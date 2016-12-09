@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.ihsinformatics.gfatmmobile.MainActivity"
+    tools:showIn="@layout/app_bar_main"
+    android:background="?colorBackground">
+
+    <LinearLayout
+        android:id="@+id/buttonLayout"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+        <Button
+            android:text="@string/forms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="selectFrag"
+            android:id="@+id/formButton"
+            android:textSize="@dimen/large"
+            android:textColor="@color/dark_grey"
+            android:drawableTint="@color/dark_grey"
+            android:background="?colorBackground"
+            android:drawableLeft="@drawable/ic_form"/>
+
+        <Button
+            android:text="@string/reports"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="selectFrag"
+            android:id="@+id/reportButton"
+            android:textSize="@dimen/large"
+            android:textColor="@color/dark_grey"
+            android:drawableTint="@color/dark_grey"
+            android:background="?colorBackground"
+            android:drawableLeft="@drawable/ic_report"/>
+
+        <Button
+            android:text="@string/search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="@dimen/large"
+            android:id="@+id/searchButton"
+            android:textColor="@color/dark_grey"
+            android:drawableTint="@color/dark_grey"
+            android:background="?colorBackground"
+            android:onClick="selectFrag"
+            android:drawableLeft="@drawable/ic_search"/>
+
+
+    </LinearLayout>
+
+    <fragment
+        android:name="com.ihsinformatics.gfatmmobile.BlankFragment"
+        android:layout_below="@id/buttonLayout"
+        android:id="@+id/fragment_place"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/programLayout"
+        android:orientation="vertical"
+        android:layout_below="@+id/fragment_place"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/select_program_continue"
+            android:textSize="@dimen/large"/>
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="?android:attr/dividerHorizontal"
+            android:showDividers="middle">
+
+            <RadioButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/medium"
+                android:paddingBottom="@dimen/medium"
+                android:text="PMDT"/>
+
+            <RadioButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/medium"
+                android:paddingBottom="@dimen/medium"
+                android:text="PET"/>
+
+
+            <RadioButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/medium"
+                android:paddingBottom="@dimen/medium"
+                android:text="FAST"/>
+
+            <RadioButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/medium"
+                android:paddingBottom="@dimen/medium"
+                android:text="COMORBIDITIES"/>
+
+            <RadioButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/medium"
+                android:paddingBottom="@dimen/medium"
+                android:text="CHILDHOOD TB"/>
+
+        </RadioGroup>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

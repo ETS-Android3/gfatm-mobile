@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="tables">
+
+        <item>
+            CREATE TABLE IF NOT EXISTS FORMS
+            (
+                id INT NOT NULL COLLATE NOCASE,
+                program TEXT NOT NULL COLLATE NOCASE,
+                form_name TEXT NOT NULL COLLATE NOCASE,
+                form_date DATETIME,
+                timestamp DATETIME NOT NULL,
+                username TEXT NOT NULL COLLATE NOCASE,
+                PRIMARY KEY (id)
+            )
+		</item>
+
+		<item>
+            CREATE TABLE IF NOT EXISTS FORMS_VALUE
+            (
+                id INT NOT NULL COLLATE NOCASE,
+                form_id INT NOT NULL COLLATE NOCASE,
+                field_name TEXT NOT NULL COLLATE NOCASE,
+                value TEXT NOT NULL COLLATE NOCASE,
+                PRIMARY KEY (id),
+                FOREIGN KEY (form_id) REFERENCES FORMS(id)
+            )
+		</item>
+
+	</string-array>
+
+</resources>

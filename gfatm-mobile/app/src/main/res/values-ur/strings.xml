@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GFATM Mobile</string>
+    <string name="action_settings">ترتیب</string>
+    <string name="default_email"></string>
+    <string name="navigation_drawer_close">بند کریں</string>
+    <string name="navigation_drawer_open">کھولیں</string>
+    <string name="goto_next">aagee</string>
+
+    <!-- Settings Values -->
+    <string-array name="programs">
+        <item>کھولیں</item>
+        <item>کھولیں</item>
+        <item>کھولیں</item>
+        <item>کھولیں</item>
+        <item>کھولیں</item>
+    </string-array>
+</resources>

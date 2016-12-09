@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="colorBackground" format="color" />
+    <attr name="colorAlternate" format="color" />
+    <attr name="colorRegistration" format="color" />
+    <attr name="colorScreening" format="color" />
+    <attr name="colorTreatment" format="color" />
+    <attr name="colorFollowup" format="color" />
+    <attr name="colorOther" format="color" />
+</resources>

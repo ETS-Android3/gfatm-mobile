@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/DarkTheme.AppBarOverlay"
+        android:id="@+id/toolbarParent">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?colorPrimary"
+            app:popupTheme="@style/DarkTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ScrollView
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbarParent">
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:orientation="vertical"
+           android:id="@+id/layout"
+           android:divider="?android:attr/dividerHorizontal"
+           android:showDividers="middle">
+
+                <RadioGroup
+                    android:id="@+id/radioGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:divider="?android:attr/dividerHorizontal"
+                    android:showDividers="middle">
+
+                </RadioGroup>
+
+       </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:gravity="right">
+
+        <TextView
+            android:id="@+id/resetButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reset"
+            android:textSize="@dimen/xlarge"
+            android:padding="@dimen/large"
+            android:textColor="?colorAccent"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/okButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ok"
+            android:textSize="@dimen/xlarge"
+            android:padding="@dimen/large"
+            android:textColor="?colorAccent"
+            android:textStyle="bold"/>
+
+
+    </LinearLayout>
+
+</RelativeLayout>

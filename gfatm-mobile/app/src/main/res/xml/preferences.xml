@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <EditTextPreference
+            android:key="theme"
+            android:persistent="true"
+            android:title="Theme"
+            android:defaultValue="@string/dark_theme"/>
+
+        <EditTextPreference
+            android:key="language"
+            android:persistent="true"
+            android:title="Language"
+            android:defaultValue="@string/english_language" />
+
+        <EditTextPreference
+            android:key="mode"
+            android:persistent="true"
+            android:title="Mode"
+            android:defaultValue="@string/online_mode" />
+
+        <EditTextPreference
+            android:key="support_contact"
+            android:persistent="true"
+            android:title="Support Contact"
+            android:defaultValue="@string/support_contact_default"/>
+
+        <EditTextPreference
+            android:key="support_email"
+            android:persistent="true"
+            android:title="Support Email"
+            android:defaultValue="@string/support_email_default"/>
+
+        <EditTextPreference
+            android:defaultValue="@string/city_default"
+            android:key="city"
+            android:title="City" />
+
+        <EditTextPreference
+            android:defaultValue="@string/country_default"
+            android:key="country"
+            android:title="country" />
+
+        <EditTextPreference
+            android:defaultValue="@string/ip_default"
+            android:key="ip"
+            android:title="IP" />
+
+        <EditTextPreference
+            android:defaultValue="@string/port_default"
+            android:key="port"
+            android:title="Port" />
+
+        <EditTextPreference
+            android:defaultValue="@string/ssl_default"
+            android:key="ssl"
+            android:title="SSL Encryption" />
+
+</PreferenceScreen>
