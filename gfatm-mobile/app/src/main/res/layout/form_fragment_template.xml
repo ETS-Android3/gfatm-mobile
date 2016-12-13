@@ -46,7 +46,7 @@
                 android:id="@+id/patientName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="?colorBackground"
+                android:textColor="@color/white"
                 android:textSize="@dimen/xlarge"
                 android:textStyle="bold"
                 android:text="Harry James Potter"/>
@@ -70,7 +70,7 @@
                 android:id="@+id/patientDob"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="?colorBackground"
+                android:textColor="@color/white"
                 android:textSize="@dimen/large"
                 android:text="36 years (Jul 31,1980)"/>
 
@@ -86,15 +86,15 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="?colorBackground"
                         android:textSize="@dimen/large"
+                        android:textColor="@color/white"
                         android:text="@string/id"/>
 
                     <TextView
                         android:id="@+id/patientId"
+                        android:textColor="@color/white"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="?colorBackground"
                         android:textStyle="bold"
                         android:textSize="@dimen/large"
                         android:text="96225-8"/>
@@ -128,6 +128,7 @@
 
             <Button
                 android:id="@+id/first_button"
+                android:background="@drawable/form_button"
                 style="@style/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -149,6 +150,7 @@
 
             <Button
                 android:id="@+id/next_button"
+                android:background="@drawable/form_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.06"
@@ -156,6 +158,7 @@
 
             <Button
                 android:id="@+id/last_button"
+                android:background="@drawable/form_button"
                 style="@style/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -174,6 +177,7 @@
 
             <Button
                 android:id="@+id/saveButton"
+                android:background="@drawable/form_button"
                 style="@style/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -182,6 +186,7 @@
 
             <Button
                 android:id="@+id/clearButton"
+                android:background="@drawable/form_button"
                 style="@style/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -190,6 +195,7 @@
 
             <Button
                 android:id="@+id/submitButton"
+                android:background="@drawable/form_button"
                 style="@style/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -17,8 +17,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/formName"
             android:text="FORM NAME"
-            android:textStyle="bold"
-            android:textSize="@dimen/xlarge" />
+            android:textSize="@dimen/xlarge"
+            android:textStyle="bold"/>
 
         <TextView
             android:layout_width="fill_parent"
@@ -26,7 +26,7 @@
             android:id="@+id/pageCount"
             android:text="0/0"
             android:textSize="@dimen/xlarge"
-            android:gravity="left"/>
+            android:gravity="right"/>
 
     </LinearLayout>
 
@@ -40,16 +40,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:gravity="left">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="?colorPrimaryDark"
-                android:text="@string/change"
-                android:id="@+id/edit"
-                android:layout_marginLeft="12dp"/>
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/patientName"
@@ -58,9 +49,15 @@
                 android:textColor="?colorBackground"
                 android:textSize="@dimen/xlarge"
                 android:textStyle="bold"
-                android:text="Harry James Potter" />
+                android:text="Harry James Potter"/>
 
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/small"
+                android:textColor="?colorPrimaryDark"
+                android:text="@string/change"
+                android:id="@+id/edit"/>
 
         </LinearLayout>
 
@@ -69,14 +66,29 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
+            <TextView
+                android:id="@+id/patientDob"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?colorBackground"
+                android:textSize="@dimen/large"
+                android:text="36 years (Jul 31,1980)"/>
+
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="right">
+                android:layout_height="match_parent">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="?colorBackground"
+                        android:textSize="@dimen/large"
+                        android:text="@string/id"/>
 
                     <TextView
                         android:id="@+id/patientId"
@@ -87,25 +99,9 @@
                         android:textSize="@dimen/large"
                         android:text="96225-8"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="?colorBackground"
-                        android:textSize="@dimen/large"
-                        android:text="@string/id"/>
-
                 </LinearLayout>
 
             </RelativeLayout>
-
-            <TextView
-                android:id="@+id/patientDob"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="?colorBackground"
-                android:textSize="@dimen/large"
-                android:text="36 years (Jul 31,1980)"
-                android:gravity="left"/>
 
         </LinearLayout>
 
@@ -132,6 +128,7 @@
 
             <Button
                 android:id="@+id/first_button"
+                android:background="@drawable/form_button"
                 style="@style/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -149,12 +146,11 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:paddingTop="5dp"
-                android:progress="0"
-                android:layoutDirection="rtl"
-                android:mirrorForRtl="true"/>
+                android:progress="0" />
 
             <Button
                 android:id="@+id/next_button"
+                android:background="@drawable/form_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.06"
@@ -162,6 +158,7 @@
 
             <Button
                 android:id="@+id/last_button"
+                android:background="@drawable/form_button"
                 style="@style/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -180,6 +177,7 @@
 
             <Button
                 android:id="@+id/saveButton"
+                android:background="@drawable/form_button"
                 style="@style/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -188,6 +186,7 @@
 
             <Button
                 android:id="@+id/clearButton"
+                android:background="@drawable/form_button"
                 style="@style/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -196,6 +195,7 @@
 
             <Button
                 android:id="@+id/submitButton"
+                android:background="@drawable/form_button"
                 style="@style/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

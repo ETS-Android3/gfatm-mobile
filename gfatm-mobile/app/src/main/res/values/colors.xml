@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="sherpaBlue">#07485B</color>
-    <color name="allPorts">#0D6986</color>
-    <color name="crimson">#DB073D</color>
-    <color name="whiteLilac">#EDE5F4</color>
-    <color name="spray">#8EC7D2</color>
+    <color name="veryDarkBrown">#5D4037</color>
+    <color name="ironstone">#795548</color>
+    <color name="mantis">#8BC34A</color>
+    <color name="swissCoffee">#D7CCC8</color>
+    <color name="scandal">#B2DFDB</color>
+    <color name="lime">#CDDC39</color>
     
-    <color name="saddleBrown">#88A825</color>
-    <color name="purpleTaupe">#5C3951</color>
-    <color name="persianGreen">#01A2A6</color>
+    <color name="teal">#00796B</color>
+    <color name="purple">#79006B</color>
+    <color name="harleyDavidsonOrange">#DC3C14</color>
     <color name="ToryBlue">#35478C</color>
     <color name="limerick">#853714</color>
 

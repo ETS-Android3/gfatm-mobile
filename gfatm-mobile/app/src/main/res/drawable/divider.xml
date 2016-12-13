@@ -4,6 +4,6 @@
     android:insetTop="10dp">
     <shape>
         <size android:width="1dp" />
-        <solid android:color="#FFCCCCCC" />
+        <solid android:color="@color/dark_grey" />
     </shape>
 </inset>
