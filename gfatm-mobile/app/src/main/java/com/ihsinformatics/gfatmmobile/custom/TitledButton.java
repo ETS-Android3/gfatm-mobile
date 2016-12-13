@@ -14,7 +14,8 @@ public class TitledButton extends LinearLayout {
 
     MyTextView questionView;
     Button button;
-    String defaultValue;
+    String defaultValue = "";
+    String tag = "";
 
     public TitledButton(Context context, String title, String ques, String defaultValue, int layoutOrientation) {
         super(context);
@@ -53,5 +54,21 @@ public class TitledButton extends LinearLayout {
         return button.getText().toString();
     }
 
-    public void setDefaultValue(){button.setText(defaultValue);}
+    public void setDefaultValue(){
+
+        if(defaultValue != null)
+            button.setText(defaultValue);
+        else
+            defaultValue = "";
+
+    }
+
+    public void setTag(String tag){
+        this.tag = tag;
+    }
+
+    public String getTag(){
+        return tag;
+    }
+
 }

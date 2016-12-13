@@ -69,11 +69,11 @@ public class MyRadioGroup extends RadioGroup implements android.widget.CompoundB
     }
 
 
-    public String getValue(){
+    public String getSelectedValue(){
         String value = "";
         for(RadioButton rb: buttons){
             if(rb.isChecked()){
-                value = rb.getTag().toString();
+                value = rb.getText().toString();
                 break;
             }
         }

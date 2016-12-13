@@ -209,7 +209,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-
         if (id == R.id.menu_server) {
 
             Intent serverActivityIntent = new Intent (this, ServerActivity.class);

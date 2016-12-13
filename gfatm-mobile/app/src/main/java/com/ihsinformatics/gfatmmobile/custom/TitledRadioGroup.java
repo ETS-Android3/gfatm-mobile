@@ -2,8 +2,6 @@ package com.ihsinformatics.gfatmmobile.custom;
 
 import android.content.Context;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 import com.ihsinformatics.gfatmmobile.App;
 
@@ -15,7 +13,7 @@ public class TitledRadioGroup extends LinearLayout {
 
     MyTextView questionView;
     MyRadioGroup radioGroup;
-
+    String tag = "";
 
     public TitledRadioGroup(Context context, String title, String ques, String[] options, String defaultValue, int radioButtonsLayout, int layoutOrientation) {
         super(context);
@@ -46,7 +44,11 @@ public class TitledRadioGroup extends LinearLayout {
         return radioGroup;
     }
 
-    public String getRadioGroupValue(){
-        return radioGroup.getValue();
+    public String getRadioGroupSelectedValue(){
+        return radioGroup.getSelectedValue();
     }
+
+    public void setTag(String tag){ this.tag = tag; }
+
+    public String getTag(){ return tag; }
 }

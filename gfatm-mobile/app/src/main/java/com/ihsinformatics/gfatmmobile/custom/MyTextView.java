@@ -26,6 +26,8 @@ public class MyTextView extends TextView {
             setGravity(Gravity.RIGHT);
         else
             setGravity(Gravity.LEFT);
+
+        setTextSize(getResources().getDimension(R.dimen.small));
     }
 
     public void selectDefaultValue(){

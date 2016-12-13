@@ -6,24 +6,22 @@
         <item>
             CREATE TABLE IF NOT EXISTS FORMS
             (
-                id INT NOT NULL COLLATE NOCASE,
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
                 program TEXT NOT NULL COLLATE NOCASE,
                 form_name TEXT NOT NULL COLLATE NOCASE,
                 form_date DATETIME,
                 timestamp DATETIME NOT NULL,
-                username TEXT NOT NULL COLLATE NOCASE,
-                PRIMARY KEY (id)
+                username TEXT NOT NULL COLLATE NOCASE
             )
 		</item>
 
 		<item>
             CREATE TABLE IF NOT EXISTS FORMS_VALUE
             (
-                id INT NOT NULL COLLATE NOCASE,
+                id INTEGER PRIMARY KEY  AUTOINCREMENT,
                 form_id INT NOT NULL COLLATE NOCASE,
                 field_name TEXT NOT NULL COLLATE NOCASE,
                 value TEXT NOT NULL COLLATE NOCASE,
-                PRIMARY KEY (id),
                 FOREIGN KEY (form_id) REFERENCES FORMS(id)
             )
 		</item>

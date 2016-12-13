@@ -39,10 +39,12 @@ import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
+import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 import static android.app.Activity.RESULT_CANCELED;
@@ -144,10 +146,15 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
 
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format ("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate.setTag("formDate");
         firstName = new TitledEditText(context, null, getResources().getString(R.string.pet_first_name), "", "", 20, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL,true);
+        firstName.setTag("firstName");
         lastName = new TitledEditText(context, null, getResources().getString(R.string.pet_last_name), "", "", 20, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        lastName.setTag("lastName");
         husbandName = new TitledEditText(context, null, getResources().getString(R.string.pet_father_husband_name), "", "", 20, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        husbandName.setTag("husbandName");
         gender = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_gender), getResources().getStringArray(R.array.pet_genders), "Male", App.HORIZONTAL, App.HORIZONTAL);
+        gender.setTag("gender");
 
         // second page views...
         ageModifiers = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_age_modifier), getResources().getStringArray(R.array.pet_age_modifiers), "Years", App.HORIZONTAL, App.HORIZONTAL);
@@ -320,7 +327,18 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
 
     @Override
     public boolean save() {
-        return false;
+
+        HashMap<String, String> formValues = new HashMap<String, String>();
+
+        formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
+        formValues.put(firstName.getTag(), App.get(firstName));
+        formValues.put(lastName.getTag(), App.get(lastName));
+        formValues.put(husbandName.getTag(), App.get(husbandName));
+        formValues.put(gender.getTag(), App.get(gender));
+
+        serverService.saveFormLocally(FORM_NAME, formValues);
+
+        return true;
     }
 
     @Override

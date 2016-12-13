@@ -234,9 +234,10 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.context_menu) {
-            return true;
+
+        if (id == R.id.saved_forms) {
+            Intent savedFormIntent = new Intent (this, SavedFormActivity.class);
+            startActivity (savedFormIntent);
         }
 
         return super.onOptionsItemSelected(item);

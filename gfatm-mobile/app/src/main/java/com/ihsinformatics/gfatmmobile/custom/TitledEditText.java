@@ -18,7 +18,7 @@ public class TitledEditText extends LinearLayout {
     MyTextView questionView;
     MyEditText editText;
     Boolean mandatory;
-
+    String tag = "";
 
     public TitledEditText(Context context, String title, String ques, String defaultValue, String hint, int length, InputFilter filter, int inputType, int layoutOrientation, Boolean mandatory) {
         super(context);
@@ -29,6 +29,7 @@ public class TitledEditText extends LinearLayout {
         if(mandatory){
             int color = App.getColor(context, R.attr.colorAccent);
             TextView mandatorySign = new TextView(context);
+            mandatorySign.setTextSize(getResources().getDimension(R.dimen.small));
             mandatorySign.setText("*");
             mandatorySign.setTextColor(color);
             linearLayout.addView(mandatorySign);
@@ -62,4 +63,8 @@ public class TitledEditText extends LinearLayout {
     }
 
     public Boolean getMandatory(){ return mandatory; }
+
+    public void setTag(String tag){ this.tag = tag; }
+
+    public String getTag(){ return tag; }
 }

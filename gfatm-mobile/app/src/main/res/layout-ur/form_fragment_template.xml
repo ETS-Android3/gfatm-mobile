@@ -133,8 +133,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.06"
-                android:text="@string/goto_first"
-                android:textAppearance="@style/text" />
+                android:text="@string/goto_first"/>
 
             <SeekBar
                 android:id="@+id/navigationSeekbar"
@@ -164,8 +163,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:layout_weight="0.06"
-                android:text="@string/goto_last"
-                android:textAppearance="@style/text" />
+                android:text="@string/goto_last" />
 
         </LinearLayout>
 

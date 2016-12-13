@@ -296,6 +296,7 @@
     <string name="title_activity_defaults">Select Defaults</string>
     <string name="title_activity_server">Server Address</string>
     <string name="title_activity_ssl">SSL Encryption</string>
+    <string name="title_saved_forms">Saved Forms</string>
 
     <string name="dark_theme" translatable="false">Dark theme</string>
     <string name="english_language" translatable="false">English</string>

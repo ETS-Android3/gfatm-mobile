@@ -20,14 +20,19 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.os.StrictMode;
+import android.text.format.DateFormat;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.ihsinformatics.gfatmmobile.custom.MyEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
+import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -163,6 +168,16 @@ public class App
 
 	public static void setLastLogin (String lastLogin) { App.lastLogin = lastLogin; }
 
+	public static Locale getCurrentLocale ()
+	{
+		return currentLocale;
+	}
+
+	public static void setCurrentLocale (Locale currentLocale)
+	{
+		App.currentLocale = currentLocale;
+	}
+
 	/**
 	 * Returns selected value in string, depending on the view passed. If no
 	 * value is present, an empty string will be returned
@@ -178,6 +193,18 @@ public class App
 		{
 			str = ((TitledEditText) view).getEditText().getText().toString();
 		}
+		else if(view instanceof MyEditText)
+		{
+			str = ((MyEditText) view).getText ().toString ();
+		}
+		else if(view instanceof EditText)
+		{
+			str = ((EditText) view).getText ().toString ();
+		}
+		if(view instanceof TitledRadioGroup)
+		{
+			str = ((TitledRadioGroup) view).getRadioGroupSelectedValue();
+		}
 		else if (view instanceof TextView)
 		{
 			str = ((TextView) view).getText ().toString ();
@@ -185,10 +212,6 @@ public class App
 		else if (view instanceof Spinner)
 		{
 			str = ((Spinner) view).getSelectedItem ().toString ();
-		}
-		else if(view instanceof EditText)
-		{
-			str = ((EditText) view).getText ().toString ();
 		}
 
 		return (str == null ? "" : str);
@@ -233,20 +256,54 @@ public class App
 		return false;
 	}
 
-	public static Locale getCurrentLocale ()
-	{
-		return currentLocale;
-	}
-
-	public static void setCurrentLocale (Locale currentLocale)
-	{
-		App.currentLocale = currentLocale;
-	}
-
 	public static boolean isCallable(Context context, Intent intent) {
 		List<ResolveInfo> list = context.getPackageManager().queryIntentActivities(intent,
 				PackageManager.MATCH_DEFAULT_ONLY);
 		return list.size() > 0;
+	}
+
+	/**
+	 * Returns date in sql date string format
+	 *
+	 * @param date
+	 * @return
+	 */
+	public static String getSqlDate (Calendar date)
+	{
+		return DateFormat.format ("yyyy-MM-dd", date).toString ();
+	}
+
+	/**
+	 * Returns date in sql date string format
+	 *
+	 * @param date
+	 * @return
+	 */
+	public static String getSqlDateTime (Calendar date)
+	{
+		return DateFormat.format ("yyyy-MM-dd hh:mm:ss", date).toString ();
+	}
+
+	/**
+	 * Returns date in sql date string format
+	 *
+	 * @param date
+	 * @return
+	 */
+	public static String getSqlDate (Date date)
+	{
+		return DateFormat.format ("yyy-MM-dd", date).toString ();
+	}
+
+	/**
+	 * Returns date in sql date string format
+	 *
+	 * @param date
+	 * @return
+	 */
+	public static String getSqlDateTime (Date date)
+	{
+		return DateFormat.format ("yyy-MM-dd hh:mm:ss", date).toString ();
 	}
 
 }

@@ -6,7 +6,7 @@
 
         <item name="colorPrimaryDark">@color/veryDarkBrown</item>
         <item name="colorPrimary">@color/ironstone</item>
-        <item name="colorAccent">@color/mantis</item>
+        <item name="colorAccent">@color/dirtyBlue</item>
         <item name="colorBackground">@color/swissCoffee</item>
         <item name="colorAlternate">@color/scandal</item>
         <item name="colorButton">@color/lime</item>
@@ -23,7 +23,6 @@
         <item name="buttonStyle">@style/button</item>
         <item name="android:radioButtonStyle">@style/radio</item>
         <item name="radioButtonStyle">@style/radio</item>
-        <item name="android:textViewStyle">@style/text</item>
         <item name="android:editTextStyle">@style/editTextStyle</item>
         <item name="android:dropDownSpinnerStyle">@style/spinnerStyle</item>
         <item name="android:checkboxStyle">@style/checkBoxStyle</item>
@@ -53,14 +52,6 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/large</item>
-    </style>
-
-    <style name="text" parent="@android:style/Widget.TextView">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">@dimen/large</item>
-        <item name="android:focusable">true</item>
-        <item name="android:focusableInTouchMode">true</item>
     </style>
 
     <style name="editTextStyle" parent="@android:style/Widget.EditText">

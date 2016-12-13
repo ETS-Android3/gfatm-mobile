@@ -40,6 +40,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
+import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -55,7 +56,8 @@ public abstract class AbstractFormActivity extends Fragment
         View.OnLongClickListener
    {
 
-   protected View mainContent;
+    protected View mainContent;
+    protected ServerService serverService;
 
     protected Calendar formDateCalendar;
     protected DialogFragment formDateFragment;
@@ -93,6 +95,8 @@ public abstract class AbstractFormActivity extends Fragment
 
         //Inflate the layout for this fragment
         mainContent = inflater.inflate(R.layout.form_fragment_template, container, false);
+
+        serverService = new ServerService (mainContent.getContext());
 
         formDateCalendar = Calendar.getInstance ();
         formDateFragment = new SelectDateFragment();
@@ -408,7 +412,7 @@ public abstract class AbstractFormActivity extends Fragment
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            submit();
+                            save();
                         }
                     });
             alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),

@@ -141,7 +141,7 @@ public class ServerActivity extends AbstractSettingActivity {
         }
         else{
 
-            if(RegexUtil.isIpAddress(App.get(ip))){
+            if(!RegexUtil.isIpAddress(App.get(ip))){
                 ip.setError(getString(R.string.invalid_value));
                 ip.requestFocus();
                 cancel = true;
