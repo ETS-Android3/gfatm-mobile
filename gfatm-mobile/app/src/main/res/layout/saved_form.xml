@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?colorBackground">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -19,21 +20,153 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
+
+        <ImageView
+            android:id="@+id/submitIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_submit"
+            android:clickable="true"
+            android:paddingLeft="14dp"
+            android:paddingRight="14dp"/>
+
+        <ImageView
+            android:id="@+id/emailIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_email"
+            android:clickable="true"
+            android:paddingLeft="14dp"
+            android:paddingRight="14dp"/>
+
+        <ImageView
+            android:id="@+id/deleteIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_delete"
+            android:clickable="true"
+            android:paddingLeft="14dp"
+            android:paddingRight="14dp"/>
+
+    </LinearLayout>
+
     <ScrollView
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/toolbarParent">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:id="@+id/mainlayout"
-            android:divider="?android:attr/dividerHorizontal"
-            android:showDividers="middle">
+            android:padding="@dimen/small"
+            android:id="@+id/mainlayout">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/pmdt"
+                android:text="PMDT"
+                android:textSize="@dimen/large"
+                android:textColor="?colorPrimary"/>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:id="@+id/pmdtlayout"
+                android:divider="?android:attr/dividerHorizontal"
+                android:showDividers="middle|end"
+                android:paddingBottom="@dimen/small">
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/pet"
+                android:text="PET"
+                android:textSize="@dimen/large"
+                android:textColor="?colorPrimary"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:id="@+id/petlayout"
+                android:divider="?android:attr/dividerHorizontal"
+                android:showDividers="middle|end"
+                android:paddingBottom="@dimen/small">
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/fast"
+                android:text="FAST"
+                android:textSize="@dimen/large"
+                android:textColor="?colorPrimary"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:id="@+id/fastlayout"
+                android:divider="?android:attr/dividerHorizontal"
+                android:showDividers="middle|end"
+                android:paddingBottom="@dimen/small">
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/comorbidities"
+                android:text="COMORBIDITIES"
+                android:textSize="@dimen/large"
+                android:textColor="?colorPrimary"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:id="@+id/comorbiditieslayout"
+                android:divider="?android:attr/dividerHorizontal"
+                android:showDividers="middle|end"
+                android:paddingBottom="@dimen/small">
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/childhoodtb"
+                android:text="CHILDHOOD TB"
+                android:textSize="@dimen/large"
+                android:textColor="?colorPrimary"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:id="@+id/childhoodtblayout"
+                android:divider="?android:attr/dividerHorizontal"
+                android:showDividers="middle|end"
+                android:paddingBottom="@dimen/small">
+
+            </LinearLayout>
 
          </LinearLayout>
 

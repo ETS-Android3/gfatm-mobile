@@ -79,7 +79,7 @@ public class ServerService
     }
 
 
-    public boolean saveFormLocally(String formName, HashMap<String,String> formValues){
+    public boolean saveFormLocally(String formName, String pid, HashMap<String,String> formValues){
 
         ContentValues values = new ContentValues ();
 
@@ -89,10 +89,11 @@ public class ServerService
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         values.put ("timestamp", timestamp.toString());
         values.put ("username", App.getUsername());
+        values.put ("p_id", pid);
 
         dbUtil.insert (Metadata.FORMS, values);
 
-        String id = dbUtil.getObject (Metadata.FORMS, "id", "program='" + App.getProgram() + "' AND form_name='" +  formName + "' AND form_date='" + formValues.get("formDate") + "' AND timestamp='" + timestamp.toString() + "' AND username='" + App.getUsername() + "'" );
+        String id = dbUtil.getObject (Metadata.FORMS, "id", "program='" + App.getProgram() + "' AND form_name='" +  formName + "' AND form_date='" + formValues.get("formDate") + "' AND timestamp='" + timestamp.toString() + "' AND username='" + App.getUsername() + "' AND p_id='" + pid + "'");
 
         for (Map.Entry<String,String> entry : formValues.entrySet()) {
 
@@ -115,7 +116,7 @@ public class ServerService
 
     public String[][] getSavedForms (String username)
     {
-        String[][] forms = dbUtil.getTableData ("select timestamp, form, json, pid from offline_forms where username='" + username + "'");
+        String[][] forms = dbUtil.getTableData ("select id, program, form_name, p_id, form_date, timestamp from " + Metadata.FORMS + " where username='" + username + "'");
         return forms;
     }
 

@@ -340,6 +340,7 @@ public class MainActivity extends AppCompatActivity
     private void showFormFragment() {
 
         int color = App.getColor(this, R.attr.colorPrimaryDark);
+
         formButton.setTextColor(color);
         formButton.setBackgroundResource(R.drawable.selected_border_button);
         DrawableCompat.setTint(formButton.getCompoundDrawables()[0], color);

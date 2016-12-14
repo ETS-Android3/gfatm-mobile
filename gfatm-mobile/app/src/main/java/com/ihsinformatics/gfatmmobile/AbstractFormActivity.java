@@ -1,6 +1,9 @@
 package com.ihsinformatics.gfatmmobile;
 
 /**
+ *
+ * Abstract Class for forms. All Forms should extend this class
+ *
  * Created by Rabbia on 11/10/2016.
  */
 
@@ -56,20 +59,26 @@ public abstract class AbstractFormActivity extends Fragment
         View.OnLongClickListener
    {
 
+    // main Layout
     protected View mainContent;
     protected ServerService serverService;
 
+    // Views for formDate
     protected Calendar formDateCalendar;
     protected DialogFragment formDateFragment;
     public static final int	DATE_DIALOG_ID	= 1;
 
+    // Extra Views for date ...
     protected Calendar secondDateCalendar;
     protected DialogFragment secondDateFragment;
     public static final int SECOND_DATE_DIALOG_ID = 2;
 
+    //for all views in fragment
     protected ArrayList<ViewGroup>	groups;
+    // for all views that need to be reset
     protected View[][] viewGroups;
 
+    // Views from Template Layout
     protected int			        PAGE_COUNT		= 0;
     protected String                FORM_NAME       = "";
     protected View[]				views;
@@ -96,6 +105,7 @@ public abstract class AbstractFormActivity extends Fragment
         //Inflate the layout for this fragment
         mainContent = inflater.inflate(R.layout.form_fragment_template, container, false);
 
+        // initializing all views an classes
         serverService = new ServerService (mainContent.getContext());
 
         formDateCalendar = Calendar.getInstance ();
@@ -123,6 +133,7 @@ public abstract class AbstractFormActivity extends Fragment
         else
             submitButton.setVisibility(View.VISIBLE);
 
+        // Setting up listeners
         View[] setListener = new View[]{firstButton, lastButton, clearButton, submitButton, nextButton, saveButton};
 
         for (View v : setListener) {
@@ -142,6 +153,7 @@ public abstract class AbstractFormActivity extends Fragment
         }
         navigationSeekbar.setOnSeekBarChangeListener (this);
 
+        // For RTL language rotating the seekbar
         if(App.isLanguageRTL())
             navigationSeekbar.setRotation( 180 );
 

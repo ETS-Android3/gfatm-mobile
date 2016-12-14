@@ -87,6 +87,15 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
     Calendar enrollmentDateCalender;
     DatePicker treatmentEnrollmentDate;
 
+    /**
+     *
+     * CHANGE PAGE_COUNT and FORM_NAME Variable only...
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -142,6 +151,10 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
         return mainContent;
     }
 
+    /**
+     *
+     * Initializes all views and ArrayList and Views Array
+     */
     public void initViews(){
 
         // first page views...
@@ -188,12 +201,13 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
         treatmentEnrollmentDate.init(enrollmentDateCalender.get(Calendar.YEAR), enrollmentDateCalender.get(Calendar.MONTH), enrollmentDateCalender.get(Calendar.DAY_OF_MONTH), onDateChangeListener);
         treatmentEnrollmentDate.setMaxDate(new Date().getTime());
 
-        // Used for reset fields
+        // Used for reset fields...
         views = new View[]{formDate.getButton(), firstName.getEditText(), lastName.getEditText(), husbandName.getEditText(), gender.getRadioGroup(),
                                 ageModifiers.getRadioGroup(), age.getEditText(), indexPatientId.getEditText(), indexExternalPatientId.getEditText(), ernsNumber.getEditText(),
                                 tbType.getRadioGroup(), infectionType.getRadioGroup(), dstAvailable.getRadioGroup(), resistanceType.getRadioGroup(),
                                 patientType.getRadioGroup(), dstPattern, treatmentRegimen};
 
+        // Array used to display views accordingly...
         viewGroups = new View[][]
                         {{formDate, firstName, lastName, husbandName, gender},
                         {ageModifiers, age, indexPatientId, scanQRCode, indexExternalPatientId, ernsNumber},
@@ -336,7 +350,7 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
         formValues.put(husbandName.getTag(), App.get(husbandName));
         formValues.put(gender.getTag(), App.get(gender));
 
-        serverService.saveFormLocally(FORM_NAME, formValues);
+        serverService.saveFormLocally(FORM_NAME, "12345-5", formValues);
 
         return true;
     }
