@@ -15,7 +15,7 @@
         <item name="colorScreening">@color/purple</item>
         <item name="colorTreatment">@color/harleyDavidsonOrange</item>
         <item name="colorFollowup">@color/ToryBlue</item>
-        <item name="colorOther">@color/limerick</item>
+        <item name="colorOther">@color/limerick</item>k
 
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
