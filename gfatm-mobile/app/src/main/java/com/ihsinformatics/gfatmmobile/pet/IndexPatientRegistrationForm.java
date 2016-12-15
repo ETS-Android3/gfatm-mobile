@@ -54,7 +54,6 @@ import static android.app.Activity.RESULT_OK;
  * Created by Rabbia on 11/24/2016.
  */
 
-
 public class IndexPatientRegistrationForm extends AbstractFormActivity {
 
     Context         context;
