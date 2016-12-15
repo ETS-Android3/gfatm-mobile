@@ -76,9 +76,9 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
 
         pmdtTextView = (TextView) findViewById(R.id.pmdt);
         pmdtLinearLayout = (LinearLayout) findViewById(R.id.pmdtlayout);
-        petTextView  = (TextView) findViewById(R.id.pet);
+        petTextView = (TextView) findViewById(R.id.pet);
         petLinearLayout = (LinearLayout) findViewById(R.id.petlayout);
-        fastTextView  = (TextView) findViewById(R.id.fast);
+        fastTextView = (TextView) findViewById(R.id.fast);
         fastLinearLayout = (LinearLayout) findViewById(R.id.fastlayout);
         comorbiditiesTextView = (TextView) findViewById(R.id.comorbidities);
         comorbiditiesLinearLayout = (LinearLayout) findViewById(R.id.comorbiditieslayout);
@@ -101,7 +101,7 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
         return super.onOptionsItemSelected(item);
     }
 
-    public void fillList(){
+    public void fillList() {
 
         ServerService serverService = new ServerService(getApplicationContext());
         String[][] forms = serverService.getSavedForms(App.getUsername());
@@ -117,11 +117,11 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
         childhoodtbLinearLayout.setVisibility(View.GONE);
         childhoodtbLinearLayout.removeAllViews();
 
-        for(int i = 0; i < forms.length; i++) {
+        for (int i = 0; i < forms.length; i++) {
 
             LinearLayout verticalLayout = new LinearLayout(getApplicationContext());
             verticalLayout.setOrientation(LinearLayout.VERTICAL);
-            verticalLayout.setPadding(10,20,10,20);
+            verticalLayout.setPadding(10, 20, 10, 20);
 
             LinearLayout linearLayout = new LinearLayout(getApplicationContext());
             linearLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -133,10 +133,9 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
 
             final int color = App.getColor(this, R.attr.colorPrimaryDark);
 
-            if(forms[i][1].equalsIgnoreCase("PMDT")){
+            if (forms[i][1].equalsIgnoreCase("PMDT")) {
 
-            }
-            else if(forms[i][1].equalsIgnoreCase("PET")){
+            } else if (forms[i][1].equalsIgnoreCase("PET")) {
 
                 CheckBox selection = new CheckBox(this);
                 linearLayout.addView(selection);
@@ -147,24 +146,23 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
                 text.setText(forms[i][2]);
                 text.setTextSize(getResources().getDimension(R.dimen.small));
                 text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
-                text.setPadding(10,0,0,0);
+                text.setPadding(10, 0, 0, 0);
                 DrawableCompat.setTint(text.getCompoundDrawables()[2], color);
                 linearLayout.addView(text);
 
                 text.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                       if(moreLayout.getVisibility() == View.VISIBLE) {
-                           moreLayout.setVisibility(View.GONE);
-                           DrawableCompat.setTint(text.getCompoundDrawables()[2], color);
-                           text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
-                       }
-                        else {
-                           moreLayout.setVisibility(View.VISIBLE);
-                           DrawableCompat.setTint(text.getCompoundDrawables()[2], color);
-                           text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_less, 0);
+                        if (moreLayout.getVisibility() == View.VISIBLE) {
+                            moreLayout.setVisibility(View.GONE);
+                            DrawableCompat.setTint(text.getCompoundDrawables()[2], color);
+                            text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
+                        } else {
+                            moreLayout.setVisibility(View.VISIBLE);
+                            DrawableCompat.setTint(text.getCompoundDrawables()[2], color);
+                            text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_less, 0);
 
-                       }
+                        }
                     }
                 });
 
@@ -218,7 +216,7 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
 
                 moreLayout.addView(ll3);
 
-                moreLayout.setPadding(80,0,0,0);
+                moreLayout.setPadding(80, 0, 0, 0);
                 moreLayout.setVisibility(View.GONE);
                 verticalLayout.addView(moreLayout);
 
@@ -226,20 +224,17 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
                 petLinearLayout.setVisibility(View.VISIBLE);
                 petLinearLayout.addView(verticalLayout);
 
-            }
-            else if(forms[i][1].equalsIgnoreCase("FAST")){
+            } else if (forms[i][1].equalsIgnoreCase("FAST")) {
 
-            }
-            else if(forms[i][1].equalsIgnoreCase("COMORBIDITIES")){
+            } else if (forms[i][1].equalsIgnoreCase("COMORBIDITIES")) {
 
-            }
-            else if(forms[i][1].equalsIgnoreCase("CHILDHOOD TB")){
+            } else if (forms[i][1].equalsIgnoreCase("CHILDHOOD TB")) {
 
             }
 
         }
 
-        if(pmdtLinearLayout.getVisibility() == View.GONE){
+        if (pmdtLinearLayout.getVisibility() == View.GONE) {
 
             final TextView text = new TextView(this);
             text.setText("No saved form found unders this program");
@@ -248,7 +243,7 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
             pmdtLinearLayout.setVisibility(View.VISIBLE);
 
         }
-        if(petLinearLayout.getVisibility() == View.GONE){
+        if (petLinearLayout.getVisibility() == View.GONE) {
 
             final TextView text = new TextView(this);
             text.setText("No saved form found unders this program");
@@ -256,7 +251,7 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
             petLinearLayout.addView(text);
             petLinearLayout.setVisibility(View.VISIBLE);
         }
-        if(fastLinearLayout.getVisibility() == View.GONE){
+        if (fastLinearLayout.getVisibility() == View.GONE) {
 
             final TextView text = new TextView(this);
             text.setText("No saved form found unders this program");
@@ -264,7 +259,7 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
             fastLinearLayout.addView(text);
             fastLinearLayout.setVisibility(View.VISIBLE);
         }
-        if(childhoodtbLinearLayout.getVisibility() == View.GONE){
+        if (childhoodtbLinearLayout.getVisibility() == View.GONE) {
 
             final TextView text = new TextView(this);
             text.setText("No saved form found unders this program");
@@ -273,7 +268,7 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
             childhoodtbLinearLayout.setVisibility(View.VISIBLE);
 
         }
-        if(comorbiditiesLinearLayout.getVisibility() == View.GONE){
+        if (comorbiditiesLinearLayout.getVisibility() == View.GONE) {
 
             final TextView text = new TextView(this);
             text.setText("No saved form found unders this program");

@@ -19,21 +19,21 @@ public class OperationModeActivity extends AbstractSettingActivity {
 
         String[] modes = getResources().getStringArray(R.array.operation_modes);
 
-        for(String mo : modes){
+        for (String mo : modes) {
 
             RadioButton rb = new RadioButton(this);
             rb.setText(mo);
-            rb.setPadding(0,40,0,40);
+            rb.setPadding(0, 40, 0, 40);
             rb.setLayoutParams(new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT));
 
             radioGroup.addView(rb);
 
-            if(App.getMode().equals(mo))
+            if (App.getMode().equals(mo))
                 rb.setChecked(true);
 
-            if(App.isLanguageRTL())
+            if (App.isLanguageRTL())
                 rb.setGravity(Gravity.RIGHT);
 
         }
@@ -43,15 +43,15 @@ public class OperationModeActivity extends AbstractSettingActivity {
     @Override
     public void onClick(View v) {
 
-        if(v == okButton){
+        if (v == okButton) {
 
-            RadioButton rb = (RadioButton) findViewById( radioGroup.getCheckedRadioButtonId());
+            RadioButton rb = (RadioButton) findViewById(radioGroup.getCheckedRadioButtonId());
             App.setMode(rb.getText().toString());
 
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences (OperationModeActivity.this);
-            SharedPreferences.Editor editor = preferences.edit ();
-            editor.putString (Preferences.MODE, App.getMode ());
-            editor.apply ();
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(OperationModeActivity.this);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(Preferences.MODE, App.getMode());
+            editor.apply();
 
             onBackPressed();
         }

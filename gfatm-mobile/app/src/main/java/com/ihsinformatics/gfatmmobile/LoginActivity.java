@@ -71,12 +71,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         String titleText = getResources().getString(R.string.app_name) + " - " + App.getVersion();
         getSupportActionBar().setTitle(titleText);
 
-        loading = new ProgressDialog (this);
+        loading = new ProgressDialog(this);
 
     }
 
 
-    public boolean validate(){
+    public boolean validate() {
 
         Boolean cancel = false;
 
@@ -108,20 +108,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (!validate()) {
 
             // Authenticate from server
-            AsyncTask<String, String, Boolean> authenticationTask = new AsyncTask<String, String, Boolean> ()
-            {
+            AsyncTask<String, String, Boolean> authenticationTask = new AsyncTask<String, String, Boolean>() {
                 @Override
-                protected Boolean doInBackground (String... params)
-                {
-                    runOnUiThread (new Runnable ()
-                    {
+                protected Boolean doInBackground(String... params) {
+                    runOnUiThread(new Runnable() {
                         @Override
-                        public void run ()
-                        {
-                            loading.setIndeterminate (true);
-                            loading.setCancelable (false);
-                            loading.setMessage (getResources ().getString (R.string.signing_in));
-                            loading.show ();
+                        public void run() {
+                            loading.setIndeterminate(true);
+                            loading.setCancelable(false);
+                            loading.setMessage(getResources().getString(R.string.signing_in));
+                            loading.show();
                         }
                     });
 
@@ -141,17 +137,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
 
                 @Override
-                protected void onProgressUpdate (String... values)
-                {
-                };
+                protected void onProgressUpdate(String... values) {
+                }
+
+                ;
 
                 @Override
-                protected void onPostExecute (Boolean result)
-                {
-                    super.onPostExecute (result);
-                    loading.dismiss ();
-                    if (result)
-                    {
+                protected void onPostExecute(Boolean result) {
+                    super.onPostExecute(result);
+                    loading.dismiss();
+                    if (result) {
                         //serverService.setCurrentUser (App.get (username));
 
                         // Save username and password in preferences
@@ -160,20 +155,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         App.setAutoLogin("Enabled");
                         String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
                         App.setLastLogin(date);
-                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences (LoginActivity.this);
-                        SharedPreferences.Editor editor = preferences.edit ();
-                        editor.putString (Preferences.USERNAME, App.getUsername ());
-                        editor.putString (Preferences.PASSWORD, App.getPassword ());
-                        editor.putString (Preferences.AUTO_LOGIN, App.getAutoLogin());
-                        editor.putString (Preferences.LAST_LOGIN, App.getLastLogin());
-                        editor.apply ();
+                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putString(Preferences.USERNAME, App.getUsername());
+                        editor.putString(Preferences.PASSWORD, App.getPassword());
+                        editor.putString(Preferences.AUTO_LOGIN, App.getAutoLogin());
+                        editor.putString(Preferences.LAST_LOGIN, App.getLastLogin());
+                        editor.apply();
 
-                        Intent intent = new Intent (LoginActivity.this, MainActivity.class);
-                        startActivity (intent);
-                        finish ();
-                    }
-                    else
-                    {
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
                         /*App.setUsername ("");
                         App.setPassword ("");
                         Toast toast = Toast.makeText (LoginActivity.this, getResources ().getString (R.string.authentication_error), App.getDelay ());
@@ -182,7 +175,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     }
                 }
             };
-            authenticationTask.execute ("");
+            authenticationTask.execute("");
 
 
         }
@@ -192,7 +185,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
 
-        if(v == loginButton){
+        if (v == loginButton) {
             attemptLogin();
         }
 
@@ -211,29 +204,26 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if (id == R.id.menu_server) {
 
-            Intent serverActivityIntent = new Intent (this, ServerActivity.class);
-            startActivity (serverActivityIntent);
+            Intent serverActivityIntent = new Intent(this, ServerActivity.class);
+            startActivity(serverActivityIntent);
 
             return true;
-        }
-        else if (id == R.id.menu_defaults) {
+        } else if (id == R.id.menu_defaults) {
 
-            Intent defaultActivityIntent = new Intent (this, DefaultActivity.class);
-            startActivity (defaultActivityIntent);
-
-            return true;
-        }
-        else if (id == R.id.menu_language) {
-
-            Intent languageActivityIntent = new Intent (this, LanguageActivity.class);
-            startActivity (languageActivityIntent);
+            Intent defaultActivityIntent = new Intent(this, DefaultActivity.class);
+            startActivity(defaultActivityIntent);
 
             return true;
-        }
-        else if (id == R.id.menu_theme) {
+        } else if (id == R.id.menu_language) {
 
-            Intent themeActivityIntent = new Intent (this, ThemeActivity.class);
-            startActivity (themeActivityIntent);
+            Intent languageActivityIntent = new Intent(this, LanguageActivity.class);
+            startActivity(languageActivityIntent);
+
+            return true;
+        } else if (id == R.id.menu_theme) {
+
+            Intent themeActivityIntent = new Intent(this, ThemeActivity.class);
+            startActivity(themeActivityIntent);
 
             return true;
         }
@@ -247,9 +237,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onResume();  // Always call the superclass method first
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-        String lang = preferences.getString (Preferences.LANGUAGE, "");
+        String lang = preferences.getString(Preferences.LANGUAGE, "");
 
-        if(!App.getLanguage().equals(lang)){
+        if (!App.getLanguage().equals(lang)) {
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString(Preferences.LANGUAGE, App.getLanguage());
             editor.apply();
@@ -260,7 +250,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     /**
-     *
      * Restarts the current activity...
      */
     private void restartActivity() {

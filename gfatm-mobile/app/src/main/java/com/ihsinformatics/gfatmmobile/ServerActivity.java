@@ -33,16 +33,16 @@ public class ServerActivity extends AbstractSettingActivity {
                         AppBarLayout.LayoutParams.MATCH_PARENT,
                         AppBarLayout.LayoutParams.WRAP_CONTENT));
         ipLayout.setOrientation(LinearLayout.VERTICAL);
-        ipLayout.setPadding(0,40,0,40);
+        ipLayout.setPadding(0, 40, 0, 40);
 
         TextView ipTextView = new TextView(this);
         ipTextView.setText(getString(R.string.ip));
         ipTextView.setTextColor(color);
         ipLayout.addView(ipTextView);
         ip = new EditText(this);
-        ip.setInputType (InputType.TYPE_CLASS_PHONE);
+        ip.setInputType(InputType.TYPE_CLASS_PHONE);
         ip.setMaxEms(15);
-        ip.setFilters (new InputFilter[] {new InputFilter.LengthFilter (15)});
+        ip.setFilters(new InputFilter[]{new InputFilter.LengthFilter(15)});
         ip.setSingleLine(true);
         ip.setText(App.getIp());
         ip.setGravity(Gravity.LEFT);
@@ -56,16 +56,16 @@ public class ServerActivity extends AbstractSettingActivity {
                         AppBarLayout.LayoutParams.MATCH_PARENT,
                         AppBarLayout.LayoutParams.WRAP_CONTENT));
         portLayout.setOrientation(LinearLayout.VERTICAL);
-        portLayout.setPadding(0,40,0,40);
+        portLayout.setPadding(0, 40, 0, 40);
 
         TextView portTextView = new TextView(this);
         portTextView.setText(getString(R.string.port));
         portTextView.setTextColor(color);
         portLayout.addView(portTextView);
         port = new EditText(this);
-        port.setInputType (InputType.TYPE_CLASS_NUMBER);
+        port.setInputType(InputType.TYPE_CLASS_NUMBER);
         port.setMaxEms(4);
-        port.setFilters (new InputFilter[] {new InputFilter.LengthFilter (4)});
+        port.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
         port.setSingleLine(true);
         port.setText(App.getPort());
         port.setGravity(Gravity.LEFT);
@@ -81,7 +81,7 @@ public class ServerActivity extends AbstractSettingActivity {
     public void onClick(View v) {
 
 
-        if(v == resetButton){
+        if (v == resetButton) {
 
             ip.setError(null);
             port.setError(null);
@@ -89,21 +89,19 @@ public class ServerActivity extends AbstractSettingActivity {
             ip.setText(getString(R.string.ip_default));
             port.setText(getString(R.string.port_default));
 
-        }
-
-        else if(v == okButton){
+        } else if (v == okButton) {
 
             Boolean cancel = validateFields();
-            if(!cancel) {
+            if (!cancel) {
 
                 App.setIp(App.get(ip));
                 App.setPort(App.get(port));
 
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences (ServerActivity.this);
-                SharedPreferences.Editor editor = preferences.edit ();
-                editor.putString (Preferences.IP, App.getIp());
-                editor.putString (Preferences.PORT, App.getPort());
-                editor.apply ();
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ServerActivity.this);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(Preferences.IP, App.getIp());
+                editor.putString(Preferences.PORT, App.getPort());
+                editor.apply();
 
                 onBackPressed();
             }
@@ -112,21 +110,20 @@ public class ServerActivity extends AbstractSettingActivity {
 
     }
 
-    public Boolean validateFields(){
+    public Boolean validateFields() {
 
         ip.setError(null);
         port.setError(null);
 
         Boolean cancel = false;
 
-        if(App.get(port).isEmpty()) {
+        if (App.get(port).isEmpty()) {
             port.setError(getString(R.string.empty_field));
             port.requestFocus();
             cancel = true;
-        }
-        else{
+        } else {
 
-            if(App.get(port).length() != 4){
+            if (App.get(port).length() != 4) {
                 port.setError(getString(R.string.invalid_value));
                 port.requestFocus();
                 cancel = true;
@@ -134,14 +131,13 @@ public class ServerActivity extends AbstractSettingActivity {
 
         }
 
-        if(App.get(ip).isEmpty()) {
+        if (App.get(ip).isEmpty()) {
             ip.setError(getString(R.string.empty_field));
             ip.requestFocus();
             cancel = true;
-        }
-        else{
+        } else {
 
-            if(!RegexUtil.isIpAddress(App.get(ip))){
+            if (!RegexUtil.isIpAddress(App.get(ip))) {
                 ip.setError(getString(R.string.invalid_value));
                 ip.requestFocus();
                 cancel = true;

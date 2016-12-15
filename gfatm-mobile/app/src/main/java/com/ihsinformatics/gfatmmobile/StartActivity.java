@@ -27,72 +27,64 @@ public class StartActivity extends Activity {
     private static DatabaseUtil dbUtil;
 
     @Override
-    protected void onCreate (Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         // on Application start
-       StartActivity.resetPreferences (this);      //loading preferences
-        super.onCreate (savedInstanceState);
+        StartActivity.resetPreferences(this);      //loading preferences
+        super.onCreate(savedInstanceState);
 
-        try
-        {
-            dbUtil = new DatabaseUtil (this);
-            dbUtil.buildDatabase (false);			// build sql lite db in app memory
-        }
-        catch (Exception e)
-        {
-            Log.e (TAG, e.getMessage ());
+        try {
+            dbUtil = new DatabaseUtil(this);
+            dbUtil.buildDatabase(false);            // build sql lite db in app memory
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
         }
 
         // Check if Login needed...
         String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
         String v = App.getLastLogin();
-        if(App.getAutoLogin().equals("Enabled") && App.getLastLogin().equals(date)){
+        if (App.getAutoLogin().equals("Enabled") && App.getLastLogin().equals(date)) {
             Intent intent = new Intent(this, MainActivity.class);
-            startActivity (intent);
-            finish ();
-        }
-        else {
+            startActivity(intent);
+            finish();
+        } else {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();
         }
     }
 
-    public static void resetPreferences (Context context)
-    {
-        PreferenceManager.setDefaultValues (context, R.xml.preferences, false);
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences (context);
-        App.setProgram (preferences.getString (Preferences.PROGRAM, ""));
-        App.setTheme (preferences.getString (Preferences.THEME, ""));
-        App.setLanguage (preferences.getString (Preferences.LANGUAGE, ""));
-        App.setMode (preferences.getString (Preferences.MODE, ""));
-        App.setSupportContact (preferences.getString (Preferences.SUPPORT_CONTACT, ""));
-        App.setSupportEmail (preferences.getString (Preferences.SUPPORT_EMAIL, ""));
-        App.setCity (preferences.getString (Preferences.CITY, ""));
-        App.setCountry (preferences.getString (Preferences.COUNTRY, ""));
-        App.setIp(preferences.getString (Preferences.IP, ""));
-        App.setPort (preferences.getString (Preferences.PORT, ""));
-        App.setSsl (preferences.getString (Preferences.SSL_ENCRYPTION, ""));
-        App.setUsername (preferences.getString (Preferences.USERNAME, ""));
-        App.setPassword (preferences.getString (Preferences.PASSWORD, ""));
-        App.setAutoLogin (preferences.getString (Preferences.AUTO_LOGIN, ""));
-        App.setLastLogin (preferences.getString (Preferences.LAST_LOGIN, ""));
-        Locale locale = new Locale(preferences.getString (Preferences.LANGUAGE, "en").toLowerCase().substring (0, 2));
-        Locale.setDefault (locale);
+    public static void resetPreferences(Context context) {
+        PreferenceManager.setDefaultValues(context, R.xml.preferences, false);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        App.setProgram(preferences.getString(Preferences.PROGRAM, ""));
+        App.setTheme(preferences.getString(Preferences.THEME, ""));
+        App.setLanguage(preferences.getString(Preferences.LANGUAGE, ""));
+        App.setMode(preferences.getString(Preferences.MODE, ""));
+        App.setSupportContact(preferences.getString(Preferences.SUPPORT_CONTACT, ""));
+        App.setSupportEmail(preferences.getString(Preferences.SUPPORT_EMAIL, ""));
+        App.setCity(preferences.getString(Preferences.CITY, ""));
+        App.setCountry(preferences.getString(Preferences.COUNTRY, ""));
+        App.setIp(preferences.getString(Preferences.IP, ""));
+        App.setPort(preferences.getString(Preferences.PORT, ""));
+        App.setSsl(preferences.getString(Preferences.SSL_ENCRYPTION, ""));
+        App.setUsername(preferences.getString(Preferences.USERNAME, ""));
+        App.setPassword(preferences.getString(Preferences.PASSWORD, ""));
+        App.setAutoLogin(preferences.getString(Preferences.AUTO_LOGIN, ""));
+        App.setLastLogin(preferences.getString(Preferences.LAST_LOGIN, ""));
+        Locale locale = new Locale(preferences.getString(Preferences.LANGUAGE, "en").toLowerCase().substring(0, 2));
+        Locale.setDefault(locale);
         Configuration config = new Configuration();
         config.locale = locale;
-        context.getResources().updateConfiguration(config,null);
-        App.setCurrentLocale (locale);
+        context.getResources().updateConfiguration(config, null);
+        App.setCurrentLocale(locale);
 
         String version = "0";
-        try
-        {
-            version = context.getPackageManager ().getPackageInfo (context.getPackageName (), 0).versionName;
+        try {
+            version = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
         }
-        catch (PackageManager.NameNotFoundException e)
-        {
-            e.printStackTrace ();
-        }
-        App.setVersion (version);
+        App.setVersion(version);
 
     }
 

@@ -18,7 +18,7 @@
             android:id="@+id/formName"
             android:text="FORM NAME"
             android:textSize="@dimen/xlarge"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="fill_parent"
@@ -26,7 +26,7 @@
             android:id="@+id/pageCount"
             android:text="0/0"
             android:textSize="@dimen/xlarge"
-            android:gravity="right"/>
+            android:gravity="right" />
 
     </LinearLayout>
 
@@ -49,7 +49,7 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/xlarge"
                 android:textStyle="bold"
-                android:text="Harry James Potter"/>
+                android:text="Harry James Potter" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -57,7 +57,7 @@
                 android:layout_marginLeft="@dimen/small"
                 android:textColor="?colorPrimaryDark"
                 android:text="@string/change"
-                android:id="@+id/edit"/>
+                android:id="@+id/edit" />
 
         </LinearLayout>
 
@@ -72,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:textSize="@dimen/large"
-                android:text="36 years (Jul 31,1980)"/>
+                android:text="36 years (Jul 31,1980)" />
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -88,7 +88,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/large"
                         android:textColor="@color/white"
-                        android:text="@string/id"/>
+                        android:text="@string/id" />
 
                     <TextView
                         android:id="@+id/patientId"
@@ -97,7 +97,7 @@
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
                         android:textSize="@dimen/large"
-                        android:text="96225-8"/>
+                        android:text="96225-8" />
 
                 </LinearLayout>
 
@@ -113,18 +113,17 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:layout_weight="0.5"
-        android:scrollbarFadeDuration="0">
-    </android.support.v4.view.ViewPager>
+        android:scrollbarFadeDuration="0"></android.support.v4.view.ViewPager>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/navigatorLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content">
 
             <Button
                 android:id="@+id/first_button"
@@ -133,7 +132,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.06"
-                android:text="@string/goto_first"/>
+                android:text="@string/goto_first" />
 
             <SeekBar
                 android:id="@+id/navigationSeekbar"
@@ -171,7 +170,7 @@
             android:id="@+id/buttonsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center" >
+            android:gravity="center">
 
             <Button
                 android:id="@+id/saveButton"

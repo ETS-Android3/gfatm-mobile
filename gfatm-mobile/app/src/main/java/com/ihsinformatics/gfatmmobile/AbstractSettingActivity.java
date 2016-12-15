@@ -54,7 +54,7 @@ public abstract class AbstractSettingActivity extends AppCompatActivity implemen
     @Override
     public void onClick(View v) {
 
-        if(v == okButton){
+        if (v == okButton) {
             onBackPressed();
         }
 

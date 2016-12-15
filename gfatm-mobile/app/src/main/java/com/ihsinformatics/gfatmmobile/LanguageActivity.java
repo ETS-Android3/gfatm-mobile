@@ -24,21 +24,21 @@ public class LanguageActivity extends AbstractSettingActivity {
 
         String[] languages = getResources().getStringArray(R.array.languages);
 
-        for(String lang : languages){
+        for (String lang : languages) {
 
             RadioButton rb = new RadioButton(this);
             rb.setText(lang);
-            rb.setPadding(0,40,0,40);
+            rb.setPadding(0, 40, 0, 40);
             rb.setLayoutParams(new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT));
 
             radioGroup.addView(rb);
 
-            if(App.getLanguage().equals(lang))
+            if (App.getLanguage().equals(lang))
                 rb.setChecked(true);
 
-            if(App.isLanguageRTL())
+            if (App.isLanguageRTL())
                 rb.setGravity(Gravity.RIGHT);
 
         }
@@ -48,11 +48,11 @@ public class LanguageActivity extends AbstractSettingActivity {
     @Override
     public void onClick(View v) {
 
-        if(v == okButton){
+        if (v == okButton) {
 
-            final RadioButton rb = (RadioButton) findViewById( radioGroup.getCheckedRadioButtonId());
+            final RadioButton rb = (RadioButton) findViewById(radioGroup.getCheckedRadioButtonId());
 
-            if(!rb.getText().equals(App.getLanguage())){
+            if (!rb.getText().equals(App.getLanguage())) {
 
                 AlertDialog alertDialog = new AlertDialog.Builder(LanguageActivity.this).create();
                 alertDialog.setMessage(getString(R.string.warning_before_language_change));
@@ -63,12 +63,12 @@ public class LanguageActivity extends AbstractSettingActivity {
 
                                 App.setLanguage(rb.getText().toString());
 
-                                Locale locale = new Locale(App.getLanguage().substring (0, 2).toLowerCase());
-                                Locale.setDefault (locale);
+                                Locale locale = new Locale(App.getLanguage().substring(0, 2).toLowerCase());
+                                Locale.setDefault(locale);
                                 Configuration config = new Configuration();
                                 config.setLocale(locale);
-                                getResources().updateConfiguration (config, null);
-                                App.setCurrentLocale (locale);
+                                getResources().updateConfiguration(config, null);
+                                App.setCurrentLocale(locale);
 
                                 onBackPressed();
                             }
@@ -83,8 +83,7 @@ public class LanguageActivity extends AbstractSettingActivity {
                 alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
 
 
-            }
-            else
+            } else
                 onBackPressed();
 
         }

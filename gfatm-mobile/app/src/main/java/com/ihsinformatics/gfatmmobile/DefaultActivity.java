@@ -44,16 +44,16 @@ public class DefaultActivity extends AbstractSettingActivity {
                         AppBarLayout.LayoutParams.MATCH_PARENT,
                         AppBarLayout.LayoutParams.WRAP_CONTENT));
         supportContactLayout.setOrientation(LinearLayout.VERTICAL);
-        supportContactLayout.setPadding(0,40,0,40);
+        supportContactLayout.setPadding(0, 40, 0, 40);
 
         TextView supportContactTextView = new TextView(this);
         supportContactTextView.setText(getString(R.string.support_contact));
         supportContactTextView.setTextColor(color);
         supportContactLayout.addView(supportContactTextView);
         supportContact = new EditText(this);
-        supportContact.setInputType (InputType.TYPE_CLASS_PHONE);
+        supportContact.setInputType(InputType.TYPE_CLASS_PHONE);
         supportContact.setMaxEms(RegexUtil.mobileNumberLength);
-        supportContact.setFilters (new InputFilter[] {new InputFilter.LengthFilter (RegexUtil.mobileNumberLength)});
+        supportContact.setFilters(new InputFilter[]{new InputFilter.LengthFilter(RegexUtil.mobileNumberLength)});
         supportContact.setSingleLine(true);
         supportContact.setText(App.getSupportContact());
         supportContact.setGravity(Gravity.LEFT);
@@ -67,7 +67,7 @@ public class DefaultActivity extends AbstractSettingActivity {
                         AppBarLayout.LayoutParams.MATCH_PARENT,
                         AppBarLayout.LayoutParams.WRAP_CONTENT));
         supportEmailLayout.setOrientation(LinearLayout.VERTICAL);
-        supportEmailLayout.setPadding(0,40,0,40);
+        supportEmailLayout.setPadding(0, 40, 0, 40);
 
         TextView supportEmailTextView = new TextView(this);
         supportEmailTextView.setText(getString(R.string.support_email));
@@ -75,7 +75,7 @@ public class DefaultActivity extends AbstractSettingActivity {
         supportEmailLayout.addView(supportEmailTextView);
         supportEmail = new EditText(this);
         supportEmail.setMaxEms(RegexUtil.defaultEditTextLength);
-        supportEmail.setFilters (new InputFilter[] {new InputFilter.LengthFilter (RegexUtil.defaultEditTextLength)});
+        supportEmail.setFilters(new InputFilter[]{new InputFilter.LengthFilter(RegexUtil.defaultEditTextLength)});
         supportEmail.setSingleLine(true);
         supportEmail.setText(App.getSupportEmail());
         supportEmailLayout.addView(supportEmail);
@@ -88,7 +88,7 @@ public class DefaultActivity extends AbstractSettingActivity {
                         AppBarLayout.LayoutParams.MATCH_PARENT,
                         AppBarLayout.LayoutParams.WRAP_CONTENT));
         cityLayout.setOrientation(LinearLayout.VERTICAL);
-        cityLayout.setPadding(0,40,0,40);
+        cityLayout.setPadding(0, 40, 0, 40);
 
         TextView cityTextView = new TextView(this);
         cityTextView.setText(getString(R.string.city));
@@ -96,7 +96,7 @@ public class DefaultActivity extends AbstractSettingActivity {
         cityLayout.addView(cityTextView);
         city = new EditText(this);
         city.setMaxEms(RegexUtil.defaultEditTextLength);
-        city.setFilters (new InputFilter[] {new InputFilter.LengthFilter (RegexUtil.defaultEditTextLength)});
+        city.setFilters(new InputFilter[]{new InputFilter.LengthFilter(RegexUtil.defaultEditTextLength)});
         city.setSingleLine(true);
         city.setText(App.getCity());
         cityLayout.addView(city);
@@ -109,7 +109,7 @@ public class DefaultActivity extends AbstractSettingActivity {
                         AppBarLayout.LayoutParams.MATCH_PARENT,
                         AppBarLayout.LayoutParams.WRAP_CONTENT));
         countryLayout.setOrientation(LinearLayout.VERTICAL);
-        countryLayout.setPadding(0,40,0,40);
+        countryLayout.setPadding(0, 40, 0, 40);
 
         TextView countryTextView = new TextView(this);
         countryTextView.setText(getString(R.string.country));
@@ -133,7 +133,7 @@ public class DefaultActivity extends AbstractSettingActivity {
     public void onClick(View v) {
 
 
-        if(v == resetButton){
+        if (v == resetButton) {
 
             supportContact.setError(null);
             supportEmail.setError(null);
@@ -144,25 +144,23 @@ public class DefaultActivity extends AbstractSettingActivity {
             city.setText(getString(R.string.city_default));
             country.setSelection(App.getIndex(country, getString(R.string.country_default)));
 
-        }
-
-        else if(v == okButton){
+        } else if (v == okButton) {
 
             Boolean cancel = validateFields();
-            if(!cancel) {
+            if (!cancel) {
 
                 App.setSupportContact(App.get(supportContact));
                 App.setSupportEmail(App.get(supportEmail));
                 App.setCity(App.get(city));
                 App.setCountry(App.get(country));
 
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences (DefaultActivity.this);
-                SharedPreferences.Editor editor = preferences.edit ();
-                editor.putString (Preferences.SUPPORT_CONTACT, App.getSupportContact());
-                editor.putString (Preferences.SUPPORT_EMAIL, App.getSupportEmail());
-                editor.putString (Preferences.CITY, App.getCity());
-                editor.putString (Preferences.COUNTRY, App.getCountry());
-                editor.apply ();
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(DefaultActivity.this);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(Preferences.SUPPORT_CONTACT, App.getSupportContact());
+                editor.putString(Preferences.SUPPORT_EMAIL, App.getSupportEmail());
+                editor.putString(Preferences.CITY, App.getCity());
+                editor.putString(Preferences.COUNTRY, App.getCountry());
+                editor.apply();
 
                 onBackPressed();
             }
@@ -171,7 +169,7 @@ public class DefaultActivity extends AbstractSettingActivity {
 
     }
 
-    public Boolean validateFields(){
+    public Boolean validateFields() {
 
         supportContact.setError(null);
         supportEmail.setError(null);
@@ -179,42 +177,39 @@ public class DefaultActivity extends AbstractSettingActivity {
 
         Boolean cancel = false;
 
-        if(App.get(city).isEmpty()) {
+        if (App.get(city).isEmpty()) {
             city.setError(getString(R.string.empty_field));
             city.requestFocus();
             cancel = true;
-        }
-        else{
+        } else {
 
-            if(!RegexUtil.isWord(App.get(city))) {
+            if (!RegexUtil.isWord(App.get(city))) {
                 city.setError(getString(R.string.invalid_value));
                 city.requestFocus();
                 cancel = true;
             }
         }
 
-        if(App.get(supportEmail).isEmpty()) {
+        if (App.get(supportEmail).isEmpty()) {
             supportEmail.setError(getString(R.string.empty_field));
             supportEmail.requestFocus();
             cancel = true;
-        }
-        else{
+        } else {
 
-            if(!RegexUtil.isEmailAddress(App.get(supportEmail))) {
+            if (!RegexUtil.isEmailAddress(App.get(supportEmail))) {
                 supportEmail.setError(getString(R.string.invalid_value));
                 supportEmail.requestFocus();
                 cancel = true;
             }
         }
 
-        if(App.get(supportContact).isEmpty()) {
+        if (App.get(supportContact).isEmpty()) {
             supportContact.setError(getString(R.string.empty_field));
             supportContact.requestFocus();
             cancel = true;
-        }
-        else{
+        } else {
 
-            if(!RegexUtil.isContactNumber(App.get(supportContact))) {
+            if (!RegexUtil.isContactNumber(App.get(supportContact))) {
                 supportContact.setError(getString(R.string.invalid_value));
                 supportContact.requestFocus();
                 cancel = true;

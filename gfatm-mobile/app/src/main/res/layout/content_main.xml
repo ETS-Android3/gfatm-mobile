@@ -33,7 +33,7 @@
             android:textColor="@color/dark_grey"
             android:drawableTint="@color/dark_grey"
             android:background="?colorBackground"
-            android:drawableLeft="@drawable/ic_form"/>
+            android:drawableLeft="@drawable/ic_form" />
 
         <Button
             android:text="@string/reports"
@@ -46,7 +46,7 @@
             android:textColor="@color/dark_grey"
             android:drawableTint="@color/dark_grey"
             android:background="?colorBackground"
-            android:drawableLeft="@drawable/ic_report"/>
+            android:drawableLeft="@drawable/ic_report" />
 
         <Button
             android:text="@string/search"
@@ -59,7 +59,7 @@
             android:drawableTint="@color/dark_grey"
             android:background="?colorBackground"
             android:onClick="selectFrag"
-            android:drawableLeft="@drawable/ic_search"/>
+            android:drawableLeft="@drawable/ic_search" />
 
 
     </LinearLayout>
@@ -69,8 +69,7 @@
         android:layout_below="@id/buttonLayout"
         android:id="@+id/fragment_place"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -84,7 +83,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/select_program_continue"
-            android:textSize="@dimen/large"/>
+            android:textSize="@dimen/large" />
 
         <RadioGroup
             android:id="@+id/radioGroup"
@@ -98,14 +97,14 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/medium"
                 android:paddingBottom="@dimen/medium"
-                android:text="PMDT"/>
+                android:text="PMDT" />
 
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/medium"
                 android:paddingBottom="@dimen/medium"
-                android:text="PET"/>
+                android:text="PET" />
 
 
             <RadioButton
@@ -113,21 +112,21 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/medium"
                 android:paddingBottom="@dimen/medium"
-                android:text="FAST"/>
+                android:text="FAST" />
 
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/medium"
                 android:paddingBottom="@dimen/medium"
-                android:text="COMORBIDITIES"/>
+                android:text="COMORBIDITIES" />
 
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/medium"
                 android:paddingBottom="@dimen/medium"
-                android:text="CHILDHOOD TB"/>
+                android:text="CHILDHOOD TB" />
 
         </RadioGroup>
 

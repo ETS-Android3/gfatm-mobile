@@ -3,7 +3,7 @@
         android:width="2dp"
         android:color="@color/white"
         android:dashWidth="10dp"
-        android:dashGap="6dp"/>
+        android:dashGap="6dp" />
 
     <corners
         android:bottomLeftRadius="2dp"

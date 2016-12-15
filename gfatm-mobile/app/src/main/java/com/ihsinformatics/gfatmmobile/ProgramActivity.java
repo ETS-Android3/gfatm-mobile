@@ -22,21 +22,21 @@ public class ProgramActivity extends AbstractSettingActivity {
 
         String[] programs = getResources().getStringArray(R.array.programs);
 
-        for(String pro : programs){
+        for (String pro : programs) {
 
             RadioButton rb = new RadioButton(this);
             rb.setText(pro);
-            rb.setPadding(0,40,0,40);
+            rb.setPadding(0, 40, 0, 40);
             rb.setLayoutParams(new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT));
 
             radioGroup.addView(rb);
 
-            if(App.getProgram().equals(pro))
+            if (App.getProgram().equals(pro))
                 rb.setChecked(true);
 
-            if(App.isLanguageRTL())
+            if (App.isLanguageRTL())
                 rb.setGravity(Gravity.RIGHT);
 
         }
@@ -47,58 +47,57 @@ public class ProgramActivity extends AbstractSettingActivity {
     @Override
     public void onClick(View v) {
 
-       if(v == okButton) {
+        if (v == okButton) {
 
-           if (radioGroup.getCheckedRadioButtonId() == -1) {
-               AlertDialog alertDialog = new AlertDialog.Builder(ProgramActivity.this).create();
-               alertDialog.setMessage(getString(R.string.no_program_selected));
-               alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.ok),
-                       new DialogInterface.OnClickListener() {
-                           public void onClick(DialogInterface dialog, int which) {
-                               dialog.dismiss();
-                           }
-                       });
-               alertDialog.show();
-           } else {
-               final RadioButton rb = (RadioButton) findViewById(radioGroup.getCheckedRadioButtonId());
+            if (radioGroup.getCheckedRadioButtonId() == -1) {
+                AlertDialog alertDialog = new AlertDialog.Builder(ProgramActivity.this).create();
+                alertDialog.setMessage(getString(R.string.no_program_selected));
+                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.ok),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();
+            } else {
+                final RadioButton rb = (RadioButton) findViewById(radioGroup.getCheckedRadioButtonId());
 
-               if(!rb.getText().equals(App.getProgram())){
+                if (!rb.getText().equals(App.getProgram())) {
 
-                   AlertDialog alertDialog = new AlertDialog.Builder(ProgramActivity.this).create();
-                   alertDialog.setMessage(getString(R.string.warning_before_program_change));
+                    AlertDialog alertDialog = new AlertDialog.Builder(ProgramActivity.this).create();
+                    alertDialog.setMessage(getString(R.string.warning_before_program_change));
 
-                   alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
-                           new DialogInterface.OnClickListener() {
-                               public void onClick(DialogInterface dialog, int which) {
-                                   dialog.dismiss();
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
 
-                                   App.setProgram(rb.getText().toString());
+                                    App.setProgram(rb.getText().toString());
 
-                                   SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ProgramActivity.this);
-                                   SharedPreferences.Editor editor = preferences.edit();
-                                   editor.putString(Preferences.PROGRAM, App.getProgram());
-                                   editor.apply();
+                                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ProgramActivity.this);
+                                    SharedPreferences.Editor editor = preferences.edit();
+                                    editor.putString(Preferences.PROGRAM, App.getProgram());
+                                    editor.apply();
 
-                                   onBackPressed();
-                               }
-                           });
-                   alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
-                           new DialogInterface.OnClickListener() {
-                               public void onClick(DialogInterface dialog, int which) {
-                                   dialog.dismiss();
-                               }
-                           });
+                                    onBackPressed();
+                                }
+                            });
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
 
-                   alertDialog.show();
-                   alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
+                    alertDialog.show();
+                    alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
 
 
-               }
-                else
+                } else
                     onBackPressed();
 
-           }
-       }
+            }
+        }
 
     }
 

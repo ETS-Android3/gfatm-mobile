@@ -1,9 +1,8 @@
 package com.ihsinformatics.gfatmmobile;
 
 /**
- *
  * Abstract Class for forms. All Forms should extend this class
- *
+ * <p>
  * Created by Rabbia on 11/10/2016.
  */
 
@@ -56,8 +55,7 @@ public abstract class AbstractFormActivity extends Fragment
         SeekBar.OnSeekBarChangeListener,
         AdapterView.OnItemSelectedListener,
         CompoundButton.OnCheckedChangeListener,
-        View.OnLongClickListener
-   {
+        View.OnLongClickListener {
 
     // main Layout
     protected View mainContent;
@@ -66,7 +64,7 @@ public abstract class AbstractFormActivity extends Fragment
     // Views for formDate
     protected Calendar formDateCalendar;
     protected DialogFragment formDateFragment;
-    public static final int	DATE_DIALOG_ID	= 1;
+    public static final int DATE_DIALOG_ID = 1;
 
     // Extra Views for date ...
     protected Calendar secondDateCalendar;
@@ -74,28 +72,27 @@ public abstract class AbstractFormActivity extends Fragment
     public static final int SECOND_DATE_DIALOG_ID = 2;
 
     //for all views in fragment
-    protected ArrayList<ViewGroup>	groups;
+    protected ArrayList<ViewGroup> groups;
     // for all views that need to be reset
     protected View[][] viewGroups;
 
     // Views from Template Layout
-    protected int			        PAGE_COUNT		= 0;
-    protected String                FORM_NAME       = "";
-    protected View[]				views;
-    protected ViewPager             pager;
-    protected SeekBar               navigationSeekbar;
-    protected LinearLayout          navigatorLayout;
-    protected Button				firstButton;
-    protected Button				lastButton;
-    protected Button				nextButton;
-    protected Button                submitButton;
-    protected Button                saveButton;
-    protected Button				clearButton;
-    protected TextView				pageButton;
-    protected TextView              formName;
+    protected int PAGE_COUNT = 0;
+    protected String FORM_NAME = "";
+    protected View[] views;
+    protected ViewPager pager;
+    protected SeekBar navigationSeekbar;
+    protected LinearLayout navigatorLayout;
+    protected Button firstButton;
+    protected Button lastButton;
+    protected Button nextButton;
+    protected Button submitButton;
+    protected Button saveButton;
+    protected Button clearButton;
+    protected TextView pageButton;
+    protected TextView formName;
 
-    protected TextView              editTextView;
-
+    protected TextView editTextView;
 
 
     @Override
@@ -106,29 +103,29 @@ public abstract class AbstractFormActivity extends Fragment
         mainContent = inflater.inflate(R.layout.form_fragment_template, container, false);
 
         // initializing all views an classes
-        serverService = new ServerService (mainContent.getContext());
+        serverService = new ServerService(mainContent.getContext());
 
-        formDateCalendar = Calendar.getInstance ();
+        formDateCalendar = Calendar.getInstance();
         formDateFragment = new SelectDateFragment();
 
-        secondDateCalendar = Calendar.getInstance ();
+        secondDateCalendar = Calendar.getInstance();
         secondDateFragment = new SelectDateFragment();
 
         editTextView = (TextView) mainContent.findViewById(R.id.edit);
         editTextView.setPaintFlags(editTextView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
-        navigationSeekbar = (SeekBar) mainContent.findViewById (R.id.navigationSeekbar);
-        pageButton = (TextView) mainContent.findViewById (R.id.pageCount);
+        navigationSeekbar = (SeekBar) mainContent.findViewById(R.id.navigationSeekbar);
+        pageButton = (TextView) mainContent.findViewById(R.id.pageCount);
         formName = (TextView) mainContent.findViewById(R.id.formName);
-        navigatorLayout = (LinearLayout) mainContent.findViewById (R.id.navigatorLayout);
-        firstButton = (Button) mainContent.findViewById (R.id.first_button);
-        lastButton = (Button) mainContent.findViewById (R.id.last_button);
-        nextButton = (Button) mainContent.findViewById (R.id.next_button);
-        clearButton = (Button) mainContent.findViewById (R.id.clearButton);
-        submitButton = (Button) mainContent.findViewById (R.id.submitButton);
+        navigatorLayout = (LinearLayout) mainContent.findViewById(R.id.navigatorLayout);
+        firstButton = (Button) mainContent.findViewById(R.id.first_button);
+        lastButton = (Button) mainContent.findViewById(R.id.last_button);
+        nextButton = (Button) mainContent.findViewById(R.id.next_button);
+        clearButton = (Button) mainContent.findViewById(R.id.clearButton);
+        submitButton = (Button) mainContent.findViewById(R.id.submitButton);
         saveButton = (Button) mainContent.findViewById(R.id.saveButton);
 
-        if(App.getMode().equalsIgnoreCase("Offline"))
+        if (App.getMode().equalsIgnoreCase("Offline"))
             submitButton.setVisibility(View.GONE);
         else
             submitButton.setVisibility(View.VISIBLE);
@@ -145,17 +142,17 @@ public abstract class AbstractFormActivity extends Fragment
                 ((RadioGroup) v).setOnClickListener(this);
             } else if (v instanceof Button) {
                 ((Button) v).setOnClickListener(this);
-            }  else if (v instanceof RadioButton) {
+            } else if (v instanceof RadioButton) {
                 ((RadioButton) v).setOnClickListener(this);
             } else if (v instanceof ImageButton) {
                 ((ImageButton) v).setOnClickListener(this);
             }
         }
-        navigationSeekbar.setOnSeekBarChangeListener (this);
+        navigationSeekbar.setOnSeekBarChangeListener(this);
 
         // For RTL language rotating the seekbar
-        if(App.isLanguageRTL())
-            navigationSeekbar.setRotation( 180 );
+        if (App.isLanguageRTL())
+            navigationSeekbar.setRotation(180);
 
         return mainContent;
     }
@@ -163,29 +160,26 @@ public abstract class AbstractFormActivity extends Fragment
     /**
      * Initialize views
      */
-    public abstract void initViews ();
+    public abstract void initViews();
 
     /**
      * Updates data in form views
      */
-    public abstract void updateDisplay ();
+    public abstract void updateDisplay();
 
     /**
      * Goto first view in the pager
      */
-    public void gotoNextPage ()
-    {
+    public void gotoNextPage() {
 
         int cp = pager.getCurrentItem();
 
-        if (App.isLanguageRTL ())
-        {
-            if(pager.getCurrentItem()-1 >= 0)
-                gotoPage(pager.getCurrentItem()-1);
-        }
-        else{
-            if(pager.getCurrentItem()+1 != PAGE_COUNT)
-                gotoPage(pager.getCurrentItem()+1);
+        if (App.isLanguageRTL()) {
+            if (pager.getCurrentItem() - 1 >= 0)
+                gotoPage(pager.getCurrentItem() - 1);
+        } else {
+            if (pager.getCurrentItem() + 1 != PAGE_COUNT)
+                gotoPage(pager.getCurrentItem() + 1);
         }
     }
 
@@ -193,39 +187,30 @@ public abstract class AbstractFormActivity extends Fragment
     /**
      * Goto first view in the pager
      */
-    public void gotoFirstPage ()
-    {
-        if (App.isLanguageRTL ())
-        {
-            gotoPage (PAGE_COUNT - 1);
-        }
-        else
-        {
-            gotoPage (0);
+    public void gotoFirstPage() {
+        if (App.isLanguageRTL()) {
+            gotoPage(PAGE_COUNT - 1);
+        } else {
+            gotoPage(0);
         }
     }
 
     /**
      * Goto last view in the pager
      */
-    public void gotoLastPage ()
-    {
+    public void gotoLastPage() {
 
-        if (App.isLanguageRTL ())
-        {
-            gotoPage (0);
-        }
-        else
-        {
-            gotoPage (PAGE_COUNT - 1);
+        if (App.isLanguageRTL()) {
+            gotoPage(0);
+        } else {
+            gotoPage(PAGE_COUNT - 1);
         }
     }
 
     /**
      * Goto view at given location in the pager
      */
-    protected void gotoPage (int pageNo)
-    {
+    protected void gotoPage(int pageNo) {
 
         pager.setCurrentItem(pageNo);
         navigationSeekbar.setProgress(pageNo);
@@ -237,96 +222,88 @@ public abstract class AbstractFormActivity extends Fragment
      *
      * @return
      */
-    public abstract boolean validate ();
+    public abstract boolean validate();
+
     /**
      * Submit the form to the server
      *
      * @return
      */
-    public abstract boolean submit ();
+    public abstract boolean submit();
 
     /**
      * Save the form to the server
      *
      * @return
      */
-    public abstract boolean save ();
+    public abstract boolean save();
 
     @Override
-    public void onNothingSelected (AdapterView<?> view)
-    {
+    public void onNothingSelected(AdapterView<?> view) {
         // Not implemented
     }
 
     @Override
-    public void onStopTrackingTouch (SeekBar seekbar)
-    {
+    public void onStopTrackingTouch(SeekBar seekbar) {
         // Not implemented
     }
 
     @Override
-    public void onStartTrackingTouch (SeekBar seekbar)
-    {
+    public void onStartTrackingTouch(SeekBar seekbar) {
         // Not implemented
     }
 
     @Override
-    public void onProgressChanged (SeekBar seekbar, int progress, boolean isByUser)
-    {
+    public void onProgressChanged(SeekBar seekbar, int progress, boolean isByUser) {
         // Move to page at the index of progress
-        pager.setCurrentItem (progress);
+        pager.setCurrentItem(progress);
         setPageCountStatus();
     }
 
     @Override
-    public void onPageSelected (int pageNo)
-    {
-        gotoPage (pageNo);
+    public void onPageSelected(int pageNo) {
+        gotoPage(pageNo);
 
     }
 
     @Override
-    public void onPageScrolled (int arg0, float arg1, int arg2)
-    {
+    public void onPageScrolled(int arg0, float arg1, int arg2) {
 
     }
 
     @Override
-    public void onPageScrollStateChanged (int arg0)
-    {
+    public void onPageScrollStateChanged(int arg0) {
         // Not implemented
     }
 
-    public void setPageCountStatus ()
-    {
+    public void setPageCountStatus() {
 
         String currentPage = "";
         String totalPage = "";
 
-        if(App.isLanguageRTL()){
+        if (App.isLanguageRTL()) {
 
             int count = PAGE_COUNT - pager.getCurrentItem();
 
-            if(count < 10)
+            if (count < 10)
                 currentPage = "0" + (count);
             else
                 currentPage = "" + (count);
 
 
-            if(PAGE_COUNT < 10)
+            if (PAGE_COUNT < 10)
                 totalPage = "0" + PAGE_COUNT;
             else
                 totalPage = "" + PAGE_COUNT;
 
-        }
-        else{
+        } else {
 
-            if(pager.getCurrentItem()+1 < 10)
-                currentPage = "0" + (pager.getCurrentItem()+1);
+            if (pager.getCurrentItem() + 1 < 10)
+                currentPage = "0" + (pager.getCurrentItem() + 1);
             else
-                currentPage = "" + (pager.getCurrentItem()+1);
+                currentPage = "" + (pager.getCurrentItem() + 1);
 
-            if(PAGE_COUNT < 10)
+            if (PAGE_COUNT < 10)
                 totalPage = "0" + PAGE_COUNT;
             else
                 totalPage = "" + PAGE_COUNT;
@@ -341,18 +318,13 @@ public abstract class AbstractFormActivity extends Fragment
     @Override
     public void onClick(View view) {
 
-        if (view == firstButton)
-        {
-            gotoFirstPage ();
-        }
-        else if (view == lastButton)
-        {
-            gotoLastPage ();
-        }
-        else if (view == nextButton){
+        if (view == firstButton) {
+            gotoFirstPage();
+        } else if (view == lastButton) {
+            gotoLastPage();
+        } else if (view == nextButton) {
             gotoNextPage();
-        }
-        else if (view == clearButton){
+        } else if (view == clearButton) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
@@ -365,9 +337,9 @@ public abstract class AbstractFormActivity extends Fragment
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                           resetViews();
+                            resetViews();
                             try {
-                                InputMethodManager imm = (InputMethodManager)mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
+                                InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
                             } catch (Exception e) {
                                 // TODO: handle exception
@@ -383,9 +355,8 @@ public abstract class AbstractFormActivity extends Fragment
             alertDialog.show();
             alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
 
-        }
-        else if (view == submitButton){
-            if(validate()){
+        } else if (view == submitButton) {
+            if (validate()) {
 
                 int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
@@ -411,8 +382,7 @@ public abstract class AbstractFormActivity extends Fragment
                 alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
 
             }
-        }
-        else if (view == saveButton){
+        } else if (view == saveButton) {
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
@@ -439,39 +409,23 @@ public abstract class AbstractFormActivity extends Fragment
 
     }
 
-    public void resetViews(){
-        for (View v : views)
-        {
-            if (v instanceof MySpinner)
-            {
+    public void resetViews() {
+        for (View v : views) {
+            if (v instanceof MySpinner) {
                 ((MySpinner) v).selectDefaultValue();
-            }
-            else  if (v instanceof TitledSpinner)
-            {
+            } else if (v instanceof TitledSpinner) {
                 ((TitledSpinner) v).getSpinner().selectDefaultValue();
-            }
-            else if (v instanceof MyEditText)
-            {
+            } else if (v instanceof MyEditText) {
                 ((MyEditText) v).setDefaultValue();
-            }
-            else if (v instanceof TitledEditText)
-            {
+            } else if (v instanceof TitledEditText) {
                 ((TitledEditText) v).getEditText().setDefaultValue();
-            }
-            else if (v instanceof MyRadioGroup)
-            {
+            } else if (v instanceof MyRadioGroup) {
                 ((MyRadioGroup) v).selectDefaultValue();
-            }
-            else if (v instanceof TitledRadioGroup)
-            {
+            } else if (v instanceof TitledRadioGroup) {
                 ((TitledRadioGroup) v).getRadioGroup().selectDefaultValue();
-            }
-            else if (v instanceof TitledCheckBoxes)
-            {
+            } else if (v instanceof TitledCheckBoxes) {
                 ((TitledCheckBoxes) v).selectDefaultValue();
-            }
-            else if (v instanceof MyCheckBox)
-            {
+            } else if (v instanceof MyCheckBox) {
                 ((MyCheckBox) v).setDefaultValue();
             }
 
@@ -485,38 +439,38 @@ public abstract class AbstractFormActivity extends Fragment
     }
 
 
-       public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+    public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
-           @Override
-           public Dialog onCreateDialog(Bundle savedInstanceState) {
-               final Calendar calendar;
-               if(getArguments().getInt("type") == DATE_DIALOG_ID)
-                    calendar = formDateCalendar;
-               else if(getArguments().getInt("type") == SECOND_DATE_DIALOG_ID)
-                   calendar = secondDateCalendar;
-               else
-                   return null;
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final Calendar calendar;
+            if (getArguments().getInt("type") == DATE_DIALOG_ID)
+                calendar = formDateCalendar;
+            else if (getArguments().getInt("type") == SECOND_DATE_DIALOG_ID)
+                calendar = secondDateCalendar;
+            else
+                return null;
 
-               int yy = calendar.get(Calendar.YEAR);
-               int mm = calendar.get(Calendar.MONTH);
-               int dd = calendar.get(Calendar.DAY_OF_MONTH);
-               DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, yy, mm, dd);
-               dialog.getDatePicker().setTag(getArguments().getInt("type"));
-               dialog.getDatePicker().setMaxDate(new Date().getTime());
-               return dialog;
-           }
+            int yy = calendar.get(Calendar.YEAR);
+            int mm = calendar.get(Calendar.MONTH);
+            int dd = calendar.get(Calendar.DAY_OF_MONTH);
+            DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, yy, mm, dd);
+            dialog.getDatePicker().setTag(getArguments().getInt("type"));
+            dialog.getDatePicker().setMaxDate(new Date().getTime());
+            return dialog;
+        }
 
-           @Override
-           public void onDateSet(DatePicker view, int yy, int mm, int dd) {
+        @Override
+        public void onDateSet(DatePicker view, int yy, int mm, int dd) {
 
-               if(((int)view.getTag()) == DATE_DIALOG_ID)
-                    formDateCalendar.set(yy,mm,dd);
-               else if(((int)view.getTag()) == SECOND_DATE_DIALOG_ID)
-                    secondDateCalendar.set(yy,mm,dd);
+            if (((int) view.getTag()) == DATE_DIALOG_ID)
+                formDateCalendar.set(yy, mm, dd);
+            else if (((int) view.getTag()) == SECOND_DATE_DIALOG_ID)
+                secondDateCalendar.set(yy, mm, dd);
 
-               updateDisplay();
-           }
-       }
+            updateDisplay();
+        }
+    }
 
 }
 

@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity
 
     FormFragment fragmentForm = new FormFragment();
     ReportFragment fragmentReport = new ReportFragment();
-    BlankFragment  blankFragment = new BlankFragment();
+    BlankFragment blankFragment = new BlankFragment();
 
     FragmentManager fm = getFragmentManager();
 
@@ -75,8 +75,8 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        View hView =  navigationView.getHeaderView(0);
-        TextView nav_user = (TextView)hView.findViewById(R.id.menuUsername);
+        View hView = navigationView.getHeaderView(0);
+        TextView nav_user = (TextView) hView.findViewById(R.id.menuUsername);
         nav_user.setText(App.getUsername());
 
         String title = toolbar.getTitle() + " (" + App.getVersion() + ")";
@@ -88,11 +88,10 @@ public class MainActivity extends AppCompatActivity
         programLayout = (LinearLayout) findViewById(R.id.programLayout);
 
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-        {
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
 
-                RadioButton rb=(RadioButton)findViewById(checkedId);
+                RadioButton rb = (RadioButton) findViewById(checkedId);
                 App.setProgram(rb.getText().toString());
 
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
@@ -126,7 +125,7 @@ public class MainActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();  // Always call the superclass method first
 
-        if(!getSupportActionBar().getSubtitle().toString().contains(App.getProgram())){
+        if (!getSupportActionBar().getSubtitle().toString().contains(App.getProgram())) {
             String subtitle = getResources().getString(R.string.program) + " " + App.getProgram();
             getSupportActionBar().setSubtitle(subtitle);
 
@@ -135,9 +134,9 @@ public class MainActivity extends AppCompatActivity
         }
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-        String lang = preferences.getString (Preferences.LANGUAGE, "");
+        String lang = preferences.getString(Preferences.LANGUAGE, "");
 
-        if(!App.getLanguage().equals(lang)){
+        if (!App.getLanguage().equals(lang)) {
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString(Preferences.LANGUAGE, App.getLanguage());
             editor.apply();
@@ -164,7 +163,7 @@ public class MainActivity extends AppCompatActivity
             AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
             alertDialog.setMessage(getString(R.string.warning_before_close_form));
             Drawable backIcon = getResources().getDrawable(R.drawable.ic_back);
-            backIcon.setAutoMirrored (true);
+            backIcon.setAutoMirrored(true);
             DrawableCompat.setTint(backIcon, color);
             alertDialog.setIcon(backIcon);
             alertDialog.setTitle(getResources().getString(R.string.back_to_form_menu));
@@ -195,7 +194,7 @@ public class MainActivity extends AppCompatActivity
         AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
         alertDialog.setMessage(getString(R.string.warning_before_close));
         Drawable backIcon = getResources().getDrawable(R.drawable.ic_back);
-        backIcon.setAutoMirrored (true);
+        backIcon.setAutoMirrored(true);
         DrawableCompat.setTint(backIcon, color);
         alertDialog.setIcon(backIcon);
         alertDialog.setTitle(getResources().getString(R.string.title_close));
@@ -219,7 +218,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void close(){
+    public void close() {
         super.onBackPressed();
     }
 
@@ -236,8 +235,8 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.saved_forms) {
-            Intent savedFormIntent = new Intent (this, SavedFormActivity.class);
-            startActivity (savedFormIntent);
+            Intent savedFormIntent = new Intent(this, SavedFormActivity.class);
+            startActivity(savedFormIntent);
         }
 
         return super.onOptionsItemSelected(item);
@@ -251,42 +250,40 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_program) {
 
-            Intent programActivityIntent = new Intent (this, ProgramActivity.class);
-            startActivity (programActivityIntent);
+            Intent programActivityIntent = new Intent(this, ProgramActivity.class);
+            startActivity(programActivityIntent);
 
         } else if (id == R.id.nav_theme) {
 
-            Intent themeActivityIntent = new Intent (this, ThemeActivity.class);
-            startActivity (themeActivityIntent);
+            Intent themeActivityIntent = new Intent(this, ThemeActivity.class);
+            startActivity(themeActivityIntent);
 
         } else if (id == R.id.nav_language) {
 
-            Intent languageActivityIntent = new Intent (this, LanguageActivity.class);
-            startActivity (languageActivityIntent);
+            Intent languageActivityIntent = new Intent(this, LanguageActivity.class);
+            startActivity(languageActivityIntent);
 
         } else if (id == R.id.nav_operation_mode) {
 
-            Intent operationModeActivityIntent = new Intent (this, OperationModeActivity.class);
-            startActivity (operationModeActivityIntent);
+            Intent operationModeActivityIntent = new Intent(this, OperationModeActivity.class);
+            startActivity(operationModeActivityIntent);
 
         } else if (id == R.id.nav_defaults) {
 
-            Intent defaultActivityIntent = new Intent (this, DefaultActivity.class);
-            startActivity (defaultActivityIntent);
+            Intent defaultActivityIntent = new Intent(this, DefaultActivity.class);
+            startActivity(defaultActivityIntent);
 
         } else if (id == R.id.nav_server) {
 
-            Intent serverActivityIntent = new Intent (this, ServerActivity.class);
-            startActivity (serverActivityIntent);
+            Intent serverActivityIntent = new Intent(this, ServerActivity.class);
+            startActivity(serverActivityIntent);
 
-        }   else if (id == R.id.nav_ssl_encryption) {
+        } else if (id == R.id.nav_ssl_encryption) {
 
-            Intent sslActivityIntent = new Intent (this, SSLEncryptionActivity.class);
-            startActivity (sslActivityIntent);
+            Intent sslActivityIntent = new Intent(this, SSLEncryptionActivity.class);
+            startActivity(sslActivityIntent);
 
-        }
-
-        else if (id == R.id.nav_logout) {
+        } else if (id == R.id.nav_logout) {
 
             int color = App.getColor(MainActivity.this, R.attr.colorAccent);
 
@@ -301,11 +298,11 @@ public class MainActivity extends AppCompatActivity
                         public void onClick(DialogInterface dialog, int which) {
 
                             App.setAutoLogin("Disabled");
-                            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences (MainActivity.this);
-                            SharedPreferences.Editor editor = preferences.edit ();
-                            editor.putString (Preferences.LAST_LOGIN, App.getLastLogin());
-                            editor.putString (Preferences.AUTO_LOGIN, App.getAutoLogin());
-                            editor.apply ();
+                            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putString(Preferences.LAST_LOGIN, App.getLastLogin());
+                            editor.putString(Preferences.AUTO_LOGIN, App.getAutoLogin());
+                            editor.apply();
                             startLoginIntent();
 
                         }
@@ -328,11 +325,11 @@ public class MainActivity extends AppCompatActivity
 
     public void selectFrag(View view) {
 
-        if(view == formButton)
+        if (view == formButton)
             showFormFragment();
-        else if(view == reportButton)
+        else if (view == reportButton)
             showReportFragment();
-        else if(view == searchButton)
+        else if (view == searchButton)
             showSearchFragment();
 
     }
@@ -361,7 +358,7 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.commit();
     }
 
-    private void showReportFragment(){
+    private void showReportFragment() {
 
         int color = App.getColor(this, R.attr.colorPrimaryDark);
 
@@ -385,7 +382,7 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.commit();
     }
 
-    private void showSearchFragment(){
+    private void showSearchFragment() {
 
         int color = App.getColor(this, R.attr.colorPrimaryDark);
 
@@ -409,7 +406,7 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.commit();
     }
 
-    private void showProgramSelection(){
+    private void showProgramSelection() {
 
         programLayout.setVisibility(View.VISIBLE);
         buttonLayout.setVisibility(View.GONE);
@@ -417,7 +414,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     *
      * Restarts the current activity...
      */
     private void restartActivity() {
@@ -426,9 +422,9 @@ public class MainActivity extends AppCompatActivity
         startActivity(intent);
     }
 
-    private  void startLoginIntent(){
-        Intent loginActivityIntent = new Intent (this, LoginActivity.class);
-        startActivity (loginActivityIntent);
+    private void startLoginIntent() {
+        Intent loginActivityIntent = new Intent(this, LoginActivity.class);
+        startActivity(loginActivityIntent);
         finish();
     }
 
