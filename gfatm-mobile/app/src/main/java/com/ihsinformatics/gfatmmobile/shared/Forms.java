@@ -15,9 +15,10 @@ import java.util.ArrayList;
 
 public class Forms {
 
-    public static final String	INDEX_PATIENT_REGISTRATION		=  "Index Patient Registration";
+    public static final String INDEX_PATIENT_REGISTRATION = "Index Patient Registration";
+    public static final String COMORBIDITIES_SCREENING_FORM = "Screening Form Mental Health And DM";
 
-    public static ArrayList<FormsObject> getPETFormList(){
+    public static ArrayList<FormsObject> getPETFormList() {
 
         ArrayList<FormsObject> petList = new ArrayList<>();
 
@@ -34,7 +35,7 @@ public class Forms {
         FormsObject counsellingFollowup = new FormsObject("Counselling Follow-up", AbstractFormActivity.class, R.drawable.pet_counselling_followup, FormTypeColor.FOLLOWUP_FORM);
         FormsObject adverseEvents = new FormsObject("Adverse Events", AbstractFormActivity.class, R.drawable.pet_adverse_events, FormTypeColor.OTHER_FORM);
         FormsObject incentiveDisbursement = new FormsObject("Incentive Disbursement", AbstractFormActivity.class, R.drawable.pet_incentive_disbursement, FormTypeColor.OTHER_FORM);
-        FormsObject endOfFollowup = new FormsObject("End of Follow-up", AbstractFormActivity.class, R.drawable.pet_followup_end,FormTypeColor.FOLLOWUP_FORM);
+        FormsObject endOfFollowup = new FormsObject("End of Follow-up", AbstractFormActivity.class, R.drawable.pet_followup_end, FormTypeColor.FOLLOWUP_FORM);
 
         petList.add(indexPatientRegistration);
         petList.add(contactRegistry);
@@ -55,7 +56,7 @@ public class Forms {
 
     }
 
-    public static ArrayList<FormsObject> getPMDTFormList(){
+    public static ArrayList<FormsObject> getPMDTFormList() {
 
         ArrayList<FormsObject> pmdtList = new ArrayList<>();
 
@@ -71,13 +72,13 @@ public class Forms {
 
     }
 
-    public static ArrayList<FormsObject> getFASTFormList(){
+    public static ArrayList<FormsObject> getFASTFormList() {
 
         ArrayList<FormsObject> fastList = new ArrayList<>();
 
-        FormsObject indexPatientRegistration = new FormsObject("Screening Form", AbstractFormActivity.class, R.drawable.pet_registration,FormTypeColor.REGISTRATION_FORM);
+        FormsObject indexPatientRegistration = new FormsObject("Screening Form", AbstractFormActivity.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
         FormsObject contactRegistry = new FormsObject("Presumptive Form", AbstractFormActivity.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
-        FormsObject baselineScreening = new FormsObject("Sputum Container and X-Ray Voucher Form", AbstractFormActivity.class, R.drawable.pet_registration,FormTypeColor.REGISTRATION_FORM);
+        FormsObject baselineScreening = new FormsObject("Sputum Container and X-Ray Voucher Form", AbstractFormActivity.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
 
         fastList.add(indexPatientRegistration);
         fastList.add(contactRegistry);
@@ -87,7 +88,7 @@ public class Forms {
 
     }
 
-    public static ArrayList<FormsObject> getChildhoodTBFormList(){
+    public static ArrayList<FormsObject> getChildhoodTBFormList() {
 
         ArrayList<FormsObject> childhoodtbList = new ArrayList<>();
 
@@ -104,7 +105,7 @@ public class Forms {
     }
 
 
-    public static ArrayList<FormsObject> getCommorbiditiesFormList(){
+    public static ArrayList<FormsObject> getCommorbiditiesFormList() {
 
         ArrayList<FormsObject> comorbiditiesList = new ArrayList<>();
 

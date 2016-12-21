@@ -118,7 +118,7 @@ public class ScreeningFormMHDM extends AbstractFormActivity implements RadioGrou
                              ViewGroup container, Bundle savedInstanceState) {
 
         PAGE_COUNT = 3;
-        FORM_NAME = Forms.INDEX_PATIENT_REGISTRATION;
+        FORM_NAME = Forms.COMORBIDITIES_SCREENING_FORM;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -293,27 +293,27 @@ public class ScreeningFormMHDM extends AbstractFormActivity implements RadioGrou
         });
 
         screeningRBS.getEditText().setSingleLine(true);
-        screeningRBS.getEditText().setOnEditorActionListener(
-                new EditText.OnEditorActionListener() {
-                    @Override
-                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                        if (actionId == EditorInfo.IME_ACTION_SEARCH ||
-                                actionId == EditorInfo.IME_ACTION_DONE ||
-                                event.getKeyCode() == KeyEvent.KEYCODE_BACK &&
-                                        event.getAction() == KeyEvent.ACTION_UP && event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-                            //if (!event.isShiftPressed()) {
-                            // the user is done typing.
+        screeningRBS.getEditText().addTextChangedListener(new TextWatcher() {
 
-                            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                            imm.hideSoftInputFromWindow(screeningRBS.getEditText().getWindowToken(), 0);
-                            displayHba1cTestVoucherOrNot();
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
 
-                            return true; // consume.
-                            //}
-                        }
-                        return false; // pass on to other listeners.
-                    }
-                });
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                try {
+                    displayHba1cTestVoucherOrNot();
+                } catch (NumberFormatException nfe) {
+                    //Exception: User might be entering " " (empty) value
+                }
+            }
+        });
     }
 
     @Override

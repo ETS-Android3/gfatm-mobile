@@ -35,7 +35,7 @@
     <string name="preferredlocation_id">Preferred location for Therapy:</string>
     <string name="preferredlocation_gpcliniccode">GP Clinic Code:</string>
     <string name="preferredlocation_other_comorbidities">Other preferred location:</string>
-    <string name="dm_screening">DM SCREENING</string>
+    <string name="dm_screening">DIABETES MELLITUS SCREENING</string>
     <string name="dmscrnng_food">Have you had something to eat within the last two hours?</string>
     <string name="scrnng_rbs">RBS:</string>
     <string name="hba1c_testvoucher">HbA1C test voucher given?</string>
