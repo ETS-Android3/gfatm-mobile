@@ -26,7 +26,7 @@
             android:id="@+id/pageCount"
             android:text="0/0"
             android:textSize="@dimen/xlarge"
-            android:gravity="right" />
+            android:gravity="left" />
 
     </LinearLayout>
 

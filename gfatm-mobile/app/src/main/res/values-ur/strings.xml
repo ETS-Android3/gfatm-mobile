@@ -15,4 +15,6 @@
         <item>کھولیں</item>
         <item>کھولیں</item>
     </string-array>
+    <string name="no">نہیں</string>
+    <string name="yes">ہاں</string>
 </resources>

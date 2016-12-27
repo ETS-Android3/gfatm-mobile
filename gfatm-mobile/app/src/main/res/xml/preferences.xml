@@ -11,13 +11,13 @@
         android:key="language"
         android:persistent="true"
         android:title="Language"
-        android:defaultValue="@string/english_language" />
+        android:defaultValue="@string/english" />
 
     <EditTextPreference
         android:key="mode"
         android:persistent="true"
         android:title="Mode"
-        android:defaultValue="@string/online_mode" />
+        android:defaultValue="@string/online" />
 
     <EditTextPreference
         android:key="support_contact"
@@ -52,7 +52,7 @@
         android:title="Port" />
 
     <EditTextPreference
-        android:defaultValue="@string/ssl_default"
+        android:defaultValue="@string/enabled"
         android:key="ssl"
         android:title="SSL Encryption" />
 

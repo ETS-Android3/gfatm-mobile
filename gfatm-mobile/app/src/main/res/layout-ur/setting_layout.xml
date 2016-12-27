@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
-    <android.support.design.widget.AppBarLayout
+    <!--<android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/DarkTheme.AppBarOverlay"
@@ -18,19 +18,20 @@
             android:background="?colorPrimary"
             app:popupTheme="@style/DarkTheme.PopupOverlay" />
 
-    </android.support.design.widget.AppBarLayout>
+    </android.support.design.widget.AppBarLayout>-->
 
     <ScrollView
+        android:id="@+id/scrollView"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/toolbarParent">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:id="@+id/layout"
+            android:padding="@dimen/small"
             android:divider="?android:attr/dividerHorizontal"
             android:showDividers="middle">
 
@@ -50,9 +51,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:orientation="horizontal"
-        android:gravity="left">
+        android:layout_below="@id/scrollView"
+        android:gravity="right">
 
         <TextView
             android:id="@+id/resetButton"
