@@ -14,7 +14,7 @@ public class MyCheckBox extends CheckBox {
     public MyCheckBox(Context context, String text, Boolean defaultValue) {
         super(context);
 
-        if(defaultValue != null)
+        if (defaultValue != null)
             this.defaultValue = defaultValue;
 
         setText(text);
@@ -23,12 +23,12 @@ public class MyCheckBox extends CheckBox {
 
     }
 
-    public void setDefaultValue(){
+    public void setDefaultValue() {
         setChecked(defaultValue);
     }
 
-    public boolean getValue(){
-        if(isChecked())
+    public boolean getValue() {
+        if (isChecked())
             return true;
         else
             return false;

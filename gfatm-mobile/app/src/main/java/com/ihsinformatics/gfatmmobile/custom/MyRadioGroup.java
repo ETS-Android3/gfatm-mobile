@@ -19,60 +19,57 @@ import java.util.ArrayList;
  * Created by Rabbia on 11/25/2016.
  */
 
-public class MyRadioGroup extends RadioGroup implements android.widget.CompoundButton.OnCheckedChangeListener{
+public class MyRadioGroup extends RadioGroup implements android.widget.CompoundButton.OnCheckedChangeListener {
 
-    private ArrayList<RadioButton>	buttons = new ArrayList<RadioButton>();
+    private ArrayList<RadioButton> buttons = new ArrayList<RadioButton>();
     private String defaultValue;
 
     public MyRadioGroup(Context context, String[] options, String defaultValue, int radioButtonsLayout) {
         super(context);
         this.defaultValue = defaultValue;
 
-        for(String opt : options){
+        for (String opt : options) {
 
             RadioButton rb = new RadioButton(context);
             rb.setText(opt);
             buttons.add(rb);
-            rb.setPadding(0,0,20,0);
+            rb.setPadding(0, 0, 20, 0);
             addView(rb);
 
         }
 
-        if(radioButtonsLayout == App.HORIZONTAL)
-            setOrientation (LinearLayout.HORIZONTAL);
+        if (radioButtonsLayout == App.HORIZONTAL)
+            setOrientation(LinearLayout.HORIZONTAL);
         else
-            setOrientation (LinearLayout.VERTICAL);
+            setOrientation(LinearLayout.VERTICAL);
 
         selectDefaultValue();
 
     }
 
     @Override
-    public void onCheckedChanged (CompoundButton button, boolean state)
-    {
-        if (state)
-        {
-            for (RadioButton r : buttons)
-            {
+    public void onCheckedChanged(CompoundButton button, boolean state) {
+        if (state) {
+            for (RadioButton r : buttons) {
                 if (r != button)
-                    r.setChecked (false);
+                    r.setChecked(false);
             }
         }
     }
 
-    public void selectDefaultValue(){
-        for(RadioButton rb: buttons){
+    public void selectDefaultValue() {
+        for (RadioButton rb : buttons) {
             String str = rb.getText().toString();
-            if(str.equals(defaultValue))
+            if (str.equals(defaultValue))
                 rb.setChecked(true);
         }
     }
 
 
-    public String getSelectedValue(){
+    public String getSelectedValue() {
         String value = "";
-        for(RadioButton rb: buttons){
-            if(rb.isChecked()){
+        for (RadioButton rb : buttons) {
+            if (rb.isChecked()) {
                 value = rb.getText().toString();
                 break;
             }

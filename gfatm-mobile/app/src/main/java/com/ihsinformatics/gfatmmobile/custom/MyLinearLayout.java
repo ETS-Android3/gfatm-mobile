@@ -17,16 +17,15 @@ import com.ihsinformatics.gfatmmobile.R;
 public class MyLinearLayout extends LinearLayout {
 
     LinearLayout childLayout;
-    TextView   titleTextView;
+    TextView titleTextView;
 
-    public MyLinearLayout(Context context, String title, int layout)
-    {
-        super (context);
-        setOrientation (LinearLayout.VERTICAL);
+    public MyLinearLayout(Context context, String title, int layout) {
+        super(context);
+        setOrientation(LinearLayout.VERTICAL);
 
         LayoutParams layoutParams = new LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(0,20,0,20);
+        layoutParams.setMargins(0, 20, 0, 20);
         setLayoutParams(layoutParams);
 
         setFocusable(true);
@@ -40,20 +39,20 @@ public class MyLinearLayout extends LinearLayout {
 
         LayoutParams layoutParams1 = new LayoutParams(
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        layoutParams1.setMargins(20,0,0,0);
+        layoutParams1.setMargins(20, 0, 0, 0);
         titleTextView.setLayoutParams(layoutParams1);
 
-        if(title == null || title.equals(""))
+        if (title == null || title.equals(""))
             titleTextView.setVisibility(GONE);
         else
             titleTextView.setText(title);
 
         childLayout = new LinearLayout(context);
-        childLayout.setPadding(5,5,5,10);
-        if(layout == App.HORIZONTAL)
-            childLayout.setOrientation (LinearLayout.HORIZONTAL);
+        childLayout.setPadding(5, 5, 5, 10);
+        if (layout == App.HORIZONTAL)
+            childLayout.setOrientation(LinearLayout.HORIZONTAL);
         else
-            childLayout.setOrientation (LinearLayout.VERTICAL);
+            childLayout.setOrientation(LinearLayout.VERTICAL);
 
         super.addView(childLayout);
 
@@ -64,12 +63,11 @@ public class MyLinearLayout extends LinearLayout {
         childLayout.addView(child);
     }
 
-    public void setTitle(String title){
-        if(title == null || title.equals("")) {
+    public void setTitle(String title) {
+        if (title == null || title.equals("")) {
             titleTextView.setVisibility(GONE);
             titleTextView.setText("");
-        }
-        else {
+        } else {
             titleTextView.setVisibility(VISIBLE);
             titleTextView.setText(title);
         }

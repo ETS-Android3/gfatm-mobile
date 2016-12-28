@@ -26,19 +26,19 @@ public class TitledCheckBoxes extends LinearLayout {
         MyLinearLayout linearLayout = new MyLinearLayout(context, title, layoutOrientation);
         this.defaultValues = defaultValues;
 
-        questionView = new MyTextView(context,ques);
+        questionView = new MyTextView(context, ques);
         linearLayout.addView(questionView);
 
         LinearLayout ll = new LinearLayout(context);
-        if(radioButtonsLayout == App.HORIZONTAL)
-            ll.setOrientation (LinearLayout.HORIZONTAL);
+        if (radioButtonsLayout == App.HORIZONTAL)
+            ll.setOrientation(LinearLayout.HORIZONTAL);
         else
-            ll.setOrientation (LinearLayout.VERTICAL);
+            ll.setOrientation(LinearLayout.VERTICAL);
 
-        for(int i = 0; i<options.length; i++){
+        for (int i = 0; i < options.length; i++) {
 
             Boolean checked = false;
-            if(defaultValues != null && defaultValues.length > i)
+            if (defaultValues != null && defaultValues.length > i)
                 checked = defaultValues[i];
 
             MyCheckBox checkBox = new MyCheckBox(context, options[i], checked);
@@ -50,29 +50,28 @@ public class TitledCheckBoxes extends LinearLayout {
         addView(linearLayout);
     }
 
-    public MyTextView getQuestionView(){
+    public MyTextView getQuestionView() {
         return questionView;
     }
 
-    public void selectDefaultValue(){
-        if(defaultValues != null) {
+    public void selectDefaultValue() {
+        if (defaultValues != null) {
             for (int i = 0; i < defaultValues.length; i++) {
 
                 Boolean flag = defaultValues[i];
-                if(checkedBoxes.get(i) != null)
+                if (checkedBoxes.get(i) != null)
                     checkedBoxes.get(i).setChecked(flag);
 
             }
 
-            if(defaultValues.length != checkedBoxes.size()){
-                for(int i = defaultValues.length; i<checkedBoxes.size(); i++){
-                    if(checkedBoxes.get(i) != null)
+            if (defaultValues.length != checkedBoxes.size()) {
+                for (int i = defaultValues.length; i < checkedBoxes.size(); i++) {
+                    if (checkedBoxes.get(i) != null)
                         checkedBoxes.get(i).setChecked(false);
                 }
             }
 
-        }
-        else{
+        } else {
             for (int i = 0; i < checkedBoxes.size(); i++) {
 
                 checkedBoxes.get(i).setChecked(false);
@@ -81,25 +80,25 @@ public class TitledCheckBoxes extends LinearLayout {
         }
     }
 
-    public MyCheckBox getCheckBox(int index){
+    public MyCheckBox getCheckBox(int index) {
 
-        if(index <= checkedBoxes.size())
+        if (index <= checkedBoxes.size())
             return checkedBoxes.get(index);
         else
             return null;
 
     }
 
-    public MyCheckBox getCheckBox(String text){
+    public MyCheckBox getCheckBox(String text) {
 
-        for(MyCheckBox cb : checkedBoxes){
-            if(cb.getText().equals(text))
+        for (MyCheckBox cb : checkedBoxes) {
+            if (cb.getText().equals(text))
                 return cb;
         }
         return null;
     }
 
-    public ArrayList<MyCheckBox> getCheckedBoxes(){
+    public ArrayList<MyCheckBox> getCheckedBoxes() {
         return checkedBoxes;
     }
 

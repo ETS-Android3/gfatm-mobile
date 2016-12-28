@@ -91,9 +91,7 @@ public abstract class AbstractFormActivity extends Fragment
     protected Button clearButton;
     protected TextView pageButton;
     protected TextView formName;
-
-    protected TextView editTextView;
-
+    protected int currentPageNo = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -110,9 +108,6 @@ public abstract class AbstractFormActivity extends Fragment
 
         secondDateCalendar = Calendar.getInstance();
         secondDateFragment = new SelectDateFragment();
-
-        editTextView = (TextView) mainContent.findViewById(R.id.edit);
-        editTextView.setPaintFlags(editTextView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         navigationSeekbar = (SeekBar) mainContent.findViewById(R.id.navigationSeekbar);
         pageButton = (TextView) mainContent.findViewById(R.id.pageCount);
@@ -313,6 +308,8 @@ public abstract class AbstractFormActivity extends Fragment
         String page = currentPage + "/" + totalPage;
         pageButton.setText(page);
 
+        currentPageNo = Integer.valueOf(currentPage);
+
     }
 
     @Override
@@ -438,7 +435,6 @@ public abstract class AbstractFormActivity extends Fragment
 
     }
 
-
     public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
         @Override
@@ -470,6 +466,10 @@ public abstract class AbstractFormActivity extends Fragment
 
             updateDisplay();
         }
+    }
+
+    protected  int getCurrentPageNo(){
+        return currentPageNo;
     }
 
 }

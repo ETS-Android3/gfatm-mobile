@@ -6,10 +6,10 @@ package com.ihsinformatics.gfatmmobile.shared;
 
 public class Programs {
 
-    public static final String	PMDT		        =  "PMDT";
-    public static final String	PET		            =  "PET";
-    public static final String	FAST		        =  "FAST";
-    public static final String	COMORBIDITIES		=  "COMORBIDITIES";
-    public static final String	CHILDHOOD_TB		=  "CHILDHOOD TB";
+    public static final String PMDT = "PMDT";
+    public static final String PET = "PET";
+    public static final String FAST = "FAST";
+    public static final String COMORBIDITIES = "COMORBIDITIES";
+    public static final String CHILDHOOD_TB = "CHILDHOOD TB";
 
 }

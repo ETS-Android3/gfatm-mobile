@@ -22,17 +22,16 @@ public class MyTextView extends TextView {
         this.defaultValue = defaultValue;
         selectDefaultValue();
 
-        if(App.isLanguageRTL())
+        if (App.isLanguageRTL())
             setGravity(Gravity.RIGHT);
         else
             setGravity(Gravity.LEFT);
 
-        setTextSize(getResources().getDimension(R.dimen.small));
     }
 
-    public void selectDefaultValue(){
+    public void selectDefaultValue() {
 
-        if(defaultValue == null || defaultValue.equals(""))
+        if (defaultValue == null || defaultValue.equals(""))
             setText("");
         else
             setText(defaultValue);

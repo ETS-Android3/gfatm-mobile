@@ -42,23 +42,20 @@ import java.util.Map;
  */
 
 
-
-public class ServerService
-{
-    private static final String	TAG	= "ServerService";
+public class ServerService {
+    private static final String TAG = "ServerService";
     private static String httpsUri;
     private static DatabaseUtil dbUtil;
     private static Context context;
 
-    public ServerService (Context context)
-    {
+    public ServerService(Context context) {
         this.context = context;
         // Specify REST module link
         httpsUri = App.getIp() + ":" + App.getPort() + "/ws/rest/v1/";
         /*httpClient = new HttpRequest (this.context);
         httpsClient = new HttpsClient (this.context);
         mdUtil = new MetadataUtil (this.context);*/
-        dbUtil = new DatabaseUtil (this.context);
+        dbUtil = new DatabaseUtil(this.context);
     }
 
     /**
@@ -66,57 +63,54 @@ public class ServerService
      *
      * @return status
      */
-    public boolean checkInternetConnection ()
-    {
+    public boolean checkInternetConnection() {
         boolean status = false;
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService (Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo ();
-        if (netInfo != null && netInfo.isConnectedOrConnecting ())
-        {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
             status = true;
         }
         return status;
     }
 
 
-    public boolean saveFormLocally(String formName, String pid, HashMap<String,String> formValues){
+    public boolean saveFormLocally(String formName, String pid, HashMap<String, String> formValues) {
 
-        ContentValues values = new ContentValues ();
+        ContentValues values = new ContentValues();
 
-        values.put ("program", App.getProgram());
-        values.put ("form_name", formName);
-        values.put ("form_date", formValues.get("formDate"));
+        values.put("program", App.getProgram());
+        values.put("form_name", formName);
+        values.put("form_date", formValues.get("formDate"));
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        values.put ("timestamp", timestamp.toString());
-        values.put ("username", App.getUsername());
-        values.put ("p_id", pid);
+        values.put("timestamp", timestamp.toString());
+        values.put("username", App.getUsername());
+        values.put("p_id", pid);
 
-        dbUtil.insert (Metadata.FORMS, values);
+        dbUtil.insert(Metadata.FORMS, values);
 
-        String id = dbUtil.getObject (Metadata.FORMS, "id", "program='" + App.getProgram() + "' AND form_name='" +  formName + "' AND form_date='" + formValues.get("formDate") + "' AND timestamp='" + timestamp.toString() + "' AND username='" + App.getUsername() + "' AND p_id='" + pid + "'");
+        String id = dbUtil.getObject(Metadata.FORMS, "id", "program='" + App.getProgram() + "' AND form_name='" + formName + "' AND form_date='" + formValues.get("formDate") + "' AND timestamp='" + timestamp.toString() + "' AND username='" + App.getUsername() + "' AND p_id='" + pid + "'");
 
-        for (Map.Entry<String,String> entry : formValues.entrySet()) {
+        for (Map.Entry<String, String> entry : formValues.entrySet()) {
 
-            ContentValues value = new ContentValues ();
+            ContentValues value = new ContentValues();
 
-            value.put ("form_id", id);
-            value.put ("field_name", entry.getKey());
-            value.put ("value", entry.getValue());
+            value.put("form_id", id);
+            value.put("field_name", entry.getKey());
+            value.put("value", entry.getValue());
 
-            dbUtil.insert (Metadata.FORMS, value);
+            dbUtil.insert(Metadata.FORMS, value);
 
         }
 
         return false;
     }
 
-    public int getTotalSavedForms(){
-        return Integer.parseInt (dbUtil.getObject ("select count(*) from " + Metadata.FORMS + " where username='" + App.getUsername() + "'"));
+    public int getTotalSavedForms() {
+        return Integer.parseInt(dbUtil.getObject("select count(*) from " + Metadata.FORMS + " where username='" + App.getUsername() + "'"));
     }
 
-    public String[][] getSavedForms (String username)
-    {
-        String[][] forms = dbUtil.getTableData ("select id, program, form_name, p_id, form_date, timestamp from " + Metadata.FORMS + " where username='" + username + "'");
+    public String[][] getSavedForms(String username) {
+        String[][] forms = dbUtil.getTableData("select id, program, form_name, p_id, form_date, timestamp from " + Metadata.FORMS + " where username='" + username + "'");
         return forms;
     }
 

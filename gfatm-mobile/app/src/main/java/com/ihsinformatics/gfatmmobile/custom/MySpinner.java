@@ -29,13 +29,12 @@ public class MySpinner extends Spinner {
 
         List<String> spinnerList = new ArrayList<String>(Arrays.asList(options));
 
-        if(App.isLanguageRTL()) {
+        if (App.isLanguageRTL()) {
             spinnerArrayAdapter = new ArrayAdapter<String>(context, R.layout.custom_rtl_spinner, spinnerList);
             setAdapter(spinnerArrayAdapter);
             spinnerArrayAdapter.setDropDownViewResource(R.layout.custom_rtl_spinner);
             setGravity(Gravity.RIGHT);
-        }
-        else {
+        } else {
             spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, spinnerList);
             setAdapter(spinnerArrayAdapter);
             spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -46,19 +45,21 @@ public class MySpinner extends Spinner {
 
     }
 
-    public void selectDefaultValue(){
+    public void selectDefaultValue() {
 
-        if(defaultValue == null || defaultValue.equals(""))
+        if (defaultValue == null || defaultValue.equals(""))
             setSelection(0);
         else
             setSelection(spinnerArrayAdapter.getPosition(defaultValue));
 
     }
 
-    public void selectValue(String value){
+    public void selectValue(String value) {
         setSelection(spinnerArrayAdapter.getPosition(value));
     }
 
-    public String getValue(){ return getSelectedItem().toString(); }
+    public String getValue() {
+        return getSelectedItem().toString();
+    }
 
 }

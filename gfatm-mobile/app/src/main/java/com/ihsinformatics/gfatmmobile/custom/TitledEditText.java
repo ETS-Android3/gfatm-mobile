@@ -26,45 +26,50 @@ public class TitledEditText extends LinearLayout {
         MyLinearLayout linearLayout = new MyLinearLayout(context, title, layoutOrientation);
         this.mandatory = mandatory;
 
-        if(mandatory){
+        if (mandatory) {
             int color = App.getColor(context, R.attr.colorAccent);
             TextView mandatorySign = new TextView(context);
-            mandatorySign.setTextSize(getResources().getDimension(R.dimen.small));
             mandatorySign.setText("*");
             mandatorySign.setTextColor(color);
             linearLayout.addView(mandatorySign);
         }
 
-        questionView = new MyTextView(context,ques);
+        questionView = new MyTextView(context, ques);
         linearLayout.addView(questionView);
 
         editText = new MyEditText(context, defaultValue, length, filter, inputType);
         linearLayout.addView(editText);
 
-        if(layoutOrientation == App.HORIZONTAL){
+        if (layoutOrientation == App.HORIZONTAL) {
             LayoutParams layoutParams1 = new LayoutParams(
                     LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-            layoutParams1.setMargins(20,0,0,0);
+            layoutParams1.setMargins(20, 0, 0, 0);
             editText.setLayoutParams(layoutParams1);
         }
 
-        if(!(hint == null || hint.equals("")))
+        if (!(hint == null || hint.equals("")))
             editText.setHint(hint);
 
         addView(linearLayout);
     }
 
-    public MyTextView getQuestionView(){
+    public MyTextView getQuestionView() {
         return questionView;
     }
 
-    public MyEditText getEditText(){
+    public MyEditText getEditText() {
         return editText;
     }
 
-    public Boolean getMandatory(){ return mandatory; }
+    public Boolean getMandatory() {
+        return mandatory;
+    }
 
-    public void setTag(String tag){ this.tag = tag; }
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
 
-    public String getTag(){ return tag; }
+    public String getTag() {
+        return tag;
+    }
 }

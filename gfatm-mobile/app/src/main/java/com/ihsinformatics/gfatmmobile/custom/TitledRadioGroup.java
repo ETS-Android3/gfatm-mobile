@@ -20,35 +20,39 @@ public class TitledRadioGroup extends LinearLayout {
 
         MyLinearLayout linearLayout = new MyLinearLayout(context, title, layoutOrientation);
 
-        questionView = new MyTextView(context,ques);
+        questionView = new MyTextView(context, ques);
         linearLayout.addView(questionView);
 
         radioGroup = new MyRadioGroup(context, options, defaultValue, radioButtonsLayout);
         linearLayout.addView(radioGroup);
 
-        if(layoutOrientation == App.HORIZONTAL){
+        if (layoutOrientation == App.HORIZONTAL) {
             LayoutParams layoutParams1 = new LayoutParams(
                     LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-            layoutParams1.setMargins(20,0,0,0);
+            layoutParams1.setMargins(20, 0, 0, 0);
             radioGroup.setLayoutParams(layoutParams1);
         }
 
         addView(linearLayout);
     }
 
-    public MyTextView getQuestionView(){
+    public MyTextView getQuestionView() {
         return questionView;
     }
 
-    public MyRadioGroup getRadioGroup(){
+    public MyRadioGroup getRadioGroup() {
         return radioGroup;
     }
 
-    public String getRadioGroupSelectedValue(){
+    public String getRadioGroupSelectedValue() {
         return radioGroup.getSelectedValue();
     }
 
-    public void setTag(String tag){ this.tag = tag; }
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
 
-    public String getTag(){ return tag; }
+    public String getTag() {
+        return tag;
+    }
 }

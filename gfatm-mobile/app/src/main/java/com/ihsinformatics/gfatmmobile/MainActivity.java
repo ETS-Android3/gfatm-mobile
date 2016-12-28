@@ -4,12 +4,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.app.Fragment;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AlertDialog;
+import android.view.MotionEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,18 +24,20 @@ import android.view.MenuItem;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnTouchListener {
 
     Context context = this;
 
     LinearLayout buttonLayout;
     LinearLayout programLayout;
+    LinearLayout headerLayout;
 
     Button formButton;
     Button reportButton;
@@ -44,6 +48,8 @@ public class MainActivity extends AppCompatActivity
     FormFragment fragmentForm = new FormFragment();
     ReportFragment fragmentReport = new ReportFragment();
     BlankFragment blankFragment = new BlankFragment();
+
+    ImageView change;
 
     FragmentManager fm = getFragmentManager();
 
@@ -84,6 +90,11 @@ public class MainActivity extends AppCompatActivity
         String subtitle = getResources().getString(R.string.program) + " " + App.getProgram();
         getSupportActionBar().setSubtitle(subtitle);
 
+        change = (ImageView) findViewById(R.id.change);
+        int color = App.getColor(this, R.attr.colorBackground);
+        DrawableCompat.setTint(change.getDrawable(), color);
+        change.setOnTouchListener(this);
+
         buttonLayout = (LinearLayout) findViewById(R.id.buttonLayout);
         programLayout = (LinearLayout) findViewById(R.id.programLayout);
 
@@ -101,6 +112,7 @@ public class MainActivity extends AppCompatActivity
 
                 buttonLayout.setVisibility(View.VISIBLE);
                 programLayout.setVisibility(View.GONE);
+                headerLayout.setVisibility(View.VISIBLE);
 
                 String subtitle = getResources().getString(R.string.program) + " " + App.getProgram();
                 getSupportActionBar().setSubtitle(subtitle);
@@ -110,6 +122,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        headerLayout = (LinearLayout) findViewById(R.id.header);
         formButton = (Button) findViewById(R.id.formButton);
         reportButton = (Button) findViewById(R.id.reportButton);
         searchButton = (Button) findViewById(R.id.searchButton);
@@ -410,6 +423,7 @@ public class MainActivity extends AppCompatActivity
 
         programLayout.setVisibility(View.VISIBLE);
         buttonLayout.setVisibility(View.GONE);
+        headerLayout.setVisibility(View.GONE);
 
     }
 
@@ -426,6 +440,32 @@ public class MainActivity extends AppCompatActivity
         Intent loginActivityIntent = new Intent(this, LoginActivity.class);
         startActivity(loginActivityIntent);
         finish();
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN: {
+                ImageView view = (ImageView) v;
+                //overlay is black with transparency of 0x77 (119)
+                view.getDrawable().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
+                view.invalidate();
+
+                Intent selectPatientActivityIntent = new Intent(this, SelectPatientActivity.class);
+                startActivity(selectPatientActivityIntent);
+
+                break;
+            }
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL: {
+                ImageView view = (ImageView) v;
+                //clear the overlay
+                view.getDrawable().clearColorFilter();
+                view.invalidate();
+                break;
+            }
+        }
+        return true;
     }
 
 }

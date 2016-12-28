@@ -11,10 +11,9 @@ Interactive Health Solutions, hereby disclaims all copyright interest in this pr
 
 package com.ihsinformatics.gfatmmobile.shared;
 
-public class Metadata
-{
+public class Metadata {
 
-	public static final String	FORMS				= "FORMS";
-	public static final String	FORMS_VALUE			= "FORMS_VALUE";
+    public static final String FORMS = "FORMS";
+    public static final String FORMS_VALUE = "FORMS_VALUE";
 
 }

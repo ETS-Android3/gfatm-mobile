@@ -21,7 +21,7 @@ public class TitledSpinner extends LinearLayout {
 
         MyLinearLayout linearLayout = new MyLinearLayout(context, title, layoutOrientation);
 
-        questionView = new MyTextView(context,ques);
+        questionView = new MyTextView(context, ques);
         linearLayout.addView(questionView);
 
         spinner = new MySpinner(context, options, defaultValue);
@@ -30,15 +30,15 @@ public class TitledSpinner extends LinearLayout {
         addView(linearLayout);
     }
 
-    public MyTextView getQuestionView(){
+    public MyTextView getQuestionView() {
         return questionView;
     }
 
-    public MySpinner getSpinner(){
+    public MySpinner getSpinner() {
         return spinner;
     }
 
-    public String getSpinnerValue(){
+    public String getSpinnerValue() {
         return spinner.getValue();
     }
 }

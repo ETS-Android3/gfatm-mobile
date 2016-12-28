@@ -47,18 +47,18 @@ public class test extends AbstractFormActivity {
         FORM_NAME = Forms.INDEX_PATIENT_REGISTRATION;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
-        pager =  (ViewPager) mainContent.findViewById(R.id.pager);
+        pager = (ViewPager) mainContent.findViewById(R.id.pager);
         pager.setAdapter(new MyAdapter());
-        pager.setOnPageChangeListener (this);
-        navigationSeekbar.setMax (PAGE_COUNT - 1);
+        pager.setOnPageChangeListener(this);
+        navigationSeekbar.setMax(PAGE_COUNT - 1);
         formName.setText(FORM_NAME);
 
         initViews();
 
         groups = new ArrayList<ViewGroup>();
 
-        if(App.isLanguageRTL()){
-            for (int i = PAGE_COUNT-1; i >= 0; i--) {
+        if (App.isLanguageRTL()) {
+            for (int i = PAGE_COUNT - 1; i >= 0; i--) {
                 LinearLayout layout = new LinearLayout(mainContent.getContext());
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -71,8 +71,7 @@ public class test extends AbstractFormActivity {
                 scrollView.addView(layout);
                 groups.add(scrollView);
             }
-        }
-        else {
+        } else {
             for (int i = 0; i < PAGE_COUNT; i++) {
                 LinearLayout layout = new LinearLayout(mainContent.getContext());
                 layout.setOrientation(LinearLayout.VERTICAL);
@@ -97,16 +96,16 @@ public class test extends AbstractFormActivity {
     @Override
     public void initViews() {
 
-        text = new TitledEditText(mainContent.getContext(), null, "Question", "" ,"Hint", 10, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        spinner = new TitledSpinner(mainContent.getContext(), "title", "Question", getResources().getStringArray(R.array.programs), "PET", App.HORIZONTAL );
+        text = new TitledEditText(mainContent.getContext(), null, "Question", "", "Hint", 10, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        spinner = new TitledSpinner(mainContent.getContext(), "title", "Question", getResources().getStringArray(R.array.programs), "PET", App.HORIZONTAL);
         radioGroup = new TitledRadioGroup(mainContent.getContext(), null, "Question", getResources().getStringArray(R.array.programs), "PMDT", App.VERTICAL, App.HORIZONTAL);
-        checkBoxes = new TitledCheckBoxes(mainContent.getContext(), "title", "Question", getResources().getStringArray(R.array.programs), new Boolean[]{true,false,true,false,false} , App.VERTICAL, App.HORIZONTAL);
+        checkBoxes = new TitledCheckBoxes(mainContent.getContext(), "title", "Question", getResources().getStringArray(R.array.programs), new Boolean[]{true, false, true, false, false}, App.VERTICAL, App.HORIZONTAL);
         checkBox = new MyCheckBox(mainContent.getContext(), "Hello", false);
 
         views = new View[]{text.getEditText(), spinner.getSpinner(), radioGroup.getRadioGroup(), checkBoxes, checkBox};
 
         viewGroups = new View[][]
-                { {text, spinner},
+                {{text, spinner},
                         {radioGroup},
                         {checkBoxes, checkBox},
                         {},

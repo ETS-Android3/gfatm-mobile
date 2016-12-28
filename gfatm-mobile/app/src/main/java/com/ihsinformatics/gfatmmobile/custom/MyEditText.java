@@ -33,15 +33,15 @@ public class MyEditText extends EditText {
 
         setSingleLine(true);
 
-        if(App.isLanguageRTL())
+        if (App.isLanguageRTL())
             setGravity(Gravity.RIGHT);
         else
             setGravity(Gravity.LEFT);
     }
 
-    public void setDefaultValue(){
+    public void setDefaultValue() {
 
-        if(defaultValue == null || defaultValue.equals(""))
+        if (defaultValue == null || defaultValue.equals(""))
             setText("");
         else
             setText(defaultValue);

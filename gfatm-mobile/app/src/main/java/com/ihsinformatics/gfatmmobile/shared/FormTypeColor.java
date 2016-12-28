@@ -10,9 +10,9 @@ import com.ihsinformatics.gfatmmobile.R;
 public class FormTypeColor {
 
     public static int REGISTRATION_FORM = R.attr.colorRegistration;
-    public static int SCREENING_FORM    = R.attr.colorScreening;
-    public static int TREATMENT_FORM    = R.attr.colorTreatment;
-    public static int FOLLOWUP_FORM     = R.attr.colorFollowup;
-    public static int OTHER_FORM        = R.attr.colorOther;
+    public static int SCREENING_FORM = R.attr.colorScreening;
+    public static int TREATMENT_FORM = R.attr.colorTreatment;
+    public static int FOLLOWUP_FORM = R.attr.colorFollowup;
+    public static int OTHER_FORM = R.attr.colorOther;
 
 }

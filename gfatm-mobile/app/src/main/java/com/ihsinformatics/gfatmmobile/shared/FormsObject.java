@@ -12,7 +12,7 @@ public class FormsObject {
 
 
     private String name;
-    private Class<?>  className;
+    private Class<?> className;
     private int icon;
     private int color;
 
@@ -47,11 +47,11 @@ public class FormsObject {
         this.name = name;
     }
 
-    public Class<?>  getClassName() {
+    public Class<?> getClassName() {
         return className;
     }
 
-    public void setClassName(Class<?>  className) {
+    public void setClassName(Class<?> className) {
         this.className = className;
     }
 

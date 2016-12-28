@@ -56,7 +56,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class IndexPatientRegistrationForm extends AbstractFormActivity {
 
-    Context         context;
+    Context context;
 
     // Views...
     TitledButton formDate;
@@ -81,14 +81,15 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
 
     TitledCheckBoxes dstPattern;
 
-    TitledCheckBoxes treatmentRegimen;
+    LinearLayout linearLayout;
+    TitledCheckBoxes treatmentRegimen1;
+    TitledCheckBoxes treatmentRegimen2;
 
     MyTextView enrollmentDateTextView;
     Calendar enrollmentDateCalender;
     DatePicker treatmentEnrollmentDate;
 
     /**
-     *
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
      *
      * @param inflater
@@ -105,18 +106,18 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
-        pager =  (ViewPager) mainContent.findViewById(R.id.pager);
+        pager = (ViewPager) mainContent.findViewById(R.id.pager);
         pager.setAdapter(new MyAdapter());
-        pager.setOnPageChangeListener (this);
-        navigationSeekbar.setMax (PAGE_COUNT - 1);
+        pager.setOnPageChangeListener(this);
+        navigationSeekbar.setMax(PAGE_COUNT - 1);
         formName.setText(FORM_NAME);
 
         initViews();
 
         groups = new ArrayList<ViewGroup>();
 
-        if(App.isLanguageRTL()){
-            for (int i = PAGE_COUNT-1; i >= 0; i--) {
+        if (App.isLanguageRTL()) {
+            for (int i = PAGE_COUNT - 1; i >= 0; i--) {
                 LinearLayout layout = new LinearLayout(mainContent.getContext());
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -129,8 +130,7 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
                 scrollView.addView(layout);
                 groups.add(scrollView);
             }
-        }
-        else {
+        } else {
             for (int i = 0; i < PAGE_COUNT; i++) {
                 LinearLayout layout = new LinearLayout(mainContent.getContext());
                 layout.setOrientation(LinearLayout.VERTICAL);
@@ -152,15 +152,14 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
     }
 
     /**
-     *
      * Initializes all views and ArrayList and Views Array
      */
-    public void initViews(){
+    public void initViews() {
 
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format ("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        firstName = new TitledEditText(context, null, getResources().getString(R.string.pet_first_name), "", "", 20, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL,true);
+        firstName = new TitledEditText(context, null, getResources().getString(R.string.pet_first_name), "", "", 20, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         firstName.setTag("firstName");
         lastName = new TitledEditText(context, null, getResources().getString(R.string.pet_last_name), "", "", 20, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         lastName.setTag("lastName");
@@ -171,7 +170,7 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
 
         // second page views...
         ageModifiers = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_age_modifier), getResources().getStringArray(R.array.pet_age_modifiers), "Years", App.HORIZONTAL, App.HORIZONTAL);
-        age = new TitledEditText(context, null, getResources().getString(R.string.pet_age), "", "", 3, RegexUtil.NumericFilter,  InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        age = new TitledEditText(context, null, getResources().getString(R.string.pet_age), "", "", 3, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         indexPatientId = new TitledEditText(context, null, getResources().getString(R.string.pet_index_patient_id), "", "", RegexUtil.idLength, RegexUtil.IdFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         indexExternalPatientId = new TitledEditText(context, null, getResources().getString(R.string.pet_index_patient_external_id), "", "", 20, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         scanQRCode = new Button(context);
@@ -191,7 +190,12 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
         dstPattern = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_dst_pattern), getResources().getStringArray(R.array.pet_dst_patterns), null, App.VERTICAL, App.VERTICAL);
 
         // sixth page viws...
-        treatmentRegimen = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_treatment_regimen), getResources().getStringArray(R.array.pet_treatment_regimens), null, App.VERTICAL, App.VERTICAL);
+        linearLayout = new LinearLayout(context);
+        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+        treatmentRegimen1 = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_treatment_regimen), getResources().getStringArray(R.array.pet_treatment_regimens_1), null, App.VERTICAL, App.VERTICAL);
+        linearLayout.addView(treatmentRegimen1);
+        treatmentRegimen2 = new TitledCheckBoxes(context, null, "", getResources().getStringArray(R.array.pet_treatment_regimens_2), null, App.VERTICAL, App.VERTICAL);
+        linearLayout.addView(treatmentRegimen2);
 
         //seventh page views...
         enrollmentDateTextView = new MyTextView(context, getResources().getString(R.string.pet_treatment_enrollement));
@@ -203,18 +207,18 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), firstName.getEditText(), lastName.getEditText(), husbandName.getEditText(), gender.getRadioGroup(),
-                                ageModifiers.getRadioGroup(), age.getEditText(), indexPatientId.getEditText(), indexExternalPatientId.getEditText(), ernsNumber.getEditText(),
-                                tbType.getRadioGroup(), infectionType.getRadioGroup(), dstAvailable.getRadioGroup(), resistanceType.getRadioGroup(),
-                                patientType.getRadioGroup(), dstPattern, treatmentRegimen};
+                ageModifiers.getRadioGroup(), age.getEditText(), indexPatientId.getEditText(), indexExternalPatientId.getEditText(), ernsNumber.getEditText(),
+                tbType.getRadioGroup(), infectionType.getRadioGroup(), dstAvailable.getRadioGroup(), resistanceType.getRadioGroup(),
+                patientType.getRadioGroup(), dstPattern, treatmentRegimen1, treatmentRegimen2};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                        {{formDate, firstName, lastName, husbandName, gender},
+                {{formDate, firstName, lastName, husbandName, gender},
                         {ageModifiers, age, indexPatientId, scanQRCode, indexExternalPatientId, ernsNumber},
                         {tbType, infectionType, dstAvailable, resistanceType},
                         {patientType},
                         {dstPattern},
-                        {treatmentRegimen},
+                        {linearLayout},
                         {enrollmentDateTextView, treatmentEnrollmentDate}};
 
         formDate.getButton().setOnClickListener(this);
@@ -224,9 +228,9 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
     @Override
     public void updateDisplay() {
 
-        formDate.getButton().setText(DateFormat.format ("dd-MMM-yyyy", formDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         enrollmentDateTextView.setError(null);
-        if(!DateFormat.format ("dd-MMM-yyyy", formDateCalendar).toString().equals(DateFormat.format ("dd-MMM-yyyy", enrollmentDateCalender).toString())) {
+        if (!DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString().equals(DateFormat.format("dd-MMM-yyyy", enrollmentDateCalender).toString())) {
             if (enrollmentDateCalender.after(formDateCalendar)) {
                 enrollmentDateTextView.setError(getResources().getString(R.string.enrollment_date_error));
                 enrollmentDateTextView.requestFocus();
@@ -241,7 +245,7 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
         Boolean error = false;
 
         enrollmentDateTextView.setError(null);
-        if(!DateFormat.format ("dd-MMM-yyyy", formDateCalendar).toString().equals(DateFormat.format ("dd-MMM-yyyy", enrollmentDateCalender).toString())) {
+        if (!DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString().equals(DateFormat.format("dd-MMM-yyyy", enrollmentDateCalender).toString())) {
             if (enrollmentDateCalender.after(formDateCalendar)) {
                 gotoLastPage();
                 enrollmentDateTextView.setError(getResources().getString(R.string.enrollment_date_error));
@@ -250,8 +254,8 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
             }
         }
 
-        if(App.get(ernsNumber).isEmpty()){
-            if(App.isLanguageRTL())
+        if (App.get(ernsNumber).isEmpty()) {
+            if (App.isLanguageRTL())
                 gotoPage(5);
             else
                 gotoPage(1);
@@ -259,8 +263,8 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
             ernsNumber.getEditText().requestFocus();
             error = true;
         }
-        if(App.get(indexPatientId).isEmpty()){
-            if(App.isLanguageRTL())
+        if (App.get(indexPatientId).isEmpty()) {
+            if (App.isLanguageRTL())
                 gotoPage(5);
             else
                 gotoPage(1);
@@ -268,8 +272,8 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
             indexPatientId.getEditText().requestFocus();
             error = true;
         }
-        if(App.get(age).isEmpty()){
-            if(App.isLanguageRTL())
+        if (App.get(age).isEmpty()) {
+            if (App.isLanguageRTL())
                 gotoPage(5);
             else
                 gotoPage(1);
@@ -278,26 +282,26 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
             error = true;
         }
 
-        if(App.get(husbandName).isEmpty()){
+        if (App.get(husbandName).isEmpty()) {
             gotoFirstPage();
             husbandName.getEditText().setError(getString(R.string.empty_field));
             husbandName.getEditText().requestFocus();
             error = true;
         }
-        if(App.get(lastName).isEmpty()){
+        if (App.get(lastName).isEmpty()) {
             gotoFirstPage();
             lastName.getEditText().setError(getString(R.string.empty_field));
             lastName.getEditText().requestFocus();
             error = true;
         }
-        if(App.get(firstName).isEmpty()){
+        if (App.get(firstName).isEmpty()) {
             gotoFirstPage();
-           firstName.getEditText().setError(getString(R.string.empty_field));
-           firstName.getEditText().requestFocus();
-           error = true;
+            firstName.getEditText().setError(getString(R.string.empty_field));
+            firstName.getEditText().requestFocus();
+            error = true;
         }
 
-        if(error) {
+        if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
@@ -311,7 +315,7 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             try {
-                                InputMethodManager imm = (InputMethodManager)mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
+                                InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
                             } catch (Exception e) {
                                 // TODO: handle exception
@@ -330,7 +334,7 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
     @Override
     public boolean submit() {
 
-        if(validate()){
+        if (validate()) {
 
             resetViews();
         }
@@ -360,20 +364,18 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
 
         super.onClick(view);
 
-        if(view == formDate.getButton()){
+        if (view == formDate.getButton()) {
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
-        }
-        else if (view == scanQRCode){
+        } else if (view == scanQRCode) {
             try {
                 Intent intent = new Intent(Barcode.BARCODE_INTENT);
-                if(App.isCallable(mainContent.getContext(),intent)){
+                if (App.isCallable(mainContent.getContext(), intent)) {
                     intent.putExtra(Barcode.SCAN_MODE, Barcode.QR_MODE);
                     startActivityForResult(intent, Barcode.BARCODE_RESULT);
-                }
-                else{
+                } else {
                     int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
                     final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
                     alertDialog.setMessage(getString(R.string.barcode_scanner_missing));
@@ -426,10 +428,10 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
     }
 
     @Override
-    public void resetViews(){
+    public void resetViews() {
         super.resetViews();
 
-        formDate.getButton().setText(DateFormat.format ("dd-MMM-yyyy", formDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         enrollmentDateCalender = Calendar.getInstance();
         treatmentEnrollmentDate.updateDate(enrollmentDateCalender.get(Calendar.YEAR), enrollmentDateCalender.get(Calendar.MONTH), enrollmentDateCalender.get(Calendar.DAY_OF_MONTH));
 
@@ -443,10 +445,9 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
             if (resultCode == RESULT_OK) {
                 String str = data.getStringExtra(Barcode.SCAN_RESULT);
                 // Check for valid Id
-				if (RegexUtil.isValidId(str) && !RegexUtil.isNumeric(str, false)) {
+                if (RegexUtil.isValidId(str) && !RegexUtil.isNumeric(str, false)) {
                     indexPatientId.getEditText().setText(str);
-				}
-                else {
+                } else {
 
                     int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
@@ -464,7 +465,7 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
                             });
                     alertDialog.show();
 
-				}
+                }
             } else if (resultCode == RESULT_CANCELED) {
 
                 int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
@@ -525,10 +526,10 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
     public class MyOnDateChangeListener implements DatePicker.OnDateChangedListener {
         @Override
         public void onDateChanged(DatePicker view, int year, int month, int day) {
-            enrollmentDateCalender.set(year,month,day);
+            enrollmentDateCalender.set(year, month, day);
 
             enrollmentDateTextView.setError(null);
-            if(!DateFormat.format ("dd-MMM-yyyy", formDateCalendar).toString().equals(DateFormat.format ("dd-MMM-yyyy", enrollmentDateCalender).toString())) {
+            if (!DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString().equals(DateFormat.format("dd-MMM-yyyy", enrollmentDateCalender).toString())) {
                 if (enrollmentDateCalender.after(formDateCalendar)) {
                     enrollmentDateTextView.setError(getResources().getString(R.string.enrollment_date_error));
                     enrollmentDateTextView.requestFocus();
@@ -538,5 +539,33 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
         }
 
     }
+
+    @Override
+    public void onPageSelected(int pageNo) {
+
+      if(!App.isLanguageRTL()) {
+          if (pageNo == 4 && dstAvailable.getRadioGroup().getSelectedValue().equalsIgnoreCase(getString(R.string.no))) {
+
+              if (getCurrentPageNo() == 4)
+                  pageNo = 5;
+              else if (getCurrentPageNo() == 6)
+                  pageNo = 3;
+          }
+      }
+      else{
+          if (pageNo == 2 && dstAvailable.getRadioGroup().getSelectedValue().equalsIgnoreCase(getString(R.string.no))) {
+
+              if (getCurrentPageNo() == 4)
+                  pageNo = 1;
+              else if (getCurrentPageNo() == 6)
+                  pageNo = 3;
+          }
+      }
+
+
+        gotoPage(pageNo);
+
+    }
+
 
 }

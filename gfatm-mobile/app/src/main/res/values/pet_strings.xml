@@ -38,8 +38,8 @@
         <item>DRTB</item>
     </string-array>
     <string-array name="yes_no_options">
-        <item>Yes</item>
-        <item>No</item>
+        <item>@string/yes</item>
+        <item>@string/no</item>
     </string-array>
     <string-array name="pet_resistance_types">
         <item>RR-TB</item>
@@ -72,31 +72,33 @@
         <item>Ethionamide</item>
         <item>Pyrazinamide</item>
     </string-array>
-    <string-array name="pet_treatment_regimens">
+    <string-array name="pet_treatment_regimens_1">
         <item>Amikacin</item>
-        <item>Amoxicillin-clavulanate</item>
         <item>Bedaquiline</item>
-        <item>Capreomycin</item>
         <item>Clofazimine</item>
-        <item>Cycloserine</item>
         <item>Delamanid</item>
-        <item>Ethambutol</item>
         <item>Ethionamide</item>
-        <item>Gatifloxacin</item>
         <item>High-dose Isoniazid</item>
-        <item>Imipenem-cilastatin</item>
         <item>Isoniazid</item>
-        <item>Kanamycin</item>
         <item>Levofloxacin</item>
-        <item>Linezolid</item>
         <item>Meropenem</item>
-        <item>Moxifloxacin</item>
         <item>P-Aminosalicylic Acid</item>
-        <item>Prothionamide</item>
         <item>Pyrazinamide</item>
-        <item>Rifampicin</item>
         <item>Streptpmycin</item>
-        <item>Terizidone</item>
         <item>Thioacetazone</item>
+    </string-array>
+    <string-array name="pet_treatment_regimens_2">
+        <item>Amoxicillin-clavulanate</item>
+        <item>Capreomycin</item>
+        <item>Cycloserine</item>
+        <item>Ethambutol</item>
+        <item>Gatifloxacin</item>
+        <item>Imipenem-cilastatin</item>
+        <item>Kanamycin</item>
+        <item>Linezolid</item>
+        <item>Moxifloxacin</item>
+        <item>Prothionamide</item>
+        <item>Rifampicin</item>
+        <item>Terizidone</item>
     </string-array>
 </resources>

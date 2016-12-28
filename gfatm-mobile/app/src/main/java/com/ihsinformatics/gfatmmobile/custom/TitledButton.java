@@ -23,16 +23,16 @@ public class TitledButton extends LinearLayout {
 
         MyLinearLayout linearLayout = new MyLinearLayout(context, title, layoutOrientation);
 
-        questionView = new MyTextView(context,ques);
+        questionView = new MyTextView(context, ques);
         linearLayout.addView(questionView);
 
         button = new Button(context);
         setDefaultValue();
 
-        if(layoutOrientation == App.HORIZONTAL){
+        if (layoutOrientation == App.HORIZONTAL) {
             LayoutParams layoutParams1 = new LayoutParams(
                     LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-            layoutParams1.setMargins(20,0,0,0);
+            layoutParams1.setMargins(20, 0, 0, 0);
             button.setLayoutParams(layoutParams1);
         }
 
@@ -42,32 +42,32 @@ public class TitledButton extends LinearLayout {
     }
 
 
-    public MyTextView getQuestionView(){
+    public MyTextView getQuestionView() {
         return questionView;
     }
 
-    public Button getButton(){
+    public Button getButton() {
         return button;
     }
 
-    public String getButtonText(){
+    public String getButtonText() {
         return button.getText().toString();
     }
 
-    public void setDefaultValue(){
+    public void setDefaultValue() {
 
-        if(defaultValue != null)
+        if (defaultValue != null)
             button.setText(defaultValue);
         else
             defaultValue = "";
 
     }
 
-    public void setTag(String tag){
+    public void setTag(String tag) {
         this.tag = tag;
     }
 
-    public String getTag(){
+    public String getTag() {
         return tag;
     }
 

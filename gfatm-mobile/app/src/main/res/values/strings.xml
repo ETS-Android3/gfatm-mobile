@@ -17,31 +17,51 @@
 
     <string name="forms_main_menu">Forms Main Menu</string>
 
+    <string name="pmdt">PMDT</string>
+    <string name="pet">PET</string>
+    <string name="fast">FAST</string>
+    <string name="comorbidities">COMORBIDITIES</string>
+    <string name="childhood_tb">CHILDHOOD TB</string>
+
     <!-- Settings Values -->
     <string-array name="programs">
-        <item>PMDT</item>
-        <item>PET</item>
-        <item>FAST</item>
-        <item>COMORBIDITIES</item>
-        <item>CHILDHOOD TB</item>
+        <item>@string/pmdt</item>
+        <item>@string/pet</item>
+        <item>@string/fast</item>
+        <item>@string/comorbidities</item>
+        <item>@string/childhood_tb</item>
     </string-array>
+
+    <string name="dark_theme">Dark theme</string>
+    <string name="light_theme">Light theme</string>
+    <string name="power_safe_theme">Power Safe theme</string>
 
     <string-array name="themes">
-        <item>Dark theme</item>
-        <item>Light theme</item>
-        <item>Power Safe theme</item>
+        <item>@string/dark_theme</item>
+        <item>@string/light_theme</item>
+        <item>@string/power_safe_theme</item>
     </string-array>
+
+    <string name="english">English</string>
+    <string name="urdu">Urdu (اردو)</string>
+    <string name="roman_english">Roman English</string>
 
     <string-array name="languages">
-        <item>English</item>
-        <item>Urdu (اردو)</item>
-        <item>Roman urdu</item>
+        <item>@string/english</item>
+        <item>@string/urdu</item>
+        <item>@string/roman_english</item>
     </string-array>
 
+    <string name="offline">Offline</string>
+    <string name="online">Online</string>
+
     <string-array name="operation_modes">
-        <item>Online</item>
-        <item>Offline</item>
+        <item>@string/online</item>
+        <item>@string/offline</item>
     </string-array>
+
+    <string name="enabled">Enabled</string>
+    <string name="disabled">Disabled</string>
 
     <string-array name="ssl_encryption">
         <item>Enabled</item>
@@ -297,18 +317,15 @@
     <string name="title_activity_server">Server Address</string>
     <string name="title_activity_ssl">SSL Encryption</string>
     <string name="title_saved_forms">Saved Forms</string>
+    <string name="title_select_patient">Select Patient</string>
+    <string name="title_create_new_patient">Create New Patient</string>
 
-    <string name="dark_theme" translatable="false">Dark theme</string>
-    <string name="english_language" translatable="false">English</string>
-    <string name="online_mode" translatable="false">Online</string>
-    <string name="offline_mode" translatable="false">Offline</string>
     <string name="support_contact_default" translatable="false">03132882088</string>
     <string name="support_email_default" translatable="false">rabbia.hassan@ihsinformatics.com</string>
     <string name="city_default" translatable="false">Karachi</string>
     <string name="country_default" translatable="false">Pakistan</string>
     <string name="ip_default" translatable="false">10.0.2.2</string>
     <string name="port_default" translatable="false">8080</string>
-    <string name="ssl_default" translatable="false">Enabled</string>
 
     <string name="support_contact">Support Contact</string>
     <string name="support_email">Support Email</string>
@@ -320,6 +337,7 @@
     <string name="ok">OK</string>
     <string name="reset">Reset</string>
     <string name="cancel">Cancel</string>
+    <string name="create">Create Patient</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
 
@@ -349,10 +367,25 @@
     <!-- Strings related to login -->
     <string name="username">Username</string>
     <string name="password">Password</string>
-    <string name="offline">Offline</string>
     <string name="login">Login</string>
     <string name="copyright">Interactive Health Solution @ 2016</string>
     <string name="signing_in">Signing in ...</string>
+
+    <!-- select Patient -->
+    <string name="create_new_patient"><u>Create new Patient</u></string>
+    <string name="patient_id">Patient ID:</string>
+    <string name="scan_barcode">Scan Barcode</string>
+    <string name="or">or</string>
+
+    <!-- create new Patient -->
+    <string name="first_name">First Name: </string>
+    <string name="last_name">Last Name: </string>
+    <string name="gender">Gender: </string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="dob">Date of Birth: </string>
+    <string name="age">Age: </string>
+    <string name="external_id">External ID: \n (Optional) </string>
 
     <!-- Forms -->
     <string name="back_to_form_menu">Back to Form Menu</string>
