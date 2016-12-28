@@ -22,7 +22,7 @@ import android.text.Spanned;
  */
 public class RegexUtil {
     public static final String numericPattern = "^[0-9]+";
-    public static final String floatingPointPattern = "^[0-9]+.{0,1}[0-9]*";
+    public static final String floatingPointPattern = "^[0-9]+.{0,1}[0-9]";
     public static final String alphaPattern = "^[A-Za-z. ]+";
     public static final String alphaNumPattern = "^[A-Za-z0-9]+";
     public static final String emailPattern = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
@@ -41,6 +41,22 @@ public class RegexUtil {
     public static final int idLength = 7;
     public static final int mobileNumberLength = 11;
     public static final int defaultEditTextLength = 50;
+
+    public static final InputFilter FloatFilter = new InputFilter() {
+
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+
+            if(source.equals("")){ // for backspace
+                return source;
+            }
+            if(source.toString().matches("^[.0-9]+")){
+                return source;
+            }
+            return "";
+
+        }
+    };
 
     public static final InputFilter AlphaFilter = new InputFilter() {
 
@@ -90,7 +106,7 @@ public class RegexUtil {
         }
     };
 
-    public static final InputFilter ernsFilter = new InputFilter() {
+    public static final InputFilter ERNSFilter = new InputFilter() {
 
         @Override
         public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {

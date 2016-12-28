@@ -2,6 +2,10 @@ package com.ihsinformatics.gfatmmobile.shared;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.R;
+import com.ihsinformatics.gfatmmobile.comorbidities.BloodSugarForm;
+import com.ihsinformatics.gfatmmobile.comorbidities.HbA1CForm;
+import com.ihsinformatics.gfatmmobile.comorbidities.PatientInformationForm;
+import com.ihsinformatics.gfatmmobile.comorbidities.ScreeningFormMHDM;
 import com.ihsinformatics.gfatmmobile.pet.IndexPatientRegistrationForm;
 import com.ihsinformatics.gfatmmobile.pet.test;
 
@@ -13,7 +17,13 @@ import java.util.ArrayList;
 
 public class Forms {
 
+    //PET
     public static final String INDEX_PATIENT_REGISTRATION = "Index Patient Registration";
+
+    //Commorbidities
+    public static final String COMORBIDITIES_SCREENING_FORM = "Screening Form Mental Health And DM";
+    public static final String COMORBIDITIES_HbA1C_FORM = "HbA1C Form";
+    public static final String COMORBIDITIES_BLOOD_SUGAR_FORM = "Blood Sugar Form";
 
     public static ArrayList<FormsObject> getPETFormList() {
 
@@ -106,16 +116,18 @@ public class Forms {
 
         ArrayList<FormsObject> comorbiditiesList = new ArrayList<>();
 
-        FormsObject indexPatientRegistration = new FormsObject("Patient Information Form", AbstractFormActivity.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
-        FormsObject contactRegistry = new FormsObject("Screening Mental Health and DM", AbstractFormActivity.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
-        FormsObject baselineScreening = new FormsObject("HbA1C Form", AbstractFormActivity.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+        FormsObject indexPatientRegistration = new FormsObject("Patient Information Form", PatientInformationForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+        FormsObject contactRegistry = new FormsObject("Screening Mental Health and DM", ScreeningFormMHDM.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+        FormsObject baselineScreening = new FormsObject("HbA1C Form", HbA1CForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+        FormsObject bloodSugarForm = new FormsObject("Blood Sugar Form", BloodSugarForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+
 
         comorbiditiesList.add(indexPatientRegistration);
         comorbiditiesList.add(contactRegistry);
         comorbiditiesList.add(baselineScreening);
+        comorbiditiesList.add(bloodSugarForm);
 
         return comorbiditiesList;
 
     }
-
 }
