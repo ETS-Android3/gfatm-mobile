@@ -1,10 +1,8 @@
 package com.ihsinformatics.gfatmmobile.comorbidities;
 
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -16,32 +14,21 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
-import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
-import com.ihsinformatics.gfatmmobile.Barcode;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
-import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
@@ -49,17 +36,11 @@ import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
-
-import static android.app.Activity.RESULT_CANCELED;
-import static android.app.Activity.RESULT_OK;
 
 /**
- * Created by Fawad Jawaid on 12/16/2016.
+ * Created by Fawad Jawaid on 16-Dec-16.
  */
 
 public class ScreeningFormMHDM extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
@@ -175,53 +156,57 @@ public class ScreeningFormMHDM extends AbstractFormActivity implements RadioGrou
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        mentalHealthScreening = new MyTextView(context, getResources().getString(R.string.akuads_Mental_Health_Screening));
+        mentalHealthScreening = new MyTextView(context, getResources().getString(R.string.comorbidities_akuads_Mental_Health_Screening));
         mentalHealthScreening.setTypeface(null, Typeface.BOLD);
-        akuadsSleep = new TitledRadioGroup(context, null, getResources().getString(R.string.akuads_sleep), getResources().getStringArray(R.array.comorbidities_MH_screening_options), "Never", App.VERTICAL, App.VERTICAL);
-        akuadsLackOfInterest = new TitledRadioGroup(context, null, getResources().getString(R.string.akuads_lackofinterest), getResources().getStringArray(R.array.comorbidities_MH_screening_options), "Never", App.VERTICAL, App.VERTICAL);
-        akuadsLostInterestHobbies = new TitledRadioGroup(context, null, getResources().getString(R.string.akuads_lostinteresthobbies), getResources().getStringArray(R.array.comorbidities_MH_screening_options), "Never", App.VERTICAL, App.VERTICAL);
-        akuadsAnxious = new TitledRadioGroup(context, null, getResources().getString(R.string.akuads_anxious), getResources().getStringArray(R.array.comorbidities_MH_screening_options), "Never", App.VERTICAL, App.VERTICAL);
-        akuadsImpendingDoom = new TitledRadioGroup(context, null, getResources().getString(R.string.akuads_impendingdoom), getResources().getStringArray(R.array.comorbidities_MH_screening_options), "Never", App.VERTICAL, App.VERTICAL);
-        akuadsDifficultyThinkingClearly = new TitledRadioGroup(context, null, getResources().getString(R.string.akuads_difficultythinkingclearly), getResources().getStringArray(R.array.comorbidities_MH_screening_options), "Never", App.VERTICAL, App.VERTICAL);
-        akuadsAlone = new TitledRadioGroup(context, null, getResources().getString(R.string.akuads_alone), getResources().getStringArray(R.array.comorbidities_MH_screening_options), "Never", App.VERTICAL, App.VERTICAL);
-        akuadsUnhappy = new TitledRadioGroup(context, null, getResources().getString(R.string.akuads_unhappy), getResources().getStringArray(R.array.comorbidities_MH_screening_options), "Never", App.VERTICAL, App.VERTICAL);
-        akuadsHopeless = new TitledRadioGroup(context, null, getResources().getString(R.string.akuads_hopeless), getResources().getStringArray(R.array.comorbidities_MH_screening_options), "Never", App.VERTICAL, App.VERTICAL);
-        akuadsHelpless = new TitledRadioGroup(context, null, getResources().getString(R.string.akuads_helpless), getResources().getStringArray(R.array.comorbidities_MH_screening_options), "Never", App.VERTICAL, App.VERTICAL);
-        akuadsWorried = new TitledRadioGroup(context, null, getResources().getString(R.string.akuads_worried), getResources().getStringArray(R.array.comorbidities_MH_screening_options), "Never", App.VERTICAL, App.VERTICAL);
-        akuadsCried = new TitledRadioGroup(context, null, getResources().getString(R.string.akuads_cried), getResources().getStringArray(R.array.comorbidities_MH_screening_options), "Never", App.VERTICAL, App.VERTICAL);
-        akuadsSuicide = new TitledRadioGroup(context, null, getResources().getString(R.string.akuads_suicide), getResources().getStringArray(R.array.comorbidities_MH_screening_options), "Never", App.VERTICAL, App.VERTICAL);
-        akuadsLossOfAppetite = new TitledRadioGroup(context, null, getResources().getString(R.string.akuads_lossofappetite), getResources().getStringArray(R.array.comorbidities_MH_screening_options), "Never", App.VERTICAL, App.VERTICAL);
-        akuadsRetrosternalBurning = new TitledRadioGroup(context, null, getResources().getString(R.string.akuads_retrosternalburning), getResources().getStringArray(R.array.comorbidities_MH_screening_options), "Never", App.VERTICAL, App.VERTICAL);
-        akuadsIndigestion = new TitledRadioGroup(context, null, getResources().getString(R.string.akuads_indigestion), getResources().getStringArray(R.array.comorbidities_MH_screening_options), "Never", App.VERTICAL, App.VERTICAL);
-        akuadsNausea = new TitledRadioGroup(context, null, getResources().getString(R.string.akuads_nausea), getResources().getStringArray(R.array.comorbidities_MH_screening_options), "Never", App.VERTICAL, App.VERTICAL);
-        akuadsConstipation = new TitledRadioGroup(context, null, getResources().getString(R.string.akuads_constipation), getResources().getStringArray(R.array.comorbidities_MH_screening_options), "Never", App.VERTICAL, App.VERTICAL);
-        akuadsDifficultBreathing = new TitledRadioGroup(context, null, getResources().getString(R.string.akuads_difficultybreathing), getResources().getStringArray(R.array.comorbidities_MH_screening_options), "Never", App.VERTICAL, App.VERTICAL);
-        akuadsTremulous = new TitledRadioGroup(context, null, getResources().getString(R.string.akuads_tremulous), getResources().getStringArray(R.array.comorbidities_MH_screening_options), "Never", App.VERTICAL, App.VERTICAL);
-        akuadsNumbness = new TitledRadioGroup(context, null, getResources().getString(R.string.akuads_numbness), getResources().getStringArray(R.array.comorbidities_MH_screening_options), "Never", App.VERTICAL, App.VERTICAL);
-        akuadsTension = new TitledRadioGroup(context, null, getResources().getString(R.string.akuads_tension), getResources().getStringArray(R.array.comorbidities_MH_screening_options), "Never", App.VERTICAL, App.VERTICAL);
-        akuadsHeadaches = new TitledRadioGroup(context, null, getResources().getString(R.string.akuads_headaches), getResources().getStringArray(R.array.comorbidities_MH_screening_options), "Never", App.VERTICAL, App.VERTICAL);
-        akuadsBodyPain = new TitledRadioGroup(context, null, getResources().getString(R.string.akuads_bodypain), getResources().getStringArray(R.array.comorbidities_MH_screening_options), "Never", App.VERTICAL, App.VERTICAL);
-        akuadsUrination = new TitledRadioGroup(context, null, getResources().getString(R.string.akuads_urination), getResources().getStringArray(R.array.comorbidities_MH_screening_options), "Never", App.VERTICAL, App.VERTICAL);
-        akuadsTotalScore = new TitledEditText(context, null, getResources().getString(R.string.akuads_totalscore), "", "", 3, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        akuadsSleep = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_sleep), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL);
+        akuadsLackOfInterest = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_lackofinterest), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL);
+        akuadsLostInterestHobbies = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_lostinteresthobbies), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL);
+        akuadsAnxious = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_anxious), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL);
+        akuadsImpendingDoom = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_impendingdoom), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL);
+        akuadsDifficultyThinkingClearly = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_difficultythinkingclearly), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL);
+        akuadsAlone = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_alone), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL);
+        akuadsUnhappy = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_unhappy), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL);
+        akuadsHopeless = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_hopeless), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL);
+        akuadsHelpless = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_helpless), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL);
+        akuadsWorried = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_worried), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL);
+        akuadsCried = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_cried), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL);
+        akuadsSuicide = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_suicide), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL);
+        akuadsLossOfAppetite = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_lossofappetite), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL);
+        akuadsRetrosternalBurning = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_retrosternalburning), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL);
+        akuadsIndigestion = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_indigestion), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL);
+        akuadsNausea = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_nausea), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL);
+        akuadsConstipation = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_constipation), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL);
+        akuadsDifficultBreathing = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_difficultybreathing), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL);
+        akuadsTremulous = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_tremulous), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL);
+        akuadsNumbness = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_numbness), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL);
+        akuadsTension = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_tension), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL);
+        akuadsHeadaches = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_headaches), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL);
+        akuadsBodyPain = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_bodypain), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL);
+        akuadsUrination = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_urination), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL);
+        akuadsTotalScore = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_akuads_totalscore), "0", "", 3, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         akuadsTotalScore.getEditText().setText(String.valueOf(getTotalScore()));
-        akuadsSeverity = new TitledRadioGroup(context, null, getResources().getString(R.string.akuads_severity), getResources().getStringArray(R.array.comorbidities_MH_severity_level), "", App.VERTICAL, App.VERTICAL);
+        akuadsTotalScore.getEditText().setFocusable(false);
+        akuadsSeverity = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_severity), getResources().getStringArray(R.array.comorbidities_MH_severity_level), "", App.VERTICAL, App.VERTICAL);
         setAkuadsSeverityLevel();
+        for (int i = 0; i < akuadsSeverity.getRadioGroup().getChildCount(); i++) {
+            akuadsSeverity.getRadioGroup().getChildAt(i).setClickable(false);
+        }
 
         // second page views...
-        akuadsAgree = new TitledRadioGroup(context, null, getResources().getString(R.string.agree_AKUADS), getResources().getStringArray(R.array.yes_no_options), "Yes", App.VERTICAL, App.VERTICAL);
-        preferredTherapyLocationSpinner = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.preferredlocation_id), getResources().getStringArray(R.array.comorbidities_location), "Sehatmand Zindagi Center - Korangi", App.HORIZONTAL);
-        gpClinicCode = new TitledEditText(context, null, getResources().getString(R.string.preferredlocation_gpcliniccode), "", "", 4, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
+        akuadsAgree = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_agree_AKUADS), getResources().getStringArray(R.array.comorbidities_yes_no), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL);
+        preferredTherapyLocationSpinner = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_preferredlocation_id), getResources().getStringArray(R.array.comorbidities_location), "Sehatmand Zindagi Center - Korangi", App.HORIZONTAL);
+        gpClinicCode = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_preferredlocation_gpcliniccode), "", getResources().getString(R.string.comorbidities_preferredlocation_gpcliniccode_range), 2, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
         displayAkuadsAgreeOrNot();
         displayPreferredTherapyLocationOrNot();
-        otherPreferredLocation = new TitledEditText(context, null, getResources().getString(R.string.preferredlocation_other_comorbidities), "", "", 20, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        otherPreferredLocation = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_preferredlocation_other_comorbidities), "", "", 50, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         showOtherPreferredLocation();
 
         // third page views...
-        dMScreening = new MyTextView(context, getResources().getString(R.string.dm_screening));
+        dMScreening = new MyTextView(context, getResources().getString(R.string.comorbidities_dm_screening));
         dMScreening.setTypeface(null, Typeface.BOLD);
-        screeningFood = new TitledRadioGroup(context, null, getResources().getString(R.string.dmscrnng_food), getResources().getStringArray(R.array.yes_no_options), "Yes", App.VERTICAL, App.VERTICAL);
-        screeningRBS = new TitledEditText(context, null, getResources().getString(R.string.scrnng_rbs), "0", "", 3, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
-        hba1cTestVoucher = new TitledRadioGroup(context, null, getResources().getString(R.string.hba1c_testvoucher), getResources().getStringArray(R.array.yes_no_options), "Yes", App.VERTICAL, App.VERTICAL);
+        screeningFood = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_dmscrnng_food), getResources().getStringArray(R.array.comorbidities_yes_no), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL);
+        screeningRBS = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_scrnng_rbs), "", getResources().getString(R.string.comorbidities_scrnng_rbs_range), 3, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
+        hba1cTestVoucher = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_hba1c_testvoucher), getResources().getStringArray(R.array.comorbidities_yes_no), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL);
         displayHba1cTestVoucherOrNot();
 
         // Used for reset fields...
@@ -251,7 +236,6 @@ public class ScreeningFormMHDM extends AbstractFormActivity implements RadioGrou
                         {dMScreening, screeningFood, screeningRBS, hba1cTestVoucher}};
 
         formDate.getButton().setOnClickListener(this);
-        //scanQRCode.setOnClickListener(this);
         akuadsSleep.getRadioGroup().setOnCheckedChangeListener(this);
         akuadsLackOfInterest.getRadioGroup().setOnCheckedChangeListener(this);
         akuadsLostInterestHobbies.getRadioGroup().setOnCheckedChangeListener(this);
@@ -308,7 +292,44 @@ public class ScreeningFormMHDM extends AbstractFormActivity implements RadioGrou
             public void onTextChanged(CharSequence s, int start,
                                       int before, int count) {
                 try {
-                    displayHba1cTestVoucherOrNot();
+                    if (screeningRBS.getEditText().getText().length() > 0) {
+                        double num = Double.parseDouble(screeningRBS.getEditText().getText().toString());
+                        if (num < 1 || num > 500) {
+                            screeningRBS.getEditText().setError(getString(R.string.comorbidities_scrnng_rbs_limit));
+                        } else {
+                            displayHba1cTestVoucherOrNot();
+                        }
+                    }
+                } catch (NumberFormatException nfe) {
+                    //Exception: User might be entering " " (empty) value
+                }
+            }
+        });
+
+        gpClinicCode.getEditText().setSingleLine(true);
+        gpClinicCode.getEditText().addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                try {
+                    if (gpClinicCode.getEditText().getText().length() > 0) {
+                        double num = Double.parseDouble(gpClinicCode.getEditText().getText().toString());
+                        if (num < 1 || num > 50) {
+                            gpClinicCode.getEditText().setError(getString(R.string.comorbidities_preferredlocation_gpcliniccode_limit));
+                        } else {
+                            displayHba1cTestVoucherOrNot();
+                        }
+                    }
                 } catch (NumberFormatException nfe) {
                     //Exception: User might be entering " " (empty) value
                 }
@@ -327,52 +348,16 @@ public class ScreeningFormMHDM extends AbstractFormActivity implements RadioGrou
 
         Boolean error = false;
 
-        /*if (App.get(ernsNumber).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(5);
-            else
-                gotoPage(1);
-            ernsNumber.getEditText().setError(getString(R.string.empty_field));
-            ernsNumber.getEditText().requestFocus();
+        if (Double.parseDouble(App.get(gpClinicCode)) < 1 || Double.parseDouble(App.get(gpClinicCode)) > 50) {
+            gpClinicCode.getEditText().setError(getString(R.string.comorbidities_preferredlocation_gpcliniccode_limit));
+            gpClinicCode.getEditText().requestFocus();
             error = true;
         }
-        if (App.get(indexPatientId).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(5);
-            else
-                gotoPage(1);
-            indexPatientId.getEditText().setError(getString(R.string.empty_field));
-            indexPatientId.getEditText().requestFocus();
+        else if (Double.parseDouble(App.get(screeningRBS)) < 1 || Double.parseDouble(App.get(screeningRBS)) > 500) {
+            screeningRBS.getEditText().setError(getString(R.string.comorbidities_scrnng_rbs_limit));
+            screeningRBS.getEditText().requestFocus();
             error = true;
         }
-        if (App.get(age).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(5);
-            else
-                gotoPage(1);
-            age.getEditText().setError(getString(R.string.empty_field));
-            age.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (App.get(husbandName).isEmpty()) {
-            gotoFirstPage();
-            husbandName.getEditText().setError(getString(R.string.empty_field));
-            husbandName.getEditText().requestFocus();
-            error = true;
-        }
-        if (App.get(lastName).isEmpty()) {
-            gotoFirstPage();
-            lastName.getEditText().setError(getString(R.string.empty_field));
-            lastName.getEditText().requestFocus();
-            error = true;
-        }
-        if (App.get(firstName).isEmpty()) {
-            gotoFirstPage();
-            firstName.getEditText().setError(getString(R.string.empty_field));
-            firstName.getEditText().requestFocus();
-            error = true;
-        }*/
 
         if (error) {
 
@@ -518,6 +503,21 @@ public class ScreeningFormMHDM extends AbstractFormActivity implements RadioGrou
 
     }
 
+    @Override
+    public void onPageSelected(int pageNo) {
+
+        //Here RTL and normal view doesn't makes any difference
+        if(pageNo == 1 && akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_normal))){
+
+            if(getCurrentPageNo() == 1)
+                pageNo = 2;
+            else if(getCurrentPageNo() == 3)
+                pageNo = 0;
+        }
+
+        gotoPage(pageNo);
+    }
+
     int getTotalScore() {
 
         ArrayList<String> selectedOptions = new ArrayList<String>();
@@ -547,10 +547,10 @@ public class ScreeningFormMHDM extends AbstractFormActivity implements RadioGrou
         selectedOptions.add(akuadsBodyPain.getRadioGroup().getSelectedValue());
         selectedOptions.add(akuadsUrination.getRadioGroup().getSelectedValue());
 
-        int neverFreq = Collections.frequency(selectedOptions, "Never");
-        int sometimesFreq = Collections.frequency(selectedOptions, "Sometimes");
-        int mostlyFreq = Collections.frequency(selectedOptions, "Mostly");
-        int alwaysFreq = Collections.frequency(selectedOptions, "Always");
+        int neverFreq = Collections.frequency(selectedOptions, getResources().getString(R.string.comorbidities_MH_screening_options_never));
+        int sometimesFreq = Collections.frequency(selectedOptions, getResources().getString(R.string.comorbidities_MH_screening_options_sometimes));
+        int mostlyFreq = Collections.frequency(selectedOptions, getResources().getString(R.string.comorbidities_MH_screening_options_mostly));
+        int alwaysFreq = Collections.frequency(selectedOptions, getResources().getString(R.string.comorbidities_MH_screening_options_always));
 
         int neverTotal = 0 * neverFreq;
         int sometimesTotal = sometimesFreq;
@@ -570,27 +570,29 @@ public class ScreeningFormMHDM extends AbstractFormActivity implements RadioGrou
         } else if (score >= 61 && score <= 75) {
             akuadsSeverity.getRadioGroup().check((akuadsSeverity.getRadioGroup().getChildAt(2)).getId());
         }
+        else {
+            akuadsSeverity.getRadioGroup().check((akuadsSeverity.getRadioGroup().getChildAt(3)).getId());
+        }
     }
 
     void displayAkuadsAgreeOrNot() {
-        if (akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase("Mild") || akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase("Moderate")
-                || akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase("Severe")) {
+        if (akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_mild)) || akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_moderate))
+                || akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_severe))) {
             akuadsAgree.setVisibility(View.VISIBLE);
             preferredTherapyLocationSpinner.setVisibility(View.VISIBLE);
             gpClinicCode.setVisibility(View.VISIBLE);
-        } else if (akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase("Normal")) {
+        } else if (akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_normal))) {
             akuadsAgree.setVisibility(View.GONE);
             preferredTherapyLocationSpinner.setVisibility(View.GONE);
             gpClinicCode.setVisibility(View.GONE);
-            gotoLastPage();
         }
     }
 
     void displayPreferredTherapyLocationOrNot() {
-        if (akuadsAgree.getRadioGroup().getSelectedValue().equalsIgnoreCase("Yes")) {
+        if (akuadsAgree.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.yes))) {
             preferredTherapyLocationSpinner.setVisibility(View.VISIBLE);
             gpClinicCode.setVisibility(View.VISIBLE);
-        } else if (akuadsAgree.getRadioGroup().getSelectedValue().equalsIgnoreCase("No")) {
+        } else if (akuadsAgree.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.no))) {
             preferredTherapyLocationSpinner.setVisibility(View.GONE);
             gpClinicCode.setVisibility(View.GONE);
         }
@@ -599,7 +601,7 @@ public class ScreeningFormMHDM extends AbstractFormActivity implements RadioGrou
     void showOtherPreferredLocation() {
         String text = preferredTherapyLocationSpinner.getSpinner().getSelectedItem().toString();
 
-        if (text.equalsIgnoreCase("other")) {
+        if (text.equalsIgnoreCase(getResources().getString(R.string.comorbidities_location_other))) {
             otherPreferredLocation.setVisibility(View.VISIBLE);
             gpClinicCode.setVisibility(View.GONE);
         } else {
@@ -609,10 +611,26 @@ public class ScreeningFormMHDM extends AbstractFormActivity implements RadioGrou
     }
 
     void displayHba1cTestVoucherOrNot() {
-        if (Integer.parseInt(screeningRBS.getEditText().getText().toString()) >= 200) {
-            hba1cTestVoucher.setVisibility(View.VISIBLE);
-        } else {
-            hba1cTestVoucher.setVisibility(View.GONE);
+        try {
+            if (Integer.parseInt(screeningRBS.getEditText().getText().toString()) >= 200) {
+                hba1cTestVoucher.setVisibility(View.VISIBLE);
+            } else {
+                hba1cTestVoucher.setVisibility(View.GONE);
+            }
         }
+        catch (NumberFormatException nfe) {
+            //Exception: User might be entering " " (empty) value
+        }
+    }
+
+    /**
+     * Goto view at given location in the pager
+     */
+    @Override
+    protected void gotoPage(int pageNo) {
+
+        pager.setCurrentItem(pageNo);
+        navigationSeekbar.setProgress(pageNo);
+
     }
 }
