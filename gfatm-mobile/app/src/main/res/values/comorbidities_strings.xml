@@ -3,42 +3,64 @@
 
     <string name="como_index_patient_registration">Index Patient Registration</string>
 
-    <string name="akuads_Mental_Health_Screening">MENTAL HEALTH SCREENING - AKUADS</string>
-    <string name="akuads_sleep">Have you been sleeping less?</string>
-    <string name="akuads_lackofinterest">Have you had lack of interest in your daily activities?</string>
-    <string name="akuads_lostinteresthobbies">Have you lost interest in your hobbies?</string>
-    <string name="akuads_anxious">Have you been anxious?</string>
-    <string name="akuads_impendingdoom">Have you had a sensation of impending doom?</string>
-    <string name="akuads_difficultythinkingclearly">Have you had difficulty in thinking clearly?</string>
-    <string name="akuads_alone">Have you preferred to be alone?</string>
-    <string name="akuads_unhappy">Have you felt unhappy?</string>
-    <string name="akuads_hopeless">Have you felt hopeless?</string>
-    <string name="akuads_helpless">Have you felt helpless?</string>
-    <string name="akuads_worried">Have you been worried?</string>
-    <string name="akuads_cried">Have you cried?</string>
-    <string name="akuads_suicide">Have you thought of taking your life?</string>
-    <string name="akuads_lossofappetite">Have you had loss of appetite?</string>
-    <string name="akuads_retrosternalburning">Have you had retrosternal burning? </string>
-    <string name="akuads_indigestion">Have you had indigestion?</string>
-    <string name="akuads_nausea">Have you had nausea?</string>
-    <string name="akuads_constipation">Have you had constipation?</string>
-    <string name="akuads_difficultybreathing">Have you felt difficulty in breathing?</string>
-    <string name="akuads_tremulous">Have you felt tremulous?</string>
-    <string name="akuads_numbness">Have you felt numbness of hands and feet?</string>
-    <string name="akuads_tension">Have you felt a sensation of tension in your neck and shoulders? </string>
-    <string name="akuads_headaches">Have you had headaches?</string>
-    <string name="akuads_bodypain">Have you felt pain all over your body?</string>
-    <string name="akuads_urination">Have you passed urine more frequently?</string>
-    <string name="akuads_totalscore">AKUADS score:</string>
-    <string name="akuads_severity">Severity level:</string>
-    <string name="agree_AKUADS">Does the client agree to therapy?</string>
-    <string name="preferredlocation_id">Preferred location for Therapy:</string>
-    <string name="preferredlocation_gpcliniccode">GP Clinic Code:</string>
-    <string name="preferredlocation_other_comorbidities">Other preferred location:</string>
-    <string name="dm_screening">DIABETES MELLITUS SCREENING</string>
-    <string name="dmscrnng_food">Have you had something to eat within the last two hours?</string>
-    <string name="scrnng_rbs">RBS:</string>
-    <string name="hba1c_testvoucher">HbA1C test voucher given?</string>
+    <string name="comorbidities_akuads_Mental_Health_Screening">MENTAL HEALTH SCREENING - AKUADS</string>
+    <string name="comorbidities_akuads_sleep">Have you been sleeping less?</string>
+    <string name="comorbidities_akuads_lackofinterest">Have you had lack of interest in your daily activities?</string>
+    <string name="comorbidities_akuads_lostinteresthobbies">Have you lost interest in your hobbies?</string>
+    <string name="comorbidities_akuads_anxious">Have you been anxious?</string>
+    <string name="comorbidities_akuads_impendingdoom">Have you had a sensation of impending doom?</string>
+    <string name="comorbidities_akuads_difficultythinkingclearly">Have you had difficulty in thinking clearly?</string>
+    <string name="comorbidities_akuads_alone">Have you preferred to be alone?</string>
+    <string name="comorbidities_akuads_unhappy">Have you felt unhappy?</string>
+    <string name="comorbidities_akuads_hopeless">Have you felt hopeless?</string>
+    <string name="comorbidities_akuads_helpless">Have you felt helpless?</string>
+    <string name="comorbidities_akuads_worried">Have you been worried?</string>
+    <string name="comorbidities_akuads_cried">Have you cried?</string>
+    <string name="comorbidities_akuads_suicide">Have you thought of taking your life?</string>
+    <string name="comorbidities_akuads_lossofappetite">Have you had loss of appetite?</string>
+    <string name="comorbidities_akuads_retrosternalburning">Have you had retrosternal burning? </string>
+    <string name="comorbidities_akuads_indigestion">Have you had indigestion?</string>
+    <string name="comorbidities_akuads_nausea">Have you had nausea?</string>
+    <string name="comorbidities_akuads_constipation">Have you had constipation?</string>
+    <string name="comorbidities_akuads_difficultybreathing">Have you felt difficulty in breathing?</string>
+    <string name="comorbidities_akuads_tremulous">Have you felt tremulous?</string>
+    <string name="comorbidities_akuads_numbness">Have you felt numbness of hands and feet?</string>
+    <string name="comorbidities_akuads_tension">Have you felt a sensation of tension in your neck and shoulders? </string>
+    <string name="comorbidities_akuads_headaches">Have you had headaches?</string>
+    <string name="comorbidities_akuads_bodypain">Have you felt pain all over your body?</string>
+    <string name="comorbidities_akuads_urination">Have you passed urine more frequently?</string>
+    <string name="comorbidities_akuads_totalscore">AKUADS score:</string>
+    <string name="comorbidities_akuads_severity">Severity level:</string>
+    <string name="comorbidities_agree_AKUADS">Does the client agree to therapy?</string>
+    <string name="comorbidities_preferredlocation_id">Preferred location for Therapy:</string>
+    <string name="comorbidities_preferredlocation_gpcliniccode">GP Clinic Code:</string>
+    <string name="comorbidities_preferredlocation_gpcliniccode_range">Range 1&#8211;50</string>
+    <string name="comorbidities_preferredlocation_gpcliniccode_limit">The value should be in the range of 1&#8211;50</string>
+    <string name="comorbidities_preferredlocation_other_comorbidities">Other preferred location:</string>
+    <string name="comorbidities_dm_screening">DIABETES MELLITUS SCREENING</string>
+    <string name="comorbidities_dmscrnng_food">Have you had something to eat within the last two hours?</string>
+    <string name="comorbidities_scrnng_rbs">RBS:</string>
+    <string name="comorbidities_scrnng_rbs_range">Range 1&#8211;500</string>
+    <string name="comorbidities_scrnng_rbs_limit">The value should be in the range of 1&#8211;500</string>
+    <string name="comorbidities_hba1c_testvoucher">HbA1C test voucher given?</string>
+
+    <string name="comorbidities_hba1c_test_order">Test Order HbA1C</string>
+    <string name="comorbidities_hba1c_testtype">Test Type:</string>
+    <string name="comorbidities_mth_txcomorbidities_hba1c">Which Follow up Month Test?</string>
+    <string name="comorbidities_hba1cdate_test_order">Test Order Date:</string>
+    <string name="comorbidities_hhba1c_testid">Test ID:</string>
+    <string name="comorbidities_hhba1c_testid_format_hint">Format #######</string>
+    <string name="comorbidities_hhba1c_testid_format_error">It should be 7 digits number</string>
+    <string name="comorbidities_hba1c_test_result">Test Result HbA1C</string>
+    <string name="comorbidities_hba1c_resultdate">Test Result Date:</string>
+    <string name="comorbidities_hba1c_result">HbA1C Result (%):</string>
+    <string name="comorbidities_hba1c_result_range">Range 0&#8211;20 (Including decimal)</string>
+    <string name="comorbidities_hba1c_diabetic">Is the patient Diabetic?</string>
+
+    <string name="comorbidities_location_other">Other</string>
+
+    <string name="comorbidities_hba1c_result_limit">The value should be in the range of 0&#8211;20</string>
+    <string name="comorbidities_hba1c_not_valid_result_value">The result value is not valid. It must be up to one decimal place</string>
 
     <string-array name="comorbidities_location">
         <item>Sehatmand Zindagi Center - Korangi</item>
@@ -47,21 +69,80 @@
         <item>Sheikh Saeed Hospital - Korangi (HMS)</item>
         <item>Helpline</item>
         <item>GP Clinics (HMS)</item>
-        <item>Other</item>
+        <item>@string/comorbidities_location_other</item>
     </string-array>
+
+    <string name="comorbidities_MH_screening_options_never">Never</string>
+    <string name="comorbidities_MH_screening_options_sometimes">Sometimes</string>
+    <string name="comorbidities_MH_screening_options_mostly">Mostly</string>
+    <string name="comorbidities_MH_screening_options_always">Always</string>
 
     <string-array name="comorbidities_MH_screening_options">
-        <item>Never</item>
-        <item>Sometimes</item>
-        <item>Mostly</item>
-        <item>Always</item>
+        <item>@string/comorbidities_MH_screening_options_never</item>
+        <item>@string/comorbidities_MH_screening_options_sometimes</item>
+        <item>@string/comorbidities_MH_screening_options_mostly</item>
+        <item>@string/comorbidities_MH_screening_options_always</item>
     </string-array>
+
+    <string name="comorbidities_MH_severity_level_mild">Mild</string>
+    <string name="comorbidities_MH_severity_level_moderate">Moderate</string>
+    <string name="comorbidities_MH_severity_level_severe">Severe</string>
+    <string name="comorbidities_MH_severity_level_normal">Normal</string>
 
     <string-array name="comorbidities_MH_severity_level">
-        <item>Mild</item>
-        <item>Moderate</item>
-        <item>Severe</item>
-        <item>Normal</item>
+        <item>@string/comorbidities_MH_severity_level_mild</item>
+        <item>@string/comorbidities_MH_severity_level_moderate</item>
+        <item>@string/comorbidities_MH_severity_level_severe</item>
+        <item>@string/comorbidities_MH_severity_level_normal</item>
     </string-array>
 
+    <string name="comorbidities_HbA1C_test_type_baseline">Baseline</string>
+    <string name="comorbidities_HbA1C_test_type_baseline_repeat">Baseline Repeat</string>
+    <string name="comorbidities_HbA1C_test_type_followup">Follow up</string>
+
+    <string-array name="comorbidities_HbA1C_test_type">
+        <item>@string/comorbidities_HbA1C_test_type_baseline</item>
+        <item>@string/comorbidities_HbA1C_test_type_baseline_repeat</item>
+        <item>@string/comorbidities_HbA1C_test_type_followup</item>
+    </string-array>
+
+    <string-array name="comorbidities_yes_no">
+        <item>@string/yes</item>
+        <item>@string/no</item>
+    </string-array>
+
+    <string-array name="comorbidities_followup_month">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+    </string-array>
+
+    <string name="comorbidities_blood_sugar_testid_format_hint">Format ###########</string>
+    <string name="comorbidities_blood_sugar_testid_format_error">It should be 11 digits number</string>
+    <string name="comorbidities_blood_sugar_test_order">Test Order Blood Sugar</string>
+    <string name="comorbidities_blood_sugar_test_result">Test Results Blood Sugar</string>
+    <string name="comorbidities_rbs_result_limit">The value should be in the range of 0&#8211;300</string>
+    <string name="comorbidities_rbs_result_range">Range 0&#8211;300</string>
+    <string name="comorbidities_rbs_result">RBS Test Result (mg/dl):</string>
 </resources>
