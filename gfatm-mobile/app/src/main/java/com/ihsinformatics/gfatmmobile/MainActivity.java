@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity
 
     Context context = this;
 
+    private static final int SECOND_ACTIVITY_RESULT_CODE = 0;
+
     LinearLayout buttonLayout;
     LinearLayout programLayout;
     LinearLayout headerLayout;
@@ -47,7 +49,7 @@ public class MainActivity extends AppCompatActivity
 
     FormFragment fragmentForm = new FormFragment();
     ReportFragment fragmentReport = new ReportFragment();
-    BlankFragment blankFragment = new BlankFragment();
+    SearchFragment fragmentSearch = new SearchFragment();
 
     ImageView change;
 
@@ -61,11 +63,11 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.add(R.id.fragment_place, fragmentForm, "FORM");
         fragmentTransaction.add(R.id.fragment_place, fragmentReport, "REPORT");
-        fragmentTransaction.add(R.id.fragment_place, blankFragment, "SEARCH");
+        fragmentTransaction.add(R.id.fragment_place, fragmentSearch, "SEARCH");
 
         fragmentTransaction.hide(fragmentForm);
         fragmentTransaction.hide(fragmentReport);
-        fragmentTransaction.hide(blankFragment);
+        fragmentTransaction.hide(fragmentSearch);
 
         fragmentTransaction.commit();
 
@@ -367,7 +369,7 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.show(fragmentForm);
         fragmentTransaction.hide(fragmentReport);
-        fragmentTransaction.hide(blankFragment);
+        fragmentTransaction.hide(fragmentSearch);
         fragmentTransaction.commit();
     }
 
@@ -391,7 +393,7 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.hide(fragmentForm);
         fragmentTransaction.show(fragmentReport);
-        fragmentTransaction.hide(blankFragment);
+        fragmentTransaction.hide(fragmentSearch);
         fragmentTransaction.commit();
     }
 
@@ -415,7 +417,7 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.hide(fragmentForm);
         fragmentTransaction.hide(fragmentReport);
-        fragmentTransaction.show(blankFragment);
+        fragmentTransaction.show(fragmentSearch);
         fragmentTransaction.commit();
     }
 
@@ -452,7 +454,7 @@ public class MainActivity extends AppCompatActivity
                 view.invalidate();
 
                 Intent selectPatientActivityIntent = new Intent(this, SelectPatientActivity.class);
-                startActivity(selectPatientActivityIntent);
+                startActivityForResult(selectPatientActivityIntent, SECOND_ACTIVITY_RESULT_CODE);
 
                 break;
             }
@@ -466,6 +468,24 @@ public class MainActivity extends AppCompatActivity
             }
         }
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // check that it is the SecondActivity with an OK result
+        if (requestCode == SECOND_ACTIVITY_RESULT_CODE) {
+            if (resultCode == RESULT_OK) {
+
+                // get String data from Intent
+                String returnString = data.getStringExtra("key");
+                if(returnString != null && returnString.equals("SEARCH")){
+                    showSearchFragment();
+                }
+
+            }
+        }
     }
 
 }

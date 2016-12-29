@@ -308,7 +308,7 @@ public class RegexUtil {
         if (isValid) {
             String idWithoutCheckdigit = id.substring(0, id.length() - 1);
             char idCheckdigit = id.charAt(id.length() - 1);
-            String validChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVYWXZ_";
+            String validChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVYWXZabcdefghijklmnopqrstuvwxyz_";
             idWithoutCheckdigit = idWithoutCheckdigit.trim();
             int sum = 0;
             for (int i = 0; i < idWithoutCheckdigit.length(); i++) {
@@ -329,7 +329,10 @@ public class RegexUtil {
             int checkDigit = (10 - (sum % 10)) % 10;
             isValid = checkDigit == Integer.parseInt(String
                     .valueOf(idCheckdigit));
+
+            Boolean flag = isValid;
         }
+
         return isValid;
     }
 

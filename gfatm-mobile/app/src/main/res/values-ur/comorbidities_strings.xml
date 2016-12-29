@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="como_index_patient_registration">Index Patient Registration</string>
+    <string name="comorbidities_index_patient_registration">Index Patient Registration</string>
 
     <string name="comorbidities_akuads_Mental_Health_Screening">MENTAL HEALTH SCREENING - AKUADS</string>
     <string name="comorbidities_akuads_sleep">Have you been sleeping less?</string>

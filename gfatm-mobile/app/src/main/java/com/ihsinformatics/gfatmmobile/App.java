@@ -230,6 +230,7 @@ public class App {
      * @return
      */
     public static String get(View view) {
+
         String str = null;
 
         if (view instanceof TitledEditText) {

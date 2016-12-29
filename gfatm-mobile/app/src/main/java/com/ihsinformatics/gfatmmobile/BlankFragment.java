@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RadioGroup;
 
 /**
  * Created by Rabbia on 11/10/2016.
@@ -21,7 +20,7 @@ public class BlankFragment extends Fragment {
         //Inflate the layout for this fragment
 
         View mainContent = inflater.inflate(
-                R.layout.fragment_blank, container, false);
+                R.layout.blank_fragment, container, false);
 
         return mainContent;
     }
