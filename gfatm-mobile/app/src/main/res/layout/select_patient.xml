@@ -64,6 +64,7 @@
                         android:text="@string/scan_barcode" />
 
                     <Button
+                        android:id="@+id/selectPatient"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/large"
@@ -234,7 +235,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/age"
-                            android:gravity="right"
                             android:textSize="@dimen/large" />
 
                         <EditText
@@ -258,7 +258,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/patient_id"
-                            android:gravity="right"
                             android:textSize="@dimen/large" />
 
                         <EditText
@@ -305,7 +304,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="55dp"
                             android:text="@string/external_id"
-                            android:gravity="right"
                             android:textSize="@dimen/large" />
 
                         <EditText

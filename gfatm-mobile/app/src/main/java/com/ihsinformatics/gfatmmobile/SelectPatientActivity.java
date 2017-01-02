@@ -49,6 +49,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
 
     EditText selectPatientId;
     Button selectPatientScanButton;
+    Button selectPatient;
 
     EditText firstName;
     EditText lastName;
@@ -76,6 +77,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
 
         selectPatientId = (EditText) findViewById(R.id.selectPatientId);
         selectPatientScanButton = (Button) findViewById(R.id.selectBarcodeScan);
+        selectPatient = (Button) findViewById(R.id.selectPatient);
 
         firstName = (EditText) findViewById(R.id.firstName);
         lastName = (EditText) findViewById(R.id.lastName);
@@ -117,6 +119,8 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
             @Override
             public void onTextChanged(CharSequence s, int start,
                                       int before, int count) {
+
+                dob.setError(null);
                 if(s.length() != 0){
                     Calendar cal = Calendar.getInstance();
                     cal.add(Calendar.YEAR, -Integer.parseInt(s.toString()));
@@ -146,6 +150,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
         createButton.setOnClickListener(this);
         createPatientScanButton.setOnClickListener(this);
         selectPatientScanButton.setOnClickListener(this);
+        selectPatient.setOnClickListener(this);
     }
 
     @Override
@@ -213,6 +218,45 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
             }
             super.onBackPressed();
 
+        } else if ( v == selectPatient){
+
+            Boolean error = false;
+
+            if (App.get(selectPatientId).isEmpty()) {
+                selectPatientId.setError(getString(R.string.empty_field));
+                selectPatientId.requestFocus();
+                error = true;
+            }else if(!RegexUtil.isValidId(App.get(selectPatientId))){
+                selectPatientId.setError(getString(R.string.invalid_id));
+                selectPatientId.requestFocus();
+                error = true;
+            }
+
+            if(error){
+                int color = App.getColor(SelectPatientActivity.this, R.attr.colorAccent);
+
+                final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this).create();
+                alertDialog.setMessage(getString(R.string.form_error));
+                Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                DrawableCompat.setTint(clearIcon, color);
+                alertDialog.setIcon(clearIcon);
+                alertDialog.setTitle(getResources().getString(R.string.title_error));
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                try {
+                                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                                } catch (Exception e) {
+                                    // TODO: handle exception
+                                }
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();
+
+            }
+
         } else if (v == createPatient) {
             selectLayout.setVisibility(View.GONE);
             createLayout.setVisibility(View.VISIBLE);
@@ -220,11 +264,9 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
 
             setTitle(getResources().getString(R.string.title_create_new_patient));
         } else if (v == createButton) {
-            /*selectLayout.setVisibility(View.VISIBLE);
-            createLayout.setVisibility(View.GONE);
-            createButton.setVisibility(View.GONE);
+            if(createPatientValidate()){
 
-            setTitle(getResources().getString(R.string.title_select_patient));*/
+            }
         }
         else if ( v == dob){
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -333,11 +375,11 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                     createPatientId.requestFocus();
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this).create();
-                    alertDialog.setMessage(getString(R.string.warning_before_clear));
-                    Drawable clearIcon = getResources().getDrawable(R.drawable.ic_clear);
+                    alertDialog.setMessage(getString(R.string.invalid_scanned_id));
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                     DrawableCompat.setTint(clearIcon, color);
                     alertDialog.setIcon(clearIcon);
-                    alertDialog.setTitle(getResources().getString(R.string.title_clear));
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
                     alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
@@ -354,7 +396,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                 createPatientId.setText("");
                 createPatientId.requestFocus();
 
-                final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this).create();
+                /*final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this).create();
                 alertDialog.setMessage(getString(R.string.warning_before_clear));
                 Drawable clearIcon = getResources().getDrawable(R.drawable.ic_clear);
                 DrawableCompat.setTint(clearIcon, color);
@@ -366,7 +408,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                                 dialog.dismiss();
                             }
                         });
-                alertDialog.show();
+                alertDialog.show();*/
 
             }
             // Set the locale again, since the Barcode app restores system's
@@ -391,11 +433,11 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                     selectPatientId.requestFocus();
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this).create();
-                    alertDialog.setMessage(getString(R.string.warning_before_clear));
-                    Drawable clearIcon = getResources().getDrawable(R.drawable.ic_clear);
+                    alertDialog.setMessage(getString(R.string.invalid_scanned_id));
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                     DrawableCompat.setTint(clearIcon, color);
                     alertDialog.setIcon(clearIcon);
-                    alertDialog.setTitle(getResources().getString(R.string.title_clear));
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
                     alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
@@ -412,7 +454,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                 selectPatientId.setText("");
                 selectPatientId.requestFocus();
 
-                final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this).create();
+                /*final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this).create();
                 alertDialog.setMessage(getString(R.string.warning_before_clear));
                 Drawable clearIcon = getResources().getDrawable(R.drawable.ic_clear);
                 DrawableCompat.setTint(clearIcon, color);
@@ -424,7 +466,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                                 dialog.dismiss();
                             }
                         });
-                alertDialog.show();
+                alertDialog.show();*/
 
             }
             // Set the locale again, since the Barcode app restores system's
@@ -467,10 +509,13 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
             createPatientId.setError(getString(R.string.empty_field));
             createPatientId.requestFocus();
             error = true;
+        }else if(!RegexUtil.isValidId(App.get(createPatientId))){
+            createPatientId.setError(getString(R.string.invalid_id));
+            createPatientId.requestFocus();
+            error = true;
         }
         if (App.get(dob).isEmpty()) {
             dob.setError(getString(R.string.empty_field));
-            dob.requestFocus();
             error = true;
         }
         if (App.get(lastName).isEmpty()) {

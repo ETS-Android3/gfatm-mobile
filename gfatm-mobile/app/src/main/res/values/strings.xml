@@ -344,6 +344,8 @@
     <!-- Errors String -->
     <string name="empty_field">This field can\'t be empty.</string>
     <string name="invalid_value">Invalid value</string>
+    <string name="invalid_scanned_id">Invalid ID: Scanned Id isn\'t Valid. Please try different Id.</string>
+    <string name="invalid_id">Invalid ID</string>
     <string name="no_program_selected">No program selected.</string>
     <string name="select_program_continue">Select Program to continue.</string>
     <string name="warning_before_program_change">Are you sure you want to change the Program? Any unsaved changes will be discarded.</string>
@@ -396,5 +398,12 @@
     <string name="goto_last">>></string>
     <string name="goto_next">Next</string>
     <string name="mandatory_field_sign">&lt;br&gt; &lt;font color=##0D6986&gt; * &lt;/font&gt;  mg</string>
+
+    <!-- Search -->
+    <string name="name">Name: </string>
+    <string name="mobile_number">Mobile #: </string>
+    <string name="health_center">Health Center: </string>
+    <string name="mother_name">Mother\'s name: </string>
+    <string name="search_again">Search Again</string>
 
 </resources>

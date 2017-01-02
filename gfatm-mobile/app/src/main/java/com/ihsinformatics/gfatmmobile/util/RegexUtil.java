@@ -330,7 +330,6 @@ public class RegexUtil {
             isValid = checkDigit == Integer.parseInt(String
                     .valueOf(idCheckdigit));
 
-            Boolean flag = isValid;
         }
 
         return isValid;
