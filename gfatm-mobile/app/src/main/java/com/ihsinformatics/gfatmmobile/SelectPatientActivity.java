@@ -181,31 +181,6 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
         return true;
     }
 
-    public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-
-            Calendar calendar = dateOfBirthCalendar;
-
-            int yy = calendar.get(Calendar.YEAR);
-            int mm = calendar.get(Calendar.MONTH);
-            int dd = calendar.get(Calendar.DAY_OF_MONTH);
-            DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, yy, mm, dd);
-            dialog.getDatePicker().setMaxDate(new Date().getTime());
-            return dialog;
-        }
-
-        @Override
-        public void onDateSet(DatePicker view, int yy, int mm, int dd) {
-
-            dateOfBirthCalendar.set(yy, mm, dd);
-            dob.setText(DateFormat.format("dd-MMM-yyyy", dateOfBirthCalendar).toString());
-            age.setText(String.valueOf(App.getDiffYears(dateOfBirthCalendar.getTime(), new Date())));
-
-        }
-    }
-
     @Override
     public void onClick(View v) {
 
@@ -232,30 +207,8 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                 error = true;
             }
 
-            if(error){
-                int color = App.getColor(SelectPatientActivity.this, R.attr.colorAccent);
+            //if(!error)
 
-                final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this).create();
-                alertDialog.setMessage(getString(R.string.form_error));
-                Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-                DrawableCompat.setTint(clearIcon, color);
-                alertDialog.setIcon(clearIcon);
-                alertDialog.setTitle(getResources().getString(R.string.title_error));
-                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-                                } catch (Exception e) {
-                                    // TODO: handle exception
-                                }
-                                dialog.dismiss();
-                            }
-                        });
-                alertDialog.show();
-
-            }
 
         } else if (v == createPatient) {
             selectLayout.setVisibility(View.GONE);
@@ -280,11 +233,11 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                     intent.putExtra(Barcode.SCAN_MODE, Barcode.QR_MODE);
                     startActivityForResult(intent, Barcode.BARCODE_RESULT);
                 } else {
-                    int color = App.getColor(SelectPatientActivity.this, R.attr.colorAccent);
+                    //int color = App.getColor(SelectPatientActivity.this, R.attr.colorAccent);
                     final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this).create();
                     alertDialog.setMessage(getString(R.string.barcode_scanner_missing));
                     Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-                    DrawableCompat.setTint(clearIcon, color);
+                    //DrawableCompat.setTint(clearIcon, color);
                     alertDialog.setIcon(clearIcon);
                     alertDialog.setTitle(getResources().getString(R.string.title_error));
                     alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
@@ -296,11 +249,11 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                     alertDialog.show();
                 }
             } catch (ActivityNotFoundException e) {
-                int color = App.getColor(SelectPatientActivity.this, R.attr.colorAccent);
+                //int color = App.getColor(SelectPatientActivity.this, R.attr.colorAccent);
                 final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this).create();
                 alertDialog.setMessage(getString(R.string.barcode_scanner_missing));
                 Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-                DrawableCompat.setTint(clearIcon, color);
+                //DrawableCompat.setTint(clearIcon, color);
                 alertDialog.setIcon(clearIcon);
                 alertDialog.setTitle(getResources().getString(R.string.title_error));
                 alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
@@ -320,11 +273,11 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                     intent.putExtra(Barcode.SCAN_MODE, Barcode.QR_MODE);
                     startActivityForResult(intent, Barcode.BARCODE_RESULT_2);
                 } else {
-                    int color = App.getColor(SelectPatientActivity.this, R.attr.colorAccent);
+                    //int color = App.getColor(SelectPatientActivity.this, R.attr.colorAccent);
                     final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this).create();
                     alertDialog.setMessage(getString(R.string.barcode_scanner_missing));
                     Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-                    DrawableCompat.setTint(clearIcon, color);
+                    //DrawableCompat.setTint(clearIcon, color);
                     alertDialog.setIcon(clearIcon);
                     alertDialog.setTitle(getResources().getString(R.string.title_error));
                     alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
@@ -336,11 +289,11 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                     alertDialog.show();
                 }
             } catch (ActivityNotFoundException e) {
-                int color = App.getColor(SelectPatientActivity.this, R.attr.colorAccent);
+                //int color = App.getColor(SelectPatientActivity.this, R.attr.colorAccent);
                 final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this).create();
                 alertDialog.setMessage(getString(R.string.barcode_scanner_missing));
                 Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-                DrawableCompat.setTint(clearIcon, color);
+                //DrawableCompat.setTint(clearIcon, color);
                 alertDialog.setIcon(clearIcon);
                 alertDialog.setTitle(getResources().getString(R.string.title_error));
                 alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
@@ -369,7 +322,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                     createPatientId.requestFocus();
                 } else {
 
-                    int color = App.getColor(SelectPatientActivity.this, R.attr.colorAccent);
+                    //int color = App.getColor(SelectPatientActivity.this, R.attr.colorAccent);
 
                     createPatientId.setText("");
                     createPatientId.requestFocus();
@@ -377,7 +330,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                     final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this).create();
                     alertDialog.setMessage(getString(R.string.invalid_scanned_id));
                     Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-                    DrawableCompat.setTint(clearIcon, color);
+                    //DrawableCompat.setTint(clearIcon, color);
                     alertDialog.setIcon(clearIcon);
                     alertDialog.setTitle(getResources().getString(R.string.title_error));
                     alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
@@ -427,7 +380,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                     selectPatientId.requestFocus();
                 } else {
 
-                    int color = App.getColor(SelectPatientActivity.this, R.attr.colorAccent);
+                    //int color = App.getColor(SelectPatientActivity.this, R.attr.colorAccent);
 
                     selectPatientId.setText("");
                     selectPatientId.requestFocus();
@@ -435,7 +388,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                     final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this).create();
                     alertDialog.setMessage(getString(R.string.invalid_scanned_id));
                     Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-                    DrawableCompat.setTint(clearIcon, color);
+                    //DrawableCompat.setTint(clearIcon, color);
                     alertDialog.setIcon(clearIcon);
                     alertDialog.setTitle(getResources().getString(R.string.title_error));
                     alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
@@ -477,7 +430,6 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
             SelectPatientActivity.this.getResources().updateConfiguration(config,null);
         }
     }
-
 
     @Override
     public void onBackPressed() {
@@ -529,32 +481,35 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
             error = true;
         }
 
-        if(error){
-            int color = App.getColor(SelectPatientActivity.this, R.attr.colorAccent);
-
-            final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this).create();
-            alertDialog.setMessage(getString(R.string.form_error));
-            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-            DrawableCompat.setTint(clearIcon, color);
-            alertDialog.setIcon(clearIcon);
-            alertDialog.setTitle(getResources().getString(R.string.title_error));
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            try {
-                                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-                            } catch (Exception e) {
-                                // TODO: handle exception
-                            }
-                            dialog.dismiss();
-                        }
-                    });
-            alertDialog.show();
-
+        if (error)
             return false;
-        }
+
         return true;
+    }
+
+    public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+            Calendar calendar = dateOfBirthCalendar;
+
+            int yy = calendar.get(Calendar.YEAR);
+            int mm = calendar.get(Calendar.MONTH);
+            int dd = calendar.get(Calendar.DAY_OF_MONTH);
+            DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, yy, mm, dd);
+            dialog.getDatePicker().setMaxDate(new Date().getTime());
+            return dialog;
+        }
+
+        @Override
+        public void onDateSet(DatePicker view, int yy, int mm, int dd) {
+
+            dateOfBirthCalendar.set(yy, mm, dd);
+            dob.setText(DateFormat.format("dd-MMM-yyyy", dateOfBirthCalendar).toString());
+            age.setText(String.valueOf(App.getDiffYears(dateOfBirthCalendar.getTime(), new Date())));
+
+        }
     }
 
 }

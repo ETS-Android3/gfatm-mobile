@@ -299,12 +299,12 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
 
         if (error) {
 
-            int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
+            // int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
             alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-            DrawableCompat.setTint(clearIcon, color);
+            // DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_error));
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
@@ -491,6 +491,32 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
         }
     }
 
+    @Override
+    public void onPageSelected(int pageNo) {
+
+        if (!App.isLanguageRTL()) {
+            if (pageNo == 4 && dstAvailable.getRadioGroup().getSelectedValue().equalsIgnoreCase(getString(R.string.no))) {
+
+                if (getCurrentPageNo() == 4)
+                    pageNo = 5;
+                else if (getCurrentPageNo() == 6)
+                    pageNo = 3;
+            }
+        } else {
+            if (pageNo == 2 && dstAvailable.getRadioGroup().getSelectedValue().equalsIgnoreCase(getString(R.string.no))) {
+
+                if (getCurrentPageNo() == 4)
+                    pageNo = 1;
+                else if (getCurrentPageNo() == 6)
+                    pageNo = 3;
+            }
+        }
+
+
+        gotoPage(pageNo);
+
+    }
+
     class MyAdapter extends PagerAdapter {
 
         @Override
@@ -533,33 +559,6 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
             }
 
         }
-
-    }
-
-    @Override
-    public void onPageSelected(int pageNo) {
-
-      if(!App.isLanguageRTL()) {
-          if (pageNo == 4 && dstAvailable.getRadioGroup().getSelectedValue().equalsIgnoreCase(getString(R.string.no))) {
-
-              if (getCurrentPageNo() == 4)
-                  pageNo = 5;
-              else if (getCurrentPageNo() == 6)
-                  pageNo = 3;
-          }
-      }
-      else{
-          if (pageNo == 2 && dstAvailable.getRadioGroup().getSelectedValue().equalsIgnoreCase(getString(R.string.no))) {
-
-              if (getCurrentPageNo() == 4)
-                  pageNo = 1;
-              else if (getCurrentPageNo() == 6)
-                  pageNo = 3;
-          }
-      }
-
-
-        gotoPage(pageNo);
 
     }
 

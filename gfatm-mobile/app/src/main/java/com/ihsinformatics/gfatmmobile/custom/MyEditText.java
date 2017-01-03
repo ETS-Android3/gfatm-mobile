@@ -1,11 +1,8 @@
 package com.ihsinformatics.gfatmmobile.custom;
 
 import android.content.Context;
-import android.drm.DrmStore;
 import android.text.InputFilter;
-import android.text.InputType;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.widget.EditText;
 
 import com.ihsinformatics.gfatmmobile.App;
@@ -24,10 +21,16 @@ public class MyEditText extends EditText {
 
         setDefaultValue();
 
-        InputFilter[] filters = new InputFilter[2];
-        filters[0] = new InputFilter.LengthFilter(length);
-        filters[1] = filter;
-        setFilters(filters);
+        if (filter == null) {
+            InputFilter[] filters = new InputFilter[1];
+            filters[0] = new InputFilter.LengthFilter(length);
+            setFilters(filters);
+        } else {
+            InputFilter[] filters = new InputFilter[2];
+            filters[0] = new InputFilter.LengthFilter(length);
+            filters[1] = filter;
+            setFilters(filters);
+        }
 
         setInputType(inputType);
 
