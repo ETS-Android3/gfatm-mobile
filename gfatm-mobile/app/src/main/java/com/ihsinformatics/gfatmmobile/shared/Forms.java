@@ -1,14 +1,12 @@
 package com.ihsinformatics.gfatmmobile.shared;
 
-import android.app.Activity;
-import android.os.Bundle;
-
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.comorbidities.BloodSugarForm;
 import com.ihsinformatics.gfatmmobile.comorbidities.HbA1CForm;
 import com.ihsinformatics.gfatmmobile.comorbidities.PatientInformationForm;
 import com.ihsinformatics.gfatmmobile.comorbidities.ScreeningFormMHDM;
+import com.ihsinformatics.gfatmmobile.fast.ScreeningForm;
 import com.ihsinformatics.gfatmmobile.pet.IndexPatientRegistrationForm;
 import com.ihsinformatics.gfatmmobile.pet.test;
 
@@ -22,6 +20,9 @@ public class Forms{
 
     //PET
     public static final String INDEX_PATIENT_REGISTRATION = "Index Patient Registration";
+
+    //Fast
+    public static final String FAST_SCREENING_FORM = "Screening Form";
 
     //Commorbidities
     public static final String COMORBIDITIES_INDEX_PATIENT_REGISTRATION = "Index Patient Registration";
@@ -87,11 +88,11 @@ public class Forms{
 
         ArrayList<FormsObject> fastList = new ArrayList<>();
 
-        FormsObject indexPatientRegistration = new FormsObject("Screening Form", AbstractFormActivity.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+        FormsObject screeningForm = new FormsObject(FAST_SCREENING_FORM, ScreeningForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
         FormsObject contactRegistry = new FormsObject("Presumptive Form", AbstractFormActivity.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
         FormsObject baselineScreening = new FormsObject("Sputum Container and X-Ray Voucher Form", AbstractFormActivity.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
 
-        fastList.add(indexPatientRegistration);
+        fastList.add(screeningForm);
         fastList.add(contactRegistry);
         fastList.add(baselineScreening);
 
