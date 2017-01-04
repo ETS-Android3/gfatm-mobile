@@ -24,7 +24,6 @@ import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
-import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -36,7 +35,6 @@ import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
-import com.ihsinformatics.gfatmmobile.pet.IndexPatientRegistrationForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
@@ -110,7 +108,7 @@ public class ScreeningForm extends AbstractFormActivity implements RadioGroup.On
                              ViewGroup container, Bundle savedInstanceState) {
 
         PAGE_COUNT = 3;
-        FORM_NAME = Forms.SCREENING_FORM;
+        FORM_NAME = Forms.FAST_SCREENING_FORM;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -196,7 +194,7 @@ public class ScreeningForm extends AbstractFormActivity implements RadioGroup.On
         indexExternalPatientId = new TitledEditText(context, null, getResources().getString(R.string.pet_index_patient_external_id), "", "", 20, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         scanQRCode = new Button(context);
         scanQRCode.setText("Scan QR Code");
-        ernsNumber = new TitledEditText(context, null, getResources().getString(R.string.pet_erns_number), "", "", RegexUtil.idLength, RegexUtil.ernsFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        ernsNumber = new TitledEditText(context, null, getResources().getString(R.string.pet_erns_number), "", "", RegexUtil.idLength, RegexUtil.ERNSFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
 
         // third page views...
         tbType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_tb_type), getResources().getStringArray(R.array.pet_tb_types), "PTB", App.HORIZONTAL, App.VERTICAL);
@@ -211,7 +209,7 @@ public class ScreeningForm extends AbstractFormActivity implements RadioGroup.On
         dstPattern = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_dst_pattern), getResources().getStringArray(R.array.pet_dst_patterns), null, App.VERTICAL, App.VERTICAL);
 
         // sixth page viws...
-        treatmentRegimen = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_treatment_regimen), getResources().getStringArray(R.array.pet_treatment_regimens), null, App.VERTICAL, App.VERTICAL);
+        treatmentRegimen = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_treatment_regimen), getResources().getStringArray(R.array.pet_treatment_regimens_1), null, App.VERTICAL, App.VERTICAL);
 
         //seventh page views...
         enrollmentDateTextView = new MyTextView(context, getResources().getString(R.string.pet_treatment_enrollement));
