@@ -36,12 +36,9 @@ public class RegexUtil {
     public static final String nicPattern = "^[0-9]{5,5}[-.]{0,1}[0-9]{7,7}[-.]{0,1}[0-9]";
     public static final String urlPattern = "^(((ht|f)tp(s?))\\:\\/\\/)?(localhost|([0-9]{1,2}|1[0-9]{2}|2[0-4][0-9]|25[0-5]|.){3}([0-9]{1,2}|1[0-9]{2}|2[0-4][0-9]|25[0-5])|(www.|[a-zA-Z].)[a-zA-Z0-9\\-\\.]+\\.(com|edu|gov|mil|net|org|biz|info|name|museum|us|ca|uk|pk|co|))(\\:[0-9]+)*(\\/($|[a-zA-Z0-9\\.\\,\\;\\?\\\\'\\\\\\\\\\\\+&amp;%\\\\$#\\\\=~_\\\\-]+))*$";
     public static final String smsPattern = "[A-Z0-9]{2,2}[0-9]{9,9} [0-3][0-9](JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)20[1-3][0-9] [YN]";
-    private static final String ipAddressPattern = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
-
     public static final int idLength = 7;
     public static final int mobileNumberLength = 11;
     public static final int defaultEditTextLength = 50;
-
     public static final InputFilter FloatFilter = new InputFilter() {
 
         @Override
@@ -57,7 +54,6 @@ public class RegexUtil {
 
         }
     };
-
     public static final InputFilter AlphaFilter = new InputFilter() {
 
         @Override
@@ -73,7 +69,6 @@ public class RegexUtil {
 
         }
     };
-
     public static final InputFilter NumericFilter = new InputFilter() {
 
         @Override
@@ -89,7 +84,6 @@ public class RegexUtil {
 
         }
     };
-
     public static final InputFilter IdFilter = new InputFilter() {
 
         @Override
@@ -105,7 +99,6 @@ public class RegexUtil {
 
         }
     };
-
     public static final InputFilter ERNSFilter = new InputFilter() {
 
         @Override
@@ -121,6 +114,7 @@ public class RegexUtil {
 
         }
     };
+    private static final String ipAddressPattern = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
 
     /**
      * Checks if given input is a valid number
@@ -308,6 +302,8 @@ public class RegexUtil {
         if (isValid) {
             String idWithoutCheckdigit = id.substring(0, id.length() - 1);
             char idCheckdigit = id.charAt(id.length() - 1);
+            Boolean isDigit = (idCheckdigit >= '0' && idCheckdigit <= '9');
+            if (!isDigit) return false;
             String validChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVYWXZabcdefghijklmnopqrstuvwxyz_";
             idWithoutCheckdigit = idWithoutCheckdigit.trim();
             int sum = 0;
