@@ -234,7 +234,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                     startActivityForResult(intent, Barcode.BARCODE_RESULT);
                 } else {
                     //int color = App.getColor(SelectPatientActivity.this, R.attr.colorAccent);
-                    final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this).create();
+                    final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this, R.style.dialog).create();
                     alertDialog.setMessage(getString(R.string.barcode_scanner_missing));
                     Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                     //DrawableCompat.setTint(clearIcon, color);
@@ -250,7 +250,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                 }
             } catch (ActivityNotFoundException e) {
                 //int color = App.getColor(SelectPatientActivity.this, R.attr.colorAccent);
-                final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this).create();
+                final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this, R.style.dialog).create();
                 alertDialog.setMessage(getString(R.string.barcode_scanner_missing));
                 Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                 //DrawableCompat.setTint(clearIcon, color);
@@ -274,7 +274,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                     startActivityForResult(intent, Barcode.BARCODE_RESULT_2);
                 } else {
                     //int color = App.getColor(SelectPatientActivity.this, R.attr.colorAccent);
-                    final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this).create();
+                    final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this, R.style.dialog).create();
                     alertDialog.setMessage(getString(R.string.barcode_scanner_missing));
                     Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                     //DrawableCompat.setTint(clearIcon, color);
@@ -290,7 +290,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                 }
             } catch (ActivityNotFoundException e) {
                 //int color = App.getColor(SelectPatientActivity.this, R.attr.colorAccent);
-                final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this).create();
+                final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this, R.style.dialog).create();
                 alertDialog.setMessage(getString(R.string.barcode_scanner_missing));
                 Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                 //DrawableCompat.setTint(clearIcon, color);
@@ -327,7 +327,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                     createPatientId.setText("");
                     createPatientId.requestFocus();
 
-                    final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this).create();
+                    final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this, R.style.dialog).create();
                     alertDialog.setMessage(getString(R.string.invalid_scanned_id));
                     Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                     //DrawableCompat.setTint(clearIcon, color);
@@ -385,7 +385,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                     selectPatientId.setText("");
                     selectPatientId.requestFocus();
 
-                    final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this).create();
+                    final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this, R.style.dialog).create();
                     alertDialog.setMessage(getString(R.string.invalid_scanned_id));
                     Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                     //DrawableCompat.setTint(clearIcon, color);

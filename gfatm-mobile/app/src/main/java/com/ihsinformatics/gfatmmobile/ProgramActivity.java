@@ -1,7 +1,6 @@
 package com.ihsinformatics.gfatmmobile;
 
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 public class ProgramActivity extends AbstractSettingActivity {
 
@@ -50,7 +48,7 @@ public class ProgramActivity extends AbstractSettingActivity {
         if (v == okButton) {
 
             if (radioGroup.getCheckedRadioButtonId() == -1) {
-                AlertDialog alertDialog = new AlertDialog.Builder(ProgramActivity.this).create();
+                AlertDialog alertDialog = new AlertDialog.Builder(ProgramActivity.this, R.style.dialog).create();
                 alertDialog.setMessage(getString(R.string.no_program_selected));
                 alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.ok),
                         new DialogInterface.OnClickListener() {
@@ -64,7 +62,7 @@ public class ProgramActivity extends AbstractSettingActivity {
 
                 if (!rb.getText().equals(App.getProgram())) {
 
-                    AlertDialog alertDialog = new AlertDialog.Builder(ProgramActivity.this).create();
+                    AlertDialog alertDialog = new AlertDialog.Builder(ProgramActivity.this, R.style.dialog).create();
                     alertDialog.setMessage(getString(R.string.warning_before_program_change));
 
                     alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),

@@ -12,7 +12,8 @@
                 p_id TEXT NOT NULL COLLATE NOCASE,
                 form_date DATETIME,
                 timestamp DATETIME NOT NULL,
-                username TEXT NOT NULL COLLATE NOCASE
+                username TEXT NOT NULL COLLATE NOCASE,
+                complete INT NOT NULL COLLATE NOCASE
             )
 		</item>
 

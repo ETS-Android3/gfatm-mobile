@@ -48,12 +48,12 @@ public class ServerService {
     private static DatabaseUtil dbUtil;
     private static Context context;
 
+
     public ServerService(Context context) {
         this.context = context;
         // Specify REST module link
         httpsUri = App.getIp() + ":" + App.getPort() + "/ws/rest/v1/";
-        /*httpClient = new HttpRequest (this.context);
-        httpsClient = new HttpsClient (this.context);
+        /*httpsClient = new HttpsClient (this.context);
         mdUtil = new MetadataUtil (this.context);*/
         dbUtil = new DatabaseUtil(this.context);
     }
@@ -112,6 +112,23 @@ public class ServerService {
     public String[][] getSavedForms(String username) {
         String[][] forms = dbUtil.getTableData("select id, program, form_name, p_id, form_date, timestamp from " + Metadata.FORMS + " where username='" + username + "'");
         return forms;
+    }
+
+    /**
+     * Gets username from App variable and checks to see if it exists in the
+     * local database. The method doesn't exactly matches the user but attempts
+     * to see if the call is authenticated on the server
+     *
+     * @return status
+     */
+    public boolean checkOrGetCurrentUser() {
+        Boolean flag = false;
+        if (App.getCommunicationMode().equals("REST")) {
+            HttpPost httpPost = new HttpPost("199.172.1.63", "8080");
+        }
+        // else ....
+
+        return flag;
     }
 
 }

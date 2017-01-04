@@ -2,7 +2,10 @@ package com.ihsinformatics.gfatmmobile;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +56,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Co
                              ViewGroup container, Bundle savedInstanceState) {
 
         //Inflate the layout for this fragment
-
         View mainContent = inflater.inflate(R.layout.search_fragment, container, false);
 
         context = mainContent.getContext();
@@ -101,13 +103,81 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Co
     public void onClick(View v) {
 
         if(v == searchPatientButton){
-            searchFormLayout.setVisibility(View.GONE);
-            searchResultLayout.setVisibility(View.VISIBLE);
+
+            if (nameCheckBox.isChecked() || mobileNumberCheckBox.isChecked() || patientIdCheckBox.isChecked() ||
+                    healthCenterCheckBox.isChecked() || motherNameCheckBox.isChecked()) {
+
+                if (validate()) {
+
+                    //TODO: Search...
+
+                    searchFormLayout.setVisibility(View.GONE);
+                    searchResultLayout.setVisibility(View.VISIBLE);
+                }
+
+            } else {
+
+                final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                alertDialog.setMessage(getString(R.string.form_error));
+                Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                // DrawableCompat.setTint(clearIcon, color);
+                alertDialog.setIcon(clearIcon);
+                alertDialog.setTitle(getResources().getString(R.string.title_error));
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();
+
+            }
+
         }
         else if (v == searchPatientAgainButton){
             searchFormLayout.setVisibility(View.VISIBLE);
             searchResultLayout.setVisibility(View.GONE);
         }
+
+    }
+
+    public boolean validate() {
+
+        Boolean flag = true;
+
+        if (motherNameCheckBox.isChecked()) {
+            if (App.get(motherName).isEmpty()) {
+                motherName.setError(getString(R.string.empty_field));
+                motherName.requestFocus();
+                flag = false;
+            }
+        }
+        if (healthCenterCheckBox.isChecked()) {
+
+        }
+        if (patientIdCheckBox.isChecked()) {
+            if (App.get(patientId).isEmpty()) {
+                patientId.setError(getString(R.string.empty_field));
+                patientId.requestFocus();
+                flag = false;
+            }
+        }
+        if (mobileNumberCheckBox.isChecked()) {
+            if (App.get(mobileNumber).isEmpty()) {
+                mobileNumber.setError(getString(R.string.empty_field));
+                mobileNumber.requestFocus();
+                flag = false;
+            }
+        }
+        if (nameCheckBox.isChecked()) {
+            if (App.get(name).isEmpty()) {
+                name.setError(getString(R.string.empty_field));
+                name.requestFocus();
+                flag = false;
+            }
+        }
+
+        return flag;
 
     }
 

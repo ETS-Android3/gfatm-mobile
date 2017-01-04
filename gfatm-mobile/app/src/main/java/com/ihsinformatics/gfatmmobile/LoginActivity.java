@@ -1,56 +1,34 @@
 package com.ihsinformatics.gfatmmobile;
 
-import android.annotation.TargetApi;
-import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.widget.PopupMenu;
+import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-
-import static android.Manifest.permission.READ_CONTACTS;
 
 /**
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
+    protected static ProgressDialog loading;
     EditText username;
     EditText password;
     Button loginButton;
     CheckBox offlineCheckBox;
-
-    protected static ProgressDialog loading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +50,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         getSupportActionBar().setTitle(titleText);
 
         loading = new ProgressDialog(this);
-
     }
 
 
@@ -114,6 +91,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            loading.setInverseBackgroundForced(true);
                             loading.setIndeterminate(true);
                             loading.setCancelable(false);
                             loading.setMessage(getResources().getString(R.string.signing_in));

@@ -7,4 +7,14 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
+    <style name="ProgressBar" parent="@android:style/Widget.ProgressBar">
+        <item name="colorPrimary">@color/ironstone</item>
+        <item name="colorPrimaryDark">@color/veryDarkBrown</item>
+        <item name="colorAccent">@color/dirtyBlue</item>
+        <item name="android:background">@color/swissCoffee</item>
+        <item name="android:backgroundTint">@color/swissCoffee</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_centerVertical">true</item>
+    </style>
+
 </resources>

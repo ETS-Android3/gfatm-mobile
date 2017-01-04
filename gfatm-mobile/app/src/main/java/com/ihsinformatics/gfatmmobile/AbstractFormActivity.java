@@ -11,7 +11,6 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.DialogInterface;
-import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -57,20 +56,17 @@ public abstract class AbstractFormActivity extends Fragment
         CompoundButton.OnCheckedChangeListener,
         View.OnLongClickListener {
 
+    public static final int DATE_DIALOG_ID = 1;
+    public static final int SECOND_DATE_DIALOG_ID = 2;
     // main Layout
     protected View mainContent;
     protected ServerService serverService;
-
     // Views for formDate
     protected Calendar formDateCalendar;
     protected DialogFragment formDateFragment;
-    public static final int DATE_DIALOG_ID = 1;
-
     // Extra Views for date ...
     protected Calendar secondDateCalendar;
     protected DialogFragment secondDateFragment;
-    public static final int SECOND_DATE_DIALOG_ID = 2;
-
     //for all views in fragment
     protected ArrayList<ViewGroup> groups;
     // for all views that need to be reset
@@ -325,7 +321,7 @@ public abstract class AbstractFormActivity extends Fragment
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
             alertDialog.setMessage(getString(R.string.warning_before_clear));
             Drawable clearIcon = getResources().getDrawable(R.drawable.ic_clear);
             DrawableCompat.setTint(clearIcon, color);
@@ -357,7 +353,7 @@ public abstract class AbstractFormActivity extends Fragment
 
                 int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-                final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+                final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
                 alertDialog.setMessage(getString(R.string.warning_before_submit));
                 Drawable clearIcon = getResources().getDrawable(R.drawable.ic_submit);
                 DrawableCompat.setTint(clearIcon, color);
@@ -382,7 +378,7 @@ public abstract class AbstractFormActivity extends Fragment
         } else if (view == saveButton) {
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
             alertDialog.setMessage(getString(R.string.warning_before_save));
             Drawable clearIcon = getResources().getDrawable(R.drawable.ic_save);
             DrawableCompat.setTint(clearIcon, color);
@@ -435,6 +431,10 @@ public abstract class AbstractFormActivity extends Fragment
 
     }
 
+    protected int getCurrentPageNo() {
+        return currentPageNo;
+    }
+
     public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
         @Override
@@ -466,10 +466,6 @@ public abstract class AbstractFormActivity extends Fragment
 
             updateDisplay();
         }
-    }
-
-    protected  int getCurrentPageNo(){
-        return currentPageNo;
     }
 
 }

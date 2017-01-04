@@ -45,6 +45,8 @@ import static java.util.Calendar.YEAR;
  * @author owais.hussain@irdresearch.org
  */
 public class App {
+    public static final int HORIZONTAL = 0;
+    public static final int VERTICAL = 1;
     private static String program = "";
     private static String version = "";
     private static String theme = "";
@@ -61,19 +63,8 @@ public class App {
     private static String password = "";
     private static String autoLogin = "";
     private static String lastLogin = "";
-
-    public static final int HORIZONTAL = 0;
-    public static final int VERTICAL = 1;
-
+    private static String communicationMode = "";
     private static Locale currentLocale;
-
-    public enum dialogButtonPosition {
-        LEFT, CENTER, RIGHT
-    }
-
-    public enum dialogButtonStatus {
-        NEUTRAL, POSITIVE, NEGATIVE
-    }
 
     public static void setThreadSafety(boolean state) {
         StrictMode.ThreadPolicy policy = StrictMode.getThreadPolicy();
@@ -84,7 +75,6 @@ public class App {
         }
         StrictMode.setThreadPolicy(policy);
     }
-
 
     public static String getProgram() {
         return program;
@@ -222,6 +212,14 @@ public class App {
         App.currentLocale = currentLocale;
     }
 
+    public static String getCommunicationMode() {
+        return communicationMode;
+    }
+
+    public static void setCommunicationMode(String communicationMode) {
+        App.communicationMode = communicationMode;
+    }
+
     /**
      * Returns selected value in string, depending on the view passed. If no
      * value is present, an empty string will be returned
@@ -349,6 +347,14 @@ public class App {
         Calendar cal = Calendar.getInstance(Locale.US);
         cal.setTime(date);
         return cal;
+    }
+
+    public enum dialogButtonPosition {
+        LEFT, CENTER, RIGHT
+    }
+
+    public enum dialogButtonStatus {
+        NEUTRAL, POSITIVE, NEGATIVE
     }
 
 }

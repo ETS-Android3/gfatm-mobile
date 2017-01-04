@@ -41,6 +41,7 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
     public static final String PASSWORD = "password";
     public static final String AUTO_LOGIN = "auto_login";
     public static final String LAST_LOGIN = "last_login";
+    public static final String COMMUNICATION_MODE = "communication_mode";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +105,8 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
             App.setAutoLogin(sharedPreferences.getString(key, ""));
         } else if (key.equals(LAST_LOGIN)) {
             App.setLastLogin(sharedPreferences.getString(key, ""));
+        } else if (key.equals(COMMUNICATION_MODE)) {
+            App.setCommunicationMode(sharedPreferences.getString(key, ""));
         }
 
 

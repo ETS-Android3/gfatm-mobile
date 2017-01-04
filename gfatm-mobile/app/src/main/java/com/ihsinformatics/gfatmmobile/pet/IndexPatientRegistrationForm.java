@@ -301,7 +301,7 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
 
             // int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
             alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             // DrawableCompat.setTint(clearIcon, color);
@@ -320,7 +320,6 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
                         }
                     });
             alertDialog.show();
-
             return false;
         }
 
@@ -373,7 +372,7 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
                     startActivityForResult(intent, Barcode.BARCODE_RESULT);
                 } else {
                     int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
-                    final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+                    final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
                     alertDialog.setMessage(getString(R.string.barcode_scanner_missing));
                     Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                     DrawableCompat.setTint(clearIcon, color);
@@ -389,7 +388,7 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
                 }
             } catch (ActivityNotFoundException e) {
                 int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
-                final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+                final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
                 alertDialog.setMessage(getString(R.string.barcode_scanner_missing));
                 Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                 DrawableCompat.setTint(clearIcon, color);
@@ -447,7 +446,7 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
 
                     int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-                    final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+                    final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
                     alertDialog.setMessage(getString(R.string.warning_before_clear));
                     Drawable clearIcon = getResources().getDrawable(R.drawable.ic_clear);
                     DrawableCompat.setTint(clearIcon, color);
@@ -466,7 +465,7 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
 
                 int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-                final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+                final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
                 alertDialog.setMessage(getString(R.string.warning_before_clear));
                 Drawable clearIcon = getResources().getDrawable(R.drawable.ic_clear);
                 DrawableCompat.setTint(clearIcon, color);

@@ -391,6 +391,8 @@
 
     <!-- Forms -->
     <string name="back_to_form_menu">Back to Form Menu</string>
+    <string name="form_date">Form Date:</string>
+    <string name="time_stamp">Timestamp:</string>
     <string name="clear">Clear</string>
     <string name="submit">Submit</string>
     <string name="save">Save</string>
@@ -405,5 +407,15 @@
     <string name="health_center">Health Center: </string>
     <string name="mother_name">Mother\'s name: </string>
     <string name="search_again">Search Again</string>
+    <string name="search_title">Select atleast one option</string>
+
+    <string-array name="age_ranges">
+        <item>0 - 15</item>
+        <item>16 - 30</item>
+        <item>31 - 45</item>
+        <item>46 - 60</item>
+        <item>61 - 75</item>
+        <item>76 - above</item>
+    </string-array>
 
 </resources>

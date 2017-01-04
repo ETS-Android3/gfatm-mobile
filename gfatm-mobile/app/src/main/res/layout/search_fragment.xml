@@ -13,10 +13,7 @@
             android:id="@+id/searchForm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:divider="?android:dividerHorizontal"
-            android:showDividers="middle"
-            android:dividerPadding="@dimen/small">
+            android:orientation="vertical">
 
             <TableLayout
                 android:layout_width="match_parent"
@@ -25,7 +22,8 @@
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:padding="@dimen/tiny">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -52,18 +50,18 @@
                         android:orientation="horizontal">
 
                         <RadioButton
-                            android:text="@string/male"
+                            android:id="@+id/male"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/male"
-                            android:textSize="@dimen/large"
-                            android:checked="true" />
+                            android:checked="true"
+                            android:text="@string/male"
+                            android:textSize="@dimen/large" />
 
                         <RadioButton
-                            android:text="@string/female"
+                            android:id="@+id/female"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/female"
+                            android:text="@string/female"
                             android:textSize="@dimen/large" />
                     </RadioGroup>
 
@@ -72,11 +70,13 @@
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:padding="@dimen/tiny">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:orientation="horizontal">
 
                         <TextView
@@ -104,9 +104,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Search Patient with atleast one of the following options"
-                android:textColor="?colorAccent"
-                />
+                android:paddingTop="@dimen/small"
+                android:text="@string/search_title"
+                android:textColor="?colorAccent" />
 
             <TableLayout
                 android:layout_width="match_parent"
@@ -115,7 +115,13 @@
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:padding="@dimen/tiny">
+
+                    <CheckBox
+                        android:id="@+id/nameCheckBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -123,14 +129,28 @@
                         android:text="@string/name"/>
 
                     <EditText
+                        android:id="@+id/name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:id="@+id/name"/>
+                        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz. "
+                        android:enabled="false"
+                        android:inputType="text"
+                        android:maxLength="20"
+                        android:maxLines="1" />
 
                 </TableRow>
 
-                <TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/tiny">
+
+                    <CheckBox
+                        android:id="@+id/mobileNumberCheckBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -143,11 +163,24 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:maxLength="11"/>
+                        android:digits="1234567890"
+                        android:enabled="false"
+                        android:inputType="phone"
+                        android:maxLength="11"
+                        android:maxLines="1" />
 
                 </TableRow>
 
-                <TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/tiny">
+
+                    <CheckBox
+                        android:id="@+id/patientIdCheckBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -160,14 +193,24 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:maxLength="7"/>
+                        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-"
+                        android:enabled="false"
+                        android:inputType="text|textNoSuggestions"
+                        android:maxLength="7"
+                        android:maxLines="1" />
 
                 </TableRow>
 
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:padding="@dimen/tiny">
+
+                    <CheckBox
+                        android:id="@+id/healthCenterCheckBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -178,25 +221,37 @@
                         android:id="@+id/healthCenter"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1"
+                        android:enabled="false" />
 
                 </TableRow>
 
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:padding="@dimen/tiny">
+
+                    <CheckBox
+                        android:id="@+id/motherNameCheckBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/mother_name" />
 
-
                     <EditText
+                        android:id="@+id/motherName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1"
+                        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz. "
+                        android:enabled="false"
+                        android:inputType="text"
+                        android:maxLength="20"
+                        android:maxLines="1" />
 
                 </TableRow>
 

@@ -1,5 +1,8 @@
 package com.ihsinformatics.gfatmmobile;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,21 +11,18 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.app.Fragment;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v7.app.AlertDialog;
-import android.view.MotionEvent;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,10 +33,8 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnTouchListener {
 
-    Context context = this;
-
     private static final int SECOND_ACTIVITY_RESULT_CODE = 0;
-
+    Context context = this;
     LinearLayout buttonLayout;
     LinearLayout programLayout;
     LinearLayout headerLayout;
@@ -175,7 +173,7 @@ public class MainActivity extends AppCompatActivity
 
             int color = App.getColor(MainActivity.this, R.attr.colorAccent);
 
-            AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+            AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this, R.style.dialog).create();
             alertDialog.setMessage(getString(R.string.warning_before_close_form));
             Drawable backIcon = getResources().getDrawable(R.drawable.ic_back);
             backIcon.setAutoMirrored(true);
@@ -206,7 +204,7 @@ public class MainActivity extends AppCompatActivity
 
         int color = App.getColor(MainActivity.this, R.attr.colorAccent);
 
-        AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+        AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this, R.style.dialog).create();
         alertDialog.setMessage(getString(R.string.warning_before_close));
         Drawable backIcon = getResources().getDrawable(R.drawable.ic_back);
         backIcon.setAutoMirrored(true);
@@ -302,7 +300,7 @@ public class MainActivity extends AppCompatActivity
 
             int color = App.getColor(MainActivity.this, R.attr.colorAccent);
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+            final AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this, R.style.dialog).create();
             alertDialog.setMessage(getString(R.string.warning_before_logout));
             Drawable logoutIcon = getResources().getDrawable(R.drawable.ic_logout);
             DrawableCompat.setTint(logoutIcon, color);

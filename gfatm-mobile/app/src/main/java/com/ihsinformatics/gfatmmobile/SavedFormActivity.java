@@ -116,7 +116,6 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
             moreLayout.setOrientation(LinearLayout.VERTICAL);
 
             final int color = App.getColor(this, R.attr.colorPrimaryDark);
-            final int color1 = App.getColor(this, R.attr.colorAccent);
 
             if (forms[i][1].equalsIgnoreCase(getResources().getString(R.string.pmdt))) {
 
@@ -133,7 +132,7 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
                 text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_complete_form, 0, R.drawable.ic_more, 0);
                 text.setPadding(10, 0, 0, 0);
                 DrawableCompat.setTint(text.getCompoundDrawables()[2], color);
-                DrawableCompat.setTint(text.getCompoundDrawables()[0], color1);
+                DrawableCompat.setTint(text.getCompoundDrawables()[0], color);
                 linearLayout.addView(text);
 
                 text.setOnClickListener(new View.OnClickListener() {
@@ -142,12 +141,12 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
                         if (moreLayout.getVisibility() == View.VISIBLE) {
                             moreLayout.setVisibility(View.GONE);
                             DrawableCompat.setTint(text.getCompoundDrawables()[2], color);
-                            DrawableCompat.setTint(text.getCompoundDrawables()[0], color1);
+                            DrawableCompat.setTint(text.getCompoundDrawables()[0], color);
                             text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_complete_form, 0, R.drawable.ic_more, 0);
                         } else {
                             moreLayout.setVisibility(View.VISIBLE);
                             DrawableCompat.setTint(text.getCompoundDrawables()[2], color);
-                            DrawableCompat.setTint(text.getCompoundDrawables()[0], color1);
+                            DrawableCompat.setTint(text.getCompoundDrawables()[0], color);
                             text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_complete_form, 0, R.drawable.ic_less, 0);
 
                         }

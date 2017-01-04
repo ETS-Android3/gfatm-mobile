@@ -2,16 +2,13 @@ package com.ihsinformatics.gfatmmobile;
 
 
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 import java.util.Locale;
 
@@ -54,7 +51,7 @@ public class LanguageActivity extends AbstractSettingActivity {
 
             if (!rb.getText().equals(App.getLanguage())) {
 
-                AlertDialog alertDialog = new AlertDialog.Builder(LanguageActivity.this).create();
+                AlertDialog alertDialog = new AlertDialog.Builder(LanguageActivity.this, R.style.dialog).create();
                 alertDialog.setMessage(getString(R.string.warning_before_language_change));
                 alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
                         new DialogInterface.OnClickListener() {
