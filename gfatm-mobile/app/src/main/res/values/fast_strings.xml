@@ -2,5 +2,95 @@
 <resources>
 
     <string name="fast_index_patient_registration">Index Patient Registration</string>
+    <string name="location_of_screening">Location Of Screening:</string>
+    <string name="if_hospital_specify">If Hospital, Specify:</string>
+    <string name="hospital_parts_title">In which part of the hospital are you conducting screening?</string>
+    <string name="if_other_specify">If other, specify:</string>
+    <string name="clinic_and_ward_title">In which OPD clinic or ward are you screening?</string>
+    <string name="patient_or_attendant_title">Patient Or Attendant?</string>
+    <string name="age_range_title">Age Range:</string>
+    <string name="gender_title">Gender:</string>
+    <string name="cough_period_title">Have you had a cough for two weeks or more?</string>
+    <string name="close_with_someone_diagnosed">Have you been in close contact with someone diagnosed with TB before?</string>
+    <string name="tb_before">Have you had TB before?</string>
 
+    <string name="community_title">Community</string>
+    <string name="hospital_title">Hospital</string>
+    <string name="location1_title">Location 1</string>
+    <string name="location2_title">Location 2</string>
+    <string name="location3_title">Location 3</string>
+    <string name="location4_title">Location 4</string>
+    <string name="opdclinicscreening_title">OPD Clinic Screening</string>
+    <string name="wardscreening_title">Ward Screening</string>
+    <string name="registrationdesk_title">Registration Desk</string>
+    <string name="nexttoxrayvan_title">Next To X-Ray Van</string>
+    <string name="other_title">Other</string>
+    <string name="generalmedicinefilterclinic_title">General/Medicine/Filter Clinic</string>
+    <string name="chest_title">Chest</string>
+    <string name="tbclinicscreening_title">TB Clinic Screening</string>
+    <string name="gynaeobstetrics_title">Gynae/Obstetrics</string>
+    <string name="surgery_title">Surgery</string>
+    <string name="er_title">ER</string>
+    <string name="patient_title">Patient</string>
+    <string name="attendant_title">Attendant</string>
+    <string name="greater_title">&gt;= 15 years old</string>
+    <string name="less_title">&lt; 15 years old</string>
+    <string name="male_title">Male</string>
+    <string name="female_title">Female</string>
+    <string name="yes_title">Yes</string>
+    <string name="no_title">No</string>
+    <string name="dont_know_title">Dont Know</string>
+    <string name="refused_title">Refused</string>
+
+
+    <string-array name="fast_locations">
+        <item>@string/community_title</item>
+        <item>@string/hospital_title</item>
+    </string-array>
+
+    <string-array name="fast_sites">
+        <item>@string/location1_title</item>
+        <item>@string/location2_title</item>
+        <item>@string/location3_title</item>
+        <item>@string/location4_title</item>
+    </string-array>
+
+    <string-array name="fast_hospital_parts">
+        <item>@string/opdclinicscreening_title</item>
+        <item>@string/wardscreening_title</item>
+        <item>@string/registrationdesk_title</item>
+        <item>@string/nexttoxrayvan_title</item>
+        <item>@string/other_title</item>
+    </string-array>
+
+    <string-array name="clinic_and_ward_list">
+        <item>@string/generalmedicinefilterclinic_title</item>
+        <item>@string/chest_title</item>
+        <item>@string/tbclinicscreening_title</item>
+        <item>@string/gynaeobstetrics_title</item>
+        <item>@string/surgery_title</item>
+        <item>@string/er_title</item>
+    </string-array>
+
+    <string-array name="patient_or_attendant_list">
+        <item>@string/patient_title</item>
+        <item>@string/attendant_title</item>
+    </string-array>
+
+    <string-array name="age_range_list">
+        <item>@string/less_title</item>
+        <item>@string/greater_title</item>
+    </string-array>
+
+    <string-array name="gender_list">
+        <item>@string/male_title</item>
+        <item>@string/female_title</item>
+    </string-array>
+
+    <string-array name="choice_list">
+        <item>@string/yes_title</item>
+        <item>@string/no_title</item>
+        <item>@string/dont_know_title</item>
+        <item>@string/refused_title</item>
+    </string-array>
 </resources>
