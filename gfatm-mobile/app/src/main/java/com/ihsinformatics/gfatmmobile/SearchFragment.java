@@ -1,10 +1,14 @@
 package com.ihsinformatics.gfatmmobile;
 
 import android.app.Fragment;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +21,15 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
+import com.ihsinformatics.gfatmmobile.util.RegexUtil;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
+
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by Rabbia on 11/10/2016.
@@ -44,6 +54,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Co
 
     CheckBox patientIdCheckBox;
     EditText patientId;
+    Button scanBarcode;
 
     CheckBox healthCenterCheckBox;
     Spinner healthCenter;
@@ -79,6 +90,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Co
 
         patientIdCheckBox = (CheckBox) mainContent.findViewById(R.id.patientIdCheckBox);
         patientId = (EditText) mainContent.findViewById(R.id.patientId);
+        scanBarcode = (Button) mainContent.findViewById(R.id.scan_barcode);
 
         healthCenterCheckBox = (CheckBox) mainContent.findViewById(R.id.healthCenterCheckBox);
         healthCenter = (Spinner) mainContent.findViewById(R.id.healthCenter);
@@ -89,6 +101,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Co
 
         searchPatientButton.setOnClickListener(this);
         searchPatientAgainButton.setOnClickListener(this);
+        scanBarcode.setOnClickListener(this);
 
         nameCheckBox.setOnCheckedChangeListener(this);
         mobileNumberCheckBox.setOnCheckedChangeListener(this);
@@ -137,8 +150,103 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Co
         else if (v == searchPatientAgainButton){
             searchFormLayout.setVisibility(View.VISIBLE);
             searchResultLayout.setVisibility(View.GONE);
+        } else if (v == scanBarcode) {
+            try {
+                Intent intent = new Intent(Barcode.BARCODE_INTENT);
+                if (App.isCallable(context, intent)) {
+                    intent.putExtra(Barcode.SCAN_MODE, Barcode.QR_MODE);
+                    startActivityForResult(intent, Barcode.BARCODE_RESULT);
+                } else {
+                    int color = App.getColor(context, R.attr.colorAccent);
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getString(R.string.barcode_scanner_missing));
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    DrawableCompat.setTint(clearIcon, color);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+            } catch (ActivityNotFoundException e) {
+                int color = App.getColor(context, R.attr.colorAccent);
+                final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                alertDialog.setMessage(getString(R.string.barcode_scanner_missing));
+                Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                DrawableCompat.setTint(clearIcon, color);
+                alertDialog.setIcon(clearIcon);
+                alertDialog.setTitle(getResources().getString(R.string.title_error));
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();
+            }
         }
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Retrieve barcode scan results
+        if (requestCode == Barcode.BARCODE_RESULT) {
+            if (resultCode == RESULT_OK) {
+                String str = data.getStringExtra(Barcode.SCAN_RESULT);
+                // Check for valid Id
+                if (RegexUtil.isValidId(str)) {
+                    patientId.setText(str);
+                } else {
+
+                    int color = App.getColor(context, R.attr.colorAccent);
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getString(R.string.warning_before_clear));
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.ic_clear);
+                    DrawableCompat.setTint(clearIcon, color);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_clear));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+
+                }
+            } else if (resultCode == RESULT_CANCELED) {
+
+                int color = App.getColor(context, R.attr.colorAccent);
+
+                final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                alertDialog.setMessage(getString(R.string.warning_before_clear));
+                Drawable clearIcon = getResources().getDrawable(R.drawable.ic_clear);
+                DrawableCompat.setTint(clearIcon, color);
+                alertDialog.setIcon(clearIcon);
+                alertDialog.setTitle(getResources().getString(R.string.title_clear));
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();
+
+            }
+            // Set the locale again, since the Barcode app restores system's
+            // locale because of orientation
+            Locale.setDefault(App.getCurrentLocale());
+            Configuration config = new Configuration();
+            config.locale = App.getCurrentLocale();
+            context.getResources().updateConfiguration(config, null);
+        }
     }
 
     public boolean validate() {
@@ -150,14 +258,19 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Co
                 motherName.setError(getString(R.string.empty_field));
                 motherName.requestFocus();
                 flag = false;
+            } else if (App.get(motherName).length() <= 3) {
+                motherName.setError(getString(R.string.invalid_value));
+                motherName.requestFocus();
+                flag = false;
             }
-        }
-        if (healthCenterCheckBox.isChecked()) {
-
         }
         if (patientIdCheckBox.isChecked()) {
             if (App.get(patientId).isEmpty()) {
                 patientId.setError(getString(R.string.empty_field));
+                patientId.requestFocus();
+                flag = false;
+            } else if (!RegexUtil.isValidId(App.get(patientId))) {
+                patientId.setError(getString(R.string.invalid_id));
                 patientId.requestFocus();
                 flag = false;
             }
@@ -167,11 +280,19 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Co
                 mobileNumber.setError(getString(R.string.empty_field));
                 mobileNumber.requestFocus();
                 flag = false;
+            } else if (App.get(mobileNumber).length() != 11) {
+                mobileNumber.setError(getString(R.string.invalid_value));
+                mobileNumber.requestFocus();
+                flag = false;
             }
         }
         if (nameCheckBox.isChecked()) {
             if (App.get(name).isEmpty()) {
                 name.setError(getString(R.string.empty_field));
+                name.requestFocus();
+                flag = false;
+            } else if (App.get(name).length() <= 3) {
+                name.setError(getString(R.string.invalid_value));
                 name.requestFocus();
                 flag = false;
             }
@@ -194,10 +315,13 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Co
             else
                 mobileNumber.setEnabled(false);
         } else if (buttonView == patientIdCheckBox) {
-            if (isChecked)
+            if (isChecked) {
                 patientId.setEnabled(true);
-            else
+                scanBarcode.setEnabled(true);
+            } else {
                 patientId.setEnabled(false);
+                scanBarcode.setEnabled(false);
+            }
         } else if (buttonView == healthCenterCheckBox) {
             if (isChecked)
                 healthCenter.setEnabled(true);
