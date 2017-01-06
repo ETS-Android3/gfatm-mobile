@@ -41,6 +41,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
+import com.ihsinformatics.gfatmmobile.shared.FormsObject;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 import java.util.ArrayList;
@@ -74,6 +75,7 @@ public abstract class AbstractFormActivity extends Fragment
 
     // Views from Template Layout
     protected int PAGE_COUNT = 0;
+    protected FormsObject FORM;
     protected String FORM_NAME = "";
     protected View[] views;
     protected ViewPager pager;
@@ -459,12 +461,28 @@ public abstract class AbstractFormActivity extends Fragment
         @Override
         public void onDateSet(DatePicker view, int yy, int mm, int dd) {
 
-            if (((int) view.getTag()) == DATE_DIALOG_ID)
-                formDateCalendar.set(yy, mm, dd);
-            else if (((int) view.getTag()) == SECOND_DATE_DIALOG_ID)
-                secondDateCalendar.set(yy, mm, dd);
+            Date date = new Date(view.getMaxDate());
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH);
+            int day = cal.get(Calendar.DAY_OF_MONTH);
 
-            updateDisplay();
+            Boolean futureDate = false;
+            if (yy > year)
+                futureDate = true;
+            else if (mm > month)
+                futureDate = true;
+            else if (dd > day)
+                futureDate = true;
+
+            if (!futureDate) {
+                if (((int) view.getTag()) == DATE_DIALOG_ID)
+                    formDateCalendar.set(yy, mm, dd);
+                else if (((int) view.getTag()) == SECOND_DATE_DIALOG_ID)
+                    secondDateCalendar.set(yy, mm, dd);
+                updateDisplay();
+            }
         }
     }
 
