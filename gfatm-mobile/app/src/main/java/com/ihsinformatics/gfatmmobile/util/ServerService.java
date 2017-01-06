@@ -31,8 +31,12 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import com.ihsinformatics.gfatmmobile.App;
+import com.ihsinformatics.gfatmmobile.shared.FormsObject;
 import com.ihsinformatics.gfatmmobile.shared.Metadata;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
@@ -74,7 +78,7 @@ public class ServerService {
     }
 
 
-    public boolean saveFormLocally(String formName, String pid, HashMap<String, String> formValues) {
+    public boolean saveFormLocally(String formName, FormsObject form, String pid, HashMap<String, String> formValues) {
 
         ContentValues values = new ContentValues();
 
@@ -85,6 +89,20 @@ public class ServerService {
         values.put("timestamp", timestamp.toString());
         values.put("username", App.getUsername());
         values.put("p_id", pid);
+        ByteArrayOutputStream bos = null;
+        ObjectOutputStream oos = null;
+        try {
+            bos = new ByteArrayOutputStream();
+            oos = new ObjectOutputStream(bos);
+            oos.writeObject(form);
+            oos.flush();
+            oos.close();
+            bos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        byte[] data = bos.toByteArray();
+        values.put("form_object", data);
 
         dbUtil.insert(Metadata.FORMS, values);
 
@@ -109,8 +127,8 @@ public class ServerService {
         return Integer.parseInt(dbUtil.getObject("select count(*) from " + Metadata.FORMS + " where username='" + App.getUsername() + "'"));
     }
 
-    public String[][] getSavedForms(String username) {
-        String[][] forms = dbUtil.getTableData("select id, program, form_name, p_id, form_date, timestamp from " + Metadata.FORMS + " where username='" + username + "'");
+    public Object[][] getSavedForms(String username) {
+        Object[][] forms = dbUtil.getFormTableData("select id, program, form_name, p_id, form_date, timestamp, form_object from " + Metadata.FORMS + " where username='" + username + "'");
         return forms;
     }
 

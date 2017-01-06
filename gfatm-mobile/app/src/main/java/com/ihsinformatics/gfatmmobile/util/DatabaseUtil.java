@@ -14,8 +14,6 @@ Interactive Health Solutions, hereby disclaims all copyright interest in this pr
 
 package com.ihsinformatics.gfatmmobile.util;
 
-import java.util.ArrayList;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -24,6 +22,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.ihsinformatics.gfatmmobile.R;
+
+import java.util.ArrayList;
 
 /**
  * @author owais.hussain@irdinformatics.org
@@ -275,5 +275,37 @@ public class DatabaseUtil extends SQLiteOpenHelper {
         }
         readableDatabase.close();
         return data.toArray(new String[][]{});
+    }
+
+
+    /**
+     * Get data in a 2-D table from local database using given query
+     *
+     * @param query
+     * @return
+     */
+    public Object[][] getFormTableData(String query) {
+        DatabaseUtil util = new DatabaseUtil(context);
+        SQLiteDatabase readableDatabase = util.getReadableDatabase();
+        ArrayList<Object[]> data = new ArrayList<Object[]>();
+        Cursor cursor = readableDatabase.rawQuery(query, null);
+        if (cursor != null) {
+            int columns = cursor.getColumnCount();
+            if (cursor.moveToFirst()) {
+                do {
+                    Object[] record = new Object[columns];
+                    for (int i = 0; i < columns; i++) {
+                        if (cursor.getColumnName(i).equals("form_object"))
+                            record[i] = cursor.getBlob(i);
+                        else
+                            record[i] = cursor.getString(i);
+                    }
+                    data.add(record);
+                }
+                while (cursor.moveToNext());
+            }
+        }
+        readableDatabase.close();
+        return data.toArray(new Object[][]{});
     }
 }
