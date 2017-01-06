@@ -31,6 +31,7 @@ import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -497,6 +498,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
             int yy = calendar.get(Calendar.YEAR);
             int mm = calendar.get(Calendar.MONTH);
             int dd = calendar.get(Calendar.DAY_OF_MONTH);
+
             DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, yy, mm, dd);
             dialog.getDatePicker().setMaxDate(new Date().getTime());
             return dialog;
@@ -505,10 +507,26 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
         @Override
         public void onDateSet(DatePicker view, int yy, int mm, int dd) {
 
-            dateOfBirthCalendar.set(yy, mm, dd);
-            dob.setText(DateFormat.format("dd-MMM-yyyy", dateOfBirthCalendar).toString());
-            age.setText(String.valueOf(App.getDiffYears(dateOfBirthCalendar.getTime(), new Date())));
+            Date date = new Date(view.getMaxDate());
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH);
+            int day = cal.get(Calendar.DAY_OF_MONTH);
 
+            Boolean futureDate = false;
+            if (yy > year)
+                futureDate = true;
+            else if (mm > month)
+                futureDate = true;
+            else if (dd > day)
+                futureDate = true;
+
+            if (!futureDate) {
+                dateOfBirthCalendar.set(yy, mm, dd);
+                dob.setText(String.valueOf(dateOfBirthCalendar.get(Calendar.DAY_OF_MONTH)) + "-" + (new SimpleDateFormat("MMM").format(dateOfBirthCalendar.getTime())) + "-" + String.valueOf(dateOfBirthCalendar.get(Calendar.YEAR)));
+                age.setText(String.valueOf(App.getDiffYears(dateOfBirthCalendar.getTime(), new Date())));
+            }
         }
     }
 
