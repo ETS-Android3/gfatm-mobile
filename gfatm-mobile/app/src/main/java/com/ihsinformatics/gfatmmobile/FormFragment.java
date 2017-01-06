@@ -147,4 +147,19 @@ public class FormFragment extends Fragment {
 
     }
 
+    public void openForm(FormsObject form) {
+        mainContent.setVisibility(View.GONE);
+
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        try {
+            FragmentTransaction replace = fragmentTransaction.replace(R.id.fragment_form, (Fragment) form.getClassName().newInstance());
+        } catch (java.lang.InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        fragmentTransaction.commit();
+    }
+
 }
