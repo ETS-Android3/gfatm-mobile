@@ -1,5 +1,6 @@
 package com.ihsinformatics.gfatmmobile;
 
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -88,7 +89,7 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
     public void fillList() {
 
         ServerService serverService = new ServerService(getApplicationContext());
-        String[][] forms = serverService.getSavedForms(App.getUsername());
+        final Object[][] forms = serverService.getSavedForms(App.getUsername());
 
         pmdtLinearLayout.setVisibility(View.GONE);
         pmdtLinearLayout.removeAllViews();
@@ -117,9 +118,9 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
 
             final int color = App.getColor(this, R.attr.colorPrimaryDark);
 
-            if (forms[i][1].equalsIgnoreCase(getResources().getString(R.string.pmdt))) {
+            if (String.valueOf(forms[i][1]).equalsIgnoreCase(getResources().getString(R.string.pmdt))) {
 
-            } else if (forms[i][1].equalsIgnoreCase(getResources().getString(R.string.pet))) {
+            } else if (String.valueOf(forms[i][1]).equalsIgnoreCase(getResources().getString(R.string.pet))) {
 
                 CheckBox selection = new CheckBox(this);
                 linearLayout.addView(selection);
@@ -127,7 +128,7 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
                 final TextView text = new TextView(this);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
                 text.setLayoutParams(params);
-                text.setText(forms[i][2]);
+                text.setText(String.valueOf(forms[i][2]));
                 text.setTextSize(getResources().getDimension(R.dimen.small));
                 text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_complete_form, 0, R.drawable.ic_more, 0);
                 text.setPadding(10, 0, 0, 0);
@@ -152,6 +153,22 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
                         }
                     }
                 });
+                final Object obj = forms[i][6];
+                final String id = String.valueOf(forms[i][0]);
+                text.setOnLongClickListener(new View.OnLongClickListener() {
+
+                    @Override
+                    public boolean onLongClick(View v) {
+
+                        Intent i = new Intent();
+                        i.putExtra("form_id", id);
+                        i.putExtra("form_object", (byte[]) obj);
+                        setResult(RESULT_OK, i);
+                        onBackPressed();
+                        return true;
+                    }
+
+                });
 
                 verticalLayout.addView(linearLayout);
 
@@ -165,7 +182,7 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
                 ll1.addView(tv);
 
                 TextView tv1 = new TextView(this);
-                tv1.setText(forms[i][3]);
+                tv1.setText(String.valueOf(forms[i][3]));
                 tv1.setTextSize(getResources().getDimension(R.dimen.small));
                 ll1.addView(tv1);
 
@@ -181,7 +198,7 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
                 ll2.addView(tv2);
 
                 TextView tv3 = new TextView(this);
-                tv3.setText(forms[i][4]);
+                tv3.setText(String.valueOf(forms[i][4]));
                 tv3.setTextSize(getResources().getDimension(R.dimen.small));
                 ll2.addView(tv3);
 
@@ -197,7 +214,7 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
                 ll3.addView(tv4);
 
                 TextView tv5 = new TextView(this);
-                tv5.setText(forms[i][5]);
+                tv5.setText(String.valueOf(forms[i][5]));
                 tv5.setTextSize(getResources().getDimension(R.dimen.small));
                 ll3.addView(tv5);
 
@@ -211,11 +228,11 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
                 petLinearLayout.setVisibility(View.VISIBLE);
                 petLinearLayout.addView(verticalLayout);
 
-            } else if (forms[i][1].equalsIgnoreCase(getResources().getString(R.string.fast))) {
+            } else if (String.valueOf(forms[i][1]).equalsIgnoreCase(getResources().getString(R.string.fast))) {
 
-            } else if (forms[i][1].equalsIgnoreCase(getResources().getString(R.string.comorbidities))) {
+            } else if (String.valueOf(forms[i][1]).equalsIgnoreCase(getResources().getString(R.string.comorbidities))) {
 
-            } else if (forms[i][1].equalsIgnoreCase(getResources().getString(R.string.childhood_tb))) {
+            } else if (String.valueOf(forms[i][1]).equalsIgnoreCase(getResources().getString(R.string.childhood_tb))) {
 
             }
 
