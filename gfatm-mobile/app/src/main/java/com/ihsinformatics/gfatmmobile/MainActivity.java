@@ -30,10 +30,17 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.ihsinformatics.gfatmmobile.shared.FormsObject;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnTouchListener {
 
-    private static final int SECOND_ACTIVITY_RESULT_CODE = 0;
+    private static final int SELECT_PATIENT_ACTIVITY = 0;
+    private static final int SAVED_FORM_ACTIVITY = 1;
     Context context = this;
     LinearLayout buttonLayout;
     LinearLayout programLayout;
@@ -248,8 +255,8 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.saved_forms) {
-            Intent savedFormIntent = new Intent(this, SavedFormActivity.class);
-            startActivity(savedFormIntent);
+            Intent savedFormActivityIntent = new Intent(this, SavedFormActivity.class);
+            startActivityForResult(savedFormActivityIntent, SAVED_FORM_ACTIVITY);
         }
 
         return super.onOptionsItemSelected(item);
@@ -452,7 +459,7 @@ public class MainActivity extends AppCompatActivity
                 view.invalidate();
 
                 Intent selectPatientActivityIntent = new Intent(this, SelectPatientActivity.class);
-                startActivityForResult(selectPatientActivityIntent, SECOND_ACTIVITY_RESULT_CODE);
+                startActivityForResult(selectPatientActivityIntent, SELECT_PATIENT_ACTIVITY);
 
                 break;
             }
@@ -472,18 +479,44 @@ public class MainActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // check that it is the SecondActivity with an OK result
-        if (requestCode == SECOND_ACTIVITY_RESULT_CODE) {
+        // check that it is the SELECT PATIENT with an OK result
+        if (requestCode == SELECT_PATIENT_ACTIVITY) {
             if (resultCode == RESULT_OK) {
 
                 // get String data from Intent
                 String returnString = data.getStringExtra("key");
-                if(returnString != null && returnString.equals("SEARCH")){
+                if (returnString != null && returnString.equals("SEARCH")) {
                     showSearchFragment();
+                }
+
+            }
+        } else if (requestCode == SAVED_FORM_ACTIVITY) {
+            if (resultCode == RESULT_OK) {
+
+                String returnString = data.getStringExtra("form_id");
+                if (returnString != null) {
+                    showFormFragment();
+                    byte[] bytes = data.getByteArrayExtra("form_object");
+
+                    ByteArrayInputStream bais = null;
+                    ObjectInputStream ins = null;
+                    try {
+
+                        bais = new ByteArrayInputStream(bytes);
+                        ins = new ObjectInputStream(bais);
+                        FormsObject f = (FormsObject) ins.readObject();
+
+                        fragmentForm.openForm(f);
+
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
 
             }
         }
     }
-
 }
