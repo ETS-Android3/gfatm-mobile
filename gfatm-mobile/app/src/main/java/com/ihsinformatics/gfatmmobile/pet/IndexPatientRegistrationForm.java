@@ -98,7 +98,8 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
                              ViewGroup container, Bundle savedInstanceState) {
 
         PAGE_COUNT = 7;
-        FORM_NAME = Forms.INDEX_PATIENT_REGISTRATION;
+        FORM_NAME = Forms.PET_INDEX_PATIENT_REGISTRATION;
+        FORM = Forms.pet_indexPatientRegistration;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -349,7 +350,7 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity {
         formValues.put(husbandName.getTag(), App.get(husbandName));
         formValues.put(gender.getTag(), App.get(gender));
 
-        serverService.saveFormLocally(FORM_NAME, "12345-5", formValues);
+        serverService.saveFormLocally(FORM_NAME, FORM, "12345-5", formValues);
 
         return true;
     }

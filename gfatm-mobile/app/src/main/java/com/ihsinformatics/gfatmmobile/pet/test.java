@@ -44,7 +44,7 @@ public class test extends AbstractFormActivity {
                              ViewGroup container, Bundle savedInstanceState) {
 
         PAGE_COUNT = 5;
-        FORM_NAME = Forms.INDEX_PATIENT_REGISTRATION;
+        FORM_NAME = Forms.PET_INDEX_PATIENT_REGISTRATION;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         pager = (ViewPager) mainContent.findViewById(R.id.pager);
