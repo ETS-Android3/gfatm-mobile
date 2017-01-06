@@ -2,7 +2,6 @@
 
     <!-- Base application theme. -->
     <style name="DarkTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
 
         <item name="colorPrimaryDark">@color/veryDarkBrown</item>
         <item name="colorPrimary">@color/ironstone</item>
@@ -28,7 +27,9 @@
         <item name="android:checkboxStyle">@style/checkBoxStyle</item>
         <item name="android:textViewStyle">@style/text</item>
         <item name="android:alertDialogStyle">@style/dialog</item>
+        <item name="alertDialogStyle">@style/dialog</item>
         <item name="android:alertDialogTheme">@style/dialog</item>
+        <item name="alertDialogTheme">@style/dialog</item>
 
     </style>
 
@@ -85,8 +86,8 @@
         <item name="colorPrimary">@color/ironstone</item>
         <item name="colorPrimaryDark">@color/veryDarkBrown</item>
         <item name="colorAccent">@color/dirtyBlue</item>
-        <item name="android:background">@color/swissCoffee</item>
         <item name="android:windowIsTranslucent">true</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
 </resources>

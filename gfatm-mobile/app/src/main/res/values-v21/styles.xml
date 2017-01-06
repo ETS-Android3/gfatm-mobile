@@ -7,14 +7,67 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
-    <style name="ProgressBar" parent="@android:style/Widget.ProgressBar">
+    <style name="datePicker" parent="@android:style/Widget.Material.Light.DatePicker">
         <item name="colorPrimary">@color/ironstone</item>
         <item name="colorPrimaryDark">@color/veryDarkBrown</item>
         <item name="colorAccent">@color/dirtyBlue</item>
-        <item name="android:background">@color/swissCoffee</item>
-        <item name="android:backgroundTint">@color/swissCoffee</item>
-        <item name="android:layout_centerHorizontal">true</item>
-        <item name="android:layout_centerVertical">true</item>
+    </style>
+
+    <style name="datePickerDialog" parent="Theme.AppCompat.DayNight.Dialog.Alert">
+        <item name="colorPrimary">@color/ironstone</item>
+        <item name="colorPrimaryDark">@color/veryDarkBrown</item>
+        <item name="colorAccent">@color/dirtyBlue</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:datePickerStyle">@style/datePicker</item>
+    </style>
+
+    <style name="DarkTheme" parent="Theme.AppCompat.Light.NoActionBar">
+
+        <item name="colorPrimaryDark">@color/veryDarkBrown</item>
+        <item name="colorPrimary">@color/ironstone</item>
+        <item name="colorAccent">@color/dirtyBlue</item>
+        <item name="colorBackground">@color/swissCoffee</item>
+        <item name="colorAlternate">@color/scandal</item>
+        <item name="colorButton">@color/lime</item>
+
+        <item name="colorRegistration">@color/teal</item>
+        <item name="colorScreening">@color/purple</item>
+        <item name="colorTreatment">@color/harleyDavidsonOrange</item>
+        <item name="colorFollowup">@color/ToryBlue</item>
+        <item name="colorOther">@color/limerick</item>k
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:buttonStyle">@style/button</item>
+        <item name="buttonStyle">@style/button</item>
+        <item name="android:radioButtonStyle">@style/radio</item>
+        <item name="radioButtonStyle">@style/radio</item>
+        <item name="android:editTextStyle">@style/editTextStyle</item>
+        <item name="android:dropDownSpinnerStyle">@style/spinnerStyle</item>
+        <item name="android:checkboxStyle">@style/checkBoxStyle</item>
+        <item name="android:textViewStyle">@style/text</item>
+        <item name="android:datePickerStyle">@style/datePicker</item>
+        <item name="android:datePickerDialogTheme">@style/datePickerDialog</item>
+        <item name="android:progressBarStyle">@style/progressBar</item>
+        <item name="progressBarStyle">@style/progressBar</item>
+
+    </style>
+
+    <style name="dialog" parent="Theme.AppCompat.DayNight.Dialog.Alert">
+        <item name="colorPrimary">@color/ironstone</item>
+        <item name="colorPrimaryDark">@color/veryDarkBrown</item>
+        <item name="colorAccent">@color/dirtyBlue</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:datePickerDialogTheme">@style/datePickerDialog</item>
+    </style>
+
+    <style name="progressBar" parent="@android:style/Widget.ProgressBar">
+        <item name="colorPrimary">@color/ironstone</item>
+        <item name="colorPrimaryDark">@color/veryDarkBrown</item>
+        <item name="colorAccent">@color/dirtyBlue</item>
+        <item name="android:indeterminateTint">@color/dirtyBlue</item>
     </style>
 
 </resources>
