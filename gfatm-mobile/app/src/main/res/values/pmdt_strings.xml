@@ -2,5 +2,38 @@
 <resources>
 
     <string name="pmdt_index_patient_registration">Index Patient Registration</string>
+    <string name="pmdt_cnic">National ID card no.</string>
+    <string name="pmdt_cnic_hint">00000-0000000-0</string>
+    <string name="pmdt_external_patient_id">External Patient ID</string>
+    <string name="pmdt_external_patient_id_hint">Enter External Patient ID</string>
+    <string name="pmdt_endtb_emr_id_hint">PAK-000-00000</string>
+    <string name="pmdt_endtb_emr_id">endTB EMR ID</string>
+    <string name="pmdt_current_address_1">Current address 1 (House number, street number/name, sector number/name)</string>
+    <string name="pmdt_current_address_1_hint">Enter current address</string>
+    <string name="pmdt_current_address_2">Current address 2 (Colony, Union Council)</string>
+    <string name="pmdt_current_address_town">Current Address Town</string>
+    <string name="pmdt_current_address_city">Current Address City</string>
+    <string name="pmdt_current_address_landmark">Current Address Landmark</string>
+    <string name="pmdt_landmark_hint">Enter landmark</string>
+    <string name="pmdt_permanent_address_1">Permanent address (House number, street number/name, sector number/name)</string>
+    <string name="pmdt_permanent_address_1_hint">Enter permanent address</string>
+    <string name="pmdt_permanent_address_2">Permanent address (Colony, Union Council, nearest landmark)</string>
+    <string name="pmdt_permanent_address_town">Permanent Address Town</string>
+    <string name="pmdt_permanent_address_city">Permanent Address City</string>
+    <string name="pmdt_permanent_address_landmark">Permanent Address Landmark</string>
+
+    <string name="pmdt_primary_phone">Primary phone number</string>
+    <string name="pmdt_primary_phone_hint">Enter Primary phone number</string>
+    <string name="pmdt_alternate_phone">Alternate phone number</string>
+
+    <string-array name="pmdt_towns">
+        <item>Gulshan-e-Iqbal</item>
+    </string-array>
+
+    <string-array name="pmdt_cities">
+        <item>Karachi</item>
+        <item>Islamabad</item>
+    </string-array>
+
 
 </resources>
