@@ -21,10 +21,13 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.R;
+import com.ihsinformatics.gfatmmobile.custom.MyRadioGroup;
+import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
@@ -40,7 +43,7 @@ import java.util.HashMap;
  * Created by Haris on 1/5/2017.
  */
 
-public class PresumptiveForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener, AdapterView.OnItemSelectedListener{
+public class PresumptiveForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
     Context context;
 
@@ -51,6 +54,8 @@ public class PresumptiveForm extends AbstractFormActivity implements RadioGroup.
     TitledEditText patient_consultation_other;
     MyTextView patient_symptom_title;
     MyTextView patient_demographics_title;
+    TitledRadioGroup cough;
+    TitledSpinner cough_duration;
     TitledRadioGroup productive_cough;
     TitledRadioGroup haemoptysis;
     TitledRadioGroup fever;
@@ -61,16 +66,6 @@ public class PresumptiveForm extends AbstractFormActivity implements RadioGroup.
     TitledRadioGroup tb_contact;
     TitledRadioGroup tb_history;
 
-
-    TitledRadioGroup screening_location;
-    TitledSpinner hospital;
-    TitledRadioGroup hospital_section;
-    TitledEditText hospital_section_other;
-    TitledSpinner opd_ward_section;
-
-    TitledRadioGroup age_range;
-    TitledRadioGroup gender;
-    TitledRadioGroup cough_twoweeks;
 
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -137,16 +132,19 @@ public class PresumptiveForm extends AbstractFormActivity implements RadioGroup.
         patient_attendant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_is_this_patient_or_attendant), getResources().getStringArray(R.array.fast_patient_or_attendant_list), getResources().getString(R.string.fast_patient_title), App.VERTICAL, App.VERTICAL);
         patient_consultation = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_speciality_patient_consult), getResources().getStringArray(R.array.fast_patient_consultation_list), getResources().getString(R.string.fast_chesttbclinic_title), App.VERTICAL);
         patient_consultation_other = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        patient_consultation_other.setVisibility(View.GONE);
 
         patient_symptom_title = new MyTextView(context, getResources().getString(R.string.fast_symptoms_title));
         patient_symptom_title.setTypeface(null, Typeface.BOLD);
+        cough = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_do_you_have_cough), getResources().getStringArray(R.array.fast_choice_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
+        cough_duration = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_duration_of_coughs), getResources().getStringArray(R.array.fast_duration_list), getResources().getString(R.string.fast_less_than_2_weeks_title), App.VERTICAL);
         productive_cough = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_is_your_cough_productive), getResources().getStringArray(R.array.fast_choice_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
         haemoptysis = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_sputum_in_blood), getResources().getStringArray(R.array.fast_choice_list), getResources().getString(R.string.fast_no_title), App.VERTICAL, App.VERTICAL);
         fever = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_do_you_have_fever), getResources().getStringArray(R.array.fast_choice_list), getResources().getString(R.string.fast_no_title), App.VERTICAL, App.VERTICAL);
         fever_duration = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_how_long_you_have_fever), getResources().getStringArray(R.array.fast_duration_list), getResources().getString(R.string.fast_less_than_2_weeks_title), App.VERTICAL);
+        fever_duration.setVisibility(View.GONE);
         night_sweats = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_do_you_have_night_sweats), getResources().getStringArray(R.array.fast_choice_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
         weight_loss = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_do_you_have_unexplained_weight_loss), getResources().getStringArray(R.array.fast_choice_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
-
 
         patient_tbhistory_title = new MyTextView(context, getResources().getString(R.string.fast_tbhistory_title));
         patient_tbhistory_title.setTypeface(null, Typeface.BOLD);
@@ -154,40 +152,28 @@ public class PresumptiveForm extends AbstractFormActivity implements RadioGroup.
         tb_contact = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_close_with_someone_diagnosed), getResources().getStringArray(R.array.fast_choice_list), getResources().getString(R.string.fast_no_title), App.VERTICAL, App.VERTICAL);
 
 
-        screening_location = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_location_of_screening), getResources().getStringArray(R.array.fast_locations), getResources().getString(R.string.fast_hospital_title), App.HORIZONTAL, App.HORIZONTAL);
-        hospital = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_if_hospital_specify), getResources().getStringArray(R.array.fast_sites), getResources().getString(R.string.fast_ASHKHI), App.HORIZONTAL);
-        hospital_section = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_hospital_parts_title), getResources().getStringArray(R.array.fast_hospital_parts), getResources().getString(R.string.fast_opdclinicscreening_title), App.VERTICAL, App.VERTICAL);
-        hospital_section_other = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        hospital_section_other.setVisibility(View.GONE);
-        opd_ward_section = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_clinic_and_ward_title), getResources().getStringArray(R.array.fast_clinic_and_ward_list), getResources().getString(R.string.fast_generalmedicinefilterclinic_title), App.VERTICAL);
-        age_range = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_age_range_title), getResources().getStringArray(R.array.fast_age_range_list), getResources().getString(R.string.fast_greater_title), App.HORIZONTAL, App.HORIZONTAL);
-        gender = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_gender_title), getResources().getStringArray(R.array.fast_gender_list), getResources().getString(R.string.fast_male_title), App.HORIZONTAL, App.HORIZONTAL);
-        cough_twoweeks = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_cough_period_title), getResources().getStringArray(R.array.fast_choice_list), getResources().getString(R.string.fast_no_title), App.VERTICAL, App.VERTICAL);
-        tb_contact = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_close_with_someone_diagnosed), getResources().getStringArray(R.array.fast_choice_list), getResources().getString(R.string.fast_no_title), App.VERTICAL, App.VERTICAL);
-        tb_history = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_tb_before), getResources().getStringArray(R.array.fast_choice_list), getResources().getString(R.string.fast_no_title), App.VERTICAL, App.VERTICAL);
 
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), patient_attendant.getRadioGroup(), hospital.getSpinner(),
-                hospital_section.getRadioGroup(), hospital_section_other.getEditText(), opd_ward_section.getSpinner(),
-                patient_attendant.getRadioGroup(), age_range.getRadioGroup(), gender.getRadioGroup(), cough_twoweeks.getRadioGroup(),
-                tb_contact.getRadioGroup(), tb_history.getRadioGroup()};
+        views = new View[]{formDate.getButton(), patient_attendant.getRadioGroup(), patient_consultation.getSpinner(),
+                patient_consultation_other.getEditText(), cough.getRadioGroup(), cough_duration.getSpinner(),
+                productive_cough.getRadioGroup(), haemoptysis.getRadioGroup(), fever.getRadioGroup(), fever_duration.getSpinner(),
+                tb_contact.getRadioGroup(), tb_history.getRadioGroup(), night_sweats.getRadioGroup(), weight_loss.getRadioGroup()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate ,patient_demographics_title , patient_attendant, patient_consultation, patient_consultation_other},
-                 {patient_symptom_title, productive_cough, haemoptysis, fever, fever_duration, night_sweats, weight_loss},
-                 {patient_tbhistory_title, tb_history, tb_contact}};
+                {{formDate, patient_demographics_title, patient_attendant, patient_consultation, patient_consultation_other},
+                        {patient_symptom_title, cough, cough_duration, productive_cough, haemoptysis, fever, fever_duration, night_sweats, weight_loss},
+                        {patient_tbhistory_title, tb_history, tb_contact}};
 
         patient_attendant.getRadioGroup().setOnCheckedChangeListener(this);
         patient_consultation.getSpinner().setOnItemSelectedListener(this);
+        cough.getRadioGroup().setOnCheckedChangeListener(this);
+        productive_cough.getRadioGroup().setOnCheckedChangeListener(this);
+        cough_duration.getSpinner().setOnItemSelectedListener(this);
         formDate.getButton().setOnClickListener(this);
-        hospital_section.getRadioGroup().setOnCheckedChangeListener(this);
-        screening_location.getRadioGroup().setOnCheckedChangeListener(this);
         patient_attendant.getRadioGroup().setOnCheckedChangeListener(this);
-        age_range.getRadioGroup().setOnCheckedChangeListener(this);
-        gender.getRadioGroup().setOnCheckedChangeListener(this);
-        cough_twoweeks.getRadioGroup().setOnCheckedChangeListener(this);
+        fever.getRadioGroup().setOnCheckedChangeListener(this);
         tb_history.getRadioGroup().setOnCheckedChangeListener(this);
         tb_contact.getRadioGroup().setOnCheckedChangeListener(this);
     }
@@ -201,13 +187,13 @@ public class PresumptiveForm extends AbstractFormActivity implements RadioGroup.
     public boolean validate() {
         Boolean error = false;
 
-        if (hospital_section_other.getVisibility() == View.VISIBLE && App.get(hospital_section_other).isEmpty()) {
+        if (patient_consultation_other.getVisibility() == View.VISIBLE && App.get(patient_consultation_other).isEmpty()) {
             if (App.isLanguageRTL())
-                gotoPage(1);
+                gotoPage(2);
             else
                 gotoPage(0);
-            hospital_section_other.getEditText().setError(getString(R.string.empty_field));
-            hospital_section_other.getEditText().requestFocus();
+            patient_consultation_other.getEditText().setError(getString(R.string.empty_field));
+            patient_consultation_other.getEditText().requestFocus();
             error = true;
         }
 
@@ -287,18 +273,14 @@ public class PresumptiveForm extends AbstractFormActivity implements RadioGroup.
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-    }
-
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-    }
-
-    @Override
-    public void resetViews() {
-        super.resetViews();
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        MySpinner spinner = (MySpinner) parent;
+        if (spinner == patient_consultation.getSpinner()) {
+            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title))) {
+                patient_consultation_other.setVisibility(View.VISIBLE);
+            } else {
+                patient_consultation_other.setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override
@@ -309,28 +291,45 @@ public class PresumptiveForm extends AbstractFormActivity implements RadioGroup.
             } else {
                 patient_consultation.setVisibility(View.VISIBLE);
             }
-        } else if (radioGroup == hospital_section.getRadioGroup()) {
-            if (hospital_section.getRadioGroup()
-                    .getSelectedValue().equals(getResources().getString(R.string.fast_other_title))) {
-                hospital_section_other.setVisibility(View.VISIBLE);
-                opd_ward_section.setVisibility(View.GONE);
-            } else if (hospital_section.getRadioGroup().getSelectedValue().
-                    equals(getResources().getString(R.string.fast_opdclinicscreening_title))
-                    || hospital_section.getRadioGroup().getSelectedValue().
-                    equals(getResources().getString(R.string.fast_wardscreening_title))) {
-                hospital_section_other.setVisibility(View.GONE);
-                opd_ward_section.setVisibility(View.VISIBLE);
-            } else if (hospital_section.getRadioGroup()
-                    .getSelectedValue().equals(getResources().getString(R.string.fast_registrationdesk_title)) ||
-                    hospital_section.getRadioGroup().getSelectedValue()
-                            .equals(getResources().getString(R.string.fast_nexttoxrayvan_title))) {
-                hospital_section_other.setVisibility(View.GONE);
-                opd_ward_section.setVisibility(View.GONE);
+        } else if (radioGroup == cough.getRadioGroup()) {
+            if (cough.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+                cough_duration.setVisibility(View.VISIBLE);
+                productive_cough.setVisibility(View.VISIBLE);
+                if (productive_cough.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+                    haemoptysis.setVisibility(View.VISIBLE);
+                } else {
+                    haemoptysis.setVisibility(View.GONE);
+                }
+            } else {
+                cough_duration.setVisibility(View.GONE);
+                productive_cough.setVisibility(View.GONE);
+                haemoptysis.setVisibility(View.GONE);
+            }
+        } else if (radioGroup == productive_cough.getRadioGroup()) {
+            if (productive_cough.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title)) && cough.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+                haemoptysis.setVisibility(View.VISIBLE);
+            } else {
+                haemoptysis.setVisibility(View.GONE);
+            }
+        } else if (radioGroup == fever.getRadioGroup()) {
+            if (fever.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+                fever_duration.setVisibility(View.VISIBLE);
+            } else {
+                fever_duration.setVisibility(View.GONE);
             }
         }
     }
 
-    //public void OnItemSelectedListener
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+    }
+
+    @Override
+    public void resetViews() {
+        super.resetViews();
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+    }
+
 
     class MyAdapter extends PagerAdapter {
 

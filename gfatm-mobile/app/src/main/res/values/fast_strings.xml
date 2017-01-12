@@ -72,6 +72,17 @@
     <string name="fast_symptoms_title">SYMPTOMS</string>
     <string name="fast_demographics_title">DEMOGRAPHICS</string>
     <string name="fast_tbhistory_title">TB HISTORY</string>
+    <string name="fast_testing_of_presumptive_patients">TESTING OF PRESUMPTIVE PATIENTS</string>
+    <string name="fast_patient_a_sputum_container">Have you given the patient a sputum container?</string>
+    <string name="fast_produced_a_sputum_sample">Has the patient produced a sputum sample?</string>
+    <string name="fast_if_no_why_not">If no, why not?</string>
+    <string name="fast_date_sputum_sample">Date sputum sample is due back from patient:</string>
+    <string name="fast_given_free_chest_xray">Have you given the patient a voucher for a free Chest X-Ray (CAD4TB)?</string>
+    <string name="fast_not_given_free_chest_xray">Why have you NOT given a voucher for a free Chest X-Ray (CAD4TB)?</string>
+    <string name="fast_patient_unable_to_expectorate">Patient unable to expectorate</string>
+    <string name="fast_patient_refused">Patient refused</string>
+    <string name="fast_presumptive_refused">Presumptive refused</string>
+
 
     <string-array name="fast_locations">
         <item>@string/fast_community_title</item>
@@ -152,5 +163,20 @@
         <item>@string/fast_morethan3weeks</item>
         <item>@string/fast_dont_know_title</item>
         <item>@string/fast_refused_title</item>
+    </string-array>
+
+    <string-array name="fast_yes_no_list">
+        <item>@string/fast_yes_title</item>
+        <item>@string/fast_no_title</item>
+    </string-array>
+
+    <string-array name="fast_if_no_why_not_list">
+        <item>@string/fast_patient_unable_to_expectorate</item>
+        <item>@string/fast_patient_refused</item>
+    </string-array>
+    
+    <string-array name="fast_not_given_free_list">
+        <item>@string/fast_presumptive_refused</item>
+        <item>@string/fast_other_title</item>
     </string-array>
 </resources>
