@@ -30,7 +30,10 @@ import android.widget.TextView;
 import com.ihsinformatics.gfatmmobile.custom.MyEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
+import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -64,7 +67,11 @@ public class App {
     private static String autoLogin = "";
     private static String lastLogin = "";
     private static String communicationMode = "";
+    private static String userFullName = "";
+    private static String location = "";
+    private static String locationLastUpdate = "";
     private static Locale currentLocale;
+
 
     public static void setThreadSafety(boolean state) {
         StrictMode.ThreadPolicy policy = StrictMode.getThreadPolicy();
@@ -196,6 +203,14 @@ public class App {
         App.autoLogin = autoLogin;
     }
 
+    public static String getUserFullName() {
+        return userFullName;
+    }
+
+    public static void setUserFullName(String userFullName) {
+        App.userFullName = userFullName;
+    }
+
     public static String getLastLogin() {
         return lastLogin;
     }
@@ -220,6 +235,22 @@ public class App {
         App.communicationMode = communicationMode;
     }
 
+    public static String getLocation() {
+        return location;
+    }
+
+    public static void setLocation(String location) {
+        App.location = location;
+    }
+
+    public static String getLocationLastUpdate() {
+        return locationLastUpdate;
+    }
+
+    public static void setLocationLastUpdate(String locationLastUpdate) {
+        App.locationLastUpdate = locationLastUpdate;
+    }
+
     /**
      * Returns selected value in string, depending on the view passed. If no
      * value is present, an empty string will be returned
@@ -237,11 +268,12 @@ public class App {
             str = ((MyEditText) view).getText().toString();
         } else if (view instanceof EditText) {
             str = ((EditText) view).getText().toString();
-        }
-        if (view instanceof TitledRadioGroup) {
+        } else if (view instanceof TitledRadioGroup) {
             str = ((TitledRadioGroup) view).getRadioGroupSelectedValue();
         } else if (view instanceof TextView) {
             str = ((TextView) view).getText().toString();
+        } else if (view instanceof TitledSpinner) {
+            str = ((TitledSpinner) view).getSpinnerValue();
         } else if (view instanceof Spinner) {
             str = ((Spinner) view).getSelectedItem().toString();
         }
@@ -347,6 +379,20 @@ public class App {
         Calendar cal = Calendar.getInstance(Locale.US);
         cal.setTime(date);
         return cal;
+    }
+
+    public static Date stringToDate(String aDate, String aFormat) {
+
+        if (aDate == null) return null;
+        SimpleDateFormat simpledateformat = new SimpleDateFormat(aFormat);
+        Date stringDate = null;
+        try {
+            stringDate = simpledateformat.parse(aDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return stringDate;
+
     }
 
     public enum dialogButtonPosition {

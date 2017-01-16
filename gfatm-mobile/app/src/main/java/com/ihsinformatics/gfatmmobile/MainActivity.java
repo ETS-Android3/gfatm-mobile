@@ -3,12 +3,14 @@ package com.ihsinformatics.gfatmmobile;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
@@ -31,6 +33,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.shared.FormsObject;
+import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -41,29 +44,29 @@ public class MainActivity extends AppCompatActivity
 
     private static final int SELECT_PATIENT_ACTIVITY = 0;
     private static final int SAVED_FORM_ACTIVITY = 1;
+    protected static ProgressDialog loading;
     Context context = this;
     LinearLayout buttonLayout;
     LinearLayout programLayout;
     LinearLayout headerLayout;
-
     Button formButton;
     Button reportButton;
     Button searchButton;
-
     RadioGroup radioGroup;
-
     FormFragment fragmentForm = new FormFragment();
     ReportFragment fragmentReport = new ReportFragment();
     SearchFragment fragmentSearch = new SearchFragment();
-
     ImageView change;
-
     FragmentManager fm = getFragmentManager();
+    private ServerService serverService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        loading = new ProgressDialog(this);
+        serverService = new ServerService(getApplicationContext());
 
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.add(R.id.fragment_place, fragmentForm, "FORM");
@@ -90,11 +93,11 @@ public class MainActivity extends AppCompatActivity
 
         View hView = navigationView.getHeaderView(0);
         TextView nav_user = (TextView) hView.findViewById(R.id.menuUsername);
-        nav_user.setText(App.getUsername());
+        nav_user.setText(App.getUserFullName());
 
         String title = toolbar.getTitle() + " (" + App.getVersion() + ")";
         getSupportActionBar().setTitle(title);
-        String subtitle = getResources().getString(R.string.program) + " " + App.getProgram();
+        String subtitle = getResources().getString(R.string.program) + " " + App.getProgram() + "  |  " + "Location:" + " " + App.getLocation();
         getSupportActionBar().setSubtitle(subtitle);
 
         change = (ImageView) findViewById(R.id.change);
@@ -126,6 +129,8 @@ public class MainActivity extends AppCompatActivity
                 fragmentForm.fillMainContent();
                 showFormFragment();
 
+                fetchMetadata();
+
             }
         });
 
@@ -134,8 +139,12 @@ public class MainActivity extends AppCompatActivity
         reportButton = (Button) findViewById(R.id.reportButton);
         searchButton = (Button) findViewById(R.id.searchButton);
 
-        if (!App.getProgram().equals(""))
+        if (!App.getProgram().equals("")) {
             showFormFragment();
+
+            if (App.getLocation().equals(""))
+                openLocationSelectionDialog();
+        }
         else
             showProgramSelection();
 
@@ -146,21 +155,24 @@ public class MainActivity extends AppCompatActivity
         super.onResume();  // Always call the superclass method first
 
         if (!getSupportActionBar().getSubtitle().toString().contains(App.getProgram())) {
-            String subtitle = getResources().getString(R.string.program) + " " + App.getProgram();
+            String subtitle = getResources().getString(R.string.program) + " " + App.getProgram() + "  |  " + "Location:" + " " + App.getLocation();
             getSupportActionBar().setSubtitle(subtitle);
 
             fragmentForm.fillMainContent();
             showFormFragment();
         }
 
+        if (!getSupportActionBar().getSubtitle().toString().contains(App.getLocation())) {
+            String subtitle = getResources().getString(R.string.program) + " " + App.getProgram() + "  |  " + "Location:" + " " + App.getLocation();
+            getSupportActionBar().setSubtitle(subtitle);
+        }
+
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         String lang = preferences.getString(Preferences.LANGUAGE, "");
-
         if (!App.getLanguage().equals(lang)) {
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString(Preferences.LANGUAGE, App.getLanguage());
             editor.apply();
-
             restartActivity();
         }
 
@@ -257,6 +269,12 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.saved_forms) {
             Intent savedFormActivityIntent = new Intent(this, SavedFormActivity.class);
             startActivityForResult(savedFormActivityIntent, SAVED_FORM_ACTIVITY);
+        } else if (id == R.id.update_database) {
+            Intent fetchMetadataActivityIntent = new Intent(this, UpdateDatabaseActivity.class);
+            startActivity(fetchMetadataActivityIntent);
+        } else if (id == R.id.location_setup) {
+            Intent locationSetupActivityIntent = new Intent(this, LocationSetupActivity.class);
+            startActivity(locationSetupActivityIntent);
         }
 
         return super.onOptionsItemSelected(item);
@@ -454,8 +472,7 @@ public class MainActivity extends AppCompatActivity
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN: {
                 ImageView view = (ImageView) v;
-                //overlay is black with transparency of 0x77 (119)
-                view.getDrawable().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
+                view.getDrawable().setColorFilter(getResources().getColor(R.color.dark_grey), PorterDuff.Mode.SRC_ATOP);
                 view.invalidate();
 
                 Intent selectPatientActivityIntent = new Intent(this, SelectPatientActivity.class);
@@ -519,4 +536,51 @@ public class MainActivity extends AppCompatActivity
             }
         }
     }
+
+    public void fetchMetadata() {
+        // Authenticate from server
+        AsyncTask<String, String, String> syncTask = new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.fetching_locations));
+                        loading.show();
+                    }
+                });
+
+                String result = serverService.getLocations();
+                return result;
+
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            ;
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+                if (result.equals("SUCCESS")) {
+
+                    openLocationSelectionDialog();
+
+                }
+            }
+        };
+        syncTask.execute("");
+    }
+
+    public void openLocationSelectionDialog() {
+        Intent languageActivityIntent = new Intent(this, LocationSelectionDialog.class);
+        startActivity(languageActivityIntent);
+    }
+
 }

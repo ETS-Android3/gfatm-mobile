@@ -11,7 +11,6 @@ import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -30,8 +29,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
+import com.ihsinformatics.gfatmmobile.util.ServerService;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -50,7 +49,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
 
     EditText selectPatientId;
     Button selectPatientScanButton;
-    Button selectPatient;
+    Button searchPatient;
 
     EditText firstName;
     EditText lastName;
@@ -63,12 +62,14 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
     Button createPatientScanButton;
     EditText externalId;
 
-    ImageView searchButton;
+    ImageView selectButton;
+    private ServerService serverService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.select_patient);
+        serverService = new ServerService(getApplicationContext());
 
         cancelButton = (TextView) findViewById(R.id.cancelButton);
         createButton = (TextView) findViewById(R.id.createPatientButton);
@@ -78,7 +79,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
 
         selectPatientId = (EditText) findViewById(R.id.selectPatientId);
         selectPatientScanButton = (Button) findViewById(R.id.selectBarcodeScan);
-        selectPatient = (Button) findViewById(R.id.selectPatient);
+        searchPatient = (Button) findViewById(R.id.searchPatientButton);
 
         firstName = (EditText) findViewById(R.id.firstName);
         lastName = (EditText) findViewById(R.id.lastName);
@@ -126,7 +127,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                     Calendar cal = Calendar.getInstance();
                     cal.add(Calendar.YEAR, -Integer.parseInt(s.toString()));
 
-                    dateOfBirthCalendar.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+                    dateOfBirthCalendar.set(cal.get(Calendar.YEAR), dateOfBirthCalendar.get(Calendar.MONTH), dateOfBirthCalendar.get(Calendar.DAY_OF_MONTH));
                     dob.setText(DateFormat.format("dd-MMM-yyyy", dateOfBirthCalendar).toString());
 
                 }
@@ -140,10 +141,10 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
             }
         });
 
-        searchButton = (ImageView) findViewById(R.id.search);
-        int color = App.getColor(this, R.attr.colorAccent);
-        DrawableCompat.setTint(searchButton.getDrawable(), color);
-        searchButton.setOnTouchListener(this);
+        selectButton = (ImageView) findViewById(R.id.select);
+        /*int color = App.getColor(this, R.attr.colorAccent);
+        DrawableCompat.setTint(selectButton.getDrawable(), color);*/
+        selectButton.setOnTouchListener(this);
 
         dob.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
@@ -151,7 +152,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
         createButton.setOnClickListener(this);
         createPatientScanButton.setOnClickListener(this);
         selectPatientScanButton.setOnClickListener(this);
-        selectPatient.setOnClickListener(this);
+        searchPatient.setOnClickListener(this);
     }
 
     @Override
@@ -163,10 +164,19 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                 view.getDrawable().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
                 view.invalidate();
 
-                Intent intent = new Intent();
-                intent.putExtra("key", "SEARCH");
-                setResult(RESULT_OK, intent);
-                finish();
+                Boolean error = false;
+
+                if (App.get(selectPatientId).isEmpty()) {
+                    selectPatientId.setError(getString(R.string.empty_field));
+                    selectPatientId.requestFocus();
+                    error = true;
+                } else if (!RegexUtil.isValidId(App.get(selectPatientId))) {
+                    selectPatientId.setError(getString(R.string.invalid_id));
+                    selectPatientId.requestFocus();
+                    error = true;
+                }
+
+                if (!error) getPatient();
 
                 break;
             }
@@ -182,6 +192,10 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
         return true;
     }
 
+    public void getPatient() {
+
+    }
+
     @Override
     public void onClick(View v) {
 
@@ -194,21 +208,14 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
             }
             super.onBackPressed();
 
-        } else if ( v == selectPatient){
+        } else if (v == searchPatient) {
 
             Boolean error = false;
 
-            if (App.get(selectPatientId).isEmpty()) {
-                selectPatientId.setError(getString(R.string.empty_field));
-                selectPatientId.requestFocus();
-                error = true;
-            }else if(!RegexUtil.isValidId(App.get(selectPatientId))){
-                selectPatientId.setError(getString(R.string.invalid_id));
-                selectPatientId.requestFocus();
-                error = true;
-            }
-
-            //if(!error)
+            Intent intent = new Intent();
+            intent.putExtra("key", "SEARCH");
+            setResult(RESULT_OK, intent);
+            finish();
 
 
         } else if (v == createPatient) {
@@ -493,12 +500,9 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-            Calendar calendar = dateOfBirthCalendar;
-
-            int yy = calendar.get(Calendar.YEAR);
-            int mm = calendar.get(Calendar.MONTH);
-            int dd = calendar.get(Calendar.DAY_OF_MONTH);
-
+            int yy = dateOfBirthCalendar.get(Calendar.YEAR);
+            int mm = dateOfBirthCalendar.get(Calendar.MONTH);
+            int dd = dateOfBirthCalendar.get(Calendar.DAY_OF_MONTH);
             DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, yy, mm, dd);
             dialog.getDatePicker().setMaxDate(new Date().getTime());
             return dialog;
@@ -507,26 +511,9 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
         @Override
         public void onDateSet(DatePicker view, int yy, int mm, int dd) {
 
-            Date date = new Date(view.getMaxDate());
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(date);
-            int year = cal.get(Calendar.YEAR);
-            int month = cal.get(Calendar.MONTH);
-            int day = cal.get(Calendar.DAY_OF_MONTH);
+            dateOfBirthCalendar.set(yy, mm, dd);
+            age.setText(String.valueOf(App.getDiffYears(dateOfBirthCalendar.getTime(), new Date())));
 
-            Boolean futureDate = false;
-            if (yy > year)
-                futureDate = true;
-            else if (mm > month)
-                futureDate = true;
-            else if (dd > day)
-                futureDate = true;
-
-            if (!futureDate) {
-                dateOfBirthCalendar.set(yy, mm, dd);
-                dob.setText(String.valueOf(dateOfBirthCalendar.get(Calendar.DAY_OF_MONTH)) + "-" + (new SimpleDateFormat("MMM").format(dateOfBirthCalendar.getTime())) + "-" + String.valueOf(dateOfBirthCalendar.get(Calendar.YEAR)));
-                age.setText(String.valueOf(App.getDiffYears(dateOfBirthCalendar.getTime(), new Date())));
-            }
         }
     }
 

@@ -9,12 +9,16 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,9 +33,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     EditText password;
     Button loginButton;
     CheckBox offlineCheckBox;
+    String usernameTemp = "";
+    String passwordTemp = "";
+    private ServerService serverService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        serverService = new ServerService(getApplicationContext());
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -48,6 +57,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         String titleText = getResources().getString(R.string.app_name) + " - " + App.getVersion();
         getSupportActionBar().setTitle(titleText);
+
+        username.setText(App.getUsername());
 
         loading = new ProgressDialog(this);
     }
@@ -85,9 +96,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (!validate()) {
 
             // Authenticate from server
-            AsyncTask<String, String, Boolean> authenticationTask = new AsyncTask<String, String, Boolean>() {
+            AsyncTask<String, String, String> authenticationTask = new AsyncTask<String, String, String>() {
                 @Override
-                protected Boolean doInBackground(String... params) {
+                protected String doInBackground(String... params) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -99,19 +110,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         }
                     });
 
+                    usernameTemp = App.getUsername();
+                    passwordTemp = App.getPassword();
+
+                    App.setUsername(App.get(username));
+                    App.setPassword(App.get(password));
+
                    /* if ((App.isOfflineMode ()) || (App.get (username).equalsIgnoreCase (defaultUser) && App.get (password).equals (defaultPassword)))
                         return true;*/
 
-                   /* boolean exists = serverService.checkOrGetCurrentUser ();
-                    return exists;*/
+                    String result = serverService.getUser();
+                    return result;
 
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                    return true;
                 }
 
                 @Override
@@ -121,11 +131,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 ;
 
                 @Override
-                protected void onPostExecute(Boolean result) {
+                protected void onPostExecute(String result) {
                     super.onPostExecute(result);
                     loading.dismiss();
-                    if (result) {
-                        //serverService.setCurrentUser (App.get (username));
+                    if (result.equals("SUCCESS")) {
 
                         // Save username and password in preferences
                         App.setUsername(App.get(username));
@@ -144,18 +153,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();
-                    } else {
-                        /*App.setUsername ("");
-                        App.setPassword ("");
-                        Toast toast = Toast.makeText (LoginActivity.this, getResources ().getString (R.string.authentication_error), App.getDelay ());
+                    } else if (result.equals("AUTHENTICATION_ERROR")) {
+                        App.setUsername(usernameTemp);
+                        App.setPassword(passwordTemp);
+                        password.setText("");
+                        Toast toast = Toast.makeText(LoginActivity.this, getResources().getString(R.string.authentication_error), Toast.LENGTH_LONG);
                         toast.setGravity (Gravity.CENTER, 0, 0);
-                        toast.show ();*/
+                        toast.show();
+                    } else if (result.equals("CONNECTION_ERROR")) {
+                        App.setUsername(usernameTemp);
+                        App.setPassword(passwordTemp);
+                        password.setText("");
+                        Toast toast = Toast.makeText(LoginActivity.this, getResources().getString(R.string.data_connection_error), Toast.LENGTH_LONG);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
                     }
                 }
             };
             authenticationTask.execute("");
-
-
         }
 
     }

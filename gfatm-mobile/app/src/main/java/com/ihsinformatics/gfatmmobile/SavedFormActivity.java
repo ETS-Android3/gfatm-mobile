@@ -1,9 +1,12 @@
 package com.ihsinformatics.gfatmmobile;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -16,6 +19,8 @@ import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
+import java.util.ArrayList;
+
 /**
  * A login screen that offers login via email/password.
  */
@@ -25,22 +30,19 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
     protected ImageView emailIcon;
     protected ImageView deleteIcon;
 
-    protected TextView pmdtTextView;
-    protected LinearLayout pmdtLinearLayout;
-    protected TextView petTextView;
-    protected LinearLayout petLinearLayout;
-    protected TextView fastTextView;
-    protected LinearLayout fastLinearLayout;
-    protected TextView comorbiditiesTextView;
-    protected LinearLayout comorbiditiesLinearLayout;
-    protected TextView childhoodtbTextView;
-    protected LinearLayout childhoodtbLinearLayout;
+    protected TextView programName;
+    protected LinearLayout contentLinearLayout;
+
+    ArrayList<CheckBox> checkBoxes = new ArrayList<CheckBox>();
+    ServerService serverService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.saved_form);
+
+        serverService = new ServerService(getApplicationContext());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -59,16 +61,8 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
         emailIcon.setOnTouchListener(this);
         deleteIcon.setOnTouchListener(this);
 
-        pmdtTextView = (TextView) findViewById(R.id.pmdt);
-        pmdtLinearLayout = (LinearLayout) findViewById(R.id.pmdtlayout);
-        petTextView = (TextView) findViewById(R.id.pet);
-        petLinearLayout = (LinearLayout) findViewById(R.id.petlayout);
-        fastTextView = (TextView) findViewById(R.id.fast);
-        fastLinearLayout = (LinearLayout) findViewById(R.id.fastlayout);
-        comorbiditiesTextView = (TextView) findViewById(R.id.comorbidities);
-        comorbiditiesLinearLayout = (LinearLayout) findViewById(R.id.comorbiditieslayout);
-        childhoodtbTextView = (TextView) findViewById(R.id.childhoodtb);
-        childhoodtbLinearLayout = (LinearLayout) findViewById(R.id.childhoodtblayout);
+        programName = (TextView) findViewById(R.id.program);
+        contentLinearLayout = (LinearLayout) findViewById(R.id.content);
 
         fillList();
 
@@ -88,42 +82,41 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
 
     public void fillList() {
 
-        ServerService serverService = new ServerService(getApplicationContext());
-        final Object[][] forms = serverService.getSavedForms(App.getUsername());
+        checkBoxes.clear();
+        contentLinearLayout.removeAllViews();
 
-        pmdtLinearLayout.setVisibility(View.GONE);
-        pmdtLinearLayout.removeAllViews();
-        petLinearLayout.setVisibility(View.GONE);
-        petLinearLayout.removeAllViews();
-        fastLinearLayout.setVisibility(View.GONE);
-        fastLinearLayout.removeAllViews();
-        comorbiditiesLinearLayout.setVisibility(View.GONE);
-        comorbiditiesLinearLayout.removeAllViews();
-        childhoodtbLinearLayout.setVisibility(View.GONE);
-        childhoodtbLinearLayout.removeAllViews();
+        final Object[][] forms = serverService.getSavedForms(App.getUsername(), App.getProgram());
 
-        for (int i = 0; i < forms.length; i++) {
+        programName.setText(App.getProgram());
 
-            LinearLayout verticalLayout = new LinearLayout(getApplicationContext());
-            verticalLayout.setOrientation(LinearLayout.VERTICAL);
-            verticalLayout.setPadding(10, 20, 10, 20);
+        if (forms == null || forms.length == 0) {
+            final TextView text = new TextView(this);
+            text.setText(getResources().getString(R.string.no_saved_form));
+            text.setTextSize(getResources().getDimension(R.dimen.small));
+            contentLinearLayout.addView(text);
+        } else {
 
-            LinearLayout linearLayout = new LinearLayout(getApplicationContext());
-            linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-            linearLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
-            linearLayout.setDividerDrawable(getResources().getDrawable(R.drawable.divider));
+            for (int i = 0; i < forms.length; i++) {
 
-            final LinearLayout moreLayout = new LinearLayout(getApplicationContext());
-            moreLayout.setOrientation(LinearLayout.VERTICAL);
+                LinearLayout verticalLayout = new LinearLayout(getApplicationContext());
+                verticalLayout.setOrientation(LinearLayout.VERTICAL);
+                verticalLayout.setPadding(10, 20, 10, 20);
 
-            final int color = App.getColor(this, R.attr.colorPrimaryDark);
+                LinearLayout linearLayout = new LinearLayout(getApplicationContext());
+                linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+                linearLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
+                linearLayout.setDividerDrawable(getResources().getDrawable(R.drawable.divider));
 
-            if (String.valueOf(forms[i][1]).equalsIgnoreCase(getResources().getString(R.string.pmdt))) {
+                final LinearLayout moreLayout = new LinearLayout(getApplicationContext());
+                moreLayout.setOrientation(LinearLayout.VERTICAL);
 
-            } else if (String.valueOf(forms[i][1]).equalsIgnoreCase(getResources().getString(R.string.pet))) {
+                final int color = App.getColor(this, R.attr.colorPrimaryDark);
+                final int color1 = App.getColor(this, R.attr.colorAccent);
 
                 CheckBox selection = new CheckBox(this);
                 linearLayout.addView(selection);
+                selection.setTag(String.valueOf(forms[i][0]));
+                checkBoxes.add(selection);
 
                 final TextView text = new TextView(this);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
@@ -176,9 +169,9 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
                 ll1.setOrientation(LinearLayout.HORIZONTAL);
 
                 TextView tv = new TextView(this);
-                tv.setText(getResources().getString(R.string.patient_id));
+                tv.setText(getResources().getString(R.string.patient_id) + " ");
                 tv.setTextSize(getResources().getDimension(R.dimen.small));
-                tv.setTextColor(color);
+                tv.setTextColor(color1);
                 ll1.addView(tv);
 
                 TextView tv1 = new TextView(this);
@@ -192,9 +185,9 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
                 ll2.setOrientation(LinearLayout.HORIZONTAL);
 
                 TextView tv2 = new TextView(this);
-                tv2.setText(getResources().getString(R.string.form_date));
+                tv2.setText(getResources().getString(R.string.form_date) + " ");
                 tv2.setTextSize(getResources().getDimension(R.dimen.small));
-                tv2.setTextColor(color);
+                tv2.setTextColor(color1);
                 ll2.addView(tv2);
 
                 TextView tv3 = new TextView(this);
@@ -208,9 +201,9 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
                 ll3.setOrientation(LinearLayout.HORIZONTAL);
 
                 TextView tv4 = new TextView(this);
-                tv4.setText(getResources().getString(R.string.time_stamp));
+                tv4.setText(getResources().getString(R.string.time_stamp) + " ");
                 tv4.setTextSize(getResources().getDimension(R.dimen.small));
-                tv4.setTextColor(color);
+                tv4.setTextColor(color1);
                 ll3.addView(tv4);
 
                 TextView tv5 = new TextView(this);
@@ -224,62 +217,10 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
                 moreLayout.setVisibility(View.GONE);
                 verticalLayout.addView(moreLayout);
 
-                petTextView.setVisibility(View.VISIBLE);
-                petLinearLayout.setVisibility(View.VISIBLE);
-                petLinearLayout.addView(verticalLayout);
+                contentLinearLayout.addView(verticalLayout);
 
-            } else if (String.valueOf(forms[i][1]).equalsIgnoreCase(getResources().getString(R.string.fast))) {
-
-            } else if (String.valueOf(forms[i][1]).equalsIgnoreCase(getResources().getString(R.string.comorbidities))) {
-
-            } else if (String.valueOf(forms[i][1]).equalsIgnoreCase(getResources().getString(R.string.childhood_tb))) {
 
             }
-
-        }
-
-        if (pmdtLinearLayout.getVisibility() == View.GONE) {
-
-            final TextView text = new TextView(this);
-            text.setText("No saved form found.");
-            text.setTextSize(getResources().getDimension(R.dimen.tiny));
-            pmdtLinearLayout.addView(text);
-            pmdtLinearLayout.setVisibility(View.VISIBLE);
-
-        }
-        if (petLinearLayout.getVisibility() == View.GONE) {
-
-            final TextView text = new TextView(this);
-            text.setText("No saved form found.");
-            text.setTextSize(getResources().getDimension(R.dimen.tiny));
-            petLinearLayout.addView(text);
-            petLinearLayout.setVisibility(View.VISIBLE);
-        }
-        if (fastLinearLayout.getVisibility() == View.GONE) {
-
-            final TextView text = new TextView(this);
-            text.setText("No saved form found.");
-            text.setTextSize(getResources().getDimension(R.dimen.tiny));
-            fastLinearLayout.addView(text);
-            fastLinearLayout.setVisibility(View.VISIBLE);
-        }
-        if (childhoodtbLinearLayout.getVisibility() == View.GONE) {
-
-            final TextView text = new TextView(this);
-            text.setText("No saved form found.");
-            text.setTextSize(getResources().getDimension(R.dimen.tiny));
-            childhoodtbLinearLayout.addView(text);
-            childhoodtbLinearLayout.setVisibility(View.VISIBLE);
-
-        }
-        if (comorbiditiesLinearLayout.getVisibility() == View.GONE) {
-
-            final TextView text = new TextView(this);
-            text.setText("No saved form found.");
-            text.setTextSize(getResources().getDimension(R.dimen.tiny));
-            comorbiditiesLinearLayout.addView(text);
-            comorbiditiesLinearLayout.setVisibility(View.VISIBLE);
-
         }
 
     }
@@ -289,9 +230,36 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN: {
                 ImageView view = (ImageView) v;
-                //overlay is black with transparency of 0x77 (119)
-                view.getDrawable().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
+                view.getDrawable().setColorFilter(getResources().getColor(R.color.dark_grey), PorterDuff.Mode.SRC_ATOP);
                 view.invalidate();
+
+                if (v == deleteIcon) {
+
+                    int color = App.getColor(SavedFormActivity.this, R.attr.colorAccent);
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(SavedFormActivity.this, R.style.dialog).create();
+                    alertDialog.setMessage(getString(R.string.warning_before_submit));
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.ic_submit);
+                    DrawableCompat.setTint(clearIcon, color);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_submit));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    deleteForms();
+                                }
+                            });
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                    alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
+
+                }
+
                 break;
             }
             case MotionEvent.ACTION_UP:
@@ -304,6 +272,16 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
             }
         }
         return true;
+    }
+
+    public void deleteForms() {
+        for (CheckBox cb : checkBoxes) {
+            if (cb.isChecked()) {
+                serverService.deleteForms(cb.getTag().toString());
+            }
+        }
+
+        fillList();
     }
 }
 

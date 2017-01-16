@@ -147,6 +147,13 @@ public abstract class AbstractFormActivity extends Fragment
         if (App.isLanguageRTL())
             navigationSeekbar.setRotation(180);
 
+        if (PAGE_COUNT == 1) {
+            firstButton.setVisibility(View.GONE);
+            lastButton.setVisibility(View.GONE);
+            nextButton.setVisibility(View.GONE);
+            navigationSeekbar.setVisibility(View.GONE);
+        }
+
         return mainContent;
     }
 
@@ -412,8 +419,10 @@ public abstract class AbstractFormActivity extends Fragment
                 ((TitledSpinner) v).getSpinner().selectDefaultValue();
             } else if (v instanceof MyEditText) {
                 ((MyEditText) v).setDefaultValue();
+                ((MyEditText) v).setError(null);
             } else if (v instanceof TitledEditText) {
                 ((TitledEditText) v).getEditText().setDefaultValue();
+                ((TitledEditText) v).getEditText().setError(null);
             } else if (v instanceof MyRadioGroup) {
                 ((MyRadioGroup) v).selectDefaultValue();
             } else if (v instanceof TitledRadioGroup) {
@@ -454,35 +463,20 @@ public abstract class AbstractFormActivity extends Fragment
             int dd = calendar.get(Calendar.DAY_OF_MONTH);
             DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, yy, mm, dd);
             dialog.getDatePicker().setTag(getArguments().getInt("type"));
-            dialog.getDatePicker().setMaxDate(new Date().getTime());
+            if (!getArguments().getBoolean("allowFutureDate", false))
+                dialog.getDatePicker().setMaxDate(new Date().getTime());
             return dialog;
         }
 
         @Override
         public void onDateSet(DatePicker view, int yy, int mm, int dd) {
 
-            Date date = new Date(view.getMaxDate());
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(date);
-            int year = cal.get(Calendar.YEAR);
-            int month = cal.get(Calendar.MONTH);
-            int day = cal.get(Calendar.DAY_OF_MONTH);
+            if (((int) view.getTag()) == DATE_DIALOG_ID)
+                formDateCalendar.set(yy, mm, dd);
+            else if (((int) view.getTag()) == SECOND_DATE_DIALOG_ID)
+                secondDateCalendar.set(yy, mm, dd);
+            updateDisplay();
 
-            Boolean futureDate = false;
-            if (yy > year)
-                futureDate = true;
-            else if (mm > month)
-                futureDate = true;
-            else if (dd > day)
-                futureDate = true;
-
-            if (!futureDate) {
-                if (((int) view.getTag()) == DATE_DIALOG_ID)
-                    formDateCalendar.set(yy, mm, dd);
-                else if (((int) view.getTag()) == SECOND_DATE_DIALOG_ID)
-                    secondDateCalendar.set(yy, mm, dd);
-                updateDisplay();
-            }
         }
     }
 

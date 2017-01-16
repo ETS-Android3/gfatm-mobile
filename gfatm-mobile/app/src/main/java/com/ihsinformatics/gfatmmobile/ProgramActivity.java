@@ -2,6 +2,7 @@ package com.ihsinformatics.gfatmmobile;
 
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -77,6 +78,8 @@ public class ProgramActivity extends AbstractSettingActivity {
                                     editor.putString(Preferences.PROGRAM, App.getProgram());
                                     editor.apply();
 
+                                    openLocationSelectionDialog();
+
                                     onBackPressed();
                                 }
                             });
@@ -97,6 +100,11 @@ public class ProgramActivity extends AbstractSettingActivity {
             }
         }
 
+    }
+
+    public void openLocationSelectionDialog() {
+        Intent languageActivityIntent = new Intent(this, LocationSelectionDialog.class);
+        startActivity(languageActivityIntent);
     }
 
 }

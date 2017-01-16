@@ -39,9 +39,12 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
     public static final String SSL_ENCRYPTION = "ssl";
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
+    public static final String USER_FULLNAME = "user_fullname";
     public static final String AUTO_LOGIN = "auto_login";
     public static final String LAST_LOGIN = "last_login";
     public static final String COMMUNICATION_MODE = "communication_mode";
+    public static final String LOCATION = "location";
+    public static final String LOCATION_LAST_UPDATE = "location_last_update";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +110,12 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
             App.setLastLogin(sharedPreferences.getString(key, ""));
         } else if (key.equals(COMMUNICATION_MODE)) {
             App.setCommunicationMode(sharedPreferences.getString(key, ""));
+        } else if (key.equals(USER_FULLNAME)) {
+            App.setUserFullName(sharedPreferences.getString(key, ""));
+        } else if (key.equals(LOCATION)) {
+            App.setLocation(sharedPreferences.getString(key, ""));
+        } else if (key.equals(LOCATION_LAST_UPDATE)) {
+            App.setLocationLastUpdate(sharedPreferences.getString(key, ""));
         }
 
 

@@ -45,6 +45,9 @@ public class StartActivity extends Activity {
         App.setAutoLogin(preferences.getString(Preferences.AUTO_LOGIN, ""));
         App.setLastLogin(preferences.getString(Preferences.LAST_LOGIN, ""));
         App.setCommunicationMode(preferences.getString(Preferences.COMMUNICATION_MODE, ""));
+        App.setUserFullName(preferences.getString(Preferences.USER_FULLNAME, ""));
+        App.setLocation(preferences.getString(Preferences.LOCATION, ""));
+        App.setLocationLastUpdate(preferences.getString(Preferences.LOCATION_LAST_UPDATE, ""));
         Locale locale = new Locale(preferences.getString(Preferences.LANGUAGE, "en").toLowerCase().substring(0, 2));
         Locale.setDefault(locale);
         Configuration config = new Configuration();
