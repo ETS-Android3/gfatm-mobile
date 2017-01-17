@@ -4,6 +4,8 @@ import android.os.StrictMode;
 import android.util.Base64;
 import android.util.Log;
 
+import com.ihsinformatics.gfatmmobile.App;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.StatusLine;
@@ -47,6 +49,7 @@ public class HttpGet {
     private static final String LOCATION_ATTRIBUTE_TYPE_RESOURCE = "locationattributetype";
     private static final String LOCATION_TAG = "locationtag";
     private static final String ENCOUNTER_TYPE_PARAM = "encounterType";
+    private static final String UUID = "uuid";
     Properties properties = new Properties();
     private boolean early = true;
     private String serverAdress = "";
@@ -75,7 +78,7 @@ public class HttpGet {
             //    String password = properties.getProperty(PropertyName.OPENMRS_PASSWORD);
             request = new org.apache.http.client.methods.HttpGet(requestUri);
             auth = Base64.encodeToString(
-                    ("admin" + ":" + "Admin123").getBytes("UTF-8"),
+                    (App.getUsername() + ":" + App.getPassword()).getBytes("UTF-8"),
                     Base64.NO_WRAP);
             request.addHeader("Authorization", "Basic " + auth);
             HttpClient client = new DefaultHttpClient();
@@ -183,6 +186,18 @@ public class HttpGet {
         return get(requestUri, condition, resourceName);
     }
 
+    private JSONArray getCustomJsonArray(String resourceName, String variable, String value) {
+        JSONArray jsonArray = null;
+        try {
+            String requestUri = "http://" + serverAdress + "/openmrs/ws/rest/v1/patient?v=custom:(uuid)&q=" + value + "";
+            JSONObject obj = get(requestUri);
+            jsonArray = obj.getJSONArray("results");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return jsonArray;
+    }
+
     private JSONArray getJSONArray(String resourceName) {
         JSONArray jsonArray = null;
         try {
@@ -227,6 +242,10 @@ public class HttpGet {
 
     public JSONObject getPersonByName(String content) {
         return getJsonObjectByName(PERSON_RESOURCE, content);
+    }
+
+    public JSONObject getUserByName(String content) {
+        return getJsonObjectByName(USER_RESOURCE, content);
     }
 
     public JSONObject getPatientByName(String content) {
@@ -385,6 +404,10 @@ public class HttpGet {
         return getJSONArray(LOCATION_ATTRIBUTE_TYPE_RESOURCE);
     }
 
+    public JSONArray getAllLocations() {
+        return getJSONArray(LOCATION_RESOURCE);
+    }
+
     public JSONArray getAllLocationTags() {
         return getJSONArray(LOCATION_TAG);
     }
@@ -400,4 +423,9 @@ public class HttpGet {
     public JSONArray getAllObservationsByEncounter(String encounter) {
         return getJSONArray(OBSERVATION_RESOURCE, ENCOUNTER_RESOURCE, encounter);
     }
+
+    public JSONArray getPatientUuidByPatientId(String patientId) {
+        return getCustomJsonArray(PATIENT_RESOURCE, UUID, patientId);
+    }
+
 }

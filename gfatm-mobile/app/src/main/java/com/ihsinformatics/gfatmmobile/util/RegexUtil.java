@@ -39,7 +39,7 @@ public class RegexUtil {
     public static final int idLength = 7;
     public static final int mobileNumberLength = 11;
     public static final int defaultEditTextLength = 50;
-    public static final InputFilter FloatFilter = new InputFilter() {
+    public static final InputFilter floatFilter = new InputFilter() {
 
         @Override
         public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
@@ -54,7 +54,7 @@ public class RegexUtil {
 
         }
     };
-    public static final InputFilter AlphaFilter = new InputFilter() {
+    public static final InputFilter alphaFilter = new InputFilter() {
 
         @Override
         public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
@@ -69,7 +69,7 @@ public class RegexUtil {
 
         }
     };
-    public static final InputFilter NumericFilter = new InputFilter() {
+    public static final InputFilter numericFilter = new InputFilter() {
 
         @Override
         public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
@@ -84,7 +84,7 @@ public class RegexUtil {
 
         }
     };
-    public static final InputFilter IdFilter = new InputFilter() {
+    public static final InputFilter idFilter = new InputFilter() {
 
         @Override
         public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
@@ -92,14 +92,14 @@ public class RegexUtil {
             if (source.equals("")) { // for backspace
                 return source;
             }
-            if (source.toString().matches("^[-0-9]+")) {
+            if (source.toString().matches("^[-A-Za-z0-9]+")) {
                 return source;
             }
             return "";
 
         }
     };
-    public static final InputFilter ERNSFilter = new InputFilter() {
+    public static final InputFilter ernsFilter = new InputFilter() {
 
         @Override
         public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
