@@ -15,5 +15,7 @@ public class Metadata {
 
     public static final String FORMS = "FORMS";
     public static final String FORMS_VALUE = "FORMS_VALUE";
+    public static final String LOCATION = "LOCATION";
+    public static final String USERS = "USERS";
 
 }

@@ -1,15 +1,12 @@
 package com.ihsinformatics.gfatmmobile.shared;
 
-import android.app.Activity;
-
-import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
+import java.io.Serializable;
 
 /**
  * Created by Rabbia on 11/20/2016.
  */
 
-public class FormsObject {
-
+public class FormsObject implements Serializable {
 
     private String name;
     private Class<?> className;
