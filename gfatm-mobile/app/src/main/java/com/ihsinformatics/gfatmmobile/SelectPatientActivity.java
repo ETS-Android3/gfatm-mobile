@@ -3,13 +3,16 @@ package com.ihsinformatics.gfatmmobile;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -36,6 +39,8 @@ import java.util.Date;
 import java.util.Locale;
 
 public class SelectPatientActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
+
+    protected static ProgressDialog loading;
 
     Calendar dateOfBirthCalendar;
     DialogFragment dobFragment;
@@ -69,6 +74,8 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.select_patient);
+        loading = new ProgressDialog(this);
+
         serverService = new ServerService(getApplicationContext());
 
         cancelButton = (TextView) findViewById(R.id.cancelButton);
@@ -226,6 +233,56 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
             setTitle(getResources().getString(R.string.title_create_new_patient));
         } else if (v == createButton) {
             if(createPatientValidate()){
+
+                // serverService.createPatient();
+
+                AsyncTask<String, String, String> createPatientTask = new AsyncTask<String, String, String>() {
+                    @Override
+                    protected String doInBackground(String... params) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                loading.setInverseBackgroundForced(true);
+                                loading.setIndeterminate(true);
+                                loading.setCancelable(false);
+                                loading.setMessage(getResources().getString(R.string.signing_in));
+                                loading.show();
+                            }
+                        });
+
+                        String id = App.get(createPatientId);
+
+                        ContentValues values = new ContentValues();
+                        values.put("patientId", "96225-8");
+                        values.put("patientId", "96225-8");
+                        values.put("patientId", "96225-8");
+
+
+                        String result = serverService.createPatient(values);
+
+                        return result;
+
+                    }
+
+                    @Override
+                    protected void onProgressUpdate(String... values) {
+                    }
+
+                    ;
+
+                    @Override
+                    protected void onPostExecute(String result) {
+                        super.onPostExecute(result);
+                        loading.dismiss();
+
+                        if (result.equals("DUPLICATE")) {
+                            createPatientId.setError(getResources().getString(R.string.duplicate_patient_id));
+                        }
+
+
+                    }
+                };
+                createPatientTask.execute("");
 
             }
         }
