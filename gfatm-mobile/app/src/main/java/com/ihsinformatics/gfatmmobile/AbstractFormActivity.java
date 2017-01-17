@@ -412,11 +412,13 @@ public abstract class AbstractFormActivity extends Fragment
     }
 
     public void resetViews() {
+
         for (View v : views) {
             if (v instanceof MySpinner) {
                 ((MySpinner) v).selectDefaultValue();
             } else if (v instanceof TitledSpinner) {
                 ((TitledSpinner) v).getSpinner().selectDefaultValue();
+                ((TitledEditText) v).getQuestionView().setError(null);
             } else if (v instanceof MyEditText) {
                 ((MyEditText) v).setDefaultValue();
                 ((MyEditText) v).setError(null);
@@ -427,8 +429,10 @@ public abstract class AbstractFormActivity extends Fragment
                 ((MyRadioGroup) v).selectDefaultValue();
             } else if (v instanceof TitledRadioGroup) {
                 ((TitledRadioGroup) v).getRadioGroup().selectDefaultValue();
+                ((TitledRadioGroup) v).getQuestionView().setError(null);
             } else if (v instanceof TitledCheckBoxes) {
                 ((TitledCheckBoxes) v).selectDefaultValue();
+                ((TitledCheckBoxes) v).getQuestionView().setError(null);
             } else if (v instanceof MyCheckBox) {
                 ((MyCheckBox) v).setDefaultValue();
             }
@@ -463,8 +467,10 @@ public abstract class AbstractFormActivity extends Fragment
             int dd = calendar.get(Calendar.DAY_OF_MONTH);
             DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, yy, mm, dd);
             dialog.getDatePicker().setTag(getArguments().getInt("type"));
-            if (!getArguments().getBoolean("allowFutureDate", false))
+            if (!getArguments().getBoolean("allowFutureDate", false) && getArguments().getInt("type") == DATE_DIALOG_ID)
                 dialog.getDatePicker().setMaxDate(new Date().getTime());
+            else if (!getArguments().getBoolean("allowFutureDate", false))
+                dialog.getDatePicker().setMaxDate(formDateCalendar.getTimeInMillis());
             return dialog;
         }
 
