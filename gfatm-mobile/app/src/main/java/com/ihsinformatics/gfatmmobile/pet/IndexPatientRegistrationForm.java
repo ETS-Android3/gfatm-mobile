@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -59,6 +61,9 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity implement
     TitledCheckBoxes treatmentRegimen2;
     TitledButton treatmentEnrollmentDate;
 
+    Snackbar snackbar;
+    ScrollView scrollView;
+
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
      *
@@ -89,29 +94,31 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity implement
 
         if (App.isLanguageRTL()) {
             for (int i = PAGE_COUNT - 1; i >= 0; i--) {
-                LinearLayout layout = new LinearLayout(mainContent.getContext());
+                LinearLayout layout = new LinearLayout(context);
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
 
                     View v = viewGroups[i][j];
                     layout.addView(v);
                 }
-                ScrollView scrollView = new ScrollView(mainContent.getContext());
+                scrollView = new ScrollView(context);
                 scrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+                scrollView.setScrollbarFadingEnabled(false);
                 scrollView.addView(layout);
                 groups.add(scrollView);
             }
         } else {
             for (int i = 0; i < PAGE_COUNT; i++) {
-                LinearLayout layout = new LinearLayout(mainContent.getContext());
+                LinearLayout layout = new LinearLayout(context);
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
 
                     View v = viewGroups[i][j];
                     layout.addView(v);
                 }
-                ScrollView scrollView = new ScrollView(mainContent.getContext());
+                scrollView = new ScrollView(context);
                 scrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+                scrollView.setScrollbarFadingEnabled(false);
                 scrollView.addView(layout);
                 groups.add(scrollView);
             }
@@ -132,8 +139,11 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity implement
         formDate.setTag("formDate");
         husbandName = new TitledEditText(context, null, getResources().getString(R.string.pet_father_husband_name), "", "", 20, RegexUtil.alphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         husbandName.setTag("husbandName");
+        husbandName.setFocusableInTouchMode(true);
         indexExternalPatientId = new TitledEditText(context, null, getResources().getString(R.string.pet_index_patient_external_id), "", "", 20, RegexUtil.alphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        indexExternalPatientId.setFocusableInTouchMode(true);
         ernsNumber = new TitledEditText(context, null, getResources().getString(R.string.pet_erns_number), "", "", RegexUtil.idLength, RegexUtil.ernsFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        ernsNumber.setFocusableInTouchMode(true);
         tbType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_tb_type), getResources().getStringArray(R.array.pet_tb_types), getResources().getString(R.string.pet_ptb), App.HORIZONTAL, App.VERTICAL, true);
         infectionType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_infection_type), getResources().getStringArray(R.array.pet_infection_types), getResources().getString(R.string.pet_dstb), App.HORIZONTAL, App.VERTICAL, true);
         dstAvailable = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_dst_available), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true);
@@ -146,7 +156,7 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity implement
         regimenlinearLayout.addView(treatmentRegimen1);
         treatmentRegimen2 = new TitledCheckBoxes(context, null, "", getResources().getStringArray(R.array.pet_treatment_regimens_2), null, App.VERTICAL, App.VERTICAL);
         regimenlinearLayout.addView(treatmentRegimen2);
-        treatmentEnrollmentDate = new TitledButton(context, null, getResources().getString(R.string.pet_treatment_enrollement), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.VERTICAL);
+        treatmentEnrollmentDate = new TitledButton(context, null, getResources().getString(R.string.pet_treatment_enrollment), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.VERTICAL);
 
         views = new View[]{formDate.getButton(), husbandName.getEditText(), indexExternalPatientId.getEditText(), ernsNumber.getEditText(),
                 tbType.getRadioGroup(), infectionType.getRadioGroup(), dstAvailable.getRadioGroup(), resistanceType.getRadioGroup(),
@@ -160,6 +170,12 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity implement
         formDate.getButton().setOnClickListener(this);
         treatmentEnrollmentDate.getButton().setOnClickListener(this);
         dstAvailable.getRadioGroup().setOnCheckedChangeListener(this);
+        for (CheckBox cb : treatmentRegimen1.getCheckedBoxes())
+            cb.setOnCheckedChangeListener(this);
+        for (CheckBox cb : treatmentRegimen2.getCheckedBoxes())
+            cb.setOnCheckedChangeListener(this);
+        for (CheckBox cb : dstPattern.getCheckedBoxes())
+            cb.setOnCheckedChangeListener(this);
 
         ArrayList<RadioButton> rbs = resistanceType.getRadioGroup().getButtons();
 
@@ -177,12 +193,19 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity implement
     @Override
     public void updateDisplay() {
 
+        if (snackbar != null)
+            snackbar.dismiss();
+
         if (!formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString())) {
 
-            if (formDateCalendar.after(new Date())) {
+            Date date = App.stringToDate(formDate.getButton().getText().toString(), "dd-MMM-yyyy");
 
-                Date date = App.stringToDate(formDate.getButton().getText().toString(), "dd-MMM-yyyy");
+            if (formDateCalendar.after(date)) {
+
                 formDateCalendar = App.getCalendar(date);
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
 
             } else
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
@@ -190,23 +213,29 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity implement
         }
 
         if (secondDateCalendar.after(formDateCalendar)) {
-            secondDateCalendar = formDateCalendar;
-            treatmentEnrollmentDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+            treatmentEnrollmentDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+            Date date = App.stringToDate(formDate.getButton().getText().toString(), "dd-MMM-yyyy");
+            secondDateCalendar = App.getCalendar(date);
+
         }
 
-        /*if(!treatmentEnrollmentDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString())){
+        if (!treatmentEnrollmentDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString())) {
 
-            if(secondDateCalendar.after(formDateCalendar)){
+            Date date = App.stringToDate(formDate.getButton().getText().toString(), "dd-MMM-yyyy");
 
-                Date date = App.stringToDate(treatmentEnrollmentDate.getButton().getText().toString(),"dd-MMM-yyyy");
-                secondDateCalendar = App.getCalendar(date);
+            if (secondDateCalendar.after(date)) {
 
-            }else
+                Date secondDate = App.stringToDate(treatmentEnrollmentDate.getButton().getText().toString(), "dd-MMM-yyyy");
+                secondDateCalendar = App.getCalendar(secondDate);
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.pet_enrollment_date_future), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+            } else
                 treatmentEnrollmentDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
 
-        }*/
-
-
+        }
 
     }
 
@@ -214,48 +243,85 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity implement
     public boolean validate() {
 
         Boolean error = false;
+        View view = null;
 
-      /*  View current = getActivity().getCurrentFocus();
-        if (current != null) current.clearFocus();*/
-
-        if (App.get(dstAvailable).isEmpty()) {
-            dstAvailable.getQuestionView().setError(getResources().getString(R.string.mandatory_field));
-            dstAvailable.getRadioGroup().requestFocus();
+        Boolean flag = false;
+        for (CheckBox cb : treatmentRegimen1.getCheckedBoxes()) {
+            if (cb.isChecked()) {
+                flag = true;
+                break;
+            }
+        }
+        if (!flag) {
+            for (CheckBox cb : treatmentRegimen2.getCheckedBoxes()) {
+                if (cb.isChecked()) {
+                    flag = true;
+                    break;
+                }
+            }
+        }
+        if (!flag) {
+            treatmentRegimen1.getQuestionView().setError(getString(R.string.empty_field));
+            treatmentRegimen1.getQuestionView().requestFocus();
+            view = regimenlinearLayout;
             error = true;
         }
 
-        if (App.get(patientType).isEmpty()) {
-            patientType.getQuestionView().setError(getResources().getString(R.string.mandatory_field));
-            patientType.getRadioGroup().requestFocus();
-            error = true;
+
+        flag = false;
+        if (dstPattern.getVisibility() == View.VISIBLE) {
+            for (CheckBox cb : dstPattern.getCheckedBoxes()) {
+                if (cb.isChecked()) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) {
+                dstPattern.getQuestionView().setError(getString(R.string.empty_field));
+                dstPattern.getQuestionView().requestFocus();
+                view = dstPattern;
+                error = true;
+            }
         }
 
         if (App.get(ernsNumber).isEmpty()) {
             ernsNumber.getEditText().setError(getString(R.string.empty_field));
             ernsNumber.getEditText().requestFocus();
             error = true;
-        }
+        } else
+            ernsNumber.clearFocus();
 
         if (App.get(husbandName).isEmpty()) {
             husbandName.getEditText().setError(getString(R.string.empty_field));
             husbandName.getEditText().requestFocus();
             error = true;
-        }
+        } else
+            husbandName.clearFocus();
+
+        indexExternalPatientId.clearFocus();
 
         if (error) {
 
-            // int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
-
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
-            alertDialog.setTitle(getString(R.string.form_error));
-            alertDialog.setMessage(getResources().getString(R.string.mandatory_value_missing));
+            final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+            alertDialog.setMessage(getResources().getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             // DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_error));
+            final View finalView = view;
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
+                            scrollView.post(new Runnable() {
+                                public void run() {
+                                    if (finalView != null) {
+                                        scrollView.scrollTo(0, finalView.getTop());
+                                        husbandName.clearFocus();
+                                        indexExternalPatientId.clearFocus();
+                                        ernsNumber.clearFocus();
+                                    }
+                                }
+                            });
                             try {
                                 InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
@@ -267,19 +333,14 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity implement
                     });
             alertDialog.show();
             return false;
-        }
-
-        return true;
+        } else
+            return true;
     }
 
     @Override
     public boolean submit() {
 
-        if (validate()) {
-
-            resetViews();
-        }
-
+        resetViews();
         return false;
     }
 
@@ -311,8 +372,8 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity implement
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             args.putBoolean("allowFutureDate", false);
-            formDateFragment.setArguments(args);
-            formDateFragment.show(getFragmentManager(), "DatePicker");
+            secondDateFragment.setArguments(args);
+            secondDateFragment.show(getFragmentManager(), "DatePicker");
         }
 
     }
@@ -330,11 +391,44 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity implement
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
+        Boolean flag = false;
+        for (CheckBox cb : dstPattern.getCheckedBoxes()) {
+            if (cb.isChecked()) {
+                flag = true;
+                break;
+            }
+        }
+        if (flag) {
+            dstPattern.getQuestionView().setError(null);
+        }
+
+        flag = false;
+        for (CheckBox cb : treatmentRegimen1.getCheckedBoxes()) {
+            if (cb.isChecked()) {
+                flag = true;
+                break;
+            }
+        }
+        if (!flag) {
+            for (CheckBox cb : treatmentRegimen2.getCheckedBoxes()) {
+                if (cb.isChecked()) {
+                    flag = true;
+                    break;
+                }
+            }
+        }
+        if (flag) {
+            treatmentRegimen1.getQuestionView().setError(null);
+        }
+
     }
 
     @Override
     public void resetViews() {
         super.resetViews();
+
+        if (snackbar != null)
+            snackbar.dismiss();
 
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         treatmentEnrollmentDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
@@ -410,7 +504,7 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity implement
 
                 }
 
-                dstPattern.setVisibility(View.GONE);
+                dstPattern.setVisibility(View.VISIBLE);
 
             }
 
