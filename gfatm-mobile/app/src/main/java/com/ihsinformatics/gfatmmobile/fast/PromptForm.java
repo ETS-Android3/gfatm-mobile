@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
@@ -25,18 +24,14 @@ import android.widget.ScrollView;
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.R;
-import com.ihsinformatics.gfatmmobile.custom.MyEditText;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
-import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
-import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -48,14 +43,13 @@ public class PromptForm extends AbstractFormActivity implements RadioGroup.OnChe
 
     // Views...
     TitledButton formDate;
-    MyTextView testing_of_presumptive_patients_title;
-    TitledEditText due_date_sample;
-    TitledRadioGroup sputum_container_given;
+    MyTextView testingOfPresumptivePatientsTitle;
+    TitledEditText dueDateSample;
+    TitledRadioGroup sputumContainerGiven;
     TitledRadioGroup sputum_sample;
-    TitledRadioGroup reason_nosputum_sample;
-
-    TitledRadioGroup free_xray_voucher;
-    TitledRadioGroup no_xray_voucher;
+    TitledRadioGroup reasonNoSputumSample;
+    TitledRadioGroup freeXrayVoucher;
+    TitledRadioGroup noXrayVoucher;
 
 
     /**
@@ -127,40 +121,40 @@ public class PromptForm extends AbstractFormActivity implements RadioGroup.OnChe
 
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        testing_of_presumptive_patients_title = new MyTextView(context, getResources().getString(R.string.fast_testing_of_presumptive_patients));
-        testing_of_presumptive_patients_title.setTypeface(null, Typeface.BOLD);
-        sputum_container_given = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_a_sputum_container), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
+        testingOfPresumptivePatientsTitle = new MyTextView(context, getResources().getString(R.string.fast_testing_of_presumptive_patients));
+        testingOfPresumptivePatientsTitle.setTypeface(null, Typeface.BOLD);
+        sputumContainerGiven = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_a_sputum_container), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
         sputum_sample = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_produced_a_sputum_sample), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
-        reason_nosputum_sample = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_if_no_why_not), getResources().getStringArray(R.array.fast_if_no_why_not_list), getResources().getString(R.string.fast_patient_unable_to_expectorate), App.VERTICAL, App.VERTICAL);
-        reason_nosputum_sample.setVisibility(View.GONE);
-        due_date_sample = new TitledEditText(context, null, getResources().getString(R.string.fast_date_sputum_sample),getSputumDate(formDateCalendar), "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        due_date_sample.getEditText().setEnabled(false);
-        free_xray_voucher = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_given_free_chest_xray), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
-        no_xray_voucher = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_not_given_free_chest_xray), getResources().getStringArray(R.array.fast_not_given_free_list), getResources().getString(R.string.fast_presumptive_refused), App.VERTICAL, App.VERTICAL);
-        no_xray_voucher.setVisibility(View.GONE);
+        reasonNoSputumSample = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_if_no_why_not), getResources().getStringArray(R.array.fast_if_no_why_not_list), getResources().getString(R.string.fast_patient_unable_to_expectorate), App.VERTICAL, App.VERTICAL);
+        reasonNoSputumSample.setVisibility(View.GONE);
+        dueDateSample = new TitledEditText(context, null, getResources().getString(R.string.fast_date_sputum_sample),getSputumDate(formDateCalendar), "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        dueDateSample.getEditText().setEnabled(false);
+        freeXrayVoucher = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_given_free_chest_xray), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
+        noXrayVoucher = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_not_given_free_chest_xray), getResources().getStringArray(R.array.fast_not_given_free_list), getResources().getString(R.string.fast_presumptive_refused), App.VERTICAL, App.VERTICAL);
+        noXrayVoucher.setVisibility(View.GONE);
 
 
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), sputum_container_given.getRadioGroup(), sputum_sample.getRadioGroup(),
-                reason_nosputum_sample.getRadioGroup(), free_xray_voucher.getRadioGroup(), no_xray_voucher.getRadioGroup()};
+        views = new View[]{formDate.getButton(), sputumContainerGiven.getRadioGroup(), sputum_sample.getRadioGroup(),
+                reasonNoSputumSample.getRadioGroup(), freeXrayVoucher.getRadioGroup(), noXrayVoucher.getRadioGroup()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, testing_of_presumptive_patients_title, sputum_container_given, sputum_sample, reason_nosputum_sample, due_date_sample, free_xray_voucher, no_xray_voucher}};
+                {{formDate, testingOfPresumptivePatientsTitle, sputumContainerGiven, sputum_sample, reasonNoSputumSample, dueDateSample, freeXrayVoucher, noXrayVoucher}};
 
         formDate.getButton().setOnClickListener(this);
-        sputum_container_given.getRadioGroup().setOnCheckedChangeListener(this);
+        sputumContainerGiven.getRadioGroup().setOnCheckedChangeListener(this);
         sputum_sample.getRadioGroup().setOnCheckedChangeListener(this);
-        reason_nosputum_sample.getRadioGroup().setOnCheckedChangeListener(this);
-        free_xray_voucher.getRadioGroup().setOnCheckedChangeListener(this);
-        no_xray_voucher.getRadioGroup().setOnCheckedChangeListener(this);
+        reasonNoSputumSample.getRadioGroup().setOnCheckedChangeListener(this);
+        freeXrayVoucher.getRadioGroup().setOnCheckedChangeListener(this);
+        noXrayVoucher.getRadioGroup().setOnCheckedChangeListener(this);
     }
 
     @Override
     public void updateDisplay() {
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        due_date_sample.getEditText().setText(getSputumDate(formDateCalendar));
+        dueDateSample.getEditText().setText(getSputumDate(formDateCalendar));
     }
 
     private String getSputumDate(Calendar calendar){
@@ -274,27 +268,27 @@ public class PromptForm extends AbstractFormActivity implements RadioGroup.OnChe
 
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
-        if (radioGroup == sputum_container_given.getRadioGroup()) {
-            if (sputum_container_given.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+        if (radioGroup == sputumContainerGiven.getRadioGroup()) {
+            if (sputumContainerGiven.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
                 sputum_sample.setVisibility(View.VISIBLE);
                 if (sputum_sample.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))) {
-                    reason_nosputum_sample.setVisibility(View.VISIBLE);
+                    reasonNoSputumSample.setVisibility(View.VISIBLE);
                 }
             } else {
                 sputum_sample.setVisibility(View.GONE);
-                reason_nosputum_sample.setVisibility(View.GONE);
+                reasonNoSputumSample.setVisibility(View.GONE);
             }
         } else if (radioGroup == sputum_sample.getRadioGroup()) {
-            if (sputum_sample.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title)) && sputum_container_given.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
-                reason_nosputum_sample.setVisibility(View.GONE);
+            if (sputum_sample.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title)) && sputumContainerGiven.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+                reasonNoSputumSample.setVisibility(View.GONE);
             } else {
-                reason_nosputum_sample.setVisibility(View.VISIBLE);
+                reasonNoSputumSample.setVisibility(View.VISIBLE);
             }
-        } else if (radioGroup == free_xray_voucher.getRadioGroup()) {
-            if (free_xray_voucher.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
-                no_xray_voucher.setVisibility(View.GONE);
+        } else if (radioGroup == freeXrayVoucher.getRadioGroup()) {
+            if (freeXrayVoucher.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+                noXrayVoucher.setVisibility(View.GONE);
             } else {
-                no_xray_voucher.setVisibility(View.VISIBLE);
+                noXrayVoucher.setVisibility(View.VISIBLE);
             }
         }
     }

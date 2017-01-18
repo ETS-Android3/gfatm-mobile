@@ -29,16 +29,16 @@
     <string name="fast_tbclinicscreening_title">TB Clinic Screening</string>
     <string name="fast_gynaeobstetrics_title">Gynae/Obstetrics</string>
     <string name="fast_surgery_title">Surgery</string>
-    <string name="fast_er_title">ER</string>
+    <string name="fast_er_title">Emergency (ER)</string>
     <string name="fast_patient_title">Patient</string>
     <string name="fast_attendant_title">Attendant</string>
     <string name="fast_greater_title">&gt;= 15 years old</string>
-    <string name="fast_less_title">&lt; 15 years old</string>
+    <string name="fast_less_title">&lt;15 years old</string>
     <string name="fast_male_title">Male</string>
     <string name="fast_female_title">Female</string>
     <string name="fast_yes_title">Yes</string>
     <string name="fast_no_title">No</string>
-    <string name="fast_dont_know_title">Dont Know</string>
+    <string name="fast_dont_know_title">Don\'t Know</string>
     <string name="fast_refused_title">Refused</string>
     <string name="fast_is_this_patient_or_attendant">Is this person a patient or an attendant?</string>
     <string name="fast_speciality_patient_consult">If patient, which speciality is the patient here to consult with?</string>
@@ -82,14 +82,46 @@
     <string name="fast_patient_unable_to_expectorate">Patient unable to expectorate</string>
     <string name="fast_patient_refused">Patient refused</string>
     <string name="fast_presumptive_refused">Presumptive refused</string>
-
-
+    <string name="fast_identified_patient_through_screening">Have you identified this patient through screening?</string>
+    <string name="fast_source_of_patient_referral">What was the source of the patient\'s referral?</string>
+    <string name="fast_doctor_or_health_worker_within_the_hospital">By a doctor or health worker within the hospital</string>
+    <string name="fast_doctor_or_health_worker_outside_the_hospital">By a doctor or health worker outside of the hospital</string>
+    <string name="fast_self_referral">Self referral</string>
+    <string name="fast_contact_of_tb_patient">Patient is a contact of a TB patient</string>
+    <string name="fast_referred_after_xray_cad4tb">Patient referred after xray/high CAD4TB score</string>
+    <string name="fast_ward_title">Ward</string>
+    <string name="fast_opd_clinic">OPD Clinic</string>
+    <string name="fast_outside_hospital_was_patient_referred">Where outside the hospital was the patient referred from?</string>
+    <string name="fast_within_hospital_was_patient_referred">Where within the hospital was the patient referred from?</string>
+    <string name="fast_public_hospital">Public hospital</string>
+    <string name="fast_private_hospital">Private hospital</string>
+    <string name="fast_GP">GP</string>
+    <string name="fast_hospital_outside_of_karachi">Hospital outside of Karachi</string>
+    <string name="fast_radio">Radio</string>
+    <string name="fast_tv">TV</string>
+    <string name="fast_newspaper">Newspaper</string>
+    <string name="fast_billboard_signboards">Billboard/Signboards</string>
+    <string name="fast_internet">Internet</string>
+    <string name="fast_sms">SMS</string>
+    <string name="fast_from_a_friend_community">From a friend/Community member</string>
+    <string name="fast_community_camp">Community Camp</string>
+    <string name="fast_school_awareness_program">School Awareness Program</string>
+    <string name="fast_pamphlet">Pamphlet</string>
+    <string name="fast_work_place_awareness">Work Place Awareness</string>
+    <string name="fast_call_center">Call Center</string>
+    <string name="fast_patient_enrolled_in_any_tb_program">Is the TB contact of the patient enrolled in any TB program?</string>
+    <string name="fast_tb_contact_any_identifications_id">Does the TB contact have any of these identification IDs?</string>
+    <string name="fast_patient_id">Patient ID</string>
+    <string name="fast_external_id">External ID</string>
+    <string name="fast_tb_registeration_no">TB Registeration No</string>
+    <string name="fast_if_external_id_hospital_or_programs">If external ID, which hospital or programs ID is this?</string>
+    <string name="fast_which_opd_clinic_or_ward_has_patient_referred_from">Which OPD clinic or Ward has the patient been referred from?</string>
+    <string name="fast_where_did_you_hear_about_us">Where did you hear about us from?</string>
+    
     <string-array name="fast_locations">
         <item>@string/fast_community_title</item>
         <item>@string/fast_hospital_title</item>
     </string-array>
-
-
 
     <string-array name="fast_hospital_parts">
         <item>@string/fast_opdclinicscreening_title</item>
@@ -109,8 +141,7 @@
 
     <string-array name="fast_clinic_and_ward_list">
         <item>@string/fast_generalmedicinefilterclinic_title</item>
-        <item>@string/fast_chest_title</item>
-        <item>@string/fast_tbclinicscreening_title</item>
+        <item>@string/fast_chesttbclinic_title</item>
         <item>@string/fast_gynaeobstetrics_title</item>
         <item>@string/fast_surgery_title</item>
         <item>@string/fast_er_title</item>
@@ -178,5 +209,58 @@
     <string-array name="fast_not_given_free_list">
         <item>@string/fast_presumptive_refused</item>
         <item>@string/fast_other_title</item>
+    </string-array>
+
+    <string-array name="fast_source_of_patient_referral_list">
+        <item>@string/fast_doctor_or_health_worker_within_the_hospital</item>
+        <item>@string/fast_doctor_or_health_worker_outside_the_hospital</item>
+        <item>@string/fast_self_referral</item>
+        <item>@string/fast_contact_of_tb_patient</item>
+        <item>@string/fast_referred_after_xray_cad4tb</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+
+    <string-array name="fast_patient_reffered_from_list">
+        <item>@string/fast_ward_title</item>
+        <item>@string/fast_opd_clinic</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+
+    <string-array name="fast_opd_clinic_or_ward_patient_reffered_from_list">
+        <item>@string/fast_generalmedicinefilterclinic_title</item>
+        <item>@string/fast_chesttbclinic_title</item>
+        <item>@string/fast_gynaeobstetrics_title</item>
+        <item>@string/fast_surgery_title</item>
+        <item>@string/fast_er_title</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+
+    <string-array name="fast_outside_hospital_patient_reffered_from">
+        <item>@string/fast_public_hospital</item>
+        <item>@string/fast_private_hospital</item>
+        <item>@string/fast_GP</item>
+        <item>@string/fast_hospital_outside_of_karachi</item>
+    </string-array>
+
+    <string-array name="fast_hear_about_us_from_list">
+        <item>@string/fast_radio</item>
+        <item>@string/fast_tv</item>
+        <item>@string/fast_newspaper</item>
+        <item>@string/fast_billboard_signboards</item>
+        <item>@string/fast_internet</item>
+        <item>@string/fast_sms</item>
+        <item>@string/fast_from_a_friend_community</item>
+        <item>@string/fast_community_camp</item>
+        <item>@string/fast_school_awareness_program</item>
+        <item>@string/fast_pamphlet</item>
+        <item>@string/fast_work_place_awareness</item>
+        <item>@string/fast_call_center</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+    
+    <string-array name="fast_tb_contact_identification_list">
+        <item>@string/fast_patient_id</item>
+        <item>@string/fast_external_id</item>
+        <item>@string/fast_tb_registeration_no</item>
     </string-array>
 </resources>
