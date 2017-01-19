@@ -231,15 +231,85 @@ public class PatientLocationForm extends AbstractFormActivity implements RadioGr
     public boolean validate() {
         Boolean error = false;
 
-     /*   if (patient_consultation_other.getVisibility() == View.VISIBLE && App.get(patient_consultation_other).isEmpty()) {
+        if (facilitySectionOther.getVisibility() == View.VISIBLE && App.get(facilityDepartmentOther).isEmpty()) {
             if (App.isLanguageRTL())
-                gotoPage(2);
+                gotoPage(0);
             else
                 gotoPage(0);
-            patient_consultation_other.getEditText().setError(getString(R.string.empty_field));
-            patient_consultation_other.getEditText().requestFocus();
+            facilitySectionOther.getEditText().setError(getString(R.string.empty_field));
+            facilitySectionOther.getEditText().requestFocus();
             error = true;
-        }*/
+        }
+
+        if (otherReferral.getVisibility() == View.VISIBLE && App.get(otherReferral).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            otherReferral.getEditText().setError(getString(R.string.empty_field));
+            otherReferral.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (facilityDepartmentOther.getVisibility() == View.VISIBLE && App.get(facilityDepartmentOther).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            facilityDepartmentOther.getEditText().setError(getString(R.string.empty_field));
+            facilityDepartmentOther.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (referralWithinOpdOther.getVisibility() == View.VISIBLE && App.get(referralWithinOpd).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            referralWithinOpdOther.getEditText().setError(getString(R.string.empty_field));
+            referralWithinOpdOther.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (hearAboutUsOther.getVisibility() == View.VISIBLE && App.get(hearAboutUsOther).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            hearAboutUsOther.getEditText().setError(getString(R.string.empty_field));
+            hearAboutUsOther.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (contactPatientId.getVisibility() == View.VISIBLE && App.get(contactPatientId).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            contactPatientId.getEditText().setError(getString(R.string.empty_field));
+            contactPatientId.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (contactExternalId.getVisibility() == View.VISIBLE && App.get(contactExternalId).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            contactExternalId.getEditText().setError(getString(R.string.empty_field));
+            contactExternalId.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (contactTbRegisternationNo.getVisibility() == View.VISIBLE && App.get(contactTbRegisternationNo).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            contactTbRegisternationNo.getEditText().setError(getString(R.string.empty_field));
+            contactTbRegisternationNo.getEditText().requestFocus();
+            error = true;
+        }
 
         if (error) {
 
