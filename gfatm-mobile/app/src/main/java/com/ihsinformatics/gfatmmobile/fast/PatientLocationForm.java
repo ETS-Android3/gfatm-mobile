@@ -9,13 +9,16 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
@@ -63,8 +66,11 @@ public class PatientLocationForm extends AbstractFormActivity implements RadioGr
     TitledCheckBoxes contactIdType;
     TitledEditText contactPatientId;
     TitledEditText contactExternalId;
-    TitledEditText contactExternalIdHospital;
+    TitledSpinner contactExternalIdHospital;
     TitledEditText contactTbRegisternationNo;
+    CheckBox patientIdCheckbox;
+    CheckBox externalIdCheckbox;
+    CheckBox tbRegisterationNoCheckbbox;
 
 
     public View onCreateView(LayoutInflater inflater,
@@ -138,23 +144,28 @@ public class PatientLocationForm extends AbstractFormActivity implements RadioGr
         otherReferral = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         otherReferral.setVisibility(View.GONE);
         facilityDepartment = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_within_hospital_was_patient_referred), getResources().getStringArray(R.array.fast_patient_reffered_from_list), getResources().getString(R.string.fast_ward_title), App.VERTICAL, App.VERTICAL);
+        facilityDepartment.setVisibility(View.GONE);
         facilityDepartmentOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         facilityDepartmentOther.setVisibility(View.GONE);
-        referralWithinOpd = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_which_opd_clinic_or_ward_has_patient_referred_from), getResources().getStringArray(R.array.fast_source_of_patient_referral_list), getResources().getString(R.string.fast_generalmedicinefilterclinic_title), App.VERTICAL);
+        referralWithinOpd = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_which_opd_clinic_or_ward_has_patient_referred_from), getResources().getStringArray(R.array.fast_opd_clinic_or_ward_patient_reffered_from_list), getResources().getString(R.string.fast_generalmedicinefilterclinic_title), App.VERTICAL);
         referralWithinOpd.setVisibility(View.GONE);
         referralWithinOpdOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         referralWithinOpdOther.setVisibility(View.GONE);
         facilityType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_outside_hospital_was_patient_referred), getResources().getStringArray(R.array.fast_outside_hospital_patient_reffered_from), getResources().getString(R.string.fast_private_hospital), App.VERTICAL, App.VERTICAL);
         facilityType.setVisibility(View.GONE);
         hearAboutUs = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_where_did_you_hear_about_us), getResources().getStringArray(R.array.fast_hear_about_us_from_list), getResources().getString(R.string.fast_radio), App.VERTICAL);
+        hearAboutUs.setVisibility(View.GONE);
         hearAboutUsOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         hearAboutUsOther.setVisibility(View.GONE);
         contactReferral = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_enrolled_in_any_tb_program), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_no_title), App.VERTICAL, App.VERTICAL);
+        contactReferral.setVisibility(View.GONE);
         contactIdType = new TitledCheckBoxes(context, null, getResources().getString(R.string.fast_tb_contact_any_identifications_id), getResources().getStringArray(R.array.fast_tb_contact_identification_list), null, App.VERTICAL, App.VERTICAL);
         contactIdType.setVisibility(View.GONE);
         contactPatientId = new TitledEditText(context, null, getResources().getString(R.string.fast_patient_id), "", "", 6, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        contactPatientId.setVisibility(View.GONE);
         contactExternalId = new TitledEditText(context, null, getResources().getString(R.string.fast_external_id), "", "", 20, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        contactExternalIdHospital = new TitledEditText(context, null, getResources().getString(R.string.fast_if_external_id_hospital_or_programs), "", "", 50, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        contactExternalId.setVisibility(View.GONE);
+        contactExternalIdHospital = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_if_external_id_hospital_or_programs),getResources().getStringArray(R.array.fast_hear_about_us_from_list) ,getResources().getString(R.string.fast_radio), App.VERTICAL);
         contactExternalIdHospital.setVisibility(View.GONE);
         contactTbRegisternationNo = new TitledEditText(context, null, getResources().getString(R.string.fast_tb_registeration_no), "", "", 11, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         contactTbRegisternationNo.setVisibility(View.GONE);
@@ -163,7 +174,7 @@ public class PatientLocationForm extends AbstractFormActivity implements RadioGr
         views = new View[]{formDate.getButton(), facilitySection.getSpinner(), facilitySectionOther.getEditText(),
                 opdWardSection.getSpinner(), patientReferralSource.getSpinner(), otherReferral.getEditText(),
                 facilityDepartment.getRadioGroup(), facilityDepartmentOther.getEditText(), referralWithinOpd.getSpinner(), referralWithinOpdOther.getEditText(),
-                facilityType.getRadioGroup(), hearAboutUs.getSpinner(), hearAboutUsOther.getEditText(), contactReferral.getRadioGroup(), contactIdType, contactPatientId.getEditText(), contactExternalId.getEditText(), contactExternalIdHospital.getEditText(),
+                facilityType.getRadioGroup(), hearAboutUs.getSpinner(), hearAboutUsOther.getEditText(), contactReferral.getRadioGroup(), contactIdType, contactPatientId.getEditText(), contactExternalId.getEditText(), contactExternalIdHospital.getSpinner(),
                 contactTbRegisternationNo.getEditText()};
 
         // Array used to display views accordingly...
@@ -179,6 +190,36 @@ public class PatientLocationForm extends AbstractFormActivity implements RadioGr
         facilityType.getRadioGroup().setOnCheckedChangeListener(this);
         hearAboutUs.getSpinner().setOnItemSelectedListener(this);
         contactReferral.getRadioGroup().setOnCheckedChangeListener(this);
+
+
+        ArrayList<MyCheckBox> checkBoxList = contactIdType.getCheckedBoxes();
+        patientIdCheckbox = checkBoxList.get(0);
+        externalIdCheckbox = checkBoxList.get(1);
+        tbRegisterationNoCheckbbox = checkBoxList.get(2);
+
+        patientIdCheckbox.setOnCheckedChangeListener(this);
+        externalIdCheckbox.setOnCheckedChangeListener(this);
+        tbRegisterationNoCheckbbox.setOnCheckedChangeListener(this);
+
+        contactExternalId.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (!(charSequence.toString().equals("")) && contactIdType.getVisibility() == View.VISIBLE
+                        && externalIdCheckbox.isChecked()) {
+                    contactExternalIdHospital.setVisibility(View.VISIBLE);
+                } else {
+                    contactExternalIdHospital.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
     }
 
     @Override
@@ -298,6 +339,17 @@ public class PatientLocationForm extends AbstractFormActivity implements RadioGr
             }
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_doctor_or_health_worker_within_the_hospital)) && screening.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))) {
                 facilityDepartment.setVisibility(View.VISIBLE);
+                if (facilityDepartment.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_ward_title)) || facilityDepartment.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_opd_clinic))) {
+                    referralWithinOpd.setVisibility(View.VISIBLE);
+                    if (referralWithinOpd.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))) {
+                        referralWithinOpdOther.setVisibility(View.VISIBLE);
+                    } else {
+                        referralWithinOpdOther.setVisibility(View.GONE);
+                    }
+                } else {
+                    referralWithinOpd.setVisibility(View.GONE);
+                    referralWithinOpdOther.setVisibility(View.GONE);
+                }
             } else {
                 facilityDepartment.setVisibility(View.GONE);
             }
@@ -417,8 +469,14 @@ public class PatientLocationForm extends AbstractFormActivity implements RadioGr
                     patientReferralSource.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_doctor_or_health_worker_within_the_hospital))
                     && screening.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))) {
                 referralWithinOpd.setVisibility(View.VISIBLE);
+                if (referralWithinOpd.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))) {
+                    referralWithinOpdOther.setVisibility(View.VISIBLE);
+                } else {
+                    referralWithinOpdOther.setVisibility(View.GONE);
+                }
             } else {
                 referralWithinOpd.setVisibility(View.GONE);
+                referralWithinOpdOther.setVisibility(View.GONE);
             }
         } else if (radioGroup == contactReferral.getRadioGroup()) {
             if (contactReferral.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))
@@ -434,7 +492,29 @@ public class PatientLocationForm extends AbstractFormActivity implements RadioGr
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (buttonView == patientIdCheckbox && isChecked) {
+            contactPatientId.setVisibility(View.VISIBLE);
+        } else {
+            contactPatientId.setVisibility(View.GONE);
+        }
+
+        if (buttonView == externalIdCheckbox && isChecked) {
+            contactExternalId.setVisibility(View.VISIBLE);
+            if (contactExternalId.getEditText().getText().toString().equals("")) {
+                contactExternalIdHospital.setVisibility(View.GONE);
+            } else {
+                contactExternalIdHospital.setVisibility(View.VISIBLE);
+            }
+        } else {
+            contactExternalId.setVisibility(View.GONE);
+            contactExternalIdHospital.setVisibility(View.GONE);
+        }
+
+        if (buttonView == tbRegisterationNoCheckbbox && isChecked) {
+            contactTbRegisternationNo.setVisibility(View.VISIBLE);
+        }
     }
+
 
     @Override
     public void resetViews() {
