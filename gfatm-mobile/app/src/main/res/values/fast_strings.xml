@@ -117,7 +117,66 @@
     <string name="fast_if_external_id_hospital_or_programs">If external ID, which hospital or programs ID is this?</string>
     <string name="fast_which_opd_clinic_or_ward_has_patient_referred_from">Which OPD clinic or Ward has the patient been referred from?</string>
     <string name="fast_where_did_you_hear_about_us">Where did you hear about us from?</string>
-    
+    <string name="fast_day_was_the_sample_submitted">Which day was the sample submitted?</string>
+    <string name="fast_point_test_being_done">At what point is the test being done?</string>
+    <string name="fast_baseline_test_specify_patient_category">If baseline test, specify patient category</string>
+    <string name="fast_repeating_test_if_baseline_repeat">Reason for repeating test if Baseline repeat?</string>
+    <string name="fast_specimen_type">Specimen Type</string>
+    <string name="fast_specimen_come_from">Where did the specimen come from?</string>
+    <string name="fast_accepted_lab_technician">Sample Accepted by Lab Technician?</string>
+    <string name="fast_why_was_the_sample_rejected">Why was the sample rejected?</string>
+    <string name="fast_other_reason_for_rejection">Other reason for rejection?</string>
+    <string name="fast_cartridge_id">Cartridge ID</string>
+    <string name="fast_baseline_new">Baseline(New Test)</string>
+    <string name="fast_baseline_repeat">Baseline Repeat(Duplicate Test)</string>
+    <string name="fast_followup_test">Follow-up Test</string>
+    <string name="fast_category_1">Category I(New)</string>
+    <string name="fast_category_2">Category II(Re-treatment)</string>
+    <string name="fast_rif_resistant">Rif Resistant +ve</string>
+    <string name="fast_indeterminate">Indeterminate</string>
+    <string name="fast_error_invalid_no_result">Error/Invalid/No result</string>
+    <string name="fast_sputum">Sputum</string>
+    <string name="fast_extra_pulmonary">Extra-Pulmonary</string>
+    <string name="fast_lymph">Lymph</string>
+    <string name="fast_pleural_fluid">Pleural Fluid</string>
+    <string name="fast_pus">Pus</string>
+    <string name="fast_saliva">Saliva</string>
+    <string name="fast_blood">Blood</string>
+    <string name="fast_food_particles">Food particles</string>
+    <string name="fast_older_than_3_days">Older than 3 days</string>
+    <string name="fast_Insufficient_quantity">Insufficient Quantity</string>
+    <string name="fast_nic_number">National ID card number?</string>
+    <string name="fast_self">Self</string>
+    <string name="fast_mother">Mother</string>
+    <string name="fast_father">Father</string>
+    <string name="fast_sister">Sister</string>
+    <string name="fast_brother">Brother</string>
+    <string name="fast_spouse">Spouse</string>
+    <string name="fast_paternal_grandfather">Paternal Grandfather</string>
+    <string name="fast_paternal_grandmother">Paternal Grandmother</string>
+    <string name="fast_maternal_grandfather">Maternal Grandfather</string>
+    <string name="fast_maternal_grandmother">Maternal Grandmother</string>
+    <string name="fast_uncle">Uncle</string>
+    <string name="fast_aunt">Aunt</string>
+    <string name="fast_son">Son</string>
+    <string name="fast_daughter">Daughter</string>
+    <string name="fast_karachi">Karachi</string>
+    <string name="fast_whose_nic_is_this">Whose NIC is this?</string>
+    <string name="fast_patient_provided_their_address">Has the patient provided their address?</string>
+    <string name="fast_address_1">Address 1 (House Number, etc)</string>
+    <string name="fast_address_2">Address 2 (Block, Street, Gali, Colony, etc)</string>
+    <string name="fast_town">Town</string>
+    <string name="fast_city">City</string>
+    <string name="fast_type_of_address_is_this">What type of Address is this?</string>
+    <string name="fast_nearest_landmark">Nearest Landmark</string>
+    <string name="fast_can_we_call_you">Can we call you and SMS you on any of these numbers for matters related to your TB tests and diagnosis?</string>
+    <string name="fast_mobile_number">Mobile Number</string>
+    <string name="fast_secondary_mobile">Secondary Mobile Number</string>
+    <string name="fast_landline_number">Landline Number</string>
+    <string name="fast_secondary_landline">Secondary Landline Number</string>
+    <string name="fast_perminant">Perminant</string>
+    <string name="fast_temporary">Temporary</string>
+
     <string-array name="fast_locations">
         <item>@string/fast_community_title</item>
         <item>@string/fast_hospital_title</item>
@@ -262,5 +321,70 @@
         <item>@string/fast_patient_id</item>
         <item>@string/fast_external_id</item>
         <item>@string/fast_tb_registeration_no</item>
+    </string-array>
+    
+    <string-array name="fast_test_being_done">
+        <item>@string/fast_baseline_new</item>
+        <item>@string/fast_baseline_repeat</item>
+        <item>@string/fast_followup_test</item>
+    </string-array>
+    
+    <string-array name="fast_patient_category_list">
+        <item>@string/fast_category_1</item>
+        <item>@string/fast_category_2</item>
+    </string-array>
+    
+    <string-array name="fast_repeating_test_if_baseline_repeat_list">
+        <item>@string/fast_rif_resistant</item>
+        <item>@string/fast_indeterminate</item>
+        <item>@string/fast_error_invalid_no_result</item>
+    </string-array>
+
+    <string-array name="fast_specimen_type_list">
+        <item>@string/fast_sputum</item>
+        <item>@string/fast_extra_pulmonary</item>
+    </string-array>
+    
+    <string-array name="fast_specimen_come_from_list">
+        <item>@string/fast_lymph</item>
+        <item>@string/fast_pleural_fluid</item>
+        <item>@string/fast_pus</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+    
+    <string-array name="fast_sample_rejected_list">
+        <item>@string/fast_saliva</item>
+        <item>@string/fast_blood</item>
+        <item>@string/fast_food_particles</item>
+        <item>@string/fast_older_than_3_days</item>
+        <item>@string/fast_Insufficient_quantity</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+
+    <string-array name="fast_whose_nic_is_this_list">
+        <item>@string/fast_self</item>
+        <item>@string/fast_mother</item>
+        <item>@string/fast_father</item>
+        <item>@string/fast_sister</item>
+        <item>@string/fast_brother</item>
+        <item>@string/fast_spouse</item>
+        <item>@string/fast_paternal_grandfather</item>
+        <item>@string/fast_paternal_grandmother</item>
+        <item>@string/fast_maternal_grandfather</item>
+        <item>@string/fast_maternal_grandmother</item>
+        <item>@string/fast_uncle</item>
+        <item>@string/fast_aunt</item>
+        <item>@string/fast_son</item>
+        <item>@string/fast_daughter</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+    
+    <string-array name="fast_cities_list">
+        <item>@string/fast_karachi</item>
+    </string-array>
+    
+    <string-array name="fast_type_of_address_list">
+        <item>@string/fast_perminant</item>
+        <item>@string/fast_temporary</item>
     </string-array>
 </resources>
