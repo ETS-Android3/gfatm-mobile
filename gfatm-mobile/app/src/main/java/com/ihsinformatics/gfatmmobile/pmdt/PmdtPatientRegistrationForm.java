@@ -29,7 +29,7 @@ import java.util.ArrayList;
  * Created by Tahira on 1/5/2017.
  */
 
-public class PatientRegistrationForm extends AbstractFormActivity {
+public class PmdtPatientRegistrationForm extends AbstractFormActivity {
 
     Context context;
 
@@ -43,7 +43,7 @@ public class PatientRegistrationForm extends AbstractFormActivity {
     TitledEditText currentAddress1;
     TitledEditText currentAddress2;
     TitledSpinner currentAddressTown;
-    TitledSpinner currentAddressCity;  // might change to spinner later on
+    TitledSpinner currentAddressCity;
     TitledEditText currentAddressLandmark;
 
     TitledEditText permanentAddress1;
@@ -55,13 +55,11 @@ public class PatientRegistrationForm extends AbstractFormActivity {
     TitledEditText primaryPhone;
     TitledEditText alternatePhone;
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         PAGE_COUNT = 4;
-        FORM_NAME = Forms.PATIENT_REGISTRAITON;
+        FORM_NAME = Forms.PMDT_PATIENT_REGISTRAITON;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -145,25 +143,27 @@ public class PatientRegistrationForm extends AbstractFormActivity {
         formDate.setTag("formDate");
         cnic = new TitledEditText(context, null, getResources().getString(R.string.pmdt_cnic), "", getResources().getString(R.string.pmdt_cnic_hint), 15, RegexUtil.nicFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         externalPatientId = new TitledEditText(context, "", getResources().getString(R.string.pmdt_external_patient_id), "", getResources().getString(R.string.pmdt_external_patient_id_hint), 11, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        endTbEmrId = new TitledEditText(context, "", getResources().getString(R.string.pmdt_endtb_emr_id), "", getResources().getString(R.string.pmdt_endtb_emr_id_hint), 13, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        endTbEmrId = new TitledEditText(context, "", getResources().getString(R.string.pmdt_endtb_emr_id), "", getResources().getString(R.string.pmdt_endtb_emr_id_hint), 13, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
 
         // second page views...
-        currentAddress1 = new TitledEditText(context, "", getResources().getString(R.string.pmdt_current_address_1), "", getResources().getString(R.string.pmdt_current_address_1_hint), 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        currentAddress2 = new TitledEditText(context, "", getResources().getString(R.string.pmdt_current_address_2), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        currentAddressTown = new TitledSpinner(context, "", getResources().getString(R.string.pmdt_current_address_town), getResources().getStringArray(R.array.pmdt_towns), "Gulshan-e-Iqbal", App.HORIZONTAL);
-        currentAddressCity = new TitledSpinner(context, "", getResources().getString(R.string.pmdt_current_address_city), getResources().getStringArray(R.array.pmdt_cities), "Karachi", App.HORIZONTAL);
-        currentAddressLandmark = new TitledEditText(context, "", getResources().getString(R.string.pmdt_current_address_landmark), "", getResources().getString(R.string.pmdt_landmark_hint), 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        currentAddress1 = new TitledEditText(context, "", getResources().getString(R.string.pmdt_current_address_1), "", getResources().getString(R.string.pmdt_current_address_1_hint), 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        currentAddress2 = new TitledEditText(context, "", getResources().getString(R.string.pmdt_current_address_2), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        currentAddressTown = new TitledSpinner(context, "", getResources().getString(R.string.pmdt_current_address_town), getResources().getStringArray(R.array.pmdt_towns), getResources().getString(R.string.pmdt_gulshan_e_iqbal), App.HORIZONTAL);
+        currentAddressCity = new TitledSpinner(context, "", getResources().getString(R.string.pmdt_current_address_city), getResources().getStringArray(R.array.pmdt_cities), getResources().getString(R.string.pmdt_karachi), App.HORIZONTAL);
+        currentAddressLandmark = new TitledEditText(context, "", getResources().getString(R.string.pmdt_current_address_landmark), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
 
         // third page views...
-        permanentAddress1 = new TitledEditText(context, "", getResources().getString(R.string.pmdt_permanent_address_1), "", getResources().getString(R.string.pmdt_permanent_address_1_hint), 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        permanentAddress2 = new TitledEditText(context, "", getResources().getString(R.string.pmdt_permanent_address_2), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        permanentAddress1 = new TitledEditText(context, "", getResources().getString(R.string.pmdt_permanent_address_1), "", getResources().getString(R.string.pmdt_permanent_address_1_hint), 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        permanentAddress2 = new TitledEditText(context, "", getResources().getString(R.string.pmdt_permanent_address_2), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         permanentAddressTown = new TitledSpinner(context, "", getResources().getString(R.string.pmdt_permanent_address_town), getResources().getStringArray(R.array.pmdt_towns), "Gulshan-e-Iqbal", App.HORIZONTAL);
         permanentAddressCity = new TitledSpinner(context, "", getResources().getString(R.string.pmdt_permanent_address_city), getResources().getStringArray(R.array.pmdt_cities), "Karachi", App.HORIZONTAL);
-        permanentAddressLandmark = new TitledEditText(context, "", getResources().getString(R.string.pmdt_permanent_address_landmark), "", getResources().getString(R.string.pmdt_landmark_hint), 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        permanentAddressLandmark = new TitledEditText(context, "", getResources().getString(R.string.pmdt_permanent_address_landmark), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
 
         // fourth (or last) page views...
         primaryPhone = new TitledEditText(context, "", getResources().getString(R.string.pmdt_primary_phone), "", getResources().getString(R.string.pmdt_primary_phone_hint), 12, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         alternatePhone = new TitledEditText(context, "", getResources().getString(R.string.pmdt_alternate_phone), "", "", 12, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
+        // if Primary Phone owner is not defined, collect as 'self'
+        // if Alternate Phone owner is not defined, collect as 'self'
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), cnic.getEditText(), externalPatientId.getEditText(), endTbEmrId.getEditText(), currentAddress1.getEditText(),
