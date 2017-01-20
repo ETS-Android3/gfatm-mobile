@@ -323,7 +323,7 @@
         <item>@string/fast_tb_registeration_no</item>
     </string-array>
     
-    <string-array name="fast_test_being_done">
+    <string-array name="fast_test_being_done_list">
         <item>@string/fast_baseline_new</item>
         <item>@string/fast_baseline_repeat</item>
         <item>@string/fast_followup_test</item>
