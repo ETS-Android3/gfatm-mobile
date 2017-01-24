@@ -192,6 +192,31 @@
     <string name="fast_not_detected">Not Detected</string>
     <string name="fast_detected">Detected</string>
     <string name="fast_error_code">Error Code</string>
+    <string name="fast_cxr_order_title">CXR Order</string>
+    <string name="fast_cxr_result_title">CXR Result</string>
+    <string name="fast_what_type_of_xray_is_this">What type of X Ray is this?</string>
+    <string name="fast_month_of_treatment">Month Of Treatment</string>
+    <string name="fast_test_date">Test Date</string>
+    <string name="fast_test_id">Test ID</string>
+    <string name="fast_chest_xray_cad4tb">Chest X-Ray (CAD4TB)</string>
+    <string name="fast_chest_xray_other">Chest X-Ray (Other)</string>
+    <string name="fast_chest_xray_cad4tb_score">Chest X-Ray (CAD4TB) Score</string>
+    <string name="fast_radiologica_diagnosis">Radiological Diagnosis</string>
+    <string name="fast_extent_of_desease">Extent of disease</string>
+    <string name="fast_radiologist_remarks">Radiologist\'s Remarks</string>
+    <string name="fast_adenopathy">Adenopathy</string>
+    <string name="fast_infiltration">Infiltration</string>
+    <string name="fast_consolidation">Consolidation</string>
+    <string name="fast_effusion">Effusion</string>
+    <string name="fast_normal">Normal</string>
+    <string name="fast_cavitation">Cavitation</string>
+    <string name="fast_miliary_tb">Miliary TB</string>
+    <string name="fast_others">Others</string>
+    <string name="fast_unilateral_disease">Unilateral Disease</string>
+    <string name="fast_bilateral_disease">Bilateral Disease</string>
+    <string name="fast_abnormal_but_extent_not_defined">Abnormal but extent not defined</string>
+    
+
 
 
     <string-array name="fast_locations">
@@ -424,5 +449,23 @@
         <item>@string/fast_not_detected</item>
         <item>@string/fast_detected</item>
         <item>@string/fast_indeterminate</item>
+    </string-array>
+
+    <string-array name="fast_radiologists_diagnosis_list">
+        <item>@string/fast_adenopathy</item>
+        <item>@string/fast_infiltration</item>
+        <item>@string/fast_consolidation</item>
+        <item>@string/fast_effusion</item>
+        <item>@string/fast_normal</item>
+        <item>@string/fast_cavitation</item>
+        <item>@string/fast_miliary_tb</item>
+        <item>@string/fast_others</item>
+    </string-array>
+
+    <string-array name="fast_extent_of_disease_list">
+        <item>@string/fast_normal</item>
+        <item>@string/fast_unilateral_disease</item>
+        <item>@string/fast_bilateral_disease</item>
+        <item>@string/fast_abnormal_but_extent_not_defined</item>
     </string-array>
 </resources>
