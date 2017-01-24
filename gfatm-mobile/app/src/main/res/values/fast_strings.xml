@@ -176,6 +176,23 @@
     <string name="fast_secondary_landline">Secondary Landline Number</string>
     <string name="fast_perminant">Perminant</string>
     <string name="fast_temporary">Temporary</string>
+    <string name="fast_date_of_result_recieved">Date of Result Received</string>
+    <string name="fast_genexpert_mtb_result">GeneXpert MTB Result</string>
+    <string name="fast_mtb_detected">MTB Detected</string>
+    <string name="fast_mtb_not_detected">MTB Not Detected</string>
+    <string name="fast_error">Error</string>
+    <string name="fast_invalid">Invalid</string>
+    <string name="fast_no_result">No Result</string>
+    <string name="fast_mtb_burden">MTB Burden</string>
+    <string name="fast_very_low">Very Low</string>
+    <string name="fast_low">Low</string>
+    <string name="fast_medium">Medium</string>
+    <string name="fast_high">High</string>
+    <string name="fast_if_mtb_then_rif_result">If MTB + then RIF Result</string>
+    <string name="fast_not_detected">Not Detected</string>
+    <string name="fast_detected">Detected</string>
+    <string name="fast_error_code">Error Code</string>
+
 
     <string-array name="fast_locations">
         <item>@string/fast_community_title</item>
@@ -386,5 +403,26 @@
     <string-array name="fast_type_of_address_list">
         <item>@string/fast_perminant</item>
         <item>@string/fast_temporary</item>
+    </string-array>
+    
+    <string-array name="fast_genexpert_mtb_result_list">
+        <item>@string/fast_mtb_detected</item>
+        <item>@string/fast_mtb_not_detected</item>
+        <item>@string/fast_error</item>
+        <item>@string/fast_invalid</item>
+        <item>@string/fast_no_result</item>
+    </string-array>
+
+    <string-array name="fast_mtb_burden_list">
+        <item>@string/fast_very_low</item>
+        <item>@string/fast_low</item>
+        <item>@string/fast_medium</item>
+        <item>@string/fast_high</item>
+    </string-array>
+
+    <string-array name="fast_if_mtb_then_rif_list">
+        <item>@string/fast_not_detected</item>
+        <item>@string/fast_detected</item>
+        <item>@string/fast_indeterminate</item>
     </string-array>
 </resources>
