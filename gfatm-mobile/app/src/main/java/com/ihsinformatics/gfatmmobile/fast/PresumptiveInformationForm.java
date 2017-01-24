@@ -2,7 +2,6 @@ package com.ihsinformatics.gfatmmobile.fast;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -25,7 +24,6 @@ import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
-import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
@@ -34,29 +32,33 @@ import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 
 /**
- * Created by Haris on 1/19/2017.
+ * Created by Haris on 1/20/2017.
  */
 
-public class GxpSpecimenCollectionForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class PresumptiveInformationForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
     Context context;
 
     // Views...
     TitledButton formDate;
-    TitledButton sampleSubmissionDate;
-    TitledRadioGroup testContextStatus;
-    TitledRadioGroup tbCategory;
-    TitledRadioGroup baselineRepeatReason;
-    TitledRadioGroup sampleType;
-    TitledSpinner specimenSource;
-    TitledEditText specimenSourceOther;
-    TitledRadioGroup sampleAccepted;
-    TitledSpinner reasonRejected;
-    TitledEditText otherReasonRejected;
-    TitledEditText cartridgeId;
+    TitledEditText cnic;
+    TitledSpinner cnicOwner;
+    TitledEditText otherCnicOwner;
+    TitledRadioGroup addressProvided;
+    TitledEditText addressHouse;
+    TitledEditText addressStreet;
+    TitledSpinner addressTown;
+    TitledSpinner city;
+    TitledRadioGroup addressType;
+    TitledEditText nearestLandmark;
+    TitledRadioGroup contactPermission;
+    TitledEditText mobileNumber;
+    TitledEditText secondaryMobileNumber;
+    TitledEditText landlineNumber;
+    TitledEditText secondaryLandlineNumber;
+
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -71,7 +73,7 @@ public class GxpSpecimenCollectionForm extends AbstractFormActivity implements R
                              ViewGroup container, Bundle savedInstanceState) {
 
         PAGE_COUNT = 1;
-        FORM_NAME = Forms.FAST_GXP_SPECIMEN_COLLECTION_FORM;
+        FORM_NAME = Forms.FAST_PRESUMPTIVE_INFORMATION_FORM;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -127,82 +129,130 @@ public class GxpSpecimenCollectionForm extends AbstractFormActivity implements R
 
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        sampleSubmissionDate = new TitledButton(context, null, getResources().getString(R.string.fast_day_was_the_sample_submitted), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.VERTICAL);
-        testContextStatus = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_point_test_being_done), getResources().getStringArray(R.array.fast_test_being_done_list), getResources().getString(R.string.fast_baseline_new), App.VERTICAL, App.VERTICAL);
-        tbCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_baseline_test_specify_patient_category), getResources().getStringArray(R.array.fast_patient_category_list), getResources().getString(R.string.fast_category_1), App.VERTICAL, App.VERTICAL);
-        baselineRepeatReason = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_repeating_test_if_baseline_repeat), getResources().getStringArray(R.array.fast_repeating_test_if_baseline_repeat_list), getResources().getString(R.string.fast_rif_resistant), App.VERTICAL, App.VERTICAL);
-        baselineRepeatReason.setVisibility(View.GONE);
-        sampleType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_specimen_type), getResources().getStringArray(R.array.fast_specimen_type_list), getResources().getString(R.string.fast_sputum), App.VERTICAL, App.VERTICAL);
-        specimenSource = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_specimen_come_from), getResources().getStringArray(R.array.fast_specimen_come_from_list), getResources().getString(R.string.fast_lymph), App.VERTICAL);
-        specimenSource.setVisibility(View.GONE);
-        specimenSourceOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        specimenSourceOther.setVisibility(View.GONE);
-        sampleAccepted = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_accepted_lab_technician), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
-        reasonRejected = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_why_was_the_sample_rejected), getResources().getStringArray(R.array.fast_sample_rejected_list), getResources().getString(R.string.fast_saliva), App.VERTICAL);
-        reasonRejected.setVisibility(View.GONE);
-        otherReasonRejected = new TitledEditText(context, null, getResources().getString(R.string.fast_other_reason_for_rejection), "", "", 50, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        otherReasonRejected.setVisibility(View.GONE);
-        cartridgeId = new TitledEditText(context, null, getResources().getString(R.string.fast_cartridge_id), "", "", 9, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        cnic = new TitledEditText(context, null, getResources().getString(R.string.fast_nic_number), "", "", 15, RegexUtil.NumericFilter, InputType.TYPE_CLASS_PHONE, App.VERTICAL, false);
+        cnicOwner = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_whose_nic_is_this), getResources().getStringArray(R.array.fast_whose_nic_is_this_list), getResources().getString(R.string.fast_self), App.VERTICAL);
+        otherCnicOwner = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        otherCnicOwner.setVisibility(View.GONE);
+        addressProvided = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_provided_their_address), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
+        addressHouse = new TitledEditText(context, null, getResources().getString(R.string.fast_address_1), "", "", 10, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        addressStreet = new TitledEditText(context, null, getResources().getString(R.string.fast_address_2), "", "", 50, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        addressTown = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_town), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL);
+        city = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.city), getResources().getStringArray(R.array.fast_cities_list), getResources().getString(R.string.fast_karachi), App.VERTICAL);
+        addressType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_type_of_address_is_this), getResources().getStringArray(R.array.fast_type_of_address_list), getResources().getString(R.string.fast_perminant), App.VERTICAL, App.VERTICAL);
+        nearestLandmark = new TitledEditText(context, null, getResources().getString(R.string.fast_nearest_landmark), "", "", 50, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        contactPermission = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_can_we_call_you), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
+        mobileNumber = new TitledEditText(context, null, getResources().getString(R.string.mobile_number), "", "", 11, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
+        secondaryMobileNumber = new TitledEditText(context, null, getResources().getString(R.string.fast_secondary_mobile), "", "", 11, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
+        landlineNumber = new TitledEditText(context, null, getResources().getString(R.string.fast_landline_number), "", "", 11, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
+        secondaryLandlineNumber = new TitledEditText(context, null, getResources().getString(R.string.fast_secondary_landline), "", "", 11, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
 
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), sampleSubmissionDate.getButton(), testContextStatus.getRadioGroup(), tbCategory.getRadioGroup(),
-                baselineRepeatReason.getRadioGroup(), sampleType.getRadioGroup(), specimenSource.getSpinner(), specimenSourceOther.getEditText(), sampleAccepted.getRadioGroup(), reasonRejected.getSpinner(), otherReasonRejected.getEditText(), cartridgeId.getEditText()};
+        views = new View[]{formDate.getButton(), cnic.getEditText(), cnicOwner.getSpinner(), otherCnicOwner.getEditText(),
+                addressProvided.getRadioGroup(), addressHouse.getEditText(), addressStreet.getEditText(), addressTown.getSpinner(),
+                city.getSpinner(), addressType.getRadioGroup(), nearestLandmark.getEditText(), contactPermission.getRadioGroup()
+                , mobileNumber.getEditText(), secondaryMobileNumber.getEditText(), landlineNumber.getEditText(), secondaryLandlineNumber.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, sampleSubmissionDate, testContextStatus, tbCategory, baselineRepeatReason, sampleType, specimenSource, specimenSourceOther, sampleAccepted, reasonRejected, otherReasonRejected, cartridgeId}};
+                {{formDate, cnic, cnicOwner, otherCnicOwner, addressProvided, addressHouse, addressStreet, addressTown,
+                        city, addressType, nearestLandmark, contactPermission, mobileNumber, secondaryMobileNumber,
+                        landlineNumber, secondaryLandlineNumber}};
+
 
         formDate.getButton().setOnClickListener(this);
-        sampleSubmissionDate.getButton().setOnClickListener(this);
-        testContextStatus.getRadioGroup().setOnCheckedChangeListener(this);
-        tbCategory.getRadioGroup().setOnCheckedChangeListener(this);
-        baselineRepeatReason.getRadioGroup().setOnCheckedChangeListener(this);
-        sampleType.getRadioGroup().setOnCheckedChangeListener(this);
-        specimenSource.getSpinner().setOnItemSelectedListener(this);
-        sampleAccepted.getRadioGroup().setOnCheckedChangeListener(this);
-        reasonRejected.getSpinner().setOnItemSelectedListener(this);
-
+        cnicOwner.getSpinner().setOnItemSelectedListener(this);
+        addressProvided.getRadioGroup().setOnCheckedChangeListener(this);
     }
 
     @Override
     public void updateDisplay() {
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        sampleSubmissionDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-
     }
 
     @Override
     public boolean validate() {
         Boolean error = false;
 
-        if (specimenSourceOther.getVisibility() == View.VISIBLE && App.get(specimenSourceOther).isEmpty()) {
+        if (cnic.getVisibility() == View.VISIBLE && App.get(cnic).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            specimenSourceOther.getEditText().setError(getString(R.string.empty_field));
-            specimenSourceOther.getEditText().requestFocus();
+            cnic.getEditText().setError(getString(R.string.empty_field));
+            cnic.getEditText().requestFocus();
             error = true;
         }
-
-        if (otherReasonRejected.getVisibility() == View.VISIBLE && App.get(otherReasonRejected).isEmpty()) {
+        if (otherCnicOwner.getVisibility() == View.VISIBLE && App.get(otherCnicOwner).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            otherReasonRejected.getEditText().setError(getString(R.string.empty_field));
-            otherReasonRejected.getEditText().requestFocus();
+            otherCnicOwner.getEditText().setError(getString(R.string.empty_field));
+            otherCnicOwner.getEditText().requestFocus();
             error = true;
         }
-
-        if (cartridgeId.getVisibility() == View.VISIBLE && App.get(cartridgeId).isEmpty()) {
+        if (addressHouse.getVisibility() == View.VISIBLE && App.get(addressHouse).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            cartridgeId.getEditText().setError(getString(R.string.empty_field));
-            cartridgeId.getEditText().requestFocus();
+            addressHouse.getEditText().setError(getString(R.string.empty_field));
+            addressHouse.getEditText().requestFocus();
+            error = true;
+        }
+        if (addressStreet.getVisibility() == View.VISIBLE && App.get(addressStreet).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            addressStreet.getEditText().setError(getString(R.string.empty_field));
+            addressStreet.getEditText().requestFocus();
+            error = true;
+        }
+        if (nearestLandmark.getVisibility() == View.VISIBLE && App.get(nearestLandmark).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            nearestLandmark.getEditText().setError(getString(R.string.empty_field));
+            nearestLandmark.getEditText().requestFocus();
+            error = true;
+        }
+        if (mobileNumber.getVisibility() == View.VISIBLE && App.get(mobileNumber).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            mobileNumber.getEditText().setError(getString(R.string.empty_field));
+            mobileNumber.getEditText().requestFocus();
+            error = true;
+        }
+        if (secondaryMobileNumber.getVisibility() == View.VISIBLE && App.get(secondaryMobileNumber).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            secondaryMobileNumber.getEditText().setError(getString(R.string.empty_field));
+            secondaryMobileNumber.getEditText().requestFocus();
+            error = true;
+        }
+        if (landlineNumber.getVisibility() == View.VISIBLE && App.get(landlineNumber).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            landlineNumber.getEditText().setError(getString(R.string.empty_field));
+            landlineNumber.getEditText().requestFocus();
+            error = true;
+        }
+        if (secondaryLandlineNumber.getVisibility() == View.VISIBLE && App.get(secondaryLandlineNumber).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            secondaryLandlineNumber.getEditText().setError(getString(R.string.empty_field));
+            secondaryLandlineNumber.getEditText().requestFocus();
             error = true;
         }
 
@@ -273,13 +323,6 @@ public class GxpSpecimenCollectionForm extends AbstractFormActivity implements R
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
         }
-
-        if (view == sampleSubmissionDate.getButton()) {
-            Bundle args = new Bundle();
-            args.putInt("type", SECOND_DATE_DIALOG_ID);
-            secondDateFragment.setArguments(args);
-            secondDateFragment.show(getFragmentManager(), "DatePicker");
-        }
     }
 
     @Override
@@ -302,7 +345,15 @@ public class GxpSpecimenCollectionForm extends AbstractFormActivity implements R
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         MySpinner spinner = (MySpinner) parent;
-        if (spinner == specimenSource.getSpinner()) {
+
+        if (spinner == cnicOwner.getSpinner()) {
+            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title))) {
+                otherCnicOwner.setVisibility(View.VISIBLE);
+            } else {
+                otherCnicOwner.setVisibility(View.GONE);
+            }
+        }
+       /* if (spinner == specimenSource.getSpinner()) {
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title))) {
                 specimenSourceOther.setVisibility(View.VISIBLE);
             } else {
@@ -314,13 +365,23 @@ public class GxpSpecimenCollectionForm extends AbstractFormActivity implements R
             } else {
                 otherReasonRejected.setVisibility(View.GONE);
             }
-        }
+        }*/
     }
 
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
 
-        if (radioGroup == testContextStatus.getRadioGroup()) {
+        if (radioGroup == addressProvided.getRadioGroup()) {
+            if (addressProvided.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+                addressHouse.setVisibility(View.VISIBLE);
+                addressStreet.setVisibility(View.VISIBLE);
+            } else {
+                addressHouse.setVisibility(View.GONE);
+                addressStreet.setVisibility(View.GONE);
+            }
+        }
+
+    /*    if (radioGroup == testContextStatus.getRadioGroup()) {
             if (testContextStatus.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_baseline_new))) {
                 tbCategory.setVisibility(View.VISIBLE);
             } else {
@@ -354,7 +415,7 @@ public class GxpSpecimenCollectionForm extends AbstractFormActivity implements R
                 cartridgeId.setVisibility(View.VISIBLE);
                 otherReasonRejected.setVisibility(View.GONE);
             }
-        }
+        }*/
 
     }
 
