@@ -195,7 +195,7 @@
     <string name="fast_cxr_order_title">CXR Order</string>
     <string name="fast_cxr_result_title">CXR Result</string>
     <string name="fast_what_type_of_xray_is_this">What type of X Ray is this?</string>
-    <string name="fast_month_of_treatment">Month Of Treatment</string>
+    <string name="fast_month_of_treatment">Month Of Treatment: </string>
     <string name="fast_test_date">Test Date</string>
     <string name="fast_test_id">Test ID</string>
     <string name="fast_chest_xray_cad4tb">Chest X-Ray (CAD4TB)</string>
@@ -215,9 +215,33 @@
     <string name="fast_unilateral_disease">Unilateral Disease</string>
     <string name="fast_bilateral_disease">Bilateral Disease</string>
     <string name="fast_abnormal_but_extent_not_defined">Abnormal but extent not defined</string>
-    
-
-
+    <string name="fast_one">1</string>
+    <string name="fast_two">2</string>
+    <string name="fast_three">3</string>
+    <string name="fast_four">4</string>
+    <string name="fast_five">5</string>
+    <string name="fast_six">6</string>
+    <string name="fast_seven">7</string>
+    <string name="fast_eight">8</string>
+    <string name="fast_nine">9</string>
+    <string name="fast_ten">10</string>
+    <string name="fast_eleven">11</string>
+    <string name="fast_twelve">12</string>
+    <string name="fast_thirteen">13</string>
+    <string name="fast_forteen">14</string>
+    <string name="fast_fifteen">15</string>
+    <string name="fast_sixteen">16</string>
+    <string name="fast_seventeen">17</string>
+    <string name="fast_eighteen">18</string>
+    <string name="fast_nineteen">19</string>
+    <string name="fast_twenty">20</string>
+    <string name="fast_twenty_one">21</string>
+    <string name="fast_twenty_two">22</string>
+    <string name="fast_twenty_three">23</string>
+    <string name="fast_twenty_four">24</string>
+    <string name="fast_order">Order</string>
+    <string name="fast_result">Result</string>
+    <string name="fast_select_form_type">Please select form type:</string>
 
     <string-array name="fast_locations">
         <item>@string/fast_community_title</item>
@@ -451,6 +475,11 @@
         <item>@string/fast_indeterminate</item>
     </string-array>
 
+    <string-array name="fast_type_of_xray_is_this_list">
+        <item>@string/fast_chest_xray_cad4tb</item>
+        <item>@string/fast_chest_xray_other</item>
+    </string-array>
+
     <string-array name="fast_radiologists_diagnosis_list">
         <item>@string/fast_adenopathy</item>
         <item>@string/fast_infiltration</item>
@@ -467,5 +496,37 @@
         <item>@string/fast_unilateral_disease</item>
         <item>@string/fast_bilateral_disease</item>
         <item>@string/fast_abnormal_but_extent_not_defined</item>
+    </string-array>
+
+    <string-array name="fast_number_list">
+        <item>@string/fast_one</item>
+        <item>@string/fast_two</item>
+        <item>@string/fast_three</item>
+        <item>@string/fast_four</item>
+        <item>@string/fast_five</item>
+        <item>@string/fast_six</item>
+        <item>@string/fast_seven</item>
+        <item>@string/fast_eight</item>
+        <item>@string/fast_nine</item>
+        <item>@string/fast_ten</item>
+        <item>@string/fast_eleven</item>
+        <item>@string/fast_twelve</item>
+        <item>@string/fast_thirteen</item>
+        <item>@string/fast_forteen</item>
+        <item>@string/fast_fifteen</item>
+        <item>@string/fast_sixteen</item>
+        <item>@string/fast_seventeen</item>
+        <item>@string/fast_eighteen</item>
+        <item>@string/fast_nineteen</item>
+        <item>@string/fast_twenty</item>
+        <item>@string/fast_twenty_one</item>
+        <item>@string/fast_twenty_two</item>
+        <item>@string/fast_twenty_three</item>
+        <item>@string/fast_twenty_four</item>
+    </string-array>
+
+    <string-array name="fast_order_and_result_list">
+        <item>@string/fast_order</item>
+        <item>@string/fast_result</item>
     </string-array>
 </resources>
