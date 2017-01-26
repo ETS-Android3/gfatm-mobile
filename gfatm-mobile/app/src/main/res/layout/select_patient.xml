@@ -48,10 +48,10 @@
                             android:maxLines="1" />
 
                         <ImageView
-                            android:id="@+id/search"
+                            android:id="@+id/select"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_search" />
+                            android:src="@drawable/ic_checked" />
 
                     </LinearLayout>
 
@@ -66,12 +66,12 @@
                         android:textSize="@dimen/large" />
 
                     <Button
-                        android:id="@+id/selectPatient"
+                        android:id="@+id/searchPatientButton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/small"
                         android:background="@drawable/form_button"
-                        android:text="@string/title_select_patient"
+                        android:text="@string/title_search_patient"
                         android:textColor="@color/white"
                         android:textSize="@dimen/large" />
 
@@ -317,7 +317,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-"
                             android:inputType="text|textNoSuggestions"
                             android:maxLength="7" />
 

@@ -21,46 +21,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="8dp">
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-        <ImageView
-            android:id="@+id/submitIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:paddingLeft="14dp"
-            android:paddingRight="14dp"
-            android:src="@drawable/ic_submit" />
-
-        <ImageView
-            android:id="@+id/emailIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:paddingLeft="14dp"
-            android:paddingRight="14dp"
-            android:src="@drawable/ic_email" />
-
-        <ImageView
-            android:id="@+id/deleteIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:paddingLeft="14dp"
-            android:paddingRight="14dp"
-            android:src="@drawable/ic_delete" />
-
-    </LinearLayout>
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -72,6 +32,37 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:padding="@dimen/small">
+
+            <TextView
+                android:id="@+id/sync"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="@string/sync_with_openmrs"
+                android:textColor="?colorAccent"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="@string/last_update_on"
+                    android:textSize="@dimen/medium" />
+
+                <TextView
+                    android:id="@+id/location_last_update"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/medium" />
+
+            </LinearLayout>
+
 
             <TextView
                 android:id="@+id/program"

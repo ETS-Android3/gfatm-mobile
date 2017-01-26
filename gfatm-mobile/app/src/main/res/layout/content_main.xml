@@ -5,25 +5,25 @@
     android:id="@+id/content_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?colorBackground"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.ihsinformatics.gfatmmobile.MainActivity"
-    tools:showIn="@layout/app_bar_main"
-    android:background="?colorBackground">
+    tools:showIn="@layout/app_bar_main">
 
     <LinearLayout
         android:id="@+id/header"
-        android:background="?colorPrimary"
-        android:padding="@dimen/small"
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/tiny"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+        android:layout_marginBottom="@dimen/tiny"
+        android:background="?colorPrimary"
+        android:orientation="vertical"
+        android:padding="@dimen/small">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,17 +34,17 @@
                 android:id="@+id/patientName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="@dimen/xlarge"
-                android:textStyle="bold"
-                android:text="Harry James Potter" />
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/change"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_create_patient"
-                android:layout_marginLeft="@dimen/small" />
+                android:layout_marginLeft="@dimen/small"
+                android:src="@drawable/ic_create_patient" />
 
         </LinearLayout>
 
@@ -57,9 +57,9 @@
                 android:id="@+id/patientDob"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text=""
                 android:textColor="@color/white"
-                android:textSize="@dimen/large"
-                android:text="36 years (Jul 31,1980)" />
+                android:textSize="@dimen/large" />
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -71,20 +71,22 @@
                     android:layout_alignParentRight="true">
 
                     <TextView
+                        android:id="@+id/id"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/large"
+                        android:text="@string/id"
                         android:textColor="@color/white"
-                        android:text="@string/id" />
+                        android:textSize="@dimen/large"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/patientId"
-                        android:textColor="@color/white"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textStyle="bold"
+                        android:text=""
+                        android:textColor="@color/white"
                         android:textSize="@dimen/large"
-                        android:text="96225-8" />
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
@@ -96,66 +98,66 @@
 
     <LinearLayout
         android:id="@+id/buttonLayout"
-        android:layout_below="@id/header"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header"
+        android:orientation="horizontal">
 
         <Button
-            android:text="@string/forms"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="selectFrag"
             android:id="@+id/formButton"
-            android:textSize="@dimen/large"
-            android:textColor="@color/dark_grey"
-            android:drawableTint="@color/dark_grey"
-            android:background="?colorBackground"
-            android:drawableLeft="@drawable/ic_form" />
-
-        <Button
-            android:text="@string/reports"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="?colorBackground"
+            android:drawableLeft="@drawable/ic_form"
+            android:drawableTint="@color/dark_grey"
             android:onClick="selectFrag"
+            android:text="@string/forms"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/large" />
+
+        <Button
             android:id="@+id/reportButton"
-            android:textSize="@dimen/large"
-            android:textColor="@color/dark_grey"
-            android:drawableTint="@color/dark_grey"
-            android:background="?colorBackground"
-            android:drawableLeft="@drawable/ic_report" />
-
-        <Button
-            android:text="@string/search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="@dimen/large"
-            android:id="@+id/searchButton"
-            android:textColor="@color/dark_grey"
-            android:drawableTint="@color/dark_grey"
             android:background="?colorBackground"
+            android:drawableLeft="@drawable/ic_report"
+            android:drawableTint="@color/dark_grey"
             android:onClick="selectFrag"
-            android:drawableLeft="@drawable/ic_search" />
+            android:text="@string/reports"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/large" />
+
+        <Button
+            android:id="@+id/searchButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="?colorBackground"
+            android:drawableLeft="@drawable/ic_search"
+            android:drawableTint="@color/dark_grey"
+            android:onClick="selectFrag"
+            android:text="@string/search"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/large" />
 
 
     </LinearLayout>
 
     <fragment
-        android:name="com.ihsinformatics.gfatmmobile.BlankFragment"
-        android:layout_below="@id/buttonLayout"
         android:id="@+id/fragment_place"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <LinearLayout
+        android:name="com.ihsinformatics.gfatmmobile.BlankFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/buttonLayout" />
+
+    <LinearLayout
         android:id="@+id/programLayout"
-        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/fragment_place"
+        android:orientation="vertical"
         android:visibility="gone">
 
         <TextView
@@ -174,37 +176,37 @@
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="@dimen/medium"
                 android:paddingBottom="@dimen/medium"
+                android:paddingTop="@dimen/medium"
                 android:text="PMDT" />
 
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="@dimen/medium"
                 android:paddingBottom="@dimen/medium"
+                android:paddingTop="@dimen/medium"
                 android:text="PET" />
 
 
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="@dimen/medium"
                 android:paddingBottom="@dimen/medium"
+                android:paddingTop="@dimen/medium"
                 android:text="FAST" />
 
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="@dimen/medium"
                 android:paddingBottom="@dimen/medium"
+                android:paddingTop="@dimen/medium"
                 android:text="COMORBIDITIES" />
 
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="@dimen/medium"
                 android:paddingBottom="@dimen/medium"
+                android:paddingTop="@dimen/medium"
                 android:text="CHILDHOOD TB" />
 
         </RadioGroup>
