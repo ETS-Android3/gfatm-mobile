@@ -8,21 +8,21 @@
     <item
         android:id="@+id/menu_server"
         android:icon="@drawable/ic_server"
-        android:title="Server Address" />
+        android:title="@string/title_server_address" />
     <item
         android:id="@+id/menu_defaults"
         android:icon="@drawable/ic_defaults"
-        android:title="Defaults"
+        android:title="@string/title_defaults"
         app:showAsAction="never" />
     <item
         android:id="@+id/menu_language"
         android:icon="@drawable/ic_language"
-        android:title="Language"
+        android:title="@string/title_language"
         app:showAsAction="never" />
     <item
         android:id="@+id/menu_theme"
         android:icon="@drawable/ic_theme"
-        android:title="Theme"
+        android:title="@string/title_theme"
         app:showAsAction="never" />
 
 </menu>
