@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.ihsinformatics.gfatmmobile.util.DatabaseUtil;
+import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -48,6 +49,14 @@ public class StartActivity extends Activity {
         App.setUserFullName(preferences.getString(Preferences.USER_FULLNAME, ""));
         App.setLocation(preferences.getString(Preferences.LOCATION, ""));
         App.setLocationLastUpdate(preferences.getString(Preferences.LOCATION_LAST_UPDATE, ""));
+        App.setPatientUuid(preferences.getString(Preferences.PATIENT_UUID, ""));
+        App.setRoles(preferences.getString(Preferences.ROLES, ""));
+        App.setProviderUUid(preferences.getString(Preferences.PROVIDER_UUID, ""));
+
+        ServerService serverService = new ServerService(context);
+        com.ihsinformatics.gfatmmobile.model.Patient patient = serverService.getPatientByUuidFromLocalDB(App.getPatientUuid());
+        App.setPatient(patient);
+
         Locale locale = new Locale(preferences.getString(Preferences.LANGUAGE, "en").toLowerCase().substring(0, 2));
         Locale.setDefault(locale);
         Configuration config = new Configuration();

@@ -10,6 +10,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -42,6 +43,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.shared.FormsObject;
+import com.ihsinformatics.gfatmmobile.util.GPSTracker;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 import java.util.ArrayList;
@@ -59,6 +61,7 @@ public abstract class AbstractFormActivity extends Fragment
 
     public static final int DATE_DIALOG_ID = 1;
     public static final int SECOND_DATE_DIALOG_ID = 2;
+    protected static ProgressDialog loading;
     // main Layout
     protected View mainContent;
     protected ServerService serverService;
@@ -91,6 +94,12 @@ public abstract class AbstractFormActivity extends Fragment
     protected TextView formName;
     protected int currentPageNo = 0;
 
+    protected Date startTime = null;
+    protected Date endTime = null;
+
+    protected double latitude = 0;
+    protected double longitude = 0;
+
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -98,8 +107,11 @@ public abstract class AbstractFormActivity extends Fragment
         //Inflate the layout for this fragment
         mainContent = inflater.inflate(R.layout.form_fragment_template, container, false);
 
+        startTime = new Date();
+
         // initializing all views an classes
         serverService = new ServerService(mainContent.getContext());
+        loading = new ProgressDialog(mainContent.getContext());
 
         formDateCalendar = Calendar.getInstance();
         formDateFragment = new SelectDateFragment();
@@ -152,6 +164,21 @@ public abstract class AbstractFormActivity extends Fragment
             lastButton.setVisibility(View.GONE);
             nextButton.setVisibility(View.GONE);
             navigationSeekbar.setVisibility(View.GONE);
+        }
+
+        GPSTracker gps = new GPSTracker(mainContent.getContext());
+
+        // check if GPS enabled
+        if (gps.canGetLocation()) {
+
+            latitude = gps.getLatitude();
+            longitude = gps.getLongitude();
+
+        } else {
+            // can't get location
+            // GPS or Network is not enabled
+            // Ask user to enable GPS/network in settings
+            gps.showSettingsAlert();
         }
 
         return mainContent;
@@ -413,6 +440,9 @@ public abstract class AbstractFormActivity extends Fragment
 
     public void resetViews() {
 
+        startTime = new Date();
+        endTime = null;
+
         for (View v : views) {
             if (v instanceof MySpinner) {
                 ((MySpinner) v).selectDefaultValue();
@@ -467,10 +497,10 @@ public abstract class AbstractFormActivity extends Fragment
             int dd = calendar.get(Calendar.DAY_OF_MONTH);
             DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, yy, mm, dd);
             dialog.getDatePicker().setTag(getArguments().getInt("type"));
-            if (!getArguments().getBoolean("allowFutureDate", false) && getArguments().getInt("type") == DATE_DIALOG_ID)
+            if (!getArguments().getBoolean("allowFutureDate", false))
                 dialog.getDatePicker().setMaxDate(new Date().getTime());
-            else if (!getArguments().getBoolean("allowFutureDate", false))
-                dialog.getDatePicker().setMaxDate(formDateCalendar.getTimeInMillis());
+            if (!getArguments().getBoolean("allowPastDate", false))
+                dialog.getDatePicker().setMinDate(new Date().getTime());
             return dialog;
         }
 

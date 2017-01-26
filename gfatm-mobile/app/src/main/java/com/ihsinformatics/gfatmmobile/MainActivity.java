@@ -21,6 +21,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -31,6 +32,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.shared.FormsObject;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
@@ -38,6 +40,10 @@ import com.ihsinformatics.gfatmmobile.util.ServerService;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnTouchListener {
@@ -57,6 +63,12 @@ public class MainActivity extends AppCompatActivity
     ReportFragment fragmentReport = new ReportFragment();
     SearchFragment fragmentSearch = new SearchFragment();
     ImageView change;
+
+    TextView patientName;
+    TextView patientDob;
+    TextView patientId;
+    TextView id;
+
     FragmentManager fm = getFragmentManager();
     private ServerService serverService;
 
@@ -94,6 +106,8 @@ public class MainActivity extends AppCompatActivity
         View hView = navigationView.getHeaderView(0);
         TextView nav_user = (TextView) hView.findViewById(R.id.menuUsername);
         nav_user.setText(App.getUserFullName());
+        TextView nav_userRole = (TextView) hView.findViewById(R.id.menuUserRoles);
+        nav_userRole.setText(App.getRoles());
 
         String title = toolbar.getTitle() + " (" + App.getVersion() + ")";
         getSupportActionBar().setTitle(title);
@@ -138,6 +152,27 @@ public class MainActivity extends AppCompatActivity
         formButton = (Button) findViewById(R.id.formButton);
         reportButton = (Button) findViewById(R.id.reportButton);
         searchButton = (Button) findViewById(R.id.searchButton);
+
+        patientName = (TextView) findViewById(R.id.patientName);
+        patientDob = (TextView) findViewById(R.id.patientDob);
+        patientId = (TextView) findViewById(R.id.patientId);
+        id = (TextView) findViewById(R.id.id);
+
+        if (App.getPatient() != null) {
+            String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
+            String lname = App.getPatient().getPerson().getFamilyName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getFamilyName().substring(1);
+
+            patientName.setText(fname + " " + lname);
+            String dob = App.getPatient().getPerson().getBirthdate().substring(0, 10);
+            if (!dob.equals("")) {
+                Date date = App.stringToDate(dob, "yyyy-MM-dd");
+                DateFormat df = new SimpleDateFormat("MMM dd, yyyy");
+                patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
+            } else patientDob.setText(dob);
+            if (!App.getPatient().getPatientId().equals(""))
+                id.setVisibility(View.VISIBLE);
+            patientId.setText(App.getPatient().getPatientId());
+        }
 
         if (!App.getProgram().equals("")) {
             showFormFragment();
@@ -504,6 +539,44 @@ public class MainActivity extends AppCompatActivity
                 String returnString = data.getStringExtra("key");
                 if (returnString != null && returnString.equals("SEARCH")) {
                     showSearchFragment();
+                } else if (returnString != null && returnString.equals("SELECT")) {
+
+                    if (App.getPatient() != null) {
+                        String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
+                        String lname = App.getPatient().getPerson().getFamilyName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getFamilyName().substring(1);
+
+                        patientName.setText(fname + " " + lname);
+                        String dob = App.getPatient().getPerson().getBirthdate().substring(0, 10);
+                        if (!dob.equals("")) {
+                            Date date = App.stringToDate(dob, "yyyy-MM-dd");
+                            DateFormat df = new SimpleDateFormat("MMM dd, yyyy");
+                            patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
+                        } else patientDob.setText(dob);
+                        if (!App.getPatient().getPatientId().equals(""))
+                            id.setVisibility(View.VISIBLE);
+                        patientId.setText(App.getPatient().getPatientId());
+                    }
+                } else if (returnString != null && returnString.equals("CREATE")) {
+
+                    if (App.getPatient() != null) {
+                        String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
+                        String lname = App.getPatient().getPerson().getFamilyName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getFamilyName().substring(1);
+
+                        patientName.setText(fname + " " + lname);
+                        String dob = App.getPatient().getPerson().getBirthdate().substring(0, 10);
+                        if (!dob.equals("")) {
+                            Date date = App.stringToDate(dob, "yyyy-MM-dd");
+                            DateFormat df = new SimpleDateFormat("MMM dd, yyyy");
+                            patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
+                        } else patientDob.setText(dob);
+                        if (!App.getPatient().getPatientId().equals(""))
+                            id.setVisibility(View.VISIBLE);
+                        patientId.setText(App.getPatient().getPatientId());
+
+                        Toast toast = Toast.makeText(MainActivity.this, getResources().getString(R.string.patient_created_successfully), Toast.LENGTH_LONG);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+                    }
                 }
 
             }
@@ -554,15 +627,26 @@ public class MainActivity extends AppCompatActivity
                 });
 
                 String result = serverService.getLocations();
-                return result;
+                if (!result.equals("SUCCESS"))
+                    return result;
 
+                publishProgress(getResources().getString(R.string.fetching_encounter_types));
+
+                result = serverService.getEncounterTypes();
+                if (!result.equals("SUCCESS"))
+                    return result;
+
+                publishProgress(getResources().getString(R.string.fetching_person_attribute_type));
+
+                result = serverService.getPersonAttributeTypes();
+                return result;
             }
 
             @Override
             protected void onProgressUpdate(String... values) {
+                loading.setMessage(values[0]);
             }
 
-            ;
 
             @Override
             protected void onPostExecute(String result) {
@@ -570,8 +654,23 @@ public class MainActivity extends AppCompatActivity
                 loading.dismiss();
                 if (result.equals("SUCCESS")) {
 
+                    Calendar calendar = Calendar.getInstance();
+                    App.setLocationLastUpdate(android.text.format.DateFormat.format("dd-MMM-yyyy HH:mm:ss", calendar).toString());
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString(Preferences.LOCATION_LAST_UPDATE, App.getLocationLastUpdate());
+                    editor.apply();
+
                     openLocationSelectionDialog();
 
+                } else if (result.equals("AUTHENTICATION_ERROR")) {
+                    Toast toast = Toast.makeText(MainActivity.this, getResources().getString(R.string.authentication_error), Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                } else if (result.equals("CONNECTION_ERROR")) {
+                    Toast toast = Toast.makeText(MainActivity.this, getResources().getString(R.string.data_connection_error), Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
                 }
             }
         };

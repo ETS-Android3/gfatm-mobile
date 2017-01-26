@@ -31,6 +31,7 @@ import com.ihsinformatics.gfatmmobile.custom.MyEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
+import com.ihsinformatics.gfatmmobile.model.Patient;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -70,6 +71,10 @@ public class App {
     private static String userFullName = "";
     private static String location = "";
     private static String locationLastUpdate = "";
+    private static String patientUuid = "";
+    private static String roles = "";
+    private static String providerUUid = "";
+    private static Patient patient = null;
     private static Locale currentLocale;
 
 
@@ -250,6 +255,39 @@ public class App {
     public static void setLocationLastUpdate(String locationLastUpdate) {
         App.locationLastUpdate = locationLastUpdate;
     }
+
+    public static String getPatientUuid() {
+        return patientUuid;
+    }
+
+    public static void setPatientUuid(String patientUuid) {
+        App.patientUuid = patientUuid;
+    }
+
+    public static Patient getPatient() {
+        return patient;
+    }
+
+    public static void setPatient(Patient patient) {
+        App.patient = patient;
+    }
+
+    public static String getRoles() {
+        return roles;
+    }
+
+    public static void setRoles(String roles) {
+        App.roles = roles;
+    }
+
+    public static String getProviderUUid() {
+        return providerUUid;
+    }
+
+    public static void setProviderUUid(String providerUUid) {
+        App.providerUUid = providerUUid;
+    }
+
 
     /**
      * Returns selected value in string, depending on the view passed. If no

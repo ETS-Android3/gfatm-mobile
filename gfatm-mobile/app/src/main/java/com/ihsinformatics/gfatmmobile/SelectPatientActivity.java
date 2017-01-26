@@ -9,16 +9,19 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -30,6 +33,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
@@ -160,6 +164,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
         createPatientScanButton.setOnClickListener(this);
         selectPatientScanButton.setOnClickListener(this);
         searchPatient.setOnClickListener(this);
+
     }
 
     @Override
@@ -201,6 +206,65 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
 
     public void getPatient() {
 
+        // Authenticate from server
+        AsyncTask<String, String, String> getPatientTask = new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.finding_patient));
+                        loading.show();
+                    }
+                });
+
+                String result = serverService.getPatient(App.get(selectPatientId));
+                return result;
+
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            ;
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                if (result.equals("CONNECTION_ERROR")) {
+                    Toast toast = Toast.makeText(SelectPatientActivity.this, getResources().getString(R.string.data_connection_error), Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                } else if (result.equals("PATIENT_NOT_FOUND")) {
+                    Toast toast = Toast.makeText(SelectPatientActivity.this, getResources().getString(R.string.patient_not_found), Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                } else {
+
+                    hideKeyboard();
+
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString(Preferences.PATIENT_UUID, App.getPatientUuid());
+                    editor.apply();
+
+                    Intent intent = new Intent();
+                    intent.putExtra("key", "SELECT");
+                    setResult(RESULT_OK, intent);
+                    finish();
+
+                }
+
+            }
+        };
+        getPatientTask.execute("");
+
     }
 
     @Override
@@ -217,7 +281,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
 
         } else if (v == searchPatient) {
 
-            Boolean error = false;
+            hideKeyboard();
 
             Intent intent = new Intent();
             intent.putExtra("key", "SEARCH");
@@ -234,7 +298,11 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
         } else if (v == createButton) {
             if(createPatientValidate()){
 
-                // serverService.createPatient();
+                final String id = App.get(createPatientId);
+                final String fname = App.get(firstName);
+                final String lname = App.get(lastName);
+                final String g = (male.isChecked()) ? "male" : "female";
+                final String eId = App.get(externalId);
 
                 AsyncTask<String, String, String> createPatientTask = new AsyncTask<String, String, String>() {
                     @Override
@@ -245,18 +313,18 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                                 loading.setInverseBackgroundForced(true);
                                 loading.setIndeterminate(true);
                                 loading.setCancelable(false);
-                                loading.setMessage(getResources().getString(R.string.signing_in));
+                                loading.setMessage(getResources().getString(R.string.creating_patient));
                                 loading.show();
                             }
                         });
 
-                        String id = App.get(createPatientId);
-
                         ContentValues values = new ContentValues();
-                        values.put("patientId", "96225-8");
-                        values.put("patientId", "96225-8");
-                        values.put("patientId", "96225-8");
-
+                        values.put("patientId", id);
+                        values.put("firstName", fname);
+                        values.put("lastName", lname);
+                        values.put("gender", g);
+                        values.put("dob", App.getSqlDate(dateOfBirthCalendar));
+                        values.put("externalId", eId);
 
                         String result = serverService.createPatient(values);
 
@@ -275,9 +343,27 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                         super.onPostExecute(result);
                         loading.dismiss();
 
-                        if (result.equals("DUPLICATE")) {
+                        if (result.equals("CONNECTION_ERROR")) {
+                            Toast toast = Toast.makeText(SelectPatientActivity.this, getResources().getString(R.string.data_connection_error), Toast.LENGTH_LONG);
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
+                        } else if (result.equals("DUPLICATE")) {
                             createPatientId.setError(getResources().getString(R.string.duplicate_patient_id));
+                        } else {
+
+                            hideKeyboard();
+
+                            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putString(Preferences.PATIENT_UUID, App.getPatientUuid());
+                            editor.apply();
+
+                            Intent intent = new Intent();
+                            intent.putExtra("key", "CREATE");
+                            setResult(RESULT_OK, intent);
+                            finish();
                         }
+
 
 
                     }
@@ -550,6 +636,14 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
             return false;
 
         return true;
+    }
+
+    public void hideKeyboard() {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
     }
 
     public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {

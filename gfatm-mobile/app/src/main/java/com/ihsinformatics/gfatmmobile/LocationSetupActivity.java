@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateFormat;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * A login screen that offers login via email/password.
@@ -351,6 +353,14 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
                 super.onPostExecute(result);
                 loading.dismiss();
                 if (result.equals("SUCCESS")) {
+
+                    Calendar calendar = Calendar.getInstance();
+                    App.setLocationLastUpdate(DateFormat.format("dd-MMM-yyyy HH:mm:ss", calendar).toString());
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString(Preferences.LOCATION_LAST_UPDATE, App.getLocationLastUpdate());
+                    editor.apply();
+
                     fillList();
                 }
             }

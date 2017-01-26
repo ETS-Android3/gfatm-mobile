@@ -96,7 +96,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (!validate()) {
 
             // Authenticate from server
-            AsyncTask<String, String, String> authenticationTask = new AsyncTask<String, String, String>() {
+            AsyncTask<String, String, String> submissionTask = new AsyncTask<String, String, String>() {
                 @Override
                 protected String doInBackground(String... params) {
                     runOnUiThread(new Runnable() {
@@ -115,9 +115,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                     App.setUsername(App.get(username));
                     App.setPassword(App.get(password));
-
-                   /* if ((App.isOfflineMode ()) || (App.get (username).equalsIgnoreCase (defaultUser) && App.get (password).equals (defaultPassword)))
-                        return true;*/
 
                     String result = serverService.getUser();
                     return result;
@@ -148,6 +145,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         editor.putString(Preferences.PASSWORD, App.getPassword());
                         editor.putString(Preferences.AUTO_LOGIN, App.getAutoLogin());
                         editor.putString(Preferences.LAST_LOGIN, App.getLastLogin());
+                        editor.putString(Preferences.USER_FULLNAME, App.getUserFullName());
+                        editor.putString(Preferences.ROLES, App.getRoles());
+                        editor.putString(Preferences.PROVIDER_UUID, App.getProviderUUid());
                         editor.apply();
 
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -158,19 +158,27 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         App.setPassword(passwordTemp);
                         password.setText("");
                         Toast toast = Toast.makeText(LoginActivity.this, getResources().getString(R.string.authentication_error), Toast.LENGTH_LONG);
-                        toast.setGravity (Gravity.CENTER, 0, 0);
+                        toast.setGravity(Gravity.BOTTOM, 0, 0);
                         toast.show();
                     } else if (result.equals("CONNECTION_ERROR")) {
                         App.setUsername(usernameTemp);
                         App.setPassword(passwordTemp);
                         password.setText("");
                         Toast toast = Toast.makeText(LoginActivity.this, getResources().getString(R.string.data_connection_error), Toast.LENGTH_LONG);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.setGravity(Gravity.BOTTOM, 0, 0);
                         toast.show();
+                    } else if (result.equals("PROVIDER_NOT_FOUND")) {
+                        App.setUsername(usernameTemp);
+                        App.setPassword(passwordTemp);
+                        password.setText("");
+                        Toast toast = Toast.makeText(LoginActivity.this, getResources().getString(R.string.provider_not_found), Toast.LENGTH_LONG);
+                        toast.setGravity(Gravity.BOTTOM, 0, 0);
+                        toast.show();
+
                     }
                 }
             };
-            authenticationTask.execute("");
+            submissionTask.execute("");
         }
 
     }
