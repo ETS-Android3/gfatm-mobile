@@ -309,23 +309,28 @@
         <item>Zimbabwe</item>
     </string-array>
 
-    <string name="title_activity_program">Select program</string>
-    <string name="title_activity_theme">Select theme</string>
-    <string name="title_activity_language">Select preferred language</string>
-    <string name="title_operation_mode">Select Operation Mode</string>
-    <string name="title_activity_defaults">Select Defaults</string>
-    <string name="title_activity_server">Server Address</string>
-    <string name="title_activity_ssl">SSL Encryption</string>
+    <string name="title_program">Program</string>
+    <string name="title_theme">Theme</string>
+    <string name="title_language">Language</string>
+    <string name="title_operation_mode">Operation Mode</string>
+    <string name="title_defaults">Defaults</string>
+    <string name="title_server_address">Server Address</string>
+    <string name="title_ssl">SSL Encryption</string>
     <string name="title_saved_forms">Saved Forms</string>
     <string name="title_select_patient">Select Patient</string>
+    <string name="title_search_patient">Search Patient</string>
     <string name="title_create_new_patient">Create New Patient</string>
+    <string name="title_update_database">Update Database</string>
+    <string name="title_advanced">Advanced</string>
+    <string name="title_others">Others</string>
+    <string name="title_location">Location Setup</string>
 
     <string name="support_contact_default" translatable="false">03132882088</string>
     <string name="support_email_default" translatable="false">rabbia.hassan@ihsinformatics.com</string>
     <string name="city_default" translatable="false">Karachi</string>
     <string name="country_default" translatable="false">Pakistan</string>
-    <string name="ip_default" translatable="false">10.0.2.2</string>
-    <string name="port_default" translatable="false">8080</string>
+    <string name="ip_default" translatable="false">202.141.249.106</string>
+    <string name="port_default" translatable="false">6847</string>
 
     <string name="support_contact">Support Contact</string>
     <string name="support_email">Support Email</string>
@@ -340,10 +345,22 @@
     <string name="create">Create Patient</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="unknown">Unknown</string>
+    <string name="refused">Refused</string>
 
     <!-- Errors String -->
+    <string name="provider_not_found">No provider associated with the user. Please contact Admin to create your user provider.</string>
+    <string name="patient_not_select">SELECT PATIENT TO CONTINUE.</string>
+    <string name="patient_not_found">PATIENT NOT FOUND</string>
+    <string name="data_connection_error">Could not connect to Server! Please check your connection settings or contact Admin</string>
+    <string name="authentication_error">Authentication failed! Please enter valid id and password.</string>
+    <string name="no_location_select">Please select your location to continue.</string>
     <string name="empty_field">This field can\'t be empty.</string>
+    <string name="form_date_future">Date can\'t be in future.</string>
+    <string name="mandatory_field">This is a mandatory field</string>
+    <string name="mandatory_value_missing">Mandatory Fields value are missing.</string>
     <string name="invalid_value">Invalid value</string>
+    <string name="value_out_of_range">Value out of range</string>
     <string name="invalid_scanned_id">Invalid ID: Scanned Id isn\'t Valid. Please try different Id.</string>
     <string name="invalid_id">Invalid ID</string>
     <string name="no_program_selected">No program selected.</string>
@@ -364,6 +381,7 @@
     <string name="title_error">Error!</string>
     <string name="form_error">Resolve the  all the issue(s) to continue.</string>
     <string name="enrollment_date_error">Enrollment Date can\'t be after form date.</string>
+    <string name="duplicate_patient_id">Patient ID already exists.</string>
     <string name="barcode_scanner_missing">Missing Barcode Scanner. Please download and install Barcode Scanner from Play Store to be able to scan the QR Codes.</string>
 
     <!-- Strings related to login -->
@@ -378,6 +396,9 @@
     <string name="patient_id">Patient ID:</string>
     <string name="scan_barcode">Scan Barcode</string>
     <string name="or">or</string>
+    <string name="patient_created_successfully">Patient created Successfully.</string>
+    <string name="creating_patient">Creating patient...</string>
+    <string name="finding_patient">Finding patient...</string>
 
     <!-- create new Patient -->
     <string name="first_name">First Name: </string>
@@ -390,6 +411,7 @@
     <string name="external_id">External ID: \n (Optional) </string>
 
     <!-- Forms -->
+    <string name="no_saved_form">No saved form found.</string>
     <string name="back_to_form_menu">Back to Form Menu</string>
     <string name="form_date">Form Date:</string>
     <string name="time_stamp">Timestamp:</string>
@@ -401,6 +423,21 @@
     <string name="goto_next">Next</string>
     <string name="mandatory_field_sign">&lt;br&gt; &lt;font color=##0D6986&gt; * &lt;/font&gt;  mg</string>
 
+    <!-- Location Setup -->
+    <string name="no_location">No Location found.</string>
+    <string name="fetching_locations">Fetching Locations ...</string>
+    <string name="fetching_person_attribute_type">Fetching Person Attribute Types ...</string>
+    <string name="fetching_encounter_types">Fetching Encounter Types ...</string>
+    <string name="primary_contact">Primary Contact:</string>
+    <string name="address_1">Address 1:</string>
+    <string name="address_2">Address 2:</string>
+    <string name="city_village">City/Village:</string>
+    <string name="description">Description:</string>
+    <string name="sync_with_openmrs">Sync with Openmrs</string>
+    <string name="last_update_on">Last update on: </string>
+    <string name="location">Location</string>
+    <string name="fetching_data">fetching data</string>
+
     <!-- Search -->
     <string name="name">Name: </string>
     <string name="mobile_number">Mobile #: </string>
@@ -409,6 +446,12 @@
     <string name="search_again">Search Again</string>
     <string name="search_title">Select atleast one option</string>
 
+    <string name="submitting_form">Submitting form...</string>
+    <string name="form_submitted">Form successfully submitted.</string>
+    <string name="title_completed">Compeleted</string>
+    <string name="insert_error">Error while trying to submit form to server.</string>
+
+
     <string-array name="age_ranges">
         <item>0 - 15</item>
         <item>16 - 30</item>
@@ -416,6 +459,24 @@
         <item>46 - 60</item>
         <item>61 - 75</item>
         <item>76 - above</item>
+    </string-array>
+
+    <string-array name="yes_no_options">
+        <item>@string/yes</item>
+        <item>@string/no</item>
+    </string-array>
+
+    <string-array name="yes_no_unknown_refused_options">
+        <item>@string/yes</item>
+        <item>@string/no</item>
+        <item>@string/refused</item>
+        <item>@string/unknown</item>
+    </string-array>
+
+    <string-array name="yes_no_unknown_options">
+        <item>@string/yes</item>
+        <item>@string/no</item>
+        <item>@string/unknown</item>
     </string-array>
 
 </resources>
