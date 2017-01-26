@@ -4,6 +4,8 @@ import android.os.StrictMode;
 import android.util.Base64;
 import android.util.Log;
 
+import com.ihsinformatics.gfatmmobile.App;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -14,14 +16,12 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.openmrs.ConceptAnswer;
 import org.openmrs.Encounter;
 import org.openmrs.EncounterProvider;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.PersonAddress;
-import org.openmrs.PersonAttribute;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.PersonName;
 
@@ -29,7 +29,6 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
-import java.util.Set;
 
 /**
  * Created by Haris on 12/9/2016.
@@ -69,7 +68,7 @@ public class HttpPost {
             httpPost.setEntity(stringEntity);
             request = httpPost;
             auth = Base64.encodeToString(
-                    ("admin" + ":" + "Admin123").getBytes("UTF-8"),
+                    (App.getUsername() + ":" + App.getPassword()).getBytes("UTF-8"),
                     Base64.NO_WRAP);
             request.addHeader("Authorization", "Basic " + auth);
             response = client.execute(request);
@@ -104,7 +103,6 @@ public class HttpPost {
 
     public String savePatientByEntitiy(Patient patient) {
         JSONObject personObj = new JSONObject();
-        JSONObject preferredName = new JSONObject();
         JSONObject personAttribute = new JSONObject();
         JSONObject attribute = new JSONObject();
         JSONArray attributes = new JSONArray();
@@ -112,11 +110,11 @@ public class HttpPost {
         JSONArray addresses = new JSONArray();
         JSONArray identifiers = new JSONArray();
         JSONObject preferredAddress = new JSONObject();
-        JSONObject identifier = new JSONObject();
         JSONObject patientObject = new JSONObject();
         try {
 
             for (PersonName personName : patient.getNames()) {
+                JSONObject preferredName = new JSONObject();
                 preferredName.put("givenName", personName.getGivenName());
                 preferredName.put("middleName", personName.getMiddleName());
                 preferredName.put("familyName", personName.getFamilyName());
@@ -125,14 +123,14 @@ public class HttpPost {
                 names.put(preferredName);
             }
 
-            for (PersonAttribute personAttr : patient.getAttributes()) {
+            /*for (PersonAttribute personAttr : patient.getAttributes()) {
                 attribute.put("attributeType", personAttr.getAttributeType().getUuid());
                 attribute.put("value", personAttr.getValue());
                 attribute.put("voided", personAttr.getVoided());
                 attributes.put(attribute);
-            }
+            }*/
 
-            for (PersonAddress personAddress : patient.getAddresses()) {
+            /*for (PersonAddress personAddress : patient.getAddresses()) {
                 preferredAddress.put("preferred", personAddress.getPreferred());
                 preferredAddress.put("address1", personAddress.getAddress1());
                 preferredAddress.put("address2", personAddress.getAddress2());
@@ -151,25 +149,26 @@ public class HttpPost {
                 preferredAddress.put("longitude", personAddress.getLongitude());
                 preferredAddress.put("voided", personAddress.getVoided());
                 addresses.put(preferredAddress);
-            }
+            }*/
 
             personObj.put("gender", patient.getGender());
             personObj.put("birthdate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(patient.getBirthdate()));
-            personObj.put("birthdateEstimated", patient.getBirthdateEstimated());
+            /*personObj.put("birthdateEstimated", patient.getBirthdateEstimated());
             personObj.put("dead", patient.getDead());
             personObj.put("deathDate", patient.getDeathDate());
-            personObj.put("causeOfDeath", patient.getCauseOfDeath());
+            personObj.put("causeOfDeath", patient.getCauseOfDeath());*/
             personObj.put("names", names);
-            personObj.put("addresses", addresses);
+            /*personObj.put("addresses", addresses);
             personObj.put("attributes", attributes);
             personObj.put("voided", patient.getPersonVoided());
             personObj.put("deathdateEstimated", patient.getDeathdateEstimated());
-            personObj.put("birthtime", patient.getBirthtime());
+            personObj.put("birthtime", patient.getBirthtime());*/
             String response = postEntityByJSON(PERSON_RESOURCE, personObj);
             JSONObject newPerson = JSONParser.getJSONObject("{"
                     + response.toString() + "}");
 
             for (PatientIdentifier patientIdentifier : patient.getIdentifiers()) {
+                JSONObject identifier = new JSONObject();
                 identifier.put("identifier", patientIdentifier.getIdentifier());
                 identifier.put("identifierType", patientIdentifier.getIdentifierType().getUuid());
                 identifier.put("location", patientIdentifier.getLocation().getUuid());
@@ -209,33 +208,25 @@ public class HttpPost {
 
     public String saveEncounterWithObservationByEntity(Encounter encounter) {
         JSONObject encounterObject = new JSONObject();
-        JSONObject obsObject = new JSONObject();
-        JSONObject encounterProviderObject = new JSONObject();
         JSONArray encounterProviderArray = new JSONArray();
         JSONArray obsArray = new JSONArray();
-        String value = null;
 
         try {
             for (Obs observation : encounter.getObs()) {
+                String value = null;
+                JSONObject obsObject = new JSONObject();
                 obsObject.put("concept", observation.getConcept().getUuid());
-                obsObject.put("person", observation.getPerson().getUuid());
-                obsObject.put("obsDatetime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(observation.getObsDatetime()));
-                obsObject.put("accessionNumber", observation.getAccessionNumber());
-                obsObject.put("valueCodedName", observation.getValueCodedName().getUuid());
-                obsObject.put("comment", observation.getComment());
-                obsObject.put("location", observation.getLocation().getUuid());
-                obsObject.put("order", observation.getOrder().getUuid());
-                obsObject.put("voided", observation.getVoided());
-                Set<ConceptAnswer> conceptAnswers = (Set<ConceptAnswer>) observation.getValueCoded().getAnswers();
-                for (ConceptAnswer conceptAnswer : conceptAnswers) {
-                    value = conceptAnswer.getUuid();
-                }
+                if (observation.getValueCoded() == null)
+                    value = observation.getValueText();
+                else
+                    value = observation.getValueCoded().getUuid();
+
                 obsObject.put("value", value);
-                obsObject.put("valueModifier", observation.getValueModifier());
                 obsArray.put(obsObject);
             }
 
             for (EncounterProvider encounterProvider : encounter.getEncounterProviders()) {
+                JSONObject encounterProviderObject = new JSONObject();
                 encounterProviderObject.put("provider", encounterProvider.getProvider().getUuid());
                 encounterProviderObject.put("encounterRole", encounterProvider.getEncounterRole().getUuid());
                 encounterProviderObject.put("voided", encounterProvider.getVoided());
@@ -248,14 +239,71 @@ public class HttpPost {
             encounterObject.put("encounterType", encounter.getEncounterType().getUuid());
             encounterObject.put("obs", obsArray);
             encounterObject.put("voided", encounter.getVoided());
-            //  encounterObject.put("visit", encounter.getVisit().getUuid());
             encounterObject.put("encounterProviders", encounterProviderArray);
 
             return postEntityByJSON(ENCOUNTER_RESOURCE, encounterObject);
 
         } catch (Exception e) {
             e.printStackTrace();
+
         }
         return null;
     }
+
+    public String savePatientIdentifierByEntity(PatientIdentifier identifier) {
+        try {
+
+            JSONObject identifierObject = new JSONObject();
+            identifierObject.put("identifier", identifier.getIdentifier());
+            identifierObject.put("identifierType", identifier.getIdentifierType().getUuid());
+            identifierObject.put("location", identifier.getLocation().getUuid());
+            identifierObject.put("preferred", identifier.getPreferred());
+            identifierObject.put("voided", identifier.getVoided());
+
+            return postEntityByJSON(PATIENT_RESOURCE + "/" + App.getPatient().getUuid() + "/" + "identifier", identifierObject);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        return null;
+    }
+
+    public String savePersonAddressByEntity(PersonAddress personAddress) {
+        try {
+
+            JSONObject identifierObject = new JSONObject();
+            identifierObject.put("address1", personAddress.getAddress1());
+            identifierObject.put("address2", personAddress.getAddress2());
+            identifierObject.put("cityVillage", personAddress.getCityVillage());
+            identifierObject.put("stateProvince", personAddress.getStateProvince());
+            identifierObject.put("country", personAddress.getCountry());
+            identifierObject.put("longitude", personAddress.getLongitude());
+            identifierObject.put("latitude", personAddress.getLatitude());
+
+            return postEntityByJSON(PERSON_RESOURCE + "/" + App.getPatient().getUuid() + "/" + "address", identifierObject);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        return null;
+    }
+
+    public String savePersonAttribute(String attributeType, String value) {
+        try {
+
+            JSONObject identifierObject = new JSONObject();
+            identifierObject.put("attributeType", attributeType);
+            identifierObject.put("value", value);
+
+            return postEntityByJSON(PERSON_RESOURCE + "/" + App.getPatient().getUuid() + "/" + "attribute", identifierObject);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        return null;
+    }
+
 }
