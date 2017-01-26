@@ -5,6 +5,10 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.ihsinformatics.gfatmmobile.App;
+import com.ihsinformatics.gfatmmobile.model.Concept;
+import com.ihsinformatics.gfatmmobile.model.EncounterType;
+import com.ihsinformatics.gfatmmobile.model.Location;
+import com.ihsinformatics.gfatmmobile.model.PersonAttributeType;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -32,6 +36,8 @@ public class HttpGet {
     private static final String TAG = "HttpsClient";
     private static final String PERSON_RESOURCE = "person";
     private static final String PATIENT_RESOURCE = "patient";
+    private static final String PROVIDER = "provider";
+    private static final String ATTRIBUTE = "attribute";
     private static final String PROGRAM_RESOURCE = "program";
     private static final String CONCEPT_RESOURCE = "concept";
     private static final String ENCOUNTER_RESOURCE = "encounter";
@@ -167,6 +173,16 @@ public class HttpGet {
         return get(requestUri);
     }
 
+    private JSONObject getJsonObject(String resourceName, String parameter, String content) {
+        if (content == null)
+            return null;
+        content = content.trim();
+        content = content.replaceAll(" ", "%20");
+        String requestUri = "http://" + serverAdress + "/openmrs/ws/rest/v1/" + resourceName + "/" + parameter +
+                "/" + content;
+        return get(requestUri);
+    }
+
     private JSONObject getJsonObjectByUuid(String resourceName, String content) {
         if (content == null)
             return null;
@@ -186,10 +202,22 @@ public class HttpGet {
         return get(requestUri, condition, resourceName);
     }
 
-    private JSONArray getCustomJsonArray(String resourceName, String variable, String value) {
+    private JSONArray getCustomJsonArray(String resourceName, String variables, String value) {
         JSONArray jsonArray = null;
         try {
-            String requestUri = "http://" + serverAdress + "/openmrs/ws/rest/v1/patient?v=custom:(uuid)&q=" + value + "";
+            String requestUri = "http://" + serverAdress + "/openmrs/ws/rest/v1/" + resourceName + "?v=custom:(" + variables + ")&q=" + value + "";
+            JSONObject obj = get(requestUri);
+            jsonArray = obj.getJSONArray("results");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return jsonArray;
+    }
+
+    private JSONArray getCustomJsonArray(String resourceName, String variables) {
+        JSONArray jsonArray = null;
+        try {
+            String requestUri = "http://" + serverAdress + "/openmrs/ws/rest/v1/" + resourceName + "?v=custom:(" + variables + ")";
             JSONObject obj = get(requestUri);
             jsonArray = obj.getJSONArray("results");
         } catch (Exception e) {
@@ -389,11 +417,11 @@ public class HttpGet {
     }
 
     public JSONArray getAllPersonAttributeTypes() {
-        return getJSONArray(PERSON_ATTRIBUTE_TYPE_RESOURCE);
+        return getCustomJsonArray(PERSON_ATTRIBUTE_TYPE_RESOURCE, PersonAttributeType.FIELDS);
     }
 
     public JSONArray getAllEncounterTypes() {
-        return getJSONArray(ENCOUNTER_TYPE_RESOURCE);
+        return getCustomJsonArray(ENCOUNTER_TYPE_RESOURCE, EncounterType.FIELDS);
     }
 
     public JSONArray getAllProviderAttributeTypes() {
@@ -405,7 +433,11 @@ public class HttpGet {
     }
 
     public JSONArray getAllLocations() {
-        return getJSONArray(LOCATION_RESOURCE);
+        return getCustomJsonArray(LOCATION_RESOURCE, Location.FIELDS);
+    }
+
+    public JSONArray getAllConcepts() {
+        return getCustomJsonArray(CONCEPT_RESOURCE, Concept.FIELDS);
     }
 
     public JSONArray getAllLocationTags() {
@@ -426,6 +458,14 @@ public class HttpGet {
 
     public JSONArray getPatientUuidByPatientId(String patientId) {
         return getCustomJsonArray(PATIENT_RESOURCE, UUID, patientId);
+    }
+
+    public JSONObject getProviderByUserId(String userId) {
+        return getJsonObjectByName(PROVIDER_RESOURCE, userId);
+    }
+
+    public JSONObject getAllPersonAttributesByPersonUuid(String personUuid) {
+        return getJsonObject(PERSON_RESOURCE, personUuid, ATTRIBUTE);
     }
 
 }
