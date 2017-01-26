@@ -18,7 +18,7 @@
     <string name="pet_patient_Type">Index Patient type</string>
     <string name="pet_dst_pattern">Index Culture DST pattern</string>
     <string name="pet_treatment_regimen">Index treatment regimen</string>
-    <string name="pet_treatment_enrollement">Index Treatment enrollment date</string>
+    <string name="pet_treatment_enrollment">Index Treatment enrollment date</string>
 
     <string-array name="pet_genders">
         <item>Male</item>
@@ -29,9 +29,11 @@
         <item>Months</item>
         <item>Days</item>
     </string-array>
+    <string name="pet_ptb">ہاں</string>
+    <string name="pet_eptb">ہاں</string>
     <string-array name="pet_tb_types">
-        <item>PTB</item>
-        <item>EPTB</item>
+        <item>@string/pet_ptb</item>
+        <item>@string/pet_eptb</item>
     </string-array>
     <string-array name="pet_infection_types">
         <item>DSTB</item>

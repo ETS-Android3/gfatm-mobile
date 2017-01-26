@@ -1,104 +1,912 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Index Patient Registration Form -->
+    <string name="pet_enrollment_date_future">Enrollment date can\'t be in future.</string>
     <string name="pet_date">Form Date:</string>
-    <string name="pet_first_name">First Name:</string>
-    <string name="pet_last_name">Last Name:</string>
     <string name="pet_father_husband_name">Father\'s/Husband\'s name:</string>
-    <string name="pet_index_patient_id">Index Patient ID:</string>
     <string name="pet_index_patient_external_id">Index Patient External ID:</string>
-    <string name="pet_gender">Gender:</string>
-    <string name="pet_age">Age:</string>
-    <string name="pet_age_modifier">Age Modifier:</string>
-    <string name="pet_erns_number">Index ENRS number:</string>
-    <string name="pet_tb_type">Type of TB</string>
+    <string name="pet_erns_number">Index ENRS/District TB number</string>
+    <string name="pet_tb_type">Index Type of TB</string>
     <string name="pet_infection_type">Index type of Tb according to drug sensitivity:</string>
     <string name="pet_dst_available">Is the index patient DST result available?</string>
     <string name="pet_resistance_Type">Index Type of DR-TB resistance</string>
     <string name="pet_patient_Type">Index Patient type</string>
     <string name="pet_dst_pattern">Index Culture DST pattern</string>
     <string name="pet_treatment_regimen">Index treatment regimen</string>
-    <string name="pet_treatment_enrollement">Index Treatment enrollment date</string>
+    <string name="pet_treatment_enrollment">Index Treatment enrollment date</string>
 
-    <string-array name="pet_genders">
-        <item>Male</item>
-        <item>Female</item>
-    </string-array>
-    <string-array name="pet_age_modifiers">
-        <item>Years</item>
-        <item>Months</item>
-        <item>Days</item>
-    </string-array>
+    <string name="pet_ptb">PTB</string>
+    <string name="pet_eptb">EPTB</string>
     <string-array name="pet_tb_types">
-        <item>PTB</item>
-        <item>EPTB</item>
+        <item>@string/pet_ptb</item>
+        <item>@string/pet_eptb</item>
     </string-array>
+
+    <string name="pet_dstb">DSTB</string>
+    <string name="pet_drtb">DRTB</string>
     <string-array name="pet_infection_types">
-        <item>DSTB</item>
-        <item>DRTB</item>
+        <item>@string/pet_dstb</item>
+        <item>@string/pet_drtb</item>
     </string-array>
-    <string-array name="yes_no_options">
-        <item>@string/yes</item>
-        <item>@string/no</item>
-    </string-array>
+
+    <string name="pet_rr_tb">RR-TB</string>
+    <string name="pet_dr_tb">Mono DR-TB</string>
+    <string name="pet_pdr_tb">PDR-TB</string>
+    <string name="pet_mdr_tb">MDR-TB</string>
+    <string name="pet_xdr_tb">XDR-TB</string>
     <string-array name="pet_resistance_types">
-        <item>RR-TB</item>
-        <item>Mono DR-TB</item>
-        <item>PDR-TB</item>
-        <item>MDR-TB</item>
-        <item>XDR-TB</item>
+        <item>@string/pet_rr_tb</item>
+        <item>@string/pet_dr_tb</item>
+        <item>@string/pet_pdr_tb</item>
+        <item>@string/pet_mdr_tb</item>
+        <item>@string/pet_xdr_tb</item>
     </string-array>
+
+    <string name="pet_new">New</string>
+    <string name="pet_relapse">Relapse</string>
+    <string name="pet_cat1">Previously treated after failure (CAT-1)</string>
+    <string name="pet_cat2">Previously treated after failure (CAT-2)</string>
+    <string name="pet_mdr">Previously treated after failure (MDR)</string>
+    <string name="pet_treatment_failure">Previously treated (treatment failure)</string>
+    <string name="pet_loss_of_followup_type">Previously treated (loss to follow-up)</string>
+    <string name="pet_unknown">Unknown</string>
+    <string name="pet_previously_treated">Others Previously treated</string>
     <string-array name="pet_patient_types">
-        <item>New</item>
-        <item>Relapse</item>
-        <item>Previously treated after failure (CAT-1)</item>
-        <item>Previously treated after failure (CAT-2)</item>
-        <item>Previously treated after failure (MDR)</item>
-        <item>Previously treated (treatment failure)</item>
-        <item>Previously treated (treatment failure)</item>
-        <item>Previously treated (loss to follow-up)</item>
-        <item>Unknown</item>
-        <item>Others Previously treated</item>
+        <item>@string/pet_new</item>
+        <item>@string/pet_relapse</item>
+        <item>@string/pet_cat1</item>
+        <item>@string/pet_cat2</item>
+        <item>@string/pet_mdr</item>
+        <item>@string/pet_treatment_failure</item>
+        <item>@string/pet_loss_of_followup_type</item>
+        <item>@string/pet_unknown</item>
+        <item>@string/pet_previously_treated</item>
     </string-array>
+
+    <string name="pet_isoniazid">Isoniazid</string>
+    <string name="pet_rifampicin">Rifampicin</string>
+    <string name="pet_amikacin">Amikacin</string>
+    <string name="pet_capreomycin">Capreomycin</string>
+    <string name="pet_streptpmycin">Streptpmycin</string>
+    <string name="pet_ofloxacin">Ofloxacin</string>
+    <string name="pet_moxifloxacin">Moxifloxacin</string>
+    <string name="pet_ethambutol">Ethambutol</string>
+    <string name="pet_ethionamide">Ethionamide</string>
+    <string name="pet_pyrazinamide">Pyrazinamide</string>
+
     <string-array name="pet_dst_patterns">
-        <item>Isoniazid</item>
-        <item>Rifampicin</item>
-        <item>Amikacin</item>
-        <item>Capreomycin</item>
-        <item>Streptpmycin</item>
-        <item>Ofloxacin</item>
-        <item>Moxifloxacin</item>
-        <item>Ethambutol</item>
-        <item>Ethionamide</item>
-        <item>Pyrazinamide</item>
+        <item>@string/pet_isoniazid</item>
+        <item>@string/pet_rifampicin</item>
+        <item>@string/pet_amikacin</item>
+        <item>@string/pet_capreomycin</item>
+        <item>@string/pet_streptpmycin</item>
+        <item>@string/pet_ofloxacin</item>
+        <item>@string/pet_moxifloxacin</item>
+        <item>@string/pet_ethambutol</item>
+        <item>@string/pet_ethionamide</item>
+        <item>@string/pet_pyrazinamide</item>
     </string-array>
+
+    <string name="pet_bedaquiline">Bedaquiline</string>
+    <string name="pet_clofazimine">Clofazimine</string>
+    <string name="pet_delamanid">Delamanid</string>
+    <string name="pet_high_dosed_isoniazid">High-dose Isoniazid</string>
+    <string name="pet_levofloxacin">Levofloxacin</string>
+    <string name="pet_meropenem">Meropenem</string>
+    <string name="pet_p_aminosalicylic_acid">P-Aminosalicylic Acid</string>
+    <string name="pet_thioacetazone">Thioacetazone</string>
+    <string name="pet_amoxicillin_clavulanate">Amoxicillin-clavulanate</string>
+    <string name="pet_cycloserine">Cycloserine</string>
+    <string name="pet_gatifloxacin">Gatifloxacin</string>
+    <string name="pet_imipenem_cilastatin">Imipenem-cilastatin</string>
+    <string name="pet_kanamycin">Kanamycin</string>
+    <string name="pet_linezolid">Linezolid</string>
+    <string name="pet_prothionamide">Prothionamide</string>
+    <string name="pet_terizidone">Terizidone</string>
+
     <string-array name="pet_treatment_regimens_1">
-        <item>Amikacin</item>
-        <item>Bedaquiline</item>
-        <item>Clofazimine</item>
-        <item>Delamanid</item>
-        <item>Ethionamide</item>
-        <item>High-dose Isoniazid</item>
-        <item>Isoniazid</item>
-        <item>Levofloxacin</item>
-        <item>Meropenem</item>
-        <item>P-Aminosalicylic Acid</item>
-        <item>Pyrazinamide</item>
-        <item>Streptpmycin</item>
-        <item>Thioacetazone</item>
+        <item>@string/pet_amikacin</item>
+        <item>@string/pet_bedaquiline</item>
+        <item>@string/pet_clofazimine</item>
+        <item>@string/pet_delamanid</item>
+        <item>@string/pet_ethionamide</item>
+        <item>@string/pet_high_dosed_isoniazid</item>
+        <item>@string/pet_isoniazid</item>
+        <item>@string/pet_levofloxacin</item>
+        <item>@string/pet_meropenem</item>
+        <item>@string/pet_p_aminosalicylic_acid</item>
+        <item>@string/pet_pyrazinamide</item>
+        <item>@string/pet_streptpmycin</item>
+        <item>@string/pet_thioacetazone</item>
     </string-array>
     <string-array name="pet_treatment_regimens_2">
-        <item>Amoxicillin-clavulanate</item>
-        <item>Capreomycin</item>
-        <item>Cycloserine</item>
-        <item>Ethambutol</item>
-        <item>Gatifloxacin</item>
-        <item>Imipenem-cilastatin</item>
-        <item>Kanamycin</item>
-        <item>Linezolid</item>
-        <item>Moxifloxacin</item>
-        <item>Prothionamide</item>
-        <item>Rifampicin</item>
-        <item>Terizidone</item>
+        <item>@string/pet_amoxicillin_clavulanate</item>
+        <item>@string/pet_capreomycin</item>
+        <item>@string/pet_cycloserine</item>
+        <item>@string/pet_ethambutol</item>
+        <item>@string/pet_gatifloxacin</item>
+        <item>@string/pet_imipenem_cilastatin</item>
+        <item>@string/pet_kanamycin</item>
+        <item>@string/pet_linezolid</item>
+        <item>@string/pet_moxifloxacin</item>
+        <item>@string/pet_prothionamide</item>
+        <item>@string/pet_rifampicin</item>
+        <item>@string/pet_terizidone</item>
+    </string-array>
+
+    <!-- Contact Registery Form -->
+    <string name="pet_total_contacts">Total Number of contacts</string>
+    <string name="pet_total_contacts_hint">0-50</string>
+    <string name="pet_total_adult_contacts">Total Number of adult contacts</string>
+    <string name="pet_total_adult_contacts_hint">0-25</string>
+    <string name="pet_total_childern_contacts">Total Number of childhood contacts</string>
+    <string name="pet_total_childern_contacts_hint">0-25</string>
+
+    <!-- Baseline Screening -->
+    <string name="pet_index_patient_id">Index Patient ID:</string>
+    <string name="pet_tb_treatment_status">Is the contact currently taking TB treatment?</string>
+    <string name="pet_contact_registered">Is contact registered in Zero TB program?</string>
+    <string name="pet_tb_history">Has the contact taken TB treatment in past?</string>
+    <string name="pet_relationship">Index patient\'s relationship with contact e.g. \'Mother\' means Index is Mother of Contact</string>
+    <string name="pet_other">Other</string>
+    <string name="pet_cnic">CNIC</string>
+    <string name="pet_cnic_owner">Whose CNIC is this?</string>
+    <string name="pet_self">Self</string>
+    <string name="pet_mother">Mother</string>
+    <string name="pet_father">Father</string>
+    <string name="pet_maternal_grandmother">Maternal Grandmother</string>
+    <string name="pet_maternal_grandfather">Maternal Grandfather</string>
+    <string name="pet_paternal_grandmother">Paternal Grandmother</string>
+    <string name="pet_paternal_grandfather">Paternal Grandfather</string>
+    <string name="pet_brother">Brother</string>
+    <string name="pet_sister">Sister</string>
+    <string name="pet_son">Son</string>
+    <string name="pet_daughter">Daughter</string>
+    <string name="pet_spouse">Spouse</string>
+    <string name="pet_aunt">Aunt</string>
+    <string name="pet_uncle">Uncle</string>
+    <string-array name="pet_cnic_owners">
+        <item>@string/pet_self</item>
+        <item>@string/pet_mother</item>
+        <item>@string/pet_father</item>
+        <item>@string/pet_maternal_grandmother</item>
+        <item>@string/pet_maternal_grandfather</item>
+        <item>@string/pet_paternal_grandmother</item>
+        <item>@string/pet_paternal_grandfather</item>
+        <item>@string/pet_brother</item>
+        <item>@string/pet_sister</item>
+        <item>@string/pet_son</item>
+        <item>@string/pet_daughter</item>
+        <item>@string/pet_spouse</item>
+        <item>@string/pet_aunt</item>
+        <item>@string/pet_uncle</item>
+        <item>@string/pet_other</item>
+    </string-array>
+    <string name="pet_phone_1">Phone Number 1</string>
+    <string name="pet_phone_2">Phone Number 2</string>
+    <string name="pet_address_1">Address 1 (House Number, etc.)</string>
+    <string name="pet_address_2">Address 2 (Block, Street, Sector, Colony, etc.)</string>
+    <string name="pet_town">Town</string>
+    <string name="pet_city">City</string>
+    <string name="pet_address_type">What type of Address is this?</string>
+    <string name="pet_permanent">Permanent</string>
+    <string name="pet_temporary">Temporary</string>
+    <string-array name="pet_address_types">
+        <item>@string/pet_permanent</item>
+        <item>@string/pet_temporary</item>
+    </string-array>
+    <string name="pet_landmark">Nearest Landmark</string>
+    <string name="pet_event_location">Location of form entry</string>
+    <string name="pet_facility">Facility</string>
+    <string name="pet_contact_home">Contact\'s home</string>
+    <string-array name="pet_locations_of_entry">
+        <item>@string/pet_facility</item>
+        <item>@string/pet_contact_home</item>
+    </string-array>
+    <string name="pet_contact_verbal_screening">Contact Verbal Symptom Screening</string>
+    <string name="pet_has_cough">Does contact have cough?</string>
+    <string name="pet_cough_duration">Cough duration</string>
+    <string name="pet_less_than_2_weeks">Less than 2 weeks</string>
+    <string name="pet_two_three_weeks">2 to 3 weeks</string>
+    <string name="pet_more_than_3_weeks">More than 3 weeks</string>
+    <string-array name="pet_cough_durations">
+        <item>@string/pet_less_than_2_weeks</item>
+        <item>@string/pet_two_three_weeks</item>
+        <item>@string/pet_more_than_3_weeks</item>
+        <item>@string/unknown</item>
+        <item>@string/refused</item>
+    </string-array>
+    <string name="pet_haemoptysis">Blood in cough (Haemoptysis)</string>
+    <string name="pet_fever">Does contact have fever?</string>
+    <string name="pet_weight_loss">Does contact have weight loss or failure to thrive?</string>
+    <string name="pet_reduced_appetite">Reduced appetite</string>
+    <string name="pet_reduced_activity">Does contact have reduced activity?</string>
+    <string name="pet_night_sweats">Does contact have night sweats?</string>
+    <string name="pet_swelling">Does the contact have glandular swelling anywhere in body?</string>
+    <string name="pet_referral">Has the contact been referred to the facility?</string>
+    <string name="pet_facility_type">Type of Facility the contact is referred to</string>
+    <string name="pet_government_facility">Government Facility</string>
+    <string name="pet_private_facility">Private Facility</string>
+    <string-array name="pet_facility_types">
+        <item>@string/pet_government_facility</item>
+        <item>@string/pet_private_facility</item>
+    </string-array>
+    <string name="pet_facility_referred">Facility contact referred to</string>
+
+    <!-- Socio Economics Data -->
+    <string name="pet_ethnicity">What is your ethnicity?</string>
+    <string name="pet_urdu_speaking">Urdu Speaking</string>
+    <string name="pet_sindhi">Sindhi</string>
+    <string name="pet_pakhtun">Pakthun</string>
+    <string name="pet_punjabi">Punjabi</string>
+    <string name="pet_balochi">Balochi</string>
+    <string name="pet_bihari">Bihari</string>
+    <string name="pet_memon">Memon</string>
+    <string name="pet_gujrati">Gujrati</string>
+    <string name="pet_brohi">Brohi</string>
+    <string name="pet_hindko">Hindko</string>
+    <string name="pet_gilgiti_kashmiri">Gilgiti/Kashmiri</string>
+    <string name="pet_siraiki">Siraiki</string>
+    <string name="pet_benagli">Bengali</string>
+    <string name="pet_afghani">Afghani</string>
+    <string name="pet_hazara">Hazara</string>
+    <string name="pet_other_ethnicity">Other Ethnicity</string>
+    <string-array name="pet_ethnicities">
+        <item>@string/pet_urdu_speaking</item>
+        <item>@string/pet_sindhi</item>
+        <item>@string/pet_pakhtun</item>
+        <item>@string/pet_punjabi</item>
+        <item>@string/pet_balochi</item>
+        <item>@string/pet_bihari</item>
+        <item>@string/pet_memon</item>
+        <item>@string/pet_gujrati</item>
+        <item>@string/pet_brohi</item>
+        <item>@string/pet_hindko</item>
+        <item>@string/pet_kashmiri</item>
+        <item>@string/pet_siraiki</item>
+        <item>@string/pet_benagli</item>
+        <item>@string/pet_afghani</item>
+        <item>@string/pet_hazara</item>
+        <item>@string/pet_other_ethnicity</item>
+        <item>@string/unknown</item>
+        <item>@string/refused</item>
+    </string-array>
+    <string name="pet_contact_education_level">Contact\'s Highest Level of Education Attainment</string>
+    <string name="pet_elementary">Elementary</string>
+    <string name="pet_primary">Primary</string>
+    <string name="pet_secondary">Secondary</string>
+    <string name="pet_intermediate">Intermediate</string>
+    <string name="pet_undergraduate">Undergraduate</string>
+    <string name="pet_graduate">Graduate</string>
+    <string name="pet_doctorate">Doctorate</string>
+    <string name="pet_religious">Religious</string>
+    <string name="pet_polytechnic">Polytechnic</string>
+    <string name="pet_special_education">Special Education</string>
+    <string name="pet_no_formal_education">No Formal Education</string>
+    <string-array name="pet_contact_education_levels">
+        <item>@string/pet_elementary</item>
+        <item>@string/pet_primary</item>
+        <item>@string/pet_secondary</item>
+        <item>@string/pet_intermediate</item>
+        <item>@string/pet_undergraduate</item>
+        <item>@string/pet_graduate</item>
+        <item>@string/pet_doctorate</item>
+        <item>@string/pet_religious</item>
+        <item>@string/pet_polytechnic</item>
+        <item>@string/pet_special_education</item>
+        <item>@string/pet_special_education</item>
+        <item>@string/pet_other</item>
+        <item>@string/refused</item>
+        <item>@string/unknown</item>
+    </string-array>
+    <string name="pet_martial_status">Marital status:</string>
+    <string name="pet_single">Single</string>
+    <string name="pet_engaged">Engaged</string>
+    <string name="pet_married">Married</string>
+    <string name="pet_separated">Separated</string>
+    <string name="pet_divorced">Divorced</string>
+    <string name="pet_widower">Widow(er)</string>
+    <string-array name="pet_martial_statuses">
+        <item>@string/pet_single</item>
+        <item>@string/pet_engaged</item>
+        <item>@string/pet_married</item>
+        <item>@string/pet_separated</item>
+        <item>@string/pet_divorced</item>
+        <item>@string/pet_widower</item>
+        <item>@string/pet_other</item>
+        <item>@string/refused</item>
+        <item>@string/unknown</item>
+    </string-array>
+    <string name="pet_employement_status">Current employment status:</string>
+    <string name="pet_employed">Employed</string>
+    <string name="pet_unable_to_work">Unable to work</string>
+    <string name="pet_student">Student</string>
+    <string name="pet_unemployed">Unemployed</string>
+    <string name="pet_housework">Housework</string>
+    <string name="pet_retired">Pensioner/Retired</string>
+    <string-array name="pet_employement_statuses">
+        <item>@string/pet_employed</item>
+        <item>@string/pet_unable_to_work</item>
+        <item>@string/pet_student</item>
+        <item>@string/pet_unemployed</item>
+        <item>@string/pet_housework</item>
+        <item>@string/pet_other</item>
+        <item>@string/refused</item>
+        <item>@string/unknown</item>
+    </string-array>
+    <string name="pet_occupation">Patient\'s Occupation:</string>
+    <string name="pet_artist">Artist</string>
+    <string name="pet_beggar">Beggar</string>
+    <string name="pet_carpenter">Carpenter</string>
+    <string name="pet_casual_labor">Casual Labor</string>
+    <string name="pet_child_labor">Child Labor</string>
+    <string name="pet_clerk">Clerk</string>
+    <string name="pet_doctor">Doctor</string>
+    <string name="pet_driver">Driver</string>
+    <string name="pet_engineer">Engineer</string>
+    <string name="pet_farmer">Farmer</string>
+    <string name="pet_fisherman">Fisherman</string>
+    <string name="pet_food_vendor">Food Vendor</string>
+    <string name="pet_forestry_worker">Forestry Worker</string>
+    <string name="pet_machine_operator">Machine Operator</string>
+    <string name="pet_miner">Miner</string>
+    <string name="pet_pilot">Pilot</string>
+    <string name="pet_plumber">Plumber</string>
+    <string name="pet_professional">Professional</string>
+    <string name="pet_reporter">Reporter</string>
+    <string name="pet_sales_representative">Sales Representative</string>
+    <string name="pet_security_officer">Security Officer</string>
+    <string name="pet_shepherd">Shepherd</string>
+    <string name="pet_slum_worker">Slum Worker</string>
+    <string name="pet_small_bussiness_owner">Small Business Owner</string>
+    <string name="pet_tailor">Tailor</string>
+    <string name="pet_trader">Trader</string>
+    <string name="pet_teacher">Teacher</string>
+    <string name="pet_vegetable_fruit_Seller">Vegetable/Fruit Seller</string>
+    <string name="pet_waiter">Waiter</string>
+    <string-array name="pet_occupations">
+        <item>@string/pet_artist</item>
+        <item>@string/pet_beggar</item>
+        <item>@string/pet_student</item>
+        <item>@string/pet_carpenter</item>
+        <item>@string/pet_casual_labor</item>
+        <item>@string/pet_child_labor</item>
+        <item>@string/pet_clerk</item>
+        <item>@string/pet_doctor</item>
+        <item>@string/pet_driver</item>
+        <item>@string/pet_engineer</item>
+        <item>@string/pet_farmer</item>
+        <item>@string/pet_fisherman</item>
+        <item>@string/pet_food_vendor</item>
+        <item>@string/pet_forestry_worker</item>
+        <item>@string/pet_housework</item>
+        <item>@string/pet_machine_operator</item>
+        <item>@string/pet_miner</item>
+        <item>@string/pet_pilot</item>
+        <item>@string/pet_plumber</item>
+        <item>@string/pet_professional</item>
+        <item>@string/pet_reporter</item>
+        <item>@string/pet_sales_representative</item>
+        <item>@string/pet_security_officer</item>
+        <item>@string/pet_shepherd</item>
+        <item>@string/pet_slum_worker</item>
+        <item>@string/pet_small_bussiness_owner</item>
+        <item>@string/pet_tailor</item>
+        <item>@string/pet_trader</item>
+        <item>@string/pet_teacher</item>
+        <item>@string/pet_vegetable_fruit_Seller</item>
+        <item>@string/pet_waiter</item>
+        <item>@string/pet_other</item>
+        <item>@string/unknown</item>
+    </string-array>
+    <string name="pet_contact_income">Contact\'s income</string>
+    <string name="pet_contact_income_group">Contact\'s income group</string>
+    <string name="pet_none">None</string>
+    <string name="pet_lower_class">Lower Class</string>
+    <string name="pet_lower_middle_class">Lower Middle Class</string>
+    <string name="pet_middle_class">Middle Class</string>
+    <string name="pet_upper_middle_class">Upper Middle Class</string>
+    <string name="pet_upper_class">Upper Class</string>
+    <string name="pet_household_head">Who is patient\'s head of household within his/her family?</string>
+    <string-array name="pet_household_heads">
+        <item>@string/pet_mother</item>
+        <item>@string/pet_father</item>
+        <item>@string/pet_maternal_grandmother</item>
+        <item>@string/pet_maternal_grandfather</item>
+        <item>@string/pet_paternal_grandmother</item>
+        <item>@string/pet_paternal_grandfather</item>
+        <item>@string/pet_brother</item>
+        <item>@string/pet_sister</item>
+        <item>@string/pet_son</item>
+        <item>@string/pet_daughter</item>
+        <item>@string/pet_spouse</item>
+        <item>@string/pet_aunt</item>
+        <item>@string/pet_uncle</item>
+        <item>@string/pet_other</item>
+    </string-array>
+    <string name="pet_household_education">Highest Level of Education Attainment of Head of Household</string>
+    <string name="pet_mother_tongue">Mother tongue</string>
+    <string name="pet_urdu">Urdu</string>
+    <string name="pet_pushto">Pushto</string>
+    <string name="pet_english">English</string>
+    <string name="pet_memoni">Memoni</string>
+    <string name="pet_brahui">Brahui</string>
+    <string name="pet_chitrali">Chitrali</string>
+    <string name="pet_kalaasha">Kalaasha</string>
+    <string name="pet_kashmiri">Kashmiri</string>
+    <string name="pet_persian">Persian</string>
+    <string name="pet_balti">Balti</string>
+    <string name="pet_makrani">Makrani</string>
+    <string-array name="pet_mother_tongues">
+        <item>@string/pet_urdu</item>
+        <item>@string/pet_punjabi</item>
+        <item>@string/pet_sindhi</item>
+        <item>@string/pet_pushto</item>
+        <item>@string/pet_balochi</item>
+        <item>@string/pet_siraiki</item>
+        <item>@string/pet_hazara</item>
+        <item>@string/pet_english</item>
+        <item>@string/pet_gujrati</item>
+        <item>@string/pet_memoni</item>
+        <item>@string/pet_brahui</item>
+        <item>@string/pet_chitrali</item>
+        <item>@string/pet_hindko</item>
+        <item>@string/pet_kalaasha</item>
+        <item>@string/pet_kashmiri</item>
+        <item>@string/pet_persian</item>
+        <item>@string/pet_balti</item>
+        <item>@string/pet_makrani</item>
+        <item>@string/pet_other</item>
+        <item>@string/refused</item>
+        <item>@string/unknown</item>
+    </string-array>
+
+    <!-- Clinician Contact Screening -->
+    <string name="pet_weight">Weight (in Kg)</string>
+    <string name="pet_height">Height (in cm)</string>
+    <string name="pet_bmi_si_unit">kg/m²</string>
+    <string name="pet_bmi">BMI</string>
+    <string name="pet_underweight">Underweight</string>
+    <string name="pet_normal">Normal</string>
+    <string name="pet_overweight">Overweight</string>
+    <string name="pet_obese">Obese</string>
+    <string name="pet_very_obese">Very Obese</string>
+    <string name="pet_muac">MUAC (cm)</string>
+    <string name="pet_weight_percentile">Weight Percentile</string>
+
+    <string name="pet_less_third_percentile">&lt;3rd Centile</string>
+    <string name="pet_third_percentile">3rd Centile</string>
+    <string name="pet_fifth_percentile">5th Centile</string>
+    <string name="pet_tenth_percentile">10th Centile</string>
+    <string name="pet_tenth_twenty_percentile">between 10-25th Centile</string>
+    <string name="pet_twenty_fifth_percentile">25th Centile</string>
+    <string name="pet_twenty_fitfy_percentile">between 25-50th Centile</string>
+    <string name="pet_fifty_percentile">50th Centile</string>
+    <string name="pet_fifth_sevety_percentile">between 50-75th Centile</string>
+    <string name="pet_seventy_fifth_percentile">75th Centile</string>
+    <string name="pet_seventy_hundredth_percentile">between 75-100th Centile</string>
+    <string name="pet_hundreth_percentile">100th Centile</string>
+    <string name="pet_greater_hundredth_percentile">&gt;100th Centile</string>
+
+    <string-array name="pet_weight_percentiles">
+        <item>@string/pet_less_third_percentile</item>
+        <item>@string/pet_third_percentile</item>
+        <item>@string/pet_fifth_percentile</item>
+        <item>@string/pet_tenth_percentile</item>
+        <item>@string/pet_tenth_twenty_percentile</item>
+        <item>@string/pet_twenty_fifth_percentile</item>
+        <item>@string/pet_twenty_fitfy_percentile</item>
+        <item>@string/pet_fifty_percentile</item>
+        <item>@string/pet_fifth_sevety_percentile</item>
+        <item>@string/pet_seventy_fifth_percentile</item>
+        <item>@string/pet_seventy_hundredth_percentile</item>
+        <item>@string/pet_hundreth_percentile</item>
+        <item>@string/pet_greater_hundredth_percentile</item>
+    </string-array>
+
+    <string name="pet_contact_symptom_screen">Contact Symptom Screen</string>
+    <string name="pet_difficulty_breathing">Difficulty in breathing</string>
+    <string name="pet_fever_duration">Duration of fever</string>
+    <string name="pet_lethargy">Lethargy</string>
+    <string name="pet_swollen_joints">Swollen Joints</string>
+    <string name="pet_back_pain">Back pain</string>
+    <string name="pet_adenopathy">Lumps in neck, armpit or groin</string>
+    <string name="pet_vomiting_without_gi_symptoms">Vomiting without other GI symptoms</string>
+    <string name="pet_gi_symptoms">Gastrointestinal symptoms</string>
+    <string name="pet_lost_activity_interest">Loss of interest in activity</string>
+    <string name="pet_exposure_point_1">Is the index case contact’s mother?</string>
+    <string name="pet_exposure_point_2">Is the index case contact’s primary care giver?</string>
+    <string name="pet_exposure_point_3">Does the index case sleep in the same bed as the contact?</string>
+    <string name="pet_exposure_point_4">Does the index case sleep in the same room as the contact?</string>
+    <string name="pet_exposure_point_5">Does the index case and contact live in the same household?</string>
+    <string name="pet_exposure_point_6">Does the index case see the contact everyday?</string>
+    <string name="pet_exposure_point_7">Is the index case coughing?</string>
+    <string name="pet_exposure_point_8">Does the index case have pulmonary TB?</string>
+    <string name="pet_exposure_point_9">Does the index case have positive sputum smear?</string>
+    <string name="pet_exposure_point_10">Is there more than one index case in contact’s household?</string>
+    <string name="pet_exposure_score">Exposure Score</string>
+
+    <string name="pet_physical_examination">Physical Examination</string>
+    <string name="pet_remarkable">Remarkable</string>
+    <string name="pet_unremarkable">unremarkable</string>
+    <string-array name="pet_examination_note">
+        <item>@string/pet_remarkable</item>
+        <item>@string/pet_unremarkable</item>
+    </string-array>
+    <string name="pet_general_appearance">General Appearance</string>
+    <string name="pet_explanation">Explanation</string>
+    <string name="pet_heent">Head, eyes, ear, nose, throat</string>
+    <string name="pet_lymphnode">Lymph node examination (Neck, Axilla, Groin)</string>
+    <string name="pet_spine">Spine</string>
+    <string name="pet_joints">Joints</string>
+    <string name="pet_skin">Skin</string>
+    <string name="pet_chest_examination">Chest examination</string>
+    <string name="pet_abdominal_examination">Abdominal examination</string>
+    <string name="pet_tb_suggestive">Is the physical examination suggestive of TB</string>
+    <string name="pet_yes_tb_suggestive">Suggestive of TB</string>
+    <string name="pet_strongly_tb_suggestive">Strongly Suggestive of TB</string>
+    <string name="pet_not_tb_suggestive">Not Suggestive of TB</string>
+    <string-array name="pet_tb_suggestives">
+        <item>@string/pet_yes_tb_suggestive</item>
+        <item>@string/pet_strongly_tb_suggestive</item>
+        <item>@string/pet_not_tb_suggestive</item>
+    </string-array>
+    <string name="pet_comorbid_condition">Do you have any co-existing medical condition?</string>
+    <string name="pet_diabetes">Diabetes</string>
+    <string name="pet_hypertension">Hypertension</string>
+    <string name="pet_chronic_renal_disease">Chronic Renal Disease</string>
+    <string name="pet_cardiovascular_disease">Cardiovascular disease</string>
+    <string name="pet_asthma">Asthma</string>
+    <string name="pet_emphysema">Emphysema</string>
+    <string name="pet_copd">COPD</string>
+    <string-array name="pet_comorbid_conditions">
+        <item>@string/pet_diabetes</item>
+        <item>@string/pet_hypertension</item>
+        <item>@string/pet_chronic_renal_disease</item>
+        <item>@string/pet_cardiovascular_disease</item>
+        <item>@string/pet_asthma</item>
+        <item>@string/pet_emphysema</item>
+        <item>@string/pet_copd</item>
+        <item>@string/pet_other</item>
+    </string-array>
+    <string name="pet_referral_needed">Does the contact need referral for his/her condition?</string>
+    <string name="pet_doctor_notes">Clinician\'s notes</string>
+
+    <!-- Infection Treatment Eligibility -->
+    <string name="pet_confirmiing_treatment_eligibility">Confirming Eligibility for Infection Treatment</string>
+    <string name="pet_pregnancy_history">Pregnancy History - suggestive of pregnancy</string>
+    <string name="pet_pregnancy_test_result">Pregnancy test result</string>
+    <string name="pet_positive">Positive</string>
+    <string name="pet_negative">Negative</string>
+    <string name="pet_undetermined">Undetermined</string>
+    <string-array name="pet_pregnancy_test_results">
+        <item>@string/pet_positive</item>
+        <item>@string/pet_negative</item>
+        <item>@string/pet_undetermined</item>
+    </string-array>
+    <string name="pet_evaluation_type">Type of evaluation for disease</string>
+    <string name="pet_evidence_based_evaluation">Evidence based evaluation</string>
+    <string name="pet_clinical_evaluation">Clinical evaluation</string>
+    <string-array name="pet_evaluation_types">
+        <item>@string/pet_evidence_based_evaluation</item>
+        <item>@string/pet_clinical_evaluation</item>
+    </string-array>
+    <string name="pet_tb_diagnosed">Has TB disease been diagnosed</string>
+    <string name="pet_type_of_tb">Type of TB diagnosed</string>
+    <string name="pet_patient_referred_fot_tb_treatment">Has the patient been referred for TB treatment?</string>
+    <string name="pet_referral_site">Name of the referral Site</string>
+    <string name="pet_tih">TIH</string>
+    <string name="pet_sghk">SGHK</string>
+    <string name="pet_szck">SZCK</string>
+    <string name="pet_jpmc">JPMC</string>
+    <string name="pet_oicd">OICD</string>
+    <string name="pet_atswh">ATSWH</string>
+    <string-array name="pet_referral_sites">
+        <item>@string/pet_tih</item>
+        <item>@string/pet_sghk</item>
+        <item>@string/pet_szck</item>
+        <item>@string/pet_jpmc</item>
+        <item>@string/pet_oicd</item>
+        <item>@string/pet_atswh</item>
+        <item>@string/pet_other</item>
+    </string-array>
+    <string name="pet_ruled_out">Has TB disease been ruled out?</string>
+    <string name="pet_eligible">Eligible for PET</string>
+    <string name="pet_consent">Does the contact agree to take PET?</string>
+
+    <!-- Treatment Initiation -->
+    <string name="pet_tb_category">Index DSTB type</string>
+    <string name="pet_cat_1">CAT-1</string>
+    <string name="pet_cat_2">CAT-2</string>
+    <string name="pet_treatment_initiation_date">PET Registration/Treatment initiation Date</string>
+    <string name="pet_regimen">PET Regimen</string>
+    <string name="pet_isoniazid_prophylaxis_therapy">Isoniazid Prophylaxis therapy</string>
+    <string name="pet_isoniazid_rifapentine">Isoniazid + Rifapentine</string>
+    <string name="pet_levofloxacin_ethionamide">Levofloxacin + Ethionamide</string>
+    <string-array name="pet_regimens">
+        <item>@string/pet_isoniazid_prophylaxis_therapy</item>
+        <item>@string/pet_isoniazid_rifapentine</item>
+        <item>@string/pet_levofloxacin_ethionamide</item>
+    </string-array>
+    <string name="pet_isoniazid_dose">Isoniazid dose</string>
+    <string name="pet_rifapentine_dose">Rifapentine  dose</string>
+    <string name="pet_levofloxacin_dose">Levofloxacin dose</string>
+    <string name="pet_ethionamide_dose">Ethionamide dose</string>
+    <string name="pet_ancillary_drugs_needed">Is there a need for ancillary drugs?</string>
+    <string name="pet_ancillary_drugs">Ancillary Drugs</string>
+    <string name="pet_iron_deficiency_prtocol">Iron Deficiency protocol</string>
+    <string name="pet_vitamin_d_protocol">Vitamin D deficiency protocol</string>
+    <string name="pet_pcm_protocol">PCM protocol</string>
+    <string-array name="pet_ancillary_drugs">
+        <item>@string/pet_iron_deficiency_prtocol</item>
+        <item>@string/pet_vitamin_d_protocol</item>
+        <item>@string/pet_pcm_protocol</item>
+    </string-array>
+    <string name="pet_ancillary_drug_duration">Duration of ancillary drugs</string>
+    <string name="pet_days">Days</string>
+    <string name="pet_weeks">Weeks</string>
+    <string name="pet_ancillary_drug_duration_unit">Duration unit for ancillary drugs</string>
+    <string-array name="pet_ancillary_drug_duration_unit">
+        <item>@string/pet_days</item>
+        <item>@string/pet_weeks</item>
+    </string-array>
+    <string name="pet_treatment_supporter_name">Name of Treatment Supporter</string>
+    <string name="pet_treatment_supporter_contact_number">Treatment Supporter Phone Number</string>
+    <string name="pet_family_treatment_supporter">Family treatment supporter</string>
+    <string name="pet_non_family_treatment_supporter">Non-family treatment supporter</string>
+    <string-array name="pet_treatment_supporter_type">
+        <item>@string/pet_family_treatment_supporter</item>
+        <item>@string/pet_non_family_treatment_supporter</item>
+    </string-array>
+    <string name="pet_treatment_supporter_type">Treatment Supporter type</string>
+    <string name="pet_treatment_supporter_relationship">Relationship of treatment supporter with the patient</string>
+
+    <!-- Baseline Counselling -->
+    <string name="pet_family_structure">Family Structure</string>
+    <string name="pet_nuclear">Nuclear</string>
+    <string name="pet_joint_family">Joint Family</string>
+    <string-array name="pet_family_structures">
+        <item>@string/pet_nuclear</item>
+        <item>@string/pet_joint_family</item>
+    </string-array>
+    <string name="pet_members_number">Number of members</string>
+    <string name="pet_earning_members">Earning members</string>
+    <string name="pet_monthly_household_income">Monthly household income</string>
+    <string name="pet_household_income_group">Household income group</string>
+    <string name="pet_residence_type">Status of house (type of residence)</string>
+    <string name="pet_rent">Rent</string>
+    <string name="pet_own">Own</string>
+    <string-array name="pet_residence_types">
+        <item>@string/pet_rent</item>
+        <item>@string/pet_own</item>
+        <item>@string/unknown</item>
+    </string-array>
+    <string name="pet_room_nos">Number of rooms</string>
+    <string name="pet_contact_psychiatric_medical_condition">Contact\'s psychiatric and general medical condition</string>
+    <string name="pet_epilepsy">Epilepsy</string>
+    <string name="pet_mental_retardation">Mental Retardation</string>
+    <string name="pet_physically_disable">Physically Disable</string>
+    <string name="pet_hiv">HIV</string>
+    <string name="pet_hcv">HCV</string>
+    <string-array name="pet_contact_psychiatric_medical_conditions">
+        <item>@string/pet_epilepsy</item>
+        <item>@string/pet_mental_retardation</item>
+        <item>@string/pet_physically_disable</item>
+        <item>@string/pet_hiv</item>
+        <item>@string/pet_hcv</item>
+        <item>@string/pet_diabetes</item>
+        <item>@string/pet_none</item>
+        <item>@string/pet_other</item>
+    </string-array>
+    <string name="pet_counselling_procedure">Counselling Procedure</string>
+    <string name="pet_counselling_to">Baseline counselling provided to</string>
+    <string name="pet_information_during_counselling_sessions">Basic information during counselling session</string>
+    <string name="pet_procedure">Procedure</string>
+    <string name="pet_purpose">Purpose</string>
+    <string name="pet_duration_of_pet">Duration of PET</string>
+    <string name="pet_infection_control_measures">Infection control measures</string>
+    <string name="pet_transmission">Transmission</string>
+    <string name="pet_adherence">Adherence</string>
+    <string name="pet_nutrition">Nutrition</string>
+    <string name="pet_common_adverse_effects">Common adverse effects</string>
+    <string name="pet_misconception">Misconception</string>
+    <string name="pet_followup">Follow-up</string>
+    <string name="pet_question_by_contact">Questions by contact</string>
+    <string name="pet_answers_by_psychologist">Answers by psychologist</string>
+    <string name="pet_contact_behaviour">Behaviour of contact</string>
+    <string name="pet_irritable">Irritable</string>
+    <string name="pet_stubborn">Stubborn</string>
+    <string name="pet_shy">Shy/Introvert</string>
+    <string name="pet_aggressive">Aggressive</string>
+    <string name="pet_argumentative">Argumentative</string>
+    <string name="pet_non_complaint">Non Complaint</string>
+    <string name="pet_complaint">Complaint</string>
+    <string name="pet_responsible">Responsible</string>
+    <string name="pet_cooperative">Co-operative</string>
+    <string name="pet_noncooperative">Non-Cooperative</string>
+    <string-array name="pet_contact_behaviours">
+        <item>@string/pet_irritable</item>
+        <item>@string/pet_stubborn</item>
+        <item>@string/pet_shy</item>
+        <item>@string/pet_aggressive</item>
+        <item>@string/pet_argumentative</item>
+        <item>@string/pet_non_complaint</item>
+        <item>@string/pet_complaint</item>
+        <item>@string/pet_responsible</item>
+        <item>@string/pet_cooperative</item>
+        <item>@string/pet_noncooperative</item>
+        <item>@string/pet_other</item>
+    </string-array>
+    <string name="pet_caretaker_comments">Comments by contact/caretaker</string>
+    <string name="pet_psychologist_comment">Comments by psychologist</string>
+
+    <!-- Monthly Home Follow-Up -->
+    <string name="pet_followup_details">Follow-up Details - TB Symptoms</string>
+    <string name="pet_adverse_event_report">Are there any adverse events?</string>
+    <string name="pet_adverse_effects">Adverse effects</string>
+    <string name="pet_joint_pain">Joint pain</string>
+    <string name="pet_headache">Headache</string>
+    <string name="pet_skin_rash">Skin rash</string>
+    <string name="pet_nausea">Nausea</string>
+    <string name="pet_dizziness">Dizziness</string>
+    <string name="pet_vomiting">Vomiting</string>
+    <string name="pet_abdominal_pain">Abdominal Pain</string>
+    <string name="pet_loss_of_appetite">Loss of appetite</string>
+    <string name="pet_visual_impairment">Visual impairment</string>
+    <string-array name="pet_adverse_effects_1">
+        <item>@string/pet_joint_pain</item>
+        <item>@string/pet_headache</item>
+        <item>@string/pet_skin_rash</item>
+        <item>@string/pet_nausea</item>
+        <item>@string/pet_dizziness</item>
+    </string-array>
+    <string-array name="pet_adverse_effects_2">
+        <item>@string/pet_vomiting</item>
+        <item>@string/pet_abdominal_pain</item>
+        <item>@string/pet_loss_of_appetite</item>
+        <item>@string/pet_visual_impairment</item>
+        <item>@string/pet_other</item>
+    </string-array>
+    <string name="pet_clinician_informed">Has the clinician been informed?</string>
+    <string name="pet_visit_suggested">Has the clinician asked for a clinical visit of the contact?</string>
+    <string name="pet_clinical_referrals">Has the contact been referred to the clinician?</string>
+
+    <!-- Treatment Adherence -->
+    <string name="pet_week_of_treatment">Week of treatment</string>
+    <string name="pet_missed_dosed">Any missed dose in the past month</string>
+    <string name="pet_no_missed_dosed">No dose missed</string>
+    <string name="pet_1_3_missed_dosed">1 to 3 doses missed</string>
+    <string name="pet_more_than_3_missed_dosed">More than 3 doses missed</string>
+    <string name="pet_patient_stopped_medication">Patient stopped medication</string>
+    <string name="pet_doctor_notified">Has the doctor been notified?</string>
+    <string-array name="pet_missed_dosed_options">
+        <item>@string/pet_no_missed_dosed</item>
+        <item>@string/pet_1_3_missed_dosed</item>
+        <item>@string/pet_more_than_3_missed_dosed</item>
+        <item>@string/pet_patient_stopped_medication</item>
+    </string-array>
+    <string name="pet_treatment_plan">Plan</string>
+
+    <!-- Clinician Follow-up Form -->
+    <string name="pet_tb_symptoms">TB Symptoms</string>
+    <string name="pet_cough">Cough</string>
+    <string name="pet_medication_side_effects">Possible medication side-effects</string>
+    <string name="pet_nausea_vomiting">Nausea/Vomiting</string>
+    <string name="pet_jaundice">Jaundice</string>
+    <string name="pet_rash">Rash</string>
+    <string name="pet_tendon_pain">Tendon Pain</string>
+    <string name="pet_eye_problems">Eye Problems</string>
+    <string name="pet_other_side_effects">Other side effects</string>
+    <string name="pet_side_effect_consistent">Are complaints consistent with drug-side effects?</string>
+    <string name="pet_clinician_review">Clinician Review</string>
+    <string name="pet_action_plan">Action plan</string>
+    <string name="pet_continue_medication_greater_adherence">Continue Medication (&gt;90% Adherence)</string>
+    <string name="pet_continue_medication_less_adherence">Continue Medication (&lt;90% Adherence)</string>
+    <string name="pet_discontinue_medication">Discontinue Medication</string>
+    <string name="pet_begin_cxr_protocol">Begin Clinical/CXR Monitoring Protocol</string>
+    <string name="pet_new_medication">New Medication</string>
+    <string name="pet_new_medication_reason">New Medication - Reason</string>
+    <string name="pet_seek_expert_consultation">Seek Expert Consultation</string>
+    <string name="pet_change_drug_dosage">Change drug dosage</string>
+    <string name="pet_ancillary_drug">Ancillary drug</string>
+    <string-array name="pet_action_plan">
+        <item>@string/pet_continue_medication_greater_adherence</item>
+        <item>@string/pet_continue_medication_less_adherence</item>
+        <item>@string/pet_discontinue_medication</item>
+        <item>@string/pet_begin_cxr_protocol</item>
+        <item>@string/pet_new_medication</item>
+        <item>@string/pet_seek_expert_consultation</item>
+        <item>@string/pet_change_drug_dosage</item>
+        <item>@string/pet_ancillary_drug</item>
+    </string-array>
+    <string name="pet_discontinue_medication_reason">Discontinue Medication - Reason</string>
+    <string name="pet_discontinue_medication_duration">Duration of discontinuation (Days)</string>
+    <string name="pet_new_medication_duration">Duration of new medicine (Days)</string>
+    <string name="pet_ancillary_drug_duration_days">Duration of ancillary drug (in days)</string>
+    <string name="pet_new_instructions">New Instructions</string>
+    <string name="pet_return_visit_date">Return Visit Date</string>
+
+    <!-- Counselling Follow-up -->
+    <string name="pet_followup_month">Follow up Month</string>
+    <string name="pet_referral_complain">Referral Complain</string>
+    <string name="pet_adherent">Is the contact adherent to PET?</string>
+    <string name="pet_reason_for_non_adherent">Reasons for non-adherent</string>
+    <string name="pet_treatment_support">Who is giving medicines to child contact?</string>
+    <string name="pet_behavioural_complain">Are there any behavioural complains since starting PET?</string>
+    <string name="pet_behavioural_complain_type">Behavioural complaints after starting PET</string>
+    <string name="pet_caretaker_negligence">Are the parents/caretakers negligent towards PET?</string>
+    <string name="pet_reason_caretaker_negligence">Reasons for negligence towards PET</string>
+    <string name="pet_misconcepions_after_pet_initiation">Any misconceptions after initiating PET?</string>
+    <string name="pet_infection_control_following">Is the Index patient following infection control measures?</string>
+    <string name="pet_infection_control_counselling">Counseling of the index patient for infection control</string>
+    <string name="pet_patient_problem">Is the patient facing any of these problems?</string>
+    <string name="pet_academic_problem">Academic problems</string>
+    <string name="pet_economic_problem">Economic problems</string>
+    <string name="pet_health_problem">Health problems</string>
+    <string-array name="pet_patient_problem">
+        <item>@string/pet_academic_problem</item>
+        <item>@string/pet_economic_problem</item>
+        <item>@string/pet_health_problem</item>
+        <item>@string/refused</item>
+        <item>@string/unknown</item>
+        <item>@string/pet_other</item>
+    </string-array>
+    <string name="pet_contact_comments">Contact\'s comments</string>
+    <string name="pet_comment_psychologist">Psychologist\'s comments</string>
+
+    <!-- Adverse Events -->
+    <string name="pet_adverse_events_followup_details">Adverse Events Follow-up Details</string>
+    <string name="pet_symptoms_require">Do symptoms require:</string>
+    <string name="pet_incentive_occasion">Incentive occasion</string>
+    <string name="pet_baseline_visit">Baseline visit</string>
+    <string-array name="pet_incentive_occasions">
+        <item>@string/pet_baseline_visit</item>
+        <item>@string/pet_followup</item>
+    </string-array>
+    <string name="pet_incentive_for">Incentive for</string>
+    <string name="pet_contact">Contact</string>
+    <string name="pet_treatment_supporter">Treatment Supporter</string>
+    <string-array name="pet_incentive_for">
+        <item>@string/pet_contact</item>
+        <item>@string/pet_treatment_supporter</item>
+    </string-array>
+
+    <string name="pet_incentive_details">Incentive Details</string>
+    <string name="pet_incentive_amount">Incentive amount (in Rupees)</string>
+    <string name="pet_incentive_disbursal_location">Incentive disbursal location</string>
+    <string name="pet_receiver_name">Receiver\'s Name</string>
+    <string name="pet_receiver_relation_with_contact">Receiver\'s relation with Contact</string>
+
+    <!-- End of Follow-up Form -->
+    <string name="pet_reason_for_end_of_followup">Reason for end of follow-up</string>
+    <string name="pet_treatment_completed">Treatment completed</string>
+    <string name="pet_loss_of_followup">Loss to follow-up</string>
+    <string name="pet_enrolled_in_tb">Enrolled in TB program (TB disease)</string>
+    <string name="pet_transferred_out">Trasferred out</string>
+    <string name="pet_not_eligible_for_study">Index not eligible for study</string>
+    <string name="pet_refused_treatment">Refused treatment</string>
+    <string name="pet_died">Died</string>
+    <string-array name="pet_reasons_for_end_of_followup">
+        <item>@string/pet_treatment_completed</item>
+        <item>@string/pet_loss_of_followup</item>
+        <item>@string/pet_enrolled_in_tb</item>
+        <item>@string/pet_transferred_out</item>
+        <item>@string/pet_not_eligible_for_study</item>
+        <item>@string/pet_refused_treatment</item>
+        <item>@string/pet_died</item>
+        <item>@string/pet_other</item>
+    </string-array>
+    <string name="pet_reason_for_exclusion">Reason for Index exclusion</string>
+    <string name="pet_xdr">XDR</string>
+    <string name="pet_pre_xdr">Pre-XDR</string>
+    <string name="pet_transfered_out_to_other_site">Trasferred out to facility other than PET Sites</string>
+    <string name="pet_index_refused_treatment">Index refused treatment</string>
+    <string-array name="pet_reason_for_exclusions">
+        <item>@string/pet_xdr</item>
+        <item>@string/pet_pre_xdr</item>
+        <item>@string/pet_transfered_out_to_other_site</item>
+        <item>@string/pet_index_refused_treatment</item>
+        <item>@string/pet_other</item>
     </string-array>
 </resources>
