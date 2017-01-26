@@ -3,7 +3,6 @@ package com.ihsinformatics.gfatmmobile.custom;
 import android.content.Context;
 import android.text.InputFilter;
 import android.widget.LinearLayout;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.App;
@@ -26,16 +25,20 @@ public class TitledEditText extends LinearLayout {
         MyLinearLayout linearLayout = new MyLinearLayout(context, title, layoutOrientation);
         this.mandatory = mandatory;
 
+        LinearLayout hLayout = new LinearLayout(context);
+        hLayout.setOrientation(HORIZONTAL);
+
         if (mandatory) {
             int color = App.getColor(context, R.attr.colorAccent);
             TextView mandatorySign = new TextView(context);
             mandatorySign.setText("*");
             mandatorySign.setTextColor(color);
-            linearLayout.addView(mandatorySign);
+            hLayout.addView(mandatorySign);
         }
 
         questionView = new MyTextView(context, ques);
-        linearLayout.addView(questionView);
+        hLayout.addView(questionView);
+        linearLayout.addView(hLayout);
 
         editText = new MyEditText(context, defaultValue, length, filter, inputType);
         linearLayout.addView(editText);
@@ -65,11 +68,11 @@ public class TitledEditText extends LinearLayout {
         return mandatory;
     }
 
-    public void setTag(String tag) {
-        this.tag = tag;
-    }
-
     public String getTag() {
         return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 }

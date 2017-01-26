@@ -1,11 +1,11 @@
 package com.ihsinformatics.gfatmmobile.custom;
 
 import android.content.Context;
-import android.widget.CheckBox;
 import android.widget.LinearLayout;
-import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.App;
+import com.ihsinformatics.gfatmmobile.R;
 
 import java.util.ArrayList;
 
@@ -18,6 +18,7 @@ public class TitledCheckBoxes extends LinearLayout {
     MyTextView questionView;
     ArrayList<MyCheckBox> checkedBoxes = new ArrayList<MyCheckBox>();
     Boolean[] defaultValues;
+    Boolean mandatory = false;
 
 
     public TitledCheckBoxes(Context context, String title, String ques, String[] options, Boolean[] defaultValues, int radioButtonsLayout, int layoutOrientation) {
@@ -49,6 +50,50 @@ public class TitledCheckBoxes extends LinearLayout {
         linearLayout.addView(ll);
         addView(linearLayout);
     }
+
+    public TitledCheckBoxes(Context context, String title, String ques, String[] options, Boolean[] defaultValues, int radioButtonsLayout, int layoutOrientation, Boolean mandatory) {
+        super(context);
+
+        MyLinearLayout linearLayout = new MyLinearLayout(context, title, layoutOrientation);
+        this.defaultValues = defaultValues;
+        this.mandatory = mandatory;
+
+        LinearLayout hLayout = new LinearLayout(context);
+        hLayout.setOrientation(HORIZONTAL);
+
+        if (mandatory) {
+            int color = App.getColor(context, R.attr.colorAccent);
+            TextView mandatorySign = new TextView(context);
+            mandatorySign.setText("*");
+            mandatorySign.setTextColor(color);
+            hLayout.addView(mandatorySign);
+        }
+
+        questionView = new MyTextView(context, ques);
+        hLayout.addView(questionView);
+        linearLayout.addView(hLayout);
+
+        LinearLayout ll = new LinearLayout(context);
+        if (radioButtonsLayout == App.HORIZONTAL)
+            ll.setOrientation(LinearLayout.HORIZONTAL);
+        else
+            ll.setOrientation(LinearLayout.VERTICAL);
+
+        for (int i = 0; i < options.length; i++) {
+
+            Boolean checked = false;
+            if (defaultValues != null && defaultValues.length > i)
+                checked = defaultValues[i];
+
+            MyCheckBox checkBox = new MyCheckBox(context, options[i], checked);
+            ll.addView(checkBox);
+            checkedBoxes.add(checkBox);
+        }
+
+        linearLayout.addView(ll);
+        addView(linearLayout);
+    }
+
 
     public MyTextView getQuestionView() {
         return questionView;
@@ -100,6 +145,10 @@ public class TitledCheckBoxes extends LinearLayout {
 
     public ArrayList<MyCheckBox> getCheckedBoxes() {
         return checkedBoxes;
+    }
+
+    public Boolean getMandatory() {
+        return mandatory;
     }
 
 }

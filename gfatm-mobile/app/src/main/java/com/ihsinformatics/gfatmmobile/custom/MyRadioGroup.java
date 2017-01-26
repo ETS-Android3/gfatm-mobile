@@ -1,17 +1,11 @@
 package com.ihsinformatics.gfatmmobile.custom;
 
 import android.content.Context;
-import android.provider.MediaStore;
-import android.view.Gravity;
-import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.App;
-import com.ihsinformatics.gfatmmobile.R;
 
 import java.util.ArrayList;
 
@@ -19,7 +13,7 @@ import java.util.ArrayList;
  * Created by Rabbia on 11/25/2016.
  */
 
-public class MyRadioGroup extends RadioGroup implements android.widget.CompoundButton.OnCheckedChangeListener {
+public class MyRadioGroup extends RadioGroup {
 
     private ArrayList<RadioButton> buttons = new ArrayList<RadioButton>();
     private String defaultValue;
@@ -47,24 +41,15 @@ public class MyRadioGroup extends RadioGroup implements android.widget.CompoundB
 
     }
 
-    @Override
-    public void onCheckedChanged(CompoundButton button, boolean state) {
-        if (state) {
-            for (RadioButton r : buttons) {
-                if (r != button)
-                    r.setChecked(false);
-            }
-        }
-    }
-
     public void selectDefaultValue() {
         for (RadioButton rb : buttons) {
             String str = rb.getText().toString();
             if (str.equals(defaultValue))
                 rb.setChecked(true);
+            else
+                rb.setChecked(false);
         }
     }
-
 
     public String getSelectedValue() {
         String value = "";
@@ -77,5 +62,8 @@ public class MyRadioGroup extends RadioGroup implements android.widget.CompoundB
         return value;
     }
 
+    public ArrayList<RadioButton> getButtons() {
+        return buttons;
+    }
 
 }
