@@ -69,6 +69,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
 
         PAGE_COUNT = 2;
         FORM_NAME = Forms.FAST_SCREENING_FORM;
+        FORM = Forms.fastScreeningForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();

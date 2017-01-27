@@ -63,6 +63,7 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
 
         PAGE_COUNT = 1;
         FORM_NAME = Forms.FAST_GENEXPERT_RESULT_FORM;
+        FORM = Forms.fastGeneXpertResultForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();

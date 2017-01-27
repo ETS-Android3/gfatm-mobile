@@ -99,7 +99,7 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
 
         PAGE_COUNT = 1;
         FORM_NAME = Forms.FAST_AFB_SMEAR_MICROSCOPY_ORDER_AND_RESULT_FORM;
-        FORM = Forms.pet_adverseEvents;
+        FORM = Forms.fastAfbSmearMicroscopyOrderAndResultForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();

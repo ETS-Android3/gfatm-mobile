@@ -74,6 +74,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
 
         PAGE_COUNT = 1;
         FORM_NAME = Forms.FAST_PRESUMPTIVE_INFORMATION_FORM;
+        FORM = Forms.fastPresumptiveInformationForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();

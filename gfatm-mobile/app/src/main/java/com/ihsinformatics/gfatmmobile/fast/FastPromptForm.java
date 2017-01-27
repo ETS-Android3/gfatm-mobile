@@ -66,6 +66,7 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
 
         PAGE_COUNT = 1;
         FORM_NAME = Forms.FAST_PROMPT_FORM;
+        FORM = Forms.fastPromptForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();

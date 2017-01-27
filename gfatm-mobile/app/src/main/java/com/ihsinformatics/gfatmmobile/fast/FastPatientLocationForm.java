@@ -76,6 +76,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
 
         PAGE_COUNT = 1;
         FORM_NAME = Forms.FAST_PATIENT_LOCATION_FORM;
+        FORM = Forms.fastPatientLocationForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();

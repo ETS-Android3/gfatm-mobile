@@ -73,6 +73,7 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
 
         PAGE_COUNT = 1;
         FORM_NAME = Forms.FAST_SCREENING_CHEST_XRAY_ORDER_AND_RESULT_FORM;
+        FORM = Forms.fastScreeningChestXrayOrderAndResultForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();

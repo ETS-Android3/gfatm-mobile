@@ -38,7 +38,7 @@ import java.util.HashMap;
  * Created by Haris on 1/19/2017.
  */
 
-public class FastGxpSpecimenCollectionForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
     Context context;
 
     // Views...
@@ -69,6 +69,7 @@ public class FastGxpSpecimenCollectionForm extends AbstractFormActivity implemen
 
         PAGE_COUNT = 1;
         FORM_NAME = Forms.FAST_GXP_SPECIMEN_COLLECTION_FORM;
+        FORM = Forms.fastGpxSpecimenCollectionForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
