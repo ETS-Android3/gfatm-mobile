@@ -2,95 +2,553 @@
 <resources>
 
     <string name="fast_index_patient_registration">Index Patient Registration</string>
-    <string name="location_of_screening">Location Of Screening:</string>
-    <string name="if_hospital_specify">If Hospital, Specify:</string>
-    <string name="hospital_parts_title">In which part of the hospital are you conducting screening?</string>
-    <string name="if_other_specify">If other, specify:</string>
-    <string name="clinic_and_ward_title">In which OPD clinic or ward are you screening?</string>
-    <string name="patient_or_attendant_title">Patient Or Attendant?</string>
-    <string name="age_range_title">Age Range:</string>
-    <string name="gender_title">Gender:</string>
-    <string name="cough_period_title">Have you had a cough for two weeks or more?</string>
-    <string name="close_with_someone_diagnosed">Have you been in close contact with someone diagnosed with TB before?</string>
-    <string name="tb_before">Have you had TB before?</string>
-
-    <string name="community_title">Community</string>
-    <string name="hospital_title">Hospital</string>
-    <string name="location1_title">Location 1</string>
-    <string name="location2_title">Location 2</string>
-    <string name="location3_title">Location 3</string>
-    <string name="location4_title">Location 4</string>
-    <string name="opdclinicscreening_title">OPD Clinic Screening</string>
-    <string name="wardscreening_title">Ward Screening</string>
-    <string name="registrationdesk_title">Registration Desk</string>
-    <string name="nexttoxrayvan_title">Next To X-Ray Van</string>
-    <string name="other_title">Other</string>
-    <string name="generalmedicinefilterclinic_title">General/Medicine/Filter Clinic</string>
-    <string name="chest_title">Chest</string>
-    <string name="tbclinicscreening_title">TB Clinic Screening</string>
-    <string name="gynaeobstetrics_title">Gynae/Obstetrics</string>
-    <string name="surgery_title">Surgery</string>
-    <string name="er_title">ER</string>
-    <string name="patient_title">Patient</string>
-    <string name="attendant_title">Attendant</string>
-    <string name="greater_title">&gt;= 15 years old</string>
-    <string name="less_title">&lt; 15 years old</string>
-    <string name="male_title">Male</string>
-    <string name="female_title">Female</string>
-    <string name="yes_title">Yes</string>
-    <string name="no_title">No</string>
-    <string name="dont_know_title">Dont Know</string>
-    <string name="refused_title">Refused</string>
-
+    <string name="fast_location_of_screening">Location Of Screening:</string>
+    <string name="fast_if_hospital_specify">If Hospital, Specify:</string>
+    <string name="fast_hospital_parts_title">In which part of the hospital are you conducting screening?</string>
+    <string name="fast_if_other_specify">If other, specify:</string>
+    <string name="fast_clinic_and_ward_title">In which OPD clinic or ward are you screening?</string>
+    <string name="fast_patient_or_attendant_title">Patient Or Attendant?</string>
+    <string name="fast_age_range_title">Age Range:</string>
+    <string name="fast_gender_title">Gender:</string>
+    <string name="fast_cough_period_title">Have you had a cough for two weeks or more?</string>
+    <string name="fast_close_with_someone_diagnosed">Have you been in close contact with someone diagnosed with TB before?</string>
+    <string name="fast_tb_before">Have you had TB before?</string>
+    <string name="fast_community_title">Community</string>
+    <string name="fast_hospital_title">Hospital</string>
+    <string name="fast_ASHKHI">Abbasi Shaheed Hospital</string>
+    <string name="fast_BIDEKHI">Baqai Institute of Diabetology and Endocrinology</string>
+    <string name="fast_CCHKHI">Childrens Cancer Hospital</string>
+    <string name="fast_CHKHI">Civil Hospital Karachi</string>
+    <string name="fast_opdclinicscreening_title">OPD Clinic Screening</string>
+    <string name="fast_wardscreening_title">Ward Screening</string>
+    <string name="fast_registrationdesk_title">Registration Desk</string>
+    <string name="fast_nexttoxrayvan_title">Next To X-Ray Van</string>
+    <string name="fast_other_title">Other</string>
+    <string name="fast_generalmedicinefilterclinic_title">General/Medicine/Filter Clinic</string>
+    <string name="fast_chest_title">Chest</string>
+    <string name="fast_tbclinicscreening_title">TB Clinic Screening</string>
+    <string name="fast_gynaeobstetrics_title">Gynae/Obstetrics</string>
+    <string name="fast_surgery_title">Surgery</string>
+    <string name="fast_er_title">Emergency (ER)</string>
+    <string name="fast_patient_title">Patient</string>
+    <string name="fast_attendant_title">Attendant</string>
+    <string name="fast_greater_title">&gt;= 15 years old</string>
+    <string name="fast_less_title">&lt;15 years old</string>
+    <string name="fast_male_title">Male</string>
+    <string name="fast_female_title">Female</string>
+    <string name="fast_yes_title">Yes</string>
+    <string name="fast_no_title">No</string>
+    <string name="fast_dont_know_title">Don\'t Know</string>
+    <string name="fast_refused_title">Refused</string>
+    <string name="fast_is_this_patient_or_attendant">Is this person a patient or an attendant?</string>
+    <string name="fast_speciality_patient_consult">If patient, which speciality is the patient here to consult with?</string>
+    <string name="fast_other_speciality">If other specialty, please specify:</string>
+    <string name="fast_do_you_have_cough">Do you have a Cough?</string>
+    <string name="fast_duration_of_coughs">Duration of cough in weeks?</string>
+    <string name="fast_is_your_cough_productive">Is your cough productive?</string>
+    <string name="fast_sputum_in_blood">Is there blood in your sputum?</string>
+    <string name="fast_do_you_have_fever">Do you have fever?</string>
+    <string name="fast_how_long_you_have_fever">How long have you had the fever?</string>
+    <string name="fast_do_you_have_night_sweats">Do you have night sweats?</string>
+    <string name="fast_do_you_have_unexplained_weight_loss">Have you had  unexplained weight loss?</string>
+    <string name="fast_chesttbclinic_title">Chest/TB Clinic</string>
+    <string name="fast_medicine_title">Medicine</string>
+    <string name="fast_ent_title">Ear, Nose amp Throat (ENT)</string>
+    <string name="fast_gynaeobstetrics_otherthen_title">Gynae/Obstetrics (Other than pregnancy)</string>
+    <string name="fast_pregnancy_title">Pregnancy (Antenatal)</string>
+    <string name="fast_orthopedics_title">Orthopedics</string>
+    <string name="fast_emergency_title">Emergency</string>
+    <string name="fast_paediatrics_title">Paediatrics</string>
+    <string name="fast_dermatology">Dermatology</string>
+    <string name="fast_neurology_title">Neurology</string>
+    <string name="fast_cardiology_title">Cardiology</string>
+    <string name="fast_urology_title">Urology</string>
+    <string name="fast_psychiatry_title">Psychiatry</string>
+    <string name="fast_opthamology_title">Opthamology</string>
+    <string name="fast_endocrionology_title">Endocrinology/Diabetes</string>
+    <string name="fast_less_than_2_weeks_title">Less than 2 weeks</string>
+    <string name="fast_2to3_weeks">2 to 3 weeks</string>
+    <string name="fast_morethan3weeks">More than 3 weeks</string>
+    <string name="fast_symptoms_title">SYMPTOMS</string>
+    <string name="fast_demographics_title">DEMOGRAPHICS</string>
+    <string name="fast_tbhistory_title">TB HISTORY</string>
+    <string name="fast_testing_of_presumptive_patients">TESTING OF PRESUMPTIVE PATIENTS</string>
+    <string name="fast_patient_a_sputum_container">Have you given the patient a sputum container?</string>
+    <string name="fast_produced_a_sputum_sample">Has the patient produced a sputum sample?</string>
+    <string name="fast_if_no_why_not">If no, why not?</string>
+    <string name="fast_date_sputum_sample">Date sputum sample is due back from patient:</string>
+    <string name="fast_given_free_chest_xray">Have you given the patient a voucher for a free Chest X-Ray (CAD4TB)?</string>
+    <string name="fast_not_given_free_chest_xray">Why have you NOT given a voucher for a free Chest X-Ray (CAD4TB)?</string>
+    <string name="fast_patient_unable_to_expectorate">Patient unable to expectorate</string>
+    <string name="fast_patient_refused">Patient refused</string>
+    <string name="fast_presumptive_refused">Presumptive refused</string>
+    <string name="fast_identified_patient_through_screening">Have you identified this patient through screening?</string>
+    <string name="fast_source_of_patient_referral">What was the source of the patient\'s referral?</string>
+    <string name="fast_doctor_or_health_worker_within_the_hospital">By a doctor or health worker within the hospital</string>
+    <string name="fast_doctor_or_health_worker_outside_the_hospital">By a doctor or health worker outside of the hospital</string>
+    <string name="fast_self_referral">Self referral</string>
+    <string name="fast_contact_of_tb_patient">Patient is a contact of a TB patient</string>
+    <string name="fast_referred_after_xray_cad4tb">Patient referred after xray/high CAD4TB score</string>
+    <string name="fast_ward_title">Ward</string>
+    <string name="fast_opd_clinic">OPD Clinic</string>
+    <string name="fast_outside_hospital_was_patient_referred">Where outside the hospital was the patient referred from?</string>
+    <string name="fast_within_hospital_was_patient_referred">Where within the hospital was the patient referred from?</string>
+    <string name="fast_public_hospital">Public hospital</string>
+    <string name="fast_private_hospital">Private hospital</string>
+    <string name="fast_GP">GP</string>
+    <string name="fast_hospital_outside_of_karachi">Hospital outside of Karachi</string>
+    <string name="fast_radio">Radio</string>
+    <string name="fast_tv">TV</string>
+    <string name="fast_newspaper">Newspaper</string>
+    <string name="fast_billboard_signboards">Billboard/Signboards</string>
+    <string name="fast_internet">Internet</string>
+    <string name="fast_sms">SMS</string>
+    <string name="fast_from_a_friend_community">From a friend/Community member</string>
+    <string name="fast_community_camp">Community Camp</string>
+    <string name="fast_school_awareness_program">School Awareness Program</string>
+    <string name="fast_pamphlet">Pamphlet</string>
+    <string name="fast_work_place_awareness">Work Place Awareness</string>
+    <string name="fast_call_center">Call Center</string>
+    <string name="fast_patient_enrolled_in_any_tb_program">Is the TB contact of the patient enrolled in any TB program?</string>
+    <string name="fast_tb_contact_any_identifications_id">Does the TB contact have any of these identification IDs?</string>
+    <string name="fast_patient_id">Patient ID</string>
+    <string name="fast_external_id">External ID</string>
+    <string name="fast_tb_registeration_no">TB Registeration No</string>
+    <string name="fast_if_external_id_hospital_or_programs">If external ID, which hospital or programs ID is this?</string>
+    <string name="fast_which_opd_clinic_or_ward_has_patient_referred_from">Which OPD clinic or Ward has the patient been referred from?</string>
+    <string name="fast_where_did_you_hear_about_us">Where did you hear about us from?</string>
+    <string name="fast_day_was_the_sample_submitted">Which day was the sample submitted?</string>
+    <string name="fast_point_test_being_done">At what point is the test being done?</string>
+    <string name="fast_baseline_test_specify_patient_category">If baseline test, specify patient category</string>
+    <string name="fast_repeating_test_if_baseline_repeat">Reason for repeating test if Baseline repeat?</string>
+    <string name="fast_specimen_type">Specimen Type</string>
+    <string name="fast_specimen_come_from">Where did the specimen come from?</string>
+    <string name="fast_accepted_lab_technician">Sample Accepted by Lab Technician?</string>
+    <string name="fast_why_was_the_sample_rejected">Why was the sample rejected?</string>
+    <string name="fast_other_reason_for_rejection">Other reason for rejection?</string>
+    <string name="fast_cartridge_id">Cartridge ID</string>
+    <string name="fast_baseline_new">Baseline(New Test)</string>
+    <string name="fast_baseline_repeat">Baseline Repeat(Duplicate Test)</string>
+    <string name="fast_followup_test">Follow-up Test</string>
+    <string name="fast_category_1">Category I(New)</string>
+    <string name="fast_category_2">Category II(Re-treatment)</string>
+    <string name="fast_rif_resistant">Rif Resistant +ve</string>
+    <string name="fast_indeterminate">Indeterminate</string>
+    <string name="fast_error_invalid_no_result">Error/Invalid/No result</string>
+    <string name="fast_sputum">Sputum</string>
+    <string name="fast_extra_pulmonary">Extra-Pulmonary</string>
+    <string name="fast_lymph">Lymph</string>
+    <string name="fast_pleural_fluid">Pleural Fluid</string>
+    <string name="fast_pus">Pus</string>
+    <string name="fast_saliva">Saliva</string>
+    <string name="fast_blood">Blood</string>
+    <string name="fast_food_particles">Food particles</string>
+    <string name="fast_older_than_3_days">Older than 3 days</string>
+    <string name="fast_Insufficient_quantity">Insufficient Quantity</string>
+    <string name="fast_nic_number">National ID card number?</string>
+    <string name="fast_self">Self</string>
+    <string name="fast_mother">Mother</string>
+    <string name="fast_father">Father</string>
+    <string name="fast_sister">Sister</string>
+    <string name="fast_brother">Brother</string>
+    <string name="fast_spouse">Spouse</string>
+    <string name="fast_paternal_grandfather">Paternal Grandfather</string>
+    <string name="fast_paternal_grandmother">Paternal Grandmother</string>
+    <string name="fast_maternal_grandfather">Maternal Grandfather</string>
+    <string name="fast_maternal_grandmother">Maternal Grandmother</string>
+    <string name="fast_uncle">Uncle</string>
+    <string name="fast_aunt">Aunt</string>
+    <string name="fast_son">Son</string>
+    <string name="fast_daughter">Daughter</string>
+    <string name="fast_karachi">Karachi</string>
+    <string name="fast_whose_nic_is_this">Whose NIC is this?</string>
+    <string name="fast_patient_provided_their_address">Has the patient provided their address?</string>
+    <string name="fast_address_1">Address 1 (House Number, etc)</string>
+    <string name="fast_address_2">Address 2 (Block, Street, Gali, Colony, etc)</string>
+    <string name="fast_town">Town</string>
+    <string name="fast_city">City</string>
+    <string name="fast_type_of_address_is_this">What type of Address is this?</string>
+    <string name="fast_nearest_landmark">Nearest Landmark</string>
+    <string name="fast_can_we_call_you">Can we call you and SMS you on any of these numbers for matters related to your TB tests and diagnosis?</string>
+    <string name="fast_mobile_number">Mobile Number</string>
+    <string name="fast_secondary_mobile">Secondary Mobile Number</string>
+    <string name="fast_landline_number">Landline Number</string>
+    <string name="fast_secondary_landline">Secondary Landline Number</string>
+    <string name="fast_perminant">Perminant</string>
+    <string name="fast_temporary">Temporary</string>
+    <string name="fast_date_of_result_recieved">Date of Result Received</string>
+    <string name="fast_genexpert_mtb_result">GeneXpert MTB Result</string>
+    <string name="fast_mtb_detected">MTB Detected</string>
+    <string name="fast_mtb_not_detected">MTB Not Detected</string>
+    <string name="fast_error">Error</string>
+    <string name="fast_invalid">Invalid</string>
+    <string name="fast_no_result">No Result</string>
+    <string name="fast_mtb_burden">MTB Burden</string>
+    <string name="fast_very_low">Very Low</string>
+    <string name="fast_low">Low</string>
+    <string name="fast_medium">Medium</string>
+    <string name="fast_high">High</string>
+    <string name="fast_if_mtb_then_rif_result">If MTB + then RIF Result</string>
+    <string name="fast_not_detected">Not Detected</string>
+    <string name="fast_detected">Detected</string>
+    <string name="fast_error_code">Error Code</string>
+    <string name="fast_cxr_order_title">CXR Order</string>
+    <string name="fast_cxr_result_title">CXR Result</string>
+    <string name="fast_what_type_of_xray_is_this">What type of X Ray is this?</string>
+    <string name="fast_month_of_treatment">Month Of Treatment: </string>
+    <string name="fast_test_date">Test Date</string>
+    <string name="fast_test_id">Test ID</string>
+    <string name="fast_chest_xray_cad4tb">Chest X-Ray (CAD4TB)</string>
+    <string name="fast_chest_xray_other">Chest X-Ray (Other)</string>
+    <string name="fast_chest_xray_cad4tb_score">Chest X-Ray (CAD4TB) Score</string>
+    <string name="fast_radiologica_diagnosis">Radiological Diagnosis</string>
+    <string name="fast_extent_of_desease">Extent of disease</string>
+    <string name="fast_radiologist_remarks">Radiologist\'s Remarks</string>
+    <string name="fast_adenopathy">Adenopathy</string>
+    <string name="fast_infiltration">Infiltration</string>
+    <string name="fast_consolidation">Consolidation</string>
+    <string name="fast_effusion">Effusion</string>
+    <string name="fast_normal">Normal</string>
+    <string name="fast_cavitation">Cavitation</string>
+    <string name="fast_miliary_tb">Miliary TB</string>
+    <string name="fast_others">Others</string>
+    <string name="fast_unilateral_disease">Unilateral Disease</string>
+    <string name="fast_bilateral_disease">Bilateral Disease</string>
+    <string name="fast_abnormal_but_extent_not_defined">Abnormal but extent not defined</string>
+    <string name="fast_one">1</string>
+    <string name="fast_two">2</string>
+    <string name="fast_three">3</string>
+    <string name="fast_four">4</string>
+    <string name="fast_five">5</string>
+    <string name="fast_six">6</string>
+    <string name="fast_seven">7</string>
+    <string name="fast_eight">8</string>
+    <string name="fast_nine">9</string>
+    <string name="fast_ten">10</string>
+    <string name="fast_eleven">11</string>
+    <string name="fast_twelve">12</string>
+    <string name="fast_thirteen">13</string>
+    <string name="fast_forteen">14</string>
+    <string name="fast_fifteen">15</string>
+    <string name="fast_sixteen">16</string>
+    <string name="fast_seventeen">17</string>
+    <string name="fast_eighteen">18</string>
+    <string name="fast_nineteen">19</string>
+    <string name="fast_twenty">20</string>
+    <string name="fast_twenty_one">21</string>
+    <string name="fast_twenty_two">22</string>
+    <string name="fast_twenty_three">23</string>
+    <string name="fast_twenty_four">24</string>
+    <string name="fast_order">Order</string>
+    <string name="fast_result">Result</string>
+    <string name="fast_select_form_type">Please select form type:</string>
+    <string name="fast_afb_smear_microscopy_order_and_result_form">AFB Smear Microscopy Order and Result Form</string>
+    <string name="fast_afb_smear_order">AFB Smear Order</string>
+    <string name="fast_date_of_submission">Date of submission</string>
+    <string name="fast_at_what_point_test_being_done">At what point is the test being done?</string>
+    <string name="fast_where_did_the_specimen_come_from">Where did the specimen come from?</string>
+    <string name="fast_afb_smear_result">AFB Smear Results</string>
+    <string name="fast_number_of_afb_seen_in_one_field">Number of AFB seen in one field</string>
+    <string name="fast_smear_result">Smear Result</string>
+    <string name="fast_negative">Negative</string>
+    <string name="fast_scanty_3_to_24">Scanty 3-24</string>
+    <string name="fast_1_plus">1+</string>
+    <string name="fast_2_plus">2+</string>
+    <string name="fast_3_plus">3+</string>
+    
 
     <string-array name="fast_locations">
-        <item>@string/community_title</item>
-        <item>@string/hospital_title</item>
-    </string-array>
-
-    <string-array name="fast_sites">
-        <item>@string/location1_title</item>
-        <item>@string/location2_title</item>
-        <item>@string/location3_title</item>
-        <item>@string/location4_title</item>
+        <item>@string/fast_community_title</item>
+        <item>@string/fast_hospital_title</item>
     </string-array>
 
     <string-array name="fast_hospital_parts">
-        <item>@string/opdclinicscreening_title</item>
-        <item>@string/wardscreening_title</item>
-        <item>@string/registrationdesk_title</item>
-        <item>@string/nexttoxrayvan_title</item>
-        <item>@string/other_title</item>
+        <item>@string/fast_opdclinicscreening_title</item>
+        <item>@string/fast_wardscreening_title</item>
+        <item>@string/fast_registrationdesk_title</item>
+        <item>@string/fast_nexttoxrayvan_title</item>
+        <item>@string/fast_other_title</item>
     </string-array>
 
-    <string-array name="clinic_and_ward_list">
-        <item>@string/generalmedicinefilterclinic_title</item>
-        <item>@string/chest_title</item>
-        <item>@string/tbclinicscreening_title</item>
-        <item>@string/gynaeobstetrics_title</item>
-        <item>@string/surgery_title</item>
-        <item>@string/er_title</item>
+    <string-array name="fast_sites">
+        <item>@string/fast_ASHKHI</item>
+        <item>@string/fast_BIDEKHI</item>
+        <item>@string/fast_CCHKHI</item>
+        <item>@string/fast_CHKHI</item>
+
     </string-array>
 
-    <string-array name="patient_or_attendant_list">
-        <item>@string/patient_title</item>
-        <item>@string/attendant_title</item>
+    <string-array name="fast_clinic_and_ward_list">
+        <item>@string/fast_generalmedicinefilterclinic_title</item>
+        <item>@string/fast_chesttbclinic_title</item>
+        <item>@string/fast_gynaeobstetrics_title</item>
+        <item>@string/fast_surgery_title</item>
+        <item>@string/fast_er_title</item>
     </string-array>
 
-    <string-array name="age_range_list">
-        <item>@string/less_title</item>
-        <item>@string/greater_title</item>
+    <string-array name="fast_patient_or_attendant_list">
+        <item>@string/fast_patient_title</item>
+        <item>@string/fast_attendant_title</item>
     </string-array>
 
-    <string-array name="gender_list">
-        <item>@string/male_title</item>
-        <item>@string/female_title</item>
+    <string-array name="fast_age_range_list">
+        <item>@string/fast_less_title</item>
+        <item>@string/fast_greater_title</item>
     </string-array>
 
-    <string-array name="choice_list">
-        <item>@string/yes_title</item>
-        <item>@string/no_title</item>
-        <item>@string/dont_know_title</item>
-        <item>@string/refused_title</item>
+    <string-array name="fast_gender_list">
+        <item>@string/fast_male_title</item>
+        <item>@string/fast_female_title</item>
+    </string-array>
+
+    <string-array name="fast_choice_list">
+        <item>@string/fast_yes_title</item>
+        <item>@string/fast_no_title</item>
+        <item>@string/fast_dont_know_title</item>
+        <item>@string/fast_refused_title</item>
+    </string-array>
+
+    <string-array name="fast_patient_consultation_list">
+        <item>@string/fast_chesttbclinic_title</item>
+        <item>@string/fast_medicine_title</item>
+        <item>@string/fast_ent_title</item>
+        <item>@string/fast_gynaeobstetrics_otherthen_title</item>
+        <item>@string/fast_pregnancy_title</item>
+        <item>@string/fast_orthopedics_title</item>
+        <item>@string/fast_emergency_title</item>
+        <item>@string/fast_paediatrics_title</item>
+        <item>@string/fast_dermatology</item>
+        <item>@string/fast_neurology_title</item>
+        <item>@string/fast_cardiology_title</item>
+        <item>@string/fast_urology_title</item>
+        <item>@string/fast_psychiatry_title</item>
+        <item>@string/fast_opthamology_title</item>
+        <item>@string/fast_endocrionology_title</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+
+    <string-array name="fast_duration_list">
+        <item>@string/fast_less_than_2_weeks_title</item>
+        <item>@string/fast_2to3_weeks</item>
+        <item>@string/fast_morethan3weeks</item>
+        <item>@string/fast_dont_know_title</item>
+        <item>@string/fast_refused_title</item>
+    </string-array>
+
+    <string-array name="fast_yes_no_list">
+        <item>@string/fast_yes_title</item>
+        <item>@string/fast_no_title</item>
+    </string-array>
+
+    <string-array name="fast_if_no_why_not_list">
+        <item>@string/fast_patient_unable_to_expectorate</item>
+        <item>@string/fast_patient_refused</item>
+    </string-array>
+    
+    <string-array name="fast_not_given_free_list">
+        <item>@string/fast_presumptive_refused</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+
+    <string-array name="fast_source_of_patient_referral_list">
+        <item>@string/fast_doctor_or_health_worker_within_the_hospital</item>
+        <item>@string/fast_doctor_or_health_worker_outside_the_hospital</item>
+        <item>@string/fast_self_referral</item>
+        <item>@string/fast_contact_of_tb_patient</item>
+        <item>@string/fast_referred_after_xray_cad4tb</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+
+    <string-array name="fast_patient_reffered_from_list">
+        <item>@string/fast_ward_title</item>
+        <item>@string/fast_opd_clinic</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+
+    <string-array name="fast_opd_clinic_or_ward_patient_reffered_from_list">
+        <item>@string/fast_generalmedicinefilterclinic_title</item>
+        <item>@string/fast_chesttbclinic_title</item>
+        <item>@string/fast_gynaeobstetrics_title</item>
+        <item>@string/fast_surgery_title</item>
+        <item>@string/fast_er_title</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+
+    <string-array name="fast_outside_hospital_patient_reffered_from">
+        <item>@string/fast_public_hospital</item>
+        <item>@string/fast_private_hospital</item>
+        <item>@string/fast_GP</item>
+        <item>@string/fast_hospital_outside_of_karachi</item>
+    </string-array>
+
+    <string-array name="fast_hear_about_us_from_list">
+        <item>@string/fast_radio</item>
+        <item>@string/fast_tv</item>
+        <item>@string/fast_newspaper</item>
+        <item>@string/fast_billboard_signboards</item>
+        <item>@string/fast_internet</item>
+        <item>@string/fast_sms</item>
+        <item>@string/fast_from_a_friend_community</item>
+        <item>@string/fast_community_camp</item>
+        <item>@string/fast_school_awareness_program</item>
+        <item>@string/fast_pamphlet</item>
+        <item>@string/fast_work_place_awareness</item>
+        <item>@string/fast_call_center</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+    
+    <string-array name="fast_tb_contact_identification_list">
+        <item>@string/fast_patient_id</item>
+        <item>@string/fast_external_id</item>
+        <item>@string/fast_tb_registeration_no</item>
+    </string-array>
+    
+    <string-array name="fast_test_being_done_list">
+        <item>@string/fast_baseline_new</item>
+        <item>@string/fast_baseline_repeat</item>
+        <item>@string/fast_followup_test</item>
+    </string-array>
+    
+    <string-array name="fast_patient_category_list">
+        <item>@string/fast_category_1</item>
+        <item>@string/fast_category_2</item>
+    </string-array>
+    
+    <string-array name="fast_repeating_test_if_baseline_repeat_list">
+        <item>@string/fast_rif_resistant</item>
+        <item>@string/fast_indeterminate</item>
+        <item>@string/fast_error_invalid_no_result</item>
+    </string-array>
+
+    <string-array name="fast_specimen_type_list">
+        <item>@string/fast_sputum</item>
+        <item>@string/fast_extra_pulmonary</item>
+    </string-array>
+    
+    <string-array name="fast_specimen_come_from_list">
+        <item>@string/fast_lymph</item>
+        <item>@string/fast_pleural_fluid</item>
+        <item>@string/fast_pus</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+    
+    <string-array name="fast_sample_rejected_list">
+        <item>@string/fast_saliva</item>
+        <item>@string/fast_blood</item>
+        <item>@string/fast_food_particles</item>
+        <item>@string/fast_older_than_3_days</item>
+        <item>@string/fast_Insufficient_quantity</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+
+    <string-array name="fast_whose_nic_is_this_list">
+        <item>@string/fast_self</item>
+        <item>@string/fast_mother</item>
+        <item>@string/fast_father</item>
+        <item>@string/fast_sister</item>
+        <item>@string/fast_brother</item>
+        <item>@string/fast_spouse</item>
+        <item>@string/fast_paternal_grandfather</item>
+        <item>@string/fast_paternal_grandmother</item>
+        <item>@string/fast_maternal_grandfather</item>
+        <item>@string/fast_maternal_grandmother</item>
+        <item>@string/fast_uncle</item>
+        <item>@string/fast_aunt</item>
+        <item>@string/fast_son</item>
+        <item>@string/fast_daughter</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+    
+    <string-array name="fast_cities_list">
+        <item>@string/fast_karachi</item>
+    </string-array>
+    
+    <string-array name="fast_type_of_address_list">
+        <item>@string/fast_perminant</item>
+        <item>@string/fast_temporary</item>
+    </string-array>
+    
+    <string-array name="fast_genexpert_mtb_result_list">
+        <item>@string/fast_mtb_detected</item>
+        <item>@string/fast_mtb_not_detected</item>
+        <item>@string/fast_error</item>
+        <item>@string/fast_invalid</item>
+        <item>@string/fast_no_result</item>
+    </string-array>
+
+    <string-array name="fast_mtb_burden_list">
+        <item>@string/fast_very_low</item>
+        <item>@string/fast_low</item>
+        <item>@string/fast_medium</item>
+        <item>@string/fast_high</item>
+    </string-array>
+
+    <string-array name="fast_if_mtb_then_rif_list">
+        <item>@string/fast_not_detected</item>
+        <item>@string/fast_detected</item>
+        <item>@string/fast_indeterminate</item>
+    </string-array>
+
+    <string-array name="fast_type_of_xray_is_this_list">
+        <item>@string/fast_chest_xray_cad4tb</item>
+        <item>@string/fast_chest_xray_other</item>
+    </string-array>
+
+    <string-array name="fast_radiologists_diagnosis_list">
+        <item>@string/fast_adenopathy</item>
+        <item>@string/fast_infiltration</item>
+        <item>@string/fast_consolidation</item>
+        <item>@string/fast_effusion</item>
+        <item>@string/fast_normal</item>
+        <item>@string/fast_cavitation</item>
+        <item>@string/fast_miliary_tb</item>
+        <item>@string/fast_others</item>
+    </string-array>
+
+    <string-array name="fast_extent_of_disease_list">
+        <item>@string/fast_normal</item>
+        <item>@string/fast_unilateral_disease</item>
+        <item>@string/fast_bilateral_disease</item>
+        <item>@string/fast_abnormal_but_extent_not_defined</item>
+    </string-array>
+
+    <string-array name="fast_number_list">
+        <item>@string/fast_one</item>
+        <item>@string/fast_two</item>
+        <item>@string/fast_three</item>
+        <item>@string/fast_four</item>
+        <item>@string/fast_five</item>
+        <item>@string/fast_six</item>
+        <item>@string/fast_seven</item>
+        <item>@string/fast_eight</item>
+        <item>@string/fast_nine</item>
+        <item>@string/fast_ten</item>
+        <item>@string/fast_eleven</item>
+        <item>@string/fast_twelve</item>
+        <item>@string/fast_thirteen</item>
+        <item>@string/fast_forteen</item>
+        <item>@string/fast_fifteen</item>
+        <item>@string/fast_sixteen</item>
+        <item>@string/fast_seventeen</item>
+        <item>@string/fast_eighteen</item>
+        <item>@string/fast_nineteen</item>
+        <item>@string/fast_twenty</item>
+        <item>@string/fast_twenty_one</item>
+        <item>@string/fast_twenty_two</item>
+        <item>@string/fast_twenty_three</item>
+        <item>@string/fast_twenty_four</item>
+    </string-array>
+
+    <string-array name="fast_order_and_result_list">
+        <item>@string/fast_order</item>
+        <item>@string/fast_result</item>
+    </string-array>
+
+    <string-array name="fast_smear_result_list">
+        <item>@string/fast_negative</item>
+        <item>@string/fast_scanty_3_to_24</item>
+        <item>@string/fast_1_plus</item>
+        <item>@string/fast_2_plus</item>
+        <item>@string/fast_3_plus</item>
     </string-array>
 </resources>
