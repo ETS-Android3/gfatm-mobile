@@ -39,6 +39,8 @@ import com.ihsinformatics.gfatmmobile.pet.MonthlyHomeFollowupForm;
 import com.ihsinformatics.gfatmmobile.pet.SocioecnomicDataForm;
 import com.ihsinformatics.gfatmmobile.pet.TreatmentAdherenceForm;
 import com.ihsinformatics.gfatmmobile.pet.TreatmentInitiationForm;
+import com.ihsinformatics.gfatmmobile.pmdt.PmdtPatientRegistrationForm;
+import com.ihsinformatics.gfatmmobile.pmdt.PmdtProviderRegistration;
 
 import java.util.ArrayList;
 
@@ -125,7 +127,10 @@ public class Forms{
      * PMDT
      ********************************/
     public static final FormsObject indexPatientRegistration = new FormsObject("Providers Registration Form", AbstractFormActivity.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
-    /********************************************************************************************************************************/
+    public static final String PMDT_PATIENT_REGISTRAITON = "Patient Registration";
+    public static final String PMDT_PROVIDER_REGISTRAITON = "Provider Registration";
+    public static final FormsObject patientRegistration = new FormsObject(PMDT_PATIENT_REGISTRAITON, PmdtPatientRegistrationForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static final FormsObject providerRegistration = new FormsObject(PMDT_PROVIDER_REGISTRAITON, PmdtProviderRegistration.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
     public static FormsObject comorbidities_indexPatientRegistration = new FormsObject("Patient Information Form", ComorbiditiesPatientInformationForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
     public static FormsObject comorbidities_mentalHealthScreening = new FormsObject("Mental Health Screening", ComorbiditiesMentalHealthScreeningForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
     public static FormsObject comorbidities_diabetesMellitusScreening = new FormsObject("Diabetes Mellitus Screening", ComorbiditiesDiabetesMellitusScreeningForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
@@ -140,6 +145,7 @@ public class Forms{
     public static FormsObject comorbidities_diabetesTreatmentFollowupForm = new FormsObject("Diabetes Treatment Follow-up Form", ComorbiditiesDiabetesTreatmentFollowupForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
     public static FormsObject comorbidities_diabetesEducationForm = new FormsObject("Diabetes Education Form", ComorbiditiesDiabetesEducationForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
 
+    /********************************************************************************************************************************/
     public static ArrayList<FormsObject> getPETFormList() {
 
         ArrayList<FormsObject> petList = new ArrayList<>();
@@ -210,7 +216,8 @@ public class Forms{
 
         ArrayList<FormsObject> pmdtList = new ArrayList<>();
 
-        pmdtList.add(indexPatientRegistration);
+        pmdtList.add(patientRegistration);
+        pmdtList.add(providerRegistration);
 
         return pmdtList;
 

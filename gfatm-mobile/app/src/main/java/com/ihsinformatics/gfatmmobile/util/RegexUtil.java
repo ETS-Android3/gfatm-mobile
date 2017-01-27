@@ -74,6 +74,18 @@ public class RegexUtil {
 
         }
     };
+    public static final InputFilter NIC_FILTER = new InputFilter() {
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+            if (source.equals("")) { // for backspace
+                return source;
+            }
+            if (source.toString().matches(nicPattern)) {
+                return source;
+            }
+            return "";
+        }
+    };
     public static final InputFilter ALPHA_FILTER = new InputFilter() {
 
         @Override

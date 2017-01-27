@@ -108,40 +108,12 @@ public class PmdtPatientRegistrationForm extends AbstractFormActivity {
         return mainContent;
     }
 
-    class MyAdapter extends PagerAdapter {
-
-        @Override
-        public int getCount() {
-            return PAGE_COUNT;
-        }
-
-        @Override
-        public Object instantiateItem(View container, int position) {
-
-            ViewGroup viewGroup = groups.get(position);
-            ((ViewPager) container).addView(viewGroup, 0);
-
-            return viewGroup;
-        }
-
-        @Override
-        public void destroyItem(View container, int position, Object obj) {
-            ((ViewPager) container).removeView((View) obj);
-        }
-
-        @Override
-        public boolean isViewFromObject(View container, Object obj) {
-            return container == obj;
-        }
-
-    }
-
     @Override
     public void initViews() {
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        cnic = new TitledEditText(context, null, getResources().getString(R.string.pmdt_cnic), "", getResources().getString(R.string.pmdt_cnic_hint), 15, RegexUtil.nicFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        cnic = new TitledEditText(context, null, getResources().getString(R.string.pmdt_cnic), "", getResources().getString(R.string.pmdt_cnic_hint), 15, RegexUtil.NIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         externalPatientId = new TitledEditText(context, "", getResources().getString(R.string.pmdt_external_patient_id), "", getResources().getString(R.string.pmdt_external_patient_id_hint), 11, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         endTbEmrId = new TitledEditText(context, "", getResources().getString(R.string.pmdt_endtb_emr_id), "", getResources().getString(R.string.pmdt_endtb_emr_id_hint), 13, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
 
@@ -160,8 +132,8 @@ public class PmdtPatientRegistrationForm extends AbstractFormActivity {
         permanentAddressLandmark = new TitledEditText(context, "", getResources().getString(R.string.pmdt_permanent_address_landmark), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
 
         // fourth (or last) page views...
-        primaryPhone = new TitledEditText(context, "", getResources().getString(R.string.pmdt_primary_phone), "", getResources().getString(R.string.pmdt_primary_phone_hint), 12, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        alternatePhone = new TitledEditText(context, "", getResources().getString(R.string.pmdt_alternate_phone), "", "", 12, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
+        primaryPhone = new TitledEditText(context, "", getResources().getString(R.string.pmdt_primary_phone), "", getResources().getString(R.string.pmdt_primary_phone_hint), 12, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        alternatePhone = new TitledEditText(context, "", getResources().getString(R.string.pmdt_alternate_phone), "", "", 12, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
         // if Primary Phone owner is not defined, collect as 'self'
         // if Alternate Phone owner is not defined, collect as 'self'
 
@@ -214,6 +186,34 @@ public class PmdtPatientRegistrationForm extends AbstractFormActivity {
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+    }
+
+    class MyAdapter extends PagerAdapter {
+
+        @Override
+        public int getCount() {
+            return PAGE_COUNT;
+        }
+
+        @Override
+        public Object instantiateItem(View container, int position) {
+
+            ViewGroup viewGroup = groups.get(position);
+            ((ViewPager) container).addView(viewGroup, 0);
+
+            return viewGroup;
+        }
+
+        @Override
+        public void destroyItem(View container, int position, Object obj) {
+            ((ViewPager) container).removeView((View) obj);
+        }
+
+        @Override
+        public boolean isViewFromObject(View container, Object obj) {
+            return container == obj;
+        }
 
     }
 }

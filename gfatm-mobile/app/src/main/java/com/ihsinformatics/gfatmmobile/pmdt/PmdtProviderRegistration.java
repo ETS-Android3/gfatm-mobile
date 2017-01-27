@@ -24,7 +24,6 @@ import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -127,31 +126,6 @@ public class PmdtProviderRegistration extends AbstractFormActivity {
         return mainContent;
     }
 
-    class MyAdapter extends PagerAdapter {
-        @Override
-        public int getCount() {
-            return PAGE_COUNT;
-        }
-
-        @Override
-        public Object instantiateItem(View container, int position) {
-            ViewGroup viewGroup = groups.get(position);
-            ((ViewPager) container).addView(viewGroup, 0);
-            return viewGroup;
-        }
-
-        @Override
-        public void destroyItem(View container, int position, Object obj) {
-            ((ViewPager) container).removeView((View) obj);
-        }
-
-        @Override
-        public boolean isViewFromObject(View container, Object obj) {
-            return container == obj;
-        }
-
-    }
-
     @Override
     public void initViews() {
         // first page views...
@@ -160,21 +134,21 @@ public class PmdtProviderRegistration extends AbstractFormActivity {
         personRole = new TitledSpinner(context, "", getResources().getString(R.string.pmdt_person_role), getResources().getStringArray(R.array.pmdt_roles), getResources().getString(R.string.pmdt_treatment_coordinator), App.HORIZONTAL);
         registeringFacility = new TitledSpinner(context, "", getResources().getString(R.string.pmdt_facility_registered), getResources().getStringArray(R.array.pmdt_roles), getResources().getString(R.string.pmdt_treatment_coordinator), App.HORIZONTAL);
         firstName = new TitledEditText(context, "", getResources().getString(R.string.pmdt_first_name), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        lastName = new TitledEditText(context, "", getResources().getString(R.string.pmdt_last_name), "", "", 50, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        cnic = new TitledEditText(context, null, getResources().getString(R.string.pmdt_cnic), "", getResources().getString(R.string.pmdt_cnic_hint), 15, RegexUtil.nicFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        lastName = new TitledEditText(context, "", getResources().getString(R.string.pmdt_last_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        cnic = new TitledEditText(context, null, getResources().getString(R.string.pmdt_cnic), "", getResources().getString(R.string.pmdt_cnic_hint), 15, RegexUtil.NIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         gender = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_gender), getResources().getStringArray(R.array.pmdt_gender), "Male", App.HORIZONTAL, App.HORIZONTAL);
         dobDate = new TitledButton(context, null, getResources().getString(R.string.pmdt_dob), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         dobDate.setTag("dobDate");
         age = new TitledEditText(context, "", getResources().getString(R.string.pmdt_age), "", "", 2, null, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        primaryContact = new TitledEditText(context, "", getResources().getString(R.string.pmdt_primary_phone), "", getResources().getString(R.string.pmdt_primary_phone_hint), 12, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        alternateContact = new TitledEditText(context, "", getResources().getString(R.string.pmdt_alternate_phone), "", "", 12, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
+        primaryContact = new TitledEditText(context, "", getResources().getString(R.string.pmdt_primary_phone), "", getResources().getString(R.string.pmdt_primary_phone_hint), 12, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        alternateContact = new TitledEditText(context, "", getResources().getString(R.string.pmdt_alternate_phone), "", "", 12, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
         // if Primary Phone owner is not defined, collect as 'self'
         // if Alternate Phone owner is not defined, collect as 'self'
 
         personPastHealthWorker = new TitledSpinner(context, "", getResources().getString(R.string.pmdt_person_past), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL);
         personHealthWorker = new TitledSpinner(context, "", getResources().getString(R.string.pmdt_person_healthworker), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL);
         occupation = new TitledSpinner(context, "", getResources().getString(R.string.pmdt_occupation), getResources().getStringArray(R.array.occupation_list), getResources().getString(R.string.pmdt_artist), App.HORIZONTAL);
-        otherOccupation = new TitledEditText(context, "", getResources().getString(R.string.pmdt_other_occupation), "", "", 100, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        otherOccupation = new TitledEditText(context, "", getResources().getString(R.string.pmdt_other_occupation), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         address1 = new TitledEditText(context, "", getResources().getString(R.string.pmdt_current_address_1), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         address2 = new TitledEditText(context, "", getResources().getString(R.string.pmdt_current_address_2), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         addressCityDistrict = new TitledSpinner(context, "", getResources().getString(R.string.pmdt_current_address_city), getResources().getStringArray(R.array.pmdt_cities), getResources().getString(R.string.pmdt_karachi), App.HORIZONTAL);
@@ -182,14 +156,14 @@ public class PmdtProviderRegistration extends AbstractFormActivity {
         administerInjections = new TitledSpinner(context, "", getResources().getString(R.string.pmdt_administer_injections), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL);
         treatmentSupporterTraining = new TitledSpinner(context, "", getResources().getString(R.string.pmdt_treatment_supporter_training), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL);
         trainingFacility = new TitledSpinner(context, "", getResources().getString(R.string.pmdt_training_facility), getResources().getStringArray(R.array.fast_locations), getResources().getString(R.string.pmdt_karachi), App.HORIZONTAL);
-        trainer = new TitledEditText(context, "", getResources().getString(R.string.pmdt_trainer), "", "", 50, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        trainer = new TitledEditText(context, "", getResources().getString(R.string.pmdt_trainer), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         trainingDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
 
         languages = new TitledSpinner(context, "", getResources().getString(R.string.pmdt_mother_tongue), getResources().getStringArray(R.array.pmdt_mother_tongues), "", App.HORIZONTAL);
-        otherLanguage = new TitledEditText(context, "", getResources().getString(R.string.pmdt_mother_tongue_other), "", "", 25, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        otherLanguage = new TitledEditText(context, "", getResources().getString(R.string.pmdt_mother_tongue_other), "", "", 25, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
 
-        id = new TitledEditText(context, "", getResources().getString(R.string.pmdt_id), "", "Enter id/username", 25, RegexUtil.ALPHA_NUM_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        password = new TitledEditText(context, "", getResources().getString(R.string.pmdt_password), "", "Enter password", 15, RegexUtil.ALPHA_NUM_FILTER, InputType.TYPE_NUMBER_VARIATION_PASSWORD, App.HORIZONTAL, true);
+        id = new TitledEditText(context, "", getResources().getString(R.string.pmdt_id), "", "Enter id/username", 25, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        password = new TitledEditText(context, "", getResources().getString(R.string.pmdt_password), "", "Enter password", 15, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_NUMBER_VARIATION_PASSWORD, App.HORIZONTAL, true);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), personRole.getSpinner(), registeringFacility.getSpinner(), firstName.getEditText(), lastName.getEditText(),
@@ -245,6 +219,31 @@ public class PmdtProviderRegistration extends AbstractFormActivity {
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+    }
+
+    class MyAdapter extends PagerAdapter {
+        @Override
+        public int getCount() {
+            return PAGE_COUNT;
+        }
+
+        @Override
+        public Object instantiateItem(View container, int position) {
+            ViewGroup viewGroup = groups.get(position);
+            ((ViewPager) container).addView(viewGroup, 0);
+            return viewGroup;
+        }
+
+        @Override
+        public void destroyItem(View container, int position, Object obj) {
+            ((ViewPager) container).removeView((View) obj);
+        }
+
+        @Override
+        public boolean isViewFromObject(View container, Object obj) {
+            return container == obj;
+        }
 
     }
 }
