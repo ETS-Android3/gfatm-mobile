@@ -179,7 +179,6 @@ public class PmdtPatientRegistrationForm extends AbstractFormActivity {
                         {primaryPhone, alternatePhone}};
 
         formDate.getButton().setOnClickListener(this);
-
     }
 
     @Override
