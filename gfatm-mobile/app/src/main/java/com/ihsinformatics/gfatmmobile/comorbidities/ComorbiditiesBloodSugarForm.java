@@ -50,29 +50,24 @@ import java.util.HashMap;
 
 public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
+    public static final int THIRD_DATE_DIALOG_ID = 3;
+    // Extra Views for date ...
+    protected Calendar thirdDateCalendar;
+    protected DialogFragment thirdDateFragment;
     Context context;
-
     // Views...
     TitledButton formDate;
-
     TitledRadioGroup formType;
-
     //Views for Test Order Blood Sugar
     MyTextView testOrderBloodSugar;
     TitledRadioGroup bloodSugarTestType;
     TitledSpinner bloodSugarFollowupMonth;
     TitledButton bloodSugarTestOrderDate;
     TitledEditText bloodSugarTestID;
-
     //Views for Test Result Blood Sugar
     MyTextView testResultBloodSugar;
     TitledButton bloodSugarTestResultDate;
     TitledEditText bloodSugarResult;
-
-    // Extra Views for date ...
-    protected Calendar thirdDateCalendar;
-    protected DialogFragment thirdDateFragment;
-    public static final int THIRD_DATE_DIALOG_ID = 3;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -88,6 +83,7 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
 
         PAGE_COUNT = 1;
         FORM_NAME = Forms.COMORBIDITIES_BLOOD_SUGAR_FORM;
+        FORM = Forms.comorbidities_bloodSugarForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -154,14 +150,14 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
         bloodSugarFollowupMonth = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_mth_txcomorbidities_hba1c), getResources().getStringArray(R.array.comorbidities_followup_month), "1", App.HORIZONTAL);
         showFollowupField();
         bloodSugarTestOrderDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1cdate_test_order), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
-        bloodSugarTestID = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hhba1c_testid), "", getResources().getString(R.string.comorbidities_blood_sugar_testid_format_hint), 11, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        bloodSugarTestID = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hhba1c_testid), "", getResources().getString(R.string.comorbidities_blood_sugar_testid_format_hint), 11, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
 
         //second page views...
         testResultBloodSugar = new MyTextView(context, getResources().getString(R.string.comorbidities_blood_sugar_test_result));
         testResultBloodSugar.setTypeface(null, Typeface.BOLD);
         bloodSugarTestResultDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1c_resultdate), DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
-        //microalbuminResult = new TitledEditText(context, null, getResources().getString(R.string.hba1c_result), "", "", 4, RegexUtil.FloatFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        bloodSugarResult = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_rbs_result), "", getResources().getString(R.string.comorbidities_rbs_result_range), 3, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        //microalbuminResult = new TitledEditText(context, null, getResources().getString(R.string.hba1c_result), "", "", 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        bloodSugarResult = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_rbs_result), "", getResources().getString(R.string.comorbidities_rbs_result_range), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         goneVisibility();
 
         // Used for reset fields...
@@ -323,7 +319,7 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
 
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
 
-        serverService.saveFormLocally(FORM_NAME, "12345-5", formValues);
+        //serverService.saveFormLocally(FORM_NAME, "12345-5", formValues);
 
         return true;
     }
@@ -336,6 +332,8 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
         if (view == formDate.getButton()) {
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
+            args.putBoolean("allowPastDate", true);
+            args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
         } else if (view == bloodSugarTestOrderDate.getButton()) {
@@ -394,34 +392,6 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
         }
     }
 
-    class MyAdapter extends PagerAdapter {
-
-        @Override
-        public int getCount() {
-            return PAGE_COUNT;
-        }
-
-        @Override
-        public Object instantiateItem(View container, int position) {
-
-            ViewGroup viewGroup = groups.get(position);
-            ((ViewPager) container).addView(viewGroup, 0);
-
-            return viewGroup;
-        }
-
-        @Override
-        public void destroyItem(View container, int position, Object obj) {
-            ((ViewPager) container).removeView((View) obj);
-        }
-
-        @Override
-        public boolean isViewFromObject(View container, Object obj) {
-            return container == obj;
-        }
-
-    }
-
     void showFollowupField() {
         if (bloodSugarTestType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_HbA1C_test_type_followup))) {
             bloodSugarFollowupMonth.setVisibility(View.VISIBLE);
@@ -463,6 +433,34 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
             bloodSugarTestResultDate.setVisibility(View.VISIBLE);
             bloodSugarResult.setVisibility(View.VISIBLE);
         }
+    }
+
+    class MyAdapter extends PagerAdapter {
+
+        @Override
+        public int getCount() {
+            return PAGE_COUNT;
+        }
+
+        @Override
+        public Object instantiateItem(View container, int position) {
+
+            ViewGroup viewGroup = groups.get(position);
+            ((ViewPager) container).addView(viewGroup, 0);
+
+            return viewGroup;
+        }
+
+        @Override
+        public void destroyItem(View container, int position, Object obj) {
+            ((ViewPager) container).removeView((View) obj);
+        }
+
+        @Override
+        public boolean isViewFromObject(View container, Object obj) {
+            return container == obj;
+        }
+
     }
 
     public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {

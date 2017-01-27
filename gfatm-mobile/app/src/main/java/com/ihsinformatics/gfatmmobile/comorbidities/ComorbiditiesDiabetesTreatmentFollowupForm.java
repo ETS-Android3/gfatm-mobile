@@ -43,8 +43,8 @@ import java.util.HashMap;
 
 public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
+    protected Calendar secondDateCalendar;
     Context context;
-
     // Views...
     TitledButton formDate;
     TitledSpinner diabetesFollowupMonthOfVisit;
@@ -65,8 +65,6 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
     TitledEditText diabetesFollowupDosageInsulinN;
     TitledEditText diabetesFollowupDosageInsulinR;
     TitledButton diabetesFollowupNextScheduledVisit;
-
-    protected Calendar secondDateCalendar;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -141,24 +139,24 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         diabetesFollowupMonthOfVisit = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_urinedr_month_of_treatment), getResources().getStringArray(R.array.comorbidities_followup_month), "1", App.HORIZONTAL);
-        diabetesFollowupBodyMassIndex = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_followup_bmi), "", getResources().getString(R.string.comorbidities_vitals_bmi_range), 4, RegexUtil.FloatFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        diabetesFollowupBodyMassIndex = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_followup_bmi), "", getResources().getString(R.string.comorbidities_vitals_bmi_range), 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         //diabetesFollowupBodyMassIndex.getEditText().setFocusable(false);
-        diabetesFollowupWaistHipRatio = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_followup_whr), "", getResources().getString(R.string.comorbidities_vitals_waist_hip_whr_range), 5, RegexUtil.FloatFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        diabetesFollowupWaistHipRatio = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_followup_whr), "", getResources().getString(R.string.comorbidities_vitals_waist_hip_whr_range), 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         //diabetesFollowupWaistHipRatio.getEditText().setFocusable(false);
-        diabetesFollowupBloodPressureSystolic = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_followup_systolic), "", getResources().getString(R.string.comorbidities_vitals_bp_systolic_diastolic_range), 3, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        diabetesFollowupBloodPressureDiastolic = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_followup_diastolic), "", getResources().getString(R.string.comorbidities_vitals_bp_systolic_diastolic_range), 3, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        diabetesFollowupHba1cTestResult = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_followup_hba1c_test_result), "", getResources().getString(R.string.comorbidities_hba1c_result_range), 4, RegexUtil.FloatFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        diabetesFollowupRBSTestResult = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_followup_rbs_test_result), "", getResources().getString(R.string.comorbidities_rbs_result_range), 3, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        diabetesFollowupBloodPressureSystolic = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_followup_systolic), "", getResources().getString(R.string.comorbidities_vitals_bp_systolic_diastolic_range), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        diabetesFollowupBloodPressureDiastolic = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_followup_diastolic), "", getResources().getString(R.string.comorbidities_vitals_bp_systolic_diastolic_range), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        diabetesFollowupHba1cTestResult = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_followup_hba1c_test_result), "", getResources().getString(R.string.comorbidities_hba1c_result_range), 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        diabetesFollowupRBSTestResult = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_followup_rbs_test_result), "", getResources().getString(R.string.comorbidities_rbs_result_range), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         diabetesFollowupHasPrescribedMedication = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_diabetes_followup_prescribed_medication), getResources().getStringArray(R.array.comorbidities_yes_no), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL);
         diabetesFollowupReasonsForNonCompliance = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_diabetes_followup_non_compliance), getResources().getStringArray(R.array.comorbidities_diabetes_followup_non_compliance_options), getResources().getString(R.string.comorbidities_diabetes_followup_non_compliance_options_side_effects), App.HORIZONTAL);
-        diabetesFollowupIfOther = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_followup_if_other), "", "", 1000, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        diabetesFollowupIfOther = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_followup_if_other), "", "", 1000, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         diabetesFollowupStatusOfDiabetesCondition = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_diabetes_followup_status_of_diabetes_condition), getResources().getStringArray(R.array.comorbidities_diabetes_followup_status_of_diabetes_condition_options), getResources().getString(R.string.comorbidities_diabetes_followup_status_of_diabetes_condition_option_controlled), App.VERTICAL, App.VERTICAL);
         diabetesFollowupChangeInRegimen = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_diabetes_followup_change_in_regimen), getResources().getStringArray(R.array.comorbidities_yes_no), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL);
         diabetesFollowupNewPrescribedMedication = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_diabetes_followup_new_prescribed), getResources().getStringArray(R.array.comorbidities_diabetes_followup_new_prescribed_options), getResources().getString(R.string.comorbidities_diabetes_followup_new_prescribed_options_biguanides), App.HORIZONTAL);
-        diabetesFollowupNewPrescribedMedicationDetail = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_followup_new_prescribed_detail), "", "", 1000, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        diabetesFollowupNewPrescribedMedicationDetail = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_followup_new_prescribed_detail), "", "", 1000, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         diabetesFollowupDosageStrengthofMetformin = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_diabetes_followup_metformin), getResources().getStringArray(R.array.comorbidities_diabetes_treatment_initiation_metformin_options), getResources().getString(R.string.comorbidities_diabetes_followup_metformin_options_500), App.HORIZONTAL);
-        diabetesFollowupDosageInsulinN = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_followup_isulinN), "", getResources().getString(R.string.comorbidities_vitals_waist_hip_whr_range), 3, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        diabetesFollowupDosageInsulinR = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_followup_isulinR), "", getResources().getString(R.string.comorbidities_vitals_waist_hip_whr_range), 3, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        diabetesFollowupDosageInsulinN = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_followup_isulinN), "", getResources().getString(R.string.comorbidities_vitals_waist_hip_whr_range), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        diabetesFollowupDosageInsulinR = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_followup_isulinR), "", getResources().getString(R.string.comorbidities_vitals_waist_hip_whr_range), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         diabetesFollowupNextScheduledVisit = new TitledButton(context, null, getResources().getString(R.string.comorbidities_diabetes_followup_next_scheduled_visit), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
 
         // Used for reset fields...
@@ -583,7 +581,7 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
 
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
 
-        serverService.saveFormLocally(FORM_NAME, "12345-5", formValues);
+        //serverService.saveFormLocally(FORM_NAME, "12345-5", formValues);
 
         return true;
     }
@@ -642,6 +640,24 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
 
     }
 
+    void displayReasonForNonCompliance() {
+        if (diabetesFollowupHasPrescribedMedication.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.no))) {
+            diabetesFollowupReasonsForNonCompliance.setVisibility(View.VISIBLE);
+        } else {
+            diabetesFollowupReasonsForNonCompliance.setVisibility(View.GONE);
+        }
+    }
+
+    void displayIfOther() {
+
+        String text = diabetesFollowupReasonsForNonCompliance.getSpinner().getSelectedItem().toString();
+        if (diabetesFollowupHasPrescribedMedication.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.no)) && text.equalsIgnoreCase(getResources().getString(R.string.comorbidities_diabetes_followup_non_compliance_options_other))) {
+            diabetesFollowupIfOther.setVisibility(View.VISIBLE);
+        } else {
+            diabetesFollowupIfOther.setVisibility(View.GONE);
+        }
+    }
+
     class MyAdapter extends PagerAdapter {
 
         @Override
@@ -668,26 +684,6 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
             return container == obj;
         }
 
-    }
-
-    void displayReasonForNonCompliance() {
-        if(diabetesFollowupHasPrescribedMedication.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.no))) {
-            diabetesFollowupReasonsForNonCompliance.setVisibility(View.VISIBLE);
-        }
-        else {
-            diabetesFollowupReasonsForNonCompliance.setVisibility(View.GONE);
-        }
-    }
-
-    void displayIfOther() {
-
-        String text = diabetesFollowupReasonsForNonCompliance.getSpinner().getSelectedItem().toString();
-        if(diabetesFollowupHasPrescribedMedication.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.no)) && text.equalsIgnoreCase(getResources().getString(R.string.comorbidities_diabetes_followup_non_compliance_options_other))) {
-            diabetesFollowupIfOther.setVisibility(View.VISIBLE);
-        }
-        else {
-            diabetesFollowupIfOther.setVisibility(View.GONE);
-        }
     }
 }
 

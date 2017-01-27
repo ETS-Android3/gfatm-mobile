@@ -50,30 +50,25 @@ import java.util.HashMap;
 
 public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
+    public static final int THIRD_DATE_DIALOG_ID = 3;
+    // Extra Views for date ...
+    protected Calendar thirdDateCalendar;
+    protected DialogFragment thirdDateFragment;
     Context context;
-
     // Views...
     TitledButton formDate;
-
     TitledRadioGroup formType;
-
     //Views for Test Order HbA1C
     MyTextView testOrderHba1C;
     TitledRadioGroup hba1cTestType;
     TitledSpinner hba1cFollowupMonth;
     TitledButton hba1cTestOrderDate;
     TitledEditText hba1cTestID;
-
     //Views for Test Result HbA1C
     MyTextView testResultHba1c;
     TitledButton hba1cTestResultDate;
     TitledEditText hba1cResult;
     TitledRadioGroup hba1cDiabetic;
-
-    // Extra Views for date ...
-    protected Calendar thirdDateCalendar;
-    protected DialogFragment thirdDateFragment;
-    public static final int THIRD_DATE_DIALOG_ID = 3;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -155,14 +150,14 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
         hba1cFollowupMonth = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_mth_txcomorbidities_hba1c), getResources().getStringArray(R.array.comorbidities_followup_month), "1", App.HORIZONTAL);
         showFollowupField();
         hba1cTestOrderDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1cdate_test_order), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
-        hba1cTestID = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hhba1c_testid), "", getResources().getString(R.string.comorbidities_hhba1c_testid_format_hint1), 9, RegexUtil.IdFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        hba1cTestID = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hhba1c_testid), "", getResources().getString(R.string.comorbidities_hhba1c_testid_format_hint1), 9, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
 
         //second page views...
         testResultHba1c = new MyTextView(context, getResources().getString(R.string.comorbidities_hba1c_test_result));
         testResultHba1c.setTypeface(null, Typeface.BOLD);
         hba1cTestResultDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1c_resultdate), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        //microalbuminResult = new TitledEditText(context, null, getResources().getString(R.string.hba1c_result), "", "", 4, RegexUtil.FloatFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        hba1cResult = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hba1c_result), "", getResources().getString(R.string.comorbidities_hba1c_result_range), 4, RegexUtil.FloatFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        //microalbuminResult = new TitledEditText(context, null, getResources().getString(R.string.hba1c_result), "", "", 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        hba1cResult = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hba1c_result), "", getResources().getString(R.string.comorbidities_hba1c_result_range), 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         hba1cDiabetic = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_hba1c_diabetic), getResources().getStringArray(R.array.comorbidities_yes_no), "", App.VERTICAL, App.VERTICAL);
         showHba1cDiabetic();
         autopopulateHba1cDiabetic();
@@ -338,7 +333,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
 
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
 
-        serverService.saveFormLocally(FORM_NAME, "12345-5", formValues);
+        //serverService.saveFormLocally(FORM_NAME, "12345-5", formValues);
 
         return true;
     }
@@ -412,34 +407,6 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
         }
     }
 
-    class MyAdapter extends PagerAdapter {
-
-        @Override
-        public int getCount() {
-            return PAGE_COUNT;
-        }
-
-        @Override
-        public Object instantiateItem(View container, int position) {
-
-            ViewGroup viewGroup = groups.get(position);
-            ((ViewPager) container).addView(viewGroup, 0);
-
-            return viewGroup;
-        }
-
-        @Override
-        public void destroyItem(View container, int position, Object obj) {
-            ((ViewPager) container).removeView((View) obj);
-        }
-
-        @Override
-        public boolean isViewFromObject(View container, Object obj) {
-            return container == obj;
-        }
-
-    }
-
     void showFollowupField() {
         if (hba1cTestType.getVisibility() == View.VISIBLE && hba1cTestType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_HbA1C_test_type_followup))) {
             hba1cFollowupMonth.setVisibility(View.VISIBLE);
@@ -505,6 +472,34 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
             hba1cResult.setVisibility(View.VISIBLE);
             hba1cDiabetic.setVisibility(View.VISIBLE);
         }
+    }
+
+    class MyAdapter extends PagerAdapter {
+
+        @Override
+        public int getCount() {
+            return PAGE_COUNT;
+        }
+
+        @Override
+        public Object instantiateItem(View container, int position) {
+
+            ViewGroup viewGroup = groups.get(position);
+            ((ViewPager) container).addView(viewGroup, 0);
+
+            return viewGroup;
+        }
+
+        @Override
+        public void destroyItem(View container, int position, Object obj) {
+            ((ViewPager) container).removeView((View) obj);
+        }
+
+        @Override
+        public boolean isViewFromObject(View container, Object obj) {
+            return container == obj;
+        }
+
     }
 
     public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {

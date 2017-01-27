@@ -125,7 +125,7 @@ public class ComorbiditiesDiabetesMellitusScreeningForm extends AbstractFormActi
         dMScreening = new MyTextView(context, getResources().getString(R.string.comorbidities_dm_screening));
         dMScreening.setTypeface(null, Typeface.BOLD);
         screeningFood = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_dmscrnng_food), getResources().getStringArray(R.array.comorbidities_yes_no), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL);
-        screeningRBS = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_scrnng_rbs), "", getResources().getString(R.string.comorbidities_scrnng_rbs_range), 3, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        screeningRBS = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_scrnng_rbs), "", getResources().getString(R.string.comorbidities_scrnng_rbs_range), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         hba1cTestVoucher = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_hba1c_testvoucher), getResources().getStringArray(R.array.comorbidities_yes_no), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL);
         displayHba1cTestVoucherOrNot();
 
@@ -245,7 +245,7 @@ public class ComorbiditiesDiabetesMellitusScreeningForm extends AbstractFormActi
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
         //formValues.put(firstName.getTag(), App.get(firstName));
 
-        serverService.saveFormLocally(FORM_NAME, "12345-5", formValues);
+        //serverService.saveFormLocally(FORM_NAME, "12345-5", formValues);
 
         return true;
     }
@@ -297,34 +297,6 @@ public class ComorbiditiesDiabetesMellitusScreeningForm extends AbstractFormActi
 
     }
 
-    class MyAdapter extends PagerAdapter {
-
-        @Override
-        public int getCount() {
-            return PAGE_COUNT;
-        }
-
-        @Override
-        public Object instantiateItem(View container, int position) {
-
-            ViewGroup viewGroup = groups.get(position);
-            ((ViewPager) container).addView(viewGroup, 0);
-
-            return viewGroup;
-        }
-
-        @Override
-        public void destroyItem(View container, int position, Object obj) {
-            ((ViewPager) container).removeView((View) obj);
-        }
-
-        @Override
-        public boolean isViewFromObject(View container, Object obj) {
-            return container == obj;
-        }
-
-    }
-
     @Override
     public void onPageSelected(int pageNo) {
 
@@ -352,6 +324,34 @@ public class ComorbiditiesDiabetesMellitusScreeningForm extends AbstractFormActi
 
         pager.setCurrentItem(pageNo);
         navigationSeekbar.setProgress(pageNo);
+
+    }
+
+    class MyAdapter extends PagerAdapter {
+
+        @Override
+        public int getCount() {
+            return PAGE_COUNT;
+        }
+
+        @Override
+        public Object instantiateItem(View container, int position) {
+
+            ViewGroup viewGroup = groups.get(position);
+            ((ViewPager) container).addView(viewGroup, 0);
+
+            return viewGroup;
+        }
+
+        @Override
+        public void destroyItem(View container, int position, Object obj) {
+            ((ViewPager) container).removeView((View) obj);
+        }
+
+        @Override
+        public boolean isViewFromObject(View container, Object obj) {
+            return container == obj;
+        }
 
     }
 }

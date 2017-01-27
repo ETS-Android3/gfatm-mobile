@@ -50,20 +50,20 @@ import java.util.HashMap;
 
 public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
+    public static final int THIRD_DATE_DIALOG_ID = 3;
+    // Extra Views for date ...
+    protected Calendar thirdDateCalendar;
+    protected DialogFragment thirdDateFragment;
+    protected Calendar fourthDateCalendar;
     Context context;
-
     // Views...
     TitledButton formDate;
-
     TitledRadioGroup formType;
-
     TitledEditText urineDRTestID;
-
     //Views for Test Order
     MyTextView testOrderUrineDR;
     TitledSpinner urineDRMonthOfVisit;
     TitledButton urineDRTestOrderDate;
-
     //Views for Test Result
     MyTextView testResultUrineDR;
     TitledButton urineDRTestResultDate;
@@ -84,14 +84,6 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
     TitledEditText urineDRHyalineCasts;
     TitledEditText urineDRCrystals;
     TitledButton nextUrineDRTestDate;
-
-
-    // Extra Views for date ...
-    protected Calendar thirdDateCalendar;
-    protected DialogFragment thirdDateFragment;
-    public static final int THIRD_DATE_DIALOG_ID = 3;
-
-    protected Calendar fourthDateCalendar;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -173,28 +165,28 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
         testOrderUrineDR.setTypeface(null, Typeface.BOLD);
         urineDRMonthOfVisit = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_urinedr_month_of_treatment), getResources().getStringArray(R.array.comorbidities_followup_month), "1", App.HORIZONTAL);
         urineDRTestOrderDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1cdate_test_order), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
-        urineDRTestID = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hhba1c_testid), "", getResources().getString(R.string.comorbidities_blood_sugar_testid_format_hint), 11, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        urineDRTestID = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hhba1c_testid), "", getResources().getString(R.string.comorbidities_blood_sugar_testid_format_hint), 11, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
 
         //second page views...
         testResultUrineDR = new MyTextView(context, getResources().getString(R.string.comorbidities_urinedr_test_result));
         testResultUrineDR.setTypeface(null, Typeface.BOLD);
         urineDRTestResultDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1c_resultdate), DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
-        urineDRQuantity = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_quantity), "", getResources().getString(R.string.comorbidities_vitals_bmi_range), 6, RegexUtil.FloatFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        urineDRColor = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_color), "", "", 50, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        urineDRSpecificGravity = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_spgravity), "", getResources().getString(R.string.comorbidities_urinedr_spgravity_ph_range), 5, RegexUtil.FloatFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        urineDRPH = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_ph), "", getResources().getString(R.string.comorbidities_urinedr_spgravity_ph_range), 5, RegexUtil.FloatFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        urineDRAlbumin = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_albumin), "", getResources().getString(R.string.comorbidities_vitals_waist_hip_whr_range), 6, RegexUtil.FloatFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        urineDRSugar = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_sugar), "", getResources().getString(R.string.comorbidities_urinedr_sugar_ketones_uro_range), 7, RegexUtil.FloatFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        urineDRKetones = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_ketones), "", getResources().getString(R.string.comorbidities_urinedr_sugar_ketones_uro_range), 7, RegexUtil.FloatFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        urineDRBilirubin = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_bilirubin), "", getResources().getString(R.string.comorbidities_vitals_bmi_range), 6, RegexUtil.FloatFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        urineDRBlood = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_blood), "", "", 50, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        urineDRNitrite = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_nitrite), "", "", 50, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        urineDRUrobilinogen = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_urobilinogen), "", getResources().getString(R.string.comorbidities_urinedr_sugar_ketones_uro_range), 7, RegexUtil.FloatFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        urineDRRedCells = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_red_cells), "", "", 50, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        urineDRPusCells = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_pus_cells), "", "", 50, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        urineDREpithelialCells = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_epithelial_cells), "", "", 50, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        urineDRHyalineCasts = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_hyaline_casts), "", "", 50, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        urineDRCrystals = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_crystals), "", "", 50, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        urineDRQuantity = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_quantity), "", getResources().getString(R.string.comorbidities_vitals_bmi_range), 6, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        urineDRColor = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_color), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        urineDRSpecificGravity = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_spgravity), "", getResources().getString(R.string.comorbidities_urinedr_spgravity_ph_range), 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        urineDRPH = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_ph), "", getResources().getString(R.string.comorbidities_urinedr_spgravity_ph_range), 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        urineDRAlbumin = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_albumin), "", getResources().getString(R.string.comorbidities_vitals_waist_hip_whr_range), 6, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        urineDRSugar = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_sugar), "", getResources().getString(R.string.comorbidities_urinedr_sugar_ketones_uro_range), 7, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        urineDRKetones = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_ketones), "", getResources().getString(R.string.comorbidities_urinedr_sugar_ketones_uro_range), 7, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        urineDRBilirubin = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_bilirubin), "", getResources().getString(R.string.comorbidities_vitals_bmi_range), 6, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        urineDRBlood = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_blood), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        urineDRNitrite = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_nitrite), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        urineDRUrobilinogen = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_urobilinogen), "", getResources().getString(R.string.comorbidities_urinedr_sugar_ketones_uro_range), 7, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        urineDRRedCells = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_red_cells), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        urineDRPusCells = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_pus_cells), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        urineDREpithelialCells = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_epithelial_cells), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        urineDRHyalineCasts = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_hyaline_casts), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        urineDRCrystals = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_crystals), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         nextUrineDRTestDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_urinedr_nexttestdate), DateFormat.format("dd-MMM-yyyy", fourthDateCalendar).toString(), App.HORIZONTAL);
         nextUrineDRTestDate.setVisibility(View.GONE);
         goneVisibility();
@@ -747,7 +739,7 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
 
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
 
-        serverService.saveFormLocally(FORM_NAME, "12345-5", formValues);
+        //serverService.saveFormLocally(FORM_NAME, "12345-5", formValues);
 
         //Send NEXT DR Test to the database
 
@@ -815,34 +807,6 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
         if (radioGroup == formType.getRadioGroup()) {
             showTestOrderOrTestResult();
         }
-    }
-
-    class MyAdapter extends PagerAdapter {
-
-        @Override
-        public int getCount() {
-            return PAGE_COUNT;
-        }
-
-        @Override
-        public Object instantiateItem(View container, int position) {
-
-            ViewGroup viewGroup = groups.get(position);
-            ((ViewPager) container).addView(viewGroup, 0);
-
-            return viewGroup;
-        }
-
-        @Override
-        public void destroyItem(View container, int position, Object obj) {
-            ((ViewPager) container).removeView((View) obj);
-        }
-
-        @Override
-        public boolean isViewFromObject(View container, Object obj) {
-            return container == obj;
-        }
-
     }
 
     void goneVisibility() {
@@ -925,6 +889,34 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
             urineDRHyalineCasts.setVisibility(View.VISIBLE);
             urineDRCrystals.setVisibility(View.VISIBLE);
         }
+    }
+
+    class MyAdapter extends PagerAdapter {
+
+        @Override
+        public int getCount() {
+            return PAGE_COUNT;
+        }
+
+        @Override
+        public Object instantiateItem(View container, int position) {
+
+            ViewGroup viewGroup = groups.get(position);
+            ((ViewPager) container).addView(viewGroup, 0);
+
+            return viewGroup;
+        }
+
+        @Override
+        public void destroyItem(View container, int position, Object obj) {
+            ((ViewPager) container).removeView((View) obj);
+        }
+
+        @Override
+        public boolean isViewFromObject(View container, Object obj) {
+            return container == obj;
+        }
+
     }
 
     public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {

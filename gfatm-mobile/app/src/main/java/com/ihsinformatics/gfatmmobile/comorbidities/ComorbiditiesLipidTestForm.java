@@ -48,20 +48,20 @@ import java.util.HashMap;
 
 public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
+    public static final int THIRD_DATE_DIALOG_ID = 3;
+    // Extra Views for date ...
+    protected Calendar thirdDateCalendar;
+    protected DialogFragment thirdDateFragment;
+    protected Calendar fourthDateCalendar;
     Context context;
-
     // Views...
     TitledButton formDate;
-
     TitledRadioGroup formType;
-
     TitledEditText lipidTestID;
-
     //Views for Test Order
     MyTextView testOrderLipid;
     TitledSpinner lipidMonthOfVisit;
     TitledButton lipidTestOrderDate;
-
     //Views for Test Result
     MyTextView testResultLipid;
     TitledButton lipidTestResultDate;
@@ -72,13 +72,6 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
     TitledEditText lipidVLDL;
     TitledEditText lipidNonHDLCholestrol;
     TitledButton nextLipidTestDate;
-
-    // Extra Views for date ...
-    protected Calendar thirdDateCalendar;
-    protected DialogFragment thirdDateFragment;
-    public static final int THIRD_DATE_DIALOG_ID = 3;
-
-    protected Calendar fourthDateCalendar;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -160,18 +153,18 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
         testOrderLipid.setTypeface(null, Typeface.BOLD);
         lipidMonthOfVisit = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_urinedr_month_of_treatment), getResources().getStringArray(R.array.comorbidities_followup_month), "1", App.HORIZONTAL);
         lipidTestOrderDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1cdate_test_order), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
-        lipidTestID = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hhba1c_testid), "", getResources().getString(R.string.comorbidities_hhba1c_testid_format_hint1), 9, RegexUtil.IdFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        lipidTestID = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hhba1c_testid), "", getResources().getString(R.string.comorbidities_hhba1c_testid_format_hint1), 9, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
 
         //second page views...
         testResultLipid = new MyTextView(context, getResources().getString(R.string.comorbidities_lipid_test_result));
         testResultLipid.setTypeface(null, Typeface.BOLD);
         lipidTestResultDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1c_resultdate), DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
-        lipidTotalCholestrol = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_lipid_test_cholestrol), "", getResources().getString(R.string.comorbidities_lipid_test_total_cholestrol_range), 7, RegexUtil.FloatFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        lipidTriglycerides = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_lipid_test_triglycerides), "", getResources().getString(R.string.comorbidities_lipid_test_triglycerides_range), 7, RegexUtil.FloatFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        lipidHDL = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_lipid_test_hdl), "", getResources().getString(R.string.comorbidities_lipid_test_hdl_range), 7, RegexUtil.FloatFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        lipidLDL = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_lipid_test_ldl), "", getResources().getString(R.string.comorbidities_lipid_test_ldl_range), 7, RegexUtil.FloatFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        lipidVLDL = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_lipid_test_vldl), "", getResources().getString(R.string.comorbidities_lipid_test_vldl_range), 7, RegexUtil.FloatFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        lipidNonHDLCholestrol = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_lipid_test_non_hdl), "", getResources().getString(R.string.comorbidities_lipid_test_non_hdl_range), 7, RegexUtil.FloatFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        lipidTotalCholestrol = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_lipid_test_cholestrol), "", getResources().getString(R.string.comorbidities_lipid_test_total_cholestrol_range), 7, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        lipidTriglycerides = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_lipid_test_triglycerides), "", getResources().getString(R.string.comorbidities_lipid_test_triglycerides_range), 7, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        lipidHDL = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_lipid_test_hdl), "", getResources().getString(R.string.comorbidities_lipid_test_hdl_range), 7, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        lipidLDL = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_lipid_test_ldl), "", getResources().getString(R.string.comorbidities_lipid_test_ldl_range), 7, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        lipidVLDL = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_lipid_test_vldl), "", getResources().getString(R.string.comorbidities_lipid_test_vldl_range), 7, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        lipidNonHDLCholestrol = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_lipid_test_non_hdl), "", getResources().getString(R.string.comorbidities_lipid_test_non_hdl_range), 7, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         nextLipidTestDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_urinedr_nexttestdate), DateFormat.format("dd-MMM-yyyy", fourthDateCalendar).toString(), App.HORIZONTAL);
         nextLipidTestDate.setVisibility(View.GONE);
         goneVisibility();
@@ -722,7 +715,7 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
 
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
 
-        serverService.saveFormLocally(FORM_NAME, "12345-5", formValues);
+        //serverService.saveFormLocally(FORM_NAME, "12345-5", formValues);
 
         //Send NEXT Lipid Test to the database
 
@@ -792,34 +785,6 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
         }
     }
 
-    class MyAdapter extends PagerAdapter {
-
-        @Override
-        public int getCount() {
-            return PAGE_COUNT;
-        }
-
-        @Override
-        public Object instantiateItem(View container, int position) {
-
-            ViewGroup viewGroup = groups.get(position);
-            ((ViewPager) container).addView(viewGroup, 0);
-
-            return viewGroup;
-        }
-
-        @Override
-        public void destroyItem(View container, int position, Object obj) {
-            ((ViewPager) container).removeView((View) obj);
-        }
-
-        @Override
-        public boolean isViewFromObject(View container, Object obj) {
-            return container == obj;
-        }
-
-    }
-
     void goneVisibility() {
         testOrderLipid.setVisibility(View.GONE);
         lipidMonthOfVisit.setVisibility(View.GONE);
@@ -870,6 +835,34 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
             lipidVLDL.setVisibility(View.VISIBLE);
             lipidNonHDLCholestrol.setVisibility(View.VISIBLE);
         }
+    }
+
+    class MyAdapter extends PagerAdapter {
+
+        @Override
+        public int getCount() {
+            return PAGE_COUNT;
+        }
+
+        @Override
+        public Object instantiateItem(View container, int position) {
+
+            ViewGroup viewGroup = groups.get(position);
+            ((ViewPager) container).addView(viewGroup, 0);
+
+            return viewGroup;
+        }
+
+        @Override
+        public void destroyItem(View container, int position, Object obj) {
+            ((ViewPager) container).removeView((View) obj);
+        }
+
+        @Override
+        public boolean isViewFromObject(View container, Object obj) {
+            return container == obj;
+        }
+
     }
 
     public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {

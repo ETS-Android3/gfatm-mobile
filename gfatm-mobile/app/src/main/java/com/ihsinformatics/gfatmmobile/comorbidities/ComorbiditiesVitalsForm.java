@@ -126,19 +126,19 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        vitalsMonthOfVisit = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_month_of_visit), "", getResources().getString(R.string.comorbidities_vitals_month_of_visit_range), 2, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        vitalsWeight = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_weight), "", getResources().getString(R.string.comorbidities_vitals_weight_range), 5, RegexUtil.FloatFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        vitalsHeight = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_height), "", getResources().getString(R.string.comorbidities_vitals_height_range), 5, RegexUtil.FloatFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        vitalsMonthOfVisit = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_month_of_visit), "", getResources().getString(R.string.comorbidities_vitals_month_of_visit_range), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        vitalsWeight = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_weight), "", getResources().getString(R.string.comorbidities_vitals_weight_range), 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        vitalsHeight = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_height), "", getResources().getString(R.string.comorbidities_vitals_height_range), 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         vitalsHeightInMeters = new MyTextView(context, "");
         vitalsHeightInMeters.setVisibility(View.GONE);
-        vitalsBodyMassIndex = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_bmi), "", getResources().getString(R.string.comorbidities_vitals_bmi_range), 4, RegexUtil.FloatFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        vitalsBodyMassIndex = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_bmi), "", getResources().getString(R.string.comorbidities_vitals_bmi_range), 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         vitalsBodyMassIndex.getEditText().setFocusable(false);
-        vitalsWaistCircumference = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_waist_circumference), "", getResources().getString(R.string.comorbidities_vitals_waist_hip_whr_range), 4, RegexUtil.FloatFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        vitalsHipCircumference = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_hip_circumference), "", getResources().getString(R.string.comorbidities_vitals_waist_hip_whr_range), 4, RegexUtil.FloatFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        vitalsWaistHipRatio = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_whr), "", getResources().getString(R.string.comorbidities_vitals_waist_hip_whr_range), 5, RegexUtil.FloatFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        vitalsWaistCircumference = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_waist_circumference), "", getResources().getString(R.string.comorbidities_vitals_waist_hip_whr_range), 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        vitalsHipCircumference = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_hip_circumference), "", getResources().getString(R.string.comorbidities_vitals_waist_hip_whr_range), 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        vitalsWaistHipRatio = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_whr), "", getResources().getString(R.string.comorbidities_vitals_waist_hip_whr_range), 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         vitalsWaistHipRatio.getEditText().setFocusable(false);
-        vitalsBloodPressureSystolic = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_bp_systolic), "", getResources().getString(R.string.comorbidities_vitals_bp_systolic_diastolic_range), 3, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        vitalsBloodPressureDiastolic = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_bp_diastolic), "", getResources().getString(R.string.comorbidities_vitals_bp_systolic_diastolic_range), 3, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        vitalsBloodPressureSystolic = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_bp_systolic), "", getResources().getString(R.string.comorbidities_vitals_bp_systolic_diastolic_range), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        vitalsBloodPressureDiastolic = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_bp_diastolic), "", getResources().getString(R.string.comorbidities_vitals_bp_systolic_diastolic_range), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), vitalsMonthOfVisit.getEditText(), vitalsWeight.getEditText(), vitalsHeight.getEditText(), vitalsBodyMassIndex.getEditText(), vitalsWaistCircumference.getEditText(),
@@ -543,7 +543,7 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
 
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
 
-        serverService.saveFormLocally(FORM_NAME, "12345-5", formValues);
+        //serverService.saveFormLocally(FORM_NAME, "12345-5", formValues);
 
         return true;
     }
@@ -592,6 +592,28 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
     }
 
+    double convertCentimeterToMeter(double cm) {
+        return cm / 100;
+    }
+
+    double calculateBMI() {
+
+        double weight = Double.parseDouble(vitalsWeight.getEditText().getText().toString());
+
+        double meters = convertCentimeterToMeter(Double.parseDouble(vitalsHeight.getEditText().getText().toString()));
+
+        return weight / (meters * meters);
+    }
+
+    double calculateWHR() {
+
+        double waistCircumference = Double.parseDouble(vitalsWaistCircumference.getEditText().getText().toString());
+
+        double hipCircumference = convertCentimeterToMeter(Double.parseDouble(vitalsHipCircumference.getEditText().getText().toString()));
+
+        return (waistCircumference / hipCircumference) / 100;
+    }
+
     class MyAdapter extends PagerAdapter {
 
         @Override
@@ -618,28 +640,6 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
             return container == obj;
         }
 
-    }
-
-    double convertCentimeterToMeter(double cm) {
-        return cm / 100;
-    }
-
-    double calculateBMI() {
-
-        double weight = Double.parseDouble(vitalsWeight.getEditText().getText().toString());
-
-        double meters = convertCentimeterToMeter(Double.parseDouble(vitalsHeight.getEditText().getText().toString()));
-
-        return weight / (meters * meters);
-    }
-
-    double calculateWHR() {
-
-        double waistCircumference = Double.parseDouble(vitalsWaistCircumference.getEditText().getText().toString());
-
-        double hipCircumference = convertCentimeterToMeter(Double.parseDouble(vitalsHipCircumference.getEditText().getText().toString()));
-
-        return (waistCircumference / hipCircumference) / 100;
     }
 }
 

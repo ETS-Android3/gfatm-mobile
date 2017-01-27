@@ -98,7 +98,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity {
                              ViewGroup container, Bundle savedInstanceState) {
 
         PAGE_COUNT = 7;
-        FORM_NAME = Forms.INDEX_PATIENT_REGISTRATION;
+        FORM_NAME = Forms.COMORBIDITIES_INDEX_PATIENT_REGISTRATION;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -155,11 +155,11 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity {
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        firstName = new TitledEditText(context, null, getResources().getString(R.string.pet_first_name), "", "", 20, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        firstName = new TitledEditText(context, null, getResources().getString(R.string.pet_first_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         firstName.setTag("firstName");
-        lastName = new TitledEditText(context, null, getResources().getString(R.string.pet_last_name), "", "", 20, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        lastName = new TitledEditText(context, null, getResources().getString(R.string.pet_last_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         lastName.setTag("lastName");
-        husbandName = new TitledEditText(context, null, getResources().getString(R.string.pet_father_husband_name), "", "", 20, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        husbandName = new TitledEditText(context, null, getResources().getString(R.string.pet_father_husband_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         husbandName.setTag("husbandName");
         gender = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_gender), getResources().getStringArray(R.array.pet_genders), "Male", App.HORIZONTAL, App.HORIZONTAL);
         gender.setTag("gender");
@@ -168,12 +168,12 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity {
 
         // second page views...
         ageModifiers = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_age_modifier), getResources().getStringArray(R.array.pet_age_modifiers), "Years", App.HORIZONTAL, App.HORIZONTAL);
-        age = new TitledEditText(context, null, getResources().getString(R.string.pet_age), "", "", 3, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        indexPatientId = new TitledEditText(context, null, getResources().getString(R.string.pet_index_patient_id), "", "", RegexUtil.idLength, RegexUtil.IdFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        indexExternalPatientId = new TitledEditText(context, null, getResources().getString(R.string.pet_index_patient_external_id), "", "", 20, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        age = new TitledEditText(context, null, getResources().getString(R.string.pet_age), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        indexPatientId = new TitledEditText(context, null, getResources().getString(R.string.pet_index_patient_id), "", "", RegexUtil.idLength, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        indexExternalPatientId = new TitledEditText(context, null, getResources().getString(R.string.pet_index_patient_external_id), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         scanQRCode = new Button(context);
         scanQRCode.setText("Scan QR Code");
-        ernsNumber = new TitledEditText(context, null, getResources().getString(R.string.pet_erns_number), "", "", RegexUtil.idLength, RegexUtil.ERNSFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        ernsNumber = new TitledEditText(context, null, getResources().getString(R.string.pet_erns_number), "", "", RegexUtil.idLength, RegexUtil.ERNS_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
 
         // third page views...
         tbType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_tb_type), getResources().getStringArray(R.array.pet_tb_types), "PTB", App.HORIZONTAL, App.VERTICAL);
@@ -191,7 +191,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity {
         treatmentRegimen = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_treatment_regimen), getResources().getStringArray(R.array.pet_treatment_regimens_1), null, App.VERTICAL, App.VERTICAL);
 
         //seventh page views...
-        enrollmentDateTextView = new MyTextView(context, getResources().getString(R.string.pet_treatment_enrollement));
+        enrollmentDateTextView = new MyTextView(context, getResources().getString(R.string.pet_treatment_initiation_date));
         treatmentEnrollmentDate = new DatePicker(context);
         ComorbiditiesPatientInformationForm.MyOnDateChangeListener onDateChangeListener = new ComorbiditiesPatientInformationForm.MyOnDateChangeListener();
         enrollmentDateCalender = Calendar.getInstance();
@@ -348,7 +348,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity {
         formValues.put(husbandName.getTag(), App.get(husbandName));
         formValues.put(gender.getTag(), App.get(gender));
 
-        serverService.saveFormLocally(FORM_NAME, "12345-5", formValues);
+        //serverService.saveFormLocally(FORM_NAME, "12345-5", formValues);
 
         return true;
     }
