@@ -6,7 +6,15 @@ import com.ihsinformatics.gfatmmobile.comorbidities.BloodSugarForm;
 import com.ihsinformatics.gfatmmobile.comorbidities.HbA1CForm;
 import com.ihsinformatics.gfatmmobile.comorbidities.PatientInformationForm;
 import com.ihsinformatics.gfatmmobile.comorbidities.ScreeningFormMHDM;
-import com.ihsinformatics.gfatmmobile.fast.ScreeningForm;
+import com.ihsinformatics.gfatmmobile.fast.FastAfbSmearMicroscopyOrderAndResultForm;
+import com.ihsinformatics.gfatmmobile.fast.FastGeneXpertResultForm;
+import com.ihsinformatics.gfatmmobile.fast.FastGxpSpecimenCollectionForm;
+import com.ihsinformatics.gfatmmobile.fast.FastPatientLocationForm;
+import com.ihsinformatics.gfatmmobile.fast.FastPresumptiveForm;
+import com.ihsinformatics.gfatmmobile.fast.FastPresumptiveInformationForm;
+import com.ihsinformatics.gfatmmobile.fast.FastPromptForm;
+import com.ihsinformatics.gfatmmobile.fast.FastScreeningChestXrayOrderAndResultForm;
+import com.ihsinformatics.gfatmmobile.fast.FastScreeningForm;
 import com.ihsinformatics.gfatmmobile.pet.AdverseEventForm;
 import com.ihsinformatics.gfatmmobile.pet.BaselineCounsellingForm;
 import com.ihsinformatics.gfatmmobile.pet.BaselineScreeningForm;
@@ -64,15 +72,30 @@ public class Forms{
     public static final FormsObject pet_adverseEvents = new FormsObject(PET_ADVERSE_EVENTS, AdverseEventForm.class, R.drawable.pet_adverse_events, FormTypeColor.OTHER_FORM);
     public static final FormsObject pet_incentiveDisbursement = new FormsObject(PET_INCENTIVE_DISBURSEMENT, IncentiveDisbursementForm.class, R.drawable.pet_incentive_disbursement, FormTypeColor.OTHER_FORM);
     public static final FormsObject pet_endOfFollowup = new FormsObject(PET_END_FOLLOWOUP, EndOfFollowupForm.class, R.drawable.pet_followup_end, FormTypeColor.FOLLOWUP_FORM);
+
     /********************************
      * FAST
      ********************************/
+    //Fast
     public static final String FAST_SCREENING_FORM = "Screening Form";
+    public static final String FAST_PRESUMPTIVE_FORM = "Presumptive Form";
+    public static final String FAST_PROMPT_FORM = "Sputum Container and X-Ray Voucher Form";
+    public static final String FAST_PATIENT_LOCATION_FORM = "Patient Location Form";
+    public static final String FAST_GXP_SPECIMEN_COLLECTION_FORM = "GXP Specimen Collection Form";
+    public static final String FAST_PRESUMPTIVE_INFORMATION_FORM = "Presumptive Information Form";
+    public static final String FAST_GENEXPERT_RESULT_FORM = "GeneXpert Result Form";
+    public static final String FAST_SCREENING_CHEST_XRAY_ORDER_AND_RESULT_FORM = "Screening Chest X-Ray(CAD4TB) Order and Result Form";
+    public static final String FAST_AFB_SMEAR_MICROSCOPY_ORDER_AND_RESULT_FORM = "AFB Smear Microscopy Order and Result Form";
+    public static final FormsObject fastScreeningForm = new FormsObject(FAST_SCREENING_FORM, FastScreeningForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static final FormsObject fastPromptForm = new FormsObject(FAST_PROMPT_FORM, FastPromptForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static final FormsObject fastPresumptiveForm = new FormsObject(FAST_PRESUMPTIVE_FORM, FastPresumptiveForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static final FormsObject fastPatientLocationForm = new FormsObject(FAST_PATIENT_LOCATION_FORM, FastPatientLocationForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static final FormsObject fastGpxSpecimenCollectionForm = new FormsObject(FAST_GXP_SPECIMEN_COLLECTION_FORM, FastGxpSpecimenCollectionForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static final FormsObject fastPresumptiveInformationForm = new FormsObject(FAST_PRESUMPTIVE_INFORMATION_FORM, FastPresumptiveInformationForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static final FormsObject fastGeneXpertResultForm = new FormsObject(FAST_GENEXPERT_RESULT_FORM, FastGeneXpertResultForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static final FormsObject fastScreeningChestXrayOrderAndResultForm = new FormsObject(FAST_SCREENING_CHEST_XRAY_ORDER_AND_RESULT_FORM, FastScreeningChestXrayOrderAndResultForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static final FormsObject fastAfbSmearMicroscopyOrderAndResultForm = new FormsObject(FAST_AFB_SMEAR_MICROSCOPY_ORDER_AND_RESULT_FORM, FastAfbSmearMicroscopyOrderAndResultForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
 
-    /********************************************************************************************************************************/
-    public static final FormsObject fast_screeningForm = new FormsObject(FAST_SCREENING_FORM, ScreeningForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
-    public static final FormsObject contactRegistry = new FormsObject("Presumptive Form", AbstractFormActivity.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
-    public static final FormsObject baselineScreening = new FormsObject("Sputum Container and X-Ray Voucher Form", AbstractFormActivity.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
     /********************************
      * COMORBIDITIES
      ********************************/
@@ -118,9 +141,15 @@ public class Forms{
 
         ArrayList<FormsObject> fastList = new ArrayList<>();
 
-        fastList.add(fast_screeningForm);
-        fastList.add(contactRegistry);
-        fastList.add(baselineScreening);
+        fastList.add(fastScreeningForm);
+        fastList.add(fastPromptForm);
+        fastList.add(fastPresumptiveForm);
+        fastList.add(fastPatientLocationForm);
+        fastList.add(fastGpxSpecimenCollectionForm);
+        fastList.add(fastPresumptiveInformationForm);
+        fastList.add(fastGeneXpertResultForm);
+        fastList.add(fastScreeningChestXrayOrderAndResultForm);
+        fastList.add(fastAfbSmearMicroscopyOrderAndResultForm);
 
         return fastList;
 
@@ -146,8 +175,6 @@ public class Forms{
         ArrayList<FormsObject> pmdtList = new ArrayList<>();
 
         pmdtList.add(indexPatientRegistration);
-        pmdtList.add(contactRegistry);
-        pmdtList.add(baselineScreening);
 
         return pmdtList;
 
@@ -160,8 +187,7 @@ public class Forms{
         ArrayList<FormsObject> childhoodtbList = new ArrayList<>();
 
         childhoodtbList.add(indexPatientRegistration);
-        childhoodtbList.add(contactRegistry);
-        childhoodtbList.add(baselineScreening);
+
 
         return childhoodtbList;
 
