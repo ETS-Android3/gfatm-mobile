@@ -43,7 +43,7 @@ import java.util.HashMap;
  * Created by Haris on 1/5/2017.
  */
 
-public class PresumptiveForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class FastPresumptiveForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
     Context context;
 

@@ -45,7 +45,7 @@ import java.util.HashMap;
  * Created by Haris on 1/13/2017.
  */
 
-public class PatientLocationForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class FastPatientLocationForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
     Context context;
     TitledButton formDate;

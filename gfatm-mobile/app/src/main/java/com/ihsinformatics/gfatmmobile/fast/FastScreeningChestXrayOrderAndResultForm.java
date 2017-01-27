@@ -34,29 +34,30 @@ import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 
 /**
- * Created by Haris on 1/19/2017.
+ * Created by Haris on 1/24/2017.
  */
 
-public class GxpSpecimenCollectionForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
     Context context;
 
     // Views...
     TitledButton formDate;
-    TitledButton sampleSubmissionDate;
-    TitledRadioGroup testContextStatus;
-    TitledRadioGroup tbCategory;
-    TitledRadioGroup baselineRepeatReason;
-    TitledRadioGroup sampleType;
-    TitledSpinner specimenSource;
-    TitledEditText specimenSourceOther;
-    TitledRadioGroup sampleAccepted;
-    TitledSpinner reasonRejected;
-    TitledEditText otherReasonRejected;
-    TitledEditText cartridgeId;
+    MyTextView cxrResultTitle;
+    MyTextView cxrOrderTitle;
+    TitledRadioGroup screenXrayType;
+    TitledRadioGroup formType;
+    TitledSpinner monthOfTreatment;
+    TitledButton testDate;
+    TitledEditText testId;
+    TitledEditText cat4tbScore;
+    TitledSpinner screenXrayDiagnosis;
+    TitledEditText screenXrayDiagnosisOther;
+    TitledSpinner extentOfDisease;
+    TitledEditText radiologistRemarks;
+
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -71,7 +72,7 @@ public class GxpSpecimenCollectionForm extends AbstractFormActivity implements R
                              ViewGroup container, Bundle savedInstanceState) {
 
         PAGE_COUNT = 1;
-        FORM_NAME = Forms.FAST_GXP_SPECIMEN_COLLECTION_FORM;
+        FORM_NAME = Forms.FAST_SCREENING_CHEST_XRAY_ORDER_AND_RESULT_FORM;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -127,48 +128,51 @@ public class GxpSpecimenCollectionForm extends AbstractFormActivity implements R
 
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        sampleSubmissionDate = new TitledButton(context, null, getResources().getString(R.string.fast_day_was_the_sample_submitted), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.VERTICAL);
-        testContextStatus = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_point_test_being_done), getResources().getStringArray(R.array.fast_test_being_done_list), getResources().getString(R.string.fast_baseline_new), App.VERTICAL, App.VERTICAL);
-        tbCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_baseline_test_specify_patient_category), getResources().getStringArray(R.array.fast_patient_category_list), getResources().getString(R.string.fast_category_1), App.VERTICAL, App.VERTICAL);
-        baselineRepeatReason = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_repeating_test_if_baseline_repeat), getResources().getStringArray(R.array.fast_repeating_test_if_baseline_repeat_list), getResources().getString(R.string.fast_rif_resistant), App.VERTICAL, App.VERTICAL);
-        baselineRepeatReason.setVisibility(View.GONE);
-        sampleType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_specimen_type), getResources().getStringArray(R.array.fast_specimen_type_list), getResources().getString(R.string.fast_sputum), App.VERTICAL, App.VERTICAL);
-        specimenSource = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_specimen_come_from), getResources().getStringArray(R.array.fast_specimen_come_from_list), getResources().getString(R.string.fast_lymph), App.VERTICAL);
-        specimenSource.setVisibility(View.GONE);
-        specimenSourceOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        specimenSourceOther.setVisibility(View.GONE);
-        sampleAccepted = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_accepted_lab_technician), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
-        reasonRejected = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_why_was_the_sample_rejected), getResources().getStringArray(R.array.fast_sample_rejected_list), getResources().getString(R.string.fast_saliva), App.VERTICAL);
-        reasonRejected.setVisibility(View.GONE);
-        otherReasonRejected = new TitledEditText(context, null, getResources().getString(R.string.fast_other_reason_for_rejection), "", "", 50, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        otherReasonRejected.setVisibility(View.GONE);
-        cartridgeId = new TitledEditText(context, null, getResources().getString(R.string.fast_cartridge_id), "", "", 9, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-
+        testId = new TitledEditText(context, null, getResources().getString(R.string.fast_test_id), "", "", 20, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
+        formType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_select_form_type), getResources().getStringArray(R.array.fast_order_and_result_list), "", App.VERTICAL, App.VERTICAL);
+        cxrOrderTitle = new MyTextView(context, getResources().getString(R.string.fast_cxr_order_title));
+        cxrOrderTitle.setTypeface(null, Typeface.BOLD);
+        cxrOrderTitle.setVisibility(View.GONE);
+        screenXrayType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_what_type_of_xray_is_this), getResources().getStringArray(R.array.fast_type_of_xray_is_this_list), getResources().getString(R.string.fast_chest_xray_other), App.VERTICAL, App.VERTICAL);
+        screenXrayType.setVisibility(View.GONE);
+        monthOfTreatment = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_month_of_treatment), getResources().getStringArray(R.array.fast_number_list), getResources().getString(R.string.fast_one), App.HORIZONTAL);
+        monthOfTreatment.setVisibility(View.GONE);
+        testDate = new TitledButton(context, null, getResources().getString(R.string.fast_test_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
+        testDate.setVisibility(View.GONE);
+        cxrResultTitle = new MyTextView(context, getResources().getString(R.string.fast_cxr_result_title));
+        cxrResultTitle.setTypeface(null, Typeface.BOLD);
+        cxrResultTitle.setVisibility(View.GONE);
+        cat4tbScore = new TitledEditText(context, null, getResources().getString(R.string.fast_chest_xray_cad4tb_score), "", "", 3, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
+        cat4tbScore.setVisibility(View.GONE);
+        screenXrayDiagnosis = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_radiologica_diagnosis), getResources().getStringArray(R.array.fast_radiologists_diagnosis_list), getResources().getString(R.string.fast_adenopathy), App.VERTICAL);
+        screenXrayDiagnosis.setVisibility(View.GONE);
+        screenXrayDiagnosisOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        screenXrayDiagnosisOther.setVisibility(View.GONE);
+        extentOfDisease = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_extent_of_desease), getResources().getStringArray(R.array.fast_extent_of_disease_list), getResources().getString(R.string.fast_normal), App.VERTICAL);
+        extentOfDisease.setVisibility(View.GONE);
+        radiologistRemarks = new TitledEditText(context, null, getResources().getString(R.string.fast_radiologist_remarks), "", "", 500, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        radiologistRemarks.setVisibility(View.GONE);
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), sampleSubmissionDate.getButton(), testContextStatus.getRadioGroup(), tbCategory.getRadioGroup(),
-                baselineRepeatReason.getRadioGroup(), sampleType.getRadioGroup(), specimenSource.getSpinner(), specimenSourceOther.getEditText(), sampleAccepted.getRadioGroup(), reasonRejected.getSpinner(), otherReasonRejected.getEditText(), cartridgeId.getEditText()};
+        views = new View[]{formDate.getButton(), testId.getEditText(), formType.getRadioGroup(), screenXrayType.getRadioGroup(),
+                monthOfTreatment.getSpinner(), testDate.getButton(), cat4tbScore.getEditText(), screenXrayDiagnosis.getSpinner(),
+                screenXrayDiagnosisOther.getEditText(), extentOfDisease.getSpinner(), radiologistRemarks.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, sampleSubmissionDate, testContextStatus, tbCategory, baselineRepeatReason, sampleType, specimenSource, specimenSourceOther, sampleAccepted, reasonRejected, otherReasonRejected, cartridgeId}};
+                {{formDate, testId, formType, cxrOrderTitle, screenXrayType, monthOfTreatment, testDate, cxrResultTitle, cat4tbScore,
+                        screenXrayDiagnosis, screenXrayDiagnosisOther, extentOfDisease, radiologistRemarks}};
 
         formDate.getButton().setOnClickListener(this);
-        sampleSubmissionDate.getButton().setOnClickListener(this);
-        testContextStatus.getRadioGroup().setOnCheckedChangeListener(this);
-        tbCategory.getRadioGroup().setOnCheckedChangeListener(this);
-        baselineRepeatReason.getRadioGroup().setOnCheckedChangeListener(this);
-        sampleType.getRadioGroup().setOnCheckedChangeListener(this);
-        specimenSource.getSpinner().setOnItemSelectedListener(this);
-        sampleAccepted.getRadioGroup().setOnCheckedChangeListener(this);
-        reasonRejected.getSpinner().setOnItemSelectedListener(this);
-
+        testDate.getButton().setOnClickListener(this);
+        formType.getRadioGroup().setOnCheckedChangeListener(this);
+        screenXrayDiagnosis.getSpinner().setOnItemSelectedListener(this);
     }
 
     @Override
     public void updateDisplay() {
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        sampleSubmissionDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+        testDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
 
     }
 
@@ -176,38 +180,48 @@ public class GxpSpecimenCollectionForm extends AbstractFormActivity implements R
     public boolean validate() {
         Boolean error = false;
 
-        if (specimenSourceOther.getVisibility() == View.VISIBLE && App.get(specimenSourceOther).isEmpty()) {
+        if (testId.getVisibility() == View.VISIBLE && App.get(testId).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            specimenSourceOther.getEditText().setError(getString(R.string.empty_field));
-            specimenSourceOther.getEditText().requestFocus();
+            testId.getEditText().setError(getString(R.string.empty_field));
+            testId.getEditText().requestFocus();
             error = true;
         }
 
-        if (otherReasonRejected.getVisibility() == View.VISIBLE && App.get(otherReasonRejected).isEmpty()) {
+        if (cat4tbScore.getVisibility() == View.VISIBLE && App.get(cat4tbScore).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            otherReasonRejected.getEditText().setError(getString(R.string.empty_field));
-            otherReasonRejected.getEditText().requestFocus();
+            cat4tbScore.getEditText().setError(getString(R.string.empty_field));
+            cat4tbScore.getEditText().requestFocus();
             error = true;
         }
 
-        if (cartridgeId.getVisibility() == View.VISIBLE && App.get(cartridgeId).isEmpty()) {
+        if (screenXrayDiagnosisOther.getVisibility() == View.VISIBLE && App.get(screenXrayDiagnosisOther).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            cartridgeId.getEditText().setError(getString(R.string.empty_field));
-            cartridgeId.getEditText().requestFocus();
+            screenXrayDiagnosisOther.getEditText().setError(getString(R.string.empty_field));
+            screenXrayDiagnosisOther.getEditText().requestFocus();
             error = true;
         }
+
+        if (radiologistRemarks.getVisibility() == View.VISIBLE && App.get(radiologistRemarks).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            radiologistRemarks.getEditText().setError(getString(R.string.empty_field));
+            radiologistRemarks.getEditText().requestFocus();
+            error = true;
+        }
+
 
         if (error) {
-
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
@@ -274,7 +288,7 @@ public class GxpSpecimenCollectionForm extends AbstractFormActivity implements R
             formDateFragment.show(getFragmentManager(), "DatePicker");
         }
 
-        if (view == sampleSubmissionDate.getButton()) {
+        if (view == testDate.getButton()) {
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             secondDateFragment.setArguments(args);
@@ -302,60 +316,47 @@ public class GxpSpecimenCollectionForm extends AbstractFormActivity implements R
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         MySpinner spinner = (MySpinner) parent;
-        if (spinner == specimenSource.getSpinner()) {
-            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title))) {
-                specimenSourceOther.setVisibility(View.VISIBLE);
+
+        if (spinner == screenXrayDiagnosis.getSpinner()) {
+            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_others))) {
+                screenXrayDiagnosisOther.setVisibility(View.VISIBLE);
             } else {
-                specimenSourceOther.setVisibility(View.GONE);
-            }
-        } else if (spinner == reasonRejected.getSpinner()) {
-            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title))) {
-                otherReasonRejected.setVisibility(View.VISIBLE);
-            } else {
-                otherReasonRejected.setVisibility(View.GONE);
+                screenXrayDiagnosisOther.setVisibility(View.GONE);
             }
         }
     }
 
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
+        if (radioGroup == formType.getRadioGroup()) {
+            if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_order))) {
+                cxrOrderTitle.setVisibility(View.VISIBLE);
+                screenXrayType.setVisibility(View.VISIBLE);
+                monthOfTreatment.setVisibility(View.VISIBLE);
+                testDate.setVisibility(View.VISIBLE);
 
-        if (radioGroup == testContextStatus.getRadioGroup()) {
-            if (testContextStatus.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_baseline_new))) {
-                tbCategory.setVisibility(View.VISIBLE);
+                cxrResultTitle.setVisibility(View.GONE);
+                cat4tbScore.setVisibility(View.GONE);
+                screenXrayDiagnosis.setVisibility(View.GONE);
+                screenXrayDiagnosisOther.setVisibility(View.GONE);
+                extentOfDisease.setVisibility(View.GONE);
+                radiologistRemarks.setVisibility(View.GONE);
             } else {
-                tbCategory.setVisibility(View.GONE);
-            }
+                cxrOrderTitle.setVisibility(View.GONE);
+                screenXrayType.setVisibility(View.GONE);
+                monthOfTreatment.setVisibility(View.GONE);
+                testDate.setVisibility(View.GONE);
 
-            if (testContextStatus.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_baseline_repeat))) {
-                baselineRepeatReason.setVisibility(View.VISIBLE);
-            } else {
-                baselineRepeatReason.setVisibility(View.GONE);
-            }
-        } else if (radioGroup == sampleType.getRadioGroup()) {
-            if (sampleType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_extra_pulmonary))) {
-                specimenSource.setVisibility(View.VISIBLE);
-                if (specimenSource.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))) {
-                    specimenSourceOther.setVisibility(View.VISIBLE);
+                cxrResultTitle.setVisibility(View.VISIBLE);
+                cat4tbScore.setVisibility(View.VISIBLE);
+                screenXrayDiagnosis.setVisibility(View.VISIBLE);
+                if (screenXrayDiagnosis.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_others))) {
+                    screenXrayDiagnosisOther.setVisibility(View.VISIBLE);
                 }
-            } else {
-                specimenSource.setVisibility(View.GONE);
-                specimenSourceOther.setVisibility(View.GONE);
-            }
-        } else if (radioGroup == sampleAccepted.getRadioGroup()) {
-            if (sampleAccepted.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))) {
-                reasonRejected.setVisibility(View.VISIBLE);
-                if (reasonRejected.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))) {
-                    otherReasonRejected.setVisibility(View.VISIBLE);
-                }
-                cartridgeId.setVisibility(View.GONE);
-            } else {
-                reasonRejected.setVisibility(View.GONE);
-                cartridgeId.setVisibility(View.VISIBLE);
-                otherReasonRejected.setVisibility(View.GONE);
+                extentOfDisease.setVisibility(View.VISIBLE);
+                radiologistRemarks.setVisibility(View.VISIBLE);
             }
         }
-
     }
 
     class MyAdapter extends PagerAdapter {
