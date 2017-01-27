@@ -40,7 +40,7 @@ public class RegexUtil {
     public static final int idLength = 7;
     public static final int mobileNumberLength = 11;
     public static final int defaultEditTextLength = 50;
-    public static final InputFilter floatFilter = new InputFilter() {
+    public static final InputFilter FLOAT_FILTER = new InputFilter() {
 
         @Override
         public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
@@ -55,7 +55,7 @@ public class RegexUtil {
 
         }
     };
-    public static final InputFilter alphaNumericFilter = new InputFilter() {
+    public static final InputFilter ALPHANUMERIC_FILTER = new InputFilter() {
 
         @Override
         public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
@@ -70,7 +70,7 @@ public class RegexUtil {
 
         }
     };
-    public static final InputFilter alphaFilter = new InputFilter() {
+    public static final InputFilter ALPHA_FILTER = new InputFilter() {
 
         @Override
         public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
@@ -85,7 +85,7 @@ public class RegexUtil {
 
         }
     };
-    public static final InputFilter numericFilter = new InputFilter() {
+    public static final InputFilter NUMERIC_FILTER = new InputFilter() {
 
         @Override
         public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
@@ -100,7 +100,7 @@ public class RegexUtil {
 
         }
     };
-    public static final InputFilter idFilter = new InputFilter() {
+    public static final InputFilter ID_FILTER = new InputFilter() {
 
         @Override
         public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
@@ -115,7 +115,7 @@ public class RegexUtil {
 
         }
     };
-    public static final InputFilter ernsFilter = new InputFilter() {
+    public static final InputFilter ERNS_FILTER = new InputFilter() {
 
         @Override
         public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
