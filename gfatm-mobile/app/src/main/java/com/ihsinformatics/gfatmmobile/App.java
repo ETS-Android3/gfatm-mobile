@@ -433,6 +433,13 @@ public class App {
 
     }
 
+    public static boolean isEnable(View view) {
+        if (view instanceof TitledEditText)
+            return ((TitledEditText) view).getEditText().isEnabled();
+
+        return view.isEnabled();
+    }
+
     public enum dialogButtonPosition {
         LEFT, CENTER, RIGHT
     }
