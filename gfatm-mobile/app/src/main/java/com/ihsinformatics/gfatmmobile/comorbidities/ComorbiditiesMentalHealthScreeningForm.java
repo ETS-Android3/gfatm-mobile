@@ -43,7 +43,7 @@ import java.util.HashMap;
  * Created by Fawad Jawaid on 16-Dec-16.
  */
 
-public class ScreeningFormMHDM extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
     Context context;
 
@@ -81,10 +81,6 @@ public class ScreeningFormMHDM extends AbstractFormActivity implements RadioGrou
     TitledSpinner preferredTherapyLocationSpinner;
     TitledEditText gpClinicCode;
     TitledEditText otherPreferredLocation;
-    MyTextView dMScreening;
-    TitledRadioGroup screeningFood;
-    TitledEditText screeningRBS;
-    TitledRadioGroup hba1cTestVoucher;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -98,13 +94,13 @@ public class ScreeningFormMHDM extends AbstractFormActivity implements RadioGrou
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        PAGE_COUNT = 3;
-        FORM_NAME = Forms.COMORBIDITIES_SCREENING_FORM;
+        PAGE_COUNT = 1;
+        FORM_NAME = Forms.COMORBIDITIES_MENTAL_HEALTH_SCREENING_FORM;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
         pager = (ViewPager) mainContent.findViewById(R.id.pager);
-        pager.setAdapter(new com.ihsinformatics.gfatmmobile.comorbidities.ScreeningFormMHDM.MyAdapter());
+        pager.setAdapter(new ComorbiditiesMentalHealthScreeningForm.MyAdapter());
         pager.setOnPageChangeListener(this);
         navigationSeekbar.setMax(PAGE_COUNT - 1);
         formName.setText(FORM_NAME);
@@ -195,19 +191,11 @@ public class ScreeningFormMHDM extends AbstractFormActivity implements RadioGrou
         // second page views...
         akuadsAgree = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_agree_AKUADS), getResources().getStringArray(R.array.comorbidities_yes_no), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL);
         preferredTherapyLocationSpinner = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_preferredlocation_id), getResources().getStringArray(R.array.comorbidities_location), "Sehatmand Zindagi Center - Korangi", App.HORIZONTAL);
-        gpClinicCode = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_preferredlocation_gpcliniccode), "", getResources().getString(R.string.comorbidities_preferredlocation_gpcliniccode_range), 2, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
+        gpClinicCode = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_preferredlocation_gpcliniccode), "", getResources().getString(R.string.comorbidities_preferredlocation_gpcliniccode_range), 2, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         displayAkuadsAgreeOrNot();
         displayPreferredTherapyLocationOrNot();
-        otherPreferredLocation = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_preferredlocation_other_comorbidities), "", "", 50, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
-        showOtherPreferredLocation();
-
-        // third page views...
-        dMScreening = new MyTextView(context, getResources().getString(R.string.comorbidities_dm_screening));
-        dMScreening.setTypeface(null, Typeface.BOLD);
-        screeningFood = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_dmscrnng_food), getResources().getStringArray(R.array.comorbidities_yes_no), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL);
-        screeningRBS = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_scrnng_rbs), "", getResources().getString(R.string.comorbidities_scrnng_rbs_range), 3, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
-        hba1cTestVoucher = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_hba1c_testvoucher), getResources().getStringArray(R.array.comorbidities_yes_no), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL);
-        displayHba1cTestVoucherOrNot();
+        otherPreferredLocation = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_preferredlocation_other_comorbidities), "", "", 50, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        otherPreferredLocation.setVisibility(View.GONE);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), akuadsSleep.getRadioGroup(), akuadsLackOfInterest.getRadioGroup(),
@@ -223,17 +211,14 @@ public class ScreeningFormMHDM extends AbstractFormActivity implements RadioGrou
                 akuadsNumbness.getRadioGroup(), akuadsTension.getRadioGroup(),
                 akuadsHeadaches.getRadioGroup(), akuadsBodyPain.getRadioGroup(),
                 akuadsUrination.getRadioGroup(), akuadsTotalScore.getEditText(), akuadsSeverity.getRadioGroup(),
-                akuadsAgree.getRadioGroup(), preferredTherapyLocationSpinner.getSpinner(), gpClinicCode.getEditText(), otherPreferredLocation.getEditText(),
-                screeningFood.getRadioGroup(), screeningRBS.getEditText(), hba1cTestVoucher.getRadioGroup()};
+                akuadsAgree.getRadioGroup(), preferredTherapyLocationSpinner.getSpinner(), gpClinicCode.getEditText(), otherPreferredLocation.getEditText(),};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formDate, mentalHealthScreening, akuadsSleep, akuadsLackOfInterest, akuadsLostInterestHobbies, akuadsAnxious, akuadsImpendingDoom, akuadsDifficultyThinkingClearly,
                         akuadsAlone, akuadsUnhappy, akuadsHopeless, akuadsHelpless, akuadsWorried, akuadsCried, akuadsSuicide, akuadsLossOfAppetite, akuadsRetrosternalBurning,
                         akuadsIndigestion, akuadsNausea, akuadsConstipation, akuadsDifficultBreathing, akuadsTremulous, akuadsNumbness, akuadsTension, akuadsHeadaches, akuadsBodyPain,
-                        akuadsUrination, akuadsTotalScore, akuadsSeverity},
-                        {akuadsAgree, preferredTherapyLocationSpinner, gpClinicCode, otherPreferredLocation},
-                        {dMScreening, screeningFood, screeningRBS, hba1cTestVoucher}};
+                        akuadsUrination, akuadsTotalScore, akuadsSeverity, akuadsAgree, preferredTherapyLocationSpinner, gpClinicCode, otherPreferredLocation}};
 
         formDate.getButton().setOnClickListener(this);
         akuadsSleep.getRadioGroup().setOnCheckedChangeListener(this);
@@ -276,36 +261,6 @@ public class ScreeningFormMHDM extends AbstractFormActivity implements RadioGrou
 
         });
 
-        screeningRBS.getEditText().setSingleLine(true);
-        screeningRBS.getEditText().addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start,
-                                          int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start,
-                                      int before, int count) {
-                try {
-                    if (screeningRBS.getEditText().getText().length() > 0) {
-                        double num = Double.parseDouble(screeningRBS.getEditText().getText().toString());
-                        if (num < 1 || num > 500) {
-                            screeningRBS.getEditText().setError(getString(R.string.comorbidities_scrnng_rbs_limit));
-                        } else {
-                            displayHba1cTestVoucherOrNot();
-                        }
-                    }
-                } catch (NumberFormatException nfe) {
-                    //Exception: User might be entering " " (empty) value
-                }
-            }
-        });
-
         gpClinicCode.getEditText().setSingleLine(true);
         gpClinicCode.getEditText().addTextChangedListener(new TextWatcher() {
 
@@ -327,7 +282,6 @@ public class ScreeningFormMHDM extends AbstractFormActivity implements RadioGrou
                         if (num < 1 || num > 50) {
                             gpClinicCode.getEditText().setError(getString(R.string.comorbidities_preferredlocation_gpcliniccode_limit));
                         } else {
-                            displayHba1cTestVoucherOrNot();
                         }
                     }
                 } catch (NumberFormatException nfe) {
@@ -348,14 +302,23 @@ public class ScreeningFormMHDM extends AbstractFormActivity implements RadioGrou
 
         Boolean error = false;
 
-        if (Double.parseDouble(App.get(gpClinicCode)) < 1 || Double.parseDouble(App.get(gpClinicCode)) > 50) {
+        if (!akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_normal)) && gpClinicCode.getVisibility() == View.VISIBLE && App.get(gpClinicCode).isEmpty()) {
+            gotoPage(1);
+            gpClinicCode.getEditText().setError(getString(R.string.empty_field));
+            gpClinicCode.getEditText().requestFocus();
+            error = true;
+        }
+        else if (gpClinicCode.getVisibility() == View.VISIBLE && !App.get(gpClinicCode).isEmpty() && (Double.parseDouble(App.get(gpClinicCode)) < 1 || Double.parseDouble(App.get(gpClinicCode)) > 50)) {
+            gotoPage(1);
             gpClinicCode.getEditText().setError(getString(R.string.comorbidities_preferredlocation_gpcliniccode_limit));
             gpClinicCode.getEditText().requestFocus();
             error = true;
         }
-        else if (Double.parseDouble(App.get(screeningRBS)) < 1 || Double.parseDouble(App.get(screeningRBS)) > 500) {
-            screeningRBS.getEditText().setError(getString(R.string.comorbidities_scrnng_rbs_limit));
-            screeningRBS.getEditText().requestFocus();
+
+        if (!akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_normal)) && otherPreferredLocation.getVisibility() == View.VISIBLE && App.get(otherPreferredLocation).isEmpty()) {
+            gotoPage(1);
+            otherPreferredLocation.getEditText().setError(getString(R.string.empty_field));
+            otherPreferredLocation.getEditText().requestFocus();
             error = true;
         }
 
@@ -503,21 +466,6 @@ public class ScreeningFormMHDM extends AbstractFormActivity implements RadioGrou
 
     }
 
-    @Override
-    public void onPageSelected(int pageNo) {
-
-        //Here RTL and normal view doesn't makes any difference
-        if(pageNo == 1 && akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_normal))){
-
-            if(getCurrentPageNo() == 1)
-                pageNo = 2;
-            else if(getCurrentPageNo() == 3)
-                pageNo = 0;
-        }
-
-        gotoPage(pageNo);
-    }
-
     int getTotalScore() {
 
         ArrayList<String> selectedOptions = new ArrayList<String>();
@@ -589,7 +537,7 @@ public class ScreeningFormMHDM extends AbstractFormActivity implements RadioGrou
     }
 
     void displayPreferredTherapyLocationOrNot() {
-        if (akuadsAgree.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.yes))) {
+        if (akuadsAgree.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.yes)) && !akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_normal))) {
             preferredTherapyLocationSpinner.setVisibility(View.VISIBLE);
             gpClinicCode.setVisibility(View.VISIBLE);
         } else if (akuadsAgree.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.no))) {
@@ -602,24 +550,15 @@ public class ScreeningFormMHDM extends AbstractFormActivity implements RadioGrou
         String text = preferredTherapyLocationSpinner.getSpinner().getSelectedItem().toString();
 
         if (text.equalsIgnoreCase(getResources().getString(R.string.comorbidities_location_other))) {
-            otherPreferredLocation.setVisibility(View.VISIBLE);
-            gpClinicCode.setVisibility(View.GONE);
-        } else {
-            otherPreferredLocation.setVisibility(View.GONE);
-            gpClinicCode.setVisibility(View.VISIBLE);
-        }
-    }
-
-    void displayHba1cTestVoucherOrNot() {
-        try {
-            if (Integer.parseInt(screeningRBS.getEditText().getText().toString()) >= 200) {
-                hba1cTestVoucher.setVisibility(View.VISIBLE);
-            } else {
-                hba1cTestVoucher.setVisibility(View.GONE);
+            if(!akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_normal))) {
+                otherPreferredLocation.setVisibility(View.VISIBLE);
+                gpClinicCode.setVisibility(View.GONE);
             }
-        }
-        catch (NumberFormatException nfe) {
-            //Exception: User might be entering " " (empty) value
+        } else {
+            if(!akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_normal))) {
+                otherPreferredLocation.setVisibility(View.GONE);
+                gpClinicCode.setVisibility(View.VISIBLE);
+            }
         }
     }
 

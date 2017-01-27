@@ -50,7 +50,7 @@ import static android.app.Activity.RESULT_OK;
  * Created by Fawad Jawaid on 12/15/2016.
  */
 
-public class PatientInformationForm extends AbstractFormActivity {
+public class ComorbiditiesPatientInformationForm extends AbstractFormActivity {
 
     Context context;
 
@@ -103,7 +103,7 @@ public class PatientInformationForm extends AbstractFormActivity {
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
         pager = (ViewPager) mainContent.findViewById(R.id.pager);
-        pager.setAdapter(new com.ihsinformatics.gfatmmobile.comorbidities.PatientInformationForm.MyAdapter());
+        pager.setAdapter(new ComorbiditiesPatientInformationForm.MyAdapter());
         pager.setOnPageChangeListener(this);
         navigationSeekbar.setMax(PAGE_COUNT - 1);
         formName.setText(FORM_NAME);
@@ -193,7 +193,7 @@ public class PatientInformationForm extends AbstractFormActivity {
         //seventh page views...
         enrollmentDateTextView = new MyTextView(context, getResources().getString(R.string.pet_treatment_enrollement));
         treatmentEnrollmentDate = new DatePicker(context);
-        com.ihsinformatics.gfatmmobile.comorbidities.PatientInformationForm.MyOnDateChangeListener onDateChangeListener = new com.ihsinformatics.gfatmmobile.comorbidities.PatientInformationForm.MyOnDateChangeListener();
+        ComorbiditiesPatientInformationForm.MyOnDateChangeListener onDateChangeListener = new ComorbiditiesPatientInformationForm.MyOnDateChangeListener();
         enrollmentDateCalender = Calendar.getInstance();
         treatmentEnrollmentDate.init(enrollmentDateCalender.get(Calendar.YEAR), enrollmentDateCalender.get(Calendar.MONTH), enrollmentDateCalender.get(Calendar.DAY_OF_MONTH), onDateChangeListener);
         treatmentEnrollmentDate.setMaxDate(new Date().getTime());

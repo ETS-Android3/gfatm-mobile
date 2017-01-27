@@ -45,33 +45,36 @@ import java.util.Date;
 import java.util.HashMap;
 
 /**
- * Created by Fawad Jawaid on 21-Dec-16.
+ * Created by Fawad Jawaid on 17-Jan-17.
  */
 
-public class HbA1CForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
     Context context;
 
     // Views...
     TitledButton formDate;
 
-    //Views for Test Order HbA1C
-    MyTextView testOrderHba1C;
-    TitledRadioGroup hba1cTestType;
-    TitledSpinner hba1cFollowupMonth;
-    TitledButton hba1cTestOrderDate;
-    TitledEditText hba1cTestID;
+    TitledRadioGroup formType;
 
-    //Views for Test Result HbA1C
-    MyTextView testResultHba1c;
-    TitledButton hba1cTestResultDate;
-    TitledEditText hba1cResult;
-    TitledRadioGroup hba1cDiabetic;
+    //Views for Test Order Blood Sugar
+    MyTextView testOrderCreatinine;
+    TitledSpinner creatinineFollowupMonth;
+    TitledButton creatinineTestOrderDate;
+    TitledEditText creatinineTestID;
+
+    //Views for Test Result Blood Sugar
+    MyTextView testResultCreatinine;
+    TitledButton creatinineTestResultDate;
+    TitledEditText creatinineResult;
+    TitledButton nextCreatinineTestDate;
 
     // Extra Views for date ...
     protected Calendar thirdDateCalendar;
     protected DialogFragment thirdDateFragment;
     public static final int THIRD_DATE_DIALOG_ID = 3;
+
+    protected Calendar fourthDateCalendar;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -85,21 +88,23 @@ public class HbA1CForm extends AbstractFormActivity implements RadioGroup.OnChec
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        PAGE_COUNT = 2;
-        FORM_NAME = Forms.COMORBIDITIES_HbA1C_FORM;
+        PAGE_COUNT = 1;
+        FORM_NAME = Forms.COMORBIDITIES_CREATININE_TEST_FORM;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
         pager = (ViewPager) mainContent.findViewById(R.id.pager);
-        pager.setAdapter(new com.ihsinformatics.gfatmmobile.comorbidities.HbA1CForm.MyAdapter());
+        pager.setAdapter(new ComorbiditiesCreatinineTestForm.MyAdapter());
         pager.setOnPageChangeListener(this);
         navigationSeekbar.setMax(PAGE_COUNT - 1);
         formName.setText(FORM_NAME);
 
-        initViews();
-
         thirdDateCalendar = Calendar.getInstance();
-        thirdDateFragment = new SelectDateFragment();
+        thirdDateFragment = new ComorbiditiesCreatinineTestForm.SelectDateFragment();
+
+        fourthDateCalendar = Calendar.getInstance();
+
+        initViews();
 
         groups = new ArrayList<ViewGroup>();
 
@@ -146,39 +151,38 @@ public class HbA1CForm extends AbstractFormActivity implements RadioGroup.OnChec
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        testOrderHba1C = new MyTextView(context, getResources().getString(R.string.comorbidities_hba1c_test_order));
-        testOrderHba1C.setTypeface(null, Typeface.BOLD);
-        hba1cTestType = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_hba1c_testtype), getResources().getStringArray(R.array.comorbidities_HbA1C_test_type), "", App.HORIZONTAL, App.VERTICAL);
-        hba1cFollowupMonth = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_mth_txcomorbidities_hba1c), getResources().getStringArray(R.array.comorbidities_followup_month), "1", App.HORIZONTAL);
-        showFollowupField();
-        hba1cTestOrderDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1cdate_test_order), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
-        hba1cTestID = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hhba1c_testid), "", getResources().getString(R.string.comorbidities_hhba1c_testid_format_hint), 7, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
+        formType = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_testorder_testresult_form_type), getResources().getStringArray(R.array.comorbidities_testorder_testresult_form_type_options), "", App.HORIZONTAL, App.VERTICAL);
+        testOrderCreatinine = new MyTextView(context, getResources().getString(R.string.comorbidities_creatinine_test_order));
+        testOrderCreatinine.setTypeface(null, Typeface.BOLD);
+        creatinineFollowupMonth = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_mth_txcomorbidities_hba1c), getResources().getStringArray(R.array.comorbidities_followup_month), "1", App.HORIZONTAL);
+        creatinineTestOrderDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1cdate_test_order), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
+        creatinineTestID = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hhba1c_testid), "", getResources().getString(R.string.comorbidities_blood_sugar_testid_format_hint), 11, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
 
         //second page views...
-        testResultHba1c = new MyTextView(context, getResources().getString(R.string.comorbidities_hba1c_test_result));
-        testResultHba1c.setTypeface(null, Typeface.BOLD);
-        hba1cTestResultDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1c_resultdate), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        //bloodSugarResult = new TitledEditText(context, null, getResources().getString(R.string.hba1c_result), "", "", 4, RegexUtil.FloatFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        hba1cResult = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hba1c_result), "", getResources().getString(R.string.comorbidities_hba1c_result_range), 4, RegexUtil.FloatFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        hba1cDiabetic = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_hba1c_diabetic), getResources().getStringArray(R.array.comorbidities_yes_no), "", App.VERTICAL, App.VERTICAL);
-        showHba1cDiabetic();
-        autopopulateHba1cDiabetic();
+        testResultCreatinine = new MyTextView(context, getResources().getString(R.string.comorbidities_creatinine_test_result));
+        testResultCreatinine.setTypeface(null, Typeface.BOLD);
+        creatinineTestResultDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1c_resultdate), DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
+        //microalbuminResult = new TitledEditText(context, null, getResources().getString(R.string.hba1c_result), "", "", 4, RegexUtil.FloatFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        creatinineResult = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_creatinine_result), "", getResources().getString(R.string.comorbidities_creatinine_result_range), 4, RegexUtil.FloatFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        nextCreatinineTestDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_urinedr_nexttestdate), DateFormat.format("dd-MMM-yyyy", fourthDateCalendar).toString(), App.HORIZONTAL);
+        nextCreatinineTestDate.setVisibility(View.GONE);
+        goneVisibility();
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), hba1cTestID.getEditText(), hba1cTestType.getRadioGroup(), hba1cFollowupMonth.getSpinner(),
-                hba1cTestOrderDate.getButton(), hba1cTestResultDate.getButton(), hba1cResult.getEditText(), hba1cDiabetic.getRadioGroup()};
+        views = new View[]{formDate.getButton(), creatinineTestID.getEditText(), formType.getRadioGroup(), creatinineFollowupMonth.getSpinner(),
+                creatinineTestOrderDate.getButton(), creatinineTestResultDate.getButton(), creatinineResult.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, testOrderHba1C, hba1cTestID, hba1cTestType, hba1cFollowupMonth, hba1cTestOrderDate},
-                        {testResultHba1c, hba1cTestResultDate, hba1cResult, hba1cDiabetic}};
+                {{formDate, creatinineTestID, formType, testOrderCreatinine, creatinineFollowupMonth, creatinineTestOrderDate,
+                        testResultCreatinine, creatinineTestResultDate, creatinineResult}};
 
         formDate.getButton().setOnClickListener(this);
-        hba1cTestType.getRadioGroup().setOnCheckedChangeListener(this);
-        hba1cTestOrderDate.getButton().setOnClickListener(this);
-        hba1cTestResultDate.getButton().setOnClickListener(this);
+        formType.getRadioGroup().setOnCheckedChangeListener(this);
+        creatinineTestOrderDate.getButton().setOnClickListener(this);
+        creatinineTestResultDate.getButton().setOnClickListener(this);
 
-        hba1cResult.getEditText().addTextChangedListener(new TextWatcher() {
+        creatinineResult.getEditText().addTextChangedListener(new TextWatcher() {
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -193,12 +197,12 @@ public class HbA1CForm extends AbstractFormActivity implements RadioGroup.OnChec
             public void onTextChanged(CharSequence s, int start,
                                       int before, int count) {
                 try {
-                    if (hba1cResult.getEditText().getText().length() > 0) {
-                        double num = Double.parseDouble(hba1cResult.getEditText().getText().toString());
-                        if (num < 0 || num > 20) {
-                            hba1cResult.getEditText().setError(getString(R.string.comorbidities_hba1c_result_limit));
+                    if (creatinineResult.getEditText().getText().length() > 0) {
+                        double num = Double.parseDouble(creatinineResult.getEditText().getText().toString());
+                        if (num < 0 || num > 99.9) {
+                            creatinineResult.getEditText().setError(getString(R.string.comorbidities_creatinine_result_limit));
                         } else {
-                            autopopulateHba1cDiabetic();
+                            //Correct value
                         }
                     }
                 } catch (NumberFormatException nfe) {
@@ -207,7 +211,7 @@ public class HbA1CForm extends AbstractFormActivity implements RadioGroup.OnChec
             }
         });
 
-        hba1cTestID.getEditText().addTextChangedListener(new TextWatcher() {
+        creatinineTestID.getEditText().addTextChangedListener(new TextWatcher() {
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -222,9 +226,9 @@ public class HbA1CForm extends AbstractFormActivity implements RadioGroup.OnChec
             public void onTextChanged(CharSequence s, int start,
                                       int before, int count) {
                 try {
-                    if (hba1cTestID.getEditText().getText().length() > 0) {
-                        if (hba1cTestID.getEditText().getText().length() < 7) {
-                            hba1cTestID.getEditText().setError(getString(R.string.comorbidities_hhba1c_testid_format_error));
+                    if (creatinineTestID.getEditText().getText().length() > 0) {
+                        if (creatinineTestID.getEditText().getText().length() < 11) {
+                            creatinineTestID.getEditText().setError(getString(R.string.comorbidities_blood_sugar_testid_format_error));
                         }
                     }
                 } catch (NumberFormatException nfe) {
@@ -238,8 +242,12 @@ public class HbA1CForm extends AbstractFormActivity implements RadioGroup.OnChec
     public void updateDisplay() {
 
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        hba1cTestOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-        hba1cTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+        creatinineTestOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+        creatinineTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+        fourthDateCalendar = thirdDateCalendar;
+        fourthDateCalendar.add(Calendar.MONTH, 2);
+        fourthDateCalendar.add(Calendar.DAY_OF_MONTH, 20);
+        nextCreatinineTestDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", fourthDateCalendar).toString());
     }
 
     @Override
@@ -247,32 +255,35 @@ public class HbA1CForm extends AbstractFormActivity implements RadioGroup.OnChec
 
         Boolean error = false;
 
-        if (App.get(hba1cTestID).isEmpty()) {
-            gotoFirstPage();
-            hba1cTestID.getEditText().setError(getString(R.string.empty_field));
-            hba1cTestID.getEditText().requestFocus();
+        if (creatinineResult.getVisibility() == View.VISIBLE && App.get(creatinineResult).isEmpty()) {
+            gotoLastPage();
+            creatinineResult.getEditText().setError(getString(R.string.empty_field));
+            creatinineResult.getEditText().requestFocus();
             error = true;
         }
-        else if (App.get(hba1cTestID).length() < 7) {
-            gotoFirstPage();
-            hba1cTestID.getEditText().setError(getString(R.string.comorbidities_hhba1c_testid_format_error));
-            hba1cTestID.getEditText().requestFocus();
+        else if (creatinineResult.getVisibility() == View.VISIBLE && !RegexUtil.isNumeric(App.get(creatinineResult), true)) {
+            gotoLastPage();
+            creatinineResult.getEditText().setError(getString(R.string.comorbidities_hba1c_not_valid_result_value));
+            creatinineResult.getEditText().requestFocus();
             error = true;
         }
-        else if (App.get(hba1cResult).isEmpty()) {
+        else if (creatinineResult.getVisibility() == View.VISIBLE && !App.get(creatinineResult).isEmpty() && Double.parseDouble(App.get(creatinineResult)) > 99.9) {
             gotoLastPage();
-            hba1cResult.getEditText().setError(getString(R.string.empty_field));
-            hba1cResult.getEditText().requestFocus();
+            creatinineResult.getEditText().setError(getString(R.string.comorbidities_creatinine_result_limit));
+            creatinineResult.getEditText().requestFocus();
             error = true;
-        } else if (!RegexUtil.isNumeric(App.get(hba1cResult), true)) {
-            gotoLastPage();
-            hba1cResult.getEditText().setError(getString(R.string.comorbidities_hba1c_not_valid_result_value));
-            hba1cResult.getEditText().requestFocus();
+        }
+
+        if (App.get(creatinineTestID).isEmpty()) {
+            gotoFirstPage();
+            creatinineTestID.getEditText().setError(getString(R.string.empty_field));
+            creatinineTestID.getEditText().requestFocus();
             error = true;
-        } else if (Double.parseDouble(App.get(hba1cResult)) > 20) {
-            gotoLastPage();
-            hba1cResult.getEditText().setError(getString(R.string.comorbidities_hba1c_result_limit));
-            hba1cResult.getEditText().requestFocus();
+        }
+        else if (!App.get(creatinineTestID).isEmpty() && App.get(creatinineTestID).length() < 11) {
+            gotoFirstPage();
+            creatinineTestID.getEditText().setError(getString(R.string.comorbidities_blood_sugar_testid_format_error));
+            creatinineTestID.getEditText().requestFocus();
             error = true;
         }
 
@@ -340,19 +351,17 @@ public class HbA1CForm extends AbstractFormActivity implements RadioGroup.OnChec
             args.putInt("type", DATE_DIALOG_ID);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
-        } else if (view == hba1cTestOrderDate.getButton()) {
+        } else if (view == creatinineTestOrderDate.getButton()) {
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
-        } else if (view == hba1cTestResultDate.getButton()) {
+        } else if (view == creatinineTestResultDate.getButton()) {
             Bundle args = new Bundle();
             args.putInt("type", THIRD_DATE_DIALOG_ID);
             thirdDateFragment.setArguments(args);
             thirdDateFragment.show(getFragmentManager(), "DatePicker");
         }
-
-
     }
 
     @Override
@@ -376,8 +385,11 @@ public class HbA1CForm extends AbstractFormActivity implements RadioGroup.OnChec
 
         thirdDateCalendar = Calendar.getInstance();
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        hba1cTestOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-        hba1cTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+        creatinineTestOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+        creatinineTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+        nextCreatinineTestDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", fourthDateCalendar).toString());
+
+        goneVisibility();
     }
 
     @Override
@@ -387,9 +399,8 @@ public class HbA1CForm extends AbstractFormActivity implements RadioGroup.OnChec
 
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
-        if (radioGroup == hba1cTestType.getRadioGroup()) {
-            showFollowupField();
-            showHba1cDiabetic();
+        if (radioGroup == formType.getRadioGroup()) {
+            showTestOrderOrTestResult();
         }
     }
 
@@ -421,33 +432,35 @@ public class HbA1CForm extends AbstractFormActivity implements RadioGroup.OnChec
 
     }
 
-    void showFollowupField() {
-        if (hba1cTestType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_HbA1C_test_type_followup))) {
-            hba1cFollowupMonth.setVisibility(View.VISIBLE);
-        } else {
-            hba1cFollowupMonth.setVisibility(View.GONE);
-        }
+
+    void goneVisibility() {
+        testOrderCreatinine.setVisibility(View.GONE);
+        creatinineFollowupMonth.setVisibility(View.GONE);
+        creatinineTestOrderDate.setVisibility(View.GONE);
+
+        testResultCreatinine.setVisibility(View.GONE);
+        creatinineTestResultDate.setVisibility(View.GONE);
+        creatinineResult.setVisibility(View.GONE);
     }
 
-    void showHba1cDiabetic() {
-        if (hba1cTestType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_HbA1C_test_type_followup))) {
+    void showTestOrderOrTestResult() {
+        if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
+            testOrderCreatinine.setVisibility(View.VISIBLE);
+            creatinineFollowupMonth.setVisibility(View.VISIBLE);
+            creatinineTestOrderDate.setVisibility(View.VISIBLE);
 
-            //Later we have to get bloodSugarTestType from Database
-            hba1cDiabetic.setVisibility(View.GONE);
+            testResultCreatinine.setVisibility(View.GONE);
+            creatinineTestResultDate.setVisibility(View.GONE);
+            creatinineResult.setVisibility(View.GONE);
+
         } else {
-            hba1cDiabetic.setVisibility(View.VISIBLE);
-        }
-    }
+            testOrderCreatinine.setVisibility(View.GONE);
+            creatinineFollowupMonth.setVisibility(View.GONE);
+            creatinineTestOrderDate.setVisibility(View.GONE);
 
-    void autopopulateHba1cDiabetic() {
-        try {
-            if (Double.parseDouble(hba1cResult.getEditText().getText().toString()) >= 6.5) {
-                hba1cDiabetic.getRadioGroup().check((hba1cDiabetic.getRadioGroup().getChildAt(0)).getId());
-            } else {
-                hba1cDiabetic.getRadioGroup().check((hba1cDiabetic.getRadioGroup().getChildAt(1)).getId());
-            }
-        } catch (NumberFormatException nfe) {
-            //Exception: User might be entering " " (empty) value
+            testResultCreatinine.setVisibility(View.VISIBLE);
+            creatinineTestResultDate.setVisibility(View.VISIBLE);
+            creatinineResult.setVisibility(View.VISIBLE);
         }
     }
 
@@ -489,4 +502,6 @@ public class HbA1CForm extends AbstractFormActivity implements RadioGroup.OnChec
     }
 
 }
+
+
 

@@ -48,12 +48,14 @@ import java.util.HashMap;
  * Created by Fawad Jawaid on 27-Dec-16.
  */
 
-public class BloodSugarForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
     Context context;
 
     // Views...
     TitledButton formDate;
+
+    TitledRadioGroup formType;
 
     //Views for Test Order Blood Sugar
     MyTextView testOrderBloodSugar;
@@ -84,21 +86,21 @@ public class BloodSugarForm extends AbstractFormActivity implements RadioGroup.O
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        PAGE_COUNT = 2;
+        PAGE_COUNT = 1;
         FORM_NAME = Forms.COMORBIDITIES_BLOOD_SUGAR_FORM;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
         pager = (ViewPager) mainContent.findViewById(R.id.pager);
-        pager.setAdapter(new com.ihsinformatics.gfatmmobile.comorbidities.BloodSugarForm.MyAdapter());
+        pager.setAdapter(new ComorbiditiesBloodSugarForm.MyAdapter());
         pager.setOnPageChangeListener(this);
         navigationSeekbar.setMax(PAGE_COUNT - 1);
         formName.setText(FORM_NAME);
 
-        initViews();
-
         thirdDateCalendar = Calendar.getInstance();
         thirdDateFragment = new SelectDateFragment();
+
+        initViews();
 
         groups = new ArrayList<ViewGroup>();
 
@@ -145,6 +147,7 @@ public class BloodSugarForm extends AbstractFormActivity implements RadioGroup.O
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
+        formType = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_testorder_testresult_form_type), getResources().getStringArray(R.array.comorbidities_testorder_testresult_form_type_options), "", App.HORIZONTAL, App.VERTICAL);
         testOrderBloodSugar = new MyTextView(context, getResources().getString(R.string.comorbidities_blood_sugar_test_order));
         testOrderBloodSugar.setTypeface(null, Typeface.BOLD);
         bloodSugarTestType = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_hba1c_testtype), getResources().getStringArray(R.array.comorbidities_HbA1C_test_type), "", App.HORIZONTAL, App.VERTICAL);
@@ -156,20 +159,22 @@ public class BloodSugarForm extends AbstractFormActivity implements RadioGroup.O
         //second page views...
         testResultBloodSugar = new MyTextView(context, getResources().getString(R.string.comorbidities_blood_sugar_test_result));
         testResultBloodSugar.setTypeface(null, Typeface.BOLD);
-        bloodSugarTestResultDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1c_resultdate), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        //bloodSugarResult = new TitledEditText(context, null, getResources().getString(R.string.hba1c_result), "", "", 4, RegexUtil.FloatFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        bloodSugarTestResultDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1c_resultdate), DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
+        //microalbuminResult = new TitledEditText(context, null, getResources().getString(R.string.hba1c_result), "", "", 4, RegexUtil.FloatFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         bloodSugarResult = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_rbs_result), "", getResources().getString(R.string.comorbidities_rbs_result_range), 3, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        goneVisibility();
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), bloodSugarTestID.getEditText(), bloodSugarTestType.getRadioGroup(), bloodSugarFollowupMonth.getSpinner(),
+        views = new View[]{formDate.getButton(), bloodSugarTestID.getEditText(), formType.getRadioGroup(), bloodSugarTestType.getRadioGroup(), bloodSugarFollowupMonth.getSpinner(),
                 bloodSugarTestOrderDate.getButton(), bloodSugarTestResultDate.getButton(), bloodSugarResult.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, testOrderBloodSugar, bloodSugarTestID, bloodSugarTestType, bloodSugarFollowupMonth, bloodSugarTestOrderDate},
-                        {testResultBloodSugar, bloodSugarTestResultDate, bloodSugarResult}};
+                {{formDate,  bloodSugarTestID, formType, testOrderBloodSugar, bloodSugarTestType, bloodSugarFollowupMonth, bloodSugarTestOrderDate,
+                        testResultBloodSugar, bloodSugarTestResultDate, bloodSugarResult}};
 
         formDate.getButton().setOnClickListener(this);
+        formType.getRadioGroup().setOnCheckedChangeListener(this);
         bloodSugarTestType.getRadioGroup().setOnCheckedChangeListener(this);
         bloodSugarTestOrderDate.getButton().setOnClickListener(this);
         bloodSugarTestResultDate.getButton().setOnClickListener(this);
@@ -243,26 +248,29 @@ public class BloodSugarForm extends AbstractFormActivity implements RadioGroup.O
 
         Boolean error = false;
 
+        if (bloodSugarResult.getVisibility() == View.VISIBLE && App.get(bloodSugarResult).isEmpty()) {
+            gotoLastPage();
+            bloodSugarResult.getEditText().setError(getString(R.string.empty_field));
+            bloodSugarResult.getEditText().requestFocus();
+            error = true;
+        }
+        else if (bloodSugarResult.getVisibility() == View.VISIBLE && !App.get(bloodSugarResult).isEmpty() && Double.parseDouble(App.get(bloodSugarResult)) > 300) {
+            gotoLastPage();
+            bloodSugarResult.getEditText().setError(getString(R.string.comorbidities_rbs_result_limit));
+            bloodSugarResult.getEditText().requestFocus();
+            error = true;
+        }
+
         if (App.get(bloodSugarTestID).isEmpty()) {
             gotoFirstPage();
             bloodSugarTestID.getEditText().setError(getString(R.string.empty_field));
             bloodSugarTestID.getEditText().requestFocus();
             error = true;
-        }  else if (App.get(bloodSugarTestID).length() < 11) {
+        }
+        else if (!App.get(bloodSugarTestID).isEmpty() && App.get(bloodSugarTestID).length() < 11) {
             gotoFirstPage();
             bloodSugarTestID.getEditText().setError(getString(R.string.comorbidities_blood_sugar_testid_format_error));
             bloodSugarTestID.getEditText().requestFocus();
-            error = true;
-        }
-        else if (App.get(bloodSugarResult).isEmpty()) {
-            gotoLastPage();
-            bloodSugarResult.getEditText().setError(getString(R.string.empty_field));
-            bloodSugarResult.getEditText().requestFocus();
-            error = true;
-        } else if (Double.parseDouble(App.get(bloodSugarResult)) > 300) {
-            gotoLastPage();
-            bloodSugarResult.getEditText().setError(getString(R.string.comorbidities_rbs_result_limit));
-            bloodSugarResult.getEditText().requestFocus();
             error = true;
         }
 
@@ -366,6 +374,8 @@ public class BloodSugarForm extends AbstractFormActivity implements RadioGroup.O
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         bloodSugarTestOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
         bloodSugarTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+
+        goneVisibility();
     }
 
     @Override
@@ -377,6 +387,10 @@ public class BloodSugarForm extends AbstractFormActivity implements RadioGroup.O
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
         if (radioGroup == bloodSugarTestType.getRadioGroup()) {
             showFollowupField();
+        }
+
+        if (radioGroup == formType.getRadioGroup()) {
+            showTestOrderOrTestResult();
         }
     }
 
@@ -413,6 +427,41 @@ public class BloodSugarForm extends AbstractFormActivity implements RadioGroup.O
             bloodSugarFollowupMonth.setVisibility(View.VISIBLE);
         } else {
             bloodSugarFollowupMonth.setVisibility(View.GONE);
+        }
+    }
+
+    void goneVisibility() {
+        testOrderBloodSugar.setVisibility(View.GONE);
+        bloodSugarTestType.setVisibility(View.GONE);
+        bloodSugarFollowupMonth.setVisibility(View.GONE);
+        bloodSugarTestOrderDate.setVisibility(View.GONE);
+
+        testResultBloodSugar.setVisibility(View.GONE);
+        bloodSugarTestResultDate.setVisibility(View.GONE);
+        bloodSugarResult.setVisibility(View.GONE);
+    }
+
+    void showTestOrderOrTestResult() {
+        if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
+            testOrderBloodSugar.setVisibility(View.VISIBLE);
+            bloodSugarTestType.setVisibility(View.VISIBLE);
+            bloodSugarFollowupMonth.setVisibility(View.VISIBLE);
+            showFollowupField();
+            bloodSugarTestOrderDate.setVisibility(View.VISIBLE);
+
+            testResultBloodSugar.setVisibility(View.GONE);
+            bloodSugarTestResultDate.setVisibility(View.GONE);
+            bloodSugarResult.setVisibility(View.GONE);
+
+        } else {
+            testOrderBloodSugar.setVisibility(View.GONE);
+            bloodSugarTestType.setVisibility(View.GONE);
+            bloodSugarFollowupMonth.setVisibility(View.GONE);
+            bloodSugarTestOrderDate.setVisibility(View.GONE);
+
+            testResultBloodSugar.setVisibility(View.VISIBLE);
+            bloodSugarTestResultDate.setVisibility(View.VISIBLE);
+            bloodSugarResult.setVisibility(View.VISIBLE);
         }
     }
 
