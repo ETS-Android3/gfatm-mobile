@@ -2,5 +2,231 @@
 <resources>
 
     <string name="pmdt_index_patient_registration">Index Patient Registration</string>
+    <string name="pmdt_first_name">First Name</string>
+    <string name="pmdt_last_name">Last Name</string>
+    <string name="pmdt_age">pmdt_age</string>
+    <string name="pmdt_gender">Gender</string>
+    <string name="pmdt_dob">Date of birth</string>
+    <string name="pmdt_cnic">National ID card no.</string>
+    <string name="pmdt_cnic_hint">00000-0000000-0</string>
+    <string name="pmdt_external_patient_id">External Patient ID</string>
+    <string name="pmdt_external_patient_id_hint">Enter External Patient ID</string>
+    <string name="pmdt_endtb_emr_id_hint">PAK-000-00000</string>
+    <string name="pmdt_endtb_emr_id">EndTB EMR ID</string>
+    <string name="pmdt_current_address_1">Current address 1 (House number, street number/name, sector number/name)</string>
+    <string name="pmdt_current_address_1_hint">Enter current address</string>
+    <string name="pmdt_current_address_2">Current address 2 (Colony, Union Council)</string>
+    <string name="pmdt_current_address_town">Current Address Town</string>
+    <string name="pmdt_current_address_city">Current Address City</string>
+    <string name="pmdt_current_address_landmark">Current Address Landmark</string>
+    <string name="pmdt_permanent_address_1">Permanent address (House number, street number/name, sector number/name)</string>
+    <string name="pmdt_permanent_address_1_hint">Enter permanent address</string>
+    <string name="pmdt_permanent_address_2">Permanent address (Colony, Union Council, nearest landmark)</string>
+    <string name="pmdt_permanent_address_town">Permanent Address Town</string>
+    <string name="pmdt_permanent_address_city">Permanent Address City</string>
+    <string name="pmdt_permanent_address_landmark">Permanent Address Landmark</string>
+
+    <string name="pmdt_primary_phone">Primary phone number</string>
+    <string name="pmdt_primary_phone_hint">Enter Primary phone number</string>
+    <string name="pmdt_alternate_phone">Alternate phone number</string>
+
+    <string name="pmdt_treatment_coordinator">Treatment Coordinator</string>
+    <string name="pmdt_monitoring_evaluation_officer">Monitoring and Evaluation Officer</string>
+
+    <string name="pmdt_person_role">Role of the person being registered</string>
+    <string name="pmdt_facility_registered">Facility this person is being reigstered for</string>
+    <string name="pmdt_person_past">Has this person ever been a Health Worker?</string>
+    <string name="pmdt_person_healthworker">Is this person a Health Worker?</string>
+    <string name="pmdt_occupation">Occupation</string>
+    <string name="pmdt_other_occupation">If occupation \'other\', then specify:</string>
+    <string name="pmdt_administer_injections">Does the Treatment Supporter know how to administer injections?</string>
+    <string name="pmdt_treatment_supporter_training">Has the Treatment Supporter been trained at facility?</string>
+    <string name="pmdt_training_facility">If yes, then which facility</string>
+    <string name="pmdt_trainer">If yes, then trained by</string>
+    <string name="pmdt_date_training">If yes, then date of training</string>
+    <string name="pmdt_mother_tongue">Languages spoken by the Treatment Supporter</string>
+    <string name="pmdt_mother_tongue_other">If other language, then specify:</string>
+    <string name="pmdt_id">ID</string>
+    <string name="pmdt_password">Password</string>
+
+
+    <!--list of occupations-->
+
+    <string name="pmdt_artist">Artist</string>
+    <string name="pmdt_carpenter">Carpenter</string>
+    <string name="pmdt_beggar">Beggar</string>
+    <string name="pmdt_casual_labour">Casual Labor</string>
+    <string name="pmdt_child_labour">Child Labor</string>
+    <string name="pmdt_clerk">Clerk</string>
+    <string name="pmdt_doctor">Doctor</string>
+    <string name="pmdt_driver">Driver</string>
+    <string name="pmdt_engineer">Engineer</string>
+    <string name="pmdt_farmer">Farmer</string>
+    <string name="pmdt_fisherman">Fisherman</string>
+    <string name="pmdt_food_vendor">Food Vendor</string>
+    <string name="pmdt_forestry_worker">Forestry Worker</string>
+    <string name="pmdt_housework">Housework</string>
+    <string name="pmdt_machine">Machine Operator</string>
+    <string name="pmdt_miner">Miner</string>
+    <string name="pmdt_pilot">Pilot</string>
+    <string name="pmdt_plumber">Plumber</string>
+    <string name="pmdt_professional">Professional</string>
+    <string name="pmdt_reporter">Reporter</string>
+    <string name="pmdt_sales_representative">Sales Representative</string>
+    <string name="pmdt_security_officer">Security Officer</string>
+    <string name="pmdt_shepherd">Shepherd</string>
+    <string name="pmdt_slum_worker">Slum Worker</string>
+    <string name="pmdt_small_business_owner">Small Business Owner</string>
+    <string name="pmdt_tailor">Tailor</string>
+    <string name="pmdt_trader">Trader</string>
+    <string name="pmdt_teacher">Teacher</string>
+    <string name="pmdt_vegetable">Vegetable/Fruit Seller</string>
+    <string name="pmdt_waiter">Waiter</string>
+
+    <!--list of mother_tongues-->
+    <string name="pmdt_urdu">Urdu</string>
+    <string name="pmdt_punjabi">Punjabi </string>
+    <string name="pmdt_sindhi">Sindhi </string>
+    <string name="pmdt_pushto">Pushto</string>
+    <string name="pmdt_balochi">Balochi </string>
+    <string name="pmdt_siraiki">Siraiki</string>
+    <string name="pmdt_hazara">Hazara</string>
+    <string name="pmdt_english">English</string>
+    <string name="pmdt_gujrati">Gujrati</string>
+    <string name="pmdt_hindko">Hindko </string>
+    <string name="pmdt_memoni">Memoni</string>
+    <string name="pmdt_brahui">Brahui</string>
+    <string name="pmdt_chitrali">Chitrali</string>
+    <string name="pmdt_kalaasha">Kalaasha</string>
+    <string name="pmdt_kashmiri">Kashmiri</string>
+    <string name="pmdt_persian">Persian</string>
+    <string name="pmdt_balti">Balti</string>
+    <string name="pmdt_makrani">Makrani</string>
+
+    <!--miscellaneous-->
+    <string name="pmdt_unknown">Unknown</string>
+    <string name="pmdt_other">Other</string>
+    <string name="pmdt_refused">Refused</string>
+
+    <!--list of towns-->
+    <string name="pmdt_gulshan_e_iqbal">Gulshan-e-Iqbal</string>
+
+    <!--list of cities-->
+    <string name="pmdt_karachi">Karachi</string>
+    <string name="pmdt_islamabad">Islamabad</string>
+
+
+    <string-array name="pmdt_gender">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+
+    <string-array name="pmdt_towns">
+        <item>@string/pmdt_gulshan_e_iqbal</item>
+    </string-array>
+
+    <string-array name="pmdt_cities">
+        <item>@string/pmdt_karachi</item>
+        <item>@string/pmdt_islamabad</item>
+    </string-array>
+
+
+    <string-array name="pmdt_roles">
+        <item>@string/pmdt_treatment_coordinator</item>
+        <item>@string/pmdt_monitoring_evaluation_officer</item>
+    </string-array>
+
+    <string-array name="occupation_list">
+        <item>@string/pmdt_artist</item>
+        <item>@string/pmdt_carpenter</item>
+        <item>@string/pmdt_beggar</item>
+        <item>@string/pmdt_casual_labour</item>
+        <item>@string/pmdt_child_labour</item>
+        <item>@string/pmdt_clerk</item>
+        <item>@string/pmdt_doctor</item>
+        <item>@string/pmdt_driver</item>
+        <item>@string/pmdt_engineer</item>
+        <item>@string/pmdt_farmer</item>
+        <item>@string/pmdt_fisherman</item>
+        <item>@string/pmdt_food_vendor</item>
+        <item>@string/pmdt_forestry_worker</item>
+        <item>@string/pmdt_housework</item>
+        <item>@string/pmdt_machine</item>
+        <item>@string/pmdt_miner</item>
+        <item>@string/pmdt_pilot</item>
+        <item>@string/pmdt_plumber</item>
+        <item>@string/pmdt_professional</item>
+        <item>@string/pmdt_reporter</item>
+        <item>@string/pmdt_sales_representative</item>
+        <item>@string/pmdt_security_officer</item>
+        <item>@string/pmdt_shepherd</item>
+        <item>@string/pmdt_slum_worker</item>
+        <item>@string/pmdt_small_business_owner</item>
+        <item>@string/pmdt_tailor</item>
+        <item>@string/pmdt_trader</item>
+        <item>@string/pmdt_teacher</item>
+        <item>@string/pmdt_vegetable</item>
+        <item>@string/pmdt_waiter</item>
+        <item>@string/pmdt_unknown</item>
+        <item>@string/pmdt_other</item>
+    </string-array>
+
+    <string-array name="pmdt_mother_tongues">
+        <item>@string/pmdt_urdu</item>
+        <item>@string/pmdt_punjabi</item>
+        <item>@string/pmdt_sindhi</item>
+        <item>@string/pmdt_pushto</item>
+        <item>@string/pmdt_balochi</item>
+        <item>@string/pmdt_siraiki</item>
+        <item>@string/pmdt_hazara</item>
+        <item>@string/pmdt_english</item>
+        <item>@string/pmdt_gujrati</item>
+        <item>@string/pmdt_memoni</item>
+        <item>@string/pmdt_brahui</item>
+        <item>@string/pmdt_chitrali</item>
+        <item>@string/pmdt_hindko</item>
+        <item>@string/pmdt_kalaasha</item>
+        <item>@string/pmdt_kashmiri</item>
+        <item>@string/pmdt_persian</item>
+        <item>@string/pmdt_balti</item>
+        <item>@string/pmdt_makrani</item>
+        <item>@string/pmdt_other</item>
+        <item>@string/pmdt_refused</item>
+        <item>@string/pmdt_unknown</item>
+    </string-array>
+
+    <!-- Check ethnicity later-->
+
+    <string name="pmdt_urdu_speaking">Urdu Speaking</string>
+    <string name="pmdt_pakhtun">Pakthun</string>
+    <string name="pmdt_bihari">Bihari</string>
+    <string name="pmdt_memon">Memon</string>
+    <string name="pmdt_brohi">Brohi</string>
+    <string name="pmdt_gilgiti_kashmiri">Gilgiti/Kashmiri</string>
+    <string name="pmdt_benagli">Bengali</string>
+    <string name="pmdt_afghani">Afghani</string>
+    <string name="pmdt_other_ethnicity">Other Ethnicity</string>
+    <string-array name="pmdt_ethnicities">
+        <item>@string/pmdt_urdu_speaking</item>
+        <item>@string/pmdt_sindhi</item>
+        <item>@string/pmdt_pakhtun</item>
+        <item>@string/pmdt_punjabi</item>
+        <item>@string/pmdt_balochi</item>
+        <item>@string/pmdt_bihari</item>
+        <item>@string/pmdt_memon</item>
+        <item>@string/pmdt_gujrati</item>
+        <item>@string/pmdt_brohi</item>
+        <item>@string/pmdt_hindko</item>
+        <item>@string/pmdt_kashmiri</item>
+        <item>@string/pmdt_siraiki</item>
+        <item>@string/pmdt_benagli</item>
+        <item>@string/pmdt_afghani</item>
+        <item>@string/pmdt_hazara</item>
+        <item>@string/pmdt_other_ethnicity</item>
+        <item>@string/pmdt_unknown</item>
+        <item>@string/pmdt_refused</item>
+    </string-array>
+
+
 
 </resources>
