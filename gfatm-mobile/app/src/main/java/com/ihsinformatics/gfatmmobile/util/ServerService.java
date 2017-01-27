@@ -631,18 +631,54 @@ public class ServerService {
         String[][] result = dbUtil.getTableData(Metadata.CONCEPT, "uuid,data_type", "full_name = '" + concept_name + "'");
         if (result.length > 0)
             return result;
-        else
-            return null;
+        else {
+
+            JSONObject jsonobject = httpGet.getConceptByName(concept_name);
+            if (jsonobject == null)
+                return null;
+            JSONObject[] jsonObjects = JSONParser.getJSONArrayFromObject(jsonobject, "results");
+            for (JSONObject json : jsonObjects) {
+                Concept concept = Concept.parseJSONObject(json);
+
+                ContentValues values = new ContentValues();
+                values.put("full_name", concept.getName());
+                values.put("uuid", concept.getUuid());
+                values.put("data_type", concept.getDataType());
+                dbUtil.insert(Metadata.CONCEPT, values);
+
+                if (concept.getName().equals(concept_name))
+                    result = getConceptUuidAndDataType(concept_name);
+            }
+            return result;
+        }
 
     }
 
     public String getEncounterTypeUuid(String type) {
 
+        String encounter = null;
         String[][] result = dbUtil.getTableData(Metadata.ENCOUNTER_TYPE, "uuid", "encounter_type = '" + App.getProgram() + "-" + type + "'");
         if (result.length > 0)
             return result[0][0];
-        else
-            return null;
+        else {
+            String fn = App.getProgram() + "-" + type;
+            JSONObject jsonobject = httpGet.getEncounterTypeByName(fn);
+            if (jsonobject == null)
+                return "ERROR RETRIEVING ENCOUNTER TYPE";
+            JSONObject[] jsonObjects = JSONParser.getJSONArrayFromObject(jsonobject, "results");
+            for (JSONObject json : jsonObjects) {
+                EncounterType eT = EncounterType.parseJSONObject(json);
+
+                ContentValues values = new ContentValues();
+                values.put("encounter_type", eT.getName());
+                values.put("uuid", eT.getUuid());
+                dbUtil.insert(Metadata.ENCOUNTER_TYPE, values);
+
+                if (fn.equals(eT.getName()))
+                    encounter = eT.getUuid();
+            }
+            return encounter;
+        }
 
     }
 
@@ -783,22 +819,7 @@ public class ServerService {
                 org.openmrs.EncounterType encounterType = new org.openmrs.EncounterType();
                 String encounterUuid = getEncounterTypeUuid(formName);
                 if (encounterUuid == null) {
-                    String fn = App.getProgram() + "-" + formName;
-                    JSONObject jsonobject = httpGet.getEncounterTypeByName(fn);
-                    if (jsonobject == null)
-                        return "ERROR RETRIEVING CONCEPT";
-                    JSONObject[] jsonObjects = JSONParser.getJSONArrayFromObject(jsonobject, "results");
-                    for (JSONObject json : jsonObjects) {
-                        EncounterType eT = EncounterType.parseJSONObject(json);
-
-                        ContentValues values = new ContentValues();
-                        values.put("encounter_type", eT.getName());
-                        values.put("uuid", eT.getUuid());
-                        dbUtil.insert(Metadata.ENCOUNTER_TYPE, values);
-
-                        if (fn.equals(encounterType.getName()))
-                            encounterUuid = getEncounterTypeUuid(formName);
-                    }
+                    return "ERROR RETRIEVING ENCOUNTER TYPE";
                 }
                 encounterType.setUuid(encounterUuid);
 
@@ -827,22 +848,7 @@ public class ServerService {
                     org.openmrs.Concept conceptQuestion = new org.openmrs.Concept();
                     String[][] conceptUuid = getConceptUuidAndDataType(obss[i][0]);
                     if (conceptUuid == null) {
-                        JSONObject jsonobject = httpGet.getConceptByName(obss[i][0]);
-                        if (jsonobject == null)
-                            return "ERROR RETRIEVING CONCEPT";
-                        JSONObject[] jsonObjects = JSONParser.getJSONArrayFromObject(jsonobject, "results");
-                        for (JSONObject json : jsonObjects) {
-                            Concept concept = Concept.parseJSONObject(json);
-
-                            ContentValues values = new ContentValues();
-                            values.put("full_name", concept.getName());
-                            values.put("uuid", concept.getUuid());
-                            values.put("data_type", concept.getDataType());
-                            dbUtil.insert(Metadata.CONCEPT, values);
-
-                            if (concept.getName().equals(obss[i][0]))
-                                conceptUuid = getConceptUuidAndDataType(obss[i][0]);
-                        }
+                        return "ERROR RETRIEVING CONCEPT";
                     }
                     conceptQuestion.setUuid(conceptUuid[0][0]);
                     obs.setConcept(conceptQuestion);
@@ -850,22 +856,7 @@ public class ServerService {
                     if (conceptUuid[0][1].equals("Coded")) {
                         String[][] valueUuid = getConceptUuidAndDataType(obss[i][1]);
                         if (valueUuid == null) {
-                            JSONObject jsonobject = httpGet.getConceptByName(obss[i][1]);
-                            if (jsonobject == null)
-                                return "ERROR RETRIEVING CONCEPT";
-                            JSONObject[] jsonObjects = JSONParser.getJSONArrayFromObject(jsonobject, "results");
-                            for (JSONObject json : jsonObjects) {
-                                Concept concept = Concept.parseJSONObject(json);
-
-                                ContentValues values = new ContentValues();
-                                values.put("full_name", concept.getName());
-                                values.put("uuid", concept.getUuid());
-                                values.put("data_type", concept.getDataType());
-                                dbUtil.insert(Metadata.CONCEPT, values);
-
-                                if (concept.getName().equals(obss[i][1]))
-                                    valueUuid = getConceptUuidAndDataType(obss[i][1]);
-                            }
+                            return "ERROR RETRIEVING CONCEPT";
                         }
 
                         org.openmrs.Concept conceptAnswer = new org.openmrs.Concept();
@@ -987,7 +978,7 @@ public class ServerService {
             }
         }
 
-        return "";
+        return "SUCCESS";
     }
 
     public String savePersonAddress(String address1, String address2, String city, String province, String country, double longitude, double latitude) {
@@ -1015,9 +1006,8 @@ public class ServerService {
             }
         }
 
-        return "";
+        return "SUCCESS";
     }
-
 
 }
 
