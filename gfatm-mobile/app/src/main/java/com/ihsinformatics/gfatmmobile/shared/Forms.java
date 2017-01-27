@@ -2,10 +2,19 @@ package com.ihsinformatics.gfatmmobile.shared;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.R;
-import com.ihsinformatics.gfatmmobile.comorbidities.BloodSugarForm;
-import com.ihsinformatics.gfatmmobile.comorbidities.HbA1CForm;
-import com.ihsinformatics.gfatmmobile.comorbidities.PatientInformationForm;
-import com.ihsinformatics.gfatmmobile.comorbidities.ScreeningFormMHDM;
+import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesBloodSugarForm;
+import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesCreatinineTestForm;
+import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesDiabetesEducationForm;
+import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesDiabetesMellitusScreeningForm;
+import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesDiabetesTreatmentFollowupForm;
+import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesDiabetesTreatmentInitiationForm;
+import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesHbA1CForm;
+import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesLipidTestForm;
+import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesMentalHealthScreeningForm;
+import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesPatientInformationForm;
+import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesUrineDetailedReportForm;
+import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesUrineMicroalbuminForm;
+import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesVitalsForm;
 import com.ihsinformatics.gfatmmobile.fast.FastAfbSmearMicroscopyOrderAndResultForm;
 import com.ihsinformatics.gfatmmobile.fast.FastGeneXpertResultForm;
 import com.ihsinformatics.gfatmmobile.fast.FastGpxSpecimenCollectionForm;
@@ -99,19 +108,37 @@ public class Forms{
     /********************************
      * COMORBIDITIES
      ********************************/
-    public static final String COMORBIDITIES_INDEX_PATIENT_REGISTRATION = "Patient Information Form";
-    public static final String COMORBIDITIES_SCREENING_FORM = "Screening Form Mental Health \n and Diabetes Mellitus";
-    /********************************************************************************************************************************/
+    public static final String COMORBIDITIES_INDEX_PATIENT_REGISTRATION = "Index Patient Registration";
+    public static final String COMORBIDITIES_MENTAL_HEALTH_SCREENING_FORM = "Screening Form Mental Health";
+    public static final String COMORBIDITIES_DIABETES_MELLITUS_SCREENING_FORM = "Screening Form Diabetes Mellitus";
     public static final String COMORBIDITIES_HbA1C_FORM = "HbA1C Form";
     public static final String COMORBIDITIES_BLOOD_SUGAR_FORM = "Blood Sugar Form";
-    public static final FormsObject comorbidities_indexPatientRegistration = new FormsObject(COMORBIDITIES_INDEX_PATIENT_REGISTRATION, PatientInformationForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
-    public static final FormsObject comorbidities_screeningForm = new FormsObject(COMORBIDITIES_SCREENING_FORM, ScreeningFormMHDM.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
-    public static final FormsObject comorbidities_hbA1CForm = new FormsObject(COMORBIDITIES_HbA1C_FORM, HbA1CForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
-    public static final FormsObject comorbidities_bloodSugarForm = new FormsObject(COMORBIDITIES_BLOOD_SUGAR_FORM, BloodSugarForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static final String COMORBIDITIES_VITALS_FORM = "Vitals Form";
+    public static final String COMORBIDITIES_DIABETES_TREATMENT_INITIATION = "Diabetes Mellitus Treatment Initiation";
+    public static final String COMORBIDITIES_URINE_DR_FORM = "Urine DR Form";
+    public static final String COMORBIDITIES_CREATININE_TEST_FORM = "Creatinine Test Form";
+    public static final String COMORBIDITIES_LIPID_TEST_FORM = "Lipid Test Form";
+    public static final String COMORBIDITIES_MICROALBUMIN_TEST_FORM = "Urine Microalbumin Form";
+    public static final String COMORBIDITIES_DIABETES_TREATMENT_FOLLOWUP_FORM = "Diabetes Treatment Follow-up Form";
+    public static final String COMORBIDITIES_DIABETES_EDUCATION_FORM = "Diabetes Education Form";
     /********************************
      * PMDT
      ********************************/
     public static final FormsObject indexPatientRegistration = new FormsObject("Providers Registration Form", AbstractFormActivity.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    /********************************************************************************************************************************/
+    public static FormsObject comorbidities_indexPatientRegistration = new FormsObject("Patient Information Form", ComorbiditiesPatientInformationForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static FormsObject comorbidities_mentalHealthScreening = new FormsObject("Mental Health Screening", ComorbiditiesMentalHealthScreeningForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static FormsObject comorbidities_diabetesMellitusScreening = new FormsObject("Diabetes Mellitus Screening", ComorbiditiesDiabetesMellitusScreeningForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static FormsObject comorbidities_hbA1cForm = new FormsObject("HbA1C Test Form", ComorbiditiesHbA1CForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static FormsObject comorbidities_bloodSugarForm = new FormsObject("Blood Sugar Test Form", ComorbiditiesBloodSugarForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static FormsObject comorbidities_vitalsForm = new FormsObject("Vitals Form", ComorbiditiesVitalsForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static FormsObject comorbidities_diabetesTreatmentInitiationForm = new FormsObject("Diabetes Treatment Initiation", ComorbiditiesDiabetesTreatmentInitiationForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static FormsObject comorbidities_urineDRForm = new FormsObject("Urine Test DR", ComorbiditiesUrineDetailedReportForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static FormsObject comorbidities_creatinineTestForm = new FormsObject("Creatinine Test Form", ComorbiditiesCreatinineTestForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static FormsObject comorbidities_lipidTestForm = new FormsObject("Lipid Test Form", ComorbiditiesLipidTestForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static FormsObject comorbidities_microalbuminTestForm = new FormsObject("Urine Microalbumin Form", ComorbiditiesUrineMicroalbuminForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static FormsObject comorbidities_diabetesTreatmentFollowupForm = new FormsObject("Diabetes Treatment Follow-up Form", ComorbiditiesDiabetesTreatmentFollowupForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static FormsObject comorbidities_diabetesEducationForm = new FormsObject("Diabetes Education Form", ComorbiditiesDiabetesEducationForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
 
     public static ArrayList<FormsObject> getPETFormList() {
 
@@ -162,9 +189,18 @@ public class Forms{
         ArrayList<FormsObject> comorbiditiesList = new ArrayList<>();
 
         comorbiditiesList.add(comorbidities_indexPatientRegistration);
-        comorbiditiesList.add(comorbidities_screeningForm);
-        comorbiditiesList.add(comorbidities_hbA1CForm);
+        comorbiditiesList.add(comorbidities_mentalHealthScreening);
+        comorbiditiesList.add(comorbidities_diabetesMellitusScreening);
+        comorbiditiesList.add(comorbidities_hbA1cForm);
         comorbiditiesList.add(comorbidities_bloodSugarForm);
+        comorbiditiesList.add(comorbidities_vitalsForm);
+        comorbiditiesList.add(comorbidities_diabetesTreatmentInitiationForm);
+        comorbiditiesList.add(comorbidities_urineDRForm);
+        comorbiditiesList.add(comorbidities_creatinineTestForm);
+        comorbiditiesList.add(comorbidities_lipidTestForm);
+        comorbiditiesList.add(comorbidities_microalbuminTestForm);
+        comorbiditiesList.add(comorbidities_diabetesTreatmentFollowupForm);
+        comorbiditiesList.add(comorbidities_diabetesEducationForm);
 
         return comorbiditiesList;
 
