@@ -1,8 +1,10 @@
 package com.ihsinformatics.gfatmmobile.pet;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.PagerAdapter;
@@ -10,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.format.DateFormat;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -143,7 +147,7 @@ public class IncentiveDisbursementForm extends AbstractFormActivity implements R
 
         nameTreatmentSupporter = new TitledEditText(context, null, getResources().getString(R.string.pet_treatment_supporter_name), "", "", 50, RegexUtil.alphaFilter, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         contactNumberTreatmentSupporter = new TitledEditText(context, null, getResources().getString(R.string.pet_treatment_supporter_contact_number), "", "", 11, RegexUtil.numericFilter, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true);
-        typeTreatmentSupporter = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_treatment_supporter_type), getResources().getStringArray(R.array.pet_treatment_supporter_type), getResources().getString(R.string.no), App.VERTICAL, App.VERTICAL, true);
+        typeTreatmentSupporter = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_treatment_supporter_type), getResources().getStringArray(R.array.pet_treatment_supporter_type), getResources().getString(R.string.pet_family_treatment_supporter), App.VERTICAL, App.VERTICAL, true);
         relationshipTreatmentSuppoter = new TitledSpinner(context, "", getResources().getString(R.string.pet_treatment_supporter_relationship), getResources().getStringArray(R.array.pet_household_heads), getResources().getString(R.string.pet_mother), App.VERTICAL, true);
         other = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         petRegimen = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_regimen), getResources().getStringArray(R.array.pet_regimens), "", App.VERTICAL, App.VERTICAL);
@@ -173,7 +177,7 @@ public class IncentiveDisbursementForm extends AbstractFormActivity implements R
                 nameTreatmentSupporter, contactNumberTreatmentSupporter, typeTreatmentSupporter, relationshipTreatmentSuppoter, other, petRegimen},
                 {linearLayout}};
 
-        View listenerViewer[] = new View[]{formDate, cnicOwner, incentiveOccasion, relationshipTreatmentSuppoter, recieverRelationWithContact};
+        View listenerViewer[] = new View[]{formDate, cnicOwner, incentiveOccasion, relationshipTreatmentSuppoter, recieverRelationWithContact, typeTreatmentSupporter};
         for (View v : listenerViewer) {
 
             if (v instanceof TitledButton)
@@ -320,6 +324,117 @@ public class IncentiveDisbursementForm extends AbstractFormActivity implements R
 
     @Override
     public boolean submit() {
+        endTime = new Date();
+
+        final ContentValues values = new ContentValues();
+        values.put("formDate", App.getSqlDate(formDateCalendar));
+        // start time...
+        // end time...
+        // gps coordinate...
+
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", App.get(cnic)});
+        observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", App.get(cnic)});
+        observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", App.get(cnic)});
+        observations.add(new String[]{"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(cnicOwner).equals(getResources().getString(R.string.pet_self)) ? "SELF" :
+                (App.get(cnicOwner).equals(getResources().getString(R.string.pet_mother)) ? "MOTHER" :
+                        (App.get(cnicOwner).equals(getResources().getString(R.string.pet_father)) ? "FATHER" :
+                                (App.get(cnicOwner).equals(getResources().getString(R.string.pet_maternal_grandmother)) ? "MATERNAL GRANDMOTHER" :
+                                        (App.get(cnicOwner).equals(getResources().getString(R.string.pet_maternal_grandfather)) ? "MATERNAL GRANDFATHER" :
+                                                (App.get(cnicOwner).equals(getResources().getString(R.string.pet_paternal_grandmother)) ? "PATERNAL GRANDMOTHER" :
+                                                        (App.get(cnicOwner).equals(getResources().getString(R.string.pet_paternal_grandfather)) ? "PATERNAL GRANDFATHER" :
+                                                                (App.get(cnicOwner).equals(getResources().getString(R.string.pet_brother)) ? "BROTHER" :
+                                                                        (App.get(cnicOwner).equals(getResources().getString(R.string.pet_sister)) ? "SISTER" :
+                                                                                (App.get(cnicOwner).equals(getResources().getString(R.string.pet_son)) ? "SON" :
+                                                                                        (App.get(cnicOwner).equals(getResources().getString(R.string.pet_daughter)) ? "SPOUSE" :
+                                                                                                (App.get(cnicOwner).equals(getResources().getString(R.string.pet_aunt)) ? "AUNT" :
+                                                                                                        (App.get(cnicOwner).equals(getResources().getString(R.string.pet_uncle)) ? "UNCLE" : "OTHER FAMILY MEMBER"))))))))))))});
+        if (otherCnicOwner.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(otherCnicOwner)});
+        observations.add(new String[]{"TYPE OF VISIT", App.get(incentiveFor).equals(getResources().getString(R.string.pet_baseline_visit)) ? "BASELINE" : "REGULAR FOLLOW UP"});
+        observations.add(new String[]{"INCENTIVE BENEFICIARY", App.get(incentiveFor).equals(getResources().getString(R.string.pet_contact)) ? "PATIENT" : "TREATMENT SUPPORTER"});
+        if (nameTreatmentSupporter.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"NAME OF TREATMENT SUPPORTER", App.get(nameTreatmentSupporter)});
+        if (contactNumberTreatmentSupporter.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"TELEPHONE NUMBER OF TREATMENT SUPPORTER", App.get(contactNumberTreatmentSupporter)});
+        if (typeTreatmentSupporter.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"TREATMENT SUPPORTER TYPE", App.get(typeTreatmentSupporter).equals(getResources().getString(R.string.pet_family_treatment_supporter)) ? "FAMILY MEMBER" : "NON-FAMILY MEMBER"});
+        if (relationshipTreatmentSuppoter.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"TREATMENT SUPPORTER RELATIONSHIP TO PATIENT", (App.get(recieverRelationWithContact).equals(getResources().getString(R.string.pet_mother))) ? "MOTHER" :
+                    (App.get(recieverRelationWithContact).equals(getResources().getString(R.string.pet_father)) ? "FATHER" :
+                            (App.get(recieverRelationWithContact).equals(getResources().getString(R.string.pet_maternal_grandmother)) ? "MATERNAL GRANDMOTHER" :
+                                    (App.get(recieverRelationWithContact).equals(getResources().getString(R.string.pet_maternal_grandfather)) ? "MATERNAL GRANDFATHER" :
+                                            (App.get(recieverRelationWithContact).equals(getResources().getString(R.string.pet_paternal_grandmother)) ? "PATERNAL GRANDMOTHER" :
+                                                    (App.get(recieverRelationWithContact).equals(getResources().getString(R.string.pet_paternal_grandfather)) ? "PATERNAL GRANDFATHER" :
+                                                            (App.get(recieverRelationWithContact).equals(getResources().getString(R.string.pet_brother)) ? "BROTHER" :
+                                                                    (App.get(recieverRelationWithContact).equals(getResources().getString(R.string.pet_sister)) ? "SISTER" :
+                                                                            (App.get(recieverRelationWithContact).equals(getResources().getString(R.string.pet_son)) ? "SON" :
+                                                                                    (App.get(recieverRelationWithContact).equals(getResources().getString(R.string.pet_daughter)) ? "SPOUSE" :
+                                                                                            (App.get(recieverRelationWithContact).equals(getResources().getString(R.string.pet_aunt)) ? "AUNT" :
+                                                                                                    (App.get(recieverRelationWithContact).equals(getResources().getString(R.string.pet_uncle)) ? "UNCLE" : "OTHER FAMILY MEMBER")))))))))))});
+        if (other.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"OTHER FAMILY MEMBER", App.get(other)});
+        observations.add(new String[]{"POST-EXPOSURE TREATMENT REGIMEN", App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy)) ? "ISONIAZID PROPHYLAXIS" :
+                (App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_rifapentine)) ? "ISONIAZID AND RIFAPENTINE" : "LEVOFLOXACIN AND ETHIONAMIDE")});
+        observations.add(new String[]{"INCENTIVE AMOUNT", App.get(incentiveAmount)});
+        observations.add(new String[]{"MONTH OF INCENTIVE", App.get(followupMonth)});
+        observations.add(new String[]{"LOCATION OF EVENT", App.get(incentiveDisbursalLocation).equals(getResources().getString(R.string.pet_contact_home)) ? "HOME" : "HEALTH FACILITY"});
+        observations.add(new String[]{"NAME OF INCENTIVE RECEIVER", App.get(recieverName)});
+        observations.add(new String[]{"RELATIONSHIP WITH INCENTIVE RECEIVER", App.get(recieverRelationWithContact).equals(getResources().getString(R.string.pet_self)) ? "SELF" :
+                (App.get(recieverRelationWithContact).equals(getResources().getString(R.string.pet_mother)) ? "MOTHER" :
+                        (App.get(recieverRelationWithContact).equals(getResources().getString(R.string.pet_father)) ? "FATHER" :
+                                (App.get(recieverRelationWithContact).equals(getResources().getString(R.string.pet_maternal_grandmother)) ? "MATERNAL GRANDMOTHER" :
+                                        (App.get(recieverRelationWithContact).equals(getResources().getString(R.string.pet_maternal_grandfather)) ? "MATERNAL GRANDFATHER" :
+                                                (App.get(recieverRelationWithContact).equals(getResources().getString(R.string.pet_paternal_grandmother)) ? "PATERNAL GRANDMOTHER" :
+                                                        (App.get(recieverRelationWithContact).equals(getResources().getString(R.string.pet_paternal_grandfather)) ? "PATERNAL GRANDFATHER" :
+                                                                (App.get(recieverRelationWithContact).equals(getResources().getString(R.string.pet_brother)) ? "BROTHER" :
+                                                                        (App.get(recieverRelationWithContact).equals(getResources().getString(R.string.pet_sister)) ? "SISTER" :
+                                                                                (App.get(recieverRelationWithContact).equals(getResources().getString(R.string.pet_son)) ? "SON" :
+                                                                                        (App.get(recieverRelationWithContact).equals(getResources().getString(R.string.pet_daughter)) ? "SPOUSE" :
+                                                                                                (App.get(recieverRelationWithContact).equals(getResources().getString(R.string.pet_aunt)) ? "AUNT" :
+                                                                                                        (App.get(recieverRelationWithContact).equals(getResources().getString(R.string.pet_uncle)) ? "UNCLE" : "OTHER FAMILY MEMBER"))))))))))))});
+        if (otherRelation.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"OTHER INCENTIVE RECEIVER", App.get(otherRelation)});
+
+
+        AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.signing_in));
+                        loading.show();
+                    }
+                });
+
+                String result = serverService.saveEncounterAndObservation(FORM_NAME, App.getSqlDate(formDateCalendar), observations.toArray(new String[][]{}));
+                return result;
+
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            ;
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                Toast toast = Toast.makeText(context, result, Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.BOTTOM, 0, 0);
+                toast.show();
+
+            }
+        };
+        submissionFormTask.execute("");
+
         resetViews();
         return false;
     }
@@ -361,6 +476,8 @@ public class IncentiveDisbursementForm extends AbstractFormActivity implements R
         if (view == formDate.getButton()) {
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
+            args.putBoolean("allowPastDate", true);
+            args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
         }

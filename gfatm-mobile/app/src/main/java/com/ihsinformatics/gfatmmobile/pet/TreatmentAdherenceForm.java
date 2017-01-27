@@ -1,23 +1,29 @@
 package com.ihsinformatics.gfatmmobile.pet;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.format.DateFormat;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -30,13 +36,14 @@ import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
  * Created by Rabbia on 11/24/2016.
  */
 
-public class TreatmentAdherenceForm extends AbstractFormActivity {
+public class TreatmentAdherenceForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
     Context context;
 
@@ -53,6 +60,7 @@ public class TreatmentAdherenceForm extends AbstractFormActivity {
     TitledEditText clincianNote;
     TitledEditText plan;
     TitledRadioGroup clinicianInformed;
+    ScrollView scrollView;
 
 
     /**
@@ -92,7 +100,7 @@ public class TreatmentAdherenceForm extends AbstractFormActivity {
                     View v = viewGroups[i][j];
                     layout.addView(v);
                 }
-                ScrollView scrollView = new ScrollView(mainContent.getContext());
+                scrollView = new ScrollView(mainContent.getContext());
                 scrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
                 scrollView.addView(layout);
                 groups.add(scrollView);
@@ -106,7 +114,7 @@ public class TreatmentAdherenceForm extends AbstractFormActivity {
                     View v = viewGroups[i][j];
                     layout.addView(v);
                 }
-                ScrollView scrollView = new ScrollView(mainContent.getContext());
+                scrollView = new ScrollView(mainContent.getContext());
                 scrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
                 scrollView.addView(layout);
                 groups.add(scrollView);
@@ -136,16 +144,16 @@ public class TreatmentAdherenceForm extends AbstractFormActivity {
         adverseEffects2 = new TitledCheckBoxes(context, null, "", getResources().getStringArray(R.array.pet_adverse_effects_2), null, App.VERTICAL, App.VERTICAL);
         adverseEffectsLayout.addView(adverseEffects2);
         otherEffects = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, RegexUtil.alphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        caretakerComments = new TitledEditText(context, null, getResources().getString(R.string.pet_caretaker_comments), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        caretakerComments = new TitledEditText(context, null, getResources().getString(R.string.pet_caretaker_comments), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         caretakerComments.getEditText().setSingleLine(false);
         caretakerComments.getEditText().setMinimumHeight(150);
-        clincianNote = new TitledEditText(context, null, getResources().getString(R.string.pet_psychologist_comment), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        clincianNote = new TitledEditText(context, null, getResources().getString(R.string.pet_psychologist_comment), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         clincianNote.getEditText().setSingleLine(false);
         clincianNote.getEditText().setMinimumHeight(150);
-        plan = new TitledEditText(context, null, getResources().getString(R.string.pet_treatment_plan), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        plan = new TitledEditText(context, null, getResources().getString(R.string.pet_treatment_plan), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         plan.getEditText().setSingleLine(false);
         plan.getEditText().setMinimumHeight(150);
-        clinicianInformed = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_clinician_informed), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
+        clinicianInformed = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_doctor_notified), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), treatmentWeekNumber.getEditText(), missedDosed.getRadioGroup(), adverseEventReport.getRadioGroup(), adverseEffects1, adverseEffects2,
@@ -156,6 +164,11 @@ public class TreatmentAdherenceForm extends AbstractFormActivity {
                 {{formDate, treatmentWeekNumber, missedDosed, adverseEventReport, adverseEffectsLayout, otherEffects, caretakerComments, clincianNote, plan, clinicianInformed}};
 
         formDate.getButton().setOnClickListener(this);
+        adverseEventReport.getRadioGroup().setOnCheckedChangeListener(this);
+        adverseEffectsLayout.setVisibility(View.GONE);
+        otherEffects.setVisibility(View.GONE);
+        for (CheckBox cb : adverseEffects2.getCheckedBoxes())
+            cb.setOnCheckedChangeListener(this);
 
     }
 
@@ -170,6 +183,39 @@ public class TreatmentAdherenceForm extends AbstractFormActivity {
     public boolean validate() {
 
         Boolean error = false;
+        View view = null;
+
+        if (App.get(otherEffects).isEmpty() && otherEffects.getVisibility() == View.VISIBLE) {
+            otherEffects.getEditText().setError(getString(R.string.empty_field));
+            otherEffects.getEditText().requestFocus();
+            error = true;
+        } else
+            otherEffects.clearFocus();
+
+        if (adverseEffectsLayout.getVisibility() == View.VISIBLE) {
+            Boolean flag = false;
+            for (CheckBox cb : adverseEffects1.getCheckedBoxes()) {
+                if (cb.isChecked()) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) {
+                for (CheckBox cb : adverseEffects2.getCheckedBoxes()) {
+                    if (cb.isChecked()) {
+                        flag = true;
+                        break;
+                    }
+                }
+            }
+            if (!flag) {
+                adverseEffects1.getQuestionView().setError(getString(R.string.empty_field));
+                adverseEffects1.getQuestionView().requestFocus();
+                view = adverseEffects1;
+                gotoLastPage();
+                error = true;
+            }
+        }
 
         if (error) {
 
@@ -181,9 +227,17 @@ public class TreatmentAdherenceForm extends AbstractFormActivity {
             // DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_error));
+            final View finalView = view;
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
+                            scrollView.post(new Runnable() {
+                                public void run() {
+                                    if (finalView != null) {
+                                        scrollView.scrollTo(0, finalView.getTop());
+                                    }
+                                }
+                            });
                             try {
                                 InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
@@ -195,20 +249,99 @@ public class TreatmentAdherenceForm extends AbstractFormActivity {
                     });
             alertDialog.show();
             return false;
-        }
-
-        return true;
+        } else
+            return true;
     }
 
     @Override
     public boolean submit() {
 
-        if (validate()) {
+        endTime = new Date();
 
-            resetViews();
+        final ContentValues values = new ContentValues();
+        values.put("formDate", App.getSqlDate(formDateCalendar));
+        // start time...
+        // end time...
+        // gps coordinate...
+
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        observations.add(new String[]{"NUMBER OF WEEKS ON TREATMENT", App.get(treatmentWeekNumber)});
+        //Missed Dose
+        observations.add(new String[]{"ADVERSE EVENTS REPORTED", App.get(adverseEventReport).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        if (adverseEffectsLayout.getVisibility() == View.VISIBLE) {
+            String adverseEventString = "";
+            for (CheckBox cb : adverseEffects1.getCheckedBoxes()) {
+                if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_joint_pain)))
+                    adverseEventString = adverseEventString + "JOINT PAIN" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_headache)))
+                    adverseEventString = adverseEventString + "HEADACHE" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_skin_rash)))
+                    adverseEventString = adverseEventString + "RASH" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_nausea)))
+                    adverseEventString = adverseEventString + "NAUSEA" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_dizziness)))
+                    adverseEventString = adverseEventString + "DIZZINESS AND GIDDINESS" + " ; ";
+            }
+            for (CheckBox cb : adverseEffects2.getCheckedBoxes()) {
+                if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_vomiting)))
+                    adverseEventString = adverseEventString + "VOMITING" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_abdominal_pain)))
+                    adverseEventString = adverseEventString + "ABDOMINAL PAIN" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_loss_of_appetite)))
+                    adverseEventString = adverseEventString + "LOSS OF APPETITE" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_visual_impairment)))
+                    adverseEventString = adverseEventString + "VISUAL IMPAIRMENT" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_other)))
+                    adverseEventString = adverseEventString + "OTHER ADVERSE EVENT" + " ; ";
+            }
+            observations.add(new String[]{"ADVERSE EVENTS", adverseEventString});
         }
+        if (otherEffects.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"OTHER ADVERSE EVENT", App.get(otherEffects)});
+        observations.add(new String[]{"CARETAKER COMMENTS", App.get(caretakerComments)});
+        observations.add(new String[]{"CLINICIAN INFORMED", App.get(clincianNote)});
+        observations.add(new String[]{"TREATMENT PLAN (TEXT)", App.get(plan)});
+        observations.add(new String[]{"CLINICIAN INFORMED", App.get(clinicianInformed).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
 
-        //resetViews();
+        AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.signing_in));
+                        loading.show();
+                    }
+                });
+
+                String result = serverService.saveEncounterAndObservation(FORM_NAME, App.getSqlDate(formDateCalendar), observations.toArray(new String[][]{}));
+                return result;
+
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            ;
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                Toast toast = Toast.makeText(context, result, Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.BOTTOM, 0, 0);
+                toast.show();
+
+            }
+        };
+        submissionFormTask.execute("");
+
+        resetViews();
         return false;
     }
 
@@ -232,6 +365,8 @@ public class TreatmentAdherenceForm extends AbstractFormActivity {
         if (view == formDate.getButton()) {
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
+            args.putBoolean("allowPastDate", true);
+            args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
         }
@@ -250,7 +385,17 @@ public class TreatmentAdherenceForm extends AbstractFormActivity {
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
+        boolean flag = false;
+        for (CheckBox cb : adverseEffects2.getCheckedBoxes()) {
+            if (cb.getText().equals(getString(R.string.pet_other)) && cb.isChecked()) {
+                flag = true;
+                break;
+            }
+        }
+        if (flag)
+            otherEffects.setVisibility(View.VISIBLE);
+        else
+            otherEffects.setVisibility(View.GONE);
     }
 
     @Override
@@ -258,11 +403,37 @@ public class TreatmentAdherenceForm extends AbstractFormActivity {
         super.resetViews();
 
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        adverseEffectsLayout.setVisibility(View.GONE);
+        otherEffects.setVisibility(View.GONE);
     }
 
     @Override
     public void onPageSelected(int pageNo) {
 
+    }
+
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+        if (group == adverseEventReport.getRadioGroup()) {
+            if (App.get(adverseEventReport).equals(getResources().getString(R.string.no))) {
+                adverseEffectsLayout.setVisibility(View.GONE);
+                otherEffects.setVisibility(View.GONE);
+            } else {
+                adverseEffectsLayout.setVisibility(View.VISIBLE);
+                boolean flag = false;
+                for (CheckBox cb : adverseEffects2.getCheckedBoxes()) {
+                    if (cb.getText().equals(getString(R.string.pet_other)) && cb.isChecked()) {
+                        flag = true;
+                        break;
+                    }
+                }
+                if (flag)
+                    otherEffects.setVisibility(View.VISIBLE);
+                else
+                    otherEffects.setVisibility(View.GONE);
+            }
+        }
     }
 
     class MyAdapter extends PagerAdapter {

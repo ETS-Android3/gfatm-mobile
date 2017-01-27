@@ -3,8 +3,10 @@ package com.ihsinformatics.gfatmmobile.pet;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -140,7 +142,7 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity implement
         husbandName = new TitledEditText(context, null, getResources().getString(R.string.pet_father_husband_name), "", "", 20, RegexUtil.alphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         husbandName.setTag("husbandName");
         husbandName.setFocusableInTouchMode(true);
-        indexExternalPatientId = new TitledEditText(context, null, getResources().getString(R.string.pet_index_patient_external_id), "", "", 20, RegexUtil.alphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        indexExternalPatientId = new TitledEditText(context, null, getResources().getString(R.string.pet_index_patient_external_id), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         indexExternalPatientId.setFocusableInTouchMode(true);
         ernsNumber = new TitledEditText(context, null, getResources().getString(R.string.pet_erns_number), "", "", RegexUtil.idLength, RegexUtil.ernsFilter, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         ernsNumber.setFocusableInTouchMode(true);
@@ -179,15 +181,8 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity implement
 
         ArrayList<RadioButton> rbs = resistanceType.getRadioGroup().getButtons();
 
-        for (RadioButton rb : rbs) {
-            if (rb.getText().equals(getResources().getString(R.string.pet_rr_tb)))
-                rb.setVisibility(View.VISIBLE);
-            else {
-                rb.setChecked(false);
-                rb.setVisibility(View.GONE);
-            }
-        }
-        dstPattern.setVisibility(View.GONE);
+        resetViews();
+
     }
 
     @Override
@@ -288,15 +283,22 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity implement
             ernsNumber.getEditText().setError(getString(R.string.empty_field));
             ernsNumber.getEditText().requestFocus();
             error = true;
-        } else
+        } else if (!RegexUtil.isValidErnsNumber(App.get(ernsNumber))) {
+            ernsNumber.getEditText().setError(getString(R.string.invalid_value));
+            ernsNumber.getEditText().requestFocus();
+            error = true;
+        }
             ernsNumber.clearFocus();
 
         if (App.get(husbandName).isEmpty()) {
             husbandName.getEditText().setError(getString(R.string.empty_field));
             husbandName.getEditText().requestFocus();
             error = true;
-        } else
-            husbandName.clearFocus();
+        } else if (App.get(husbandName).length() <= 2) {
+            husbandName.getEditText().setError(getString(R.string.invalid_value));
+            husbandName.getEditText().requestFocus();
+            error = true;
+        } else husbandName.clearFocus();
 
         indexExternalPatientId.clearFocus();
 
@@ -340,7 +342,227 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity implement
     @Override
     public boolean submit() {
 
-        resetViews();
+        endTime = new Date();
+
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
+        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+        /*observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
+        observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});*/
+        observations.add(new String[]{"SITE OF TUBERCULOSIS DISEASE", App.get(tbType).equals(getResources().getString(R.string.pet_ptb)) ? "PULMONARY TUBERCULOSIS" : "EXTRA-PULMONARY TUBERCULOSIS"});
+        observations.add(new String[]{"TUBERCULOSIS INFECTION TYPE", App.get(infectionType).equals(getResources().getString(R.string.pet_dstb)) ? "DRUG-SENSITIVE TUBERCULOSIS INFECTION" : "DRUG-RESISTANT TUBERCULOSIS INFECTION"});
+        observations.add(new String[]{"DST RESULT AVAILABLE", App.get(dstAvailable).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        observations.add(new String[]{"TUBERCULOSIS DRUG RESISTANCE TYPE", App.get(resistanceType).equals(getResources().getString(R.string.pet_rr_tb)) ? "RIFAMPICIN RESISTANT TUBERCULOSIS INFECTION" :
+                (App.get(resistanceType).equals(getResources().getString(R.string.pet_dr_tb)) ? "MONO DRUG RESISTANT TUBERCULOSIS" :
+                        (App.get(resistanceType).equals(getResources().getString(R.string.pet_pdr_tb)) ? "PANDRUG RESISTANT TUBERCULOSIS" :
+                                (App.get(resistanceType).equals(getResources().getString(R.string.pet_mdr_tb))) ? "MULTI-DRUG RESISTANT TUBERCULOSIS INFECTION" : "EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION"))});
+        observations.add(new String[]{"TB PATIENT TYPE", App.get(patientType).equals(getResources().getString(R.string.pet_new)) ? "NEW TB PATIENT" :
+                (App.get(patientType).equals(getResources().getString(R.string.pet_relapse)) ? "RELAPSE" :
+                        (App.get(patientType).equals(getResources().getString(R.string.pet_cat1)) ? "FAILURE OF CATEGORY I TREATMENT" :
+                                (App.get(patientType).equals(getResources().getString(R.string.pet_cat2))) ? "FAILURE OF CATEGORY II TREATMENT" :
+                                        (App.get(patientType).equals(getResources().getString(R.string.pet_mdr))) ? "FAILURE OF MDR-TB TREATMENT" :
+                                                (App.get(patientType).equals(getResources().getString(R.string.pet_treatment_failure))) ? "FAILURE OF PREVIOUS TREATMENT" :
+                                                        (App.get(patientType).equals(getResources().getString(R.string.pet_loss_of_followup_type))) ? "LOST TO FOLLOW-UP" :
+                                                                (App.get(patientType).equals(getResources().getString(R.string.unknown))) ? "UNKNOWN" : "OTHER"))});
+       /* if(dstPattern.getVisibility() == View.VISIBLE){
+            for(CheckBox cb : dstPattern.getCheckedBoxes()){
+                if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_isoniazid)))
+                    observations.add (new String[] {"SITE OF TUBERCULOSIS DISEASE", "ISONIAZID"});
+                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_rifampicin)))
+                    observations.add (new String[] {"SITE OF TUBERCULOSIS DISEASE", "RIFAMPICIN"});
+                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_amikacin)))
+                    observations.add (new String[] {"SITE OF TUBERCULOSIS DISEASE", "AMIKACIN"});
+                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_capreomycin)))
+                    observations.add (new String[] {"SITE OF TUBERCULOSIS DISEASE", "CAPREOMYCIN"});
+                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_streptpmycin)))
+                    observations.add (new String[] {"SITE OF TUBERCULOSIS DISEASE", "STREPTOMYCIN"});
+                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_ofloxacin)))
+                    observations.add (new String[] {"SITE OF TUBERCULOSIS DISEASE", "OFLOXACIN"});
+                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_moxifloxacin)))
+                    observations.add (new String[] {"SITE OF TUBERCULOSIS DISEASE", "MOXIFLOXACIN"});
+                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_ethambutol)))
+                    observations.add (new String[] {"SITE OF TUBERCULOSIS DISEASE", "ETHAMBUTOL"});
+                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_ethionamide)))
+                    observations.add (new String[] {"SITE OF TUBERCULOSIS DISEASE", "ETHIONAMIDE"});
+                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_pyrazinamide)))
+                    observations.add (new String[] {"SITE OF TUBERCULOSIS DISEASE", "PYRAZINAMIDE"});
+            }
+        }*/
+      /*  String treatmentRegimen = "";
+        for(CheckBox cb : treatmentRegimen1.getCheckedBoxes()){
+            if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_amikacin)))
+                observations.add (new String[] {"TUBERCULOSIS DRUGS", "AMIKACIN"});
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_bedaquiline)))
+                observations.add (new String[] {"TUBERCULOSIS DRUGS", "BEDAQUILINE"});
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_clofazimine)))
+                observations.add (new String[] {"TUBERCULOSIS DRUGS", "CLOFAZIMINE"});
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_delamanid)))
+                observations.add (new String[] {"TUBERCULOSIS DRUGS", "DELAMANID"});
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_ethionamide)))
+                observations.add (new String[] {"TUBERCULOSIS DRUGS", "ETHIONAMIDE"});
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_high_dosed_isoniazid)))
+                observations.add (new String[] {"TUBERCULOSIS DRUGS", "HIGH DOSE ISONIAZID"});
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_isoniazid)))
+                observations.add (new String[] {"TUBERCULOSIS DRUGS", "ISONIAZID"});
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_levofloxacin)))
+                observations.add (new String[] {"TUBERCULOSIS DRUGS", "LEVOFLOXACIN"});
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_meropenem)))
+                observations.add (new String[] {"TUBERCULOSIS DRUGS", "MEROPENEM"});
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_p_aminosalicylic_acid)))
+                observations.add (new String[] {"TUBERCULOSIS DRUGS", "P-AMINOSALICYLIC ACID MONOSODIUM"});
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_pyrazinamide)))
+                observations.add (new String[] {"TUBERCULOSIS DRUGS", "PYRAZINAMIDE"});
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_streptpmycin)))
+                observations.add (new String[] {"TUBERCULOSIS DRUGS", "STREPTPMYCIN"});
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_thioacetazone)))
+                observations.add (new String[] {"TUBERCULOSIS DRUGS", "THIOACETAZONE"});
+        }
+        for(CheckBox cb : treatmentRegimen2.getCheckedBoxes()){
+            if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_capreomycin)))
+                observations.add (new String[] {"TUBERCULOSIS DRUGS", "CAPREOMYCIN"});
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_cycloserine)))
+                observations.add (new String[] {"TUBERCULOSIS DRUGS", "CYCLOSERINE"});
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_ethambutol)))
+                observations.add (new String[] {"TUBERCULOSIS DRUGS", "ETHAMBUTOL"});
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_gatifloxacin)))
+                observations.add (new String[] {"TUBERCULOSIS DRUGS", "GATIFLOXACIN"});
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_ethionamide)))
+                observations.add (new String[] {"TUBERCULOSIS DRUGS", "ETHIONAMIDE"});
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_imipenem_cilastatin)))
+                observations.add (new String[] {"TUBERCULOSIS DRUGS", "IMIPENEM AND CILASTATIN"});
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_kanamycin)))
+                observations.add (new String[] {"TUBERCULOSIS DRUGS", "KANAMYCIN"});
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_linezolid)))
+                observations.add (new String[] {"TUBERCULOSIS DRUGS", "LINEZOLID"});
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_moxifloxacin)))
+                observations.add (new String[] {"TUBERCULOSIS DRUGS", "MOXIFLOXACIN"});
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_prothionamide)))
+                observations.add (new String[] {"TUBERCULOSIS DRUGS", "PROTHIONAMIDE"});
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_rifampicin)))
+                observations.add (new String[] {"TUBERCULOSIS DRUGS", "RIFAMPICIN"});
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_terizidone)))
+                observations.add (new String[] {"TUBERCULOSIS DRUGS", "TERIZIDONE"});
+        }*/
+
+        AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.submitting_form));
+                        loading.show();
+                    }
+                });
+
+                String result = "";
+                if (App.isEnable(ernsNumber)) {
+                    result = serverService.saveIdentifier("ENRS", App.get(ernsNumber));
+                    if (!result.equals("SUCCESS"))
+                        return result;
+                }
+
+                if (!App.get(indexExternalPatientId).isEmpty() && App.isEnable(indexExternalPatientId)) {
+                    result = serverService.saveIdentifier("External ID", App.get(indexExternalPatientId));
+                    if (!result.equals("SUCCESS"))
+                        return result;
+                }
+
+                if (App.isEnable(husbandName)) {
+                    result = serverService.savePersonAttributeType("Unknown patient", App.get(husbandName));
+                    if (!result.equals("SUCCESS"))
+                        return result;
+                }
+
+
+                result = serverService.saveEncounterAndObservation(FORM_NAME, formDateCalendar, observations.toArray(new String[][]{}));
+                return result;
+
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            ;
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                if (result.equals("SUCCESS")) {
+                    resetViews();
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.form_submitted));
+                    Drawable submitIcon = getResources().getDrawable(R.drawable.ic_submit);
+                    alertDialog.setIcon(submitIcon);
+                    int color = App.getColor(context, R.attr.colorAccent);
+                    DrawableCompat.setTint(submitIcon, color);
+                    alertDialog.setTitle(getResources().getString(R.string.title_completed));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else if (result.equals("CONNECTION_ERROR")) {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
+                    alertDialog.setMessage(getResources().getString(R.string.insert_error));
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+
+
+            }
+        };
+        submissionFormTask.execute("");
+
         return false;
     }
 
@@ -365,6 +587,7 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity implement
         if (view == formDate.getButton()) {
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
+            args.putBoolean("allowPastDate", true);
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
@@ -372,6 +595,7 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity implement
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             args.putBoolean("allowFutureDate", false);
+            args.putBoolean("allowPastDate", true);
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
         }
@@ -390,36 +614,6 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity implement
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-        Boolean flag = false;
-        for (CheckBox cb : dstPattern.getCheckedBoxes()) {
-            if (cb.isChecked()) {
-                flag = true;
-                break;
-            }
-        }
-        if (flag) {
-            dstPattern.getQuestionView().setError(null);
-        }
-
-        flag = false;
-        for (CheckBox cb : treatmentRegimen1.getCheckedBoxes()) {
-            if (cb.isChecked()) {
-                flag = true;
-                break;
-            }
-        }
-        if (!flag) {
-            for (CheckBox cb : treatmentRegimen2.getCheckedBoxes()) {
-                if (cb.isChecked()) {
-                    flag = true;
-                    break;
-                }
-            }
-        }
-        if (flag) {
-            treatmentRegimen1.getQuestionView().setError(null);
-        }
 
     }
 
@@ -445,6 +639,65 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity implement
         dstPattern.setVisibility(View.GONE);
 
         husbandName.getEditText().requestFocus();
+
+        final AsyncTask<String, String, String> autopopulateFormTask = new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.fetching_data));
+                        loading.show();
+                    }
+                });
+
+                String husbandNameString = serverService.getPersonAttribute("Unknown patient");
+                return husbandNameString;
+
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            ;
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                String enrsId = App.getPatient().getEnrs();
+                if (enrsId.equals("")) {
+                    ernsNumber.getEditText().setText("");
+                    ernsNumber.getEditText().setEnabled(true);
+                } else {
+                    ernsNumber.getEditText().setText(enrsId);
+                    ernsNumber.getEditText().setEnabled(false);
+                }
+
+                String externalId = App.getPatient().getExternalId();
+                if (externalId.equals("")) {
+                    indexExternalPatientId.getEditText().setText("");
+                    indexExternalPatientId.getEditText().setEnabled(true);
+                } else {
+                    indexExternalPatientId.getEditText().setText(externalId);
+                    indexExternalPatientId.getEditText().setEnabled(false);
+                }
+
+                if (result.equals("")) {
+                    husbandName.getEditText().setText("");
+                    husbandName.getEditText().setEnabled(true);
+                } else {
+                    husbandName.getEditText().setText(result);
+                    husbandName.getEditText().setEnabled(false);
+                }
+            }
+        };
+        autopopulateFormTask.execute("");
 
     }
 
@@ -485,8 +738,10 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity implement
 
                 for (RadioButton rb : rbs) {
 
-                    if (rb.getText().equals(getResources().getString(R.string.pet_rr_tb)))
+                    if (rb.getText().equals(getResources().getString(R.string.pet_rr_tb))) {
                         rb.setVisibility(View.VISIBLE);
+                        rb.setChecked(true);
+                    }
                     else {
                         rb.setChecked(false);
                         rb.setVisibility(View.GONE);
@@ -509,7 +764,6 @@ public class IndexPatientRegistrationForm extends AbstractFormActivity implement
             }
 
         }
-
 
     }
 
