@@ -160,7 +160,7 @@ public class MonthlyHomeFollowupForm extends AbstractFormActivity implements Rad
         adverseEffectsLayout.addView(adverseEffects1);
         adverseEffects2 = new TitledCheckBoxes(context, null, "", getResources().getStringArray(R.array.pet_adverse_effects_2), null, App.VERTICAL, App.VERTICAL);
         adverseEffectsLayout.addView(adverseEffects2);
-        otherEffects = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, RegexUtil.alphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        otherEffects = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         clinicianInformed = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_clinician_informed), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         visitSuggested = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_visit_suggested), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         clinicalReferral = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_clinical_referrals), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
