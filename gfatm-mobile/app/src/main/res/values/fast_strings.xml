@@ -242,6 +242,20 @@
     <string name="fast_order">Order</string>
     <string name="fast_result">Result</string>
     <string name="fast_select_form_type">Please select form type:</string>
+    <string name="fast_afb_smear_microscopy_order_and_result_form">AFB Smear Microscopy Order and Result Form</string>
+    <string name="fast_afb_smear_order">AFB Smear Order</string>
+    <string name="fast_date_of_submission">Date of submission</string>
+    <string name="fast_at_what_point_test_being_done">At what point is the test being done?</string>
+    <string name="fast_where_did_the_specimen_come_from">Where did the specimen come from?</string>
+    <string name="fast_afb_smear_result">AFB Smear Results</string>
+    <string name="fast_number_of_afb_seen_in_one_field">Number of AFB seen in one field</string>
+    <string name="fast_smear_result">Smear Result</string>
+    <string name="fast_negative">Negative</string>
+    <string name="fast_scanty_3_to_24">Scanty 3-24</string>
+    <string name="fast_1_plus">1+</string>
+    <string name="fast_2_plus">2+</string>
+    <string name="fast_3_plus">3+</string>
+    
 
     <string-array name="fast_locations">
         <item>@string/fast_community_title</item>
@@ -528,5 +542,13 @@
     <string-array name="fast_order_and_result_list">
         <item>@string/fast_order</item>
         <item>@string/fast_result</item>
+    </string-array>
+
+    <string-array name="fast_smear_result_list">
+        <item>@string/fast_negative</item>
+        <item>@string/fast_scanty_3_to_24</item>
+        <item>@string/fast_1_plus</item>
+        <item>@string/fast_2_plus</item>
+        <item>@string/fast_3_plus</item>
     </string-array>
 </resources>
