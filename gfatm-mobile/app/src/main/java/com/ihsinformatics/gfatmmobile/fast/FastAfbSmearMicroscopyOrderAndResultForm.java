@@ -48,17 +48,13 @@ import java.util.HashMap;
  */
 
 public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
-    Context context;
-
     public static final int THIRD_DATE_DIALOG_ID = 3;
     public static final int FORTH_DATE_DIALOG_ID = 4;
-
     protected Calendar thirdDateCalendar;
     protected DialogFragment thirdDateFragment;
-
     protected Calendar forthDateCalendar;
     protected DialogFragment forthDateFragment;
-
+    Context context;
     // Views...
     TitledButton formDate;
     TitledEditText testId;
@@ -103,6 +99,7 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
 
         PAGE_COUNT = 1;
         FORM_NAME = Forms.FAST_AFB_SMEAR_MICROSCOPY_ORDER_AND_RESULT_FORM;
+        FORM = Forms.pet_adverseEvents;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -163,7 +160,7 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
         forthDateFragment = new SelectDateFragment();
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        testId = new TitledEditText(context, null, getResources().getString(R.string.fast_test_id), "", "", 50, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
+        testId = new TitledEditText(context, null, getResources().getString(R.string.fast_test_id), "", "", 50, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
         formType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_select_form_type), getResources().getStringArray(R.array.fast_order_and_result_list), "", App.VERTICAL, App.VERTICAL);
         afbSmearOrder = new MyTextView(context, getResources().getString(R.string.fast_afb_smear_order));
         afbSmearOrder.setTypeface(null, Typeface.BOLD);
@@ -180,7 +177,7 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
         specimenType.setVisibility(View.GONE);
         specimenSource = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_where_did_the_specimen_come_from), getResources().getStringArray(R.array.fast_specimen_come_from_list), getResources().getString(R.string.fast_lymph), App.VERTICAL);
         specimenSource.setVisibility(View.GONE);
-        specimenSourceOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        specimenSourceOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         specimenSourceOther.setVisibility(View.GONE);
         afbSmearResult = new MyTextView(context, getResources().getString(R.string.fast_afb_smear_result));
         afbSmearResult.setTypeface(null, Typeface.BOLD);
@@ -189,7 +186,7 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
         dateTestResult.setVisibility(View.GONE);
         smearResult = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_smear_result), getResources().getStringArray(R.array.fast_smear_result_list), getResources().getString(R.string.fast_negative), App.VERTICAL);
         smearResult.setVisibility(View.GONE);
-        noAfb = new TitledEditText(context, null, getResources().getString(R.string.fast_number_of_afb_seen_in_one_field), "", "", 10, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        noAfb = new TitledEditText(context, null, getResources().getString(R.string.fast_number_of_afb_seen_in_one_field), "", "", 10, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         noAfb.setVisibility(View.GONE);
 
 

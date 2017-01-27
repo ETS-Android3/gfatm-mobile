@@ -128,7 +128,7 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
 
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        testId = new TitledEditText(context, null, getResources().getString(R.string.fast_test_id), "", "", 20, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
+        testId = new TitledEditText(context, null, getResources().getString(R.string.fast_test_id), "", "", 20, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
         formType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_select_form_type), getResources().getStringArray(R.array.fast_order_and_result_list), "", App.VERTICAL, App.VERTICAL);
         cxrOrderTitle = new MyTextView(context, getResources().getString(R.string.fast_cxr_order_title));
         cxrOrderTitle.setTypeface(null, Typeface.BOLD);
@@ -142,15 +142,15 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
         cxrResultTitle = new MyTextView(context, getResources().getString(R.string.fast_cxr_result_title));
         cxrResultTitle.setTypeface(null, Typeface.BOLD);
         cxrResultTitle.setVisibility(View.GONE);
-        cat4tbScore = new TitledEditText(context, null, getResources().getString(R.string.fast_chest_xray_cad4tb_score), "", "", 3, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
+        cat4tbScore = new TitledEditText(context, null, getResources().getString(R.string.fast_chest_xray_cad4tb_score), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
         cat4tbScore.setVisibility(View.GONE);
         screenXrayDiagnosis = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_radiologica_diagnosis), getResources().getStringArray(R.array.fast_radiologists_diagnosis_list), getResources().getString(R.string.fast_adenopathy), App.VERTICAL);
         screenXrayDiagnosis.setVisibility(View.GONE);
-        screenXrayDiagnosisOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        screenXrayDiagnosisOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         screenXrayDiagnosisOther.setVisibility(View.GONE);
         extentOfDisease = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_extent_of_desease), getResources().getStringArray(R.array.fast_extent_of_disease_list), getResources().getString(R.string.fast_normal), App.VERTICAL);
         extentOfDisease.setVisibility(View.GONE);
-        radiologistRemarks = new TitledEditText(context, null, getResources().getString(R.string.fast_radiologist_remarks), "", "", 500, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        radiologistRemarks = new TitledEditText(context, null, getResources().getString(R.string.fast_radiologist_remarks), "", "", 500, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         radiologistRemarks.setVisibility(View.GONE);
 
         // Used for reset fields...

@@ -44,7 +44,7 @@ public class test extends AbstractFormActivity {
                              ViewGroup container, Bundle savedInstanceState) {
 
         PAGE_COUNT = 5;
-        FORM_NAME = Forms.INDEX_PATIENT_REGISTRATION;
+        FORM_NAME = Forms.PET_INDEX_PATIENT_REGISTRATION;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         pager =  (ViewPager) mainContent.findViewById(R.id.pager);
@@ -97,7 +97,7 @@ public class test extends AbstractFormActivity {
     @Override
     public void initViews() {
 
-        text = new TitledEditText(mainContent.getContext(), null, "Question", "" ,"Hint", 10, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        text = new TitledEditText(mainContent.getContext(), null, "Question", "", "Hint", 10, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         spinner = new TitledSpinner(mainContent.getContext(), "title", "Question", getResources().getStringArray(R.array.programs), "PET", App.HORIZONTAL );
         radioGroup = new TitledRadioGroup(mainContent.getContext(), null, "Question", getResources().getStringArray(R.array.programs), "PMDT", App.VERTICAL, App.HORIZONTAL);
         checkBoxes = new TitledCheckBoxes(mainContent.getContext(), "title", "Question", getResources().getStringArray(R.array.programs), new Boolean[]{true,false,true,false,false} , App.VERTICAL, App.HORIZONTAL);

@@ -129,22 +129,22 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
 
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        cnic = new TitledEditText(context, null, getResources().getString(R.string.fast_nic_number), "", "", 15, RegexUtil.NumericFilter, InputType.TYPE_CLASS_PHONE, App.VERTICAL, false);
+        cnic = new TitledEditText(context, null, getResources().getString(R.string.fast_nic_number), "", "", 15, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, false);
         cnicOwner = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_whose_nic_is_this), getResources().getStringArray(R.array.fast_whose_nic_is_this_list), getResources().getString(R.string.fast_self), App.VERTICAL);
-        otherCnicOwner = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        otherCnicOwner = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         otherCnicOwner.setVisibility(View.GONE);
         addressProvided = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_provided_their_address), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
-        addressHouse = new TitledEditText(context, null, getResources().getString(R.string.fast_address_1), "", "", 10, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        addressStreet = new TitledEditText(context, null, getResources().getString(R.string.fast_address_2), "", "", 50, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        addressHouse = new TitledEditText(context, null, getResources().getString(R.string.fast_address_1), "", "", 10, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        addressStreet = new TitledEditText(context, null, getResources().getString(R.string.fast_address_2), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         addressTown = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_town), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL);
         city = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.city), getResources().getStringArray(R.array.fast_cities_list), getResources().getString(R.string.fast_karachi), App.VERTICAL);
         addressType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_type_of_address_is_this), getResources().getStringArray(R.array.fast_type_of_address_list), getResources().getString(R.string.fast_perminant), App.VERTICAL, App.VERTICAL);
-        nearestLandmark = new TitledEditText(context, null, getResources().getString(R.string.fast_nearest_landmark), "", "", 50, RegexUtil.AlphaFilter, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        nearestLandmark = new TitledEditText(context, null, getResources().getString(R.string.fast_nearest_landmark), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         contactPermission = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_can_we_call_you), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
-        mobileNumber = new TitledEditText(context, null, getResources().getString(R.string.mobile_number), "", "", 11, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
-        secondaryMobileNumber = new TitledEditText(context, null, getResources().getString(R.string.fast_secondary_mobile), "", "", 11, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
-        landlineNumber = new TitledEditText(context, null, getResources().getString(R.string.fast_landline_number), "", "", 11, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
-        secondaryLandlineNumber = new TitledEditText(context, null, getResources().getString(R.string.fast_secondary_landline), "", "", 11, RegexUtil.NumericFilter, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
+        mobileNumber = new TitledEditText(context, null, getResources().getString(R.string.mobile_number), "", "", 11, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
+        secondaryMobileNumber = new TitledEditText(context, null, getResources().getString(R.string.fast_secondary_mobile), "", "", 11, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
+        landlineNumber = new TitledEditText(context, null, getResources().getString(R.string.fast_landline_number), "", "", 11, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
+        secondaryLandlineNumber = new TitledEditText(context, null, getResources().getString(R.string.fast_secondary_landline), "", "", 11, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
 
 
         // Used for reset fields...
