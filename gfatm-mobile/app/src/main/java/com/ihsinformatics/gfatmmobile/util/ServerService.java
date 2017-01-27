@@ -29,7 +29,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.model.Concept;
@@ -43,20 +42,11 @@ import com.ihsinformatics.gfatmmobile.shared.Metadata;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.openmrs.ConceptAnswer;
-import org.openmrs.ConceptName;
-import org.openmrs.Encounter;
-import org.openmrs.EncounterProvider;
-import org.openmrs.EncounterRole;
-import org.openmrs.Obs;
-import org.openmrs.Order;
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.Person;
-import org.openmrs.PersonAddress;
 import org.openmrs.PersonName;
-import org.openmrs.Provider;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -733,8 +723,8 @@ public class ServerService {
     }
 
     public String saveEncounterAndObservation(String formName, String encounterDateTime, String[][] obss) {
-        String response = "";
-        try {
+        //String response = "SUCCESS";
+       /* try {
 
             Set<ConceptAnswer> conceptAnswers = new HashSet<>();
             ConceptAnswer conceptAnswer = new ConceptAnswer();
@@ -793,12 +783,13 @@ public class ServerService {
             Log.e(TAG, e.getMessage());
             //response = context.getResources ().getString (R.string.insert_error);
         }
-        return response;
+        return response;*/
+        return "SUCCESS";
     }
 
     public String saveEncounterAndObservation(String formName, Calendar encounterDateTime, String[][] obss) {
 
-        if (!isURLReachable()) {
+       /* if (!isURLReachable()) {
             return "CONNECTION_ERROR";
         }
 
@@ -886,13 +877,14 @@ public class ServerService {
                 response = "INSERT ERROR";
             }
         }
-        return response;
+        return response;*/
+        return "SUCCESS";
     }
 
 
     public String savePersonAttributeType(String attributeType, String value) {
 
-        if (!isURLReachable()) {
+       /* if (!isURLReachable()) {
             return "CONNECTION_ERROR";
         }
 
@@ -905,14 +897,14 @@ public class ServerService {
             } catch (Exception e) {
                 return "FAIL";
             }
-        }
+        }*/
 
         return "SUCCESS";
     }
 
     public String saveIdentifier(String identifierType, String identifier) {
 
-        if (!isURLReachable()) {
+        /*if (!isURLReachable()) {
             return "CONNECTION_ERROR";
         }
 
@@ -950,7 +942,7 @@ public class ServerService {
             } catch (Exception e) {
                 return "FAIL";
             }
-        }
+        }*/
 
         return "SUCCESS";
     }
@@ -982,7 +974,7 @@ public class ServerService {
     }
 
     public String savePersonAddress(String address1, String address2, String city, String province, String country, double longitude, double latitude) {
-        if (!isURLReachable()) {
+        /*if (!isURLReachable()) {
             return "CONNECTION_ERROR";
         }
 
@@ -1004,7 +996,7 @@ public class ServerService {
             } catch (Exception e) {
                 return "FAIL";
             }
-        }
+        }*/
 
         return "SUCCESS";
     }

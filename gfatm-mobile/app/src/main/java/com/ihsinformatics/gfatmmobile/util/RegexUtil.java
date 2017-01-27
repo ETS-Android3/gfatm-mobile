@@ -37,6 +37,10 @@ public class RegexUtil {
     public static final String urlPattern = "^(((ht|f)tp(s?))\\:\\/\\/)?(localhost|([0-9]{1,2}|1[0-9]{2}|2[0-4][0-9]|25[0-5]|.){3}([0-9]{1,2}|1[0-9]{2}|2[0-4][0-9]|25[0-5])|(www.|[a-zA-Z].)[a-zA-Z0-9\\-\\.]+\\.(com|edu|gov|mil|net|org|biz|info|name|museum|us|ca|uk|pk|co|))(\\:[0-9]+)*(\\/($|[a-zA-Z0-9\\.\\,\\;\\?\\\\'\\\\\\\\\\\\+&amp;%\\\\$#\\\\=~_\\\\-]+))*$";
     public static final String smsPattern = "[A-Z0-9]{2,2}[0-9]{9,9} [0-3][0-9](JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)20[1-3][0-9] [YN]";
     public static final String ernsNumberPattern = "[0-9]{3,4}/[0-9]{2,2}";
+    public static final String floatingPointPatternForThreeDecimalPlaces = "^[0-9]+.{0,3}[0-9]";
+    public static final String floatingPointPatternForTwoDecimalPlaces = "^[0-9]+.{0,2}[0-9]";
+    public static final String testIDPattern = "^{0,1}[0-9]{7,7}[-.]{0,1}[0-9]";
+
     public static final int idLength = 7;
     public static final int mobileNumberLength = 11;
     public static final int defaultEditTextLength = 50;
@@ -389,5 +393,54 @@ public class RegexUtil {
         int checkDigit = (10 - (sum % 10)) % 10;
         isValid = checkDigit == Integer.parseInt(String.valueOf(idCheckdigit));
         return isValid;
+    }
+
+    /**
+     * Checks if given input is a valid number
+     *
+     * @param string input String
+     * @return true/false
+     */
+    public static boolean isNumericForTwoDecimalPlaces(String string, boolean floating) {
+        try {
+            if (floating)
+                return string.matches(floatingPointPatternForTwoDecimalPlaces);
+            return string.matches(numericPattern);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * Checks if given input is a valid number
+     *
+     * @param string input String
+     * @return true/false
+     */
+    public static boolean isNumericForThreeDecimalPlaces(String string, boolean floating) {
+        try {
+            if (floating)
+                return string.matches(floatingPointPatternForThreeDecimalPlaces);
+            return string.matches(numericPattern);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * Checks if given input is a valid test id
+     *
+     * @param string input String
+     * @return true/false
+     */
+    public static boolean isCorrectTestID(String string) {
+        try {
+            return string.matches(testIDPattern);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
