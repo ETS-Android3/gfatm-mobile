@@ -321,6 +321,8 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
             args.putInt("type", DATE_DIALOG_ID);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
+            args.putBoolean("allowPastDate", true);
+            args.putBoolean("allowFutureDate", false);
         }
 
         if (view == dateOfSubmission.getButton()) {
