@@ -56,7 +56,7 @@ public class Forms{
     public static final String PET_INDEX_PATIENT_REGISTRATION = "Index Patient Registration";
     public static final String PET_CONTACT_REGISTRY = "Contact Registry";
     public static final String PET_BASELINE_SCREENING = "Baseline Screening";
-    public static final String PET_SOCIO_ECNOMICS_DATA = "Socio Economics Data";
+    public static final String PET_SOCIO_ECNOMICS_DATA = "Socioeconomic Data";
     public static final String PET_CLINICIAN_CONTACT_SCREENING = "Clinician Contact Screening";
     public static final String PET_INFECTION_TREATMENT_ELIGIBILITY = "Infection Treatment Eligibility";
     public static final String PET_TREATMENT_INITIATION = "Treatment Initiation";
