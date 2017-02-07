@@ -225,7 +225,7 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
         if (freeXrayVoucher.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"VOUCHER GIVEN FOR TEST", App.get(freeXrayVoucher).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
         if (noXrayVoucher.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"REASON VOUCHER NOT GIVEN", App.get(noXrayVoucher).equals(getResources().getString(R.string.fast_presumptive_refused)) ? "REFUSED" : "OTHER NON-CODED"});
+            observations.add(new String[]{"REASON VOUCHER NOT GIVEN", App.get(noXrayVoucher).equals(getResources().getString(R.string.fast_presumptive_refused)) ? "REFUSED" : "OTHER"});
 
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {

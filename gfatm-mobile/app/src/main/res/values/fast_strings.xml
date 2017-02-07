@@ -145,7 +145,7 @@
     <string name="fast_food_particles">Food particles</string>
     <string name="fast_older_than_3_days">Older than 3 days</string>
     <string name="fast_Insufficient_quantity">Insufficient Quantity</string>
-    <string name="fast_nic_number">National ID card number?</string>
+    <string name="fast_nic_number">National ID card number:</string>
     <string name="fast_self">Self</string>
     <string name="fast_mother">Mother</string>
     <string name="fast_father">Father</string>
@@ -170,10 +170,12 @@
     <string name="fast_type_of_address_is_this">What type of Address is this?</string>
     <string name="fast_nearest_landmark">Nearest Landmark</string>
     <string name="fast_can_we_call_you">Can we call you and SMS you on any of these numbers for matters related to your TB tests and diagnosis?</string>
-    <string name="fast_mobile_number">Mobile Number</string>
-    <string name="fast_secondary_mobile">Secondary Mobile Number</string>
-    <string name="fast_landline_number">Landline Number</string>
-    <string name="fast_secondary_landline">Secondary Landline Number</string>
+    <string name="fast_mobile_number">Mobile Number:</string>
+    <string name="fast_secondary_mobile">Secondary Mobile Number:</string>
+    <string name="fast_landline_number">Landline Number:</string>
+    <string name="fast_secondary_landline">Secondary Landline Number:</string>
+    <string name="length_message">Incomplete field</string>
+    <string name="incorrect_contact_number">Incorrect Contact Number</string>
     <string name="fast_perminant">Perminant</string>
     <string name="fast_temporary">Temporary</string>
     <string name="fast_date_of_result_recieved">Date of Result Received</string>
@@ -314,6 +316,7 @@
         <item>@string/fast_ent_title</item>
         <item>@string/fast_gynaeobstetrics_otherthen_title</item>
         <item>@string/fast_pregnancy_title</item>
+        <item>@string/fast_surgery_title</item>
         <item>@string/fast_orthopedics_title</item>
         <item>@string/fast_emergency_title</item>
         <item>@string/fast_paediatrics_title</item>
@@ -378,7 +381,6 @@
         <item>@string/fast_public_hospital</item>
         <item>@string/fast_private_hospital</item>
         <item>@string/fast_GP</item>
-        <item>@string/fast_hospital_outside_of_karachi</item>
     </string-array>
 
     <string-array name="fast_hear_about_us_from_list">
