@@ -257,7 +257,38 @@
     <string name="fast_1_plus">1+</string>
     <string name="fast_2_plus">2+</string>
     <string name="fast_3_plus">3+</string>
-    
+    <string name="fast_type_of_media_for_dst">Type of media for DST</string>
+    <string name="fast_dst_order">DST Order</string>
+    <string name="fast_dst_result">DST Result</string>
+    <string name="fast_lowenstein_jensen">Lowenstein-Jensen</string>
+    <string name="fast_mycobacteria_growth_indicator_tube">Mycobacteria Growth Indicator Tube</string>
+    <string name="fast_middlebrook_7h11s">Middlebrook 7H11S</string>
+    <string name="fast_total_laboratory_automation">Total Laboratory Automation</string>
+    <string name="fast_susceptible">Susceptible</string>
+    <string name="fast_resistant">Resistant</string>
+    <string name="fast_isoniazid_0.2_ml_result">Isoniazid 0.2 µg/ml result</string>
+    <string name="fast_isoniazid_0.1_ml_result">Isoniazid 0.1 µg/ml result</string>
+    <string name="fast_rifampicin">Rifampicin</string>
+    <string name="fast_ethambuthol">Ethambuthol</string>
+    <string name="fast_streptomycin">Streptomycin</string>
+    <string name="fast_pyrazinamide">Pyrazinamide</string>
+    <string name="fast_ofloxacin">Ofloxacin</string>
+    <string name="fast_levofloxacin">Levofloxacin</string>
+    <string name="fast_moxifloxacin_05">Moxifloxacin 0.5 µg/ml</string>
+    <string name="fast_moxifloxacin_2">Moxifloxacin 2 µg/ml</string>
+    <string name="fast_amikacin">Amikacin</string>
+    <string name="fast_kanamycin">Kanamycin</string>
+    <string name="fast_capreomycin">Capreomycin</string>
+    <string name="fast_ethionamide">Ethionamide</string>
+    <string name="fast_cycloserine">Cycloserine</string>
+    <string name="fast_p_aminosalicylic_acid">P-Aminosalicylic Acid</string>
+    <string name="fast_bedaquiline">Bedaquiline</string>
+    <string name="fast_delamanid">Delamanid</string>
+    <string name="fast_linezolid">Linezolid</string>
+    <string name="fast_clofazamine">Clofazamine</string>
+    <string name="fast_other_drug_name">Other drug name</string>
+    <string name="fast_other_drug_result">Other drug Result</string>
+
 
     <string-array name="fast_locations">
         <item>@string/fast_community_title</item>
@@ -552,5 +583,24 @@
         <item>@string/fast_1_plus</item>
         <item>@string/fast_2_plus</item>
         <item>@string/fast_3_plus</item>
+    </string-array>
+    
+    <string-array name="fast_susceptible_resistant_indeterminate_list">
+        <item>@string/fast_susceptible</item>
+        <item>@string/fast_resistant</item>
+        <item>@string/fast_indeterminate</item>
+    </string-array>
+    
+    <string-array name="fast_dst_medium_list">
+        <item>@string/fast_lowenstein_jensen</item>
+        <item>@string/fast_mycobacteria_growth_indicator_tube</item>
+        <item>@string/fast_middlebrook_7h11s</item>
+        <item>@string/fast_total_laboratory_automation</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+
+    <string-array name="fast_test_context_status_list">
+        <item>@string/fast_baseline_new</item>
+        <item>@string/fast_followup_test</item>
     </string-array>
 </resources>
