@@ -241,6 +241,32 @@
     <string name="fast_twenty_two">22</string>
     <string name="fast_twenty_three">23</string>
     <string name="fast_twenty_four">24</string>
+    <string name="fast_twenty_five">25</string>
+    <string name="fast_twenty_six">26</string>
+    <string name="fast_twenty_seven">27</string>
+    <string name="fast_twenty_eight">28</string>
+    <string name="fast_twenty_nine">29</string>
+    <string name="fast_thirty">30</string>
+    <string name="fast_thirty_one">31</string>
+    <string name="fast_thirty_two">32</string>
+    <string name="fast_thirty_three">33</string>
+    <string name="fast_thirty_four">34</string>
+    <string name="fast_thirty_five">35</string>
+    <string name="fast_thirty_six">36</string>
+    <string name="fast_thirty_seven">37</string>
+    <string name="fast_thirty_eight">38</string>
+    <string name="fast_thirty_nine">39</string>
+    <string name="fast_forty">40</string>
+    <string name="fast_forty_one">41</string>
+    <string name="fast_forty_two">42</string>
+    <string name="fast_forty_three">43</string>
+    <string name="fast_forty_four">44</string>
+    <string name="fast_forty_five">45</string>
+    <string name="fast_forty_six">46</string>
+    <string name="fast_forty_seven">47</string>
+    <string name="fast_forty_eight">48</string>
+    <string name="fast_forty_nine">49</string>
+    <string name="fast_fifty">50</string>
     <string name="fast_order">Order</string>
     <string name="fast_result">Result</string>
     <string name="fast_select_form_type">Please select form type:</string>
@@ -288,7 +314,9 @@
     <string name="fast_clofazamine">Clofazamine</string>
     <string name="fast_other_drug_name">Other drug name</string>
     <string name="fast_other_drug_result">Other drug Result</string>
-
+    <string name="fast_how_many_people_sleep_in_your_home">Contact Registry: How many people (excluding you) sleep in your home?</string>
+    <string name="fast_total_number_of_adult_contacts">Total Number of adult contacts</string>
+    <string name="fast_total_number_of_childhood_contacts">Total Number of childhood contacts</string>
 
     <string-array name="fast_locations">
         <item>@string/fast_community_title</item>
@@ -602,5 +630,86 @@
     <string-array name="fast_test_context_status_list">
         <item>@string/fast_baseline_new</item>
         <item>@string/fast_followup_test</item>
+    </string-array>
+
+    <string-array name="fast_0_25_list">
+        <item>@string/fast_one</item>
+        <item>@string/fast_two</item>
+        <item>@string/fast_three</item>
+        <item>@string/fast_four</item>
+        <item>@string/fast_five</item>
+        <item>@string/fast_six</item>
+        <item>@string/fast_seven</item>
+        <item>@string/fast_eight</item>
+        <item>@string/fast_nine</item>
+        <item>@string/fast_ten</item>
+        <item>@string/fast_eleven</item>
+        <item>@string/fast_twelve</item>
+        <item>@string/fast_thirteen</item>
+        <item>@string/fast_forteen</item>
+        <item>@string/fast_fifteen</item>
+        <item>@string/fast_sixteen</item>
+        <item>@string/fast_seventeen</item>
+        <item>@string/fast_eighteen</item>
+        <item>@string/fast_nineteen</item>
+        <item>@string/fast_twenty</item>
+        <item>@string/fast_twenty_one</item>
+        <item>@string/fast_twenty_two</item>
+        <item>@string/fast_twenty_three</item>
+        <item>@string/fast_twenty_four</item>
+        <item>@string/fast_twenty_five</item>
+    </string-array>
+
+    <string-array name="fast_0_50_list">
+        <item>@string/fast_one</item>
+        <item>@string/fast_two</item>
+        <item>@string/fast_three</item>
+        <item>@string/fast_four</item>
+        <item>@string/fast_five</item>
+        <item>@string/fast_six</item>
+        <item>@string/fast_seven</item>
+        <item>@string/fast_eight</item>
+        <item>@string/fast_nine</item>
+        <item>@string/fast_ten</item>
+        <item>@string/fast_eleven</item>
+        <item>@string/fast_twelve</item>
+        <item>@string/fast_thirteen</item>
+        <item>@string/fast_forteen</item>
+        <item>@string/fast_fifteen</item>
+        <item>@string/fast_sixteen</item>
+        <item>@string/fast_seventeen</item>
+        <item>@string/fast_eighteen</item>
+        <item>@string/fast_nineteen</item>
+        <item>@string/fast_twenty</item>
+        <item>@string/fast_twenty_one</item>
+        <item>@string/fast_twenty_two</item>
+        <item>@string/fast_twenty_three</item>
+        <item>@string/fast_twenty_four</item>
+        <item>@string/fast_twenty_five</item>
+        <item>@string/fast_twenty_six</item>
+        <item>@string/fast_twenty_seven</item>
+        <item>@string/fast_twenty_eight</item>
+        <item>@string/fast_twenty_nine</item>
+        <item>@string/fast_thirty</item>
+        <item>@string/fast_thirty_one</item>
+        <item>@string/fast_thirty_two</item>
+        <item>@string/fast_thirty_three</item>
+        <item>@string/fast_thirty_four</item>
+        <item>@string/fast_thirty_five</item>
+        <item>@string/fast_thirty_six</item>
+        <item>@string/fast_thirty_seven</item>
+        <item>@string/fast_thirty_eight</item>
+        <item>@string/fast_thirty_nine</item>
+        <item>@string/fast_forty</item>
+        <item>@string/fast_forty_one</item>
+        <item>@string/fast_forty_two</item>
+        <item>@string/fast_forty_three</item>
+        <item>@string/fast_forty_four</item>
+        <item>@string/fast_forty_five</item>
+        <item>@string/fast_forty_six</item>
+        <item>@string/fast_forty_seven</item>
+        <item>@string/fast_forty_eight</item>
+        <item>@string/fast_forty_nine</item>
+        <item>@string/fast_fifty</item>
     </string-array>
 </resources>
