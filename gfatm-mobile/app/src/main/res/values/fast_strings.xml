@@ -267,7 +267,7 @@
     <string name="fast_susceptible">Susceptible</string>
     <string name="fast_resistant">Resistant</string>
     <string name="fast_isoniazid_0.2_ml_result">Isoniazid 0.2 µg/ml result</string>
-    <string name="fast_isoniazid_0.1_ml_result">Isoniazid 0.1 µg/ml result</string>
+    <string name="fast_isoniazid_1_ml_result">Isoniazid 1 µg/ml result</string>
     <string name="fast_rifampicin">Rifampicin</string>
     <string name="fast_ethambuthol">Ethambuthol</string>
     <string name="fast_streptomycin">Streptomycin</string>

@@ -13,7 +13,9 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,35 +46,52 @@ import java.util.Date;
 import java.util.HashMap;
 
 /**
- * Created by Haris on 1/26/2017.
+ * Created by Haris on 2/8/2017.
  */
 
-public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class FastDSTOrderAndResultForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener{
     public static final int THIRD_DATE_DIALOG_ID = 3;
-    public static final int FORTH_DATE_DIALOG_ID = 4;
+
     protected Calendar thirdDateCalendar;
     protected DialogFragment thirdDateFragment;
-    protected Calendar forthDateCalendar;
-    protected DialogFragment forthDateFragment;
+
     Context context;
     // Views...
     TitledButton formDate;
     TitledEditText testId;
     TitledRadioGroup formType;
-    MyTextView afbSmearOrder;
-    MyTextView afbSmearResult;
+    MyTextView dstOrder;
+    MyTextView dstResult;
     TitledButton dateOfSubmission;
-    TitledButton testDate;
     TitledRadioGroup testContextStatus;
     TitledSpinner monthOfTreatment;
     TitledRadioGroup specimenType;
     TitledSpinner specimenSource;
     TitledEditText specimenSourceOther;
     TitledButton dateTestResult;
-    TitledSpinner smearResult;
-    TitledEditText noAfb;
-
-
+    TitledSpinner dstMedium;
+    TitledRadioGroup inh02Resistant;
+    TitledRadioGroup inh1Resistant;
+    TitledRadioGroup rifResistant;
+    TitledRadioGroup etbResistant;
+    TitledRadioGroup smResistant;
+    TitledRadioGroup pzaResistant;
+    TitledRadioGroup ofxResistant;
+    TitledRadioGroup levoResistant;
+    TitledRadioGroup moxi05Resistant;
+    TitledRadioGroup moxi2Resistant;
+    TitledRadioGroup amkResistant;
+    TitledRadioGroup kmResistant;
+    TitledRadioGroup cmResistant;
+    TitledRadioGroup ethioResistant;
+    TitledRadioGroup csResistant;
+    TitledRadioGroup pasResistant;
+    TitledRadioGroup bdqResistant;
+    TitledRadioGroup dlmResistant;
+    TitledRadioGroup lzdResistant;
+    TitledRadioGroup cfzResistant;
+    TitledRadioGroup otherDrugResult;
+    TitledEditText otherDrugName;
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
      *
@@ -86,8 +105,8 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
                              ViewGroup container, Bundle savedInstanceState) {
 
         PAGE_COUNT = 1;
-        FORM_NAME = Forms.FAST_AFB_SMEAR_MICROSCOPY_ORDER_AND_RESULT_FORM;
-        FORM = Forms.fastAfbSmearMicroscopyOrderAndResultForm;
+        FORM_NAME = Forms.FAST_DST_ORDER_AND_RESULT_FORM;
+        FORM = Forms.fastDstOrderAndResultForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -144,20 +163,16 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
         thirdDateCalendar = Calendar.getInstance();
         thirdDateFragment = new SelectDateFragment();
 
-        forthDateCalendar = Calendar.getInstance();
-        forthDateFragment = new SelectDateFragment();
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         testId = new TitledEditText(context, null, getResources().getString(R.string.fast_test_id), "", "", 50, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
         formType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_select_form_type), getResources().getStringArray(R.array.fast_order_and_result_list), "", App.VERTICAL, App.VERTICAL);
-        afbSmearOrder = new MyTextView(context, getResources().getString(R.string.fast_afb_smear_order));
-        afbSmearOrder.setTypeface(null, Typeface.BOLD);
-        afbSmearOrder.setVisibility(View.GONE);
+        dstOrder = new MyTextView(context, getResources().getString(R.string.fast_dst_order));
+        dstOrder.setTypeface(null, Typeface.BOLD);
+        dstOrder.setVisibility(View.GONE);
         dateOfSubmission = new TitledButton(context, null, getResources().getString(R.string.fast_date_of_submission), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         dateOfSubmission.setVisibility(View.GONE);
-        testDate = new TitledButton(context, null, getResources().getString(R.string.fast_test_date), DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
-        testDate.setVisibility(View.GONE);
-        testContextStatus = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_at_what_point_test_being_done), getResources().getStringArray(R.array.fast_test_being_done_list), getResources().getString(R.string.fast_baseline_new), App.VERTICAL, App.VERTICAL);
+        testContextStatus = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_at_what_point_test_being_done), getResources().getStringArray(R.array.fast_test_context_status_list), getResources().getString(R.string.fast_baseline_new), App.VERTICAL, App.VERTICAL);
         testContextStatus.setVisibility(View.GONE);
         monthOfTreatment = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_month_of_treatment), getResources().getStringArray(R.array.fast_number_list), getResources().getString(R.string.fast_one), App.HORIZONTAL);
         monthOfTreatment.setVisibility(View.GONE);
@@ -167,37 +182,104 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
         specimenSource.setVisibility(View.GONE);
         specimenSourceOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         specimenSourceOther.setVisibility(View.GONE);
-        afbSmearResult = new MyTextView(context, getResources().getString(R.string.fast_afb_smear_result));
-        afbSmearResult.setTypeface(null, Typeface.BOLD);
-        afbSmearResult.setVisibility(View.GONE);
-        dateTestResult = new TitledButton(context, null, getResources().getString(R.string.fast_date_of_result_recieved), DateFormat.format("dd-MMM-yyyy", forthDateCalendar).toString(), App.HORIZONTAL);
+        dstResult = new MyTextView(context, getResources().getString(R.string.fast_dst_result));
+        dstResult.setTypeface(null, Typeface.BOLD);
+        dstResult.setVisibility(View.GONE);
+        dateTestResult = new TitledButton(context, null, getResources().getString(R.string.fast_date_of_result_recieved), DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
         dateTestResult.setVisibility(View.GONE);
-        smearResult = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_smear_result), getResources().getStringArray(R.array.fast_smear_result_list), getResources().getString(R.string.fast_negative), App.VERTICAL);
-        smearResult.setVisibility(View.GONE);
-        noAfb = new TitledEditText(context, null, getResources().getString(R.string.fast_number_of_afb_seen_in_one_field), "", "", 10, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        noAfb.setVisibility(View.GONE);
-
+        dstMedium = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_type_of_media_for_dst), getResources().getStringArray(R.array.fast_dst_medium_list), getResources().getString(R.string.fast_lowenstein_jensen), App.VERTICAL);
+        dstMedium.setVisibility(View.GONE);
+        inh02Resistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_isoniazid_0_2_ml_result), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        inh02Resistant.setVisibility(View.GONE);
+        inh1Resistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_isoniazid_1_ml_result), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        inh1Resistant.setVisibility(View.GONE);
+        rifResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_rifampicin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        rifResistant.setVisibility(View.GONE);
+        etbResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_ethambuthol), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        etbResistant.setVisibility(View.GONE);
+        smResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_streptomycin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        smResistant.setVisibility(View.GONE);
+        pzaResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_pyrazinamide), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        pzaResistant.setVisibility(View.GONE);
+        ofxResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_ofloxacin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        ofxResistant.setVisibility(View.GONE);
+        levoResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_levofloxacin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        levoResistant.setVisibility(View.GONE);
+        moxi05Resistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_moxifloxacin_05), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        moxi05Resistant.setVisibility(View.GONE);
+        moxi2Resistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_moxifloxacin_2), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        moxi2Resistant.setVisibility(View.GONE);
+        amkResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_amikacin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        amkResistant.setVisibility(View.GONE);
+        kmResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_kanamycin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        kmResistant.setVisibility(View.GONE);
+        cmResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_capreomycin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        cmResistant.setVisibility(View.GONE);
+        ethioResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_ethionamide), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        ethioResistant.setVisibility(View.GONE);
+        csResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_cycloserine), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        csResistant.setVisibility(View.GONE);
+        pasResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_p_aminosalicylic_acid), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        pasResistant.setVisibility(View.GONE);
+        bdqResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_bedaquiline), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        bdqResistant.setVisibility(View.GONE);
+        dlmResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_delamanid), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        dlmResistant.setVisibility(View.GONE);
+        lzdResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_linezolid), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        lzdResistant.setVisibility(View.GONE);
+        cfzResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_clofazamine), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        cfzResistant.setVisibility(View.GONE);
+        otherDrugName = new TitledEditText(context, null, getResources().getString(R.string.fast_other_drug_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        otherDrugName.setVisibility(View.GONE);
+        otherDrugResult = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_other_drug_result), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        otherDrugResult.setVisibility(View.GONE);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), testId.getEditText(), formType.getRadioGroup(), dateOfSubmission.getButton(),
-                testDate.getButton(), testContextStatus.getRadioGroup(), monthOfTreatment.getSpinner(), specimenType.getRadioGroup(),
-                specimenSource.getSpinner(), specimenSourceOther.getEditText(), dateTestResult.getButton(), smearResult.getSpinner(), noAfb.getEditText()};
+                testContextStatus.getRadioGroup(), monthOfTreatment.getSpinner(), specimenType.getRadioGroup(),
+                specimenSource.getSpinner(), specimenSourceOther.getEditText(), dateTestResult.getButton(), dstMedium.getSpinner(),
+                inh02Resistant.getRadioGroup(), inh1Resistant.getRadioGroup(), rifResistant.getRadioGroup(), etbResistant.getRadioGroup(),
+                smResistant.getRadioGroup(), pzaResistant.getRadioGroup(), ofxResistant.getRadioGroup(), levoResistant.getRadioGroup(),
+                moxi05Resistant.getRadioGroup(), moxi2Resistant.getRadioGroup(), amkResistant.getRadioGroup(), kmResistant.getRadioGroup(),
+                cmResistant.getRadioGroup(), pasResistant.getRadioGroup(), bdqResistant.getRadioGroup(), dlmResistant.getRadioGroup(),
+                lzdResistant.getRadioGroup(), cfzResistant.getRadioGroup(), otherDrugName.getEditText(), otherDrugResult.getRadioGroup()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, testId, formType, afbSmearOrder, dateOfSubmission, testDate, testContextStatus, monthOfTreatment, specimenType,
-                        specimenSource, specimenSourceOther, afbSmearResult, dateTestResult, smearResult, noAfb}};
+                {{formDate, testId, formType, dstOrder, dateOfSubmission,  testContextStatus, monthOfTreatment, specimenType,
+                        specimenSource, specimenSourceOther, dstResult, dateTestResult, dstMedium, inh02Resistant, inh1Resistant,
+                        rifResistant, etbResistant, smResistant, pzaResistant, ofxResistant, levoResistant, moxi05Resistant, moxi2Resistant
+                        , amkResistant, kmResistant, cmResistant, pasResistant, bdqResistant, dlmResistant, lzdResistant, cfzResistant,
+                        otherDrugName, otherDrugResult}};
 
         formDate.getButton().setOnClickListener(this);
-        dateOfSubmission.getButton().setOnClickListener(this);
-        testDate.getButton().setOnClickListener(this);
         dateOfSubmission.getButton().setOnClickListener(this);
         dateTestResult.getButton().setOnClickListener(this);
         formType.getRadioGroup().setOnCheckedChangeListener(this);
         specimenSource.getSpinner().setOnItemSelectedListener(this);
         testContextStatus.getRadioGroup().setOnCheckedChangeListener(this);
         specimenType.getRadioGroup().setOnCheckedChangeListener(this);
-        smearResult.getSpinner().setOnItemSelectedListener(this);
+
+        otherDrugName.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (!(charSequence.toString().equals("")) && formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result))){
+                    otherDrugResult.setVisibility(View.VISIBLE);
+                } else {
+                    otherDrugResult.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 
     }
 
@@ -205,8 +287,7 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
     public void updateDisplay() {
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         dateOfSubmission.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-        testDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
-        dateTestResult.getButton().setText(DateFormat.format("dd-MMM-yyyy", forthDateCalendar).toString());
+        dateTestResult.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
     }
 
     @Override
@@ -233,13 +314,13 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
             error = true;
         }
 
-        if (noAfb.getVisibility() == View.VISIBLE && App.get(noAfb).isEmpty()) {
+        if (otherDrugName.getVisibility() == View.VISIBLE && App.get(otherDrugName).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            noAfb.getEditText().setError(getString(R.string.empty_field));
-            noAfb.getEditText().requestFocus();
+            otherDrugName.getEditText().setError(getString(R.string.empty_field));
+            otherDrugName.getEditText().requestFocus();
             error = true;
         }
 
@@ -318,21 +399,20 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
-        }
-
-        if (view == testDate.getButton()) {
-            Bundle args = new Bundle();
-            args.putInt("type", THIRD_DATE_DIALOG_ID);
-            thirdDateFragment.setArguments(args);
-            thirdDateFragment.show(getFragmentManager(), "DatePicker");
+            args.putBoolean("allowPastDate", true);
+            args.putBoolean("allowFutureDate", false);
         }
 
         if (view == dateTestResult.getButton()) {
             Bundle args = new Bundle();
-            args.putInt("type", FORTH_DATE_DIALOG_ID);
-            forthDateFragment.setArguments(args);
-            forthDateFragment.show(getFragmentManager(), "DatePicker");
+            args.putInt("type", THIRD_DATE_DIALOG_ID);
+            thirdDateFragment.setArguments(args);
+            thirdDateFragment.show(getFragmentManager(), "DatePicker");
+            args.putBoolean("allowPastDate", true);
+            args.putBoolean("allowFutureDate", false);
         }
+
+
     }
 
     @Override
@@ -363,31 +443,14 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
                 specimenSourceOther.setVisibility(View.GONE);
             }
         }
-
-        if (spinner == smearResult.getSpinner()) {
-            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_negative))) {
-                noAfb.setVisibility(View.VISIBLE);
-            } else {
-                noAfb.setVisibility(View.GONE);
-            }
-        }
-
-      /*0  if (spinner == screenXrayDiagnosis.getSpinner()) {
-            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_others))) {
-                screenXrayDiagnosisOther.setVisibility(View.VISIBLE);
-            } else {
-                screenXrayDiagnosisOther.setVisibility(View.GONE);
-            }
-        }*/
     }
 
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
         if (radioGroup == formType.getRadioGroup()) {
             if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_order))) {
-                afbSmearOrder.setVisibility(View.VISIBLE);
+                dstOrder.setVisibility(View.VISIBLE);
                 dateOfSubmission.setVisibility(View.VISIBLE);
-                testDate.setVisibility(View.VISIBLE);
                 testContextStatus.setVisibility(View.VISIBLE);
                 if (testContextStatus.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_followup_test))) {
                     monthOfTreatment.setVisibility(View.VISIBLE);
@@ -399,46 +462,99 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
                     if (specimenSource.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))) {
                         specimenSourceOther.setVisibility(View.VISIBLE);
                     }
+                    else{
+                        specimenSourceOther.setVisibility(View.GONE);
+                    }
+                }
+                else{
+                    specimenSource.setVisibility(View.GONE);
+                    specimenSourceOther.setVisibility(View.GONE);
                 }
 
-                afbSmearResult.setVisibility(View.GONE);
+                dstResult.setVisibility(View.GONE);
                 dateTestResult.setVisibility(View.GONE);
-                smearResult.setVisibility(View.GONE);
-                noAfb.setVisibility(View.GONE);
-
+                dstMedium.setVisibility(View.GONE);
+                inh02Resistant.setVisibility(View.GONE);
+                inh1Resistant.setVisibility(View.GONE);
+                rifResistant.setVisibility(View.GONE);
+                etbResistant.setVisibility(View.GONE);
+                smResistant.setVisibility(View.GONE);
+                pzaResistant.setVisibility(View.GONE);
+                ofxResistant.setVisibility(View.GONE);
+                levoResistant.setVisibility(View.GONE);
+                moxi05Resistant.setVisibility(View.GONE);
+                moxi2Resistant.setVisibility(View.GONE);
+                amkResistant.setVisibility(View.GONE);
+                kmResistant.setVisibility(View.GONE);
+                cmResistant.setVisibility(View.GONE);
+                ethioResistant.setVisibility(View.GONE);
+                csResistant.setVisibility(View.GONE);
+                pasResistant.setVisibility(View.GONE);
+                bdqResistant.setVisibility(View.GONE);
+                dlmResistant.setVisibility(View.GONE);
+                lzdResistant.setVisibility(View.GONE);
+                cfzResistant.setVisibility(View.GONE);
+                otherDrugName.setVisibility(View.GONE);
+                otherDrugResult.setVisibility(View.GONE);
             } else {
-                afbSmearOrder.setVisibility(View.GONE);
+
+                dstResult.setVisibility(View.VISIBLE);
+                dateTestResult.setVisibility(View.VISIBLE);
+                dstMedium.setVisibility(View.VISIBLE);
+                inh02Resistant.setVisibility(View.VISIBLE);
+                inh1Resistant.setVisibility(View.VISIBLE);
+                rifResistant.setVisibility(View.VISIBLE);
+                etbResistant.setVisibility(View.VISIBLE);
+                smResistant.setVisibility(View.VISIBLE);
+                pzaResistant.setVisibility(View.VISIBLE);
+                ofxResistant.setVisibility(View.VISIBLE);
+                levoResistant.setVisibility(View.VISIBLE);
+                moxi05Resistant.setVisibility(View.VISIBLE);
+                moxi2Resistant.setVisibility(View.VISIBLE);
+                amkResistant.setVisibility(View.VISIBLE);
+                kmResistant.setVisibility(View.VISIBLE);
+                cmResistant.setVisibility(View.VISIBLE);
+                ethioResistant.setVisibility(View.VISIBLE);
+                csResistant.setVisibility(View.VISIBLE);
+                pasResistant.setVisibility(View.VISIBLE);
+                bdqResistant.setVisibility(View.VISIBLE);
+                dlmResistant.setVisibility(View.VISIBLE);
+                lzdResistant.setVisibility(View.VISIBLE);
+                cfzResistant.setVisibility(View.VISIBLE);
+                otherDrugName.setVisibility(View.VISIBLE);
+
+
+
+                dstOrder.setVisibility(View.GONE);
                 dateOfSubmission.setVisibility(View.GONE);
-                testDate.setVisibility(View.GONE);
                 testContextStatus.setVisibility(View.GONE);
                 monthOfTreatment.setVisibility(View.GONE);
                 specimenType.setVisibility(View.GONE);
                 specimenSource.setVisibility(View.GONE);
                 specimenSourceOther.setVisibility(View.GONE);
-
-                afbSmearResult.setVisibility(View.VISIBLE);
-                dateTestResult.setVisibility(View.VISIBLE);
-                smearResult.setVisibility(View.VISIBLE);
-
-                if (smearResult.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_negative))) {
-                    noAfb.setVisibility(View.VISIBLE);
-                }
             }
-        } else if (radioGroup == testContextStatus.getRadioGroup()) {
-            if (testContextStatus.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_followup_test))) {
+        }
+
+        if(radioGroup == testContextStatus.getRadioGroup()){
+            if(testContextStatus.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_followup_test))){
                 monthOfTreatment.setVisibility(View.VISIBLE);
-            } else {
+            }
+            else{
                 monthOfTreatment.setVisibility(View.GONE);
             }
-        } else if (radioGroup == specimenType.getRadioGroup()) {
-            if (specimenType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_extra_pulmonary))) {
+        }
+
+        if(radioGroup == specimenType.getRadioGroup()){
+            if(specimenType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_extra_pulmonary))){
                 specimenSource.setVisibility(View.VISIBLE);
-                if (specimenSource.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))) {
+                if(specimenSource.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))){
                     specimenSourceOther.setVisibility(View.VISIBLE);
-                } else {
+                }
+                else{
                     specimenSourceOther.setVisibility(View.GONE);
                 }
-            } else {
+            }
+            else{
                 specimenSource.setVisibility(View.GONE);
                 specimenSourceOther.setVisibility(View.GONE);
             }
@@ -484,8 +600,6 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
                 calendar = secondDateCalendar;
             else if (getArguments().getInt("type") == THIRD_DATE_DIALOG_ID)
                 calendar = thirdDateCalendar;
-            else if (getArguments().getInt("type") == FORTH_DATE_DIALOG_ID)
-                calendar = forthDateCalendar;
             else
                 return null;
 
@@ -507,12 +621,9 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
                 secondDateCalendar.set(yy, mm, dd);
             else if (((int) view.getTag()) == THIRD_DATE_DIALOG_ID)
                 thirdDateCalendar.set(yy, mm, dd);
-            else if (((int) view.getTag()) == FORTH_DATE_DIALOG_ID)
-                forthDateCalendar.set(yy, mm, dd);
 
             updateDisplay();
         }
     }
-
 
 }
