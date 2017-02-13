@@ -2,6 +2,7 @@ package com.ihsinformatics.gfatmmobile.fast;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,32 +26,30 @@ import android.widget.ScrollView;
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.R;
-import com.ihsinformatics.gfatmmobile.custom.MySpinner;
+import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
+import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
-import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
 /**
- * Created by Haris on 1/24/2017.
+ * Created by Haris on 2/9/2017.
  */
 
-public class FastGeneXpertResultForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class FastContactRegistryForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
     Context context;
 
     // Views...
     TitledButton formDate;
-    TitledEditText cartridgeId;
-    TitledButton dateTestResult;
-    TitledSpinner gxpResult;
-    TitledSpinner mtbBurden;
-    TitledSpinner rifResult;
-    TitledEditText errorCode;
+    TitledSpinner contacts;
+    TitledSpinner adultContacts;
+    TitledSpinner childhoodContacts;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -64,8 +64,8 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
                              ViewGroup container, Bundle savedInstanceState) {
 
         PAGE_COUNT = 1;
-        FORM_NAME = Forms.FAST_GENEXPERT_RESULT_FORM;
-        FORM = Forms.fastGeneXpertResultForm;
+        FORM_NAME = Forms.FAST_CONTACT_REGISTRY_FORM;
+        FORM = Forms.fastContactRegistryForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -121,62 +121,29 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
 
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        cartridgeId = new TitledEditText(context, null, getResources().getString(R.string.fast_cartridge_id), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        dateTestResult = new TitledButton(context, null, getResources().getString(R.string.fast_date_of_result_recieved), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.VERTICAL);
-        gxpResult = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_genexpert_mtb_result), getResources().getStringArray(R.array.fast_genexpert_mtb_result_list), getResources().getString(R.string.fast_mtb_not_detected), App.VERTICAL);
-        mtbBurden = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_mtb_burden), getResources().getStringArray(R.array.fast_mtb_burden_list), getResources().getString(R.string.fast_very_low), App.VERTICAL);
-        mtbBurden.setVisibility(View.GONE);
-        rifResult = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_if_mtb_then_rif_result), getResources().getStringArray(R.array.fast_if_mtb_then_rif_list), getResources().getString(R.string.fast_not_detected), App.VERTICAL);
-        rifResult.setVisibility(View.GONE);
-        errorCode = new TitledEditText(context, null, getResources().getString(R.string.fast_error_code), "", "", 15, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, false);
-        errorCode.setVisibility(View.GONE);
+
+        contacts = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_how_many_people_sleep_in_your_home), getResources().getStringArray(R.array.fast_0_50_list), getResources().getString(R.string.fast_one), App.VERTICAL);
+        adultContacts = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_total_number_of_adult_contacts), getResources().getStringArray(R.array.fast_0_25_list), getResources().getString(R.string.fast_one), App.HORIZONTAL);
+        childhoodContacts = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_total_number_of_childhood_contacts), getResources().getStringArray(R.array.fast_0_25_list), getResources().getString(R.string.fast_one), App.HORIZONTAL);
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), cartridgeId.getEditText(), dateTestResult.getButton(), gxpResult.getSpinner(),
-                mtbBurden.getSpinner(), rifResult.getSpinner(), errorCode.getEditText()};
+        views = new View[]{formDate.getButton(), contacts.getSpinner(), adultContacts.getSpinner(),
+                childhoodContacts.getSpinner()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, cartridgeId, dateTestResult, gxpResult, mtbBurden, rifResult, errorCode}};
-
+                {{formDate, contacts, adultContacts, childhoodContacts}};
         formDate.getButton().setOnClickListener(this);
-        dateTestResult.getButton().setOnClickListener(this);
-        gxpResult.getSpinner().setOnItemSelectedListener(this);
-        mtbBurden.getSpinner().setOnItemSelectedListener(this);
-        rifResult.getSpinner().setOnItemSelectedListener(this);
     }
 
     @Override
     public void updateDisplay() {
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        dateTestResult.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-
     }
 
     @Override
     public boolean validate() {
         Boolean error = false;
-
-        if (cartridgeId.getVisibility() == View.VISIBLE && App.get(cartridgeId).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            cartridgeId.getEditText().setError(getString(R.string.empty_field));
-            cartridgeId.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (errorCode.getVisibility() == View.VISIBLE && App.get(errorCode).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            errorCode.getEditText().setError(getString(R.string.empty_field));
-            errorCode.getEditText().requestFocus();
-            error = true;
-        }
-
 
         if (error) {
 
@@ -204,39 +171,22 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
 
             return false;
         }
-
         return true;
     }
 
     @Override
     public boolean submit() {
+
         endTime = new Date();
 
         final ArrayList<String[]> observations = new ArrayList<String[]>();
         observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
         observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
-        //  observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
-        //observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});
-        observations.add(new String[]{"Cartridge ID", App.get(cartridgeId)});
-        observations.add(new String[]{"DATE OF TEST RESULT RECEIVED", App.getSqlDateTime(secondDateCalendar)});
-
-       if (gxpResult.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"GENEXPERT MTB/RIF", App.get(gxpResult).equals(getResources().getString(R.string.fast_mtb_detected)) ? "MYCOBACTERIUM TUBERCULOSIS DETECTED WITH RIFAMPIN RESISTANCE" :
-                    (App.get(gxpResult).equals(getResources().getString(R.string.fast_mtb_not_detected)) ? "MYCOBACTERIUM TUBERCULOSIS DETECTED WITHOUT RIFAMPIN RESISTANCE" :
-                            (App.get(gxpResult).equals(getResources().getString(R.string.fast_error)) ? "NEGATIVE" :
-                                    (App.get(gxpResult).equals(getResources().getString(R.string.fast_invalid)) ? "INVALID" : "NO RESULT")))});
-
-        if (mtbBurden.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"MTB BURDEN", App.get(mtbBurden).equals(getResources().getString(R.string.fast_very_low)) ? "VERY LOW" :
-                    (App.get(mtbBurden).equals(getResources().getString(R.string.fast_low)) ? "LOW" :
-                            (App.get(mtbBurden).equals(getResources().getString(R.string.fast_medium)) ? "MEDIUM" : "HIGH"))});
-
-        if (rifResult.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"RIF RESULT", App.get(rifResult).equals(getResources().getString(R.string.fast_not_detected)) ? "NOT DETECTED" :
-                    (App.get(rifResult).equals(getResources().getString(R.string.fast_detected)) ? "DETECTED" : "INTERMEDIATE")});
-
-        if (errorCode.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"ERROR CODE", App.get(errorCode)});
+       /* observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
+        observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});*/
+        observations.add(new String[]{"NUMBER OF CONTACTS", contacts.getSpinner().getSelectedItem().toString()});
+        observations.add(new String[]{"NUMBER OF ADULT CONTACTS", adultContacts.getSpinner().getSelectedItem().toString()});
+        observations.add(new String[]{"NUMBER OF CHILDHOOD CONTACTS", childhoodContacts.getSpinner().getSelectedItem().toString()});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -252,7 +202,7 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("GXP Test", formDateCalendar, observations.toArray(new String[][]{}));
+                String result = serverService.saveEncounterAndObservation("Contact Registry", formDateCalendar, observations.toArray(new String[][]{}));
                 return result;
 
             }
@@ -365,15 +315,6 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
             args.putBoolean("allowPastDate", true);
             args.putBoolean("allowFutureDate", false);
         }
-
-        if (view == dateTestResult.getButton()) {
-            Bundle args = new Bundle();
-            args.putInt("type", SECOND_DATE_DIALOG_ID);
-            secondDateFragment.setArguments(args);
-            secondDateFragment.show(getFragmentManager(), "DatePicker");
-            args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", false);
-        }
     }
 
     @Override
@@ -381,6 +322,10 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
         return false;
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+    }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -391,26 +336,6 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
     public void resetViews() {
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        MySpinner spinner = (MySpinner) parent;
-        if (spinner == gxpResult.getSpinner()) {
-            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_mtb_detected))) {
-                mtbBurden.setVisibility(View.VISIBLE);
-                rifResult.setVisibility(View.VISIBLE);
-            } else {
-                mtbBurden.setVisibility(View.GONE);
-                rifResult.setVisibility(View.GONE);
-            }
-
-            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_error))) {
-                errorCode.setVisibility(View.VISIBLE);
-            } else {
-                errorCode.setVisibility(View.GONE);
-            }
-        }
     }
 
     @Override

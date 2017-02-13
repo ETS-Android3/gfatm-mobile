@@ -317,6 +317,18 @@
     <string name="fast_how_many_people_sleep_in_your_home">Contact Registry: How many people (excluding you) sleep in your home?</string>
     <string name="fast_total_number_of_adult_contacts">Total Number of adult contacts</string>
     <string name="fast_total_number_of_childhood_contacts">Total Number of childhood contacts</string>
+    <string name="fast_patient_being_referred_out_or_transferred_out">Is this patient being referred out or transferred out?</string>
+    <string name="fast_reason_for_referral_transfer">Reason for referral/transfer</string>
+    <string name="fast_location_for_referral_transfer">Location of Referral/transfer</string>
+    <string name="fast_referral">Referral(before starting treatment)</string>
+    <string name="fast_transfer">Transfer(after starting treatment)</string>
+    <string name="fast_complicated_tb">Complicated TB</string>
+    <string name="fast_mycobacterium_other_than_tb">Mycobacterium other than TB (MOTT)</string>
+    <string name="fast_patient_choose_another_facility">Patient chose another facility</string>
+    <string name="fast_drtb_suspect">DR-TB Suspect</string>
+    <string name="fast_drtb">DR-TB</string>
+    <string name="fast_treatment_failure">Treatment Failure</string>
+
 
     <string-array name="fast_locations">
         <item>@string/fast_community_title</item>
@@ -711,5 +723,20 @@
         <item>@string/fast_forty_eight</item>
         <item>@string/fast_forty_nine</item>
         <item>@string/fast_fifty</item>
+    </string-array>
+
+    <string-array name="fast_referral_transfer_list">
+        <item>@string/fast_referral</item>
+        <item>@string/fast_transfer</item>
+    </string-array>
+    
+    <string-array name="fast_reason_referral_transfer_list">
+        <item>@string/fast_patient_choose_another_facility</item>
+        <item>@string/fast_drtb_suspect</item>
+        <item>@string/fast_drtb</item>
+        <item>@string/fast_treatment_failure</item>
+        <item>@string/fast_complicated_tb</item>
+        <item>@string/fast_mycobacterium_other_than_tb</item>
+        <item>@string/fast_other_title</item>
     </string-array>
 </resources>

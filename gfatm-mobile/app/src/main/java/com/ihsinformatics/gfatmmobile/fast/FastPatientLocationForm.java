@@ -185,7 +185,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
             locationArray[i] = String.valueOf(locations[i][1]);
         }
 
-        contactExternalIdHospital = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_if_external_id_hospital_or_programs), locationArray, getResources().getString(R.string.fast_radio), App.VERTICAL);
+        contactExternalIdHospital = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_if_external_id_hospital_or_programs), locationArray, "", App.VERTICAL);
         contactExternalIdHospital.setVisibility(View.GONE);
         contactTbRegisternationNo = new TitledEditText(context, null, getResources().getString(R.string.fast_tb_registeration_no), "", "", 11, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         contactTbRegisternationNo.setVisibility(View.GONE);
