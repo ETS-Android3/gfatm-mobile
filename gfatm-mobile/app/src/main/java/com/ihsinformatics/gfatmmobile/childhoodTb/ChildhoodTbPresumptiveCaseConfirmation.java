@@ -237,7 +237,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
         contactCoughing.setVisibility(View.GONE);
         oneCloseContactInHousehold = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_contact_in_child_household),getResources().getStringArray(R.array.yes_no_unknown_refused_options),null,App.HORIZONTAL,App.VERTICAL,true);
         oneCloseContactInHousehold.setVisibility(View.GONE);
-        conclusion = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_conclusion),getResources().getStringArray(R.array.conclusion_list),getResources().getString(R.string.ctb_tb_presumptive_confirmed),App.HORIZONTAL,App.VERTICAL,true);
+        conclusion = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_conclusion),getResources().getStringArray(R.array.ctb_conclusion_list),getResources().getString(R.string.ctb_tb_presumptive_confirmed),App.HORIZONTAL,App.VERTICAL,true);
         doctorNotes =new TitledEditText(context, null, getResources().getString(R.string.ctb_doctor_notes), "", "", 1000, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
 
 
