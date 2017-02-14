@@ -49,12 +49,12 @@ public class StartActivity extends Activity {
         App.setUserFullName(preferences.getString(Preferences.USER_FULLNAME, ""));
         App.setLocation(preferences.getString(Preferences.LOCATION, ""));
         App.setLocationLastUpdate(preferences.getString(Preferences.LOCATION_LAST_UPDATE, ""));
-        App.setPatientUuid(preferences.getString(Preferences.PATIENT_UUID, ""));
+        App.setPatientId(preferences.getString(Preferences.PATIENT_ID, ""));
         App.setRoles(preferences.getString(Preferences.ROLES, ""));
         App.setProviderUUid(preferences.getString(Preferences.PROVIDER_UUID, ""));
 
         ServerService serverService = new ServerService(context);
-        com.ihsinformatics.gfatmmobile.model.Patient patient = serverService.getPatientByUuidFromLocalDB(App.getPatientUuid());
+        com.ihsinformatics.gfatmmobile.model.Patient patient = serverService.getPatientByIdFromLocalDB(App.getPatientId());
         App.setPatient(patient);
 
         Locale locale = new Locale(preferences.getString(Preferences.LANGUAGE, "en").toLowerCase().substring(0, 2));

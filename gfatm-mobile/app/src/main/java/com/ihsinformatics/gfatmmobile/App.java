@@ -71,7 +71,7 @@ public class App {
     private static String userFullName = "";
     private static String location = "";
     private static String locationLastUpdate = "";
-    private static String patientUuid = "";
+    private static String patientId = "";
     private static String roles = "";
     private static String providerUUid = "";
     private static Patient patient = null;
@@ -256,12 +256,12 @@ public class App {
         App.locationLastUpdate = locationLastUpdate;
     }
 
-    public static String getPatientUuid() {
-        return patientUuid;
+    public static String getPatientId() {
+        return patientId;
     }
 
-    public static void setPatientUuid(String patientUuid) {
-        App.patientUuid = patientUuid;
+    public static void setPatientId(String patientId) {
+        App.patientId = patientId;
     }
 
     public static Patient getPatient() {
@@ -433,11 +433,11 @@ public class App {
 
     }
 
-    public static boolean isEnable(View view) {
-        if (view instanceof TitledEditText)
-            return ((TitledEditText) view).getEditText().isEnabled();
-
-        return view.isEnabled();
+    public static boolean hasKeyListener(TitledEditText view) {
+        if (view.getEditText().getKeyListener() == null)
+            return false;
+        else
+            return true;
     }
 
     public enum dialogButtonPosition {

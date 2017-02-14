@@ -155,13 +155,18 @@ public class FormFragment extends Fragment {
 
     }
 
-    public void openForm(FormsObject form) {
+    public void openForm(FormsObject form, String encounterId, Boolean openFlag) {
         mainContent.setVisibility(View.GONE);
 
         FragmentManager fm = getFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         try {
-            FragmentTransaction replace = fragmentTransaction.replace(R.id.fragment_form, (Fragment) form.getClassName().newInstance());
+            Fragment newFragment = (Fragment) form.getClassName().newInstance();
+            Bundle args = new Bundle();
+            args.putString("encounterId", encounterId);
+            args.putBoolean("open", openFlag);
+            newFragment.setArguments(args);
+            FragmentTransaction replace = fragmentTransaction.replace(R.id.fragment_form, newFragment);
         } catch (java.lang.InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {

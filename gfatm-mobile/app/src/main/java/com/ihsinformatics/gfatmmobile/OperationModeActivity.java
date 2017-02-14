@@ -8,7 +8,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 public class OperationModeActivity extends AbstractSettingActivity {
 
@@ -36,6 +35,12 @@ public class OperationModeActivity extends AbstractSettingActivity {
             if (App.isLanguageRTL())
                 rb.setGravity(Gravity.RIGHT);
 
+        }
+
+        if (App.getMode().equalsIgnoreCase("OFFLINE")) {
+            for (int i = 0; i < radioGroup.getChildCount(); i++) {
+                ((RadioButton) radioGroup.getChildAt(i)).setEnabled(false);
+            }
         }
 
     }

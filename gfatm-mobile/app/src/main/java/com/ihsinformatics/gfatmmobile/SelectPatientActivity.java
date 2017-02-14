@@ -138,7 +138,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                     Calendar cal = Calendar.getInstance();
                     cal.add(Calendar.YEAR, -Integer.parseInt(s.toString()));
 
-                    dateOfBirthCalendar.set(cal.get(Calendar.YEAR), dateOfBirthCalendar.get(Calendar.MONTH), dateOfBirthCalendar.get(Calendar.DAY_OF_MONTH));
+                    dateOfBirthCalendar.set(dateOfBirthCalendar.get(Calendar.YEAR), dateOfBirthCalendar.get(Calendar.MONTH), dateOfBirthCalendar.get(Calendar.DAY_OF_MONTH));
                     dob.setText(DateFormat.format("dd-MMM-yyyy", dateOfBirthCalendar).toString());
 
                 }
@@ -165,6 +165,16 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
         selectPatientScanButton.setOnClickListener(this);
         searchPatient.setOnClickListener(this);
 
+        /*ServerService serverService = new ServerService(getApplicationContext());
+        serverService.submitOfflineForms();*/
+
+        /*ServerService serverService = new ServerService(getApplicationContext());
+        Object[][] encounterTypes = serverService.getAllEncounterTypesFromLocalDB();
+
+
+        Toast.makeText(getApplicationContext(), String.valueOf(encounterTypes.length),
+                Toast.LENGTH_LONG).show();
+*/
     }
 
     @Override
@@ -251,7 +261,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
 
                     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     SharedPreferences.Editor editor = preferences.edit();
-                    editor.putString(Preferences.PATIENT_UUID, App.getPatientUuid());
+                    editor.putString(Preferences.PATIENT_ID, App.getPatientId());
                     editor.apply();
 
                     Intent intent = new Intent();
@@ -355,7 +365,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
 
                             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                             SharedPreferences.Editor editor = preferences.edit();
-                            editor.putString(Preferences.PATIENT_UUID, App.getPatientUuid());
+                            editor.putString(Preferences.PATIENT_ID, App.getPatientId());
                             editor.apply();
 
                             Intent intent = new Intent();

@@ -24,7 +24,7 @@ import java.util.ArrayList;
 /**
  * A login screen that offers login via email/password.
  */
-public class SavedFormActivity extends AppCompatActivity implements View.OnTouchListener {
+public class OfflineFormActivity extends AppCompatActivity implements View.OnTouchListener {
 
     protected ImageView submitIcon;
     protected ImageView emailIcon;
@@ -85,7 +85,7 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
         checkBoxes.clear();
         contentLinearLayout.removeAllViews();
 
-        final Object[][] forms = serverService.getSavedForms(App.getUsername(), App.getProgram());
+        final Object[][] forms = serverService.getOfflineForms(App.getProgram());
 
         programName.setText(App.getProgram());
 
@@ -121,12 +121,11 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
                 final TextView text = new TextView(this);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
                 text.setLayoutParams(params);
-                text.setText(String.valueOf(forms[i][2]));
+                text.setText(String.valueOf(forms[i][1]));
                 text.setTextSize(getResources().getDimension(R.dimen.small));
-                text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_complete_form, 0, R.drawable.ic_more, 0);
+                text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
                 text.setPadding(10, 0, 0, 0);
                 DrawableCompat.setTint(text.getCompoundDrawables()[2], color);
-                DrawableCompat.setTint(text.getCompoundDrawables()[0], color);
                 linearLayout.addView(text);
 
                 text.setOnClickListener(new View.OnClickListener() {
@@ -154,7 +153,8 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
                     public boolean onLongClick(View v) {
 
                         Intent i = new Intent();
-                        i.putExtra("form_id", id);
+                        i.putExtra("encounter_id", id);
+                        i.putExtra("open", true);
                         i.putExtra("form_object", (byte[]) obj);
                         setResult(RESULT_OK, i);
                         onBackPressed();
@@ -175,7 +175,7 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
                 ll1.addView(tv);
 
                 TextView tv1 = new TextView(this);
-                tv1.setText(String.valueOf(forms[i][3]));
+                tv1.setText(String.valueOf(forms[i][4]));
                 tv1.setTextSize(getResources().getDimension(R.dimen.small));
                 ll1.addView(tv1);
 
@@ -191,7 +191,7 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
                 ll2.addView(tv2);
 
                 TextView tv3 = new TextView(this);
-                tv3.setText(String.valueOf(forms[i][4]));
+                tv3.setText(String.valueOf(forms[i][2]));
                 tv3.setTextSize(getResources().getDimension(R.dimen.small));
                 ll2.addView(tv3);
 
@@ -235,9 +235,9 @@ public class SavedFormActivity extends AppCompatActivity implements View.OnTouch
 
                 if (v == deleteIcon) {
 
-                    int color = App.getColor(SavedFormActivity.this, R.attr.colorAccent);
+                    int color = App.getColor(OfflineFormActivity.this, R.attr.colorAccent);
 
-                    final AlertDialog alertDialog = new AlertDialog.Builder(SavedFormActivity.this, R.style.dialog).create();
+                    final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
                     alertDialog.setMessage(getString(R.string.warning_before_submit));
                     Drawable clearIcon = getResources().getDrawable(R.drawable.ic_submit);
                     DrawableCompat.setTint(clearIcon, color);

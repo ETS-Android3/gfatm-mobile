@@ -95,6 +95,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if (!validate()) {
 
+            if (offlineCheckBox.isChecked())
+                App.setMode(getResources().getString(R.string.offline));
+            else
+                App.setMode(getResources().getString(R.string.online));
+
             // Authenticate from server
             AsyncTask<String, String, String> submissionTask = new AsyncTask<String, String, String>() {
                 @Override
@@ -174,7 +179,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         Toast toast = Toast.makeText(LoginActivity.this, getResources().getString(R.string.provider_not_found), Toast.LENGTH_LONG);
                         toast.setGravity(Gravity.BOTTOM, 0, 0);
                         toast.show();
-
+                    } else if (result.equals("USER_NOT_FOUND")) {
+                        App.setUsername(usernameTemp);
+                        App.setPassword(passwordTemp);
+                        password.setText("");
+                        Toast toast = Toast.makeText(LoginActivity.this, getResources().getString(R.string.user_not_found), Toast.LENGTH_LONG);
+                        toast.setGravity(Gravity.BOTTOM, 0, 0);
+                        toast.show();
                     }
                 }
             };

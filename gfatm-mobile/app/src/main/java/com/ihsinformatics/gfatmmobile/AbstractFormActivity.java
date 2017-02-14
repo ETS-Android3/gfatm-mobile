@@ -130,11 +130,6 @@ public abstract class AbstractFormActivity extends Fragment
         submitButton = (Button) mainContent.findViewById(R.id.submitButton);
         saveButton = (Button) mainContent.findViewById(R.id.saveButton);
 
-        if (App.getMode().equalsIgnoreCase("Offline"))
-            submitButton.setVisibility(View.GONE);
-        else
-            submitButton.setVisibility(View.VISIBLE);
-
         // Setting up listeners
         View[] setListener = new View[]{firstButton, lastButton, clearButton, submitButton, nextButton, saveButton};
 

@@ -110,6 +110,13 @@ public class MainActivity extends AppCompatActivity
         nav_userRole.setText(App.getRoles());
 
         String title = toolbar.getTitle() + " (" + App.getVersion() + ")";
+        if (App.getMode().equalsIgnoreCase("OFFLINE")) {
+            if (!title.contains(" ----- Offline Mode"))
+                title = title + " ----- Offline Mode";
+        } else {
+            if (!title.contains(" ----- Offline Mode"))
+                title.replace(" ----- Offline Mode", "");
+        }
         getSupportActionBar().setTitle(title);
         String subtitle = getResources().getString(R.string.program) + " " + App.getProgram() + "  |  " + "Location:" + " " + App.getLocation();
         getSupportActionBar().setSubtitle(subtitle);
@@ -201,6 +208,16 @@ public class MainActivity extends AppCompatActivity
             String subtitle = getResources().getString(R.string.program) + " " + App.getProgram() + "  |  " + "Location:" + " " + App.getLocation();
             getSupportActionBar().setSubtitle(subtitle);
         }
+
+        String title = getSupportActionBar().getTitle().toString();
+        if (App.getMode().equalsIgnoreCase("OFFLINE")) {
+            if (!title.contains(" ----- Offline Mode"))
+                title = title + " ----- Offline Mode";
+        } else {
+            if (!title.contains(" ----- Offline Mode"))
+                title.replace(" ----- Offline Mode", "");
+        }
+        getSupportActionBar().setTitle(title);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         String lang = preferences.getString(Preferences.LANGUAGE, "");
@@ -301,8 +318,8 @@ public class MainActivity extends AppCompatActivity
 
         int id = item.getItemId();
 
-        if (id == R.id.saved_forms) {
-            Intent savedFormActivityIntent = new Intent(this, SavedFormActivity.class);
+        if (id == R.id.offline_forms) {
+            Intent savedFormActivityIntent = new Intent(this, OfflineFormActivity.class);
             startActivityForResult(savedFormActivityIntent, SAVED_FORM_ACTIVITY);
         } else if (id == R.id.update_database) {
             Intent fetchMetadataActivityIntent = new Intent(this, UpdateDatabaseActivity.class);
@@ -583,7 +600,8 @@ public class MainActivity extends AppCompatActivity
         } else if (requestCode == SAVED_FORM_ACTIVITY) {
             if (resultCode == RESULT_OK) {
 
-                String returnString = data.getStringExtra("form_id");
+                String returnString = data.getStringExtra("encounter_id");
+                Boolean openFlag = data.getBooleanExtra("open", false);
                 if (returnString != null) {
                     showFormFragment();
                     byte[] bytes = data.getByteArrayExtra("form_object");
@@ -596,7 +614,7 @@ public class MainActivity extends AppCompatActivity
                         ins = new ObjectInputStream(bais);
                         FormsObject f = (FormsObject) ins.readObject();
 
-                        fragmentForm.openForm(f);
+                        fragmentForm.openForm(f, returnString, openFlag);
 
 
                     } catch (IOException e) {
