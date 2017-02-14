@@ -2,6 +2,7 @@ package com.ihsinformatics.gfatmmobile.custom;
 
 import android.content.Context;
 import android.text.InputFilter;
+import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -44,10 +45,20 @@ public class TitledEditText extends LinearLayout {
         linearLayout.addView(editText);
 
         if (layoutOrientation == App.HORIZONTAL) {
-            LayoutParams layoutParams1 = new LayoutParams(
-                    LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-            layoutParams1.setMargins(20, 0, 0, 0);
-            editText.setLayoutParams(layoutParams1);
+
+            LayoutParams layoutParams1 = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
+            hLayout.setLayoutParams(layoutParams1);
+
+            questionView.setGravity(Gravity.CENTER);
+
+            LayoutParams layoutParams2 = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
+            questionView.setLayoutParams(layoutParams2);
+
+            LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+            layoutParams.setMargins(20, 0, 0, 0);
+            editText.setLayoutParams(layoutParams);
+
+            editText.setGravity(Gravity.BOTTOM);
         }
 
         if (!(hint == null || hint.equals("")))
