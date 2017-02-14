@@ -22,5 +22,8 @@ public class Metadata {
     public static final String CONCEPT = "CONCEPT";
     public static final String ENCOUNTER_TYPE = "ENCOUNTER_TYPE";
     public static final String PERSON_ATTRIBUTE_TYPE = "PERSON_ATTRIBUTE_TYPE";
+    public static final String ENCOUNTER = "ENCOUNTER";
+    public static final String OBS = "OBS";
+    public static final String OFFLINE_FORM = "OFFLINE_FORMS";
 
 }
