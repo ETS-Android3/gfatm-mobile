@@ -58,11 +58,11 @@ public class Location extends AbstractModel {
         String name = "";
         String locationId = "";
         String primaryContact = "";
-        String fastLocation = "Y";
-        String pmdtLocation = "Y";
-        String petLocation = "Y";
-        String comorbiditiesLocation = "Y";
-        String childhoodTbLocation = "Y";
+        String fastLocation = "N";
+        String pmdtLocation = "N";
+        String petLocation = "N";
+        String comorbiditiesLocation = "N";
+        String childhoodTbLocation = "N";
         String address1 = "";
         String address2 = "";
         String city = "";
@@ -86,16 +86,16 @@ public class Location extends AbstractModel {
                         primaryContact = value;
                     } else if (display.contains("Location ID")) {
                         locationId = value;
-                    } else if (display.contains("FAST Location")) {
-                        fastLocation = value;
-                    } else if (display.contains("PET Location")) {
-                        petLocation = value;
-                    } else if (display.contains("Co-Morbidities Location")) {
-                        comorbiditiesLocation = value;
-                    } else if (display.contains("PET Location")) {
-                        petLocation = value;
-                    } else if (display.contains("Childhood TB Location")) {
-                        childhoodTbLocation = value;
+                    } else if (display.contains("FAST Location") && display.contains("true")) {
+                        fastLocation = "Y";
+                    } else if (display.contains("PET Location") && display.contains("true")) {
+                        petLocation = "Y";
+                    } else if (display.contains("Co-Morbidities Location") && display.contains("true")) {
+                        comorbiditiesLocation = "Y";
+                    } else if (display.contains("PET Location") && display.contains("true")) {
+                        petLocation = "Y";
+                    } else if (display.contains("Childhood TB Location") && display.contains("true")) {
+                        childhoodTbLocation = "Y";
                     }
 
                 }

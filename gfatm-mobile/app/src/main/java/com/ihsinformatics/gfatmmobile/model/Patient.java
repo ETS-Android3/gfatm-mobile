@@ -28,6 +28,7 @@ public class Patient extends AbstractModel {
     private String enrs;
     private String endTBId;
     private Person person;
+    private int pid;
 
     public Patient(String uuid, String patientId, String externalId, String enrs, String endTBId, Person person) {
         super(uuid);
@@ -45,32 +46,29 @@ public class Patient extends AbstractModel {
         String externalId = "";
         String enrs = "";
         String endTBId = "";
+
         Person person = null;
         try {
             uuid = json.getString("uuid");
             JSONObject jsonobject = json.getJSONObject("person");
             person = Person.parseJSONObject(jsonobject);
-
             JSONArray identifiers = json.getJSONArray("identifiers");
-            try {
-                for (int i = 0; i < identifiers.length(); i++) {
 
-                    JSONObject object = identifiers.getJSONObject(i);
-                    String display = object.getString("display");
+            for (int i = 0; i < identifiers.length(); i++) {
 
-                    if (display.contains("Patient ID")) {
-                        patientId = display.replace("Patient ID = ", "");
-                    } else if (display.contains("External ID")) {
-                        externalId = display.replace("External ID = ", "");
-                    } else if (display.contains("ENRS")) {
-                        enrs = display.replace("ENRS = ", "");
-                    } else if (display.contains("endTB EMR ID")) {
-                        endTBId = display.replace("endTB EMR ID = ", "");
-                    }
+                JSONObject object = identifiers.getJSONObject(i);
+                String display = object.getString("display");
 
+                if (display.contains("Patient ID")) {
+                    patientId = display.replace("Patient ID = ", "");
+                } else if (display.contains("External ID")) {
+                    externalId = display.replace("External ID = ", "");
+                } else if (display.contains("ENRS")) {
+                    enrs = display.replace("ENRS = ", "");
+                } else if (display.contains("endTB EMR ID")) {
+                    endTBId = display.replace("endTB EMR ID = ", "");
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
+
             }
 
         } catch (JSONException e) {
@@ -79,6 +77,14 @@ public class Patient extends AbstractModel {
         }
         patient = new Patient(uuid, patientId, externalId, enrs, endTBId, person);
         return patient;
+    }
+
+    public int getPid() {
+        return pid;
+    }
+
+    public void setPid(int pid) {
+        this.pid = pid;
     }
 
     public JSONObject getJSONObject() {
