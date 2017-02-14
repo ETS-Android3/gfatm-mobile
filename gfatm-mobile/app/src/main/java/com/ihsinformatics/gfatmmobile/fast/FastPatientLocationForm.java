@@ -451,7 +451,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("Patient Location", formDateCalendar, observations.toArray(new String[][]{}));
+                String result = serverService.saveEncounterAndObservation("Patient Location", FORM, formDateCalendar, observations.toArray(new String[][]{}));
                 return result;
 
             }

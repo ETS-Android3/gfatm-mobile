@@ -636,34 +636,47 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
                     }
                 });
 
-                String result = serverService.savePersonAddress(App.get(addressHouse), App.get(addressStreet), App.getCity(), App.get(addressTown), "", longitude, latitude);
-                if (!result.equals("SUCCESS"))
+                String result = serverService.saveEncounterAndObservation("Presumptive Information", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                if (!result.contains("SUCCESS"))
                     return result;
+                else {
 
-                result = serverService.savePersonAttributeType("Primary Contact", mobileNumber );
-                if (!result.equals("SUCCESS"))
-                    return result;
+                    String encounterId = "";
 
-                if(!(App.get(secondaryMobile1).isEmpty() && App.get(secondaryMobile2).isEmpty())) {
-                    result = serverService.savePersonAttributeType("Secondary Contact", secondaryMobileNumber);
+                    if (result.contains("_")) {
+                        String[] successArray = result.split("_");
+                        encounterId = successArray[1];
+                    }
+
+                    result = serverService.savePersonAddress(App.get(addressHouse), App.get(addressStreet), App.getCity(), App.get(addressTown), "", longitude, latitude, encounterId);
                     if (!result.equals("SUCCESS"))
                         return result;
-                }
 
-                if(!(App.get(landline1).isEmpty() && App.get(landline2).isEmpty())) {
-                    result = serverService.savePersonAttributeType("Tertiary Contact", landlineNumber);
+                    result = serverService.savePersonAttributeType("Primary Contact", mobileNumber, encounterId);
                     if (!result.equals("SUCCESS"))
                         return result;
+
+                    if (!(App.get(secondaryMobile1).isEmpty() && App.get(secondaryMobile2).isEmpty())) {
+                        result = serverService.savePersonAttributeType("Secondary Contact", secondaryMobileNumber, encounterId);
+                        if (!result.equals("SUCCESS"))
+                            return result;
+                    }
+
+                    if (!(App.get(landline1).isEmpty() && App.get(landline2).isEmpty())) {
+                        result = serverService.savePersonAttributeType("Tertiary Contact", landlineNumber, encounterId);
+                        if (!result.equals("SUCCESS"))
+                            return result;
+                    }
+
+                    if (!(App.get(secondaryLandline1).isEmpty() && App.get(secondaryLandline2).isEmpty())) {
+                        result = serverService.savePersonAttributeType("Quaternary Contact", secondaryLandlineNumber, encounterId);
+                        if (!result.equals("SUCCESS"))
+                            return result;
+                    }
+
                 }
 
-                if(!(App.get(secondaryLandline1).isEmpty() && App.get(secondaryLandline2).isEmpty())) {
-                    result = serverService.savePersonAttributeType("Quaternary Contact", secondaryLandlineNumber);
-                    if (!result.equals("SUCCESS"))
-                        return result;
-                }
-
-                result = serverService.saveEncounterAndObservation("Presumptive Information", formDateCalendar, observations.toArray(new String[][]{}));
-                return result;
+                return "SUCCESS";
 
             }
 

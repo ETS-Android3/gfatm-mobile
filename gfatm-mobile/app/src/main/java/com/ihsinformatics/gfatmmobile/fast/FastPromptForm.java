@@ -242,7 +242,7 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("Prompt", formDateCalendar, observations.toArray(new String[][]{}));
+                String result = serverService.saveEncounterAndObservation("Prompt", FORM, formDateCalendar, observations.toArray(new String[][]{}));
                 return result;
 
             }
