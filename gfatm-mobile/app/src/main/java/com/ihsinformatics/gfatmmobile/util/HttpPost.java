@@ -22,13 +22,13 @@ import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.PersonAddress;
-import org.openmrs.PersonAttributeType;
 import org.openmrs.PersonName;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
+import java.util.Set;
 
 /**
  * Created by Haris on 12/9/2016.
@@ -101,15 +101,15 @@ public class HttpPost {
         return postJSONObject(resource, jsonObject);
     }
 
+    public String backgroundPost(String uri, String content) {
+        String requestURI = uri.replace("serverAddress", serverAddress);
+        return post(requestURI, content);
+    }
+
     public String savePatientByEntitiy(Patient patient) {
         JSONObject personObj = new JSONObject();
-        JSONObject personAttribute = new JSONObject();
-        JSONObject attribute = new JSONObject();
-        JSONArray attributes = new JSONArray();
         JSONArray names = new JSONArray();
-        JSONArray addresses = new JSONArray();
         JSONArray identifiers = new JSONArray();
-        JSONObject preferredAddress = new JSONObject();
         JSONObject patientObject = new JSONObject();
         try {
 
@@ -123,46 +123,10 @@ public class HttpPost {
                 names.put(preferredName);
             }
 
-            /*for (PersonAttribute personAttr : patient.getAttributes()) {
-                attribute.put("attributeType", personAttr.getAttributeType().getUuid());
-                attribute.put("value", personAttr.getValue());
-                attribute.put("voided", personAttr.getVoided());
-                attributes.put(attribute);
-            }*/
-
-            /*for (PersonAddress personAddress : patient.getAddresses()) {
-                preferredAddress.put("preferred", personAddress.getPreferred());
-                preferredAddress.put("address1", personAddress.getAddress1());
-                preferredAddress.put("address2", personAddress.getAddress2());
-                preferredAddress.put("cityVillage", personAddress.getCityVillage());
-                preferredAddress.put("stateProvince", personAddress.getStateProvince());
-                preferredAddress.put("country", personAddress.getCountry());
-                preferredAddress.put("postalCode", personAddress.getPostalCode());
-                preferredAddress.put("countyDistrict", personAddress.getCountyDistrict());
-                preferredAddress.put("address3", personAddress.getAddress3());
-                preferredAddress.put("address4", personAddress.getAddress4());
-                preferredAddress.put("address5", personAddress.getAddress5());
-                preferredAddress.put("address6", personAddress.getAddress6());
-                preferredAddress.put("startDate", personAddress.getStartDate());
-                preferredAddress.put("endDate", personAddress.getEndDate());
-                preferredAddress.put("latitude", personAddress.getLatitude());
-                preferredAddress.put("longitude", personAddress.getLongitude());
-                preferredAddress.put("voided", personAddress.getVoided());
-                addresses.put(preferredAddress);
-            }*/
-
             personObj.put("gender", patient.getGender());
-            personObj.put("birthdate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(patient.getBirthdate()));
-            /*personObj.put("birthdateEstimated", patient.getBirthdateEstimated());
-            personObj.put("dead", patient.getDead());
-            personObj.put("deathDate", patient.getDeathDate());
-            personObj.put("causeOfDeath", patient.getCauseOfDeath());*/
+            personObj.put("birthdate", App.getSqlDate(patient.getBirthdate()));
             personObj.put("names", names);
-            /*personObj.put("addresses", addresses);
-            personObj.put("attributes", attributes);
-            personObj.put("voided", patient.getPersonVoided());
-            personObj.put("deathdateEstimated", patient.getDeathdateEstimated());
-            personObj.put("birthtime", patient.getBirthtime());*/
+
             String response = postEntityByJSON(PERSON_RESOURCE, personObj);
             JSONObject newPerson = JSONParser.getJSONObject("{"
                     + response.toString() + "}");
@@ -180,26 +144,9 @@ public class HttpPost {
             patientObject.put("person", newPerson.get("uuid"));
             patientObject.put("identifiers", identifiers);
             patientObject.put("voided", patient.getVoided());
+
             return postEntityByJSON(PATIENT_RESOURCE, patientObject);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public String savePersonAttributeByEntity(PersonAttributeType personAttributeType) {
-        JSONObject personAttributeObject = new JSONObject();
-        try {
-            personAttributeObject.put("name", personAttributeType.getName());
-            personAttributeObject.put("description", (personAttributeType.getDescription()) == null ? "NULL" : personAttributeType.getDescription());
-            personAttributeObject.put("format", personAttributeType.getFormat());
-            personAttributeObject.put("foreignKey", personAttributeType.getForeignKey());
-            personAttributeObject.put("sortWeight", personAttributeType.getSortWeight());
-            personAttributeObject.put("searchable", personAttributeType.getSearchable());
-            personAttributeObject.put("editPrivilege", personAttributeType.getEditPrivilege());
-            personAttributeObject.put("retired", personAttributeType.getRetired());
-            return postEntityByJSON(PERSON_ATTRIBUTE_TYPE_RESOURCE, personAttributeObject);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -212,14 +159,37 @@ public class HttpPost {
         JSONArray obsArray = new JSONArray();
 
         try {
-            for (Obs observation : encounter.getObs()) {
+            for (Obs observation : encounter.getObsAtTopLevel(false)) {
                 String value = null;
                 JSONObject obsObject = new JSONObject();
                 obsObject.put("concept", observation.getConcept().getUuid());
-                if (observation.getValueCoded() == null)
-                    value = observation.getValueText();
-                else
-                    value = observation.getValueCoded().getUuid();
+
+                if (observation.getGroupMembers() == null) {
+                    if (observation.getValueCoded() == null)
+                        value = observation.getValueText();
+                    else
+                        value = observation.getValueCoded().getUuid();
+                } else {
+
+                    JSONArray obsGroupArray = new JSONArray();
+                    Set<Obs> groupedObs = observation.getGroupMembers();
+
+                    for (Obs obs1 : groupedObs) {
+                        String value1 = null;
+                        JSONObject valueObject = new JSONObject();
+                        valueObject.put("concept", obs1.getConcept().getUuid());
+
+                        if (obs1.getValueCoded() == null)
+                            value1 = obs1.getValueText();
+                        else
+                            value1 = obs1.getValueCoded().getUuid();
+
+                        valueObject.put("value", value1);
+                        obsGroupArray.put(valueObject);
+
+                    }
+                    obsObject.put("groupMembers", obsGroupArray);
+                }
 
                 obsObject.put("value", value);
                 obsArray.put(obsObject);
@@ -241,6 +211,15 @@ public class HttpPost {
             encounterObject.put("voided", encounter.getVoided());
             encounterObject.put("encounterProviders", encounterProviderArray);
 
+            if (App.getMode().equalsIgnoreCase("OFFLINE")) {
+
+                String requestURI = "http://serverAddress/openmrs/ws/rest/v1/" + ENCOUNTER_RESOURCE;
+                String content = encounterObject.toString();
+
+                return requestURI + " ;;;; " + content;
+
+            }
+
             return postEntityByJSON(ENCOUNTER_RESOURCE, encounterObject);
 
         } catch (Exception e) {
@@ -260,6 +239,15 @@ public class HttpPost {
             identifierObject.put("preferred", identifier.getPreferred());
             identifierObject.put("voided", identifier.getVoided());
 
+            if (App.getMode().equalsIgnoreCase("OFFLINE")) {
+
+                String requestURI = "http://serverAddress/openmrs/ws/rest/v1/" + PATIENT_RESOURCE + "/" + App.getPatient().getUuid() + "/" + "identifier";
+                String content = identifierObject.toString();
+
+                return requestURI + " ;;;; " + content;
+
+            }
+
             return postEntityByJSON(PATIENT_RESOURCE + "/" + App.getPatient().getUuid() + "/" + "identifier", identifierObject);
 
         } catch (Exception e) {
@@ -272,16 +260,25 @@ public class HttpPost {
     public String savePersonAddressByEntity(PersonAddress personAddress) {
         try {
 
-            JSONObject identifierObject = new JSONObject();
-            identifierObject.put("address1", personAddress.getAddress1());
-            identifierObject.put("address2", personAddress.getAddress2());
-            identifierObject.put("cityVillage", personAddress.getCityVillage());
-            identifierObject.put("stateProvince", personAddress.getStateProvince());
-            identifierObject.put("country", personAddress.getCountry());
-            identifierObject.put("longitude", personAddress.getLongitude());
-            identifierObject.put("latitude", personAddress.getLatitude());
+            JSONObject personAddressObject = new JSONObject();
+            personAddressObject.put("address1", personAddress.getAddress1());
+            personAddressObject.put("address2", personAddress.getAddress2());
+            personAddressObject.put("cityVillage", personAddress.getCityVillage());
+            personAddressObject.put("stateProvince", personAddress.getStateProvince());
+            personAddressObject.put("country", personAddress.getCountry());
+            personAddressObject.put("longitude", personAddress.getLongitude());
+            personAddressObject.put("latitude", personAddress.getLatitude());
 
-            return postEntityByJSON(PERSON_RESOURCE + "/" + App.getPatient().getUuid() + "/" + "address", identifierObject);
+            if (App.getMode().equalsIgnoreCase("OFFLINE")) {
+
+                String requestURI = "http://serverAddress/openmrs/ws/rest/v1/" + PERSON_RESOURCE + "/" + App.getPatient().getUuid() + "/" + "address";
+                String content = personAddressObject.toString();
+
+                return requestURI + " ;;;; " + content;
+
+            }
+
+            return postEntityByJSON(PERSON_RESOURCE + "/" + App.getPatient().getUuid() + "/" + "address", personAddressObject);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -293,11 +290,20 @@ public class HttpPost {
     public String savePersonAttribute(String attributeType, String value) {
         try {
 
-            JSONObject identifierObject = new JSONObject();
-            identifierObject.put("attributeType", attributeType);
-            identifierObject.put("value", value);
+            JSONObject personAttributeObject = new JSONObject();
+            personAttributeObject.put("attributeType", attributeType);
+            personAttributeObject.put("value", value);
 
-            return postEntityByJSON(PERSON_RESOURCE + "/" + App.getPatient().getUuid() + "/" + "attribute", identifierObject);
+            if (App.getMode().equalsIgnoreCase("OFFLINE")) {
+
+                String requestURI = "http://serverAddress/openmrs/ws/rest/v1/" + PERSON_RESOURCE + "/" + App.getPatient().getUuid() + "/" + "attribute";
+                String content = personAttributeObject.toString();
+
+                return requestURI + " ;;;; " + content;
+
+            }
+
+            return postEntityByJSON(PERSON_RESOURCE + "/" + App.getPatient().getUuid() + "/" + "attribute", personAttributeObject);
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -44,6 +44,7 @@ public class RegexUtil {
     public static final int idLength = 7;
     public static final int mobileNumberLength = 11;
     public static final int defaultEditTextLength = 50;
+    public static final int landlineNumberLength = 10;
     public static final InputFilter FLOAT_FILTER = new InputFilter() {
 
         @Override
@@ -435,6 +436,17 @@ public class RegexUtil {
             if (floating)
                 return string.matches(floatingPointPatternForThreeDecimalPlaces);
             return string.matches(numericPattern);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean isLandlineNumber(String string) {
+        try {
+            if (!(string.length() == mobileNumberLength && string.length() == landlineNumberLength))
+                return false;
+            return string.matches(contactNoPattern);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
