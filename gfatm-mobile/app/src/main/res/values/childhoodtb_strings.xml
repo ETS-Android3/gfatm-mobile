@@ -187,8 +187,20 @@
     <string name="ctb_sputum">Sputum</string>
     <string name="ctb_speciment_route">Where did the speciment come from?</string>
     <string name="ctb_lymph">Lymph</string>
-    <string name="ctb_pleural_fluid"></string>
-
+    <string name="ctb_pleural_fluid">Pleural Fluid</string>
+    <string name="ctb_plus">Plus</string>
+    <string name="ctb_accepted_by_technician">Where did the speciment come from?</string>
+    <string name="ctb_accepted">Accepted</string>
+    <string name="ctb_rejected">Rejected</string>
+    <string name="ctb_why_sample_rejected">Why was the sample rejected?</string>
+    <string name="ctb_saliva">Saliva</string>
+    <string name="ctb_blood">Blood</string>
+    <string name="ctb_food_particles">Food particles</string>
+    <string name="ctb_older_than_3_days">Older than 3 days</string>
+    <string name="ctb_insufficient_qunatity">Insufficient Quantity</string>
+    <string name="ctb_other_reason_rejection">Other reason for rejection?</string>
+    <string name="ctb_cartridge_id">Cartridge ID</string>
+    
     <string-array name="ctb_screening_location_list">
         <item>@string/ctb_hospital</item>
         <item>@string/ctb_community</item>
@@ -342,10 +354,58 @@
         <item>@string/refused</item>
     </string-array>
 
-    <string-array name="conclusion_list">
+    <string-array name="ctb_conclusion_list">
         <item>@string/ctb_tb_presumptive_confirmed</item>
         <item>@string/ctb_not_tb_presumptive</item>
     </string-array>
+
+    <string-array name="ctb_ctb_baseline_repeat_followup_list">
+        <item>@string/ctb_baseline</item>
+        <item>@string/ctb_baseline_repeat</item>
+        <item>@string/ctb_follow_up_test</item>
+    </string-array>
+
+    <string-array name="ctb_patient_category_list">
+        <item>@string/ctb_categoryI</item>
+        <item>@string/ctb_categoryII</item>
+    </string-array>
+
+    <string-array name="ctb_reason_for_repeating_list">
+        <item>@string/ctb_rr_positive</item>
+        <item>@string/ctb_indeterminate</item>
+        <item>@string/ctb_error_invalid_no_result</item>
+    </string-array>
+    
+    <string-array name="ctb_specimen_type_list">
+        <item>@string/ctb_sputum</item>
+        <item>@string/ctb_extra_pulmonary</item>
+    </string-array>
+    
+    <string-array name="ctb_speciment_route_list">
+        <item>@string/ctb_lymph</item>
+        <item>@string/ctb_pleural_fluid</item>
+        <item>@string/ctb_plus</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
+    
+    
+    <string-array name="ctb_accepted_by_techician_list">
+        <item>@string/ctb_accepted</item>
+        <item>@string/ctb_rejected</item>
+    </string-array>
+
+    <string-array name="ctb_why_sample_rejected_list">
+        <item>@string/ctb_saliva</item>
+        <item>@string/ctb_blood</item>
+        <item>@string/ctb_food_particles</item>
+        <item>@string/ctb_older_than_3_days</item>
+        <item>@string/ctb_insufficient_qunatity</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
+
+
+
+
 
 
 </resources>
