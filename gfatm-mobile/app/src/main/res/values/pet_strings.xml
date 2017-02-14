@@ -142,6 +142,7 @@
     <string name="pet_total_adult_contacts_hint">0-25</string>
     <string name="pet_total_childern_contacts">Total Number of childhood contacts</string>
     <string name="pet_total_childern_contacts_hint">0-25</string>
+    <string name="pet_count_mismatch">Total count doesn\'t match.</string>
 
     <!-- Baseline Screening -->
     <string name="pet_index_patient_id">Index Patient ID:</string>
@@ -233,6 +234,7 @@
         <item>@string/pet_private_facility</item>
     </string-array>
     <string name="pet_facility_referred">Facility contact referred to</string>
+    <string name="pet_index_contact_id_same_error">Index Id and Contact id can\'t be same.</string>
 
     <!-- Socio Economics Data -->
     <string name="pet_ethnicity">What is your ethnicity?</string>
@@ -629,10 +631,10 @@
         <item>@string/pet_isoniazid_rifapentine</item>
         <item>@string/pet_levofloxacin_ethionamide</item>
     </string-array>
-    <string name="pet_isoniazid_dose">Isoniazid dose</string>
-    <string name="pet_rifapentine_dose">Rifapentine  dose</string>
-    <string name="pet_levofloxacin_dose">Levofloxacin dose</string>
-    <string name="pet_ethionamide_dose">Ethionamide dose</string>
+    <string name="pet_isoniazid_dose">Isoniazid dose (mg/kg)</string>
+    <string name="pet_rifapentine_dose">Rifapentine  dose (mg/kg)</string>
+    <string name="pet_levofloxacin_dose">Levofloxacin dose (mg/kg)</string>
+    <string name="pet_ethionamide_dose">Ethionamide dose (mg/kg)</string>
     <string name="pet_ancillary_drugs_needed">Is there a need for ancillary drugs?</string>
     <string name="pet_ancillary_drugs">Ancillary Drugs</string>
     <string name="pet_iron_deficiency_prtocol">Iron Deficiency protocol</string>
