@@ -37,25 +37,21 @@ import java.util.Date;
 import java.util.HashMap;
 
 /**
- * Created by Haris on 1/19/2017.
+ * Created by Haris on 2/10/2017.
  */
 
-public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class FastReferralAndTransferForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener{
     Context context;
 
     // Views...
     TitledButton formDate;
-    TitledButton sampleSubmissionDate;
-    TitledRadioGroup testContextStatus;
-    TitledRadioGroup tbCategory;
-    TitledRadioGroup baselineRepeatReason;
-    TitledRadioGroup sampleType;
-    TitledSpinner specimenSource;
-    TitledEditText specimenSourceOther;
-    TitledRadioGroup sampleAccepted;
-    TitledSpinner reasonRejected;
-    TitledEditText otherReasonRejected;
-    TitledEditText cartridgeId;
+    TitledRadioGroup referralTransfer;
+    TitledSpinner reasonReferralTransfer;
+    TitledEditText reasonReferralTransferOther;
+    TitledSpinner referralSite;
+    TitledEditText referralSiteOther;
+
+
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -70,8 +66,8 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
                              ViewGroup container, Bundle savedInstanceState) {
 
         PAGE_COUNT = 1;
-        FORM_NAME = Forms.FAST_GXP_SPECIMEN_COLLECTION_FORM;
-        FORM = Forms.fastGpxSpecimenCollectionForm;
+        FORM_NAME = Forms.FAST_REFERRAL_AND_TRANSFER_FORM;
+        FORM = Forms.fastReferralTransferForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -127,80 +123,55 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
 
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        sampleSubmissionDate = new TitledButton(context, null, getResources().getString(R.string.fast_day_was_the_sample_submitted), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.VERTICAL);
-        testContextStatus = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_point_test_being_done), getResources().getStringArray(R.array.fast_test_being_done_list), getResources().getString(R.string.fast_baseline_new), App.VERTICAL, App.VERTICAL);
-        tbCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_baseline_test_specify_patient_category), getResources().getStringArray(R.array.fast_patient_category_list), getResources().getString(R.string.fast_category_1), App.VERTICAL, App.VERTICAL);
-        baselineRepeatReason = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_repeating_test_if_baseline_repeat), getResources().getStringArray(R.array.fast_repeating_test_if_baseline_repeat_list), getResources().getString(R.string.fast_rif_resistant), App.VERTICAL, App.VERTICAL);
-        sampleType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_specimen_type), getResources().getStringArray(R.array.fast_specimen_type_list), getResources().getString(R.string.fast_sputum), App.VERTICAL, App.VERTICAL);
-        specimenSource = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_specimen_come_from), getResources().getStringArray(R.array.fast_specimen_come_from_list), getResources().getString(R.string.fast_lymph), App.VERTICAL);
-        specimenSourceOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        sampleAccepted = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_accepted_lab_technician), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
-        reasonRejected = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_why_was_the_sample_rejected), getResources().getStringArray(R.array.fast_sample_rejected_list), getResources().getString(R.string.fast_saliva), App.VERTICAL);
-        otherReasonRejected = new TitledEditText(context, null, getResources().getString(R.string.fast_other_reason_for_rejection), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        cartridgeId = new TitledEditText(context, null, getResources().getString(R.string.fast_cartridge_id), "", "", 9, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        referralTransfer = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_being_referred_out_or_transferred_out), getResources().getStringArray(R.array.fast_referral_transfer_list), getResources().getString(R.string.fast_referral), App.VERTICAL, App.VERTICAL);
+        reasonReferralTransfer = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_reason_for_referral_transfer), getResources().getStringArray(R.array.fast_reason_referral_transfer_list), getResources().getString(R.string.fast_patient_choose_another_facility), App.VERTICAL);
+        reasonReferralTransferOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
 
+        String columnName = "";
+        if (App.getProgram().equals(getResources().getString(R.string.pet)))
+            columnName = "pet_location";
+        else if (App.getProgram().equals(getResources().getString(R.string.fast)))
+            columnName = "fast_location";
+        else if (App.getProgram().equals(getResources().getString(R.string.comorbidities)))
+            columnName = "comorbidities_location";
+        else if (App.getProgram().equals(getResources().getString(R.string.pmdt)))
+            columnName = "pmdt_location";
+        else if (App.getProgram().equals(getResources().getString(R.string.childhood_tb)))
+            columnName = "childhood_tb_location";
+
+        final Object[][] locations = serverService.getAllLocations(columnName);
+        String[] locationArray = new String[locations.length + 1];
+        for (int i = 0; i < locations.length; i++) {
+            locationArray[i] = String.valueOf(locations[i][1]);
+        }
+        locationArray[locationArray.length - 1] = getResources().getString(R.string.fast_other_title);
+
+        referralSite = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_location_for_referral_transfer),locationArray, "", App.VERTICAL);
+        referralSiteOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), sampleSubmissionDate.getButton(), testContextStatus.getRadioGroup(), tbCategory.getRadioGroup(),
-                baselineRepeatReason.getRadioGroup(), sampleType.getRadioGroup(), specimenSource.getSpinner(), specimenSourceOther.getEditText(), sampleAccepted.getRadioGroup(), reasonRejected.getSpinner(), otherReasonRejected.getEditText(), cartridgeId.getEditText()};
+        views = new View[]{formDate.getButton(), referralTransfer.getRadioGroup(), reasonReferralTransfer.getSpinner(),
+                referralSite.getSpinner(), reasonReferralTransferOther.getEditText(), referralSiteOther.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, sampleSubmissionDate, testContextStatus, tbCategory, baselineRepeatReason, sampleType, specimenSource, specimenSourceOther, sampleAccepted, reasonRejected, otherReasonRejected, cartridgeId}};
+                {{formDate, referralTransfer, reasonReferralTransfer, reasonReferralTransferOther, referralSite, referralSiteOther}};
 
         formDate.getButton().setOnClickListener(this);
-        sampleSubmissionDate.getButton().setOnClickListener(this);
-        testContextStatus.getRadioGroup().setOnCheckedChangeListener(this);
-        tbCategory.getRadioGroup().setOnCheckedChangeListener(this);
-        baselineRepeatReason.getRadioGroup().setOnCheckedChangeListener(this);
-        sampleType.getRadioGroup().setOnCheckedChangeListener(this);
-        specimenSource.getSpinner().setOnItemSelectedListener(this);
-        sampleAccepted.getRadioGroup().setOnCheckedChangeListener(this);
-        reasonRejected.getSpinner().setOnItemSelectedListener(this);
+        reasonReferralTransfer.getSpinner().setOnItemSelectedListener(this);
+        referralSite.getSpinner().setOnItemSelectedListener(this);
 
         resetViews();
-
     }
 
     @Override
     public void updateDisplay() {
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        sampleSubmissionDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
     }
 
     @Override
     public boolean validate() {
         Boolean error = false;
-
-        if (specimenSourceOther.getVisibility() == View.VISIBLE && App.get(specimenSourceOther).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            specimenSourceOther.getEditText().setError(getString(R.string.empty_field));
-            specimenSourceOther.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (otherReasonRejected.getVisibility() == View.VISIBLE && App.get(otherReasonRejected).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            otherReasonRejected.getEditText().setError(getString(R.string.empty_field));
-            otherReasonRejected.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (cartridgeId.getVisibility() == View.VISIBLE && App.get(cartridgeId).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            cartridgeId.getEditText().setError(getString(R.string.empty_field));
-            cartridgeId.getEditText().requestFocus();
-            error = true;
-        }
 
         if (error) {
 
@@ -228,7 +199,6 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
 
             return false;
         }
-
         return true;
     }
 
@@ -240,51 +210,28 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
         final ArrayList<String[]> observations = new ArrayList<String[]>();
         observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
         observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
-        //  observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
-        //observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});
+        /*observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
+        observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});*/
+        if (referralTransfer.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"PATIENT BEING REFEREED OUT OR TRANSFERRED OUT", App.get(referralTransfer).equals(getResources().getString(R.string.fast_referral)) ? "PATIENT REFERRED" : "PATIENT TRANSFERRED OUT"});
 
 
-        observations.add(new String[]{"SPECIMEN SUBMISSION DATE", App.getSqlDateTime(secondDateCalendar)});
+        if (reasonReferralTransfer.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"REASON FOR REFERRAL OR TRANSFER", App.get(reasonReferralTransfer).equals(getResources().getString(R.string.fast_patient_choose_another_facility)) ? "PATIENT CHOOSE ANOTHER FACILITY" :
+                    (App.get(reasonReferralTransfer).equals(getResources().getString(R.string.fast_drtb_suspect)) ? "MULTI-DRUG RESISTANT TUBERCULOSIS SUSPECTED" :
+                            (App.get(reasonReferralTransfer).equals(getResources().getString(R.string.fast_drtb)) ? "DRUG RESISTANT TUBERCULOSIS" :
+                                    (App.get(reasonReferralTransfer).equals(getResources().getString(R.string.fast_treatment_failure)) ? "TUBERCULOSIS TREATMENT FAILURE" :
+                                            (App.get(reasonReferralTransfer).equals(getResources().getString(R.string.fast_complicated_tb)) ? "COMPLICATED TUBERCULOSIS" :
+                                                    (App.get(reasonReferralTransfer).equals(getResources().getString(R.string.fast_mycobacterium_other_than_tb)) ? "MYCOBACTERIUM TUBERCULOSIS" : "OTHER TRANSFER OR REFERRAL REASON")))))});
 
-        if (testContextStatus.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TEST CONTEXT STATUS", App.get(testContextStatus).equals(getResources().getString(R.string.fast_baseline_new)) ? "BASELINE" :
-                    (App.get(testContextStatus).equals(getResources().getString(R.string.fast_baseline_repeat)) ? "BASELINE REPEAT" : "REGULAR FOLLOW UP")});
+        if (reasonReferralTransferOther.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"OTHER TRANSFER OR REFERRAL REASON", App.get(reasonReferralTransferOther)});
 
+        if (referralSite.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"REFERRING FACILITY NAME", referralSite.getSpinner().getSelectedItem().toString()});
 
-        if (tbCategory.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TB CATEGORY", App.get(tbCategory).equals(getResources().getString(R.string.fast_category_1)) ? "CATEGORY I TUBERCULOSIS" : "CATEGORY II TUBERCULOSIS"});
-
-        if (baselineRepeatReason.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"REASON FOR BASELINE REPEAT TEST", App.get(baselineRepeatReason).equals(getResources().getString(R.string.fast_baseline_new)) ? "RIF RESISTANT POSITIVE" :
-                    (App.get(baselineRepeatReason).equals(getResources().getString(R.string.fast_baseline_repeat)) ? "INDETERMINATE" : "INVALID")});
-
-        if (sampleType.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"SPECIMEN TYPE", App.get(sampleType).equals(getResources().getString(R.string.fast_sputum)) ? "SPUTUM" : "EXTRA-PULMONARY TUBERCULOSIS"});
-
-        if (specimenSource.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"SPECIMEN SOURCE", App.get(specimenSource).equals(getResources().getString(R.string.fast_lymph)) ? "LYMPHOCYTES" :
-                    (App.get(specimenSource).equals(getResources().getString(R.string.fast_pleural_fluid)) ? "PLEURAL EFFUSION" :
-                            (App.get(specimenSource).equals(getResources().getString(R.string.fast_pus)) ? "PUS" : "OTHER SPECIMEN SOURCE"))});
-
-        if (specimenSourceOther.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER SPECIMEN SOURCE", App.get(specimenSourceOther)});
-
-        if (sampleAccepted.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"SPECIMEN ACCEPTED", App.get(sampleAccepted).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
-
-
-        if (reasonRejected.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"SPECIMEN UNSATISFACTORY FOR DIAGNOSIS", App.get(reasonRejected).equals(getResources().getString(R.string.fast_saliva)) ? "SALIVA" :
-                    (App.get(reasonRejected).equals(getResources().getString(R.string.fast_blood)) ? "BLOOD IN SAMPLE" :
-                            (App.get(reasonRejected).equals(getResources().getString(R.string.fast_food_particles)) ? "FOOD PARTICALS" :
-                                    (App.get(reasonRejected).equals(getResources().getString(R.string.fast_older_than_3_days)) ? "SAMPLE OLDER THAN 3 DAYS" :
-                                            (App.get(reasonRejected).equals(getResources().getString(R.string.fast_Insufficient_quantity)) ? "INSUFFICIENT QUANTITY" : "OTHER REASON OF SAMPLE REJECTION"))))});
-
-        if (otherReasonRejected.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER REASON OF SAMPLE REJECTION", App.get(otherReasonRejected)});
-
-        if (cartridgeId.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"Cartridge ID", App.get(cartridgeId)});
+        if (referralSiteOther.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"LOCATION OF REFERRAL OR TRANSFER OTHER", App.get(referralSiteOther)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -300,7 +247,7 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("GXP Specimen Collection", formDateCalendar, observations.toArray(new String[][]{}));
+                String result = serverService.saveEncounterAndObservation("Referral Form", formDateCalendar, observations.toArray(new String[][]{}));
                 return result;
 
             }
@@ -413,15 +360,6 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
             args.putBoolean("allowPastDate", true);
             args.putBoolean("allowFutureDate", false);
         }
-
-        if (view == sampleSubmissionDate.getButton()) {
-            Bundle args = new Bundle();
-            args.putInt("type", SECOND_DATE_DIALOG_ID);
-            secondDateFragment.setArguments(args);
-            secondDateFragment.show(getFragmentManager(), "DatePicker");
-            args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", false);
-        }
     }
 
     @Override
@@ -429,6 +367,26 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
         return false;
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        MySpinner spinner = (MySpinner) parent;
+        if (spinner == reasonReferralTransfer.getSpinner()) {
+            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title))) {
+                reasonReferralTransferOther.setVisibility(View.VISIBLE);
+            } else {
+                reasonReferralTransferOther.setVisibility(View.GONE);
+            }
+        }
+
+        else if(spinner == referralSite.getSpinner()){
+            if(parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title))){
+                referralSiteOther.setVisibility(View.VISIBLE);
+            }
+            else{
+                referralSiteOther.setVisibility(View.GONE);
+            }
+        }
+    }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -439,71 +397,12 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
     public void resetViews() {
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        sampleSubmissionDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-        baselineRepeatReason.setVisibility(View.GONE);
-        specimenSource.setVisibility(View.GONE);
-        specimenSourceOther.setVisibility(View.GONE);
-        reasonRejected.setVisibility(View.GONE);
-        otherReasonRejected.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        MySpinner spinner = (MySpinner) parent;
-        if (spinner == specimenSource.getSpinner()) {
-            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title))) {
-                specimenSourceOther.setVisibility(View.VISIBLE);
-            } else {
-                specimenSourceOther.setVisibility(View.GONE);
-            }
-        } else if (spinner == reasonRejected.getSpinner()) {
-            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title))) {
-                otherReasonRejected.setVisibility(View.VISIBLE);
-            } else {
-                otherReasonRejected.setVisibility(View.GONE);
-            }
-        }
+        reasonReferralTransferOther.setVisibility(View.GONE);
+        referralSiteOther.setVisibility(View.GONE);
     }
 
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
-
-        if (radioGroup == testContextStatus.getRadioGroup()) {
-            if (testContextStatus.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_baseline_new))) {
-                tbCategory.setVisibility(View.VISIBLE);
-            } else {
-                tbCategory.setVisibility(View.GONE);
-            }
-
-            if (testContextStatus.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_baseline_repeat))) {
-                baselineRepeatReason.setVisibility(View.VISIBLE);
-            } else {
-                baselineRepeatReason.setVisibility(View.GONE);
-            }
-        } else if (radioGroup == sampleType.getRadioGroup()) {
-            if (sampleType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_extra_pulmonary))) {
-                specimenSource.setVisibility(View.VISIBLE);
-                if (specimenSource.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))) {
-                    specimenSourceOther.setVisibility(View.VISIBLE);
-                }
-            } else {
-                specimenSource.setVisibility(View.GONE);
-                specimenSourceOther.setVisibility(View.GONE);
-            }
-        } else if (radioGroup == sampleAccepted.getRadioGroup()) {
-            if (sampleAccepted.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))) {
-                reasonRejected.setVisibility(View.VISIBLE);
-                if (reasonRejected.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))) {
-                    otherReasonRejected.setVisibility(View.VISIBLE);
-                }
-                cartridgeId.setVisibility(View.GONE);
-            } else {
-                reasonRejected.setVisibility(View.GONE);
-                cartridgeId.setVisibility(View.VISIBLE);
-                otherReasonRejected.setVisibility(View.GONE);
-            }
-        }
-
     }
 
     class MyAdapter extends PagerAdapter {

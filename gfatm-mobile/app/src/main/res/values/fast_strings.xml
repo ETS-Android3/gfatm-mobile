@@ -145,7 +145,7 @@
     <string name="fast_food_particles">Food particles</string>
     <string name="fast_older_than_3_days">Older than 3 days</string>
     <string name="fast_Insufficient_quantity">Insufficient Quantity</string>
-    <string name="fast_nic_number">National ID card number?</string>
+    <string name="fast_nic_number">National ID card number:</string>
     <string name="fast_self">Self</string>
     <string name="fast_mother">Mother</string>
     <string name="fast_father">Father</string>
@@ -170,10 +170,12 @@
     <string name="fast_type_of_address_is_this">What type of Address is this?</string>
     <string name="fast_nearest_landmark">Nearest Landmark</string>
     <string name="fast_can_we_call_you">Can we call you and SMS you on any of these numbers for matters related to your TB tests and diagnosis?</string>
-    <string name="fast_mobile_number">Mobile Number</string>
-    <string name="fast_secondary_mobile">Secondary Mobile Number</string>
-    <string name="fast_landline_number">Landline Number</string>
-    <string name="fast_secondary_landline">Secondary Landline Number</string>
+    <string name="fast_mobile_number">Mobile Number:</string>
+    <string name="fast_secondary_mobile">Secondary Mobile Number:</string>
+    <string name="fast_landline_number">Landline Number:</string>
+    <string name="fast_secondary_landline">Secondary Landline Number:</string>
+    <string name="length_message">Incomplete field</string>
+    <string name="incorrect_contact_number">Incorrect Contact Number</string>
     <string name="fast_perminant">Perminant</string>
     <string name="fast_temporary">Temporary</string>
     <string name="fast_date_of_result_recieved">Date of Result Received</string>
@@ -239,6 +241,32 @@
     <string name="fast_twenty_two">22</string>
     <string name="fast_twenty_three">23</string>
     <string name="fast_twenty_four">24</string>
+    <string name="fast_twenty_five">25</string>
+    <string name="fast_twenty_six">26</string>
+    <string name="fast_twenty_seven">27</string>
+    <string name="fast_twenty_eight">28</string>
+    <string name="fast_twenty_nine">29</string>
+    <string name="fast_thirty">30</string>
+    <string name="fast_thirty_one">31</string>
+    <string name="fast_thirty_two">32</string>
+    <string name="fast_thirty_three">33</string>
+    <string name="fast_thirty_four">34</string>
+    <string name="fast_thirty_five">35</string>
+    <string name="fast_thirty_six">36</string>
+    <string name="fast_thirty_seven">37</string>
+    <string name="fast_thirty_eight">38</string>
+    <string name="fast_thirty_nine">39</string>
+    <string name="fast_forty">40</string>
+    <string name="fast_forty_one">41</string>
+    <string name="fast_forty_two">42</string>
+    <string name="fast_forty_three">43</string>
+    <string name="fast_forty_four">44</string>
+    <string name="fast_forty_five">45</string>
+    <string name="fast_forty_six">46</string>
+    <string name="fast_forty_seven">47</string>
+    <string name="fast_forty_eight">48</string>
+    <string name="fast_forty_nine">49</string>
+    <string name="fast_fifty">50</string>
     <string name="fast_order">Order</string>
     <string name="fast_result">Result</string>
     <string name="fast_select_form_type">Please select form type:</string>
@@ -255,7 +283,52 @@
     <string name="fast_1_plus">1+</string>
     <string name="fast_2_plus">2+</string>
     <string name="fast_3_plus">3+</string>
-    
+    <string name="fast_type_of_media_for_dst">Type of media for DST</string>
+    <string name="fast_dst_order">DST Order</string>
+    <string name="fast_dst_result">DST Result</string>
+    <string name="fast_lowenstein_jensen">Lowenstein-Jensen</string>
+    <string name="fast_mycobacteria_growth_indicator_tube">Mycobacteria Growth Indicator Tube</string>
+    <string name="fast_middlebrook_7h11s">Middlebrook 7H11S</string>
+    <string name="fast_total_laboratory_automation">Total Laboratory Automation</string>
+    <string name="fast_susceptible">Susceptible</string>
+    <string name="fast_resistant">Resistant</string>
+    <string name="fast_isoniazid_0.2_ml_result">Isoniazid 0.2 µg/ml result</string>
+    <string name="fast_isoniazid_1_ml_result">Isoniazid 1 µg/ml result</string>
+    <string name="fast_rifampicin">Rifampicin</string>
+    <string name="fast_ethambuthol">Ethambuthol</string>
+    <string name="fast_streptomycin">Streptomycin</string>
+    <string name="fast_pyrazinamide">Pyrazinamide</string>
+    <string name="fast_ofloxacin">Ofloxacin</string>
+    <string name="fast_levofloxacin">Levofloxacin</string>
+    <string name="fast_moxifloxacin_05">Moxifloxacin 0.5 µg/ml</string>
+    <string name="fast_moxifloxacin_2">Moxifloxacin 2 µg/ml</string>
+    <string name="fast_amikacin">Amikacin</string>
+    <string name="fast_kanamycin">Kanamycin</string>
+    <string name="fast_capreomycin">Capreomycin</string>
+    <string name="fast_ethionamide">Ethionamide</string>
+    <string name="fast_cycloserine">Cycloserine</string>
+    <string name="fast_p_aminosalicylic_acid">P-Aminosalicylic Acid</string>
+    <string name="fast_bedaquiline">Bedaquiline</string>
+    <string name="fast_delamanid">Delamanid</string>
+    <string name="fast_linezolid">Linezolid</string>
+    <string name="fast_clofazamine">Clofazamine</string>
+    <string name="fast_other_drug_name">Other drug name</string>
+    <string name="fast_other_drug_result">Other drug Result</string>
+    <string name="fast_how_many_people_sleep_in_your_home">Contact Registry: How many people (excluding you) sleep in your home?</string>
+    <string name="fast_total_number_of_adult_contacts">Total Number of adult contacts</string>
+    <string name="fast_total_number_of_childhood_contacts">Total Number of childhood contacts</string>
+    <string name="fast_patient_being_referred_out_or_transferred_out">Is this patient being referred out or transferred out?</string>
+    <string name="fast_reason_for_referral_transfer">Reason for referral/transfer</string>
+    <string name="fast_location_for_referral_transfer">Location of Referral/transfer</string>
+    <string name="fast_referral">Referral(before starting treatment)</string>
+    <string name="fast_transfer">Transfer(after starting treatment)</string>
+    <string name="fast_complicated_tb">Complicated TB</string>
+    <string name="fast_mycobacterium_other_than_tb">Mycobacterium other than TB (MOTT)</string>
+    <string name="fast_patient_choose_another_facility">Patient chose another facility</string>
+    <string name="fast_drtb_suspect">DR-TB Suspect</string>
+    <string name="fast_drtb">DR-TB</string>
+    <string name="fast_treatment_failure">Treatment Failure</string>
+
 
     <string-array name="fast_locations">
         <item>@string/fast_community_title</item>
@@ -314,6 +387,7 @@
         <item>@string/fast_ent_title</item>
         <item>@string/fast_gynaeobstetrics_otherthen_title</item>
         <item>@string/fast_pregnancy_title</item>
+        <item>@string/fast_surgery_title</item>
         <item>@string/fast_orthopedics_title</item>
         <item>@string/fast_emergency_title</item>
         <item>@string/fast_paediatrics_title</item>
@@ -378,7 +452,6 @@
         <item>@string/fast_public_hospital</item>
         <item>@string/fast_private_hospital</item>
         <item>@string/fast_GP</item>
-        <item>@string/fast_hospital_outside_of_karachi</item>
     </string-array>
 
     <string-array name="fast_hear_about_us_from_list">
@@ -550,5 +623,120 @@
         <item>@string/fast_1_plus</item>
         <item>@string/fast_2_plus</item>
         <item>@string/fast_3_plus</item>
+    </string-array>
+    
+    <string-array name="fast_susceptible_resistant_indeterminate_list">
+        <item>@string/fast_susceptible</item>
+        <item>@string/fast_resistant</item>
+        <item>@string/fast_indeterminate</item>
+    </string-array>
+    
+    <string-array name="fast_dst_medium_list">
+        <item>@string/fast_lowenstein_jensen</item>
+        <item>@string/fast_mycobacteria_growth_indicator_tube</item>
+        <item>@string/fast_middlebrook_7h11s</item>
+        <item>@string/fast_total_laboratory_automation</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+
+    <string-array name="fast_test_context_status_list">
+        <item>@string/fast_baseline_new</item>
+        <item>@string/fast_followup_test</item>
+    </string-array>
+
+    <string-array name="fast_0_25_list">
+        <item>@string/fast_one</item>
+        <item>@string/fast_two</item>
+        <item>@string/fast_three</item>
+        <item>@string/fast_four</item>
+        <item>@string/fast_five</item>
+        <item>@string/fast_six</item>
+        <item>@string/fast_seven</item>
+        <item>@string/fast_eight</item>
+        <item>@string/fast_nine</item>
+        <item>@string/fast_ten</item>
+        <item>@string/fast_eleven</item>
+        <item>@string/fast_twelve</item>
+        <item>@string/fast_thirteen</item>
+        <item>@string/fast_forteen</item>
+        <item>@string/fast_fifteen</item>
+        <item>@string/fast_sixteen</item>
+        <item>@string/fast_seventeen</item>
+        <item>@string/fast_eighteen</item>
+        <item>@string/fast_nineteen</item>
+        <item>@string/fast_twenty</item>
+        <item>@string/fast_twenty_one</item>
+        <item>@string/fast_twenty_two</item>
+        <item>@string/fast_twenty_three</item>
+        <item>@string/fast_twenty_four</item>
+        <item>@string/fast_twenty_five</item>
+    </string-array>
+
+    <string-array name="fast_0_50_list">
+        <item>@string/fast_one</item>
+        <item>@string/fast_two</item>
+        <item>@string/fast_three</item>
+        <item>@string/fast_four</item>
+        <item>@string/fast_five</item>
+        <item>@string/fast_six</item>
+        <item>@string/fast_seven</item>
+        <item>@string/fast_eight</item>
+        <item>@string/fast_nine</item>
+        <item>@string/fast_ten</item>
+        <item>@string/fast_eleven</item>
+        <item>@string/fast_twelve</item>
+        <item>@string/fast_thirteen</item>
+        <item>@string/fast_forteen</item>
+        <item>@string/fast_fifteen</item>
+        <item>@string/fast_sixteen</item>
+        <item>@string/fast_seventeen</item>
+        <item>@string/fast_eighteen</item>
+        <item>@string/fast_nineteen</item>
+        <item>@string/fast_twenty</item>
+        <item>@string/fast_twenty_one</item>
+        <item>@string/fast_twenty_two</item>
+        <item>@string/fast_twenty_three</item>
+        <item>@string/fast_twenty_four</item>
+        <item>@string/fast_twenty_five</item>
+        <item>@string/fast_twenty_six</item>
+        <item>@string/fast_twenty_seven</item>
+        <item>@string/fast_twenty_eight</item>
+        <item>@string/fast_twenty_nine</item>
+        <item>@string/fast_thirty</item>
+        <item>@string/fast_thirty_one</item>
+        <item>@string/fast_thirty_two</item>
+        <item>@string/fast_thirty_three</item>
+        <item>@string/fast_thirty_four</item>
+        <item>@string/fast_thirty_five</item>
+        <item>@string/fast_thirty_six</item>
+        <item>@string/fast_thirty_seven</item>
+        <item>@string/fast_thirty_eight</item>
+        <item>@string/fast_thirty_nine</item>
+        <item>@string/fast_forty</item>
+        <item>@string/fast_forty_one</item>
+        <item>@string/fast_forty_two</item>
+        <item>@string/fast_forty_three</item>
+        <item>@string/fast_forty_four</item>
+        <item>@string/fast_forty_five</item>
+        <item>@string/fast_forty_six</item>
+        <item>@string/fast_forty_seven</item>
+        <item>@string/fast_forty_eight</item>
+        <item>@string/fast_forty_nine</item>
+        <item>@string/fast_fifty</item>
+    </string-array>
+
+    <string-array name="fast_referral_transfer_list">
+        <item>@string/fast_referral</item>
+        <item>@string/fast_transfer</item>
+    </string-array>
+    
+    <string-array name="fast_reason_referral_transfer_list">
+        <item>@string/fast_patient_choose_another_facility</item>
+        <item>@string/fast_drtb_suspect</item>
+        <item>@string/fast_drtb</item>
+        <item>@string/fast_treatment_failure</item>
+        <item>@string/fast_complicated_tb</item>
+        <item>@string/fast_mycobacterium_other_than_tb</item>
+        <item>@string/fast_other_title</item>
     </string-array>
 </resources>

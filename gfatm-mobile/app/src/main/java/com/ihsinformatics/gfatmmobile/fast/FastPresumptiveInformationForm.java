@@ -3,6 +3,7 @@ package com.ihsinformatics.gfatmmobile.fast;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
@@ -32,6 +33,7 @@ import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -43,21 +45,32 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
 
     // Views...
     TitledButton formDate;
-    TitledEditText cnic;
+    LinearLayout cnicLinearLayout;
+    TitledEditText cnic1;
+    TitledEditText cnic2;
+    TitledEditText cnic3;
+    LinearLayout mobileLinearLayout;
+    TitledEditText mobile1;
+    TitledEditText mobile2;
+    LinearLayout secondaryMobileLinearLayout;
+    TitledEditText secondaryMobile1;
+    TitledEditText secondaryMobile2;
+    LinearLayout landlineLinearLayout;
+    TitledEditText landline1;
+    TitledEditText landline2;
+    LinearLayout secondaryLandlineLinearLayout;
+    TitledEditText secondaryLandline1;
+    TitledEditText secondaryLandline2;
     TitledSpinner cnicOwner;
     TitledEditText otherCnicOwner;
     TitledRadioGroup addressProvided;
     TitledEditText addressHouse;
     TitledEditText addressStreet;
     TitledSpinner addressTown;
-    TitledSpinner city;
+    TitledEditText city;
     TitledRadioGroup addressType;
     TitledEditText nearestLandmark;
     TitledRadioGroup contactPermission;
-    TitledEditText mobileNumber;
-    TitledEditText secondaryMobileNumber;
-    TitledEditText landlineNumber;
-    TitledEditText secondaryLandlineNumber;
 
 
     /**
@@ -130,40 +143,71 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
 
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        cnic = new TitledEditText(context, null, getResources().getString(R.string.fast_nic_number), "", "", 15, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, false);
+        cnicLinearLayout = new LinearLayout(context);
+        cnicLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
+        cnic1 = new TitledEditText(context, null, getResources().getString(R.string.fast_nic_number), "", "#####", 5, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        cnicLinearLayout.addView(cnic1);
+        cnic2 = new TitledEditText(context, null, "-", "", "#######", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        cnicLinearLayout.addView(cnic2);
+        cnic3 = new TitledEditText(context, null, "-", "", "#", 1, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        cnicLinearLayout.addView(cnic3);
         cnicOwner = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_whose_nic_is_this), getResources().getStringArray(R.array.fast_whose_nic_is_this_list), getResources().getString(R.string.fast_self), App.VERTICAL);
         otherCnicOwner = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        otherCnicOwner.setVisibility(View.GONE);
         addressProvided = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_provided_their_address), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
         addressHouse = new TitledEditText(context, null, getResources().getString(R.string.fast_address_1), "", "", 10, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         addressStreet = new TitledEditText(context, null, getResources().getString(R.string.fast_address_2), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         addressTown = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_town), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL);
-        city = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.city), getResources().getStringArray(R.array.fast_cities_list), getResources().getString(R.string.fast_karachi), App.VERTICAL);
+        city = new TitledEditText(context, null, getResources().getString(R.string.fast_city), App.getCity(), "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        city.getEditText().setKeyListener(null);
+        city.getEditText().setFocusable(false);
         addressType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_type_of_address_is_this), getResources().getStringArray(R.array.fast_type_of_address_list), getResources().getString(R.string.fast_perminant), App.VERTICAL, App.VERTICAL);
         nearestLandmark = new TitledEditText(context, null, getResources().getString(R.string.fast_nearest_landmark), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         contactPermission = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_can_we_call_you), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
-        mobileNumber = new TitledEditText(context, null, getResources().getString(R.string.mobile_number), "", "", 11, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
-        secondaryMobileNumber = new TitledEditText(context, null, getResources().getString(R.string.fast_secondary_mobile), "", "", 11, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
-        landlineNumber = new TitledEditText(context, null, getResources().getString(R.string.fast_landline_number), "", "", 11, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
-        secondaryLandlineNumber = new TitledEditText(context, null, getResources().getString(R.string.fast_secondary_landline), "", "", 11, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
+        mobileLinearLayout = new LinearLayout(context);
+        mobileLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
+        mobile1 = new TitledEditText(context, null, getResources().getString(R.string.fast_mobile_number), "", "####", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        mobileLinearLayout.addView(mobile1);
+        mobile2 = new TitledEditText(context, null, "-", "", "#######", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        mobileLinearLayout.addView(mobile2);
+        secondaryMobileLinearLayout = new LinearLayout(context);
+        secondaryMobileLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
+        secondaryMobile1 = new TitledEditText(context, null, getResources().getString(R.string.fast_secondary_mobile), "", "####", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        secondaryMobileLinearLayout.addView(secondaryMobile1);
+        secondaryMobile2 = new TitledEditText(context, null, "-", "", "#######", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        secondaryMobileLinearLayout.addView(secondaryMobile2);
+        landlineLinearLayout = new LinearLayout(context);
+        landlineLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
+        landline1 = new TitledEditText(context, null, getResources().getString(R.string.fast_landline_number), "", "####", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        landlineLinearLayout.addView(landline1);
+        landline2 = new TitledEditText(context, null, "-", "", "#######", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        landlineLinearLayout.addView(landline2);
+        secondaryLandlineLinearLayout = new LinearLayout(context);
+        secondaryLandlineLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
+        secondaryLandline1 = new TitledEditText(context, null, getResources().getString(R.string.fast_secondary_landline), "", "####", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        secondaryLandlineLinearLayout.addView(secondaryLandline1);
+        secondaryLandline2 = new TitledEditText(context, null, "-", "", "#######", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        secondaryLandlineLinearLayout.addView(secondaryLandline2);
 
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), cnic.getEditText(), cnicOwner.getSpinner(), otherCnicOwner.getEditText(),
+        views = new View[]{formDate.getButton(), cnic1.getEditText(), cnic2.getEditText(), cnic3.getEditText(), cnicOwner.getSpinner(), otherCnicOwner.getEditText(),
                 addressProvided.getRadioGroup(), addressHouse.getEditText(), addressStreet.getEditText(), addressTown.getSpinner(),
-                city.getSpinner(), addressType.getRadioGroup(), nearestLandmark.getEditText(), contactPermission.getRadioGroup()
-                , mobileNumber.getEditText(), secondaryMobileNumber.getEditText(), landlineNumber.getEditText(), secondaryLandlineNumber.getEditText()};
+                city.getEditText(), addressType.getRadioGroup(), nearestLandmark.getEditText(), contactPermission.getRadioGroup()
+                , mobile1.getEditText(), mobile2.getEditText(), secondaryMobile1.getEditText(), secondaryMobile2.getEditText(), landline1.getEditText(),
+                landline2.getEditText(), secondaryLandline1.getEditText(), secondaryLandline2.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, cnic, cnicOwner, otherCnicOwner, addressProvided, addressHouse, addressStreet, addressTown,
-                        city, addressType, nearestLandmark, contactPermission, mobileNumber, secondaryMobileNumber,
-                        landlineNumber, secondaryLandlineNumber}};
+                {{formDate, cnicLinearLayout, cnicOwner, otherCnicOwner, addressProvided, addressHouse, addressStreet, addressTown,
+                        city, addressType, nearestLandmark, contactPermission, mobileLinearLayout, secondaryMobileLinearLayout,
+                        landlineLinearLayout, secondaryLandlineLinearLayout}};
 
 
         formDate.getButton().setOnClickListener(this);
         cnicOwner.getSpinner().setOnItemSelectedListener(this);
         addressProvided.getRadioGroup().setOnCheckedChangeListener(this);
+
+        resetViews();
     }
 
     @Override
@@ -175,15 +219,66 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
     public boolean validate() {
         Boolean error = false;
 
-        if (cnic.getVisibility() == View.VISIBLE && App.get(cnic).isEmpty()) {
+        if (App.get(cnic1).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            cnic.getEditText().setError(getString(R.string.empty_field));
-            cnic.getEditText().requestFocus();
+            cnic1.getEditText().setError(getString(R.string.empty_field));
+            cnic1.getEditText().requestFocus();
             error = true;
         }
+
+        if (App.get(cnic2).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            cnic2.getEditText().setError(getString(R.string.empty_field));
+            cnic2.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (App.get(cnic3).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            cnic3.getEditText().setError(getString(R.string.empty_field));
+            cnic3.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (App.get(cnic1).length() != 5) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            cnic1.getEditText().setError(getString(R.string.length_message));
+            cnic1.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (App.get(cnic2).length() != 7) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            cnic2.getEditText().setError(getString(R.string.length_message));
+            cnic2.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (App.get(cnic3).length() != 1) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            cnic3.getEditText().setError(getString(R.string.length_message));
+            cnic3.getEditText().requestFocus();
+            error = true;
+        }
+
         if (otherCnicOwner.getVisibility() == View.VISIBLE && App.get(otherCnicOwner).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
@@ -220,41 +315,230 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             nearestLandmark.getEditText().requestFocus();
             error = true;
         }
-        if (mobileNumber.getVisibility() == View.VISIBLE && App.get(mobileNumber).isEmpty()) {
+        if (App.get(mobile1).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            mobileNumber.getEditText().setError(getString(R.string.empty_field));
-            mobileNumber.getEditText().requestFocus();
+            mobile1.getEditText().setError(getString(R.string.empty_field));
+            mobile1.getEditText().requestFocus();
             error = true;
         }
-        if (secondaryMobileNumber.getVisibility() == View.VISIBLE && App.get(secondaryMobileNumber).isEmpty()) {
+
+        if (App.get(mobile2).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            secondaryMobileNumber.getEditText().setError(getString(R.string.empty_field));
-            secondaryMobileNumber.getEditText().requestFocus();
+            mobile2.getEditText().setError(getString(R.string.empty_field));
+            mobile2.getEditText().requestFocus();
             error = true;
         }
-        if (landlineNumber.getVisibility() == View.VISIBLE && App.get(landlineNumber).isEmpty()) {
+
+        if (App.get(secondaryMobile1).isEmpty() && !App.get(secondaryMobile2).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            landlineNumber.getEditText().setError(getString(R.string.empty_field));
-            landlineNumber.getEditText().requestFocus();
+            secondaryMobile1.getEditText().setError(getString(R.string.empty_field));
+            secondaryMobile1.getEditText().requestFocus();
+            error = true;
+        } else {
+            secondaryMobile1.getEditText().setError(null);
+        }
+
+        if (App.get(secondaryMobile2).isEmpty() && !App.get(secondaryMobile1).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            secondaryMobile2.getEditText().setError(getString(R.string.empty_field));
+            secondaryMobile2.getEditText().requestFocus();
+            error = true;
+        } else {
+            secondaryMobile2.getEditText().setError(null);
+        }
+
+        if (App.get(landline1).isEmpty() && !App.get(landline2).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            landline1.getEditText().setError(getString(R.string.empty_field));
+            landline1.getEditText().requestFocus();
+            error = true;
+        } else {
+            landline1.getEditText().setError(null);
+        }
+
+        if (App.get(landline2).isEmpty() && !App.get(landline1).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            landline2.getEditText().setError(getString(R.string.empty_field));
+            landline2.getEditText().requestFocus();
+            error = true;
+        } else {
+            landline2.getEditText().setError(null);
+        }
+
+        if (App.get(secondaryLandline1).isEmpty() && !App.get(secondaryLandline2).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            secondaryLandline1.getEditText().setError(getString(R.string.empty_field));
+            secondaryLandline1.getEditText().requestFocus();
+            error = true;
+        } else {
+            secondaryLandline1.getEditText().setError(null);
+        }
+
+        if (App.get(secondaryLandline2).isEmpty() && !App.get(secondaryLandline1).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            secondaryLandline2.getEditText().setError(getString(R.string.empty_field));
+            secondaryLandline2.getEditText().requestFocus();
+            error = true;
+        } else {
+            secondaryLandline2.getEditText().setError(null);
+        }
+
+        if (App.get(mobile1).length() != 4) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            mobile1.getEditText().setError(getString(R.string.length_message));
+            mobile1.getEditText().requestFocus();
             error = true;
         }
-        if (secondaryLandlineNumber.getVisibility() == View.VISIBLE && App.get(secondaryLandlineNumber).isEmpty()) {
+
+        if (App.get(mobile2).length() != 7) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            secondaryLandlineNumber.getEditText().setError(getString(R.string.empty_field));
-            secondaryLandlineNumber.getEditText().requestFocus();
+            mobile2.getEditText().setError(getString(R.string.length_message));
+            mobile2.getEditText().requestFocus();
             error = true;
+        }
+
+        if (!(App.get(secondaryMobile1).isEmpty() && App.get(secondaryMobile2).isEmpty()) && App.get(secondaryMobile1).length() != 4) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            secondaryMobile1.getEditText().setError(getString(R.string.length_message));
+            secondaryMobile1.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (!(App.get(secondaryMobile1).isEmpty() && App.get(secondaryMobile2).isEmpty()) && App.get(secondaryMobile2).length() != 7) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            secondaryMobile2.getEditText().setError(getString(R.string.length_message));
+            secondaryMobile2.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (!(App.get(landline1).isEmpty() && App.get(landline2).isEmpty()) && !(App.get(landline1).length() == 3 || App.get(landline1).length() == 4)) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            landline1.getEditText().setError(getString(R.string.length_message));
+            landline1.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (!(App.get(landline1).isEmpty() && App.get(landline2).isEmpty()) && App.get(landline2).length() != 7) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            landline2.getEditText().setError(getString(R.string.length_message));
+            landline2.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (!(App.get(secondaryLandline1).isEmpty() && App.get(secondaryLandline2).isEmpty()) && !(App.get(secondaryLandline1).length() == 3 || App.get(secondaryLandline1).length() == 4)) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            secondaryLandline1.getEditText().setError(getString(R.string.length_message));
+            secondaryLandline1.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (!(App.get(secondaryLandline1).isEmpty() && App.get(secondaryLandline2).isEmpty()) && App.get(secondaryLandline2).length() != 7) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            secondaryLandline2.getEditText().setError(getString(R.string.length_message));
+            secondaryLandline2.getEditText().requestFocus();
+            error = true;
+        }
+
+        final String mobileNumber = mobile1.getEditText().getText().toString() + mobile2.getEditText().getText().toString();
+        final String secondaryMobileNumber = secondaryMobile1.getEditText().getText().toString() + secondaryMobile2.getEditText().getText().toString();
+        final String landlineNumber = landline1.getEditText().getText().toString() + landline2.getEditText().getText().toString();
+        final String secondaryLandlineNumber = secondaryLandline1.getEditText().getText().toString() + secondaryLandline2.getEditText().getText().toString();
+
+        if (!RegexUtil.isContactNumber(mobileNumber)) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            mobile2.getEditText().setError(getString(R.string.incorrect_contact_number));
+            mobile2.getEditText().requestFocus();
+            error = true;
+        } else {
+            mobile2.getEditText().setError(null);
+        }
+
+        if (!App.get(secondaryMobile1).isEmpty() && App.get(secondaryMobile2).isEmpty() && !RegexUtil.isContactNumber(secondaryMobileNumber)) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            secondaryMobile2.getEditText().setError(getString(R.string.incorrect_contact_number));
+            secondaryMobile2.getEditText().requestFocus();
+            error = true;
+        } else {
+            secondaryMobile2.getEditText().setError(null);
+        }
+
+        if (!App.get(landline1).isEmpty() && App.get(landline2).isEmpty() && !RegexUtil.isLandlineNumber(landlineNumber)) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            landline2.getEditText().setError(getString(R.string.incorrect_contact_number));
+            landline2.getEditText().requestFocus();
+            error = true;
+        } else {
+            landline2.getEditText().setError(null);
+        }
+
+
+        if (!App.get(secondaryLandline1).isEmpty() && App.get(secondaryLandline2).isEmpty() && !RegexUtil.isLandlineNumber(secondaryLandlineNumber)) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            secondaryLandline2.getEditText().setError(getString(R.string.incorrect_contact_number));
+            secondaryLandline2.getEditText().requestFocus();
+            error = true;
+        } else {
+            secondaryLandline2.getEditText().setError(null);
         }
 
         if (error) {
@@ -287,14 +571,179 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         return true;
     }
 
+
     @Override
     public boolean submit() {
 
-        if (validate()) {
-            resetViews();
-        }
+        endTime = new Date();
 
-        //resetViews();
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
+        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+      /*  observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
+        observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});*/
+
+        String cnicNumber = cnic1.getEditText().getText().toString() + cnic2.getEditText().getText().toString() + cnic3.getEditText().getText().toString();
+        final String mobileNumber = mobile1.getEditText().getText().toString() + mobile2.getEditText().getText().toString();
+        final String secondaryMobileNumber = secondaryMobile1.getEditText().getText().toString() + secondaryMobile2.getEditText().getText().toString();
+        final String landlineNumber = landline1.getEditText().getText().toString() + landline2.getEditText().getText().toString();
+        final String secondaryLandlineNumber = secondaryLandline1.getEditText().getText().toString() + secondaryLandline2.getEditText().getText().toString();
+
+
+        observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnicNumber});
+
+        if (cnicOwner.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(cnicOwner).equals(getResources().getString(R.string.fast_self)) ? "SELF" :
+                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_mother)) ? "MOTHER" :
+                            (App.get(cnicOwner).equals(getResources().getString(R.string.fast_father)) ? "FATHER" :
+                                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_sister)) ? "SISTER" :
+                                            (App.get(cnicOwner).equals(getResources().getString(R.string.fast_brother)) ? "BROTHER" :
+                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_spouse)) ? "SPOUSE" :
+                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.fast_paternal_grandfather)) ? "PATERNAL GRANDFATHER" :
+                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_paternal_grandmother)) ? "PATERNAL GRANDMOTHER" :
+                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.fast_maternal_grandfather)) ? "MATERNAL GRANDFATHER" :
+                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_maternal_grandmother)) ? "MATERNAL GRANDMOTHER" :
+                                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.fast_uncle)) ? "UNCLE" :
+                                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_aunt)) ? "AUNT" :
+                                                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.fast_son)) ? "SON" :
+                                                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_daughter)) ? "DAUGHTER" : "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER")))))))))))))});
+        if (otherCnicOwner.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(otherCnicOwner)});
+
+        if (addressProvided.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"PATIENT PROVIDED ADDRESS", App.get(addressProvided).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
+
+        if (addressType.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"TYPE OF ADDRESS", App.get(addressType).equals(getResources().getString(R.string.fast_perminant)) ? "PERMANENT ADDRESS" : "TEMPORARY ADDRESS"});
+
+        if (nearestLandmark.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"NEAREST LANDMARK", App.get(nearestLandmark)});
+
+        if (contactPermission.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"PERMISSION TO CONTACT FOR CALL AND SMS", App.get(contactPermission).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
+
+        AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.submitting_form));
+                        loading.show();
+                    }
+                });
+
+                String result = serverService.savePersonAddress(App.get(addressHouse), App.get(addressStreet), App.getCity(), App.get(addressTown), "", longitude, latitude);
+                if (!result.equals("SUCCESS"))
+                    return result;
+
+                result = serverService.savePersonAttributeType("Primary Contact", mobileNumber );
+                if (!result.equals("SUCCESS"))
+                    return result;
+
+                if(!(App.get(secondaryMobile1).isEmpty() && App.get(secondaryMobile2).isEmpty())) {
+                    result = serverService.savePersonAttributeType("Secondary Contact", secondaryMobileNumber);
+                    if (!result.equals("SUCCESS"))
+                        return result;
+                }
+
+                if(!(App.get(landline1).isEmpty() && App.get(landline2).isEmpty())) {
+                    result = serverService.savePersonAttributeType("Tertiary Contact", landlineNumber);
+                    if (!result.equals("SUCCESS"))
+                        return result;
+                }
+
+                if(!(App.get(secondaryLandline1).isEmpty() && App.get(secondaryLandline2).isEmpty())) {
+                    result = serverService.savePersonAttributeType("Quaternary Contact", secondaryLandlineNumber);
+                    if (!result.equals("SUCCESS"))
+                        return result;
+                }
+
+                result = serverService.saveEncounterAndObservation("Presumptive Information", formDateCalendar, observations.toArray(new String[][]{}));
+                return result;
+
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                if (result.equals("SUCCESS")) {
+                    resetViews();
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.form_submitted));
+                    Drawable submitIcon = getResources().getDrawable(R.drawable.ic_submit);
+                    alertDialog.setIcon(submitIcon);
+                    int color = App.getColor(context, R.attr.colorAccent);
+                    DrawableCompat.setTint(submitIcon, color);
+                    alertDialog.setTitle(getResources().getString(R.string.title_completed));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else if (result.equals("CONNECTION_ERROR")) {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
+                    alertDialog.setMessage(message);
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+
+            }
+        };
+        submissionFormTask.execute("");
+
         return false;
     }
 
@@ -323,6 +772,8 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             args.putInt("type", DATE_DIALOG_ID);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
+            args.putBoolean("allowPastDate", true);
+            args.putBoolean("allowFutureDate", false);
         }
     }
 
@@ -341,6 +792,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
     public void resetViews() {
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        otherCnicOwner.setVisibility(View.GONE);
     }
 
     @Override
@@ -354,19 +806,6 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
                 otherCnicOwner.setVisibility(View.GONE);
             }
         }
-       /* if (spinner == specimenSource.getSpinner()) {
-            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title))) {
-                specimenSourceOther.setVisibility(View.VISIBLE);
-            } else {
-                specimenSourceOther.setVisibility(View.GONE);
-            }
-        } else if (spinner == reasonRejected.getSpinner()) {
-            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title))) {
-                otherReasonRejected.setVisibility(View.VISIBLE);
-            } else {
-                otherReasonRejected.setVisibility(View.GONE);
-            }
-        }*/
     }
 
     @Override
@@ -381,43 +820,6 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
                 addressStreet.setVisibility(View.GONE);
             }
         }
-
-    /*    if (radioGroup == testContextStatus.getRadioGroup()) {
-            if (testContextStatus.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_baseline_new))) {
-                tbCategory.setVisibility(View.VISIBLE);
-            } else {
-                tbCategory.setVisibility(View.GONE);
-            }
-
-            if (testContextStatus.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_baseline_repeat))) {
-                baselineRepeatReason.setVisibility(View.VISIBLE);
-            } else {
-                baselineRepeatReason.setVisibility(View.GONE);
-            }
-        } else if (radioGroup == sampleType.getRadioGroup()) {
-            if (sampleType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_extra_pulmonary))) {
-                specimenSource.setVisibility(View.VISIBLE);
-                if (specimenSource.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))) {
-                    specimenSourceOther.setVisibility(View.VISIBLE);
-                }
-            } else {
-                specimenSource.setVisibility(View.GONE);
-                specimenSourceOther.setVisibility(View.GONE);
-            }
-        } else if (radioGroup == sampleAccepted.getRadioGroup()) {
-            if (sampleAccepted.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))) {
-                reasonRejected.setVisibility(View.VISIBLE);
-                if (reasonRejected.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))) {
-                    otherReasonRejected.setVisibility(View.VISIBLE);
-                }
-                cartridgeId.setVisibility(View.GONE);
-            } else {
-                reasonRejected.setVisibility(View.GONE);
-                cartridgeId.setVisibility(View.VISIBLE);
-                otherReasonRejected.setVisibility(View.GONE);
-            }
-        }*/
-
     }
 
     class MyAdapter extends PagerAdapter {

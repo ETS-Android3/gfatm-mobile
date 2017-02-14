@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
@@ -11,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +34,7 @@ import com.ihsinformatics.gfatmmobile.shared.Forms;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -127,13 +130,15 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
         sputumContainerGiven = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_a_sputum_container), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
         sputum_sample = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_produced_a_sputum_sample), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
         reasonNoSputumSample = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_if_no_why_not), getResources().getStringArray(R.array.fast_if_no_why_not_list), getResources().getString(R.string.fast_patient_unable_to_expectorate), App.VERTICAL, App.VERTICAL);
-        reasonNoSputumSample.setVisibility(View.GONE);
-        dueDateSample = new TitledEditText(context, null, getResources().getString(R.string.fast_date_sputum_sample),getSputumDate(formDateCalendar), "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        dueDateSample.getEditText().setEnabled(false);
+        secondDateCalendar.set(Calendar.YEAR, formDateCalendar.get(Calendar.YEAR));
+        secondDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
+        secondDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
+        secondDateCalendar.add(Calendar.DAY_OF_MONTH, 1);
+        dueDateSample = new TitledEditText(context, null, getResources().getString(R.string.fast_date_sputum_sample), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        dueDateSample.getEditText().setKeyListener(null);
+        dueDateSample.getEditText().setFocusable(false);
         freeXrayVoucher = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_given_free_chest_xray), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
         noXrayVoucher = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_not_given_free_chest_xray), getResources().getStringArray(R.array.fast_not_given_free_list), getResources().getString(R.string.fast_presumptive_refused), App.VERTICAL, App.VERTICAL);
-        noXrayVoucher.setVisibility(View.GONE);
-
 
 
         // Used for reset fields...
@@ -150,32 +155,26 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
         reasonNoSputumSample.getRadioGroup().setOnCheckedChangeListener(this);
         freeXrayVoucher.getRadioGroup().setOnCheckedChangeListener(this);
         noXrayVoucher.getRadioGroup().setOnCheckedChangeListener(this);
+
+        resetViews();
     }
 
     @Override
     public void updateDisplay() {
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        dueDateSample.getEditText().setText(getSputumDate(formDateCalendar));
-    }
+        secondDateCalendar.set(Calendar.YEAR, formDateCalendar.get(Calendar.YEAR));
+        secondDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
+        secondDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
+        secondDateCalendar.add(Calendar.DAY_OF_MONTH, 1);
+        dueDateSample.getEditText().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
 
-    private String getSputumDate(Calendar calendar){
-        calendar.add(Calendar.DATE, 1);
-        return DateFormat.format("dd-MMM-yyyy", calendar).toString();
+        Log.d("formdate", DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        Log.d("formdate", formDate.getButton().getText().toString());
     }
 
     @Override
     public boolean validate() {
         Boolean error = false;
-
-      /*  if (hospital_section_other.getVisibility() == View.VISIBLE && App.get(hospital_section_other).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(1);
-            else
-                gotoPage(0);
-            hospital_section_other.getEditText().setError(getString(R.string.empty_field));
-            hospital_section_other.getEditText().requestFocus();
-            error = true;
-        }*/
 
         if (error) {
 
@@ -210,11 +209,121 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
     @Override
     public boolean submit() {
 
-        if (validate()) {
-            resetViews();
-        }
+        endTime = new Date();
 
-        //resetViews();
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
+        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+      /*  observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
+        observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});*/
+        observations.add(new String[]{"SPUTUM CONTAINER", App.get(sputumContainerGiven).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
+        if (sputum_sample.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"SPUTUM PRODUCED", App.get(sputum_sample).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
+        if (reasonNoSputumSample.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"PATIENT DO NOT PRODUCE SPUTUM SAMPLE", App.get(reasonNoSputumSample).equals(getResources().getString(R.string.fast_patient_unable_to_expectorate)) ? "UNABLE TO EXPECTORATE" : "REFUSED"});
+        observations.add(new String[]{"SPUTUM SAMPLE DUE DATE", App.getSqlDate(secondDateCalendar)});
+        if (freeXrayVoucher.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"VOUCHER GIVEN FOR TEST", App.get(freeXrayVoucher).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
+        if (noXrayVoucher.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"REASON VOUCHER NOT GIVEN", App.get(noXrayVoucher).equals(getResources().getString(R.string.fast_presumptive_refused)) ? "REFUSED" : "OTHER"});
+
+
+        AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.submitting_form));
+                        loading.show();
+                    }
+                });
+
+                String result = serverService.saveEncounterAndObservation("Prompt", formDateCalendar, observations.toArray(new String[][]{}));
+                return result;
+
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                if (result.equals("SUCCESS")) {
+                    resetViews();
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.form_submitted));
+                    Drawable submitIcon = getResources().getDrawable(R.drawable.ic_submit);
+                    alertDialog.setIcon(submitIcon);
+                    int color = App.getColor(context, R.attr.colorAccent);
+                    DrawableCompat.setTint(submitIcon, color);
+                    alertDialog.setTitle(getResources().getString(R.string.title_completed));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else if (result.equals("CONNECTION_ERROR")) {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
+                    alertDialog.setMessage(message);
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+
+            }
+        };
+        submissionFormTask.execute("");
+
         return false;
     }
 
@@ -243,6 +352,8 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
             args.putInt("type", DATE_DIALOG_ID);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
+            args.putBoolean("allowPastDate", true);
+            args.putBoolean("allowFutureDate", false);
         }
     }
 
@@ -265,6 +376,9 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
     public void resetViews() {
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        reasonNoSputumSample.setVisibility(View.GONE);
+        noXrayVoucher.setVisibility(View.GONE);
+
     }
 
     @Override
@@ -293,6 +407,7 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
             }
         }
     }
+
     class MyAdapter extends PagerAdapter {
 
         @Override

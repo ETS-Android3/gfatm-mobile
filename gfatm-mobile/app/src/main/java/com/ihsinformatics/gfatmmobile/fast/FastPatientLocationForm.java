@@ -3,6 +3,7 @@ package com.ihsinformatics.gfatmmobile.fast;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
@@ -37,6 +38,7 @@ import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -136,38 +138,41 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
         screening = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_identified_patient_through_screening), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
         facilitySection = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_hospital_parts_title), getResources().getStringArray(R.array.fast_hospital_parts), getResources().getString(R.string.fast_opdclinicscreening_title), App.VERTICAL);
         facilitySectionOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        facilitySectionOther.setVisibility(View.GONE);
         opdWardSection = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_clinic_and_ward_title), getResources().getStringArray(R.array.fast_clinic_and_ward_list), getResources().getString(R.string.fast_generalmedicinefilterclinic_title), App.VERTICAL);
         patientReferralSource = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_source_of_patient_referral), getResources().getStringArray(R.array.fast_source_of_patient_referral_list), getResources().getString(R.string.fast_self_referral), App.VERTICAL);
-        patientReferralSource.setVisibility(View.GONE);
         otherReferral = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        otherReferral.setVisibility(View.GONE);
         facilityDepartment = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_within_hospital_was_patient_referred), getResources().getStringArray(R.array.fast_patient_reffered_from_list), getResources().getString(R.string.fast_ward_title), App.VERTICAL, App.VERTICAL);
-        facilityDepartment.setVisibility(View.GONE);
         facilityDepartmentOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        facilityDepartmentOther.setVisibility(View.GONE);
         referralWithinOpd = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_which_opd_clinic_or_ward_has_patient_referred_from), getResources().getStringArray(R.array.fast_opd_clinic_or_ward_patient_reffered_from_list), getResources().getString(R.string.fast_generalmedicinefilterclinic_title), App.VERTICAL);
-        referralWithinOpd.setVisibility(View.GONE);
         referralWithinOpdOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        referralWithinOpdOther.setVisibility(View.GONE);
         facilityType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_outside_hospital_was_patient_referred), getResources().getStringArray(R.array.fast_outside_hospital_patient_reffered_from), getResources().getString(R.string.fast_private_hospital), App.VERTICAL, App.VERTICAL);
-        facilityType.setVisibility(View.GONE);
         hearAboutUs = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_where_did_you_hear_about_us), getResources().getStringArray(R.array.fast_hear_about_us_from_list), getResources().getString(R.string.fast_radio), App.VERTICAL);
-        hearAboutUs.setVisibility(View.GONE);
         hearAboutUsOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        hearAboutUsOther.setVisibility(View.GONE);
         contactReferral = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_enrolled_in_any_tb_program), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_no_title), App.VERTICAL, App.VERTICAL);
-        contactReferral.setVisibility(View.GONE);
         contactIdType = new TitledCheckBoxes(context, null, getResources().getString(R.string.fast_tb_contact_any_identifications_id), getResources().getStringArray(R.array.fast_tb_contact_identification_list), null, App.VERTICAL, App.VERTICAL);
-        contactIdType.setVisibility(View.GONE);
         contactPatientId = new TitledEditText(context, null, getResources().getString(R.string.fast_patient_id), "", "", 6, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        contactPatientId.setVisibility(View.GONE);
         contactExternalId = new TitledEditText(context, null, getResources().getString(R.string.fast_external_id), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        contactExternalId.setVisibility(View.GONE);
-        contactExternalIdHospital = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_if_external_id_hospital_or_programs),getResources().getStringArray(R.array.fast_hear_about_us_from_list) ,getResources().getString(R.string.fast_radio), App.VERTICAL);
-        contactExternalIdHospital.setVisibility(View.GONE);
+
+        String columnName = "";
+        if (App.getProgram().equals(getResources().getString(R.string.pet)))
+            columnName = "pet_location";
+        else if (App.getProgram().equals(getResources().getString(R.string.fast)))
+            columnName = "fast_location";
+        else if (App.getProgram().equals(getResources().getString(R.string.comorbidities)))
+            columnName = "comorbidities_location";
+        else if (App.getProgram().equals(getResources().getString(R.string.pmdt)))
+            columnName = "pmdt_location";
+        else if (App.getProgram().equals(getResources().getString(R.string.childhood_tb)))
+            columnName = "childhood_tb_location";
+
+        final Object[][] locations = serverService.getAllLocations(columnName);
+        String[] locationArray = new String[locations.length];
+        for (int i = 0; i < locations.length; i++) {
+            locationArray[i] = String.valueOf(locations[i][1]);
+        }
+
+        contactExternalIdHospital = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_if_external_id_hospital_or_programs), locationArray, "", App.VERTICAL);
         contactTbRegisternationNo = new TitledEditText(context, null, getResources().getString(R.string.fast_tb_registeration_no), "", "", 11, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        contactTbRegisternationNo.setVisibility(View.GONE);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), facilitySection.getSpinner(), facilitySectionOther.getEditText(),
@@ -180,6 +185,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
         viewGroups = new View[][]
                 {{formDate, screening, facilitySection, facilitySectionOther, opdWardSection, patientReferralSource, otherReferral, facilityDepartment, facilityDepartmentOther, referralWithinOpd, referralWithinOpdOther, facilityType, hearAboutUs, hearAboutUsOther, contactReferral, contactIdType, contactPatientId, contactExternalId, contactExternalIdHospital, contactTbRegisternationNo},};
 
+        formDate.getButton().setOnClickListener(this);
         screening.getRadioGroup().setOnCheckedChangeListener(this);
         facilitySection.getSpinner().setOnItemSelectedListener(this);
         opdWardSection.getSpinner().setOnItemSelectedListener(this);
@@ -219,6 +225,8 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
             public void afterTextChanged(Editable editable) {
             }
         });
+
+        resetViews();
     }
 
     @Override
@@ -230,7 +238,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
     public boolean validate() {
         Boolean error = false;
 
-        if (facilitySectionOther.getVisibility() == View.VISIBLE && App.get(facilityDepartmentOther).isEmpty()) {
+        if (facilitySectionOther.getVisibility() == View.VISIBLE && App.get(facilitySectionOther).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -343,13 +351,191 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
     @Override
     public boolean submit() {
 
-        if (validate()) {
-            resetViews();
-        }
+        endTime = new Date();
 
-        //resetViews();
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
+        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+      /*  observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
+        observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});*/
+        observations.add(new String[]{"IDENTIFIED PATIENT THROUGH SCREENING", App.get(screening).equals(getResources().getString(R.string.fast_patient_title)) ? "YES" : "NO"});
+
+        if (facilitySection.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"HOSPITAL SECTION", App.get(facilitySection).equals(getResources().getString(R.string.fast_opdclinicscreening_title)) ? "OPD CLINIC SCREENING" :
+                    (App.get(facilitySection).equals(getResources().getString(R.string.fast_wardscreening_title)) ? "WARD SCREENING" :
+                            (App.get(facilitySection).equals(getResources().getString(R.string.fast_registrationdesk_title)) ? "REGISTRATION DESK" :
+                                    (App.get(facilitySection).equals(getResources().getString(R.string.fast_nexttoxrayvan_title)) ? "X-RAY VAN" : "OTHER")))});
+
+        if (opdWardSection.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"OUTPATIENT DEPARTMENT", App.get(opdWardSection).equals(getResources().getString(R.string.fast_generalmedicinefilterclinic_title)) ? "GENERAL MEDICINE DEPARTMENT" :
+                    (App.get(opdWardSection).equals(getResources().getString(R.string.fast_chesttbclinic_title)) ? "CHEST MEDICINE DEPARTMENT" :
+                            (App.get(opdWardSection).equals(getResources().getString(R.string.fast_gynaeobstetrics_title)) ? "OBSTETRICS AND GYNECOLOGY DEPARTMENT" :
+                                    (App.get(opdWardSection).equals(getResources().getString(R.string.fast_surgery_title)) ? "PEDIATRIC SURGERY DEPARTMENT" : "EMERGENCY DEPARTMENT")))});
+
+
+        if (patientReferralSource.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"PATIENT REFERRAL SOURCE", App.get(patientReferralSource).equals(getResources().getString(R.string.fast_doctor_or_health_worker_within_the_hospital)) ? "CLINICAL OFFICER/DOCTOR" :
+                    (App.get(patientReferralSource).equals(getResources().getString(R.string.fast_doctor_or_health_worker_outside_the_hospital)) ? "PRIVATE PRACTIONER" :
+                            (App.get(patientReferralSource).equals(getResources().getString(R.string.fast_self_referral)) ? "SELF" :
+                                    (App.get(patientReferralSource).equals(getResources().getString(R.string.fast_contact_of_tb_patient)) ? "TUBERCULOSIS CONTACT" :
+                                            (App.get(patientReferralSource).equals(getResources().getString(R.string.fast_referred_after_xray_cad4tb)) ? "CD4 COUNT" : "OTHER"))))});
+
+        if (otherReferral.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"OTHER", App.get(otherReferral)});
+
+
+        if (facilityDepartment.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"HEALTH FACILITY DEPARTMENT", App.get(facilityDepartment).equals(getResources().getString(R.string.fast_ward_title)) ? "OUTPATIENT DEPARTMENT" :
+                    (App.get(facilityDepartment).equals(getResources().getString(R.string.fast_opd_clinic)) ? "OBSERVATION WARD" : "OTHER FACILITY SECTION")});
+
+        if (referralWithinOpd.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"OUTPATIENT DEPARTMENT", App.get(referralWithinOpd).equals(getResources().getString(R.string.fast_generalmedicinefilterclinic_title)) ? "GENERAL MEDICINE DEPARTMENT" :
+                    (App.get(referralWithinOpd).equals(getResources().getString(R.string.fast_chesttbclinic_title)) ? "CHEST MEDICINE DEPARTMENT" :
+                            (App.get(referralWithinOpd).equals(getResources().getString(R.string.fast_gynaeobstetrics_title)) ? "OBSTETRICS AND GYNECOLOGY DEPARTMENT" :
+                                    (App.get(referralWithinOpd).equals(getResources().getString(R.string.fast_surgery_title)) ? "PEDIATRIC SURGERY DEPARTMENT" :
+                                            (App.get(referralWithinOpd).equals(getResources().getString(R.string.fast_emergency_title)) ? "EMERGENCY DEPARTMENT" : "OTHER OPD CLINIC OR WARD"))))});
+
+        if (referralWithinOpdOther.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"OTHER OPD CLINIC OR WARD", App.get(referralWithinOpdOther)});
+
+        if (facilityType.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"TYPE OF HEALTHCARE FACILITY", App.get(facilityType).equals(getResources().getString(R.string.fast_private_hospital)) ? "PRIVATE FACILITY" :
+                    (App.get(facilityType).equals(getResources().getString(R.string.fast_public_hospital)) ? "GOVERNMENT FACILITY" : "GENERAL PRACTITIONER")});
+
+
+        if (hearAboutUs.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"HEAR ABOUT US", App.get(hearAboutUs).equals(getResources().getString(R.string.fast_radio)) ? "RADIO, AS A HOUSEHOLD ITEM" :
+                    (App.get(hearAboutUs).equals(getResources().getString(R.string.fast_tv)) ? "TV" :
+                            (App.get(hearAboutUs).equals(getResources().getString(R.string.fast_newspaper)) ? "NEWSPAPER" :
+                                    (App.get(hearAboutUs).equals(getResources().getString(R.string.fast_billboard_signboards)) ? "BILLBOARD" :
+                                            (App.get(hearAboutUs).equals(getResources().getString(R.string.fast_internet)) ? "INTERNET CONNECTION" :
+                                                    (App.get(hearAboutUs).equals(getResources().getString(R.string.fast_sms)) ? "SMS" :
+                                                            (App.get(hearAboutUs).equals(getResources().getString(R.string.fast_from_a_friend_community)) ? "FRIEND" :
+                                                                    (App.get(hearAboutUs).equals(getResources().getString(R.string.fast_community_camp)) ? "COMMUNITY CAMP" :
+                                                                            (App.get(hearAboutUs).equals(getResources().getString(R.string.fast_school_awareness_program)) ? "SCHOOL AWARENESS PROGRAM" :
+                                                                                    (App.get(hearAboutUs).equals(getResources().getString(R.string.fast_pamphlet)) ? "Pamphlet" :
+                                                                                            (App.get(hearAboutUs).equals(getResources().getString(R.string.fast_work_place_awareness)) ? "WORK PLACE AWARNESS" :
+                                                                                                    (App.get(hearAboutUs).equals(getResources().getString(R.string.fast_call_center)) ? "CALL CENTER" : "HEAR ABOUT US OTHER")))))))))))});
+
+
+        if (hearAboutUsOther.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"HEAR ABOUT US OTHER", App.get(hearAboutUsOther)});
+
+        if (contactReferral.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"PATIENT ENROLLED", App.get(contactReferral).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
+
+        if (contactPatientId.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"CONTACT PATIENT ID", App.get(contactPatientId)});
+
+        if (contactExternalId.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"CONTACT EXTERNAL ID", App.get(contactExternalId)});
+
+        if (contactExternalIdHospital.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"FACILITY NAME", App.get(contactExternalIdHospital)});
+
+        if (contactTbRegisternationNo.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"TB REGISTRATION NUMBER", App.get(contactTbRegisternationNo)});
+
+
+        AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.submitting_form));
+                        loading.show();
+                    }
+                });
+
+                String result = serverService.saveEncounterAndObservation("Patient Location", formDateCalendar, observations.toArray(new String[][]{}));
+                return result;
+
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                if (result.equals("SUCCESS")) {
+                    resetViews();
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.form_submitted));
+                    Drawable submitIcon = getResources().getDrawable(R.drawable.ic_submit);
+                    alertDialog.setIcon(submitIcon);
+                    int color = App.getColor(context, R.attr.colorAccent);
+                    DrawableCompat.setTint(submitIcon, color);
+                    alertDialog.setTitle(getResources().getString(R.string.title_completed));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else if (result.equals("CONNECTION_ERROR")) {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
+                    alertDialog.setMessage(message);
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+
+            }
+        };
+        submissionFormTask.execute("");
+
         return false;
     }
+
 
     @Override
     public boolean save() {
@@ -376,6 +562,8 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
             args.putInt("type", DATE_DIALOG_ID);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
+            args.putBoolean("allowPastDate", true);
+            args.putBoolean("allowFutureDate", false);
         }
     }
 
@@ -421,6 +609,8 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
                 }
             } else {
                 facilityDepartment.setVisibility(View.GONE);
+                referralWithinOpd.setVisibility(View.GONE);
+                referralWithinOpdOther.setVisibility(View.GONE);
             }
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_doctor_or_health_worker_outside_the_hospital)) && screening.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))) {
                 facilityType.setVisibility(View.VISIBLE);
@@ -435,8 +625,46 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
 
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_contact_of_tb_patient)) && screening.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))) {
                 contactReferral.setVisibility(View.VISIBLE);
+                if (contactReferral.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+                    contactIdType.setVisibility(View.VISIBLE);
+                    ArrayList<MyCheckBox> myCheckBoxes = contactIdType.getCheckedBoxes();
+                    if (myCheckBoxes.get(0).getValue() == true) {
+                        contactPatientId.setVisibility(View.VISIBLE);
+                    } else {
+                        contactPatientId.setVisibility(View.GONE);
+                    }
+                    if (myCheckBoxes.get(1).getValue() == true) {
+                        contactExternalId.setVisibility(View.VISIBLE);
+                        if (!(App.get(contactExternalId).equals(""))) {
+                            contactExternalIdHospital.setVisibility(View.VISIBLE);
+                        } else {
+                            contactExternalIdHospital.setVisibility(View.GONE);
+                        }
+                    } else {
+                        contactExternalId.setVisibility(View.GONE);
+                        contactExternalIdHospital.setVisibility(View.GONE);
+                    }
+
+                    if (myCheckBoxes.get(2).getValue() == true) {
+                        contactTbRegisternationNo.setVisibility(View.VISIBLE);
+                    } else {
+                        contactTbRegisternationNo.setVisibility(View.GONE);
+                    }
+
+                } else {
+                    contactIdType.setVisibility(View.GONE);
+                    contactPatientId.setVisibility(View.GONE);
+                    contactExternalId.setVisibility(View.GONE);
+                    contactExternalIdHospital.setVisibility(View.GONE);
+                    contactTbRegisternationNo.setVisibility(View.GONE);
+                }
             } else {
                 contactReferral.setVisibility(View.GONE);
+                contactIdType.setVisibility(View.GONE);
+                contactPatientId.setVisibility(View.GONE);
+                contactExternalId.setVisibility(View.GONE);
+                contactExternalIdHospital.setVisibility(View.GONE);
+                contactTbRegisternationNo.setVisibility(View.GONE);
             }
         } else if (spinner == referralWithinOpd.getSpinner()) {
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title)) && facilityDepartment.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_ward_title))
@@ -521,6 +749,11 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
                         if (myCheckBoxes.get(2).getValue() == true) {
                             contactTbRegisternationNo.setVisibility(View.VISIBLE);
                         }
+                    } else {
+                        contactPatientId.setVisibility(View.GONE);
+                        contactExternalId.setVisibility(View.GONE);
+                        contactExternalIdHospital.setVisibility(View.GONE);
+                        contactTbRegisternationNo.setVisibility(View.GONE);
                     }
                 }
             }
@@ -552,8 +785,36 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
                     && patientReferralSource.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_contact_of_tb_patient))
                     && screening.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))) {
                 contactIdType.setVisibility(View.VISIBLE);
+                ArrayList<MyCheckBox> myCheckBoxes = contactIdType.getCheckedBoxes();
+                if (myCheckBoxes.get(0).getValue() == true) {
+                    contactPatientId.setVisibility(View.VISIBLE);
+                } else {
+                    contactPatientId.setVisibility(View.GONE);
+                }
+                if (myCheckBoxes.get(1).getValue() == true) {
+                    contactExternalId.setVisibility(View.VISIBLE);
+                    if (!(App.get(contactExternalId).equals(""))) {
+                        contactExternalIdHospital.setVisibility(View.VISIBLE);
+                    } else {
+                        contactExternalIdHospital.setVisibility(View.GONE);
+                    }
+                } else {
+                    contactExternalId.setVisibility(View.GONE);
+                    contactExternalIdHospital.setVisibility(View.GONE);
+                }
+
+                if (myCheckBoxes.get(2).getValue() == true) {
+                    contactTbRegisternationNo.setVisibility(View.VISIBLE);
+                } else {
+                    contactTbRegisternationNo.setVisibility(View.GONE);
+                }
+
             } else {
                 contactIdType.setVisibility(View.GONE);
+                contactPatientId.setVisibility(View.GONE);
+                contactExternalId.setVisibility(View.GONE);
+                contactExternalIdHospital.setVisibility(View.GONE);
+                contactTbRegisternationNo.setVisibility(View.GONE);
             }
         }
     }
@@ -561,13 +822,13 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (buttonView == patientIdCheckbox && isChecked) {
+        if (patientIdCheckbox.isChecked() && patientIdCheckbox.getVisibility() == View.VISIBLE) {
             contactPatientId.setVisibility(View.VISIBLE);
         } else {
             contactPatientId.setVisibility(View.GONE);
         }
 
-        if (buttonView == externalIdCheckbox && isChecked) {
+        if (externalIdCheckbox.isChecked() && externalIdCheckbox.getVisibility() == View.VISIBLE) {
             contactExternalId.setVisibility(View.VISIBLE);
             if (contactExternalId.getEditText().getText().toString().equals("")) {
                 contactExternalIdHospital.setVisibility(View.GONE);
@@ -579,8 +840,10 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
             contactExternalIdHospital.setVisibility(View.GONE);
         }
 
-        if (buttonView == tbRegisterationNoCheckbbox && isChecked) {
+        if (tbRegisterationNoCheckbbox.isChecked() && tbRegisterationNoCheckbbox.getVisibility() == View.VISIBLE) {
             contactTbRegisternationNo.setVisibility(View.VISIBLE);
+        } else {
+            contactTbRegisternationNo.setVisibility(View.GONE);
         }
     }
 
@@ -589,6 +852,22 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
     public void resetViews() {
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        facilitySectionOther.setVisibility(View.GONE);
+        patientReferralSource.setVisibility(View.GONE);
+        otherReferral.setVisibility(View.GONE);
+        facilityDepartment.setVisibility(View.GONE);
+        facilityDepartmentOther.setVisibility(View.GONE);
+        referralWithinOpd.setVisibility(View.GONE);
+        referralWithinOpdOther.setVisibility(View.GONE);
+        facilityType.setVisibility(View.GONE);
+        hearAboutUs.setVisibility(View.GONE);
+        hearAboutUsOther.setVisibility(View.GONE);
+        contactReferral.setVisibility(View.GONE);
+        contactIdType.setVisibility(View.GONE);
+        contactPatientId.setVisibility(View.GONE);
+        contactExternalId.setVisibility(View.GONE);
+        contactExternalIdHospital.setVisibility(View.GONE);
+        contactTbRegisternationNo.setVisibility(View.GONE);
     }
 
 

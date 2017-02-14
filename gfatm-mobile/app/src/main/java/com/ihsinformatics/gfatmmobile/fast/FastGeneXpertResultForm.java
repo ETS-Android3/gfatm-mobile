@@ -3,6 +3,7 @@ package com.ihsinformatics.gfatmmobile.fast;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
@@ -31,6 +32,7 @@ import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -123,11 +125,8 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
         dateTestResult = new TitledButton(context, null, getResources().getString(R.string.fast_date_of_result_recieved), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.VERTICAL);
         gxpResult = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_genexpert_mtb_result), getResources().getStringArray(R.array.fast_genexpert_mtb_result_list), getResources().getString(R.string.fast_mtb_not_detected), App.VERTICAL);
         mtbBurden = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_mtb_burden), getResources().getStringArray(R.array.fast_mtb_burden_list), getResources().getString(R.string.fast_very_low), App.VERTICAL);
-        mtbBurden.setVisibility(View.GONE);
         rifResult = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_if_mtb_then_rif_result), getResources().getStringArray(R.array.fast_if_mtb_then_rif_list), getResources().getString(R.string.fast_not_detected), App.VERTICAL);
-        rifResult.setVisibility(View.GONE);
         errorCode = new TitledEditText(context, null, getResources().getString(R.string.fast_error_code), "", "", 15, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, false);
-        errorCode.setVisibility(View.GONE);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), cartridgeId.getEditText(), dateTestResult.getButton(), gxpResult.getSpinner(),
@@ -142,6 +141,8 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
         gxpResult.getSpinner().setOnItemSelectedListener(this);
         mtbBurden.getSpinner().setOnItemSelectedListener(this);
         rifResult.getSpinner().setOnItemSelectedListener(this);
+
+        resetViews();
     }
 
     @Override
@@ -208,12 +209,130 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
 
     @Override
     public boolean submit() {
+        endTime = new Date();
 
-        if (validate()) {
-            resetViews();
-        }
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
+        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+        //  observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
+        //observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});
+        observations.add(new String[]{"Cartridge ID", App.get(cartridgeId)});
+        observations.add(new String[]{"DATE OF TEST RESULT RECEIVED", App.getSqlDateTime(secondDateCalendar)});
 
-        //resetViews();
+       if (gxpResult.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"GENEXPERT MTB/RIF", App.get(gxpResult).equals(getResources().getString(R.string.fast_mtb_detected)) ? "MYCOBACTERIUM TUBERCULOSIS DETECTED WITH RIFAMPIN RESISTANCE" :
+                    (App.get(gxpResult).equals(getResources().getString(R.string.fast_mtb_not_detected)) ? "MYCOBACTERIUM TUBERCULOSIS DETECTED WITHOUT RIFAMPIN RESISTANCE" :
+                            (App.get(gxpResult).equals(getResources().getString(R.string.fast_error)) ? "NEGATIVE" :
+                                    (App.get(gxpResult).equals(getResources().getString(R.string.fast_invalid)) ? "INVALID" : "NO RESULT")))});
+
+        if (mtbBurden.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"MTB BURDEN", App.get(mtbBurden).equals(getResources().getString(R.string.fast_very_low)) ? "VERY LOW" :
+                    (App.get(mtbBurden).equals(getResources().getString(R.string.fast_low)) ? "LOW" :
+                            (App.get(mtbBurden).equals(getResources().getString(R.string.fast_medium)) ? "MEDIUM" : "HIGH"))});
+
+        if (rifResult.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"RIF RESULT", App.get(rifResult).equals(getResources().getString(R.string.fast_not_detected)) ? "NOT DETECTED" :
+                    (App.get(rifResult).equals(getResources().getString(R.string.fast_detected)) ? "DETECTED" : "INTERMEDIATE")});
+
+        if (errorCode.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"ERROR CODE", App.get(errorCode)});
+
+        AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.submitting_form));
+                        loading.show();
+                    }
+                });
+
+                String result = serverService.saveEncounterAndObservation("GXP Test", formDateCalendar, observations.toArray(new String[][]{}));
+                return result;
+
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                if (result.equals("SUCCESS")) {
+                    resetViews();
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.form_submitted));
+                    Drawable submitIcon = getResources().getDrawable(R.drawable.ic_submit);
+                    alertDialog.setIcon(submitIcon);
+                    int color = App.getColor(context, R.attr.colorAccent);
+                    DrawableCompat.setTint(submitIcon, color);
+                    alertDialog.setTitle(getResources().getString(R.string.title_completed));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else if (result.equals("CONNECTION_ERROR")) {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
+                    alertDialog.setMessage(message);
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+
+            }
+        };
+        submissionFormTask.execute("");
+
         return false;
     }
 
@@ -242,6 +361,8 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
             args.putInt("type", DATE_DIALOG_ID);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
+            args.putBoolean("allowPastDate", true);
+            args.putBoolean("allowFutureDate", false);
         }
 
         if (view == dateTestResult.getButton()) {
@@ -249,6 +370,8 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
+            args.putBoolean("allowPastDate", true);
+            args.putBoolean("allowFutureDate", false);
         }
     }
 
@@ -267,6 +390,10 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
     public void resetViews() {
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        dateTestResult.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+        mtbBurden.setVisibility(View.GONE);
+        errorCode.setVisibility(View.GONE);
+        rifResult.setVisibility(View.GONE);
     }
 
     @Override

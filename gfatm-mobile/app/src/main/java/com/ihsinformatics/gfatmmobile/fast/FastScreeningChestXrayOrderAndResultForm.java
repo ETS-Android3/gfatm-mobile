@@ -133,26 +133,16 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
         formType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_select_form_type), getResources().getStringArray(R.array.fast_order_and_result_list), "", App.VERTICAL, App.VERTICAL);
         cxrOrderTitle = new MyTextView(context, getResources().getString(R.string.fast_cxr_order_title));
         cxrOrderTitle.setTypeface(null, Typeface.BOLD);
-        cxrOrderTitle.setVisibility(View.GONE);
         screenXrayType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_what_type_of_xray_is_this), getResources().getStringArray(R.array.fast_type_of_xray_is_this_list), getResources().getString(R.string.fast_chest_xray_other), App.VERTICAL, App.VERTICAL);
-        screenXrayType.setVisibility(View.GONE);
         monthOfTreatment = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_month_of_treatment), getResources().getStringArray(R.array.fast_number_list), getResources().getString(R.string.fast_one), App.HORIZONTAL);
-        monthOfTreatment.setVisibility(View.GONE);
         testDate = new TitledButton(context, null, getResources().getString(R.string.fast_test_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
-        testDate.setVisibility(View.GONE);
         cxrResultTitle = new MyTextView(context, getResources().getString(R.string.fast_cxr_result_title));
         cxrResultTitle.setTypeface(null, Typeface.BOLD);
-        cxrResultTitle.setVisibility(View.GONE);
         cat4tbScore = new TitledEditText(context, null, getResources().getString(R.string.fast_chest_xray_cad4tb_score), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
-        cat4tbScore.setVisibility(View.GONE);
         screenXrayDiagnosis = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_radiologica_diagnosis), getResources().getStringArray(R.array.fast_radiologists_diagnosis_list), getResources().getString(R.string.fast_adenopathy), App.VERTICAL);
-        screenXrayDiagnosis.setVisibility(View.GONE);
         screenXrayDiagnosisOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        screenXrayDiagnosisOther.setVisibility(View.GONE);
         extentOfDisease = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_extent_of_desease), getResources().getStringArray(R.array.fast_extent_of_disease_list), getResources().getString(R.string.fast_normal), App.VERTICAL);
-        extentOfDisease.setVisibility(View.GONE);
         radiologistRemarks = new TitledEditText(context, null, getResources().getString(R.string.fast_radiologist_remarks), "", "", 500, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        radiologistRemarks.setVisibility(View.GONE);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), testId.getEditText(), formType.getRadioGroup(), screenXrayType.getRadioGroup(),
@@ -168,6 +158,8 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
         testDate.getButton().setOnClickListener(this);
         formType.getRadioGroup().setOnCheckedChangeListener(this);
         screenXrayDiagnosis.getSpinner().setOnItemSelectedListener(this);
+
+        resetViews();
     }
 
     @Override
@@ -287,6 +279,8 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
             args.putInt("type", DATE_DIALOG_ID);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
+            args.putBoolean("allowPastDate", true);
+            args.putBoolean("allowFutureDate", false);
         }
 
         if (view == testDate.getButton()) {
@@ -312,6 +306,17 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
     public void resetViews() {
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        testDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+        cxrOrderTitle.setVisibility(View.GONE);
+        screenXrayType.setVisibility(View.GONE);
+        monthOfTreatment.setVisibility(View.GONE);
+        testDate.setVisibility(View.GONE);
+        cxrResultTitle.setVisibility(View.GONE);
+        cat4tbScore.setVisibility(View.GONE);
+        screenXrayDiagnosis.setVisibility(View.GONE);
+        screenXrayDiagnosisOther.setVisibility(View.GONE);
+        extentOfDisease.setVisibility(View.GONE);
+        radiologistRemarks.setVisibility(View.GONE);
     }
 
     @Override
