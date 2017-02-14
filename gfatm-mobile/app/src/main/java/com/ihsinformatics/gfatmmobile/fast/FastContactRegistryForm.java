@@ -198,6 +198,8 @@ public class FastContactRegistryForm extends AbstractFormActivity implements Rad
                 });
 
                 String result = serverService.saveEncounterAndObservation("Contact Registry", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                if (result.contains("SUCCESS"))
+                    return "SUCCESS";
                 return result;
 
             }

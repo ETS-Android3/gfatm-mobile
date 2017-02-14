@@ -301,6 +301,8 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
                 });
 
                 String result = serverService.saveEncounterAndObservation("GXP Specimen Collection", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                if (result.contains("SUCCESS"))
+                    return "SUCCESS";
                 return result;
 
             }
