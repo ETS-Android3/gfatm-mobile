@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Instrumentation ContactRegistryForm, which will execute on an Android device.
+ * Instrumentation PetContactRegistryForm, which will execute on an Android device.
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
@@ -18,7 +18,7 @@ import static org.junit.Assert.assertEquals;
 public class ExampleInstrumentedTest {
     @Test
     public void useAppContext() throws Exception {
-        // Context of the app under ContactRegistryForm.
+        // Context of the app under PetContactRegistryForm.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
         assertEquals("com.ihsinformatics.gfatmmobile", appContext.getPackageName());

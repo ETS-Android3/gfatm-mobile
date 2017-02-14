@@ -21,7 +21,6 @@ import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -234,11 +233,13 @@ public class PetContactRegistryForm extends AbstractFormActivity {
     public boolean submit() {
 
         Bundle bundle = this.getArguments();
-        Boolean saveFlag = bundle.getBoolean("save", false);
-        if (saveFlag) {
-            Toast.makeText(context, "Hello!",
-                    Toast.LENGTH_LONG).show();
-            return true;
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            String encounterId = bundle.getString("encounterId");
+            if (saveFlag) {
+                serverService.deleteOfflineForms(encounterId);
+            }
+            bundle.putBoolean("save", false);
         }
 
         endTime = new Date();

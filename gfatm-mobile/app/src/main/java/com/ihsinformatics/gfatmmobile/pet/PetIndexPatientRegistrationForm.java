@@ -441,7 +441,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
             else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_kanamycin)))
                 treatmentRegimenString = treatmentRegimenString + "KANAMYCIN" + " ; ";
             else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_linezolid)))
-                treatmentRegimenString = treatmentRegimenString + "MOXIFLOXACIN" + " ; ";
+                treatmentRegimenString = treatmentRegimenString + "LINEZOLID" + " ; ";
             else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_moxifloxacin)))
                 treatmentRegimenString = treatmentRegimenString + "MOXIFLOXACIN" + " ; ";
             else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_prothionamide)))

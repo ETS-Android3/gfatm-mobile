@@ -347,6 +347,9 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
                 });
 
                 String result = serverService.saveEncounterAndObservation(FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                if (result.contains("SUCCESS"))
+                    return "SUCCESS";
+
                 return result;
 
             }

@@ -1373,6 +1373,10 @@ public class ServerService {
         return encounter;
     }
 
+    public boolean deleteOfflineForms(String encounterId) {
+        return dbUtil.delete(Metadata.OFFLINE_FORM, "encounter_id=?", new String[]{encounterId});
+    }
+
 
 
 }
