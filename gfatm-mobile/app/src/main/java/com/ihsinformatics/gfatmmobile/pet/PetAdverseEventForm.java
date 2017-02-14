@@ -1,10 +1,12 @@
 package com.ihsinformatics.gfatmmobile.pet;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -42,27 +44,13 @@ import java.util.Date;
  * Created by Rabbia on 11/24/2016.
  */
 
-public class ClinicianFollowupForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class PetAdverseEventForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
     Context context;
 
     TitledButton formDate;
+    TitledEditText weight;
 
-    TitledRadioGroup cough;
-    TitledRadioGroup coughDuration;
-    TitledRadioGroup haemoptysis;
-    TitledRadioGroup difficultyBreathing;
-    TitledRadioGroup fever;
-    TitledRadioGroup feverDuration;
-    TitledRadioGroup weightLoss;
-    TitledRadioGroup nightSweats;
-    TitledRadioGroup lethargy;
-    TitledRadioGroup swollenJoints;
-    TitledRadioGroup backPain;
-    TitledRadioGroup adenopathy;
-    TitledRadioGroup vomiting;
-    TitledRadioGroup giSymptoms;
-    TitledRadioGroup lossInterestInActivity;
 
     TitledRadioGroup dizziness;
     TitledRadioGroup nausea;
@@ -75,7 +63,6 @@ public class ClinicianFollowupForm extends AbstractFormActivity implements Radio
     TitledEditText otherSideEffects;
     TitledRadioGroup sideeffectsConsistent;
 
-    TitledRadioGroup missedDosed;
     TitledCheckBoxes actionPlan;
     TitledEditText medicationDiscontinueReason;
     TitledEditText medicationDiscontinueDuration;
@@ -91,16 +78,16 @@ public class ClinicianFollowupForm extends AbstractFormActivity implements Radio
     TitledEditText newInstruction;
     TitledButton returnVisitDate;
 
+    Snackbar snackbar;
     ScrollView scrollView;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        PAGE_COUNT = 3;
-        FORM_NAME = Forms.PET_CLINICIAN_FOLLOWUP;
-        FORM = Forms.pet_clinicianFollowup;
+        PAGE_COUNT = 2;
+        FORM_NAME = Forms.PET_ADVERSE_EVENTS;
+        FORM = Forms.pet_adverseEvents;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -154,41 +141,10 @@ public class ClinicianFollowupForm extends AbstractFormActivity implements Radio
     public void initViews() {
 
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        weight = new TitledEditText(context, null, getResources().getString(R.string.pet_weight), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_NUMBER_FLAG_DECIMAL, App.HORIZONTAL, true);
 
-        MyLinearLayout linearLayout1 = new MyLinearLayout(context, getResources().getString(R.string.pet_tb_symptoms), App.VERTICAL);
-        cough = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_cough), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
-        coughDuration = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_cough_duration), getResources().getStringArray(R.array.pet_cough_durations), getResources().getString(R.string.pet_less_than_2_weeks), App.VERTICAL, App.VERTICAL);
-        haemoptysis = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_haemoptysis), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
-        difficultyBreathing = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_difficulty_breathing), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
-        fever = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_fever), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
-        feverDuration = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_fever_duration), getResources().getStringArray(R.array.pet_cough_durations), getResources().getString(R.string.pet_less_than_2_weeks), App.VERTICAL, App.VERTICAL);
-        weightLoss = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_weight_loss), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
-        nightSweats = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_night_sweats), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
-        lethargy = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_lethargy), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
-        swollenJoints = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_swollen_joints), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
-        backPain = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_back_pain), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
-        adenopathy = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_adenopathy), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
-        vomiting = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_vomiting_without_gi_symptoms), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
-        giSymptoms = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_gi_symptoms), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
-        lossInterestInActivity = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_lost_activity_interest), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
 
-        linearLayout1.addView(cough);
-        linearLayout1.addView(coughDuration);
-        linearLayout1.addView(haemoptysis);
-        linearLayout1.addView(difficultyBreathing);
-        linearLayout1.addView(fever);
-        linearLayout1.addView(feverDuration);
-        linearLayout1.addView(weightLoss);
-        linearLayout1.addView(nightSweats);
-        linearLayout1.addView(lethargy);
-        linearLayout1.addView(swollenJoints);
-        linearLayout1.addView(backPain);
-        linearLayout1.addView(adenopathy);
-        linearLayout1.addView(vomiting);
-        linearLayout1.addView(giSymptoms);
-        linearLayout1.addView(lossInterestInActivity);
-
-        MyLinearLayout linearLayout2 = new MyLinearLayout(context, getResources().getString(R.string.pet_medication_side_effects), App.VERTICAL);
+        MyLinearLayout linearLayout1 = new MyLinearLayout(context, getResources().getString(R.string.pet_adverse_events_followup_details), App.VERTICAL);
         dizziness = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_dizziness), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         nausea = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_nausea_vomiting), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         abdominalPain = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_abdominal_pain), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
@@ -202,117 +158,66 @@ public class ClinicianFollowupForm extends AbstractFormActivity implements Radio
         otherSideEffects.getEditText().setMinimumHeight(150);
         sideeffectsConsistent = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_side_effect_consistent), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
 
-        linearLayout2.addView(dizziness);
-        linearLayout2.addView(nausea);
-        linearLayout2.addView(abdominalPain);
-        linearLayout2.addView(lossOfAppetite);
-        linearLayout2.addView(jaundice);
-        linearLayout2.addView(rash);
-        linearLayout2.addView(tendonPain);
-        linearLayout2.addView(eyeProblem);
-        linearLayout2.addView(otherSideEffects);
-        linearLayout2.addView(sideeffectsConsistent);
+        linearLayout1.addView(dizziness);
+        linearLayout1.addView(nausea);
+        linearLayout1.addView(abdominalPain);
+        linearLayout1.addView(lossOfAppetite);
+        linearLayout1.addView(jaundice);
+        linearLayout1.addView(rash);
+        linearLayout1.addView(tendonPain);
+        linearLayout1.addView(eyeProblem);
+        linearLayout1.addView(otherSideEffects);
+        linearLayout1.addView(sideeffectsConsistent);
 
-        MyLinearLayout linearLayout3 = new MyLinearLayout(context, getResources().getString(R.string.pet_clinician_review), App.VERTICAL);
-        missedDosed = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_missed_dosed), getResources().getStringArray(R.array.pet_missed_dosed_options), getResources().getString(R.string.pet_no_missed_dosed), App.VERTICAL, App.VERTICAL);
-        actionPlan = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_action_plan), getResources().getStringArray(R.array.pet_action_plan), null, App.VERTICAL, App.VERTICAL);
-        medicationDiscontinueReason = new TitledEditText(context, null, getResources().getString(R.string.pet_discontinue_medication), "", "", 250, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        MyLinearLayout linearLayout2 = new MyLinearLayout(context, getResources().getString(R.string.pet_symptoms_require), App.VERTICAL);
+        actionPlan = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_action_plan), getResources().getStringArray(R.array.pet_action_plan), null, App.VERTICAL, App.VERTICAL, true);
+        medicationDiscontinueReason = new TitledEditText(context, null, getResources().getString(R.string.pet_discontinue_medication_reason), "", "", 250, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         medicationDiscontinueReason.getEditText().setSingleLine(false);
         medicationDiscontinueReason.getEditText().setMinimumHeight(150);
-        medicationDiscontinueDuration = new TitledEditText(context, null, getResources().getString(R.string.pet_discontinue_medication_duration), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
-        newMedication = new TitledEditText(context, null, getResources().getString(R.string.pet_new_medication), "", "", 250, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        medicationDiscontinueDuration = new TitledEditText(context, null, getResources().getString(R.string.pet_discontinue_medication_duration), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        newMedication = new TitledEditText(context, null, getResources().getString(R.string.pet_new_medication_reason), "", "", 250, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         newMedication.getEditText().setSingleLine(false);
         newMedication.getEditText().setMinimumHeight(150);
-        newMedicationDuration = new TitledEditText(context, null, getResources().getString(R.string.pet_new_medication_duration), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
+        newMedicationDuration = new TitledEditText(context, null, getResources().getString(R.string.pet_new_medication_duration), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         petRegimen = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_regimen), getResources().getStringArray(R.array.pet_regimens), "", App.VERTICAL, App.VERTICAL);
-        isoniazidDose = new TitledEditText(context, null, getResources().getString(R.string.pet_isoniazid_dose), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
-        rifapentineDose = new TitledEditText(context, null, getResources().getString(R.string.pet_rifapentine_dose), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
-        levofloxacinDose = new TitledEditText(context, null, getResources().getString(R.string.pet_levofloxacin_dose), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
-        ethionamideDose = new TitledEditText(context, null, getResources().getString(R.string.pet_ethionamide_dose), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
-        ancillaryDrugs = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_ancillary_drugs), getResources().getStringArray(R.array.pet_ancillary_drugs), null, App.VERTICAL, App.VERTICAL);
+        isoniazidDose = new TitledEditText(context, null, getResources().getString(R.string.pet_isoniazid_dose), "", "", 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
+        rifapentineDose = new TitledEditText(context, null, getResources().getString(R.string.pet_rifapentine_dose), "", "", 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
+        levofloxacinDose = new TitledEditText(context, null, getResources().getString(R.string.pet_levofloxacin_dose), "", "", 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
+        ethionamideDose = new TitledEditText(context, null, getResources().getString(R.string.pet_ethionamide_dose), "", "", 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
+        ancillaryDrugs = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_ancillary_drugs), getResources().getStringArray(R.array.pet_ancillary_drugs), null, App.VERTICAL, App.VERTICAL, true);
         ancillaryDrugDuration = new TitledEditText(context, null, getResources().getString(R.string.pet_ancillary_drug_duration_days), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         newInstruction = new TitledEditText(context, null, getResources().getString(R.string.pet_new_instructions), "", "", 250, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         newInstruction.getEditText().setSingleLine(false);
         newInstruction.getEditText().setMinimumHeight(150);
         returnVisitDate = new TitledButton(context, null, getResources().getString(R.string.pet_return_visit_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.VERTICAL);
 
-        linearLayout3.addView(missedDosed);
-        linearLayout3.addView(actionPlan);
-        linearLayout3.addView(medicationDiscontinueReason);
-        linearLayout3.addView(newMedication);
-        linearLayout3.addView(newMedicationDuration);
-        linearLayout3.addView(petRegimen);
-        linearLayout3.addView(isoniazidDose);
-        linearLayout3.addView(rifapentineDose);
-        linearLayout3.addView(levofloxacinDose);
-        linearLayout3.addView(ethionamideDose);
-        linearLayout3.addView(ancillaryDrugs);
-        linearLayout3.addView(ancillaryDrugDuration);
-        linearLayout3.addView(newInstruction);
-        linearLayout3.addView(returnVisitDate);
+        linearLayout2.addView(actionPlan);
+        linearLayout2.addView(medicationDiscontinueReason);
+        linearLayout2.addView(medicationDiscontinueDuration);
+        linearLayout2.addView(newMedication);
+        linearLayout2.addView(newMedicationDuration);
+        linearLayout2.addView(petRegimen);
+        linearLayout2.addView(isoniazidDose);
+        linearLayout2.addView(rifapentineDose);
+        linearLayout2.addView(levofloxacinDose);
+        linearLayout2.addView(ethionamideDose);
+        linearLayout2.addView(ancillaryDrugs);
+        linearLayout2.addView(ancillaryDrugDuration);
+        linearLayout2.addView(newInstruction);
+        linearLayout2.addView(returnVisitDate);
 
-        views = new View[]{formDate.getButton(), cough.getRadioGroup(), coughDuration.getRadioGroup(), haemoptysis.getRadioGroup(), difficultyBreathing.getRadioGroup(), fever.getRadioGroup(), feverDuration.getRadioGroup(),
-                weightLoss.getRadioGroup(), nightSweats.getRadioGroup(), lethargy.getRadioGroup(), swollenJoints.getRadioGroup(), backPain.getRadioGroup(), adenopathy.getRadioGroup(),
-                vomiting.getRadioGroup(), giSymptoms.getRadioGroup(), lossInterestInActivity.getRadioGroup(),
-                dizziness.getRadioGroup(), nausea.getRadioGroup(), abdominalPain.getRadioGroup(), lossOfAppetite.getRadioGroup(), jaundice.getRadioGroup(), jaundice.getRadioGroup(), rash.getRadioGroup(),
+        views = new View[]{formDate.getButton(), weight.getEditText(), dizziness.getRadioGroup(), nausea.getRadioGroup(), abdominalPain.getRadioGroup(), lossOfAppetite.getRadioGroup(), jaundice.getRadioGroup(), jaundice.getRadioGroup(), rash.getRadioGroup(),
                 tendonPain.getRadioGroup(), eyeProblem.getRadioGroup(), otherSideEffects.getEditText(), sideeffectsConsistent.getRadioGroup(),
-                missedDosed.getRadioGroup(), actionPlan, medicationDiscontinueReason.getEditText(), medicationDiscontinueDuration.getEditText(), newMedication.getEditText(), newMedicationDuration.getEditText(),
+                actionPlan, medicationDiscontinueReason.getEditText(), medicationDiscontinueDuration.getEditText(), newMedication.getEditText(), newMedicationDuration.getEditText(),
                 petRegimen.getRadioGroup(), isoniazidDose.getEditText(), rifapentineDose.getEditText(), levofloxacinDose.getEditText(), ethionamideDose.getEditText(), ancillaryDrugs, ancillaryDrugDuration,
                 newInstruction.getEditText(), returnVisitDate.getButton()
         };
 
-        viewGroups = new View[][]{{formDate, linearLayout1},
-                {linearLayout2},
-                {linearLayout3}};
+        viewGroups = new View[][]{{formDate, weight, linearLayout1},
+                {linearLayout2}};
 
         formDate.getButton().setOnClickListener(this);
         returnVisitDate.getButton().setOnClickListener(this);
-
-        cough.getRadioGroup().setOnCheckedChangeListener(this);
-        fever.getRadioGroup().setOnCheckedChangeListener(this);
-
-        coughDuration.setVisibility(View.GONE);
-        haemoptysis.setVisibility(View.GONE);
-        feverDuration.setVisibility(View.GONE);
-
-        if (App.getPatient().getPerson().getAge() > 5)
-            weightLoss.setVisibility(View.GONE);
-        else
-            weightLoss.setVisibility(View.VISIBLE);
-
-        petRegimen.getRadioGroup().setOnCheckedChangeListener(this);
-
-        medicationDiscontinueReason.setVisibility(View.GONE);
-        medicationDiscontinueDuration.setVisibility(View.GONE);
-        newMedication.setVisibility(View.GONE);
-        newMedicationDuration.setVisibility(View.GONE);
-        petRegimen.setVisibility(View.GONE);
-        isoniazidDose.setVisibility(View.GONE);
-        rifapentineDose.setVisibility(View.GONE);
-        levofloxacinDose.setVisibility(View.GONE);
-        ethionamideDose.setVisibility(View.GONE);
-        ancillaryDrugs.setVisibility(View.GONE);
-        ancillaryDrugDuration.setVisibility(View.GONE);
-
-        for (CheckBox cb : actionPlan.getCheckedBoxes())
-            cb.setOnCheckedChangeListener(this);
-
-    }
-
-    @Override
-    public void resetViews() {
-        super.resetViews();
-
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        coughDuration.setVisibility(View.GONE);
-        haemoptysis.setVisibility(View.GONE);
-        feverDuration.setVisibility(View.GONE);
-
-        if (App.getPatient().getPerson().getAge() > 5)
-            weightLoss.setVisibility(View.GONE);
-        else
-            weightLoss.setVisibility(View.VISIBLE);
-
         petRegimen.getRadioGroup().setOnCheckedChangeListener(this);
 
         medicationDiscontinueReason.setVisibility(View.GONE);
@@ -334,7 +239,48 @@ public class ClinicianFollowupForm extends AbstractFormActivity implements Radio
 
     @Override
     public void updateDisplay() {
+        if (snackbar != null)
+            snackbar.dismiss();
+
+        if (!formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString())) {
+
+            if (formDateCalendar.after(new Date())) {
+
+                Date date = App.stringToDate(formDate.getButton().getText().toString(), "dd-MMM-yyyy");
+                formDateCalendar = App.getCalendar(date);
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+            } else
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        }
+
+    }
+
+
+    @Override
+    public void resetViews() {
+        super.resetViews();
+
+        if (snackbar != null)
+            snackbar.dismiss();
+
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        medicationDiscontinueReason.setVisibility(View.GONE);
+        medicationDiscontinueDuration.setVisibility(View.GONE);
+        newMedication.setVisibility(View.GONE);
+        newMedicationDuration.setVisibility(View.GONE);
+        petRegimen.setVisibility(View.GONE);
+        isoniazidDose.setVisibility(View.GONE);
+        rifapentineDose.setVisibility(View.GONE);
+        levofloxacinDose.setVisibility(View.GONE);
+        ethionamideDose.setVisibility(View.GONE);
+        ancillaryDrugs.setVisibility(View.GONE);
+        ancillaryDrugDuration.setVisibility(View.GONE);
+
     }
 
 
@@ -454,6 +400,14 @@ public class ClinicianFollowupForm extends AbstractFormActivity implements Radio
             error = true;
         }
 
+        if (App.get(weight).isEmpty()) {
+            weight.getEditText().setError(getString(R.string.empty_field));
+            weight.getEditText().requestFocus();
+            gotoLastPage();
+            view = null;
+            error = true;
+        }
+
         if (error) {
 
             final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
@@ -493,35 +447,13 @@ public class ClinicianFollowupForm extends AbstractFormActivity implements Radio
     public boolean submit() {
         endTime = new Date();
 
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
-        observations.add(new String[]{"COUGH", App.get(cough).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        if (coughDuration.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"COUGH DURATION", App.get(coughDuration).equals(getResources().getString(R.string.pet_less_than_2_weeks)) ? "COUGH LASTING LESS THAN 2 WEEKS (163739)" :
-                    (App.get(coughDuration).equals(getResources().getString(R.string.pet_two_three_weeks)) ? "COUGH LASTING MORE THAN 2 WEEKS" :
-                            (App.get(coughDuration).equals(getResources().getString(R.string.pet_more_than_3_weeks)) ? "COUGH LASTING MORE THAN 3 WEEKS" :
-                                    (App.get(coughDuration).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSED")))});
-        if (haemoptysis.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"HEMOPTYSIS", App.get(haemoptysis).equals(getResources().getString(R.string.yes)) ? "YES" :
-                    (App.get(haemoptysis).equals(getResources().getString(R.string.no)) ? "NO" :
-                            (App.get(haemoptysis).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
-        observations.add(new String[]{"DYSPNEA", App.get(difficultyBreathing).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        observations.add(new String[]{"FEVER", App.get(fever).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        if (feverDuration.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"FEVER DURATION", App.get(feverDuration).equals(getResources().getString(R.string.pet_less_than_2_weeks)) ? "COUGH LASTING LESS THAN 2 WEEKS (163739)" :
-                    (App.get(feverDuration).equals(getResources().getString(R.string.pet_two_three_weeks)) ? "COUGH LASTING MORE THAN 2 WEEKS" :
-                            (App.get(feverDuration).equals(getResources().getString(R.string.pet_more_than_3_weeks)) ? "COUGH LASTING MORE THAN 3 WEEKS" :
-                                    (App.get(feverDuration).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSED")))});
-        if (weightLoss.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"WEIGHT LOSS", App.get(weightLoss).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        observations.add(new String[]{"NIGHT SWEATS", App.get(nightSweats).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        observations.add(new String[]{"LETHARGY", App.get(lethargy).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        observations.add(new String[]{"JOINT SWELLING", App.get(swollenJoints).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        observations.add(new String[]{"BACK PAIN", App.get(backPain).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        observations.add(new String[]{"ADENOPATHY", App.get(adenopathy).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        observations.add(new String[]{"VOMITING", App.get(vomiting).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        observations.add(new String[]{"GASTROINTESTINAL SYMPTOM", App.get(giSymptoms).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        observations.add(new String[]{"LOSS OF INTEREST", App.get(lossInterestInActivity).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        final ContentValues values = new ContentValues();
+        values.put("formDate", App.getSqlDate(formDateCalendar));
+        // start time...
+        // end time...
+        // gps coordinate...
 
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
         observations.add(new String[]{"DIZZINESS AND GIDDINESS", App.get(dizziness).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         observations.add(new String[]{"NAUSEA AND VOMITING", App.get(nausea).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         observations.add(new String[]{"ABDOMINAL PAIN", App.get(abdominalPain).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
@@ -532,11 +464,6 @@ public class ClinicianFollowupForm extends AbstractFormActivity implements Radio
         observations.add(new String[]{"VISION PROBLEM", App.get(eyeProblem).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         observations.add(new String[]{"OTHER ADVERSE EVENT", App.get(otherSideEffects)});
         observations.add(new String[]{"CONSISTENT SIDE EFFECTS", App.get(sideeffectsConsistent).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        observations.add(new String[]{"ACTION PLAN", App.get(missedDosed).equals(getResources().getString(R.string.pet_continue_medication_greater_adherence)) ? "CONTINUE MEDICATION (HIGH ADHERENCE)" :
-                (App.get(missedDosed).equals(getResources().getString(R.string.pet_continue_medication_less_adherence)) ? "CONTINUE MEDICATION (LOW ADHERENCE)" :
-                        (App.get(missedDosed).equals(getResources().getString(R.string.pet_discontinue_medication)) ? "DISCONTINUE MEDICATION" : ""))});
-        // Missed Dosed
-
         String actionPlanString = "";
         for (CheckBox cb : actionPlan.getCheckedBoxes()) {
             if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_continue_medication_greater_adherence)))
@@ -557,7 +484,6 @@ public class ClinicianFollowupForm extends AbstractFormActivity implements Radio
                 actionPlanString = actionPlanString + "GIVE ANCILLARY DRUG" + " ; ";
         }
         observations.add(new String[]{"ACTION PLAN", actionPlanString});
-
         if (medicationDiscontinueReason.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"REASON TO DISCONTINUE MEDICATION", App.get(medicationDiscontinueReason)});
         if (medicationDiscontinueDuration.getVisibility() == View.VISIBLE)
@@ -577,6 +503,8 @@ public class ClinicianFollowupForm extends AbstractFormActivity implements Radio
             observations.add(new String[]{"LEVOFLOXACIN DOSE", App.get(levofloxacinDose)});
         if (ethionamideDose.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"ETHIONAMIDE DOSE", App.get(ethionamideDose)});
+        if (isoniazidDose.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"ISONIAZID DOSE", App.get(isoniazidDose)});
         if (ancillaryDrugs.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"ANCILLARY DRUGS", App.get(ancillaryDrugs).equals(getResources().getString(R.string.pet_iron_deficiency_prtocol)) ? "IRON" :
                     (App.get(ancillaryDrugs).equals(getResources().getString(R.string.pet_vitamin_d_protocol)) ? "VITAMIN D" : "CHLORPHENIRAMINE / METHSCOPOLAMINE / PHENYLEPHRINE")});
@@ -599,7 +527,7 @@ public class ClinicianFollowupForm extends AbstractFormActivity implements Radio
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(FORM_NAME, App.getSqlDate(formDateCalendar), observations.toArray(new String[][]{}));
+                String result = serverService.saveEncounterAndObservation(FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}));
                 return result;
 
             }
@@ -732,21 +660,7 @@ public class ClinicianFollowupForm extends AbstractFormActivity implements Radio
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
 
-        if (group == cough.getRadioGroup()) {
-            if (App.get(cough).equals(getResources().getString(R.string.yes))) {
-                coughDuration.setVisibility(View.VISIBLE);
-                haemoptysis.setVisibility(View.VISIBLE);
-            } else {
-                coughDuration.setVisibility(View.GONE);
-                haemoptysis.setVisibility(View.GONE);
-            }
-        } else if (group == fever.getRadioGroup()) {
-            if (App.get(fever).equals(getResources().getString(R.string.yes))) {
-                feverDuration.setVisibility(View.VISIBLE);
-            } else {
-                feverDuration.setVisibility(View.GONE);
-            }
-        } else if (group == petRegimen.getRadioGroup()) {
+        if (group == petRegimen.getRadioGroup()) {
 
             int age = App.getPatient().getPerson().getAge();
 

@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -12,7 +13,6 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +24,6 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
-import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -45,7 +44,7 @@ import java.util.Date;
  * Created by Rabbia on 11/24/2016.
  */
 
-public class ClinicianContactScreeningForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class PetClinicianContactScreeningForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
     Context context;
 
@@ -54,7 +53,7 @@ public class ClinicianContactScreeningForm extends AbstractFormActivity implemen
     TitledEditText height;
     TitledEditText bmi;
     TitledEditText muac;
-    TitledRadioGroup weightPercentile;
+    TitledSpinner weightPercentile;
 
     TitledRadioGroup cough;
     TitledRadioGroup coughDuration;
@@ -100,7 +99,7 @@ public class ClinicianContactScreeningForm extends AbstractFormActivity implemen
     TitledRadioGroup abdominal;
     TitledEditText abdominalExplanation;
     TitledEditText others;
-    TitledSpinner examOutcome;
+    TitledRadioGroup examOutcome;
     TitledCheckBoxes comorbidCondition;
     CheckBox otherComorbidCondition;
     TitledEditText otherCondition;
@@ -171,10 +170,10 @@ public class ClinicianContactScreeningForm extends AbstractFormActivity implemen
         height = new TitledEditText(context, null, getResources().getString(R.string.pet_height), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         bmi = new TitledEditText(context, null, getResources().getString(R.string.pet_bmi), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         muac = new TitledEditText(context, null, getResources().getString(R.string.pet_muac), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_NUMBER_FLAG_DECIMAL, App.HORIZONTAL, true);
-        weightPercentile = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_weight_percentile), getResources().getStringArray(R.array.pet_weight_percentiles), getResources().getString(R.string.pet_less_third_percentile), App.VERTICAL, App.VERTICAL, true);
+        weightPercentile = new TitledSpinner(context, null, getResources().getString(R.string.pet_weight_percentile), getResources().getStringArray(R.array.pet_weight_percentiles), getResources().getString(R.string.pet_less_third_percentile), App.VERTICAL);
         MyLinearLayout linearLayout1 = new MyLinearLayout(context, getResources().getString(R.string.pet_contact_symptom_screen), App.VERTICAL);
         cough = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_has_cough), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true);
-        coughDuration = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_cough_duration), getResources().getStringArray(R.array.pet_cough_durations), getResources().getString(R.string.no), App.VERTICAL, App.VERTICAL, true);
+        coughDuration = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_cough_duration), getResources().getStringArray(R.array.pet_cough_durations), getResources().getString(R.string.pet_less_than_2_weeks), App.VERTICAL, App.VERTICAL, true);
         haemoptysis = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_haemoptysis), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true);
         difficultyBreathing = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_difficulty_breathing), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true);
         fever = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_fever), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true);
@@ -265,7 +264,7 @@ public class ClinicianContactScreeningForm extends AbstractFormActivity implemen
         others = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         others.getEditText().setSingleLine(false);
         others.getEditText().setMinimumHeight(150);
-        examOutcome = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_tb_suggestive), getResources().getStringArray(R.array.pet_tb_suggestives), getResources().getString(R.string.pet_not_tb_suggestive), App.VERTICAL, true);
+        examOutcome = new TitledRadioGroup(mainContent.getContext(), "", getResources().getString(R.string.pet_tb_suggestive), getResources().getStringArray(R.array.pet_tb_suggestives), getResources().getString(R.string.pet_not_tb_suggestive), App.VERTICAL, App.VERTICAL);
         comorbidCondition = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_comorbid_condition), getResources().getStringArray(R.array.pet_comorbid_conditions), null, App.VERTICAL, App.VERTICAL);
         otherCondition = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 15, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         referral = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_referral_needed), getResources().getStringArray(R.array.yes_no_unknown_options), getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
@@ -296,7 +295,7 @@ public class ClinicianContactScreeningForm extends AbstractFormActivity implemen
         linearLayout3.addView(referral);
         linearLayout3.addView(clincianNote);
 
-        views = new View[]{formDate.getButton(), weight.getEditText(), height.getEditText(), bmi.getEditText(), muac.getEditText(), weightPercentile.getRadioGroup(),
+        views = new View[]{formDate.getButton(), weight.getEditText(), height.getEditText(), bmi.getEditText(), muac.getEditText(), weightPercentile.getSpinner(),
                 cough.getRadioGroup(), coughDuration.getRadioGroup(), haemoptysis.getRadioGroup(), difficultyBreathing.getRadioGroup(), fever.getRadioGroup(), feverDuration.getRadioGroup(),
                 weightLoss.getRadioGroup(), nightSweats.getRadioGroup(), lethargy.getRadioGroup(), swollenJoints.getRadioGroup(), backPain.getRadioGroup(), adenopathy.getRadioGroup(),
                 vomiting.getRadioGroup(), giSymptoms.getRadioGroup(), lossInterestInActivity.getRadioGroup(), exposurePoint1.getRadioGroup(), exposurePoint2.getRadioGroup(), exposurePoint3.getRadioGroup(),
@@ -304,7 +303,7 @@ public class ClinicianContactScreeningForm extends AbstractFormActivity implemen
                 exposurePoint10.getRadioGroup(), exposureScore.getEditText(),
                 generalAppearence.getRadioGroup(), generalAppearenceExplanation.getEditText(), heent.getRadioGroup(), heentExplanation.getEditText(), lymphnode.getRadioGroup(), lymphnodeExplanation.getEditText(),
                 spine.getRadioGroup(), spineExplanation.getEditText(), joints.getRadioGroup(), jointsExplanation.getEditText(), skin.getRadioGroup(), jointsExplanation.getEditText(),
-                chest.getRadioGroup(), chestExplanation.getEditText(), abdominal.getRadioGroup(), abdominal.getRadioGroup(), examOutcome.getSpinner(), comorbidCondition,
+                chest.getRadioGroup(), chestExplanation.getEditText(), abdominal.getRadioGroup(), abdominal.getRadioGroup(), examOutcome.getRadioGroup(), comorbidCondition,
                 otherCondition.getEditText(), referral.getRadioGroup(), clincianNote.getEditText()};
 
         viewGroups = new View[][]{{formDate, weight, height, bmi, muac, weightPercentile},
@@ -431,23 +430,7 @@ public class ClinicianContactScreeningForm extends AbstractFormActivity implemen
 
         }
 
-        coughDuration.setVisibility(View.GONE);
-        haemoptysis.setVisibility(View.GONE);
-        feverDuration.setVisibility(View.GONE);
-        generalAppearenceExplanation.setVisibility(View.GONE);
-        heentExplanation.setVisibility(View.GONE);
-        lymphnodeExplanation.setVisibility(View.GONE);
-        spineExplanation.setVisibility(View.GONE);
-        jointsExplanation.setVisibility(View.GONE);
-        skinExplanation.setVisibility(View.GONE);
-        chestExplanation.setVisibility(View.GONE);
-        abdominalExplanation.setVisibility(View.GONE);
-        otherCondition.setVisibility(View.GONE);
-
-        if (App.getPatient().getPerson().getAge() < 6)
-            muac.setVisibility(View.VISIBLE);
-        else
-            muac.setVisibility(View.VISIBLE);
+        resetViews();
 
     }
 
@@ -472,7 +455,12 @@ public class ClinicianContactScreeningForm extends AbstractFormActivity implemen
         if (App.getPatient().getPerson().getAge() < 6)
             muac.setVisibility(View.VISIBLE);
         else
-            muac.setVisibility(View.VISIBLE);
+            muac.setVisibility(View.GONE);
+
+        if (App.getPatient().getPerson().getAge() < 18)
+            weightPercentile.setVisibility(View.VISIBLE);
+        else
+            weightPercentile.setVisibility(View.GONE);
 
     }
 
@@ -600,8 +588,10 @@ public class ClinicianContactScreeningForm extends AbstractFormActivity implemen
         observations.add(new String[]{"HEIGHT (CM)", App.get(height)});
         String[] bmiString = App.get(bmi).split(" - ");
         observations.add(new String[]{"BODY MASS INDEX", bmiString[0]});
-        observations.add(new String[]{"MID-UPPER ARM CIRCUMFERENCE", App.get(muac)});
-        observations.add(new String[]{"WEIGHT PERCENTILE GROUP", App.get(weightPercentile).equals(getResources().getString(R.string.pet_less_third_percentile)) ? "<3rd Centile" :
+        if (muac.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"MID-UPPER ARM CIRCUMFERENCE", App.get(muac)});
+        if (weightPercentile.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"WEIGHT PERCENTILE GROUP", App.get(weightPercentile).equals(getResources().getString(R.string.pet_less_third_percentile)) ? "<3rd Centile" :
                 (App.get(weightPercentile).equals(getResources().getString(R.string.pet_third_percentile)) ? "3rd Centile" :
                         (App.get(weightPercentile).equals(getResources().getString(R.string.pet_fifth_percentile)) ? "5th Centile" :
                                 (App.get(weightPercentile).equals(getResources().getString(R.string.pet_tenth_percentile)) ? "10th Centile" :
@@ -614,7 +604,9 @@ public class ClinicianContactScreeningForm extends AbstractFormActivity implemen
                                                                                         (App.get(weightPercentile).equals(getResources().getString(R.string.pet_seventy_hundredth_percentile)) ? "between 75-100th Centile" :
                                                                                                 (App.get(weightPercentile).equals(getResources().getString(R.string.pet_hundreth_percentile)) ? "100th Centile" : ">100th Centile")))))))))))});
 
-        observations.add(new String[]{"COUGH", App.get(cough).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        observations.add(new String[]{"COUGH", App.get(cough).equals(getResources().getString(R.string.yes)) ? "YES" :
+                (App.get(cough).equals(getResources().getString(R.string.no)) ? "NO" :
+                        (App.get(cough).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
         if (coughDuration.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"COUGH DURATION", App.get(coughDuration).equals(getResources().getString(R.string.pet_less_than_2_weeks)) ? "COUGH LASTING LESS THAN 2 WEEKS (163739)" :
                     (App.get(coughDuration).equals(getResources().getString(R.string.pet_two_three_weeks)) ? "COUGH LASTING MORE THAN 2 WEEKS" :
@@ -624,23 +616,45 @@ public class ClinicianContactScreeningForm extends AbstractFormActivity implemen
             observations.add(new String[]{"HEMOPTYSIS", App.get(haemoptysis).equals(getResources().getString(R.string.yes)) ? "YES" :
                     (App.get(haemoptysis).equals(getResources().getString(R.string.no)) ? "NO" :
                             (App.get(haemoptysis).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
-        observations.add(new String[]{"DYSPNEA", App.get(difficultyBreathing).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        observations.add(new String[]{"FEVER", App.get(fever).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        observations.add(new String[]{"DYSPNEA", App.get(difficultyBreathing).equals(getResources().getString(R.string.yes)) ? "YES" :
+                (App.get(difficultyBreathing).equals(getResources().getString(R.string.no)) ? "NO" :
+                        (App.get(difficultyBreathing).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+        observations.add(new String[]{"FEVER", App.get(fever).equals(getResources().getString(R.string.yes)) ? "YES" :
+                (App.get(fever).equals(getResources().getString(R.string.no)) ? "NO" :
+                        (App.get(fever).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
         if (feverDuration.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"FEVER DURATION", App.get(feverDuration).equals(getResources().getString(R.string.pet_less_than_2_weeks)) ? "COUGH LASTING LESS THAN 2 WEEKS (163739)" :
                     (App.get(feverDuration).equals(getResources().getString(R.string.pet_two_three_weeks)) ? "COUGH LASTING MORE THAN 2 WEEKS" :
                             (App.get(feverDuration).equals(getResources().getString(R.string.pet_more_than_3_weeks)) ? "COUGH LASTING MORE THAN 3 WEEKS" :
                                     (App.get(feverDuration).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSED")))});
         if (weightLoss.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"WEIGHT LOSS", App.get(weightLoss).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        observations.add(new String[]{"NIGHT SWEATS", App.get(nightSweats).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        observations.add(new String[]{"LETHARGY", App.get(lethargy).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        observations.add(new String[]{"JOINT SWELLING", App.get(swollenJoints).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        observations.add(new String[]{"BACK PAIN", App.get(backPain).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        observations.add(new String[]{"ADENOPATHY", App.get(adenopathy).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        observations.add(new String[]{"VOMITING", App.get(vomiting).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        observations.add(new String[]{"GASTROINTESTINAL SYMPTOM", App.get(giSymptoms).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        observations.add(new String[]{"LOSS OF INTEREST", App.get(lossInterestInActivity).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+            observations.add(new String[]{"WEIGHT LOSS", App.get(swollenJoints).equals(getResources().getString(R.string.yes)) ? "YES" :
+                    (App.get(swollenJoints).equals(getResources().getString(R.string.no)) ? "NO" :
+                            (App.get(swollenJoints).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+        observations.add(new String[]{"NIGHT SWEATS", App.get(nightSweats).equals(getResources().getString(R.string.yes)) ? "YES" :
+                (App.get(nightSweats).equals(getResources().getString(R.string.no)) ? "NO" :
+                        (App.get(nightSweats).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+        observations.add(new String[]{"LETHARGY", App.get(lethargy).equals(getResources().getString(R.string.yes)) ? "YES" :
+                (App.get(lethargy).equals(getResources().getString(R.string.no)) ? "NO" :
+                        (App.get(lethargy).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+        observations.add(new String[]{"JOINT SWELLING", App.get(swollenJoints).equals(getResources().getString(R.string.yes)) ? "YES" :
+                (App.get(swollenJoints).equals(getResources().getString(R.string.no)) ? "NO" :
+                        (App.get(swollenJoints).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+        observations.add(new String[]{"BACK PAIN", App.get(backPain).equals(getResources().getString(R.string.yes)) ? "YES" :
+                (App.get(backPain).equals(getResources().getString(R.string.no)) ? "NO" :
+                        (App.get(backPain).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+        observations.add(new String[]{"ADENOPATHY", App.get(adenopathy).equals(getResources().getString(R.string.yes)) ? "YES" :
+                (App.get(adenopathy).equals(getResources().getString(R.string.no)) ? "NO" :
+                        (App.get(adenopathy).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+        observations.add(new String[]{"VOMITING", App.get(vomiting).equals(getResources().getString(R.string.yes)) ? "YES" :
+                (App.get(vomiting).equals(getResources().getString(R.string.no)) ? "NO" :
+                        (App.get(vomiting).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+        observations.add(new String[]{"GASTROINTESTINAL SYMPTOM", App.get(giSymptoms).equals(getResources().getString(R.string.yes)) ? "YES" :
+                (App.get(giSymptoms).equals(getResources().getString(R.string.no)) ? "NO" :
+                        (App.get(giSymptoms).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+        observations.add(new String[]{"LOSS OF INTEREST", App.get(lossInterestInActivity).equals(getResources().getString(R.string.yes)) ? "YES" :
+                (App.get(lossInterestInActivity).equals(getResources().getString(R.string.no)) ? "NO" :
+                        (App.get(lossInterestInActivity).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
 
         observations.add(new String[]{"INDEX CASE MOTHER OF CONTACT", App.get(exposurePoint1).equals(getResources().getString(R.string.yes)) ? "YES" :
                 (App.get(exposurePoint1).equals(getResources().getString(R.string.no)) ? "NO" :
@@ -693,7 +707,26 @@ public class ClinicianContactScreeningForm extends AbstractFormActivity implemen
         observations.add(new String[]{"FREE TEXT COMMENT", App.get(others)});
         observations.add(new String[]{"TUBERCULOSIS PHYSICAL EXAM OUTCOME", App.get(examOutcome).equals(getResources().getString(R.string.pet_not_tb_suggestive)) ? "NO TB INDICATION" :
                 (App.get(examOutcome).equals(getResources().getString(R.string.pet_strongly_tb_suggestive)) ? "STRONGLY SUGGESTIVE OF TB" : "SUGGESTIVE OF TB")});
-        // OTHER CORMOBID CONDITIONS
+        String comorbidString = "";
+        for (CheckBox cb : comorbidCondition.getCheckedBoxes()) {
+            if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_diabetes)))
+                comorbidString = comorbidString + "DIABETES MELLITUS" + " ; ";
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_hypertension)))
+                comorbidString = comorbidString + "HYPERTENSION" + " ; ";
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_chronic_renal_disease)))
+                comorbidString = comorbidString + "CHRONIC RENAL DISEASE" + " ; ";
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_cardiovascular_disease)))
+                comorbidString = comorbidString + "CARDIOVASCULAR DISEASE" + " ; ";
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_asthma)))
+                comorbidString = comorbidString + "ASTHMA" + " ; ";
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_emphysema)))
+                comorbidString = comorbidString + "EMPHYSEMA" + " ; ";
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_copd)))
+                comorbidString = comorbidString + "CHRONIC OBSTRUCTIVE PULMONARY DISEASE" + " ; ";
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_other)))
+                comorbidString = comorbidString + "OTHER" + " ; ";
+        }
+        observations.add(new String[]{"CO-MORBID CONDITIONS", comorbidString});
         if (otherCondition.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER DISEASE", App.get(otherCondition)});
         observations.add(new String[]{"PATIENT REFERRED", App.get(referral).equals(getResources().getString(R.string.yes)) ? "YES" :
@@ -709,12 +742,12 @@ public class ClinicianContactScreeningForm extends AbstractFormActivity implemen
                         loading.setInverseBackgroundForced(true);
                         loading.setIndeterminate(true);
                         loading.setCancelable(false);
-                        loading.setMessage(getResources().getString(R.string.signing_in));
+                        loading.setMessage(getResources().getString(R.string.submitting_form));
                         loading.show();
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(FORM_NAME, App.getSqlDate(formDateCalendar), observations.toArray(new String[][]{}));
+                String result = serverService.saveEncounterAndObservation(FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}));
                 return result;
 
             }
@@ -730,15 +763,75 @@ public class ClinicianContactScreeningForm extends AbstractFormActivity implemen
                 super.onPostExecute(result);
                 loading.dismiss();
 
-                Toast toast = Toast.makeText(context, result, Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.BOTTOM, 0, 0);
-                toast.show();
+                if (result.equals("SUCCESS")) {
+                    resetViews();
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.form_submitted));
+                    Drawable submitIcon = getResources().getDrawable(R.drawable.ic_submit);
+                    alertDialog.setIcon(submitIcon);
+                    int color = App.getColor(context, R.attr.colorAccent);
+                    DrawableCompat.setTint(submitIcon, color);
+                    alertDialog.setTitle(getResources().getString(R.string.title_completed));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else if (result.equals("CONNECTION_ERROR")) {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
+                    alertDialog.setMessage(message);
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+
 
             }
         };
         submissionFormTask.execute("");
 
-        resetViews();
         return false;
     }
 

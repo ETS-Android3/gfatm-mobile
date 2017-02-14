@@ -1,12 +1,12 @@
 package com.ihsinformatics.gfatmmobile.pet;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -14,7 +14,6 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +25,6 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
-import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -48,7 +46,7 @@ import java.util.Date;
  * Created by Rabbia on 11/24/2016.
  */
 
-public class BaselineCounsellingForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class PetBaselineCounsellingForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
     Context context;
 
@@ -179,15 +177,15 @@ public class BaselineCounsellingForm extends AbstractFormActivity implements Rad
         // third page views...
         MyLinearLayout linearLayout1 = new MyLinearLayout(context, getResources().getString(R.string.pet_information_during_counselling_sessions), App.VERTICAL);
         procedure = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_procedure), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.HORIZONTAL);
-        procedureExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        procedureExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         procedureExplanation.getEditText().setSingleLine(false);
         procedureExplanation.getEditText().setMinimumHeight(150);
         purpose = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_purpose), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.HORIZONTAL);
-        purposeExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        purposeExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         purposeExplanation.getEditText().setSingleLine(false);
         purposeExplanation.getEditText().setMinimumHeight(150);
         durationOfPet = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_duration_of_pet), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.HORIZONTAL);
-        durationOfPetExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        durationOfPetExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         durationOfPetExplanation.getEditText().setSingleLine(false);
         durationOfPetExplanation.getEditText().setMinimumHeight(150);
         infectionControlMeasures = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_infection_control_measures), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.HORIZONTAL);
@@ -195,27 +193,27 @@ public class BaselineCounsellingForm extends AbstractFormActivity implements Rad
         infectionControlMeasuresExplanation.getEditText().setSingleLine(false);
         infectionControlMeasuresExplanation.getEditText().setMinimumHeight(150);
         transmission = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_transmission), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.HORIZONTAL);
-        transmissionExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        transmissionExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         transmissionExplanation.getEditText().setSingleLine(false);
         transmissionExplanation.getEditText().setMinimumHeight(150);
         adherence = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_adherence), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.HORIZONTAL);
-        adherenceExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        adherenceExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         adherenceExplanation.getEditText().setSingleLine(false);
         adherenceExplanation.getEditText().setMinimumHeight(150);
         nutrition = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_nutrition), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.HORIZONTAL);
-        nutritionExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        nutritionExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         nutritionExplanation.getEditText().setSingleLine(false);
         nutritionExplanation.getEditText().setMinimumHeight(150);
         commonAdverseEffects = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_common_adverse_effects), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.HORIZONTAL);
-        commonAdverseEffectsExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        commonAdverseEffectsExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         commonAdverseEffectsExplanation.getEditText().setSingleLine(false);
         commonAdverseEffectsExplanation.getEditText().setMinimumHeight(150);
         misconception = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_misconception), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.HORIZONTAL);
-        misconceptionExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        misconceptionExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         misconceptionExplanation.getEditText().setSingleLine(false);
         misconceptionExplanation.getEditText().setMinimumHeight(150);
         followup = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_followup), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.HORIZONTAL);
-        followupExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        followupExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         followupExplanation.getEditText().setSingleLine(false);
         followupExplanation.getEditText().setMinimumHeight(150);
         questionsByContact = new TitledEditText(context, null, getResources().getString(R.string.pet_question_by_contact), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
@@ -314,6 +312,7 @@ public class BaselineCounsellingForm extends AbstractFormActivity implements Rad
         contactIncomeGroup.getEditText().setKeyListener(null);
 
         formDate.getButton().setOnClickListener(this);
+        procedure.getRadioGroup().setOnCheckedChangeListener(this);
         purpose.getRadioGroup().setOnCheckedChangeListener(this);
         durationOfPet.getRadioGroup().setOnCheckedChangeListener(this);
         infectionControlMeasures.getRadioGroup().setOnCheckedChangeListener(this);
@@ -436,74 +435,6 @@ public class BaselineCounsellingForm extends AbstractFormActivity implements Rad
             error = true;
         }
 
-        if (App.get(followupExplanation).isEmpty() && followupExplanation.getVisibility() == View.VISIBLE) {
-            followupExplanation.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            followupExplanation.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (App.get(misconceptionExplanation).isEmpty() && misconceptionExplanation.getVisibility() == View.VISIBLE) {
-            misconceptionExplanation.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            misconceptionExplanation.getEditText().requestFocus();
-            gotoLastPage();
-            error = true;
-        }
-
-        if (App.get(commonAdverseEffectsExplanation).isEmpty() && commonAdverseEffectsExplanation.getVisibility() == View.VISIBLE) {
-            commonAdverseEffectsExplanation.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            commonAdverseEffectsExplanation.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (App.get(nutritionExplanation).isEmpty() && nutritionExplanation.getVisibility() == View.VISIBLE) {
-            nutritionExplanation.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            nutritionExplanation.getEditText().requestFocus();
-            gotoLastPage();
-            error = true;
-        }
-
-        if (App.get(adherenceExplanation).isEmpty() && adherenceExplanation.getVisibility() == View.VISIBLE) {
-            adherenceExplanation.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            adherenceExplanation.getEditText().requestFocus();
-            gotoLastPage();
-            error = true;
-        }
-
-        if (App.get(transmissionExplanation).isEmpty() && transmissionExplanation.getVisibility() == View.VISIBLE) {
-            transmissionExplanation.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            transmissionExplanation.getEditText().requestFocus();
-            gotoLastPage();
-            error = true;
-        }
-
-        if (App.get(infectionControlMeasuresExplanation).isEmpty() && infectionControlMeasuresExplanation.getVisibility() == View.VISIBLE) {
-            infectionControlMeasuresExplanation.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            infectionControlMeasuresExplanation.getEditText().requestFocus();
-            gotoLastPage();
-            error = true;
-        }
-
-        if (App.get(durationOfPetExplanation).isEmpty() && durationOfPetExplanation.getVisibility() == View.VISIBLE) {
-            durationOfPetExplanation.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            durationOfPetExplanation.getEditText().requestFocus();
-            gotoLastPage();
-            error = true;
-        }
-
-        if (App.get(purposeExplanation).isEmpty() && purposeExplanation.getVisibility() == View.VISIBLE) {
-            purposeExplanation.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            purposeExplanation.getEditText().requestFocus();
-            gotoLastPage();
-            error = true;
-        }
-
-        if (App.get(procedureExplanation).isEmpty() && procedureExplanation.getVisibility() == View.VISIBLE) {
-            procedureExplanation.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            procedureExplanation.getEditText().requestFocus();
-            gotoLastPage();
-            error = true;
-        }
-
         if (App.get(counsellingProvidedToOther).isEmpty() && counsellingProvidedToOther.getVisibility() == View.VISIBLE) {
             counsellingProvidedToOther.getEditText().setError(getResources().getString(R.string.mandatory_field));
             counsellingProvidedToOther.getEditText().requestFocus();
@@ -593,23 +524,23 @@ public class BaselineCounsellingForm extends AbstractFormActivity implements Rad
     public boolean submit() {
         endTime = new Date();
 
-        final ContentValues values = new ContentValues();
-        values.put("formDate", App.getSqlDate(formDateCalendar));
-        // start time...
-        // end time...
-        // gps coordinate...
-
         final ArrayList<String[]> observations = new ArrayList<String[]>();
+        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
+        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+        /*observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
+        observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});*/
+
         observations.add(new String[]{"FAMILY STRUCTURE", App.get(familyStructure).equals(getResources().getString(R.string.pet_joint_family)) ? "JOINT FAMILY" : "NUCLEAR FAMILY"});
         observations.add(new String[]{"FAMILY SIZE", App.get(numberOfFamilyMembers)});
         observations.add(new String[]{"EARNING FAMILY MEMBERS", App.get(earningMembers)});
-        observations.add(new String[]{"AVERAGE INCOME PER MONTH", App.get(contactIncome)});
-        observations.add(new String[]{"INCOME CLASS", App.get(contactIncomeGroup).equals(getResources().getString(R.string.pet_none)) ? "NONE" :
+        observations.add(new String[]{"MONTHLY INCOME", App.get(contactIncome)});
+        final String incomeClassString = App.get(contactIncomeGroup).equals(getResources().getString(R.string.pet_none)) ? "NONE" :
                 (App.get(contactIncomeGroup).equals(getResources().getString(R.string.pet_lower_class)) ? "LOWER INCOME CLASS" :
                         (App.get(contactIncomeGroup).equals(getResources().getString(R.string.pet_lower_middle_class)) ? "LOWER MIDDLE INCOME CLASS" :
                                 (App.get(contactIncomeGroup).equals(getResources().getString(R.string.pet_middle_class)) ? "MIDDLE INCOME CLASS" :
                                         (App.get(contactIncomeGroup).equals(getResources().getString(R.string.pet_upper_middle_class)) ? "UPPER MIDDLE INCOME CLASS" :
-                                                (App.get(contactIncomeGroup).equals(getResources().getString(R.string.pet_upper_class)) ? "UPPER INCOME CLASS" : "UNKNOWN")))))});
+                                                (App.get(contactIncomeGroup).equals(getResources().getString(R.string.pet_upper_class)) ? "UPPER INCOME CLASS" : "UNKNOWN")))));
+        observations.add(new String[]{"INCOME CLASS", incomeClassString});
         observations.add(new String[]{"HOUSE TYPE", App.get(residenceType).equals(getResources().getString(R.string.pet_rent)) ? "RENTED" :
                 (App.get(residenceType).equals(getResources().getString(R.string.pet_own)) ? "OWNED" : "UNKNOWN")});
         observations.add(new String[]{"NUMBER OF ROOMS (IN HOUSE)", App.get(noOfRooms)});
@@ -729,12 +660,12 @@ public class BaselineCounsellingForm extends AbstractFormActivity implements Rad
                         loading.setInverseBackgroundForced(true);
                         loading.setIndeterminate(true);
                         loading.setCancelable(false);
-                        loading.setMessage(getResources().getString(R.string.signing_in));
+                        loading.setMessage(getResources().getString(R.string.submitting_form));
                         loading.show();
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(FORM_NAME, App.getSqlDate(formDateCalendar), observations.toArray(new String[][]{}));
+                String result = serverService.saveEncounterAndObservation(FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}));
                 return result;
 
             }
@@ -750,15 +681,75 @@ public class BaselineCounsellingForm extends AbstractFormActivity implements Rad
                 super.onPostExecute(result);
                 loading.dismiss();
 
-                Toast toast = Toast.makeText(context, result, Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.BOTTOM, 0, 0);
-                toast.show();
+                if (result.equals("SUCCESS")) {
+                    resetViews();
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.form_submitted));
+                    Drawable submitIcon = getResources().getDrawable(R.drawable.ic_submit);
+                    alertDialog.setIcon(submitIcon);
+                    int color = App.getColor(context, R.attr.colorAccent);
+                    DrawableCompat.setTint(submitIcon, color);
+                    alertDialog.setTitle(getResources().getString(R.string.title_completed));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else if (result.equals("CONNECTION_ERROR")) {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
+                    alertDialog.setMessage(message);
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+
 
             }
         };
         submissionFormTask.execute("");
 
-        resetViews();
         return false;
     }
 
@@ -833,9 +824,9 @@ public class BaselineCounsellingForm extends AbstractFormActivity implements Rad
 
         if (group == procedure.getRadioGroup()) {
             if (App.get(procedure).equals(getResources().getString(R.string.yes)))
-                purposeExplanation.setVisibility(View.VISIBLE);
+                procedureExplanation.setVisibility(View.VISIBLE);
             else
-                purposeExplanation.setVisibility(View.GONE);
+                procedureExplanation.setVisibility(View.GONE);
         } else if (group == purpose.getRadioGroup()) {
             if (App.get(purpose).equals(getResources().getString(R.string.yes)))
                 purposeExplanation.setVisibility(View.VISIBLE);

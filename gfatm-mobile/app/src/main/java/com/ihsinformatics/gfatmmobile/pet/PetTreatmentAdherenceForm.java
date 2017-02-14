@@ -1,17 +1,16 @@
 package com.ihsinformatics.gfatmmobile.pet;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.format.DateFormat;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,6 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
-import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -43,14 +41,14 @@ import java.util.HashMap;
  * Created by Rabbia on 11/24/2016.
  */
 
-public class TreatmentAdherenceForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class PetTreatmentAdherenceForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
     Context context;
 
     // Views...
     TitledButton formDate;
     TitledEditText treatmentWeekNumber;
-    TitledRadioGroup missedDosed;
+    TitledEditText missedDosage;
     TitledRadioGroup adverseEventReport;
     LinearLayout adverseEffectsLayout;
     TitledCheckBoxes adverseEffects1;
@@ -134,8 +132,8 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        treatmentWeekNumber = new TitledEditText(context, null, getResources().getString(R.string.pet_week_of_treatment), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        missedDosed = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_missed_dosed), getResources().getStringArray(R.array.pet_missed_dosed_options), getResources().getString(R.string.no), App.VERTICAL, App.VERTICAL);
+        treatmentWeekNumber = new TitledEditText(context, null, getResources().getString(R.string.pet_week_of_treatment), "", "0-30", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        missedDosage = new TitledEditText(context, null, getResources().getString(R.string.pet_missed_dosed), "0", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
         adverseEventReport = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_adverse_event_report), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         adverseEffectsLayout = new LinearLayout(context);
         adverseEffectsLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -156,12 +154,12 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
         clinicianInformed = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_doctor_notified), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), treatmentWeekNumber.getEditText(), missedDosed.getRadioGroup(), adverseEventReport.getRadioGroup(), adverseEffects1, adverseEffects2,
+        views = new View[]{formDate.getButton(), treatmentWeekNumber.getEditText(), missedDosage.getEditText(), adverseEventReport.getRadioGroup(), adverseEffects1, adverseEffects2,
                 otherEffects.getEditText(), caretakerComments.getEditText(), clincianNote.getEditText(), plan.getEditText(), clinicianInformed.getRadioGroup()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, treatmentWeekNumber, missedDosed, adverseEventReport, adverseEffectsLayout, otherEffects, caretakerComments, clincianNote, plan, clinicianInformed}};
+                {{formDate, treatmentWeekNumber, missedDosage, adverseEventReport, adverseEffectsLayout, otherEffects, caretakerComments, clincianNote, plan, clinicianInformed}};
 
         formDate.getButton().setOnClickListener(this);
         adverseEventReport.getRadioGroup().setOnCheckedChangeListener(this);
@@ -216,6 +214,24 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
                 error = true;
             }
         }
+        if (App.get(missedDosage).isEmpty()) {
+            missedDosage.getEditText().setError(getString(R.string.empty_field));
+            missedDosage.getEditText().requestFocus();
+            error = true;
+        }
+        if (App.get(treatmentWeekNumber).isEmpty()) {
+            treatmentWeekNumber.getEditText().setError(getString(R.string.empty_field));
+            treatmentWeekNumber.getEditText().requestFocus();
+            error = true;
+        } else {
+
+            int weekNo = Integer.parseInt(App.get(treatmentWeekNumber));
+            if (weekNo > 30) {
+                treatmentWeekNumber.getEditText().setError(getString(R.string.value_out_of_range));
+                treatmentWeekNumber.getEditText().requestFocus();
+                error = true;
+            }
+        }
 
         if (error) {
 
@@ -258,15 +274,13 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
 
         endTime = new Date();
 
-        final ContentValues values = new ContentValues();
-        values.put("formDate", App.getSqlDate(formDateCalendar));
-        // start time...
-        // end time...
-        // gps coordinate...
-
         final ArrayList<String[]> observations = new ArrayList<String[]>();
+        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
+        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+        /*observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
+        observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});*/
         observations.add(new String[]{"NUMBER OF WEEKS ON TREATMENT", App.get(treatmentWeekNumber)});
-        //Missed Dose
+        observations.add(new String[]{"NUMBER OF MISSED MEDICATION DOSES IN LAST MONTH", App.get(missedDosage)});
         observations.add(new String[]{"ADVERSE EVENTS REPORTED", App.get(adverseEventReport).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         if (adverseEffectsLayout.getVisibility() == View.VISIBLE) {
             String adverseEventString = "";
@@ -312,12 +326,12 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
                         loading.setInverseBackgroundForced(true);
                         loading.setIndeterminate(true);
                         loading.setCancelable(false);
-                        loading.setMessage(getResources().getString(R.string.signing_in));
+                        loading.setMessage(getResources().getString(R.string.submitting_form));
                         loading.show();
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(FORM_NAME, App.getSqlDate(formDateCalendar), observations.toArray(new String[][]{}));
+                String result = serverService.saveEncounterAndObservation(FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}));
                 return result;
 
             }
@@ -333,10 +347,69 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
                 super.onPostExecute(result);
                 loading.dismiss();
 
-                Toast toast = Toast.makeText(context, result, Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.BOTTOM, 0, 0);
-                toast.show();
+                if (result.equals("SUCCESS")) {
+                    resetViews();
 
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.form_submitted));
+                    Drawable submitIcon = getResources().getDrawable(R.drawable.ic_submit);
+                    alertDialog.setIcon(submitIcon);
+                    int color = App.getColor(context, R.attr.colorAccent);
+                    DrawableCompat.setTint(submitIcon, color);
+                    alertDialog.setTitle(getResources().getString(R.string.title_completed));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else if (result.equals("CONNECTION_ERROR")) {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
+                    alertDialog.setMessage(message);
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
             }
         };
         submissionFormTask.execute("");

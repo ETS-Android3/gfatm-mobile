@@ -40,7 +40,7 @@ import java.util.Date;
  * Created by Rabbia on 11/24/2016.
  */
 
-public class SocioecnomicDataForm extends AbstractFormActivity {
+public class PetSocioecnomicDataForm extends AbstractFormActivity {
 
     Context context;
     TitledButton formDate;
@@ -121,7 +121,7 @@ public class SocioecnomicDataForm extends AbstractFormActivity {
         ethinicity = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_ethnicity), getResources().getStringArray(R.array.pet_ethnicities), "", App.VERTICAL, true);
         otherEthinicity = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         contactEducationLevel = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_contact_education_level), getResources().getStringArray(R.array.pet_contact_education_levels), getResources().getString(R.string.pet_intermediate), App.VERTICAL, true);
-        maritalStatus = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_martial_status), getResources().getStringArray(R.array.pet_martial_statuses), getResources().getString(R.string.pet_married), App.VERTICAL, true);
+        maritalStatus = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_martial_status), getResources().getStringArray(R.array.pet_martial_statuses), getResources().getString(R.string.pet_single), App.VERTICAL, true);
         emloyementStatus = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_employement_status), getResources().getStringArray(R.array.pet_employement_statuses), getResources().getString(R.string.pet_employed), App.VERTICAL, true);
         occupation = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_occupation), getResources().getStringArray(R.array.pet_occupations), getString(R.string.pet_artist), App.VERTICAL, true);
         contactIncome = new TitledEditText(context, null, getResources().getString(R.string.pet_contact_income), "0", "", 20, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
@@ -181,9 +181,7 @@ public class SocioecnomicDataForm extends AbstractFormActivity {
         householdHead.getSpinner().setOnItemSelectedListener(this);
         motherTongue.getSpinner().setOnItemSelectedListener(this);
 
-        otherEthinicity.setVisibility(View.GONE);
-        otherHouseholdHead.setVisibility(View.GONE);
-        otherMotherTongue.setVisibility(View.GONE);
+        resetViews();
 
     }
 
@@ -313,15 +311,87 @@ public class SocioecnomicDataForm extends AbstractFormActivity {
 
         final String maritalStatusString = App.get(maritalStatus).equals(getResources().getString(R.string.pet_single)) ? "SINGLE" :
                 (App.get(maritalStatus).equals(getResources().getString(R.string.pet_engaged)) ? "ENGAGED" :
-                        (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_married)) ? "MARRIED" :
-                                (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_separated)) ? "SEPARATED" :
-                                        (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_divorced)) ? "DIVORCED" :
-                                                (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_widower)) ? "WIDOWED" :
-                                                        (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_other)) ? "OTHER" :
-                                                                (App.get(contactEducationLevel).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSE")))))));
+                        (App.get(maritalStatus).equals(getResources().getString(R.string.pet_married)) ? "MARRIED" :
+                                (App.get(maritalStatus).equals(getResources().getString(R.string.pet_separated)) ? "SEPARATED" :
+                                        (App.get(maritalStatus).equals(getResources().getString(R.string.pet_divorced)) ? "DIVORCED" :
+                                                (App.get(maritalStatus).equals(getResources().getString(R.string.pet_widower)) ? "WIDOWED" :
+                                                        (App.get(maritalStatus).equals(getResources().getString(R.string.pet_other)) ? "OTHER" :
+                                                                (App.get(maritalStatus).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSE")))))));
         observations.add(new String[]{"MARITAL STATUS", maritalStatusString});
 
-        final String employementStatusString = App.get(maritalStatus).equals(getResources().getString(R.string.pet_employed)) ? "EMPLOYED" :
+        final String employementStatusString = App.get(emloyementStatus).equals(getResources().getString(R.string.pet_employed)) ? "EMPLOYED" :
+                (App.get(emloyementStatus).equals(getResources().getString(R.string.pet_unable_to_work)) ? "UNABLE TO WORK" :
+                        (App.get(emloyementStatus).equals(getResources().getString(R.string.pet_student)) ? "STUDENT" :
+                                (App.get(emloyementStatus).equals(getResources().getString(R.string.pet_unemployed)) ? "UNEMPLOYED" :
+                                        (App.get(emloyementStatus).equals(getResources().getString(R.string.pet_housework)) ? "DIVORCED" :
+                                                (App.get(emloyementStatus).equals(getResources().getString(R.string.pet_retired)) ? "RETIRED" :
+                                                        (App.get(emloyementStatus).equals(getResources().getString(R.string.pet_retired)) ? "RETIRED" :
+                                                                (App.get(emloyementStatus).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSE")))))));
+        observations.add(new String[]{"EMPLOYMENT STATUS", employementStatusString});
+
+        final String occupationString = App.get(occupation).equals(getResources().getString(R.string.pet_artist)) ? "ARTIST" :
+                (App.get(occupation).equals(getResources().getString(R.string.pet_beggar)) ? "BEGGAR" :
+                        (App.get(occupation).equals(getResources().getString(R.string.pet_student)) ? "STUDENT" :
+                                (App.get(occupation).equals(getResources().getString(R.string.pet_carpenter)) ? "CARPENTER" :
+                                        (App.get(occupation).equals(getResources().getString(R.string.pet_casual_labor)) ? "CASUAL LABOR" :
+                                                (App.get(occupation).equals(getResources().getString(R.string.pet_child_labor)) ? "CHILD LABOR" :
+                                                        (App.get(occupation).equals(getResources().getString(R.string.pet_clerk)) ? "CLERK" :
+                                                                (App.get(occupation).equals(getResources().getString(R.string.pet_doctor)) ? "MEDICAL OFFICER/DOCTOR" :
+                                                                        (App.get(occupation).equals(getResources().getString(R.string.pet_driver)) ? "DRIVER" :
+                                                                                (App.get(occupation).equals(getResources().getString(R.string.pet_engineer)) ? "ENGINEER" :
+                                                                                        (App.get(occupation).equals(getResources().getString(R.string.pet_farmer)) ? "FARMER" :
+                                                                                                (App.get(occupation).equals(getResources().getString(R.string.pet_fisherman)) ? "FISHERMAN" :
+                                                                                                        (App.get(occupation).equals(getResources().getString(R.string.pet_food_vendor)) ? "FOOD VENDOR" :
+                                                                                                                (App.get(occupation).equals(getResources().getString(R.string.pet_forestry_worker)) ? "FORESTRY WORKER" :
+                                                                                                                        (App.get(occupation).equals(getResources().getString(R.string.pet_housework)) ? "HOUSEWORK" :
+                                                                                                                                (App.get(occupation).equals(getResources().getString(R.string.pet_machine_operator)) ? "MACHINE OPERATOR" :
+                                                                                                                                        (App.get(occupation).equals(getResources().getString(R.string.pet_miner)) ? "MINER" :
+                                                                                                                                                (App.get(occupation).equals(getResources().getString(R.string.pet_pilot)) ? "PILOT" :
+                                                                                                                                                        (App.get(occupation).equals(getResources().getString(R.string.pet_plumber)) ? "PLUMBER" :
+                                                                                                                                                                (App.get(occupation).equals(getResources().getString(R.string.pet_professional)) ? "PROFESSIONAL" :
+                                                                                                                                                                        (App.get(occupation).equals(getResources().getString(R.string.pet_reporter)) ? "REPORTER" :
+                                                                                                                                                                                (App.get(occupation).equals(getResources().getString(R.string.pet_sales_representative)) ? "SALES REPRESENTATIVE" :
+                                                                                                                                                                                        (App.get(occupation).equals(getResources().getString(R.string.pet_security_officer)) ? "SECURITY OFFICER" :
+                                                                                                                                                                                                (App.get(occupation).equals(getResources().getString(R.string.pet_shepherd)) ? "SHEPHERD" :
+                                                                                                                                                                                                        (App.get(occupation).equals(getResources().getString(R.string.pet_slum_worker)) ? "SLUM WORKER" :
+                                                                                                                                                                                                                (App.get(occupation).equals(getResources().getString(R.string.pet_small_bussiness_owner)) ? "SMALL BUSINESS OWNER" :
+                                                                                                                                                                                                                        (App.get(occupation).equals(getResources().getString(R.string.pet_tailor)) ? "TAILOR" :
+                                                                                                                                                                                                                                (App.get(occupation).equals(getResources().getString(R.string.pet_trader)) ? "TRADER" :
+                                                                                                                                                                                                                                        (App.get(occupation).equals(getResources().getString(R.string.pet_teacher)) ? "TEACHER" :
+                                                                                                                                                                                                                                                (App.get(occupation).equals(getResources().getString(R.string.pet_vegetable_fruit_Seller)) ? "VEGETABLE SELLER" :
+                                                                                                                                                                                                                                                        (App.get(occupation).equals(getResources().getString(R.string.pet_waiter)) ? "WAITER" :
+                                                                                                                                                                                                                                                                (App.get(occupation).equals(getResources().getString(R.string.pet_other)) ? "OTHER" : "UNKNOWN")))))))))))))))))))))))))))))));
+        observations.add(new String[]{"COMMON OCCUPATIONS", occupationString});
+        observations.add(new String[]{"MONTHLY INCOME", App.get(contactIncome)});
+
+        final String incomeClassString = App.get(contactIncomeGroup).equals(getResources().getString(R.string.pet_none)) ? "NONE" :
+                (App.get(contactIncomeGroup).equals(getResources().getString(R.string.pet_lower_class)) ? "LOWER INCOME CLASS" :
+                        (App.get(contactIncomeGroup).equals(getResources().getString(R.string.pet_lower_middle_class)) ? "LOWER MIDDLE INCOME CLASS" :
+                                (App.get(contactIncomeGroup).equals(getResources().getString(R.string.pet_middle_class)) ? "MIDDLE INCOME CLASS" :
+                                        (App.get(contactIncomeGroup).equals(getResources().getString(R.string.pet_upper_middle_class)) ? "UPPER MIDDLE INCOME CLASS" :
+                                                (App.get(contactIncomeGroup).equals(getResources().getString(R.string.pet_upper_class)) ? "UPPER INCOME CLASS" : "UNKNOWN")))));
+        observations.add(new String[]{"INCOME CLASS", incomeClassString});
+
+
+        final String householdHeadtring = App.get(householdHead).equals(getResources().getString(R.string.pet_mother)) ? "MOTHER" :
+                (App.get(householdHead).equals(getResources().getString(R.string.pet_father)) ? "FATHER" :
+                        (App.get(householdHead).equals(getResources().getString(R.string.pet_maternal_grandmother)) ? "MATERNAL GRANDMOTHER" :
+                                (App.get(householdHead).equals(getResources().getString(R.string.pet_maternal_grandfather)) ? "MATERNAL GRANDFATHER" :
+                                        (App.get(householdHead).equals(getResources().getString(R.string.pet_paternal_grandmother)) ? "PATERNAL GRANDMOTHER" :
+                                                (App.get(householdHead).equals(getResources().getString(R.string.pet_paternal_grandfather)) ? "PATERNAL GRANDFATHER" :
+                                                        (App.get(householdHead).equals(getResources().getString(R.string.pet_brother)) ? "BROTHER" :
+                                                                (App.get(householdHead).equals(getResources().getString(R.string.pet_sister)) ? "SISTER" :
+                                                                        (App.get(householdHead).equals(getResources().getString(R.string.pet_son)) ? "SON" :
+                                                                                (App.get(householdHead).equals(getResources().getString(R.string.pet_daughter)) ? "SPOUSE" :
+                                                                                        (App.get(householdHead).equals(getResources().getString(R.string.pet_aunt)) ? "AUNT" :
+                                                                                                (App.get(householdHead).equals(getResources().getString(R.string.pet_uncle)) ? "UNCLE" : "OTHER FAMILY MEMBER")))))))))));
+
+        observations.add(new String[]{"RELATIONSHIP TO HEAD OF HOUSEHOLD", householdHeadtring});
+
+        if (otherHouseholdHead.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"OTHER FAMILY MEMBER", App.get(otherHouseholdHead)});
+
+        final String houseHoldEmployementStatusString = App.get(maritalStatus).equals(getResources().getString(R.string.pet_employed)) ? "EMPLOYED" :
                 (App.get(maritalStatus).equals(getResources().getString(R.string.pet_unable_to_work)) ? "UNABLE TO WORK" :
                         (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_student)) ? "STUDENT" :
                                 (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_unemployed)) ? "UNEMPLOYED" :
@@ -329,79 +399,32 @@ public class SocioecnomicDataForm extends AbstractFormActivity {
                                                 (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_retired)) ? "RETIRED" :
                                                         (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_retired)) ? "RETIRED" :
                                                                 (App.get(contactEducationLevel).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSE")))))));
-        observations.add(new String[]{"EMPLOYMENT STATUS", employementStatusString});
+        observations.add(new String[]{"EMPLOYMENT STATUS", houseHoldEmployementStatusString});
+
+        final String motherTongueString = App.get(motherTongue).equals(getResources().getString(R.string.pet_urdu)) ? "URDU LANGUAGE" :
+                (App.get(motherTongue).equals(getResources().getString(R.string.pet_punjabi)) ? "PUNJABI LANGUAGE" :
+                        (App.get(motherTongue).equals(getResources().getString(R.string.pet_sindhi)) ? "SINDHI LANGUAGE" :
+                                (App.get(motherTongue).equals(getResources().getString(R.string.pet_pushto)) ? "PUSHTO LANGUAGE" :
+                                        (App.get(motherTongue).equals(getResources().getString(R.string.pet_balochi)) ? "BALOCHI LANGUAGE" :
+                                                (App.get(motherTongue).equals(getResources().getString(R.string.pet_siraiki)) ? "SIRAIKI LANGUAGE" :
+                                                        (App.get(motherTongue).equals(getResources().getString(R.string.pet_hazara)) ? "HAZARA LANGUAGE" :
+                                                                (App.get(motherTongue).equals(getResources().getString(R.string.pet_english)) ? "ENGLISH LANGUAGE" :
+                                                                        (App.get(motherTongue).equals(getResources().getString(R.string.pet_gujrati)) ? "GUJRATI LANGUAGE" :
+                                                                                (App.get(motherTongue).equals(getResources().getString(R.string.pet_memoni)) ? "MEMONI LANGUAGE" :
+                                                                                        (App.get(motherTongue).equals(getResources().getString(R.string.pet_brahui)) ? "BRAHUI LANGUAGE" :
+                                                                                                (App.get(motherTongue).equals(getResources().getString(R.string.pet_chitrali)) ? "CHITRALI LANGUAGE" :
+                                                                                                        (App.get(motherTongue).equals(getResources().getString(R.string.pet_hindko)) ? "HINDKO LANGUAGE" :
+                                                                                                                (App.get(motherTongue).equals(getResources().getString(R.string.pet_kalaasha)) ? "KALAASHA LANGUAGE" :
+                                                                                                                        (App.get(motherTongue).equals(getResources().getString(R.string.pet_kashmiri)) ? "KASHMIRI LANGUAGE" :
+                                                                                                                                (App.get(motherTongue).equals(getResources().getString(R.string.pet_persian)) ? "PERSIAN LANGUAGE" :
+                                                                                                                                        (App.get(motherTongue).equals(getResources().getString(R.string.pet_balti)) ? "BALTI LANGUAGE" :
+                                                                                                                                                (App.get(motherTongue).equals(getResources().getString(R.string.pet_makrani)) ? "MAKRANI LANGUAGE" :
+                                                                                                                                                        (App.get(motherTongue).equals(getResources().getString(R.string.pet_other)) ? "OTHER" :
+                                                                                                                                                                (App.get(motherTongue).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN")))))))))))))))))));
+        if (otherMotherTongue.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"OTHER LANGUAGE", App.get(otherMotherTongue)});
 
 
-        /*final String ownerString = App.get(relationship).equals(getResources().getString(R.string.pet_self)) ? "SELF" :
-                (App.get(relationship).equals(getResources().getString(R.string.pet_mother)) ? "MOTHER" :
-                        (App.get(relationship).equals(getResources().getString(R.string.pet_father)) ? "FATHER" :
-                                (App.get(relationship).equals(getResources().getString(R.string.pet_maternal_grandmother)) ? "MATERNAL GRANDMOTHER" :
-                                        (App.get(relationship).equals(getResources().getString(R.string.pet_maternal_grandfather)) ? "MATERNAL GRANDFATHER" :
-                                                (App.get(relationship).equals(getResources().getString(R.string.pet_paternal_grandmother)) ? "PATERNAL GRANDMOTHER" :
-                                                        (App.get(relationship).equals(getResources().getString(R.string.pet_paternal_grandfather)) ? "PATERNAL GRANDFATHER" :
-                                                                (App.get(relationship).equals(getResources().getString(R.string.pet_brother)) ? "BROTHER" :
-                                                                        (App.get(relationship).equals(getResources().getString(R.string.pet_sister)) ? "SISTER" :
-                                                                                (App.get(relationship).equals(getResources().getString(R.string.pet_son)) ? "SON" :
-                                                                                        (App.get(relationship).equals(getResources().getString(R.string.pet_daughter)) ? "SPOUSE" :
-                                                                                                (App.get(relationship).equals(getResources().getString(R.string.pet_aunt)) ? "AUNT" :
-                                                                                                        (App.get(relationship).equals(getResources().getString(R.string.pet_uncle)) ? "UNCLE" : "OTHER FAMILY MEMBER" ) ) ) ) ) ) ) ) ) ) ) );
-
-
-        observations.add (new String[] {"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(cnicOwner).equals(getResources().getString(R.string.pet_self)) ? "SELF" :
-                (App.get(cnicOwner).equals(getResources().getString(R.string.pet_mother)) ? "MOTHER" :
-                        (App.get(cnicOwner).equals(getResources().getString(R.string.pet_father)) ? "FATHER" :
-                                (App.get(cnicOwner).equals(getResources().getString(R.string.pet_maternal_grandmother)) ? "MATERNAL GRANDMOTHER" :
-                                        (App.get(cnicOwner).equals(getResources().getString(R.string.pet_maternal_grandfather)) ? "MATERNAL GRANDFATHER" :
-                                                (App.get(cnicOwner).equals(getResources().getString(R.string.pet_paternal_grandmother)) ? "PATERNAL GRANDMOTHER" :
-                                                        (App.get(cnicOwner).equals(getResources().getString(R.string.pet_paternal_grandfather)) ? "PATERNAL GRANDFATHER" :
-                                                                (App.get(cnicOwner).equals(getResources().getString(R.string.pet_brother)) ? "BROTHER" :
-                                                                        (App.get(cnicOwner).equals(getResources().getString(R.string.pet_sister)) ? "SISTER" :
-                                                                                (App.get(cnicOwner).equals(getResources().getString(R.string.pet_son)) ? "SON" :
-                                                                                        (App.get(cnicOwner).equals(getResources().getString(R.string.pet_daughter)) ? "SPOUSE" :
-                                                                                                (App.get(cnicOwner).equals(getResources().getString(R.string.pet_aunt)) ? "AUNT" :
-                                                                                                        (App.get(cnicOwner).equals(getResources().getString(R.string.pet_uncle)) ? "UNCLE" : "OTHER FAMILY MEMBER" ) ) ) ) ) ) ) ) ) ) ) ) });
-        if(otherCnicOwner.getVisibility() == View.VISIBLE)
-            observations.add (new String[] {"OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER\nOTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(otherCnicOwner)});
-
-        observations.add (new String[] {"LOCATION OF EVENT", App.get(entryLocation).equals(getResources().getString(R.string.pet_facility)) ? "HEALTH FACILITY" : "HOME" });
-
-        observations.add (new String[] {"COUGH", App.get(cough).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(cough).equals(getResources().getString(R.string.no)) ? "NO" :
-                        (App.get(cough).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN" ) )});
-        if(coughDuration.getVisibility() == View.VISIBLE)
-            observations.add (new String[] {"COUGH DURATION", App.get(coughDuration).equals(getResources().getString(R.string.pet_less_than_2_weeks)) ? "COUGH LASTING LESS THAN 2 WEEKS (163739)" :
-                    (App.get(coughDuration).equals(getResources().getString(R.string.pet_two_three_weeks)) ? "COUGH LASTING MORE THAN 2 WEEKS" :
-                            (App.get(coughDuration).equals(getResources().getString(R.string.pet_more_than_3_weeks)) ? "COUGH LASTING MORE THAN 3 WEEKS" :
-                                    (App.get(coughDuration).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSED" ) ) )});
-        if(haemoptysis.getVisibility() == View.VISIBLE)
-            observations.add (new String[] {"HEMOPTYSIS", App.get(haemoptysis).equals(getResources().getString(R.string.yes)) ? "YES" :
-                    (App.get(haemoptysis).equals(getResources().getString(R.string.no)) ? "NO" :
-                            (App.get(haemoptysis).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN" ) )});
-        observations.add (new String[] {"FEVER", App.get(fever).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(fever).equals(getResources().getString(R.string.no)) ? "NO" :
-                        (App.get(fever).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN" ) )});
-        observations.add (new String[] {"WEIGHT LOSS", App.get(weightLoss).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(weightLoss).equals(getResources().getString(R.string.no)) ? "NO" :
-                        (App.get(weightLoss).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN" ) )});
-        observations.add (new String[] {"LOSS OF APPETITE", App.get(reduceAppetite).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(reduceAppetite).equals(getResources().getString(R.string.no)) ? "NO" :
-                        (App.get(reduceAppetite).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN" ) )});
-        observations.add (new String[] {"NIGHT SWEATS", App.get(nightSweats).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(nightSweats).equals(getResources().getString(R.string.no)) ? "NO" :
-                        (App.get(nightSweats).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN" ) )});
-        observations.add (new String[] {"REDUCED MOBILITY", App.get(reduceActivity).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(reduceActivity).equals(getResources().getString(R.string.no)) ? "NO" :
-                        (App.get(reduceActivity).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN" ) )});
-        observations.add (new String[] {"NIGHT SWEATS", App.get(nightSweats).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(nightSweats).equals(getResources().getString(R.string.no)) ? "NO" :
-                        (App.get(nightSweats).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN" ) )});
-        observations.add (new String[] {"SWELLING", App.get(swelling).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(swelling).equals(getResources().getString(R.string.no)) ? "NO" :
-                        (App.get(swelling).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN" ) )});
-        observations.add (new String[] {"PATIENT REFERRED", App.get(swelling).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(swelling).equals(getResources().getString(R.string.no)) ? "NO" : "UNKNOWN" )});
-        observations.add (new String[] {"REFERRING FACILITY NAME", App.get(referredFacility) });
-*/
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
             protected String doInBackground(String... params) {
@@ -416,29 +439,55 @@ public class SocioecnomicDataForm extends AbstractFormActivity {
                     }
                 });
 
-               /* String result =  serverService.savePersonAddress(App.get(address1), App.get(address2), App.getCity(), App.get(town), "", longitude, latitude);
-                if(!result.equals("SUCCESS"))
+                String result = serverService.saveEncounterAndObservation(FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                if (!result.contains("SUCCESS"))
                     return result;
+                else {
 
-                result = serverService.savePersonAttributeType("Primary Contact", App.get(phone1));
-                if (!result.equals("SUCCESS"))
-                    return result;
+                    String encounterId = "";
 
-                result = serverService.savePersonAttributeType("Secondary Contact", App.get(phone2));
-                if(!result.equals("SUCCESS"))
-                    return result;
+                    if (result.contains("_")) {
+                        String[] successArray = result.split("_");
+                        encounterId = successArray[1];
+                    }
 
-                result = serverService.savePersonAttributeType("National ID", App.get(cnic));
-                if (!result.equals("SUCCESS"))
-                    return result;
+                    String[][] concept = serverService.getConceptUuidAndDataType(ethnicityString);
+                    result = serverService.savePersonAttributeType("Ethnicity", concept[0][0], encounterId);
+                    if (!result.equals("SUCCESS"))
+                        return result;
 
-                String[][] cnicOwnerConcept =  serverService.getConceptUuidAndDataType(ownerString);
-                result = serverService.savePersonAttributeType("National ID Owner", cnicOwnerConcept[0][0]);
-                if (!result.equals("SUCCESS"))
-                    return result;
-*/
-                String result = serverService.saveEncounterAndObservation(FORM_NAME, formDateCalendar, observations.toArray(new String[][]{}));
-                return result;
+                    concept = serverService.getConceptUuidAndDataType(contactEducationLevelString);
+                    result = serverService.savePersonAttributeType("Education Level", concept[0][0], encounterId);
+                    if (!result.equals("SUCCESS"))
+                        return result;
+
+                    concept = serverService.getConceptUuidAndDataType(maritalStatusString);
+                    result = serverService.savePersonAttributeType("Marital Status", concept[0][0], encounterId);
+                    if (!result.equals("SUCCESS"))
+                        return result;
+
+                    concept = serverService.getConceptUuidAndDataType(employementStatusString);
+                    result = serverService.savePersonAttributeType("Employment Status", concept[0][0], encounterId);
+                    if (!result.equals("SUCCESS"))
+                        return result;
+
+                    concept = serverService.getConceptUuidAndDataType(occupationString);
+                    result = serverService.savePersonAttributeType("Occupation", concept[0][0], encounterId);
+                    if (!result.equals("SUCCESS"))
+                        return result;
+
+                    concept = serverService.getConceptUuidAndDataType(incomeClassString);
+                    result = serverService.savePersonAttributeType("Income Class", concept[0][0], encounterId);
+                    if (!result.equals("SUCCESS"))
+                        return result;
+
+                    concept = serverService.getConceptUuidAndDataType(motherTongueString);
+                    result = serverService.savePersonAttributeType("Mother Tongue", concept[0][0], encounterId);
+                    if (!result.equals("SUCCESS"))
+                        return result;
+                }
+
+                return "SUCCESS";
 
             }
 
@@ -498,7 +547,7 @@ public class SocioecnomicDataForm extends AbstractFormActivity {
                 } else {
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
-                    alertDialog.setMessage(getResources().getString(R.string.insert_error));
+                    alertDialog.setMessage(message);
                     Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                     alertDialog.setIcon(clearIcon);
                     alertDialog.setTitle(getResources().getString(R.string.title_error));

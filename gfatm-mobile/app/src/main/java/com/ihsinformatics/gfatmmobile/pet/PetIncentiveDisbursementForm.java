@@ -46,7 +46,7 @@ import java.util.Date;
  * Created by Rabbia on 11/24/2016.
  */
 
-public class IncentiveDisbursementForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class PetIncentiveDisbursementForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
     Context context;
 
@@ -411,7 +411,7 @@ public class IncentiveDisbursementForm extends AbstractFormActivity implements R
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(FORM_NAME, App.getSqlDate(formDateCalendar), observations.toArray(new String[][]{}));
+                String result = serverService.saveEncounterAndObservation(FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}));
                 return result;
 
             }

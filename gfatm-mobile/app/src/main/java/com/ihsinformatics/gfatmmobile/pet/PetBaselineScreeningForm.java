@@ -51,7 +51,7 @@ import static android.app.Activity.RESULT_OK;
  * Created by Rabbia on 11/24/2016.
  */
 
-public class BaselineScreeningForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class PetBaselineScreeningForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
     Context context;
 
@@ -65,11 +65,18 @@ public class BaselineScreeningForm extends AbstractFormActivity implements Radio
     TitledRadioGroup tbHistory;
     TitledSpinner relationship;
     TitledEditText otherRelation;
-    TitledEditText cnic;
+    LinearLayout cnicLayout;
+    TitledEditText cnic1;
+    TitledEditText cnic2;
+    TitledEditText cnic3;
     TitledSpinner cnicOwner;
     TitledEditText otherCnicOwner;
-    TitledEditText phone1;
-    TitledEditText phone2;
+    LinearLayout phone1Layout;
+    TitledEditText phone1a;
+    TitledEditText phone1b;
+    LinearLayout phone2Layout;
+    TitledEditText phone2a;
+    TitledEditText phone2b;
     TitledEditText address1;
     TitledEditText address2;
     TitledEditText town;
@@ -163,7 +170,7 @@ public class BaselineScreeningForm extends AbstractFormActivity implements Radio
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        indexPatientId = new TitledEditText(context, null, getResources().getString(R.string.pet_index_patient_id), "", "", RegexUtil.idLength, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        indexPatientId = new TitledEditText(context, null, getResources().getString(R.string.pet_index_patient_id), "", "", RegexUtil.idLength, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         scanQRCode = new Button(context);
         scanQRCode.setText("Scan QR Code");
         treatmentStatus = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_tb_treatment_status), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
@@ -172,11 +179,28 @@ public class BaselineScreeningForm extends AbstractFormActivity implements Radio
         tbHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_tb_history), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         relationship = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_relationship), getResources().getStringArray(R.array.pet_cnic_owners), "", App.VERTICAL);
         otherRelation = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 15, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        cnic = new TitledEditText(context, null, getResources().getString(R.string.pet_cnic), "", "", 15, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        cnicLayout = new LinearLayout(context);
+        cnicLayout.setOrientation(LinearLayout.HORIZONTAL);
+        cnic1 = new TitledEditText(context, null, getResources().getString(R.string.pet_cnic), "", "XXXXX", 5, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        cnicLayout.addView(cnic1);
+        cnic2 = new TitledEditText(context, null, "-", "", "XXXXXXX", 7, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        cnicLayout.addView(cnic2);
+        cnic3 = new TitledEditText(context, null, "-", "", "X", 1, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        cnicLayout.addView(cnic3);
         cnicOwner = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_cnic_owner), getResources().getStringArray(R.array.pet_cnic_owners), "", App.VERTICAL);
         otherCnicOwner = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        phone1 = new TitledEditText(context, null, getResources().getString(R.string.pet_phone_1), "", "", RegexUtil.mobileNumberLength, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        phone2 = new TitledEditText(context, null, getResources().getString(R.string.pet_phone_2), "", "", RegexUtil.mobileNumberLength, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        phone1Layout = new LinearLayout(context);
+        phone1Layout.setOrientation(LinearLayout.HORIZONTAL);
+        phone1a = new TitledEditText(context, null, getResources().getString(R.string.pet_phone_1), "", "XXXX", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        phone1Layout.addView(phone1a);
+        phone1b = new TitledEditText(context, null, "-", "", "XXXXXXX", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        phone1Layout.addView(phone1b);
+        phone2Layout = new LinearLayout(context);
+        phone2Layout.setOrientation(LinearLayout.HORIZONTAL);
+        phone2a = new TitledEditText(context, null, getResources().getString(R.string.pet_phone_2), "", "XXXX", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        phone2Layout.addView(phone2a);
+        phone2b = new TitledEditText(context, null, "-", "", "XXXXXXX", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        phone2Layout.addView(phone2b);
         address1 = new TitledEditText(context, null, getResources().getString(R.string.pet_address_1), "", "", 10, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         address2 = new TitledEditText(context, null, getResources().getString(R.string.pet_address_2), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         town = new TitledEditText(context, null, getResources().getString(R.string.pet_town), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
@@ -233,7 +257,7 @@ public class BaselineScreeningForm extends AbstractFormActivity implements Radio
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), indexPatientId.getEditText(), treatmentStatus.getRadioGroup(), contactRegistered.getRadioGroup(), tbHistory.getRadioGroup(), relationship.getSpinner(), otherRelation.getEditText(),
-                cnic.getEditText(), cnicOwner.getSpinner(), otherCnicOwner.getEditText(), phone1.getEditText(), phone2.getEditText(), address1.getEditText(), address2.getEditText(), town.getEditText(), city.getEditText(),
+                cnic1.getEditText(), cnic2.getEditText(), cnic3.getEditText(), cnicOwner.getSpinner(), otherCnicOwner.getEditText(), phone1a.getEditText(), phone1b.getEditText(), phone2a.getEditText(), phone2b.getEditText(), address1.getEditText(), address2.getEditText(), town.getEditText(), city.getEditText(),
                 addressType.getRadioGroup(), landmark.getEditText(), entryLocation.getRadioGroup(),
                 cough.getRadioGroup(), coughDuration.getRadioGroup(), haemoptysis.getRadioGroup(), fever.getRadioGroup(), weightLoss.getRadioGroup(), reduceAppetite.getRadioGroup(), reduceActivity.getRadioGroup(),
                 nightSweats.getRadioGroup(), nightSweats.getRadioGroup(), swelling.getRadioGroup(), referral.getRadioGroup(), referredFacility.getSpinner(), treatmentInitiationDate.getButton()};
@@ -241,7 +265,7 @@ public class BaselineScreeningForm extends AbstractFormActivity implements Radio
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formDate, indexPatientId, scanQRCode, treatmentStatus, treatmentInitiationDate, contactRegistered, tbHistory, relationship, otherRelation,
-                        cnic, cnicOwner, otherCnicOwner, phone1, phone2, address1, address2, town, city, addressType, landmark, entryLocation, linearLayout},
+                        cnicLayout, cnicOwner, otherCnicOwner, phone1Layout, phone2Layout, address1, address2, town, city, addressType, landmark, entryLocation, linearLayout},
                 };
 
         formDate.getButton().setOnClickListener(this);
@@ -251,7 +275,6 @@ public class BaselineScreeningForm extends AbstractFormActivity implements Radio
         cnicOwner.getSpinner().setOnItemSelectedListener(this);
         relationship.getSpinner().setOnItemSelectedListener(this);
         treatmentStatus.getRadioGroup().setOnCheckedChangeListener(this);
-        tbHistory.getRadioGroup().setOnCheckedChangeListener(this);
         referral.getRadioGroup().setOnCheckedChangeListener(this);
 
         resetViews();
@@ -275,22 +298,30 @@ public class BaselineScreeningForm extends AbstractFormActivity implements Radio
             city.getEditText().requestFocus();
             error = true;
         }
-        if (App.get(phone2).isEmpty() && phone2.getVisibility() == View.VISIBLE) {
-            phone2.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            phone2.getEditText().requestFocus();
+        if (App.get(phone2a).isEmpty()) {
+            phone2a.getEditText().setError(getResources().getString(R.string.mandatory_field));
+            phone2a.getEditText().requestFocus();
             error = true;
-        } else if (RegexUtil.isValidNIC(App.get(phone2))) {
-            phone2.getEditText().setError(getResources().getString(R.string.invalid_value));
-            phone2.getEditText().requestFocus();
+        } else if (App.get(phone2b).isEmpty()) {
+            phone2b.getEditText().setError(getResources().getString(R.string.mandatory_field));
+            phone2b.getEditText().requestFocus();
+            error = true;
+        } else if (!RegexUtil.isContactNumber(App.get(phone2a) + App.get(phone2b))) {
+            phone2b.getEditText().setError(getResources().getString(R.string.invalid_value));
+            phone2b.getEditText().requestFocus();
             error = true;
         }
-        if (App.get(phone1).isEmpty() && phone1.getVisibility() == View.VISIBLE) {
-            phone1.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            phone1.getEditText().requestFocus();
+        if (App.get(phone1a).isEmpty()) {
+            phone1a.getEditText().setError(getResources().getString(R.string.mandatory_field));
+            phone1a.getEditText().requestFocus();
             error = true;
-        } else if (RegexUtil.isValidNIC(App.get(phone1))) {
-            phone1.getEditText().setError(getResources().getString(R.string.invalid_value));
-            phone1.getEditText().requestFocus();
+        } else if (App.get(phone1b).isEmpty()) {
+            phone1b.getEditText().setError(getResources().getString(R.string.mandatory_field));
+            phone1b.getEditText().requestFocus();
+            error = true;
+        } else if (!RegexUtil.isContactNumber(App.get(phone1a) + App.get(phone1b))) {
+            phone1b.getEditText().setError(getResources().getString(R.string.invalid_value));
+            phone1b.getEditText().requestFocus();
             error = true;
         }
         if (App.get(otherCnicOwner).isEmpty() && otherCnicOwner.getVisibility() == View.VISIBLE) {
@@ -298,16 +329,37 @@ public class BaselineScreeningForm extends AbstractFormActivity implements Radio
             otherCnicOwner.getEditText().requestFocus();
             error = true;
         }
-        if (App.get(cnic).isEmpty() && cnic.getVisibility() == View.VISIBLE) {
-            cnic.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            cnic.getEditText().requestFocus();
+        if (App.get(cnic1).isEmpty()) {
+            cnic1.getEditText().setError(getResources().getString(R.string.mandatory_field));
+            cnic1.getEditText().requestFocus();
             error = true;
         }
-//        else if (RegexUtil.isValidNIC(App.get(cnic))){
-//            cnic.getEditText().setError(getResources().getString(R.string.invalid_value));
-//            cnic.getEditText().requestFocus();
-//            error = true;
-//        }
+        if (App.get(cnic2).isEmpty()) {
+            cnic2.getEditText().setError(getResources().getString(R.string.mandatory_field));
+            cnic2.getEditText().requestFocus();
+            error = true;
+        }
+        if (App.get(cnic3).isEmpty()) {
+            cnic3.getEditText().setError(getResources().getString(R.string.mandatory_field));
+            cnic3.getEditText().requestFocus();
+            error = true;
+        }
+        if (App.get(cnic1).length() != 5) {
+            cnic1.getEditText().setError(getResources().getString(R.string.invalid_value));
+            cnic1.getEditText().requestFocus();
+            error = true;
+        }
+        if (App.get(cnic2).length() != 7) {
+            cnic2.getEditText().setError(getResources().getString(R.string.invalid_value));
+            cnic2.getEditText().requestFocus();
+            error = true;
+        }
+        if (App.get(cnic3).length() != 1) {
+            cnic3.getEditText().setError(getResources().getString(R.string.invalid_value));
+            cnic3.getEditText().requestFocus();
+            error = true;
+        }
+
         if (App.get(otherRelation).isEmpty() && otherRelation.getVisibility() == View.VISIBLE) {
             otherRelation.getEditText().setError(getResources().getString(R.string.mandatory_field));
             otherRelation.getEditText().requestFocus();
@@ -319,6 +371,10 @@ public class BaselineScreeningForm extends AbstractFormActivity implements Radio
             error = true;
         } else if (!RegexUtil.isValidId(App.get(indexPatientId))) {
             indexPatientId.getEditText().setError(getResources().getString(R.string.invalid_id));
+            indexPatientId.getEditText().requestFocus();
+            error = true;
+        } else if (App.getPatient().getPatientId().equals(App.get(indexPatientId))) {
+            indexPatientId.getEditText().setError(getResources().getString(R.string.pet_index_contact_id_same_error));
             indexPatientId.getEditText().requestFocus();
             error = true;
         }
@@ -364,12 +420,12 @@ public class BaselineScreeningForm extends AbstractFormActivity implements Radio
         /*observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
         observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});*/
 
+        observations.add(new String[]{"PATIENT ID OF INDEX CASE", App.get(indexPatientId)});
         observations.add(new String[]{"TUBERCULOSIS TREATMENT STATUS", App.get(treatmentStatus).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         if (treatmentInitiationDate.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TREATMENT START DATE", App.getSqlDate(secondDateCalendar)});
-       /* if(contactRegistered.getVisibility() == View.VISIBLE)
-            observations.add (new String[] {"TUBERCULOSIS TREATMENT STATUS", App.get(contactRegistered).equals(getResources().getString(R.string.yes)) ? "YES" : "NO" });
-*/
+        if (contactRegistered.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"REGISTERED IN ZERO TB", App.get(contactRegistered).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         observations.add(new String[]{"HISTORY OF TUBERCULOSIS", App.get(tbHistory).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         observations.add(new String[]{"FAMILY MEMBER", App.get(relationship).equals(getResources().getString(R.string.pet_self)) ? "SELF" :
                 (App.get(relationship).equals(getResources().getString(R.string.pet_mother)) ? "MOTHER" :
@@ -386,9 +442,9 @@ public class BaselineScreeningForm extends AbstractFormActivity implements Radio
                                                                                                         (App.get(relationship).equals(getResources().getString(R.string.pet_uncle)) ? "UNCLE" : "OTHER FAMILY MEMBER"))))))))))))});
         if (otherRelation.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER FAMILY MEMBER", App.get(otherRelation)});
-        observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", App.get(cnic)});
 
-
+        final String cnic = App.get(cnic1) + "-" + App.get(cnic2) + "-" + App.get(cnic3);
+        observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnic});
         final String ownerString = App.get(relationship).equals(getResources().getString(R.string.pet_self)) ? "SELF" :
                 (App.get(relationship).equals(getResources().getString(R.string.pet_mother)) ? "MOTHER" :
                         (App.get(relationship).equals(getResources().getString(R.string.pet_father)) ? "FATHER" :
@@ -418,11 +474,12 @@ public class BaselineScreeningForm extends AbstractFormActivity implements Radio
                                                                                                 (App.get(cnicOwner).equals(getResources().getString(R.string.pet_aunt)) ? "AUNT" :
                                                                                                         (App.get(cnicOwner).equals(getResources().getString(R.string.pet_uncle)) ? "UNCLE" : "OTHER FAMILY MEMBER"))))))))))))});
         if (otherCnicOwner.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER\nOTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(otherCnicOwner)});
+            observations.add(new String[]{"OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(otherCnicOwner)});
 
         observations.add(new String[]{"LOCATION OF EVENT", App.get(entryLocation).equals(getResources().getString(R.string.pet_facility)) ? "HEALTH FACILITY" : "HOME"});
 
-        observations.add(new String[]{"COUGH", App.get(cough).equals(getResources().getString(R.string.yes)) ? "YES" :
+        if (cough.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"COUGH", App.get(cough).equals(getResources().getString(R.string.yes)) ? "YES" :
                 (App.get(cough).equals(getResources().getString(R.string.no)) ? "NO" :
                         (App.get(cough).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
         if (coughDuration.getVisibility() == View.VISIBLE)
@@ -434,30 +491,35 @@ public class BaselineScreeningForm extends AbstractFormActivity implements Radio
             observations.add(new String[]{"HEMOPTYSIS", App.get(haemoptysis).equals(getResources().getString(R.string.yes)) ? "YES" :
                     (App.get(haemoptysis).equals(getResources().getString(R.string.no)) ? "NO" :
                             (App.get(haemoptysis).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
-        observations.add(new String[]{"FEVER", App.get(fever).equals(getResources().getString(R.string.yes)) ? "YES" :
+        if (fever.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"FEVER", App.get(fever).equals(getResources().getString(R.string.yes)) ? "YES" :
                 (App.get(fever).equals(getResources().getString(R.string.no)) ? "NO" :
                         (App.get(fever).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
-        observations.add(new String[]{"WEIGHT LOSS", App.get(weightLoss).equals(getResources().getString(R.string.yes)) ? "YES" :
+        if (weightLoss.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"WEIGHT LOSS", App.get(weightLoss).equals(getResources().getString(R.string.yes)) ? "YES" :
                 (App.get(weightLoss).equals(getResources().getString(R.string.no)) ? "NO" :
                         (App.get(weightLoss).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
-        observations.add(new String[]{"LOSS OF APPETITE", App.get(reduceAppetite).equals(getResources().getString(R.string.yes)) ? "YES" :
+        if (reduceAppetite.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"LOSS OF APPETITE", App.get(reduceAppetite).equals(getResources().getString(R.string.yes)) ? "YES" :
                 (App.get(reduceAppetite).equals(getResources().getString(R.string.no)) ? "NO" :
                         (App.get(reduceAppetite).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
-        observations.add(new String[]{"NIGHT SWEATS", App.get(nightSweats).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(nightSweats).equals(getResources().getString(R.string.no)) ? "NO" :
-                        (App.get(nightSweats).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
-        observations.add(new String[]{"REDUCED MOBILITY", App.get(reduceActivity).equals(getResources().getString(R.string.yes)) ? "YES" :
+        if (reduceActivity.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"REDUCED MOBILITY", App.get(reduceActivity).equals(getResources().getString(R.string.yes)) ? "YES" :
                 (App.get(reduceActivity).equals(getResources().getString(R.string.no)) ? "NO" :
                         (App.get(reduceActivity).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
-        observations.add(new String[]{"NIGHT SWEATS", App.get(nightSweats).equals(getResources().getString(R.string.yes)) ? "YES" :
+        if (nightSweats.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"NIGHT SWEATS", App.get(nightSweats).equals(getResources().getString(R.string.yes)) ? "YES" :
                 (App.get(nightSweats).equals(getResources().getString(R.string.no)) ? "NO" :
                         (App.get(nightSweats).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
-        observations.add(new String[]{"SWELLING", App.get(swelling).equals(getResources().getString(R.string.yes)) ? "YES" :
+        if (swelling.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"SWELLING", App.get(swelling).equals(getResources().getString(R.string.yes)) ? "YES" :
                 (App.get(swelling).equals(getResources().getString(R.string.no)) ? "NO" :
                         (App.get(swelling).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
-        observations.add(new String[]{"PATIENT REFERRED", App.get(swelling).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(swelling).equals(getResources().getString(R.string.no)) ? "NO" : "UNKNOWN")});
-        observations.add(new String[]{"REFERRING FACILITY NAME", App.get(referredFacility)});
+        if (referral.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"PATIENT REFERRED", App.get(swelling).equals(getResources().getString(R.string.yes)) ? "YES" :
+                    (App.get(referral).equals(getResources().getString(R.string.no)) ? "NO" : "UNKNOWN")});
+        if (referredFacility.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"REFERRING FACILITY NAME", App.get(referredFacility)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -473,29 +535,41 @@ public class BaselineScreeningForm extends AbstractFormActivity implements Radio
                     }
                 });
 
-                String result = serverService.savePersonAddress(App.get(address1), App.get(address2), App.getCity(), App.get(town), "", longitude, latitude);
-                if (!result.equals("SUCCESS"))
+                String result = serverService.saveEncounterAndObservation(FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                if (!result.contains("SUCCESS"))
                     return result;
+                else {
 
-                result = serverService.savePersonAttributeType("Primary Contact", App.get(phone1));
-                if (!result.equals("SUCCESS"))
-                    return result;
+                    String encounterId = "";
 
-                result = serverService.savePersonAttributeType("Secondary Contact", App.get(phone2));
-                if (!result.equals("SUCCESS"))
-                    return result;
+                    if (result.contains("_")) {
+                        String[] successArray = result.split("_");
+                        encounterId = successArray[1];
+                    }
 
-                result = serverService.savePersonAttributeType("National ID", App.get(cnic));
-                if (!result.equals("SUCCESS"))
-                    return result;
+                    result = serverService.savePersonAddress(App.get(address1), App.get(address2), App.getCity(), App.get(town), "", longitude, latitude, encounterId);
+                    if (!result.equals("SUCCESS"))
+                        return result;
 
-                String[][] cnicOwnerConcept = serverService.getConceptUuidAndDataType(ownerString);
-                result = serverService.savePersonAttributeType("National ID Owner", cnicOwnerConcept[0][0]);
-                if (!result.equals("SUCCESS"))
-                    return result;
+                    result = serverService.savePersonAttributeType("Primary Contact", App.get(phone1a) + App.get(phone1b), encounterId);
+                    if (!result.equals("SUCCESS"))
+                        return result;
 
-                result = serverService.saveEncounterAndObservation(FORM_NAME, formDateCalendar, observations.toArray(new String[][]{}));
-                return result;
+                    result = serverService.savePersonAttributeType("Secondary Contact", App.get(phone2a) + App.get(phone2b), encounterId);
+                    if (!result.equals("SUCCESS"))
+                        return result;
+
+                    result = serverService.savePersonAttributeType("National ID", cnic, encounterId);
+                    if (!result.equals("SUCCESS"))
+                        return result;
+
+                    String[][] cnicOwnerConcept = serverService.getConceptUuidAndDataType(ownerString);
+                    result = serverService.savePersonAttributeType("National ID Owner", cnicOwnerConcept[0][0], encounterId);
+                    if (!result.equals("SUCCESS"))
+                        return result;
+                }
+
+                return "SUCCESS";
 
             }
 
@@ -555,7 +629,7 @@ public class BaselineScreeningForm extends AbstractFormActivity implements Radio
                 } else {
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
-                    alertDialog.setMessage(getResources().getString(R.string.insert_error));
+                    alertDialog.setMessage(message);
                     Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                     alertDialog.setIcon(clearIcon);
                     alertDialog.setTitle(getResources().getString(R.string.title_error));
@@ -719,22 +793,7 @@ public class BaselineScreeningForm extends AbstractFormActivity implements Radio
             } else {
                 contactRegistered.setVisibility(View.GONE);
                 treatmentInitiationDate.setVisibility(View.GONE);
-
-                if (App.get(tbHistory).equals(getResources().getString(R.string.yes)))
-                    linearLayout.setVisibility(View.GONE);
-                else
-                    linearLayout.setVisibility(View.VISIBLE);
-
-            }
-        } else if (group == tbHistory.getRadioGroup()) {
-            if (App.get(tbHistory).equals(getResources().getString(R.string.yes)))
-                linearLayout.setVisibility(View.GONE);
-            else {
-
-                if (App.get(tbHistory).equals(getResources().getString(R.string.yes)))
-                    linearLayout.setVisibility(View.GONE);
-                else
-                    linearLayout.setVisibility(View.VISIBLE);
+                linearLayout.setVisibility(View.VISIBLE);
             }
         } else if (group == referral.getRadioGroup()) {
             if (App.get(referral).equals(getResources().getString(R.string.yes)))

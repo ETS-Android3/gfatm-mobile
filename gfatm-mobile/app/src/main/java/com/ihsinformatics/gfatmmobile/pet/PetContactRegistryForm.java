@@ -20,18 +20,18 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.RadioGroup;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.R;
-import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
-import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
-import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
+import com.ihsinformatics.gfatmmobile.model.Encounter;
+import com.ihsinformatics.gfatmmobile.model.Obs;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
+import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,15 +40,14 @@ import java.util.Date;
  * Created by Rabbia on 11/24/2016.
  */
 
-public class EndOfFollowupForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class PetContactRegistryForm extends AbstractFormActivity {
 
     Context context;
-
     TitledButton formDate;
-    TitledSpinner reasonForFollowupEnd;
-    TitledEditText explanation;
-    TitledRadioGroup reasonForExclusion;
-    TitledEditText other;
+    TitledEditText totalContacts;
+    TitledEditText totalAdultContacts;
+    TitledEditText totalChildrenContacts;
+
     Snackbar snackbar;
 
     @Override
@@ -56,8 +55,8 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
                              ViewGroup container, Bundle savedInstanceState) {
 
         PAGE_COUNT = 1;
-        FORM_NAME = Forms.PET_END_FOLLOWOUP;
-        FORM = Forms.pet_endOfFollowup;
+        FORM_NAME = Forms.PET_CONTACT_REGISTRY;
+        FORM = Forms.pet_contactRegistry;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -73,14 +72,14 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
 
         if (App.isLanguageRTL()) {
             for (int i = PAGE_COUNT - 1; i >= 0; i--) {
-                LinearLayout layout = new LinearLayout(mainContent.getContext());
+                LinearLayout layout = new LinearLayout(context);
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
 
                     View v = viewGroups[i][j];
                     layout.addView(v);
                 }
-                ScrollView scrollView = new ScrollView(mainContent.getContext());
+                ScrollView scrollView = new ScrollView(context);
                 scrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
                 scrollView.setScrollbarFadingEnabled(false);
                 scrollView.addView(layout);
@@ -88,14 +87,14 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
             }
         } else {
             for (int i = 0; i < PAGE_COUNT; i++) {
-                LinearLayout layout = new LinearLayout(mainContent.getContext());
+                LinearLayout layout = new LinearLayout(context);
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
 
                     View v = viewGroups[i][j];
                     layout.addView(v);
                 }
-                ScrollView scrollView = new ScrollView(mainContent.getContext());
+                ScrollView scrollView = new ScrollView(context);
                 scrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
                 scrollView.setScrollbarFadingEnabled(false);
                 scrollView.addView(layout);
@@ -113,40 +112,17 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
     public void initViews() {
 
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        reasonForFollowupEnd = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_reason_for_end_of_followup), getResources().getStringArray(R.array.pet_reasons_for_end_of_followup), "", App.VERTICAL, true);
-        explanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 250, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        explanation.getEditText().setSingleLine(false);
-        explanation.getEditText().setMinimumHeight(150);
-        reasonForExclusion = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_reason_for_exclusion), getResources().getStringArray(R.array.pet_reason_for_exclusions), "", App.VERTICAL, App.VERTICAL);
-        other = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 250, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        other.getEditText().setSingleLine(false);
-        other.getEditText().setMinimumHeight(150);
+        totalContacts = new TitledEditText(context, null, getResources().getString(R.string.pet_total_contacts), "", getResources().getString(R.string.pet_total_contacts_hint), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        totalAdultContacts = new TitledEditText(context, null, getResources().getString(R.string.pet_total_adult_contacts), "", getResources().getString(R.string.pet_total_adult_contacts_hint), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        totalChildrenContacts = new TitledEditText(context, null, getResources().getString(R.string.pet_total_childern_contacts), "", getResources().getString(R.string.pet_total_childern_contacts_hint), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
 
-        views = new View[]{formDate.getButton(), reasonForFollowupEnd.getSpinner(), explanation.getEditText(), reasonForExclusion.getRadioGroup(), other.getEditText()};
+        views = new View[]{formDate.getButton(), totalContacts.getEditText(), totalAdultContacts.getEditText(), totalChildrenContacts.getEditText()};
 
-        viewGroups = new View[][]{{formDate, reasonForFollowupEnd, explanation, reasonForExclusion, other}};
+        viewGroups = new View[][]{{formDate, totalContacts, totalAdultContacts, totalChildrenContacts}};
 
         formDate.getButton().setOnClickListener(this);
-        reasonForFollowupEnd.getSpinner().setOnItemSelectedListener(this);
-        reasonForExclusion.getRadioGroup().setOnCheckedChangeListener(this);
 
-        explanation.setVisibility(View.GONE);
-        other.setVisibility(View.GONE);
-
-    }
-
-    @Override
-    public void resetViews() {
-
-        super.resetViews();
-
-        if (snackbar != null)
-            snackbar.dismiss();
-
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-
-        explanation.setVisibility(View.GONE);
-        other.setVisibility(View.GONE);
+        resetViews();
 
     }
 
@@ -177,24 +153,62 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
 
         Boolean error = false;
 
-        if (App.get(other).isEmpty() && other.getVisibility() == View.VISIBLE) {
-            other.getQuestionView().setError(getResources().getString(R.string.mandatory_field));
-            other.getEditText().requestFocus();
+        if (App.get(totalChildrenContacts).isEmpty()) {
+            totalChildrenContacts.getEditText().setError(getString(R.string.empty_field));
+            totalChildrenContacts.getEditText().requestFocus();
             error = true;
+        } else {
+            int no = Integer.parseInt(App.get(totalChildrenContacts));
+            if (no < 0 || no > 25) {
+                totalChildrenContacts.getEditText().setError(getString(R.string.value_out_of_range));
+                totalChildrenContacts.getEditText().requestFocus();
+                error = true;
+            }
         }
 
-        if (App.get(explanation).isEmpty() && explanation.getVisibility() == View.VISIBLE) {
-            explanation.getQuestionView().setError(getResources().getString(R.string.mandatory_field));
-            explanation.getEditText().requestFocus();
+        if (App.get(totalAdultContacts).isEmpty()) {
+            totalAdultContacts.getEditText().setError(getString(R.string.empty_field));
+            totalAdultContacts.getEditText().requestFocus();
             error = true;
+        } else {
+            int no = Integer.parseInt(App.get(totalAdultContacts));
+            if (no < 0 || no > 25) {
+                totalAdultContacts.getEditText().setError(getString(R.string.value_out_of_range));
+                totalAdultContacts.getEditText().requestFocus();
+                error = true;
+            }
+        }
+
+        if (App.get(totalContacts).isEmpty()) {
+            totalContacts.getEditText().setError(getString(R.string.empty_field));
+            totalContacts.getEditText().requestFocus();
+            error = true;
+        } else {
+            int no = Integer.parseInt(App.get(totalContacts));
+            if (no < 0 || no > 50) {
+                totalContacts.getEditText().setError(getString(R.string.value_out_of_range));
+                totalContacts.getEditText().requestFocus();
+                error = true;
+            }
+        }
+
+        if (!error) {
+            int totalContactsNo = Integer.parseInt(App.get(totalContacts));
+            int totalAdultContactNo = Integer.parseInt(App.get(totalAdultContacts));
+            int totalChildrenContactNo = Integer.parseInt(App.get(totalChildrenContacts));
+
+            if (totalContactsNo != totalAdultContactNo + totalChildrenContactNo) {
+                totalContacts.getEditText().setError(getString(R.string.pet_count_mismatch));
+                totalContacts.getEditText().requestFocus();
+                error = true;
+            }
         }
 
         if (error) {
 
             final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
-            alertDialog.setMessage(getResources().getString(R.string.form_error));
+            alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-            // DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_error));
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
@@ -219,6 +233,14 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
     @Override
     public boolean submit() {
 
+        Bundle bundle = this.getArguments();
+        Boolean saveFlag = bundle.getBoolean("save", false);
+        if (saveFlag) {
+            Toast.makeText(context, "Hello!",
+                    Toast.LENGTH_LONG).show();
+            return true;
+        }
+
         endTime = new Date();
 
         final ArrayList<String[]> observations = new ArrayList<String[]>();
@@ -226,23 +248,9 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
         observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
         /*observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
         observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});*/
-        observations.add(new String[]{"REASON TO END FOLLOW-UP", App.get(reasonForFollowupEnd).equals(getResources().getString(R.string.pet_treatment_completed)) ? "TREATMENT COMPLETE" :
-                (App.get(reasonForFollowupEnd).equals(getResources().getString(R.string.pet_loss_of_followup)) ? "LOST TO FOLLOW-UP" :
-                        (App.get(reasonForFollowupEnd).equals(getResources().getString(R.string.pet_enrolled_in_tb)) ? "ENROLLED IN TB PROGRAM" :
-                                (App.get(reasonForFollowupEnd).equals(getResources().getString(R.string.pet_transferred_out)) ? "TRANSFERRED OUT" :
-                                        (App.get(reasonForFollowupEnd).equals(getResources().getString(R.string.pet_not_eligible_for_study)) ? "NOT ELIGIBLE FOR PROGRAM" :
-                                                (App.get(reasonForFollowupEnd).equals(getResources().getString(R.string.pet_refused_treatment)) ? "REFUSAL OF TREATMENT BY PATIENT" :
-                                                        (App.get(reasonForFollowupEnd).equals(getResources().getString(R.string.pet_died)) ? "DECEASED" : "OTHER"))))))});
-        if (explanation.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"REASON TO END FOLLOW-UP (TEXT)", App.get(explanation)});
-        if (!App.get(reasonForExclusion).equals(""))
-            observations.add(new String[]{"REASON FOR EXCLUSION FROM PET PROGRAM", App.get(reasonForExclusion).equals(getResources().getString(R.string.pet_xdr)) ? "EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION" :
-                    (App.get(reasonForExclusion).equals(getResources().getString(R.string.pet_pre_xdr)) ? "PRE-EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION" :
-                            (App.get(reasonForExclusion).equals(getResources().getString(R.string.pet_transfered_out_to_other_site)) ? "TRANSFERRED OUT" :
-                                    (App.get(reasonForExclusion).equals(getResources().getString(R.string.pet_index_refused_treatment)) ? "REFUSAL OF TREATMENT BY PATIENT" : "OTHER NON-CODED")))});
-        if (other.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER NON-CODED", App.get(other)});
-
+        observations.add(new String[]{"NUMBER OF CONTACTS", App.get(totalContacts)});
+        observations.add(new String[]{"NUMBER OF ADULT CONTACTS", App.get(totalAdultContacts)});
+        observations.add(new String[]{"NUMBER OF CHILDHOOD CONTACTS", App.get(totalChildrenContacts)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -258,7 +266,10 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(FORM_NAME, formDateCalendar, observations.toArray(new String[][]{}));
+                String result = serverService.saveEncounterAndObservation(FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                if (result.contains("SUCCESS"))
+                    return "SUCCESS";
+
                 return result;
 
             }
@@ -281,7 +292,28 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
                     alertDialog.setMessage(getResources().getString(R.string.form_submitted));
                     Drawable submitIcon = getResources().getDrawable(R.drawable.ic_submit);
                     alertDialog.setIcon(submitIcon);
+                    int color = App.getColor(context, R.attr.colorAccent);
+                    DrawableCompat.setTint(submitIcon, color);
                     alertDialog.setTitle(getResources().getString(R.string.title_completed));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else if (result.equals("CONNECTION_ERROR")) {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
                     alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
@@ -297,10 +329,9 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
                     alertDialog.show();
                 } else {
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
-                    alertDialog.setMessage(getResources().getString(R.string.insert_error));
+                    String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
+                    alertDialog.setMessage(message);
                     Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-                    int color = App.getColor(context, R.attr.colorAccent);
-                    DrawableCompat.setTint(clearIcon, color);
                     alertDialog.setIcon(clearIcon);
                     alertDialog.setTitle(getResources().getString(R.string.title_error));
                     alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
@@ -318,11 +349,61 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
                     alertDialog.show();
                 }
 
+
             }
         };
         submissionFormTask.execute("");
 
         return false;
+    }
+
+    @Override
+    public void resetViews() {
+        super.resetViews();
+
+        if (snackbar != null)
+            snackbar.dismiss();
+
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean openFlag = bundle.getBoolean("open");
+            if (openFlag) {
+
+                bundle.putBoolean("open", false);
+                bundle.putBoolean("save", true);
+
+                String id = bundle.getString("encounterId");
+                int encounterId = Integer.valueOf(id);
+
+                Encounter encounter = serverService.getEncounterAndObservationFromLocalDb(encounterId);
+                ArrayList<Obs> obsGroup = encounter.getObsGroup();
+
+                for (Obs obs : obsGroup) {
+
+                    if (obs.getConceptName().equals("NUMBER OF CONTACTS")) {
+
+                        String value = obs.getValue().replace(".0", "");
+                        totalContacts.getEditText().setText(value);
+
+                    } else if (obs.getConceptName().equals("NUMBER OF ADULT CONTACTS")) {
+
+                        String value = obs.getValue().replace(".0", "");
+                        totalAdultContacts.getEditText().setText(value);
+
+                    } else if (obs.getConceptName().equals("NUMBER OF CHILDHOOD CONTACTS")) {
+
+                        String value = obs.getValue().replace(".0", "");
+                        totalChildrenContacts.getEditText().setText(value);
+
+                    }
+                }
+            } else
+                bundle.putBoolean("save", false);
+
+        }
+
     }
 
     @Override
@@ -354,32 +435,11 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-        MySpinner spinner = (MySpinner) parent;
-        if (spinner == reasonForFollowupEnd.getSpinner()) {
-            if (App.get(reasonForFollowupEnd).equals(getResources().getString(R.string.pet_transferred_out)) ||
-                    App.get(reasonForFollowupEnd).equals(getResources().getString(R.string.pet_refused_treatment)) ||
-                    App.get(reasonForFollowupEnd).equals(getResources().getString(R.string.pet_other)))
-                explanation.setVisibility(View.VISIBLE);
-            else
-                explanation.setVisibility(View.GONE);
-        }
-
     }
-
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-    }
-
-    @Override
-    public void onCheckedChanged(RadioGroup group, int checkedId) {
-        if (group == reasonForExclusion.getRadioGroup()) {
-            if (App.get(reasonForExclusion).equals(getResources().getString(R.string.pet_other)))
-                other.setVisibility(View.VISIBLE);
-            else
-                other.setVisibility(View.GONE);
-        }
     }
 
     class MyAdapter extends PagerAdapter {

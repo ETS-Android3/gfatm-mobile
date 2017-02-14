@@ -43,7 +43,7 @@ import java.util.Date;
  * Created by Rabbia on 11/24/2016.
  */
 
-public class InfectionTreatmentEligibilityForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
     Context context;
 
@@ -125,6 +125,25 @@ public class InfectionTreatmentEligibilityForm extends AbstractFormActivity impl
 
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
 
+        String columnName = "";
+        if (App.getProgram().equals(getResources().getString(R.string.pet)))
+            columnName = "pet_location";
+        else if (App.getProgram().equals(getResources().getString(R.string.fast)))
+            columnName = "fast_location";
+        else if (App.getProgram().equals(getResources().getString(R.string.comorbidities)))
+            columnName = "comorbidities_location";
+        else if (App.getProgram().equals(getResources().getString(R.string.pmdt)))
+            columnName = "pmdt_location";
+        else if (App.getProgram().equals(getResources().getString(R.string.childhood_tb)))
+            columnName = "childhood_tb_location";
+
+        final Object[][] locations = serverService.getAllLocations(columnName);
+        String[] locationArray = new String[locations.length + 1];
+        for (int i = 0; i < locations.length; i++) {
+            locationArray[i] = String.valueOf(locations[i][1]);
+        }
+        locationArray[locations.length] = "OTHER";
+
         MyLinearLayout linearLayout1 = new MyLinearLayout(context, getResources().getString(R.string.pet_contact_symptom_screen), App.VERTICAL);
         pregnancyHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_pregnancy_history), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true);
         pregnancyTestResult = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_pregnancy_test_result), getResources().getStringArray(R.array.pet_pregnancy_test_results), getResources().getString(R.string.pet_positive), App.VERTICAL, App.VERTICAL, true);
@@ -132,7 +151,7 @@ public class InfectionTreatmentEligibilityForm extends AbstractFormActivity impl
         tbDiagnosis = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_tb_diagnosed), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true);
         infectionType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_type_of_tb), getResources().getStringArray(R.array.pet_infection_types), getResources().getString(R.string.pet_dstb), App.HORIZONTAL, App.VERTICAL, true);
         tbReferral = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_patient_referred_fot_tb_treatment), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, true);
-        referralSite = new TitledSpinner(context, null, getResources().getString(R.string.pet_referral_site), getResources().getStringArray(R.array.pet_referral_sites), "", App.VERTICAL, true);
+        referralSite = new TitledSpinner(context, null, getResources().getString(R.string.pet_referral_site), locationArray, "", App.VERTICAL, true);
         othersSite = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         tbRuledOut = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_ruled_out), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, true);
         petEligiable = new TitledEditText(context, null, getResources().getString(R.string.pet_eligible), getResources().getString(R.string.no), "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
@@ -171,14 +190,7 @@ public class InfectionTreatmentEligibilityForm extends AbstractFormActivity impl
         for (CheckBox cb : evaluationType.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
 
-        pregnancyTestResult.setVisibility(View.GONE);
-        othersSite.setVisibility(View.GONE);
-        infectionType.setVisibility(View.GONE);
-        tbReferral.setVisibility(View.GONE);
-        referralSite.setVisibility(View.GONE);
-        othersSite.setVisibility(View.GONE);
-
-        tbRuledOut.setVisibility(View.VISIBLE);
+        resetViews();
 
     }
 
@@ -209,6 +221,14 @@ public class InfectionTreatmentEligibilityForm extends AbstractFormActivity impl
         referralSite.setVisibility(View.GONE);
         othersSite.setVisibility(View.GONE);
         tbRuledOut.setVisibility(View.VISIBLE);
+
+        String s = App.getPatient().getPerson().getMaritalStatus();
+
+
+        if (App.getPatient().getPerson().getAge() < 14 || App.getPatient().getPerson().getMaritalStatus().equalsIgnoreCase("Single"))
+            pregnancyHistory.setVisibility(View.GONE);
+        else
+            pregnancyHistory.setVisibility(View.VISIBLE);
 
     }
 
@@ -288,14 +308,14 @@ public class InfectionTreatmentEligibilityForm extends AbstractFormActivity impl
         observations.add(new String[]{"PREGNANCY STATUS", App.get(pregnancyHistory).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         observations.add(new String[]{"PREGNANCY TEST RESULT", App.get(pregnancyTestResult).equals(getResources().getString(R.string.pet_positive)) ? "POSITIVE" :
                 (App.get(pregnancyTestResult).equals(getResources().getString(R.string.pet_negative)) ? "NEGATIVE" : "PREGNANCY TEST UNDETERMINENT")});
-        /*String evaluationTypeString = "";
+        String evaluationTypeString = "";
         for (CheckBox cb : evaluationType.getCheckedBoxes()) {
             if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_evidence_based_evaluation)))
                 evaluationTypeString = evaluationTypeString + "EVIDENCE BASED EVALUATION" + " ; ";
             else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_clinical_evaluation)))
                 evaluationTypeString = evaluationTypeString + "CLINICAL EVALUATION" + " ; ";
         }
-        observations.add (new String[]{"TB EVALUATION TYPE", evaluationTypeString});*/
+        observations.add(new String[]{"TB EVALUATION TYPE", evaluationTypeString});
         observations.add(new String[]{"TUBERCULOSIS DIAGNOSED", App.get(tbDiagnosis).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         if (infectionType.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TUBERCULOSIS INFECTION TYPE", App.get(infectionType).equals(getResources().getString(R.string.pet_dstb)) ? "DRUG-SENSITIVE TUBERCULOSIS INFECTION" : "DRUG-RESISTANT TUBERCULOSIS INFECTION"});
@@ -326,7 +346,7 @@ public class InfectionTreatmentEligibilityForm extends AbstractFormActivity impl
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(FORM_NAME, formDateCalendar, observations.toArray(new String[][]{}));
+                String result = serverService.saveEncounterAndObservation(FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}));
                 return result;
 
             }
@@ -365,9 +385,29 @@ public class InfectionTreatmentEligibilityForm extends AbstractFormActivity impl
                                 }
                             });
                     alertDialog.show();
+                } else if (result.equals("CONNECTION_ERROR")) {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
                 } else {
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
-                    alertDialog.setMessage(getResources().getString(R.string.insert_error));
+                    String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
+                    alertDialog.setMessage(message);
                     Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                     alertDialog.setIcon(clearIcon);
                     alertDialog.setTitle(getResources().getString(R.string.title_error));
@@ -424,7 +464,7 @@ public class InfectionTreatmentEligibilityForm extends AbstractFormActivity impl
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         MySpinner spinner = (MySpinner) parent;
         if (spinner == referralSite.getSpinner()) {
-            if (App.get(referralSite).equals(getResources().getString(R.string.pet_other)))
+            if (App.get(referralSite).equalsIgnoreCase(getResources().getString(R.string.pet_other)))
                 othersSite.setVisibility(View.VISIBLE);
             else
                 othersSite.setVisibility(View.GONE);
