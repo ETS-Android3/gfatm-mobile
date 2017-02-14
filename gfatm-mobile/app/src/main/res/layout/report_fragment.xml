@@ -3,13 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#ffff00">
+    android:padding="@dimen/tiny">
 
-    <EditText
-        android:id="@+id/editText2"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="This is fragment No.2"
-        android:textStyle="bold" />
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/reportFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>
