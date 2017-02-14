@@ -140,7 +140,6 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
      * Initializes all views and ArrayList and Views Array
      */
     public void initViews() {
-
         thirdDateCalendar = Calendar.getInstance();
         thirdDateFragment = new SelectDateFragment();
 
@@ -152,31 +151,18 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
         formType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_select_form_type), getResources().getStringArray(R.array.fast_order_and_result_list), "", App.VERTICAL, App.VERTICAL);
         afbSmearOrder = new MyTextView(context, getResources().getString(R.string.fast_afb_smear_order));
         afbSmearOrder.setTypeface(null, Typeface.BOLD);
-        afbSmearOrder.setVisibility(View.GONE);
         dateOfSubmission = new TitledButton(context, null, getResources().getString(R.string.fast_date_of_submission), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
-        dateOfSubmission.setVisibility(View.GONE);
         testDate = new TitledButton(context, null, getResources().getString(R.string.fast_test_date), DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
-        testDate.setVisibility(View.GONE);
         testContextStatus = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_at_what_point_test_being_done), getResources().getStringArray(R.array.fast_test_being_done_list), getResources().getString(R.string.fast_baseline_new), App.VERTICAL, App.VERTICAL);
-        testContextStatus.setVisibility(View.GONE);
         monthOfTreatment = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_month_of_treatment), getResources().getStringArray(R.array.fast_number_list), getResources().getString(R.string.fast_one), App.HORIZONTAL);
-        monthOfTreatment.setVisibility(View.GONE);
         specimenType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_specimen_type), getResources().getStringArray(R.array.fast_specimen_type_list), getResources().getString(R.string.fast_sputum), App.VERTICAL, App.VERTICAL);
-        specimenType.setVisibility(View.GONE);
         specimenSource = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_where_did_the_specimen_come_from), getResources().getStringArray(R.array.fast_specimen_come_from_list), getResources().getString(R.string.fast_lymph), App.VERTICAL);
-        specimenSource.setVisibility(View.GONE);
         specimenSourceOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        specimenSourceOther.setVisibility(View.GONE);
         afbSmearResult = new MyTextView(context, getResources().getString(R.string.fast_afb_smear_result));
         afbSmearResult.setTypeface(null, Typeface.BOLD);
-        afbSmearResult.setVisibility(View.GONE);
         dateTestResult = new TitledButton(context, null, getResources().getString(R.string.fast_date_of_result_recieved), DateFormat.format("dd-MMM-yyyy", forthDateCalendar).toString(), App.HORIZONTAL);
-        dateTestResult.setVisibility(View.GONE);
         smearResult = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_smear_result), getResources().getStringArray(R.array.fast_smear_result_list), getResources().getString(R.string.fast_negative), App.VERTICAL);
-        smearResult.setVisibility(View.GONE);
         noAfb = new TitledEditText(context, null, getResources().getString(R.string.fast_number_of_afb_seen_in_one_field), "", "", 10, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        noAfb.setVisibility(View.GONE);
-
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), testId.getEditText(), formType.getRadioGroup(), dateOfSubmission.getButton(),
@@ -199,6 +185,7 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
         specimenType.getRadioGroup().setOnCheckedChangeListener(this);
         smearResult.getSpinner().setOnItemSelectedListener(this);
 
+        resetViews();
     }
 
     @Override
@@ -350,6 +337,21 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
     public void resetViews() {
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        dateOfSubmission.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+        testDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+        dateTestResult.getButton().setText(DateFormat.format("dd-MMM-yyyy", forthDateCalendar).toString());
+        afbSmearOrder.setVisibility(View.GONE);
+        dateOfSubmission.setVisibility(View.GONE);
+        testDate.setVisibility(View.GONE);
+        testContextStatus.setVisibility(View.GONE);
+        monthOfTreatment.setVisibility(View.GONE);
+        specimenType.setVisibility(View.GONE);
+        specimenSource.setVisibility(View.GONE);
+        specimenSourceOther.setVisibility(View.GONE);
+        afbSmearResult.setVisibility(View.GONE);
+        dateTestResult.setVisibility(View.GONE);
+        smearResult.setVisibility(View.GONE);
+        noAfb.setVisibility(View.GONE);
     }
 
     @Override

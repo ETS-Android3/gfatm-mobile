@@ -153,7 +153,6 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         cnicLinearLayout.addView(cnic3);
         cnicOwner = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_whose_nic_is_this), getResources().getStringArray(R.array.fast_whose_nic_is_this_list), getResources().getString(R.string.fast_self), App.VERTICAL);
         otherCnicOwner = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        otherCnicOwner.setVisibility(View.GONE);
         addressProvided = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_provided_their_address), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
         addressHouse = new TitledEditText(context, null, getResources().getString(R.string.fast_address_1), "", "", 10, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         addressStreet = new TitledEditText(context, null, getResources().getString(R.string.fast_address_2), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
@@ -207,6 +206,8 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         formDate.getButton().setOnClickListener(this);
         cnicOwner.getSpinner().setOnItemSelectedListener(this);
         addressProvided.getRadioGroup().setOnCheckedChangeListener(this);
+
+        resetViews();
     }
 
     @Override
@@ -791,6 +792,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
     public void resetViews() {
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        otherCnicOwner.setVisibility(View.GONE);
     }
 
     @Override

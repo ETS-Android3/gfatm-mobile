@@ -132,7 +132,6 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
         patientAttendant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_is_this_patient_or_attendant), getResources().getStringArray(R.array.fast_patient_or_attendant_list), getResources().getString(R.string.fast_patient_title), App.VERTICAL, App.VERTICAL);
         patientConsultation = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_speciality_patient_consult), getResources().getStringArray(R.array.fast_patient_consultation_list), getResources().getString(R.string.fast_chesttbclinic_title), App.VERTICAL);
         patientConsultationOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        patientConsultationOther.setVisibility(View.GONE);
 
         patientSymptomTitle = new MyTextView(context, getResources().getString(R.string.fast_symptoms_title));
         patientSymptomTitle.setTypeface(null, Typeface.BOLD);
@@ -142,7 +141,6 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
         haemoptysis = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_sputum_in_blood), getResources().getStringArray(R.array.fast_choice_list), getResources().getString(R.string.fast_no_title), App.VERTICAL, App.VERTICAL);
         fever = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_do_you_have_fever), getResources().getStringArray(R.array.fast_choice_list), getResources().getString(R.string.fast_no_title), App.VERTICAL, App.VERTICAL);
         feverDuration = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_how_long_you_have_fever), getResources().getStringArray(R.array.fast_duration_list), getResources().getString(R.string.fast_less_than_2_weeks_title), App.VERTICAL);
-        feverDuration.setVisibility(View.GONE);
         nightSweats = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_do_you_have_night_sweats), getResources().getStringArray(R.array.fast_choice_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
         weightLoss = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_do_you_have_unexplained_weight_loss), getResources().getStringArray(R.array.fast_choice_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
 
@@ -176,6 +174,8 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
         fever.getRadioGroup().setOnCheckedChangeListener(this);
         tbHistory.getRadioGroup().setOnCheckedChangeListener(this);
         tbContact.getRadioGroup().setOnCheckedChangeListener(this);
+
+        resetViews();
     }
 
     @Override
@@ -507,6 +507,9 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
     public void resetViews() {
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        patientConsultationOther.setVisibility(View.GONE);
+        feverDuration.setVisibility(View.GONE);
+
     }
 
 

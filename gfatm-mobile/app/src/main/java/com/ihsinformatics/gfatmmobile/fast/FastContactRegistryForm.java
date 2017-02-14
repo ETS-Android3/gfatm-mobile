@@ -134,6 +134,8 @@ public class FastContactRegistryForm extends AbstractFormActivity implements Rad
         viewGroups = new View[][]
                 {{formDate, contacts, adultContacts, childhoodContacts}};
         formDate.getButton().setOnClickListener(this);
+
+        resetViews();
     }
 
     @Override

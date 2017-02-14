@@ -125,11 +125,8 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
         dateTestResult = new TitledButton(context, null, getResources().getString(R.string.fast_date_of_result_recieved), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.VERTICAL);
         gxpResult = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_genexpert_mtb_result), getResources().getStringArray(R.array.fast_genexpert_mtb_result_list), getResources().getString(R.string.fast_mtb_not_detected), App.VERTICAL);
         mtbBurden = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_mtb_burden), getResources().getStringArray(R.array.fast_mtb_burden_list), getResources().getString(R.string.fast_very_low), App.VERTICAL);
-        mtbBurden.setVisibility(View.GONE);
         rifResult = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_if_mtb_then_rif_result), getResources().getStringArray(R.array.fast_if_mtb_then_rif_list), getResources().getString(R.string.fast_not_detected), App.VERTICAL);
-        rifResult.setVisibility(View.GONE);
         errorCode = new TitledEditText(context, null, getResources().getString(R.string.fast_error_code), "", "", 15, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, false);
-        errorCode.setVisibility(View.GONE);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), cartridgeId.getEditText(), dateTestResult.getButton(), gxpResult.getSpinner(),
@@ -144,6 +141,8 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
         gxpResult.getSpinner().setOnItemSelectedListener(this);
         mtbBurden.getSpinner().setOnItemSelectedListener(this);
         rifResult.getSpinner().setOnItemSelectedListener(this);
+
+        resetViews();
     }
 
     @Override
@@ -391,6 +390,10 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
     public void resetViews() {
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        dateTestResult.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+        mtbBurden.setVisibility(View.GONE);
+        errorCode.setVisibility(View.GONE);
+        rifResult.setVisibility(View.GONE);
     }
 
     @Override

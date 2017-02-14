@@ -138,34 +138,20 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
         screening = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_identified_patient_through_screening), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
         facilitySection = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_hospital_parts_title), getResources().getStringArray(R.array.fast_hospital_parts), getResources().getString(R.string.fast_opdclinicscreening_title), App.VERTICAL);
         facilitySectionOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        facilitySectionOther.setVisibility(View.GONE);
         opdWardSection = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_clinic_and_ward_title), getResources().getStringArray(R.array.fast_clinic_and_ward_list), getResources().getString(R.string.fast_generalmedicinefilterclinic_title), App.VERTICAL);
         patientReferralSource = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_source_of_patient_referral), getResources().getStringArray(R.array.fast_source_of_patient_referral_list), getResources().getString(R.string.fast_self_referral), App.VERTICAL);
-        patientReferralSource.setVisibility(View.GONE);
         otherReferral = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        otherReferral.setVisibility(View.GONE);
         facilityDepartment = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_within_hospital_was_patient_referred), getResources().getStringArray(R.array.fast_patient_reffered_from_list), getResources().getString(R.string.fast_ward_title), App.VERTICAL, App.VERTICAL);
-        facilityDepartment.setVisibility(View.GONE);
         facilityDepartmentOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        facilityDepartmentOther.setVisibility(View.GONE);
         referralWithinOpd = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_which_opd_clinic_or_ward_has_patient_referred_from), getResources().getStringArray(R.array.fast_opd_clinic_or_ward_patient_reffered_from_list), getResources().getString(R.string.fast_generalmedicinefilterclinic_title), App.VERTICAL);
-        referralWithinOpd.setVisibility(View.GONE);
         referralWithinOpdOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        referralWithinOpdOther.setVisibility(View.GONE);
         facilityType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_outside_hospital_was_patient_referred), getResources().getStringArray(R.array.fast_outside_hospital_patient_reffered_from), getResources().getString(R.string.fast_private_hospital), App.VERTICAL, App.VERTICAL);
-        facilityType.setVisibility(View.GONE);
         hearAboutUs = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_where_did_you_hear_about_us), getResources().getStringArray(R.array.fast_hear_about_us_from_list), getResources().getString(R.string.fast_radio), App.VERTICAL);
-        hearAboutUs.setVisibility(View.GONE);
         hearAboutUsOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        hearAboutUsOther.setVisibility(View.GONE);
         contactReferral = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_enrolled_in_any_tb_program), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_no_title), App.VERTICAL, App.VERTICAL);
-        contactReferral.setVisibility(View.GONE);
         contactIdType = new TitledCheckBoxes(context, null, getResources().getString(R.string.fast_tb_contact_any_identifications_id), getResources().getStringArray(R.array.fast_tb_contact_identification_list), null, App.VERTICAL, App.VERTICAL);
-        contactIdType.setVisibility(View.GONE);
         contactPatientId = new TitledEditText(context, null, getResources().getString(R.string.fast_patient_id), "", "", 6, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        contactPatientId.setVisibility(View.GONE);
         contactExternalId = new TitledEditText(context, null, getResources().getString(R.string.fast_external_id), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        contactExternalId.setVisibility(View.GONE);
 
         String columnName = "";
         if (App.getProgram().equals(getResources().getString(R.string.pet)))
@@ -186,9 +172,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
         }
 
         contactExternalIdHospital = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_if_external_id_hospital_or_programs), locationArray, "", App.VERTICAL);
-        contactExternalIdHospital.setVisibility(View.GONE);
         contactTbRegisternationNo = new TitledEditText(context, null, getResources().getString(R.string.fast_tb_registeration_no), "", "", 11, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        contactTbRegisternationNo.setVisibility(View.GONE);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), facilitySection.getSpinner(), facilitySectionOther.getEditText(),
@@ -241,6 +225,8 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
             public void afterTextChanged(Editable editable) {
             }
         });
+
+        resetViews();
     }
 
     @Override
@@ -866,6 +852,22 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
     public void resetViews() {
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        facilitySectionOther.setVisibility(View.GONE);
+        patientReferralSource.setVisibility(View.GONE);
+        otherReferral.setVisibility(View.GONE);
+        facilityDepartment.setVisibility(View.GONE);
+        facilityDepartmentOther.setVisibility(View.GONE);
+        referralWithinOpd.setVisibility(View.GONE);
+        referralWithinOpdOther.setVisibility(View.GONE);
+        facilityType.setVisibility(View.GONE);
+        hearAboutUs.setVisibility(View.GONE);
+        hearAboutUsOther.setVisibility(View.GONE);
+        contactReferral.setVisibility(View.GONE);
+        contactIdType.setVisibility(View.GONE);
+        contactPatientId.setVisibility(View.GONE);
+        contactExternalId.setVisibility(View.GONE);
+        contactExternalIdHospital.setVisibility(View.GONE);
+        contactTbRegisternationNo.setVisibility(View.GONE);
     }
 
 

@@ -131,17 +131,12 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
         testContextStatus = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_point_test_being_done), getResources().getStringArray(R.array.fast_test_being_done_list), getResources().getString(R.string.fast_baseline_new), App.VERTICAL, App.VERTICAL);
         tbCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_baseline_test_specify_patient_category), getResources().getStringArray(R.array.fast_patient_category_list), getResources().getString(R.string.fast_category_1), App.VERTICAL, App.VERTICAL);
         baselineRepeatReason = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_repeating_test_if_baseline_repeat), getResources().getStringArray(R.array.fast_repeating_test_if_baseline_repeat_list), getResources().getString(R.string.fast_rif_resistant), App.VERTICAL, App.VERTICAL);
-        baselineRepeatReason.setVisibility(View.GONE);
         sampleType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_specimen_type), getResources().getStringArray(R.array.fast_specimen_type_list), getResources().getString(R.string.fast_sputum), App.VERTICAL, App.VERTICAL);
         specimenSource = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_specimen_come_from), getResources().getStringArray(R.array.fast_specimen_come_from_list), getResources().getString(R.string.fast_lymph), App.VERTICAL);
-        specimenSource.setVisibility(View.GONE);
         specimenSourceOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        specimenSourceOther.setVisibility(View.GONE);
         sampleAccepted = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_accepted_lab_technician), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
         reasonRejected = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_why_was_the_sample_rejected), getResources().getStringArray(R.array.fast_sample_rejected_list), getResources().getString(R.string.fast_saliva), App.VERTICAL);
-        reasonRejected.setVisibility(View.GONE);
         otherReasonRejected = new TitledEditText(context, null, getResources().getString(R.string.fast_other_reason_for_rejection), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        otherReasonRejected.setVisibility(View.GONE);
         cartridgeId = new TitledEditText(context, null, getResources().getString(R.string.fast_cartridge_id), "", "", 9, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
 
 
@@ -162,6 +157,8 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
         specimenSource.getSpinner().setOnItemSelectedListener(this);
         sampleAccepted.getRadioGroup().setOnCheckedChangeListener(this);
         reasonRejected.getSpinner().setOnItemSelectedListener(this);
+
+        resetViews();
 
     }
 
@@ -442,6 +439,12 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
     public void resetViews() {
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        sampleSubmissionDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+        baselineRepeatReason.setVisibility(View.GONE);
+        specimenSource.setVisibility(View.GONE);
+        specimenSourceOther.setVisibility(View.GONE);
+        reasonRejected.setVisibility(View.GONE);
+        otherReasonRejected.setVisibility(View.GONE);
     }
 
     @Override

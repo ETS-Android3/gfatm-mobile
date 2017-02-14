@@ -130,7 +130,6 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
         sputumContainerGiven = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_a_sputum_container), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
         sputum_sample = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_produced_a_sputum_sample), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
         reasonNoSputumSample = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_if_no_why_not), getResources().getStringArray(R.array.fast_if_no_why_not_list), getResources().getString(R.string.fast_patient_unable_to_expectorate), App.VERTICAL, App.VERTICAL);
-        reasonNoSputumSample.setVisibility(View.GONE);
         secondDateCalendar.set(Calendar.YEAR, formDateCalendar.get(Calendar.YEAR));
         secondDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
         secondDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
@@ -140,7 +139,6 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
         dueDateSample.getEditText().setFocusable(false);
         freeXrayVoucher = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_given_free_chest_xray), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
         noXrayVoucher = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_not_given_free_chest_xray), getResources().getStringArray(R.array.fast_not_given_free_list), getResources().getString(R.string.fast_presumptive_refused), App.VERTICAL, App.VERTICAL);
-        noXrayVoucher.setVisibility(View.GONE);
 
 
         // Used for reset fields...
@@ -157,6 +155,8 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
         reasonNoSputumSample.getRadioGroup().setOnCheckedChangeListener(this);
         freeXrayVoucher.getRadioGroup().setOnCheckedChangeListener(this);
         noXrayVoucher.getRadioGroup().setOnCheckedChangeListener(this);
+
+        resetViews();
     }
 
     @Override
@@ -376,6 +376,9 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
     public void resetViews() {
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        reasonNoSputumSample.setVisibility(View.GONE);
+        noXrayVoucher.setVisibility(View.GONE);
+
     }
 
     @Override
