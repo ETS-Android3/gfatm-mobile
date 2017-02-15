@@ -252,6 +252,8 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
                 });
 
                 String result = serverService.saveEncounterAndObservation("GXP Test", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                if (result.contains("SUCCESS"))
+                    return "SUCCESS";
                 return result;
 
             }
