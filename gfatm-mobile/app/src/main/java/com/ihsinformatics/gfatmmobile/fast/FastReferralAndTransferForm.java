@@ -250,6 +250,7 @@ public class FastReferralAndTransferForm extends AbstractFormActivity implements
                 String result = serverService.saveEncounterAndObservation("Referral Form", FORM, formDateCalendar, observations.toArray(new String[][]{}));
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
+
                 return result;
 
             }
