@@ -69,7 +69,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        PAGE_COUNT = 3;
+        PAGE_COUNT = 1;
         FORM_NAME = Forms.FAST_PRESUMPTIVE_FORM;
         FORM = Forms.fastPresumptiveForm;
 

@@ -374,6 +374,8 @@
     <string name="fast_intensive_phase">Intensive Phase</string>
     <string name="fast_continuation_phase">Continuation Phase</string>
     <string name="fast_end_treatment">End Treatment</string>
+    <string name="fast_other_extra_pulmonary_site">Other Extra-Pulmonary TB Site</string>
+    <string name="fast_registeration_date">Registeration Date</string>
 
     <string-array name="fast_locations">
         <item>@string/fast_community_title</item>
@@ -843,6 +845,11 @@
         <item>@string/fast_transfer_out</item>
         <item>@string/fast_loss_to_follow_up_default</item>
         <item>@string/fast_other_title</item>
+    </string-array>
 
+    <string-array name="fast_treatment_plan_list">
+        <item>@string/fast_intensive_phase</item>
+        <item>@string/fast_continuation_phase</item>
+        <item>@string/fast_end_treatment</item>
     </string-array>
 </resources>
