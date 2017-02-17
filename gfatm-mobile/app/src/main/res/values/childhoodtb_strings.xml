@@ -235,7 +235,8 @@
     <string name="ctb_unilateral_disease">Unilateral disease</string>
     <string name="ctb_bilateral_disease">Bilateral disease</string>
     <string name="ctb_abnormal_extend_not_defined">Abnormal but extent not defined</string>
-    <string name="ctb_radiologist_remark">Radiologist's Remarks</string>
+    <string name="ctb_radiologist_remark">Radiologist\'s Remarks</string>
+    <string name="ctb_range_1_to_24">Invalid range. Please enter betweeen 1-24</string>
 
     <string-array name="ctb_screening_location_list">
         <item>@string/ctb_hospital</item>
@@ -461,7 +462,27 @@
     </string-array>
 
 
+    <string-array name="ctb_type_of_xray_list">
+        <item>@string/ctb_chest_xray_cad4tb</item>
+        <item>@string/ctb_chest_xray_other</item>
+    </string-array>
 
+    <string-array name="ctb_radiological_diagnosis_list">
+        <item>@string/ctb_adenopathy</item>
+        <item>@string/ctb_infiltration</item>
+        <item>@string/ctb_consolidation</item>
+        <item>@string/ctb_effusion</item>
+        <item>@string/ctb_normal</item>
+        <item>@string/ctb_cavitation</item>
+        <item>@string/ctb_miliary_tb</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
 
+    <string-array name="ctb_disease_extent_list">
+        <item>@string/ctb_normal</item>
+        <item>@string/ctb_unilateral_disease</item>
+        <item>@string/ctb_bilateral_disease</item>
+        <item>@string/ctb_abnormal_extend_not_defined</item>
+    </string-array>
 
 </resources>
