@@ -1,16 +1,21 @@
 package com.ihsinformatics.gfatmmobile.childhoodTb;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -218,6 +223,60 @@ public class ChildhoodTbScreeningLocation extends AbstractFormActivity implement
 
     @Override
     public boolean validate() {
+        boolean error=false;
+        if (otherFacilityDeparment.getVisibility() == View.VISIBLE && App.get(otherFacilityDeparment).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            otherFacilityDeparment.getEditText().setError(getString(R.string.empty_field));
+            otherFacilityDeparment.getEditText().requestFocus();
+            error = true;
+        }
+        if (referralOutsideOther.getVisibility() == View.VISIBLE && App.get(referralOutsideOther).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            referralOutsideOther.getEditText().setError(getString(R.string.empty_field));
+            referralOutsideOther.getEditText().requestFocus();
+            error = true;
+        }
+        if (hearAboutUsOther.getVisibility() == View.VISIBLE && App.get(hearAboutUsOther).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            hearAboutUsOther.getEditText().setError(getString(R.string.empty_field));
+            hearAboutUsOther.getEditText().requestFocus();
+            error = true;
+        }
+        if (error) {
+
+            int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
+
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+            alertDialog.setMessage(getString(R.string.form_error));
+            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+            DrawableCompat.setTint(clearIcon, color);
+            alertDialog.setIcon(clearIcon);
+            alertDialog.setTitle(getResources().getString(R.string.title_error));
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            try {
+                                InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                            } catch (Exception e) {
+// TODO: handle exception
+                            }
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
+
+            return false;
+        }
         return true;
     }
 
@@ -264,29 +323,38 @@ public class ChildhoodTbScreeningLocation extends AbstractFormActivity implement
         MySpinner spinner = (MySpinner) parent;
         if (spinner == referralSource.getSpinner()) {
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_doctor_healthworker_in_hospital)) && screeningReferralBoolean==true) {
+                patientEnrolledTb.getRadioGroup().clearCheck();
                 facilityDepartment.setVisibility(View.VISIBLE);
+                hearAboutUs.getSpinner().setSelection(0);
+                referralOutsideOpd.getSpinner().setSelection(0);
             } else {
                 facilityDepartment.setVisibility(View.GONE);
             }
-
             if(parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_doctor_healthworker_out_hospital))) {
+                patientEnrolledTb.getRadioGroup().clearCheck();
+                facilityDepartment.getRadioGroup().clearCheck();
+                hearAboutUs.getSpinner().setSelection(0);
                 referralOutsideOpd.setVisibility(View.VISIBLE);
             } else {
                 referralOutsideOpd.setVisibility(View.GONE);
             }
             if(parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_child_tested_for_tb))) {
+                patientEnrolledTb.getRadioGroup().clearCheck();
+                facilityDepartment.getRadioGroup().clearCheck();
+                referralOutsideOpd.getSpinner().setSelection(0);
                 hearAboutUs.setVisibility(View.VISIBLE);
             } else {
                 hearAboutUs.setVisibility(View.GONE);
+
             }
             if(parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_family_member_tb_patient))) {
+                facilityDepartment.getRadioGroup().clearCheck();
+                hearAboutUs.getSpinner().setSelection(0);
+                referralOutsideOpd.getSpinner().setSelection(0);
                 patientEnrolledTb.setVisibility(View.VISIBLE);
             } else {
                 patientEnrolledTb.setVisibility(View.GONE);
             }
-
-
-
         }
         if (spinner == referralOutsideOpd.getSpinner()) {
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_other_title))) {
@@ -296,7 +364,7 @@ public class ChildhoodTbScreeningLocation extends AbstractFormActivity implement
             }
         }
         if (spinner == hearAboutUs.getSpinner()) {
-            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_other_title))) {
+            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_other_title)) & hearAboutUs.getVisibility()==View.VISIBLE) {
                 hearAboutUsOther.setVisibility(View.VISIBLE);
             } else {
                 hearAboutUsOther.setVisibility(View.GONE);

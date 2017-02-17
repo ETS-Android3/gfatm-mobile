@@ -158,8 +158,8 @@
     <string name="ctb_not_tb_presumptive">Not a TB Presumptive</string>
     <string name="ctb_doctor_notes">Doctor notes</string>
     <string name="ctb_contacts">How many people (excluding the child) sleep in the child\'s home?</string>
-    <string name="ctb_adult_contacts">Total Number of adult contacts </string>
-    <string name="ctb_childhood_contacts">Total Number of adult contacts </string>
+    <string name="ctb_adult_contacts">Total Number of adult contacts</string>
+    <string name="ctb_childhood_contacts">Total Number of childhood contacts (aged 15 and under)</string>
     <string name="ctb_ppa_score">What is the child\'s PPA Score?</string>
     <string name="ctb_chest_xray">Chest X-ray</string>
     <string name="ctb_ultrasound">Ultrasound</string>
@@ -200,7 +200,43 @@
     <string name="ctb_insufficient_qunatity">Insufficient Quantity</string>
     <string name="ctb_other_reason_rejection">Other reason for rejection?</string>
     <string name="ctb_cartridge_id">Cartridge ID</string>
-    
+    <string name="ctb_date_result_recieve">Date of Result Received</string>
+    <string name="ctb_mtb_result">GeneXpert MTB Result</string>
+    <string name="ctb_mtb_detected">MTB Detected</string>
+    <string name="ctb_mtb_not_detected">MTB Not Detected</string>
+    <string name="ctb_error">Error</string>
+    <string name="ctb_invalid">Invalid</string>
+    <string name="ctb_no_result">No Result</string>
+    <string name="ctb_mtb_burden">MTB Burden</string>
+    <string name="ctb_very_low">Very Low</string>
+    <string name="ctb_low">Low</string>
+    <string name="ctb_medium">Medium</string>
+    <string name="ctb_high">High</string>
+    <string name="ctb_mtb_rif_result">If MTB + then RIF Result</string>
+    <string name="ctb_not_detected">NOT Detected</string>
+    <string name="ctb_detected">Detected</string>
+    <string name="ctb_error_code">Error Code</string>
+    <string name="ctb_type_of_xray">What type of X Ray is this?</string>
+    <string name="ctb_chest_xray_cad4tb">Chest X-Ray (CAD4TB)</string>
+    <string name="ctb_chest_xray_other">Chest X-Ray (Other)</string>
+    <string name="ctb_month_treatment">Month of treatment?</string>
+    <string name="ctb_test_date">Test date</string>
+    <string name="ctb_test_id">Test ID</string>
+    <string name="ctb_chest_xray_cad4tb_score">Chest X-Ray (CAD4TB) Score</string>
+    <string name="ctb_radiological_diagnosis">Radiological Diagnosis</string>
+    <string name="ctb_adenopathy">Adenopathy</string>
+    <string name="ctb_infiltration">Infiltration</string>
+    <string name="ctb_consolidation">Consolidation</string>
+    <string name="ctb_effusion">Effusion</string>
+    <string name="ctb_normal">Normal</string>
+    <string name="ctb_cavitation">Cavitation</string>
+    <string name="ctb_miliary_tb">Miliary TB</string>
+    <string name="ctb_extent_disease">Extent of disease</string>
+    <string name="ctb_unilateral_disease">Unilateral disease</string>
+    <string name="ctb_bilateral_disease">Bilateral disease</string>
+    <string name="ctb_abnormal_extend_not_defined">Abnormal but extent not defined</string>
+    <string name="ctb_radiologist_remark">Radiologist's Remarks</string>
+
     <string-array name="ctb_screening_location_list">
         <item>@string/ctb_hospital</item>
         <item>@string/ctb_community</item>
@@ -403,6 +439,26 @@
         <item>@string/ctb_other_title</item>
     </string-array>
 
+    <string-array name="ctb_mtb_result_list">
+        <item>@string/ctb_mtb_detected</item>
+        <item>@string/ctb_mtb_not_detected</item>
+        <item>@string/ctb_error</item>
+        <item>@string/ctb_invalid</item>
+        <item>@string/ctb_no_result</item>
+    </string-array>
+
+    <string-array name="ctb_mtb_burden_list">
+        <item>@string/ctb_very_low</item>
+        <item>@string/ctb_low</item>
+        <item>@string/ctb_medium</item>
+        <item>@string/ctb_high</item>
+    </string-array>
+
+    <string-array name="ctb_mtb_rif_result_list">
+        <item>@string/ctb_not_detected</item>
+        <item>@string/ctb_detected</item>
+        <item>@string/ctb_indeterminate</item>
+    </string-array>
 
 
 
