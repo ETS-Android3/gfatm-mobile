@@ -13,17 +13,21 @@ package com.ihsinformatics.gfatmmobile.shared;
 
 public class Metadata {
 
-    public static final String FORMS = "FORMS";
-    public static final String FORMS_VALUE = "FORMS_VALUE";
-    public static final String LOCATION = "LOCATION";
-    public static final String USERS = "USERS";
-    public static final String IDENTIFIER_TYPE = "IDENTIFIER_TYPE";
-    public static final String PATIENT = "PATIENT";
-    public static final String CONCEPT = "CONCEPT";
-    public static final String ENCOUNTER_TYPE = "ENCOUNTER_TYPE";
-    public static final String PERSON_ATTRIBUTE_TYPE = "PERSON_ATTRIBUTE_TYPE";
+    public static final String FORMS = "form";
+    public static final String FORMS_VALUE = "form_value";
+    public static final String LOCATION = "location";
+    public static final String USERS = "users";
+    public static final String IDENTIFIER_TYPE = "identifier_type";
+    public static final String PATIENT = "patient";
+    public static final String CONCEPT = "concept";
+    public static final String ENCOUNTER_TYPE = "encounter_type";
+    public static final String PERSON_ATTRIBUTE_TYPE = "person_attribute_type";
     public static final String ENCOUNTER = "ENCOUNTER";
     public static final String OBS = "OBS";
-    public static final String OFFLINE_FORM = "OFFLINE_FORMS";
+    public static final String OFFLINE_FORM = "offline_form";
+
+    public static final String PERSON_ADDRESS = "Person Address";
+    public static final String PERSON_ATTRIBUTE = "Person Attribute";
+    public static final String PATIENT_IDENTIFIER = "Patient Identifier";
 
 }
