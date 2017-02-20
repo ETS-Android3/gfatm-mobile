@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
@@ -42,7 +41,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity
@@ -150,8 +148,6 @@ public class MainActivity extends AppCompatActivity
                 fragmentForm.fillMainContent();
                 showFormFragment();
 
-                fetchMetadata();
-
             }
         });
 
@@ -197,7 +193,7 @@ public class MainActivity extends AppCompatActivity
         super.onResume();  // Always call the superclass method first
 
         if (!getSupportActionBar().getSubtitle().toString().contains(App.getProgram())) {
-            String subtitle = getResources().getString(R.string.program) + " " + App.getProgram() + "  |  " + "Location:" + " " + App.getLocation();
+            String subtitle = getResources().getString(R.string.program) + " " + App.getProgram() + "  |  " + getResources().getString(R.string.location) + " " + App.getLocation();
             getSupportActionBar().setSubtitle(subtitle);
 
             fragmentForm.fillMainContent();
@@ -205,7 +201,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         if (!getSupportActionBar().getSubtitle().toString().contains(App.getLocation())) {
-            String subtitle = getResources().getString(R.string.program) + " " + App.getProgram() + "  |  " + "Location:" + " " + App.getLocation();
+            String subtitle = getResources().getString(R.string.program) + " " + App.getProgram() + "  |  " + getResources().getString(R.string.location) + " " + App.getLocation();
             getSupportActionBar().setSubtitle(subtitle);
         }
 
@@ -600,7 +596,7 @@ public class MainActivity extends AppCompatActivity
         } else if (requestCode == SAVED_FORM_ACTIVITY) {
             if (resultCode == RESULT_OK) {
 
-                String returnString = data.getStringExtra("encounter_id");
+                String returnString = data.getStringExtra("form_id");
                 Boolean openFlag = data.getBooleanExtra("open", false);
                 if (returnString != null) {
                     showFormFragment();
@@ -626,73 +622,6 @@ public class MainActivity extends AppCompatActivity
 
             }
         }
-    }
-
-    public void fetchMetadata() {
-        // Authenticate from server
-        AsyncTask<String, String, String> syncTask = new AsyncTask<String, String, String>() {
-            @Override
-            protected String doInBackground(String... params) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        loading.setInverseBackgroundForced(true);
-                        loading.setIndeterminate(true);
-                        loading.setCancelable(false);
-                        loading.setMessage(getResources().getString(R.string.fetching_locations));
-                        loading.show();
-                    }
-                });
-
-                String result = serverService.getLocations();
-                if (!result.equals("SUCCESS"))
-                    return result;
-
-                publishProgress(getResources().getString(R.string.fetching_encounter_types));
-
-                result = serverService.getEncounterTypes();
-                if (!result.equals("SUCCESS"))
-                    return result;
-
-                publishProgress(getResources().getString(R.string.fetching_person_attribute_type));
-
-                result = serverService.getPersonAttributeTypes();
-                return result;
-            }
-
-            @Override
-            protected void onProgressUpdate(String... values) {
-                loading.setMessage(values[0]);
-            }
-
-
-            @Override
-            protected void onPostExecute(String result) {
-                super.onPostExecute(result);
-                loading.dismiss();
-                if (result.equals("SUCCESS")) {
-
-                    Calendar calendar = Calendar.getInstance();
-                    App.setLocationLastUpdate(android.text.format.DateFormat.format("dd-MMM-yyyy HH:mm:ss", calendar).toString());
-                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putString(Preferences.LOCATION_LAST_UPDATE, App.getLocationLastUpdate());
-                    editor.apply();
-
-                    openLocationSelectionDialog();
-
-                } else if (result.equals("AUTHENTICATION_ERROR")) {
-                    Toast toast = Toast.makeText(MainActivity.this, getResources().getString(R.string.authentication_error), Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.CENTER, 0, 0);
-                    toast.show();
-                } else if (result.equals("CONNECTION_ERROR")) {
-                    Toast toast = Toast.makeText(MainActivity.this, getResources().getString(R.string.data_connection_error), Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.CENTER, 0, 0);
-                    toast.show();
-                }
-            }
-        };
-        syncTask.execute("");
     }
 
     public void openLocationSelectionDialog() {

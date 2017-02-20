@@ -260,6 +260,8 @@ public abstract class AbstractFormActivity extends Fragment
      */
     public abstract boolean save();
 
+    public abstract void refill(int encounterId);
+
     @Override
     public void onNothingSelected(AdapterView<?> view) {
         // Not implemented
@@ -492,8 +494,12 @@ public abstract class AbstractFormActivity extends Fragment
             int dd = calendar.get(Calendar.DAY_OF_MONTH);
             DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, yy, mm, dd);
             dialog.getDatePicker().setTag(getArguments().getInt("type"));
-            if (!getArguments().getBoolean("allowFutureDate", false))
-                dialog.getDatePicker().setMaxDate(new Date().getTime());
+            if (!getArguments().getBoolean("allowFutureDate", false)) {
+                Date date = new Date();
+                date.setHours(24);
+                date.setSeconds(60);
+                dialog.getDatePicker().setMaxDate(date.getTime());
+            }
             if (!getArguments().getBoolean("allowPastDate", false))
                 dialog.getDatePicker().setMinDate(new Date().getTime());
             return dialog;

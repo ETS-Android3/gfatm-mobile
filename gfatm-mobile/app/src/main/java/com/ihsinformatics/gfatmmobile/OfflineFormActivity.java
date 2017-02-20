@@ -85,7 +85,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
         checkBoxes.clear();
         contentLinearLayout.removeAllViews();
 
-        final Object[][] forms = serverService.getOfflineForms(App.getProgram());
+        final Object[][] forms = serverService.getSavedForms(App.getUsername(), App.getProgram());
 
         programName.setText(App.getProgram());
 
@@ -121,7 +121,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                 final TextView text = new TextView(this);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
                 text.setLayoutParams(params);
-                text.setText(String.valueOf(forms[i][1]));
+                text.setText(String.valueOf(forms[i][1]) + " - " + forms[i][2]);
                 text.setTextSize(getResources().getDimension(R.dimen.small));
                 text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
                 text.setPadding(10, 0, 0, 0);
@@ -134,14 +134,11 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                         if (moreLayout.getVisibility() == View.VISIBLE) {
                             moreLayout.setVisibility(View.GONE);
                             DrawableCompat.setTint(text.getCompoundDrawables()[2], color);
-                            DrawableCompat.setTint(text.getCompoundDrawables()[0], color);
-                            text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_complete_form, 0, R.drawable.ic_more, 0);
+                            text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
                         } else {
                             moreLayout.setVisibility(View.VISIBLE);
                             DrawableCompat.setTint(text.getCompoundDrawables()[2], color);
-                            DrawableCompat.setTint(text.getCompoundDrawables()[0], color);
-                            text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_complete_form, 0, R.drawable.ic_less, 0);
-
+                            text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_less, 0);
                         }
                     }
                 });
@@ -153,7 +150,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                     public boolean onLongClick(View v) {
 
                         Intent i = new Intent();
-                        i.putExtra("encounter_id", id);
+                        i.putExtra("form_id", id);
                         i.putExtra("open", true);
                         i.putExtra("form_object", (byte[]) obj);
                         setResult(RESULT_OK, i);
@@ -174,8 +171,9 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                 tv.setTextColor(color1);
                 ll1.addView(tv);
 
+                String identifier = serverService.getPatientIdentifierBySystemIdLocalDB(String.valueOf(forms[i][3]));
                 TextView tv1 = new TextView(this);
-                tv1.setText(String.valueOf(forms[i][4]));
+                tv1.setText(identifier);
                 tv1.setTextSize(getResources().getDimension(R.dimen.small));
                 ll1.addView(tv1);
 
@@ -191,7 +189,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                 ll2.addView(tv2);
 
                 TextView tv3 = new TextView(this);
-                tv3.setText(String.valueOf(forms[i][2]));
+                tv3.setText(String.valueOf(forms[i][4]));
                 tv3.setTextSize(getResources().getDimension(R.dimen.small));
                 ll2.addView(tv3);
 
@@ -201,13 +199,13 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                 ll3.setOrientation(LinearLayout.HORIZONTAL);
 
                 TextView tv4 = new TextView(this);
-                tv4.setText(getResources().getString(R.string.time_stamp) + " ");
+                tv4.setText(getResources().getString(R.string.location) + " ");
                 tv4.setTextSize(getResources().getDimension(R.dimen.small));
                 tv4.setTextColor(color1);
                 ll3.addView(tv4);
 
                 TextView tv5 = new TextView(this);
-                tv5.setText(String.valueOf(forms[i][5]));
+                tv5.setText(String.valueOf(forms[i][7]));
                 tv5.setTextSize(getResources().getDimension(R.dimen.small));
                 ll3.addView(tv5);
 

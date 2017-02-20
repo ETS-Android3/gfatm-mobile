@@ -77,8 +77,12 @@ public class StartActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // on Application start
-        StartActivity.resetPreferences(this);      //loading preferences
+
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_splash);
+
+        StartActivity.resetPreferences(this);      //loading preferences
+
 
         try {
             dbUtil = new DatabaseUtil(this);

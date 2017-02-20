@@ -13,13 +13,11 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.graphics.drawable.DrawableCompat;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.shared.FormsObject;
@@ -100,11 +98,11 @@ public class FormFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
 
-                        if (App.getPatient() == null) {
+                        /*if (App.getPatient() == null) {
                             Toast toast = Toast.makeText(mainContent.getContext(), getResources().getString(R.string.patient_not_select), Toast.LENGTH_LONG);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
-                        } else {
+                        } else {*/
                             mainContent.setVisibility(View.GONE);
 
                             FragmentManager fm = getFragmentManager();
@@ -117,7 +115,7 @@ public class FormFragment extends Fragment {
                                 e.printStackTrace();
                             }
                             fragmentTransaction.commit();
-                        }
+                        /*}*/
 
                     }
                 });
@@ -155,7 +153,7 @@ public class FormFragment extends Fragment {
 
     }
 
-    public void openForm(FormsObject form, String encounterId, Boolean openFlag) {
+    public void openForm(FormsObject form, String formId, Boolean openFlag) {
         mainContent.setVisibility(View.GONE);
 
         FragmentManager fm = getFragmentManager();
@@ -163,7 +161,7 @@ public class FormFragment extends Fragment {
         try {
             Fragment newFragment = (Fragment) form.getClassName().newInstance();
             Bundle args = new Bundle();
-            args.putString("encounterId", encounterId);
+            args.putString("formId", formId);
             args.putBoolean("open", openFlag);
             newFragment.setArguments(args);
             FragmentTransaction replace = fragmentTransaction.replace(R.id.fragment_form, newFragment);
