@@ -328,6 +328,67 @@
     <string name="fast_drtb_suspect">DR-TB Suspect</string>
     <string name="fast_drtb">DR-TB</string>
     <string name="fast_treatment_failure">Treatment Failure</string>
+    <string name="fast_cnic">CNIC</string>
+    <string name="fast_type_of_diagnosis">Type of Diagnosis</string>
+    <string name="fast_bactoriologically_confirmed">Bacteriologically confirmed</string>
+    <string name="fast_clinically_diagnosed">Clinically diagnosed</string>
+    <string name="fast_what_type_of_tb">What type of TB?</string>
+    <string name="fast_pulmonary">Pulmonary</string>
+    <string name="fast_site_of_extra_pulmonary">Site of Extra-Pulmonary TB</string>
+    <string name="other_extra_pulmonary_tb_site">Other Extra-Pulmonary TB Site</string>
+    <string name="fast_lymph_node">Lymph Node</string>
+    <string name="fast_abdomen">Abdomen</string>
+    <string name="fast_CNS">CNS (includes meningeal, brain)</string>
+    <string name="fast_renal">Renal</string>
+    <string name="fast_bones">Bones (includes spine)</string>
+    <string name="fast_genitourinary">Genitourinary</string>
+    <string name="fast_pleural_effusion">Pleural Effusion</string>
+    <string name="fast_patient_type">Patient Type</string>
+    <string name="fast_new">New</string>
+    <string name="fast_relapse">Relapse</string>
+    <string name="fast_referred_transferred_in">Referred / Transferred in</string>
+    <string name="fast_treatment_after_loss_to_follow_up">Treatment after loss to follow up (default)</string>
+    <string name="fast_treatment_after_failure">Treatment after failure</string>
+    <string name="fast_was_treatment_initiated">Was treatment initiated?</string>
+    <string name="fast_reason_the_treatment_was_not_iniated">Reason the treatment was not initiated?</string>
+    <string name="fast_patient_refused_treatment">Patient Refused Treatment</string>
+    <string name="fast_patient_loss_to_follow_up">Patient loss to follow up</string>
+    <string name="fast_patient_died">Patient Died</string>
+    <string name="fast_referred_before_start_of_treatment">Referral (before start of treatment)</string>
+    <string name="fast_patient_category">Patient Category</string>
+    <string name="fast_category1">Category I</string>
+    <string name="fast_category2">Category II</string>
+    <string name="fast_if_category_2_history_of_previous">If Category II, history of previous anti-tuberculosis treatment?</string>
+    <string name="fast_cat_1">Cat I</string>
+    <string name="fast_cat_2">Cat II</string>
+    <string name="fast_cat1_cat2">Cat I and Cat II</string>
+    <string name="fast_if_category_2_outcome_of_previous">If Category II, outcome of previous anti-tuberculosis treatment?</string>
+    <string name="fast_cured">Cured</string>
+    <string name="fast_treatment_completed">Treatment Completed</string>
+    <string name="fast_transfer_out">Transfer Out</string>
+    <string name="fast_loss_to_follow_up_default">Loss To Follow Up (Default)</string>
+    <string name="fast_patient_weight">Patient Weight (kg)</string>
+    <string name="fast_next_appointment_date">Next Appointment Date</string>
+    <string name="fast_treatment_initiation_date">Treatment Initiation Date</string>
+    <string name="fast_what_is_patient_current_treatment_plan">What is the patient\'s current treatment plan?</string>
+    <string name="fast_intensive_phase">Intensive Phase</string>
+    <string name="fast_continuation_phase">Continuation Phase</string>
+    <string name="fast_end_treatment">End Treatment</string>
+    <string name="fast_other_extra_pulmonary_site">Other Extra-Pulmonary TB Site</string>
+    <string name="fast_registeration_date">Registeration Date</string>
+
+    <string name="fast_date_of_missed_visit">Date of missed visit?</string>
+    <string name="fast_have_you_been_able_to_contact_the_patient">Have you been able to contact the patient?</string>
+    <string name="fast_why_were_you_unable_to_contact_the_patient">If no, why were you unable to contact the patient?</string>
+    <string name="fast_why_missed_visit">Reason why missed visit?</string>
+    <string name="fast_date_of_next_visit">Date of next visit?</string>
+    <string name="fast_phone_switched_off">Phone switched off</string>
+    <string name="fast_patient_did_not_recieve_call">Patient did not receive call</string>
+    <string name="fast_incorrect_contact_number">Incorrect contact number</string>
+    <string name="fast_patient_moved">Patient Moved</string>
+    <string name="fast_patient_continuing_treatment_at_another_location">Patient continuing treatment at another location</string>
+    <string name="fast_patient_unable_to_visit_hospital">Patient unable to visit hospital due to personal reasons</string>
+    <string name="fast_patient_unwell">Patient unwell</string>
 
 
     <string-array name="fast_locations">
@@ -418,7 +479,7 @@
         <item>@string/fast_patient_unable_to_expectorate</item>
         <item>@string/fast_patient_refused</item>
     </string-array>
-    
+
     <string-array name="fast_not_given_free_list">
         <item>@string/fast_presumptive_refused</item>
         <item>@string/fast_other_title</item>
@@ -469,24 +530,24 @@
         <item>@string/fast_call_center</item>
         <item>@string/fast_other_title</item>
     </string-array>
-    
+
     <string-array name="fast_tb_contact_identification_list">
         <item>@string/fast_patient_id</item>
         <item>@string/fast_external_id</item>
         <item>@string/fast_tb_registeration_no</item>
     </string-array>
-    
+
     <string-array name="fast_test_being_done_list">
         <item>@string/fast_baseline_new</item>
         <item>@string/fast_baseline_repeat</item>
         <item>@string/fast_followup_test</item>
     </string-array>
-    
+
     <string-array name="fast_patient_category_list">
         <item>@string/fast_category_1</item>
         <item>@string/fast_category_2</item>
     </string-array>
-    
+
     <string-array name="fast_repeating_test_if_baseline_repeat_list">
         <item>@string/fast_rif_resistant</item>
         <item>@string/fast_indeterminate</item>
@@ -497,14 +558,14 @@
         <item>@string/fast_sputum</item>
         <item>@string/fast_extra_pulmonary</item>
     </string-array>
-    
+
     <string-array name="fast_specimen_come_from_list">
         <item>@string/fast_lymph</item>
         <item>@string/fast_pleural_fluid</item>
         <item>@string/fast_pus</item>
         <item>@string/fast_other_title</item>
     </string-array>
-    
+
     <string-array name="fast_sample_rejected_list">
         <item>@string/fast_saliva</item>
         <item>@string/fast_blood</item>
@@ -531,16 +592,16 @@
         <item>@string/fast_daughter</item>
         <item>@string/fast_other_title</item>
     </string-array>
-    
+
     <string-array name="fast_cities_list">
         <item>@string/fast_karachi</item>
     </string-array>
-    
+
     <string-array name="fast_type_of_address_list">
         <item>@string/fast_perminant</item>
         <item>@string/fast_temporary</item>
     </string-array>
-    
+
     <string-array name="fast_genexpert_mtb_result_list">
         <item>@string/fast_mtb_detected</item>
         <item>@string/fast_mtb_not_detected</item>
@@ -624,13 +685,13 @@
         <item>@string/fast_2_plus</item>
         <item>@string/fast_3_plus</item>
     </string-array>
-    
+
     <string-array name="fast_susceptible_resistant_indeterminate_list">
         <item>@string/fast_susceptible</item>
         <item>@string/fast_resistant</item>
         <item>@string/fast_indeterminate</item>
     </string-array>
-    
+
     <string-array name="fast_dst_medium_list">
         <item>@string/fast_lowenstein_jensen</item>
         <item>@string/fast_mycobacteria_growth_indicator_tube</item>
@@ -729,7 +790,7 @@
         <item>@string/fast_referral</item>
         <item>@string/fast_transfer</item>
     </string-array>
-    
+
     <string-array name="fast_reason_referral_transfer_list">
         <item>@string/fast_patient_choose_another_facility</item>
         <item>@string/fast_drtb_suspect</item>
@@ -737,6 +798,88 @@
         <item>@string/fast_treatment_failure</item>
         <item>@string/fast_complicated_tb</item>
         <item>@string/fast_mycobacterium_other_than_tb</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+
+    <string-array name="fast_diagonosis_type_list">
+        <item>@string/fast_bactoriologically_confirmed</item>
+        <item>@string/fast_clinically_diagnosed</item>
+    </string-array>
+
+    <string-array name="fast_tb_type_list">
+        <item>@string/fast_pulmonary</item>
+        <item>@string/fast_extra_pulmonary</item>
+    </string-array>
+
+    <string-array name="fast_extra_pulmonary_site_list">
+        <item>@string/fast_lymph_node</item>
+        <item>@string/fast_abdomen</item>
+        <item>@string/fast_CNS</item>
+        <item>@string/fast_renal</item>
+        <item>@string/fast_bones</item>
+        <item>@string/fast_genitourinary</item>
+        <item>@string/fast_pleural_effusion</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+
+    <string-array name="fast_patient_type_list">
+        <item>@string/fast_new</item>
+        <item>@string/fast_relapse</item>
+        <item>@string/fast_referred_transferred_in</item>
+        <item>@string/fast_treatment_after_loss_to_follow_up</item>
+        <item>@string/fast_treatment_after_failure</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+
+    <string-array name="fast_reason_treatment_notinitiated_list">
+        <item>@string/fast_patient_refused_treatment</item>
+        <item>@string/fast_patient_loss_to_follow_up</item>
+        <item>@string/fast_patient_died</item>
+        <item>@string/fast_referred_before_start_of_treatment</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+
+    <string-array name="fast_tb_category_list">
+        <item>@string/fast_category1</item>
+        <item>@string/fast_category2</item>
+    </string-array>
+
+    <string-array name="fast_history_category_2_list">
+        <item>@string/fast_cat_1</item>
+        <item>@string/fast_cat_2</item>
+        <item>@string/fast_cat1_cat2</item>
+        <item>@string/fast_others</item>
+    </string-array>
+
+    <string-array name="fast_outcome_previous_category_list">
+        <item>@string/fast_cured</item>
+        <item>@string/fast_treatment_completed</item>
+        <item>@string/fast_treatment_failure</item>
+        <item>@string/fast_transfer_out</item>
+        <item>@string/fast_loss_to_follow_up_default</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+
+    <string-array name="fast_treatment_plan_list">
+        <item>@string/fast_intensive_phase</item>
+        <item>@string/fast_continuation_phase</item>
+        <item>@string/fast_end_treatment</item>
+    </string-array>
+
+    <string-array name="fast_reason_patient_not_contacted_list">
+        <item>@string/fast_phone_switched_off</item>
+        <item>@string/fast_patient_did_not_recieve_call</item>
+        <item>@string/fast_incorrect_contact_number</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+
+    <string-array name="fast_reason_missed_visit_list">
+        <item>@string/fast_patient_moved</item>
+        <item>@string/fast_patient_continuing_treatment_at_another_location</item>
+        <item>@string/fast_patient_unable_to_visit_hospital</item>
+        <item>@string/fast_patient_died</item>
+        <item>@string/fast_patient_refused_treatment</item>
+        <item>@string/fast_patient_unwell</item>
         <item>@string/fast_other_title</item>
     </string-array>
 </resources>

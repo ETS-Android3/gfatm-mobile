@@ -219,7 +219,7 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
         observations.add(new String[]{"Cartridge ID", App.get(cartridgeId)});
         observations.add(new String[]{"DATE OF TEST RESULT RECEIVED", App.getSqlDateTime(secondDateCalendar)});
 
-       if (gxpResult.getVisibility() == View.VISIBLE)
+        if (gxpResult.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"GENEXPERT MTB/RIF", App.get(gxpResult).equals(getResources().getString(R.string.fast_mtb_detected)) ? "MYCOBACTERIUM TUBERCULOSIS DETECTED WITH RIFAMPIN RESISTANCE" :
                     (App.get(gxpResult).equals(getResources().getString(R.string.fast_mtb_not_detected)) ? "MYCOBACTERIUM TUBERCULOSIS DETECTED WITHOUT RIFAMPIN RESISTANCE" :
                             (App.get(gxpResult).equals(getResources().getString(R.string.fast_error)) ? "NEGATIVE" :
@@ -252,6 +252,9 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
                 });
 
                 String result = serverService.saveEncounterAndObservation("GXP Test", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                if (result.contains("SUCCESS"))
+                    return "SUCCESS";
+
                 return result;
 
             }

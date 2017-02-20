@@ -69,7 +69,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        PAGE_COUNT = 3;
+        PAGE_COUNT = 1;
         FORM_NAME = Forms.FAST_PRESUMPTIVE_FORM;
         FORM = Forms.fastPresumptiveForm;
 
@@ -247,22 +247,22 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
                                             (App.get(patientConsultation).equals(getResources().getString(R.string.fast_pregnancy_title)) ? "ANTENATAL DEPARTMENT" :
                                                     (App.get(patientConsultation).equals(getResources().getString(R.string.fast_surgery_title)) ? "GENERAL SURGERY DEPARTMENT" :
                                                             (App.get(patientConsultation).equals(getResources().getString(R.string.fast_orthopedics_title)) ? "ORTHOPEDIC DEPARTMENT" :
-                                                                (App.get(patientConsultation).equals(getResources().getString(R.string.fast_emergency_title)) ? "EMERGENCY DEPARTMENT" :
-                                                                    (App.get(patientConsultation).equals(getResources().getString(R.string.fast_paediatrics_title)) ? "PEDIATRIC MEDICINE DEPARTMENT" :
-                                                                            (App.get(patientConsultation).equals(getResources().getString(R.string.fast_dermatology)) ? "DERMATOLOGY DEPARTMENT" :
-                                                                                    (App.get(patientConsultation).equals(getResources().getString(R.string.fast_neurology_title)) ? "NEUROLOGY DEPARTMENT" :
-                                                                                            (App.get(patientConsultation).equals(getResources().getString(R.string.fast_cardiology_title)) ? "CARDIOLOGY DEPARTMENT" :
-                                                                                                    (App.get(patientConsultation).equals(getResources().getString(R.string.fast_urology_title)) ? "UROLOGY DEPARTMENT" :
-                                                                                                         (App.get(patientConsultation).equals(getResources().getString(R.string.fast_psychiatry_title)) ? "PSYCHIATRY DEPARTMENT" :
-                                                                                                                 (App.get(patientConsultation).equals(getResources().getString(R.string.fast_opthamology_title)) ? "OPHTHALMOLOGY DEPARTMENT" :
-                                                                                                                         (App.get(patientConsultation).equals(getResources().getString(R.string.fast_endocrionology_title)) ? "ENDOCRINOLOGY DEPARTMENT" : "OTHER")))))))))))))))});
+                                                                    (App.get(patientConsultation).equals(getResources().getString(R.string.fast_emergency_title)) ? "EMERGENCY DEPARTMENT" :
+                                                                            (App.get(patientConsultation).equals(getResources().getString(R.string.fast_paediatrics_title)) ? "PEDIATRIC MEDICINE DEPARTMENT" :
+                                                                                    (App.get(patientConsultation).equals(getResources().getString(R.string.fast_dermatology)) ? "DERMATOLOGY DEPARTMENT" :
+                                                                                            (App.get(patientConsultation).equals(getResources().getString(R.string.fast_neurology_title)) ? "NEUROLOGY DEPARTMENT" :
+                                                                                                    (App.get(patientConsultation).equals(getResources().getString(R.string.fast_cardiology_title)) ? "CARDIOLOGY DEPARTMENT" :
+                                                                                                            (App.get(patientConsultation).equals(getResources().getString(R.string.fast_urology_title)) ? "UROLOGY DEPARTMENT" :
+                                                                                                                    (App.get(patientConsultation).equals(getResources().getString(R.string.fast_psychiatry_title)) ? "PSYCHIATRY DEPARTMENT" :
+                                                                                                                            (App.get(patientConsultation).equals(getResources().getString(R.string.fast_opthamology_title)) ? "OPHTHALMOLOGY DEPARTMENT" :
+                                                                                                                                    (App.get(patientConsultation).equals(getResources().getString(R.string.fast_endocrionology_title)) ? "ENDOCRINOLOGY DEPARTMENT" : "OTHER")))))))))))))))});
         if (patientConsultationOther.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER", App.get(patientConsultationOther)});
 
         if (cough.getVisibility() == View.VISIBLE)
-        observations.add(new String[]{"COUGH", App.get(cough).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
-                (App.get(cough).equals(getResources().getString(R.string.fast_no_title)) ? "NO" :
-                        (App.get(cough).equals(getResources().getString(R.string.fast_refused_title)) ? "REFUSED" : "UNKNOWN"))});
+            observations.add(new String[]{"COUGH", App.get(cough).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
+                    (App.get(cough).equals(getResources().getString(R.string.fast_no_title)) ? "NO" :
+                            (App.get(cough).equals(getResources().getString(R.string.fast_refused_title)) ? "REFUSED" : "UNKNOWN"))});
 
         if (coughDuration.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"COUGH DURATION", App.get(coughDuration).equals(getResources().getString(R.string.fast_less_than_2_weeks_title)) ? "COUGH LASTING LESS THAN 2 WEEKS" :
@@ -271,9 +271,9 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
                                     (App.get(coughDuration).equals(getResources().getString(R.string.fast_refused_title)) ? "REFUSED" : "UNKNOWN")))});
 
         if (productiveCough.getVisibility() == View.VISIBLE)
-        observations.add(new String[]{"PRODUCTIVE COUGH", App.get(productiveCough).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
-                (App.get(productiveCough).equals(getResources().getString(R.string.fast_no_title)) ? "NO" :
-                        (App.get(productiveCough).equals(getResources().getString(R.string.fast_refused_title)) ? "REFUSED" : "UNKNOWN"))});
+            observations.add(new String[]{"PRODUCTIVE COUGH", App.get(productiveCough).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
+                    (App.get(productiveCough).equals(getResources().getString(R.string.fast_no_title)) ? "NO" :
+                            (App.get(productiveCough).equals(getResources().getString(R.string.fast_refused_title)) ? "REFUSED" : "UNKNOWN"))});
 
 
         if (haemoptysis.getVisibility() == View.VISIBLE)
@@ -331,6 +331,9 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
                 });
 
                 String result = serverService.saveEncounterAndObservation("Presumptive", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                if (result.contains("SUCCESS"))
+                    return "SUCCESS";
+
                 return result;
 
             }
