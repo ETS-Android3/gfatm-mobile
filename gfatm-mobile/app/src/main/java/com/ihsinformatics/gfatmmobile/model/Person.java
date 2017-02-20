@@ -50,6 +50,7 @@ public class Person extends AbstractModel {
     String guardianName;
     String address1;
     String address2;
+    String address3;
     String stateProvince;
     String cityVillage;
     String country;
@@ -59,7 +60,7 @@ public class Person extends AbstractModel {
                   String primaryContact, String primaryContactOwner, String secondaryContact, String secondaryContactOwner,
                   String ethnicity, String educationLevel, String employmentStatus, String occupation, String motherTongue, String incomeClass,
                   String nationalId, String nationalIdOwner, String guardianName,
-                  String address1, String address2, String stateProvince, String cityVillage, String country) {
+                  String address1, String address2, String address3, String stateProvince, String cityVillage, String country) {
 
         super(uuid);
         this.givenName = givenName;
@@ -88,6 +89,7 @@ public class Person extends AbstractModel {
         this.guardianName = guardianName;
         this.address1 = address1;
         this.address2 = address2;
+        this.address3 = address3;
         this.stateProvince = stateProvince;
         this.cityVillage = cityVillage;
         this.country = country;
@@ -123,6 +125,7 @@ public class Person extends AbstractModel {
         String guardianName = "";
         String address1 = "";
         String address2 = "";
+        String address3 = "";
         String stateProvince = "";
         String cityVillage = "";
         String country = "";
@@ -147,6 +150,8 @@ public class Person extends AbstractModel {
                 cityVillage = addressObject.getString("cityVillage");
             if (addressObject.getString("country") == null)
                 country = addressObject.getString("country");
+            if (addressObject.getString("address3") == null)
+                address3 = addressObject.getString("address3");
 
             JSONArray attributes = json.getJSONArray("attributes");
 
@@ -219,7 +224,7 @@ public class Person extends AbstractModel {
                 primaryContact, primaryContactOwner, secondaryContact, secondaryContactOwner,
                 ethnicity, educationLevel, employmentStatus, occupation, motherTongue, incomeClass,
                 nationalId, nationalIdOwner, guardianName,
-                address1, address2, stateProvince, cityVillage, country);
+                address1, address2, address3, stateProvince, cityVillage, country);
         return person;
     }
 
@@ -424,6 +429,54 @@ public class Person extends AbstractModel {
 
     public void setGuardianName(String guardianName) {
         this.guardianName = guardianName;
+    }
+
+    public String getAddress3() {
+        return address3;
+    }
+
+    public void setAddress3(String address3) {
+        this.address3 = address3;
+    }
+
+    public String getAddress1() {
+        return address1;
+    }
+
+    public void setAddress1(String address1) {
+        this.address1 = address1;
+    }
+
+    public String getAddress2() {
+        return address2;
+    }
+
+    public void setAddress2(String address2) {
+        this.address2 = address2;
+    }
+
+    public String getStateProvince() {
+        return stateProvince;
+    }
+
+    public void setStateProvince(String stateProvince) {
+        this.stateProvince = stateProvince;
+    }
+
+    public String getCityVillage() {
+        return cityVillage;
+    }
+
+    public void setCityVillage(String cityVillage) {
+        this.cityVillage = cityVillage;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     @Override

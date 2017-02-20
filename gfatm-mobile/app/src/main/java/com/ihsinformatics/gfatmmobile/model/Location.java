@@ -22,7 +22,7 @@ import org.json.JSONObject;
  * @author owais.hussain@irdresearch.org
  */
 public class Location extends AbstractModel {
-    public static final String FIELDS = "uuid,name,address1,address2,cityVillage,description,attributes";
+    public static final String FIELDS = "uuid,name,address1,address2,address3,cityVillage,description,attributes";
     private String name;
     private String locationId;
     private String primaryContact;
@@ -33,10 +33,11 @@ public class Location extends AbstractModel {
     private String childhoodTbLocation;
     private String address1;
     private String address2;
+    private String address3;
     private String city;
     private String description;
 
-    public Location(String uuid, String name, String locationId, String primaryContact, String fastLocation, String pmdtLocation, String comorbiditiesLocation, String petLocation, String childhoodTbLocation, String address1, String address2, String city, String description) {
+    public Location(String uuid, String name, String locationId, String primaryContact, String fastLocation, String pmdtLocation, String comorbiditiesLocation, String petLocation, String childhoodTbLocation, String address1, String address2, String address3, String city, String description) {
         super(uuid);
         this.name = name;
         this.locationId = locationId;
@@ -48,6 +49,7 @@ public class Location extends AbstractModel {
         this.childhoodTbLocation = childhoodTbLocation;
         this.address1 = address1;
         this.address1 = address2;
+        this.address3 = address3;
         this.city = city;
         this.description = description;
     }
@@ -65,6 +67,7 @@ public class Location extends AbstractModel {
         String childhoodTbLocation = "N";
         String address1 = "";
         String address2 = "";
+        String address3 = "";
         String city = "";
         String description = "";
         try {
@@ -72,6 +75,7 @@ public class Location extends AbstractModel {
             name = json.getString("name");
             address1 = json.getString("address1");
             address2 = json.getString("address2");
+            address3 = json.getString("address3");
             city = json.getString("cityVillage");
             description = json.getString("description");
             JSONArray attributes = json.getJSONArray("attributes");
@@ -107,7 +111,7 @@ public class Location extends AbstractModel {
             e.printStackTrace();
             location = null;
         }
-        location = new Location(uuid, name, locationId, primaryContact, fastLocation, pmdtLocation, comorbiditiesLocation, petLocation, childhoodTbLocation, address1, address2, city, description);
+        location = new Location(uuid, name, locationId, primaryContact, fastLocation, pmdtLocation, comorbiditiesLocation, petLocation, childhoodTbLocation, address1, address2, address3, city, description);
         return location;
     }
 
@@ -200,6 +204,14 @@ public class Location extends AbstractModel {
 
     public void setAddress2(String address2) {
         this.address2 = address2;
+    }
+
+    public String getAddress3() {
+        return address3;
+    }
+
+    public void setAddress3(String address3) {
+        this.address3 = address3;
     }
 
     public String getCity() {
