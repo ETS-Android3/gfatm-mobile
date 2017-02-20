@@ -54,7 +54,10 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
     TitledEditText indexPatientId;
     Button scanQRCode;
     TitledEditText indexExternalPatientId;
-    TitledEditText cnic;
+    LinearLayout cnicLayout;
+    TitledEditText cnic1;
+    TitledEditText cnic2;
+    TitledEditText cnic3;
     TitledSpinner cnicOwner;
     TitledEditText otherCnicOwner;
     TitledRadioGroup incentiveOccasion;
@@ -139,7 +142,14 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
         scanQRCode = new Button(context);
         scanQRCode.setText("Scan QR Code");
         indexExternalPatientId = new TitledEditText(context, null, getResources().getString(R.string.pet_index_patient_external_id), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
-        cnic = new TitledEditText(context, null, getResources().getString(R.string.pet_cnic), "", "", 13, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        cnicLayout = new LinearLayout(context);
+        cnicLayout.setOrientation(LinearLayout.HORIZONTAL);
+        cnic1 = new TitledEditText(context, null, getResources().getString(R.string.pet_cnic), "", "XXXXX", 5, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        cnicLayout.addView(cnic1);
+        cnic2 = new TitledEditText(context, null, "-", "", "XXXXXXX", 7, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        cnicLayout.addView(cnic2);
+        cnic3 = new TitledEditText(context, null, "-", "", "X", 1, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        cnicLayout.addView(cnic3);
         cnicOwner = new TitledSpinner(context, "", getResources().getString(R.string.pet_cnic_owner), getResources().getStringArray(R.array.pet_cnic_owners), getResources().getString(R.string.pet_self), App.VERTICAL, true);
         otherCnicOwner = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         incentiveOccasion = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_incentive_occasion), getResources().getStringArray(R.array.pet_incentive_occasions), getResources().getString(R.string.pet_baseline_visit), App.HORIZONTAL, App.VERTICAL, true);
@@ -168,12 +178,12 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
         linearLayout.addView(recieverRelationWithContact);
         linearLayout.addView(otherRelation);
 
-        views = new View[]{formDate.getButton(), indexPatientId.getEditText(), scanQRCode, indexExternalPatientId.getEditText(), cnic.getEditText(), cnicOwner.getSpinner(), otherCnicOwner.getEditText(), incentiveOccasion.getRadioGroup(), incentiveFor.getRadioGroup(),
+        views = new View[]{formDate.getButton(), indexPatientId.getEditText(), scanQRCode, indexExternalPatientId.getEditText(), cnic1.getEditText(), cnic2.getEditText(), cnic3.getEditText(), cnicOwner.getSpinner(), otherCnicOwner.getEditText(), incentiveOccasion.getRadioGroup(), incentiveFor.getRadioGroup(),
                 nameTreatmentSupporter.getEditText(), contactNumberTreatmentSupporter.getEditText(), typeTreatmentSupporter.getRadioGroup(), relationshipTreatmentSuppoter.getSpinner(), other.getEditText(), petRegimen.getRadioGroup(), incentiveAmount.getEditText(),
                 followupMonth.getEditText(), incentiveDisbursalLocation.getRadioGroup(), recieverName.getEditText(), recieverRelationWithContact.getSpinner(), otherRelation.getEditText()
         };
 
-        viewGroups = new View[][]{{formDate, indexPatientId, scanQRCode, indexExternalPatientId, cnic, cnicOwner, otherCnicOwner, incentiveOccasion, incentiveFor,
+        viewGroups = new View[][]{{formDate, indexPatientId, scanQRCode, indexExternalPatientId, cnicLayout, cnicOwner, otherCnicOwner, incentiveOccasion, incentiveFor,
                 nameTreatmentSupporter, contactNumberTreatmentSupporter, typeTreatmentSupporter, relationshipTreatmentSuppoter, other, petRegimen},
                 {linearLayout}};
 
@@ -279,13 +289,34 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
             error = true;
         }
 
-        if (App.get(cnic).isEmpty()) {
-            cnic.getEditText().setError(getString(R.string.empty_field));
-            cnic.getEditText().requestFocus();
+        if (App.get(cnic1).isEmpty()) {
+            cnic1.getEditText().setError(getResources().getString(R.string.mandatory_field));
+            cnic1.getEditText().requestFocus();
             error = true;
-        } else if (!RegexUtil.isValidNIC(App.get(cnic))) {
-            cnic.getEditText().setError(getString(R.string.invalid_value));
-            cnic.getEditText().requestFocus();
+        }
+        if (App.get(cnic2).isEmpty()) {
+            cnic2.getEditText().setError(getResources().getString(R.string.mandatory_field));
+            cnic2.getEditText().requestFocus();
+            error = true;
+        }
+        if (App.get(cnic3).isEmpty()) {
+            cnic3.getEditText().setError(getResources().getString(R.string.mandatory_field));
+            cnic3.getEditText().requestFocus();
+            error = true;
+        }
+        if (App.get(cnic1).length() != 5) {
+            cnic1.getEditText().setError(getResources().getString(R.string.invalid_value));
+            cnic1.getEditText().requestFocus();
+            error = true;
+        }
+        if (App.get(cnic2).length() != 7) {
+            cnic2.getEditText().setError(getResources().getString(R.string.invalid_value));
+            cnic2.getEditText().requestFocus();
+            error = true;
+        }
+        if (App.get(cnic3).length() != 1) {
+            cnic3.getEditText().setError(getResources().getString(R.string.invalid_value));
+            cnic3.getEditText().requestFocus();
             error = true;
         }
 
@@ -333,9 +364,8 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
         // gps coordinate...
 
         final ArrayList<String[]> observations = new ArrayList<String[]>();
-        observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", App.get(cnic)});
-        observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", App.get(cnic)});
-        observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", App.get(cnic)});
+        final String cnic = App.get(cnic1) + "-" + App.get(cnic2) + "-" + App.get(cnic3);
+        observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnic});
         observations.add(new String[]{"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(cnicOwner).equals(getResources().getString(R.string.pet_self)) ? "SELF" :
                 (App.get(cnicOwner).equals(getResources().getString(R.string.pet_mother)) ? "MOTHER" :
                         (App.get(cnicOwner).equals(getResources().getString(R.string.pet_father)) ? "FATHER" :
@@ -545,6 +575,10 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
             }
         }
 
+    }
+
+    @Override
+    public void refill(int encounterId) {
     }
 
     class MyAdapter extends PagerAdapter {

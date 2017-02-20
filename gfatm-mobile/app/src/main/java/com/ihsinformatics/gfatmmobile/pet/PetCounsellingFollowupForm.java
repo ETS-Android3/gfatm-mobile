@@ -1,17 +1,16 @@
 package com.ihsinformatics.gfatmmobile.pet;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.format.DateFormat;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,6 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
-import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -53,7 +51,7 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
     TitledButton formDate;
     TitledEditText followupMonth;
     TitledEditText referralComplain;
-    TitledRadioGroup missedDosed;
+    TitledEditText missedDosage;
     TitledRadioGroup adherentToPet;
     TitledEditText reasonForNonAdherent;
 
@@ -158,7 +156,7 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
         referralComplain = new TitledEditText(context, null, getResources().getString(R.string.pet_referral_complain), "", "", 250, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         referralComplain.getEditText().setSingleLine(false);
         referralComplain.getEditText().setMinimumHeight(150);
-        missedDosed = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_missed_dosed), getResources().getStringArray(R.array.pet_missed_dosed_options), getResources().getString(R.string.pet_no_missed_dosed), App.VERTICAL, App.VERTICAL);
+        missedDosage = new TitledEditText(context, null, getResources().getString(R.string.pet_missed_dosed), "0", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
         adherentToPet = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_adherent), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.HORIZONTAL);
         reasonForNonAdherent = new TitledEditText(context, null, getResources().getString(R.string.pet_reason_for_non_adherent), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
 
@@ -193,7 +191,7 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
         psychologistComments.getEditText().setMinimumHeight(150);
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), followupMonth.getEditText(), missedDosed.getRadioGroup(), adherentToPet.getRadioGroup(), reasonForNonAdherent.getEditText(),
+        views = new View[]{formDate.getButton(), followupMonth.getEditText(), missedDosage.getEditText(), adherentToPet.getRadioGroup(), reasonForNonAdherent.getEditText(),
                 adverseEventReport.getRadioGroup(), adverseEffects1, adverseEffects2, otherEffects.getEditText(), treatmentSuppoterRelation.getSpinner(),
                 treatmentSuppoterRelation.getSpinner(), behaviouralComplaintType.getSpinner(), other.getEditText(), treatmentSupportNegligence.getRadioGroup(),
                 treatmentSupportNegligenceReason.getEditText(), misconceptionInPet.getRadioGroup(), misconception.getEditText(),
@@ -201,7 +199,7 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
                 contactComments.getEditText(), psychologistComments.getEditText(), behavioralComplaint.getRadioGroup()};
 
         // Array used to display views accordingly...
-        viewGroups = new View[][]{{formDate, followupMonth, referralComplain, missedDosed, adherentToPet, reasonForNonAdherent, adverseEventReport, adverseEffectsLayout, otherEffects,
+        viewGroups = new View[][]{{formDate, followupMonth, referralComplain, missedDosage, adherentToPet, reasonForNonAdherent, adverseEventReport, adverseEffectsLayout, otherEffects,
                 treatmentSuppoterRelation, behavioralComplaint, behaviouralComplaintType, other, treatmentSupportNegligence, treatmentSupportNegligenceReason, misconceptionInPet, misconception,
                 infectionControllFollowing, infectionControlCounselling, patientFacingProblem, otherProblem, contactComments, psychologistComments}};
 
@@ -216,18 +214,11 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
         for (CheckBox cb : adverseEffects2.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
 
-        reasonForNonAdherent.setVisibility(View.GONE);
-        adverseEffectsLayout.setVisibility(View.GONE);
-        otherEffects.setVisibility(View.GONE);
-        behaviouralComplaintType.setVisibility(View.GONE);
-        other.setVisibility(View.GONE);
-        treatmentSupportNegligenceReason.setVisibility(View.GONE);
-        misconception.setVisibility(View.GONE);
-        infectionControlCounselling.setVisibility(View.VISIBLE);
-        otherProblem.setVisibility(View.GONE);
         for (CheckBox cb : patientFacingProblem.getCheckedBoxes()) {
             cb.setOnCheckedChangeListener(this);
         }
+
+        resetViews();
     }
 
     @Override
@@ -242,8 +233,9 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
         other.setVisibility(View.GONE);
         treatmentSupportNegligenceReason.setVisibility(View.GONE);
         misconception.setVisibility(View.GONE);
-        infectionControlCounselling.setVisibility(View.VISIBLE);
+        infectionControlCounselling.setVisibility(View.GONE);
         misconception.setVisibility(View.GONE);
+
     }
 
     @Override
@@ -327,6 +319,14 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
         } else
             reasonForNonAdherent.clearFocus();
 
+        if (App.get(missedDosage).isEmpty() && missedDosage.getVisibility() == View.VISIBLE) {
+            missedDosage.getEditText().setError(getString(R.string.empty_field));
+            missedDosage.getEditText().requestFocus();
+            error = true;
+            view = null;
+        } else
+            missedDosage.clearFocus();
+
         if (App.get(followupMonth).isEmpty() && followupMonth.getVisibility() == View.VISIBLE) {
             followupMonth.getEditText().setError(getString(R.string.empty_field));
             followupMonth.getEditText().requestFocus();
@@ -377,16 +377,14 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
 
         endTime = new Date();
 
-        final ContentValues values = new ContentValues();
-        values.put("formDate", App.getSqlDate(formDateCalendar));
-        // start time...
-        // end time...
-        // gps coordinate...
-
         final ArrayList<String[]> observations = new ArrayList<String[]>();
+        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
+        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+        /*observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
+        observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});*/
         observations.add(new String[]{"FOLLOW-UP MONTH", App.get(followupMonth)});
         observations.add(new String[]{"REFERRAL COMPLAINT", App.get(referralComplain)});
-        //Missed Dose
+        observations.add(new String[]{"NUMBER OF MISSED MEDICATION DOSES IN LAST MONTH", App.get(missedDosage)});
         observations.add(new String[]{"PATIENT ADHERENT TO TRETMENT", App.get(adherentToPet).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         if (reasonForNonAdherent.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"LOW ADHERENCE REASON", App.get(reasonForNonAdherent)});
@@ -455,11 +453,26 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
         observations.add(new String[]{"INFECTION CONTROL MEASURES FOLLOWED", App.get(infectionControllFollowing).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         if (infectionControlCounselling.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"INFECTION CONTROL COUNSELLING", App.get(infectionControlCounselling).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        String scoialProblem = "";
+        for (CheckBox cb : patientFacingProblem.getCheckedBoxes()) {
+            if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_academic_problem)))
+                scoialProblem = scoialProblem + "ACADEMIC PROBLEM" + " ; ";
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_economic_problem)))
+                scoialProblem = scoialProblem + "ECONOMIC PROBLEM" + " ; ";
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_health_problem)))
+                scoialProblem = scoialProblem + "PERSONAL BARRIER TO HEALTH CARE" + " ; ";
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_unknown)))
+                scoialProblem = scoialProblem + "UNKNOWN" + " ; ";
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.refused)))
+                scoialProblem = scoialProblem + "REFUSED" + " ; ";
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_other)))
+                scoialProblem = scoialProblem + "OTHER" + " ; ";
+        }
         observations.add(new String[]{"SOCIAL PROBLEM", App.get(patientFacingProblem).equals(getResources().getString(R.string.pet_academic_problem)) ? "ACADEMIC PROBLEM" :
                 (App.get(patientFacingProblem).equals(getResources().getString(R.string.pet_economic_problem)) ? "ECONOMIC PROBLEM" :
                         (App.get(patientFacingProblem).equals(getResources().getString(R.string.pet_health_problem)) ? "PERSONAL BARRIER TO HEALTH CARE" :
                                 (App.get(patientFacingProblem).equals(getResources().getString(R.string.pet_unknown)) ? "UNKNOWN" :
-                                        (App.get(patientFacingProblem).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "OTHER NON-CODED"))))});
+                                        (App.get(patientFacingProblem).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "OTHER"))))});
         observations.add(new String[]{"CARETAKER COMMENTS", App.get(contactComments)});
         observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(psychologistComments)});
 
@@ -472,7 +485,7 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
                         loading.setInverseBackgroundForced(true);
                         loading.setIndeterminate(true);
                         loading.setCancelable(false);
-                        loading.setMessage(getResources().getString(R.string.signing_in));
+                        loading.setMessage(getResources().getString(R.string.submitting_form));
                         loading.show();
                     }
                 });
@@ -496,15 +509,75 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
                 super.onPostExecute(result);
                 loading.dismiss();
 
-                Toast toast = Toast.makeText(context, result, Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.BOTTOM, 0, 0);
-                toast.show();
+                if (result.equals("SUCCESS")) {
+                    resetViews();
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.form_submitted));
+                    Drawable submitIcon = getResources().getDrawable(R.drawable.ic_submit);
+                    alertDialog.setIcon(submitIcon);
+                    int color = App.getColor(context, R.attr.colorAccent);
+                    DrawableCompat.setTint(submitIcon, color);
+                    alertDialog.setTitle(getResources().getString(R.string.title_completed));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else if (result.equals("CONNECTION_ERROR")) {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
+                    alertDialog.setMessage(message);
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+
 
             }
         };
         submissionFormTask.execute("");
 
-        resetViews();
         return false;
     }
 
@@ -633,12 +706,16 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
                 misconception.setVisibility(View.VISIBLE);
             else
                 misconception.setVisibility(View.GONE);
-        } else if (group == infectionControlCounselling.getRadioGroup()) {
-            if (App.get(infectionControlCounselling).equals(getResources().getString(R.string.yes)))
-                infectionControllFollowing.setVisibility(View.GONE);
+        } else if (group == infectionControllFollowing.getRadioGroup()) {
+            if (App.get(infectionControllFollowing).equals(getResources().getString(R.string.yes)))
+                infectionControlCounselling.setVisibility(View.GONE);
             else
-                infectionControllFollowing.setVisibility(View.VISIBLE);
+                infectionControlCounselling.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void refill(int encounterId) {
     }
 
     class MyAdapter extends PagerAdapter {

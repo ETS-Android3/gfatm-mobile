@@ -162,6 +162,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         treatmentInitiationDate = new TitledButton(context, null, getResources().getString(R.string.pet_treatment_initiation_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.VERTICAL);
         petRegimen = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_regimen), getResources().getStringArray(R.array.pet_regimens), "", App.VERTICAL, App.VERTICAL);
         isoniazidDose = new TitledEditText(context, null, getResources().getString(R.string.pet_isoniazid_dose), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        rifapentineAvailable = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_rifapentine_available), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         rifapentineDose = new TitledEditText(context, null, getResources().getString(R.string.pet_rifapentine_dose), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         levofloxacinDose = new TitledEditText(context, null, getResources().getString(R.string.pet_levofloxacin_dose), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         ethionamideDose = new TitledEditText(context, null, getResources().getString(R.string.pet_ethionamide_dose), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
@@ -187,12 +188,12 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         views = new View[]{formDate.getButton(), weight.getEditText(), indexPatientId.getEditText(), tbType.getEditText(), infectionType.getEditText(), dstPattern.getEditText(), resistanceType.getEditText(),
                 treatmentInitiationDate.getButton(), petRegimen.getRadioGroup(), isoniazidDose.getEditText(), rifapentineDose.getEditText(), levofloxacinDose.getEditText(), ethionamideDose.getEditText(),
                 ancillaryNeed.getRadioGroup(), ancillaryDrugs, ancillaryDrugDuration.getEditText(), ancillaryDrugDuration.getEditText(),
-                nameTreatmentSupporter.getEditText(), phone1a.getEditText(), phone1b.getEditText(), typeTreatmentSupporter.getRadioGroup(), relationshipTreatmentSuppoter.getSpinner(), other.getEditText()};
+                nameTreatmentSupporter.getEditText(), phone1a.getEditText(), phone1b.getEditText(), typeTreatmentSupporter.getRadioGroup(), relationshipTreatmentSuppoter.getSpinner(), other.getEditText(), rifapentineAvailable.getRadioGroup()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formDate, weight, indexPatientId, tbType, infectionType, resistanceType, dstPattern},
-                        {treatmentInitiationDate, petRegimen, isoniazidDose, rifapentineDose, levofloxacinDose, ethionamideDose, ancillaryNeed, ancillaryDrugs, ancillaryDrugDuration, nameTreatmentSupporter, contactNumberTreatmentSupporter, typeTreatmentSupporter, relationshipTreatmentSuppoter, other},
+                        {treatmentInitiationDate, petRegimen, rifapentineAvailable, isoniazidDose, rifapentineDose, levofloxacinDose, ethionamideDose, ancillaryNeed, ancillaryDrugs, ancillaryDrugDuration, nameTreatmentSupporter, contactNumberTreatmentSupporter, typeTreatmentSupporter, relationshipTreatmentSuppoter, other},
                 };
 
         formDate.getButton().setOnClickListener(this);
@@ -201,6 +202,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         ancillaryNeed.getRadioGroup().setOnCheckedChangeListener(this);
         typeTreatmentSupporter.getRadioGroup().setOnCheckedChangeListener(this);
         relationshipTreatmentSuppoter.getSpinner().setOnItemSelectedListener(this);
+        rifapentineAvailable.getRadioGroup().setOnCheckedChangeListener(this);
 
         resetViews();
     }
@@ -217,6 +219,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         ethionamideDose.setVisibility(View.GONE);
         ancillaryDrugs.setVisibility(View.GONE);
         ancillaryDrugDuration.setVisibility(View.GONE);
+        rifapentineAvailable.setVisibility(View.GONE);
         relationshipTreatmentSuppoter.setVisibility(View.VISIBLE);
 
         final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
@@ -295,10 +298,13 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
                     for (RadioButton rb : petRegimen.getRadioGroup().getButtons()) {
 
-                        if (rb.getText().equals(getResources().getString(R.string.pet_levofloxacin_ethionamide)))
+                        if (rb.getText().equals(getResources().getString(R.string.pet_levofloxacin_ethionamide))) {
+                            rb.setVisibility(View.VISIBLE);
                             rb.setChecked(true);
-                        else
+                        } else {
+                            rb.setVisibility(View.GONE);
                             rb.setChecked(false);
+                        }
 
                     }
 
@@ -309,19 +315,25 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                     if (App.getPatient().getPerson().getAge() < 2) {
                         for (RadioButton rb : petRegimen.getRadioGroup().getButtons()) {
 
-                            if (rb.getText().equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy)))
+                            if (rb.getText().equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy))) {
+                                rb.setVisibility(View.VISIBLE);
                                 rb.setChecked(true);
-                            else
+                            } else {
+                                rb.setVisibility(View.GONE);
                                 rb.setChecked(false);
+                            }
 
                         }
                     } else {
                         for (RadioButton rb : petRegimen.getRadioGroup().getButtons()) {
 
-                            if (rb.getText().equals(getResources().getString(R.string.pet_isoniazid_rifapentine)))
+                            if (rb.getText().equals(getResources().getString(R.string.pet_isoniazid_rifapentine))) {
+                                rb.setVisibility(View.VISIBLE);
                                 rb.setChecked(true);
-                            else
+                            } else {
+                                rb.setVisibility(View.GONE);
                                 rb.setChecked(false);
+                            }
 
                         }
                     }
@@ -667,6 +679,16 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         if (group == petRegimen.getRadioGroup()) {
 
+            isoniazidDose.getEditText().setHint("");
+            rifapentineDose.getEditText().setHint("");
+            levofloxacinDose.getEditText().setHint("");
+            ethionamideDose.getEditText().setHint("");
+
+            isoniazidDose.getEditText().setText("");
+            rifapentineDose.getEditText().setText("");
+            levofloxacinDose.getEditText().setText("");
+            ethionamideDose.getEditText().setText("");
+
             int age = App.getPatient().getPerson().getAge();
             int weightInt = 0;
             if (!App.get(weight).equals("")) {
@@ -675,10 +697,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
             if (App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy))) {
 
-                int w = 0;
-
-                if (age < 12) w = weightInt * 15;
-                else w = weightInt * 25;
+                int w = 1;
+                w = weightInt * 10;
 
                 isoniazidDose.getEditText().setText(String.valueOf(w));
 
@@ -686,51 +706,126 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 rifapentineDose.setVisibility(View.GONE);
                 levofloxacinDose.setVisibility(View.GONE);
                 ethionamideDose.setVisibility(View.GONE);
+                rifapentineAvailable.setVisibility(View.GONE);
 
             } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_rifapentine))) {
 
-                int w = 0;
+                int w = 1;
 
-                if (age < 12) w = weightInt * 15;
-                else w = weightInt * 25;
+                rifapentineAvailable.setVisibility(View.VISIBLE);
+                if (App.get(rifapentineAvailable).equals(getResources().getString(R.string.no))) {
 
-                isoniazidDose.getEditText().setText(String.valueOf(w));
-
-                w = 0;
-                if (age < 2) w = 0;
-                else if (age >= 2 && age < 12) w = weightInt * 300;
-                else w = weightInt * 450;
-
-                rifapentineDose.getEditText().setText(String.valueOf(w));
-
-                isoniazidDose.setVisibility(View.VISIBLE);
-                if (App.getPatient().getPerson().getAge() < 2)
+                    isoniazidDose.setVisibility(View.VISIBLE);
                     rifapentineDose.setVisibility(View.GONE);
-                else
+                    levofloxacinDose.setVisibility(View.GONE);
+                    ethionamideDose.setVisibility(View.GONE);
+
+                    if (age < 12) w = weightInt * 10;
+                    else if (age < 15) w = weightInt * 10;
+                    else w = weightInt * 5;
+
+                    isoniazidDose.getEditText().setText(String.valueOf(w));
+
+                } else {
+
+                    w = 1;
+                    w = weightInt * 15;
+                    isoniazidDose.getEditText().setText(String.valueOf(w));
+
+                    rifapentineDose.getEditText().setText("");
+                    if (age < 12)
+                        rifapentineDose.getEditText().setHint("300 - 450 mg");
+                    else
+                        rifapentineDose.getEditText().setHint("450 - 900 mg");
+
+                    isoniazidDose.setVisibility(View.VISIBLE);
                     rifapentineDose.setVisibility(View.VISIBLE);
-                levofloxacinDose.setVisibility(View.GONE);
-                ethionamideDose.setVisibility(View.GONE);
+                    levofloxacinDose.setVisibility(View.GONE);
+                    ethionamideDose.setVisibility(View.GONE);
+
+                }
 
             } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_levofloxacin_ethionamide))) {
 
-                int w = 0;
+                int w = 1;
 
-                if (age < 15) w = weightInt * 15;
-                else w = weightInt * 750;
+                if (age < 15) {
+                    ethionamideDose.getEditText().setText("");
+                    ethionamideDose.getEditText().setHint("15 - 20 mg/kg");
+                } else {
+                    ethionamideDose.getEditText().setText("");
+                    ethionamideDose.getEditText().setHint("500 - 1000 mg");
+                }
 
-                levofloxacinDose.getEditText().setText(String.valueOf(w));
-
-                w = 0;
-
-                if (age < 15) w = weightInt * 15;
-                else w = weightInt * 500;
-
-                ethionamideDose.getEditText().setText(String.valueOf(w));
+                Double ww = 1.0;
+                if (age < 2) {
+                    ww = weightInt * 15.0;
+                    int i = (int) Math.round(ww);
+                    levofloxacinDose.getEditText().setText(String.valueOf(i));
+                } else if (age < 15) {
+                    levofloxacinDose.getEditText().setText(String.valueOf(""));
+                    levofloxacinDose.getEditText().setHint("7.5 - 10 mg/kg");
+                } else {
+                    levofloxacinDose.getEditText().setText(String.valueOf(""));
+                    levofloxacinDose.getEditText().setHint("750 - 1000 mg");
+                }
 
                 isoniazidDose.setVisibility(View.GONE);
                 rifapentineDose.setVisibility(View.GONE);
                 levofloxacinDose.setVisibility(View.VISIBLE);
                 ethionamideDose.setVisibility(View.VISIBLE);
+                rifapentineAvailable.setVisibility(View.GONE);
+
+            }
+        } else if (group == rifapentineAvailable.getRadioGroup()) {
+
+            isoniazidDose.getEditText().setHint("");
+            rifapentineDose.getEditText().setHint("");
+            levofloxacinDose.getEditText().setHint("");
+            ethionamideDose.getEditText().setHint("");
+
+            isoniazidDose.getEditText().setText("");
+            rifapentineDose.getEditText().setText("");
+            levofloxacinDose.getEditText().setText("");
+            ethionamideDose.getEditText().setText("");
+
+            int age = App.getPatient().getPerson().getAge();
+            int weightInt = 0;
+            if (!App.get(weight).equals("")) {
+                weightInt = Integer.parseInt(App.get(weight));
+            }
+            int w = 1;
+
+            if (App.get(rifapentineAvailable).equals(getResources().getString(R.string.no))) {
+
+                isoniazidDose.setVisibility(View.VISIBLE);
+                rifapentineDose.setVisibility(View.GONE);
+                levofloxacinDose.setVisibility(View.GONE);
+                ethionamideDose.setVisibility(View.GONE);
+
+
+                if (age < 12) w = weightInt * 10;
+                else if (age < 15) w = weightInt * 10;
+                else w = weightInt * 5;
+
+                isoniazidDose.getEditText().setText(String.valueOf(w));
+
+            } else {
+
+                w = 1;
+                w = weightInt * 15;
+                isoniazidDose.getEditText().setText(String.valueOf(w));
+
+                rifapentineDose.getEditText().setText("");
+                if (age < 12)
+                    rifapentineDose.getEditText().setHint("300 - 450 mg");
+                else
+                    rifapentineDose.getEditText().setHint("450 - 900 mg");
+
+                isoniazidDose.setVisibility(View.VISIBLE);
+                rifapentineDose.setVisibility(View.VISIBLE);
+                levofloxacinDose.setVisibility(View.GONE);
+                ethionamideDose.setVisibility(View.GONE);
 
             }
         } else if (group == ancillaryNeed.getRadioGroup()) {
@@ -753,6 +848,10 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 other.setVisibility(View.GONE);
             }
         }
+    }
+
+    @Override
+    public void refill(int encounterId) {
     }
 
     class MyAdapter extends PagerAdapter {

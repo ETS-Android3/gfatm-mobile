@@ -512,6 +512,10 @@ public class PetTreatmentAdherenceForm extends AbstractFormActivity implements R
         }
     }
 
+    @Override
+    public void refill(int encounterId) {
+    }
+
     class MyAdapter extends PagerAdapter {
 
         @Override

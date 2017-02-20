@@ -287,8 +287,9 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
                                                                                                 (App.get(ethinicity).equals(getResources().getString(R.string.pet_siraiki)) ? "SARAIKI" :
                                                                                                         (App.get(ethinicity).equals(getResources().getString(R.string.pet_benagli)) ? "BANGALI" :
                                                                                                                 (App.get(ethinicity).equals(getResources().getString(R.string.pet_afghani)) ? "AFGHAN" :
-                                                                                                                        (App.get(ethinicity).equals(getResources().getString(R.string.pet_other_ethnicity)) ? "OTHER ETHNICITY" :
-                                                                                                                                (App.get(ethinicity).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSED")))))))))))))));
+                                                                                                                        (App.get(ethinicity).equals(getResources().getString(R.string.pet_hazara)) ? "HAZARA" :
+                                                                                                                                (App.get(ethinicity).equals(getResources().getString(R.string.pet_other_ethnicity)) ? "OTHER ETHNICITY" :
+                                                                                                                                        (App.get(ethinicity).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSED"))))))))))))))));
 
         observations.add(new String[]{"ETHNICITY", ethnicityString});
         if (otherEthinicity.getVisibility() == View.VISIBLE)
@@ -300,8 +301,8 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
                                 (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_intermediate)) ? "INTERMEDIATE EDUCATION" :
                                         (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_undergraduate)) ? "UNDERGRADUATE EDUCATION" :
                                                 (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_graduate)) ? "GRADUATE EDUCATION" :
-                                                        (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_doctorate)) ? "MEMON" :
-                                                                (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_religious)) ? "DOCTORATE EDUCATION" :
+                                                        (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_doctorate)) ? "DOCTORATE EDUCATION" :
+                                                                (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_religious)) ? "RELIGIOUS EDUCATION" :
                                                                         (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_polytechnic)) ? "POLYTECHNIC EDUCATION" :
                                                                                 (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_special_education)) ? "SPECIAL EDUCATION RECEIVED" :
                                                                                         (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_no_formal_education)) ? "NO FORMAL EDUCATION" :
@@ -372,7 +373,6 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
                                                 (App.get(contactIncomeGroup).equals(getResources().getString(R.string.pet_upper_class)) ? "UPPER INCOME CLASS" : "UNKNOWN")))));
         observations.add(new String[]{"INCOME CLASS", incomeClassString});
 
-
         final String householdHeadtring = App.get(householdHead).equals(getResources().getString(R.string.pet_mother)) ? "MOTHER" :
                 (App.get(householdHead).equals(getResources().getString(R.string.pet_father)) ? "FATHER" :
                         (App.get(householdHead).equals(getResources().getString(R.string.pet_maternal_grandmother)) ? "MATERNAL GRANDMOTHER" :
@@ -391,15 +391,20 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
         if (otherHouseholdHead.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER FAMILY MEMBER", App.get(otherHouseholdHead)});
 
-        final String houseHoldEmployementStatusString = App.get(maritalStatus).equals(getResources().getString(R.string.pet_employed)) ? "EMPLOYED" :
-                (App.get(maritalStatus).equals(getResources().getString(R.string.pet_unable_to_work)) ? "UNABLE TO WORK" :
-                        (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_student)) ? "STUDENT" :
-                                (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_unemployed)) ? "UNEMPLOYED" :
-                                        (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_housework)) ? "DIVORCED" :
-                                                (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_retired)) ? "RETIRED" :
-                                                        (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_retired)) ? "RETIRED" :
-                                                                (App.get(contactEducationLevel).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSE")))))));
-        observations.add(new String[]{"EMPLOYMENT STATUS", houseHoldEmployementStatusString});
+        final String houseHoldEducationLevelString = App.get(householdHeadEducationLevel).equals(getResources().getString(R.string.pet_elementary)) ? "ELEMENTARY EDUCATION" :
+                (App.get(householdHeadEducationLevel).equals(getResources().getString(R.string.pet_primary)) ? "PRIMARY EDUCATION" :
+                        (App.get(householdHeadEducationLevel).equals(getResources().getString(R.string.pet_secondary)) ? "SECONDARY EDUCATION" :
+                                (App.get(householdHeadEducationLevel).equals(getResources().getString(R.string.pet_intermediate)) ? "INTERMEDIATE EDUCATION" :
+                                        (App.get(householdHeadEducationLevel).equals(getResources().getString(R.string.pet_undergraduate)) ? "UNDERGRADUATE EDUCATION" :
+                                                (App.get(householdHeadEducationLevel).equals(getResources().getString(R.string.pet_graduate)) ? "GRADUATE EDUCATION" :
+                                                        (App.get(householdHeadEducationLevel).equals(getResources().getString(R.string.pet_doctorate)) ? "DOCTORATE EDUCATION" :
+                                                                (App.get(householdHeadEducationLevel).equals(getResources().getString(R.string.pet_religious)) ? "RELIGIOUS EDUCATION" :
+                                                                        (App.get(householdHeadEducationLevel).equals(getResources().getString(R.string.pet_polytechnic)) ? "POLYTECHNIC EDUCATION" :
+                                                                                (App.get(householdHeadEducationLevel).equals(getResources().getString(R.string.pet_special_education)) ? "SPECIAL EDUCATION RECEIVED" :
+                                                                                        (App.get(householdHeadEducationLevel).equals(getResources().getString(R.string.pet_no_formal_education)) ? "NO FORMAL EDUCATION" :
+                                                                                                (App.get(householdHeadEducationLevel).equals(getResources().getString(R.string.pet_other)) ? "OTHER" :
+                                                                                                        (App.get(householdHeadEducationLevel).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSED"))))))))))));
+        observations.add(new String[]{"CURRENT EDUCATION LEVEL OF HEAD OF HOUSEHOLD", houseHoldEducationLevelString});
 
         final String motherTongueString = App.get(motherTongue).equals(getResources().getString(R.string.pet_urdu)) ? "URDU LANGUAGE" :
                 (App.get(motherTongue).equals(getResources().getString(R.string.pet_punjabi)) ? "PUNJABI LANGUAGE" :
@@ -421,6 +426,7 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
                                                                                                                                                 (App.get(motherTongue).equals(getResources().getString(R.string.pet_makrani)) ? "MAKRANI LANGUAGE" :
                                                                                                                                                         (App.get(motherTongue).equals(getResources().getString(R.string.pet_other)) ? "OTHER" :
                                                                                                                                                                 (App.get(motherTongue).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN")))))))))))))))))));
+        observations.add(new String[]{"MOTHER TONGUE", motherTongueString});
         if (otherMotherTongue.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER LANGUAGE", App.get(otherMotherTongue)});
 
@@ -624,6 +630,10 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
+    }
+
+    @Override
+    public void refill(int encounterId) {
     }
 
     class MyAdapter extends PagerAdapter {

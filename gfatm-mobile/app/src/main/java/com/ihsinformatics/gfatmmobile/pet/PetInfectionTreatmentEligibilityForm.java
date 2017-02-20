@@ -535,6 +535,10 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
         }
     }
 
+    @Override
+    public void refill(int encounterId) {
+    }
+
     class MyAdapter extends PagerAdapter {
 
         @Override

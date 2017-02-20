@@ -385,6 +385,10 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
         }
     }
 
+    @Override
+    public void refill(int encounterId) {
+    }
+
     class MyAdapter extends PagerAdapter {
 
         @Override

@@ -878,6 +878,10 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
         }
     }
 
+    @Override
+    public void refill(int encounterId) {
+    }
+
     class MyAdapter extends PagerAdapter {
 
         @Override

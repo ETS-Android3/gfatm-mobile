@@ -1,18 +1,17 @@
 package com.ihsinformatics.gfatmmobile.pet;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.format.DateFormat;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,6 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
-import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -219,21 +217,10 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
         formDate.getButton().setOnClickListener(this);
         returnVisitDate.getButton().setOnClickListener(this);
         petRegimen.getRadioGroup().setOnCheckedChangeListener(this);
-
-        medicationDiscontinueReason.setVisibility(View.GONE);
-        medicationDiscontinueDuration.setVisibility(View.GONE);
-        newMedication.setVisibility(View.GONE);
-        newMedicationDuration.setVisibility(View.GONE);
-        petRegimen.setVisibility(View.GONE);
-        isoniazidDose.setVisibility(View.GONE);
-        rifapentineDose.setVisibility(View.GONE);
-        levofloxacinDose.setVisibility(View.GONE);
-        ethionamideDose.setVisibility(View.GONE);
-        ancillaryDrugs.setVisibility(View.GONE);
-        ancillaryDrugDuration.setVisibility(View.GONE);
-
         for (CheckBox cb : actionPlan.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
+
+        resetViews();
 
     }
 
@@ -256,7 +243,7 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
         }
-
+        returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
     }
 
 
@@ -447,13 +434,11 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
     public boolean submit() {
         endTime = new Date();
 
-        final ContentValues values = new ContentValues();
-        values.put("formDate", App.getSqlDate(formDateCalendar));
-        // start time...
-        // end time...
-        // gps coordinate...
-
         final ArrayList<String[]> observations = new ArrayList<String[]>();
+        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
+        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+        /*observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
+        observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});*/
         observations.add(new String[]{"DIZZINESS AND GIDDINESS", App.get(dizziness).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         observations.add(new String[]{"NAUSEA AND VOMITING", App.get(nausea).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         observations.add(new String[]{"ABDOMINAL PAIN", App.get(abdominalPain).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
@@ -493,7 +478,9 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
         if (newMedicationDuration.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"DURATION OF NEW MEDICATION IN DAYS", App.get(newMedicationDuration)});
 
-        // REGIMEN...
+        if (petRegimen.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"POST-EXPOSURE TREATMENT REGIMEN", App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy)) ? "ISONIAZID PROPHYLAXIS" :
+                    (App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_rifapentine)) ? "ISONIAZID AND RIFAPENTINE" : "LEVOFLOXACIN AND ETHIONAMIDE")});
 
         if (isoniazidDose.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"ISONIAZID DOSE", App.get(isoniazidDose)});
@@ -503,11 +490,18 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
             observations.add(new String[]{"LEVOFLOXACIN DOSE", App.get(levofloxacinDose)});
         if (ethionamideDose.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"ETHIONAMIDE DOSE", App.get(ethionamideDose)});
-        if (isoniazidDose.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"ISONIAZID DOSE", App.get(isoniazidDose)});
-        if (ancillaryDrugs.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"ANCILLARY DRUGS", App.get(ancillaryDrugs).equals(getResources().getString(R.string.pet_iron_deficiency_prtocol)) ? "IRON" :
-                    (App.get(ancillaryDrugs).equals(getResources().getString(R.string.pet_vitamin_d_protocol)) ? "VITAMIN D" : "CHLORPHENIRAMINE / METHSCOPOLAMINE / PHENYLEPHRINE")});
+        if (ancillaryDrugs.getVisibility() == View.VISIBLE) {
+            String ancillaryDrugString = "";
+            for (CheckBox cb : ancillaryDrugs.getCheckedBoxes()) {
+                if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_iron_deficiency_prtocol)))
+                    ancillaryDrugString = ancillaryDrugString + "IRON" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_vitamin_d_protocol)))
+                    ancillaryDrugString = ancillaryDrugString + "VITAMIN D" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_pcm_protocol)))
+                    ancillaryDrugString = ancillaryDrugString + "PHENYLEPHRINE, CHLORPHENIRAMINE, AND METHSCOPOLAMINE" + " ; ";
+            }
+            observations.add(new String[]{"ANCILLARY DRUGS", ancillaryDrugString});
+        }
         if (ancillaryDrugDuration.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"MEDICATION DURATION", App.get(ancillaryDrugDuration)});
         observations.add(new String[]{"INSTRUCTIONS TO PATIENT AND/OR FAMILY", App.get(newInstruction)});
@@ -522,7 +516,7 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
                         loading.setInverseBackgroundForced(true);
                         loading.setIndeterminate(true);
                         loading.setCancelable(false);
-                        loading.setMessage(getResources().getString(R.string.signing_in));
+                        loading.setMessage(getResources().getString(R.string.submitting_form));
                         loading.show();
                     }
                 });
@@ -546,15 +540,74 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
                 super.onPostExecute(result);
                 loading.dismiss();
 
-                Toast toast = Toast.makeText(context, result, Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.BOTTOM, 0, 0);
-                toast.show();
+                if (result.equals("SUCCESS")) {
+                    resetViews();
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.form_submitted));
+                    Drawable submitIcon = getResources().getDrawable(R.drawable.ic_submit);
+                    alertDialog.setIcon(submitIcon);
+                    int color = App.getColor(context, R.attr.colorAccent);
+                    DrawableCompat.setTint(submitIcon, color);
+                    alertDialog.setTitle(getResources().getString(R.string.title_completed));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else if (result.equals("CONNECTION_ERROR")) {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
+                    alertDialog.setMessage(message);
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+
 
             }
         };
         submissionFormTask.execute("");
-
-        resetViews();
         return false;
     }
 
@@ -708,6 +761,10 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
             }
         }
 
+    }
+
+    @Override
+    public void refill(int encounterId) {
     }
 
     class MyAdapter extends PagerAdapter {

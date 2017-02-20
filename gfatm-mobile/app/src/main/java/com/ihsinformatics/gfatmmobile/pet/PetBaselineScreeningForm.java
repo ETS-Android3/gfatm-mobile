@@ -23,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
@@ -36,6 +37,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
@@ -177,7 +179,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         treatmentInitiationDate = new TitledButton(context, null, getResources().getString(R.string.pet_treatment_initiation_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.VERTICAL);
         contactRegistered = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_contact_registered), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         tbHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_tb_history), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
-        relationship = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_relationship), getResources().getStringArray(R.array.pet_cnic_owners), "", App.VERTICAL);
+        relationship = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_relationship), getResources().getStringArray(R.array.pet_household_heads), "", App.VERTICAL);
         otherRelation = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 15, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         cnicLayout = new LinearLayout(context);
         cnicLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -445,22 +447,8 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
 
         final String cnic = App.get(cnic1) + "-" + App.get(cnic2) + "-" + App.get(cnic3);
         observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnic});
-        final String ownerString = App.get(relationship).equals(getResources().getString(R.string.pet_self)) ? "SELF" :
-                (App.get(relationship).equals(getResources().getString(R.string.pet_mother)) ? "MOTHER" :
-                        (App.get(relationship).equals(getResources().getString(R.string.pet_father)) ? "FATHER" :
-                                (App.get(relationship).equals(getResources().getString(R.string.pet_maternal_grandmother)) ? "MATERNAL GRANDMOTHER" :
-                                        (App.get(relationship).equals(getResources().getString(R.string.pet_maternal_grandfather)) ? "MATERNAL GRANDFATHER" :
-                                                (App.get(relationship).equals(getResources().getString(R.string.pet_paternal_grandmother)) ? "PATERNAL GRANDMOTHER" :
-                                                        (App.get(relationship).equals(getResources().getString(R.string.pet_paternal_grandfather)) ? "PATERNAL GRANDFATHER" :
-                                                                (App.get(relationship).equals(getResources().getString(R.string.pet_brother)) ? "BROTHER" :
-                                                                        (App.get(relationship).equals(getResources().getString(R.string.pet_sister)) ? "SISTER" :
-                                                                                (App.get(relationship).equals(getResources().getString(R.string.pet_son)) ? "SON" :
-                                                                                        (App.get(relationship).equals(getResources().getString(R.string.pet_daughter)) ? "SPOUSE" :
-                                                                                                (App.get(relationship).equals(getResources().getString(R.string.pet_aunt)) ? "AUNT" :
-                                                                                                        (App.get(relationship).equals(getResources().getString(R.string.pet_uncle)) ? "UNCLE" : "OTHER FAMILY MEMBER"))))))))))));
 
-
-        observations.add(new String[]{"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(cnicOwner).equals(getResources().getString(R.string.pet_self)) ? "SELF" :
+        final String ownerString = App.get(cnicOwner).equals(getResources().getString(R.string.pet_self)) ? "SELF" :
                 (App.get(cnicOwner).equals(getResources().getString(R.string.pet_mother)) ? "MOTHER" :
                         (App.get(cnicOwner).equals(getResources().getString(R.string.pet_father)) ? "FATHER" :
                                 (App.get(cnicOwner).equals(getResources().getString(R.string.pet_maternal_grandmother)) ? "MATERNAL GRANDMOTHER" :
@@ -472,7 +460,9 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                                                                                 (App.get(cnicOwner).equals(getResources().getString(R.string.pet_son)) ? "SON" :
                                                                                         (App.get(cnicOwner).equals(getResources().getString(R.string.pet_daughter)) ? "SPOUSE" :
                                                                                                 (App.get(cnicOwner).equals(getResources().getString(R.string.pet_aunt)) ? "AUNT" :
-                                                                                                        (App.get(cnicOwner).equals(getResources().getString(R.string.pet_uncle)) ? "UNCLE" : "OTHER FAMILY MEMBER"))))))))))))});
+                                                                                                        (App.get(cnicOwner).equals(getResources().getString(R.string.pet_uncle)) ? "UNCLE" : "OTHER FAMILY MEMBER"))))))))))));
+
+        observations.add(new String[]{"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", ownerString});
         if (otherCnicOwner.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(otherCnicOwner)});
 
@@ -483,7 +473,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                 (App.get(cough).equals(getResources().getString(R.string.no)) ? "NO" :
                         (App.get(cough).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
         if (coughDuration.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"COUGH DURATION", App.get(coughDuration).equals(getResources().getString(R.string.pet_less_than_2_weeks)) ? "COUGH LASTING LESS THAN 2 WEEKS (163739)" :
+            observations.add(new String[]{"COUGH DURATION", App.get(coughDuration).equals(getResources().getString(R.string.pet_less_than_2_weeks)) ? "COUGH LASTING LESS THAN 2 WEEKS" :
                     (App.get(coughDuration).equals(getResources().getString(R.string.pet_two_three_weeks)) ? "COUGH LASTING MORE THAN 2 WEEKS" :
                             (App.get(coughDuration).equals(getResources().getString(R.string.pet_more_than_3_weeks)) ? "COUGH LASTING MORE THAN 3 WEEKS" :
                                     (App.get(coughDuration).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSED")))});
@@ -516,7 +506,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                 (App.get(swelling).equals(getResources().getString(R.string.no)) ? "NO" :
                         (App.get(swelling).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
         if (referral.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"PATIENT REFERRED", App.get(swelling).equals(getResources().getString(R.string.yes)) ? "YES" :
+            observations.add(new String[]{"PATIENT REFERRED", App.get(referral).equals(getResources().getString(R.string.yes)) ? "YES" :
                     (App.get(referral).equals(getResources().getString(R.string.no)) ? "NO" : "UNKNOWN")});
         if (referredFacility.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"REFERRING FACILITY NAME", App.get(referredFacility)});
@@ -547,7 +537,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                         encounterId = successArray[1];
                     }
 
-                    result = serverService.savePersonAddress(App.get(address1), App.get(address2), App.getCity(), App.get(town), "", longitude, latitude, encounterId);
+                    result = serverService.savePersonAddress(App.get(address1), App.get(address2), App.getCity(), App.get(town), "", longitude, latitude, App.get(landmark), encounterId);
                     if (!result.equals("SUCCESS"))
                         return result;
 
@@ -771,6 +761,22 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         linearLayout.setVisibility(View.VISIBLE);
         referredFacility.setVisibility(View.GONE);
 
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean openFlag = bundle.getBoolean("open");
+            if (openFlag) {
+
+                bundle.putBoolean("open", false);
+                bundle.putBoolean("save", true);
+
+                String id = bundle.getString("formId");
+                int formId = Integer.valueOf(id);
+
+                refill(formId);
+
+            } else bundle.putBoolean("save", false);
+        }
+
     }
 
     @Override
@@ -869,6 +875,281 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         }
     }
 
+    @Override
+    public void refill(int formId) {
+
+
+        OfflineForm fo = serverService.getOfflineFormById(formId);
+        String date = fo.getFormDate();
+        ArrayList<String[][]> obsValue = fo.getObsValue();
+        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        for (int i = 0; i < obsValue.size(); i++) {
+
+            String[][] obs = obsValue.get(i);
+
+            if (obs[0][0].equals("FORM START TIME")) {
+                startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
+            } else if (obs[0][0].equals("PATIENT ID OF INDEX CASE")) {
+                indexPatientId.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("TUBERCULOSIS TREATMENT STATUS")) {
+
+                for (RadioButton rb : treatmentStatus.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("TREATMENT START DATE")) {
+                String secondDate = obs[0][1];
+                secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
+                treatmentInitiationDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+                treatmentInitiationDate.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("REGISTERED IN ZERO TB")) {
+                for (RadioButton rb : contactRegistered.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                contactRegistered.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("HISTORY OF TUBERCULOSIS")) {
+                for (RadioButton rb : tbHistory.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("FAMILY MEMBER")) {
+                String value = obs[0][1].equals("MOTHER") ? getResources().getString(R.string.pet_mother) :
+                        (obs[0][1].equals("FATHER") ? getResources().getString(R.string.pet_father) :
+                                (obs[0][1].equals("MATERNAL GRANDMOTHER") ? getResources().getString(R.string.pet_maternal_grandmother) :
+                                        (obs[0][1].equals("MATERNAL GRANDFATHER") ? getResources().getString(R.string.pet_maternal_grandfather) :
+                                                (obs[0][1].equals("PATERNAL GRANDMOTHER") ? getResources().getString(R.string.pet_paternal_grandmother) :
+                                                        (obs[0][1].equals("PATERNAL GRANDFATHER") ? getResources().getString(R.string.pet_paternal_grandfather) :
+                                                                (obs[0][1].equals("BROTHER") ? getResources().getString(R.string.pet_brother) :
+                                                                        (obs[0][1].equals("SISTER") ? getResources().getString(R.string.pet_sister) :
+                                                                                (obs[0][1].equals("SON") ? getResources().getString(R.string.pet_son) :
+                                                                                        obs[0][1].equals("DAUGHTER") ? getResources().getString(R.string.pet_daughter) :
+                                                                                                obs[0][1].equals("SPOUSE") ? getResources().getString(R.string.pet_spouse) :
+                                                                                                        obs[0][1].equals("AUNT") ? getResources().getString(R.string.pet_aunt) :
+                                                                                                                obs[0][1].equals("UNCLE") ? getResources().getString(R.string.pet_uncle) : getResources().getString(R.string.pet_other)))))))));
+                relationship.getSpinner().selectValue(value);
+            } else if (obs[0][0].equals("OTHER FAMILY MEMBER")) {
+                otherRelation.getEditText().setText(obs[0][1]);
+                otherRelation.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("NATIONAL IDENTIFICATION NUMBER")) {
+                String[] cnicArray = obs[0][1].split("-");
+                cnic1.getEditText().setText(cnicArray[0]);
+                cnic2.getEditText().setText(cnicArray[1]);
+                cnic3.getEditText().setText(cnicArray[2]);
+            } else if (obs[0][0].equals("COMPUTERIZED NATIONAL IDENTIFICATION OWNER")) {
+                String value = obs[0][1].equals("SELF") ? getResources().getString(R.string.pet_self) :
+                        (obs[0][1].equals("MOTHER") ? getResources().getString(R.string.pet_mother) :
+                                (obs[0][1].equals("FATHER") ? getResources().getString(R.string.pet_father) :
+                                        (obs[0][1].equals("MATERNAL GRANDMOTHER") ? getResources().getString(R.string.pet_maternal_grandmother) :
+                                                (obs[0][1].equals("MATERNAL GRANDFATHER") ? getResources().getString(R.string.pet_maternal_grandfather) :
+                                                        (obs[0][1].equals("PATERNAL GRANDMOTHER") ? getResources().getString(R.string.pet_paternal_grandmother) :
+                                                                (obs[0][1].equals("PATERNAL GRANDFATHER") ? getResources().getString(R.string.pet_paternal_grandfather) :
+                                                                        (obs[0][1].equals("BROTHER") ? getResources().getString(R.string.pet_brother) :
+                                                                                (obs[0][1].equals("SISTER") ? getResources().getString(R.string.pet_sister) :
+                                                                                        (obs[0][1].equals("SON") ? getResources().getString(R.string.pet_son) :
+                                                                                                obs[0][1].equals("DAUGHTER") ? getResources().getString(R.string.pet_daughter) :
+                                                                                                        obs[0][1].equals("SPOUSE") ? getResources().getString(R.string.pet_spouse) :
+                                                                                                                obs[0][1].equals("AUNT") ? getResources().getString(R.string.pet_aunt) :
+                                                                                                                        obs[0][1].equals("UNCLE") ? getResources().getString(R.string.pet_uncle) : getResources().getString(R.string.pet_other))))))))));
+                cnicOwner.getSpinner().selectValue(value);
+            } else if (obs[0][0].equals("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER")) {
+                otherCnicOwner.getEditText().setText(obs[0][1]);
+                otherCnicOwner.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("LOCATION OF EVENT")) {
+                for (RadioButton rb : entryLocation.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet_facility)) && obs[0][1].equals("HEALTH FACILITY")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_contact_home)) && obs[0][1].equals("HOME")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("COUGH")) {
+                for (RadioButton rb : cough.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.refused)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("COUGH DURATION")) {
+                for (RadioButton rb : coughDuration.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet_less_than_2_weeks)) && obs[0][1].equals("COUGH LASTING LESS THAN 2 WEEKS")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_two_three_weeks)) && obs[0][1].equals("COUGH LASTING MORE THAN 2 WEEKS")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_more_than_3_weeks)) && obs[0][1].equals("COUGH LASTING MORE THAN 3 WEEKS")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.refused)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                coughDuration.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("HEMOPTYSIS")) {
+                for (RadioButton rb : haemoptysis.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.refused)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("FEVER")) {
+                for (RadioButton rb : fever.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.refused)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("WEIGHT LOSS")) {
+                for (RadioButton rb : weightLoss.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.refused)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("LOSS OF APPETITE")) {
+                for (RadioButton rb : reduceAppetite.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.refused)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("REDUCED MOBILITY")) {
+                for (RadioButton rb : reduceActivity.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.refused)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("NIGHT SWEATS")) {
+                for (RadioButton rb : nightSweats.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.refused)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("SWELLING")) {
+                for (RadioButton rb : swelling.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.refused)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("PATIENT REFERRED")) {
+                for (RadioButton rb : referral.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("REFERRING FACILITY NAME")) {
+                referredFacility.getSpinner().selectValue(obs[0][1]);
+                referredFacility.setVisibility(View.VISIBLE);
+            }
+
+        }
+    }
 
     class MyAdapter extends PagerAdapter {
 

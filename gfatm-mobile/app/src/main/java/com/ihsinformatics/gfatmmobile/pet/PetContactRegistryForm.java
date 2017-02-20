@@ -27,8 +27,7 @@ import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
-import com.ihsinformatics.gfatmmobile.model.Encounter;
-import com.ihsinformatics.gfatmmobile.model.Obs;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
@@ -235,7 +234,7 @@ public class PetContactRegistryForm extends AbstractFormActivity {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean saveFlag = bundle.getBoolean("save", false);
-            String encounterId = bundle.getString("encounterId");
+            String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
             }
@@ -362,9 +361,6 @@ public class PetContactRegistryForm extends AbstractFormActivity {
     public void resetViews() {
         super.resetViews();
 
-        if (snackbar != null)
-            snackbar.dismiss();
-
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
         Bundle bundle = this.getArguments();
@@ -375,36 +371,46 @@ public class PetContactRegistryForm extends AbstractFormActivity {
                 bundle.putBoolean("open", false);
                 bundle.putBoolean("save", true);
 
-                String id = bundle.getString("encounterId");
+                String id = bundle.getString("formId");
                 int encounterId = Integer.valueOf(id);
 
-                Encounter encounter = serverService.getEncounterAndObservationFromLocalDb(encounterId);
-                ArrayList<Obs> obsGroup = encounter.getObsGroup();
+                refill(encounterId);
 
-                for (Obs obs : obsGroup) {
-
-                    if (obs.getConceptName().equals("NUMBER OF CONTACTS")) {
-
-                        String value = obs.getValue().replace(".0", "");
-                        totalContacts.getEditText().setText(value);
-
-                    } else if (obs.getConceptName().equals("NUMBER OF ADULT CONTACTS")) {
-
-                        String value = obs.getValue().replace(".0", "");
-                        totalAdultContacts.getEditText().setText(value);
-
-                    } else if (obs.getConceptName().equals("NUMBER OF CHILDHOOD CONTACTS")) {
-
-                        String value = obs.getValue().replace(".0", "");
-                        totalChildrenContacts.getEditText().setText(value);
-
-                    }
-                }
-            } else
-                bundle.putBoolean("save", false);
+            } else bundle.putBoolean("save", false);
 
         }
+    }
 
+    @Override
+    public void refill(int formId) {
+
+        OfflineForm fo = serverService.getOfflineFormById(formId);
+        String date = fo.getFormDate();
+        ArrayList<String[][]> obsValue = fo.getObsValue();
+        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        for (int i = 0; i < obsValue.size(); i++) {
+
+            String[][] obs = obsValue.get(i);
+
+            if (obs[0][0].equals("NUMBER OF CONTACTS")) {
+
+                String value = obs[0][1].replace(".0", "");
+                totalContacts.getEditText().setText(value);
+
+            } else if (obs[0][0].equals("NUMBER OF ADULT CONTACTS")) {
+
+                String value = obs[0][1].replace(".0", "");
+                totalAdultContacts.getEditText().setText(value);
+
+            } else if (obs[0][0].equals("NUMBER OF CHILDHOOD CONTACTS")) {
+
+                String value = obs[0][1].replace(".0", "");
+                totalChildrenContacts.getEditText().setText(value);
+
+            }
+        }
     }
 
     @Override
