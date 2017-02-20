@@ -19,6 +19,7 @@ import com.ihsinformatics.gfatmmobile.fast.FastContactRegistryForm;
 import com.ihsinformatics.gfatmmobile.fast.FastDSTOrderAndResultForm;
 import com.ihsinformatics.gfatmmobile.fast.FastGeneXpertResultForm;
 import com.ihsinformatics.gfatmmobile.fast.FastGpxSpecimenCollectionForm;
+import com.ihsinformatics.gfatmmobile.fast.FastMissedFollowupForm;
 import com.ihsinformatics.gfatmmobile.fast.FastPatientLocationForm;
 import com.ihsinformatics.gfatmmobile.fast.FastPresumptiveForm;
 import com.ihsinformatics.gfatmmobile.fast.FastPresumptiveInformationForm;
@@ -26,6 +27,8 @@ import com.ihsinformatics.gfatmmobile.fast.FastPromptForm;
 import com.ihsinformatics.gfatmmobile.fast.FastReferralAndTransferForm;
 import com.ihsinformatics.gfatmmobile.fast.FastScreeningChestXrayOrderAndResultForm;
 import com.ihsinformatics.gfatmmobile.fast.FastScreeningForm;
+import com.ihsinformatics.gfatmmobile.fast.FastTreatmentFollowupForm;
+import com.ihsinformatics.gfatmmobile.fast.FastTreatmentInitiationForm;
 import com.ihsinformatics.gfatmmobile.pet.PetAdverseEventForm;
 import com.ihsinformatics.gfatmmobile.pet.PetBaselineCounsellingForm;
 import com.ihsinformatics.gfatmmobile.pet.PetBaselineScreeningForm;
@@ -101,6 +104,9 @@ public class Forms{
     public static final String FAST_DST_ORDER_AND_RESULT_FORM = "DST Order And Result Form";
     public static final String FAST_CONTACT_REGISTRY_FORM = "Contact Registry Form";
     public static final String FAST_REFERRAL_AND_TRANSFER_FORM = "Referral and Transfer Form";
+    public static final String FAST_TREATMENT_INITIATION_FORM = "Treatment Initiation Form";
+    public static final String FAST_TREATMENT_FOLLOWUP_FORM = "Treatment Followup Form";
+    public static final String FAST_MISSED_VISIT_FOLLOWUP_FORM = "Missed Visit Follow-up";
 
     public static final FormsObject fastScreeningForm = new FormsObject(FAST_SCREENING_FORM, FastScreeningForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
     public static final FormsObject fastPromptForm = new FormsObject(FAST_PROMPT_FORM, FastPromptForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
@@ -114,7 +120,9 @@ public class Forms{
     public static final FormsObject fastDstOrderAndResultForm = new FormsObject(FAST_DST_ORDER_AND_RESULT_FORM, FastDSTOrderAndResultForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
     public static final FormsObject fastContactRegistryForm = new FormsObject(FAST_CONTACT_REGISTRY_FORM, FastContactRegistryForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
     public static final FormsObject fastReferralTransferForm = new FormsObject(FAST_REFERRAL_AND_TRANSFER_FORM, FastReferralAndTransferForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
-
+    public static final FormsObject fastTreatmentInitiationForm = new FormsObject(FAST_TREATMENT_INITIATION_FORM, FastTreatmentInitiationForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static final FormsObject fastTreatmentFollowupForm = new FormsObject(FAST_TREATMENT_FOLLOWUP_FORM, FastTreatmentFollowupForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static final FormsObject fastMissedVisitFollowupForm = new FormsObject(FAST_MISSED_VISIT_FOLLOWUP_FORM, FastMissedFollowupForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
     /********************************
      * COMORBIDITIES
      ********************************/
@@ -193,6 +201,9 @@ public class Forms{
         fastList.add(fastDstOrderAndResultForm);
         fastList.add(fastContactRegistryForm);
         fastList.add(fastReferralTransferForm);
+        fastList.add(fastTreatmentInitiationForm);
+        fastList.add(fastTreatmentFollowupForm);
+        fastList.add(fastMissedVisitFollowupForm);
 
         return fastList;
 
