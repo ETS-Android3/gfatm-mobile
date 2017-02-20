@@ -297,7 +297,7 @@
         <item>@string/pet_religious</item>
         <item>@string/pet_polytechnic</item>
         <item>@string/pet_special_education</item>
-        <item>@string/pet_special_education</item>
+        <item>@string/pet_no_formal_education</item>
         <item>@string/pet_other</item>
         <item>@string/refused</item>
         <item>@string/unknown</item>
@@ -333,7 +333,7 @@
         <item>@string/pet_student</item>
         <item>@string/pet_unemployed</item>
         <item>@string/pet_housework</item>
-        <item>@string/pet_other</item>
+        <item>@string/pet_retired</item>
         <item>@string/refused</item>
         <item>@string/unknown</item>
     </string-array>
@@ -631,11 +631,12 @@
         <item>@string/pet_isoniazid_rifapentine</item>
         <item>@string/pet_levofloxacin_ethionamide</item>
     </string-array>
-    <string name="pet_isoniazid_dose">Isoniazid dose (mg/kg)</string>
-    <string name="pet_rifapentine_dose">Rifapentine  dose (mg/kg)</string>
-    <string name="pet_levofloxacin_dose">Levofloxacin dose (mg/kg)</string>
-    <string name="pet_ethionamide_dose">Ethionamide dose (mg/kg)</string>
+    <string name="pet_isoniazid_dose">Isoniazid dose (mg)</string>
+    <string name="pet_rifapentine_dose">Rifapentine  dose (mg)</string>
+    <string name="pet_levofloxacin_dose">Levofloxacin dose (mg)</string>
+    <string name="pet_ethionamide_dose">Ethionamide dose (mg)</string>
     <string name="pet_ancillary_drugs_needed">Is there a need for ancillary drugs?</string>
+    <string name="pet_rifapentine_available">Is rifapentine available in stock?</string>
     <string name="pet_ancillary_drugs">Ancillary Drugs</string>
     <string name="pet_iron_deficiency_prtocol">Iron Deficiency protocol</string>
     <string name="pet_vitamin_d_protocol">Vitamin D deficiency protocol</string>

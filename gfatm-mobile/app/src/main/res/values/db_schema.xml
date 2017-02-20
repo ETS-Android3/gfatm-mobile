@@ -4,21 +4,23 @@
     <string-array name="tables">
 
         <item>
-            CREATE TABLE IF NOT EXISTS FORMS
+            CREATE TABLE IF NOT EXISTS form
             (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 program TEXT NOT NULL COLLATE NOCASE,
+                username TEXT NOT NULL COLLATE NOCASE,
                 form_name TEXT NOT NULL COLLATE NOCASE,
                 p_id TEXT NOT NULL COLLATE NOCASE,
                 form_date DATETIME,
                 timestamp DATETIME NOT NULL,
-                encounterType TEXT NOT NULL COLLATE NOCASE,
-                form_object BLOB NOT NULL COLLATE NOCASE
+                location TEXT NOT NULL COLLATE NOCASE,
+                form_object BLOB NOT NULL COLLATE NOCASE,
+                encounter_id INT COLLATE NOCASE
             )
 		</item>
 
 		<item>
-            CREATE TABLE IF NOT EXISTS FORMS_VALUE
+            CREATE TABLE IF NOT EXISTS form_value
             (
                 id INTEGER PRIMARY KEY  AUTOINCREMENT,
                 form_id INT NOT NULL COLLATE NOCASE,
@@ -29,12 +31,12 @@
 		</item>
 
         <item>
-            CREATE TABLE IF NOT EXISTS LOCATION
+            CREATE TABLE IF NOT EXISTS location
             (
                 location_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 location_name VARCHAR UNIQUE NOT NULL,
                 uuid VARCHAR UNIQUE NOT NULL,
-                parent_id INTEGER,
+                parent_uuid VARCHAR,
                 fast_location CHAR DEFAULT \'Y\' NOT NULL,
                 pet_location CHAR DEFAULT \'Y\' NOT NULL,
                 childhood_tb_location CHAR DEFAULT \'Y\' NOT NULL,
@@ -44,13 +46,15 @@
                 primary_contact VARCHAR,
                 address1 VARCHAR,
                 address2 VARCHAR,
+                address3 VARCHAR,
                 city_village VARCHAR,
+                state_province VARCHAR,
                 description TEXT
             )
         </item>
 
         <item>
-            CREATE TABLE IF NOT EXISTS USERS
+            CREATE TABLE IF NOT EXISTS users
             (
                 user_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 provider_uuid VARCHAR UNIQUE NOT NULL,
@@ -65,7 +69,7 @@
         </item>
 
         <item>
-            CREATE TABLE IF NOT EXISTS IDENTIFIER_TYPE
+            CREATE TABLE IF NOT EXISTS identifier_type
             (
                 identifier_type_id INTEGER PRIMARY KEY UNIQUE NOT NULL,
                 identifier_name VARCHAR UNIQUE NOT NULL,
@@ -75,15 +79,27 @@
             );
         </item>
 
-        <item>INSERT OR IGNORE INTO IDENTIFIER_TYPE VALUES(1,\'OpenMRS Identification Number\',\'8d793bee-c2cc-11de-8d13-0010c6dffd0f\',\'N\',\'Unique number used in OpenMRS\');</item>
-        <item>INSERT OR IGNORE INTO IDENTIFIER_TYPE VALUES(2,\'Old Identification Number\',\'8d79403a-c2cc-11de-8d13-0010c6dffd0f\',\'N\',\'Number given out prior to the OpenMRS system (No check digit)\');</item>
-        <item>INSERT OR IGNORE INTO IDENTIFIER_TYPE VALUES(3,\'Patient ID\',\'05a29f94-c0ed-11e2-94be-8c13b969e334\',\'Y\',\'OpenMRS patient identifier, with check-digit\');</item>
-        <item>INSERT OR IGNORE INTO IDENTIFIER_TYPE VALUES(4,\'ENRS\',\'0481be90-41be-4aa2-b0dc-0e82ccff6f5c\',\'N\',\'Registration ID assigned to MDR-TB patients\');</item>
-        <item>INSERT OR IGNORE INTO IDENTIFIER_TYPE VALUES(5,\'External ID\',\'20b16aaf-2851-4662-8292-0e7b89a82448\',\'N\',\'Patient ID in an external MRS, like MR. No.\');</item>
-        <item>INSERT OR IGNORE INTO IDENTIFIER_TYPE VALUES(6,\'endTB EMR ID\',\'8a6670cc-b8a5-474a-84e3-7b9dd16a2978\',\'N\',\'Patient Identifier type for Bahmni Registration System (endTB)\');</item>
+        <item>
+            CREATE TABLE IF NOT EXISTS encounter_type
+            (
+                encounter_type VARCHAR PRIMARY KEY UNIQUE NOT NULL,
+                edit_privilege VARCHAR,
+                view_privilege VARCHAR,
+                uuid VARCHAR UNIQUE NOT NULL
+            );
+        </item>
 
         <item>
-            CREATE TABLE IF NOT EXISTS PATIENT
+            CREATE TABLE IF NOT EXISTS person_attribute_type
+            (
+                person_attribute_type VARCHAR PRIMARY KEY UNIQUE NOT NULL,
+                format VARCHAR,
+                uuid VARCHAR UNIQUE NOT NULL
+            );
+        </item>
+
+        <item>
+            CREATE TABLE IF NOT EXISTS patient
             (
                 patient_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 uuid VARCHAR UNIQUE NOT NULL,
@@ -128,120 +144,24 @@
                 guardianname VARCHAR,
                 address1 VARCHAR,
                 address2 VARCHAR,
+                address3 VARCHAR,
                 description VARCHAR
             );
         </item>
 
         <item>
-            CREATE TABLE IF NOT EXISTS CONCEPT
+            CREATE TABLE IF NOT EXISTS concept
             (
                 concept_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 full_name VARCHAR UNIQUE,
+                var_name VARCHAR,
                 uuid VARCHAR UNIQUE NOT NULL,
                 data_type VARCHAR NOT NULL
             );
         </item>
 
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'SITE OF TUBERCULOSIS DISEASE\',\'160040AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'Coded\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'TUBERCULOSIS INFECTION TYPE\',\'9ff21ec5-7fe7-4af2-952b-57e5386b4075\',\'Coded\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'DST RESULT AVAILABLE\',\'197dbae7-88bf-4a57-bec2-5f4e4958d0e7\',\'Coded\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'PULMONARY TUBERCULOSIS\',\'42AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'Boolean\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'EXTRA-PULMONARY TUBERCULOSIS\',\'5042AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'DRUG-SENSITIVE TUBERCULOSIS INFECTION\',\'160248AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'DRUG-RESISTANT TUBERCULOSIS INFECTION\',\'160247AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'YES\',\'1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'NO\',\'1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'TUBERCULOSIS DRUG RESISTANCE TYPE\',\'40343c4d-6682-4ddb-8856-350edf9d8ff2\',\'Coded\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'TB PATIENT TYPE\',\'159990AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'Coded\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'RIFAMPICIN RESISTANT TUBERCULOSIS INFECTION\',\'430d3a24-25f0-4153-8dd3-c452e6a0dd75\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'MONO DRUG RESISTANT TUBERCULOSIS\',\'74ee3623-1d9e-4102-b7e3-106e6121cf2e\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'PANDRUG RESISTANT TUBERCULOSIS\',\'5df1547e-f4f8-4f6e-8cb9-c707308529c5\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'MULTI-DRUG RESISTANT TUBERCULOSIS INFECTION\',\'159345AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION\',\'159346AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'NEW TB PATIENT\',\'159977AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'RELAPSE\',\'160033AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'FAILURE OF CATEGORY I TREATMENT\',\'160032AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'FAILURE OF CATEGORY II TREATMENT\',\'160030AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'FAILURE OF MDR-TB TREATMENT\',\'c7b7fab7-7618-452f-b1f1-cee2acc8492a\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'FAILURE OF PREVIOUS TREATMENT\',\'b0b91fa6-bdd5-4812-ac0e-a3e12a212db2\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'LOST TO FOLLOW-UP\',\'160031AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'UNKNOWN\',\'1067AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'RESISTANT TO ANTI-TUBERCULOSIS DRUGS\',\'159956AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'Coded\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'ISONIAZID\',\'78280AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'RIFAMPICIN\',\'767AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'AMIKACIN\',\'71060AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'CAPREOMYCIN\',\'72794AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'STREPTOMYCIN\',\'84360AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'OFLOXACIN\',\'81022AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'MOXIFLOXACIN\',\'80133AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'ETHAMBUTOL\',\'75948AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'ETHIONAMIDE\',\'75976AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'PYRAZINAMIDE\',\'82900AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'TUBERCULOSIS DRUGS\',\'160021AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'AMOXICILLIN AND CLAVULANIC ACID\',\'450AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'BEDAQUILINE\',\'163143AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'CLOFAZIMINE\',\'73449AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'DELAMANID\',\'73449AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'HIGH DOSE ISONIAZID\',\'73449AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'LEVOFLOXACIN\',\'73449AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'MEROPENEM\',\'73449AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'P-AMINOSALICYLIC ACID MONOSODIUM\',\'73449AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'THIOACETAZONE\',\'73449AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'CAPREOMYCIN\',\'73449AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'CYCLOSERINE\',\'73449AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'GATIFLOXACIN\',\'73449AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'IMIPENEM AND CILASTATIN\',\'73449AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'KANAMYCIN\',\'73449AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'LINEZOLID\',\'73449AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'PROTHIONAMIDE\',\'73449AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'TERIZIDONE\',\'73449AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'NUMBER OF CONTACTS\',\'0e594b8c-cd8c-4437-9c6e-bc4e30ec7598\',\'Numeric\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'NUMBER OF ADULT CONTACTS\',\'73eb7f4b-c9ce-4f4a-a400-1d08cbd6f5a6\',\'Numeric\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'NUMBER OF CHILDHOOD CONTACTS\',\'24ce8061-fd5a-42db-9c1a-cc4b522c72c8\',\'Numeric\');</item>
-
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'REASON TO END FOLLOW-UP\',\'f81e6010-91d2-4423-af7f-9161a3c44fb3\',\'Coded\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'REASON TO END FOLLOW-UP (TEXT)\',\'778d0439-601e-4731-bec9-1b6151be1011\',\'Text\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'REASON FOR EXCLUSION FROM PET PROGRAM\',\'4d5a1d7d-bfcf-4b72-aa13-0f1d79514703\',\'Coded\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'TREATMENT COMPLETE\',\'160035AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'LOST TO FOLLOW-UP\',\'160031AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'ENROLLED IN TB PROGRAM\',\'67bde4e7-9c00-4bad-a9db-0ac25ba0fd2a\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'TRANSFERRED OUT\',\'159492AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'NOT ELIGIBLE FOR PROGRAM\',\'328d0ba2-8a96-4153-b2d1-c97ba7fb9b75\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'REFUSAL OF TREATMENT BY PATIENT\',\'127750AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'DECEASED\',\'159AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'PRE-EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION\',\'c4b589c3-02d8-44a2-8787-04d333c05e20\',\'N/A\');</item>
-
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'PATIENT ID OF INDEX CASE\',\'163755AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'Text\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'OTHER\',\'5622AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'TEXT\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'REASON VOUCHER NOT GIVEN\',\'407f94d8-d8c4-46d1-9607-fb400b25aa23\',\'Coded\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'OTHER OPD CLINIC OR WARD\',\'8e6f8105-dee5-4ecd-8e22-67dd62570c49\',\'Text\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'REASON FOR REFERRAL OR TRANSFER\',\'1da30109-cade-4aec-8051-9f7637b8d377\',\'Coded\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'PATIENT BEING REFEREED OUT OR TRANSFERRED OUT\',\'f684d047-789a-4f0e-9d37-f67f8c50f4ec\',\'Coded\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'OTHER TRANSFER OR REFERRAL REASON\',\'88853649-8d86-4372-9ca5-1dcbe5fecc5a\',\'Text\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'LOCATION OF REFERRAL OR TRANSFER OTHER\',\'208bd50d-bff8-4f82-b7dd-2395c2bd474a\',\'Text\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'DATE OF TEST RESULT RECEIVED\',\'162079AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'Datetime\');</item>
-        <item>INSERT OR IGNORE INTO CONCEPT (full_name, uuid, data_type) VALUES(\'NOT DETECTED\',\'1302AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\',\'N/A\');</item>
-
-
         <item>
-            CREATE TABLE IF NOT EXISTS ENCOUNTER_TYPE
-            (
-                encounter_type VARCHAR PRIMARY KEY UNIQUE NOT NULL,
-                uuid VARCHAR UNIQUE NOT NULL
-            );
-        </item>
-
-        <item>
-            CREATE TABLE IF NOT EXISTS PERSON_ATTRIBUTE_TYPE
-            (
-                person_attribute_type VARCHAR PRIMARY KEY UNIQUE NOT NULL,
-                uuid VARCHAR UNIQUE NOT NULL
-            );
-        </item>
-
-        <item>
-            CREATE TABLE IF NOT EXISTS ENCOUNTER
+            CREATE TABLE IF NOT EXISTS encounter
             (
                 encounter_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 uuid VARCHAR,
@@ -256,7 +176,7 @@
         </item>
 
          <item>
-            CREATE TABLE IF NOT EXISTS OBS
+            CREATE TABLE IF NOT EXISTS obs
             (
                 obs_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 uuid VARCHAR,
@@ -267,14 +187,16 @@
             );
         </item>
 
-        <item>CREATE TABLE IF NOT EXISTS OFFLINE_FORMS (
-            id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-		    username TEXT NOT NULL COLLATE NOCASE,
-            form TEXT NOT NULL COLLATE NOCASE,
-            pid TEXT NOT NULL COLLATE NOCASE,
-            uri TEXT NOT NULL COLLATE NOCASE,
-            content TEXT NOT NULL COLLATE NOCASE,
-            encounter_id INT COLLATE NOCASE
+        <item>
+            CREATE TABLE IF NOT EXISTS offline_form
+            (
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                username TEXT NOT NULL COLLATE NOCASE,
+                form TEXT NOT NULL COLLATE NOCASE,
+                pid TEXT NOT NULL COLLATE NOCASE,
+                uri TEXT NOT NULL COLLATE NOCASE,
+                content TEXT NOT NULL COLLATE NOCASE,
+                form_id INT COLLATE NOCASE
             );
 		</item>
 

@@ -20,8 +20,8 @@
     <string name="pmdt">PMDT</string>
     <string name="pet">PET</string>
     <string name="fast">FAST</string>
-    <string name="comorbidities">COMORBIDITIES</string>
-    <string name="childhood_tb">CHILDHOOD TB</string>
+    <string name="comorbidities">Comorbidities</string>
+    <string name="childhood_tb">Childhood TB</string>
 
     <!-- Settings Values -->
     <string-array name="programs">
@@ -437,7 +437,7 @@
     <string name="description">Description:</string>
     <string name="sync_with_openmrs">Sync with Openmrs</string>
     <string name="last_update_on">Last update on: </string>
-    <string name="location">Location</string>
+    <string name="location">Location:</string>
     <string name="fetching_data">fetching data</string>
 
     <!-- Search -->
