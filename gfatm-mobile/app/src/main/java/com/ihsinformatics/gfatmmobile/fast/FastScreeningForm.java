@@ -238,6 +238,11 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
     }
 
     @Override
+    public void refill(int encounterId) {
+
+    }
+
+    @Override
     public void onClick(View view) {
 
         super.onClick(view);

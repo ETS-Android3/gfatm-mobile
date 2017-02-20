@@ -23,7 +23,6 @@ import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
@@ -48,11 +47,10 @@ import java.util.HashMap;
  */
 
 public class FastTreatmentInitiationForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
-    Boolean dateChoose = false;
     public static final int THIRD_DATE_DIALOG_ID = 3;
     protected Calendar thirdDateCalendar;
     protected DialogFragment thirdDateFragment;
-
+    Boolean dateChoose = false;
     Context context;
 
     // Views...
@@ -567,6 +565,11 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         serverService.saveFormLocally(FORM_NAME, "12345-5", formValues);*/
 
         return true;
+    }
+
+    @Override
+    public void refill(int encounterId) {
+
     }
 
     @Override

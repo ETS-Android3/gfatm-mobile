@@ -648,7 +648,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
                         encounterId = successArray[1];
                     }
 
-                    result = serverService.savePersonAddress(App.get(addressHouse), App.get(addressStreet), App.getCity(), App.get(addressTown), "", longitude, latitude, encounterId);
+                    result = serverService.savePersonAddress(App.get(addressHouse), App.get(addressStreet), App.getCity(), App.get(addressTown), "", longitude, latitude, "", encounterId);
                     if (!result.equals("SUCCESS"))
                         return result;
 
@@ -773,6 +773,11 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         serverService.saveFormLocally(FORM_NAME, "12345-5", formValues);*/
 
         return true;
+    }
+
+    @Override
+    public void refill(int encounterId) {
+
     }
 
     @Override

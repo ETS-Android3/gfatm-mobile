@@ -346,6 +346,11 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
     }
 
     @Override
+    public void refill(int encounterId) {
+
+    }
+
+    @Override
     public void onClick(View view) {
 
         super.onClick(view);
