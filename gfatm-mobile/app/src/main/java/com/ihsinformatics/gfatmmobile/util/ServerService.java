@@ -35,6 +35,7 @@ import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.model.Concept;
 import com.ihsinformatics.gfatmmobile.model.EncounterType;
 import com.ihsinformatics.gfatmmobile.model.Location;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.model.PersonAttributeType;
 import com.ihsinformatics.gfatmmobile.model.User;
 import com.ihsinformatics.gfatmmobile.shared.FormsObject;
@@ -127,6 +128,15 @@ public class ServerService {
             return null;
     }
 
+    public String getPatientIdentifierBySystemIdLocalDB(String id) {
+
+        String[][] result = dbUtil.getTableData(Metadata.PATIENT, "identifier", "patient_id = '" + id + "'");
+        if (result.length > 0)
+            return result[0][0];
+        else
+            return null;
+    }
+
     public boolean saveFormLocally(String formName, FormsObject form, String pid, HashMap<String, String> formValues) {
 
         ContentValues values = new ContentValues();
@@ -182,12 +192,7 @@ public class ServerService {
     }
 
     public Object[][] getSavedForms(String username, String programName) {
-        Object[][] forms = dbUtil.getFormTableData("select id, program, form_name, p_id, form_date, timestamp, form_object from " + Metadata.FORMS + " where username='" + username + "' and program = '" + programName + "'");
-        return forms;
-    }
-
-    public Object[][] getOfflineForms(String programName) {
-        Object[][] forms = dbUtil.getFormTableData("select encounter_id, encounterType, encounterDatetime, encounterLocation, patientId, form_date, form_object from " + Metadata.ENCOUNTER + " where  uuid IS NULL and encounterType like '" + App.getProgram() + "-%'");
+        Object[][] forms = dbUtil.getFormTableData("select id, program, form_name, p_id, form_date, timestamp, form_object, location, encounter_id, username from " + Metadata.FORMS + " where username='" + username + "' and program = '" + programName + "'");
         return forms;
     }
 
@@ -213,12 +218,12 @@ public class ServerService {
     }
 
     public Object[][] getAllLocations() {
-        Object[][] locations = dbUtil.getFormTableData("select location_id, location_name, uuid, parent_id, fast_location, pet_location, childhood_tb_location, comorbidities_location, pmdt_location, aic_location, primary_contact, address1, address2, city_village, description from " + Metadata.LOCATION);
+        Object[][] locations = dbUtil.getFormTableData("select location_id, location_name, uuid, parent_uuid, fast_location, pet_location, childhood_tb_location, comorbidities_location, pmdt_location, aic_location, primary_contact, address1, address2, city_village, description from " + Metadata.LOCATION);
         return locations;
     }
 
     public Object[][] getAllLocations(String programColumn) {
-        Object[][] locations = dbUtil.getFormTableData("select location_id, location_name, uuid, parent_id, fast_location, pet_location, childhood_tb_location, comorbidities_location, pmdt_location, aic_location, primary_contact, address1, address2, city_village, description from " + Metadata.LOCATION + " where " + programColumn + " = 'Y'");
+        Object[][] locations = dbUtil.getFormTableData("select location_id, location_name, uuid, parent_uuid, fast_location, pet_location, childhood_tb_location, comorbidities_location, pmdt_location, aic_location, primary_contact, address1, address2, city_village, description from " + Metadata.LOCATION + " where " + programColumn + " = 'Y'");
         return locations;
     }
 
@@ -323,6 +328,7 @@ public class ServerService {
                     String description = location.getDescription();
                     String address1 = location.getAddress1();
                     String address2 = location.getAddress2();
+                    String address3 = location.getAddress3();
                     String city = location.getCity();
                     String petLocation = location.getPetLocation();
                     String pmdtLocation = location.getPmdtLocation();
@@ -337,6 +343,7 @@ public class ServerService {
                     values.put("description", description);
                     values.put("address1", address1);
                     values.put("address2", address2);
+                    values.put("address3", address3);
                     values.put("city_village", city);
                     values.put("pet_location", petLocation);
                     values.put("pmdt_location", pmdtLocation);
@@ -606,6 +613,12 @@ public class ServerService {
                         String nationalId = patient.getPerson().getNationalId();
                         String nationalIdOwner = patient.getPerson().getNationalIdOwner();
                         String guardianName = patient.getPerson().getGuardianName();
+                        String address1 = patient.getPerson().getAddress1();
+                        String address2 = patient.getPerson().getAddress2();
+                        String address3 = patient.getPerson().getAddress3();
+                        String stateProvince = patient.getPerson().getStateProvince();
+                        String cityVillage = patient.getPerson().getCityVillage();
+                        String country = patient.getPerson().getCountry();
 
                         ContentValues values = new ContentValues();
                         values.put("uuid", puuid);
@@ -637,6 +650,12 @@ public class ServerService {
                         values.put("nationalid", nationalId);
                         values.put("nationalidowner", nationalIdOwner);
                         values.put("guardianname", guardianName);
+                        values.put("address1", address1);
+                        values.put("address2", address2);
+                        values.put("address3", address3);
+                        values.put("stateProvince", stateProvince);
+                        values.put("cityVillage", cityVillage);
+                        values.put("country", country);
                         dbUtil.insert(Metadata.PATIENT, values);
 
                         App.setPatientId(getPatientSystemIdByUuidLocalDB(uuid));
@@ -788,20 +807,20 @@ public class ServerService {
                 "mothername, primarycontact, primarycontactOwner, secondarycontact, secondarycontactOwner, ethnicity, " + // 10 - 15
                 "educationlevel, employmentstatus, occupation, incomeclass, mothertongue, nationalid, nationalidowner, guardianname, " + // 16 - 23
                 "identifier, external_id, enrs, endtb_emr_id, " +  // 24 - 27
-                "address1, address2, stateProvince, cityVillage, country, patient_id ", "patient_id = '" + id + "'"); //28 -33
+                "address1, address2, address3, stateProvince, cityVillage, country, patient_id ", "patient_id = '" + id + "'"); //28 - 34
 
         if (result == null || result.length == 0)
             return patient;
 
-        Date date = App.stringToDate(result[0][3], "yyyy-MM-DD");
+        Date date = App.stringToDate(result[0][3], "yyyy-MM-dd");
         int age = App.getDiffYears(date, new Date());
         com.ihsinformatics.gfatmmobile.model.Person person = new com.ihsinformatics.gfatmmobile.model.Person(result[0][0], result[0][1], result[0][2], age, result[0][3], result[0][4],
                 result[0][5], result[0][6], result[0][7], result[0][8], result[0][9], result[0][10], result[0][11], result[0][12], result[0][13], result[0][14],
                 result[0][15], result[0][16], result[0][17], result[0][18], result[0][19], result[0][20], result[0][21], result[0][22], result[0][23],
-                result[0][28], result[0][29], result[0][30], result[0][31], result[0][32]);
+                result[0][28], result[0][29], result[0][30], result[0][31], result[0][32], result[0][33]);
 
         patient = new com.ihsinformatics.gfatmmobile.model.Patient(result[0][0], result[0][24], result[0][25], result[0][26], result[0][27], person);
-        patient.setPid(Integer.valueOf(result[0][33]));
+        patient.setPid(Integer.valueOf(result[0][34]));
 
         return patient;
 
@@ -820,20 +839,20 @@ public class ServerService {
                 "motherName, primaryContact, primaryContactOwner, secondaryContact, secondaryContactOwner, ethnicity, " + // 10 - 15
                 "educationlevel, employmentstatus, occupation, incomeclass, mothertongue, nationalid, nationalidowner, guardianname, " + // 16 - 23
                 "identifier, external_id, enrs, endtb_emr_id, " + // 24 - 27
-                "address1, address2, stateProvince, cityVillage, country, patient_id", "identifier = '" + patientId + "'"); // 28 - 32
+                "address1, address2, address3 stateProvince, cityVillage, country, patient_id", "identifier = '" + patientId + "'"); // 28 - 33
 
         if (result == null || result.length == 0)
             return patient;
 
-        Date date = App.stringToDate(result[0][3], "yyyy-MM-DD");
+        Date date = App.stringToDate(result[0][3], "yyyy-MM-dd");
         int age = App.getDiffYears(date, new Date());
         com.ihsinformatics.gfatmmobile.model.Person person = new com.ihsinformatics.gfatmmobile.model.Person(result[0][0], result[0][1], result[0][2], age, result[0][3], result[0][4],
                 result[0][5], result[0][6], result[0][7], result[0][8], result[0][9], result[0][10], result[0][11], result[0][12], result[0][13], result[0][14],
                 result[0][15], result[0][16], result[0][17], result[0][18], result[0][19], result[0][20], result[0][21], result[0][22], result[0][23],
-                result[0][28], result[0][29], result[0][30], result[0][31], result[0][32]);
+                result[0][28], result[0][29], result[0][30], result[0][31], result[0][32], result[0][33]);
 
         patient = new com.ihsinformatics.gfatmmobile.model.Patient(result[0][0], result[0][24], result[0][25], result[0][26], result[0][27], person);
-        patient.setPid(Integer.parseInt(result[0][33]));
+        patient.setPid(Integer.parseInt(result[0][34]));
 
         return patient;
     }
@@ -967,15 +986,27 @@ public class ServerService {
                     String uri = httpPost.saveEncounterWithObservationByEntity(encounter);
                     String[] uriArray = uri.split(" ;;;; ");
 
-                    deleteEncounter(App.getPatient().getPatientId(), App.getProgram() + "-" + formName);
+                    deleteEncounter(App.getPatientId(), App.getProgram() + "-" + formName);
 
                     ContentValues values2 = new ContentValues();
                     values2.put("encounterType", App.getProgram() + "-" + formName);
                     values2.put("encounterDatetime", App.getSqlDate(encounterDateTime));
                     values2.put("encounterLocation", App.getLocation());
                     values2.put("patientId", App.getPatient().getPid());
+                    dbUtil.insert(Metadata.ENCOUNTER, values2);
+
+                    String id = dbUtil.getObject(Metadata.ENCOUNTER, "encounter_id", "patientId='" + App.getPatient().getPid() + "' and encounterType='" + App.getProgram() + "-" + formName + "'");
+
+                    ContentValues values5 = new ContentValues();
+                    values5.put("program", App.getProgram());
+                    values5.put("form_name", formName);
+                    values5.put("p_id", App.getPatientId());
+                    values5.put("form_date", App.getSqlDate(encounterDateTime));
                     Date date = new Date();
-                    values2.put("form_date", date.getTime());
+                    values5.put("timestamp", date.getTime());
+                    values5.put("location", App.getLocation());
+                    values5.put("encounter_id", id);
+                    values5.put("username", App.getUsername());
                     ByteArrayOutputStream bos = null;
                     ObjectOutputStream oos = null;
                     try {
@@ -989,10 +1020,10 @@ public class ServerService {
                         e.printStackTrace();
                     }
                     byte[] data = bos.toByteArray();
-                    values2.put("form_object", data);
-                    dbUtil.insert(Metadata.ENCOUNTER, values2);
+                    values5.put("form_object", data);
+                    dbUtil.insert(Metadata.FORMS, values5);
 
-                    String id = dbUtil.getObject(Metadata.ENCOUNTER, "encounter_id", "patientId='" + App.getPatient().getPid() + "' and encounterType='" + App.getProgram() + "-" + formName + "'");
+                    String formId = dbUtil.getObject(Metadata.FORMS, "id", "p_id='" + App.getPatientId() + "' and timestamp='" + date.getTime() + "'");
 
                     for (int i = 0; i < obss.length; i++) {
 
@@ -1004,6 +1035,13 @@ public class ServerService {
                                 values3.put("value", valueArray[j]);
                                 values3.put("encounter_id", id);
                                 dbUtil.insert(Metadata.OBS, values3);
+
+                                ContentValues values6 = new ContentValues();
+                                values6.put("field_name", obss[i][0]);
+                                values6.put("value", valueArray[j]);
+                                values6.put("form_id", formId);
+                                dbUtil.insert(Metadata.FORMS_VALUE, values6);
+
                             }
 
                         } else {
@@ -1012,11 +1050,17 @@ public class ServerService {
                             values3.put("value", obss[i][1]);
                             values3.put("encounter_id", id);
                             dbUtil.insert(Metadata.OBS, values3);
+
+                            ContentValues values6 = new ContentValues();
+                            values6.put("field_name", obss[i][0]);
+                            values6.put("value", obss[i][1]);
+                            values6.put("form_id", formId);
+                            dbUtil.insert(Metadata.FORMS_VALUE, values6);
                         }
                     }
 
                     ContentValues values4 = new ContentValues();
-                    values4.put("encounter_id", id);
+                    values4.put("form_id", formId);
                     values4.put("uri", uriArray[0]);
                     values4.put("content", uriArray[1]);
                     values4.put("pid", App.getPatientId());
@@ -1024,7 +1068,7 @@ public class ServerService {
                     values4.put("username", App.getUsername());
                     dbUtil.insert(Metadata.OFFLINE_FORM, values4);
 
-                    return "SUCCESS_" + id;
+                    return "SUCCESS_" + formId;
 
                 } else {
                     String returnString = httpPost.saveEncounterWithObservationByEntity(encounter);
@@ -1065,8 +1109,10 @@ public class ServerService {
 
     public String savePersonAttributeType(String attributeType, String value, String encounterId) {
 
-        if (!isURLReachable()) {
-            return "CONNECTION_ERROR";
+        if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
+            if (!isURLReachable()) {
+                return "CONNECTION_ERROR";
+            }
         }
         if (App.getCommunicationMode().equals("REST")) {
             try {
@@ -1075,7 +1121,7 @@ public class ServerService {
 
                 String uri = httpPost.savePersonAttribute(personAttributeTypeUuid, value);
 
-                if (App.getMode().equals("OFFLINE")) {
+                if (App.getMode().equalsIgnoreCase("OFFLINE")) {
                     String[] uriArray = uri.split(" ;;;; ");
 
                     ContentValues values4 = new ContentValues();
@@ -1083,9 +1129,15 @@ public class ServerService {
                     values4.put("uri", uriArray[0]);
                     values4.put("content", uriArray[1]);
                     values4.put("pid", App.getPatientId());
-                    values4.put("form", "Person Attribute");
+                    values4.put("form", Metadata.PERSON_ATTRIBUTE);
                     values4.put("username", App.getUsername());
                     dbUtil.insert(Metadata.OFFLINE_FORM, values4);
+
+                    ContentValues values6 = new ContentValues();
+                    values6.put("field_name", attributeType);
+                    values6.put("value", value);
+                    values6.put("form_id", encounterId);
+                    dbUtil.insert(Metadata.FORMS_VALUE, values6);
                 }
 
                 ContentValues contentValues = new ContentValues();
@@ -1104,8 +1156,10 @@ public class ServerService {
 
     public String saveIdentifier(String identifierType, String identifier, String encounterId) {
 
-        if (!isURLReachable()) {
-            return "CONNECTION_ERROR";
+        if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
+            if (!isURLReachable()) {
+                return "CONNECTION_ERROR";
+            }
         }
 
         if (App.getCommunicationMode().equals("REST")) {
@@ -1129,17 +1183,23 @@ public class ServerService {
                     patientIdentifier.setLocation(ll);
 
                     String uri = httpPost.savePatientIdentifierByEntity(patientIdentifier);
-                    if (App.getMode().equals("OFFLINE")) {
+                    if (App.getMode().equalsIgnoreCase("OFFLINE")) {
                         String[] uriArray = uri.split(" ;;;; ");
 
                         ContentValues values4 = new ContentValues();
-                        values4.put("encounter_id", Integer.valueOf(encounterId));
+                        values4.put("form_id", Integer.valueOf(encounterId));
                         values4.put("uri", uriArray[0]);
                         values4.put("content", uriArray[1]);
                         values4.put("pid", App.getPatientId());
-                        values4.put("form", "Patient Identifier");
+                        values4.put("form", Metadata.PATIENT_IDENTIFIER);
                         values4.put("username", App.getUsername());
                         dbUtil.insert(Metadata.OFFLINE_FORM, values4);
+
+                        ContentValues values6 = new ContentValues();
+                        values6.put("field_name", identifierType);
+                        values6.put("value", identifier);
+                        values6.put("form_id", encounterId);
+                        dbUtil.insert(Metadata.FORMS_VALUE, values6);
                     }
 
                     ContentValues contentValues = new ContentValues();
@@ -1159,35 +1219,12 @@ public class ServerService {
         return "SUCCESS";
     }
 
-    public String getPersonAttribute(String personAttributeType) {
-        if (!isURLReachable()) {
-            return "CONNECTION_ERROR";
-        }
+    public String savePersonAddress(String address1, String address2, String city, String province, String country, double longitude, double latitude, String landmark, String encounterId) {
 
-        if (App.getCommunicationMode().equals("REST")) {
-            try {
-
-                JSONObject jsonObj = httpGet.getAllPersonAttributesByPersonUuid(App.getPatient().getUuid());
-                JSONObject[] jsonObjects = JSONParser.getJSONArrayFromObject(jsonObj, "results");
-                for (JSONObject json : jsonObjects) {
-
-                    String display = json.getString("display");
-                    if (display.contains(personAttributeType)) {
-                        return json.getString("value");
-                    }
-
-                }
-            } catch (Exception e) {
-                return "FAIL";
+        if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
+            if (!isURLReachable()) {
+                return "CONNECTION_ERROR";
             }
-        }
-
-        return "";
-    }
-
-    public String savePersonAddress(String address1, String address2, String city, String province, String country, double longitude, double latitude, String encounterId) {
-        if (!isURLReachable()) {
-            return "CONNECTION_ERROR";
         }
 
         if (App.getCommunicationMode().equals("REST")) {
@@ -1197,6 +1234,7 @@ public class ServerService {
                 personAddress.setPreferred(false);
                 personAddress.setAddress1(address1);
                 personAddress.setAddress2(address2);
+                personAddress.setAddress3(landmark);
                 personAddress.setCityVillage(city);
                 personAddress.setStateProvince(province);
                 personAddress.setCountry(country);
@@ -1204,7 +1242,7 @@ public class ServerService {
                 personAddress.setLatitude(String.valueOf(latitude));
 
                 String uri = httpPost.savePersonAddressByEntity(personAddress);
-                if (App.getMode().equals("OFFLINE")) {
+                if (App.getMode().equalsIgnoreCase("OFFLINE")) {
                     String[] uriArray = uri.split(" ;;;; ");
 
                     ContentValues values4 = new ContentValues();
@@ -1212,14 +1250,63 @@ public class ServerService {
                     values4.put("uri", uriArray[0]);
                     values4.put("content", uriArray[1]);
                     values4.put("pid", App.getPatientId());
-                    values4.put("form", "Person Address");
+                    values4.put("form", Metadata.PERSON_ADDRESS);
                     values4.put("username", App.getUsername());
                     dbUtil.insert(Metadata.OFFLINE_FORM, values4);
+
+                    ContentValues values6 = new ContentValues();
+                    values6.put("field_name", "address1");
+                    values6.put("value", address1);
+                    values6.put("form_id", encounterId);
+                    dbUtil.insert(Metadata.FORMS_VALUE, values6);
+
+                    values6 = new ContentValues();
+                    values6.put("field_name", "address2");
+                    values6.put("value", address2);
+                    values6.put("form_id", encounterId);
+                    dbUtil.insert(Metadata.FORMS_VALUE, values6);
+
+                    values6 = new ContentValues();
+                    values6.put("field_name", "address3");
+                    values6.put("value", landmark);
+                    values6.put("form_id", encounterId);
+                    dbUtil.insert(Metadata.FORMS_VALUE, values6);
+
+                    values6 = new ContentValues();
+                    values6.put("field_name", "CityVillage");
+                    values6.put("value", city);
+                    values6.put("form_id", encounterId);
+                    dbUtil.insert(Metadata.FORMS_VALUE, values6);
+
+                    values6 = new ContentValues();
+                    values6.put("field_name", "stateProvince");
+                    values6.put("value", province);
+                    values6.put("form_id", encounterId);
+                    dbUtil.insert(Metadata.FORMS_VALUE, values6);
+
+                    values6 = new ContentValues();
+                    values6.put("field_name", "country");
+                    values6.put("value", country);
+                    values6.put("form_id", encounterId);
+                    dbUtil.insert(Metadata.FORMS_VALUE, values6);
+
+                    values6 = new ContentValues();
+                    values6.put("field_name", "longitude");
+                    values6.put("value", longitude);
+                    values6.put("form_id", encounterId);
+                    dbUtil.insert(Metadata.FORMS_VALUE, values6);
+
+                    values6 = new ContentValues();
+                    values6.put("field_name", "latitude");
+                    values6.put("value", latitude);
+                    values6.put("form_id", encounterId);
+                    dbUtil.insert(Metadata.FORMS_VALUE, values6);
                 }
 
                 ContentValues contentValues = new ContentValues();
                 contentValues.put("address1", address1);
                 contentValues.put("address2", address2);
+                contentValues.put("address3", landmark);
                 contentValues.put("CityVillage", city);
                 contentValues.put("stateProvince", province);
                 contentValues.put("country", country);
@@ -1244,6 +1331,27 @@ public class ServerService {
 
     }
 
+    public Object[][] getOfflineFormByFormAndEncounter(String formName, int encounterId) {
+
+        Object[][] form = dbUtil.getFormTableData("select content from " + Metadata.OFFLINE_FORM + " where form = '" + formName + "' and encounter_id = " + encounterId);
+        return form;
+    }
+
+    public OfflineForm getOfflineFormById(int formId) {
+
+        Object[][] form = dbUtil.getFormTableData("select id, program, form_name, p_id, form_date, timestamp, form_object, location, encounter_id, username from " + Metadata.FORMS + " where id = " + formId);
+        if (form.length < 1)
+            return null;
+        OfflineForm fo = new OfflineForm(String.valueOf(form[0][0]), String.valueOf(form[0][1]), String.valueOf(form[0][2]), String.valueOf(form[0][3]), String.valueOf(form[0][4]), String.valueOf(form[0][5]),
+                String.valueOf(form[0][6]), String.valueOf(form[0][7]), String.valueOf(form[0][8]), String.valueOf(form[0][9]));
+
+        Object[][] obs = dbUtil.getFormTableData("select field_name, value from " + Metadata.FORMS_VALUE + " where form_id = " + String.valueOf(form[0][0]));
+        for (int i = 0; i < obs.length; i++) {
+            fo.putObsValue(String.valueOf(obs[i][0]), String.valueOf(obs[i][1]));
+        }
+
+        return fo;
+    }
 
     public Object[][] getAllEncounterFromLocalDB() {
 
@@ -1313,7 +1421,7 @@ public class ServerService {
 
             }
 
-            deleteEncounter(App.getPatient().getPatientId(), encounter1.getEncounterType());
+            deleteEncounter(App.getPatientId(), encounter1.getEncounterType());
 
             ContentValues values2 = new ContentValues();
             values2.put("uuid", encounter1.getUuid());
@@ -1373,8 +1481,11 @@ public class ServerService {
         return encounter;
     }
 
-    public boolean deleteOfflineForms(String encounterId) {
-        return dbUtil.delete(Metadata.OFFLINE_FORM, "encounter_id=?", new String[]{encounterId});
+    public boolean deleteOfflineForms(String fromId) {
+        dbUtil.delete(Metadata.FORMS, "id=?", new String[]{fromId});
+        dbUtil.delete(Metadata.FORMS_VALUE, "form_id=?", new String[]{fromId});
+        dbUtil.delete(Metadata.OFFLINE_FORM, "form_id=?", new String[]{fromId});
+        return true;
     }
 
 

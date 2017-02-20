@@ -23,6 +23,9 @@ import android.util.Log;
 
 import com.ihsinformatics.gfatmmobile.R;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 /**
@@ -30,7 +33,7 @@ import java.util.ArrayList;
  */
 public class DatabaseUtil extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseUtil";
-    private static final String DB_NAME = "tbreach3.db";
+    private static final String DB_NAME = "globalfund.db";
     private static final int DB_VERSION = 1;
     private Context context;
 
@@ -71,8 +74,23 @@ public class DatabaseUtil extends SQLiteOpenHelper {
         for (String s : tables) {
             db.execSQL(s);
         }
+        Log.i(TAG, "Database created.");
+
+        InputStream insertsStream = context.getResources().openRawResource(R.raw.metadata);
+        BufferedReader insertReader = new BufferedReader(new InputStreamReader(insertsStream));
+        String insertStmt = "";
+        try {
+            while (insertReader.ready()) {
+                insertStmt = insertReader.readLine();
+                if (!(insertsStream == null || insertStmt.startsWith("--") || insertStmt.equals("") || insertStmt.equals("null")))
+                    db.execSQL(insertStmt);
+            }
+            insertReader.close();
+        } catch (Exception e) {
+            Log.e(TAG, "insert error:" + insertStmt);
+        }
+        Log.i(TAG, "Inserts completed.");
         db.close();
-        Log.i(TAG, "Database created/updated.");
     }
 
     /**

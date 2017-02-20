@@ -263,6 +263,7 @@ public class HttpPost {
             JSONObject personAddressObject = new JSONObject();
             personAddressObject.put("address1", personAddress.getAddress1());
             personAddressObject.put("address2", personAddress.getAddress2());
+            personAddressObject.put("address3", personAddress.getAddress3());
             personAddressObject.put("cityVillage", personAddress.getCityVillage());
             personAddressObject.put("stateProvince", personAddress.getStateProvince());
             personAddressObject.put("country", personAddress.getCountry());
