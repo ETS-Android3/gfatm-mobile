@@ -494,7 +494,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
                 });
 
                 String result = "";
-                result = serverService.saveEncounterAndObservation(FORM_NAME, formDateCalendar, observations.toArray(new String[][]{}));
+                result = serverService.saveEncounterAndObservation(FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}));
                 return result;
 
             }
@@ -593,6 +593,11 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
         //serverService.saveFormLocally(FORM_NAME, "12345-5", formValues);
 
         return true;
+    }
+
+    @Override
+    public void refill(int encounterId) {
+
     }
 
     @Override

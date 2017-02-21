@@ -431,6 +431,11 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
     }
 
     @Override
+    public void refill(int encounterId) {
+
+    }
+
+    @Override
     public void onClick(View view) {
 
         super.onClick(view);

@@ -340,6 +340,11 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
     }
 
     @Override
+    public void refill(int encounterId) {
+
+    }
+
+    @Override
     public void onClick(View view) {
 
         super.onClick(view);

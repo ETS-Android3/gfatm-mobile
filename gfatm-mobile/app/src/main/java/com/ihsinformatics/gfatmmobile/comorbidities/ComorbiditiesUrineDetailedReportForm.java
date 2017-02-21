@@ -748,6 +748,11 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
     }
 
     @Override
+    public void refill(int encounterId) {
+
+    }
+
+    @Override
     public void onClick(View view) {
 
         super.onClick(view);

@@ -35,8 +35,6 @@ import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
-import org.openmrs.validator.TestOrderValidator;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -269,7 +267,7 @@ public class ComorbiditiesDiabetesMellitusScreeningForm extends AbstractFormActi
                 });
 
                 String result = "";
-                result = serverService.saveEncounterAndObservation(FORM_NAME, formDateCalendar, observations.toArray(new String[][]{}));
+                result = serverService.saveEncounterAndObservation(FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}));
                 return result;
 
             }
@@ -368,6 +366,11 @@ public class ComorbiditiesDiabetesMellitusScreeningForm extends AbstractFormActi
         //serverService.saveFormLocally(FORM_NAME, "12345-5", formValues);
 
         return true;
+    }
+
+    @Override
+    public void refill(int encounterId) {
+
     }
 
     @Override
