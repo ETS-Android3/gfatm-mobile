@@ -237,6 +237,20 @@
     <string name="ctb_abnormal_extend_not_defined">Abnormal but extent not defined</string>
     <string name="ctb_radiologist_remark">Radiologist\'s Remarks</string>
     <string name="ctb_range_1_to_24">Invalid range. Please enter betweeen 1-24</string>
+    <string name="ctb_date_submission">Date of submission</string>
+    <string name="ctb_point_test_being_done">At what point is the test being done?</string>
+    <string name="ctb_followup">Follow-up</string>
+    <string name="ctb_date_result_recieved">Date Result Received</string>
+    <string name="ctb_smear_result">Smear Result</string>
+    <string name="ctb_negative">Negative</string>
+    <string name="ctb_scanty_3_24">Scanty 3-24</string>
+    <string name="ctb_1_positive">1+</string>
+    <string name="ctb_2_positive">2+</string>
+    <string name="ctb_3_positive">3+</string>
+    <string name="ctb_afb_seen_in_one_field">Number of AFB seen in one field</string>
+    <string name="ctb_type_of_form">Type of form</string>
+    <string name="ctb_order">Order</string>
+    <string name="ctb_result">Result</string>
 
     <string-array name="ctb_screening_location_list">
         <item>@string/ctb_hospital</item>
@@ -484,5 +498,27 @@
         <item>@string/ctb_bilateral_disease</item>
         <item>@string/ctb_abnormal_extend_not_defined</item>
     </string-array>
+
+    <string-array name="ctb_point_test_being_done_list">
+        <item>@string/ctb_baseline</item>
+        <item>@string/ctb_baseline_repeat</item>
+        <item>@string/ctb_followup</item>
+    </string-array>
+
+    <string-array name="ctb_afb_seen_one_field_list">
+        <item>@string/ctb_negative</item>
+        <item>@string/ctb_scanty_3_24</item>
+        <item>@string/ctb_1_positive</item>
+        <item>@string/ctb_2_positive</item>
+        <item>@string/ctb_3_positive</item>
+    </string-array>
+
+    <string-array name="ctb_type_of_form_list">
+        <item>@string/ctb_order</item>
+        <item>@string/ctb_result</item>
+    </string-array>
+
+
+
 
 </resources>
