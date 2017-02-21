@@ -178,14 +178,14 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/medium"
                 android:paddingTop="@dimen/medium"
-                android:text="PMDT" />
+                android:text="@string/pmdt" />
 
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/medium"
                 android:paddingTop="@dimen/medium"
-                android:text="PET" />
+                android:text="@string/pet" />
 
 
             <RadioButton
@@ -193,21 +193,21 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/medium"
                 android:paddingTop="@dimen/medium"
-                android:text="FAST" />
+                android:text="@string/fast" />
 
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/medium"
                 android:paddingTop="@dimen/medium"
-                android:text="COMORBIDITIES" />
+                android:text="@string/comorbidities" />
 
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/medium"
                 android:paddingTop="@dimen/medium"
-                android:text="CHILDHOOD TB" />
+                android:text="@string/childhood_tb" />
 
         </RadioGroup>
 
