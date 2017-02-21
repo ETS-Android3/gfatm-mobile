@@ -56,15 +56,15 @@ public class FormFragment extends Fragment {
 
         ArrayList<FormsObject> forms = new ArrayList<FormsObject>();
 
-        if (App.getProgram().equals("PET"))
+        if (App.getProgram().equalsIgnoreCase("PET"))
             forms = Forms.getPETFormList();
-        else if (App.getProgram().equals("PMDT"))
+        else if (App.getProgram().equalsIgnoreCase("PMDT"))
             forms = Forms.getPMDTFormList();
-        else if (App.getProgram().equals("FAST"))
+        else if (App.getProgram().equalsIgnoreCase("FAST"))
             forms = Forms.getFASTFormList();
-        else if (App.getProgram().equals("COMORBIDITIES"))
+        else if (App.getProgram().equalsIgnoreCase("COMORBIDITIES"))
             forms = Forms.getCommorbiditiesFormList();
-        else if (App.getProgram().equals("CHILDHOOD TB"))
+        else if (App.getProgram().equalsIgnoreCase("CHILDHOOD TB"))
             forms = Forms.getChildhoodTBFormList();
 
         for (int i = 0; i < forms.size(); i++) {
