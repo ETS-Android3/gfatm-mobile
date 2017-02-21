@@ -121,8 +121,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     App.setUsername(App.get(username));
                     App.setPassword(App.get(password));
 
-                    //String result = serverService.getUser();
-                    return "SUCCESS";
+                    String result = serverService.getUser();
+                    return result;
 
                 }
 
