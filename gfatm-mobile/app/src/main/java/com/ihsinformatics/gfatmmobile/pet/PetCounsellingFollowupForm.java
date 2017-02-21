@@ -172,7 +172,7 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
         treatmentSuppoterRelation = new TitledSpinner(context, "", getResources().getString(R.string.pet_treatment_support), getResources().getStringArray(R.array.pet_household_heads), "", App.VERTICAL);
         behavioralComplaint = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_behavioural_complain), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         behaviouralComplaintType = new TitledSpinner(context, "", getResources().getString(R.string.pet_behavioural_complain), getResources().getStringArray(R.array.pet_contact_behaviours), "", App.VERTICAL);
-        other = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        other = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 250, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
 
         treatmentSupportNegligence = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_caretaker_negligence), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         treatmentSupportNegligenceReason = new TitledEditText(context, null, getResources().getString(R.string.pet_reason_caretaker_negligence), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
