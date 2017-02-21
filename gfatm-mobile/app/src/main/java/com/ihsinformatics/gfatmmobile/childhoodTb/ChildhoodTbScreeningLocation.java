@@ -20,14 +20,12 @@ import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.R;
-import com.ihsinformatics.gfatmmobile.custom.MyCheckBox;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
@@ -296,6 +294,11 @@ public class ChildhoodTbScreeningLocation extends AbstractFormActivity implement
         serverService.saveFormLocally(FORM_NAME, FORM, "12345-5", formValues);
 
         return true;
+    }
+
+    @Override
+    public void refill(int encounterId) {
+
     }
 
     @Override

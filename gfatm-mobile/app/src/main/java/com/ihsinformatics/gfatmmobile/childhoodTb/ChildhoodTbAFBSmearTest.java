@@ -49,6 +49,12 @@ import java.util.HashMap;
 
 public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
+    public static final int THIRD_DIALOG_ID = 3;
+    public static final int FOURTH_DIALOG_ID = 4;
+    protected Calendar thirdDateCalender;
+    protected DialogFragment thirdDateFragment;
+    protected Calendar fourthDateCalender;
+    protected DialogFragment fourthDateFragment;
     Context context;
     TitledButton formDate;
     TitledRadioGroup formType;
@@ -60,22 +66,11 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
     TitledRadioGroup specimenType;
     TitledSpinner specimenComeFrom;
     TitledEditText otherSpecimentComeFrom;
-
     TitledButton resultRecievedDate;
     TitledSpinner smearResult;
     TitledEditText afbSeenOneField;
-
     Snackbar snackbar;
     ScrollView scrollView;
-
-    public static final int THIRD_DIALOG_ID = 3;
-    protected Calendar thirdDateCalender;
-    protected DialogFragment thirdDateFragment;
-
-    public static final int FOURTH_DIALOG_ID = 4;
-    protected Calendar fourthDateCalender;
-    protected DialogFragment fourthDateFragment;
-
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -373,6 +368,11 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
         serverService.saveFormLocally(FORM_NAME, FORM, "12345-5", formValues);
 
         return true;
+    }
+
+    @Override
+    public void refill(int encounterId) {
+
     }
 
     @Override

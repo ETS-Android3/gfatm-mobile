@@ -251,7 +251,7 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("PPA Score", formDateCalendar, observations.toArray(new String[][]{}));
+                String result = serverService.saveEncounterAndObservation("PPA Score", FORM, formDateCalendar, observations.toArray(new String[][]{}));
                 return result;
             }
 
@@ -348,6 +348,11 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
         serverService.saveFormLocally(FORM_NAME, FORM, "12345-5", formValues);
 
         return true;
+    }
+
+    @Override
+    public void refill(int encounterId) {
+
     }
 
     @Override

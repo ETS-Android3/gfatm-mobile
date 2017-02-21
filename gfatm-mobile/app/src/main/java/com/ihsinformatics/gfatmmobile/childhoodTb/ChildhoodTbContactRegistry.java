@@ -20,23 +20,17 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.R;
-import com.ihsinformatics.gfatmmobile.custom.MyCheckBox;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
-import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
-import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
-import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
@@ -334,7 +328,7 @@ public class ChildhoodTbContactRegistry extends AbstractFormActivity implements 
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("Contact Registry", formDateCalendar, observations.toArray(new String[][]{}));
+                String result = serverService.saveEncounterAndObservation("Contact Registry", FORM, formDateCalendar, observations.toArray(new String[][]{}));
                 return result;
             }
 
@@ -431,6 +425,11 @@ public class ChildhoodTbContactRegistry extends AbstractFormActivity implements 
         serverService.saveFormLocally(FORM_NAME, FORM, "12345-5", formValues);
 
         return true;
+    }
+
+    @Override
+    public void refill(int encounterId) {
+
     }
 
     @Override

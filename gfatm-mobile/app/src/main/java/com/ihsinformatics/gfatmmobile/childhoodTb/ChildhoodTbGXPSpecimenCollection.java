@@ -9,9 +9,7 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
-import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -298,6 +296,11 @@ public class ChildhoodTbGXPSpecimenCollection extends AbstractFormActivity imple
         serverService.saveFormLocally(FORM_NAME, FORM, "12345-5", formValues);
 
         return true;
+    }
+
+    @Override
+    public void refill(int encounterId) {
+
     }
 
     @Override

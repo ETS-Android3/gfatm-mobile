@@ -3,7 +3,6 @@ package com.ihsinformatics.gfatmmobile.childhoodTb;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -303,6 +302,11 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
         serverService.saveFormLocally(FORM_NAME, FORM, "12345-5", formValues);
 
         return true;
+    }
+
+    @Override
+    public void refill(int encounterId) {
+
     }
 
     @Override

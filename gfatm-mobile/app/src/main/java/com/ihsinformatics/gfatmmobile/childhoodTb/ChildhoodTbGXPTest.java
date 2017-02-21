@@ -253,6 +253,11 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
     }
 
     @Override
+    public void refill(int encounterId) {
+
+    }
+
+    @Override
     public void onClick(View view) {
 
         super.onClick(view);
