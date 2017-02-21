@@ -1,6 +1,17 @@
 package com.ihsinformatics.gfatmmobile.shared;
 
 import com.ihsinformatics.gfatmmobile.R;
+import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbAFBSmearTest;
+import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbCXRScreeningTest;
+import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbContactRegistry;
+import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbGXPSpecimenCollection;
+import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbGXPTest;
+import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbPPAScore;
+import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbPatientRegistration;
+import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbPresumptiveCaseConfirmation;
+import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbScreeningLocation;
+import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbTestIndicationForm;
+import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbVerbalScreeningForm;
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesBloodSugarForm;
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesCreatinineTestForm;
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesDiabetesEducationForm;
@@ -146,6 +157,30 @@ public class Forms{
     public static final String PMDT_PROVIDER_REGISTRAITON = "Provider Registration";
     public static final FormsObject patientRegistration = new FormsObject(PMDT_PATIENT_REGISTRAITON, PmdtPatientRegistrationForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
     public static final FormsObject providerRegistration = new FormsObject(PMDT_PROVIDER_REGISTRAITON, PmdtProviderRegistration.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    /********************************************************************************************************************************/
+
+    public static final String CHILDHOODTB_VERBAL_SCREENING = "VERBAL SCREENING";
+    public static final FormsObject childhoodTb_verbalScreeningForm = new FormsObject(CHILDHOODTB_VERBAL_SCREENING, ChildhoodTbVerbalScreeningForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static final String CHILDHOOD_SCREENING_LOCATION = "CHILDHOOD SCREENING LOCATION";
+    public static final FormsObject childhoodTb_screeningLocation = new FormsObject(CHILDHOOD_SCREENING_LOCATION, ChildhoodTbScreeningLocation.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static final String CHILDHOODTB_PATIENT_REGISTRATION = "PATIENT REGISTRATION";
+    public static final FormsObject childhoodTb_patientRegistration = new FormsObject(CHILDHOODTB_PATIENT_REGISTRATION, ChildhoodTbPatientRegistration.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static final String CHILDHOODTB_PRESUMPTIVE_CASE_CONFIRMATION = "PRESUMPTIVE CASE CONFIRMATION";
+    public static final FormsObject childhoodTb_presumptive_case_confirmation = new FormsObject(CHILDHOODTB_PRESUMPTIVE_CASE_CONFIRMATION, ChildhoodTbPresumptiveCaseConfirmation.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static final String CHILDHOODTB_CONTACT_REGISTRY = "CONTACT REGISTRY";
+    public static final FormsObject childhoodTb_contact_registry = new FormsObject(CHILDHOODTB_CONTACT_REGISTRY, ChildhoodTbContactRegistry.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static final String CHILDHOODTB_PPA_SCORE = "PPA SCORE";
+    public static final FormsObject childhoodTb_ppa_score = new FormsObject(CHILDHOODTB_PPA_SCORE, ChildhoodTbPPAScore.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static final String CHILDHOODTB_TEST_INDICATION_FORM = "TEST INDICATION FORM";
+    public static final FormsObject childhoodTb_test_indication_form = new FormsObject(CHILDHOODTB_TEST_INDICATION_FORM, ChildhoodTbTestIndicationForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static final String CHILDHOODTB_GXP_SPECIMEN_COLLECTION_FORM = "GXP SPECIMEN COLLECTION FORM";
+    public static final FormsObject childhoodTb_gxp_specimen_form = new FormsObject(CHILDHOODTB_GXP_SPECIMEN_COLLECTION_FORM, ChildhoodTbGXPSpecimenCollection.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static final String CHILDHOODTB_GXP_TEST = "GXP TEST";
+    public static final FormsObject childhoodTb_gxp_test = new FormsObject(CHILDHOODTB_GXP_TEST, ChildhoodTbGXPTest.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static final String CHILDHOODTB_CXR_SCREENING_TEST = "CXR SCREENING TEST";
+    public static final FormsObject childhoodTb_cxr_screening_test = new FormsObject(CHILDHOODTB_CXR_SCREENING_TEST, ChildhoodTbCXRScreeningTest.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static final String CHILDHOODTB_AFB_SMEAR_ORDER_AND_RESULT = "AFB SMEAR ORDER & RESULT FORM";
+    public static final FormsObject childhoodTb_afb_smear_order_and_result = new FormsObject(CHILDHOODTB_AFB_SMEAR_ORDER_AND_RESULT, ChildhoodTbAFBSmearTest.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
     public static FormsObject comorbidities_indexPatientRegistration = new FormsObject("Patient Information Form", ComorbiditiesPatientInformationForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
     public static FormsObject comorbidities_mentalHealthScreening = new FormsObject("Mental Health Screening", ComorbiditiesMentalHealthScreeningForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
     public static FormsObject comorbidities_diabetesMellitusScreening = new FormsObject("Diabetes Mellitus Screening", ComorbiditiesDiabetesMellitusScreeningForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
@@ -161,6 +196,8 @@ public class Forms{
     public static FormsObject comorbidities_diabetesEducationForm = new FormsObject("Diabetes Education Form", ComorbiditiesDiabetesEducationForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
 
     /********************************************************************************************************************************/
+
+
     public static ArrayList<FormsObject> getPETFormList() {
 
         ArrayList<FormsObject> petList = new ArrayList<>();
@@ -243,13 +280,23 @@ public class Forms{
         return pmdtList;
 
     }
-    /********************************************************************************************************************************/
 
     /******************************** CHILDHOOD TB ********************************/
     public static ArrayList<FormsObject> getChildhoodTBFormList() {
 
         ArrayList<FormsObject> childhoodtbList = new ArrayList<>();
 
+        childhoodtbList.add(childhoodTb_verbalScreeningForm);
+        childhoodtbList.add(childhoodTb_screeningLocation);
+        childhoodtbList.add(childhoodTb_patientRegistration);
+        childhoodtbList.add(childhoodTb_presumptive_case_confirmation);
+        childhoodtbList.add(childhoodTb_contact_registry);
+        childhoodtbList.add(childhoodTb_ppa_score);
+        childhoodtbList.add(childhoodTb_test_indication_form);
+        childhoodtbList.add(childhoodTb_gxp_specimen_form);
+        childhoodtbList.add(childhoodTb_gxp_test);
+        childhoodtbList.add(childhoodTb_cxr_screening_test);
+        childhoodtbList.add(childhoodTb_afb_smear_order_and_result);
 
         return childhoodtbList;
 
