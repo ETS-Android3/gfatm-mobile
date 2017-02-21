@@ -1,6 +1,524 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="ctb_index_patient_registration">Index Patient Registration</string>
+    <string name="ctb_verbal_screening">Verbal Screening </string>
+    <string name="ctb_screening_location">Where are you conducting screening?</string>
+    <string name="ctb_hospital_specify">If hospital, please specify</string>
+    <string name="ctb_hospital">Hospital </string>
+    <string name="ctb_community">Community</string>
+    <string name="ctb_indus_hospital">Indus Hospital</string>
+    <string name="ctb_jinnah_hospital">Jinnah Hospital</string>
+    <string name="ctb_facility_section">Where in the hospital are you conducting screening?"</string>
+    <string name="ctb_opd_clinic">OPD Clinic</string>
+    <string name="ctb_ward">Ward</string>
+    <string name="ctb_registration_desk">Registration Desk</string>
+    <string name="ctb_xray_van">Next to X-Ray van</string>
+    <string name="ctb_other_title">Other</string>
+    <string name="ctb_other_specify">If other, specify</string>
+    <string name="ctb_opd_clinic_or_ward">If OPD Clinic or Ward, please specify</string>
+    <string name="ctb_paediatrics">Paediatrics</string>
+    <string name="ctb_general_medicine_filter_clinic">General/Medicine/Filter Clinic</string>
+    <string name="ctb_chest_tb_clinic_screening">Chest/TB Clinic screening</string>
+    <string name="ctb_gynae_obstetrics">Gynae/Obstetrics</string>
+    <string name="ctb_surgery">Surgery</string>
+    <string name="ctb_er">ER</string>
+    <string name="ctb_mother_name">Mother\'s name</string>
+    <string name="ctb_father_name">Father\'s name</string>
+    <string name="ctb_patient_attendant">Is this child a patient or an attendant?</string><string name="ctb_cough"> Does your child have a cough?</string>
+    <string name="ctb_patient">Patient</string>
+    <string name="ctb_attendant">Attendant</string>
+    <string name="ctb_no">No</string>
+    <string name="ctb_yes">Yes</string>
+    <string name="ctb_unknown">Unknown</string>
+    <string name="ctb_refused">Refused</string>
+    <string name="ctb_poor">Poor</string>
+    <string name="ctb_ok">OK</string>
+    <string name="ctb_cough_duration">What is the duration of cough? </string>
+    <string name="ctb_less_than_2_weeks">Less than 2 weeks</string>
+    <string name="ctb_2_to_3_weeks">2 to 3 weeks</string>
+    <string name="ctb_more_than_3_weeks">More than 3 weeks</string>
+    <string name="ctb_fever_more_than_2_weeks">Does your child have fever for more than 2 weeks?                              </string>
+    <string name="ctb_night_sweats">Does the child have night sweats?</string>
+    <string name="ctb_weight_loss">Does the child have unexplained weight loss?</string>
+    <string name="ctb_child_appetite">What is the child\'s appetite like?</string>
+    <string name="ctb_lymph_node_swelling">Does the child have lymph node swelling of greater than 2 weeks</string>
+    <string name="ctb_joint_spine_swelling">Does the child have swelling in the joint/spine of greater than 2 weeks?</string>
+    <string name="ctb_tb_before">Has your child had TB before?</string>
+    <string name="ctb_tb_medication">Has your child taken TB medication before?</string>
+    <string name="ctb_tb_history_2years">Has your child been in close contact with someone diagnosed with TB or a history of contact/family with TB patient in the past 2 years? (e.g. family member you live with, lived with anyone who has TB, close friend etc).</string>
+    <string name="ctb_close_contact_type">Who was the close contact?</string>
+    <string name="ctb_mother">Mother</string>
+    <string name="ctb_father">Father</string>
+    <string name="ctb_brother">Brother</string>
+    <string name="ctb_sister">Sister</string>
+    <string name="ctb_paternal_grandfather">Paternal Grandfather</string>
+    <string name="ctb_paternal_grandmother">Paternal Grandmother</string>
+    <string name="ctb_maternal_grandfather">Maternal Grandfather</string>
+    <string name="ctb_maternal_grandmother">Maternal Grandmother</string>
+    <string name="ctb_uncle">Uncle</string>
+    <string name="ctb_aunt">Aunt</string>
+    <string name="ctb_other_contact">Specify other contact</string>
+    <string name="ctb_presumptive_tb">Is the patient a TB Presumptive?</string>
+    <string name="ctb_screening_referral">How did you identify this patient?</string>
+    <string name="ctb_screening">Screening</string>
+    <string name="ctb_reffered">Referred</string>
+    <string name="ctb_patient_referral_source">If referred, and the patient came to you for investigation, what was the source of the patient\’s referral?</string>
+    <string name="ctb_doctor_healthworker_in_hospital">By a doctor or health worker within the hospital</string>   
+    <string name="ctb_doctor_healthworker_out_hospital">By a doctor or health worker outside of the hospital</string>
+    <string name="ctb_child_tested_for_tb">Care giver wants to get the child tested for TB (self-refferal)</string>
+    <string name="ctb_family_member_tb_patient">Child is a family member(contact) of a TB patient who wants to be investigated</string>
+    <string name="ctb_facility_department">Where within the hospital was the child referred from?</string>
+    <string name="ctb_referral_inside">If OPD Clinic or Ward, please specify</string>
+    <string name="ctb_referral_outside">Where outside the hospital was the child referred from?</string>
+    <string name="ctb_public_hospital">Public Hospital</string>
+    <string name="ctb_private_hospital">Private Hospital</string>
+    <string name="ctb_gp">GP</string>
+    <string name="ctb_hospital_outside">Hospital outside the city</string>
+    <string name="ctb_hear_about_us">If the care giver wants to get child tested for TB, how did they hear about our TB program?</string>
+    <string name="ctb_radio">Radio</string>
+    <string name="ctb_tv">TV</string>
+    <string name="ctb_newspaper">Newspaper</string>
+    <string name="ctb_billbaord_signboard">Billboard/Signboards</string>
+    <string name="ctb_internet">Internet</string>
+    <string name="ctb_sms">SMS</string>
+    <string name="ctb_form_a_friend_community_member">Form a friend/Community member</string>
+    <string name="ctb_school_awareness_program">School Awareness Program</string>
+    <string name="ctb_call_center">Call Center</string>
+    <string name="ctb_patient_enrolled_tb">Is the TB contact of the child enrolled in any TB program?</string>
+    <string name="ctb_contact_id_type">Does the TB contact have any of the identification IDs below?</string>
+    <string name="ctb_patient_id">Patient ID</string>
+    <string name="ctb_external_id">External ID</string>
+    <string name="ctb_tb_registration_no">TB Registration No.</string>
+    <string name="ctb_contact_patient_id">Contact\'s Patient ID</string>
+    <string name="ctb_contact_external_id">Contact\'s External ID</string>
+    <string name="ctb_contact_external_id_hospital">If external ID, which hospital or programs\' ID is this?</string>
+    <string name="ctb_contact_tb_registration_no">Contact\'s TB Registration No.</string>
+    <string name="ctb_caregive_nic">What is the care giver\’s National ID card number?</string>
+    <string name="ctb_cnic_owner">Whose CNIC is this?</string>
+    <string name="ctb_address_provided">Has the care giver provided the child\’s address?</string>
+    <string name="ctb_address1">Address 1 (House Number, etc.)</string>
+    <string name="ctb_address2">Address 2 (Block, Street, Gali, Colony, etc.)</string>
+    <string name="ctb_karachi">Karachi</string>
+    <string name="ctb_hyderabad">Hyderabad</string>
+    <string name="ctb_lahore">Lahore</string>
+    <string name="ctb_rawalpindi">RawalPindi</string>
+    <string name="ctb_islamabad">Islamabad</string>
+    <string name="ctb_town">Town</string>
+    <string name="ctb_address_type">What type of address is this?</string>
+    <string name="ctb_permanent">Permanent</string>
+    <string name="ctb_temporary">Temporary</string>
+    <string name="ctb_nearest_landmark">What is the nearest Landmark?</string>
+    <string name="ctb_whose_contact">Whose contact number is this?</string>
+    <string name="ctb_permission">Permission to use this number for follow up calls and text messages</string>
+    <string name="ctb_secondary_mobile_number">Secondary Mobile  number</string>
+    <string name="ctb_landline_number">Landline number</string>
+    <string name="ctb_secondary_landline_number">Secondary landline number</string>
+    <string name="ctb_weight">Weight (kg)</string>
+    <string name="ctb_height">Height (cm)</string>
+    <string name="ctb_weight_percentile">Weight Percentile</string>
+    <string name="ctb_less_than_5">≤5th percentile</string>
+    <string name="ctb_less_than_10">6-≤10th percentile</string>
+    <string name="ctb_less_than_25">11-≤25th percentile</string>
+    <string name="ctb_less_than_50">26-≤50th percentile</string>
+    <string name="ctb_greater_than_50">>50th percentile</string>
+    <string name="ctb_fever">Does the child have a fever?</string>
+    <string name="ctb_general_appearance">General Appearance</string>
+    <string name="ctb_remarkable">Remarkable</string>
+    <string name="ctb_unremarkable">Unremarkable</string>
+    <string name="ctb_explanation">Explanation</string>
+    <string name="ctb_head_eye_ear_nose_throat">Head, eyes, ear, nose, throat Examination</string>
+    <string name="ctb_lymphnode">Lymph node examination (Neck, Axilla, Groin)</string>
+    <string name="ctb_spine">Spine examination</string>
+    <string name="ctb_joints">Joints examination</string>
+    <string name="ctb_skin">Skin examination</string>
+    <string name="ctb_chest">Chest examination</string>
+    <string name="ctb_abdominal">Abdominal examination</string>
+    <string name="ctb_tb_exam_outcome">Is the physical examination suggestive of TB</string>
+    <string name="ctb_suggestive_tb">Suggestive of TB</string>
+    <string name="ctb_strongly_suggestive_tb">Strongly Suggestive of TB</string>
+    <string name="ctb_not_sugguestive_tb">Not Suggestive of TB</string>
+    <string name="ctb_bcg">Does the child have BCG scar?</string>
+    <string name="ctb_additional_comments_contact_history">Additional comments regarding contact history of the patient.</string>
+    <string name="ctb_infection_form">What form of TB does the close contact have?</string>
+    <string name="ctb_susceptible_tb">Susceptible TB</string>
+    <string name="ctb_dr_tb">DR-TB</string>
+    <string name="ctb_tb_type">What type of TB does the close contact have?</string>
+    <string name="ctb_pulmonary">Pulmonary</string>
+    <string name="ctb_extra_pulmonary">Extra-Pulmonary</string>
+    <string name="ctb_smear_positive">Does the close contact have sputum smear positive TB?</string>
+    <string name="ctb_primary_caregiver">Is the close contact the child\'s primary care giver?</string>
+    <string name="ctb_sleep_same_bed">Does the close contact sleep in the same bed as the child?</string>
+    <string name="ctb_sleep_same_room">Does the close contact sleep in the same room as the child?</string>
+    <string name="ctb_live_in_same_household">Does the close contact live in the same household?</string>
+    <string name="ctb_see_child_everyday">Does the close contact see the child everyday?</string>
+    <string name="ctb_contact_coughing">Is the close contact coughing?</string>
+    <string name="ctb_contact_in_child_household">Is there more than one close contact in child\'s household?</string>
+    <string name="ctb_conclusion">Conclusion</string>
+    <string name="ctb_tb_presumptive_confirmed">TB Presumptive confirmed</string>
+    <string name="ctb_not_tb_presumptive">Not a TB Presumptive</string>
+    <string name="ctb_doctor_notes">Doctor notes</string>
+    <string name="ctb_contacts">How many people (excluding the child) sleep in the child\'s home?</string>
+    <string name="ctb_adult_contacts">Total Number of adult contacts</string>
+    <string name="ctb_childhood_contacts">Total Number of childhood contacts (aged 15 and under)</string>
+    <string name="ctb_ppa_score">What is the child\'s PPA Score?</string>
+    <string name="ctb_chest_xray">Chest X-ray</string>
+    <string name="ctb_ultrasound">Ultrasound</string>
+    <string name="ctb_ct_scan">CT Scan</string>
+    <string name="ctb_gene_xpert">GeneXpert MTB/RIF</string>
+    <string name="ctb_mantoux">Mantoux test</string>
+    <string name="ctb_smear_microscopy">Smear Microscopy</string>
+    <string name="ctb_histopathology">Histopathology/FNAC</string>
+    <string name="ctb_cbc">CBC</string>
+    <string name="ctb_esr">ESR</string>
+    <string name="ctb_drug_sensitivity">Drug Sensitivity Test</string>
+    <string name="ctb_sample_submitted">Which day was the sample submitted?</string>
+    <string name="ctb_baseline_repeat_followup">Baseline, baseline repeat, or follow-up test?</string>
+    <string name="ctb_baseline">Baseline (New Test)</string>
+    <string name="ctb_baseline_repeat">Baseline Repeat (Duplicate Test)</string>
+    <string name="ctb_follow_up_test">Follow-up Test</string>
+    <string name="ctb_patient_category">Patient Category</string>
+    <string name="ctb_categoryI">Category I(New)</string>
+    <string name="ctb_categoryII">Category II (Re-treatment)</string>
+    <string name="ctb_reason_for_repeating">Reason for repeating test if Baseline repeat?</string>
+    <string name="ctb_rr_positive">RR +ve</string>
+    <string name="ctb_indeterminate">Indeterminate</string>
+    <string name="ctb_error_invalid_no_result">Error/Invalid/No result</string>
+    <string name="ctb_specimen_type">Specimen Type</string>
+    <string name="ctb_sputum">Sputum</string>
+    <string name="ctb_speciment_route">Where did the speciment come from?</string>
+    <string name="ctb_lymph">Lymph</string>
+    <string name="ctb_pleural_fluid">Pleural Fluid</string>
+    <string name="ctb_plus">Plus</string>
+    <string name="ctb_accepted_by_technician">Where did the speciment come from?</string>
+    <string name="ctb_accepted">Accepted</string>
+    <string name="ctb_rejected">Rejected</string>
+    <string name="ctb_why_sample_rejected">Why was the sample rejected?</string>
+    <string name="ctb_saliva">Saliva</string>
+    <string name="ctb_blood">Blood</string>
+    <string name="ctb_food_particles">Food particles</string>
+    <string name="ctb_older_than_3_days">Older than 3 days</string>
+    <string name="ctb_insufficient_qunatity">Insufficient Quantity</string>
+    <string name="ctb_other_reason_rejection">Other reason for rejection?</string>
+    <string name="ctb_cartridge_id">Cartridge ID</string>
+    <string name="ctb_date_result_recieve">Date of Result Received</string>
+    <string name="ctb_mtb_result">GeneXpert MTB Result</string>
+    <string name="ctb_mtb_detected">MTB Detected</string>
+    <string name="ctb_mtb_not_detected">MTB Not Detected</string>
+    <string name="ctb_error">Error</string>
+    <string name="ctb_invalid">Invalid</string>
+    <string name="ctb_no_result">No Result</string>
+    <string name="ctb_mtb_burden">MTB Burden</string>
+    <string name="ctb_very_low">Very Low</string>
+    <string name="ctb_low">Low</string>
+    <string name="ctb_medium">Medium</string>
+    <string name="ctb_high">High</string>
+    <string name="ctb_mtb_rif_result">If MTB + then RIF Result</string>
+    <string name="ctb_not_detected">NOT Detected</string>
+    <string name="ctb_detected">Detected</string>
+    <string name="ctb_error_code">Error Code</string>
+    <string name="ctb_type_of_xray">What type of X Ray is this?</string>
+    <string name="ctb_chest_xray_cad4tb">Chest X-Ray (CAD4TB)</string>
+    <string name="ctb_chest_xray_other">Chest X-Ray (Other)</string>
+    <string name="ctb_month_treatment">Month of treatment?</string>
+    <string name="ctb_test_date">Test date</string>
+    <string name="ctb_test_id">Test ID</string>
+    <string name="ctb_chest_xray_cad4tb_score">Chest X-Ray (CAD4TB) Score</string>
+    <string name="ctb_radiological_diagnosis">Radiological Diagnosis</string>
+    <string name="ctb_adenopathy">Adenopathy</string>
+    <string name="ctb_infiltration">Infiltration</string>
+    <string name="ctb_consolidation">Consolidation</string>
+    <string name="ctb_effusion">Effusion</string>
+    <string name="ctb_normal">Normal</string>
+    <string name="ctb_cavitation">Cavitation</string>
+    <string name="ctb_miliary_tb">Miliary TB</string>
+    <string name="ctb_extent_disease">Extent of disease</string>
+    <string name="ctb_unilateral_disease">Unilateral disease</string>
+    <string name="ctb_bilateral_disease">Bilateral disease</string>
+    <string name="ctb_abnormal_extend_not_defined">Abnormal but extent not defined</string>
+    <string name="ctb_radiologist_remark">Radiologist\'s Remarks</string>
+    <string name="ctb_range_1_to_24">Invalid range. Please enter betweeen 1-24</string>
+    <string name="ctb_date_submission">Date of submission</string>
+    <string name="ctb_point_test_being_done">At what point is the test being done?</string>
+    <string name="ctb_followup">Follow-up</string>
+    <string name="ctb_date_result_recieved">Date Result Received</string>
+    <string name="ctb_smear_result">Smear Result</string>
+    <string name="ctb_negative">Negative</string>
+    <string name="ctb_scanty_3_24">Scanty 3-24</string>
+    <string name="ctb_1_positive">1+</string>
+    <string name="ctb_2_positive">2+</string>
+    <string name="ctb_3_positive">3+</string>
+    <string name="ctb_afb_seen_in_one_field">Number of AFB seen in one field</string>
+    <string name="ctb_type_of_form">Type of form</string>
+    <string name="ctb_order">Order</string>
+    <string name="ctb_result">Result</string>
+
+    <string-array name="ctb_screening_location_list">
+        <item>@string/ctb_hospital</item>
+        <item>@string/ctb_community</item>
+    </string-array>
+
+    <string-array name="ctb_hospital_list">
+        <item>@string/ctb_indus_hospital</item>
+        <item>@string/ctb_jinnah_hospital</item>
+    </string-array>
+
+    <string-array name="ctb_facility_section_list">
+        <item>@string/ctb_opd_clinic</item>
+        <item>@string/ctb_ward</item>
+        <item>@string/ctb_registration_desk</item>
+        <item>@string/ctb_xray_van</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
+
+    <string-array name="ctb_opd_ward_section_list">
+        <item>@string/ctb_paediatrics</item>
+        <item>@string/ctb_general_medicine_filter_clinic</item>
+        <item>@string/ctb_chest_tb_clinic_screening</item>
+        <item>@string/ctb_gynae_obstetrics</item>
+        <item>@string/ctb_surgery</item>
+        <item>@string/ctb_er</item>
+    </string-array>
+
+    <string-array name="ctb_patient_attendant_list">
+        <item>@string/ctb_patient</item>
+        <item>@string/ctb_attendant</item>
+    </string-array>
+
+    <string-array name="ctb_cough_duration_list">
+        <item>@string/ctb_less_than_2_weeks</item>
+        <item>@string/ctb_2_to_3_weeks</item>
+        <item>@string/ctb_more_than_3_weeks</item>
+        <item>@string/ctb_unknown</item>
+        <item>@string/ctb_refused</item>
+    </string-array>
+
+
+    <string-array name="ctb_appetite_list">
+        <item>@string/ctb_poor</item>
+        <item>@string/ctb_ok</item>
+        <item>@string/ctb_unknown</item>
+        <item>@string/ctb_refused</item>
+    </string-array>
+
+    <string-array name="ctb_close_contact_type_list">
+        <item>@string/ctb_mother</item>
+        <item>@string/ctb_father</item>
+        <item>@string/ctb_brother</item>
+        <item>@string/ctb_sister</item>
+        <item>@string/ctb_paternal_grandfather</item>
+        <item>@string/ctb_paternal_grandmother</item>
+        <item>@string/ctb_maternal_grandfather</item>
+        <item>@string/ctb_maternal_grandmother</item>
+        <item>@string/ctb_uncle</item>
+        <item>@string/ctb_aunt</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
+    
+    <string-array name="ctb_screening_referral_list">
+        <item>@string/ctb_screening</item>
+        <item>@string/ctb_reffered</item>
+    </string-array>
+
+    <string-array name="ctb_patient_referral_source_list">
+        <item>@string/ctb_doctor_healthworker_in_hospital</item>
+        <item>@string/ctb_doctor_healthworker_out_hospital</item>
+        <item>@string/ctb_child_tested_for_tb</item>
+        <item>@string/ctb_family_member_tb_patient</item>
+    </string-array>
+    
+    <string-array name="ctb_facility_department_list">
+        <item>@string/ctb_opd_clinic</item>
+        <item>@string/ctb_ward</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
+
+    <string-array name="ctb_patient_type_id_list">
+        <item>@string/ctb_patient_id</item>
+        <item>@string/ctb_external_id</item>
+        <item>@string/ctb_tb_registration_no</item>
+    </string-array>
+
+    <string-array name="ctb_referral_outside_list">
+        <item>@string/ctb_public_hospital</item>
+        <item>@string/ctb_private_hospital</item>
+        <item>@string/ctb_gp</item>
+        <item>@string/ctb_hospital_outside</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
+
+    <string-array name="ctb_hear_about_us_list">
+        <item>@string/ctb_radio</item>
+        <item>@string/ctb_tv</item>
+        <item>@string/ctb_newspaper</item>
+        <item>@string/ctb_billbaord_signboard</item>
+        <item>@string/ctb_internet</item>
+        <item>@string/ctb_sms</item>
+        <item>@string/ctb_form_a_friend_community_member</item>
+        <item>@string/ctb_school_awareness_program</item>
+        <item>@string/ctb_call_center</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
+
+    <string-array name="ctb_city_list">
+        <item>@string/ctb_karachi</item>
+        <item>@string/ctb_hyderabad</item>
+        <item>@string/ctb_lahore</item>
+        <item>@string/ctb_islamabad</item>
+        <item>@string/ctb_rawalpindi</item>
+    </string-array>
+
+    <string-array name="ctb_address_type_list">
+        <item>@string/ctb_permanent</item>
+        <item>@string/ctb_temporary</item>
+    </string-array>
+
+    <string-array name="ctb_weight_percentile_list">
+        <item>@string/ctb_less_than_5</item>
+        <item>@string/ctb_less_than_10</item>
+        <item>@string/ctb_less_than_25</item>
+        <item>@string/ctb_less_than_50</item>
+        <item>@string/ctb_greater_than_50</item>
+    </string-array>
+
+    <string-array name="ctb_remarkable_unremarkable">
+        <item>@string/ctb_remarkable</item>
+        <item>@string/ctb_unremarkable</item>
+    </string-array>
+    
+    <string-array name="ctb_tb_exam_outcome_list">
+        <item>@string/ctb_suggestive_tb</item>
+        <item>@string/ctb_strongly_suggestive_tb</item>
+        <item>@string/ctb_not_sugguestive_tb</item>
+    </string-array>
+
+    <string-array name="ctb_tb_form_list">
+        <item>@string/ctb_susceptible_tb</item>
+        <item>@string/ctb_dr_tb</item>
+        <item>@string/unknown</item>
+        <item>@string/refused</item>
+    </string-array>
+
+    <string-array name="ctb_tb_type_list">
+        <item>@string/ctb_pulmonary</item>
+        <item>@string/ctb_extra_pulmonary</item>
+        <item>@string/unknown</item>
+        <item>@string/refused</item>
+    </string-array>
+
+    <string-array name="ctb_conclusion_list">
+        <item>@string/ctb_tb_presumptive_confirmed</item>
+        <item>@string/ctb_not_tb_presumptive</item>
+    </string-array>
+
+    <string-array name="ctb_ctb_baseline_repeat_followup_list">
+        <item>@string/ctb_baseline</item>
+        <item>@string/ctb_baseline_repeat</item>
+        <item>@string/ctb_follow_up_test</item>
+    </string-array>
+
+    <string-array name="ctb_patient_category_list">
+        <item>@string/ctb_categoryI</item>
+        <item>@string/ctb_categoryII</item>
+    </string-array>
+
+    <string-array name="ctb_reason_for_repeating_list">
+        <item>@string/ctb_rr_positive</item>
+        <item>@string/ctb_indeterminate</item>
+        <item>@string/ctb_error_invalid_no_result</item>
+    </string-array>
+    
+    <string-array name="ctb_specimen_type_list">
+        <item>@string/ctb_sputum</item>
+        <item>@string/ctb_extra_pulmonary</item>
+    </string-array>
+    
+    <string-array name="ctb_speciment_route_list">
+        <item>@string/ctb_lymph</item>
+        <item>@string/ctb_pleural_fluid</item>
+        <item>@string/ctb_plus</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
+    
+    
+    <string-array name="ctb_accepted_by_techician_list">
+        <item>@string/ctb_accepted</item>
+        <item>@string/ctb_rejected</item>
+    </string-array>
+
+    <string-array name="ctb_why_sample_rejected_list">
+        <item>@string/ctb_saliva</item>
+        <item>@string/ctb_blood</item>
+        <item>@string/ctb_food_particles</item>
+        <item>@string/ctb_older_than_3_days</item>
+        <item>@string/ctb_insufficient_qunatity</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
+
+    <string-array name="ctb_mtb_result_list">
+        <item>@string/ctb_mtb_detected</item>
+        <item>@string/ctb_mtb_not_detected</item>
+        <item>@string/ctb_error</item>
+        <item>@string/ctb_invalid</item>
+        <item>@string/ctb_no_result</item>
+    </string-array>
+
+    <string-array name="ctb_mtb_burden_list">
+        <item>@string/ctb_very_low</item>
+        <item>@string/ctb_low</item>
+        <item>@string/ctb_medium</item>
+        <item>@string/ctb_high</item>
+    </string-array>
+
+    <string-array name="ctb_mtb_rif_result_list">
+        <item>@string/ctb_not_detected</item>
+        <item>@string/ctb_detected</item>
+        <item>@string/ctb_indeterminate</item>
+    </string-array>
+
+
+    <string-array name="ctb_type_of_xray_list">
+        <item>@string/ctb_chest_xray_cad4tb</item>
+        <item>@string/ctb_chest_xray_other</item>
+    </string-array>
+
+    <string-array name="ctb_radiological_diagnosis_list">
+        <item>@string/ctb_adenopathy</item>
+        <item>@string/ctb_infiltration</item>
+        <item>@string/ctb_consolidation</item>
+        <item>@string/ctb_effusion</item>
+        <item>@string/ctb_normal</item>
+        <item>@string/ctb_cavitation</item>
+        <item>@string/ctb_miliary_tb</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
+
+    <string-array name="ctb_disease_extent_list">
+        <item>@string/ctb_normal</item>
+        <item>@string/ctb_unilateral_disease</item>
+        <item>@string/ctb_bilateral_disease</item>
+        <item>@string/ctb_abnormal_extend_not_defined</item>
+    </string-array>
+
+    <string-array name="ctb_point_test_being_done_list">
+        <item>@string/ctb_baseline</item>
+        <item>@string/ctb_baseline_repeat</item>
+        <item>@string/ctb_followup</item>
+    </string-array>
+
+    <string-array name="ctb_afb_seen_one_field_list">
+        <item>@string/ctb_negative</item>
+        <item>@string/ctb_scanty_3_24</item>
+        <item>@string/ctb_1_positive</item>
+        <item>@string/ctb_2_positive</item>
+        <item>@string/ctb_3_positive</item>
+    </string-array>
+
+    <string-array name="ctb_type_of_form_list">
+        <item>@string/ctb_order</item>
+        <item>@string/ctb_result</item>
+    </string-array>
+
+
+
 
 </resources>
