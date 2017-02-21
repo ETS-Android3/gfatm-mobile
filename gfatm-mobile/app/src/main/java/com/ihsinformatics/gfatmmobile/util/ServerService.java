@@ -735,6 +735,12 @@ public class ServerService {
 
     public String[][] getConceptUuidAndDataType(String concept_name) {
 
+        if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
+            if (!isURLReachable()) {
+                return null;
+            }
+        }
+
         String[][] result = dbUtil.getTableData(Metadata.CONCEPT, "uuid,data_type", "full_name = '" + concept_name + "'");
         if (result.length > 0)
             return result;
