@@ -339,11 +339,15 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
         } else if (view == bloodSugarTestOrderDate.getButton()) {
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
+            args.putBoolean("allowPastDate", true);
+            args.putBoolean("allowFutureDate", false);
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
         } else if (view == bloodSugarTestResultDate.getButton()) {
             Bundle args = new Bundle();
             args.putInt("type", THIRD_DATE_DIALOG_ID);
+            args.putBoolean("allowPastDate", true);
+            args.putBoolean("allowFutureDate", false);
             thirdDateFragment.setArguments(args);
             thirdDateFragment.show(getFragmentManager(), "DatePicker");
         }

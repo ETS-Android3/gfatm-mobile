@@ -70,6 +70,7 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
 
         PAGE_COUNT = 1;
         FORM_NAME = Forms.COMORBIDITIES_VITALS_FORM;
+        FORM = Forms.comorbidities_vitalsForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -556,6 +557,8 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
         if (view == formDate.getButton()) {
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
+            args.putBoolean("allowPastDate", true);
+            args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
         }
