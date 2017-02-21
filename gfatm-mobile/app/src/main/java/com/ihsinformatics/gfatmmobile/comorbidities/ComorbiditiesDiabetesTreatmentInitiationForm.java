@@ -85,6 +85,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
 
         PAGE_COUNT = 7;
         FORM_NAME = Forms.COMORBIDITIES_DIABETES_TREATMENT_INITIATION;
+        FORM =  Forms.comorbidities_diabetesTreatmentInitiationForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -299,6 +300,8 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
         if (view == formDate.getButton()) {
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
+            args.putBoolean("allowPastDate", true);
+            args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
         }

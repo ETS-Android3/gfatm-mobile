@@ -115,6 +115,7 @@
     </string-array>
 
     <string-array name="comorbidities_followup_month">
+        <item>0</item>
         <item>1</item>
         <item>2</item>
         <item>3</item>
@@ -549,6 +550,564 @@
         <item>@string/comorbidities_diabetes_followup_metformin_options_1500</item>
         <item>@string/comorbidities_diabetes_followup_metformin_options_2000</item>
         <item>@string/comorbidities_diabetes_followup_metformin_options_2500</item>
+    </string-array>
+
+    <!-- Strings for ComorbiditiesDiabetesFootScreeningForm -->
+    <string name="comorbidities_foot_screening_right_foot">Was the right foot examined?</string>
+    <string name="comorbidities_foot_screening_right_foot_reason">Reason right foot not examined:</string>
+    <string name="comorbidities_foot_screening_left_foot">Was the left foot examined?</string>
+    <string name="comorbidities_foot_screening_left_foot_reason">Reason left foot not examined:</string>
+    <string name="comorbidities_foot_screening_complications_of_foot">In the last year, has the patient had any complications of the feet?</string>
+    <string name="comorbidities_foot_screening_history_of_amputation">History of Amputation:</string>
+    <string name="comorbidities_foot_screening_dermatological_examination">Dermatological Examination</string>
+    <string name="comorbidities_foot_screening_skin_right_foot">Skin Right Foot Examination:</string>
+    <string name="comorbidities_foot_screening_skin_left_foot">Skin Left Foot Examination:</string>
+    <string name="comorbidities_foot_screening_right_foot_sweating">Right Foot Sweating:</string>
+    <string name="comorbidities_foot_screening_left_foot_sweating">Left Foot Sweating:</string>
+    <string name="comorbidities_foot_screening_musculoskeletal_examination">Musculoskeletal Examination</string>
+    <string name="comorbidities_foot_screening_right_foot_deformity">Right Foot Deformity found:</string>
+    <string name="comorbidities_foot_screening_left_foot_deformity">Left Foot Deformity found:</string>
+    <string name="comorbidities_foot_screening_neurological_examination">Neurological Examination</string>
+    <string name="comorbidities_foot_screening_right_foot_monofilament">Right foot with Monofilament:</string>
+    <string name="comorbidities_foot_screening_left_foot_monofilament">Left foot with Monofilament:</string>
+    <string name="comorbidities_foot_screening_right_foot_tuning_fork">Right foot with Tuning Fork:</string>
+    <string name="comorbidities_foot_screening_left_foot_tuning_fork">Left foot with Tuning Fork:</string>
+    <string name="comorbidities_foot_screening_vascular_examination">Vascular Examination</string>
+    <string name="comorbidities_foot_screening_right_foot_vascular_assesment">Right foot Vascular assesment:</string>
+    <string name="comorbidities_foot_screening_left_foot_vascular_assesment">Left foot Vascular assesment:</string>
+    <string name="comorbidities_foot_screening_other_examination">Other Examination</string>
+    <string name="comorbidities_foot_screening_foot_hygiene">Foot Hygiene:</string>
+    <string name="comorbidities_foot_screening_footwear_appropriate">Footwear appropriate:</string>
+    <string name="comorbidities_foot_screening_previous_ulcer">Previous Ulcer:</string>
+    <string name="comorbidities_foot_screening_clinical_notes">Detailed Clinical Notes if needed:</string>
+    <string name="comorbidities_foot_screening_recommendations">Recommendations:</string>
+
+    <string name="comorbidities_foot_screening_foot_options_yes">Yes</string>
+    <string name="comorbidities_foot_screening_foot_options_amputation">Amputation</string>
+    <string name="comorbidities_foot_screening_foot_options_patient_refusal">Patient Refusal</string>
+
+    <string-array name="comorbidities_foot_screening_foot_options">
+        <item>@string/comorbidities_foot_screening_foot_options_yes</item>
+        <item>@string/comorbidities_foot_screening_foot_reason_options_amputation</item>
+        <item>@string/comorbidities_foot_screening_foot_reason_options_patient_refusal</item>
+    </string-array>
+
+    <string name="comorbidities_foot_screening_foot_reason_options_amputation">Amputation</string>
+    <string name="comorbidities_foot_screening_foot_reason_options_patient_refusal">Patient Refusal</string>
+
+    <string-array name="comorbidities_foot_screening_foot_reason_options">
+        <item>@string/comorbidities_foot_screening_foot_reason_options_amputation</item>
+        <item>@string/comorbidities_foot_screening_foot_reason_options_patient_refusal</item>
+    </string-array>
+
+    <string name="comorbidities_foot_screening_complications_of_foot_options_infection">Infection</string>
+    <string name="comorbidities_foot_screening_complications_of_foot_options_ulcers">Ulcers</string>
+    <string name="comorbidities_foot_screening_complications_of_foot_options_ingrown">Ingrown Toenails</string>
+    <string name="comorbidities_foot_screening_complications_of_foot_options_other">Other</string>
+
+    <string-array name="comorbidities_foot_screening_complications_of_foot_options">
+        <item>@string/comorbidities_foot_screening_complications_of_foot_options_infection</item>
+        <item>@string/comorbidities_foot_screening_complications_of_foot_options_ulcers</item>
+        <item>@string/comorbidities_foot_screening_complications_of_foot_options_ingrown</item>
+        <item>@string/comorbidities_foot_screening_complications_of_foot_options_other</item>
+    </string-array>
+
+    <string name="comorbidities_foot_screening_skin_foot_options_normal">Normal</string>
+    <string name="comorbidities_foot_screening_skin_foot_options_thickened">Thickened</string>
+    <string name="comorbidities_foot_screening_skin_foot_options_dry">Dry</string>
+    <string name="comorbidities_foot_screening_skin_foot_options_cracked">Cracked</string>
+    <string name="comorbidities_foot_screening_skin_foot_options_infection">Infection</string>
+    <string name="comorbidities_foot_screening_skin_foot_options_ulceration">Ulceration</string>
+    <string name="comorbidities_foot_screening_skin_foot_options_callus">Callus/Blisters/Hemorrhage into callus</string>
+    <string name="comorbidities_foot_screening_skin_foot_options_discoloration">Discoloration</string>
+
+    <string-array name="comorbidities_foot_screening_skin_foot_options">
+        <item>@string/comorbidities_foot_screening_skin_foot_options_normal</item>
+        <item>@string/comorbidities_foot_screening_skin_foot_options_thickened</item>
+        <item>@string/comorbidities_foot_screening_skin_foot_options_dry</item>
+        <item>@string/comorbidities_foot_screening_skin_foot_options_cracked</item>
+        <item>@string/comorbidities_foot_screening_skin_foot_options_infection</item>
+        <item>@string/comorbidities_foot_screening_skin_foot_options_ulceration</item>
+        <item>@string/comorbidities_foot_screening_skin_foot_options_callus</item>
+        <item>@string/comorbidities_foot_screening_skin_foot_options_discoloration</item>
+    </string-array>
+
+    <string name="comorbidities_foot_screening_neurological_examination_options_detectable">Detectable</string>
+    <string name="comorbidities_foot_screening_neurological_examination_options_not_detectable">Not Detectable</string>
+
+    <string-array name="comorbidities_foot_screening_neurological_examination_options">
+        <item>@string/comorbidities_foot_screening_neurological_examination_options_detectable</item>
+        <item>@string/comorbidities_foot_screening_neurological_examination_options_not_detectable</item>
+    </string-array>
+
+    <string name="comorbidities_foot_screening_vascular_examination_options_present">Present</string>
+    <string name="comorbidities_foot_screening_vascular_examination_options_diminished">Diminished</string>
+    <string name="comorbidities_foot_screening_vascular_examination_options_absent">Absent</string>
+
+    <string-array name="comorbidities_foot_screening_vascular_examination_options">
+        <item>@string/comorbidities_foot_screening_vascular_examination_options_present</item>
+        <item>@string/comorbidities_foot_screening_vascular_examination_options_diminished</item>
+        <item>@string/comorbidities_foot_screening_vascular_examination_options_absent</item>
+    </string-array>
+
+    <string name="comorbidities_foot_screening_foot_hygiene_options_poor">Poor</string>
+    <string name="comorbidities_foot_screening_foot_hygiene_options_average">Average</string>
+    <string name="comorbidities_foot_screening_foot_hygiene_options_good">Good</string>
+
+    <string-array name="comorbidities_foot_screening_foot_hygiene_options">
+        <item>@string/comorbidities_foot_screening_foot_hygiene_options_poor</item>
+        <item>@string/comorbidities_foot_screening_foot_hygiene_options_average</item>
+        <item>@string/comorbidities_foot_screening_foot_hygiene_options_good</item>
+    </string-array>
+
+    <string name="comorbidities_foot_screening_recommendations_options_management">Management of Diabetes</string>
+    <string name="comorbidities_foot_screening_recommendations_options_referral">Referral to Foot doctor</string>
+
+    <string-array name="comorbidities_foot_screening_recommendations_options">
+        <item>@string/comorbidities_foot_screening_recommendations_options_management</item>
+        <item>@string/comorbidities_foot_screening_recommendations_options_referral</item>
+    </string-array>
+
+    <!-- Strings for ComorbiditiesDiabetesEyeScreeningForm -->
+    <string name="comorbidities_eye_screening_eye_status">Eye Status:</string>
+    <string name="comorbidities_eye_screening_right_eye_diagnosed">Right Eye Diagnosed:</string>
+    <string name="comorbidities_eye_screening_left_eye_diagnosed">Left Eye Diagnosed:</string>
+    <string name="comorbidities_eye_screening_evidence_eye">Evidence found for:</string>
+    <string name="comorbidities_eye_screening_evidence_eye_other">If other, state:</string>
+    <string name="comorbidities_eye_screening_diabetic_retinopathy">Evidence of Diabetic Retinopathy:</string>
+    <string name="comorbidities_eye_screening_mild_diabetic_retinopathy">Mild Non-proliferative Diabetic Retinopathy (micro aneurysms only):</string>
+    <string name="comorbidities_eye_screening_moderate_diabetic_retinopathy">Moderate Non-proliferative Diabetic Retinopathy (more than micro aneurysms, such as exudates and cotton wool spots):</string>
+    <string name="comorbidities_eye_screening_severe_diabetic_retinopathy">Severe Non-proliferative Diabetic Retinopathy (intra retinal hemorrhages, definite venous beading , micro vascular abnormalities):</string>
+    <string name="comorbidities_eye_screening_proliferative_diabetic_retinopathy">Proliferative Diabetic Retinopathy (Neovascularization, Vitreous/preretinal hemorrhage):</string>
+    <string name="comorbidities_eye_screening_diabetic_macular_edema">Diabetic Macular Edema (DME) present:</string>
+    <string name="comorbidities_eye_screening_clinical_dme">Clinically Significant DME:</string>
+    <string name="comorbidities_eye_screening_other">Other eye screenining details:</string>
+    <string name="comorbidities_eye_screening_visionloss">Other eye screenining details:</string>
+    <string name="comorbidities_eye_screening_recommendations">Recommendations:</string>
+
+    <string name="comorbidities_eye_screening_eye_status_options_right_eye">Right eye not examined due to deformity or prosthetic eye</string>
+    <string name="comorbidities_eye_screening_eye_status_options_left_eye">Left eye not examined due to deformity or prosthetic eye</string>
+    <string name="comorbidities_eye_screening_eye_status_options_both_eyes">Both eyes not examined due to deformity or prosthetic eyes</string>
+
+    <string-array name="comorbidities_eye_screening_eye_status_options">
+        <item>@string/comorbidities_eye_screening_eye_status_options_right_eye</item>
+        <item>@string/comorbidities_eye_screening_eye_status_options_left_eye</item>
+        <item>@string/comorbidities_eye_screening_eye_status_options_both_eyes</item>
+    </string-array>
+
+    <string name="comorbidities_eye_screening_eye_diagnosed_options_yes">Yes</string>
+    <string name="comorbidities_eye_screening_eye_diagnosed_options_no_deformity">Not Examined Due to Deformity</string>
+    <string name="comorbidities_eye_screening_eye_diagnosed_options_no_prosthetic">Not Examined Due to Prosthetic Eye</string>
+
+    <string-array name="comorbidities_eye_screening_eye_diagnosed_options">
+        <item>@string/comorbidities_eye_screening_eye_diagnosed_options_yes</item>
+        <item>@string/comorbidities_eye_screening_eye_diagnosed_options_no_deformity</item>
+        <item>@string/comorbidities_eye_screening_eye_diagnosed_options_no_prosthetic</item>
+    </string-array>
+
+    <string name="comorbidities_eye_screening_evidence_eye_options_cataract">Cataract</string>
+    <string name="comorbidities_eye_screening_evidence_eye_options_papillitis">Papillitis</string>
+    <string name="comorbidities_eye_screening_evidence_eye_options_ischemic">Ischemic Neuropathy</string>
+    <string name="comorbidities_eye_screening_evidence_eye_options_other">Other</string>
+
+    <string-array name="comorbidities_eye_screening_evidence_eye_options">
+        <item>@string/comorbidities_eye_screening_evidence_eye_options_cataract</item>
+        <item>@string/comorbidities_eye_screening_evidence_eye_options_papillitis</item>
+        <item>@string/comorbidities_eye_screening_evidence_eye_options_ischemic</item>
+        <item>@string/comorbidities_eye_screening_evidence_eye_options_other</item>
+    </string-array>
+
+    <string name="comorbidities_eye_screening_diabetic_retinopathy_options_none">None</string>
+    <string name="comorbidities_eye_screening_diabetic_retinopathy_options_right">Right Eye</string>
+    <string name="comorbidities_eye_screening_diabetic_retinopathy_options_left">Left Eye</string>
+    <string name="comorbidities_eye_screening_diabetic_retinopathy_options_both">Both Eyes</string>
+
+    <string-array name="comorbidities_eye_screening_diabetic_retinopathy_options">
+        <item>@string/comorbidities_eye_screening_diabetic_retinopathy_options_none</item>
+        <item>@string/comorbidities_eye_screening_diabetic_retinopathy_options_right</item>
+        <item>@string/comorbidities_eye_screening_diabetic_retinopathy_options_left</item>
+        <item>@string/comorbidities_eye_screening_diabetic_retinopathy_options_both</item>
+    </string-array>
+
+    <string name="comorbidities_eye_screening_recommendations_options_management">Management of Diabetes</string>
+    <string name="comorbidities_eye_screening_recommendations_options_referral">Referral to Opthalmologist</string>
+
+    <string-array name="comorbidities_eye_screening_recommendations_options">
+        <item>@string/comorbidities_foot_screening_recommendations_options_management</item>
+        <item>@string/comorbidities_foot_screening_recommendations_options_referral</item>
+    </string-array>
+
+    <!-- Strings for ComorbiditiesTreatmentFollowupMentalHealth -->
+    <string name="comorbidities_treatment_followup_MH_gp_clinic_code">Specify GP Clinic Code:</string>
+    <string name="comorbidities_treatment_followup_MH_session_number">Session Number:</string>
+    <string name="comorbidities_treatment_followup_MH_condition_before_session">How did the client feel before the session?</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint">What is the client\'s main complaint?</string>
+    <string name="comorbidities_treatment_followup_MH_cooperation">Client\'s co-operation:</string>
+    <string name="comorbidities_treatment_followup_MH_defensiveness">Client\'s defensiveness:</string>
+    <string name="comorbidities_treatment_followup_MH_distress">Client\'s level of distress:</string>
+    <string name="comorbidities_treatment_followup_MH_condition_after_session">How did the client feel after the session?</string>
+    <string name="comorbidities_treatment_followup_MH_improved">Improvement in the client\'s mental health status after the session?</string>
+    <string name="comorbidities_treatment_followup_MH_advice">Please describe the advice given to the client:</string>
+    <string name="comorbidities_treatment_followup_MH_continuation_status">Continuation Status:</string>
+    <string name="comorbidities_treatment_followup_MH_preferred_location">Preferred location for next therapy session:</string>
+    <string name="comorbidities_treatment_followup_MH_next_date">Next Appointment Date:</string>
+
+    <string name="comorbidities_treatment_followup_MH_condition_before_session_options_very_bad">Very bad</string>
+    <string name="comorbidities_treatment_followup_MH_condition_before_session_options_bad">Bad</string>
+    <string name="comorbidities_treatment_followup_MH_condition_before_session_options_neutral">Neutral</string>
+    <string name="comorbidities_treatment_followup_MH_condition_before_session_options_good">Good</string>
+    <string name="comorbidities_treatment_followup_MH_condition_before_session_options_very_good">Very Good</string>
+
+    <string-array name="comorbidities_treatment_followup_MH_condition_before_session_options">
+        <item>@string/comorbidities_treatment_followup_MH_condition_before_session_options_very_bad</item>
+        <item>@string/comorbidities_treatment_followup_MH_condition_before_session_options_bad</item>
+        <item>@string/comorbidities_treatment_followup_MH_condition_before_session_options_neutral</item>
+        <item>@string/comorbidities_treatment_followup_MH_condition_before_session_options_good</item>
+        <item>@string/comorbidities_treatment_followup_MH_condition_before_session_options_very_good</item>
+    </string-array>
+
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options_relationship_problems">Relationship problems</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options_physical_illness">Phsycial Illness</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options_daily_life">Daily life struggle</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options_subtance">Subtance abuse</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options_financial">Financial problems</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options_physical_abuse">Physical Abuse</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options_sexual_problems">Sexual problems</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options_other">Other</string>
+
+    <string-array name="comorbidities_treatment_followup_MH_client_complaint_options">
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options_relationship_problems</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options_physical_illness</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options_daily_life</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options_subtance</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options_financial</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options_physical_abuse</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options_sexual_problems</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options_other</item>
+    </string-array>
+
+    <string name="comorbidities_treatment_followup_MH_cooperation_options_complaint">Compliant</string>
+    <string name="comorbidities_treatment_followup_MH_cooperation_options_uncomfortable">Uncomfortable</string>
+    <string name="comorbidities_treatment_followup_MH_cooperation_options_uncooperative">Uncooperative</string>
+
+    <string-array name="comorbidities_treatment_followup_MH_cooperation_options">
+        <item>@string/comorbidities_treatment_followup_MH_cooperation_options_complaint</item>
+        <item>@string/comorbidities_treatment_followup_MH_cooperation_options_uncomfortable</item>
+        <item>@string/comorbidities_treatment_followup_MH_cooperation_options_uncooperative</item>
+    </string-array>
+
+    <string name="comorbidities_treatment_followup_MH_defensiveness_options_reserved">Reserved</string>
+    <string name="comorbidities_treatment_followup_MH_defensiveness_options_aggressive">Aggressive</string>
+    <string name="comorbidities_treatment_followup_MH_defensiveness_options_normal">Normal</string>
+    <string name="comorbidities_treatment_followup_MH_defensiveness_options_open">Open</string>
+
+    <string-array name="comorbidities_treatment_followup_MH_defensiveness_options">
+        <item>@string/comorbidities_treatment_followup_MH_defensiveness_options_reserved</item>
+        <item>@string/comorbidities_treatment_followup_MH_defensiveness_options_aggressive</item>
+        <item>@string/comorbidities_treatment_followup_MH_defensiveness_options_normal</item>
+        <item>@string/comorbidities_treatment_followup_MH_defensiveness_options_open</item>
+    </string-array>
+
+    <string name="comorbidities_treatment_followup_MH_distress_options_severly">Severely distressed</string>
+    <string name="comorbidities_treatment_followup_MH_distress_options_moderately">Moderately distressed</string>
+    <string name="comorbidities_treatment_followup_MH_distress_options_mildly">Mildly distressed</string>
+    <string name="comorbidities_treatment_followup_MH_distress_options_rarely">Rarely Distressed</string>
+    <string name="comorbidities_treatment_followup_MH_distress_options_not_at_all">Not Distressed at all</string>
+
+    <string-array name="comorbidities_treatment_followup_MH_distress_options">
+        <item>@string/comorbidities_treatment_followup_MH_distress_options_severly</item>
+        <item>@string/comorbidities_treatment_followup_MH_distress_options_moderately</item>
+        <item>@string/comorbidities_treatment_followup_MH_distress_options_mildly</item>
+        <item>@string/comorbidities_treatment_followup_MH_distress_options_rarely</item>
+        <item>@string/comorbidities_treatment_followup_MH_distress_options_not_at_all</item>
+    </string-array>
+
+    <string name="comorbidities_treatment_followup_MH_condition_after_session_options_very_bad">Very bad</string>
+    <string name="comorbidities_treatment_followup_MH_condition_after_session_options_bad">Bad</string>
+    <string name="comorbidities_treatment_followup_MH_condition_after_session_options_neutral">Neutral</string>
+    <string name="comorbidities_treatment_followup_MH_condition_after_session_options_good">Good</string>
+    <string name="comorbidities_treatment_followup_MH_condition_after_session_options_very_good">Very Good</string>
+
+    <string-array name="comorbidities_treatment_followup_MH_condition_after_session_options">
+        <item>@string/comorbidities_treatment_followup_MH_condition_after_session_options_very_bad</item>
+        <item>@string/comorbidities_treatment_followup_MH_condition_after_session_options_bad</item>
+        <item>@string/comorbidities_treatment_followup_MH_condition_after_session_options_neutral</item>
+        <item>@string/comorbidities_treatment_followup_MH_condition_after_session_options_good</item>
+        <item>@string/comorbidities_treatment_followup_MH_condition_after_session_options_very_good</item>
+    </string-array>
+
+    <string name="comorbidities_treatment_followup_MH_continuation_status_options_continue">Continue therapy</string>
+    <string name="comorbidities_treatment_followup_MH_continuation_status_options_last">Last session</string>
+    <string name="comorbidities_treatment_followup_MH_continuation_status_options_referred">Referred</string>
+    <string name="comorbidities_treatment_followup_MH_continuation_status_options_other">Other</string>
+
+    <string-array name="comorbidities_treatment_followup_MH_continuation_status_options">
+        <item>@string/comorbidities_treatment_followup_MH_continuation_status_options_continue</item>
+        <item>@string/comorbidities_treatment_followup_MH_continuation_status_options_last</item>
+        <item>@string/comorbidities_treatment_followup_MH_continuation_status_options_referred</item>
+        <item>@string/comorbidities_treatment_followup_MH_continuation_status_options_other</item>
+    </string-array>
+
+    <!-- Strings for ComorbiditiesAssessmentFormMentalHealth -->
+    <string name="comorbidities_assessment_form_MH_rescreening">Type of rescreening:</string>
+
+    <string name="comorbidities_assessment_form_MH_rescreening_options_4th_session">4th session</string>
+    <string name="comorbidities_assessment_form_MH_rescreening_options_end">End of treatment</string>
+    <string name="comorbidities_assessment_form_MH_rescreening_options_rescreening">Rescreening</string>
+    <string name="comorbidities_assessment_form_MH_rescreening_options_other">Other</string>
+
+    <string-array name="comorbidities_assessment_form_MH_rescreening_options">
+        <item>@string/comorbidities_assessment_form_MH_rescreening_options_4th_session</item>
+        <item>@string/comorbidities_assessment_form_MH_rescreening_options_end</item>
+        <item>@string/comorbidities_assessment_form_MH_rescreening_options_rescreening</item>
+        <item>@string/comorbidities_assessment_form_MH_rescreening_options_other</item>
+    </string-array>
+
+    <!-- Strings for ComorbiditiesEndOfTreatmentMentalHealthForm -->
+    <string name="comorbidities_end_treatment_MH_number_of_sessions">Total number of sessions conducted:</string>
+    <string name="comorbidities_end_treatment_MH_akuads_score">AKAUDS re-screening score:</string>
+    <string name="comorbidities_end_treatment_MH_reason_of_discontinuation">Reason for discontinuation:</string>
+    <string name="comorbidities_end_treatment_MH_feeling_better">If Feeling better because of the counseling:</string>
+    <string name="comorbidities_end_treatment_MH_loss_to_followup">If Lost to follow up: Reason for loss to Follow-up:</string>
+    <string name="comorbidities_end_treatment_MH_referred_to">If referred, referred to:</string>
+    <string name="comorbidities_end_treatment_MH_if_other">If Other:</string>
+    <string name="comorbidities_end_treatment_MH_referral_reason">Reason for referral:</string>
+    <string name="comorbidities_end_treatment_MH_describe_illness">If cause of referred is \'other severe mental illness\', please describe what the client is presumed to be suffering from:</string>
+    <string name="comorbidities_end_treatment_MH_comments_remarks">Comments/Remarks:</string>
+
+    <string name="comorbidities_end_treatment_MH_reason_of_discontinuation_options_feeling_better">Feeling better because of the counseling</string>
+    <string name="comorbidities_end_treatment_MH_reason_of_discontinuation_options_doesnot_time">Does not have time</string>
+    <string name="comorbidities_end_treatment_MH_reason_of_discontinuation_options_family_refused">Family refused</string>
+    <string name="comorbidities_end_treatment_MH_reason_of_discontinuation_options_language_barrier">Language barrier</string>
+    <string name="comorbidities_end_treatment_MH_reason_of_discontinuation_options_think_no_depression">Thinks that he/she does not have depression</string>
+    <string name="comorbidities_end_treatment_MH_reason_of_discontinuation_options_lost_followup">Lost to Follow up</string>
+    <string name="comorbidities_end_treatment_MH_reason_of_discontinuation_options_referred">Referred</string>
+    <string name="comorbidities_end_treatment_MH_reason_of_discontinuation_options_other">Other</string>
+
+    <string-array name="comorbidities_end_treatment_MH_reason_of_discontinuation_options">
+        <item>@string/comorbidities_end_treatment_MH_reason_of_discontinuation_options_feeling_better</item>
+        <item>@string/comorbidities_end_treatment_MH_reason_of_discontinuation_options_doesnot_time</item>
+        <item>@string/comorbidities_end_treatment_MH_reason_of_discontinuation_options_family_refused</item>
+        <item>@string/comorbidities_end_treatment_MH_reason_of_discontinuation_options_language_barrier</item>
+        <item>@string/comorbidities_end_treatment_MH_reason_of_discontinuation_options_think_no_depression</item>
+        <item>@string/comorbidities_end_treatment_MH_reason_of_discontinuation_options_lost_followup</item>
+        <item>@string/comorbidities_end_treatment_MH_reason_of_discontinuation_options_referred</item>
+        <item>@string/comorbidities_end_treatment_MH_reason_of_discontinuation_options_other</item>
+    </string-array>
+
+    <string name="comorbidities_end_treatment_MH_feeling_better_options_self_reported">1&#8211;3 sessions conducted and no Akuads filled (SELF REPORTED IMPROVEMENT)</string>
+    <string name="comorbidities_end_treatment_MH_feeling_better_options_therapy_completed">4 or more sessions conducted and AKUADS filled (SUCCESFULLY COMPLETED THERAPY WITH IMPROVED OUTCOMES).</string>
+
+    <string-array name="comorbidities_end_treatment_MH_feeling_better_options">
+    <item>@string/comorbidities_end_treatment_MH_feeling_better_options_self_reported</item>
+    <item>@string/comorbidities_end_treatment_MH_feeling_better_options_therapy_completed</item>
+    </string-array>
+
+    <string name="comorbidities_end_treatment_MH_loss_to_followup_options_unreachable">Unreachable by phone</string>
+    <string name="comorbidities_end_treatment_MH_loss_to_followup_options_moved">Moved/Relocated</string>
+    <string name="comorbidities_end_treatment_MH_loss_to_followup_options_other">Other</string>
+
+    <string-array name="comorbidities_end_treatment_MH_loss_to_followup_options">
+        <item>@string/comorbidities_end_treatment_MH_loss_to_followup_options_unreachable</item>
+        <item>@string/comorbidities_end_treatment_MH_loss_to_followup_options_moved</item>
+        <item>@string/comorbidities_end_treatment_MH_loss_to_followup_options_other</item>
+    </string-array>
+
+    <string name="comorbidities_end_treatment_MH_referred_to_options_referred">Referred to specialist services</string>
+    <string name="comorbidities_end_treatment_MH_referred_to_options_other">Other</string>
+
+    <string-array name="comorbidities_end_treatment_MH_referred_to_options">
+        <item>@string/comorbidities_end_treatment_MH_referred_to_options_referred</item>
+        <item>@string/comorbidities_end_treatment_MH_referred_to_options_other</item>
+    </string-array>
+
+    <string name="comorbidities_end_treatment_MH_referral_reason_options_depression">Severe depression/anxiety</string>
+    <string name="comorbidities_end_treatment_MH_referral_reason_options_mental_illness">Other severe mental illness</string>
+
+    <string-array name="comorbidities_end_treatment_MH_referral_reason_options">
+        <item>@string/comorbidities_end_treatment_MH_referral_reason_options_depression</item>
+        <item>@string/comorbidities_end_treatment_MH_referral_reason_options_mental_illness</item>
+    </string-array>
+
+    <!-- Strings for ComorbiditiesDrugDisbursement -->
+    <string name="comorbidities_drug_disbursement_adherence_text">ADHERENCE</string>
+    <string name="comorbidities_drug_disbursement_adherence">Adherence:</string>
+    <string name="comorbidities_drug_disbursement_drug_distribution">DRUG DISTRIBUTION RECORD</string>
+    <string name="comorbidities_drug_disbursement_drug_distribution_number">Drug Distribution Number:</string>
+    <string name="comorbidities_drug_disbursement_drug_distribution_number_range">Range 0&#8211;24</string>
+    <string name="comorbidities_drug_disbursement_drug_distribution_number_limit">The value should be in the range of 0&#8211;24</string>
+    <string name="comorbidities_drug_disbursement_drugs_picked_up">Drugs Picked up?</string>
+    <string name="comorbidities_drug_disbursement_drug_dist_detail_text">DRUG DISTRIBUTION DETAIL</string>
+    <string name="comorbidities_drug_disbursement_drug_dist_date">Drug Distribution Date:</string>
+    <string name="comorbidities_drug_disbursement_specify_other">Specify if Other:</string>
+    <string name="comorbidities_drug_disbursement_days_worth">Days worth of drugs distributed:</string>
+    <string name="comorbidities_drug_disbursement_days_worth_range">Range 1&#8211;10</string>
+    <string name="comorbidities_drug_disbursement_days_worth_limit">The value should be in the range of 1&#8211;10</string>
+    <string name="comorbidities_drug_disbursement_number_of_metformin">Number of Metformin tablet leaves (500 mg) distributed:</string>
+    <string name="comorbidities_drug_disbursement_number_of_metformin_range">Range 0&#8211;15</string>
+    <string name="comorbidities_drug_disbursement_number_of_metformin_limit">The value should be in the range of 0&#8211;15</string>
+    <string name="comorbidities_drug_disbursement_number_of_insulinN">Number of Insulin N vials (10 ml) distributed:</string>
+    <string name="comorbidities_drug_disbursement_number_of_insulinR">Number of Insulin R vials (10 ml) distributed:</string>
+    <string name="comorbidities_drug_disbursement_number_of_insulin_range">Range 0&#8211;3</string>
+    <string name="comorbidities_drug_disbursement_number_of_insulin_limit">The value should be in the range of 0&#8211;3</string>
+
+    <string name="comorbidities_drug_disbursement_adherence_options_no_dose_missed">No dose missed</string>
+    <string name="comorbidities_drug_disbursement_adherence_options_1to3">1 to 3 doses missed</string>
+    <string name="comorbidities_drug_disbursement_adherence_options_more_than_3">More than 3 doses missed</string>
+    <string name="comorbidities_drug_disbursement_adherence_options_patient_stopped">Patient stopped medication</string>
+
+    <string-array name="comorbidities_drug_disbursement_adherence_options">
+        <item>@string/comorbidities_drug_disbursement_adherence_options_no_dose_missed</item>
+        <item>@string/comorbidities_drug_disbursement_adherence_options_1to3</item>
+        <item>@string/comorbidities_drug_disbursement_adherence_options_more_than_3</item>
+        <item>@string/comorbidities_drug_disbursement_adherence_options_patient_stopped</item>
+    </string-array>
+
+    <!-- Strings for ComorbiditiesPatientInformationForm -->
+    <string name="comorbidities_patient_information_external_patient_id">External Patient Registration/ID:</string>
+    <string name="comorbidities_patient_information_screening_facility_location">Screening Facility Location:</string>
+    <string name="comorbidities_patient_information_gp_clinic_code">Specify GP Clinic Code:</string>
+    <string name="comorbidities_patient_information_location_other">Specify, if Other:</string>
+    <string name="comorbidities_patient_information_father_name">Father\'s Name:</string>
+    <string name="comorbidities_patient_information_husband_name">Husband\'s Name:</string>
+    <string name="comorbidities_patient_information_nic">National ID card number?</string>
+    <string name="comorbidities_patient_information_nic_format_hint">#####-#######-#</string>
+    <string name="comorbidities_patient_information_nic_format_error">It should be 15 digits number.</string>
+    <string name="comorbidities_patient_information_nic_format_dasherror">The format should be #####-#######-#</string>
+    <string name="comorbidities_patient_information_cnic_owner">Whose NIC is this?</string>
+    <string name="comorbidities_patient_information_other_cnic_owner">If other, specify:</string>
+    <string name="comorbidities_patient_information_address_provided">Has the patient provided their address?</string>
+    <string name="comorbidities_patient_information_address1">Address 1 (House Number, etc.):</string>
+    <string name="comorbidities_patient_information_address2">Address 2 (Block, Street, Gali, Colony, etc.):</string>
+    <string name="comorbidities_patient_information_town">Town:</string>
+    <string name="comorbidities_patient_information_city">City:</string>
+    <string name="comorbidities_patient_information_address_type">What type of Address is this?</string>
+    <string name="comorbidities_patient_information_nearest_landmark">Nearest Landmark:</string>
+    <string name="comorbidities_patient_information_mobile_number">Mobile Number:</string>
+    <string name="comorbidities_patient_information_mobile_number_format_hint">####-#######</string>
+    <string name="comorbidities_patient_information_mobile_number_format_dasherror">The format should be ####-#######</string>
+    <string name="comorbidities_patient_information_secondary_mobile">Secondary Mobile Number:</string>
+    <string name="comorbidities_patient_information_landline">Landline Number:</string>
+    <string name="comorbidities_patient_information_landline_format_hint">###-########</string>
+    <string name="comorbidities_patient_information_landline_format_dasherror">The format should be ###-########</string>
+    <string name="comorbidities_patient_information_secondary_landline">Secondary Landline Number:</string>
+    <string name="comorbidities_patient_information_tb_status">TB Status:</string>
+    <string name="comorbidities_patient_information_tb_category">If TB +ve what is the category of treatment:</string>
+    <string name="comorbidities_patient_information_marital_status">Marital Status:</string>
+    <string name="comorbidities_patient_information_head_of_education">Head of Household Education:</string>
+    <string name="comorbidities_patient_information_eduaction_level">Educational level of patient:</string>
+
+    <string name="comorbidities_patient_information_nic_options_self">Self</string>
+    <string name="comorbidities_patient_information_nic_options_mother">Mother</string>
+    <string name="comorbidities_patient_information_nic_options_father">Father</string>
+    <string name="comorbidities_patient_information_nic_options_sister">Sister</string>
+    <string name="comorbidities_patient_information_nic_options_brother">Brother</string>
+    <string name="comorbidities_patient_information_nic_options_spouse">Spouse</string>
+    <string name="comorbidities_patient_information_nic_options_paternal_GF">Paternal Grandfather</string>
+    <string name="comorbidities_patient_information_nic_options_paternal_GM">Paternal Grandmother</string>
+    <string name="comorbidities_patient_information_nic_options_maternal_GF">Maternal Grandfather</string>
+    <string name="comorbidities_patient_information_nic_options_maternal_GM">Maternal Grandmother</string>
+    <string name="comorbidities_patient_information_nic_options_uncle">Uncle</string>
+    <string name="comorbidities_patient_information_nic_options_aunt">Aunt</string>
+    <string name="comorbidities_patient_information_nic_options_son">Son</string>
+    <string name="comorbidities_patient_information_nic_options_daughter">Daughter</string>
+    <string name="comorbidities_patient_information_nic_options_other">Other</string>
+
+    <string-array name="comorbidities_patient_information_nic_options">
+        <item>@string/comorbidities_patient_information_nic_options_self</item>
+        <item>@string/comorbidities_patient_information_nic_options_mother</item>
+        <item>@string/comorbidities_patient_information_nic_options_father</item>
+        <item>@string/comorbidities_patient_information_nic_options_sister</item>
+        <item>@string/comorbidities_patient_information_nic_options_brother</item>
+        <item>@string/comorbidities_patient_information_nic_options_spouse</item>
+        <item>@string/comorbidities_patient_information_nic_options_paternal_GF</item>
+        <item>@string/comorbidities_patient_information_nic_options_paternal_GM</item>
+        <item>@string/comorbidities_patient_information_nic_options_maternal_GF</item>
+        <item>@string/comorbidities_patient_information_nic_options_maternal_GM</item>
+        <item>@string/comorbidities_patient_information_nic_options_uncle</item>
+        <item>@string/comorbidities_patient_information_nic_options_aunt</item>
+        <item>@string/comorbidities_patient_information_nic_options_son</item>
+        <item>@string/comorbidities_patient_information_nic_options_daughter</item>
+        <item>@string/comorbidities_patient_information_nic_options_other</item>
+    </string-array>
+
+    <string name="comorbidities_patient_information_address_type_permanent">Permanent</string>
+    <string name="comorbidities_patient_information_address_type_temporary">Temporary</string>
+
+    <string-array name="comorbidities_patient_information_address_type_options">
+        <item>@string/comorbidities_patient_information_address_type_permanent</item>
+        <item>@string/comorbidities_patient_information_address_type_temporary</item>
+    </string-array>
+
+    <string name="comorbidities_patient_information_tb_status_positive">TB +ve</string>
+    <string name="comorbidities_patient_information_tb_status_negative">TB -ve</string>
+
+    <string-array name="comorbidities_patient_information_tb_status_options">
+        <item>@string/comorbidities_patient_information_tb_status_positive</item>
+        <item>@string/comorbidities_patient_information_tb_status_negative</item>
+    </string-array>
+
+    <string name="comorbidities_patient_information_tb_category_cat1">Category 1 (SS-TB)</string>
+    <string name="comorbidities_patient_information_tb_category_cat2">Category 2 (SS-TB)</string>
+    <string name="comorbidities_patient_information_tb_category_mdr_tb">MDR TB</string>
+
+    <string-array name="comorbidities_patient_information_tb_category_options">
+        <item>@string/comorbidities_patient_information_tb_category_cat1</item>
+        <item>@string/comorbidities_patient_information_tb_category_cat1</item>
+        <item>@string/comorbidities_patient_information_tb_category_mdr_tb</item>
+    </string-array>
+
+    <string name="comorbidities_patient_information_marital_status_options_single">Single</string>
+    <string name="comorbidities_patient_information_marital_status_options_engaged">Engaged</string>
+    <string name="comorbidities_patient_information_marital_status_options_married">Married</string>
+    <string name="comorbidities_patient_information_marital_status_options_separated">Separated</string>
+    <string name="comorbidities_patient_information_marital_status_options_divorced">Divorced</string>
+    <string name="comorbidities_patient_information_marital_status_options_widow">Widow(er)</string>
+    <string name="comorbidities_patient_information_marital_status_options_other">Other</string>
+    <string name="comorbidities_patient_information_marital_status_options_unknown">Unknown</string>
+    <string name="comorbidities_patient_information_marital_status_options_refused">Refused</string>
+
+    <string-array name="comorbidities_patient_information_marital_status_options">
+        <item>@string/comorbidities_patient_information_marital_status_options_single</item>
+        <item>@string/comorbidities_patient_information_marital_status_options_engaged</item>
+        <item>@string/comorbidities_patient_information_marital_status_options_married</item>
+        <item>@string/comorbidities_patient_information_marital_status_options_separated</item>
+        <item>@string/comorbidities_patient_information_marital_status_options_divorced</item>
+        <item>@string/comorbidities_patient_information_marital_status_options_widow</item>
+        <item>@string/comorbidities_patient_information_marital_status_options_other</item>
+        <item>@string/comorbidities_patient_information_marital_status_options_unknown</item>
+        <item>@string/comorbidities_patient_information_marital_status_options_refused</item>
+    </string-array>
+
+    <string name="comorbidities_patient_information_education_options_ele">Elementary</string>
+    <string name="comorbidities_patient_information_education_options_pri">Primary</string>
+    <string name="comorbidities_patient_information_education_options_sec">Secondary</string>
+    <string name="comorbidities_patient_information_education_options_inter">Intermediate</string>
+    <string name="comorbidities_patient_information_education_options_undergrad">Undergraduate</string>
+    <string name="ccomorbidities_patient_information_education_options_grad">Graduate</string>
+    <string name="comorbidities_patient_information_education_options_doc">Doctorate</string>
+    <string name="comorbidities_patient_information_education_options_religious">Religious</string>
+    <string name="comorbidities_patient_information_education_options_polytechnic">Polytechnic</string>
+    <string name="comorbidities_patient_information_education_options_special_education">Special Education</string>
+    <string name="comorbidities_patient_information_education_options_no_education">No Formal Education</string>
+    <string name="comorbidities_patient_information_education_options_other">Other</string>
+    <string name="comorbidities_patient_information_education_options_unknown">Unknown</string>
+    <string name="comorbidities_patient_information_education_options_refused">Refused</string>
+
+    <string-array name="comorbidities_patient_information_education_options">
+        <item>@string/comorbidities_patient_information_education_options_ele</item>
+        <item>@string/comorbidities_patient_information_education_options_pri</item>
+        <item>@string/comorbidities_patient_information_education_options_sec</item>
+        <item>@string/comorbidities_patient_information_education_options_inter</item>
+        <item>@string/comorbidities_patient_information_education_options_undergrad</item>
+        <item>@string/ccomorbidities_patient_information_education_options_grad</item>
+        <item>@string/comorbidities_patient_information_education_options_doc</item>
+        <item>@string/comorbidities_patient_information_education_options_religious</item>
+        <item>@string/comorbidities_patient_information_education_options_polytechnic</item>
+        <item>@string/comorbidities_patient_information_education_options_no_education</item>
+        <item>@string/comorbidities_patient_information_education_options_other</item>
+        <item>@string/comorbidities_patient_information_education_options_unknown</item>
+        <item>@string/comorbidities_patient_information_education_options_refused</item>
     </string-array>
 
 </resources>

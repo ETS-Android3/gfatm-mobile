@@ -84,6 +84,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
 
         PAGE_COUNT = 1;
         FORM_NAME = Forms.COMORBIDITIES_HbA1C_FORM;
+        FORM = Forms.comorbidities_hbA1cForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -346,16 +347,22 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
         if (view == formDate.getButton()) {
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
+            args.putBoolean("allowPastDate", true);
+            args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
         } else if (view == hba1cTestOrderDate.getButton()) {
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
+            args.putBoolean("allowPastDate", true);
+            args.putBoolean("allowFutureDate", false);
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
         } else if (view == hba1cTestResultDate.getButton()) {
             Bundle args = new Bundle();
             args.putInt("type", THIRD_DATE_DIALOG_ID);
+            args.putBoolean("allowPastDate", true);
+            args.putBoolean("allowFutureDate", false);
             thirdDateFragment.setArguments(args);
             thirdDateFragment.show(getFragmentManager(), "DatePicker");
         }

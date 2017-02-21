@@ -98,7 +98,8 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity {
                              ViewGroup container, Bundle savedInstanceState) {
 
         PAGE_COUNT = 7;
-        FORM_NAME = Forms.COMORBIDITIES_INDEX_PATIENT_REGISTRATION;
+        FORM_NAME = Forms.COMORBIDITIES_PATIENT_INFORMATION_FORM;
+        FORM = Forms.comorbidities_indexPatientRegistration;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -361,6 +362,8 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity {
         if (view == formDate.getButton()) {
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
+            args.putBoolean("allowPastDate", true);
+            args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
         } else if (view == scanQRCode) {

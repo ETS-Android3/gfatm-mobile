@@ -80,6 +80,7 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
 
         PAGE_COUNT = 3;
         FORM_NAME = Forms.COMORBIDITIES_DIABETES_TREATMENT_FOLLOWUP_FORM;
+        FORM =  Forms.comorbidities_diabetesTreatmentFollowupForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -594,6 +595,8 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
         if (view == formDate.getButton()) {
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
+            args.putBoolean("allowPastDate", true);
+            args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
         }
