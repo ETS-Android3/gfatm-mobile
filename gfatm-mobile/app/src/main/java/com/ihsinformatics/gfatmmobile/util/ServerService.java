@@ -240,7 +240,7 @@ public class ServerService {
             Object[][] user = getUserFromLoccalDB(App.getUsername());
             if (user.length < 1) {
                 return "USER_NOT_FOUND";
-            }
+        }
             if (!App.getPassword().equals(String.valueOf(user[0][4]))) {
                 return "AUTHENTICATION_ERROR";
             }
