@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -26,6 +27,7 @@ import static android.content.ContentValues.TAG;
 public class StartActivity extends Activity {
 
     private static DatabaseUtil dbUtil;
+    private Context context;
 
     public static void resetPreferences(Context context) {
         PreferenceManager.setDefaultValues(context, R.xml.preferences, false);
@@ -78,31 +80,57 @@ public class StartActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         // on Application start
 
+        context = this;
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        StartActivity.resetPreferences(this);      //loading preferences
+        new PrefetchData().execute();
+    }
 
 
-        try {
-            dbUtil = new DatabaseUtil(this);
-            dbUtil.buildDatabase(false);            // build sql lite db in app memory
-        } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+    /**
+     * Async Task to make http call
+     */
+    private class PrefetchData extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
         }
 
-        // Check if Login needed...
-        String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
-        String v = App.getLastLogin();
-        if (App.getAutoLogin().equals("Enabled") && App.getLastLogin().equals(date)) {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        } else {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-            finish();
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            StartActivity.resetPreferences(context);      //loading preferences
+
+            try {
+                dbUtil = new DatabaseUtil(context);
+                dbUtil.buildDatabase(false);            // build sql lite db in app memory
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage());
+            }
+
+            return null;
         }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            // Check if Login needed...
+            String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+            String v = App.getLastLogin();
+            if (App.getAutoLogin().equals("Enabled") && App.getLastLogin().equals(date)) {
+                Intent intent = new Intent(context, MainActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+                Intent intent = new Intent(context, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }
+
     }
 
 
