@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/tiny"
+    android:background="@color/honey_dew" >
+
+    <ScrollView
+        android:id="@+main_id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <TableRow
+                android:id="@+main_id/mainMenuTableRow"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/micro" >
+
+                <TextView
+                    android:id="@+main_id/mainMenu"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_marginBottom="12sp"
+                    android:gravity="center"
+                    android:text="@string/uvgi_lights"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/BlueShade"
+                    android:textStyle="bold" />
+            </TableRow>
+            
+            <TableRow
+                android:id="@+main_id/row1TableRow"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <Button
+                    android:id="@+main_id/installation_form"
+                    style="@style/button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/installation_icon"
+                    android:text="@string/installation"
+                    android:layout_marginBottom="10sp"
+                    android:textSize="20sp" />
+                
+            </TableRow>
+            
+            <TableRow
+                android:id="@+main_id/row1TableRow"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <Button
+                    android:id="@+main_id/maintenance_form"
+                    style="@style/button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/maintenance_icon"
+                    android:text="@string/maintenance"
+                    android:layout_marginBottom="10sp"
+                    android:textSize="20sp" />
+            </TableRow>
+            
+            <TableRow
+                android:id="@+main_id/row2TableRow"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <Button
+                    android:id="@+main_id/troubleshootingLog_form"
+                    style="@style/button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/log_icon"
+                    android:text="@string/troubleshooting_log"
+                    android:layout_marginBottom="10sp"
+                    android:textSize="20sp" />
+            </TableRow>
+            
+            <TableRow
+                android:id="@+main_id/row2TableRow"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <Button
+                    android:id="@+main_id/troubleshootingStatus_form"
+                    style="@style/button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/status_icon"
+                    android:text="@string/troubleshooting_status"
+                    android:layout_marginBottom="10sp"
+                    android:textSize="20sp" />
+            </TableRow> 
+            
+            <TableRow
+                android:id="@+main_id/row2TableRow"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <Button
+                    android:id="@+main_id/troubleshootingStatusUpdate_form"
+                    style="@style/button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/status_icon"
+                    android:text="@string/troubleshooting_status_update"
+                    android:layout_marginBottom="10sp"
+                    android:textSize="20sp" />
+            </TableRow>
+            
+            <TableRow
+                android:id="@+main_id/row2TableRow"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <Button
+                     android:id="@+main_id/troubleshootingResolution_form"
+                    style="@style/button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/resolution_icon"
+                    android:text="@string/troubleshooting_resolution"
+                    android:layout_marginBottom="10sp"
+                    android:textSize="18sp" />
+            </TableRow>
+            
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

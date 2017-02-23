@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.ihsinformatics.aic"
+    android:versionCode="3"
+    android:versionName="1.0.0"
+   >
+
+    <uses-sdk
+        android:minSdkVersion="17"
+        android:targetSdkVersion="22" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="com.ihsinformatics.aic.MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.ihsinformatics.aic.LoginActivity"
+            android:windowSoftInputMode="stateHidden"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.ihsinformatics.aic.GuestLoginActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.ihsinformatics.aic.Preferences"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.ihsinformatics.aic.MainMenuActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.ihsinformatics.aic.UvgiMenuActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.ihsinformatics.aic.UvgiInstallationActivity"
+            android:configChanges="keyboardHidden|orientation" 
+            android:windowSoftInputMode="stateHidden" android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name="com.ihsinformatics.aic.UvgiMaintenanceActivity"
+            android:configChanges="keyboardHidden|orientation" 
+            android:windowSoftInputMode="stateHidden" android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name="com.ihsinformatics.aic.UvgiTroubleshootLogActivity"
+            android:configChanges="keyboardHidden|orientation" 
+            android:windowSoftInputMode="stateHidden" android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name="com.ihsinformatics.aic.UvgiTroubleshootStatusUpdateActivity"
+            android:configChanges="keyboardHidden|orientation" 
+            android:windowSoftInputMode="stateHidden" android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name="com.ihsinformatics.aic.UvgiTroubleshootStatusActivity"
+            android:configChanges="keyboardHidden|orientation" 
+            android:windowSoftInputMode="stateHidden" android:label="@string/troubleshooting_status">
+        </activity>
+        <activity
+            android:name="com.ihsinformatics.aic.UvgiTroubleshootResolutionActivity"
+            android:configChanges="keyboardHidden|orientation" 
+            android:windowSoftInputMode="stateHidden" android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name="com.ihsinformatics.aic.SavedFormsActivity"
+            android:configChanges="keyboardHidden|orientation" 
+            android:windowSoftInputMode="stateHidden" android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name="com.ihsinformatics.aic.Barcode"
+            android:configChanges="keyboardHidden|orientation" 
+            android:windowSoftInputMode="stateHidden" android:label="@string/app_name">
+        </activity>
+    </application>
+
+</manifest>

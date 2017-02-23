@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="error_title">خرابی</string>
+    <string name="authentication_error">سرور سے تصدیق نہیں ہوئی! براہ مہربانی درست یوزر نام اور پاس ورڈ درج کریں</string>
+    <string name="data_access_error">آپ کے پاس مطلوبہ معلومات کے حصول کا اختیار نہیں</string>
+    <string name="data_connection_error">سرور سے رابطہ نہیں ہو رہا! اپنا کنکشن دیکھیں یا پھر انتظامیہ سے رابطہ کریں </string>
+    <string name="data_mismatch">فراہم کردہ معلومات میں فرق ہے</string>
+    <string name="delete_error">یہ ڈیٹا دیگر معلومات سے متصل ہونے کے باعث تلف نہیں کیا جا سکتا</string>
+    <string name="duplication">اس ڈیٹا کی ایک نقل پہلے ہی موجود ہے۔ معلومات محفوظ نہیں کی جا سکتی</string>
+    <string name="empty_data">نامکمل معلومات! براہ مہربانی معلومات مکمل کرنے کے بعد دوبارہ کوشش کریں</string>
+    <string name="empty_selection">کم از کم ایک آپشن کا انتخاب کرنا لازمی ہے</string>
+    <string name="form_unavailable">معذرت! مطلوبہ معلومات اس وقت دستیاب نہیں</string>
+    <string name="insert_error">معلومات محفوظ نہیں ہوسکی! برائے مہربانی تصدیق کریں کہ درج کردہ معلومات درست ہیں</string>
+    <string name="incomplete_operation">معلومات مکمل طور پر محفوظ نہیں ہو سکیں۔</string>
+    <string name="item_not_found">فراہم کردہ ڈیٹا کے مطاہق کوئی معلومات موجود نہیں۔</string>
+    <string name="invalid_data">برائے مہربانی تصدیق کریں کہ مندرجہ ڈیٹا درست طور پر فراہم کیا گیا ہے</string>
+    <string name="invalid_date_or_time">وقت یا تاریخ کا اندراج درست نہیں</string>
+    <string name="operation_cancelled">درخواست یا عمل منسوخ ہو گیا ہے</string>
+    <string name="out_of_range">فراہم کردہ معلومات درست نہیں</string>
+    <string name="parameter_missing">کچھ ویلیوز غلط یا نامکمل ہیں۔ برائے مہربانی تمام لازمی معلومات کا درست اندراج کریں</string>
+    <string name="parsing_error">فراہم کردہ معلومات درست شکل میں نہیں</string>
+    <string name="session_expired">سیشن کی معیاد ختم ہو چکی ہے۔ برائے مہربانی دوبارہ لاگ ان کریں</string>
+    <string name="unknown_error">نامعلوم خرابی! برائے مہربانی لاگ فائل دیکھیں</string>
+    <string name="update_error">>معلومات محفوظ نہیں ہوسکی! برائے مہربانی تصدیق کریں کہ درج کردہ معلومات درست ہیں</string>
+    <string name="user_not_found">یوزر کا نام درست نہیں۔ برائے مہربانی درست نام فراہم کریں</string>
+    <string name="missing_provider">درخواست کنندہ (پرووائڈر) موجود نہیں۔ برائے مہربانی انتظامیہ سے رابطہ کریں</string>
+    <string name="barcode_scanner_missing">بار کوڈ ایپلی کیشن موجود نہیں۔ برائے مہربانی بار کو پڑھنے کی ایپلی کیشن انسٹال کر کے دوبارہ کوشش کریں</string>
+    <string name="no_value_selected">کم از کم ایک آپشن کا انتخاب لازمی ہے</string>
+    <string name="missing_location">پروگرام جاری رکھنے کے لیے کم از کم ایک مرکز کا انتخاب لازمی ہے</string>
+    <string name="offline_mode_error">آف لائن لاگ ان کے لیے یہ سہولت دستیاب نہیں ہے</string>
+
+</resources>
