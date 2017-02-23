@@ -376,7 +376,6 @@
     <string name="fast_end_treatment">End Treatment</string>
     <string name="fast_other_extra_pulmonary_site">Other Extra-Pulmonary TB Site</string>
     <string name="fast_registeration_date">Registeration Date</string>
-
     <string name="fast_date_of_missed_visit">Date of missed visit?</string>
     <string name="fast_have_you_been_able_to_contact_the_patient">Have you been able to contact the patient?</string>
     <string name="fast_why_were_you_unable_to_contact_the_patient">If no, why were you unable to contact the patient?</string>
@@ -389,6 +388,23 @@
     <string name="fast_patient_continuing_treatment_at_another_location">Patient continuing treatment at another location</string>
     <string name="fast_patient_unable_to_visit_hospital">Patient unable to visit hospital due to personal reasons</string>
     <string name="fast_patient_unwell">Patient unwell</string>
+    <string name="fast_treatment_outcome">Treatment Outcome</string>
+    <string name="fast_location_of_transfer_out">Location of transfer out</string>
+    <string name="fast_other_reason_remarks">Other Reason/Remarks</string>
+    <string name="fast_treatment_initiated_at_transfer_referral_site">Treatment initiated at Referral / Transfer site</string>
+    <string name="fast_reason_treatment_not_initiated_at_referral_site">Reason treatment not initiated at referral site</string>
+    <string name="fast_dr_confirmation">DR Confirmation</string>
+    <string name="fast_enrs_number">ENRS Number</string>
+    <string name="fast_first_name">First Name</string>
+    <string name="fast_last_name">Last Name</string>
+    <string name="fast_contact_number">Contact Number</string>
+    <string name="fast_died">Died</string>
+    <string name="fast_referral_new">Referral</string>
+    <string name="fast_patient_could_not_be_contacted">Patient could not be contacted</string>
+    <string name="fast_patient_left_the_city">Patient left the city</string>
+    <string name="fast_dr_not_confirmed_by_baseline_repeat_test">DR not confirmed by baseline repeat test</string>
+    <string name="fast_treatment_after_loss_to_follow_up_without_default">Treatment after loss to follow up</string>
+
 
 
     <string-array name="fast_locations">
@@ -440,6 +456,12 @@
         <item>@string/fast_no_title</item>
         <item>@string/fast_dont_know_title</item>
         <item>@string/fast_refused_title</item>
+    </string-array>
+
+    <string-array name="fast_yes_no_unknown_list">
+        <item>@string/fast_yes_title</item>
+        <item>@string/fast_no_title</item>
+        <item>@string/fast_dont_know_title</item>
     </string-array>
 
     <string-array name="fast_patient_consultation_list">
@@ -880,6 +902,27 @@
         <item>@string/fast_patient_died</item>
         <item>@string/fast_patient_refused_treatment</item>
         <item>@string/fast_patient_unwell</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+    
+    <string-array name="fast_treatment_outcome_list">
+        <item>@string/fast_cured</item>
+        <item>@string/fast_treatment_completed</item>
+        <item>@string/fast_treatment_failure</item>
+        <item>@string/fast_died</item>
+        <item>@string/fast_transfer_out</item>
+        <item>@string/fast_referral_new</item>
+        <item>@string/fast_treatment_after_loss_to_follow_up_without_default</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+
+    
+    <string-array name="fast_reason_treatment_not_initiated_referral_site_list">
+        <item>@string/fast_patient_could_not_be_contacted</item>
+        <item>@string/fast_patient_left_the_city</item>
+        <item>@string/fast_patient_refused_treatment</item>
+        <item>@string/fast_patient_died</item>
+        <item>@string/fast_dr_not_confirmed_by_baseline_repeat_test</item>
         <item>@string/fast_other_title</item>
     </string-array>
 </resources>
