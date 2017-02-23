@@ -251,7 +251,38 @@
     <string name="ctb_type_of_form">Type of form</string>
     <string name="ctb_order">Order</string>
     <string name="ctb_result">Result</string>
+    <string name="ctb_type_of_media_dst">Type of media for DST</string>
+    <string name="ctb_lowenstein_jensen">Lowenstein-Jensen</string>
+    <string name="ctb_mycobacteria_growth_indicator">Mycobacteria Growth Indicator Tube</string>
+    <string name="ctb_middlebrook_7h11s">Middlebrook 7H11S</string>
+    <string name="ctb_laboratory_automation">Total Laboratory Automation</string>
+    <string name="ctb_isoniazid_point_2_result">Isoniazid 0.2 µg/ml result</string>
+    <string name="ctb_susceptible">Susceptible</string>
+    <string name="ctb_resistant">Resistant</string>
+    <string name="ctb_isoniazid_1_result">Isoniazid 1 µg/ml  result</string>
+    <string name="ctb_rifampicin">Rifampicin</string>
+    <string name="ctb_ethambuhol">Ethambuthol</string>
+    <string name="ctb_streptomycin">Streptomycin</string>
+    <string name="ctb_pyrazinamide">Pyrazinamide</string>
+    <string name="ctb_ofloxacin">Ofloxacin</string>
+    <string name="ctb_levofloxacin">Levofloxacin</string>
+    <string name="ctb_moxifloxacin_point_5">Moxifloxacin 0.5 µg/ml</string>
+    <string name="ctb_moxifloxacin_2">Moxifloxacin 2 µg/ml</string>
+    <string name="ctb_amikacin">Amikacin</string>
+    <string name="ctb_kanamycin">Kanamycin</string>
+    <string name="ctb_capreomycin">Capreomycin</string>
+    <string name="ctb_ethionamide">Ethionamide</string>
+    <string name="ctb_cycloserine">Cycloserine</string>
+    <string name="ctb_pas">PAS</string>
+    <string name="ctb_bedaquiline">Bedaquiline</string>
+    <string name="ctb_delamanid">Delamanid</string>
+    <string name="ctb_linezolid">Linezolid</string>
+    <string name="ctb_clofazamine">Clofazamine</string>
+    <string name="ctb_other_drug_name">Other drug name</string>
+    <string name="ctb_other_drug_result">Other drug Result</string>
 
+
+    
     <string-array name="ctb_screening_location_list">
         <item>@string/ctb_hospital</item>
         <item>@string/ctb_community</item>
@@ -516,6 +547,20 @@
     <string-array name="ctb_type_of_form_list">
         <item>@string/ctb_order</item>
         <item>@string/ctb_result</item>
+    </string-array>
+
+    <string-array name="ctb_type_of_media_dst_list">
+        <item>@string/ctb_lowenstein_jensen</item>
+        <item>@string/ctb_mycobacteria_growth_indicator</item>
+        <item>@string/ctb_middlebrook_7h11s</item>
+        <item>@string/ctb_laboratory_automation</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
+
+    <string-array name="ctb_susceptible_resistant_indeterminate">
+        <item>@string/ctb_susceptible</item>
+        <item>@string/ctb_resistant</item>
+        <item>@string/ctb_indeterminate</item>
     </string-array>
 
 
