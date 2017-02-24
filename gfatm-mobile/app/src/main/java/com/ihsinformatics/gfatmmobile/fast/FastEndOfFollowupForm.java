@@ -192,6 +192,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
     public boolean validate() {
         Boolean error = false;
 
+
         if (remarks.getVisibility() == View.VISIBLE && App.get(remarks).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);

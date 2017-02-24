@@ -19,6 +19,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
@@ -31,6 +32,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
@@ -69,7 +71,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        PAGE_COUNT = 1;
+        PAGE_COUNT = 3;
         FORM_NAME = Forms.FAST_PRESUMPTIVE_FORM;
         FORM = Forms.fastPresumptiveForm;
 
@@ -148,8 +150,6 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
         patientTbHistoryTitle.setTypeface(null, Typeface.BOLD);
         tbHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_tb_before), getResources().getStringArray(R.array.fast_choice_list), getResources().getString(R.string.fast_no_title), App.VERTICAL, App.VERTICAL);
         tbContact = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_close_with_someone_diagnosed), getResources().getStringArray(R.array.fast_choice_list), getResources().getString(R.string.fast_no_title), App.VERTICAL, App.VERTICAL);
-
-
 
 
         // Used for reset fields...
@@ -282,7 +282,6 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
                             (App.get(haemoptysis).equals(getResources().getString(R.string.fast_refused_title)) ? "REFUSED" : "UNKNOWN"))});
 
 
-
         if (fever.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"FEVER", App.get(fever).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
                     (App.get(fever).equals(getResources().getString(R.string.fast_no_title)) ? "NO" :
@@ -290,9 +289,9 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
 
 
         if (feverDuration.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"FEVER DURATION", App.get(feverDuration).equals(getResources().getString(R.string.fast_less_than_2_weeks_title)) ? "COUGH LASTING LESS THAN 2 WEEKS (163739)" :
-                    (App.get(feverDuration).equals(getResources().getString(R.string.fast_2to3_weeks)) ? "COUGH LASTING MORE THAN 2 WEEKS" :
-                            (App.get(feverDuration).equals(getResources().getString(R.string.fast_morethan3weeks)) ? "COUGH LASTING MORE THAN 3 WEEKS" :
+            observations.add(new String[]{"FEVER DURATION", App.get(feverDuration).equals(getResources().getString(R.string.fast_less_than_2_weeks_title)) ? "FEVER LASTING LESS THAN TWO WEEKS" :
+                    (App.get(feverDuration).equals(getResources().getString(R.string.fast_2to3_weeks)) ? "FEVER LASTING FOR 2 TO 3 WEEKS" :
+                            (App.get(feverDuration).equals(getResources().getString(R.string.fast_morethan3weeks)) ? "FEVER LASTING MORE THAN THREE WEEKS" :
                                     (App.get(feverDuration).equals(getResources().getString(R.string.fast_refused_title)) ? "REFUSED" : "UNKNOWN")))});
 
         if (nightSweats.getVisibility() == View.VISIBLE)
@@ -434,7 +433,212 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
     }
 
     @Override
-    public void refill(int encounterId) {
+    public void refill(int formId) {
+
+        OfflineForm fo = serverService.getOfflineFormById(formId);
+        String date = fo.getFormDate();
+        ArrayList<String[][]> obsValue = fo.getObsValue();
+        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        for (int i = 0; i < obsValue.size(); i++) {
+
+            String[][] obs = obsValue.get(i);
+            if (obs[0][0].equals("FORM START TIME")) {
+                startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
+            } else if (obs[0][0].equals("PERSON ATTENDING FACILITY")) {
+
+                for (RadioButton rb : patientAttendant.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_patient_title)) && obs[0][1].equals("SELF")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_attendant_title)) && obs[0][1].equals("ATTENDANT")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                patientAttendant.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("PATIENT CONSULTATION DEPARTMENT")) {
+                String value = obs[0][1].equals("CHEST MEDICINE DEPARTMENT") ? getResources().getString(R.string.fast_chesttbclinic_title) :
+                        (obs[0][1].equals("GENERAL MEDICINE DEPARTMENT") ? getResources().getString(R.string.fast_medicine_title) :
+                                (obs[0][1].equals("EAR, NOSE AND THROAT DEPARTMENT") ? getResources().getString(R.string.fast_ent_title) :
+                                        (obs[0][1].equals("OBSTETRICS AND GYNECOLOGY DEPARTMENT") ? getResources().getString(R.string.fast_gynaeobstetrics_otherthen_title) :
+                                                (obs[0][1].equals("ANTENATAL DEPARTMENT") ? getResources().getString(R.string.fast_pregnancy_title) :
+                                                        (obs[0][1].equals("GENERAL SURGERY DEPARTMENT") ? getResources().getString(R.string.fast_surgery_title) :
+                                                                (obs[0][1].equals("ORTHOPEDIC DEPARTMENT") ? getResources().getString(R.string.fast_orthopedics_title) :
+                                                                        (obs[0][1].equals("EMERGENCY DEPARTMENT") ? getResources().getString(R.string.fast_emergency_title) :
+                                                                                (obs[0][1].equals("PEDIATRIC MEDICINE DEPARTMENT") ? getResources().getString(R.string.fast_paediatrics_title) :
+                                                                                        (obs[0][1].equals("DERMATOLOGY DEPARTMENT") ? getResources().getString(R.string.fast_dermatology) :
+                                                                                                (obs[0][1].equals("NEUROLOGY DEPARTMENT") ? getResources().getString(R.string.fast_neurology_title) :
+                                                                                                        (obs[0][1].equals("CARDIOLOGY DEPARTMENT") ? getResources().getString(R.string.fast_cardiology_title) :
+                                                                                                                (obs[0][1].equals("UROLOGY DEPARTMENT") ? getResources().getString(R.string.fast_urology_title) :
+                                                                                                                        (obs[0][1].equals("PSYCHIATRY DEPARTMENT") ? getResources().getString(R.string.fast_psychiatry_title) :
+                                                                                                                                (obs[0][1].equals("OPHTHALMOLOGY DEPARTMENT") ? getResources().getString(R.string.fast_opthamology_title) :
+                                                                                                                                        (obs[0][1].equals("ENDOCRINOLOGY DEPARTMENT") ? getResources().getString(R.string.fast_endocrionology_title) :
+                                                                                                                                                getResources().getString(R.string.fast_other_title))))))))))))))));
+
+
+                patientConsultation.getSpinner().selectValue(value);
+                patientConsultation.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("OTHER")) {
+                patientConsultationOther.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("COUGH")) {
+                for (RadioButton rb : cough.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_refused_title)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_dont_know_title)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                cough.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("COUGH DURATION")) {
+                String value = obs[0][1].equals("COUGH LASTING LESS THAN 2 WEEKS") ? getResources().getString(R.string.fast_less_than_2_weeks_title) :
+                        (obs[0][1].equals("COUGH LASTING MORE THAN 2 WEEKS") ? getResources().getString(R.string.fast_2to3_weeks) :
+                                (obs[0][1].equals("COUGH LASTING MORE THAN 3 WEEKS") ? getResources().getString(R.string.fast_morethan3weeks) :
+                                        (obs[0][1].equals("REFUSED") ? getResources().getString(R.string.fast_refused_title) :
+                                                getResources().getString(R.string.fast_dont_know_title))));
+
+                coughDuration.getSpinner().selectValue(value);
+                coughDuration.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("PRODUCTIVE COUGH")) {
+                for (RadioButton rb : productiveCough.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_refused_title)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_dont_know_title)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                productiveCough.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("HEMOPTYSIS")) {
+                for (RadioButton rb : haemoptysis.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_refused_title)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_dont_know_title)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                haemoptysis.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("FEVER")) {
+                for (RadioButton rb : fever.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_refused_title)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_dont_know_title)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                fever.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("FEVER DURATION")) {
+                String value = obs[0][1].equals("FEVER LASTING LESS THAN TWO WEEKS") ? getResources().getString(R.string.fast_less_than_2_weeks_title) :
+                        (obs[0][1].equals("FEVER LASTING FOR 2 TO 3 WEEKS") ? getResources().getString(R.string.fast_2to3_weeks) :
+                                (obs[0][1].equals("FEVER LASTING MORE THAN THREE WEEKS") ? getResources().getString(R.string.fast_morethan3weeks) :
+                                        (obs[0][1].equals("REFUSED") ? getResources().getString(R.string.fast_refused_title) :
+                                                getResources().getString(R.string.fast_dont_know_title))));
+
+                feverDuration.getSpinner().selectValue(value);
+                feverDuration.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("NIGHT SWEATS")) {
+                for (RadioButton rb : nightSweats.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_refused_title)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_dont_know_title)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                nightSweats.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("WEIGHT LOSS")) {
+                for (RadioButton rb : weightLoss.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_refused_title)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_dont_know_title)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                weightLoss.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("HISTORY OF TUBERCULOSIS")) {
+                for (RadioButton rb : tbHistory.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_refused_title)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_dont_know_title)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                tbHistory.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("TUBERCULOSIS CONTACT")) {
+                for (RadioButton rb : tbContact.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_refused_title)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_dont_know_title)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                tbContact.setVisibility(View.VISIBLE);
+            }
+
+        }
 
     }
 
@@ -475,8 +679,15 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
         if (radioGroup == patientAttendant.getRadioGroup()) {
             if (patientAttendant.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_attendant_title))) {
                 patientConsultation.setVisibility(View.GONE);
+                patientConsultationOther.setVisibility(View.GONE);
+
             } else {
                 patientConsultation.setVisibility(View.VISIBLE);
+                if (patientConsultation.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))) {
+                    patientConsultationOther.setVisibility(View.VISIBLE);
+                } else {
+                    patientConsultationOther.setVisibility(View.GONE);
+                }
             }
         } else if (radioGroup == cough.getRadioGroup()) {
             if (cough.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
@@ -517,6 +728,23 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         patientConsultationOther.setVisibility(View.GONE);
         feverDuration.setVisibility(View.GONE);
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean openFlag = bundle.getBoolean("open");
+            if (openFlag) {
+
+                bundle.putBoolean("open", false);
+                bundle.putBoolean("save", true);
+
+                String id = bundle.getString("formId");
+                int formId = Integer.valueOf(id);
+
+                refill(formId);
+
+            } else bundle.putBoolean("save", false);
+
+        }
 
     }
 
