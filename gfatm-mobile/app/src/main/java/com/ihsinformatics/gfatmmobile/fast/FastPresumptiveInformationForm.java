@@ -18,6 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
@@ -29,6 +30,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
@@ -66,7 +68,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
     TitledRadioGroup addressProvided;
     TitledEditText addressHouse;
     TitledEditText addressStreet;
-    TitledSpinner addressTown;
+    TitledRadioGroup addressTown;
     TitledEditText city;
     TitledRadioGroup addressType;
     TitledEditText nearestLandmark;
@@ -156,7 +158,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         addressProvided = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_provided_their_address), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
         addressHouse = new TitledEditText(context, null, getResources().getString(R.string.fast_address_1), "", "", 10, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         addressStreet = new TitledEditText(context, null, getResources().getString(R.string.fast_address_2), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        addressTown = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_town), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL);
+        addressTown = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_town), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
         city = new TitledEditText(context, null, getResources().getString(R.string.fast_city), App.getCity(), "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         city.getEditText().setKeyListener(null);
         city.getEditText().setFocusable(false);
@@ -191,7 +193,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), cnic1.getEditText(), cnic2.getEditText(), cnic3.getEditText(), cnicOwner.getSpinner(), otherCnicOwner.getEditText(),
-                addressProvided.getRadioGroup(), addressHouse.getEditText(), addressStreet.getEditText(), addressTown.getSpinner(),
+                addressProvided.getRadioGroup(), addressHouse.getEditText(), addressStreet.getEditText(), addressTown.getRadioGroup(),
                 city.getEditText(), addressType.getRadioGroup(), nearestLandmark.getEditText(), contactPermission.getRadioGroup()
                 , mobile1.getEditText(), mobile2.getEditText(), secondaryMobile1.getEditText(), secondaryMobile2.getEditText(), landline1.getEditText(),
                 landline2.getEditText(), secondaryLandline1.getEditText(), secondaryLandline2.getEditText()};
@@ -776,8 +778,151 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
     }
 
     @Override
-    public void refill(int encounterId) {
+    public void refill(int formId) {
 
+        OfflineForm fo = serverService.getOfflineFormById(formId);
+        String date = fo.getFormDate();
+        ArrayList<String[][]> obsValue = fo.getObsValue();
+        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        for (int i = 0; i < obsValue.size(); i++) {
+
+            String[][] obs = obsValue.get(i);
+            if (obs[0][0].equals("FORM START TIME")) {
+                startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
+            } else if (obs[0][0].equals("NATIONAL IDENTIFICATION NUMBER")) {
+                String data = obs[0][1];
+                cnic1.getEditText().setText(data.substring(0, 5));
+                cnic2.getEditText().setText(data.substring(5, 12));
+                cnic3.getEditText().setText(data.substring(12));
+            } else if (obs[0][0].equals("COMPUTERIZED NATIONAL IDENTIFICATION OWNER")) {
+                String value = obs[0][1].equals("SELF") ? getResources().getString(R.string.fast_self) :
+                        (obs[0][1].equals("MOTHER") ? getResources().getString(R.string.fast_mother) :
+                                (obs[0][1].equals("FATHER") ? getResources().getString(R.string.fast_father) :
+                                        (obs[0][1].equals("SISTER") ? getResources().getString(R.string.fast_sister) :
+                                                (obs[0][1].equals("BROTHER") ? getResources().getString(R.string.fast_brother) :
+                                                        (obs[0][1].equals("SPOUSE") ? getResources().getString(R.string.fast_spouse) :
+                                                                (obs[0][1].equals("PATERNAL GRANDFATHER") ? getResources().getString(R.string.fast_paternal_grandfather) :
+                                                                        (obs[0][1].equals("PATERNAL GRANDMOTHER") ? getResources().getString(R.string.fast_paternal_grandmother) :
+                                                                                (obs[0][1].equals("MATERNAL GRANDFATHER") ? getResources().getString(R.string.fast_maternal_grandfather) :
+                                                                                        (obs[0][1].equals("MATERNAL GRANDMOTHER") ? getResources().getString(R.string.fast_maternal_grandmother) :
+                                                                                                (obs[0][1].equals("UNCLE") ? getResources().getString(R.string.fast_uncle) :
+                                                                                                        (obs[0][1].equals("AUNT") ? getResources().getString(R.string.fast_aunt) :
+                                                                                                                (obs[0][1].equals("SON") ? getResources().getString(R.string.fast_son) :
+                                                                                                                        (obs[0][1].equals("DAUGHTER") ? getResources().getString(R.string.fast_daughter) :
+                                                                                                                                getResources().getString(R.string.fast_other_title))))))))))))));
+
+
+                cnicOwner.getSpinner().selectValue(value);
+                cnicOwner.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER")) {
+                otherCnicOwner.getEditText().setText(obs[0][1]);
+                otherCnicOwner.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("PATIENT PROVIDED ADDRESS")) {
+
+                for (RadioButton rb : addressProvided.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                addressProvided.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("TYPE OF ADDRESS")) {
+
+                for (RadioButton rb : addressType.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_perminant)) && obs[0][1].equals("PERMANENT ADDRESS")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_temporary)) && obs[0][1].equals("TEMPORARY ADDRESS")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                addressType.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("NEAREST LANDMARK")) {
+                nearestLandmark.getEditText().setText(obs[0][1]);
+                nearestLandmark.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("PERMISSION TO CONTACT FOR CALL AND SMS")) {
+
+                for (RadioButton rb : contactPermission.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                contactPermission.setVisibility(View.VISIBLE);
+            }
+
+            else if (obs[0][0].equals("address1")) {
+                addressHouse.getEditText().setText(obs[0][1]);
+                addressHouse.setVisibility(View.VISIBLE);
+            }
+
+            else if (obs[0][0].equals("address2")) {
+                addressStreet.getEditText().setText(obs[0][1]);
+                addressStreet.setVisibility(View.VISIBLE);
+            }
+
+            else if (obs[0][0].equals("CityVillage")) {
+                city.getEditText().setText(obs[0][1]);
+                city.setVisibility(View.VISIBLE);
+            }
+
+            else if (obs[0][0].equals("stateProvince")) {
+
+                for (RadioButton rb : addressTown.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                addressTown.setVisibility(View.VISIBLE);
+            }
+
+            else if (obs[0][0].equals("Primary Contact")) {
+                String mobNum = obs[0][1];
+                mobile1.getEditText().setText(mobNum.substring(0,4));
+                mobile2.getEditText().setText(mobNum.substring(4,11));
+            }
+            else if (obs[0][0].equals("Secondary Contact")) {
+                String mobNum2 = obs[0][1];
+                secondaryMobile1.getEditText().setText(mobNum2.substring(0,4));
+                secondaryMobile2.getEditText().setText(mobNum2.substring(4,11));
+            }
+            else if (obs[0][0].equals("Tertiary Contact")) {
+                String landNum = obs[0][1];
+                if(landNum.length() == 11) {
+                    landline1.getEditText().setText(landNum.substring(0, 4));
+                    landline2.getEditText().setText(landNum.substring(4, 11));
+                }
+                else{
+                    landline1.getEditText().setText(landNum.substring(0, 3));
+                    landline2.getEditText().setText(landNum.substring(3, 10));
+                }
+            }
+            else if (obs[0][0].equals("Quaternary Contact")) {
+                String landNum1 = obs[0][1];
+                if(landNum1.length() == 11) {
+                    secondaryLandline1.getEditText().setText(landNum1.substring(0, 4));
+                    secondaryLandline2.getEditText().setText(landNum1.substring(4, 11));
+                }
+                else{
+                    secondaryLandline1.getEditText().setText(landNum1.substring(0, 3));
+                    secondaryLandline2.getEditText().setText(landNum1.substring(3, 10));
+                }
+            }
+
+        }
     }
 
     @Override
@@ -811,6 +956,23 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         otherCnicOwner.setVisibility(View.GONE);
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean openFlag = bundle.getBoolean("open");
+            if (openFlag) {
+
+                bundle.putBoolean("open", false);
+                bundle.putBoolean("save", true);
+
+                String id = bundle.getString("formId");
+                int formId = Integer.valueOf(id);
+
+                refill(formId);
+
+            } else bundle.putBoolean("save", false);
+
+        }
     }
 
     @Override

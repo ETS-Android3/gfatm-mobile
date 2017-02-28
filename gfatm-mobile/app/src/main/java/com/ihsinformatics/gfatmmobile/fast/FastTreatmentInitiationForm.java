@@ -23,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
@@ -34,6 +35,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
@@ -568,8 +570,214 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
     }
 
     @Override
-    public void refill(int encounterId) {
+    public void refill(int formId) {
 
+        OfflineForm fo = serverService.getOfflineFormById(formId);
+        String date = fo.getFormDate();
+        ArrayList<String[][]> obsValue = fo.getObsValue();
+        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        for (int i = 0; i < obsValue.size(); i++) {
+
+            String[][] obs = obsValue.get(i);
+            if (obs[0][0].equals("FORM START TIME")) {
+                startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
+            }
+
+            else if (obs[0][0].equals("REGISTRATION DATE")) {
+                String secondDate = obs[0][1];
+                secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
+                regDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+                regDate.setVisibility(View.VISIBLE);
+            }
+
+            else if (obs[0][0].equals("NATIONAL IDENTIFICATION NUMBER")) {
+                String data = obs[0][1];
+                cnic1.getEditText().setText(data.substring(0,5));
+                cnic2.getEditText().setText(data.substring(5,12));
+                cnic3.getEditText().setText(data.substring(12));
+            }
+
+            else if (obs[0][0].equals("COMPUTERIZED NATIONAL IDENTIFICATION OWNER")) {
+                String value = obs[0][1].equals("SELF") ? getResources().getString(R.string.fast_self) :
+                        (obs[0][1].equals("MOTHER") ? getResources().getString(R.string.fast_mother) :
+                                (obs[0][1].equals("FATHER") ? getResources().getString(R.string.fast_father) :
+                                        (obs[0][1].equals("SISTER") ? getResources().getString(R.string.fast_sister) :
+                                                (obs[0][1].equals("BROTHER") ? getResources().getString(R.string.fast_brother) :
+                                                        (obs[0][1].equals("SPOUSE") ? getResources().getString(R.string.fast_spouse) :
+                                                                (obs[0][1].equals("PATERNAL GRANDFATHER") ? getResources().getString(R.string.fast_paternal_grandfather) :
+                                                                        (obs[0][1].equals("PATERNAL GRANDMOTHER") ? getResources().getString(R.string.fast_paternal_grandmother) :
+                                                                                (obs[0][1].equals("MATERNAL GRANDFATHER") ? getResources().getString(R.string.fast_maternal_grandfather) :
+                                                                                        (obs[0][1].equals("MATERNAL GRANDMOTHER") ? getResources().getString(R.string.fast_maternal_grandmother) :
+                                                                                                (obs[0][1].equals("UNCLE") ? getResources().getString(R.string.fast_uncle) :
+                                                                                                        (obs[0][1].equals("AUNT") ? getResources().getString(R.string.fast_aunt) :
+                                                                                                                (obs[0][1].equals("SON") ? getResources().getString(R.string.fast_son) :
+                                                                                                                        (obs[0][1].equals("DAUGHTER") ? getResources().getString(R.string.fast_daughter) :
+                                                                                                                                                getResources().getString(R.string.fast_other_title))))))))))))));
+
+
+                cnicOwner.getSpinner().selectValue(value);
+                cnicOwner.setVisibility(View.VISIBLE);
+            }
+
+            else if (obs[0][0].equals("TB REGISTRATION NUMBER")) {
+                tbRegisterationNumber.getEditText().setText(obs[0][1]);
+                tbRegisterationNumber.setVisibility(View.VISIBLE);
+            }
+
+
+            else if (obs[0][0].equals("TUBERCULOSIS DIAGNOSIS METHOD")) {
+
+                for (RadioButton rb : diagonosisType.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_bactoriologically_confirmed)) && obs[0][1].equals("PRIMARY RESPIRATORY TUBERCULOSIS, CONFIRMED BACTERIOLOGICALLY AND HISTOLOGICALLY")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_clinically_diagnosed)) && obs[0][1].equals("CLINICAL SUSPICION")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                diagonosisType.setVisibility(View.VISIBLE);
+            }
+
+            else if (obs[0][0].equals("SITE OF TUBERCULOSIS DISEASE")) {
+
+                for (RadioButton rb : tbType.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_pulmonary)) && obs[0][1].equals("PULMONARY TUBERCULOSIS")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_extra_pulmonary)) && obs[0][1].equals("EXTRA-PULMONARY TUBERCULOSIS")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                tbType.setVisibility(View.VISIBLE);
+            }
+
+            else if (obs[0][0].equals("EXTRA PULMONARY SITE")) {
+                String value = obs[0][1].equals("LYMPH NODE SARCOIDOSIS") ? getResources().getString(R.string.fast_lymph_node) :
+                        (obs[0][1].equals("ABDOMEN") ? getResources().getString(R.string.fast_abdomen) :
+                                (obs[0][1].equals("ACUTE LYMPHOBLASTIC LEUKEMIA WITH CENTRAL NERVOUS SYSTEM INVOLVEMENT") ? getResources().getString(R.string.fast_CNS) :
+                                        (obs[0][1].equals("RENAL DISEASE") ? getResources().getString(R.string.fast_renal) :
+                                                (obs[0][1].equals("TUBERCULOSIS OF BONES AND JOINTS") ? getResources().getString(R.string.fast_bones) :
+                                                        (obs[0][1].equals("GENITOURINARY TUBERCULOSIS") ? getResources().getString(R.string.fast_genitourinary) :
+                                                                (obs[0][1].equals("PLEURAL EFFUSION") ? getResources().getString(R.string.fast_pleural_effusion):
+                                                                        getResources().getString(R.string.fast_other_title)))))));
+
+                extraPulmonarySite.getSpinner().selectValue(value);
+                extraPulmonarySite.setVisibility(View.VISIBLE);
+            }
+
+            else if (obs[0][0].equals("OTHER EXTRA PULMONARY SITE")) {
+                extraPulmonarySiteOther.getEditText().setText(obs[0][1]);
+                extraPulmonarySiteOther.setVisibility(View.VISIBLE);
+            }
+
+            else if (obs[0][0].equals("TB PATIENT TYPE")) {
+                String value = obs[0][1].equals("NEW TB PATIENT") ? getResources().getString(R.string.fast_new) :
+                        (obs[0][1].equals("RELAPSE") ? getResources().getString(R.string.fast_relapse) :
+                                (obs[0][1].equals("PATIENT REFERRED") ? getResources().getString(R.string.fast_referred_transferred_in) :
+                                        (obs[0][1].equals("LOST TO FOLLOW-UP") ? getResources().getString(R.string.fast_treatment_after_loss_to_follow_up) :
+                                                (obs[0][1].equals("TUBERCULOSIS TREATMENT FAILURE") ? getResources().getString(R.string.fast_treatment_failure) :
+                                                        getResources().getString(R.string.fast_other_title)))));
+
+                patientType.getSpinner().selectValue(value);
+                patientType.setVisibility(View.VISIBLE);
+            }
+
+
+            else if (obs[0][0].equals("TREATMENT INITIATED")) {
+
+                for (RadioButton rb : treatmentInitiated.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                treatmentInitiated.setVisibility(View.VISIBLE);
+            }
+
+            else if (obs[0][0].equals("TREATMENT NOT STARTED")) {
+                String value = obs[0][1].equals("REFUSAL OF TREATMENT BY PATIENT") ? getResources().getString(R.string.fast_patient_refused_treatment) :
+                        (obs[0][1].equals("LOST TO FOLLOW-UP") ? getResources().getString(R.string.fast_patient_loss_to_follow_up) :
+                                (obs[0][1].equals("DECEASED") ? getResources().getString(R.string.fast_patient_died) :
+                                        (obs[0][1].equals("PATIENT REFERRED") ? getResources().getString(R.string.fast_referral) :
+                                                        getResources().getString(R.string.fast_other_title))));
+
+                reasonTreatmentNotIniated.getSpinner().selectValue(value);
+                reasonTreatmentNotIniated.setVisibility(View.VISIBLE);
+            }
+
+            else if (obs[0][0].equals("TREATMENT NOT INITIATED OTHER REASON")) {
+                reasonTreatmentNotInitiatedOther.getEditText().setText(obs[0][1]);
+                reasonTreatmentNotInitiatedOther.setVisibility(View.VISIBLE);
+            }
+
+            else if (obs[0][0].equals("TB CATEGORY")) {
+
+                for (RadioButton rb : tbCategory.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_category1)) && obs[0][1].equals("CATEGORY I TUBERCULOSIS")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_category2)) && obs[0][1].equals("CATEGORY II TUBERCULOSIS")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                tbCategory.setVisibility(View.VISIBLE);
+            }
+
+            else if (obs[0][0].equals("HISTORY OF PREVIOUSLY ANTI TUBERCULOSIS TREATMENT")) {
+
+                for (RadioButton rb : historyCategory.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_cat_1)) && obs[0][1].equals("CATEGORY I TUBERCULOSIS")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_cat_2)) && obs[0][1].equals("CATEGORY II TUBERCULOSIS")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.fast_cat1_cat2)) && obs[0][1].equals("CAT I & II TUBERCULOSIS")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.fast_others)) && obs[0][1].equals("OTHER")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                historyCategory.setVisibility(View.VISIBLE);
+            }
+
+
+            else if (obs[0][0].equals("OUTCOME OF PREVIOUS CAT II TUBERCULOSIS TREATMENT")) {
+                String value = obs[0][1].equals("CURE, OUTCOME") ? getResources().getString(R.string.fast_cured) :
+                        (obs[0][1].equals("TREATMENT COMPLETE") ? getResources().getString(R.string.fast_treatment_completed) :
+                                (obs[0][1].equals("TUBERCULOSIS TREATMENT FAILURE") ? getResources().getString(R.string.fast_treatment_failure) :
+                                        (obs[0][1].equals("TRANSFERRED OUT") ? getResources().getString(R.string.fast_transfer_out) :
+                                                (obs[0][1].equals("LOST TO FOLLOW-UP") ? getResources().getString(R.string.fast_loss_to_follow_up_default) :
+                                                        getResources().getString(R.string.fast_other_title)))));
+
+                outcomePreviousCategory.getSpinner().selectValue(value);
+                outcomePreviousCategory.setVisibility(View.VISIBLE);
+            }
+
+            else if (obs[0][0].equals("WEIGHT (KG)")) {
+                weight.getEditText().setText(obs[0][1]);
+                weight.setVisibility(View.VISIBLE);
+            }
+
+            else if (obs[0][0].equals("RETURN VISIT DATE")) {
+                String secondDate = obs[0][1];
+                thirdDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
+                returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+                returnVisitDate.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     @Override
@@ -731,7 +939,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             protected void onProgressUpdate(String... values) {
             }
 
-            ;
+
 
             @Override
             protected void onPostExecute(HashMap<String, String> result) {
@@ -751,6 +959,24 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             }
         };
         autopopulateFormTask.execute("");
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean openFlag = bundle.getBoolean("open");
+            if (openFlag) {
+
+                bundle.putBoolean("open", false);
+                bundle.putBoolean("save", true);
+
+                String id = bundle.getString("formId");
+                int formId = Integer.valueOf(id);
+
+                refill(formId);
+
+            } else bundle.putBoolean("save", false);
+
+        }
+
 
     }
 
