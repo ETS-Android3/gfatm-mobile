@@ -18,6 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
@@ -29,6 +30,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
@@ -50,7 +52,7 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
     TitledRadioGroup tbCategory;
     TitledRadioGroup baselineRepeatReason;
     TitledRadioGroup sampleType;
-    TitledSpinner specimenSource;
+    TitledRadioGroup specimenSource;
     TitledEditText specimenSourceOther;
     TitledRadioGroup sampleAccepted;
     TitledSpinner reasonRejected;
@@ -132,7 +134,7 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
         tbCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_baseline_test_specify_patient_category), getResources().getStringArray(R.array.fast_patient_category_list), getResources().getString(R.string.fast_category_1), App.VERTICAL, App.VERTICAL);
         baselineRepeatReason = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_repeating_test_if_baseline_repeat), getResources().getStringArray(R.array.fast_repeating_test_if_baseline_repeat_list), getResources().getString(R.string.fast_rif_resistant), App.VERTICAL, App.VERTICAL);
         sampleType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_specimen_type), getResources().getStringArray(R.array.fast_specimen_type_list), getResources().getString(R.string.fast_sputum), App.VERTICAL, App.VERTICAL);
-        specimenSource = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_specimen_come_from), getResources().getStringArray(R.array.fast_specimen_come_from_list), getResources().getString(R.string.fast_lymph), App.VERTICAL);
+        specimenSource = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_specimen_come_from), getResources().getStringArray(R.array.fast_specimen_come_from_list), getResources().getString(R.string.fast_lymph), App.VERTICAL, App.VERTICAL);
         specimenSourceOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         sampleAccepted = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_accepted_lab_technician), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
         reasonRejected = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_why_was_the_sample_rejected), getResources().getStringArray(R.array.fast_sample_rejected_list), getResources().getString(R.string.fast_saliva), App.VERTICAL);
@@ -142,7 +144,7 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), sampleSubmissionDate.getButton(), testContextStatus.getRadioGroup(), tbCategory.getRadioGroup(),
-                baselineRepeatReason.getRadioGroup(), sampleType.getRadioGroup(), specimenSource.getSpinner(), specimenSourceOther.getEditText(), sampleAccepted.getRadioGroup(), reasonRejected.getSpinner(), otherReasonRejected.getEditText(), cartridgeId.getEditText()};
+                baselineRepeatReason.getRadioGroup(), sampleType.getRadioGroup(), specimenSource.getRadioGroup(), specimenSourceOther.getEditText(), sampleAccepted.getRadioGroup(), reasonRejected.getSpinner(), otherReasonRejected.getEditText(), cartridgeId.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
@@ -154,7 +156,7 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
         tbCategory.getRadioGroup().setOnCheckedChangeListener(this);
         baselineRepeatReason.getRadioGroup().setOnCheckedChangeListener(this);
         sampleType.getRadioGroup().setOnCheckedChangeListener(this);
-        specimenSource.getSpinner().setOnItemSelectedListener(this);
+        specimenSource.getRadioGroup().setOnCheckedChangeListener(this);
         sampleAccepted.getRadioGroup().setOnCheckedChangeListener(this);
         reasonRejected.getSpinner().setOnItemSelectedListener(this);
 
@@ -284,7 +286,7 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
             observations.add(new String[]{"OTHER REASON OF SAMPLE REJECTION", App.get(otherReasonRejected)});
 
         if (cartridgeId.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"Cartridge ID", App.get(cartridgeId)});
+            observations.add(new String[]{"CARTRIDGE ID", App.get(cartridgeId)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -403,8 +405,132 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
         return true;
     }
 
+
     @Override
-    public void refill(int encounterId) {
+    public void refill(int formId) {
+
+        OfflineForm fo = serverService.getOfflineFormById(formId);
+        String date = fo.getFormDate();
+        ArrayList<String[][]> obsValue = fo.getObsValue();
+        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        for (int i = 0; i < obsValue.size(); i++) {
+
+            String[][] obs = obsValue.get(i);
+            if (obs[0][0].equals("FORM START TIME")) {
+                startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
+            } else if (obs[0][0].equals("SPECIMEN SUBMISSION DATE")) {
+                String secondDate = obs[0][1];
+                secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
+                sampleSubmissionDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+                sampleSubmissionDate.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("TEST CONTEXT STATUS")) {
+
+                for (RadioButton rb : testContextStatus.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_baseline_new)) && obs[0][1].equals("BASELINE")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_baseline_repeat)) && obs[0][1].equals("BASELINE REPEAT")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_followup_test)) && obs[0][1].equals("REGULAR FOLLOW UP")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                testContextStatus.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("TB CATEGORY")) {
+
+                for (RadioButton rb : tbCategory.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_category_1)) && obs[0][1].equals("CATEGORY I TUBERCULOSIS")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_category_2)) && obs[0][1].equals("CATEGORY II TUBERCULOSIS")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                tbCategory.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("REASON FOR BASELINE REPEAT TEST")) {
+
+                for (RadioButton rb : baselineRepeatReason.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_rif_resistant)) && obs[0][1].equals("RIF RESISTANT POSITIVE")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_error_invalid_no_result)) && obs[0][1].equals("INVALID")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                baselineRepeatReason.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("SPECIMEN TYPE")) {
+
+                for (RadioButton rb : sampleType.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_sputum)) && obs[0][1].equals("SPUTUM")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_extra_pulmonary)) && obs[0][1].equals("EXTRA-PULMONARY TUBERCULOSIS")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                sampleType.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("SPECIMEN SOURCE")) {
+
+                for (RadioButton rb : specimenSource.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_lymph)) && obs[0][1].equals("LYMPHOCYTES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_pleural_fluid)) && obs[0][1].equals("PLEURAL EFFUSION")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_pus)) && obs[0][1].equals("PUS")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_other_title)) && obs[0][1].equals("OTHER SPECIMEN SOURCE")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                specimenSource.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("OTHER SPECIMEN SOURCE")) {
+                specimenSourceOther.getEditText().setText(obs[0][1]);
+                specimenSourceOther.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("SPECIMEN ACCEPTED")) {
+
+                for (RadioButton rb : sampleAccepted.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                sampleAccepted.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("SPECIMEN UNSATISFACTORY FOR DIAGNOSIS")) {
+                String value = obs[0][1].equals("SALIVA") ? getResources().getString(R.string.fast_saliva) :
+                        (obs[0][1].equals("BLOOD IN SAMPLE") ? getResources().getString(R.string.fast_blood) :
+                                (obs[0][1].equals("FOOD PARTICALS") ? getResources().getString(R.string.fast_food_particles) :
+                                        (obs[0][1].equals("SAMPLE OLDER THAN 3 DAYS") ? getResources().getString(R.string.fast_older_than_3_days) :
+                                                (obs[0][1].equals("INSUFFICIENT QUANTITY") ? getResources().getString(R.string.fast_Insufficient_quantity)
+                                                        : getResources().getString(R.string.fast_other_title)))));
+
+                reasonRejected.getSpinner().selectValue(value);
+                reasonRejected.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("OTHER REASON OF SAMPLE REJECTION")) {
+                otherReasonRejected.getEditText().setText(obs[0][1]);
+                otherReasonRejected.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("CARTRIDGE ID")) {
+                cartridgeId.getEditText().setText(obs[0][1]);
+                cartridgeId.setVisibility(View.VISIBLE);
+            }
+
+        }
 
     }
 
@@ -453,18 +579,29 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
         specimenSourceOther.setVisibility(View.GONE);
         reasonRejected.setVisibility(View.GONE);
         otherReasonRejected.setVisibility(View.GONE);
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean openFlag = bundle.getBoolean("open");
+            if (openFlag) {
+
+                bundle.putBoolean("open", false);
+                bundle.putBoolean("save", true);
+
+                String id = bundle.getString("formId");
+                int formId = Integer.valueOf(id);
+
+                refill(formId);
+
+            } else bundle.putBoolean("save", false);
+
+        }
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         MySpinner spinner = (MySpinner) parent;
-        if (spinner == specimenSource.getSpinner()) {
-            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title))) {
-                specimenSourceOther.setVisibility(View.VISIBLE);
-            } else {
-                specimenSourceOther.setVisibility(View.GONE);
-            }
-        } else if (spinner == reasonRejected.getSpinner()) {
+        if (spinner == reasonRejected.getSpinner()) {
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title))) {
                 otherReasonRejected.setVisibility(View.VISIBLE);
             } else {
@@ -491,7 +628,7 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
         } else if (radioGroup == sampleType.getRadioGroup()) {
             if (sampleType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_extra_pulmonary))) {
                 specimenSource.setVisibility(View.VISIBLE);
-                if (specimenSource.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))) {
+                if (specimenSource.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_other_title))) {
                     specimenSourceOther.setVisibility(View.VISIBLE);
                 }
             } else {
@@ -509,6 +646,12 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
                 reasonRejected.setVisibility(View.GONE);
                 cartridgeId.setVisibility(View.VISIBLE);
                 otherReasonRejected.setVisibility(View.GONE);
+            }
+        } else if (radioGroup == specimenSource.getRadioGroup()) {
+            if (specimenSource.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_other_title))) {
+                specimenSourceOther.setVisibility(View.VISIBLE);
+            } else {
+                specimenSourceOther.setVisibility(View.GONE);
             }
         }
 

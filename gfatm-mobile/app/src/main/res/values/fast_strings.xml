@@ -404,6 +404,7 @@
     <string name="fast_patient_left_the_city">Patient left the city</string>
     <string name="fast_dr_not_confirmed_by_baseline_repeat_test">DR not confirmed by baseline repeat test</string>
     <string name="fast_treatment_after_loss_to_follow_up_without_default">Treatment after loss to follow up</string>
+    <string name="fast_please_select_form_type">Please select form type!</string>
 
 
 

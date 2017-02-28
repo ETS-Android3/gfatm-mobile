@@ -18,6 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
@@ -27,7 +28,9 @@ import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
+import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
@@ -47,8 +50,8 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
     TitledEditText cartridgeId;
     TitledButton dateTestResult;
     TitledSpinner gxpResult;
-    TitledSpinner mtbBurden;
-    TitledSpinner rifResult;
+    TitledRadioGroup mtbBurden;
+    TitledRadioGroup rifResult;
     TitledEditText errorCode;
 
     /**
@@ -124,13 +127,13 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
         cartridgeId = new TitledEditText(context, null, getResources().getString(R.string.fast_cartridge_id), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         dateTestResult = new TitledButton(context, null, getResources().getString(R.string.fast_date_of_result_recieved), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.VERTICAL);
         gxpResult = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_genexpert_mtb_result), getResources().getStringArray(R.array.fast_genexpert_mtb_result_list), getResources().getString(R.string.fast_mtb_not_detected), App.VERTICAL);
-        mtbBurden = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_mtb_burden), getResources().getStringArray(R.array.fast_mtb_burden_list), getResources().getString(R.string.fast_very_low), App.VERTICAL);
-        rifResult = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_if_mtb_then_rif_result), getResources().getStringArray(R.array.fast_if_mtb_then_rif_list), getResources().getString(R.string.fast_not_detected), App.VERTICAL);
+        mtbBurden = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_mtb_burden), getResources().getStringArray(R.array.fast_mtb_burden_list), getResources().getString(R.string.fast_very_low), App.VERTICAL, App.VERTICAL);
+        rifResult = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_if_mtb_then_rif_result), getResources().getStringArray(R.array.fast_if_mtb_then_rif_list), getResources().getString(R.string.fast_not_detected), App.VERTICAL, App.VERTICAL);
         errorCode = new TitledEditText(context, null, getResources().getString(R.string.fast_error_code), "", "", 15, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, false);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), cartridgeId.getEditText(), dateTestResult.getButton(), gxpResult.getSpinner(),
-                mtbBurden.getSpinner(), rifResult.getSpinner(), errorCode.getEditText()};
+                mtbBurden.getRadioGroup(), rifResult.getRadioGroup(), errorCode.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
@@ -139,8 +142,8 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
         formDate.getButton().setOnClickListener(this);
         dateTestResult.getButton().setOnClickListener(this);
         gxpResult.getSpinner().setOnItemSelectedListener(this);
-        mtbBurden.getSpinner().setOnItemSelectedListener(this);
-        rifResult.getSpinner().setOnItemSelectedListener(this);
+        mtbBurden.getRadioGroup().setOnCheckedChangeListener(this);
+        rifResult.getRadioGroup().setOnCheckedChangeListener(this);
 
         resetViews();
     }
@@ -216,11 +219,11 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
         observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
         //  observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
         //observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});
-        observations.add(new String[]{"Cartridge ID", App.get(cartridgeId)});
+        observations.add(new String[]{"CARTRIDGE ID", App.get(cartridgeId)});
         observations.add(new String[]{"DATE OF TEST RESULT RECEIVED", App.getSqlDateTime(secondDateCalendar)});
 
         if (gxpResult.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"GENEXPERT MTB/RIF", App.get(gxpResult).equals(getResources().getString(R.string.fast_mtb_detected)) ? "MYCOBACTERIUM TUBERCULOSIS DETECTED WITH RIFAMPIN RESISTANCE" :
+            observations.add(new String[]{"GENEXPERT MTB/RIF RESULT", App.get(gxpResult).equals(getResources().getString(R.string.fast_mtb_detected)) ? "MYCOBACTERIUM TUBERCULOSIS DETECTED WITH RIFAMPIN RESISTANCE" :
                     (App.get(gxpResult).equals(getResources().getString(R.string.fast_mtb_not_detected)) ? "MYCOBACTERIUM TUBERCULOSIS DETECTED WITHOUT RIFAMPIN RESISTANCE" :
                             (App.get(gxpResult).equals(getResources().getString(R.string.fast_error)) ? "NEGATIVE" :
                                     (App.get(gxpResult).equals(getResources().getString(R.string.fast_invalid)) ? "INVALID" : "NO RESULT")))});
@@ -231,7 +234,7 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
                             (App.get(mtbBurden).equals(getResources().getString(R.string.fast_medium)) ? "MEDIUM" : "HIGH"))});
 
         if (rifResult.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"RIF RESULT", App.get(rifResult).equals(getResources().getString(R.string.fast_not_detected)) ? "NOT DETECTED" :
+            observations.add(new String[]{"RIF RESISTANCE RESULT", App.get(rifResult).equals(getResources().getString(R.string.fast_not_detected)) ? "NOT DETECTED" :
                     (App.get(rifResult).equals(getResources().getString(R.string.fast_detected)) ? "DETECTED" : "INTERMEDIATE")});
 
         if (errorCode.getVisibility() == View.VISIBLE)
@@ -355,7 +358,73 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
     }
 
     @Override
-    public void refill(int encounterId) {
+    public void refill(int formId) {
+
+        OfflineForm fo = serverService.getOfflineFormById(formId);
+        String date = fo.getFormDate();
+        ArrayList<String[][]> obsValue = fo.getObsValue();
+        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        for (int i = 0; i < obsValue.size(); i++) {
+
+            String[][] obs = obsValue.get(i);
+            if (obs[0][0].equals("FORM START TIME")) {
+                startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
+            } else if (obs[0][0].equals("CARTRIDGE ID")) {
+                cartridgeId.getEditText().setText(obs[0][1]);
+                cartridgeId.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("GENEXPERT MTB/RIF RESULT")) {
+                String value = obs[0][1].equals("MYCOBACTERIUM TUBERCULOSIS DETECTED WITH RIFAMPIN RESISTANCE") ? getResources().getString(R.string.fast_mtb_detected) :
+                        (obs[0][1].equals("MYCOBACTERIUM TUBERCULOSIS DETECTED WITHOUT RIFAMPIN RESISTANCE") ? getResources().getString(R.string.fast_mtb_not_detected) :
+                                (obs[0][1].equals("NEGATIVE") ? getResources().getString(R.string.fast_error) :
+                                        (obs[0][1].equals("INVALID") ? getResources().getString(R.string.fast_invalid) : getResources().getString(R.string.fast_no_result))));
+
+                gxpResult.getSpinner().selectValue(value);
+                gxpResult.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("DATE OF TEST RESULT RECEIVED")) {
+                String secondDate = obs[0][1];
+                secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
+                dateTestResult.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+                dateTestResult.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("MTB BURDEN")) {
+
+                for (RadioButton rb : mtbBurden.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_very_low)) && obs[0][1].equals("VERY LOW")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_low)) && obs[0][1].equals("LOW")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_medium)) && obs[0][1].equals("MEDIUM")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_high)) && obs[0][1].equals("HIGH")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                mtbBurden.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("RIF RESULT")) {
+
+                for (RadioButton rb : rifResult.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_not_detected)) && obs[0][1].equals("NOT DETECTED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_detected)) && obs[0][1].equals("DETECTED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INTERMEDIATE")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                rifResult.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("ERROR CODE")) {
+                errorCode.getEditText().setText(obs[0][1]);
+                errorCode.setVisibility(View.VISIBLE);
+            }
+        }
 
     }
 
@@ -402,6 +471,24 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
         mtbBurden.setVisibility(View.GONE);
         errorCode.setVisibility(View.GONE);
         rifResult.setVisibility(View.GONE);
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean openFlag = bundle.getBoolean("open");
+            if (openFlag) {
+
+                bundle.putBoolean("open", false);
+                bundle.putBoolean("save", true);
+
+                String id = bundle.getString("formId");
+                int formId = Integer.valueOf(id);
+
+                refill(formId);
+
+            } else bundle.putBoolean("save", false);
+
+        }
+
     }
 
     @Override
