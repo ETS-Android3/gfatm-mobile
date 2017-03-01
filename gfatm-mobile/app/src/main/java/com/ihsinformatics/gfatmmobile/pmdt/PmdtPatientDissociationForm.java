@@ -2,7 +2,6 @@ package com.ihsinformatics.gfatmmobile.pmdt;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.renderscript.ScriptGroup;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.InputType;
@@ -13,16 +12,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.R;
-import com.ihsinformatics.gfatmmobile.custom.MyEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
-import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
@@ -30,10 +26,10 @@ import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 import java.util.ArrayList;
 
 /**
- * Created by Tahira on 2/28/2017.
+ * Created by Tahira on 3/1/2017.
  */
 
-public class PmdtPatientAssignmentForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class PmdtPatientDissociationForm extends AbstractFormActivity {
 
     Context context;
     TitledButton formDate;
@@ -41,17 +37,8 @@ public class PmdtPatientAssignmentForm extends AbstractFormActivity implements R
     TitledEditText treatmentSupporterFirstName;
     TitledEditText treatmentSupporterLastName;
 
-    TitledEditText address1;
-    TitledEditText address2;
-    TitledSpinner addressCityDistrict;  // List - To be decided by Program Team later
-    TitledSpinner addressTownTaluka;       // Towns - To be decided by Program Team later
-    TitledEditText addressLandmark;
-
-    TitledRadioGroup treatmentSupporterHouseholdMember;
-    TitledSpinner treatmentSupporterPatientRelationship;
-    TitledEditText otherRelationship;
-    TitledRadioGroup reasonTreatmentSupporterHouseholdMember;
-    TitledEditText otherReasonTreatmentSupporterHouseholdMember;
+    TitledSpinner reasonDissociation;
+    TitledEditText otherReasonDissociation;
 
     ScrollView scrollView;
 
@@ -64,8 +51,8 @@ public class PmdtPatientAssignmentForm extends AbstractFormActivity implements R
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         PAGE_COUNT = 1;
-        FORM_NAME = Forms.PMDT_PATIENT_ASSIGNMENT;
-        FORM = Forms.patientAssignment;
+        FORM_NAME = Forms.PMDT_PATIENT_DISSOCIATION;
+        FORM = Forms.patientDissociation;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -122,37 +109,25 @@ public class PmdtPatientAssignmentForm extends AbstractFormActivity implements R
         treatmentSupporterFirstName.setFocusableInTouchMode(true);
         treatmentSupporterLastName = new TitledEditText(context, "", getResources().getString(R.string.pmdt_treatment_supporter_last_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         treatmentSupporterLastName.setFocusableInTouchMode(true);
-        address1 = new TitledEditText(context, "", getResources().getString(R.string.pmdt_current_address_1), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        address2 = new TitledEditText(context, "", getResources().getString(R.string.pmdt_current_address_2), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        addressCityDistrict = new TitledSpinner(context, "", getResources().getString(R.string.pmdt_current_address_city), getResources().getStringArray(R.array.pmdt_cities), getResources().getString(R.string.pmdt_karachi), App.HORIZONTAL);
-        // Taluka to be considered
-        addressLandmark = new TitledEditText(context, "", getResources().getString(R.string.pmdt_current_address_landmark), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
-        treatmentSupporterHouseholdMember = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_treatment_supporter_household_member), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
-        treatmentSupporterPatientRelationship = new TitledSpinner(context, "", getResources().getString(R.string.pmdt_treatment_supporter_patient_relationship), getResources().getStringArray(R.array.pmdt_treatment_supporter_patient_relation), getResources().getString(R.string.pmdt_father), App.VERTICAL);
-        otherRelationship = new TitledEditText(context, "", getResources().getString(R.string.pmdt_other_relationship), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        reasonTreatmentSupporterHouseholdMember = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_reason_having_treatment_supporter), getResources().getStringArray(R.array.pmdt_reasons_for_having_treatment_supporter), getResources().getString(R.string.pmdt_family_refused_treatment_supporter), App.VERTICAL, App.VERTICAL);
-        otherReasonTreatmentSupporterHouseholdMember = new TitledEditText(context, "", getResources().getString(R.string.pmdt_other_reason_having_treatment_supporter), "", "", 255, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        reasonDissociation = new TitledSpinner(context, null, getResources().getString(R.string.pmdt_reason_dissociation), getResources().getStringArray(R.array.pmdt_reasons_dissociation), getResources().getString(R.string.pmdt_patient_not_satisfied), App.VERTICAL);
+        otherReasonDissociation = new TitledEditText(context, null, getResources().getString(R.string.pmdt_reason_dissociation_other), "", "", 255, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
 
         views = new View[]{formDate.getButton(), treatmentSupporterId.getEditText(), treatmentSupporterFirstName.getEditText(), treatmentSupporterLastName.getEditText(),
-                address1.getEditText(), address2.getEditText(), addressCityDistrict.getSpinner(), /* Taluka, if required*/ addressLandmark.getEditText(),
-                treatmentSupporterHouseholdMember.getRadioGroup(), treatmentSupporterPatientRelationship.getSpinner(), otherRelationship.getEditText(),
-                otherReasonTreatmentSupporterHouseholdMember.getEditText(), otherReasonTreatmentSupporterHouseholdMember.getEditText()};
+                reasonDissociation.getSpinner(), otherReasonDissociation.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, treatmentSupporterId, treatmentSupporterFirstName, treatmentSupporterLastName, address1, address2,
-                        addressCityDistrict, addressLandmark, treatmentSupporterHouseholdMember, treatmentSupporterPatientRelationship,
-                        otherRelationship, reasonTreatmentSupporterHouseholdMember, otherReasonTreatmentSupporterHouseholdMember}};
+                {{formDate, treatmentSupporterId, treatmentSupporterFirstName, treatmentSupporterLastName,
+                        reasonDissociation, otherReasonDissociation}};
 
         formDate.getButton().setOnClickListener(this);
-        treatmentSupporterHouseholdMember.getRadioGroup().setOnCheckedChangeListener(this);
-        reasonTreatmentSupporterHouseholdMember.getRadioGroup().setOnCheckedChangeListener(this);
         resetViews();
     }
 
     @Override
     public void updateDisplay() {
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
     }
 
     @Override
@@ -168,21 +143,6 @@ public class PmdtPatientAssignmentForm extends AbstractFormActivity implements R
     @Override
     public boolean save() {
         return false;
-    }
-
-    @Override
-    public void onClick(View view) {
-
-        super.onClick(view);
-
-        if (view == formDate.getButton()) {
-            Bundle args = new Bundle();
-            args.putInt("type", DATE_DIALOG_ID);
-            args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", false);
-            formDateFragment.setArguments(args);
-            formDateFragment.show(getFragmentManager(), "DatePicker");
-        }
     }
 
     @Override
@@ -202,10 +162,6 @@ public class PmdtPatientAssignmentForm extends AbstractFormActivity implements R
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-    }
-
-    @Override
-    public void onCheckedChanged(RadioGroup group, int checkedId) {
 
     }
 

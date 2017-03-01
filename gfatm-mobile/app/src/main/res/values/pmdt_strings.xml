@@ -49,7 +49,7 @@
     <string name="pmdt_id">ID</string>
     <string name="pmdt_password">Password</string>
 
-
+    <!-- Basic Management Unit Visit -->
     <string name="pmdt_visit_date">Date of Visit</string>
     <string name="pmdt_district">District</string>
     <string name="pmdt_town_taluka_tehsil">Town/Taluka/Tehsil</string>
@@ -60,6 +60,7 @@
     <string name="pmdt_facility_referred">To which facility have the patients been referred?</string>
     <string name="pmdt_number_patients_enrolled">Number of patients enrolled in PMDT</string>
 
+    <!-- Patient Assignment Form -->
     <string name="pmdt_treatment_supporter_id">Treatment Supporter ID</string>
     <string name="pmdt_treatment_supporter_first_name">Treatment Supporter First Name</string>
     <string name="pmdt_treatment_supporter_last_name">Treatment Supporter Last Name</string>
@@ -123,7 +124,6 @@
         <item>@string/pmdt_cousin</item>
         <item>@string/pmdt_other</item>
     </string-array>
-
     <string name="pmdt_family_refused_treatment_supporter">Family refused to have a Treatment Supporter who is not a household member</string>
     <string name="pmdt_patient_refused_treatment_supporter">Patient refused to have a Treatment Supporter who is not a household member</string>
     <string name="pmdt_unable_to_appoint_treatment_supporter">Unable to appoint Treatment Supporter as incentive not being provided</string>
@@ -135,6 +135,46 @@
     </string-array>
 
 
+    <!-- Patient Dissociation -->
+    <string name="pmdt_reason_dissociation">Reason for dissociation</string>
+    <string name="pmdt_patient_not_satisfied">Patient is not satisfied with the Treatment Supporter</string>
+    <string name="pmdt_supervisor_not_satisfied">Supervisor is not satisfied with Treatment Supporter\'s performance</string>
+    <string name="pmdt_treatment_outcome_declared">Treatment outcome has been declared for the patient</string>
+    <string name="pmdt_treatment_supporter_unwilling_patient">Treatment Supporter is unwilling to continue with this patient</string>
+    <string name="pmdt_treatment_supporter_relocated">Treatment Supporter has relocated</string>
+    <string name="pmdt_patient_relocated">Patient has relocated</string>
+    <string name="pmdt_treatment_supporter_shifted">Treatment Supporter has been shifted to another program location</string>
+    <string name="pmdt_patient_transferred">Patient has been transferred to another program location</string>
+    <string name="pmdt_treatment_supporter_unwilling_program">Treatment Supporter is unwilling to continue with the program</string>
+    <string name="pmdt_treatment_supporter_leave_program">Treatment Supporter has been asked to leave the program</string>
+    <string-array name="pmdt_reasons_dissociation">
+        <item>@string/pmdt_patient_not_satisfied</item>
+        <item>@string/pmdt_supervisor_not_satisfied</item>
+        <item>@string/pmdt_treatment_outcome_declared</item>
+        <item>@string/pmdt_treatment_supporter_unwilling_patient</item>
+        <item>@string/pmdt_treatment_supporter_relocated</item>
+        <item>@string/pmdt_patient_relocated</item>
+        <item>@string/pmdt_treatment_supporter_shifted</item>
+        <item>@string/pmdt_patient_transferred</item>
+        <item>@string/pmdt_treatment_supporter_unwilling_program</item>
+        <item>@string/pmdt_treatment_supporter_leave_program</item>
+        <item>@string/pmdt_other</item>
+    </string-array>
+    <string name="pmdt_reason_dissociation_other">If reason \'other\', then specify:</string>
+
+    <!-- Daily Treatment Monitoring -->
+    <string name="pmdt_reporting_date">Date of reporting</string>
+    <string name="pmdt_day_of_treatment">Which day of treatment?</string>
+    <string name="pmdt_treatment_day_type">Is it a fully observed day, missed prescribed day, or an incomplete prescribed day?</string>
+    <string name="pmdt_patient_adverse_event">Does the patient have an adverse event?</string>
+    <string name="pmdt_fully_observed_day">Fully Observed day</string>
+    <string name="pmdt_missed_prescribed_day">Missed prescribed day</string>
+    <string name="pmdt_incomplete_prescribed_day">Incomplete prescribed day</string>
+    <string-array name="pmdt_types_treatment_day">
+        <item>@string/pmdt_fully_observed_day</item>
+        <item>@string/pmdt_missed_prescribed_day</item>
+        <item>@string/pmdt_incomplete_prescribed_day</item>
+    </string-array>
     <!--list of occupations-->
 
     <string name="pmdt_artist">Artist</string>
