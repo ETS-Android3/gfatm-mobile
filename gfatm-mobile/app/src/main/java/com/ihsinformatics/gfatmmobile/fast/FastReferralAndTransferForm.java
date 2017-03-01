@@ -205,6 +205,15 @@ public class FastReferralAndTransferForm extends AbstractFormActivity implements
 
     @Override
     public boolean submit() {
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            String encounterId = bundle.getString("formId");
+            if (saveFlag) {
+                serverService.deleteOfflineForms(encounterId);
+            }
+            bundle.putBoolean("save", false);
+        }
 
         endTime = new Date();
 

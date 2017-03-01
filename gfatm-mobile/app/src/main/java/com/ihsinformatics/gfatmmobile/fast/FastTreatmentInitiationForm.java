@@ -358,6 +358,15 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
     @Override
     public boolean submit() {
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            String encounterId = bundle.getString("formId");
+            if (saveFlag) {
+                serverService.deleteOfflineForms(encounterId);
+            }
+            bundle.putBoolean("save", false);
+        }
 
         endTime = new Date();
         String cnicNumber = cnic1.getEditText().toString() + cnic2.getEditText().toString() + cnic3.getEditText().toString();
@@ -909,8 +918,9 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                 });
 
                 HashMap<String, String> result = new HashMap<String, String>();
-                String cnic1 = serverService.getObsValue(App.getPatient().getPatientId(), App.getProgram() + "-" + "Presumptive Information", "NATIONAL IDENTIFICATION NUMBER");
-                String cnicowner1 = serverService.getObsValue(App.getPatient().getPatientId(), App.getProgram() + "-" + "Presumptive Information", "COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
+                String cnic1 = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Information", "NATIONAL IDENTIFICATION NUMBER");
+                String cnicowner1 = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Information", "COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
+                String regDate = serverService.getEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + "Presumptive Information");
 
                 if (cnic1 != null)
                     result.put("NATIONAL IDENTIFICATION NUMBER", cnic1);
@@ -931,6 +941,8 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                                                                                                                             (cnicowner1.equals("DAUGHTER") ? getResources().getString(R.string.fast_daughter) : getResources().getString(R.string.fast_other_title)))))))))))))));
 
                 }
+                if(regDate != null)
+                    result.put("FORM DATE", regDate);
 
                 return result;
             }
@@ -938,7 +950,6 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             @Override
             protected void onProgressUpdate(String... values) {
             }
-
 
 
             @Override
@@ -955,6 +966,12 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
                 if (result.get("COMPUTERIZED NATIONAL IDENTIFICATION OWNER") != null) {
                     cnicOwner.getSpinner().selectValue(result.get("COMPUTERIZED NATIONAL IDENTIFICATION OWNER"));
+                }
+
+                if (result.get("FORM DATE") != null) {
+                    String registerationDate = result.get("FORM DATE");
+                    secondDateCalendar.setTime(App.stringToDate(registerationDate, "dd/MM/yyyy"));
+                    regDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
                 }
             }
         };

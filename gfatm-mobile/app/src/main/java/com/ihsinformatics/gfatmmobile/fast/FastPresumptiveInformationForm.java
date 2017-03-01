@@ -68,7 +68,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
     TitledRadioGroup addressProvided;
     TitledEditText addressHouse;
     TitledEditText addressStreet;
-    TitledRadioGroup addressTown;
+    TitledSpinner addressTown;
     TitledEditText city;
     TitledRadioGroup addressType;
     TitledEditText nearestLandmark;
@@ -158,7 +158,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         addressProvided = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_provided_their_address), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
         addressHouse = new TitledEditText(context, null, getResources().getString(R.string.fast_address_1), "", "", 10, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         addressStreet = new TitledEditText(context, null, getResources().getString(R.string.fast_address_2), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        addressTown = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_town), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
+        addressTown = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_town), getResources().getStringArray(R.array.fast_towns_list),"Default Town", App.VERTICAL);
         city = new TitledEditText(context, null, getResources().getString(R.string.fast_city), App.getCity(), "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         city.getEditText().setKeyListener(null);
         city.getEditText().setFocusable(false);
@@ -193,7 +193,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), cnic1.getEditText(), cnic2.getEditText(), cnic3.getEditText(), cnicOwner.getSpinner(), otherCnicOwner.getEditText(),
-                addressProvided.getRadioGroup(), addressHouse.getEditText(), addressStreet.getEditText(), addressTown.getRadioGroup(),
+                addressProvided.getRadioGroup(), addressHouse.getEditText(), addressStreet.getEditText(), addressTown.getSpinner(),
                 city.getEditText(), addressType.getRadioGroup(), nearestLandmark.getEditText(), contactPermission.getRadioGroup()
                 , mobile1.getEditText(), mobile2.getEditText(), secondaryMobile1.getEditText(), secondaryMobile2.getEditText(), landline1.getEditText(),
                 landline2.getEditText(), secondaryLandline1.getEditText(), secondaryLandline2.getEditText()};
@@ -577,6 +577,16 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
     @Override
     public boolean submit() {
 
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            String encounterId = bundle.getString("formId");
+            if (saveFlag) {
+                serverService.deleteOfflineForms(encounterId);
+            }
+            bundle.putBoolean("save", false);
+        }
+
         endTime = new Date();
 
         final ArrayList<String[]> observations = new ArrayList<String[]>();
@@ -623,6 +633,26 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
 
         if (contactPermission.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"PERMISSION TO CONTACT FOR CALL AND SMS", App.get(contactPermission).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
+
+        observations.add(new String[]{"CONTACT PHONE NUMBER", mobileNumber});
+
+        if (!(App.get(secondaryMobile1).isEmpty() && App.get(secondaryMobile2).isEmpty()))
+        observations.add(new String[]{"SECONDARY MOBILE NUMBER", secondaryMobileNumber});
+
+        if (!(App.get(landline1).isEmpty() && App.get(landline2).isEmpty()))
+        observations.add(new String[]{"TERTIARY CONTACT NUMBER", landlineNumber});
+
+        if (!(App.get(secondaryLandline1).isEmpty() && App.get(secondaryLandline2).isEmpty()))
+        observations.add(new String[]{"QUATERNARY CONTACT NUMBER", secondaryLandlineNumber});
+
+        if (addressHouse.getVisibility() == View.VISIBLE)
+        observations.add(new String[]{"ADDRESS (TEXT)", App.get(addressHouse)});
+
+        if (addressStreet.getVisibility() == View.VISIBLE)
+        observations.add(new String[]{"EXTENDED ADDRESS (TEXT)", App.get(addressStreet)});
+
+        if (addressTown.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"TOWN",addressTown.getSpinner().getSelectedItem().toString()});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -860,12 +890,12 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
                 contactPermission.setVisibility(View.VISIBLE);
             }
 
-            else if (obs[0][0].equals("address1")) {
+            else if (obs[0][0].equals("ADDRESS (TEXT)")) {
                 addressHouse.getEditText().setText(obs[0][1]);
                 addressHouse.setVisibility(View.VISIBLE);
             }
 
-            else if (obs[0][0].equals("address2")) {
+            else if (obs[0][0].equals("EXTENDED ADDRESS (TEXT)")) {
                 addressStreet.getEditText().setText(obs[0][1]);
                 addressStreet.setVisibility(View.VISIBLE);
             }
@@ -875,31 +905,22 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
                 city.setVisibility(View.VISIBLE);
             }
 
-            else if (obs[0][0].equals("stateProvince")) {
-
-                for (RadioButton rb : addressTown.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
+            else if (obs[0][0].equals("TOWN")) {
+                addressTown.getSpinner().selectValue(obs[0][1]);
                 addressTown.setVisibility(View.VISIBLE);
             }
 
-            else if (obs[0][0].equals("Primary Contact")) {
+            else if (obs[0][0].equals("CONTACT PHONE NUMBER")) {
                 String mobNum = obs[0][1];
                 mobile1.getEditText().setText(mobNum.substring(0,4));
                 mobile2.getEditText().setText(mobNum.substring(4,11));
             }
-            else if (obs[0][0].equals("Secondary Contact")) {
+            else if (obs[0][0].equals("SECONDARY MOBILE NUMBER")) {
                 String mobNum2 = obs[0][1];
                 secondaryMobile1.getEditText().setText(mobNum2.substring(0,4));
                 secondaryMobile2.getEditText().setText(mobNum2.substring(4,11));
             }
-            else if (obs[0][0].equals("Tertiary Contact")) {
+            else if (obs[0][0].equals("TERTIARY CONTACT NUMBER")) {
                 String landNum = obs[0][1];
                 if(landNum.length() == 11) {
                     landline1.getEditText().setText(landNum.substring(0, 4));
@@ -910,7 +931,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
                     landline2.getEditText().setText(landNum.substring(3, 10));
                 }
             }
-            else if (obs[0][0].equals("Quaternary Contact")) {
+            else if (obs[0][0].equals("QUATERNARY CONTACT NUMBER")) {
                 String landNum1 = obs[0][1];
                 if(landNum1.length() == 11) {
                     secondaryLandline1.getEditText().setText(landNum1.substring(0, 4));

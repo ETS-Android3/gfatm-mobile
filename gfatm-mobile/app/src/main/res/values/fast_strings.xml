@@ -926,4 +926,27 @@
         <item>@string/fast_dr_not_confirmed_by_baseline_repeat_test</item>
         <item>@string/fast_other_title</item>
     </string-array>
+
+
+    <string-array name="fast_towns_list">
+        <item>Default Town</item>
+        <item>Baldia Town</item>
+        <item>Bin Qasim Town</item>
+        <item>Gadap Town</item>
+        <item>Gulberg Town</item>
+        <item>Gulshan-e-Iqbal Town</item>
+        <item>Jamshed Town</item>
+        <item>Kimari Town</item>
+        <item>Korangi Town</item>
+        <item>Landhi Town</item>
+        <item>Liaquatabad Town</item>
+        <item>Lyari Town</item>
+        <item>Malir Town</item>
+        <item>New Karachi Town</item>
+        <item>North Nazimabad Town</item>
+        <item>Orangi Town</item>
+        <item>Saddar Town</item>
+        <item>Shah Faisal Town</item>
+        <item>S.I.T.E Town</item>
+    </string-array>
 </resources>
