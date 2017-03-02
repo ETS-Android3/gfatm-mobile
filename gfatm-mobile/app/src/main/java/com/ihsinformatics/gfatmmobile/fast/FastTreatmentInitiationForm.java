@@ -424,7 +424,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                     (App.get(patientType).equals(getResources().getString(R.string.fast_relapse)) ? "RELAPSE" :
                             (App.get(patientType).equals(getResources().getString(R.string.fast_referred_transferred_in)) ? "PATIENT REFERRED" :
                                     (App.get(patientType).equals(getResources().getString(R.string.fast_treatment_after_loss_to_follow_up)) ? "LOST TO FOLLOW-UP" :
-                                            (App.get(patientType).equals(getResources().getString(R.string.fast_treatment_failure)) ? "TUBERCULOSIS TREATMENT FAILURE" : "OTHER" ))))});
+                                            (App.get(patientType).equals(getResources().getString(R.string.fast_treatment_failure)) ? "TUBERCULOSIS TREATMENT FAILURE" : "OTHER PATIENT TYPE" ))))});
 
 
         if (treatmentInitiated.getVisibility() == View.VISIBLE)
@@ -445,7 +445,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
        if (historyCategory.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"HISTORY OF PREVIOUSLY ANTI TUBERCULOSIS TREATMENT", App.get(historyCategory).equals(getResources().getString(R.string.fast_cat_1)) ? "CATEGORY I TUBERCULOSIS" :
                     (App.get(historyCategory).equals(getResources().getString(R.string.fast_cat_2)) ? "CATEGORY II TUBERCULOSIS" :
-                            (App.get(historyCategory).equals(getResources().getString(R.string.fast_cat1_cat2)) ? "CAT I & II TUBERCULOSIS" : "OTHER" ))});
+                            (App.get(historyCategory).equals(getResources().getString(R.string.fast_cat1_cat2)) ? "CAT I & II TUBERCULOSIS" : "OTHER TUBERCULOSIS CATEGORY" ))});
 
 
         if (outcomePreviousCategory.getVisibility() == View.VISIBLE)
@@ -453,7 +453,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                     (App.get(outcomePreviousCategory).equals(getResources().getString(R.string.fast_treatment_completed)) ? "TREATMENT COMPLETE" :
                             (App.get(outcomePreviousCategory).equals(getResources().getString(R.string.fast_treatment_failure)) ? "TUBERCULOSIS TREATMENT FAILURE" :
                                     (App.get(outcomePreviousCategory).equals(getResources().getString(R.string.fast_transfer_out)) ? "TRANSFERRED OUT":
-                                        (App.get(outcomePreviousCategory).equals(getResources().getString(R.string.fast_loss_to_follow_up_default)) ? "LOST TO FOLLOW-UP" : "OTHER" ))))});
+                                        (App.get(outcomePreviousCategory).equals(getResources().getString(R.string.fast_loss_to_follow_up_default)) ? "LOST TO FOLLOW-UP" : "OTHER TREATMENT OUTCOME" ))))});
 
         if (weight.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"WEIGHT (KG)", App.get(weight)});

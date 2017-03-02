@@ -255,9 +255,9 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
                                                                                                             (App.get(patientConsultation).equals(getResources().getString(R.string.fast_urology_title)) ? "UROLOGY DEPARTMENT" :
                                                                                                                     (App.get(patientConsultation).equals(getResources().getString(R.string.fast_psychiatry_title)) ? "PSYCHIATRY DEPARTMENT" :
                                                                                                                             (App.get(patientConsultation).equals(getResources().getString(R.string.fast_opthamology_title)) ? "OPHTHALMOLOGY DEPARTMENT" :
-                                                                                                                                    (App.get(patientConsultation).equals(getResources().getString(R.string.fast_endocrionology_title)) ? "ENDOCRINOLOGY DEPARTMENT" : "OTHER")))))))))))))))});
+                                                                                                                                    (App.get(patientConsultation).equals(getResources().getString(R.string.fast_endocrionology_title)) ? "ENDOCRINOLOGY DEPARTMENT" : "OTHER FACILITY DEPARTMENT")))))))))))))))});
         if (patientConsultationOther.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER", App.get(patientConsultationOther)});
+            observations.add(new String[]{"OTHER FACILITY DEPARTMENT", App.get(patientConsultationOther)});
 
         if (cough.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"COUGH", App.get(cough).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
@@ -480,7 +480,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
 
                 patientConsultation.getSpinner().selectValue(value);
                 patientConsultation.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("OTHER")) {
+            } else if (obs[0][0].equals("OTHER FACILITY DEPARTMENT")) {
                 patientConsultationOther.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("COUGH")) {
                 for (RadioButton rb : cough.getRadioGroup().getButtons()) {
