@@ -177,7 +177,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
         contactTbRegisternationNo = new TitledEditText(context, null, getResources().getString(R.string.fast_tb_registeration_no), "", "", 11, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), facilitySection.getSpinner(), facilitySectionOther.getEditText(),
+        views = new View[]{formDate.getButton(), screening.getRadioGroup(), facilitySection.getSpinner(), facilitySectionOther.getEditText(),
                 opdWardSection.getSpinner(), patientReferralSource.getSpinner(), otherReferral.getEditText(),
                 facilityDepartment.getRadioGroup(), facilityDepartmentOther.getEditText(), referralWithinOpd.getSpinner(), referralWithinOpdOther.getEditText(),
                 facilityType.getRadioGroup(), hearAboutUs.getSpinner(), hearAboutUsOther.getEditText(), contactReferral.getRadioGroup(), contactIdType, contactPatientId.getEditText(), contactExternalId.getEditText(), contactExternalIdHospital.getSpinner(),
@@ -444,6 +444,21 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
         if (contactReferral.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"PATIENT ENROLLED", App.get(contactReferral).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
 
+
+        if (contactIdType.getVisibility() == View.VISIBLE) {
+            String contactIdTypeString = "";
+            for (CheckBox cb : contactIdType.getCheckedBoxes()) {
+                if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_patient_id)))
+                    contactIdTypeString = contactIdTypeString + "CONTACT PATIENT ID" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_external_id)))
+                    contactIdTypeString = contactIdTypeString + "CONTACT EXTERNAL ID" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_tb_registeration_no)))
+                    contactIdTypeString = contactIdTypeString + "TB REGISTRATION NUMBER" + " ; ";
+            }
+            observations.add(new String[]{"CONTACT ID TYPE", contactIdTypeString});
+        }
+
+
         if (contactPatientId.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"CONTACT PATIENT ID", App.get(contactPatientId)});
 
@@ -451,7 +466,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
             observations.add(new String[]{"CONTACT EXTERNAL ID", App.get(contactExternalId)});
 
         if (contactExternalIdHospital.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"FACILITY NAME", App.get(contactExternalIdHospital)});
+            observations.add(new String[]{"CONTACT FACILITY NAME", App.get(contactExternalIdHospital)});
 
         if (contactTbRegisternationNo.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TB REGISTRATION NUMBER", App.get(contactTbRegisternationNo)});
@@ -714,13 +729,27 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
                     }
                 }
                 contactReferral.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("CONTACT ID TYPE")) {
+                for (CheckBox cb : contactIdType.getCheckedBoxes()) {
+                    if (cb.getText().equals(getResources().getString(R.string.fast_patient_id)) && obs[0][1].equals("CONTACT PATIENT ID")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.fast_external_id)) && obs[0][1].equals("CONTACT EXTERNAL ID")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.fast_tb_registeration_no)) && obs[0][1].equals("TB REGISTRATION NUMBER")) {
+                        cb.setChecked(true);
+                        break;
+                    }
+                }
+                contactIdType.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("CONTACT PATIENT ID")) {
                 contactPatientId.getEditText().setText(obs[0][1]);
                 contactPatientId.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("CONTACT EXTERNAL ID")) {
                 contactExternalId.getEditText().setText(obs[0][1]);
                 contactExternalId.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("FACILITY NAME")) {
+            } else if (obs[0][0].equals("CONTACT FACILITY NAME")) {
                 contactExternalIdHospital.getSpinner().selectValue(obs[0][1]);
                 contactExternalIdHospital.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("TB REGISTRATION NUMBER")) {
@@ -782,12 +811,22 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
                     } else {
                         referralWithinOpdOther.setVisibility(View.GONE);
                     }
-                } else {
+                }
+                else {
                     referralWithinOpd.setVisibility(View.GONE);
                     referralWithinOpdOther.setVisibility(View.GONE);
                 }
+
+                if(facilityDepartment.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_other_title))){
+                    facilityDepartmentOther.setVisibility(View.VISIBLE);
+                }
+                else{
+                    facilityDepartmentOther.setVisibility(View.GONE);
+                }
+
             } else {
                 facilityDepartment.setVisibility(View.GONE);
+                facilityDepartmentOther.setVisibility(View.GONE);
                 referralWithinOpd.setVisibility(View.GONE);
                 referralWithinOpdOther.setVisibility(View.GONE);
             }
@@ -798,8 +837,15 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
             }
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_self_referral)) && screening.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))) {
                 hearAboutUs.setVisibility(View.VISIBLE);
+                if (hearAboutUs.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))){
+                    hearAboutUsOther.setVisibility(View.VISIBLE);
+                }
+                else{
+                    hearAboutUsOther.setVisibility(View.GONE);
+                }
             } else {
                 hearAboutUs.setVisibility(View.GONE);
+                hearAboutUsOther.setVisibility(View.GONE);
             }
 
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_contact_of_tb_patient)) && screening.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))) {
@@ -873,6 +919,10 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
                 if (facilitySection.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_opdclinicscreening_title)) || facilitySection.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_wardscreening_title))) {
                     opdWardSection.setVisibility(View.VISIBLE);
                 }
+
+                else if (facilitySection.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))) {
+                    facilitySectionOther.setVisibility(View.VISIBLE);
+                }
                 patientReferralSource.setVisibility(View.GONE);
                 otherReferral.setVisibility(View.GONE);
                 facilityDepartment.setVisibility(View.GONE);
@@ -890,6 +940,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
                 contactTbRegisternationNo.setVisibility(View.GONE);
             } else {
                 facilitySection.setVisibility(View.GONE);
+                facilitySectionOther.setVisibility(View.GONE);
                 opdWardSection.setVisibility(View.GONE);
                 patientReferralSource.setVisibility(View.VISIBLE);
                 if (patientReferralSource.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))) {
