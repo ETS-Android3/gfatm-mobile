@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -78,6 +79,8 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
     TitledSpinner outcomePreviousCategory;
     TitledEditText weight;
     TitledButton returnVisitDate;
+
+    Snackbar snackbar;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -207,8 +210,42 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
     @Override
     public void updateDisplay() {
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        regDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+        if (snackbar != null)
+            snackbar.dismiss();
+
+        if (!formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString())) {
+
+            Date date = App.stringToDate(formDate.getButton().getText().toString(), "dd-MMM-yyyy");
+
+            if (formDateCalendar.after(App.getCalendar(date))) {
+
+                formDateCalendar = App.getCalendar(date);
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+            } else
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        }
+
+        if (!regDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString())) {
+
+            Date date = App.stringToDate(regDate.getButton().getText().toString(), "dd-MMM-yyyy");
+
+            if (secondDateCalendar.after(App.getCalendar(date))) {
+
+                secondDateCalendar = App.getCalendar(date);
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+            } else
+                regDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+
+        }
+
+
         if (!dateChoose) {
             thirdDateCalendar.set(Calendar.YEAR, secondDateCalendar.get(Calendar.YEAR));
             thirdDateCalendar.set(Calendar.DAY_OF_MONTH, secondDateCalendar.get(Calendar.DAY_OF_MONTH));

@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -57,6 +58,7 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
     TitledRadioGroup freeXrayVoucher;
     TitledRadioGroup noXrayVoucher;
 
+    Snackbar snackbar;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -164,6 +166,27 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
 
     @Override
     public void updateDisplay() {
+
+        if (snackbar != null)
+            snackbar.dismiss();
+
+        if (!formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString())) {
+
+            Date date = App.stringToDate(formDate.getButton().getText().toString(), "dd-MMM-yyyy");
+
+            if (formDateCalendar.after(App.getCalendar(date))) {
+
+                formDateCalendar = App.getCalendar(date);
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+            } else
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        }
+
+
+
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         secondDateCalendar.set(Calendar.YEAR, formDateCalendar.get(Calendar.YEAR));
         secondDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));

@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -73,6 +74,8 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
     TitledRadioGroup addressType;
     TitledEditText nearestLandmark;
     TitledRadioGroup contactPermission;
+
+    Snackbar snackbar;
 
 
     /**
@@ -214,7 +217,25 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
 
     @Override
     public void updateDisplay() {
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        if (snackbar != null)
+            snackbar.dismiss();
+
+        if (!formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString())) {
+
+            Date date = App.stringToDate(formDate.getButton().getText().toString(), "dd-MMM-yyyy");
+
+            if (formDateCalendar.after(App.getCalendar(date))) {
+
+                formDateCalendar = App.getCalendar(date);
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+            } else
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        }
     }
 
     @Override
