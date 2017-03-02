@@ -30,6 +30,7 @@
     <string name="fast_gynaeobstetrics_title">Gynae/Obstetrics</string>
     <string name="fast_surgery_title">Surgery</string>
     <string name="fast_er_title">Emergency (ER)</string>
+    <string name="fast_form_date_past">Date can\'t be in past.</string>
     <string name="fast_patient_title">Patient</string>
     <string name="fast_attendant_title">Attendant</string>
     <string name="fast_greater_title">&gt;= 15 years old</string>
