@@ -217,24 +217,25 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
 
     @Override
     public void updateDisplay() {
-
         if (snackbar != null)
             snackbar.dismiss();
 
-        if (!formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString())) {
+        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
 
-            Date date = App.stringToDate(formDate.getButton().getText().toString(), "dd-MMM-yyyy");
+            String formDa = formDate.getButton().getText().toString();
 
+            Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
 
-                formDateCalendar = App.getCalendar(date);
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-            } else
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
+            } else
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         }
     }
 
