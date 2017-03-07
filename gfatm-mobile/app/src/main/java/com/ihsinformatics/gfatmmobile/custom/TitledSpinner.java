@@ -1,6 +1,7 @@
 package com.ihsinformatics.gfatmmobile.custom;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -55,6 +56,23 @@ public class TitledSpinner extends LinearLayout {
 
         spinner = new MySpinner(context, options, defaultValue);
         linearLayout.addView(spinner);
+
+        if (layoutOrientation == App.HORIZONTAL) {
+
+            LayoutParams layoutParams1 = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
+            hLayout.setLayoutParams(layoutParams1);
+
+            questionView.setGravity(Gravity.CENTER);
+
+            LayoutParams layoutParams2 = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
+            questionView.setLayoutParams(layoutParams2);
+
+            LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+            layoutParams.setMargins(20, 0, 0, 0);
+            spinner.setLayoutParams(layoutParams);
+
+            spinner.setGravity(Gravity.BOTTOM);
+        }
 
         addView(linearLayout);
     }

@@ -42,12 +42,11 @@ public class MyRadioGroup extends RadioGroup {
     }
 
     public void selectDefaultValue() {
+        clearCheck();
         for (RadioButton rb : buttons) {
             String str = rb.getText().toString();
             if (str.equals(defaultValue))
                 rb.setChecked(true);
-            else
-                rb.setChecked(false);
         }
     }
 
