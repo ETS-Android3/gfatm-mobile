@@ -408,7 +408,7 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
 
                 String result = "";
                 result = serverService.saveEncounterAndObservation(FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}));
-                if (!result.contains("SUCCESS"))
+                if (result.contains("SUCCESS"))
                     return "SUCCESS";
 
                 return result;

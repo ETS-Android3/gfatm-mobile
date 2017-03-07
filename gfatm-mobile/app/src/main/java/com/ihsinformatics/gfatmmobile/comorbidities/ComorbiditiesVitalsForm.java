@@ -564,15 +564,15 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
 
                 String result = "";
                 result = serverService.saveEncounterAndObservation(FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}));
-                return result;
+                if (result.contains("SUCCESS"))
+                    return "SUCCESS";
 
+                return result;
             }
 
             @Override
             protected void onProgressUpdate(String... values) {
             }
-
-            ;
 
             @Override
             protected void onPostExecute(String result) {
