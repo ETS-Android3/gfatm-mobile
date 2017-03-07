@@ -3,7 +3,6 @@ package com.ihsinformatics.gfatmmobile.comorbidities;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,44 +10,52 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.R;
-import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
-import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
+import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
+import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
+import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
 /**
- * Created by Fawad Jawaid on 19-Jan-17.
+ * Created by Fawad Jawaid on 14-Feb-17.
  */
-public class ComorbiditiesDiabetesEducationForm extends AbstractFormActivity {
+
+public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
     Context context;
 
     // Views...
     TitledButton formDate;
-    TitledSpinner diabetesEducationFormFollowupMonth;
-    MyTextView diabetesEducationFormEducationalPlan;
-    TitledCheckBoxes diabetesEducationFormDiabetesEducation;
-    MyTextView diabetesEducationFormEducationalMaterial;
-    TitledCheckBoxes diabetesEducationFormDiabetesEducationalMaterial;
+    TitledEditText numberOfSessionsConducted;
+    TitledEditText akuadsRescreeningScore;
+    TitledSpinner reasonForDiscontinuation;
+    TitledRadioGroup feelingBetterReason;
+    TitledRadioGroup lossToFollowup;
+    TitledRadioGroup referredTo;
+    //TitledEditText ifOther;
+    TitledRadioGroup reasonForReferral;
+    //TitledEditText otherSevereMentalIllness;
+    TitledEditText remarks;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -63,13 +70,13 @@ public class ComorbiditiesDiabetesEducationForm extends AbstractFormActivity {
                              ViewGroup container, Bundle savedInstanceState) {
 
         PAGE_COUNT = 1;
-        FORM_NAME = Forms.COMORBIDITIES_DIABETES_EDUCATION_FORM;
-        FORM =  Forms.comorbidities_diabetesEducationForm;
+        FORM_NAME = Forms.COMORBIDITIES_END_OF_TREATMENT_MENTAL_HEALTH;
+        FORM = Forms.comorbidities_endOfTreatmentFormMH;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
         pager = (ViewPager) mainContent.findViewById(R.id.pager);
-        pager.setAdapter(new ComorbiditiesDiabetesEducationForm.MyAdapter());
+        pager.setAdapter(new ComorbiditiesEndOfTreatmentMentalHealthForm.MyAdapter());
         pager.setOnPageChangeListener(this);
         navigationSeekbar.setMax(PAGE_COUNT - 1);
         formName.setText(FORM_NAME);
@@ -121,22 +128,46 @@ public class ComorbiditiesDiabetesEducationForm extends AbstractFormActivity {
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        diabetesEducationFormEducationalPlan = new MyTextView(context, getResources().getString(R.string.comorbidities_education_form_educational_plan));
-        diabetesEducationFormEducationalPlan.setTypeface(null, Typeface.BOLD);
-        diabetesEducationFormFollowupMonth = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_mth_txcomorbidities_hba1c), getResources().getStringArray(R.array.comorbidities_followup_month), "1", App.HORIZONTAL);
-        diabetesEducationFormDiabetesEducation = new TitledCheckBoxes(context, null, getResources().getString(R.string.comorbidities_education_form_educational_plan_text), getResources().getStringArray(R.array.comorbidities_education_form_educational_plan_text_options), new Boolean[]{true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false ,false, false}, App.VERTICAL, App.VERTICAL);
-        diabetesEducationFormEducationalMaterial = new MyTextView(context, getResources().getString(R.string.comorbidities_education_form_educational_material));
-        diabetesEducationFormEducationalMaterial.setTypeface(null, Typeface.BOLD);
-        diabetesEducationFormDiabetesEducationalMaterial = new TitledCheckBoxes(context, null, getResources().getString(R.string.comorbidities_education_form_educational_material_text), getResources().getStringArray(R.array.comorbidities_education_form_educational_material_text_options), new Boolean[]{true, false, false, false, false, false, false, false, false, false, false}, App.VERTICAL, App.VERTICAL);
+        numberOfSessionsConducted = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_number_of_sessions), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        akuadsRescreeningScore = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_akuads_score), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        reasonForDiscontinuation = new TitledSpinner(mainContent.getContext(), null, getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation),  getResources().getStringArray(R.array.comorbidities_end_treatment_MH_reason_of_discontinuation_options), "", App.VERTICAL, true);
+        feelingBetterReason = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_feeling_better), getResources().getStringArray(R.array.comorbidities_end_treatment_MH_feeling_better_options), "", App.VERTICAL, App.VERTICAL);
+        lossToFollowup = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_loss_to_followup), getResources().getStringArray(R.array.comorbidities_end_treatment_MH_loss_to_followup_options), "", App.VERTICAL, App.VERTICAL);
+        referredTo = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_referred_to), getResources().getStringArray(R.array.comorbidities_end_treatment_MH_referred_to_options), "", App.VERTICAL, App.VERTICAL);
+        reasonForReferral = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_referral_reason), getResources().getStringArray(R.array.comorbidities_end_treatment_MH_referral_reason_options), "", App.VERTICAL, App.VERTICAL);
+        //ifOther = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_if_other), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        //otherSevereMentalIllness =  new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_describe_illness), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        remarks=  new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_comments_remarks), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        displayFeelingBetterReason();
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), diabetesEducationFormFollowupMonth.getSpinner(), diabetesEducationFormDiabetesEducation, diabetesEducationFormDiabetesEducationalMaterial};
+        views = new View[]{formDate.getButton(), numberOfSessionsConducted.getEditText(), akuadsRescreeningScore.getEditText(), reasonForDiscontinuation.getSpinner(), feelingBetterReason.getRadioGroup(),
+                lossToFollowup.getRadioGroup(), referredTo.getRadioGroup(), reasonForReferral.getRadioGroup(), /*ifOther.getEditText(), otherSevereMentalIllness.getEditText(),*/ remarks.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, diabetesEducationFormFollowupMonth, diabetesEducationFormEducationalPlan, diabetesEducationFormDiabetesEducation, diabetesEducationFormEducationalMaterial, diabetesEducationFormDiabetesEducationalMaterial}};
+                {{formDate, numberOfSessionsConducted, akuadsRescreeningScore, reasonForDiscontinuation, feelingBetterReason,
+                        lossToFollowup, referredTo, reasonForReferral, /*ifOther, otherSevereMentalIllness,*/ remarks}};
 
         formDate.getButton().setOnClickListener(this);
+        feelingBetterReason.getRadioGroup().setOnCheckedChangeListener(this);
+        lossToFollowup.getRadioGroup().setOnCheckedChangeListener(this);
+        referredTo.getRadioGroup().setOnCheckedChangeListener(this);
+        reasonForReferral.getRadioGroup().setOnCheckedChangeListener(this);
+
+        reasonForDiscontinuation.getSpinner().setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                displayFeelingBetterReason();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+            }
+
+        });
+
+        resetViews();
     }
 
     @Override
@@ -188,81 +219,29 @@ public class ComorbiditiesDiabetesEducationForm extends AbstractFormActivity {
         final ArrayList<String[]> observations = new ArrayList<String[]>();
         observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
         observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
-        observations.add(new String[]{"FOLLOW-UP MONTH", App.get(diabetesEducationFormFollowupMonth)});
+        observations.add(new String[]{"TOTAL NUMBER OF SESSIONS", App.get(numberOfSessionsConducted)});
+        observations.add(new String[]{"AKUADS SCORE", App.get(akuadsRescreeningScore)});
 
-        String diabetesEducationFormDiabetesEducationString = "";
-        for(CheckBox cb : diabetesEducationFormDiabetesEducation.getCheckedBoxes()){
-            if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_education_form_educational_plan_text_option1)))
-                diabetesEducationFormDiabetesEducationString = diabetesEducationFormDiabetesEducationString + "TYPES OF DIABETES" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_education_form_educational_plan_text_option2)))
-                diabetesEducationFormDiabetesEducationString = diabetesEducationFormDiabetesEducationString + "DIABETES COMPLICATIONS" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_education_form_educational_plan_text_option3)))
-                diabetesEducationFormDiabetesEducationString = diabetesEducationFormDiabetesEducationString + "ORAL MEDICATION TIMING AND ROUTE" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_education_form_educational_plan_text_option4)))
-                diabetesEducationFormDiabetesEducationString = diabetesEducationFormDiabetesEducationString + "SIDE EFFECTS (TEXT)" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_education_form_educational_plan_text_option5)))
-                diabetesEducationFormDiabetesEducationString = diabetesEducationFormDiabetesEducationString + "INSULINE TYPES AND DURATION" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_education_form_educational_plan_text_option6)))
-                diabetesEducationFormDiabetesEducationString = diabetesEducationFormDiabetesEducationString + "INSULIN INJECTING TECHNIQUE" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_education_form_educational_plan_text_option7)))
-                diabetesEducationFormDiabetesEducationString = diabetesEducationFormDiabetesEducationString + "INJECTION SITE ROTATION" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_education_form_educational_plan_text_option8)))
-                diabetesEducationFormDiabetesEducationString = diabetesEducationFormDiabetesEducationString + "DOSE ADJUSTMENT" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_education_form_educational_plan_text_option9)))
-                diabetesEducationFormDiabetesEducationString = diabetesEducationFormDiabetesEducationString + "GLUCOMETER" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_education_form_educational_plan_text_option10)))
-                diabetesEducationFormDiabetesEducationString = diabetesEducationFormDiabetesEducationString + "SELF-MONITORING BLOOD GLUCOSE" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_education_form_educational_plan_text_option11)))
-                diabetesEducationFormDiabetesEducationString = diabetesEducationFormDiabetesEducationString + "LIFESTYLE" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_education_form_educational_plan_text_option12)))
-                diabetesEducationFormDiabetesEducationString = diabetesEducationFormDiabetesEducationString + "PHYSICAL EXERCISE" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_education_form_educational_plan_text_option13)))
-                diabetesEducationFormDiabetesEducationString = diabetesEducationFormDiabetesEducationString + "FASTING WITH DIABETES" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_education_form_educational_plan_text_option14)))
-                diabetesEducationFormDiabetesEducationString = diabetesEducationFormDiabetesEducationString + "TRAVELING" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_education_form_educational_plan_text_option15)))
-                diabetesEducationFormDiabetesEducationString = diabetesEducationFormDiabetesEducationString + "HYPOGLYCAEMIA" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_education_form_educational_plan_text_option16)))
-                diabetesEducationFormDiabetesEducationString = diabetesEducationFormDiabetesEducationString + "HYPERGLYCAEMIA" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_education_form_educational_plan_text_option17)))
-                diabetesEducationFormDiabetesEducationString = diabetesEducationFormDiabetesEducationString + "TREATMENT SUPPORTER EDUCATION" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_education_form_educational_plan_text_option18)))
-                diabetesEducationFormDiabetesEducationString = diabetesEducationFormDiabetesEducationString + "NOT ELIGIBLE FOR EDUCATION" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_education_form_educational_plan_text_option19)))
-                diabetesEducationFormDiabetesEducationString = diabetesEducationFormDiabetesEducationString + "FOOTCARE TIPS" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_education_form_educational_plan_text_option20)))
-                diabetesEducationFormDiabetesEducationString = diabetesEducationFormDiabetesEducationString + "HELPLINE" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_education_form_educational_plan_text_option21)))
-                diabetesEducationFormDiabetesEducationString = diabetesEducationFormDiabetesEducationString + "MEDICAL TESTS" + " ; ";
-        }
-        observations.add(new String[]{"DIABETES EDUCATION", diabetesEducationFormDiabetesEducationString});
+        final String reasonForDiscontinuationString = App.get(reasonForDiscontinuation).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_feeling_better)) ? "FEELING BETTER" :
+                (App.get(reasonForDiscontinuation).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_doesnot_time)) ? "TIME CONSTRAINT" :
+                        (App.get(reasonForDiscontinuation).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_family_refused)) ? "FAMILY REFUSED TREATMENT":
+                                (App.get(reasonForDiscontinuation).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_language_barrier)) ? "SPEECH AND LANGUAGE DEFICITS":
+                                        (App.get(reasonForDiscontinuation).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_think_no_depression)) ? "PATIENT THINKS HE HAS NO DEPRESSION":
+                                                (App.get(reasonForDiscontinuation).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_lost_followup)) ? "LOST TO FOLLOW-UP":
+                                                        (App.get(reasonForDiscontinuation).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_referred)) ? "PATIENT REFERRED" : "REASON FOR DISCONTINUING SERVICE (TEXT)"))))));
+        observations.add(new String[]{"REASON FOR DISCONTINUATION OF PROGRAM", reasonForDiscontinuationString});
 
-        String diabetesEducationFormDiabetesEducationalMaterialString = "";
-        for(CheckBox cb : diabetesEducationFormDiabetesEducationalMaterial.getCheckedBoxes()){
-            if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_education_form_educational_material_text_option1)))
-                diabetesEducationFormDiabetesEducationalMaterialString = diabetesEducationFormDiabetesEducationalMaterialString + "SELF-MONITORING BLOOD GLUCOSE" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_education_form_educational_material_text_option2)))
-                diabetesEducationFormDiabetesEducationalMaterialString = diabetesEducationFormDiabetesEducationalMaterialString + "HYPOGLYCAEMIA" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_education_form_educational_material_text_option3)))
-                diabetesEducationFormDiabetesEducationalMaterialString = diabetesEducationFormDiabetesEducationalMaterialString + "HYPERGLYCAEMIA" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_education_form_educational_material_text_option4)))
-                diabetesEducationFormDiabetesEducationalMaterialString = diabetesEducationFormDiabetesEducationalMaterialString + "FOOTCARE TIPS" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_education_form_educational_material_text_option5)))
-                diabetesEducationFormDiabetesEducationalMaterialString = diabetesEducationFormDiabetesEducationalMaterialString + "DIABETES FACT BOOKLET" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_education_form_educational_material_text_option6)))
-                diabetesEducationFormDiabetesEducationalMaterialString = diabetesEducationFormDiabetesEducationalMaterialString + "INSULIN INJECTING TECHNIQUE" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_education_form_educational_material_text_option7)))
-                diabetesEducationFormDiabetesEducationalMaterialString = diabetesEducationFormDiabetesEducationalMaterialString + "INSULIN DOSAGE CHART" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_education_form_educational_material_text_option8)))
-                diabetesEducationFormDiabetesEducationalMaterialString = diabetesEducationFormDiabetesEducationalMaterialString + "DOSE ADJUSTMENT" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_education_form_educational_material_text_option9)))
-                diabetesEducationFormDiabetesEducationalMaterialString = diabetesEducationFormDiabetesEducationalMaterialString + "INJECTION SITE ROTATION" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_education_form_educational_material_text_option10)))
-                diabetesEducationFormDiabetesEducationalMaterialString = diabetesEducationFormDiabetesEducationalMaterialString + "FASTING WITH DIABETES" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_education_form_educational_material_text_option11)))
-                diabetesEducationFormDiabetesEducationalMaterialString = diabetesEducationFormDiabetesEducationalMaterialString + "HELPLINE" + " ; ";
+        if(feelingBetterReason.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"REASON FOR FEELING BETTER", App.get(feelingBetterReason).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_feeling_better_options_self_reported)) ? "1 to 3 sessions conducted and no Akuads filled (SELF REPORTED IMPROVEMENT)" : "4 or more sessions conducted and AKUADS filled (SUCCESFULLY COMPLETED THERAPY WITH IMPROVED OUTCOMES)"});
         }
-        observations.add(new String[]{"DIABETES EDUCATION MATERIAL", diabetesEducationFormDiabetesEducationalMaterialString});
+
+        observations.add(new String[]{"REASON FOR LOST TO FOLLOW UP", App.get(lossToFollowup).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_loss_to_followup_options_unreachable)) ? "PATIENT UNREACHABLE" :
+                (App.get(lossToFollowup).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_loss_to_followup_options_moved)) ? "PATIENT MOVED" : "OTHER REASON TO END FOLLOW UP")});
+
+
+        observations.add(new String[]{"REFERRING FACILITY NAME", App.get(referredTo)});
+        observations.add(new String[]{"OTHER TRANSFER OR REFERRAL REASON", App.get(reasonForReferral)});
+        observations.add(new String[]{"FREE TEXT COMMENT", App.get(remarks)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -419,11 +398,27 @@ public class ComorbiditiesDiabetesEducationForm extends AbstractFormActivity {
         super.resetViews();
 
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        displayFeelingBetterReason();
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onCheckedChanged(RadioGroup radioGroup, int i) {
+
+    }
+
+    void displayFeelingBetterReason() {
+        if(reasonForDiscontinuation.getSpinner().getSelectedItem().toString().equalsIgnoreCase(getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_feeling_better))) {
+            feelingBetterReason.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            feelingBetterReason.setVisibility(View.GONE);
+        }
     }
 
     class MyAdapter extends PagerAdapter {
@@ -453,8 +448,9 @@ public class ComorbiditiesDiabetesEducationForm extends AbstractFormActivity {
         }
 
     }
-
 }
+
+
 
 
 

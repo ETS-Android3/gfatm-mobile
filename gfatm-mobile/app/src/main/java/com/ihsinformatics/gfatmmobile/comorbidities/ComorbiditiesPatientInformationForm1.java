@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
@@ -35,12 +36,12 @@ import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
  * Created by Fawad Jawiad on 20-Feb-17.
  */
-
 public class ComorbiditiesPatientInformationForm1 extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
     Context context;
@@ -53,7 +54,11 @@ public class ComorbiditiesPatientInformationForm1 extends AbstractFormActivity i
     TitledEditText specifyOther;
     TitledEditText fatherName;
     TitledEditText husbandName;
-    TitledEditText nic;
+    //TitledEditText nic;
+    LinearLayout cnicLayout;
+    TitledEditText cnic1;
+    TitledEditText cnic2;
+    TitledEditText cnic3;
     TitledSpinner nicOwner;
     TitledEditText otherNicOwner;
     TitledRadioGroup addressProvided;
@@ -63,10 +68,18 @@ public class ComorbiditiesPatientInformationForm1 extends AbstractFormActivity i
     TitledEditText city;
     TitledRadioGroup addressType;
     TitledEditText landmark;
-    TitledEditText mobileNumber1;
-    TitledEditText mobileNumber2;
-    TitledEditText landline1;
-    TitledEditText landline2;
+    LinearLayout mobileNumber1Layout;
+    TitledEditText mobileNumber1a;
+    TitledEditText mobileNumber1b;
+    LinearLayout mobileNumber2Layout;
+    TitledEditText mobileNumber2a;
+    TitledEditText mobileNumber2b;
+    LinearLayout landline1Layout;
+    TitledEditText landline1a;
+    TitledEditText landline1b;
+    LinearLayout landline2Layout;
+    TitledEditText landline2a;
+    TitledEditText landline2b;
     TitledRadioGroup tbStatus;
     TitledRadioGroup tbCategory;
     TitledSpinner maritalStatus;
@@ -149,10 +162,18 @@ public class ComorbiditiesPatientInformationForm1 extends AbstractFormActivity i
         specifyOther = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_location_other), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         husbandName = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_husband_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         fatherName = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_father_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
-        nic = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_nic), "", "", 15, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
+        //nic = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_nic), "", "", 15, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
+        cnicLayout = new LinearLayout(context);
+        cnicLayout.setOrientation(LinearLayout.HORIZONTAL);
+        cnic1 = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_nic), "", "XXXXX", 5, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        cnicLayout.addView(cnic1);
+        cnic2 = new TitledEditText(context, null, "-", "", "XXXXXXX", 7, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        cnicLayout.addView(cnic2);
+        cnic3 = new TitledEditText(context, null, "-", "", "X", 1, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        cnicLayout.addView(cnic3);
         nicOwner = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_patient_information_cnic_owner), getResources().getStringArray(R.array.comorbidities_patient_information_nic_options), "", App.VERTICAL);
         otherNicOwner = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_other_cnic_owner), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        addressProvided =  new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_patient_information_address_provided), getResources().getStringArray(R.array.yes_no_options), "", App.HORIZONTAL, App.VERTICAL);
+        addressProvided = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_patient_information_address_provided), getResources().getStringArray(R.array.yes_no_options), "", App.HORIZONTAL, App.VERTICAL);
         address1 = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_address1), "", "", 10, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         address2 = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_address2), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         town = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_town), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
@@ -160,26 +181,50 @@ public class ComorbiditiesPatientInformationForm1 extends AbstractFormActivity i
         city.getEditText().setKeyListener(null);
         addressType = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_patient_information_address_type), getResources().getStringArray(R.array.comorbidities_patient_information_address_type_options), getResources().getString(R.string.comorbidities_patient_information_address_type_permanent), App.HORIZONTAL, App.VERTICAL);
         landmark = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_nearest_landmark), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        mobileNumber1 = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_mobile_number), "", "", RegexUtil.mobileNumberLength, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        mobileNumber2 = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_secondary_mobile), "", "", RegexUtil.mobileNumberLength, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        landline1 = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_landline), "", "", RegexUtil.mobileNumberLength, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        landline2 = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_secondary_landline), "", "", RegexUtil.mobileNumberLength, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        //mobileNumber1 = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_mobile_number), "", "", RegexUtil.mobileNumberLength, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        mobileNumber1Layout = new LinearLayout(context);
+        mobileNumber1Layout.setOrientation(LinearLayout.HORIZONTAL);
+        mobileNumber1a = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_mobile_number), "", "XXXX", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        mobileNumber1Layout.addView(mobileNumber1a);
+        mobileNumber1b = new TitledEditText(context, null, "-", "", "XXXXXXX", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        mobileNumber1Layout.addView(mobileNumber1b);
+        //mobileNumber2 = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_secondary_mobile), "", "", RegexUtil.mobileNumberLength, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        mobileNumber2Layout = new LinearLayout(context);
+        mobileNumber2Layout.setOrientation(LinearLayout.HORIZONTAL);
+        mobileNumber2a = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_secondary_mobile), "", "XXXX", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        mobileNumber2Layout.addView(mobileNumber2a);
+        mobileNumber2b = new TitledEditText(context, null, "-", "", "XXXXXXX", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        mobileNumber2Layout.addView(mobileNumber2b);
+        //landline1 = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_landline), "", "", RegexUtil.mobileNumberLength, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        landline1Layout = new LinearLayout(context);
+        landline1Layout.setOrientation(LinearLayout.HORIZONTAL);
+        landline1a = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_landline), "", "XXXX", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        landline1Layout.addView(landline1a);
+        landline1b = new TitledEditText(context, null, "-", "", "XXXXXXX", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        landline1Layout.addView(landline1b);
+        //landline2 = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_secondary_landline), "", "", RegexUtil.mobileNumberLength, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        landline2Layout = new LinearLayout(context);
+        landline2Layout.setOrientation(LinearLayout.HORIZONTAL);
+        landline2a = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_secondary_landline), "", "XXXX", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        landline2Layout.addView(landline2a);
+        landline2b = new TitledEditText(context, null, "-", "", "XXXXXXX", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        landline2Layout.addView(landline2b);
         tbStatus = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_patient_information_tb_status), getResources().getStringArray(R.array.comorbidities_patient_information_tb_status_options), getResources().getString(R.string.comorbidities_patient_information_tb_status_positive), App.HORIZONTAL, App.VERTICAL);
-        tbCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_patient_information_tb_category), getResources().getStringArray(R.array.comorbidities_patient_information_tb_category_options), getResources().getString(R.string.comorbidities_patient_information_tb_category_cat1),  App.HORIZONTAL, App.VERTICAL);
+        tbCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_patient_information_tb_category), getResources().getStringArray(R.array.comorbidities_patient_information_tb_category_options), getResources().getString(R.string.comorbidities_patient_information_tb_category_cat1), App.HORIZONTAL, App.VERTICAL);
         maritalStatus = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_patient_information_marital_status), getResources().getStringArray(R.array.comorbidities_patient_information_marital_status_options), getResources().getString(R.string.comorbidities_patient_information_marital_status_options_single), App.VERTICAL, true);
         householdHeadEducationLevel = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_patient_information_head_of_education), getResources().getStringArray(R.array.comorbidities_patient_information_education_options), getString(R.string.comorbidities_patient_information_education_options_ele), App.VERTICAL);
         patientEducationalLevel = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_patient_information_eduaction_level), getResources().getStringArray(R.array.comorbidities_patient_information_education_options), getString(R.string.comorbidities_patient_information_education_options_ele), App.VERTICAL);
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), indexExternalPatientId.getEditText(), gpClinicCode.getEditText(), specifyOther.getEditText(), husbandName.getEditText(), fatherName.getEditText(), nic.getEditText(), nicOwner.getSpinner(), otherNicOwner.getEditText(),addressProvided.getRadioGroup(),
-                address1.getEditText(), address2.getEditText(), town.getEditText(), city.getEditText(), addressType.getRadioGroup(), landmark.getEditText(), mobileNumber1.getEditText(), mobileNumber2.getEditText(), landline1.getEditText(), landline2.getEditText(), tbStatus.getRadioGroup(), tbCategory.getRadioGroup(),
-                maritalStatus.getSpinner(), householdHeadEducationLevel.getSpinner(), patientEducationalLevel.getSpinner()};
+        views = new View[]{formDate.getButton(), indexExternalPatientId.getEditText(), gpClinicCode.getEditText(), specifyOther.getEditText(), husbandName.getEditText(), fatherName.getEditText(), cnic1.getEditText(), cnic2.getEditText(), cnic3.getEditText(),/*nic.getEditText(),*/ nicOwner.getSpinner(), otherNicOwner.getEditText(), addressProvided.getRadioGroup(),
+                address1.getEditText(), address2.getEditText(), town.getEditText(), city.getEditText(), addressType.getRadioGroup(), landmark.getEditText(), mobileNumber1a.getEditText(), mobileNumber1b.getEditText(), mobileNumber2a.getEditText(), mobileNumber2b.getEditText(), landline1a.getEditText(), landline1b.getEditText(), landline2a.getEditText(), landline2b.getEditText(),/*mobileNumber1.getEditText(), mobileNumber2.getEditText(), landline1.getEditText(), landline2.getEditText(),*/
+                tbStatus.getRadioGroup(), tbCategory.getRadioGroup(), maritalStatus.getSpinner(), householdHeadEducationLevel.getSpinner(), patientEducationalLevel.getSpinner()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, indexExternalPatientId, gpClinicCode, specifyOther, husbandName, fatherName, nic, nicOwner, otherNicOwner,addressProvided,
-                        address1, address2, town, city, addressType, landmark, mobileNumber1, mobileNumber2, landline1, landline2, tbStatus, tbCategory,
-                maritalStatus, householdHeadEducationLevel, patientEducationalLevel}};
+                {{formDate, indexExternalPatientId, gpClinicCode, specifyOther, husbandName, fatherName, cnicLayout,/*nic,*/ nicOwner, otherNicOwner, addressProvided,
+                        address1, address2, town, city, addressType, landmark, mobileNumber1Layout, mobileNumber2Layout, landline1Layout, landline2Layout, /*mobileNumber1, mobileNumber2, landline1, landline2,*/ tbStatus, tbCategory,
+                        maritalStatus, householdHeadEducationLevel, patientEducationalLevel}};
 
         formDate.getButton().setOnClickListener(this);
         nicOwner.getSpinner().setOnItemSelectedListener(this);
@@ -231,6 +276,20 @@ public class ComorbiditiesPatientInformationForm1 extends AbstractFormActivity i
 
         Boolean error = false;
 
+        if (App.get(mobileNumber1a).isEmpty()) {
+            mobileNumber1a.getEditText().setError(getResources().getString(R.string.empty_field));
+            mobileNumber1a.getEditText().requestFocus();
+            error = true;
+        } else if (App.get(mobileNumber1b).isEmpty()) {
+            mobileNumber1b.getEditText().setError(getResources().getString(R.string.empty_field));
+            mobileNumber1b.getEditText().requestFocus();
+            error = true;
+        } else if (!RegexUtil.isContactNumber(App.get(mobileNumber1a) + App.get(mobileNumber1b))) {
+            mobileNumber1b.getEditText().setError(getResources().getString(R.string.invalid_value));
+            mobileNumber1b.getEditText().requestFocus();
+            error = true;
+        }
+
         if (App.get(city).isEmpty() && city.getVisibility() == View.VISIBLE) {
             city.getEditText().setError(getResources().getString(R.string.empty_field));
             city.getEditText().requestFocus();
@@ -249,8 +308,7 @@ public class ComorbiditiesPatientInformationForm1 extends AbstractFormActivity i
             gpClinicCode.getEditText().setError(getString(R.string.empty_field));
             gpClinicCode.getEditText().requestFocus();
             error = true;
-        }
-        else if (gpClinicCode.getVisibility() == View.VISIBLE && !App.get(gpClinicCode).isEmpty() && (Double.parseDouble(App.get(gpClinicCode)) < 1 || Double.parseDouble(App.get(gpClinicCode)) > 50)) {
+        } else if (gpClinicCode.getVisibility() == View.VISIBLE && !App.get(gpClinicCode).isEmpty() && (Double.parseDouble(App.get(gpClinicCode)) < 1 || Double.parseDouble(App.get(gpClinicCode)) > 50)) {
             gotoPage(1);
             gpClinicCode.getEditText().setError(getString(R.string.comorbidities_preferredlocation_gpcliniccode_limit));
             gpClinicCode.getEditText().requestFocus();
@@ -290,12 +348,235 @@ public class ComorbiditiesPatientInformationForm1 extends AbstractFormActivity i
     @Override
     public boolean submit() {
 
-        if (validate()) {
+        endTime = new Date();
 
-            resetViews();
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
+        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+        observations.add(new String[]{"FATHER NAME", App.get(fatherName)});
+        observations.add(new String[]{"PARTNER FULL NAME", App.get(husbandName)});
+
+        final String cnic = App.get(cnic1) + "-" + App.get(cnic2) + "-" + App.get(cnic3);
+        observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnic});
+
+        final String ownerString = App.get(nicOwner).equals(getResources().getString(R.string.pet_self)) ? "SELF" :
+                (App.get(nicOwner).equals(getResources().getString(R.string.pet_mother)) ? "MOTHER" :
+                        (App.get(nicOwner).equals(getResources().getString(R.string.pet_father)) ? "FATHER" :
+                                (App.get(nicOwner).equals(getResources().getString(R.string.pet_maternal_grandmother)) ? "MATERNAL GRANDMOTHER" :
+                                        (App.get(nicOwner).equals(getResources().getString(R.string.pet_maternal_grandfather)) ? "MATERNAL GRANDFATHER" :
+                                                (App.get(nicOwner).equals(getResources().getString(R.string.pet_paternal_grandmother)) ? "PATERNAL GRANDMOTHER" :
+                                                        (App.get(nicOwner).equals(getResources().getString(R.string.pet_paternal_grandfather)) ? "PATERNAL GRANDFATHER" :
+                                                                (App.get(nicOwner).equals(getResources().getString(R.string.pet_brother)) ? "BROTHER" :
+                                                                        (App.get(nicOwner).equals(getResources().getString(R.string.pet_sister)) ? "SISTER" :
+                                                                                (App.get(nicOwner).equals(getResources().getString(R.string.pet_son)) ? "SON" :
+                                                                                        (App.get(nicOwner).equals(getResources().getString(R.string.pet_daughter)) ? "SPOUSE" :
+                                                                                                (App.get(nicOwner).equals(getResources().getString(R.string.pet_aunt)) ? "AUNT" :
+                                                                                                        (App.get(nicOwner).equals(getResources().getString(R.string.pet_uncle)) ? "UNCLE" : "OTHER FAMILY MEMBER"))))))))))));
+
+        observations.add(new String[]{"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", ownerString});
+        if (otherNicOwner.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(otherNicOwner)});
+        observations.add(new String[]{"PATIENT PROVIDED ADDRESS", App.get(addressProvided).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        observations.add(new String[]{"ADDRESS (TEXT)", App.get(address1)});
+        observations.add(new String[]{"EXTENDED ADDRESS (TEXT)", App.get(address2)});
+        observations.add(new String[]{"TOWN", App.get(town)});
+        observations.add(new String[]{"VILLAGE", App.get(city)});
+        observations.add(new String[]{"TYPE OF ADDRESS", App.get(addressProvided).equals(getResources().getString(R.string.comorbidities_patient_information_address_type_permanent)) ? "PERMANENT ADDRESS" : "TEMPORARY ADDRESS"});
+        observations.add(new String[]{"NEAREST LANDMARK", App.get(landmark)});
+
+        final String mobileNumber1 = App.get(mobileNumber1a) + "-" + App.get(mobileNumber1b);
+        observations.add(new String[]{"CONTACT PHONE NUMBER", mobileNumber1});
+
+        final String mobileNumber2 = App.get(mobileNumber2a) + "-" + App.get(mobileNumber2b);
+        observations.add(new String[]{"SECONDARY MOBILE NUMBER", mobileNumber2});
+
+        final String landline1 = App.get(landline1a) + "-" + App.get(landline1b);
+        observations.add(new String[]{"TERTIARY CONTACT NUMBER", landline1});
+
+        final String landline2 = App.get(landline2a) + "-" + App.get(landline2b);
+        observations.add(new String[]{"QUATERNARY CONTACT NUMBER", landline2});
+
+        observations.add(new String[]{"TUBERCULOSIS INFECTION TYPE", App.get(addressProvided).equals(getResources().getString(R.string.comorbidities_patient_information_tb_status_positive)) ? "SMEAR POSITIVE TUBERCULOSIS INFECTION" : "SMEAR NEGATIVE TUBERCULOSIS INFECTION"});
+        if (tbCategory.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"TB CATEGORY", App.get(tbCategory).equals(getResources().getString(R.string.comorbidities_patient_information_tb_category_cat1)) ? "CATEGORY I TUBERCULOSIS" :
+                    (App.get(tbCategory).equals(getResources().getString(R.string.comorbidities_patient_information_tb_category_cat2)) ? "CATEGORY II TUBERCULOSIS" : "MULTI-DRUG RESISTANT TUBERCULOSIS INFECTION")});
         }
+        final String maritalStatusString = App.get(maritalStatus).equals(getResources().getString(R.string.pet_single)) ? "SINGLE" :
+                (App.get(maritalStatus).equals(getResources().getString(R.string.pet_engaged)) ? "ENGAGED" :
+                        (App.get(maritalStatus).equals(getResources().getString(R.string.pet_married)) ? "MARRIED" :
+                                (App.get(maritalStatus).equals(getResources().getString(R.string.pet_separated)) ? "SEPARATED" :
+                                        (App.get(maritalStatus).equals(getResources().getString(R.string.pet_divorced)) ? "DIVORCED" :
+                                                (App.get(maritalStatus).equals(getResources().getString(R.string.pet_widower)) ? "WIDOWED" :
+                                                        (App.get(maritalStatus).equals(getResources().getString(R.string.pet_other)) ? "OTHER" :
+                                                                (App.get(maritalStatus).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSE")))))));
+        observations.add(new String[]{"MARITAL STATUS", maritalStatusString});
 
-        //resetViews();
+        final String houseHoldEducationLevelString = App.get(householdHeadEducationLevel).equals(getResources().getString(R.string.pet_elementary)) ? "ELEMENTARY EDUCATION" :
+                (App.get(householdHeadEducationLevel).equals(getResources().getString(R.string.pet_primary)) ? "PRIMARY EDUCATION" :
+                        (App.get(householdHeadEducationLevel).equals(getResources().getString(R.string.pet_secondary)) ? "SECONDARY EDUCATION" :
+                                (App.get(householdHeadEducationLevel).equals(getResources().getString(R.string.pet_intermediate)) ? "INTERMEDIATE EDUCATION" :
+                                        (App.get(householdHeadEducationLevel).equals(getResources().getString(R.string.pet_undergraduate)) ? "UNDERGRADUATE EDUCATION" :
+                                                (App.get(householdHeadEducationLevel).equals(getResources().getString(R.string.pet_graduate)) ? "GRADUATE EDUCATION" :
+                                                        (App.get(householdHeadEducationLevel).equals(getResources().getString(R.string.pet_doctorate)) ? "DOCTORATE EDUCATION" :
+                                                                (App.get(householdHeadEducationLevel).equals(getResources().getString(R.string.pet_religious)) ? "RELIGIOUS EDUCATION" :
+                                                                        (App.get(householdHeadEducationLevel).equals(getResources().getString(R.string.pet_polytechnic)) ? "POLYTECHNIC EDUCATION" :
+                                                                                (App.get(householdHeadEducationLevel).equals(getResources().getString(R.string.pet_special_education)) ? "SPECIAL EDUCATION RECEIVED" :
+                                                                                        (App.get(householdHeadEducationLevel).equals(getResources().getString(R.string.pet_no_formal_education)) ? "NO FORMAL EDUCATION" :
+                                                                                                (App.get(householdHeadEducationLevel).equals(getResources().getString(R.string.pet_other)) ? "OTHER EDUCATION LEVEL" :
+                                                                                                        (App.get(householdHeadEducationLevel).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSED"))))))))))));
+        observations.add(new String[]{"CURRENT EDUCATION LEVEL OF HEAD OF HOUSEHOLD", houseHoldEducationLevelString});
+
+        final String patientEducationLevelString = App.get(patientEducationalLevel).equals(getResources().getString(R.string.pet_elementary)) ? "ELEMENTARY EDUCATION" :
+                (App.get(patientEducationalLevel).equals(getResources().getString(R.string.pet_primary)) ? "PRIMARY EDUCATION" :
+                        (App.get(patientEducationalLevel).equals(getResources().getString(R.string.pet_secondary)) ? "SECONDARY EDUCATION" :
+                                (App.get(patientEducationalLevel).equals(getResources().getString(R.string.pet_intermediate)) ? "INTERMEDIATE EDUCATION" :
+                                        (App.get(patientEducationalLevel).equals(getResources().getString(R.string.pet_undergraduate)) ? "UNDERGRADUATE EDUCATION" :
+                                                (App.get(patientEducationalLevel).equals(getResources().getString(R.string.pet_graduate)) ? "GRADUATE EDUCATION" :
+                                                        (App.get(patientEducationalLevel).equals(getResources().getString(R.string.pet_doctorate)) ? "DOCTORATE EDUCATION" :
+                                                                (App.get(patientEducationalLevel).equals(getResources().getString(R.string.pet_religious)) ? "RELIGIOUS EDUCATION" :
+                                                                        (App.get(patientEducationalLevel).equals(getResources().getString(R.string.pet_polytechnic)) ? "POLYTECHNIC EDUCATION" :
+                                                                                (App.get(patientEducationalLevel).equals(getResources().getString(R.string.pet_special_education)) ? "SPECIAL EDUCATION RECEIVED" :
+                                                                                        (App.get(patientEducationalLevel).equals(getResources().getString(R.string.pet_no_formal_education)) ? "NO FORMAL EDUCATION" :
+                                                                                                (App.get(patientEducationalLevel).equals(getResources().getString(R.string.pet_other)) ? "OTHER" :
+                                                                                                        (App.get(patientEducationalLevel).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSED"))))))))))));
+        observations.add(new String[]{"HIGHEST EDUCATION LEVEL", patientEducationLevelString});
+
+        AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.submitting_form));
+                        loading.show();
+                    }
+                });
+
+                String result = "";
+                result = serverService.saveEncounterAndObservation(FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                if (!result.contains("SUCCESS"))
+                    return result;
+                else {
+
+                    String encounterId = "";
+
+                    if (result.contains("_")) {
+                        String[] successArray = result.split("_");
+                        encounterId = successArray[1];
+                    }
+
+                    if (!App.get(indexExternalPatientId).isEmpty() && App.hasKeyListener(indexExternalPatientId)) {
+                        result = serverService.saveIdentifier("External ID", App.get(indexExternalPatientId), encounterId);
+                        if (!result.equals("SUCCESS"))
+                            return result;
+                    }
+
+                    result = serverService.savePersonAddress(App.get(address1), App.get(address2), App.getCity(), App.get(town), App.getCountry(), longitude, latitude, App.get(landmark), encounterId);
+                    if (!result.equals("SUCCESS"))
+                        return result;
+
+                    result = serverService.savePersonAttributeType("Primary Contact", App.get(mobileNumber1a) + App.get(mobileNumber1b), encounterId);
+                    if (!result.equals("SUCCESS"))
+                        return result;
+
+                    result = serverService.savePersonAttributeType("Secondary Contact", App.get(mobileNumber2a) + App.get(mobileNumber2b), encounterId);
+                    if (!result.equals("SUCCESS"))
+                        return result;
+
+                    result = serverService.savePersonAttributeType("Tertiary Contact", App.get(landline1a) + App.get(landline1b), encounterId);
+                    if (!result.equals("SUCCESS"))
+                        return result;
+
+                    result = serverService.savePersonAttributeType("Quaternary Contact", App.get(landline2a) + App.get(landline2b), encounterId);
+                    if (!result.equals("SUCCESS"))
+                        return result;
+
+                }
+
+                return "SUCCESS";
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                if (result.equals("SUCCESS")) {
+                    resetViews();
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.form_submitted));
+                    Drawable submitIcon = getResources().getDrawable(R.drawable.ic_submit);
+                    alertDialog.setIcon(submitIcon);
+                    int color = App.getColor(context, R.attr.colorAccent);
+                    DrawableCompat.setTint(submitIcon, color);
+                    alertDialog.setTitle(getResources().getString(R.string.title_completed));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else if (result.equals("CONNECTION_ERROR")) {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
+                    alertDialog.setMessage(message);
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+
+
+            }
+        };
+        submissionFormTask.execute("");
+
         return false;
     }
 
@@ -373,41 +654,38 @@ public class ComorbiditiesPatientInformationForm1 extends AbstractFormActivity i
     }
 
     void displayHusbandName() {
-        if(App.getPatient().getPerson().getGender().equalsIgnoreCase(getResources().getString(R.string.female))) {
+        if (App.getPatient().getPerson().getGender().equalsIgnoreCase(getResources().getString(R.string.female))) {
             husbandName.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             husbandName.setVisibility(View.GONE);
         }
     }
 
     void displayAddressOrNot() {
-        if(App.get(addressProvided).equalsIgnoreCase(getResources().getString(R.string.yes))) {
+        if (App.get(addressProvided).equalsIgnoreCase(getResources().getString(R.string.yes))) {
             address1.setVisibility(View.VISIBLE);
             address2.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             address1.setVisibility(View.GONE);
             address2.setVisibility(View.GONE);
         }
     }
 
     void displayTBCategory() {
-        if(App.get(tbStatus).equalsIgnoreCase(getResources().getString(R.string.comorbidities_patient_information_tb_status_positive))){
+        if (App.get(tbStatus).equalsIgnoreCase(getResources().getString(R.string.comorbidities_patient_information_tb_status_positive))) {
             tbCategory.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             tbCategory.setVisibility(View.GONE);
         }
     }
 
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
-        if(radioGroup == addressProvided.getRadioGroup()) {
+        if (radioGroup == addressProvided.getRadioGroup()) {
             displayAddressOrNot();
         }
 
-        if(radioGroup == tbStatus.getRadioGroup()) {
+        if (radioGroup == tbStatus.getRadioGroup()) {
             displayTBCategory();
         }
     }
