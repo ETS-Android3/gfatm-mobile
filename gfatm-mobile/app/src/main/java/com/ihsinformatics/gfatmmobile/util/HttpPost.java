@@ -39,6 +39,7 @@ public class HttpPost {
     private static String PATIENT_RESOURCE = "patient";
     private static String PERSON_ATTRIBUTE_TYPE_RESOURCE = "personattributetype";
     private static String ENCOUNTER_RESOURCE = "encounter";
+    private static String PROGRAM_ENROLLEMENT = "programenrollment";
     private static String TAG = "";
     private String serverAddress = "";
 
@@ -74,7 +75,7 @@ public class HttpPost {
             response = client.execute(request);
             StatusLine statusLine = response.getStatusLine();
             Log.d(TAG, "Http response code: " + statusLine.getStatusCode());
-            if (statusLine.getStatusCode() == HttpStatus.SC_CREATED) {
+            if (statusLine.getStatusCode() == HttpStatus.SC_OK || statusLine.getStatusCode() == HttpStatus.SC_CREATED) {
                 entity = response.getEntity();
                 InputStream is = entity.getContent();
                 BufferedReader bufferedReader = new BufferedReader(
@@ -127,9 +128,19 @@ public class HttpPost {
             personObj.put("birthdate", App.getSqlDate(patient.getBirthdate()));
             personObj.put("names", names);
 
-            String response = postEntityByJSON(PERSON_RESOURCE, personObj);
-            JSONObject newPerson = JSONParser.getJSONObject("{"
-                    + response.toString() + "}");
+            JSONObject newPerson = null;
+            String offlineReturnString = "";
+            if (App.getMode().equalsIgnoreCase("OFFLINE")) {
+
+                String requestURI = "http://serverAddress/openmrs/ws/rest/v1/" + PERSON_RESOURCE;
+                String content = personObj.toString();
+
+                offlineReturnString = requestURI + " ;;;; " + content;
+
+            } else {
+                String string = postEntityByJSON(PERSON_RESOURCE, personObj);
+                newPerson = JSONParser.getJSONObject("{" + string + "}");
+            }
 
             for (PatientIdentifier patientIdentifier : patient.getIdentifiers()) {
                 JSONObject identifier = new JSONObject();
@@ -141,9 +152,22 @@ public class HttpPost {
                 identifiers.put(identifier);
             }
 
-            patientObject.put("person", newPerson.get("uuid"));
+            if (patient.getUuid().equals(""))
+                patientObject.put("person", newPerson.get("uuid"));
+            else
+                patientObject.put("person", patient.getUuid());
+
             patientObject.put("identifiers", identifiers);
             patientObject.put("voided", patient.getVoided());
+
+            if (App.getMode().equalsIgnoreCase("OFFLINE")) {
+
+                String requestURI = "http://serverAddress/openmrs/ws/rest/v1/" + PATIENT_RESOURCE;
+                String content = patientObject.toString();
+
+                offlineReturnString = offlineReturnString + " ;;;; " + requestURI + " ;;;; " + content;
+                return offlineReturnString;
+            }
 
             return postEntityByJSON(PATIENT_RESOURCE, patientObject);
 
@@ -229,7 +253,7 @@ public class HttpPost {
         return null;
     }
 
-    public String savePatientIdentifierByEntity(PatientIdentifier identifier) {
+    public String savePatientIdentifierByEntity(PatientIdentifier identifier, String patientUuid) {
         try {
 
             JSONObject identifierObject = new JSONObject();
@@ -241,14 +265,14 @@ public class HttpPost {
 
             if (App.getMode().equalsIgnoreCase("OFFLINE")) {
 
-                String requestURI = "http://serverAddress/openmrs/ws/rest/v1/" + PATIENT_RESOURCE + "/" + App.getPatient().getUuid() + "/" + "identifier";
+                String requestURI = "http://serverAddress/openmrs/ws/rest/v1/" + PATIENT_RESOURCE + "/" + patientUuid + "/" + "identifier";
                 String content = identifierObject.toString();
 
                 return requestURI + " ;;;; " + content;
 
             }
 
-            return postEntityByJSON(PATIENT_RESOURCE + "/" + App.getPatient().getUuid() + "/" + "identifier", identifierObject);
+            return postEntityByJSON(PATIENT_RESOURCE + "/" + patientUuid + "/" + "identifier", identifierObject);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -257,7 +281,36 @@ public class HttpPost {
         return null;
     }
 
-    public String savePersonAddressByEntity(PersonAddress personAddress) {
+    public String saveProgramEnrollment(String programName, String location, String enrollmentDate) {
+
+        try {
+
+            JSONObject programEnrollementObject = new JSONObject();
+            programEnrollementObject.put("patient", App.getPatient().getUuid());
+            programEnrollementObject.put("program", programName);
+            programEnrollementObject.put("location", location);
+            programEnrollementObject.put("dateEnrolled", enrollmentDate);
+
+            if (App.getMode().equalsIgnoreCase("OFFLINE")) {
+
+                String requestURI = "http://serverAddress/openmrs/ws/rest/v1/" + PROGRAM_ENROLLEMENT + "/" + App.getPatient().getUuid() + "/" + "address";
+                String content = programEnrollementObject.toString();
+
+                return requestURI + " ;;;; " + content;
+
+            }
+
+            return postEntityByJSON(PROGRAM_ENROLLEMENT, programEnrollementObject);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        return null;
+
+    }
+
+    public String savePersonAddressByEntity(PersonAddress personAddress, String patientUuid) {
         try {
 
             JSONObject personAddressObject = new JSONObject();
@@ -272,14 +325,14 @@ public class HttpPost {
 
             if (App.getMode().equalsIgnoreCase("OFFLINE")) {
 
-                String requestURI = "http://serverAddress/openmrs/ws/rest/v1/" + PERSON_RESOURCE + "/" + App.getPatient().getUuid() + "/" + "address";
+                String requestURI = "http://serverAddress/openmrs/ws/rest/v1/" + PERSON_RESOURCE + "/" + patientUuid + "/" + "address";
                 String content = personAddressObject.toString();
 
                 return requestURI + " ;;;; " + content;
 
             }
 
-            return postEntityByJSON(PERSON_RESOURCE + "/" + App.getPatient().getUuid() + "/" + "address", personAddressObject);
+            return postEntityByJSON(PERSON_RESOURCE + "/" + patientUuid + "/" + "address", personAddressObject);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -288,7 +341,7 @@ public class HttpPost {
         return null;
     }
 
-    public String savePersonAttribute(String attributeType, String value) {
+    public String savePersonAttribute(String attributeType, String value, String patientUuid) {
         try {
 
             JSONObject personAttributeObject = new JSONObject();
@@ -297,14 +350,14 @@ public class HttpPost {
 
             if (App.getMode().equalsIgnoreCase("OFFLINE")) {
 
-                String requestURI = "http://serverAddress/openmrs/ws/rest/v1/" + PERSON_RESOURCE + "/" + App.getPatient().getUuid() + "/" + "attribute";
+                String requestURI = "http://serverAddress/openmrs/ws/rest/v1/" + PERSON_RESOURCE + "/" + patientUuid + "/" + "attribute";
                 String content = personAttributeObject.toString();
 
                 return requestURI + " ;;;; " + content;
 
             }
 
-            return postEntityByJSON(PERSON_RESOURCE + "/" + App.getPatient().getUuid() + "/" + "attribute", personAttributeObject);
+            return postEntityByJSON(PERSON_RESOURCE + "/" + patientUuid + "/" + "attribute", personAttributeObject);
 
         } catch (Exception e) {
             e.printStackTrace();

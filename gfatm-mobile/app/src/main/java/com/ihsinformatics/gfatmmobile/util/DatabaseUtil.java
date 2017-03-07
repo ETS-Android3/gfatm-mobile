@@ -24,6 +24,7 @@ import android.util.Log;
 import com.ihsinformatics.gfatmmobile.R;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -58,6 +59,11 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                 break;
         }
         onUpgrade(db, ++oldVersion, newVersion);
+    }
+
+    public boolean doesDatabaseExist() {
+        File dbFile = context.getDatabasePath(DB_NAME);
+        return dbFile.exists();
     }
 
     /**
