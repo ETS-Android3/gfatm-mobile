@@ -54,10 +54,12 @@ public class Person extends AbstractModel {
     String stateProvince;
     String cityVillage;
     String country;
+    String tertiaryContact;
+    String quaternaryContact;
 
 
     public Person(String uuid, String givenName, String familyName, int age, String birthdate, String gender, String birthPlace, String citizenship, String maritalStatus, String healthCenter, String healthDistrict, String motherName,
-                  String primaryContact, String primaryContactOwner, String secondaryContact, String secondaryContactOwner,
+                  String primaryContact, String primaryContactOwner, String secondaryContact, String secondaryContactOwner, String tertiaryContact, String quaternaryContact,
                   String ethnicity, String educationLevel, String employmentStatus, String occupation, String motherTongue, String incomeClass,
                   String nationalId, String nationalIdOwner, String guardianName,
                   String address1, String address2, String address3, String stateProvince, String cityVillage, String country) {
@@ -93,6 +95,8 @@ public class Person extends AbstractModel {
         this.stateProvince = stateProvince;
         this.cityVillage = cityVillage;
         this.country = country;
+        this.tertiaryContact = tertiaryContact;
+        this.quaternaryContact = quaternaryContact;
     }
 
     public static Person parseJSONObject(JSONObject json) {
@@ -129,6 +133,8 @@ public class Person extends AbstractModel {
         String stateProvince = "";
         String cityVillage = "";
         String country = "";
+        String tertiaryContact = "";
+        String quaternaryContact = "";
 
         try {
             uuid = json.getString("uuid");
@@ -178,6 +184,10 @@ public class Person extends AbstractModel {
                         nationalId = displayString[1];
                     } else if (displayString[0].equals("Guardian Name")) {
                         guardianName = displayString[1];
+                    } else if (displayString[0].equals("Tertiary Contact")) {
+                        guardianName = displayString[1];
+                    } else if (displayString[0].equals("Quaternary Contact")) {
+                        guardianName = displayString[1];
                     }
                 } else {
 
@@ -210,6 +220,10 @@ public class Person extends AbstractModel {
                         nationalIdOwner = display;
                     } else if (attributeType.equals("Guardian Name")) {
                         guardianName = display;
+                    } else if (displayString[0].equals("Tertiary Contact")) {
+                        guardianName = displayString[1];
+                    } else if (displayString[0].equals("Quaternary Contact")) {
+                        guardianName = displayString[1];
                     }
 
                 }
@@ -221,7 +235,7 @@ public class Person extends AbstractModel {
         }
         person = new Person(uuid, givenName, familyName, age, birthdate, gender,
                 birthPlace, citizenship, maritalStatus, healthCenter, healthDistrict, motherName,
-                primaryContact, primaryContactOwner, secondaryContact, secondaryContactOwner,
+                primaryContact, primaryContactOwner, secondaryContact, secondaryContactOwner, tertiaryContact, quaternaryContact,
                 ethnicity, educationLevel, employmentStatus, occupation, motherTongue, incomeClass,
                 nationalId, nationalIdOwner, guardianName,
                 address1, address2, address3, stateProvince, cityVillage, country);
