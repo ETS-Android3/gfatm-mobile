@@ -342,6 +342,17 @@
     <string name="ctb_patient_died">Patient died</string>
     <string name="ctb_patient_refused_treatment">Patient refused treatment</string>
     <string name="ctb_next_visit_date">Date of next visit? </string>
+    <string name="ctb_patient_referred_transferred">Is this patient being referred out or transferred out?</string>
+    <string name="ctb_referral_before_starting_treatment">Referral (before starting treatment)</string>
+    <string name="ctb_transfer_after_starting_treatment">Transfer (after starting treatment)</string>
+    <string name="ctb_reason_for_referral_transfer">Reason for referral/transfer</string>
+    <string name="ctb_patient_chose_another_facility">Patient chose another facility</string>
+    <string name="ctb_dr_tb_suspect">DR-TB Suspect</string>
+    <string name="ctb_treatment_failure">Treatment Failure</string>
+    <string name="ctb_complicated_tb">Complicated TB</string>
+    <string name="ctb_mott">Mycobacterium other than TB (MOTT)</string>
+    <string name="ctb_location_referral_transfer">Location of Referral/transfer</string>
+    <string name="ctb_location_other">Location, if Other</string>
 
     <string-array name="ctb_screening_location_list">
         <item>@string/ctb_hospital</item>
@@ -721,6 +732,21 @@
         <item>@string/ctb_patient_unable_to_visit_due_to_reason</item>
         <item>@string/ctb_patient_died</item>
         <item>@string/ctb_patient_refused_treatment</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
+
+    <string-array name="ctb_patient_referred_or_tranferred_list">
+        <item>@string/ctb_referral_before_starting_treatment</item>
+        <item>@string/ctb_transfer_after_starting_treatment</item>
+    </string-array>
+
+    <string-array name="ctb_reason_for_referral_transfer_list">
+        <item>@string/ctb_patient_chose_another_facility</item>
+        <item>@string/ctb_dr_tb_suspect</item>
+        <item>@string/ctb_dr_tb</item>
+        <item>@string/ctb_treatment_failure</item>
+        <item>@string/ctb_complicated_tb</item>
+        <item>@string/ctb_mott</item>
         <item>@string/ctb_other_title</item>
     </string-array>
 
