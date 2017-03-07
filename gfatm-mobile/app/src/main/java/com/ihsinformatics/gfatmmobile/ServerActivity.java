@@ -4,7 +4,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.AppBarLayout;
-import android.support.v4.content.ContextCompat;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.view.Gravity;
@@ -14,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
+import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 public class ServerActivity extends AbstractSettingActivity {
 
@@ -102,6 +102,8 @@ public class ServerActivity extends AbstractSettingActivity {
                 editor.putString(Preferences.IP, App.getIp());
                 editor.putString(Preferences.PORT, App.getPort());
                 editor.apply();
+
+                ServerService serverService = new ServerService(getApplicationContext());
 
                 onBackPressed();
             }

@@ -14,6 +14,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -93,6 +94,7 @@ public abstract class AbstractFormActivity extends Fragment
     protected TextView pageButton;
     protected TextView formName;
     protected int currentPageNo = 0;
+    protected Snackbar snackbar;
 
     protected Date startTime = null;
     protected Date endTime = null;
@@ -176,6 +178,7 @@ public abstract class AbstractFormActivity extends Fragment
             gps.showSettingsAlert();
         }
 
+        snackbar.dismiss();
         return mainContent;
     }
 
@@ -352,6 +355,7 @@ public abstract class AbstractFormActivity extends Fragment
             gotoNextPage();
         } else if (view == clearButton) {
 
+            snackbar.dismiss();
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
@@ -382,6 +386,7 @@ public abstract class AbstractFormActivity extends Fragment
             alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
 
         } else if (view == submitButton) {
+            snackbar.dismiss();
             if (validate()) {
 
                 int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
@@ -437,6 +442,7 @@ public abstract class AbstractFormActivity extends Fragment
 
     public void resetViews() {
 
+        snackbar.dismiss();
         startTime = new Date();
         endTime = null;
 

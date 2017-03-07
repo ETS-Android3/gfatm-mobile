@@ -104,6 +104,10 @@ public class FormFragment extends Fragment {
                             Toast toast = Toast.makeText(mainContent.getContext(), getResources().getString(R.string.patient_not_select), Toast.LENGTH_LONG);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
+                        } else if (App.getLocation() == null || App.getLocation().equals("")) {
+                            Toast toast = Toast.makeText(mainContent.getContext(), getResources().getString(R.string.location_not_select), Toast.LENGTH_LONG);
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
                         } else {
                             mainContent.setVisibility(View.GONE);
 

@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 import java.util.ArrayList;
@@ -144,79 +145,111 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                 });
                 final Object obj = forms[i][6];
                 final String id = String.valueOf(forms[i][0]);
-                text.setOnLongClickListener(new View.OnLongClickListener() {
 
-                    @Override
-                    public boolean onLongClick(View v) {
+                if (!forms[i][2].equals("CREATE PATIENT")) {
 
-                        Intent i = new Intent();
-                        i.putExtra("form_id", id);
-                        i.putExtra("open", true);
-                        i.putExtra("form_object", (byte[]) obj);
-                        setResult(RESULT_OK, i);
-                        onBackPressed();
-                        return true;
+                    text.setOnLongClickListener(new View.OnLongClickListener() {
+
+                        @Override
+                        public boolean onLongClick(View v) {
+
+                            Intent i = new Intent();
+                            i.putExtra("form_id", id);
+                            i.putExtra("open", true);
+                            i.putExtra("form_object", (byte[]) obj);
+                            setResult(RESULT_OK, i);
+                            onBackPressed();
+                            return true;
+                        }
+
+                    });
+
+                    verticalLayout.addView(linearLayout);
+
+                    LinearLayout ll1 = new LinearLayout(this);
+                    ll1.setOrientation(LinearLayout.HORIZONTAL);
+
+                    TextView tv = new TextView(this);
+                    tv.setText(getResources().getString(R.string.patient_id) + " ");
+                    tv.setTextSize(getResources().getDimension(R.dimen.small));
+                    tv.setTextColor(color1);
+                    ll1.addView(tv);
+
+                    String identifier = serverService.getPatientIdentifierBySystemIdLocalDB(String.valueOf(forms[i][3]));
+                    TextView tv1 = new TextView(this);
+                    tv1.setText(identifier);
+                    tv1.setTextSize(getResources().getDimension(R.dimen.small));
+                    ll1.addView(tv1);
+
+                    moreLayout.addView(ll1);
+
+                    LinearLayout ll2 = new LinearLayout(this);
+                    ll2.setOrientation(LinearLayout.HORIZONTAL);
+
+                    TextView tv2 = new TextView(this);
+                    tv2.setText(getResources().getString(R.string.form_date) + " ");
+                    tv2.setTextSize(getResources().getDimension(R.dimen.small));
+                    tv2.setTextColor(color1);
+                    ll2.addView(tv2);
+
+                    TextView tv3 = new TextView(this);
+                    tv3.setText(String.valueOf(forms[i][4]));
+                    tv3.setTextSize(getResources().getDimension(R.dimen.small));
+                    ll2.addView(tv3);
+
+                    moreLayout.addView(ll2);
+
+                    LinearLayout ll3 = new LinearLayout(this);
+                    ll3.setOrientation(LinearLayout.HORIZONTAL);
+
+                    TextView tv4 = new TextView(this);
+                    tv4.setText(getResources().getString(R.string.location) + " ");
+                    tv4.setTextSize(getResources().getDimension(R.dimen.small));
+                    tv4.setTextColor(color1);
+                    ll3.addView(tv4);
+
+                    TextView tv5 = new TextView(this);
+                    tv5.setText(String.valueOf(forms[i][7]));
+                    tv5.setTextSize(getResources().getDimension(R.dimen.small));
+                    ll3.addView(tv5);
+
+                    moreLayout.addView(ll3);
+
+                } else {
+
+                    verticalLayout.addView(linearLayout);
+
+                    OfflineForm offlineForm = serverService.getOfflineFormById(Integer.parseInt(String.valueOf(forms[i][0])));
+                    ArrayList<String[][]> array = offlineForm.getObsValue();
+
+                    for (int k = 0; k < array.size(); k++) {
+                        String[][] obs = array.get(k);
+
+                        LinearLayout ll1 = new LinearLayout(this);
+                        ll1.setOrientation(LinearLayout.HORIZONTAL);
+
+                        TextView tv = new TextView(this);
+                        tv.setText(App.convertToTitleCase(obs[0][0] + ": "));
+                        tv.setTextSize(getResources().getDimension(R.dimen.small));
+                        tv.setTextColor(color1);
+                        ll1.addView(tv);
+
+                        String identifier = serverService.getPatientIdentifierBySystemIdLocalDB(String.valueOf(forms[i][3]));
+                        TextView tv1 = new TextView(this);
+                        tv1.setText(obs[0][1]);
+                        tv1.setTextSize(getResources().getDimension(R.dimen.small));
+                        ll1.addView(tv1);
+
+                        moreLayout.addView(ll1);
+
                     }
 
-                });
-
-                verticalLayout.addView(linearLayout);
-
-                LinearLayout ll1 = new LinearLayout(this);
-                ll1.setOrientation(LinearLayout.HORIZONTAL);
-
-                TextView tv = new TextView(this);
-                tv.setText(getResources().getString(R.string.patient_id) + " ");
-                tv.setTextSize(getResources().getDimension(R.dimen.small));
-                tv.setTextColor(color1);
-                ll1.addView(tv);
-
-                String identifier = serverService.getPatientIdentifierBySystemIdLocalDB(String.valueOf(forms[i][3]));
-                TextView tv1 = new TextView(this);
-                tv1.setText(identifier);
-                tv1.setTextSize(getResources().getDimension(R.dimen.small));
-                ll1.addView(tv1);
-
-                moreLayout.addView(ll1);
-
-                LinearLayout ll2 = new LinearLayout(this);
-                ll2.setOrientation(LinearLayout.HORIZONTAL);
-
-                TextView tv2 = new TextView(this);
-                tv2.setText(getResources().getString(R.string.form_date) + " ");
-                tv2.setTextSize(getResources().getDimension(R.dimen.small));
-                tv2.setTextColor(color1);
-                ll2.addView(tv2);
-
-                TextView tv3 = new TextView(this);
-                tv3.setText(String.valueOf(forms[i][4]));
-                tv3.setTextSize(getResources().getDimension(R.dimen.small));
-                ll2.addView(tv3);
-
-                moreLayout.addView(ll2);
-
-                LinearLayout ll3 = new LinearLayout(this);
-                ll3.setOrientation(LinearLayout.HORIZONTAL);
-
-                TextView tv4 = new TextView(this);
-                tv4.setText(getResources().getString(R.string.location) + " ");
-                tv4.setTextSize(getResources().getDimension(R.dimen.small));
-                tv4.setTextColor(color1);
-                ll3.addView(tv4);
-
-                TextView tv5 = new TextView(this);
-                tv5.setText(String.valueOf(forms[i][7]));
-                tv5.setTextSize(getResources().getDimension(R.dimen.small));
-                ll3.addView(tv5);
-
-                moreLayout.addView(ll3);
+                }
 
                 moreLayout.setPadding(80, 0, 0, 0);
                 moreLayout.setVisibility(View.GONE);
                 verticalLayout.addView(moreLayout);
-
                 contentLinearLayout.addView(verticalLayout);
-
 
             }
         }
@@ -236,6 +269,31 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                     int color = App.getColor(OfflineFormActivity.this, R.attr.colorAccent);
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
+                    alertDialog.setMessage(getString(R.string.warning_before_delete));
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.ic_delete);
+                    DrawableCompat.setTint(clearIcon, color);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_delete));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    deleteForms();
+                                }
+                            });
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                    alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
+
+                } else if (v == submitIcon) {
+
+                    int color = App.getColor(OfflineFormActivity.this, R.attr.colorAccent);
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
                     alertDialog.setMessage(getString(R.string.warning_before_submit));
                     Drawable clearIcon = getResources().getDrawable(R.drawable.ic_submit);
                     DrawableCompat.setTint(clearIcon, color);
@@ -244,7 +302,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                     alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    deleteForms();
+                                    submitForms();
                                 }
                             });
                     alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
@@ -276,6 +334,16 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
         for (CheckBox cb : checkBoxes) {
             if (cb.isChecked()) {
                 serverService.deleteForms(cb.getTag().toString());
+            }
+        }
+
+        fillList();
+    }
+
+    public void submitForms() {
+        for (CheckBox cb : checkBoxes) {
+            if (cb.isChecked()) {
+                serverService.submitOfflineForm(cb.getTag().toString());
             }
         }
 

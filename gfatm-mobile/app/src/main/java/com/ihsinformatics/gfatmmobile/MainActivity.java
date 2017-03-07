@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity
     ReportFragment fragmentReport = new ReportFragment();
     SearchFragment fragmentSearch = new SearchFragment();
     ImageView change;
+    ImageView update;
 
     TextView patientName;
     TextView patientDob;
@@ -124,6 +126,10 @@ public class MainActivity extends AppCompatActivity
         DrawableCompat.setTint(change.getDrawable(), color);
         change.setOnTouchListener(this);
 
+        update = (ImageView) findViewById(R.id.update);
+        DrawableCompat.setTint(update.getDrawable(), color);
+        update.setOnTouchListener(this);
+
         buttonLayout = (LinearLayout) findViewById(R.id.buttonLayout);
         programLayout = (LinearLayout) findViewById(R.id.programLayout);
 
@@ -146,7 +152,11 @@ public class MainActivity extends AppCompatActivity
                 String subtitle = getResources().getString(R.string.program) + " " + App.getProgram();
                 getSupportActionBar().setSubtitle(subtitle);
                 fragmentForm.fillMainContent();
+                fragmentReport.fillReportFragment();
                 showFormFragment();
+
+                if (App.getLocation().equals(""))
+                    openLocationSelectionDialog();
 
             }
         });
@@ -186,6 +196,8 @@ public class MainActivity extends AppCompatActivity
         else
             showProgramSelection();
 
+        //serverService.submitOfflineForms();
+
     }
 
     @Override
@@ -197,6 +209,7 @@ public class MainActivity extends AppCompatActivity
             getSupportActionBar().setSubtitle(subtitle);
 
             fragmentForm.fillMainContent();
+            fragmentReport.fillReportFragment();
             showFormFragment();
         }
 
@@ -519,14 +532,23 @@ public class MainActivity extends AppCompatActivity
     public boolean onTouch(View v, MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN: {
+
                 ImageView view = (ImageView) v;
-                view.getDrawable().setColorFilter(getResources().getColor(R.color.dark_grey), PorterDuff.Mode.SRC_ATOP);
-                view.invalidate();
 
-                Intent selectPatientActivityIntent = new Intent(this, SelectPatientActivity.class);
-                startActivityForResult(selectPatientActivityIntent, SELECT_PATIENT_ACTIVITY);
+                if (view == change) {
+                    view.getDrawable().setColorFilter(getResources().getColor(R.color.dark_grey), PorterDuff.Mode.SRC_ATOP);
+                    view.invalidate();
 
-                break;
+                    Intent selectPatientActivityIntent = new Intent(this, SelectPatientActivity.class);
+                    startActivityForResult(selectPatientActivityIntent, SELECT_PATIENT_ACTIVITY);
+
+                    break;
+                } else if (view == update) {
+
+                    updatePatientDetails();
+
+                    break;
+                }
             }
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL: {
@@ -538,6 +560,87 @@ public class MainActivity extends AppCompatActivity
             }
         }
         return true;
+    }
+
+    private void updatePatientDetails() {
+        AsyncTask<String, String, String> updateTask = new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.updating_patient));
+                        loading.show();
+                    }
+                });
+
+                String result = serverService.updatePatientDetails(App.getPatient().getPatientId());
+                return result;
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            ;
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                if (result.equals("SUCCESS")) {
+                    //resetViews();
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.form_submitted));
+                    Drawable submitIcon = getResources().getDrawable(R.drawable.ic_submit);
+                    alertDialog.setIcon(submitIcon);
+                    int color = App.getColor(context, R.attr.colorAccent);
+                    DrawableCompat.setTint(submitIcon, color);
+                    alertDialog.setTitle(getResources().getString(R.string.title_completed));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else if (result.equals("CONNECTION_ERROR")) {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
+                    alertDialog.setMessage(message);
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+
+
+            }
+        };
+        updateTask.execute("");
     }
 
     @Override
@@ -568,6 +671,9 @@ public class MainActivity extends AppCompatActivity
                         if (!App.getPatient().getPatientId().equals(""))
                             id.setVisibility(View.VISIBLE);
                         patientId.setText(App.getPatient().getPatientId());
+
+                        fragmentReport.fillReportFragment();
+                        fragmentForm.fillMainContent();
                     }
                 } else if (returnString != null && returnString.equals("CREATE")) {
 
@@ -589,8 +695,12 @@ public class MainActivity extends AppCompatActivity
                         Toast toast = Toast.makeText(MainActivity.this, getResources().getString(R.string.patient_created_successfully), Toast.LENGTH_LONG);
                         toast.setGravity(Gravity.CENTER, 0, 0);
                         toast.show();
+
+                        fragmentReport.fillReportFragment();
+                        fragmentForm.fillMainContent();
                     }
                 }
+
 
             }
         } else if (requestCode == SAVED_FORM_ACTIVITY) {

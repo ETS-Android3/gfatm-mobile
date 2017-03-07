@@ -56,7 +56,7 @@ public class StartActivity extends Activity {
         App.setProviderUUid(preferences.getString(Preferences.PROVIDER_UUID, ""));
 
         ServerService serverService = new ServerService(context);
-        com.ihsinformatics.gfatmmobile.model.Patient patient = serverService.getPatientByIdFromLocalDB(App.getPatientId());
+        com.ihsinformatics.gfatmmobile.model.Patient patient = serverService.getPatientBySystemIdFromLocalDB(App.getPatientId());
         App.setPatient(patient);
 
         Locale locale = new Locale(preferences.getString(Preferences.LANGUAGE, "en").toLowerCase().substring(0, 2));
@@ -105,8 +105,11 @@ public class StartActivity extends Activity {
             StartActivity.resetPreferences(context);      //loading preferences
 
             try {
+
                 dbUtil = new DatabaseUtil(context);
-                dbUtil.buildDatabase(false);            // build sql lite db in app memory
+                Boolean flag = dbUtil.doesDatabaseExist();
+                if (!flag)
+                    dbUtil.buildDatabase(false);            // build sql lite db in app memory
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
             }

@@ -70,8 +70,9 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
     EditText createPatientId;
     Button createPatientScanButton;
     EditText externalId;
-
     ImageView selectButton;
+    Toast toast;
+    boolean flag = false;
     private ServerService serverService;
 
     @Override
@@ -135,11 +136,19 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
 
                 dob.setError(null);
                 if(s.length() != 0){
-                    Calendar cal = Calendar.getInstance();
-                    cal.add(Calendar.YEAR, -Integer.parseInt(s.toString()));
 
-                    dateOfBirthCalendar.set(dateOfBirthCalendar.get(Calendar.YEAR), dateOfBirthCalendar.get(Calendar.MONTH), dateOfBirthCalendar.get(Calendar.DAY_OF_MONTH));
-                    dob.setText(DateFormat.format("dd-MMM-yyyy", dateOfBirthCalendar).toString());
+                    if (!flag) {
+                        Calendar cal = Calendar.getInstance();
+                        cal.add(Calendar.YEAR, -Integer.parseInt(s.toString()));
+
+                        dateOfBirthCalendar.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+                        dob.setText(DateFormat.format("dd-MMM-yyyy", dateOfBirthCalendar).toString());
+                    }
+
+                    if (Integer.parseInt(age.getText().toString()) > 130)
+                        age.setError(getResources().getString(R.string.age_invalid));
+                    else
+                        age.setError(null);
 
                 }
                 else{
@@ -148,6 +157,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
 
                     dateOfBirthCalendar.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
                     dob.setText("");
+                    dob.setError(null);
                 }
             }
         });
@@ -164,6 +174,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
         createPatientScanButton.setOnClickListener(this);
         selectPatientScanButton.setOnClickListener(this);
         searchPatient.setOnClickListener(this);
+
 
         /*ServerService serverService = new ServerService(getApplicationContext());
         serverService.submitOfflineForms();*/
@@ -630,6 +641,11 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
         if (App.get(dob).isEmpty()) {
             dob.setError(getString(R.string.empty_field));
             error = true;
+        } else {
+            if (Integer.parseInt(age.getText().toString()) > 130)
+                age.setError(getResources().getString(R.string.age_invalid));
+            else
+                age.setError(null);
         }
         if (App.get(lastName).isEmpty()) {
             lastName.setError(getString(R.string.empty_field));
@@ -672,8 +688,33 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
         @Override
         public void onDateSet(DatePicker view, int yy, int mm, int dd) {
 
+            String formDa = dob.getText().toString();
+
             dateOfBirthCalendar.set(yy, mm, dd);
-            age.setText(String.valueOf(App.getDiffYears(dateOfBirthCalendar.getTime(), new Date())));
+            dob.setText(DateFormat.format("dd-MMM-yyyy", dateOfBirthCalendar).toString());
+
+            Date date = new Date();
+
+            if (dateOfBirthCalendar.after(App.getCalendar(date))) {
+
+                if (!formDa.equals("")) {
+                    dateOfBirthCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                    dob.setText(DateFormat.format("dd-MMM-yyyy", dateOfBirthCalendar).toString());
+                }
+
+                flag = true;
+                if (!formDa.equals(""))
+                    age.setText(String.valueOf(App.getDiffYears(dateOfBirthCalendar.getTime(), new Date())));
+                else
+                    age.setText("");
+                flag = false;
+
+            } else {
+                dob.setText(DateFormat.format("dd-MMM-yyyy", dateOfBirthCalendar).toString());
+                flag = true;
+                age.setText(String.valueOf(App.getDiffYears(dateOfBirthCalendar.getTime(), new Date())));
+                flag = false;
+            }
 
         }
     }

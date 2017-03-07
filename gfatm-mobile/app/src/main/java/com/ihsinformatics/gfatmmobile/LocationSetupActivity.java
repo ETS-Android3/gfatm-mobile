@@ -33,6 +33,7 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
     protected LinearLayout contentLinearLayout;
     protected TextView syncText;
     protected TextView lastUpdate;
+    protected TextView lastUpdateTextView;
     ArrayList<RadioButton> radioButtons = new ArrayList<RadioButton>();
     private ServerService serverService;
 
@@ -53,6 +54,7 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
         contentLinearLayout = (LinearLayout) findViewById(R.id.content);
         syncText = (TextView) findViewById(R.id.sync);
         lastUpdate = (TextView) findViewById(R.id.location_last_update);
+        lastUpdateTextView = (TextView) findViewById(R.id.last_update);
 
         syncText.setOnTouchListener(this);
 
@@ -77,7 +79,16 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
 
         contentLinearLayout.removeAllViews();
 
-        lastUpdate.setText(App.getLocationLastUpdate());
+        String lu = App.getLocationLastUpdate();
+        lastUpdate.setText(lu);
+
+        if (lastUpdate.getText().equals("")) {
+            lastUpdateTextView.setVisibility(View.GONE);
+            lastUpdate.setVisibility(View.GONE);
+        } else {
+            lastUpdateTextView.setVisibility(View.VISIBLE);
+            lastUpdate.setVisibility(View.VISIBLE);
+        }
 
         ServerService serverService = new ServerService(getApplicationContext());
         String columnName = "";

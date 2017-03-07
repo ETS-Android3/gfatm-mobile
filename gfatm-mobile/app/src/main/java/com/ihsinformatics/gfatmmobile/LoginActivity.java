@@ -121,6 +121,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     App.setUsername(App.get(username));
                     App.setPassword(App.get(password));
 
+                    App.setPatient(null);
+                    App.setPatientId(null);
+
                     String result = serverService.getUser();
                     return result;
 
@@ -153,6 +156,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         editor.putString(Preferences.USER_FULLNAME, App.getUserFullName());
                         editor.putString(Preferences.ROLES, App.getRoles());
                         editor.putString(Preferences.PROVIDER_UUID, App.getProviderUUid());
+                        editor.putString(Preferences.MODE, App.getMode());
                         editor.apply();
 
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);

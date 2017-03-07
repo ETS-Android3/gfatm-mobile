@@ -440,6 +440,22 @@ public class App {
             return true;
     }
 
+    public static String convertToTitleCase(String word) {
+        if (word == null) {
+            return "";
+        }
+
+        switch (word.length()) {
+            case 0:
+                return "";
+            case 1:
+                return word.toUpperCase(Locale.getDefault()) + " ";
+            default:
+                char firstLetter = Character.toUpperCase(word.charAt(0));
+                return firstLetter + word.substring(1).toLowerCase(Locale.getDefault()) + " ";
+        }
+    }
+
     public enum dialogButtonPosition {
         LEFT, CENTER, RIGHT
     }
