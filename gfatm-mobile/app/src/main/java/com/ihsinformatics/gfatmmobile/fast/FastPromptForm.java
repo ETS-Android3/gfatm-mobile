@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -18,8 +19,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
@@ -30,6 +33,7 @@ import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 
 import java.util.ArrayList;
@@ -54,6 +58,7 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
     TitledRadioGroup freeXrayVoucher;
     TitledRadioGroup noXrayVoucher;
 
+    Snackbar snackbar;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -161,7 +166,27 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
 
     @Override
     public void updateDisplay() {
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        if (snackbar != null)
+            snackbar.dismiss();
+
+        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
+
+            String formDa = formDate.getButton().getText().toString();
+
+            Date date = new Date();
+            if (formDateCalendar.after(App.getCalendar(date))) {
+
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+            } else
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        }
+
         secondDateCalendar.set(Calendar.YEAR, formDateCalendar.get(Calendar.YEAR));
         secondDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
         secondDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
@@ -208,6 +233,16 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
 
     @Override
     public boolean submit() {
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            String encounterId = bundle.getString("formId");
+            if (saveFlag) {
+                serverService.deleteOfflineForms(encounterId);
+            }
+            bundle.putBoolean("save", false);
+        }
 
         endTime = new Date();
 
@@ -345,8 +380,88 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
         return true;
     }
 
+
     @Override
-    public void refill(int encounterId) {
+    public void refill(int formId) {
+
+        OfflineForm fo = serverService.getOfflineFormById(formId);
+        String date = fo.getFormDate();
+        ArrayList<String[][]> obsValue = fo.getObsValue();
+        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        for (int i = 0; i < obsValue.size(); i++) {
+
+            String[][] obs = obsValue.get(i);
+            if (obs[0][0].equals("FORM START TIME")) {
+                startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
+            } else if (obs[0][0].equals("SPUTUM CONTAINER")) {
+
+                for (RadioButton rb : sputumContainerGiven.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                sputumContainerGiven.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("SPUTUM PRODUCED")) {
+
+                for (RadioButton rb : sputum_sample.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                sputum_sample.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("PATIENT DO NOT PRODUCE SPUTUM SAMPLE")) {
+
+                for (RadioButton rb : reasonNoSputumSample.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_patient_unable_to_expectorate)) && obs[0][1].equals("UNABLE TO EXPECTORATE")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_refused_title)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                reasonNoSputumSample.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("SPUTUM SAMPLE DUE DATE")) {
+                String secondDate = obs[0][1];
+                secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
+                dueDateSample.getEditText().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+                dueDateSample.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("VOUCHER GIVEN FOR TEST")) {
+
+                for (RadioButton rb : freeXrayVoucher.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                freeXrayVoucher.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("REASON VOUCHER NOT GIVEN")) {
+
+                for (RadioButton rb : noXrayVoucher.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_presumptive_refused)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_other_title)) && obs[0][1].equals("OTHER")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                noXrayVoucher.setVisibility(View.VISIBLE);
+            }
+        }
 
     }
 
@@ -386,6 +501,24 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         reasonNoSputumSample.setVisibility(View.GONE);
         noXrayVoucher.setVisibility(View.GONE);
+        updateDisplay();
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean openFlag = bundle.getBoolean("open");
+            if (openFlag) {
+
+                bundle.putBoolean("open", false);
+                bundle.putBoolean("save", true);
+
+                String id = bundle.getString("formId");
+                int formId = Integer.valueOf(id);
+
+                refill(formId);
+
+            } else bundle.putBoolean("save", false);
+
+        }
 
     }
 

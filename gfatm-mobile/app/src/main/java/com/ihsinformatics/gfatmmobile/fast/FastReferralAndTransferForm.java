@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -18,6 +19,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
@@ -29,6 +31,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
@@ -40,7 +43,7 @@ import java.util.HashMap;
  * Created by Haris on 2/10/2017.
  */
 
-public class FastReferralAndTransferForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener{
+public class FastReferralAndTransferForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
     Context context;
 
     // Views...
@@ -51,6 +54,7 @@ public class FastReferralAndTransferForm extends AbstractFormActivity implements
     TitledSpinner referralSite;
     TitledEditText referralSiteOther;
 
+    Snackbar snackbar;
 
 
     /**
@@ -146,7 +150,7 @@ public class FastReferralAndTransferForm extends AbstractFormActivity implements
         }
         locationArray[locationArray.length - 1] = getResources().getString(R.string.fast_other_title);
 
-        referralSite = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_location_for_referral_transfer),locationArray, "", App.VERTICAL);
+        referralSite = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_location_for_referral_transfer), locationArray, "", App.VERTICAL);
         referralSiteOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
 
         // Used for reset fields...
@@ -166,7 +170,26 @@ public class FastReferralAndTransferForm extends AbstractFormActivity implements
 
     @Override
     public void updateDisplay() {
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        if (snackbar != null)
+            snackbar.dismiss();
+
+        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
+
+            String formDa = formDate.getButton().getText().toString();
+
+            Date date = new Date();
+            if (formDateCalendar.after(App.getCalendar(date))) {
+
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+            } else
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        }
     }
 
     @Override
@@ -204,6 +227,15 @@ public class FastReferralAndTransferForm extends AbstractFormActivity implements
 
     @Override
     public boolean submit() {
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            String encounterId = bundle.getString("formId");
+            if (saveFlag) {
+                serverService.deleteOfflineForms(encounterId);
+            }
+            bundle.putBoolean("save", false);
+        }
 
         endTime = new Date();
 
@@ -351,8 +383,53 @@ public class FastReferralAndTransferForm extends AbstractFormActivity implements
     }
 
     @Override
-    public void refill(int encounterId) {
+    public void refill(int formId) {
 
+        OfflineForm fo = serverService.getOfflineFormById(formId);
+        String date = fo.getFormDate();
+        ArrayList<String[][]> obsValue = fo.getObsValue();
+        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        for (int i = 0; i < obsValue.size(); i++) {
+
+            String[][] obs = obsValue.get(i);
+            if (obs[0][0].equals("FORM START TIME")) {
+                startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
+            } else if (obs[0][0].equals("PATIENT BEING REFEREED OUT OR TRANSFERRED OUT")) {
+
+                for (RadioButton rb : referralTransfer.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_referral)) && obs[0][1].equals("PATIENT REFERRED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_transfer)) && obs[0][1].equals("PATIENT TRANSFERRED OUT")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                referralTransfer.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("REASON FOR REFERRAL OR TRANSFER")) {
+                String value = obs[0][1].equals("PATIENT CHOOSE ANOTHER FACILITY") ? getResources().getString(R.string.fast_patient_choose_another_facility) :
+                        (obs[0][1].equals("MULTI-DRUG RESISTANT TUBERCULOSIS SUSPECTED") ? getResources().getString(R.string.fast_drtb_suspect) :
+                                (obs[0][1].equals("DRUG RESISTANT TUBERCULOSIS") ? getResources().getString(R.string.fast_drtb) :
+                                        (obs[0][1].equals("TUBERCULOSIS TREATMENT FAILURE") ? getResources().getString(R.string.fast_treatment_failure) :
+                                                (obs[0][1].equals("COMPLICATED TUBERCULOSIS") ? getResources().getString(R.string.fast_complicated_tb) :
+                                                        (obs[0][1].equals("MYCOBACTERIUM TUBERCULOSIS") ? getResources().getString(R.string.fast_mycobacterium_other_than_tb) :
+                                                                getResources().getString(R.string.fast_other_title))))));
+
+                reasonReferralTransfer.getSpinner().selectValue(value);
+                reasonReferralTransfer.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("OTHER TRANSFER OR REFERRAL REASON")) {
+                reasonReferralTransferOther.getEditText().setText(obs[0][1]);
+                reasonReferralTransferOther.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("REFERRING FACILITY NAME")) {
+                referralSite.getSpinner().selectValue(obs[0][1]);
+                referralSite.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("LOCATION OF REFERRAL OR TRANSFER OTHER")) {
+                referralSiteOther.getEditText().setText(obs[0][1]);
+                referralSiteOther.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     @Override
@@ -384,13 +461,10 @@ public class FastReferralAndTransferForm extends AbstractFormActivity implements
             } else {
                 reasonReferralTransferOther.setVisibility(View.GONE);
             }
-        }
-
-        else if(spinner == referralSite.getSpinner()){
-            if(parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title))){
+        } else if (spinner == referralSite.getSpinner()) {
+            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title))) {
                 referralSiteOther.setVisibility(View.VISIBLE);
-            }
-            else{
+            } else {
                 referralSiteOther.setVisibility(View.GONE);
             }
         }
@@ -407,6 +481,23 @@ public class FastReferralAndTransferForm extends AbstractFormActivity implements
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         reasonReferralTransferOther.setVisibility(View.GONE);
         referralSiteOther.setVisibility(View.GONE);
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean openFlag = bundle.getBoolean("open");
+            if (openFlag) {
+
+                bundle.putBoolean("open", false);
+                bundle.putBoolean("save", true);
+
+                String id = bundle.getString("formId");
+                int formId = Integer.valueOf(id);
+
+                refill(formId);
+
+            } else bundle.putBoolean("save", false);
+
+        }
     }
 
     @Override
