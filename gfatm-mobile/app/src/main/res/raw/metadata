@@ -3865,6 +3865,11 @@ INSERT OR IGNORE INTO concept(full_name,var_name,uuid,data_type) VALUES ('HUMAN 
 INSERT OR IGNORE INTO concept(full_name,var_name,uuid,data_type) VALUES ('SEXUALLY TRANSMITTED DISEASE (STD) IN MOTHER DURING PREGNANCY',NULL,'163771AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','Boolean');
 INSERT OR IGNORE INTO concept(full_name,var_name,uuid,data_type) VALUES ('DRUGS RECEIVED BY PATIENT','drugs_received','fcd72596-8989-4b20-8c09-ee0171a6d763','Boolean');
 
+INSERT OR IGNORE INTO program VALUES (1, "86ba1232-d576-416e-b102-5f335c6746ce", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
+INSERT OR IGNORE INTO program VALUES (2, "5d372a38-ae27-4a68-a8d2-bc517a2c9c40", "PET", "Post-Exposure Treatment");
+INSERT OR IGNORE INTO program VALUES (3, "d056c989-7b3d-4be7-91b6-b751963081e3", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
+INSERT OR IGNORE INTO program VALUES (4, "d056c989-7b3d-4be7-91b6-b751963081e3", "ChildhoodTB", "Paediatric Tuberculosis Program");
+
 -- Encounter Types: select name as encounter_type, edit_privilege, view_privilege, uuid from encounter_type where retired = 0
 INSERT OR IGNORE INTO encounter_type VALUES ('PET-Contact Registry','Add PET Forms','View PET Forms','ca3aed11-1aa4-42a1-b85c-8332fc8001fc');
 INSERT OR IGNORE INTO encounter_type VALUES ('PET-Treatment Adherence','Add PET Forms','View PET Forms','67a71486-1a54-468f-ac3e-7091a9a79584');
@@ -3974,7 +3979,7 @@ INSERT OR IGNORE INTO location VALUES (3,'IHS','7fdfa2cb-bc95-405a-88c6-32b7673c
 INSERT OR IGNORE INTO location VALUES (4,'JPMC-KHI','2131aff8-2e2a-480a-b7ab-4ac53250262b',NULL,'Y','Y','N','N','Y','Y',NULL,'Rafiqui Shaheed Road',NULL,NULL,'Karachi','Sindh','Jinnah Post-graduate Medical College');
 INSERT OR IGNORE INTO location VALUES (5,'CH-KHI','6351fcf4-e311-4a19-90f9-35667d99a8af',NULL,'Y','N','Y','Y','Y','Y',NULL,'Baba-e-Urdu Road','Nanakwara',NULL,'Karachi','Sindh','Civil Hospital Karachi');
 INSERT OR IGNORE INTO location VALUES (6,'NICH-KHI','b1a8b05e-3542-4037-bbd3-998ee9c40574',NULL,'Y','N','Y','N','N','Y',NULL,'Rafiqui S.J Shaheed Road',NULL,NULL,'Karachi','Sindh','National Institute of Child Health');
-INSERT OR IGNORE INTO location VALUES (7,'ASH-KHI','58c57d25-8d39-41ab-8422-108a0c277d98',NULL,'Y','Y','Y','N','N','N','02199260301','Tabish Dehlavi Road',NULL,NULL,'Karachi','Sindh','Abbasi Shaheed Hospital');
+INSERT OR IGNORE INTO location VALUES (7,'ASH-KHI','58c57d25-8d39-41ab-8422-108a0c277d98',NULL,'Y','N','Y','N','N','Y','02199260301','Tabish Dehlavi Road',NULL,NULL,'Karachi','Sindh','Abbasi Shaheed Hospital');
 INSERT OR IGNORE INTO location VALUES (8,'IRD-PK','aff27d58-a15c-49a6-9beb-d30dcfc0c66e',NULL,'N','N','N','N','N','N',NULL,'508, Ibrahim Trade Towers','PECHS, Shahra-e-Faisal',NULL,'Karachi','Sindh','Interactive Research and Development');
 INSERT OR IGNORE INTO location VALUES (9,'NICVD-KHI','de561805-51b0-4afc-81df-0af5c2a39a12',NULL,'Y','N','N','N','N','Y',NULL,'Raffique Shaheed Rd','Bizerta Lines, Cantt',NULL,'Karachi','Sindh','National Institute of Cardio-vasular Diseases');
 INSERT OR IGNORE INTO location VALUES (10,'LGH-KHI','f10fdc40-9652-454a-acbb-f79a56dd0c1f',NULL,'Y','N','Y','N','N','Y',NULL,'Lyari',NULL,NULL,'Karachi','Sindh','Lyari General Hospital');
