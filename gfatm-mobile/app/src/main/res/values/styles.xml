@@ -30,6 +30,7 @@
         <item name="alertDialogStyle">@style/dialog</item>
         <item name="android:alertDialogTheme">@style/dialog</item>
         <item name="alertDialogTheme">@style/dialog</item>
+        <item name="android:autoCompleteTextViewStyle">@style/autoCompleteTextView</item>
 
     </style>
 
@@ -82,12 +83,19 @@
         <item name="android:textSize">@dimen/large</item>
     </style>
 
+    <style name="autoCompleteTextView" parent="@android:style/Widget.AutoCompleteTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/large</item>
+    </style>
+
     <style name="dialog" parent="Theme.AppCompat.DayNight.Dialog.Alert">
         <item name="colorPrimary">@color/ironstone</item>
         <item name="colorPrimaryDark">@color/veryDarkBrown</item>
         <item name="colorAccent">@color/dirtyBlue</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:windowCloseOnTouchOutside">false</item>
     </style>
 
 </resources>
