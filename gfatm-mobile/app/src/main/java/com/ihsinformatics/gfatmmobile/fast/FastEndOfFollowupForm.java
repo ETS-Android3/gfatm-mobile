@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -19,7 +18,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
@@ -31,7 +29,6 @@ import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
-import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
@@ -40,22 +37,27 @@ import java.util.Date;
 import java.util.HashMap;
 
 /**
- * Created by Haris on 1/24/2017.
+ * Created by Haris on 2/21/2017.
  */
 
-public class FastGeneXpertResultForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class FastEndOfFollowupForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener{
     Context context;
 
     // Views...
     TitledButton formDate;
-    TitledEditText cartridgeId;
-    TitledButton dateTestResult;
-    TitledSpinner gxpResult;
-    TitledRadioGroup mtbBurden;
-    TitledRadioGroup rifResult;
-    TitledEditText errorCode;
-
-    Snackbar snackbar;
+    TitledSpinner treatmentOutcome;
+    TitledSpinner transferOutLocations;
+    TitledEditText remarks;
+    TitledRadioGroup treatmentInitiatedReferralSite;
+    TitledSpinner treatmentNotInitiatedReferralSite;
+    TitledEditText treatmentNotInitiatedReferralSiteOther;
+    TitledRadioGroup drConfirmation;
+    TitledEditText enrsId;
+    TitledEditText firstName;
+    TitledEditText lastName;
+    LinearLayout mobileLinearLayout;
+    TitledEditText mobile1;
+    TitledEditText mobile2;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -70,8 +72,8 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
                              ViewGroup container, Bundle savedInstanceState) {
 
         PAGE_COUNT = 1;
-        FORM_NAME = Forms.FAST_GENEXPERT_RESULT_FORM;
-        FORM = Forms.fastGeneXpertResultForm;
+        FORM_NAME = Forms.FAST_END_OF_FOLLOWUP_FORM;
+        FORM = Forms.fastEndOfFollowupForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -127,106 +129,163 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
 
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        cartridgeId = new TitledEditText(context, null, getResources().getString(R.string.fast_cartridge_id), "", "", 10, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        dateTestResult = new TitledButton(context, null, getResources().getString(R.string.fast_date_of_result_recieved), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.VERTICAL);
-        gxpResult = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_genexpert_mtb_result), getResources().getStringArray(R.array.fast_genexpert_mtb_result_list), getResources().getString(R.string.fast_mtb_not_detected), App.VERTICAL);
-        mtbBurden = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_mtb_burden), getResources().getStringArray(R.array.fast_mtb_burden_list), getResources().getString(R.string.fast_very_low), App.VERTICAL, App.VERTICAL);
-        rifResult = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_if_mtb_then_rif_result), getResources().getStringArray(R.array.fast_if_mtb_then_rif_list), getResources().getString(R.string.fast_not_detected), App.VERTICAL, App.VERTICAL);
-        errorCode = new TitledEditText(context, null, getResources().getString(R.string.fast_error_code), "", "", 15, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, false);
+        treatmentOutcome = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_treatment_outcome), getResources().getStringArray(R.array.fast_treatment_outcome_list), getResources().getString(R.string.fast_cured), App.VERTICAL);
+        String columnName = "";
+        if (App.getProgram().equals(getResources().getString(R.string.pet)))
+            columnName = "pet_location";
+        else if (App.getProgram().equals(getResources().getString(R.string.fast)))
+            columnName = "fast_location";
+        else if (App.getProgram().equals(getResources().getString(R.string.comorbidities)))
+            columnName = "comorbidities_location";
+        else if (App.getProgram().equals(getResources().getString(R.string.pmdt)))
+            columnName = "pmdt_location";
+        else if (App.getProgram().equals(getResources().getString(R.string.childhood_tb)))
+            columnName = "childhood_tb_location";
+
+        final Object[][] locations = serverService.getAllLocations(columnName);
+        String[] locationArray = new String[locations.length];
+        for (int i = 0; i < locations.length; i++) {
+            locationArray[i] = String.valueOf(locations[i][1]);
+        }
+        transferOutLocations = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_location_of_transfer_out),locationArray, "", App.VERTICAL);
+        remarks = new TitledEditText(context, null, getResources().getString(R.string.fast_other_reason_remarks), "", "", 250, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        treatmentInitiatedReferralSite = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_treatment_initiated_at_transfer_referral_site), getResources().getStringArray(R.array.fast_yes_no_unknown_list), getResources().getString(R.string.fast_dont_know_title), App.VERTICAL, App.VERTICAL);
+        treatmentNotInitiatedReferralSite = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_reason_treatment_not_initiated_at_referral_site), getResources().getStringArray(R.array.fast_reason_treatment_not_initiated_referral_site_list), getResources().getString(R.string.fast_patient_could_not_be_contacted), App.VERTICAL);
+        treatmentNotInitiatedReferralSiteOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        drConfirmation = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_dr_confirmation), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_no_title), App.VERTICAL, App.VERTICAL);
+        enrsId = new TitledEditText(context, null, getResources().getString(R.string.fast_enrs_number), "", "", 10, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        firstName = new TitledEditText(context, null, getResources().getString(R.string.fast_first_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        lastName = new TitledEditText(context, null, getResources().getString(R.string.fast_last_name), "", "", 10, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        mobileLinearLayout = new LinearLayout(context);
+        mobileLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
+        mobile1 = new TitledEditText(context, null, getResources().getString(R.string.fast_contact_number), "", "####", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        mobileLinearLayout.addView(mobile1);
+        mobile2 = new TitledEditText(context, null, "-", "", "#######", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        mobileLinearLayout.addView(mobile2);
+
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), cartridgeId.getEditText(), dateTestResult.getButton(), gxpResult.getSpinner(),
-                mtbBurden.getRadioGroup(), rifResult.getRadioGroup(), errorCode.getEditText()};
+        views = new View[]{formDate.getButton(), treatmentOutcome.getSpinner(), transferOutLocations.getSpinner(), remarks.getEditText()
+        , treatmentInitiatedReferralSite.getRadioGroup(), treatmentNotInitiatedReferralSite.getSpinner(), treatmentNotInitiatedReferralSiteOther.getEditText(),
+        drConfirmation.getRadioGroup(), enrsId.getEditText(), firstName.getEditText(), lastName.getEditText(), mobile1.getEditText(), mobile2.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, cartridgeId, dateTestResult, gxpResult, mtbBurden, rifResult, errorCode}};
+                {{formDate, treatmentOutcome, transferOutLocations, remarks, treatmentInitiatedReferralSite, treatmentNotInitiatedReferralSite
+                , treatmentNotInitiatedReferralSiteOther, drConfirmation, enrsId, firstName, lastName, mobileLinearLayout}};
 
         formDate.getButton().setOnClickListener(this);
-        dateTestResult.getButton().setOnClickListener(this);
-        gxpResult.getSpinner().setOnItemSelectedListener(this);
-        mtbBurden.getRadioGroup().setOnCheckedChangeListener(this);
-        rifResult.getRadioGroup().setOnCheckedChangeListener(this);
+        treatmentOutcome.getSpinner().setOnItemSelectedListener(this);
+        treatmentNotInitiatedReferralSite.getSpinner().setOnItemSelectedListener(this);
+        treatmentInitiatedReferralSite.getRadioGroup().setOnCheckedChangeListener(this);
+        drConfirmation.getRadioGroup().setOnCheckedChangeListener(this);
 
         resetViews();
     }
 
     @Override
     public void updateDisplay() {
-        if (snackbar != null)
-            snackbar.dismiss();
-
-        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
-
-            String formDa = formDate.getButton().getText().toString();
-
-            Date date = new Date();
-            if (formDateCalendar.after(App.getCalendar(date))) {
-
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
-
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
-                snackbar.show();
-
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-
-            } else
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        }
-
-        if (!(dateTestResult.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString()))) {
-
-            String formDa = dateTestResult.getButton().getText().toString();
-
-            Date date = new Date();
-            if (secondDateCalendar.after(App.getCalendar(date))) {
-
-                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
-
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
-                snackbar.show();
-
-                dateTestResult.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-
-            } else
-                dateTestResult.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-        }
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
     }
 
     @Override
     public boolean validate() {
         Boolean error = false;
 
-        if (cartridgeId.getVisibility() == View.VISIBLE && App.get(cartridgeId).isEmpty()) {
+
+        if (remarks.getVisibility() == View.VISIBLE && App.get(remarks).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            cartridgeId.getEditText().setError(getString(R.string.empty_field));
-            cartridgeId.getEditText().requestFocus();
+            remarks.getEditText().setError(getString(R.string.empty_field));
+            remarks.getEditText().requestFocus();
             error = true;
         }
 
-        if (cartridgeId.getVisibility() == View.VISIBLE && App.get(cartridgeId).length()!=10) {
+        if (enrsId.getVisibility() == View.VISIBLE && App.get(enrsId).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            cartridgeId.getEditText().setError(getString(R.string.invalid_value));
-            cartridgeId.getEditText().requestFocus();
+            enrsId.getEditText().setError(getString(R.string.empty_field));
+            enrsId.getEditText().requestFocus();
             error = true;
         }
 
-        if (errorCode.getVisibility() == View.VISIBLE && App.get(errorCode).isEmpty()) {
+        if (firstName.getVisibility() == View.VISIBLE && App.get(firstName).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            errorCode.getEditText().setError(getString(R.string.empty_field));
-            errorCode.getEditText().requestFocus();
+            firstName.getEditText().setError(getString(R.string.empty_field));
+            firstName.getEditText().requestFocus();
             error = true;
         }
 
+        if (lastName.getVisibility() == View.VISIBLE && App.get(lastName).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            lastName.getEditText().setError(getString(R.string.empty_field));
+            lastName.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (App.get(mobile1).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            mobile1.getEditText().setError(getString(R.string.empty_field));
+            mobile1.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (App.get(mobile2).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            mobile2.getEditText().setError(getString(R.string.empty_field));
+            mobile2.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (App.get(mobile1).length() != 4) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            mobile1.getEditText().setError(getString(R.string.length_message));
+            mobile1.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (App.get(mobile2).length() != 7) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            mobile2.getEditText().setError(getString(R.string.length_message));
+            mobile2.getEditText().requestFocus();
+            error = true;
+        }
+
+        final String mobileNumber = mobile1.getEditText().getText().toString() + mobile2.getEditText().getText().toString();
+
+        if (!RegexUtil.isContactNumber(mobileNumber)) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            mobile2.getEditText().setError(getString(R.string.incorrect_contact_number));
+            mobile2.getEditText().requestFocus();
+            error = true;
+        } else {
+            mobile2.getEditText().setError(null);
+        }
 
         if (error) {
 
@@ -254,49 +313,39 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
 
             return false;
         }
-
         return true;
     }
 
     @Override
     public boolean submit() {
 
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            Boolean saveFlag = bundle.getBoolean("save", false);
-            String encounterId = bundle.getString("formId");
-            if (saveFlag) {
-                serverService.deleteOfflineForms(encounterId);
-            }
-            bundle.putBoolean("save", false);
-        }
         endTime = new Date();
-
+/*
         final ArrayList<String[]> observations = new ArrayList<String[]>();
         observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
         observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
-        //  observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
-        //observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});
-        observations.add(new String[]{"CARTRIDGE ID", App.get(cartridgeId)});
-        observations.add(new String[]{"DATE OF TEST RESULT RECEIVED", App.getSqlDateTime(secondDateCalendar)});
+        /*observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
+        observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});
+        if (referralTransfer.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"PATIENT BEING REFEREED OUT OR TRANSFERRED OUT", App.get(referralTransfer).equals(getResources().getString(R.string.fast_referral)) ? "PATIENT REFERRED" : "PATIENT TRANSFERRED OUT"});
 
-        if (gxpResult.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"GENEXPERT MTB/RIF RESULT", App.get(gxpResult).equals(getResources().getString(R.string.fast_mtb_detected)) ? "MYCOBACTERIUM TUBERCULOSIS DETECTED WITH RIFAMPIN RESISTANCE" :
-                    (App.get(gxpResult).equals(getResources().getString(R.string.fast_mtb_not_detected)) ? "MYCOBACTERIUM TUBERCULOSIS DETECTED WITHOUT RIFAMPIN RESISTANCE" :
-                            (App.get(gxpResult).equals(getResources().getString(R.string.fast_error)) ? "NEGATIVE" :
-                                    (App.get(gxpResult).equals(getResources().getString(R.string.fast_invalid)) ? "INVALID" : "NO RESULT")))});
 
-        if (mtbBurden.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"MTB BURDEN", App.get(mtbBurden).equals(getResources().getString(R.string.fast_very_low)) ? "VERY LOW" :
-                    (App.get(mtbBurden).equals(getResources().getString(R.string.fast_low)) ? "LOW" :
-                            (App.get(mtbBurden).equals(getResources().getString(R.string.fast_medium)) ? "MEDIUM" : "HIGH"))});
+        if (reasonReferralTransfer.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"REASON FOR REFERRAL OR TRANSFER", App.get(reasonReferralTransfer).equals(getResources().getString(R.string.fast_patient_choose_another_facility)) ? "PATIENT CHOOSE ANOTHER FACILITY" :
+                    (App.get(reasonReferralTransfer).equals(getResources().getString(R.string.fast_drtb_suspect)) ? "MULTI-DRUG RESISTANT TUBERCULOSIS SUSPECTED" :
+                            (App.get(reasonReferralTransfer).equals(getResources().getString(R.string.fast_drtb)) ? "DRUG RESISTANT TUBERCULOSIS" :
+                                    (App.get(reasonReferralTransfer).equals(getResources().getString(R.string.fast_treatment_failure)) ? "TUBERCULOSIS TREATMENT FAILURE" :
+                                            (App.get(reasonReferralTransfer).equals(getResources().getString(R.string.fast_complicated_tb)) ? "COMPLICATED TUBERCULOSIS" :
+                                                    (App.get(reasonReferralTransfer).equals(getResources().getString(R.string.fast_mycobacterium_other_than_tb)) ? "MYCOBACTERIUM TUBERCULOSIS" : "OTHER TRANSFER OR REFERRAL REASON")))))});
 
-        if (rifResult.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"RIF RESISTANCE RESULT", App.get(rifResult).equals(getResources().getString(R.string.fast_not_detected)) ? "NOT DETECTED" :
-                    (App.get(rifResult).equals(getResources().getString(R.string.fast_detected)) ? "DETECTED" : "INTERMEDIATE")});
+        if (reasonReferralTransferOther.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"OTHER TRANSFER OR REFERRAL REASON", App.get(reasonReferralTransferOther)});
 
-        if (errorCode.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"ERROR CODE", App.get(errorCode)});
+        if (referralSite.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"REFERRING FACILITY NAME", referralSite.getSpinner().getSelectedItem().toString()});
+
+        if (referralSiteOther.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"LOCATION OF REFERRAL OR TRANSFER OTHER", App.get(referralSiteOther)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -312,7 +361,7 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("GXP Test", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                String result = serverService.saveEncounterAndObservation("Referral Form", FORM, formDateCalendar, observations.toArray(new String[][]{}));
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 
@@ -395,7 +444,7 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
 
             }
         };
-        submissionFormTask.execute("");
+        submissionFormTask.execute("");*/
 
         return false;
     }
@@ -416,73 +465,7 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
     }
 
     @Override
-    public void refill(int formId) {
-
-        OfflineForm fo = serverService.getOfflineFormById(formId);
-        String date = fo.getFormDate();
-        ArrayList<String[][]> obsValue = fo.getObsValue();
-        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-
-        for (int i = 0; i < obsValue.size(); i++) {
-
-            String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("FORM START TIME")) {
-                startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
-            } else if (obs[0][0].equals("CARTRIDGE ID")) {
-                cartridgeId.getEditText().setText(obs[0][1]);
-                cartridgeId.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("GENEXPERT MTB/RIF RESULT")) {
-                String value = obs[0][1].equals("MYCOBACTERIUM TUBERCULOSIS DETECTED WITH RIFAMPIN RESISTANCE") ? getResources().getString(R.string.fast_mtb_detected) :
-                        (obs[0][1].equals("MYCOBACTERIUM TUBERCULOSIS DETECTED WITHOUT RIFAMPIN RESISTANCE") ? getResources().getString(R.string.fast_mtb_not_detected) :
-                                (obs[0][1].equals("NEGATIVE") ? getResources().getString(R.string.fast_error) :
-                                        (obs[0][1].equals("INVALID") ? getResources().getString(R.string.fast_invalid) : getResources().getString(R.string.fast_no_result))));
-
-                gxpResult.getSpinner().selectValue(value);
-                gxpResult.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("DATE OF TEST RESULT RECEIVED")) {
-                String secondDate = obs[0][1];
-                secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
-                dateTestResult.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-                dateTestResult.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("MTB BURDEN")) {
-
-                for (RadioButton rb : mtbBurden.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_very_low)) && obs[0][1].equals("VERY LOW")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_low)) && obs[0][1].equals("LOW")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_medium)) && obs[0][1].equals("MEDIUM")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_high)) && obs[0][1].equals("HIGH")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                mtbBurden.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("RIF RESULT")) {
-
-                for (RadioButton rb : rifResult.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_not_detected)) && obs[0][1].equals("NOT DETECTED")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_detected)) && obs[0][1].equals("DETECTED")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INTERMEDIATE")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                rifResult.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("ERROR CODE")) {
-                errorCode.getEditText().setText(obs[0][1]);
-                errorCode.setVisibility(View.VISIBLE);
-            }
-        }
+    public void refill(int encounterId) {
 
     }
 
@@ -499,15 +482,6 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
             args.putBoolean("allowPastDate", true);
             args.putBoolean("allowFutureDate", false);
         }
-
-        if (view == dateTestResult.getButton()) {
-            Bundle args = new Bundle();
-            args.putInt("type", SECOND_DATE_DIALOG_ID);
-            secondDateFragment.setArguments(args);
-            secondDateFragment.show(getFragmentManager(), "DatePicker");
-            args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", false);
-        }
     }
 
     @Override
@@ -515,6 +489,35 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
         return false;
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        MySpinner spinner = (MySpinner) parent;
+        if (spinner == treatmentOutcome.getSpinner()) {
+            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_transfer_out))) {
+                transferOutLocations.setVisibility(View.VISIBLE);
+            } else {
+                transferOutLocations.setVisibility(View.GONE);
+            }
+
+            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title)) ||
+                    parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_referral_new))||
+                    parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_patient_loss_to_follow_up))) {
+                    remarks.setVisibility(View.VISIBLE);
+
+            } else {
+                remarks.setVisibility(View.GONE);
+            }
+        }
+
+        else if(spinner == treatmentNotInitiatedReferralSite.getSpinner()){
+            if(parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title))){
+                treatmentNotInitiatedReferralSiteOther.setVisibility(View.VISIBLE);
+            }
+            else{
+                treatmentNotInitiatedReferralSiteOther.setVisibility(View.GONE);
+            }
+        }
+    }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -525,52 +528,34 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
     public void resetViews() {
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        dateTestResult.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-        mtbBurden.setVisibility(View.GONE);
-        errorCode.setVisibility(View.GONE);
-        rifResult.setVisibility(View.GONE);
-
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            Boolean openFlag = bundle.getBoolean("open");
-            if (openFlag) {
-
-                bundle.putBoolean("open", false);
-                bundle.putBoolean("save", true);
-
-                String id = bundle.getString("formId");
-                int formId = Integer.valueOf(id);
-
-                refill(formId);
-
-            } else bundle.putBoolean("save", false);
-
-        }
-
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        MySpinner spinner = (MySpinner) parent;
-        if (spinner == gxpResult.getSpinner()) {
-            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_mtb_detected))) {
-                mtbBurden.setVisibility(View.VISIBLE);
-                rifResult.setVisibility(View.VISIBLE);
-            } else {
-                mtbBurden.setVisibility(View.GONE);
-                rifResult.setVisibility(View.GONE);
-            }
-
-            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_error))) {
-                errorCode.setVisibility(View.VISIBLE);
-            } else {
-                errorCode.setVisibility(View.GONE);
-            }
-        }
+        transferOutLocations.setVisibility(View.GONE);
+        remarks.setVisibility(View.GONE);
+        treatmentNotInitiatedReferralSite.setVisibility(View.GONE);
+        treatmentNotInitiatedReferralSiteOther.setVisibility(View.GONE);
+        enrsId.setVisibility(View.GONE);
     }
 
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
+        if(radioGroup == treatmentInitiatedReferralSite.getRadioGroup()){
+            if(treatmentInitiatedReferralSite.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))){
+                treatmentNotInitiatedReferralSite.setVisibility(View.VISIBLE);
+
+            }
+            else{
+                treatmentNotInitiatedReferralSite.setVisibility(View.GONE);
+
+            }
+        }
+
+        else if(radioGroup == drConfirmation.getRadioGroup()){
+            if(drConfirmation.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))){
+                enrsId.setVisibility(View.VISIBLE);
+            }
+            else{
+                enrsId.setVisibility(View.GONE);
+            }
+        }
     }
 
     class MyAdapter extends PagerAdapter {
