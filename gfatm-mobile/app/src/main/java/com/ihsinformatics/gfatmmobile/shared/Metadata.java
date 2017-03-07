@@ -25,6 +25,7 @@ public class Metadata {
     public static final String ENCOUNTER = "ENCOUNTER";
     public static final String OBS = "OBS";
     public static final String OFFLINE_FORM = "offline_form";
+    public static final String PROGRAM = "program";
 
     public static final String PERSON_ADDRESS = "Person Address";
     public static final String PERSON_ATTRIBUTE = "Person Attribute";
