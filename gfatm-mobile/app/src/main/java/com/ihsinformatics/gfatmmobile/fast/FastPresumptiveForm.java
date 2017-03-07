@@ -51,6 +51,8 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
 
     // Views...
     TitledButton formDate;
+    TitledEditText husbandName;
+    TitledEditText fatherName;
     TitledRadioGroup patientAttendant;
     TitledSpinner patientConsultation;
     TitledEditText patientConsultationOther;
@@ -131,9 +133,36 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
     public void initViews() {
 
         // first page views...
+        if (App.getPatient().getPerson().getAge() <= 15) {
+
+            int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
+
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+            alertDialog.setMessage(getString(R.string.fast_patient_age_less_than_15));
+            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+            DrawableCompat.setTint(clearIcon, color);
+            alertDialog.setIcon(clearIcon);
+            alertDialog.setTitle(getResources().getString(R.string.title_error));
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            try {
+                                InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                            } catch (Exception e) {
+                                // TODO: handle exception
+                            }
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
+        }
+
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         patientDemographicsTitle = new MyTextView(context, getResources().getString(R.string.fast_demographics_title));
         patientDemographicsTitle.setTypeface(null, Typeface.BOLD);
+        husbandName = new TitledEditText(context, null, getResources().getString(R.string.fast_husband_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        fatherName = new TitledEditText(context, null, getResources().getString(R.string.fast_father_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         patientAttendant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_is_this_patient_or_attendant), getResources().getStringArray(R.array.fast_patient_or_attendant_list), getResources().getString(R.string.fast_patient_title), App.VERTICAL, App.VERTICAL);
         patientConsultation = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_speciality_patient_consult), getResources().getStringArray(R.array.fast_patient_consultation_list), getResources().getString(R.string.fast_chesttbclinic_title), App.VERTICAL);
         patientConsultationOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
@@ -156,14 +185,14 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
 
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), patientAttendant.getRadioGroup(), patientConsultation.getSpinner(),
+        views = new View[]{formDate.getButton(), husbandName.getEditText(), fatherName.getEditText(), patientAttendant.getRadioGroup(), patientConsultation.getSpinner(),
                 patientConsultationOther.getEditText(), cough.getRadioGroup(), coughDuration.getSpinner(),
                 productiveCough.getRadioGroup(), haemoptysis.getRadioGroup(), fever.getRadioGroup(), feverDuration.getSpinner(),
                 tbContact.getRadioGroup(), tbHistory.getRadioGroup(), nightSweats.getRadioGroup(), weightLoss.getRadioGroup()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, patientDemographicsTitle, patientAttendant, patientConsultation, patientConsultationOther},
+                {{formDate, patientDemographicsTitle, husbandName, fatherName, patientAttendant, patientConsultation, patientConsultationOther},
                         {patientSymptomTitle, cough, coughDuration, productiveCough, haemoptysis, fever, feverDuration, nightSweats, weightLoss},
                         {patientTbHistoryTitle, tbHistory, tbContact}};
 
@@ -207,24 +236,13 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
 
     @Override
     public boolean validate() {
-        Boolean error = false;
 
-        if (patientConsultationOther.getVisibility() == View.VISIBLE && App.get(patientConsultationOther).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(2);
-            else
-                gotoPage(0);
-            patientConsultationOther.getEditText().setError(getString(R.string.empty_field));
-            patientConsultationOther.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (error) {
+        if (App.getPatient().getPerson().getAge() <= 15) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
-            alertDialog.setMessage(getString(R.string.form_error));
+            alertDialog.setMessage(getString(R.string.fast_patient_age_less_than_15_cant_submit));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
@@ -242,8 +260,56 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
                         }
                     });
             alertDialog.show();
-
             return false;
+        } else {
+            Boolean error = false;
+
+            if (patientConsultationOther.getVisibility() == View.VISIBLE && App.get(patientConsultationOther).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(2);
+                else
+                    gotoPage(0);
+                patientConsultationOther.getEditText().setError(getString(R.string.empty_field));
+                patientConsultationOther.getEditText().requestFocus();
+                error = true;
+            }
+
+            if (fatherName.getVisibility() == View.VISIBLE && App.get(fatherName).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(2);
+                else
+                    gotoPage(0);
+                fatherName.getEditText().setError(getString(R.string.empty_field));
+                fatherName.getEditText().requestFocus();
+                error = true;
+            }
+
+            if (error) {
+
+                int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
+
+                final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+                alertDialog.setMessage(getString(R.string.form_error));
+                Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                DrawableCompat.setTint(clearIcon, color);
+                alertDialog.setIcon(clearIcon);
+                alertDialog.setTitle(getResources().getString(R.string.title_error));
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                try {
+                                    InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
+                                    imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                } catch (Exception e) {
+                                    // TODO: handle exception
+                                }
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();
+
+                return false;
+            }
         }
 
         return true;
@@ -252,6 +318,17 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
     @Override
     public boolean submit() {
 
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            String encounterId = bundle.getString("formId");
+            if (saveFlag) {
+                serverService.deleteOfflineForms(encounterId);
+            }
+            bundle.putBoolean("save", false);
+        }
+
+
         endTime = new Date();
 
         final ArrayList<String[]> observations = new ArrayList<String[]>();
@@ -259,6 +336,13 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
         observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
       /*  observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
         observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});*/
+
+        if (husbandName.getVisibility() == View.VISIBLE && !(App.get(husbandName).isEmpty()))
+            observations.add(new String[]{"PARTNER FULL NAME", App.get(husbandName)});
+
+        if (fatherName.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"FATHER NAME", App.get(fatherName)});
+
         observations.add(new String[]{"PERSON ATTENDING FACILITY", App.get(patientAttendant).equals(getResources().getString(R.string.fast_patient_title)) ? "SELF" : "ATTENDANT"});
 
         if (patientConsultation.getVisibility() == View.VISIBLE)
@@ -468,7 +552,17 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
             String[][] obs = obsValue.get(i);
             if (obs[0][0].equals("FORM START TIME")) {
                 startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
-            } else if (obs[0][0].equals("PERSON ATTENDING FACILITY")) {
+            }
+
+            else if (obs[0][0].equals("PARTNER FULL NAME")) {
+                husbandName.getEditText().setText(obs[0][1]);
+            }
+
+            else if (obs[0][0].equals("FATHER NAME")) {
+                fatherName.getEditText().setText(obs[0][1]);
+            }
+
+            else if (obs[0][0].equals("PERSON ATTENDING FACILITY")) {
 
                 for (RadioButton rb : patientAttendant.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_patient_title)) && obs[0][1].equals("SELF")) {
@@ -748,6 +842,9 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
     public void resetViews() {
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        if(App.getPatient().getPerson().getGender().equals("M")){
+            husbandName.setVisibility(View.GONE);
+        }
         patientConsultationOther.setVisibility(View.GONE);
         feverDuration.setVisibility(View.GONE);
 

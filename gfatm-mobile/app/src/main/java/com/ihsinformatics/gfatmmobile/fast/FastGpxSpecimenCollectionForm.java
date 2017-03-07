@@ -139,10 +139,10 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
         sampleType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_specimen_type), getResources().getStringArray(R.array.fast_specimen_type_list), getResources().getString(R.string.fast_sputum), App.VERTICAL, App.VERTICAL);
         specimenSource = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_specimen_come_from), getResources().getStringArray(R.array.fast_specimen_come_from_list), getResources().getString(R.string.fast_lymph), App.VERTICAL, App.VERTICAL);
         specimenSourceOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        sampleAccepted = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_accepted_lab_technician), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
+        sampleAccepted = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_accepted_lab_technician), getResources().getStringArray(R.array.fast_accepted_rejected_list), getResources().getString(R.string.fast_accepted), App.VERTICAL, App.VERTICAL);
         reasonRejected = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_why_was_the_sample_rejected), getResources().getStringArray(R.array.fast_sample_rejected_list), getResources().getString(R.string.fast_saliva), App.VERTICAL);
         otherReasonRejected = new TitledEditText(context, null, getResources().getString(R.string.fast_other_reason_for_rejection), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        cartridgeId = new TitledEditText(context, null, getResources().getString(R.string.fast_cartridge_id), "", "", 9, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        cartridgeId = new TitledEditText(context, null, getResources().getString(R.string.fast_cartridge_id), "", "", 10,null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
 
 
         // Used for reset fields...
@@ -244,6 +244,16 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
             error = true;
         }
 
+        if (cartridgeId.getVisibility() == View.VISIBLE && App.get(cartridgeId).length()!=10) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            cartridgeId.getEditText().setError(getString(R.string.invalid_value));
+            cartridgeId.getEditText().requestFocus();
+            error = true;
+        }
+
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
@@ -322,7 +332,7 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
             observations.add(new String[]{"OTHER SPECIMEN SOURCE", App.get(specimenSourceOther)});
 
         if (sampleAccepted.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"SPECIMEN ACCEPTED", App.get(sampleAccepted).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
+            observations.add(new String[]{"SPECIMEN ACCEPTED", App.get(sampleAccepted).equals(getResources().getString(R.string.fast_accepted)) ? "ACCEPTED" : "REJECTED"});
 
 
         if (reasonRejected.getVisibility() == View.VISIBLE)
@@ -553,10 +563,10 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
             } else if (obs[0][0].equals("SPECIMEN ACCEPTED")) {
 
                 for (RadioButton rb : sampleAccepted.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_accepted)) && obs[0][1].equals("ACCEPTED")) {
                         rb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_rejected)) && obs[0][1].equals("REJECTED")) {
                         rb.setChecked(true);
                         break;
                     }

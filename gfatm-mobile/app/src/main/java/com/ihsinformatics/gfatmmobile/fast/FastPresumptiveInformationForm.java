@@ -159,8 +159,8 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         cnicOwner = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_whose_nic_is_this), getResources().getStringArray(R.array.fast_whose_nic_is_this_list), getResources().getString(R.string.fast_self), App.VERTICAL);
         otherCnicOwner = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         addressProvided = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_provided_their_address), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
-        addressHouse = new TitledEditText(context, null, getResources().getString(R.string.fast_address_1), "", "", 10, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        addressStreet = new TitledEditText(context, null, getResources().getString(R.string.fast_address_2), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        addressHouse = new TitledEditText(context, null, getResources().getString(R.string.fast_address_1), "", "", 10, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        addressStreet = new TitledEditText(context, null, getResources().getString(R.string.fast_address_2), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         addressTown = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_town), getResources().getStringArray(R.array.fast_towns_list),"Default Town", App.VERTICAL);
         city = new TitledEditText(context, null, getResources().getString(R.string.fast_city), App.getCity(), "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         city.getEditText().setKeyListener(null);
@@ -516,7 +516,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         final String landlineNumber = landline1.getEditText().getText().toString() + landline2.getEditText().getText().toString();
         final String secondaryLandlineNumber = secondaryLandline1.getEditText().getText().toString() + secondaryLandline2.getEditText().getText().toString();
 
-        if (!RegexUtil.isContactNumber(mobileNumber)) {
+        if (!RegexUtil.isMobileNumber(mobileNumber)) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -528,7 +528,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             mobile2.getEditText().setError(null);
         }
 
-        if (!App.get(secondaryMobile1).isEmpty() && App.get(secondaryMobile2).isEmpty() && !RegexUtil.isContactNumber(secondaryMobileNumber)) {
+        if (!App.get(secondaryMobile1).isEmpty() && App.get(secondaryMobile2).isEmpty() && !RegexUtil.isMobileNumber(secondaryMobileNumber)) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else

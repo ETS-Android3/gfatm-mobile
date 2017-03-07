@@ -154,8 +154,8 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
         hearAboutUsOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         contactReferral = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_enrolled_in_any_tb_program), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_no_title), App.VERTICAL, App.VERTICAL);
         contactIdType = new TitledCheckBoxes(context, null, getResources().getString(R.string.fast_tb_contact_any_identifications_id), getResources().getStringArray(R.array.fast_tb_contact_identification_list), null, App.VERTICAL, App.VERTICAL);
-        contactPatientId = new TitledEditText(context, null, getResources().getString(R.string.fast_patient_id), "", "", 6, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
-        contactExternalId = new TitledEditText(context, null, getResources().getString(R.string.fast_external_id), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        contactPatientId = new TitledEditText(context, null, getResources().getString(R.string.fast_patient_id), "", "", 7, RegexUtil.ALPHANUMERIC_FILTER_2, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        contactExternalId = new TitledEditText(context, null, getResources().getString(R.string.fast_external_id), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
 
         String columnName = "";
         if (App.getProgram().equals(getResources().getString(R.string.pet)))
@@ -176,7 +176,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
         }
 
         contactExternalIdHospital = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_if_external_id_hospital_or_programs), locationArray, "", App.VERTICAL);
-        contactTbRegisternationNo = new TitledEditText(context, null, getResources().getString(R.string.fast_tb_registeration_no), "", "", 11, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        contactTbRegisternationNo = new TitledEditText(context, null, getResources().getString(R.string.fast_tb_registeration_no), "", "", 11, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), screening.getRadioGroup(), facilitySection.getSpinner(), facilitySectionOther.getEditText(),
@@ -261,6 +261,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
     public boolean validate() {
         Boolean error = false;
 
+
         if (facilitySectionOther.getVisibility() == View.VISIBLE && App.get(facilitySectionOther).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
@@ -320,6 +321,27 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
             contactPatientId.getEditText().requestFocus();
             error = true;
         }
+
+        if (contactPatientId.getVisibility() == View.VISIBLE && !RegexUtil.isValidId(App.get(contactPatientId))){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            contactPatientId.getEditText().setError(getString(R.string.invalid_value));
+            contactPatientId.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (contactPatientId.getVisibility() == View.VISIBLE && App.get(contactPatientId).length()!=7) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            contactPatientId.getEditText().setError(getString(R.string.invalid_value));
+            contactPatientId.getEditText().requestFocus();
+            error = true;
+        }
+
 
         if (contactExternalId.getVisibility() == View.VISIBLE && App.get(contactExternalId).isEmpty()) {
             if (App.isLanguageRTL())
