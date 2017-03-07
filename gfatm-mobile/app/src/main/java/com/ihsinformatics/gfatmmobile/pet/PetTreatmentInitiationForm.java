@@ -5,11 +5,14 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -204,6 +207,172 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         relationshipTreatmentSuppoter.getSpinner().setOnItemSelectedListener(this);
         rifapentineAvailable.getRadioGroup().setOnCheckedChangeListener(this);
 
+        weight.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                isoniazidDose.getEditText().setHint("");
+                rifapentineDose.getEditText().setHint("");
+                levofloxacinDose.getEditText().setHint("");
+                ethionamideDose.getEditText().setHint("");
+
+                isoniazidDose.getEditText().setText("");
+                rifapentineDose.getEditText().setText("");
+                levofloxacinDose.getEditText().setText("");
+                ethionamideDose.getEditText().setText("");
+
+                int age = App.getPatient().getPerson().getAge();
+                int weightInt = 0;
+                if (!App.get(weight).equals("")) {
+                    weightInt = Integer.parseInt(App.get(weight));
+                }
+
+                if (App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy))) {
+
+                    int w = 1;
+                    w = weightInt * 10;
+
+                    isoniazidDose.getEditText().setText(String.valueOf(w));
+
+                    isoniazidDose.setVisibility(View.VISIBLE);
+                    rifapentineDose.setVisibility(View.GONE);
+                    levofloxacinDose.setVisibility(View.GONE);
+                    ethionamideDose.setVisibility(View.GONE);
+                    rifapentineAvailable.setVisibility(View.GONE);
+
+                } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_rifapentine))) {
+
+                    int w = 1;
+
+                    rifapentineAvailable.setVisibility(View.VISIBLE);
+                    if (App.get(rifapentineAvailable).equals(getResources().getString(R.string.no))) {
+
+                        isoniazidDose.setVisibility(View.VISIBLE);
+                        rifapentineDose.setVisibility(View.GONE);
+                        levofloxacinDose.setVisibility(View.GONE);
+                        ethionamideDose.setVisibility(View.GONE);
+
+                        if (age < 12) w = weightInt * 10;
+                        else if (age < 15) w = weightInt * 10;
+                        else w = weightInt * 5;
+
+                        isoniazidDose.getEditText().setText(String.valueOf(w));
+
+                    } else {
+
+                        w = 1;
+                        w = weightInt * 15;
+                        isoniazidDose.getEditText().setText(String.valueOf(w));
+
+                        rifapentineDose.getEditText().setText("");
+                        if (age < 12)
+                            rifapentineDose.getEditText().setHint("300 - 450 mg");
+                        else
+                            rifapentineDose.getEditText().setHint("450 - 900 mg");
+
+                        isoniazidDose.setVisibility(View.VISIBLE);
+                        rifapentineDose.setVisibility(View.VISIBLE);
+                        levofloxacinDose.setVisibility(View.GONE);
+                        ethionamideDose.setVisibility(View.GONE);
+
+                    }
+
+                } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_levofloxacin_ethionamide))) {
+
+                    int w = 1;
+
+                    if (age < 15) {
+                        ethionamideDose.getEditText().setText("");
+                        ethionamideDose.getEditText().setHint("15 - 20 mg/kg");
+                    } else {
+                        ethionamideDose.getEditText().setText("");
+                        ethionamideDose.getEditText().setHint("500 - 1000 mg");
+                    }
+
+                    Double ww = 1.0;
+                    if (age < 2) {
+                        ww = weightInt * 15.0;
+                        int i = (int) Math.round(ww);
+                        levofloxacinDose.getEditText().setText(String.valueOf(i));
+                    } else if (age < 15) {
+                        levofloxacinDose.getEditText().setText(String.valueOf(""));
+                        levofloxacinDose.getEditText().setHint("7.5 - 10 mg/kg");
+                    } else {
+                        levofloxacinDose.getEditText().setText(String.valueOf(""));
+                        levofloxacinDose.getEditText().setHint("750 - 1000 mg");
+                    }
+
+                    isoniazidDose.setVisibility(View.GONE);
+                    rifapentineDose.setVisibility(View.GONE);
+                    levofloxacinDose.setVisibility(View.VISIBLE);
+                    ethionamideDose.setVisibility(View.VISIBLE);
+                    rifapentineAvailable.setVisibility(View.GONE);
+
+                }
+
+            }
+        });
+
+
+        rifapentineDose.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!App.get(rifapentineDose).equals("")) {
+                    int dose = Integer.parseInt(App.get(rifapentineDose));
+                    String hint = rifapentineDose.getEditText().getHint().toString();
+
+                    if (hint.equals("300 - 450 mg")) {
+                        if (dose < 300 || dose > 450)
+                            rifapentineDose.getEditText().setError(getResources().getString(R.string.pet_rifapentine_out_of_range_1));
+                        else
+                            rifapentineDose.getEditText().setError(null);
+                    } else if (hint.equals("450 - 900 mg")) {
+                        if (dose < 450 || dose > 900)
+                            rifapentineDose.getEditText().setError(getResources().getString(R.string.pet_rifapentine_out_of_range_2));
+                        else
+                            rifapentineDose.getEditText().setError(null);
+                    }
+                }
+            }
+        });
+
+        isoniazidDose.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!App.get(isoniazidDose).equals("")) {
+                    int dose = Integer.parseInt(App.get(isoniazidDose));
+                    if (dose > 300)
+                        isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded));
+                    else
+                        isoniazidDose.getEditText().setError(null);
+                }
+            }
+        });
+
         resetViews();
     }
 
@@ -237,8 +406,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 });
 
                 HashMap<String, String> result = new HashMap<String, String>();
-                String weight = serverService.getObsValue(App.getPatient().getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_CONTACT_SCREENING, "WEIGHT (KG)");
-                String indexId = serverService.getObsValue(App.getPatient().getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "PATIENT ID OF INDEX CASE");
+                String weight = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_CONTACT_SCREENING, "WEIGHT (KG)");
+                String indexId = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "PATIENT ID OF INDEX CASE");
 
                 String tbType = "";
                 String infectionType = "";
@@ -246,30 +415,37 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 String dstbType = "";
 
                 if (!(indexId == null || indexId.equals(""))) {
-                    tbType = serverService.getObsValue(indexId, App.getProgram() + "-" + Forms.PET_INDEX_PATIENT_REGISTRATION, "SITE OF TUBERCULOSIS DISEASE");
-                    infectionType = serverService.getObsValue(indexId, App.getProgram() + "-" + Forms.PET_INDEX_PATIENT_REGISTRATION, "TUBERCULOSIS INFECTION TYPE");
-                    resistanceType = serverService.getObsValue(indexId, App.getProgram() + "-" + Forms.PET_INDEX_PATIENT_REGISTRATION, "TUBERCULOSIS DRUG RESISTANCE TYPE");
-                    dstbType = serverService.getObsValue(indexId, App.getProgram() + "-" + Forms.PET_INDEX_PATIENT_REGISTRATION, "RESISTANT TO ANTI-TUBERCULOSIS DRUGS");
+                    String id = serverService.getPatientSystemIdByIdentifierLocalDB(indexId);
+                    tbType = serverService.getObsValue(id, App.getProgram() + "-" + Forms.PET_INDEX_PATIENT_REGISTRATION, "SITE OF TUBERCULOSIS DISEASE");
+                    infectionType = serverService.getObsValue(id, App.getProgram() + "-" + Forms.PET_INDEX_PATIENT_REGISTRATION, "TUBERCULOSIS INFECTION TYPE");
+                    resistanceType = serverService.getObsValue(id, App.getProgram() + "-" + Forms.PET_INDEX_PATIENT_REGISTRATION, "TUBERCULOSIS DRUG RESISTANCE TYPE");
+                    dstbType = serverService.getObsValue(id, App.getProgram() + "-" + Forms.PET_INDEX_PATIENT_REGISTRATION, "RESISTANT TO ANTI-TUBERCULOSIS DRUGS");
                 }
 
                 if (weight != null)
                     weight = weight.replace(".0", "");
 
                 if (weight != null)
-                    result.put("WEIGHT (KG)", weight);
+                    if (!weight.equals(""))
+                        result.put("WEIGHT (KG)", weight);
                 if (indexId != null)
-                    result.put("PATIENT ID OF INDEX CASE", indexId);
+                    if (!indexId.equals(""))
+                        result.put("PATIENT ID OF INDEX CASE", indexId);
                 if (tbType != null)
-                    result.put("SITE OF TUBERCULOSIS DISEASE", tbType.equals("PULMONARY TUBERCULOSIS") ? getResources().getString(R.string.pet_ptb) : getResources().getString(R.string.pet_eptb));
+                    if (!tbType.equals(""))
+                        result.put("SITE OF TUBERCULOSIS DISEASE", tbType.equals("PULMONARY TUBERCULOSIS") ? getResources().getString(R.string.pet_ptb) : getResources().getString(R.string.pet_eptb));
                 if (infectionType != null)
-                    result.put("TUBERCULOSIS INFECTION TYPE", infectionType.equals("DRUG-SENSITIVE TUBERCULOSIS INFECTION") ? getResources().getString(R.string.pet_dstb) : getResources().getString(R.string.pet_drtb));
+                    if (!infectionType.equals(""))
+                        result.put("TUBERCULOSIS INFECTION TYPE", infectionType.equals("DRUG-SENSITIVE TUBERCULOSIS INFECTION") ? getResources().getString(R.string.pet_dstb) : getResources().getString(R.string.pet_drtb));
                 if (resistanceType != null)
-                    result.put("TUBERCULOSIS DRUG RESISTANCE TYPE", resistanceType.equals("RIFAMPICIN RESISTANT TUBERCULOSIS INFECTION") ? getResources().getString(R.string.pet_rr_tb) :
+                    if (!resistanceType.equals(""))
+                        result.put("TUBERCULOSIS DRUG RESISTANCE TYPE", resistanceType.equals("RIFAMPICIN RESISTANT TUBERCULOSIS INFECTION") ? getResources().getString(R.string.pet_rr_tb) :
                             (resistanceType.equals("MONO DRUG RESISTANT TUBERCULOSIS") ? getResources().getString(R.string.pet_dr_tb) :
                                     (resistanceType.equals("PANDRUG RESISTANT TUBERCULOSIS") ? getResources().getString(R.string.pet_pdr_tb) :
                                             (resistanceType.equals("MULTI-DRUG RESISTANT TUBERCULOSIS INFECTION") ? getResources().getString(R.string.pet_mdr_tb) : getResources().getString(R.string.pet_xdr_tb)))));
                 if (dstbType != null)
-                    result.put("RESISTANT TO ANTI-TUBERCULOSIS DRUGS", dstbType);
+                    if (!dstbType.equals(""))
+                        result.put("RESISTANT TO ANTI-TUBERCULOSIS DRUGS", dstbType);
 
                 return result;
 
@@ -298,13 +474,10 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
                     for (RadioButton rb : petRegimen.getRadioGroup().getButtons()) {
 
-                        if (rb.getText().equals(getResources().getString(R.string.pet_levofloxacin_ethionamide))) {
-                            rb.setVisibility(View.VISIBLE);
+                        if (rb.getText().equals(getResources().getString(R.string.pet_levofloxacin_ethionamide)))
                             rb.setChecked(true);
-                        } else {
-                            rb.setVisibility(View.GONE);
+                        else
                             rb.setChecked(false);
-                        }
 
                     }
 
@@ -315,25 +488,20 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                     if (App.getPatient().getPerson().getAge() < 2) {
                         for (RadioButton rb : petRegimen.getRadioGroup().getButtons()) {
 
-                            if (rb.getText().equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy))) {
-                                rb.setVisibility(View.VISIBLE);
+                            if (rb.getText().equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy)))
                                 rb.setChecked(true);
-                            } else {
-                                rb.setVisibility(View.GONE);
+                            else
                                 rb.setChecked(false);
-                            }
 
                         }
                     } else {
                         for (RadioButton rb : petRegimen.getRadioGroup().getButtons()) {
 
-                            if (rb.getText().equals(getResources().getString(R.string.pet_isoniazid_rifapentine))) {
-                                rb.setVisibility(View.VISIBLE);
+                            if (rb.getText().equals(getResources().getString(R.string.pet_isoniazid_rifapentine)))
                                 rb.setChecked(true);
-                            } else {
-                                rb.setVisibility(View.GONE);
+                            else
                                 rb.setChecked(false);
-                            }
+
 
                         }
                     }
@@ -349,7 +517,27 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
     @Override
     public void updateDisplay() {
 
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        if (snackbar != null)
+            snackbar.dismiss();
+
+        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
+
+            String formDa = formDate.getButton().getText().toString();
+
+            Date date = new Date();
+            if (formDateCalendar.after(App.getCalendar(date))) {
+
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+            } else
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        }
         treatmentInitiationDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
 
     }
@@ -432,6 +620,25 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 rifapentineDose.getQuestionView().requestFocus();
                 view = null;
                 error = true;
+            } else {
+                int dose = Integer.parseInt(App.get(rifapentineDose));
+                String hint = rifapentineDose.getEditText().getHint().toString();
+
+                if (hint.equals("300 - 450 mg")) {
+                    if (dose < 300 || dose > 450) {
+                        rifapentineDose.getEditText().setError(getResources().getString(R.string.pet_rifapentine_out_of_range_1));
+                        rifapentineDose.getQuestionView().requestFocus();
+                        view = null;
+                        error = true;
+                    }
+                } else if (hint.equals("450 - 900 mg")) {
+                    if (dose < 450 || dose > 900) {
+                        rifapentineDose.getEditText().setError(getResources().getString(R.string.pet_rifapentine_out_of_range_2));
+                        rifapentineDose.getQuestionView().requestFocus();
+                        view = null;
+                        error = true;
+                    }
+                }
             }
         }
         if (isoniazidDose.getVisibility() == View.VISIBLE) {
@@ -440,6 +647,14 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 isoniazidDose.getQuestionView().requestFocus();
                 view = null;
                 error = true;
+            } else {
+                int dose = Integer.parseInt(App.get(isoniazidDose));
+                if (dose > 300) {
+                    isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded));
+                    isoniazidDose.getQuestionView().requestFocus();
+                    view = null;
+                    error = true;
+                }
             }
         }
 

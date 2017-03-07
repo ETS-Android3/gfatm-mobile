@@ -75,7 +75,6 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
     TitledEditText recieverName;
     TitledSpinner recieverRelationWithContact;
     TitledEditText otherRelation;
-    Snackbar snackbar;
 
 
     @Override
@@ -220,15 +219,19 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
         if (snackbar != null)
             snackbar.dismiss();
 
-        if (!formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString())) {
+        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
 
-            if (formDateCalendar.after(new Date())) {
+            String formDa = formDate.getButton().getText().toString();
 
-                Date date = App.stringToDate(formDate.getButton().getText().toString(), "dd-MMM-yyyy");
-                formDateCalendar = App.getCalendar(date);
+            Date date = new Date();
+            if (formDateCalendar.after(App.getCalendar(date))) {
+
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
+
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
             } else
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());

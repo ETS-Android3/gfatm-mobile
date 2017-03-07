@@ -37,6 +37,7 @@ import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Created by Rabbia on 11/24/2016.
@@ -76,7 +77,6 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
     TitledEditText newInstruction;
     TitledButton returnVisitDate;
 
-    Snackbar snackbar;
     ScrollView scrollView;
 
     @Override
@@ -229,21 +229,24 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
         if (snackbar != null)
             snackbar.dismiss();
 
-        if (!formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString())) {
+        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
 
-            if (formDateCalendar.after(new Date())) {
+            String formDa = formDate.getButton().getText().toString();
 
-                Date date = App.stringToDate(formDate.getButton().getText().toString(), "dd-MMM-yyyy");
-                formDateCalendar = App.getCalendar(date);
+            Date date = new Date();
+            if (formDateCalendar.after(App.getCalendar(date))) {
+
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
+
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
             } else
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
         }
-        returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
     }
 
 
@@ -267,6 +270,52 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
         ethionamideDose.setVisibility(View.GONE);
         ancillaryDrugs.setVisibility(View.GONE);
         ancillaryDrugDuration.setVisibility(View.GONE);
+
+        final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
+            @Override
+            protected HashMap<String, String> doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.fetching_data));
+                        loading.show();
+                    }
+                });
+
+                HashMap<String, String> result = new HashMap<String, String>();
+                String weight = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "WEIGHT (KG)");
+
+                if (weight != null)
+                    weight = weight.replace(".0", "");
+
+                if (weight != null)
+                    if (!weight.equals(""))
+                        result.put("WEIGHT (KG)", weight);
+
+                return result;
+
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            ;
+
+            @Override
+            protected void onPostExecute(HashMap<String, String> result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                weight.getEditText().setText(result.get("WEIGHT (KG)"));
+
+
+            }
+        };
+        autopopulateFormTask.execute("");
 
     }
 

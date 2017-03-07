@@ -20,6 +20,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
@@ -31,6 +32,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 
 import java.util.ArrayList;
@@ -49,7 +51,8 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
     TitledEditText explanation;
     TitledRadioGroup reasonForExclusion;
     TitledEditText other;
-    Snackbar snackbar;
+
+    ScrollView scrollView;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -95,7 +98,7 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
                     View v = viewGroups[i][j];
                     layout.addView(v);
                 }
-                ScrollView scrollView = new ScrollView(mainContent.getContext());
+                scrollView = new ScrollView(mainContent.getContext());
                 scrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
                 scrollView.setScrollbarFadingEnabled(false);
                 scrollView.addView(layout);
@@ -117,7 +120,7 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
         explanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 250, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         explanation.getEditText().setSingleLine(false);
         explanation.getEditText().setMinimumHeight(150);
-        reasonForExclusion = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_reason_for_exclusion), getResources().getStringArray(R.array.pet_reason_for_exclusions), "", App.VERTICAL, App.VERTICAL);
+        reasonForExclusion = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_reason_for_exclusion), getResources().getStringArray(R.array.pet_reason_for_exclusions), getResources().getString(R.string.pet_xdr), App.VERTICAL, App.VERTICAL);
         other = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 250, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         other.getEditText().setSingleLine(false);
         other.getEditText().setMinimumHeight(150);
@@ -130,8 +133,7 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
         reasonForFollowupEnd.getSpinner().setOnItemSelectedListener(this);
         reasonForExclusion.getRadioGroup().setOnCheckedChangeListener(this);
 
-        explanation.setVisibility(View.GONE);
-        other.setVisibility(View.GONE);
+        resetViews();
 
     }
 
@@ -145,8 +147,27 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
 
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
+        reasonForExclusion.setVisibility(View.GONE);
         explanation.setVisibility(View.GONE);
         other.setVisibility(View.GONE);
+        reasonForExclusion.getQuestionView().setError(null);
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean openFlag = bundle.getBoolean("open");
+            if (openFlag) {
+
+                bundle.putBoolean("open", false);
+                bundle.putBoolean("save", true);
+
+                String id = bundle.getString("formId");
+                int formId = Integer.valueOf(id);
+
+                refill(formId);
+
+            } else bundle.putBoolean("save", false);
+
+        }
 
     }
 
@@ -155,15 +176,19 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
         if (snackbar != null)
             snackbar.dismiss();
 
-        if (!formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString())) {
+        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
 
-            if (formDateCalendar.after(new Date())) {
+            String formDa = formDate.getButton().getText().toString();
 
-                Date date = App.stringToDate(formDate.getButton().getText().toString(), "dd-MMM-yyyy");
-                formDateCalendar = App.getCalendar(date);
+            Date date = new Date();
+            if (formDateCalendar.after(App.getCalendar(date))) {
+
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
+
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
             } else
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
@@ -176,17 +201,27 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
     public boolean validate() {
 
         Boolean error = false;
+        View view = null;
 
         if (App.get(other).isEmpty() && other.getVisibility() == View.VISIBLE) {
-            other.getQuestionView().setError(getResources().getString(R.string.mandatory_field));
+            other.getEditText().setError(getResources().getString(R.string.mandatory_field));
             other.getEditText().requestFocus();
             error = true;
+            view = null;
+        }
+
+        if (App.get(reasonForExclusion).isEmpty() && reasonForExclusion.getVisibility() == View.VISIBLE) {
+            reasonForExclusion.getQuestionView().setError(getResources().getString(R.string.mandatory_field));
+            reasonForExclusion.getRadioGroup().requestFocus();
+            error = true;
+            view = reasonForExclusion;
         }
 
         if (App.get(explanation).isEmpty() && explanation.getVisibility() == View.VISIBLE) {
-            explanation.getQuestionView().setError(getResources().getString(R.string.mandatory_field));
+            explanation.getEditText().setError(getResources().getString(R.string.mandatory_field));
             explanation.getEditText().requestFocus();
             error = true;
+            view = null;
         }
 
         if (error) {
@@ -197,9 +232,17 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
             // DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_error));
+            final View finalView = view;
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
+                            scrollView.post(new Runnable() {
+                                public void run() {
+                                    if (finalView != null) {
+                                        scrollView.scrollTo(0, finalView.getTop());
+                                    }
+                                }
+                            });
                             try {
                                 InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
@@ -211,9 +254,9 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
                     });
             alertDialog.show();
             return false;
-        }
+        } else
+            return true;
 
-        return true;
     }
 
     @Override
@@ -235,13 +278,13 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
                                                         (App.get(reasonForFollowupEnd).equals(getResources().getString(R.string.pet_died)) ? "DECEASED" : "OTHER"))))))});
         if (explanation.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"REASON TO END FOLLOW-UP (TEXT)", App.get(explanation)});
-        if (!App.get(reasonForExclusion).equals(""))
+        if (reasonForExclusion.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"REASON FOR EXCLUSION FROM PET PROGRAM", App.get(reasonForExclusion).equals(getResources().getString(R.string.pet_xdr)) ? "EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION" :
                     (App.get(reasonForExclusion).equals(getResources().getString(R.string.pet_pre_xdr)) ? "PRE-EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION" :
                             (App.get(reasonForExclusion).equals(getResources().getString(R.string.pet_transfered_out_to_other_site)) ? "TRANSFERRED OUT" :
-                                    (App.get(reasonForExclusion).equals(getResources().getString(R.string.pet_index_refused_treatment)) ? "REFUSAL OF TREATMENT BY PATIENT" : "OTHER NON-CODED")))});
+                                    (App.get(reasonForExclusion).equals(getResources().getString(R.string.pet_index_refused_treatment)) ? "REFUSAL OF TREATMENT BY PATIENT" : "OTHER")))});
         if (other.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER NON-CODED", App.get(other)});
+            observations.add(new String[]{"OTHER", App.get(other)});
 
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
@@ -284,7 +327,28 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
                     alertDialog.setMessage(getResources().getString(R.string.form_submitted));
                     Drawable submitIcon = getResources().getDrawable(R.drawable.ic_submit);
                     alertDialog.setIcon(submitIcon);
+                    int color = App.getColor(context, R.attr.colorAccent);
+                    DrawableCompat.setTint(submitIcon, color);
                     alertDialog.setTitle(getResources().getString(R.string.title_completed));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else if (result.equals("CONNECTION_ERROR")) {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
                     alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
@@ -300,10 +364,9 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
                     alertDialog.show();
                 } else {
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
-                    alertDialog.setMessage(getResources().getString(R.string.insert_error));
+                    String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
+                    alertDialog.setMessage(message);
                     Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-                    int color = App.getColor(context, R.attr.colorAccent);
-                    DrawableCompat.setTint(clearIcon, color);
                     alertDialog.setIcon(clearIcon);
                     alertDialog.setTitle(getResources().getString(R.string.title_error));
                     alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
@@ -320,6 +383,7 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
                             });
                     alertDialog.show();
                 }
+
 
             }
         };
@@ -365,6 +429,16 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
                 explanation.setVisibility(View.VISIBLE);
             else
                 explanation.setVisibility(View.GONE);
+
+            if (App.get(reasonForFollowupEnd).equals(getResources().getString(R.string.pet_not_eligible_for_study)))
+                reasonForExclusion.setVisibility(View.VISIBLE);
+            else
+                reasonForExclusion.setVisibility(View.GONE);
+
+            if (App.get(reasonForExclusion).equals(getResources().getString(R.string.pet_other)) && reasonForExclusion.getVisibility() == View.VISIBLE)
+                other.setVisibility(View.VISIBLE);
+            else
+                other.setVisibility(View.GONE);
         }
 
     }
@@ -386,7 +460,59 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
     }
 
     @Override
-    public void refill(int encounterId) {
+    public void refill(int formId) {
+
+        OfflineForm fo = serverService.getOfflineFormById(formId);
+        String date = fo.getFormDate();
+        ArrayList<String[][]> obsValue = fo.getObsValue();
+        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        for (int i = 0; i < obsValue.size(); i++) {
+
+            String[][] obs = obsValue.get(i);
+
+            if (obs[0][0].equals("REASON TO END FOLLOW-UP")) {
+
+                String value = obs[0][1].equals("TREATMENT COMPLETE") ? getResources().getString(R.string.pet_treatment_completed) :
+                        (obs[0][1].equals("LOST TO FOLLOW-UP") ? getResources().getString(R.string.pet_loss_of_followup) :
+                                (obs[0][1].equals("ENROLLED IN TB PROGRAM") ? getResources().getString(R.string.pet_enrolled_in_tb) :
+                                        (obs[0][1].equals("TRANSFERRED OUT") ? getResources().getString(R.string.pet_transferred_out) :
+                                                (obs[0][1].equals("NOT ELIGIBLE FOR PROGRAM") ? getResources().getString(R.string.pet_not_eligible_for_study) :
+                                                        (obs[0][1].equals("REFUSAL OF TREATMENT BY PATIENT") ? getResources().getString(R.string.pet_refused_treatment) :
+                                                                (obs[0][1].equals("DECEASED") ? getResources().getString(R.string.pet_died) : getResources().getString(R.string.pet_other)))))));
+                reasonForFollowupEnd.getSpinner().selectValue(value);
+
+            } else if (obs[0][0].equals("REASON TO END FOLLOW-UP (TEXT)")) {
+                explanation.getEditText().setText(String.valueOf(obs[0][1]));
+                explanation.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("REASON FOR EXCLUSION FROM PET PROGRAM")) {
+                for (RadioButton rb : reasonForExclusion.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet_xdr)) && obs[0][1].equals("EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_pre_xdr)) && obs[0][1].equals("PRE-EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_transfered_out_to_other_site)) && obs[0][1].equals("TRANSFERRED OUT")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_index_refused_treatment)) && obs[0][1].equals("REFUSAL OF TREATMENT BY PATIENT")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_other)) && obs[0][1].equals("OTHER")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                reasonForExclusion.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("OTHER")) {
+                other.getEditText().setText(String.valueOf(obs[0][1]));
+                other.setVisibility(View.VISIBLE);
+            }
+
+        }
+
     }
 
     class MyAdapter extends PagerAdapter {
