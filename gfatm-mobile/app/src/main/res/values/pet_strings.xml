@@ -618,6 +618,9 @@
     <string name="pet_consent">Does the contact agree to take PET?</string>
 
     <!-- Treatment Initiation -->
+    <string name="pet_isoniazid_dose_exceeded">Isoniazid dose shouldn\'t exceed 300mg</string>
+    <string name="pet_rifapentine_out_of_range_1">Rifapentine dose should be in 300 - 450 mg</string>
+    <string name="pet_rifapentine_out_of_range_2">Rifapentine dose should be in 450 - 900 mg</string>
     <string name="pet_tb_category">Index DSTB type</string>
     <string name="pet_cat_1">CAT-1</string>
     <string name="pet_cat_2">CAT-2</string>

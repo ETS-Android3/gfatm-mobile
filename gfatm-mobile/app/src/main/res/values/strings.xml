@@ -351,8 +351,10 @@
 
     <!-- Errors String -->
     <string name="user_not_found">No record of username found in local DB.</string>
+    <string name="age_invalid">Age can\'t exceed 130</string>
     <string name="provider_not_found">No provider associated with the user. Please contact Admin to create your user provider.</string>
     <string name="patient_not_select">SELECT PATIENT TO CONTINUE.</string>
+    <string name="location_not_select">SELECT LOCATION TO CONTINUE.</string>
     <string name="patient_not_found">PATIENT NOT FOUND</string>
     <string name="data_connection_error">Could not connect to Server! Please check your connection settings or contact Admin</string>
     <string name="authentication_error">Authentication failed! Please enter valid username and password.</string>
@@ -375,7 +377,9 @@
     <string name="title_logout">Log out</string>
     <string name="warning_before_logout">Are you sure you want to logout this form? Any unsaved changes will be discarded.</string>
     <string name="title_submit">Submit the Form</string>
-    <string name="warning_before_submit">Are you sure you want to submit this form to server?</string>
+    <string name="warning_before_submit">Are you sure you want to submit this form to openmrs?</string>
+    <string name="title_delete">Delete the Form</string>
+    <string name="warning_before_delete">Are you sure you want to delete this form without submitting it to openmrs?</string>
     <string name="title_save">Save the Form</string>
     <string name="warning_before_save">Are you sure you want to submit this form locally?</string>
     <string name="title_close">Close App</string>
@@ -451,8 +455,11 @@
     <string name="submitting_form">Submitting form...</string>
     <string name="form_submitted">Form successfully submitted.</string>
     <string name="title_completed">Compeleted</string>
-    <string name="insert_error">Error while trying to submit form to server.</string>
+    <string name="insert_error">Error while trying to submit form to openmrs.</string>
 
+    <string name="latest_encocunter">Latest Encounters</string>
+    <string name="no_encounters">No Encounters</string>
+    <string name="updating_patient">Updating Patient</string>
 
     <string-array name="age_ranges">
         <item>0 - 15</item>
