@@ -69,8 +69,14 @@ import com.ihsinformatics.gfatmmobile.pet.PetMonthlyHomeFollowupForm;
 import com.ihsinformatics.gfatmmobile.pet.PetSocioecnomicDataForm;
 import com.ihsinformatics.gfatmmobile.pet.PetTreatmentAdherenceForm;
 import com.ihsinformatics.gfatmmobile.pet.PetTreatmentInitiationForm;
+import com.ihsinformatics.gfatmmobile.pmdt.PmdtBasicManagementUnitVistForm;
+import com.ihsinformatics.gfatmmobile.pmdt.PmdtDailyTreatmentMonitoringForm;
+import com.ihsinformatics.gfatmmobile.pmdt.PmdtPatientAssignmentForm;
+import com.ihsinformatics.gfatmmobile.pmdt.PmdtPatientDissociationForm;
 import com.ihsinformatics.gfatmmobile.pmdt.PmdtPatientRegistrationForm;
 import com.ihsinformatics.gfatmmobile.pmdt.PmdtProviderRegistration;
+import com.ihsinformatics.gfatmmobile.pmdt.PmdtSocialSupportFoodBasketForm;
+import com.ihsinformatics.gfatmmobile.pmdt.PmdtTreatmentCoordinatorMonitoringForm;
 
 import java.util.ArrayList;
 
@@ -178,8 +184,20 @@ public class Forms{
      ********************************/
     public static final String PMDT_PATIENT_REGISTRAITON = "Patient Registration";
     public static final String PMDT_PROVIDER_REGISTRAITON = "Provider Registration";
+    public static final String PMDT_BASIC_MANAGEMENT_UNIT_VISIT = "Basic Management Unit Visit";
+    public static final String PMDT_PATIENT_ASSIGNMENT = "Patient Assignment";
+    public static final String PMDT_PATIENT_DISSOCIATION = "Patient Disscociation";
+    public static final String PMDT_DAILY_TREATMENT_MONITORING = "Daily Treatment Monitoring";
+    public static final String PMDT_TREATMENT_COORDINATOR_MONITORING = "TC Monitoring";
+    public static final String PMDT_SOCIAL_SUPPORT_FOOD_BASKET = "Social Support Food Basket";
     public static final FormsObject patientRegistration = new FormsObject(PMDT_PATIENT_REGISTRAITON, PmdtPatientRegistrationForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
     public static final FormsObject providerRegistration = new FormsObject(PMDT_PROVIDER_REGISTRAITON, PmdtProviderRegistration.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static final FormsObject basicManagementUnitVisit = new FormsObject(PMDT_BASIC_MANAGEMENT_UNIT_VISIT, PmdtBasicManagementUnitVistForm.class, R.drawable.pet_treatment_adherence, FormTypeColor.OTHER_FORM);
+    public static final FormsObject patientAssignment = new FormsObject(PMDT_PATIENT_ASSIGNMENT, PmdtPatientAssignmentForm.class, R.drawable.pet_counselling_followup, FormTypeColor.FOLLOWUP_FORM);
+    public static final FormsObject patientDissociation = new FormsObject(PMDT_PATIENT_DISSOCIATION, PmdtPatientDissociationForm.class, R.drawable.pet_counselling_followup, FormTypeColor.FOLLOWUP_FORM);
+    public static final FormsObject dailyTreatmentMonitoring = new FormsObject(PMDT_DAILY_TREATMENT_MONITORING, PmdtDailyTreatmentMonitoringForm.class, R.drawable.pet_counselling_followup, FormTypeColor.FOLLOWUP_FORM);
+    public static final FormsObject treatmentCoordinatorcMonitoring = new FormsObject(PMDT_TREATMENT_COORDINATOR_MONITORING, PmdtTreatmentCoordinatorMonitoringForm.class, R.drawable.pet_counselling_followup, FormTypeColor.FOLLOWUP_FORM);
+    public static final FormsObject socialSupportFoodBasket = new FormsObject(PMDT_SOCIAL_SUPPORT_FOOD_BASKET, PmdtSocialSupportFoodBasketForm.class, R.drawable.pet_counselling_followup, FormTypeColor.FOLLOWUP_FORM);
     /********************************
      * CHILDHOOD TB
      ********************************/
@@ -327,8 +345,15 @@ public class Forms{
 
         pmdtList.add(patientRegistration);
         pmdtList.add(providerRegistration);
+        pmdtList.add(basicManagementUnitVisit);
+        pmdtList.add(patientAssignment);
+        pmdtList.add(patientDissociation);
+        pmdtList.add(dailyTreatmentMonitoring);
+        pmdtList.add(treatmentCoordinatorcMonitoring);
+        pmdtList.add(socialSupportFoodBasket);
 
         return pmdtList;
+
 
     }
 
