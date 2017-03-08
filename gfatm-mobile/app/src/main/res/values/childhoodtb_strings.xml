@@ -251,6 +251,108 @@
     <string name="ctb_type_of_form">Type of form</string>
     <string name="ctb_order">Order</string>
     <string name="ctb_result">Result</string>
+    <string name="ctb_type_of_media_dst">Type of media for DST</string>
+    <string name="ctb_lowenstein_jensen">Lowenstein-Jensen</string>
+    <string name="ctb_mycobacteria_growth_indicator">Mycobacteria Growth Indicator Tube</string>
+    <string name="ctb_middlebrook_7h11s">Middlebrook 7H11S</string>
+    <string name="ctb_laboratory_automation">Total Laboratory Automation</string>
+    <string name="ctb_isoniazid_point_2_result">Isoniazid 0.2 µg/ml result</string>
+    <string name="ctb_susceptible">Susceptible</string>
+    <string name="ctb_resistant">Resistant</string>
+    <string name="ctb_isoniazid_1_result">Isoniazid 1 µg/ml  result</string>
+    <string name="ctb_rifampicin">Rifampicin</string>
+    <string name="ctb_ethambuhol">Ethambuthol</string>
+    <string name="ctb_streptomycin">Streptomycin</string>
+    <string name="ctb_pyrazinamide">Pyrazinamide</string>
+    <string name="ctb_ofloxacin">Ofloxacin</string>
+    <string name="ctb_levofloxacin">Levofloxacin</string>
+    <string name="ctb_moxifloxacin_point_5">Moxifloxacin 0.5 µg/ml</string>
+    <string name="ctb_moxifloxacin_2">Moxifloxacin 2 µg/ml</string>
+    <string name="ctb_amikacin">Amikacin</string>
+    <string name="ctb_kanamycin">Kanamycin</string>
+    <string name="ctb_capreomycin">Capreomycin</string>
+    <string name="ctb_ethionamide">Ethionamide</string>
+    <string name="ctb_cycloserine">Cycloserine</string>
+    <string name="ctb_pas">PAS</string>
+    <string name="ctb_bedaquiline">Bedaquiline</string>
+    <string name="ctb_delamanid">Delamanid</string>
+    <string name="ctb_linezolid">Linezolid</string>
+    <string name="ctb_clofazamine">Clofazamine</string>
+    <string name="ctb_other_drug_name">Other drug name</string>
+    <string name="ctb_other_drug_result">Other drug Result</string>
+    <string name="ctb_site_ultrasound">What is the site of the ultrasound?</string>
+    <string name="ctb_test_order_date">Test Order Date</string>
+    <string name="ctb_ultrasound_result_date">Ultrasound Result Date</string>
+    <string name="ctb_ultrasound_result">Ultrasound Result</string>
+    <string name="ctb_abdomen_adenopathy">Abdomen adenopathy</string>
+    <string name="ctb_intestinal_wall_thickening">Intestinal wall thickening</string>
+    <string name="ctb_ascites">Ascites</string>
+    <string name="ctb_pleural_effusion">Pleural effusion</string>
+    <string name="ctb_matted_lymph_nodes">Matted lymph nodes</string>
+    <string name="ctb_ultrasound_interpretation">Ultrasound Interpretation</string>
+    <string name="ctb_diagnostic">Diagnostic</string>
+    <string name="ctb_abdomen">Abdomen</string>
+    <string name="ctb_chest_name">Chest</string>
+    <string name="ctb_joint_bone">Joint/bone</string>
+    <string name="ctb_spine_name">Spine</string>
+    <string name="ctb_brain">Brain</string>
+    <string name="ctb_ct_scan_site">CT Scan Site</string>
+    <string name="ctb_test_result_date">Test Result Date</string>
+    <string name="ctb_ct_chest_suggestive_tb">CT chest suggestive of TB</string>
+    <string name="ctb_miliary">Miliary</string>
+    <string name="ctb_ct_chest_interpretation">CT chest interpretation</string>
+    <string name="ctb_ct_abdomen_suggestive_tb">CT abdomen suggestive of TB</string>
+    <string name="ctb_ct_abdomen_interpretation">CT abdomen interpretation</string>
+    <string name="ctb_ct_brain_suggestive_tb">CT brain suggestive of TB</string>
+    <string name="ctb_ct_brain_interpretation">CT brain interpretation</string>
+    <string name="ctb_ct_bone_suggestive_tb">CT bone suggestive of TB</string>
+    <string name="ctb_ct_spine_suggestive_tb">CT spine suggestive of TB</string>
+    <string name="ctb_meningeal_enhancement">Meningeal enhancement</string>
+    <string name="ctb_tuberculomas">Tuberculomas</string>
+    <string name="ctb_tuberculin_skin_test">Tuberculin Skin Test Result</string>
+    <string name="ctb_interpretation_mantoux">Interpretation of Mantoux Test</string>
+    <string name="ctb_less_than_5mm">&lt;5mm</string>
+    <string name="ctb_5_to_9mm">5-9 mm</string>
+    <string name="ctb_greater_than_10mm">≥ 10 mm</string>
+    <string name="ctb_positive">Positive</string>
+    <string name="ctb_histopathology_site">Histopathology Site</string>
+    <string name="ctb_histopathology_result">Histopathology Result</string>
+    <string name="ctb_ipt_start_date">IPT Start Date</string>
+    <string name="ctb_dose_at_intiation_point">Dose at treatment initiation point</string>
+    <string name="ctb_weight_visit">Weight at visit(kg)</string>
+    <string name="ctb_complaints">Complaints</string>
+    <string name="ctb_dose">Dose</string>
+    <string name="ctb_quater_per_day">(1/4 tab) once a day</string>
+    <string name="ctb_half_per_day">(1/2 tab) once a day</string>
+    <string name="ctb_per_day">(1 tab) once a day</string>
+    <string name="ctb_complete">Complete</string>
+    <string name="ctb_continuing">Continuing</string>
+    <string name="ctb_lost_to_followup">Lost to follow up</string>
+    <string name="ctb_ipt_compliance">IPT compliance</string>
+    <string name="ctb_ipt_outcome">IPT outcome</string>
+    <string name="ctb_missed_visit_date">Date of missed visit?</string>
+    <string name="ctb_able_to_contact_patient">Have you been able to contact the patient?</string>
+    <string name="ctb_why_unable_to_contact">If no, why were you unable to contact the patient?</string>
+    <string name="ctb_phone_switched_off">Phone switched off</string>
+    <string name="ctb_patient_did_not_recieve_call">Patient did not receive call</string>
+    <string name="ctb_reason_why_missed">Reason why missed visit?</string>
+    <string name="ctb_pateint_moved">Patient moved</string>
+    <string name="ctb_pateint_continue_another_location">Patient continuing treatment at another location</string>
+    <string name="ctb_patient_unable_to_visit_due_to_reason">Patient unable to visit hospital due to personal reasons</string>
+    <string name="ctb_patient_died">Patient died</string>
+    <string name="ctb_patient_refused_treatment">Patient refused treatment</string>
+    <string name="ctb_next_visit_date">Date of next visit? </string>
+    <string name="ctb_patient_referred_transferred">Is this patient being referred out or transferred out?</string>
+    <string name="ctb_referral_before_starting_treatment">Referral (before starting treatment)</string>
+    <string name="ctb_transfer_after_starting_treatment">Transfer (after starting treatment)</string>
+    <string name="ctb_reason_for_referral_transfer">Reason for referral/transfer</string>
+    <string name="ctb_patient_chose_another_facility">Patient chose another facility</string>
+    <string name="ctb_dr_tb_suspect">DR-TB Suspect</string>
+    <string name="ctb_treatment_failure">Treatment Failure</string>
+    <string name="ctb_complicated_tb">Complicated TB</string>
+    <string name="ctb_mott">Mycobacterium other than TB (MOTT)</string>
+    <string name="ctb_location_referral_transfer">Location of Referral/transfer</string>
+    <string name="ctb_location_other">Location, if Other</string>
 
     <string-array name="ctb_screening_location_list">
         <item>@string/ctb_hospital</item>
@@ -518,7 +620,135 @@
         <item>@string/ctb_result</item>
     </string-array>
 
+    <string-array name="ctb_type_of_media_dst_list">
+        <item>@string/ctb_lowenstein_jensen</item>
+        <item>@string/ctb_mycobacteria_growth_indicator</item>
+        <item>@string/ctb_middlebrook_7h11s</item>
+        <item>@string/ctb_laboratory_automation</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
 
+    <string-array name="ctb_susceptible_resistant_indeterminate">
+        <item>@string/ctb_susceptible</item>
+        <item>@string/ctb_resistant</item>
+        <item>@string/ctb_indeterminate</item>
+    </string-array>
+
+    <string-array name="ctb_ultrasound_result_list">
+        <item>@string/ctb_abdomen_adenopathy</item>
+        <item>@string/ctb_intestinal_wall_thickening</item>
+        <item>@string/ctb_ascites</item>
+        <item>@string/ctb_pleural_effusion</item>
+        <item>@string/ctb_matted_lymph_nodes</item>
+        <item>@string/ctb_normal</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
+
+    <string-array name="ctb_ultrasound_interpretation_list">
+        <item>@string/ctb_suggestive_tb</item>
+        <item>@string/ctb_normal</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
+
+    <string-array name="ctb_ultrasound_test_point_list">
+        <item>@string/ctb_diagnostic</item>
+        <item>@string/ctb_followup</item>
+    </string-array>
+
+    <string-array name="ctb_site_of_ultrasound_list">
+        <item>@string/ctb_abdomen</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
+
+    <string-array name="ctb_ct_scan_site_list">
+        <item>@string/ctb_chest_name</item>
+        <item>@string/ctb_abdomen</item>
+        <item>@string/ctb_joint_bone</item>
+        <item>@string/ctb_spine_name</item>
+        <item>@string/ctb_brain</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
+
+    <string-array name="ctb_ct_chest_suggestive_tb_list">
+        <item>@string/ctb_consolidation</item>
+        <item>@string/ctb_adenopathy</item>
+        <item>@string/ctb_pleural_effusion</item>
+        <item>@string/ctb_miliary</item>
+    </string-array>
+
+    <string-array name="ctb_suggestive_not_suggestive">
+        <item>@string/ctb_suggestive_tb</item>
+        <item>@string/ctb_not_sugguestive_tb</item>
+    </string-array>
+
+    <string-array name="ctb_ct_abdomen_suggestive_tb_list">
+        <item>@string/ctb_adenopathy</item>
+        <item>@string/ctb_intestinal_wall_thickening</item>
+        <item>@string/ctb_ascites</item>
+    </string-array>
+
+    <string-array name="ctb_meningeal_tuberculomas">
+        <item>@string/ctb_meningeal_enhancement</item>
+        <item>@string/ctb_tuberculomas</item>
+    </string-array>
+    
+    <string-array name="ctb_tuberculin_skin_test_list">
+        <item>@string/ctb_less_than_5mm</item>
+        <item>@string/ctb_5_to_9mm</item>
+        <item>@string/ctb_greater_than_10mm</item>
+    </string-array>
+
+    <string-array name="ctb_positive_negative">
+        <item>@string/ctb_positive</item>
+        <item>@string/ctb_negative</item>
+    </string-array>
+
+    <string-array name="ctb_suggestive_tb_normal">
+        <item>@string/ctb_suggestive_tb</item>
+        <item>@string/ctb_normal</item>
+    </string-array>
+
+    <string-array name="ctb_dose_list">
+        <item>@string/ctb_quater_per_day</item>
+        <item>@string/ctb_half_per_day</item>
+        <item>@string/ctb_per_day</item>
+    </string-array>
+
+    <string-array name="ctb_ipt_outcome_list">
+        <item>@string/ctb_complete</item>
+        <item>@string/ctb_continuing</item>
+        <item>@string/ctb_lost_to_followup</item>
+    </string-array>
+
+    <string-array name="ctb_unable_to_contact_list">
+        <item>@string/ctb_phone_switched_off</item>
+        <item>@string/ctb_patient_did_not_recieve_call</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
+
+    <string-array name="ctb_why_missed_reason_list">
+        <item>@string/ctb_pateint_moved</item>
+        <item>@string/ctb_pateint_continue_another_location</item>
+        <item>@string/ctb_patient_unable_to_visit_due_to_reason</item>
+        <item>@string/ctb_patient_died</item>
+        <item>@string/ctb_patient_refused_treatment</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
+
+    <string-array name="ctb_patient_referred_or_tranferred_list">
+        <item>@string/ctb_referral_before_starting_treatment</item>
+        <item>@string/ctb_transfer_after_starting_treatment</item>
+    </string-array>
+
+    <string-array name="ctb_reason_for_referral_transfer_list">
+        <item>@string/ctb_patient_chose_another_facility</item>
+        <item>@string/ctb_dr_tb_suspect</item>
+        <item>@string/ctb_dr_tb</item>
+        <item>@string/ctb_treatment_failure</item>
+        <item>@string/ctb_complicated_tb</item>
+        <item>@string/ctb_mott</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
 
 
 </resources>
