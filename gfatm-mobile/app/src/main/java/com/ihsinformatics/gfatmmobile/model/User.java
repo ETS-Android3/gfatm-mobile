@@ -53,7 +53,7 @@ public class User extends AbstractModel {
                 JSONObject jsonobject = rolesArray.getJSONObject(i);
 
                 if (!jsonobject.get("name").equals("Provider")) {
-                    if (i != 0)
+                    if (!roles.equals(""))
                         roles = roles + " , ";
 
                     roles = roles + jsonobject.get("name");
