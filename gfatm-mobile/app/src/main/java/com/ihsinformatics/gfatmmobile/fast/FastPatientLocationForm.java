@@ -260,9 +260,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-            }
-
-            else
+            } else
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         }
     }
@@ -270,6 +268,21 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
     @Override
     public boolean validate() {
         Boolean error = false;
+        Boolean checkBoxError = true;
+
+        if (contactIdType.getVisibility() == View.VISIBLE) {
+            for (CheckBox cb : contactIdType.getCheckedBoxes()) {
+                if (cb.isChecked()) {
+                    checkBoxError = false;
+                    break;
+                }
+            }
+            if (checkBoxError) {
+                error = true;
+            }
+        }
+
+
         if (facilitySectionOther.getVisibility() == View.VISIBLE && App.get(facilitySectionOther).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
@@ -330,7 +343,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
             error = true;
         }
 
-        if (contactPatientId.getVisibility() == View.VISIBLE && !RegexUtil.isValidId(App.get(contactPatientId))){
+        if (contactPatientId.getVisibility() == View.VISIBLE && !RegexUtil.isValidId(App.get(contactPatientId))) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -340,7 +353,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
             error = true;
         }
 
-        if (contactPatientId.getVisibility() == View.VISIBLE && App.get(contactPatientId).length()!=7) {
+        if (contactPatientId.getVisibility() == View.VISIBLE && App.get(contactPatientId).length() != 7) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -376,7 +389,11 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
-            alertDialog.setMessage(getString(R.string.form_error));
+            if (checkBoxError) {
+                alertDialog.setMessage(getString(R.string.fast_please_select_atleast_one_checkbox_for_identification_ids));
+            } else {
+                alertDialog.setMessage(getString(R.string.form_error));
+            }
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
@@ -862,16 +879,14 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
                     } else {
                         referralWithinOpdOther.setVisibility(View.GONE);
                     }
-                }
-                else {
+                } else {
                     referralWithinOpd.setVisibility(View.GONE);
                     referralWithinOpdOther.setVisibility(View.GONE);
                 }
 
-                if(facilityDepartment.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_other_title))){
+                if (facilityDepartment.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_other_title))) {
                     facilityDepartmentOther.setVisibility(View.VISIBLE);
-                }
-                else{
+                } else {
                     facilityDepartmentOther.setVisibility(View.GONE);
                 }
 
@@ -888,10 +903,9 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
             }
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_self_referral)) && screening.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))) {
                 hearAboutUs.setVisibility(View.VISIBLE);
-                if (hearAboutUs.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))){
+                if (hearAboutUs.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))) {
                     hearAboutUsOther.setVisibility(View.VISIBLE);
-                }
-                else{
+                } else {
                     hearAboutUsOther.setVisibility(View.GONE);
                 }
             } else {
@@ -969,9 +983,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
                 facilitySection.setVisibility(View.VISIBLE);
                 if (facilitySection.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_opdclinicscreening_title)) || facilitySection.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_wardscreening_title))) {
                     opdWardSection.setVisibility(View.VISIBLE);
-                }
-
-                else if (facilitySection.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))) {
+                } else if (facilitySection.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))) {
                     facilitySectionOther.setVisibility(View.VISIBLE);
                 }
                 patientReferralSource.setVisibility(View.GONE);

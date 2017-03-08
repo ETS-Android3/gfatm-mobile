@@ -662,7 +662,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             observations.add(new String[]{"NEAREST LANDMARK", App.get(nearestLandmark)});
 
         if (contactPermission.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"PERMISSION TO CONTACT FOR CALL AND SMS", App.get(contactPermission).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
+            observations.add(new String[]{"PERMISSION TO USE CONTACT NUMBER", App.get(contactPermission).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
 
         observations.add(new String[]{"CONTACT PHONE NUMBER", mobileNumber});
 
@@ -906,7 +906,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             } else if (obs[0][0].equals("NEAREST LANDMARK")) {
                 nearestLandmark.getEditText().setText(obs[0][1]);
                 nearestLandmark.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("PERMISSION TO CONTACT FOR CALL AND SMS")) {
+            } else if (obs[0][0].equals("PERMISSION TO USE CONTACT NUMBER")) {
 
                 for (RadioButton rb : contactPermission.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {

@@ -302,7 +302,7 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
         //  observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
         //observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});
         observations.add(new String[]{"CARTRIDGE ID", App.get(cartridgeId)});
-        observations.add(new String[]{"DATE OF TEST RESULT RECEIVED", App.getSqlDateTime(secondDateCalendar)});
+        observations.add(new String[]{"DATE OF  TEST RESULT RECEIVED", App.getSqlDateTime(secondDateCalendar)});
 
         if (gxpResult.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"GENEXPERT MTB/RIF RESULT", App.get(gxpResult).equals(getResources().getString(R.string.fast_mtb_detected)) ? "MYCOBACTERIUM TUBERCULOSIS DETECTED WITH RIFAMPIN RESISTANCE" :

@@ -848,7 +848,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
     public void resetViews() {
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        if(App.getPatient().getPerson().getGender().equals("M")){
+        if(App.getPatient().getPerson().getGender().equals("male")){
             husbandName.setVisibility(View.GONE);
         }
         patientConsultationOther.setVisibility(View.GONE);
