@@ -33,6 +33,7 @@ import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesVitalsForm;
 import com.ihsinformatics.gfatmmobile.fast.FastAfbSmearMicroscopyOrderAndResultForm;
 import com.ihsinformatics.gfatmmobile.fast.FastContactRegistryForm;
 import com.ihsinformatics.gfatmmobile.fast.FastDSTOrderAndResultForm;
+import com.ihsinformatics.gfatmmobile.fast.FastEndOfFollowupForm;
 import com.ihsinformatics.gfatmmobile.fast.FastGeneXpertResultForm;
 import com.ihsinformatics.gfatmmobile.fast.FastGpxSpecimenCollectionForm;
 import com.ihsinformatics.gfatmmobile.fast.FastMissedFollowupForm;
@@ -123,22 +124,25 @@ public class Forms{
     public static final String FAST_TREATMENT_INITIATION_FORM = "Treatment Initiation Form";
     public static final String FAST_TREATMENT_FOLLOWUP_FORM = "Treatment Followup Form";
     public static final String FAST_MISSED_VISIT_FOLLOWUP_FORM = "Missed Visit Follow-up";
+    public static final String FAST_END_OF_FOLLOWUP_FORM = "End of Follow up Form";
 
     public static final FormsObject fastScreeningForm = new FormsObject(FAST_SCREENING_FORM, FastScreeningForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
     public static final FormsObject fastPromptForm = new FormsObject(FAST_PROMPT_FORM, FastPromptForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
     public static final FormsObject fastPresumptiveForm = new FormsObject(FAST_PRESUMPTIVE_FORM, FastPresumptiveForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
     public static final FormsObject fastPatientLocationForm = new FormsObject(FAST_PATIENT_LOCATION_FORM, FastPatientLocationForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
-    public static final FormsObject fastGpxSpecimenCollectionForm = new FormsObject(FAST_GXP_SPECIMEN_COLLECTION_FORM, FastGpxSpecimenCollectionForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static final FormsObject fastGpxSpecimenCollectionForm = new FormsObject(FAST_GXP_SPECIMEN_COLLECTION_FORM, FastGpxSpecimenCollectionForm.class, R.drawable.pet_treatment_adherence, FormTypeColor.TEST_FORM);
     public static final FormsObject fastPresumptiveInformationForm = new FormsObject(FAST_PRESUMPTIVE_INFORMATION_FORM, FastPresumptiveInformationForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
-    public static final FormsObject fastGeneXpertResultForm = new FormsObject(FAST_GENEXPERT_RESULT_FORM, FastGeneXpertResultForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static final FormsObject fastGeneXpertResultForm = new FormsObject(FAST_GENEXPERT_RESULT_FORM, FastGeneXpertResultForm.class, R.drawable.pet_treatment_adherence, FormTypeColor.TEST_FORM);
     public static final FormsObject fastScreeningChestXrayOrderAndResultForm = new FormsObject(FAST_SCREENING_CHEST_XRAY_ORDER_AND_RESULT_FORM, FastScreeningChestXrayOrderAndResultForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
     public static final FormsObject fastAfbSmearMicroscopyOrderAndResultForm = new FormsObject(FAST_AFB_SMEAR_MICROSCOPY_ORDER_AND_RESULT_FORM, FastAfbSmearMicroscopyOrderAndResultForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
     public static final FormsObject fastDstOrderAndResultForm = new FormsObject(FAST_DST_ORDER_AND_RESULT_FORM, FastDSTOrderAndResultForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
     public static final FormsObject fastContactRegistryForm = new FormsObject(FAST_CONTACT_REGISTRY_FORM, FastContactRegistryForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
-    public static final FormsObject fastReferralTransferForm = new FormsObject(FAST_REFERRAL_AND_TRANSFER_FORM, FastReferralAndTransferForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
-    public static final FormsObject fastTreatmentInitiationForm = new FormsObject(FAST_TREATMENT_INITIATION_FORM, FastTreatmentInitiationForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static final FormsObject fastReferralTransferForm = new FormsObject(FAST_REFERRAL_AND_TRANSFER_FORM, FastReferralAndTransferForm.class, R.drawable.pet_registration, FormTypeColor.TREATMENT_FORM);
+    public static final FormsObject fastTreatmentInitiationForm = new FormsObject(FAST_TREATMENT_INITIATION_FORM, FastTreatmentInitiationForm.class, R.drawable.pet_treatment_initiation, FormTypeColor.FOLLOWUP_FORM);
     public static final FormsObject fastTreatmentFollowupForm = new FormsObject(FAST_TREATMENT_FOLLOWUP_FORM, FastTreatmentFollowupForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
     public static final FormsObject fastMissedVisitFollowupForm = new FormsObject(FAST_MISSED_VISIT_FOLLOWUP_FORM, FastMissedFollowupForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static final FormsObject fastEndOfFollowupForm = new FormsObject(FAST_END_OF_FOLLOWUP_FORM, FastEndOfFollowupForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+
     /********************************
      * COMORBIDITIES
      ********************************/
@@ -259,6 +263,7 @@ public class Forms{
         fastList.add(fastTreatmentInitiationForm);
         fastList.add(fastTreatmentFollowupForm);
         fastList.add(fastMissedVisitFollowupForm);
+        fastList.add(fastEndOfFollowupForm);
 
         return fastList;
 
