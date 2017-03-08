@@ -60,8 +60,6 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
     TitledEditText otherReasonRejected;
     TitledEditText cartridgeId;
 
-    Snackbar snackbar;
-
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
      *

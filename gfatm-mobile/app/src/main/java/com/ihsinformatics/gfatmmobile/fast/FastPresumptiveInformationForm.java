@@ -75,9 +75,6 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
     TitledEditText nearestLandmark;
     TitledRadioGroup contactPermission;
 
-    Snackbar snackbar;
-
-
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
      *

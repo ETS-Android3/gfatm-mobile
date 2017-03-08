@@ -75,8 +75,6 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
     CheckBox externalIdCheckbox;
     CheckBox tbRegisterationNoCheckbbox;
 
-    Snackbar snackbar;
-
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -154,7 +152,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
         hearAboutUsOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         contactReferral = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_enrolled_in_any_tb_program), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_no_title), App.VERTICAL, App.VERTICAL);
         contactIdType = new TitledCheckBoxes(context, null, getResources().getString(R.string.fast_tb_contact_any_identifications_id), getResources().getStringArray(R.array.fast_tb_contact_identification_list), null, App.VERTICAL, App.VERTICAL);
-        contactPatientId = new TitledEditText(context, null, getResources().getString(R.string.fast_patient_id), "", "", 7, RegexUtil.ALPHANUMERIC_FILTER_2, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        contactPatientId = new TitledEditText(context, null, getResources().getString(R.string.fast_patient_id), "", "", 7, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         contactExternalId = new TitledEditText(context, null, getResources().getString(R.string.fast_external_id), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
 
         String columnName = "";

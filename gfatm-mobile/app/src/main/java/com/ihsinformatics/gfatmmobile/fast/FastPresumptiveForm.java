@@ -70,9 +70,6 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
     TitledRadioGroup tbContact;
     TitledRadioGroup tbHistory;
 
-    Snackbar snackbar;
-
-
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 

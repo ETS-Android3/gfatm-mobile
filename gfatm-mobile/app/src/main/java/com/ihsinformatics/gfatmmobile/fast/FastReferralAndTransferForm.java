@@ -54,8 +54,6 @@ public class FastReferralAndTransferForm extends AbstractFormActivity implements
     TitledSpinner referralSite;
     TitledEditText referralSiteOther;
 
-    Snackbar snackbar;
-
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...

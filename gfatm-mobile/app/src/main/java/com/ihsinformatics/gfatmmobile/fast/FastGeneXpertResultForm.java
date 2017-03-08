@@ -55,7 +55,6 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
     TitledRadioGroup rifResult;
     TitledEditText errorCode;
 
-    Snackbar snackbar;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
