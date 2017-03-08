@@ -1,12 +1,8 @@
 package com.ihsinformatics.gfatmmobile.comorbidities;
 
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,9 +10,7 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
-import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +18,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
-import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
@@ -32,7 +25,6 @@ import android.widget.ScrollView;
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.R;
-import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
@@ -41,35 +33,29 @@ import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
 /**
- * Created by Fawad Jawaid on 19-Jan-17.
+ * Created by Fawad Jawaid on 14-Feb-17.
  */
 
-public class ComorbiditiesUrineMicroalbuminForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
-    public static final int THIRD_DATE_DIALOG_ID = 3;
-    // Extra Views for date ...
-    protected Calendar thirdDateCalendar;
-    protected DialogFragment thirdDateFragment;
-    protected Calendar fourthDateCalendar;
     Context context;
+
     // Views...
     TitledButton formDate;
-    TitledRadioGroup formType;
-    //Views for Test Order Urine Microalbumin
-    MyTextView testOrderMicroablbumin;
-    TitledSpinner microalbuminFollowupMonth;
-    TitledButton microalbuminTestOrderDate;
-    TitledEditText microalbuminTestID;
-    //Views for Test Result Urine Microalbumin
-    MyTextView testResultMicroalbumin;
-    TitledButton microalbuminTestResultDate;
-    TitledEditText microalbuminResult;
-    TitledButton nextMicroalbuminTestDate;
+    TitledEditText numberOfSessionsConducted;
+    TitledEditText akuadsRescreeningScore;
+    TitledSpinner reasonForDiscontinuation;
+    TitledRadioGroup feelingBetterReason;
+    TitledRadioGroup lossToFollowup;
+    TitledRadioGroup referredTo;
+    //TitledEditText ifOther;
+    TitledRadioGroup reasonForReferral;
+    //TitledEditText otherSevereMentalIllness;
+    TitledEditText remarks;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -84,21 +70,16 @@ public class ComorbiditiesUrineMicroalbuminForm extends AbstractFormActivity imp
                              ViewGroup container, Bundle savedInstanceState) {
 
         PAGE_COUNT = 1;
-        FORM_NAME = Forms.COMORBIDITIES_MICROALBUMIN_TEST_FORM;
-        FORM = Forms.comorbidities_microalbuminTestForm;
+        FORM_NAME = Forms.COMORBIDITIES_END_OF_TREATMENT_MENTAL_HEALTH;
+        FORM = Forms.comorbidities_endOfTreatmentFormMH;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
         pager = (ViewPager) mainContent.findViewById(R.id.pager);
-        pager.setAdapter(new ComorbiditiesUrineMicroalbuminForm.MyAdapter());
+        pager.setAdapter(new ComorbiditiesEndOfTreatmentMentalHealthForm.MyAdapter());
         pager.setOnPageChangeListener(this);
         navigationSeekbar.setMax(PAGE_COUNT - 1);
         formName.setText(FORM_NAME);
-
-        thirdDateCalendar = Calendar.getInstance();
-        thirdDateFragment = new ComorbiditiesUrineMicroalbuminForm.SelectDateFragment();
-
-        fourthDateCalendar = Calendar.getInstance();
 
         initViews();
 
@@ -147,146 +128,58 @@ public class ComorbiditiesUrineMicroalbuminForm extends AbstractFormActivity imp
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        formType = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_testorder_testresult_form_type), getResources().getStringArray(R.array.comorbidities_testorder_testresult_form_type_options), "", App.HORIZONTAL, App.VERTICAL);
-        testOrderMicroablbumin = new MyTextView(context, getResources().getString(R.string.comorbidities_creatinine_test_order));
-        testOrderMicroablbumin.setTypeface(null, Typeface.BOLD);
-        microalbuminFollowupMonth = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_mth_txcomorbidities_hba1c), getResources().getStringArray(R.array.comorbidities_followup_month), "1", App.HORIZONTAL);
-        microalbuminTestOrderDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1cdate_test_order), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
-        microalbuminTestID = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hhba1c_testid), "", "", 9, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
-
-        //second page views...
-        testResultMicroalbumin = new MyTextView(context, getResources().getString(R.string.comorbidities_creatinine_test_result));
-        testResultMicroalbumin.setTypeface(null, Typeface.BOLD);
-        microalbuminTestResultDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1c_resultdate), DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
-        //microalbuminResult = new TitledEditText(context, null, getResources().getString(R.string.hba1c_result), "", "", 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        microalbuminResult = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_creatinine_result), "", getResources().getString(R.string.comorbidities_vitals_bp_systolic_diastolic_range), 6, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        nextMicroalbuminTestDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_urinedr_nexttestdate), DateFormat.format("dd-MMM-yyyy", fourthDateCalendar).toString(), App.HORIZONTAL);
-        nextMicroalbuminTestDate.setVisibility(View.GONE);
-        goneVisibility();
+        numberOfSessionsConducted = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_number_of_sessions), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        akuadsRescreeningScore = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_akuads_score), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        reasonForDiscontinuation = new TitledSpinner(mainContent.getContext(), null, getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation),  getResources().getStringArray(R.array.comorbidities_end_treatment_MH_reason_of_discontinuation_options), "", App.VERTICAL, true);
+        feelingBetterReason = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_feeling_better), getResources().getStringArray(R.array.comorbidities_end_treatment_MH_feeling_better_options), "", App.VERTICAL, App.VERTICAL);
+        lossToFollowup = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_loss_to_followup), getResources().getStringArray(R.array.comorbidities_end_treatment_MH_loss_to_followup_options), "", App.VERTICAL, App.VERTICAL);
+        referredTo = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_referred_to), getResources().getStringArray(R.array.comorbidities_end_treatment_MH_referred_to_options), "", App.VERTICAL, App.VERTICAL);
+        reasonForReferral = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_referral_reason), getResources().getStringArray(R.array.comorbidities_end_treatment_MH_referral_reason_options), "", App.VERTICAL, App.VERTICAL);
+        //ifOther = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_if_other), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        //otherSevereMentalIllness =  new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_describe_illness), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        remarks=  new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_comments_remarks), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        displayFeelingBetterReason();
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), microalbuminTestID.getEditText(), formType.getRadioGroup(), microalbuminFollowupMonth.getSpinner(),
-                microalbuminTestOrderDate.getButton(), microalbuminTestResultDate.getButton(), microalbuminResult.getEditText()};
+        views = new View[]{formDate.getButton(), numberOfSessionsConducted.getEditText(), akuadsRescreeningScore.getEditText(), reasonForDiscontinuation.getSpinner(), feelingBetterReason.getRadioGroup(),
+                lossToFollowup.getRadioGroup(), referredTo.getRadioGroup(), reasonForReferral.getRadioGroup(), /*ifOther.getEditText(), otherSevereMentalIllness.getEditText(),*/ remarks.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, microalbuminTestID, formType, testOrderMicroablbumin, microalbuminFollowupMonth, microalbuminTestOrderDate,
-                        testResultMicroalbumin, microalbuminTestResultDate, microalbuminResult}};
+                {{formDate, numberOfSessionsConducted, akuadsRescreeningScore, reasonForDiscontinuation, feelingBetterReason,
+                        lossToFollowup, referredTo, reasonForReferral, /*ifOther, otherSevereMentalIllness,*/ remarks}};
 
         formDate.getButton().setOnClickListener(this);
-        formType.getRadioGroup().setOnCheckedChangeListener(this);
-        microalbuminTestOrderDate.getButton().setOnClickListener(this);
-        microalbuminTestResultDate.getButton().setOnClickListener(this);
+        feelingBetterReason.getRadioGroup().setOnCheckedChangeListener(this);
+        lossToFollowup.getRadioGroup().setOnCheckedChangeListener(this);
+        referredTo.getRadioGroup().setOnCheckedChangeListener(this);
+        reasonForReferral.getRadioGroup().setOnCheckedChangeListener(this);
 
-        microalbuminResult.getEditText().addTextChangedListener(new TextWatcher() {
-
+        reasonForDiscontinuation.getSpinner().setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void afterTextChanged(Editable s) {
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                displayFeelingBetterReason();
             }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start,
-                                          int count, int after) {
+            public void onNothingSelected(AdapterView<?> parentView) {
             }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start,
-                                      int before, int count) {
-                try {
-                    if (microalbuminResult.getEditText().getText().length() > 0) {
-                        double num = Double.parseDouble(microalbuminResult.getEditText().getText().toString());
-                        if (num < 0 || num > 300) {
-                            microalbuminResult.getEditText().setError(getString(R.string.comorbidities_vitals_bp_systolic_diastolic_limit));
-                        } else {
-                            //Correct value
-                        }
-                    }
-                } catch (NumberFormatException nfe) {
-                    //Exception: User might be entering " " (empty) value
-                }
-            }
         });
 
-        microalbuminTestID.getEditText().addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start,
-                                          int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start,
-                                      int before, int count) {
-                try {
-                    if (microalbuminTestID.getEditText().getText().length() > 0) {
-                        if (microalbuminTestID.getEditText().getText().length() < 9) {
-                            microalbuminTestID.getEditText().setError(getString(R.string.comorbidities_hhba1c_testid_format_error1));
-                        }
-                    }
-                } catch (NumberFormatException nfe) {
-                    //Exception: User might be entering " " (empty) value
-                }
-            }
-        });
+        resetViews();
     }
 
     @Override
     public void updateDisplay() {
 
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        microalbuminTestOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-        microalbuminTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
-        fourthDateCalendar = thirdDateCalendar;
-        fourthDateCalendar.add(Calendar.MONTH, 2);
-        fourthDateCalendar.add(Calendar.DAY_OF_MONTH, 20);
-        nextMicroalbuminTestDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", fourthDateCalendar).toString());
     }
 
     @Override
     public boolean validate() {
 
         Boolean error = false;
-
-        if (microalbuminResult.getVisibility() == View.VISIBLE && App.get(microalbuminResult).isEmpty()) {
-            gotoLastPage();
-            microalbuminResult.getEditText().setError(getString(R.string.empty_field));
-            microalbuminResult.getEditText().requestFocus();
-            error = true;
-        }
-        else if (microalbuminResult.getVisibility() == View.VISIBLE && !RegexUtil.isNumericForTwoDecimalPlaces(App.get(microalbuminResult), true)) {
-            gotoLastPage();
-            microalbuminResult.getEditText().setError(getString(R.string.comorbidities_upto_two_decimal_places_error));
-            microalbuminResult.getEditText().requestFocus();
-            error = true;
-        }
-        else if (microalbuminResult.getVisibility() == View.VISIBLE && !App.get(microalbuminResult).isEmpty() && Double.parseDouble(App.get(microalbuminResult)) > 300) {
-            gotoLastPage();
-            microalbuminResult.getEditText().setError(getString(R.string.comorbidities_creatinine_result_limit));
-            microalbuminResult.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (App.get(microalbuminTestID).isEmpty()) {
-            gotoFirstPage();
-            microalbuminTestID.getEditText().setError(getString(R.string.empty_field));
-            microalbuminTestID.getEditText().requestFocus();
-            error = true;
-        }
-        else if (!App.get(microalbuminTestID).isEmpty() && App.get(microalbuminTestID).length() < 9) {
-            gotoFirstPage();
-            microalbuminTestID.getEditText().setError(getString(R.string.comorbidities_hhba1c_testid_format_error1));
-            microalbuminTestID.getEditText().requestFocus();
-            error = true;
-        } /*else if (!RegexUtil.isCorrectTestID(App.get(microalbuminTestID))) {
-            gotoLastPage();
-            microalbuminTestID.getEditText().setError(getString(R.string.comorbidities_hhba1c_testid_format_dasherror));
-            microalbuminTestID.getEditText().requestFocus();
-            error = true;
-        }*/
 
         if (error) {
 
@@ -326,11 +219,29 @@ public class ComorbiditiesUrineMicroalbuminForm extends AbstractFormActivity imp
         final ArrayList<String[]> observations = new ArrayList<String[]>();
         observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
         observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
-        /*observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
-        observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});*/
-        observations.add(new String[]{"FOLLOW-UP MONTH", App.get(microalbuminFollowupMonth)});
-        observations.add(new String[]{"DATE TEST ORDERED", App.getSqlDateTime(secondDateCalendar)});
-        observations.add(new String[]{"TEST ID", App.get(microalbuminTestID)});
+        observations.add(new String[]{"TOTAL NUMBER OF SESSIONS", App.get(numberOfSessionsConducted)});
+        observations.add(new String[]{"AKUADS SCORE", App.get(akuadsRescreeningScore)});
+
+        final String reasonForDiscontinuationString = App.get(reasonForDiscontinuation).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_feeling_better)) ? "FEELING BETTER" :
+                (App.get(reasonForDiscontinuation).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_doesnot_time)) ? "TIME CONSTRAINT" :
+                        (App.get(reasonForDiscontinuation).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_family_refused)) ? "FAMILY REFUSED TREATMENT":
+                                (App.get(reasonForDiscontinuation).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_language_barrier)) ? "SPEECH AND LANGUAGE DEFICITS":
+                                        (App.get(reasonForDiscontinuation).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_think_no_depression)) ? "PATIENT THINKS HE HAS NO DEPRESSION":
+                                                (App.get(reasonForDiscontinuation).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_lost_followup)) ? "LOST TO FOLLOW-UP":
+                                                        (App.get(reasonForDiscontinuation).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_referred)) ? "PATIENT REFERRED" : "REASON FOR DISCONTINUING SERVICE (TEXT)"))))));
+        observations.add(new String[]{"REASON FOR DISCONTINUATION OF PROGRAM", reasonForDiscontinuationString});
+
+        if(feelingBetterReason.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"REASON FOR FEELING BETTER", App.get(feelingBetterReason).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_feeling_better_options_self_reported)) ? "1 to 3 sessions conducted and no Akuads filled (SELF REPORTED IMPROVEMENT)" : "4 or more sessions conducted and AKUADS filled (SUCCESFULLY COMPLETED THERAPY WITH IMPROVED OUTCOMES)"});
+        }
+
+        observations.add(new String[]{"REASON FOR LOST TO FOLLOW UP", App.get(lossToFollowup).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_loss_to_followup_options_unreachable)) ? "PATIENT UNREACHABLE" :
+                (App.get(lossToFollowup).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_loss_to_followup_options_moved)) ? "PATIENT MOVED" : "OTHER REASON TO END FOLLOW UP")});
+
+
+        observations.add(new String[]{"REFERRING FACILITY NAME", App.get(referredTo)});
+        observations.add(new String[]{"OTHER TRANSFER OR REFERRAL REASON", App.get(reasonForReferral)});
+        observations.add(new String[]{"FREE TEXT COMMENT", App.get(remarks)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -357,8 +268,6 @@ public class ComorbiditiesUrineMicroalbuminForm extends AbstractFormActivity imp
             @Override
             protected void onProgressUpdate(String... values) {
             }
-
-            ;
 
             @Override
             protected void onPostExecute(String result) {
@@ -410,7 +319,7 @@ public class ComorbiditiesUrineMicroalbuminForm extends AbstractFormActivity imp
                 } else {
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
-                    alertDialog.setMessage(getResources().getString(R.string.insert_error));
+                    alertDialog.setMessage(message);
                     Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                     alertDialog.setIcon(clearIcon);
                     alertDialog.setTitle(getResources().getString(R.string.title_error));
@@ -466,20 +375,6 @@ public class ComorbiditiesUrineMicroalbuminForm extends AbstractFormActivity imp
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
-        } else if (view == microalbuminTestOrderDate.getButton()) {
-            Bundle args = new Bundle();
-            args.putInt("type", SECOND_DATE_DIALOG_ID);
-            args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", false);
-            secondDateFragment.setArguments(args);
-            secondDateFragment.show(getFragmentManager(), "DatePicker");
-        } else if (view == microalbuminTestResultDate.getButton()) {
-            Bundle args = new Bundle();
-            args.putInt("type", THIRD_DATE_DIALOG_ID);
-            args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", false);
-            thirdDateFragment.setArguments(args);
-            thirdDateFragment.show(getFragmentManager(), "DatePicker");
         }
     }
 
@@ -502,13 +397,8 @@ public class ComorbiditiesUrineMicroalbuminForm extends AbstractFormActivity imp
     public void resetViews() {
         super.resetViews();
 
-        thirdDateCalendar = Calendar.getInstance();
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        microalbuminTestOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-        microalbuminTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
-        nextMicroalbuminTestDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", fourthDateCalendar).toString());
-
-        goneVisibility();
+        displayFeelingBetterReason();
     }
 
     @Override
@@ -518,39 +408,16 @@ public class ComorbiditiesUrineMicroalbuminForm extends AbstractFormActivity imp
 
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
-        if (radioGroup == formType.getRadioGroup()) {
-            showTestOrderOrTestResult();
+
+    }
+
+    void displayFeelingBetterReason() {
+        if(reasonForDiscontinuation.getSpinner().getSelectedItem().toString().equalsIgnoreCase(getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_feeling_better))) {
+            feelingBetterReason.setVisibility(View.VISIBLE);
         }
-    }
-
-    void goneVisibility() {
-        testOrderMicroablbumin.setVisibility(View.GONE);
-        microalbuminFollowupMonth.setVisibility(View.GONE);
-        microalbuminTestOrderDate.setVisibility(View.GONE);
-
-        testResultMicroalbumin.setVisibility(View.GONE);
-        microalbuminTestResultDate.setVisibility(View.GONE);
-        microalbuminResult.setVisibility(View.GONE);
-    }
-
-    void showTestOrderOrTestResult() {
-        if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
-            testOrderMicroablbumin.setVisibility(View.VISIBLE);
-            microalbuminFollowupMonth.setVisibility(View.VISIBLE);
-            microalbuminTestOrderDate.setVisibility(View.VISIBLE);
-
-            testResultMicroalbumin.setVisibility(View.GONE);
-            microalbuminTestResultDate.setVisibility(View.GONE);
-            microalbuminResult.setVisibility(View.GONE);
-
-        } else {
-            testOrderMicroablbumin.setVisibility(View.GONE);
-            microalbuminFollowupMonth.setVisibility(View.GONE);
-            microalbuminTestOrderDate.setVisibility(View.GONE);
-
-            testResultMicroalbumin.setVisibility(View.VISIBLE);
-            microalbuminTestResultDate.setVisibility(View.VISIBLE);
-            microalbuminResult.setVisibility(View.VISIBLE);
+        else
+        {
+            feelingBetterReason.setVisibility(View.GONE);
         }
     }
 
@@ -581,45 +448,10 @@ public class ComorbiditiesUrineMicroalbuminForm extends AbstractFormActivity imp
         }
 
     }
-
-    public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final Calendar calendar;
-            if (getArguments().getInt("type") == DATE_DIALOG_ID)
-                calendar = formDateCalendar;
-            else if (getArguments().getInt("type") == SECOND_DATE_DIALOG_ID)
-                calendar = secondDateCalendar;
-            else if (getArguments().getInt("type") == THIRD_DATE_DIALOG_ID)
-                calendar = thirdDateCalendar;
-            else
-                return null;
-
-            int yy = calendar.get(Calendar.YEAR);
-            int mm = calendar.get(Calendar.MONTH);
-            int dd = calendar.get(Calendar.DAY_OF_MONTH);
-            DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, yy, mm, dd);
-            dialog.getDatePicker().setTag(getArguments().getInt("type"));
-            dialog.getDatePicker().setMaxDate(new Date().getTime());
-            return dialog;
-        }
-
-        @Override
-        public void onDateSet(DatePicker view, int yy, int mm, int dd) {
-
-            if (((int) view.getTag()) == DATE_DIALOG_ID)
-                formDateCalendar.set(yy, mm, dd);
-            else if (((int) view.getTag()) == SECOND_DATE_DIALOG_ID)
-                secondDateCalendar.set(yy, mm, dd);
-            else if (((int) view.getTag()) == THIRD_DATE_DIALOG_ID)
-                thirdDateCalendar.set(yy, mm, dd);
-
-            updateDisplay();
-        }
-    }
-
 }
+
+
+
 
 
 

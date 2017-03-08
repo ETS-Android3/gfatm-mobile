@@ -5,18 +5,22 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
@@ -34,6 +38,7 @@ import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -70,6 +75,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
     TitledRadioGroup diabetesTreatmentInitiationMetformin;
     TitledEditText diabetesTreatmentInitiationInsulinN;
     TitledEditText diabetesTreatmentInitiationInsulinR;
+    TitledEditText diabetesTreatmentInitiationInsulinMix;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -145,7 +151,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
         previousHistory = new MyTextView(context, getResources().getString(R.string.comorbidities_diabetes_previous_history));
         previousHistory.setTypeface(null, Typeface.BOLD);
         diabetesFamilyHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_diabetes_family_history), getResources().getStringArray(R.array.comorbidities_diabetes_family_history_options), "", App.HORIZONTAL, App.VERTICAL);
-        diabetesFamilyHistorySpecify = new TitledCheckBoxes(context, null, getResources().getString(R.string.comorbidities_education_form_educational_plan_text), getResources().getStringArray(R.array.comorbidities_education_form_educational_plan_text_options), new Boolean[]{true, false, false, false, false}, App.VERTICAL, App.VERTICAL);
+        diabetesFamilyHistorySpecify = new TitledCheckBoxes(context, null, getResources().getString(R.string.comorbidities_diabetes_family_history_specify), getResources().getStringArray(R.array.comorbidities_diabetes_family_history_specify_options1), new Boolean[]{true, false, false, false, false, false, false, false, false, false, false, false, false, false}, App.VERTICAL, App.VERTICAL);
         previousDiabetesTreatmentHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_previous_diabetes_treatment_history), getResources().getStringArray(R.array.comorbidities_yes_no), "", App.HORIZONTAL, App.VERTICAL);
         showDiabetesFamilyHistorySpecify();
         selfReportedDiabetesTreatmentHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_self_reported_diabetes_treatment_history), getResources().getStringArray(R.array.comorbidities_self_reported_diabetes_treatment_history_options), getResources().getString(R.string.comorbidities_self_reported_diabetes_treatment_history_both), App.HORIZONTAL, App.VERTICAL);
@@ -156,7 +162,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
         hxDiabeticRetinopathy = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_hx_diabetic_retinopathy), getResources().getStringArray(R.array.comorbidities_hx_diabetic_cemia_pathies_options), "", App.HORIZONTAL, App.VERTICAL);
         hxDiabeticNeuropathy = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_hx_diabetic_neuropathy), getResources().getStringArray(R.array.comorbidities_hx_diabetic_cemia_pathies_options), "", App.HORIZONTAL, App.VERTICAL);
         hxDiabeticNephropathy = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_hx_diabetic_nephropathy), getResources().getStringArray(R.array.comorbidities_hx_diabetic_cemia_pathies_options), "", App.HORIZONTAL, App.VERTICAL);
-        hxDiabeticInfections = new TitledCheckBoxes(context, null, getResources().getString(R.string.comorbidities_hx_diabetic_infections), getResources().getStringArray(R.array.comorbidities_hx_diabetic_infections_options), new Boolean[]{true, false, false, false, false, false, false, false}, App.VERTICAL, App.VERTICAL);
+        hxDiabeticInfections = new TitledCheckBoxes(context, null, getResources().getString(R.string.comorbidities_hx_diabetic_infections), getResources().getStringArray(R.array.comorbidities_hx_diabetic_infections_options), new Boolean[]{true, false, false, false, false, false, false}, App.VERTICAL, App.VERTICAL);
         hxDiabeticPvd = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_hx_diabetic_pvd), getResources().getStringArray(R.array.comorbidities_hx_diabetic_cemia_pathies_options), "", App.HORIZONTAL, App.VERTICAL);
         hxDiabeticCad = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_hx_diabetic_cad), getResources().getStringArray(R.array.comorbidities_hx_diabetic_cemia_pathies_options), "", App.HORIZONTAL, App.VERTICAL);
         hxDiabeticHypertension = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_hx_diabetic_hypertension), getResources().getStringArray(R.array.comorbidities_hx_diabetic_cemia_pathies_options), "", App.HORIZONTAL, App.VERTICAL);
@@ -166,12 +172,12 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
 
         treatmentInitiation = new MyTextView(context, getResources().getString(R.string.comorbidities_treatment_initiation));
         treatmentInitiation.setTypeface(null, Typeface.BOLD);
-        diabetesTreatmentInitiation = new TitledCheckBoxes(context, null, getResources().getString(R.string.comorbidities_diabetes_treatment_initiation), getResources().getStringArray(R.array.comorbidities_diabetes_treatment_initiation_options), new Boolean[]{true, false, false, false, false, false, false}, App.VERTICAL, App.VERTICAL);
+        diabetesTreatmentInitiation = new TitledCheckBoxes(context, null, getResources().getString(R.string.comorbidities_diabetes_treatment_initiation), getResources().getStringArray(R.array.comorbidities_diabetes_treatment_initiation_options), new Boolean[]{true, false, false, false, false, false, false, false}, App.VERTICAL, App.VERTICAL);
         diabetesTreatmentDetail = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_treatment_detail), "", "", 1000, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         diabetesTreatmentInitiationMetformin = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_metformin), getResources().getStringArray(R.array.comorbidities_diabetes_treatment_initiation_metformin_options), getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_metformin_500), App.HORIZONTAL, App.VERTICAL);
-        diabetesTreatmentInitiationInsulinN = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_insulinN), "", "", 100, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        diabetesTreatmentInitiationInsulinR = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_insulinR), "", "", 100, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-
+        diabetesTreatmentInitiationInsulinN = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_insulinN), "", getResources().getString(R.string.comorbidities_vitals_waist_hip_whr_range), 100, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        diabetesTreatmentInitiationInsulinR = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_insulinR), "", getResources().getString(R.string.comorbidities_vitals_waist_hip_whr_range), 100, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        diabetesTreatmentInitiationInsulinMix = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_insulin_mix), "", getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_insulin_mix_range), 100, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         // Used for reset fields...
         views = new View[]{formDate.getButton(), diabetesFamilyHistory.getRadioGroup(), diabetesFamilyHistorySpecify,
                 previousDiabetesTreatmentHistory.getRadioGroup(), selfReportedDiabetesTreatmentHistory.getRadioGroup(), typeDiabetes.getRadioGroup(), statusDiabetes.getRadioGroup(),
@@ -179,7 +185,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
                 hxDiabeticInfections, hxDiabeticPvd.getRadioGroup(),
                 hxDiabeticCad.getRadioGroup(), hxDiabeticHypertension.getRadioGroup(), hxDiabeticGestationalDiabetes.getRadioGroup(), hxDiabeticBirth.getRadioGroup(),
                 treatmentInitiation, diabetesTreatmentInitiation, diabetesTreatmentDetail.getEditText(),
-                diabetesTreatmentInitiationMetformin.getRadioGroup(), diabetesTreatmentInitiationInsulinN.getEditText(), diabetesTreatmentInitiationInsulinR.getEditText()};
+                diabetesTreatmentInitiationMetformin.getRadioGroup(), diabetesTreatmentInitiationInsulinN.getEditText(), diabetesTreatmentInitiationInsulinR.getEditText(), diabetesTreatmentInitiationInsulinMix.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
@@ -189,7 +195,88 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
                         {hxDiabeticInfections, hxDiabeticPvd},
                         {hxDiabeticCad, hxDiabeticHypertension, hxDiabeticGestationalDiabetes, hxDiabeticBirth},
                         {treatmentInitiation, diabetesTreatmentInitiation, diabetesTreatmentDetail},
-                        {diabetesTreatmentInitiationMetformin, diabetesTreatmentInitiationInsulinN, diabetesTreatmentInitiationInsulinR}};
+                        {diabetesTreatmentInitiationMetformin, diabetesTreatmentInitiationInsulinN, diabetesTreatmentInitiationInsulinR, diabetesTreatmentInitiationInsulinMix}};
+
+        diabetesTreatmentInitiationInsulinN.getEditText().addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                try {
+                    if (diabetesTreatmentInitiationInsulinN.getEditText().getText().length() > 0) {
+                        double num = Integer.parseInt(diabetesTreatmentInitiationInsulinN.getEditText().getText().toString());
+                        if (num < 0 || num > 100) {
+                            diabetesTreatmentInitiationInsulinN.getEditText().setError(getString(R.string.comorbidities_vitals_waist_hip_whr_limit));
+                        }
+                    }
+                } catch (NumberFormatException nfe) {
+                    //Exception: User might be entering " " (empty) value
+                }
+            }
+        });
+
+        diabetesTreatmentInitiationInsulinR.getEditText().addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                try {
+                    if (diabetesTreatmentInitiationInsulinR.getEditText().getText().length() > 0) {
+                        double num = Integer.parseInt(diabetesTreatmentInitiationInsulinR.getEditText().getText().toString());
+                        if (num < 0 || num > 100) {
+                            diabetesTreatmentInitiationInsulinR.getEditText().setError(getString(R.string.comorbidities_vitals_waist_hip_whr_limit));
+                        }
+                    }
+                } catch (NumberFormatException nfe) {
+                    //Exception: User might be entering " " (empty) value
+                }
+            }
+        });
+
+        diabetesTreatmentInitiationInsulinMix.getEditText().addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                try {
+                    if (diabetesTreatmentInitiationInsulinMix.getEditText().getText().length() > 0) {
+                        double num = Integer.parseInt(diabetesTreatmentInitiationInsulinMix.getEditText().getText().toString());
+                        if (num < 0 || num > 1000) {
+                            diabetesTreatmentInitiationInsulinMix.getEditText().setError(getString(R.string.comorbidities_diabetes_treatment_initiation_insulin_mix_limit));
+                        }
+                    }
+                } catch (NumberFormatException nfe) {
+                    //Exception: User might be entering " " (empty) value
+                }
+            }
+        });
 
         formDate.getButton().setOnClickListener(this);
         diabetesFamilyHistory.getRadioGroup().setOnCheckedChangeListener(this);
@@ -208,12 +295,38 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
 
         Boolean error = false;
 
+        if (App.get(diabetesTreatmentInitiationInsulinMix).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(6);
+            diabetesTreatmentInitiationInsulinMix.getEditText().setError(getString(R.string.empty_field));
+            diabetesTreatmentInitiationInsulinMix.getEditText().requestFocus();
+            error = true;
+        }else if (!App.get(diabetesTreatmentInitiationInsulinMix).isEmpty() && Integer.parseInt(App.get(diabetesTreatmentInitiationInsulinMix)) > 1000) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(6);
+            diabetesTreatmentInitiationInsulinMix.getEditText().setError(getString(R.string.comorbidities_diabetes_treatment_initiation_insulin_mix_limit));
+            diabetesTreatmentInitiationInsulinMix.getEditText().requestFocus();
+            error = true;
+        }
+
         if (App.get(diabetesTreatmentInitiationInsulinR).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(6);
             diabetesTreatmentInitiationInsulinR.getEditText().setError(getString(R.string.empty_field));
+            diabetesTreatmentInitiationInsulinR.getEditText().requestFocus();
+            error = true;
+        } else if (!App.get(diabetesTreatmentInitiationInsulinR).isEmpty() && Integer.parseInt(App.get(diabetesTreatmentInitiationInsulinR)) > 100) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(6);
+            diabetesTreatmentInitiationInsulinR.getEditText().setError(getString(R.string.comorbidities_vitals_waist_hip_whr_limit));
             diabetesTreatmentInitiationInsulinR.getEditText().requestFocus();
             error = true;
         }
@@ -224,6 +337,14 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
             else
                 gotoPage(6);
             diabetesTreatmentInitiationInsulinN.getEditText().setError(getString(R.string.empty_field));
+            diabetesTreatmentInitiationInsulinN.getEditText().requestFocus();
+            error = true;
+        }else if (!App.get(diabetesTreatmentInitiationInsulinN).isEmpty() && Integer.parseInt(App.get(diabetesTreatmentInitiationInsulinN)) > 100) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(6);
+            diabetesTreatmentInitiationInsulinN.getEditText().setError(getString(R.string.comorbidities_vitals_waist_hip_whr_limit));
             diabetesTreatmentInitiationInsulinN.getEditText().requestFocus();
             error = true;
         }
@@ -271,12 +392,231 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
     @Override
     public boolean submit() {
 
-        if (validate()) {
+        endTime = new Date();
 
-            resetViews();
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
+        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+        observations.add(new String[]{"FAMILY HISTORY OF DIABETES MELLITUS", App.get(diabetesFamilyHistory).equals(getResources().getString(R.string.comorbidities_diabetes_family_history_yes)) ? "YES" :
+                (App.get(diabetesFamilyHistory).equals(getResources().getString(R.string.comorbidities_diabetes_family_history_no)) ? "NO" :
+                        App.get(diabetesFamilyHistory).equals(getResources().getString(R.string.comorbidities_diabetes_family_history_refused)) ? "REFUSED" : "UNKNOWN")});
+
+        if(diabetesFamilyHistorySpecify.getVisibility() == View.VISIBLE) {
+            String diabetesFamilyHistoryString = "";
+            for (CheckBox cb : diabetesFamilyHistorySpecify.getCheckedBoxes()) {
+                if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_specify_mother)))
+                    diabetesFamilyHistoryString = diabetesFamilyHistoryString + "MOTHER" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_specify_father)))
+                    diabetesFamilyHistoryString = diabetesFamilyHistoryString + "FATHER" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_specify_maternalgm)))
+                    diabetesFamilyHistoryString = diabetesFamilyHistoryString + "MATERNAL GRANDMOTHER" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_specify_maternalgf)))
+                    diabetesFamilyHistoryString = diabetesFamilyHistoryString + "MATERNAL GRANDFATHER" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_specify_paternalgm)))
+                    diabetesFamilyHistoryString = diabetesFamilyHistoryString + "PATERNAL GRANDMOTHER" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_specify_paternalgf)))
+                    diabetesFamilyHistoryString = diabetesFamilyHistoryString + "PATERNAL GRANDFATHER" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_specify_brother)))
+                    diabetesFamilyHistoryString = diabetesFamilyHistoryString + "BROTHER" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_specify_sister)))
+                    diabetesFamilyHistoryString = diabetesFamilyHistoryString + "SISTER" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_specify_son)))
+                    diabetesFamilyHistoryString = diabetesFamilyHistoryString + "SON" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_specify_daughter)))
+                    diabetesFamilyHistoryString = diabetesFamilyHistoryString + "DAUGHTER" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_specify_spouse)))
+                    diabetesFamilyHistoryString = diabetesFamilyHistoryString + "SPOUSE" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_specify_aunt)))
+                    diabetesFamilyHistoryString = diabetesFamilyHistoryString + "AUNT" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_specify_uncle)))
+                    diabetesFamilyHistoryString = diabetesFamilyHistoryString + "UNCLE" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_specify_other1)))
+                    diabetesFamilyHistoryString = diabetesFamilyHistoryString + "OTHER" + " ; ";
+            }
+            observations.add(new String[]{"FAMILY MEMBERS WITH DIABETES", diabetesFamilyHistoryString});
         }
 
-        //resetViews();
+        observations.add(new String[]{"DIABETES MELLITUS MEDICATION HISTORY", App.get(previousDiabetesTreatmentHistory).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+
+        if(selfReportedDiabetesTreatmentHistory.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"SELF REPORTED DIABETES MEDICATION", App.get(selfReportedDiabetesTreatmentHistory).equals(getResources().getString(R.string.comorbidities_self_reported_diabetes_treatment_history_oha)) ? "ORAL ANTIHYPERCLYCEMIC MEDICATION" : "INSULIN"});
+        }
+
+        if(typeDiabetes.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"TYPE OF DIABETES MELLITUS", App.get(typeDiabetes).equals(getResources().getString(R.string.comorbidities_type_diabetes_type1)) ? "DIABETES MELLITUS TYPE 1" : "DIABETES MELLITUS TYPE II"});
+        }
+
+        observations.add(new String[]{"DIABETES CONTROL STATUS", App.get(statusDiabetes).equals(getResources().getString(R.string.comorbidities_status_diabetes_controlled)) ? "CONTROLLED DIABETES MELLITUS" : "UNCONTROLLED DIABETES MELLITUS"});
+        observations.add(new String[]{"DIABETIC HYPOGLYCEMIA", App.get(hxHypoglycemia).equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_yes)) ? "YES" :
+                (App.get(hxHypoglycemia).equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_no)) ? "NO" : "UNKNOWN")});
+        observations.add(new String[]{"DIABETIC RETINOPATHY", App.get(hxDiabeticRetinopathy).equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_yes)) ? "YES" :
+                (App.get(hxDiabeticRetinopathy).equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_no)) ? "NO" : "UNKNOWN")});
+        observations.add(new String[]{"DIABETIC AUTONOMIC NEUROPATHY", App.get(hxDiabeticNeuropathy).equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_yes)) ? "YES" :
+                (App.get(hxDiabeticNeuropathy).equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_no)) ? "NO" : "UNKNOWN")});
+        observations.add(new String[]{"DIABETIC NEPHROPATHY", App.get(hxDiabeticNephropathy).equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_yes)) ? "YES" :
+                (App.get(hxDiabeticNephropathy).equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_no)) ? "NO" : "UNKNOWN")});
+
+        String hxDiabeticInfectionsString = "";
+        for(CheckBox cb : diabetesFamilyHistorySpecify.getCheckedBoxes()){
+            if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_infections_skin)))
+                hxDiabeticInfectionsString = hxDiabeticInfectionsString + "INFECTION OF SKIN" + " ; ";
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_infections_foot)))
+                hxDiabeticInfectionsString = hxDiabeticInfectionsString + "FOOT INFECTION" + " ; ";
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_infections_dental)))
+                hxDiabeticInfectionsString = hxDiabeticInfectionsString + "INFECTED DENTAL CARIES" + " ; ";
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_infections_gu)))
+                hxDiabeticInfectionsString = hxDiabeticInfectionsString + "GENITOURINARY SYMPTOMS" + " ; ";
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_infections_pelvic)))
+                hxDiabeticInfectionsString = hxDiabeticInfectionsString + "GENITAL INFECTION" + " ; ";
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_infections_upper_respiratory)))
+                hxDiabeticInfectionsString = hxDiabeticInfectionsString + "UPPER RESPIRATORY INFECTION" + " ; ";
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_infections_other)))
+                hxDiabeticInfectionsString = hxDiabeticInfectionsString + "OTHER INFECTION" + " ; ";
+        }
+        observations.add(new String[]{"HISTORY OF INFECTIONS", hxDiabeticInfectionsString});
+
+        observations.add(new String[]{"PERIPHERAL VASCULAR DISEASE", App.get(hxDiabeticPvd).equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_yes)) ? "YES" :
+                (App.get(hxDiabeticPvd).equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_no)) ? "NO" : "UNKNOWN")});
+        observations.add(new String[]{"CORONARY HEART DISEASE", App.get(hxDiabeticCad).equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_yes)) ? "YES" :
+                (App.get(hxDiabeticCad).equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_no)) ? "NO" : "UNKNOWN")});
+
+        if(hxDiabeticHypertension.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"GESTATIONAL DIABETES DURING PREGNENCY", App.get(hxDiabeticHypertension).equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_yes)) ? "YES" :
+                    (App.get(hxDiabeticHypertension).equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_no)) ? "NO" : "UNKNOWN")});
+        }
+
+        if(hxDiabeticGestationalDiabetes.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"GESTATIONAL DIABETES CONTINUED AFTER DELIVERY", App.get(hxDiabeticGestationalDiabetes).equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_yes)) ? "YES" :
+                    (App.get(hxDiabeticGestationalDiabetes).equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_no)) ? "NO" : "UNKNOWN")});
+        }
+
+        String diabetesTreatmentInitiationString = "";
+        for(CheckBox cb : diabetesTreatmentInitiation.getCheckedBoxes()){
+            if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_metformin_option)))
+                diabetesTreatmentInitiationString = diabetesTreatmentInitiationString + "METFORMIN" + " ; ";
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_sulfonlyurea_option)))
+                diabetesTreatmentInitiationString = diabetesTreatmentInitiationString + "SULFONLYUREAS" + " ; ";
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_tzd_option)))
+                diabetesTreatmentInitiationString = diabetesTreatmentInitiationString + "PIOGLITAZONE" + " ; ";
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_dpp4i_option)))
+                diabetesTreatmentInitiationString = diabetesTreatmentInitiationString + "DIPEPTIDYL PEPTIDASE 4 INHIBITOR" + " ; ";
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_insulinN_option)))
+                diabetesTreatmentInitiationString = diabetesTreatmentInitiationString + "INSULIN, ISOPHANE, HUMAN" + " ; ";
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_insulinR_option)))
+                diabetesTreatmentInitiationString = diabetesTreatmentInitiationString + "INSULIN, REGULAR, HUMAN" + " ; ";
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_insulin_mix_option)))
+                diabetesTreatmentInitiationString = diabetesTreatmentInitiationString + "INSULIN 70/30" + " ; ";
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_other_option)))
+                diabetesTreatmentInitiationString = diabetesTreatmentInitiationString + "OTHER DRUG NAME" + " ; ";
+        }
+        observations.add(new String[]{"DIABETES MEDICATIONS", diabetesTreatmentInitiationString});
+
+        observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(diabetesTreatmentDetail)});
+        observations.add(new String[]{"METFORMIN DOSE", App.get(diabetesTreatmentInitiationMetformin)});
+        observations.add(new String[]{"INSULIN N DOSAGE", App.get(diabetesTreatmentInitiationInsulinN)});
+        observations.add(new String[]{"INSULIN R DOSAGE", App.get(diabetesTreatmentInitiationInsulinR)});
+        observations.add(new String[]{"INSULIN 70/30 DOSAGE", App.get(diabetesTreatmentInitiationInsulinMix)});
+
+        AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.submitting_form));
+                        loading.show();
+                    }
+                });
+
+                String result = "";
+                result = serverService.saveEncounterAndObservation(FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                if (result.contains("SUCCESS"))
+                    return "SUCCESS";
+
+                return result;
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                if (result.equals("SUCCESS")) {
+                    resetViews();
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.form_submitted));
+                    Drawable submitIcon = getResources().getDrawable(R.drawable.ic_submit);
+                    alertDialog.setIcon(submitIcon);
+                    int color = App.getColor(context, R.attr.colorAccent);
+                    DrawableCompat.setTint(submitIcon, color);
+                    alertDialog.setTitle(getResources().getString(R.string.title_completed));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else if (result.equals("CONNECTION_ERROR")) {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
+                    alertDialog.setMessage(message);
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+
+
+            }
+        };
+        submissionFormTask.execute("");
+
         return false;
     }
 

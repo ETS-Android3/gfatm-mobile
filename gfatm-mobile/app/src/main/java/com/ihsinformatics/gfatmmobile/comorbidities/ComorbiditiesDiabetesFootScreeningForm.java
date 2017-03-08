@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
@@ -34,6 +36,7 @@ import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -288,10 +291,206 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
     @Override
     public boolean submit() {
 
-        if (validate()) {
+        endTime = new Date();
 
-            resetViews();
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
+        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+        observations.add(new String[]{"FOLLOW-UP MONTH", App.get(diabetesFootScreeningMonthOfVisit)});
+        observations.add(new String[]{"RIGHT FOOT EXAMINATION", App.get(diabetesFootScreeningRightFootExamined).equals(getResources().getString(R.string.comorbidities_foot_screening_foot_options_yes)) ? "YES" :
+                (App.get(diabetesFootScreeningRightFootExamined).equals(getResources().getString(R.string.comorbidities_foot_screening_foot_options_amputation)) ? "AMPUTATION" : "REFUSED")});
+        observations.add(new String[]{"LEFT FOOT EXAMINATION", App.get(diabetesFootScreeningLeftFootExamined).equals(getResources().getString(R.string.comorbidities_foot_screening_foot_options_yes)) ? "YES" :
+                (App.get(diabetesFootScreeningLeftFootExamined).equals(getResources().getString(R.string.comorbidities_foot_screening_foot_options_amputation)) ? "AMPUTATION" : "REFUSED")});
+
+        if(diabetesFootScreeningComplicationsOfFeet.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"FOOT COMPLICATIONS", App.get(diabetesFootScreeningComplicationsOfFeet).equals(getResources().getString(R.string.comorbidities_foot_screening_complications_of_foot_options_infection)) ? "FOOT INFECTION" :
+                    (App.get(diabetesFootScreeningComplicationsOfFeet).equals(getResources().getString(R.string.comorbidities_foot_screening_complications_of_foot_options_ulcers)) ? "FOOT ULCER" :
+                            App.get(diabetesFootScreeningComplicationsOfFeet).equals(getResources().getString(R.string.comorbidities_foot_screening_complications_of_foot_options_ingrown)) ? "INGROWING TOENAIL" : "OTHER INFECTION")});
         }
+
+        if(diabetesFootScreeningHistoryOfAmputation.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"HISTORY OF AMPUTATION", App.get(diabetesFootScreeningHistoryOfAmputation).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        }
+
+        if(diabetesFootScreeningSkinRightFootExamination.getVisibility() == View.VISIBLE) {
+            final String diabetesFootScreeningSkinRightFootExaminationString = App.get(diabetesFootScreeningSkinRightFootExamination).equals(getResources().getString(R.string.comorbidities_foot_screening_skin_foot_options_normal)) ? "NORMAL" :
+                    (App.get(diabetesFootScreeningSkinRightFootExamination).equals(getResources().getString(R.string.comorbidities_foot_screening_skin_foot_options_thickened)) ? "THICKENING OF SKIN" :
+                            (App.get(diabetesFootScreeningSkinRightFootExamination).equals(getResources().getString(R.string.comorbidities_foot_screening_skin_foot_options_dry)) ? "DRY SKIN" :
+                                    (App.get(diabetesFootScreeningSkinRightFootExamination).equals(getResources().getString(R.string.comorbidities_foot_screening_skin_foot_options_cracked)) ? "CRACKED SKIN" :
+                                            (App.get(diabetesFootScreeningSkinRightFootExamination).equals(getResources().getString(R.string.comorbidities_foot_screening_skin_foot_options_infection)) ? "INFECTION OF SKIN" :
+                                                    (App.get(diabetesFootScreeningSkinRightFootExamination).equals(getResources().getString(R.string.comorbidities_foot_screening_skin_foot_options_ulceration)) ? "SKIN ULCER" :
+                                                            (App.get(diabetesFootScreeningSkinRightFootExamination).equals(getResources().getString(R.string.comorbidities_foot_screening_skin_foot_options_callus)) ? "SKIN CALLUS" : "DISCOLORATION OF SKIN"))))));
+            observations.add(new String[]{"RIGHT FOOT SKIN EXAMINATION", diabetesFootScreeningSkinRightFootExaminationString});
+        }
+
+        if(diabetesFootScreeningSkinLeftFootExamination.getVisibility() == View.VISIBLE) {
+            final String diabetesFootScreeningSkinLefttFootExaminationString = App.get(diabetesFootScreeningSkinLeftFootExamination).equals(getResources().getString(R.string.comorbidities_foot_screening_skin_foot_options_normal)) ? "NORMAL" :
+                    (App.get(diabetesFootScreeningSkinLeftFootExamination).equals(getResources().getString(R.string.comorbidities_foot_screening_skin_foot_options_thickened)) ? "THICKENING OF SKIN" :
+                            (App.get(diabetesFootScreeningSkinLeftFootExamination).equals(getResources().getString(R.string.comorbidities_foot_screening_skin_foot_options_dry)) ? "DRY SKIN" :
+                                    (App.get(diabetesFootScreeningSkinLeftFootExamination).equals(getResources().getString(R.string.comorbidities_foot_screening_skin_foot_options_cracked)) ? "CRACKED SKIN" :
+                                            (App.get(diabetesFootScreeningSkinLeftFootExamination).equals(getResources().getString(R.string.comorbidities_foot_screening_skin_foot_options_infection)) ? "INFECTION OF SKIN" :
+                                                    (App.get(diabetesFootScreeningSkinLeftFootExamination).equals(getResources().getString(R.string.comorbidities_foot_screening_skin_foot_options_ulceration)) ? "SKIN ULCER" :
+                                                            (App.get(diabetesFootScreeningSkinLeftFootExamination).equals(getResources().getString(R.string.comorbidities_foot_screening_skin_foot_options_callus)) ? "SKIN CALLUS" : "DISCOLORATION OF SKIN"))))));
+            observations.add(new String[]{"LEFT FOOT SKIN EXAMINATION", diabetesFootScreeningSkinLefttFootExaminationString});
+        }
+
+        if(diabetesFootScreeningRightFootSweating.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"RIGHT FOOT SWEATING", App.get(diabetesFootScreeningRightFootSweating).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        }
+
+        if(diabetesFootScreeningLeftFootSweating.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"LEFT FOOT SWEATING", App.get(diabetesFootScreeningLeftFootSweating).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        }
+
+        if(diabetesFootScreeningRightFootDeformity.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"DEFORMITY OF RIGHT FOOT", App.get(diabetesFootScreeningRightFootDeformity).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        }
+
+        if(diabetesFootScreeningLeftFootDeformity.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"DEFORMITY OF LEFT FOOT", App.get(diabetesFootScreeningLeftFootDeformity).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        }
+
+        if(diabetesFootScreeningRightFootMonofilament.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"RIGHT FOOT MONOFILAMENT", App.get(diabetesFootScreeningRightFootMonofilament).equals(getResources().getString(R.string.comorbidities_foot_screening_neurological_examination_options_detectable)) ? "DETECTED" : "NOT DETECTED"});
+        }
+
+        if(diabetesFootScreeningLeftFootMonofilament.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"LEFT FOOT MONOFILAMENT", App.get(diabetesFootScreeningLeftFootMonofilament).equals(getResources().getString(R.string.comorbidities_foot_screening_neurological_examination_options_detectable)) ? "DETECTED" : "NOT DETECTED"});
+        }
+
+        if(diabetesFootScreeningRightFootTuningFork.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"RIGHT FOOT TURING FORK", App.get(diabetesFootScreeningRightFootTuningFork).equals(getResources().getString(R.string.comorbidities_foot_screening_neurological_examination_options_detectable)) ? "DETECTED" : "NOT DETECTED"});
+        }
+
+        if(diabetesFootScreeningLeftFootTuningFork.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"LEFT FOOT TURING FORK", App.get(diabetesFootScreeningLeftFootTuningFork).equals(getResources().getString(R.string.comorbidities_foot_screening_neurological_examination_options_detectable)) ? "DETECTED" : "NOT DETECTED"});
+        }
+
+        if(diabetesFootScreeningRightFootVascular.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"RIGHT FOOT VASCULAR", App.get(diabetesFootScreeningRightFootVascular).equals(getResources().getString(R.string.comorbidities_foot_screening_vascular_examination_options_present)) ? "PRESENT" :
+                    (App.get(diabetesFootScreeningRightFootVascular).equals(getResources().getString(R.string.comorbidities_foot_screening_vascular_examination_options_diminished)) ? "REDUCED" : "ABSENT")});
+        }
+
+        if(diabetesFootScreeningLeftFootVascular.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"LEFT FOOT VASCULAR", App.get(diabetesFootScreeningLeftFootVascular).equals(getResources().getString(R.string.comorbidities_foot_screening_vascular_examination_options_present)) ? "PRESENT" :
+                    (App.get(diabetesFootScreeningLeftFootVascular).equals(getResources().getString(R.string.comorbidities_foot_screening_vascular_examination_options_diminished)) ? "REDUCED" : "ABSENT")});
+        }
+
+        if(diabetesFootScreeningFootHygiene.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"FOOT HYGENE", App.get(diabetesFootScreeningFootHygiene).equals(getResources().getString(R.string.comorbidities_foot_screening_foot_hygiene_options_poor)) ? "POOR" :
+                    (App.get(diabetesFootScreeningFootHygiene).equals(getResources().getString(R.string.comorbidities_foot_screening_foot_hygiene_options_average)) ? "AVERAGE" : "GOOD")});
+        }
+
+        if(diabetesFootScreeningFootwearAppropriate.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"FOOTWEAR", App.get(diabetesFootScreeningFootwearAppropriate).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        }
+
+        if(diabetesFootScreeningPreviousUlcer.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"ULCER HISTORY", App.get(diabetesFootScreeningPreviousUlcer).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        }
+
+        observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(diabetesFootScreeningDetailedClinicalNotes)});
+        observations.add(new String[]{"DIABETES RECOMMENDATAION", App.get(diabetesFootScreeningRecommendations).equals(getResources().getString(R.string.comorbidities_foot_screening_recommendations_options_referral)) ? "PATIENT REFERRED" : "DIABETES MANAGEMENT"});
+
+        AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.submitting_form));
+                        loading.show();
+                    }
+                });
+
+                String result = "";
+                result = serverService.saveEncounterAndObservation(FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                if (result.contains("SUCCESS"))
+                    return "SUCCESS";
+
+                return result;
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                if (result.equals("SUCCESS")) {
+                    resetViews();
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.form_submitted));
+                    Drawable submitIcon = getResources().getDrawable(R.drawable.ic_submit);
+                    alertDialog.setIcon(submitIcon);
+                    int color = App.getColor(context, R.attr.colorAccent);
+                    DrawableCompat.setTint(submitIcon, color);
+                    alertDialog.setTitle(getResources().getString(R.string.title_completed));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else if (result.equals("CONNECTION_ERROR")) {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
+                    alertDialog.setMessage(message);
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+
+
+            }
+        };
+        submissionFormTask.execute("");
 
         return false;
     }

@@ -39,7 +39,7 @@
     <string name="comorbidities_preferredlocation_other_comorbidities">Other preferred location:</string>
     <string name="comorbidities_dm_screening">DIABETES MELLITUS SCREENING</string>
     <string name="comorbidities_dmscrnng_food">Have you had something to eat within the last two hours?</string>
-    <string name="comorbidities_scrnng_rbs">RBS:</string>
+    <string name="comorbidities_scrnng_rbs">Random Blood Sugar (RBS):</string>
     <string name="comorbidities_scrnng_rbs_range">Range 1&#8211;500</string>
     <string name="comorbidities_scrnng_rbs_limit">The value should be in the range of 1&#8211;500</string>
     <string name="comorbidities_hba1c_testvoucher">HbA1C test voucher given?</string>
@@ -206,6 +206,9 @@
     <string name="comorbidities_diabetes_treatment_initiation_metformin">Dosage Strength of Metformin/Day</string>
     <string name="comorbidities_diabetes_treatment_initiation_insulinN">Dosage of Insulin N (Units/Day):</string>
     <string name="comorbidities_diabetes_treatment_initiation_insulinR">Dosage of Insulin R (Units/Day):</string>
+    <string name="comorbidities_diabetes_treatment_initiation_insulin_mix">Dosage of Mixed Insulin (Units/Day):</string>
+    <string name="comorbidities_diabetes_treatment_initiation_insulin_mix_range">Range 0&#8211;1000</string>
+    <string name="comorbidities_diabetes_treatment_initiation_insulin_mix_limit">The value should be in the range of 0&#8211;1000</string>
 
     <string name="comorbidities_diabetes_family_history_yes">Yes</string>
     <string name="comorbidities_diabetes_family_history_no">No</string>
@@ -233,14 +236,45 @@
         <item>@string/comorbidities_diabetes_family_history_specify_other</item>
     </string-array>
 
-    <string name="comorbidities_self_reported_diabetes_treatment_history_oha">OHA</string>
+    <string name="comorbidities_diabetes_family_history_specify_mother">Mother</string>
+    <string name="comorbidities_diabetes_family_history_specify_father">Father</string>
+    <string name="comorbidities_diabetes_family_history_specify_maternalgm">Maternal Grandmother</string>
+    <string name="comorbidities_diabetes_family_history_specify_maternalgf">Maternal Grandfather</string>
+    <string name="comorbidities_diabetes_family_history_specify_paternalgm">Paternal Grandmother</string>
+    <string name="comorbidities_diabetes_family_history_specify_paternalgf">Paternal Grandfather</string>
+    <string name="comorbidities_diabetes_family_history_specify_brother">Brother</string>
+    <string name="comorbidities_diabetes_family_history_specify_sister">Sister</string>
+    <string name="comorbidities_diabetes_family_history_specify_son">Son</string>
+    <string name="comorbidities_diabetes_family_history_specify_daughter">Daughter</string>
+    <string name="comorbidities_diabetes_family_history_specify_spouse">Spouse</string>
+    <string name="comorbidities_diabetes_family_history_specify_aunt">Aunt</string>
+    <string name="comorbidities_diabetes_family_history_specify_uncle">Uncle</string>
+    <string name="comorbidities_diabetes_family_history_specify_other1">Other</string>
+
+    <string-array name="comorbidities_diabetes_family_history_specify_options1">
+        <item>@string/comorbidities_diabetes_family_history_specify_mother</item>
+        <item>@string/comorbidities_diabetes_family_history_specify_father</item>
+        <item>@string/comorbidities_diabetes_family_history_specify_maternalgm</item>
+        <item>@string/comorbidities_diabetes_family_history_specify_maternalgf</item>
+        <item>@string/comorbidities_diabetes_family_history_specify_paternalgm</item>
+        <item>@string/comorbidities_diabetes_family_history_specify_paternalgf</item>
+        <item>@string/comorbidities_diabetes_family_history_specify_brother</item>
+        <item>@string/comorbidities_diabetes_family_history_specify_sister</item>
+        <item>@string/comorbidities_diabetes_family_history_specify_son</item>
+        <item>@string/comorbidities_diabetes_family_history_specify_daughter</item>
+        <item>@string/comorbidities_diabetes_family_history_specify_spouse</item>
+        <item>@string/comorbidities_diabetes_family_history_specify_aunt</item>
+        <item>@string/comorbidities_diabetes_family_history_specify_uncle</item>
+        <item>@string/comorbidities_diabetes_family_history_specify_other</item>
+    </string-array>
+
+    <string name="comorbidities_self_reported_diabetes_treatment_history_oha">Oral Antihyperglycemic Drugs</string>
     <string name="comorbidities_self_reported_diabetes_treatment_history_insulin">Insulin</string>
     <string name="comorbidities_self_reported_diabetes_treatment_history_both">Both</string>
 
     <string-array name="comorbidities_self_reported_diabetes_treatment_history_options">
         <item>@string/comorbidities_self_reported_diabetes_treatment_history_oha</item>
         <item>@string/comorbidities_self_reported_diabetes_treatment_history_insulin</item>
-        <item>@string/comorbidities_self_reported_diabetes_treatment_history_both</item>
     </string-array>
 
     <string name="comorbidities_type_diabetes_type1">Type 1</string>
@@ -261,18 +295,18 @@
 
     <string name="comorbidities_hx_diabetic_cemia_pathies_yes">Yes</string>
     <string name="comorbidities_hx_diabetic_cemia_pathies_no">No</string>
-    <string name="comorbidities_hx_diabetic_cemia_pathies_not_sure">Not sure</string>
+    <string name="comorbidities_hx_diabetic_cemia_pathies_unknown">Unknown</string>
 
     <string-array name="comorbidities_hx_diabetic_cemia_pathies_options">
         <item>@string/comorbidities_hx_diabetic_cemia_pathies_yes</item>
         <item>@string/comorbidities_hx_diabetic_cemia_pathies_no</item>
-        <item>@string/comorbidities_hx_diabetic_cemia_pathies_not_sure</item>
+        <item>@string/comorbidities_hx_diabetic_cemia_pathies_unknown</item>
     </string-array>
 
     <string name="comorbidities_hx_diabetic_infections_skin">Skin</string>
     <string name="comorbidities_hx_diabetic_infections_foot">Foot</string>
     <string name="comorbidities_hx_diabetic_infections_dental">Dental</string>
-    <string name="comorbidities_hx_diabetic_infections_gu">GU</string>
+    <string name="comorbidities_hx_diabetic_infections_gu">Genitourinary</string>
     <string name="comorbidities_hx_diabetic_infections_pelvic">Pelvic/Genital</string>
     <string name="comorbidities_hx_diabetic_infections_upper_respiratory">Upper Respiratory</string>
     <string name="comorbidities_hx_diabetic_infections_none">None</string>
@@ -285,16 +319,16 @@
         <item>@string/comorbidities_hx_diabetic_infections_gu</item>
         <item>@string/comorbidities_hx_diabetic_infections_pelvic</item>
         <item>@string/comorbidities_hx_diabetic_infections_upper_respiratory</item>
-        <item>@string/comorbidities_hx_diabetic_infections_none</item>
         <item>@string/comorbidities_hx_diabetic_infections_other</item>
     </string-array>
 
     <string name="comorbidities_diabetes_treatment_initiation_metformin_option">Metformin</string>
-    <string name="comorbidities_diabetes_treatment_initiation_sulfonlyurea_option">Sulfonlyurea (SU)</string>
-    <string name="comorbidities_diabetes_treatment_initiation_tzd_option">TZD</string>
-    <string name="comorbidities_diabetes_treatment_initiation_dpp4i_option">DPP-4-i</string>
-    <string name="comorbidities_diabetes_treatment_initiation_glp1ra_option">GLP-1-RA</string>
-    <string name="comorbidities_diabetes_treatment_initiation_insulin_option">Insulin</string>
+    <string name="comorbidities_diabetes_treatment_initiation_sulfonlyurea_option">Sulfonylurea (SU) - Glimepride</string>
+    <string name="comorbidities_diabetes_treatment_initiation_tzd_option">Thiazolidinediones (TZD) - Pioglitazone</string>
+    <string name="comorbidities_diabetes_treatment_initiation_dpp4i_option">Dipeptidyl Peptidase 4 Inhibitor (DPP-4-i) - Sitagliptin</string>
+    <string name="comorbidities_diabetes_treatment_initiation_insulinN_option">Insulin N</string>
+    <string name="comorbidities_diabetes_treatment_initiation_insulinR_option">Insulin R</string>
+    <string name="comorbidities_diabetes_treatment_initiation_insulin_mix_option">Insulin Mix 30/70</string>
     <string name="comorbidities_diabetes_treatment_initiation_other_option">Other</string>
 
     <string-array name="comorbidities_diabetes_treatment_initiation_options">
@@ -302,8 +336,9 @@
         <item>@string/comorbidities_diabetes_treatment_initiation_sulfonlyurea_option</item>
         <item>@string/comorbidities_diabetes_treatment_initiation_tzd_option</item>
         <item>@string/comorbidities_diabetes_treatment_initiation_dpp4i_option</item>
-        <item>@string/comorbidities_diabetes_treatment_initiation_glp1ra_option</item>
-        <item>@string/comorbidities_diabetes_treatment_initiation_insulin_option</item>
+        <item>@string/comorbidities_diabetes_treatment_initiation_insulinN_option</item>
+        <item>@string/comorbidities_diabetes_treatment_initiation_insulinR_option</item>
+        <item>@string/comorbidities_diabetes_treatment_initiation_insulin_mix_option</item>
         <item>@string/comorbidities_diabetes_treatment_initiation_other_option</item>
     </string-array>
 
@@ -393,22 +428,24 @@
     <string name="comorbidities_education_form_educational_plan_text_option1">Types of Diabetes</string>
     <string name="comorbidities_education_form_educational_plan_text_option2">Complications of Diabetes</string>
     <string name="comorbidities_education_form_educational_plan_text_option3">Oral medications, mode of action, timings, route of intake and side effects</string>
-    <string name="comorbidities_education_form_educational_plan_text_option4">Insulin types and duration of action</string>
-    <string name="comorbidities_education_form_educational_plan_text_option5">Demonstrated Insulin injecting technique</string>
-    <string name="comorbidities_education_form_educational_plan_text_option6">Demonstrated proper site rotation</string>
-    <string name="comorbidities_education_form_educational_plan_text_option7">Insulin dose adjustment</string>
-    <string name="comorbidities_education_form_educational_plan_text_option8">Glucometer</string>
-    <string name="comorbidities_education_form_educational_plan_text_option9">SMBG</string>
-    <string name="comorbidities_education_form_educational_plan_text_option10">Life style changes/exercise</string>
-    <string name="comorbidities_education_form_educational_plan_text_option11">Diabetes and fasting in Ramadan</string>
-    <string name="comorbidities_education_form_educational_plan_text_option12">Travelling with diabetes</string>
-    <string name="comorbidities_education_form_educational_plan_text_option13">Hypoglycemia</string>
-    <string name="comorbidities_education_form_educational_plan_text_option14">Hyperglycemia</string>
-    <string name="comorbidities_education_form_educational_plan_text_option15">Family/ Caregiver educated</string>
-    <string name="comorbidities_education_form_educational_plan_text_option16">Patient is not appropriate for education</string>
-    <string name="comorbidities_education_form_educational_plan_text_option17">Foot care Tips</string>
-    <string name="comorbidities_education_form_educational_plan_text_option18">Helpline</string>
-    <string name="comorbidities_education_form_educational_plan_text_option19">Tests</string>
+    <string name="comorbidities_education_form_educational_plan_text_option4">Side effects</string>
+    <string name="comorbidities_education_form_educational_plan_text_option5">Insulin types and duration of action</string>
+    <string name="comorbidities_education_form_educational_plan_text_option6">Demonstrated Insulin injecting technique</string>
+    <string name="comorbidities_education_form_educational_plan_text_option7">Demonstrated proper site rotation</string>
+    <string name="comorbidities_education_form_educational_plan_text_option8">Insulin dose adjustment</string>
+    <string name="comorbidities_education_form_educational_plan_text_option9">Glucometer</string>
+    <string name="comorbidities_education_form_educational_plan_text_option10">Self-Monitoring Blood Glucose</string>
+    <string name="comorbidities_education_form_educational_plan_text_option11">Life style changes/exercise</string>
+    <string name="comorbidities_education_form_educational_plan_text_option12">Exercise</string>
+    <string name="comorbidities_education_form_educational_plan_text_option13">Diabetes and fasting in Ramadan</string>
+    <string name="comorbidities_education_form_educational_plan_text_option14">Travelling with diabetes</string>
+    <string name="comorbidities_education_form_educational_plan_text_option15">Hypoglycemia</string>
+    <string name="comorbidities_education_form_educational_plan_text_option16">Hyperglycemia</string>
+    <string name="comorbidities_education_form_educational_plan_text_option17">Family/ Caregiver educated</string>
+    <string name="comorbidities_education_form_educational_plan_text_option18">Patient is not appropriate for education</string>
+    <string name="comorbidities_education_form_educational_plan_text_option19">Foot care Tips</string>
+    <string name="comorbidities_education_form_educational_plan_text_option20">Helpline</string>
+    <string name="comorbidities_education_form_educational_plan_text_option21">Tests</string>
 
     <string-array name="comorbidities_education_form_educational_plan_text_options">
         <item>@string/comorbidities_education_form_educational_plan_text_option1</item>
@@ -424,14 +461,17 @@
         <item>@string/comorbidities_education_form_educational_plan_text_option11</item>
         <item>@string/comorbidities_education_form_educational_plan_text_option12</item>
         <item>@string/comorbidities_education_form_educational_plan_text_option13</item>
+        <item>@string/comorbidities_education_form_educational_plan_text_option14</item>
         <item>@string/comorbidities_education_form_educational_plan_text_option15</item>
         <item>@string/comorbidities_education_form_educational_plan_text_option16</item>
         <item>@string/comorbidities_education_form_educational_plan_text_option17</item>
         <item>@string/comorbidities_education_form_educational_plan_text_option18</item>
         <item>@string/comorbidities_education_form_educational_plan_text_option19</item>
+        <item>@string/comorbidities_education_form_educational_plan_text_option20</item>
+        <item>@string/comorbidities_education_form_educational_plan_text_option21</item>
     </string-array>
 
-    <string name="comorbidities_education_form_educational_material_text_option1">SMBG Chart</string>
+    <string name="comorbidities_education_form_educational_material_text_option1">Self-Monitoring Blood Glucose Chart</string>
     <string name="comorbidities_education_form_educational_material_text_option2">Hypoglycemia awareness brochure</string>
     <string name="comorbidities_education_form_educational_material_text_option3">Hyperglycemia awareness brochure</string>
     <string name="comorbidities_education_form_educational_material_text_option4">Foot Care tips brochure</string>
@@ -439,10 +479,9 @@
     <string name="comorbidities_education_form_educational_material_text_option6">Insulin injecting technique brochure</string>
     <string name="comorbidities_education_form_educational_material_text_option7">Insulin Dosage chart</string>
     <string name="comorbidities_education_form_educational_material_text_option8">Insulin dose adjustment</string>
-    <string name="comorbidities_education_form_educational_material_text_option9">Rotation Guide (Abdomen)</string>
-    <string name="comorbidities_education_form_educational_material_text_option10">Rotation Guide (Thighs)</string>
-    <string name="comorbidities_education_form_educational_material_text_option11">Ramadan guidelines</string>
-    <string name="comorbidities_education_form_educational_material_text_option12">Helpline contact number</string>
+    <string name="comorbidities_education_form_educational_material_text_option9">Rotation Guide</string>
+    <string name="comorbidities_education_form_educational_material_text_option10">Ramadan guidelines</string>
+    <string name="comorbidities_education_form_educational_material_text_option11">Helpline contact number</string>
 
     <string-array name="comorbidities_education_form_educational_material_text_options">
         <item>@string/comorbidities_education_form_educational_material_text_option1</item>
@@ -456,7 +495,6 @@
         <item>@string/comorbidities_education_form_educational_material_text_option9</item>
         <item>@string/comorbidities_education_form_educational_material_text_option10</item>
         <item>@string/comorbidities_education_form_educational_material_text_option11</item>
-        <item>@string/comorbidities_education_form_educational_material_text_option12</item>
     </string-array>
 
     <!-- Strings for ComorbiditiesDiabetesTreatmentFollow-upForm -->
@@ -733,8 +771,8 @@
     <string name="comorbidities_eye_screening_recommendations_options_referral">Referral to Opthalmologist</string>
 
     <string-array name="comorbidities_eye_screening_recommendations_options">
-        <item>@string/comorbidities_foot_screening_recommendations_options_management</item>
-        <item>@string/comorbidities_foot_screening_recommendations_options_referral</item>
+        <item>@string/comorbidities_eye_screening_recommendations_options_management</item>
+        <item>@string/comorbidities_eye_screening_recommendations_options_referral</item>
     </string-array>
 
     <!-- Strings for ComorbiditiesTreatmentFollowupMentalHealth -->
@@ -851,15 +889,15 @@
     <!-- Strings for ComorbiditiesAssessmentFormMentalHealth -->
     <string name="comorbidities_assessment_form_MH_rescreening">Type of rescreening:</string>
 
-    <string name="comorbidities_assessment_form_MH_rescreening_options_4th_session">4th session</string>
+    <string name="comorbidities_assessment_form_MH_rescreening_options_6th_session">6th session</string>
     <string name="comorbidities_assessment_form_MH_rescreening_options_end">End of treatment</string>
     <string name="comorbidities_assessment_form_MH_rescreening_options_rescreening">Rescreening</string>
     <string name="comorbidities_assessment_form_MH_rescreening_options_other">Other</string>
 
     <string-array name="comorbidities_assessment_form_MH_rescreening_options">
-        <item>@string/comorbidities_assessment_form_MH_rescreening_options_4th_session</item>
-        <item>@string/comorbidities_assessment_form_MH_rescreening_options_end</item>
+        <item>@string/comorbidities_assessment_form_MH_rescreening_options_6th_session</item>
         <item>@string/comorbidities_assessment_form_MH_rescreening_options_rescreening</item>
+        <item>@string/comorbidities_assessment_form_MH_rescreening_options_end</item>
         <item>@string/comorbidities_assessment_form_MH_rescreening_options_other</item>
     </string-array>
 
@@ -895,7 +933,7 @@
         <item>@string/comorbidities_end_treatment_MH_reason_of_discontinuation_options_other</item>
     </string-array>
 
-    <string name="comorbidities_end_treatment_MH_feeling_better_options_self_reported">1&#8211;3 sessions conducted and no Akuads filled (SELF REPORTED IMPROVEMENT)</string>
+    <string name="comorbidities_end_treatment_MH_feeling_better_options_self_reported">1&#8211;3 sessions conducted and no Akuads filled (SELF REPORTED IMPROVEMENT).</string>
     <string name="comorbidities_end_treatment_MH_feeling_better_options_therapy_completed">4 or more sessions conducted and AKUADS filled (SUCCESFULLY COMPLETED THERAPY WITH IMPROVED OUTCOMES).</string>
 
     <string-array name="comorbidities_end_treatment_MH_feeling_better_options">
@@ -934,8 +972,8 @@
     <string name="comorbidities_drug_disbursement_adherence">Adherence:</string>
     <string name="comorbidities_drug_disbursement_drug_distribution">DRUG DISTRIBUTION RECORD</string>
     <string name="comorbidities_drug_disbursement_drug_distribution_number">Drug Distribution Number:</string>
-    <string name="comorbidities_drug_disbursement_drug_distribution_number_range">Range 0&#8211;24</string>
-    <string name="comorbidities_drug_disbursement_drug_distribution_number_limit">The value should be in the range of 0&#8211;24</string>
+    <string name="comorbidities_drug_disbursement_drug_distribution_number_range">Range 0&#8211;999</string>
+    <string name="comorbidities_drug_disbursement_drug_distribution_number_limit">The value should be in the range of 0&#8211;999</string>
     <string name="comorbidities_drug_disbursement_drugs_picked_up">Drugs Picked up?</string>
     <string name="comorbidities_drug_disbursement_drug_dist_detail_text">DRUG DISTRIBUTION DETAIL</string>
     <string name="comorbidities_drug_disbursement_drug_dist_date">Drug Distribution Date:</string>
@@ -1053,7 +1091,7 @@
 
     <string-array name="comorbidities_patient_information_tb_category_options">
         <item>@string/comorbidities_patient_information_tb_category_cat1</item>
-        <item>@string/comorbidities_patient_information_tb_category_cat1</item>
+        <item>@string/comorbidities_patient_information_tb_category_cat2</item>
         <item>@string/comorbidities_patient_information_tb_category_mdr_tb</item>
     </string-array>
 

@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
@@ -35,6 +36,7 @@ import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -48,13 +50,14 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
     // Views...
     TitledButton formDate;
     MyTextView aherenceTextView;
-    TitledRadioGroup aherence;
+    //TitledRadioGroup aherence;
+    TitledEditText adherence;
     MyTextView drugDistributionRecord;
     TitledEditText drugDistributionNumber;
     TitledRadioGroup drugsPickedUp;
     MyTextView drugDistributionDetail;
     TitledButton drugDistributionDate;
-    TitledEditText specifyOther;
+    //TitledEditText specifyOther;
     TitledEditText drugsDispersedDays;
     TitledEditText metformin;
     TitledEditText insulinN;
@@ -74,7 +77,7 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
 
         PAGE_COUNT = 1;
         FORM_NAME = Forms.COMORBIDITIES_DRUG_DISBURSEMENT;
-        FORM = Forms.comorbidities_DrugDisbursementForm;
+        FORM = Forms.comorbidities_drugDisbursementForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -133,27 +136,28 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
         formDate.setTag("formDate");
         aherenceTextView = new MyTextView(context, getResources().getString(R.string.comorbidities_drug_disbursement_adherence_text));
         aherenceTextView.setTypeface(null, Typeface.BOLD);
-        aherence = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_drug_disbursement_adherence), getResources().getStringArray(R.array.comorbidities_drug_disbursement_adherence_options), "", App.VERTICAL, App.VERTICAL);
+        //aherence = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_drug_disbursement_adherence), getResources().getStringArray(R.array.comorbidities_drug_disbursement_adherence_options), "", App.VERTICAL, App.VERTICAL);
+        adherence = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_drug_disbursement_adherence), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         drugDistributionRecord = new MyTextView(context, getResources().getString(R.string.comorbidities_drug_disbursement_drug_distribution));
         drugDistributionRecord.setTypeface(null, Typeface.BOLD);
-        drugDistributionNumber = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_drug_disbursement_drug_distribution_number), "", getResources().getString(R.string.comorbidities_drug_disbursement_drug_distribution_number_range), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        drugDistributionNumber = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_drug_disbursement_drug_distribution_number), "", getResources().getString(R.string.comorbidities_drug_disbursement_drug_distribution_number_range), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         drugsPickedUp = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_drug_disbursement_drugs_picked_up), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL);
         drugDistributionDetail = new MyTextView(context, getResources().getString(R.string.comorbidities_drug_disbursement_drug_dist_detail_text));
         drugDistributionDetail.setTypeface(null, Typeface.BOLD);
         drugDistributionDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_drug_disbursement_drug_dist_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
-        specifyOther = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_drug_disbursement_specify_other), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        //specifyOther = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_drug_disbursement_specify_other), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         drugsDispersedDays = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_drug_disbursement_days_worth), "", getResources().getString(R.string.comorbidities_drug_disbursement_days_worth_range), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         metformin = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_drug_disbursement_number_of_metformin), "", getResources().getString(R.string.comorbidities_drug_disbursement_number_of_metformin_range), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
         insulinN = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_drug_disbursement_number_of_insulinN), "", getResources().getString(R.string.comorbidities_drug_disbursement_number_of_insulin_range), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         insulinR = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_drug_disbursement_number_of_insulinR), "", getResources().getString(R.string.comorbidities_drug_disbursement_number_of_insulin_range), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), aherence.getRadioGroup(), drugDistributionNumber.getEditText(), drugsPickedUp.getRadioGroup(), drugDistributionDate.getButton(), specifyOther.getEditText(),
+        views = new View[]{formDate.getButton(), adherence.getEditText(),/*aherence.getRadioGroup(),*/ drugDistributionNumber.getEditText(), drugsPickedUp.getRadioGroup(), drugDistributionDate.getButton(), /*specifyOther.getEditText(),*/
                 drugsDispersedDays.getEditText(), metformin.getEditText(), insulinN.getEditText(), insulinR.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, aherenceTextView, aherence, drugDistributionRecord, drugDistributionNumber, drugsPickedUp, drugDistributionDetail, drugDistributionDate, specifyOther, drugsDispersedDays, metformin, insulinN, insulinR}};
+                {{formDate, aherenceTextView, adherence,/*aherence,*/ drugDistributionRecord, drugDistributionNumber, drugsPickedUp, drugDistributionDetail, drugDistributionDate, /*specifyOther,*/ drugsDispersedDays, metformin, insulinN, insulinR}};
 
         formDate.getButton().setOnClickListener(this);
         drugDistributionDate.getButton().setOnClickListener(this);
@@ -177,7 +181,7 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
                         int num = Integer.parseInt(drugDistributionNumber.getEditText().getText().toString());
                         if (num < 0) {
                             drugDistributionNumber.getEditText().setError(getString(R.string.comorbidities_drug_disbursement_drug_distribution_number_limit));
-                        } else if (drugDistributionNumber.getEditText().getText().length() > 1 && num > 24) {
+                        } else if (drugDistributionNumber.getEditText().getText().length() > 2 && num > 999) {
                             drugDistributionNumber.getEditText().setError(getString(R.string.comorbidities_drug_disbursement_drug_distribution_number_limit));
                         }
                     }
@@ -358,22 +362,29 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
             error = true;
         }
 
-        if (App.get(specifyOther).isEmpty()) {
+        /*if (App.get(specifyOther).isEmpty()) {
             gotoFirstPage();
             specifyOther.getEditText().setError(getString(R.string.empty_field));
             specifyOther.getEditText().requestFocus();
             error = true;
-        }
+        }*/
 
         if (App.get(drugDistributionNumber).isEmpty()) {
             gotoFirstPage();
             drugDistributionNumber.getEditText().setError(getString(R.string.empty_field));
             drugDistributionNumber.getEditText().requestFocus();
             error = true;
-        } else if (!App.get(drugDistributionNumber).isEmpty() && Integer.parseInt(App.get(drugDistributionNumber)) > 24) {
+        } else if (!App.get(drugDistributionNumber).isEmpty() && Integer.parseInt(App.get(drugDistributionNumber)) > 999) {
             gotoFirstPage();
             drugDistributionNumber.getEditText().setError(getString(R.string.comorbidities_drug_disbursement_drug_distribution_number_limit));
             drugDistributionNumber.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (App.get(adherence).isEmpty()) {
+            gotoFirstPage();
+            adherence.getEditText().setError(getString(R.string.empty_field));
+            adherence.getEditText().requestFocus();
             error = true;
         }
 
@@ -410,10 +421,126 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
     @Override
     public boolean submit() {
 
-        if (validate()) {
+        endTime = new Date();
 
-            resetViews();
-        }
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
+        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+
+        //Alternate of Aherence
+        /*final String treatmentFollowupMHDefensivenessString = App.get(aherence).equals(getResources().getString(R.string.comorbidities_drug_disbursement_adherence_options_no_dose_missed)) ? "RESERVED BEHAVIOUR" :
+                (App.get(aherence).equals(getResources().getString(R.string.comorbidities_drug_disbursement_adherence_options_1to3)) ? "AGGRESSIVE BEHAVIOUR" :
+                        (App.get(aherence).equals(getResources().getString(R.string.comorbidities_drug_disbursement_adherence_options_more_than_3)) ? "NORMAL" : "OPEN BEHAVIOUR"));
+        observations.add(new String[]{"NUMBER OF MISSED MEDICATION DOSES IN LAST MONTH", treatmentFollowupMHDefensivenessString});*/
+
+        observations.add(new String[]{"NUMBER OF MISSED MEDICATION DOSES IN LAST MONTH", App.get(adherence)});
+        observations.add(new String[]{"DRUG DISPERSAL NUMBER", App.get(drugDistributionNumber)});
+        //--> Check this, observations.add(new String[]{"DRUGS RECEIVED BY PATIENT", App.get(drugsPickedUp).equals(getResources().getString(R.string.yes)) ? "true" : "false"});
+        observations.add(new String[]{"NEXT DATE OF DRUG DISPERSAL", App.getSqlDate(secondDateCalendar)});
+        observations.add(new String[]{"DAYS WORTH OF DRUGS DISPERSED", App.get(drugsDispersedDays)});
+        observations.add(new String[]{"METFORMIN DOSE", App.get(metformin)});
+        observations.add(new String[]{"INSULIN N DOSAGE", App.get(insulinN)});
+        observations.add(new String[]{"INSULIN R DOSAGE", App.get(insulinR)});
+
+        AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.submitting_form));
+                        loading.show();
+                    }
+                });
+
+                String result = "";
+                result = serverService.saveEncounterAndObservation(FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                if (result.contains("SUCCESS"))
+                    return "SUCCESS";
+
+                return result;
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                if (result.equals("SUCCESS")) {
+                    resetViews();
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.form_submitted));
+                    Drawable submitIcon = getResources().getDrawable(R.drawable.ic_submit);
+                    alertDialog.setIcon(submitIcon);
+                    int color = App.getColor(context, R.attr.colorAccent);
+                    DrawableCompat.setTint(submitIcon, color);
+                    alertDialog.setTitle(getResources().getString(R.string.title_completed));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else if (result.equals("CONNECTION_ERROR")) {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
+                    alertDialog.setMessage(message);
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+
+
+            }
+        };
+        submissionFormTask.execute("");
 
         return false;
     }

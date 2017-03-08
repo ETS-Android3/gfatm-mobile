@@ -220,6 +220,7 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
 
         preferredTherapyLocationSpinner = new TitledSpinner(mainContent.getContext(), null, getResources().getString(R.string.comorbidities_preferredlocation_id), locationArray, "", App.VERTICAL, true);
         //reasonForDiscontinuation = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_preferredlocation_id), getResources().getStringArray(R.array.comorbidities_location), "Sehatmand Zindagi Center - Korangi", App.HORIZONTAL);
+        showPreferredLocationOrNot();
         gpClinicCode = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_preferredlocation_gpcliniccode), "", getResources().getString(R.string.comorbidities_preferredlocation_gpcliniccode_range), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         nextAppointmentDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_urinedr_nexttestdate), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         //displayAkuadsAgreeOrNot();
@@ -400,7 +401,14 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
         observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
         /*observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
         observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});*/
-        observations.add(new String[]{"HEALTH CLINIC/POST", App.get(gpClinicCode)});
+        observations.add(new String[]{"FOLLOW-UP VISIT TYPE", App.get(typeOfRescreening).equals(getResources().getString(R.string.comorbidities_assessment_form_MH_rescreening_options_6th_session)) ? "SIXTH SESSION" :
+                (App.get(typeOfRescreening).equals(getResources().getString(R.string.comorbidities_assessment_form_MH_rescreening_options_rescreening)) ? "REPEATED SCREENING" :
+                        (App.get(typeOfRescreening).equals(getResources().getString(R.string.comorbidities_assessment_form_MH_rescreening_options_end)) ? "END OF TREATMENT ASSESSMENT" : "OTHER ASSESSMENT REASON"))});
+
+        if(gpClinicCode.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"HEALTH CLINIC/POST", App.get(gpClinicCode)});
+        }
+
         observations.add(new String[]{"SLEEPING LESS (AKUADS)", App.get(akuadsSleep).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
                 (App.get(akuadsSleep).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
                         (App.get(akuadsSleep).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "OTHER"))});
@@ -482,9 +490,13 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
                         (App.get(akuadsUrination).equals(getResources().getString(R.string.comorbidities_MH_severity_level_moderate)) ? "MODERATE" : "SEVERE"))});
         observations.add(new String[]{"CONTINUATION STATUS", App.get(continuationStatus).equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_continuation_status_options_continue)) ? "EXERCISE THERAPY" :
                 (App.get(continuationStatus).equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_continuation_status_options_last)) ? "END OF THERAPY" :
-                        (App.get(continuationStatus).equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_continuation_status_options_referred)) ? "PATIENT REFERRED" : "OTHER"))});
+                        (App.get(continuationStatus).equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_continuation_status_options_referred)) ? "PATIENT REFERRED" : "OTHER CONTINUATION STATUS"))});
         observations.add(new String[]{"THERAPY CONSENT", App.get(akuadsAgree).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        observations.add(new String[]{"FACILITY REFERRED TO", App.get(preferredTherapyLocationSpinner)});
+
+        if(preferredTherapyLocationSpinner.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"FACILITY REFERRED TO", App.get(preferredTherapyLocationSpinner)});
+        }
+        
         observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDateTime(secondDateCalendar)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
@@ -503,8 +515,10 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
 
                 String result = "";
                 result = serverService.saveEncounterAndObservation(FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}));
-                return result;
+                if (result.contains("SUCCESS"))
+                    return "SUCCESS";
 
+                return result;
             }
 
             @Override
@@ -652,6 +666,7 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
 
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         nextAppointmentDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+        showPreferredLocationOrNot();
     }
 
     @Override
@@ -676,8 +691,10 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
             //displayAkuadsAgreeOrNot();
         } else if (radioGroup == akuadsSeverity.getRadioGroup()) {
             //displayAkuadsAgreeOrNot();
-        } else if (radioGroup == akuadsAgree.getRadioGroup()) {
+        } /*else if (radioGroup == akuadsAgree.getRadioGroup()) {
             //displayPreferredTherapyLocationOrNot();
+        }*/ else if (radioGroup == akuadsAgree.getRadioGroup()) {
+            showPreferredLocationOrNot();
         }
     }
 
@@ -735,6 +752,15 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
         }
         else {
             akuadsSeverity.getRadioGroup().check((akuadsSeverity.getRadioGroup().getChildAt(3)).getId());
+        }
+    }
+
+    void showPreferredLocationOrNot() {
+        if (akuadsAgree.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.yes))) {
+            preferredTherapyLocationSpinner.setVisibility(View.VISIBLE);
+        }
+        else {
+            preferredTherapyLocationSpinner.setVisibility(View.GONE);
         }
     }
 

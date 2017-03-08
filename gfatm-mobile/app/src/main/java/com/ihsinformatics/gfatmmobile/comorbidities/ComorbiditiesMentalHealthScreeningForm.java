@@ -495,8 +495,10 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
 
                 String result = "";
                 result = serverService.saveEncounterAndObservation(FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}));
-                return result;
+                if (result.contains("SUCCESS"))
+                    return "SUCCESS";
 
+                return result;
             }
 
             @Override
