@@ -141,35 +141,21 @@ public class ChildhoodTbScreeningLocation extends AbstractFormActivity implement
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
 
-        screeningReferral = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_screening_referral),getResources().getStringArray(R.array.ctb_screening_referral_list),null,App.HORIZONTAL,App.VERTICAL,true);
+        screeningReferral = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_screening_referral),getResources().getStringArray(R.array.ctb_screening_referral_list),getResources().getString(R.string.ctb_screening),App.HORIZONTAL,App.VERTICAL,true);
         referralSource = new TitledSpinner(context,null,getResources().getString(R.string.ctb_patient_referral_source),getResources().getStringArray(R.array.ctb_patient_referral_source_list),null,App.VERTICAL);
-        referralSource.setVisibility(View.GONE);
         facilityDepartment = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_facility_department),getResources().getStringArray(R.array.ctb_facility_department_list),null,App.HORIZONTAL,App.VERTICAL);
-        facilityDepartment.setVisibility(View.GONE);
         otherFacilityDeparment = new TitledEditText(context,null,getResources().getString(R.string.ctb_other_specify),"","",20,RegexUtil.ALPHA_FILTER,InputType.TYPE_CLASS_TEXT,App.VERTICAL,false);
-        otherFacilityDeparment.setVisibility(View.GONE);
         referralWithinOpd = new TitledSpinner(context,null,getResources().getString(R.string.ctb_referral_inside),getResources().getStringArray(R.array.ctb_opd_ward_section_list),null,App.VERTICAL);
-        referralWithinOpd.setVisibility(View.GONE);
         referralOutsideOpd = new TitledSpinner(context,null,getResources().getString(R.string.ctb_referral_outside),getResources().getStringArray(R.array.ctb_referral_outside_list),null,App.VERTICAL);
-        referralOutsideOpd.setVisibility(View.GONE);
         referralOutsideOther = new TitledEditText(context,null,getResources().getString(R.string.ctb_other_specify),"","",20,RegexUtil.ALPHA_FILTER,InputType.TYPE_CLASS_TEXT,App.VERTICAL,false);
-        referralOutsideOther.setVisibility(View.GONE);
         hearAboutUs = new TitledSpinner(context,null,getResources().getString(R.string.ctb_hear_about_us),getResources().getStringArray(R.array.ctb_hear_about_us_list),null,App.VERTICAL);
-        hearAboutUs.setVisibility(View.GONE);
         hearAboutUsOther = new TitledEditText(context,null,getResources().getString(R.string.ctb_other_specify),"","",20,RegexUtil.ALPHA_FILTER,InputType.TYPE_CLASS_TEXT,App.VERTICAL,false);
-        hearAboutUsOther.setVisibility(View.GONE);
         patientEnrolledTb = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_patient_enrolled_tb),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL);
-        patientEnrolledTb.setVisibility(View.GONE);
         contactIdType = new TitledCheckBoxes(context,null,getResources().getString(R.string.ctb_contact_id_type),getResources().getStringArray(R.array.ctb_patient_type_id_list),null,App.VERTICAL,App.VERTICAL);
-        contactIdType.setVisibility(View.GONE);
         contactPatientId = new TitledEditText(context,null,getResources().getString(R.string.ctb_contact_patient_id),"","",20,RegexUtil.ALPHANUMERIC_FILTER,InputType.TYPE_CLASS_TEXT,App.VERTICAL,false);
-        contactPatientId.setVisibility(View.GONE);
         contactExternalId = new TitledEditText(context,null,getResources().getString(R.string.ctb_contact_external_id),"","",20,RegexUtil.ALPHANUMERIC_FILTER,InputType.TYPE_CLASS_TEXT,App.VERTICAL,false);
-        contactExternalId.setVisibility(View.GONE);
         contactExternalIdHospital = new TitledEditText(context,null,getResources().getString(R.string.ctb_contact_external_id_hospital),"","",20,RegexUtil.ALPHANUMERIC_FILTER,InputType.TYPE_CLASS_TEXT,App.VERTICAL,false);
-        contactExternalIdHospital.setVisibility(View.GONE);
         contactTbRegistrationNo = new TitledEditText(context,null,getResources().getString(R.string.ctb_contact_tb_registration_no),"","",20,RegexUtil.ALPHANUMERIC_FILTER,InputType.TYPE_CLASS_TEXT,App.VERTICAL,false);
-        contactTbRegistrationNo.setVisibility(View.GONE);
 
 
 
@@ -292,17 +278,16 @@ public class ChildhoodTbScreeningLocation extends AbstractFormActivity implement
         if (referralSource.getVisibility() == View.VISIBLE){
             observations.add(new String[]{"PATIENT REFERRAL SOURCE", App.get(referralSource).equals(getResources().getString(R.string.ctb_doctor_healthworker_in_hospital)) ? "CLINICAL OFFICER/DOCTOR" :
                     (App.get(referralSource).equals(getResources().getString(R.string.ctb_doctor_healthworker_out_hospital)) ? "PRIVATE PRACTIONER" :
-                            (App.get(referralSource).equals(getResources().getString(R.string.ctb_child_tested_for_tb)) ? "SELF" :
-                                    (App.get(referralSource).equals(getResources().getString(R.string.ctb_family_member_tb_patient)) ? "TUBERCULOSIS CONTACT" : "OTHER")))});
+                            (App.get(referralSource).equals(getResources().getString(R.string.ctb_child_tested_for_tb)) ? "SELF" : "TUBERCULOSIS CONTACT"))});
         }
 
         if (facilityDepartment.getVisibility() == View.VISIBLE){
             observations.add(new String[]{"HEALTH FACILITY DEPARTMENT", App.get(facilityDepartment).equals(getResources().getString(R.string.ctb_opd_clinic)) ? "OUTPATIENT DEPARTMENT" :
-                    (App.get(facilityDepartment).equals(getResources().getString(R.string.ctb_ward)) ? "OBSERVATION WARD" : "OTHER FACILITY SECTION")});
+                    (App.get(facilityDepartment).equals(getResources().getString(R.string.ctb_ward)) ? "OBSERVATION WARD" : "OTHER FACILITY DEPARTMENT")});
         }
 
         if (otherFacilityDeparment.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER FACILITY SECTION", App.get(otherFacilityDeparment)});
+            observations.add(new String[]{"OTHER FACILITY DEPARTMENT", App.get(otherFacilityDeparment)});
 
         if (referralWithinOpd.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OUTPATIENT DEPARTMENT", App.get(referralWithinOpd).equals(getResources().getString(R.string.ctb_general_medicine_filter_clinic)) ? "GENERAL MEDICINE DEPARTMENT" :
@@ -604,7 +589,19 @@ public class ChildhoodTbScreeningLocation extends AbstractFormActivity implement
             snackbar.dismiss();
 
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-
+        referralSource.setVisibility(View.GONE);
+        otherFacilityDeparment.setVisibility(View.GONE);
+        referralWithinOpd.setVisibility(View.GONE);
+        referralOutsideOpd.setVisibility(View.GONE);
+        referralOutsideOther.setVisibility(View.GONE);
+        hearAboutUs.setVisibility(View.GONE);
+        hearAboutUsOther.setVisibility(View.GONE);
+        patientEnrolledTb.setVisibility(View.GONE);
+        contactIdType.setVisibility(View.GONE);
+        contactPatientId.setVisibility(View.GONE);
+        contactExternalId.setVisibility(View.GONE);
+        contactExternalIdHospital.setVisibility(View.GONE);
+        contactTbRegistrationNo.setVisibility(View.GONE);
     }
 
 

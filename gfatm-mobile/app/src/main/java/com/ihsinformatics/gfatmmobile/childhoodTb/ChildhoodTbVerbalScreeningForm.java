@@ -310,7 +310,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
             observations.add(new String[]{"HOSPITAL SECTION", App.get(facility_section).equals(getResources().getString(R.string.ctb_opd_clinic)) ? "OPD CLINIC SCREENING" :
                     (App.get(facility_section).equals(getResources().getString(R.string.ctb_ward)) ? "WARD SCREENING" :
                             (App.get(facility_section).equals(getResources().getString(R.string.ctb_registration_desk)) ? "REGISTRATION DESK" :
-                                    (App.get(facility_section).equals(getResources().getString(R.string.ctb_xray_van)) ? "X-RAY VAN" : "OTHER")))});
+                                    (App.get(facility_section).equals(getResources().getString(R.string.ctb_xray_van)) ? "X-RAY VAN" : "OTHER FACILITY SECTION")))});
         }
 
         if (facility_section_other.getVisibility() == View.VISIBLE)
@@ -390,7 +390,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
             else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_maternal_grandmother)))
                 closeContactString = closeContactString + "MATERNAL GRANDMOTHER" + " ; ";
             else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_other_title)))
-                closeContactString = closeContactString + "OTHER" + "OTHER CONTACT TYPE" + " ; ";
+                closeContactString = closeContactString + "OTHER CONTACT TYPE" + " ; ";
         }
         observations.add(new String[]{"CLOSE CONTACT WITH PATIENT", closeContactString});
 
