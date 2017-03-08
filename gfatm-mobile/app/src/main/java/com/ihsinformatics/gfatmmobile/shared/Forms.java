@@ -29,6 +29,7 @@ import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesDiabetesMellitu
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesDiabetesTreatmentFollowupForm;
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesDiabetesTreatmentInitiationForm;
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesDrugDisbursement;
+import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesEndOfTreatmentMentalHealthForm;
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesHbA1CForm;
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesLipidTestForm;
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesMentalHealthAssessmentForm;
@@ -256,8 +257,8 @@ public class Forms{
     public static FormsObject comorbidities_diabetesEyeScreeningForm = new FormsObject(COMORBIDITIES_DIABETES_EYE_SCREENING_FORM, ComorbiditiesDiabetesEyeScreeningForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
     public static FormsObject comorbidities_treatmentFollowupMHForm = new FormsObject(COMORBIDITIES_TREATMENT_FOLLOWUP_MENTAL_HEALTH_FORM, ComorbiditiesMentalHealthTreatmentFollowupForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
     public static FormsObject comorbidities_assessmentFormMH = new FormsObject(COMORBIDITIES_ASSESSMENT_FORM_MENTAL_HEALTH, ComorbiditiesMentalHealthAssessmentForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
-    //public static FormsObject comorbidities_EndOfTreatmentFormMH = new FormsObject(COMORBIDITIES_END_OF_TREATMENT_MENTAL_HEALTH, ComorbiditiesEndOfTreatmentMentalHealthForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
-    public static FormsObject comorbidities_DrugDisbursementForm = new FormsObject(COMORBIDITIES_DRUG_DISBURSEMENT, ComorbiditiesDrugDisbursement.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static FormsObject comorbidities_endOfTreatmentFormMH = new FormsObject(COMORBIDITIES_END_OF_TREATMENT_MENTAL_HEALTH, ComorbiditiesEndOfTreatmentMentalHealthForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static FormsObject comorbidities_drugDisbursementForm = new FormsObject(COMORBIDITIES_DRUG_DISBURSEMENT, ComorbiditiesDrugDisbursement.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
 
     /********************************************************************************************************************************/
 
@@ -332,8 +333,8 @@ public class Forms{
         comorbiditiesList.add(comorbidities_diabetesEyeScreeningForm);
         comorbiditiesList.add(comorbidities_treatmentFollowupMHForm);
         comorbiditiesList.add(comorbidities_assessmentFormMH);
-        //comorbiditiesList.add(comorbidities_EndOfTreatmentFormMH);
-        comorbiditiesList.add(comorbidities_DrugDisbursementForm);
+        comorbiditiesList.add(comorbidities_endOfTreatmentFormMH);
+        comorbiditiesList.add(comorbidities_drugDisbursementForm);
 
         return comorbiditiesList;
 
