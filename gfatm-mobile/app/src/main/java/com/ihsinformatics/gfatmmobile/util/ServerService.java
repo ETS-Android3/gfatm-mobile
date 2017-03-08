@@ -790,9 +790,12 @@ public class ServerService {
                         App.setPatientId(getPatientSystemIdByUuidLocalDB(uuid));
                         App.setPatient(patient);
 
-                        Object[][] encounterTypes = getAllEncounterTypesFromLocalDB();
+                        Object[][] encounterTypes = getEncounterTypesFromLocalDBByProgramName(App.getProgram());
 
                         for (Object[] encType : encounterTypes) {
+
+                            if (!String.valueOf(encType[1]).startsWith(App.getProgram()))
+                                continue;
 
                             JSONObject jsonObject = httpGet.getLatestEncounter(App.getPatient().getUuid(), String.valueOf(encType[0]));
                             if (jsonObject == null)
@@ -1484,9 +1487,9 @@ public class ServerService {
         return "SUCCESS";
     }
 
-    public Object[][] getAllEncounterTypesFromLocalDB() {
+    public Object[][] getEncounterTypesFromLocalDBByProgramName(String programName) {
 
-        Object[][] encounterTypes = dbUtil.getFormTableData("select uuid from " + Metadata.ENCOUNTER_TYPE);
+        Object[][] encounterTypes = dbUtil.getFormTableData("select uuid, encounter_type from " + Metadata.ENCOUNTER_TYPE + " where encounter_type like '" + programName + "%'");
         return encounterTypes;
 
     }
@@ -1569,8 +1572,8 @@ public class ServerService {
         return dbUtil.delete(Metadata.OBS, "encounter_id=?", new String[]{String.valueOf(encounter[0][0])});
     }
 
-    public boolean deleteEncounter(String patientId) {
-        Object[][] encounter = dbUtil.getFormTableData("select encounter_id from " + Metadata.ENCOUNTER + " where patientId='" + patientId + "'");
+    public boolean deleteEncounterByProgram(String patientId, String programName) {
+        Object[][] encounter = dbUtil.getFormTableData("select encounter_id from " + Metadata.ENCOUNTER + " where patientId='" + patientId + "' and encounterType like '" + programName + "%'");
         if (encounter.length < 1)
             return false;
         for (int i = 0; i < encounter.length; i++) {
@@ -1927,8 +1930,8 @@ public class ServerService {
                     App.setPatientId(getPatientSystemIdByUuidLocalDB(uuid));
                     App.setPatient(patient);
 
-                    Object[][] encounterTypes = getAllEncounterTypesFromLocalDB();
-                    deleteEncounter(App.getPatientId());
+                    Object[][] encounterTypes = getEncounterTypesFromLocalDBByProgramName(App.getProgram());
+                    deleteEncounterByProgram(App.getPatientId(), App.getProgram());
 
                     for (Object[] encType : encounterTypes) {
 

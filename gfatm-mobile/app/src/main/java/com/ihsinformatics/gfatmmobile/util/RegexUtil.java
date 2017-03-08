@@ -40,6 +40,7 @@ public class RegexUtil {
     public static final String floatingPointPatternForThreeDecimalPlaces = "^[0-9]+.{0,3}[0-9]";
     public static final String floatingPointPatternForTwoDecimalPlaces = "^[0-9]+.{0,2}[0-9]";
     public static final String testIDPattern = "^{0,1}[0-9]{7,7}[-.]{0,1}[0-9]";
+    public static final String mobileNumPattern = "[0][3][0-9]{9}";
 
     public static final int idLength = 7;
     public static final int mobileNumberLength = 11;
@@ -462,6 +463,17 @@ public class RegexUtil {
     public static boolean isCorrectTestID(String string) {
         try {
             return string.matches(testIDPattern);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean isMobileNumber(String string) {
+        try {
+            if (string.length() != mobileNumberLength)
+                return false;
+            return string.matches(mobileNumPattern);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
