@@ -608,7 +608,7 @@ public class MainActivity extends AppCompatActivity
                     //resetViews();
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
-                    alertDialog.setMessage(getResources().getString(R.string.form_submitted));
+                    alertDialog.setMessage(getResources().getString(R.string.patient_updated));
                     Drawable submitIcon = getResources().getDrawable(R.drawable.ic_submit);
                     alertDialog.setIcon(submitIcon);
                     int color = App.getColor(context, R.attr.colorAccent);
