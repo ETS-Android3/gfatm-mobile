@@ -235,7 +235,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
             }else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
-                formDateCalendar = App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss"));
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "yyyy-MM-dd'T'HH:mm:ss"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
