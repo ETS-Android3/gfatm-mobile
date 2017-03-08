@@ -126,7 +126,7 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         ppaScore = new TitledEditText(context, null, getResources().getString(R.string.ctb_ppa_score), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
-        views = new View[]{formDate.getButton()};
+        views = new View[]{formDate.getButton(),ppaScore.getEditText()};
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formDate, ppaScore}};
@@ -236,7 +236,7 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
         observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
         /*observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
         observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});*/
-        observations.add(new String[]{"CHILD\'S PPA SCORE", App.get(ppaScore)});
+        observations.add(new String[]{"PPA SCORE", App.get(ppaScore)});
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
             protected String doInBackground(String... params) {
