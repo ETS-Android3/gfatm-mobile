@@ -109,18 +109,6 @@ public class MainActivity extends AppCompatActivity
         TextView nav_userRole = (TextView) hView.findViewById(R.id.menuUserRoles);
         nav_userRole.setText(App.getRoles());
 
-        String title = toolbar.getTitle() + " (" + App.getVersion() + ")";
-        if (App.getMode().equalsIgnoreCase("OFFLINE")) {
-            if (!title.contains(" ----- Offline Mode"))
-                title = title + " ----- Offline Mode";
-        } else {
-            if (!title.contains(" ----- Offline Mode"))
-                title.replace(" ----- Offline Mode", "");
-        }
-        getSupportActionBar().setTitle(title);
-        String subtitle = getResources().getString(R.string.program) + " " + App.getProgram() + "  |  " + "Location:" + " " + App.getLocation();
-        getSupportActionBar().setSubtitle(subtitle);
-
         change = (ImageView) findViewById(R.id.change);
         int color = App.getColor(this, R.attr.colorBackground);
         DrawableCompat.setTint(change.getDrawable(), color);
@@ -129,6 +117,25 @@ public class MainActivity extends AppCompatActivity
         update = (ImageView) findViewById(R.id.update);
         DrawableCompat.setTint(update.getDrawable(), color);
         update.setOnTouchListener(this);
+
+        String title = toolbar.getTitle() + " (" + App.getVersion() + ")";
+        if (App.getMode().equalsIgnoreCase("OFFLINE")) {
+            if (!title.contains(" ----- Offline Mode"))
+                title = title + " ----- Offline Mode";
+            update.setVisibility(View.GONE);
+        } else {
+            if (!title.contains(" ----- Offline Mode"))
+                title.replace(" ----- Offline Mode", "");
+
+            if (App.getPatient() == null)
+                update.setVisibility(View.GONE);
+            else
+                update.setVisibility(View.VISIBLE);
+
+        }
+        getSupportActionBar().setTitle(title);
+        String subtitle = getResources().getString(R.string.program) + " " + App.getProgram() + "  |  " + "Location:" + " " + App.getLocation();
+        getSupportActionBar().setSubtitle(subtitle);
 
         buttonLayout = (LinearLayout) findViewById(R.id.buttonLayout);
         programLayout = (LinearLayout) findViewById(R.id.programLayout);
@@ -222,9 +229,14 @@ public class MainActivity extends AppCompatActivity
         if (App.getMode().equalsIgnoreCase("OFFLINE")) {
             if (!title.contains(" ----- Offline Mode"))
                 title = title + " ----- Offline Mode";
+            update.setVisibility(View.GONE);
         } else {
             if (!title.contains(" ----- Offline Mode"))
                 title.replace(" ----- Offline Mode", "");
+            if (App.getPatient() == null)
+                update.setVisibility(View.GONE);
+            else
+                update.setVisibility(View.VISIBLE);
         }
         getSupportActionBar().setTitle(title);
 
@@ -578,6 +590,7 @@ public class MainActivity extends AppCompatActivity
 
                 String result = serverService.updatePatientDetails(App.getPatient().getPatientId());
                 return result;
+                //return "SUCCESS";
             }
 
             @Override
