@@ -175,6 +175,11 @@ public class PmdtPatientRegistrationForm extends AbstractFormActivity {
     }
 
     @Override
+    public void refill(int encounterId) {
+
+    }
+
+    @Override
     public boolean onLongClick(View v) {
         return false;
     }

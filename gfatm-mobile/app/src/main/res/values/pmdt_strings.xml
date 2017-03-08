@@ -38,20 +38,321 @@
     <string name="pmdt_person_past">Has this person ever been a Health Worker?</string>
     <string name="pmdt_person_healthworker">Is this person a Health Worker?</string>
     <string name="pmdt_occupation">Occupation</string>
-    <string name="pmdt_other_occupation">If occupation \'other\', then specify:</string>
-    <string name="pmdt_administer_injections">Does the Treatment Supporter know how to administer injections?</string>
+    <string name="pmdt_other_occupation">If occupation \'other\', then specify</string>
+    <string name="pmdt_know_administer_injections">Does the Treatment Supporter know how to administer injections?</string>
     <string name="pmdt_treatment_supporter_training">Has the Treatment Supporter been trained at facility?</string>
     <string name="pmdt_training_facility">If yes, then which facility</string>
     <string name="pmdt_trainer">If yes, then trained by</string>
     <string name="pmdt_date_training">If yes, then date of training</string>
     <string name="pmdt_mother_tongue">Languages spoken by the Treatment Supporter</string>
-    <string name="pmdt_mother_tongue_other">If other language, then specify:</string>
+    <string name="pmdt_mother_tongue_other">If other language, then specify</string>
     <string name="pmdt_id">ID</string>
     <string name="pmdt_password">Password</string>
 
+    <!-- Basic Management Unit Visit -->
+    <string name="pmdt_visit_date">Date of Visit</string>
+    <string name="pmdt_district">District</string>
+    <string name="pmdt_town_taluka_tehsil">Town/Taluka/Tehsil</string>
+    <string name="pmdt_city_uc_sector">City/Sector/UC/Village</string>
+    <string name="pmdt_basic_management_unit_visited">Name of Basic Management unit visited</string>
+    <string name="pmdt_doctor_name_visited">Name of doctor visited</string>
+    <string name="pmdt_number_failure_cases">Number of failure cases found</string>
+    <string name="pmdt_facility_referred">To which facility have the patients been referred?</string>
+    <string name="pmdt_number_patients_enrolled">Number of patients enrolled in PMDT</string>
+
+    <!-- Patient Assignment Form -->
+    <string name="pmdt_treatment_supporter_id">Treatment Supporter ID</string>
+    <string name="pmdt_treatment_supporter_first_name">Treatment Supporter First Name</string>
+    <string name="pmdt_treatment_supporter_last_name">Treatment Supporter Last Name</string>
+    <string name="pmdt_treatment_supporter_household_member">Is the Treatment Supporter a household member of the patient?</string>
+    <string name="pmdt_treatment_supporter_patient_relationship">Treatment Supporter relationship with the patient</string>
+    <string name="pmdt_other_relationship">If relationship other, then specify</string>
+    <string name="pmdt_reason_having_treatment_supporter">Reason for having household member as a Treatment Supporter</string>
+    <string name="pmdt_other_reason_having_treatment_supporter">Other reason for having household member as a Treatment Supporter</string>
+    <string name="pmdt_self">Self</string>
+    <string name="pmdt_mother">Mother</string>
+    <string name="pmdt_father">Father</string>
+    <string name="pmdt_husband">Husband</string>
+    <string name="pmdt_spouse">Spouse</string>
+    <string name="pmdt_wife">Wife</string>
+    <string name="pmdt_sister">Sister</string>
+    <string name="pmdt_brother">Brother</string>
+    <string name="pmdt_nephew">Nephew</string>
+    <string name="pmdt_neice">Neice</string>
+    <string name="pmdt_paternal_grandfather">Paternal Grandfather</string>
+    <string name="pmdt_paternal_grandmother">Paternal Grandmother</string>
+    <string name="pmdt_maternal_grandfather">Maternal Grandfather</string>
+    <string name="pmdt_maternal_grandmother">Maternal Grandmother</string>
+    <string name="pmdt_grandson">Grandson</string>
+    <string name="pmdt_granddaughter">Granddaughter</string>
+    <string name="pmdt_father_in_law">Father in law</string>
+    <string name="pmdt_mother_in_law">Mother in law</string>
+    <string name="pmdt_daughter_in_law">Daughter in law</string>
+    <string name="pmdt_son_in_law">Son in law</string>
+    <string name="pmdt_brother_in_law">Brother in law</string>
+    <string name="pmdt_sister_in_law">Sister in law</string>
+    <string name="pmdt_uncle">Uncle</string>
+    <string name="pmdt_aunt">Aunt</string>
+    <string name="pmdt_son">Son</string>
+    <string name="pmdt_daughter">Daughter</string>
+    <string name="pmdt_cousin">Cousin</string>
+    <string-array name="pmdt_treatment_supporter_patient_relation">
+        <item>@string/pmdt_mother</item>
+        <item>@string/pmdt_father</item>
+        <item>@string/pmdt_husband</item>
+        <item>@string/pmdt_wife</item>
+        <item>@string/pmdt_son</item>
+        <item>@string/pmdt_daughter</item>
+        <item>@string/pmdt_brother</item>
+        <item>@string/pmdt_sister</item>
+        <item>@string/pmdt_nephew</item>
+        <item>@string/pmdt_neice</item>
+        <item>@string/pmdt_maternal_grandmother</item>
+        <item>@string/pmdt_maternal_grandfather</item>
+        <item>@string/pmdt_paternal_grandmother</item>
+        <item>@string/pmdt_paternal_grandfather</item>
+        <item>@string/pmdt_grandson</item>
+        <item>@string/pmdt_granddaughter</item>
+        <item>@string/pmdt_father_in_law</item>
+        <item>@string/pmdt_mother_in_law</item>
+        <item>@string/pmdt_daughter_in_law</item>
+        <item>@string/pmdt_son_in_law</item>
+        <item>@string/pmdt_brother_in_law</item>
+        <item>@string/pmdt_sister_in_law</item>
+        <item>@string/pmdt_uncle</item>
+        <item>@string/pmdt_aunt</item>
+        <item>@string/pmdt_cousin</item>
+        <item>@string/pmdt_other</item>
+    </string-array>
+    <string name="pmdt_family_refused_treatment_supporter">Family refused to have a Treatment Supporter who is not a household member</string>
+    <string name="pmdt_patient_refused_treatment_supporter">Patient refused to have a Treatment Supporter who is not a household member</string>
+    <string name="pmdt_unable_to_appoint_treatment_supporter">Unable to appoint Treatment Supporter as incentive not being provided</string>
+    <string-array name="pmdt_reasons_for_having_treatment_supporter">
+        <item>@string/pmdt_family_refused_treatment_supporter</item>
+        <item>@string/pmdt_patient_refused_treatment_supporter</item>
+        <item>@string/pmdt_unable_to_appoint_treatment_supporter</item>
+        <item>@string/pmdt_other</item>
+    </string-array>
+
+
+    <!-- Patient Dissociation -->
+    <string name="pmdt_reason_dissociation">Reason for dissociation</string>
+    <string name="pmdt_patient_not_satisfied">Patient is not satisfied with the Treatment Supporter</string>
+    <string name="pmdt_supervisor_not_satisfied">Supervisor is not satisfied with Treatment Supporter\'s performance</string>
+    <string name="pmdt_treatment_outcome_declared">Treatment outcome has been declared for the patient</string>
+    <string name="pmdt_treatment_supporter_unwilling_patient">Treatment Supporter is unwilling to continue with this patient</string>
+    <string name="pmdt_treatment_supporter_relocated">Treatment Supporter has relocated</string>
+    <string name="pmdt_patient_relocated">Patient has relocated</string>
+    <string name="pmdt_treatment_supporter_shifted">Treatment Supporter has been shifted to another program location</string>
+    <string name="pmdt_patient_transferred">Patient has been transferred to another program location</string>
+    <string name="pmdt_treatment_supporter_unwilling_program">Treatment Supporter is unwilling to continue with the program</string>
+    <string name="pmdt_treatment_supporter_leave_program">Treatment Supporter has been asked to leave the program</string>
+    <string-array name="pmdt_reasons_dissociation">
+        <item>@string/pmdt_patient_not_satisfied</item>
+        <item>@string/pmdt_supervisor_not_satisfied</item>
+        <item>@string/pmdt_treatment_outcome_declared</item>
+        <item>@string/pmdt_treatment_supporter_unwilling_patient</item>
+        <item>@string/pmdt_treatment_supporter_relocated</item>
+        <item>@string/pmdt_patient_relocated</item>
+        <item>@string/pmdt_treatment_supporter_shifted</item>
+        <item>@string/pmdt_patient_transferred</item>
+        <item>@string/pmdt_treatment_supporter_unwilling_program</item>
+        <item>@string/pmdt_treatment_supporter_leave_program</item>
+        <item>@string/pmdt_other</item>
+    </string-array>
+    <string name="pmdt_reason_dissociation_other">If reason \'other\', then specify</string>
+
+    <!-- Daily Treatment Monitoring -->
+    <string name="pmdt_reporting_date">Date of reporting</string>
+    <string name="pmdt_day_of_treatment">Which day of treatment?</string>
+    <string name="pmdt_treatment_day_type">Is it a fully observed day, missed prescribed day, or an incomplete prescribed day?</string>
+    <string name="pmdt_patient_adverse_event">Does the patient have an adverse event?</string>
+    <string name="pmdt_fully_observed_day">Fully Observed day</string>
+    <string name="pmdt_missed_prescribed_day">Missed prescribed day</string>
+    <string name="pmdt_incomplete_prescribed_day">Incomplete prescribed day</string>
+    <string-array name="pmdt_types_treatment_day">
+        <item>@string/pmdt_fully_observed_day</item>
+        <item>@string/pmdt_missed_prescribed_day</item>
+        <item>@string/pmdt_incomplete_prescribed_day</item>
+    </string-array>
+
+    <!-- Treatment Coordinator Monitoring -->
+    <string name="pmdt_patient_understand_tb_regimen">Does the patient understand his/her TB regimen (drug names and doses)?</string>
+    <string name="pmdt_patient_know_side_effects">Does the patient know about common side effects of his/her TB drugs?</string>
+    <string name="pmdt_treatment_supporter_provide_dot">How often does the patient\'s Treatment Supporter provide DOT?</string>
+    <string name="pmdt_treatment_supporter_provide_dot_irregularly">If the Treatment Supporter provides DOT irregularly, then</string>
+    <string name="pmdt_place_dot">Place where the Treatment Supporter provides DOT</string>
+    <string name="pmdt_other_place_dot">If other, then specify</string>
+    <string name="pmdt_dot_last_prescribed_day">Did the Treatment Supporter provide DOT on last prescribed day prior to this visit?</string>
+    <string name="pmdt_administer_injections">Does the Treatment Supporter administer injectables?</string>
+    <string name="pmdt_missed_dose">Did the patient miss any drug dose since the last monitoring visit?</string>
+    <string name="pmdt_reason_missed_dose">If yes, then why</string>
+    <string name="pmdt_other_reason_missed_dose">If reason for missed dose \'other\', then specify</string>
+    <string name="pmdt_practice_infection_control">Does the Treatment Supporter practice appropriate infection control measures when he visits the patient?</string>
+    <string name="pmdt_family_practice_infection_control">Does the patient and his/her family practice infection control measures at home?</string>
+    <string name="pmdt_wait_after_administer_drug">How long does the Treatment Supporter wait after administering the drugs?</string>
+    <string name="pmdt_register_household_members">Does the Treatment Supporter register patient\'s household members for contact screening?</string>
+    <string name="pmdt_contact_screening_performed_date">If yes, then when was the last contact screening performed? (an estimated date)</string>
+    <string name="pmdt_patient_satisfied">Is the patient satisfed with the attitude of his/her Treatment Supporter?</string>
+    <string name="pmdt_sputum_submitted_last_visit">Did the patient submit sputum on his/her last clinic visit?</string>
+    <string name="pmdt_reason_not_submitted_sputum">If no, then why?</string>
+    <string name="pmdt_other_reason_not_submitted_sputum">Other reason for non submission of sputum</string>
+    <string name="pmdt_food_basket_incentice_last_month">Did the patient receive food basket incentive for last month?</string>
+    <string name="pmdt_adverse_event_last_visit">Did the patient report any adverse events to the Treatment Supporter since last monitoring visit?</string>
+    <string name="pmdt_action_adverse_event">If yes, then what action was taken by the Treatment Supporter?</string>
+    <string name="pmdt_other_action_adverse_event">If action \'other\', then specify</string>
+    <string name="pmdt_address_social_problems">Has the Treatment Supporter addressed any social problems that the patient faced?</string>
+    <string name="pmdt_refer_counseling">Refer for counseling?</string>
+    <string name="pmdt_counseling_type">If yes, then for what?</string>
+    <string name="pmdt_other_counseling_type">If other, then specify</string>
+    <string name="pmdt_treatment_coordinator_notes">Notes</string>
+
+    <string name="pmdt_not_at_all">Not at all</string>
+    <string name="pmdt_regularly">Regularly</string>
+    <string name="pmdt_irregularly">Irregularly</string>
+    <!-- unknwon already created-->
+    <string-array name="pmdt_how_often_provide_dot">
+        <item>@string/pmdt_not_at_all</item>
+        <item>@string/pmdt_regularly</item>
+        <item>@string/pmdt_irregularly</item>
+        <item>@string/unknown</item>
+    </string-array>
+
+    <string name="pmdt_six_days_per_week">6 days per week</string>
+    <string name="pmdt_every_other_day">Every other day</string>
+    <string name="pmdt_three_days_per_week">3 days per week</string>
+    <string name="pmdt_four_five_days_a_week">4-5 days per week</string>
+    <string name="pmdt_two_three_days_a_week">2-3 days a week</string>
+    <string name="pmdt_once_a_week">Once a week</string>
+    <string name="pmdt_every_two_weeks">Every two weeks</string>
+    <string name="pmdt_once_a_month">Once a month</string>
+    <string-array name="irregular_dot_types">
+        <item>@string/pmdt_six_days_per_week</item>
+        <item>@string/pmdt_every_other_day</item>
+        <item>@string/pmdt_three_days_per_week</item>
+        <item>@string/pmdt_four_five_days_a_week</item>
+        <item>@string/pmdt_two_three_days_a_week</item>
+        <item>@string/pmdt_once_a_week</item>
+        <item>@string/pmdt_every_two_weeks</item>
+        <item>@string/pmdt_once_a_month</item>
+    </string-array>
+
+    <string name="pmdt_patient_home">Patient\'s home</string>
+    <string name="pmdt_treatment_supporter_workplace">Treatment Supporter\'s workplace</string>
+    <string name="pmdt_patient_workplace">Patient\'s workplace</string>
+    <!-- other - already created-->
+    <string-array name="pmdt_places_dot_provided">
+        <item>@string/pmdt_patient_home</item>
+        <item>@string/pmdt_treatment_supporter_workplace</item>
+        <item>@string/pmdt_patient_workplace</item>
+        <item>@string/pmdt_other</item>
+    </string-array>
+
+    <string name="pmdt_not_applicable">Not Applicable</string>
+    <string-array name="pmdt_yes_no_not_applicable">
+        <item>@string/yes</item>
+        <item>@string/no</item>
+        <item>@string/pmdt_not_applicable</item>
+    </string-array>
+
+    <string-array name="pmdt_yes_no_refused">
+        <item>@string/yes</item>
+        <item>@string/no</item>
+        <item>@string/pmdt_refused</item>
+    </string-array>
+
+    <string-array name="pmdt_missed_drug_options">
+        <item>@string/yes</item>
+        <item>@string/no</item>
+        <item>@string/pmdt_refused</item>
+        <item>@string/pmdt_unknown</item>
+    </string-array>
+    <string name="pmdt_adverse_event">Adverse Event</string>
+    <string name="pmdt_drug_not_available">Drug not available</string>
+    <string name="pmdt_treatment_supporter_did_not_come">Treatment Supporter did not come</string>
+    <string-array name="pmdt_missed_drug_reasons">
+        <item>@string/pmdt_adverse_event</item>
+        <item>@string/pmdt_drug_not_available</item>
+        <item>@string/pmdt_treatment_supporter_did_not_come</item>
+        <item>@string/pmdt_refused</item>
+        <item>@string/pmdt_unknown</item>
+        <item>@string/pmdt_other</item>
+    </string-array>
+
+    <string name="pmdt_always">Always</string>
+    <string name="pmdt_sometimes">Sometimes</string>
+    <string name="pmdt_rarely">Rarely</string>
+    <string name="pmdt_never">Never</string>
+    <string-array name="pmdt_infection_control_frequency">
+        <item>@string/pmdt_always</item>
+        <item>@string/pmdt_sometimes</item>
+        <item>@string/pmdt_rarely</item>
+        <item>@string/pmdt_never</item>
+        <item>@string/pmdt_unknown</item>
+    </string-array>
+
+    <string-array name="pmdt_infection_control_family_frequency">
+        <item>@string/pmdt_always</item>
+        <item>@string/pmdt_sometimes</item>
+        <item>@string/pmdt_rarely</item>
+        <item>@string/pmdt_never</item>
+        <item>@string/pmdt_unknown</item>
+    </string-array>
+
+    <string name="pmdt_does_not_wait">Does not wait</string>
+    <string name="pmdt_less_than_ten_mins">&lt; 10 minutes</string>
+    <string name="pmdt_ten_to_twenty_mins">10 - 20 minutes</string>
+    <string name="pmdt_twenty_to_thirty_mins">20 - 30 minutes</string>
+    <string name="pmdt_thirty_mins_an_hour">30 minutes - 1 hour</string>
+    <string name="pmdt_more_than_an_hour">&gt; 1 hour</string>
+    <string-array name="pmdt_wait_after_drug_time_range">
+        <item>@string/pmdt_does_not_wait</item>
+        <item>@string/pmdt_less_than_ten_mins</item>
+        <item>@string/pmdt_ten_to_twenty_mins</item>
+        <item>@string/pmdt_twenty_to_thirty_mins</item>
+        <item>@string/pmdt_thirty_mins_an_hour</item>
+        <item>@string/pmdt_more_than_an_hour</item>
+    </string-array>
+
+    <string name="pmdt_could_not_produce_sputum">Could not produce sputum</string>
+    <string name="pmdt_doctor_did_not_request">Doctor did not request</string>
+    <string-array name="pmdt_reasons_sputums_not_submitted">
+        <item>@string/pmdt_could_not_produce_sputum</item>
+        <item>@string/pmdt_doctor_did_not_request</item>
+        <item>@string/pmdt_other</item>
+    </string-array>
+
+    <string name="pmdt_arranged_follow_up">Arranged follow up next day for clinical review</string>
+    <string name="pmdt_consulted_and_advised">Consulted on phone with TB doctor and advised ancillary medications</string>
+    <string name="pmdt_consulted_and_arranged_transfer">Consulted on phone with TB doctor and arranged transfer to referral hospital</string>
+    <string name="pmdt_no_action_required">No action was required</string>
+    <string-array name="pmdt_adverse_actions_treatment_supporter">
+        <item>@string/pmdt_arranged_follow_up</item>
+        <item>@string/pmdt_consulted_and_advised</item>
+        <item>@string/pmdt_consulted_and_arranged_transfer</item>
+        <item>@string/pmdt_no_action_required</item>
+        <item>@string/pmdt_other</item>
+    </string-array>
+
+    <string name="pmdt_adherence">Adherence</string>
+    <string name="pmdt_infection_control">Infection control</string>
+    <string name="pmdt_adverse_events">Adverse events</string>
+    <string name="pmdt_psychosocial_issues">Psycho-social issues</string>
+    <string name="pmdt_substance_abuse">Substance abuse</string>
+    <string-array name="pmdt_counseling_types">
+        <item>@string/pmdt_adherence</item>
+        <item>@string/pmdt_infection_control</item>
+        <item>@string/pmdt_adverse_events</item>
+        <item>@string/pmdt_psychosocial_issues</item>
+        <item>@string/pmdt_substance_abuse</item>
+        <item>@string/pmdt_other</item>
+    </string-array>
+
+
+    <!--create arrays-->
+
 
     <!--list of occupations-->
-
     <string name="pmdt_artist">Artist</string>
     <string name="pmdt_carpenter">Carpenter</string>
     <string name="pmdt_beggar">Beggar</string>
