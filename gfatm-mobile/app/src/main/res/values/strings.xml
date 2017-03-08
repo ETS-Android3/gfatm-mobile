@@ -454,6 +454,7 @@
 
     <string name="submitting_form">Submitting form...</string>
     <string name="form_submitted">Form successfully submitted.</string>
+    <string name="patient_updated">Patient successfully updated.</string>
     <string name="title_completed">Compeleted</string>
     <string name="insert_error">Error while trying to submit form to openmrs.</string>
 
