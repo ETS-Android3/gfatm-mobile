@@ -178,7 +178,7 @@ public abstract class AbstractFormActivity extends Fragment
             gps.showSettingsAlert();
         }
 
-        snackbar.dismiss();
+        //snackbar.dismiss();
         return mainContent;
     }
 
@@ -355,7 +355,7 @@ public abstract class AbstractFormActivity extends Fragment
             gotoNextPage();
         } else if (view == clearButton) {
 
-            snackbar.dismiss();
+            //snackbar.dismiss();
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
@@ -386,7 +386,7 @@ public abstract class AbstractFormActivity extends Fragment
             alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
 
         } else if (view == submitButton) {
-            snackbar.dismiss();
+            //snackbar.dismiss();
             if (validate()) {
 
                 int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
@@ -442,7 +442,7 @@ public abstract class AbstractFormActivity extends Fragment
 
     public void resetViews() {
 
-        snackbar.dismiss();
+        //snackbar.dismiss();
         startTime = new Date();
         endTime = null;
 
