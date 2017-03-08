@@ -3754,7 +3754,7 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NO RESULT',NULL
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TREATMENT MISCONCEPTIONS','treatment_misconceptions','Coded','c66757cf-9b67-4fe3-9b23-f9d860d0a5ba');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TREATMENT MISCONCEPTION (TEXT)','treatment_misconception_explain','Text','6f2575c1-7854-44f8-b239-fbcfeb5ca571');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SOCIAL PROBLEM','social_problem','Coded','8bf16bbf-92f0-4e3c-9227-00f6f94755a3');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TEST ID','test_id','Numeric','5dd28640-0f74-4259-b3ca-c7aedbd435ae');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TEST ID','test_id','Text','5dd28640-0f74-4259-b3ca-c7aedbd435ae');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('BMU VISIT DATE','bmu_visit_date','Date','c90e4d40-eaad-44cb-840d-91a3cd46e35a');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NAME OF BMU VISITED','visited_bmu_name','Text','3242a629-79ce-4a1b-9945-6a6d453d1ea6');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('BMU DOCTOR','doctor_bmu','Text','cf08cf5c-42bf-48c6-96c6-3a6c679fc1c3');
@@ -4335,6 +4335,16 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PROTHIONAMIDE',
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TERIZIDONE', 'TRD','N/A','84836AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 
 INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('NOT DETECTED',NULL,'1302AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('MOTHER', NULL,'970AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('FATHER', NULL,'971AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('MATERNAL GRANDMOTHER', NULL,'160723AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('MATERNAL GRANDFATHER', NULL,'160724AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('PATERNAL GRANDMOTHER', NULL,'160726AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('PATERNAL GRANDFATHER', NULL,'160725AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('LIFESTYLE',NULL,'135797AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+
 
 -- Program
 INSERT OR IGNORE INTO program VALUES (1, "86ba1232-d576-416e-b102-5f335c6746ce", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
