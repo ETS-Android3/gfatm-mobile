@@ -39,7 +39,7 @@
     <string name="comorbidities_preferredlocation_other_comorbidities">Other preferred location:</string>
     <string name="comorbidities_dm_screening">DIABETES MELLITUS SCREENING</string>
     <string name="comorbidities_dmscrnng_food">Have you had something to eat within the last two hours?</string>
-    <string name="comorbidities_scrnng_rbs">RBS:</string>
+    <string name="comorbidities_scrnng_rbs">Random Blood Sugar (RBS):</string>
     <string name="comorbidities_scrnng_rbs_range">Range 1&#8211;500</string>
     <string name="comorbidities_scrnng_rbs_limit">The value should be in the range of 1&#8211;500</string>
     <string name="comorbidities_hba1c_testvoucher">HbA1C test voucher given?</string>
