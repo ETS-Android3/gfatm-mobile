@@ -229,7 +229,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
             }else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "yyyy-MM-dd'T'HH:mm:ss"));
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
@@ -464,7 +464,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             observations.add(new String[]{"TB REGISTRATION NUMBER", App.get(tbRegisterationNumber)});
 
         if (diagonosisType.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TUBERCULOSIS DIAGNOSIS METHOD", App.get(diagonosisType).equals(getResources().getString(R.string.fast_bactoriologically_confirmed)) ? "PRIMARY RESPIRATORY TUBERCULOSIS, CONFIRMED BACTERIOLOGICALLY AND HISTOLOGICALLY" : "CLINICAL SUSPICION"});
+            observations.add(new String[]{"TUBERCULOSIS DIAGNOSIS METHOD", App.get(diagonosisType).equals(getResources().getString(R.string.fast_bactoriologically_confirmed)) ? "PRIMARY RESPIRATORY TUBERCULOSIS, CONFIRMED BACTERIOLOGICALLY" : "CLINICAL SUSPICION"});
 
         if (tbType.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"SITE OF TUBERCULOSIS DISEASE", App.get(tbType).equals(getResources().getString(R.string.fast_pulmonary)) ? "PULMONARY TUBERCULOSIS" : "EXTRA-PULMONARY TUBERCULOSIS"});
