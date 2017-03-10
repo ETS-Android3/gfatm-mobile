@@ -280,16 +280,6 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
                 error = true;
             }
 
-            if (fatherName.getVisibility() == View.VISIBLE && App.get(fatherName).isEmpty()) {
-                if (App.isLanguageRTL())
-                    gotoPage(2);
-                else
-                    gotoPage(0);
-                fatherName.getEditText().setError(getString(R.string.empty_field));
-                fatherName.getEditText().requestFocus();
-                error = true;
-            }
-
             if (error) {
 
                 int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
@@ -346,7 +336,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
         if (husbandName.getVisibility() == View.VISIBLE && !(App.get(husbandName).isEmpty()))
             observations.add(new String[]{"PARTNER FULL NAME", App.get(husbandName)});
 
-        if (fatherName.getVisibility() == View.VISIBLE)
+        if (fatherName.getVisibility() == View.VISIBLE && !App.get(fatherName).isEmpty())
             observations.add(new String[]{"FATHER NAME", App.get(fatherName)});
 
         observations.add(new String[]{"PERSON ATTENDING FACILITY", App.get(patientAttendant).equals(getResources().getString(R.string.fast_patient_title)) ? "SELF" : "ATTENDANT"});

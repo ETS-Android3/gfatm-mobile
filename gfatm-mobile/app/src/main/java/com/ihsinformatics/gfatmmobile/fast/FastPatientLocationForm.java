@@ -175,7 +175,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
         }
 
         contactExternalIdHospital = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_if_external_id_hospital_or_programs), locationArray, "", App.VERTICAL);
-        contactTbRegisternationNo = new TitledEditText(context, null, getResources().getString(R.string.fast_tb_registeration_no), "", "", 11, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        contactTbRegisternationNo = new TitledEditText(context, null, getResources().getString(R.string.fast_tb_registeration_no), "", "", 11, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), screening.getRadioGroup(), facilitySection.getSpinner(), facilitySectionOther.getEditText(),
@@ -268,20 +268,6 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
     @Override
     public boolean validate() {
         Boolean error = false;
-        Boolean checkBoxError = true;
-
-        if (contactIdType.getVisibility() == View.VISIBLE) {
-            for (CheckBox cb : contactIdType.getCheckedBoxes()) {
-                if (cb.isChecked()) {
-                    checkBoxError = false;
-                    break;
-                }
-            }
-            if (checkBoxError) {
-                error = true;
-            }
-        }
-
 
         if (facilitySectionOther.getVisibility() == View.VISIBLE && App.get(facilitySectionOther).isEmpty()) {
             if (App.isLanguageRTL())
@@ -389,11 +375,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
-            if (checkBoxError) {
-                alertDialog.setMessage(getString(R.string.fast_please_select_atleast_one_checkbox_for_identification_ids));
-            } else {
-                alertDialog.setMessage(getString(R.string.form_error));
-            }
+            alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
