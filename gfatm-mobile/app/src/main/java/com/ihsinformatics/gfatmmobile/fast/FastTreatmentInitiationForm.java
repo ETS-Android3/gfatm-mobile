@@ -693,7 +693,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             } else if (obs[0][0].equals("TUBERCULOSIS DIAGNOSIS METHOD")) {
 
                 for (RadioButton rb : diagonosisType.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_bactoriologically_confirmed)) && obs[0][1].equals("PRIMARY RESPIRATORY TUBERCULOSIS, CONFIRMED BACTERIOLOGICALLY AND HISTOLOGICALLY")) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_bactoriologically_confirmed)) && obs[0][1].equals("PRIMARY RESPIRATORY TUBERCULOSIS, CONFIRMED BACTERIOLOGICALLY")) {
                         rb.setChecked(true);
                         break;
                     } else if (rb.getText().equals(getResources().getString(R.string.fast_clinically_diagnosed)) && obs[0][1].equals("CLINICAL SUSPICION")) {
