@@ -585,15 +585,15 @@ public class ServerService {
                     patient.setIdentifiers(patientIdentifierSet);
                     patient.setUuid(personUuid);
 
-                    ContentValues values3 = new ContentValues();
-                    values3.put("identifier", patientId);
-                    values3.put("first_name", givenName);
-                    values3.put("last_name", familyName);
-                    values3.put("gender", gender);
-                    values3.put("birthdate", dob);
-                    dbUtil.insert(Metadata.PATIENT, values3);
-
                     if (App.getMode().equalsIgnoreCase("OFFLINE")) {
+
+                        ContentValues values3 = new ContentValues();
+                        values3.put("identifier", patientId);
+                        values3.put("first_name", givenName);
+                        values3.put("last_name", familyName);
+                        values3.put("gender", gender);
+                        values3.put("birthdate", dob);
+                        dbUtil.insert(Metadata.PATIENT, values3);
 
                         getPatient(patientId);
 
@@ -824,6 +824,13 @@ public class ServerService {
                         }
                     }
                 } else {
+
+                    if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
+                        String patientUuid = patient.getUuid();
+                        if (patientUuid == null || patientUuid.equals(""))
+                            return "OFFLINE_PATIENT";
+                    }
+
                     App.setPatientId(String.valueOf(patient.getPid()));
                     App.setPatient(patient);
                 }
@@ -897,6 +904,9 @@ public class ServerService {
             JSONObject[] jsonObjects = JSONParser.getJSONArrayFromObject(jsonobject, "results");
             for (JSONObject json : jsonObjects) {
                 Concept concept = Concept.parseJSONObject(json);
+
+                if (!concept.getName().equals(concept_name))
+                    continue;
 
                 ContentValues values = new ContentValues();
                 values.put("full_name", concept.getName());
@@ -1142,10 +1152,10 @@ public class ServerService {
                     values2.put("encounterType", App.getProgram() + "-" + formName);
                     values2.put("encounterDatetime", App.getSqlDate(encounterDateTime));
                     values2.put("encounterLocation", App.getLocation());
-                    values2.put("patientId", App.getPatient().getPid());
+                    values2.put("patientId", App.getPatientId());
                     dbUtil.insert(Metadata.ENCOUNTER, values2);
 
-                    String id = dbUtil.getObject(Metadata.ENCOUNTER, "encounter_id", "patientId='" + App.getPatient().getPid() + "' and encounterType='" + App.getProgram() + "-" + formName + "'");
+                    String id = dbUtil.getObject(Metadata.ENCOUNTER, "encounter_id", "encounterType='" + App.getProgram() + "-" + formName + "' and patientId=" + App.getPatientId());
 
                     ContentValues values5 = new ContentValues();
                     values5.put("program", App.getProgram());
@@ -1226,7 +1236,7 @@ public class ServerService {
                     com.ihsinformatics.gfatmmobile.model.Encounter encounter1 = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(jsonObject);
                     encounter1.setPatientId(App.getPatientId());
 
-                    deleteEncounter(App.getPatient().getPatientId(), encounter1.getEncounterType());
+                    deleteEncounter(App.getPatientId(), encounter1.getEncounterType());
 
                     ContentValues values2 = new ContentValues();
                     values2.put("uuid", encounter1.getUuid());
@@ -1281,7 +1291,7 @@ public class ServerService {
                     String[] uriArray = uri.split(" ;;;; ");
 
                     ContentValues values4 = new ContentValues();
-                    values4.put("encounter_id", Integer.valueOf(encounterId));
+                    values4.put("form_id", Integer.valueOf(encounterId));
                     values4.put("uri", uriArray[0]);
                     values4.put("content", uriArray[1]);
                     values4.put("pid", App.getPatientId());
@@ -1294,7 +1304,7 @@ public class ServerService {
                 ContentValues contentValues = new ContentValues();
                 contentValues.put(attributeType.replace(" ", "").toLowerCase(), value);
 
-                dbUtil.update(Metadata.PATIENT, contentValues, "patientId=?", new String[]{App.getPatientId()});
+                dbUtil.update(Metadata.PATIENT, contentValues, "patient_Id=?", new String[]{App.getPatientId()});
                 App.setPatient(getPatientBySystemIdFromLocalDB(App.getPatientId()));
 
             } catch (Exception e) {
@@ -1409,7 +1419,7 @@ public class ServerService {
                     String[] uriArray = uri.split(" ;;;; ");
 
                     ContentValues values4 = new ContentValues();
-                    values4.put("encounter_id", Integer.valueOf(encounterId));
+                    values4.put("form_id", Integer.valueOf(encounterId));
                     values4.put("uri", uriArray[0]);
                     values4.put("content", uriArray[1]);
                     values4.put("pid", App.getPatientId());
@@ -1584,87 +1594,109 @@ public class ServerService {
         return true;
     }
 
-    public void submitOfflineForm(String formId) {
+    public String submitOfflineForm(String formId) {
 
-        Object[][] forms = dbUtil.getFormTableData("select id, form, pid, uri, content, form_id from " + Metadata.OFFLINE_FORM + " where form_id='" + formId + "'");
-
-        for (int i = 0; i < forms.length; i++) {
-
-            Object[] form = forms[i];
-
-            if (String.valueOf(form[1]).contains("CREATE")) {
-
-                String returnString = httpPost.backgroundPost(String.valueOf(form[3]), String.valueOf(form[4]));
-
-                try {
-                    JSONObject newPerson = JSONParser.getJSONObject("{"
-                            + returnString.toString() + "}");
-
-                    i++;
-                    form = forms[i];
-                    String patientContent = String.valueOf(form[4]).replace("uuid-replacement-string", String.valueOf(newPerson.get("uuid")));
-                    httpPost.backgroundPost(String.valueOf(form[3]), patientContent);
-
-                    Object[][] encounterForms = dbUtil.getFormTableData("select id, form, pid, uri, content, form_id from " + Metadata.OFFLINE_FORM + " where pid='" + String.valueOf(form[2]) + "'");
-                    for (int j = 0; j < encounterForms.length; j++) {
-                        Object[] encounterForm = encounterForms[j];
-
-                        if (String.valueOf(form[4]).contains("uuid-replacement-string")) {
-                            String content = String.valueOf(encounterForm[4]).replace("uuid-replacement-string", String.valueOf(newPerson.get("uuid")));
-
-                            ContentValues values = new ContentValues();
-                            values.put("content", content);
-
-                            dbUtil.update(Metadata.OFFLINE_FORM, values, "id=?", new String[]{String.valueOf(encounterForm[0])});
-                        }
-
-                    }
-
-                    ContentValues values = new ContentValues();
-                    values.put("uuid", String.valueOf(newPerson.get("uuid")));
-
-                    JSONObject json = JSONParser.getJSONObject(patientContent);
-
-                    dbUtil.update(Metadata.PATIENT, values, "identifier=?", new String[]{String.valueOf(json.get("identifier"))});
-
-                } catch (Exception e) {
-
-                }
-
-            } else {
-
-                String returnString = httpPost.backgroundPost(String.valueOf(form[3]), String.valueOf(form[4]));
-
-                JSONObject jsonObject = JSONParser.getJSONObject("{" + returnString.toString() + "}");
-                com.ihsinformatics.gfatmmobile.model.Encounter encounter1 = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(jsonObject);
-
-                deleteEncounter(App.getPatientId(), encounter1.getEncounterType());
-
-                ContentValues values2 = new ContentValues();
-                values2.put("uuid", encounter1.getUuid());
-                values2.put("encounterType", encounter1.getEncounterType());
-                values2.put("encounterDatetime", encounter1.getEncounterDatetime());
-                values2.put("encounterLocation", encounter1.getEncounterLocation());
-                values2.put("patientId", String.valueOf(form[2]));
-                dbUtil.insert(Metadata.ENCOUNTER, values2);
-
-                String id = dbUtil.getObject(Metadata.ENCOUNTER, "encounter_id", "uuid='" + encounter1.getUuid() + "'");
-
-                for (com.ihsinformatics.gfatmmobile.model.Obs obs : encounter1.getObsGroup()) {
-                    ContentValues values3 = new ContentValues();
-                    values3.put("uuid", obs.getUuid());
-                    values3.put("conceptName", obs.getConceptName());
-                    values3.put("value", obs.getValue());
-                    values3.put("encounter_id", id);
-                    dbUtil.insert(Metadata.OBS, values3);
-                }
-
+        if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
+            if (!isURLReachable()) {
+                return "CONNECTION_ERROR";
             }
         }
 
-        dbUtil.delete(Metadata.OFFLINE_FORM, "form_id=?", new String[]{formId});
-        dbUtil.delete(Metadata.FORMS, "id=?", new String[]{formId});
-        dbUtil.delete(Metadata.FORMS_VALUE, "form_id=?", new String[]{formId});
+        if (App.getCommunicationMode().equals("REST")) {
+            Object[][] forms = dbUtil.getFormTableData("select id, form, pid, uri, content, form_id from " + Metadata.OFFLINE_FORM + " where form_id='" + formId + "'");
+
+            for (int i = 0; i < forms.length; i++) {
+
+                Object[] form = forms[i];
+
+                if (String.valueOf(form[1]).contains("CREATE")) {
+
+                    String returnString = httpPost.backgroundPost(String.valueOf(form[3]), String.valueOf(form[4]));
+
+                    if (returnString == null)
+                        return "POST_ERROR";
+
+                    try {
+                        JSONObject newPerson = JSONParser.getJSONObject("{"
+                                + returnString.toString() + "}");
+
+                        i++;
+                        form = forms[i];
+                        String patientContent = String.valueOf(form[4]).replace("uuid-replacement-string", String.valueOf(newPerson.get("uuid")));
+                        returnString = httpPost.backgroundPost(String.valueOf(form[3]), patientContent);
+
+                        if (returnString == null)
+                            return "POST_ERROR";
+
+                        Object[][] encounterForms = dbUtil.getFormTableData("select id, form, pid, uri, content, form_id from " + Metadata.OFFLINE_FORM + " where pid='" + String.valueOf(form[2]) + "'");
+                        for (int j = 0; j < encounterForms.length; j++) {
+                            Object[] encounterForm = encounterForms[j];
+
+                            if (String.valueOf(form[4]).contains("uuid-replacement-string")) {
+                                String content = String.valueOf(encounterForm[4]).replace("uuid-replacement-string", String.valueOf(newPerson.get("uuid")));
+
+                                ContentValues values = new ContentValues();
+                                values.put("content", content);
+
+                                dbUtil.update(Metadata.OFFLINE_FORM, values, "id=?", new String[]{String.valueOf(encounterForm[0])});
+                            }
+
+                        }
+
+                        ContentValues values = new ContentValues();
+                        values.put("uuid", String.valueOf(newPerson.get("uuid")));
+
+                        JSONObject json = JSONParser.getJSONObject(patientContent);
+
+                        dbUtil.update(Metadata.PATIENT, values, "identifier=?", new String[]{String.valueOf(json.get("identifier"))});
+
+                    } catch (Exception e) {
+                        return "PARSER_ERROR";
+                    }
+
+                } else {
+
+                    String returnString = httpPost.backgroundPost(String.valueOf(form[3]), String.valueOf(form[4]));
+                    if (returnString == null)
+                        return "POST_ERROR";
+
+                    try {
+                        JSONObject jsonObject = JSONParser.getJSONObject("{" + returnString.toString() + "}");
+                        com.ihsinformatics.gfatmmobile.model.Encounter encounter1 = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(jsonObject);
+
+                        deleteEncounter(App.getPatientId(), encounter1.getEncounterType());
+
+                        ContentValues values2 = new ContentValues();
+                        values2.put("uuid", encounter1.getUuid());
+                        values2.put("encounterType", encounter1.getEncounterType());
+                        values2.put("encounterDatetime", encounter1.getEncounterDatetime());
+                        values2.put("encounterLocation", encounter1.getEncounterLocation());
+                        values2.put("patientId", String.valueOf(form[2]));
+                        dbUtil.insert(Metadata.ENCOUNTER, values2);
+
+                        String id = dbUtil.getObject(Metadata.ENCOUNTER, "encounter_id", "uuid='" + encounter1.getUuid() + "'");
+
+                        for (com.ihsinformatics.gfatmmobile.model.Obs obs : encounter1.getObsGroup()) {
+                            ContentValues values3 = new ContentValues();
+                            values3.put("uuid", obs.getUuid());
+                            values3.put("conceptName", obs.getConceptName());
+                            values3.put("value", obs.getValue());
+                            values3.put("encounter_id", id);
+                            dbUtil.insert(Metadata.OBS, values3);
+                        }
+                    } catch (Exception e) {
+                        return "PARSER_ERROR";
+                    }
+
+                }
+            }
+
+            dbUtil.delete(Metadata.OFFLINE_FORM, "form_id=?", new String[]{formId});
+            dbUtil.delete(Metadata.FORMS, "id=?", new String[]{formId});
+            dbUtil.delete(Metadata.FORMS_VALUE, "form_id=?", new String[]{formId});
+        }
+
+        return "SUCCESS";
 
     }
 
@@ -1835,6 +1867,12 @@ public class ServerService {
     }
 
     public String updatePatientDetails(String patientId) {
+
+        if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
+            if (!isURLReachable()) {
+                return "CONNECTION_ERROR";
+            }
+        }
 
         if (App.getCommunicationMode().equalsIgnoreCase("REST")) {
             try {

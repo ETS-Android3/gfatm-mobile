@@ -445,7 +445,7 @@ public class RegexUtil {
 
     public static boolean isLandlineNumber(String string) {
         try {
-            if (!(string.length() == mobileNumberLength && string.length() == landlineNumberLength))
+            if (!(string.length() == mobileNumberLength || string.length() == landlineNumberLength))
                 return false;
             return string.matches(contactNoPattern);
         } catch (Exception e) {
