@@ -21,7 +21,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -175,6 +174,8 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
         selectPatientScanButton.setOnClickListener(this);
         searchPatient.setOnClickListener(this);
 
+        this.setFinishOnTouchOutside(false);
+
 
         /*ServerService serverService = new ServerService(getApplicationContext());
         serverService.submitOfflineForms();*/
@@ -259,13 +260,57 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                 loading.dismiss();
 
                 if (result.equals("CONNECTION_ERROR")) {
-                    Toast toast = Toast.makeText(SelectPatientActivity.this, getResources().getString(R.string.data_connection_error), Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.CENTER, 0, 0);
-                    toast.show();
+                    final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
                 } else if (result.equals("PATIENT_NOT_FOUND")) {
-                    Toast toast = Toast.makeText(SelectPatientActivity.this, getResources().getString(R.string.patient_not_found), Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.CENTER, 0, 0);
-                    toast.show();
+                    final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.patient_not_found));
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else if (result.equals("OFFLINE_PATIENT")) {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.offline_patient));
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else if (result.equals("FAIL")) {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.patient_get_error));
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
                 } else {
 
                     hideKeyboard();
@@ -365,9 +410,31 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                         loading.dismiss();
 
                         if (result.equals("CONNECTION_ERROR")) {
-                            Toast toast = Toast.makeText(SelectPatientActivity.this, getResources().getString(R.string.data_connection_error), Toast.LENGTH_LONG);
-                            toast.setGravity(Gravity.CENTER, 0, 0);
-                            toast.show();
+                            final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this, R.style.dialog).create();
+                            alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
+                            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                            alertDialog.setIcon(clearIcon);
+                            alertDialog.setTitle(getResources().getString(R.string.title_error));
+                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                            alertDialog.show();
+                        } else if (result.equals("FAIL")) {
+                            final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this, R.style.dialog).create();
+                            alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
+                            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                            alertDialog.setIcon(clearIcon);
+                            alertDialog.setTitle(getResources().getString(R.string.title_error));
+                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                            alertDialog.show();
                         } else if (result.equals("DUPLICATE")) {
                             createPatientId.setError(getResources().getString(R.string.duplicate_patient_id));
                         } else {

@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity
                 RadioButton rb = (RadioButton) findViewById(checkedId);
                 App.setProgram(rb.getText().toString());
 
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString(Preferences.PROGRAM, App.getProgram());
                 editor.apply();
@@ -240,7 +240,7 @@ public class MainActivity extends AppCompatActivity
         }
         getSupportActionBar().setTitle(title);
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String lang = preferences.getString(Preferences.LANGUAGE, "");
         if (!App.getLanguage().equals(lang)) {
             SharedPreferences.Editor editor = preferences.edit();
@@ -409,7 +409,7 @@ public class MainActivity extends AppCompatActivity
                         public void onClick(DialogInterface dialog, int which) {
 
                             App.setAutoLogin("Disabled");
-                            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.putString(Preferences.LAST_LOGIN, App.getLastLogin());
                             editor.putString(Preferences.AUTO_LOGIN, App.getAutoLogin());
@@ -546,10 +546,10 @@ public class MainActivity extends AppCompatActivity
             case MotionEvent.ACTION_DOWN: {
 
                 ImageView view = (ImageView) v;
+                view.getDrawable().setColorFilter(getResources().getColor(R.color.dark_grey), PorterDuff.Mode.SRC_ATOP);
+                view.invalidate();
 
                 if (view == change) {
-                    view.getDrawable().setColorFilter(getResources().getColor(R.color.dark_grey), PorterDuff.Mode.SRC_ATOP);
-                    view.invalidate();
 
                     Intent selectPatientActivityIntent = new Intent(this, SelectPatientActivity.class);
                     startActivityForResult(selectPatientActivityIntent, SELECT_PATIENT_ACTIVITY);

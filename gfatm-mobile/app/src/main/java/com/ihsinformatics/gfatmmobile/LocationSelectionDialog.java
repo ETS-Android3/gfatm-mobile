@@ -249,7 +249,6 @@ public class LocationSelectionDialog extends AbstractSettingActivity {
             }
         }
 
-        this.setFinishOnTouchOutside(false);
 
     }
 

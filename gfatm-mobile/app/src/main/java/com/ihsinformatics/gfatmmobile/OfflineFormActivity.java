@@ -1,14 +1,17 @@
 package com.ihsinformatics.gfatmmobile;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,6 +19,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
@@ -26,6 +30,8 @@ import java.util.ArrayList;
  * A login screen that offers login via email/password.
  */
 public class OfflineFormActivity extends AppCompatActivity implements View.OnTouchListener {
+
+    protected static ProgressDialog loading;
 
     protected ImageView submitIcon;
     protected ImageView emailIcon;
@@ -44,6 +50,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
         setContentView(R.layout.saved_form);
 
         serverService = new ServerService(getApplicationContext());
+        loading = new ProgressDialog(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -64,6 +71,16 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
 
         programName = (TextView) findViewById(R.id.program);
         contentLinearLayout = (LinearLayout) findViewById(R.id.content);
+
+        if (App.getMode().equalsIgnoreCase("OFFLINE")) {
+            submitIcon.setVisibility(View.GONE);
+            emailIcon.setVisibility(View.GONE);
+            deleteIcon.setVisibility(View.GONE);
+        } else {
+            submitIcon.setVisibility(View.VISIBLE);
+            emailIcon.setVisibility(View.VISIBLE);
+            deleteIcon.setVisibility(View.VISIBLE);
+        }
 
         fillList();
 
@@ -341,14 +358,95 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
     }
 
     public void submitForms() {
+
+        final ArrayList<String> checkedTag = new ArrayList<>();
         for (CheckBox cb : checkBoxes) {
             if (cb.isChecked()) {
-                serverService.submitOfflineForm(cb.getTag().toString());
+                checkedTag.add(cb.getTag().toString());
             }
         }
 
-        fillList();
+
+        AsyncTask<String, String, String> submissionTask = new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.signing_in));
+                        loading.show();
+                    }
+                });
+
+
+                for (int i = 0; i < checkedTag.size(); i++) {
+                    String returnString = serverService.submitOfflineForm(checkedTag.get(i));
+                    if (!returnString.equals("SUCCESS"))
+                        return returnString;
+                }
+
+                return "SUCCESS";
+
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            ;
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+                if (result.equals("SUCCESS")) {
+
+                    Toast toast = Toast.makeText(OfflineFormActivity.this, getResources().getString(R.string.forms_submitted), Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.BOTTOM, 0, 0);
+                    toast.show();
+
+                } else if (result.equals("CONNECTION_ERROR")) {
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+
+                } else {
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
+                    String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
+                    alertDialog.setMessage(message);
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+
+                }
+            }
+        };
+        submissionTask.execute("");
+
     }
+
+
 }
 
 

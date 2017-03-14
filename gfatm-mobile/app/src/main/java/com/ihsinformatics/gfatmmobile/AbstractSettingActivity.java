@@ -2,7 +2,6 @@ package com.ihsinformatics.gfatmmobile;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,6 +32,8 @@ public abstract class AbstractSettingActivity extends AppCompatActivity implemen
         resetButton.setVisibility(View.GONE);
         okButton = (TextView) findViewById(R.id.okButton);
         okButton.setOnClickListener(this);
+
+        this.setFinishOnTouchOutside(false);
 
     }
 
