@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.App;
@@ -25,7 +24,7 @@ public class MyLinearLayout extends LinearLayout {
 
         LayoutParams layoutParams = new LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(0, 20, 0, 20);
+        layoutParams.setMargins(0, 5, 0, 5);
         setLayoutParams(layoutParams);
 
         setFocusable(true);
