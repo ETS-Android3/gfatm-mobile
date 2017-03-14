@@ -171,7 +171,6 @@
                 encounterDatetime VARCHAR,
                 encounterLocation VARCHAR,
                 patientId INT NOT NULL COLLATE NOCASE,
-                form_object BLOB COLLATE NOCASE,
                 form_date VARCHAR,
                 FOREIGN KEY (patientId) REFERENCES PATIENT(patient_id)
             );
@@ -202,7 +201,7 @@
             );
 		</item>
 
-        <item>
+        <!--<item>
             CREATE TABLE IF NOT EXISTS offline_patient_form
             (
                 offline_form_id NOT NULL,
@@ -210,7 +209,7 @@
                 content TEXT NOT NULL COLLATE NOCASE,
                 type TEXT NOT NULL COLLATE NOCASE
             );
-		</item>
+		</item>-->
 
         <item>
             CREATE TABLE IF NOT EXISTS program

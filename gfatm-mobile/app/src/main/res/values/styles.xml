@@ -3,18 +3,17 @@
     <!-- Base application theme. -->
     <style name="DarkTheme" parent="Theme.AppCompat.Light.NoActionBar">
 
-        <item name="colorPrimaryDark">@color/veryDarkBrown</item>
-        <item name="colorPrimary">@color/ironstone</item>
-        <item name="colorAccent">@color/dirtyBlue</item>
-        <item name="colorBackground">@color/swissCoffee</item>
-        <item name="colorAlternate">@color/scandal</item>
-        <item name="colorButton">@color/lime</item>
+        <item name="colorPrimaryDark">@color/midnightGreen</item>
+        <item name="colorPrimary">@color/metallicSeaweed</item>
+        <item name="colorAccent">@color/charlestonGreen</item>
+        <item name="colorBackground">@color/white</item>
 
         <item name="colorRegistration">@color/teal</item>
         <item name="colorScreening">@color/purple</item>
         <item name="colorTreatment">@color/harleyDavidsonOrange</item>
         <item name="colorFollowup">@color/ToryBlue</item>
-        <item name="colorOther">@color/limerick</item>k
+        <item name="colorOther">@color/limerick</item>
+        <item name="colorButton">@color/bacon</item>
 
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -31,6 +30,7 @@
         <item name="android:alertDialogTheme">@style/dialog</item>
         <item name="alertDialogTheme">@style/dialog</item>
         <item name="android:autoCompleteTextViewStyle">@style/autoCompleteTextView</item>
+        <item name="progressBarStyle">@style/progressBar</item>
 
     </style>
 
@@ -90,12 +90,18 @@
     </style>
 
     <style name="dialog" parent="Theme.AppCompat.DayNight.Dialog.Alert">
-        <item name="colorPrimary">@color/ironstone</item>
-        <item name="colorPrimaryDark">@color/veryDarkBrown</item>
-        <item name="colorAccent">@color/dirtyBlue</item>
+        <item name="colorPrimary">@color/metallicSeaweed</item>
+        <item name="colorPrimaryDark">@color/midnightGreen</item>
+        <item name="colorAccent">@color/charlestonGreen</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:textStyle">bold</item>
         <item name="android:windowCloseOnTouchOutside">false</item>
+    </style>
+
+    <style name="progressBar" parent="@android:style/Widget.ProgressBar">
+        <item name="colorPrimary">@color/metallicSeaweed</item>
+        <item name="colorPrimaryDark">@color/midnightGreen</item>
+        <item name="colorAccent">@color/metallicSeaweed</item>
     </style>
 
 </resources>

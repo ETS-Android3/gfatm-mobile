@@ -219,11 +219,11 @@
         <item>@string/refused</item>
     </string-array>
     <string name="pet_haemoptysis">Blood in cough (Haemoptysis)</string>
-    <string name="pet_fever">Does contact have fever?</string>
-    <string name="pet_weight_loss">Does contact have weight loss or failure to thrive?</string>
+    <string name="pet_has_fever">Does contact have fever?</string>
+    <string name="pet_have_weight_loss">Does contact have weight loss or failure to thrive?</string>
     <string name="pet_reduced_appetite">Reduced appetite</string>
     <string name="pet_reduced_activity">Does contact have reduced activity?</string>
-    <string name="pet_night_sweats">Does contact have night sweats?</string>
+    <string name="pet_have_night_sweats">Does contact have night sweats?</string>
     <string name="pet_swelling">Does the contact have glandular swelling anywhere in body?</string>
     <string name="pet_referral">Has the contact been referred to the facility?</string>
     <string name="pet_facility_type">Type of Facility the contact is referred to</string>
@@ -249,7 +249,7 @@
     <string name="pet_brohi">Brohi</string>
     <string name="pet_hindko">Hindko</string>
     <string name="pet_gilgiti_kashmiri">Gilgiti/Kashmiri</string>
-    <string name="pet_siraiki">Siraiki</string>
+    <string name="pet_siraiki">Saraiki</string>
     <string name="pet_benagli">Bengali</string>
     <string name="pet_afghani">Afghani</string>
     <string name="pet_hazara">Hazara</string>
@@ -370,7 +370,6 @@
     <string-array name="pet_occupations">
         <item>@string/pet_artist</item>
         <item>@string/pet_beggar</item>
-        <item>@string/pet_student</item>
         <item>@string/pet_carpenter</item>
         <item>@string/pet_casual_labor</item>
         <item>@string/pet_child_labor</item>
@@ -509,7 +508,10 @@
 
     <string name="pet_contact_symptom_screen">Contact Symptom Screen</string>
     <string name="pet_difficulty_breathing">Difficulty in breathing</string>
+    <string name="pet_fever">Fever</string>
     <string name="pet_fever_duration">Duration of fever</string>
+    <string name="pet_weight_loss">Weight-loss</string>
+    <string name="pet_night_sweats">Night sweats</string>
     <string name="pet_lethargy">Lethargy</string>
     <string name="pet_swollen_joints">Swollen Joints</string>
     <string name="pet_back_pain">Back pain</string>
@@ -618,6 +620,9 @@
     <string name="pet_consent">Does the contact agree to take PET?</string>
 
     <!-- Treatment Initiation -->
+    <string name="baseline_screening_missing">Baseline Screening form is missing. If form is already submitted to openmrs, try updating patient.</string>
+    <string name="index_patient_info_missing">Index Patient () information is missing.</string>
+
     <string name="pet_isoniazid_dose_exceeded">Isoniazid dose shouldn\'t exceed 300mg</string>
     <string name="pet_rifapentine_out_of_range_1">Rifapentine dose should be in 300 - 450 mg</string>
     <string name="pet_rifapentine_out_of_range_2">Rifapentine dose should be in 450 - 900 mg</string>
@@ -746,6 +751,7 @@
     </string-array>
     <string name="pet_caretaker_comments">Comments by contact/caretaker</string>
     <string name="pet_psychologist_comment">Comments by psychologist</string>
+    <string name="pet_psychologist_answer">Answers by a psychologist</string>
 
     <!-- Monthly Home Follow-Up -->
     <string name="pet_followup_details">Follow-up Details - TB Symptoms</string>
@@ -780,7 +786,7 @@
 
     <!-- Treatment Adherence -->
     <string name="pet_week_of_treatment">Week of treatment</string>
-    <string name="pet_missed_dosed">Any missed dose in the past month</string>
+    <string name="pet_missed_dosed">How many days worth of medication was missed in the past month?</string>
     <string name="pet_no_missed_dosed">No dose missed</string>
     <string name="pet_1_3_missed_dosed">1 to 3 doses missed</string>
     <string name="pet_more_than_3_missed_dosed">More than 3 doses missed</string>

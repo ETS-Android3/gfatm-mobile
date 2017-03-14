@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="veryDarkBrown">#5D4037</color>
-    <color name="ironstone">#795548</color>
-    <color name="dirtyBlue">#486c79</color>
-    <color name="swissCoffee">#D7CCC8</color>
-    <color name="scandal">#B2DFDB</color>
-    <color name="lime">#CDDC39</color>
+    <color name="midnightGreen">#114B5F</color>
+    <color name="metallicSeaweed">#456990</color>
+    <color name="charlestonGreen">#272D2D</color>
+    <color name="nyanza">#E8FDE6</color>
 
     <color name="teal">#00796B</color>
     <color name="purple">#79006B</color>
@@ -18,5 +16,6 @@
     <color name="light_grey">#D3D3D3</color>
     <color name="dark_grey">#909090</color>
     <color name="black">#000000</color>
+    <color name="bacon">#F9EDEC</color>
 
 </resources>

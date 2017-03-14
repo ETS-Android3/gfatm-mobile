@@ -8,15 +8,15 @@
     </style>
 
     <style name="datePicker" parent="@android:style/Widget.Material.Light.DatePicker">
-        <item name="colorPrimary">@color/ironstone</item>
-        <item name="colorPrimaryDark">@color/veryDarkBrown</item>
-        <item name="colorAccent">@color/dirtyBlue</item>
+        <item name="colorPrimary">@color/metallicSeaweed</item>
+        <item name="colorPrimaryDark">@color/midnightGreen</item>
+        <item name="colorAccent">@color/charlestonGreen</item>
     </style>
 
     <style name="datePickerDialog" parent="Theme.AppCompat.DayNight.Dialog.Alert">
-        <item name="colorPrimary">@color/ironstone</item>
-        <item name="colorPrimaryDark">@color/veryDarkBrown</item>
-        <item name="colorAccent">@color/dirtyBlue</item>
+        <item name="colorPrimary">@color/metallicSeaweed</item>
+        <item name="colorPrimaryDark">@color/midnightGreen</item>
+        <item name="colorAccent">@color/charlestonGreen</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:textStyle">bold</item>
         <item name="android:datePickerStyle">@style/datePicker</item>
@@ -24,18 +24,17 @@
 
     <style name="DarkTheme" parent="Theme.AppCompat.Light.NoActionBar">
 
-        <item name="colorPrimaryDark">@color/veryDarkBrown</item>
-        <item name="colorPrimary">@color/ironstone</item>
-        <item name="colorAccent">@color/dirtyBlue</item>
-        <item name="colorBackground">@color/swissCoffee</item>
-        <item name="colorAlternate">@color/scandal</item>
-        <item name="colorButton">@color/lime</item>
+        <item name="colorPrimaryDark">@color/midnightGreen</item>
+        <item name="colorPrimary">@color/metallicSeaweed</item>
+        <item name="colorAccent">@color/charlestonGreen</item>
+        <item name="colorBackground">@color/white</item>
 
         <item name="colorRegistration">@color/teal</item>
         <item name="colorScreening">@color/purple</item>
         <item name="colorTreatment">@color/harleyDavidsonOrange</item>
         <item name="colorFollowup">@color/ToryBlue</item>
         <item name="colorOther">@color/limerick</item>
+        <item name="colorButton">@color/bacon</item>
 
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -57,19 +56,19 @@
     </style>
 
     <style name="dialog" parent="Theme.AppCompat.DayNight.Dialog.Alert">
-        <item name="colorPrimary">@color/ironstone</item>
-        <item name="colorPrimaryDark">@color/veryDarkBrown</item>
-        <item name="colorAccent">@color/dirtyBlue</item>
+        <item name="colorPrimary">@color/metallicSeaweed</item>
+        <item name="colorPrimaryDark">@color/midnightGreen</item>
+        <item name="colorAccent">@color/charlestonGreen</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:textStyle">bold</item>
         <item name="android:datePickerDialogTheme">@style/datePickerDialog</item>
     </style>
 
     <style name="progressBar" parent="@android:style/Widget.ProgressBar">
-        <item name="colorPrimary">@color/ironstone</item>
-        <item name="colorPrimaryDark">@color/veryDarkBrown</item>
-        <item name="colorAccent">@color/dirtyBlue</item>
-        <item name="android:indeterminateTint">@color/dirtyBlue</item>
+        <item name="colorPrimary">@color/metallicSeaweed</item>
+        <item name="colorPrimaryDark">@color/midnightGreen</item>
+        <item name="colorAccent">@color/metallicSeaweed</item>
+        <item name="android:indeterminateTint">@color/charlestonGreen</item>
     </style>
 
 </resources>

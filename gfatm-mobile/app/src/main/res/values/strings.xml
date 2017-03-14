@@ -356,7 +356,10 @@
     <string name="patient_not_select">SELECT PATIENT TO CONTINUE.</string>
     <string name="location_not_select">SELECT LOCATION TO CONTINUE.</string>
     <string name="patient_not_found">PATIENT NOT FOUND</string>
+    <string name="offline_patient">This patient was created offline. Please submit offline form before you can start using the patient in online mode.</string>
     <string name="data_connection_error">Could not connect to Server! Please check your connection settings or contact Admin</string>
+    <string name="patient_creation_error">Error while creating patient.</string>
+    <string name="patient_get_error">Error while fetching patient.</string>
     <string name="authentication_error">Authentication failed! Please enter valid username and password.</string>
     <string name="no_location_select">Please select your location to continue.</string>
     <string name="empty_field">This field can\'t be empty.</string>
@@ -389,6 +392,7 @@
     <string name="enrollment_date_error">Enrollment Date can\'t be after form date.</string>
     <string name="duplicate_patient_id">Patient ID already exists.</string>
     <string name="barcode_scanner_missing">Missing Barcode Scanner. Please download and install Barcode Scanner from Play Store to be able to scan the QR Codes.</string>
+    <string name="form_cannot_be_before_person_dob">Form date should be after Patient\'s DOB</string>
 
     <!-- Strings related to login -->
     <string name="username">Username</string>
@@ -454,6 +458,7 @@
 
     <string name="submitting_form">Submitting form...</string>
     <string name="form_submitted">Form successfully submitted.</string>
+    <string name="forms_submitted">Form(s) successfully submitted.</string>
     <string name="patient_updated">Patient successfully updated.</string>
     <string name="title_completed">Compeleted</string>
     <string name="insert_error">Error while trying to submit form to openmrs.</string>
