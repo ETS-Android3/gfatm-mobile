@@ -194,9 +194,9 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, regDate, cnicLinearLayout, cnicOwner, tbRegisterationNumber, diagonosisType, tbType, extraPulmonarySite,
-                        extraPulmonarySiteOther, patientType, treatmentInitiated, reasonTreatmentNotIniated, reasonTreatmentNotInitiatedOther
-                        , tbCategory, historyCategory, outcomePreviousCategory, weight, returnVisitDate}};
+                {{formDate, regDate, cnicLinearLayout, cnicOwner, diagonosisType, tbType, extraPulmonarySite,
+                        extraPulmonarySiteOther, patientType, treatmentInitiated, reasonTreatmentNotIniated, reasonTreatmentNotInitiatedOther,
+                        tbRegisterationNumber, tbCategory, historyCategory, outcomePreviousCategory, weight, returnVisitDate}};
         formDate.getButton().setOnClickListener(this);
         regDate.getButton().setOnClickListener(this);
         returnVisitDate.getButton().setOnClickListener(this);
