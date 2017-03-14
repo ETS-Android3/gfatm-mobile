@@ -437,7 +437,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                             alertDialog.show();
                         } else if (result.equals("DUPLICATE")) {
                             createPatientId.setError(getResources().getString(R.string.duplicate_patient_id));
-                        } else {
+                        } else if (result.equals("SUCCESS")) {
 
                             hideKeyboard();
 
@@ -450,6 +450,19 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                             intent.putExtra("key", "CREATE");
                             setResult(RESULT_OK, intent);
                             finish();
+                        } else {
+                            final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this, R.style.dialog).create();
+                            alertDialog.setMessage(getResources().getString(R.string.patient_creation_error) + "\n\n (" + result + ")");
+                            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                            alertDialog.setIcon(clearIcon);
+                            alertDialog.setTitle(getResources().getString(R.string.title_error));
+                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                            alertDialog.show();
                         }
 
 
@@ -709,8 +722,10 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
             dob.setError(getString(R.string.empty_field));
             error = true;
         } else {
-            if (Integer.parseInt(age.getText().toString()) > 130)
+            if (Integer.parseInt(age.getText().toString()) > 130) {
                 age.setError(getResources().getString(R.string.age_invalid));
+                error = true;
+            }
             else
                 age.setError(null);
         }

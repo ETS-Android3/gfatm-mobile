@@ -440,6 +440,8 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                     alertDialog.show();
 
                 }
+
+                fillList();
             }
         };
         submissionTask.execute("");
