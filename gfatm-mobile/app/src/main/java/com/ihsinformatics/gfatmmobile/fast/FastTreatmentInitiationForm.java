@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -157,26 +158,26 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         regDate = new TitledButton(context, null, getResources().getString(R.string.fast_registeration_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         cnicLinearLayout = new LinearLayout(context);
         cnicLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
-        cnic1 = new TitledEditText(context, null, getResources().getString(R.string.fast_nic_number), "", "#####", 5, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        cnic1 = new TitledEditText(context, null, getResources().getString(R.string.fast_nic_number), "", "#####", 5, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         cnicLinearLayout.addView(cnic1);
         cnic2 = new TitledEditText(context, null, "-", "", "#######", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         cnicLinearLayout.addView(cnic2);
         cnic3 = new TitledEditText(context, null, "-", "", "#", 1, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         cnicLinearLayout.addView(cnic3);
         cnicOwner = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_cnic), getResources().getStringArray(R.array.fast_whose_nic_is_this_list), getResources().getString(R.string.fast_self), App.VERTICAL);
-        tbRegisterationNumber = new TitledEditText(context, null, getResources().getString(R.string.fast_tb_registeration_no), "", "", 11, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        tbRegisterationNumber = new TitledEditText(context, null, getResources().getString(R.string.fast_tb_registeration_no), "", "", 11, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         diagonosisType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_type_of_diagnosis), getResources().getStringArray(R.array.fast_diagonosis_type_list), getResources().getString(R.string.fast_bactoriologically_confirmed), App.VERTICAL, App.VERTICAL);
         tbType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_what_type_of_tb), getResources().getStringArray(R.array.fast_tb_type_list), getResources().getString(R.string.fast_pulmonary), App.VERTICAL, App.VERTICAL);
         extraPulmonarySite = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_site_of_extra_pulmonary), getResources().getStringArray(R.array.fast_extra_pulmonary_site_list), getResources().getString(R.string.fast_lymph_node), App.VERTICAL);
-        extraPulmonarySiteOther = new TitledEditText(context, null, getResources().getString(R.string.other_extra_pulmonary_tb_site), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        extraPulmonarySiteOther = new TitledEditText(context, null, getResources().getString(R.string.other_extra_pulmonary_tb_site), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         patientType = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_patient_type), getResources().getStringArray(R.array.fast_patient_type_list), getResources().getString(R.string.fast_new), App.VERTICAL);
         treatmentInitiated = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_was_treatment_initiated), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
         reasonTreatmentNotIniated = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_reason_the_treatment_was_not_iniated), getResources().getStringArray(R.array.fast_reason_treatment_notinitiated_list), getResources().getString(R.string.fast_patient_refused_treatment), App.VERTICAL);
-        reasonTreatmentNotInitiatedOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        reasonTreatmentNotInitiatedOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         tbCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_category), getResources().getStringArray(R.array.fast_tb_category_list), getResources().getString(R.string.fast_category1), App.VERTICAL, App.VERTICAL);
         historyCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_if_category_2_history_of_previous), getResources().getStringArray(R.array.fast_history_category_2_list), getResources().getString(R.string.fast_cat_1), App.VERTICAL, App.VERTICAL);
         outcomePreviousCategory = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_if_category_2_outcome_of_previous), getResources().getStringArray(R.array.fast_outcome_previous_category_list), getResources().getString(R.string.fast_cured), App.VERTICAL);
-        weight = new TitledEditText(context, null, getResources().getString(R.string.fast_patient_weight), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
+        weight = new TitledEditText(context, null, getResources().getString(R.string.fast_patient_weight), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
         thirdDateCalendar.set(Calendar.YEAR, secondDateCalendar.get(Calendar.YEAR));
         thirdDateCalendar.set(Calendar.DAY_OF_MONTH, secondDateCalendar.get(Calendar.DAY_OF_MONTH));
         thirdDateCalendar.set(Calendar.MONTH, secondDateCalendar.get(Calendar.MONTH));
@@ -193,9 +194,9 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, regDate, cnicLinearLayout, cnicOwner, tbRegisterationNumber, diagonosisType, tbType, extraPulmonarySite,
-                        extraPulmonarySiteOther, patientType, treatmentInitiated, reasonTreatmentNotIniated, reasonTreatmentNotInitiatedOther
-                        , tbCategory, historyCategory, outcomePreviousCategory, weight, returnVisitDate}};
+                {{formDate, regDate, cnicLinearLayout, cnicOwner, diagonosisType, tbType, extraPulmonarySite,
+                        extraPulmonarySiteOther, patientType, treatmentInitiated, reasonTreatmentNotIniated, reasonTreatmentNotInitiatedOther,
+                        tbRegisterationNumber, tbCategory, historyCategory, outcomePreviousCategory, weight, returnVisitDate}};
         formDate.getButton().setOnClickListener(this);
         regDate.getButton().setOnClickListener(this);
         returnVisitDate.getButton().setOnClickListener(this);
@@ -214,6 +215,8 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
+
 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
@@ -225,7 +228,15 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
-            } else
+            }else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+            }
+            else
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         }
 
@@ -453,7 +464,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             observations.add(new String[]{"TB REGISTRATION NUMBER", App.get(tbRegisterationNumber)});
 
         if (diagonosisType.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TUBERCULOSIS DIAGNOSIS METHOD", App.get(diagonosisType).equals(getResources().getString(R.string.fast_bactoriologically_confirmed)) ? "PRIMARY RESPIRATORY TUBERCULOSIS, CONFIRMED BACTERIOLOGICALLY AND HISTOLOGICALLY" : "CLINICAL SUSPICION"});
+            observations.add(new String[]{"TUBERCULOSIS DIAGNOSIS METHOD", App.get(diagonosisType).equals(getResources().getString(R.string.fast_bactoriologically_confirmed)) ? "PRIMARY RESPIRATORY TUBERCULOSIS, CONFIRMED BACTERIOLOGICALLY" : "CLINICAL SUSPICION"});
 
         if (tbType.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"SITE OF TUBERCULOSIS DISEASE", App.get(tbType).equals(getResources().getString(R.string.fast_pulmonary)) ? "PULMONARY TUBERCULOSIS" : "EXTRA-PULMONARY TUBERCULOSIS"});
@@ -682,7 +693,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             } else if (obs[0][0].equals("TUBERCULOSIS DIAGNOSIS METHOD")) {
 
                 for (RadioButton rb : diagonosisType.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_bactoriologically_confirmed)) && obs[0][1].equals("PRIMARY RESPIRATORY TUBERCULOSIS, CONFIRMED BACTERIOLOGICALLY AND HISTOLOGICALLY")) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_bactoriologically_confirmed)) && obs[0][1].equals("PRIMARY RESPIRATORY TUBERCULOSIS, CONFIRMED BACTERIOLOGICALLY")) {
                         rb.setChecked(true);
                         break;
                     } else if (rb.getText().equals(getResources().getString(R.string.fast_clinically_diagnosed)) && obs[0][1].equals("CLINICAL SUSPICION")) {

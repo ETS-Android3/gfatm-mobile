@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -180,7 +181,6 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
         tbHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_tb_before), getResources().getStringArray(R.array.fast_choice_list), getResources().getString(R.string.fast_no_title), App.VERTICAL, App.VERTICAL);
         tbContact = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_close_with_someone_diagnosed), getResources().getStringArray(R.array.fast_choice_list), getResources().getString(R.string.fast_no_title), App.VERTICAL, App.VERTICAL);
 
-
         // Used for reset fields...
         views = new View[]{formDate.getButton(), husbandName.getEditText(), fatherName.getEditText(), patientAttendant.getRadioGroup(), patientConsultation.getSpinner(),
                 patientConsultationOther.getEditText(), cough.getRadioGroup(), coughDuration.getSpinner(),
@@ -215,6 +215,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
         if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
@@ -226,7 +227,15 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
 
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
-            } else
+            }else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+            }
+            else
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         }
     }
@@ -268,16 +277,6 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
                     gotoPage(0);
                 patientConsultationOther.getEditText().setError(getString(R.string.empty_field));
                 patientConsultationOther.getEditText().requestFocus();
-                error = true;
-            }
-
-            if (fatherName.getVisibility() == View.VISIBLE && App.get(fatherName).isEmpty()) {
-                if (App.isLanguageRTL())
-                    gotoPage(2);
-                else
-                    gotoPage(0);
-                fatherName.getEditText().setError(getString(R.string.empty_field));
-                fatherName.getEditText().requestFocus();
                 error = true;
             }
 
@@ -337,7 +336,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
         if (husbandName.getVisibility() == View.VISIBLE && !(App.get(husbandName).isEmpty()))
             observations.add(new String[]{"PARTNER FULL NAME", App.get(husbandName)});
 
-        if (fatherName.getVisibility() == View.VISIBLE)
+        if (fatherName.getVisibility() == View.VISIBLE && !App.get(fatherName).isEmpty())
             observations.add(new String[]{"FATHER NAME", App.get(fatherName)});
 
         observations.add(new String[]{"PERSON ATTENDING FACILITY", App.get(patientAttendant).equals(getResources().getString(R.string.fast_patient_title)) ? "SELF" : "ATTENDANT"});
@@ -839,7 +838,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
     public void resetViews() {
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        if(App.getPatient().getPerson().getGender().equals("M")){
+        if(App.getPatient().getPerson().getGender().equals("male")){
             husbandName.setVisibility(View.GONE);
         }
         patientConsultationOther.setVisibility(View.GONE);
