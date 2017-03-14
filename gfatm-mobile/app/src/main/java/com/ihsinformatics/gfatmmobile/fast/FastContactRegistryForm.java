@@ -173,7 +173,6 @@ public class FastContactRegistryForm extends AbstractFormActivity implements Rad
     public boolean submit() {
 
         endTime = new Date();
-
         final ArrayList<String[]> observations = new ArrayList<String[]>();
         observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
         observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});

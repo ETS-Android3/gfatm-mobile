@@ -412,6 +412,9 @@
     <string name="fast_father_name">Father\'s Name</string>
     <string name="fast_accepted">Accepted</string>
     <string name="fast_rejected">Rejected</string>
+    <string name="fast_date_of_result_recieved_cannot_be_less_than_submission_date">Date of result received cannot be before sample submission date</string>
+    <string name="fast_form_cannot_be_before_person_dob">Form date cannot be before person date of birth</string>
+    <string name="fast_please_select_atleast_one_checkbox_for_identification_ids">Please select atleast one checkbox for identifcation IDs</string>
 
 
 

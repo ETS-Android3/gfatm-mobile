@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -147,23 +148,23 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         cnicLinearLayout = new LinearLayout(context);
         cnicLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
-        cnic1 = new TitledEditText(context, null, getResources().getString(R.string.fast_nic_number), "", "#####", 5, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        cnic1 = new TitledEditText(context, null, getResources().getString(R.string.fast_nic_number), "", "#####", 5, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         cnicLinearLayout.addView(cnic1);
         cnic2 = new TitledEditText(context, null, "-", "", "#######", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         cnicLinearLayout.addView(cnic2);
         cnic3 = new TitledEditText(context, null, "-", "", "#", 1, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         cnicLinearLayout.addView(cnic3);
         cnicOwner = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_whose_nic_is_this), getResources().getStringArray(R.array.fast_whose_nic_is_this_list), getResources().getString(R.string.fast_self), App.VERTICAL);
-        otherCnicOwner = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        otherCnicOwner = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         addressProvided = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_provided_their_address), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
         addressHouse = new TitledEditText(context, null, getResources().getString(R.string.fast_address_1), "", "", 10, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         addressStreet = new TitledEditText(context, null, getResources().getString(R.string.fast_address_2), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         addressTown = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_town), getResources().getStringArray(R.array.fast_towns_list),"Default Town", App.VERTICAL);
-        city = new TitledEditText(context, null, getResources().getString(R.string.fast_city), App.getCity(), "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        city = new TitledEditText(context, null, getResources().getString(R.string.fast_city), App.getCity(), "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         city.getEditText().setKeyListener(null);
         city.getEditText().setFocusable(false);
         addressType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_type_of_address_is_this), getResources().getStringArray(R.array.fast_type_of_address_list), getResources().getString(R.string.fast_perminant), App.VERTICAL, App.VERTICAL);
-        nearestLandmark = new TitledEditText(context, null, getResources().getString(R.string.fast_nearest_landmark), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        nearestLandmark = new TitledEditText(context, null, getResources().getString(R.string.fast_nearest_landmark), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         contactPermission = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_can_we_call_you), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
         mobileLinearLayout = new LinearLayout(context);
         mobileLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -220,6 +221,8 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
+
 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
@@ -231,7 +234,15 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
 
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
-            } else
+            }else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+            }
+            else
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         }
     }
@@ -309,33 +320,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             otherCnicOwner.getEditText().requestFocus();
             error = true;
         }
-        if (addressHouse.getVisibility() == View.VISIBLE && App.get(addressHouse).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            addressHouse.getEditText().setError(getString(R.string.empty_field));
-            addressHouse.getEditText().requestFocus();
-            error = true;
-        }
-        if (addressStreet.getVisibility() == View.VISIBLE && App.get(addressStreet).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            addressStreet.getEditText().setError(getString(R.string.empty_field));
-            addressStreet.getEditText().requestFocus();
-            error = true;
-        }
-        if (nearestLandmark.getVisibility() == View.VISIBLE && App.get(nearestLandmark).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            nearestLandmark.getEditText().setError(getString(R.string.empty_field));
-            nearestLandmark.getEditText().requestFocus();
-            error = true;
-        }
+
         if (App.get(mobile1).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
@@ -525,7 +510,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             mobile2.getEditText().setError(null);
         }
 
-        if (!App.get(secondaryMobile1).isEmpty() && App.get(secondaryMobile2).isEmpty() && !RegexUtil.isMobileNumber(secondaryMobileNumber)) {
+        if (!App.get(secondaryMobile1).isEmpty() && !App.get(secondaryMobile2).isEmpty() && !RegexUtil.isMobileNumber(secondaryMobileNumber)) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -537,7 +522,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             secondaryMobile2.getEditText().setError(null);
         }
 
-        if (!App.get(landline1).isEmpty() && App.get(landline2).isEmpty() && !RegexUtil.isLandlineNumber(landlineNumber)) {
+        if (!App.get(landline1).isEmpty() && !App.get(landline2).isEmpty() && !RegexUtil.isLandlineNumber(landlineNumber)) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -550,7 +535,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         }
 
 
-        if (!App.get(secondaryLandline1).isEmpty() && App.get(secondaryLandline2).isEmpty() && !RegexUtil.isLandlineNumber(secondaryLandlineNumber)) {
+        if (!App.get(secondaryLandline1).isEmpty() && !App.get(secondaryLandline2).isEmpty() && !RegexUtil.isLandlineNumber(secondaryLandlineNumber)) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -647,11 +632,11 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         if (addressType.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TYPE OF ADDRESS", App.get(addressType).equals(getResources().getString(R.string.fast_perminant)) ? "PERMANENT ADDRESS" : "TEMPORARY ADDRESS"});
 
-        if (nearestLandmark.getVisibility() == View.VISIBLE)
+        if (nearestLandmark.getVisibility() == View.VISIBLE && !App.get(nearestLandmark).isEmpty())
             observations.add(new String[]{"NEAREST LANDMARK", App.get(nearestLandmark)});
 
         if (contactPermission.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"PERMISSION TO CONTACT FOR CALL AND SMS", App.get(contactPermission).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
+            observations.add(new String[]{"PERMISSION TO USE CONTACT NUMBER", App.get(contactPermission).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
 
         observations.add(new String[]{"CONTACT PHONE NUMBER", mobileNumber});
 
@@ -664,10 +649,10 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         if (!(App.get(secondaryLandline1).isEmpty() && App.get(secondaryLandline2).isEmpty()))
         observations.add(new String[]{"QUATERNARY CONTACT NUMBER", secondaryLandlineNumber});
 
-        if (addressHouse.getVisibility() == View.VISIBLE)
+        if (addressHouse.getVisibility() == View.VISIBLE && !App.get(addressHouse).isEmpty())
         observations.add(new String[]{"ADDRESS (TEXT)", App.get(addressHouse)});
 
-        if (addressStreet.getVisibility() == View.VISIBLE)
+        if (addressStreet.getVisibility() == View.VISIBLE && !App.get(addressStreet).isEmpty())
         observations.add(new String[]{"EXTENDED ADDRESS (TEXT)", App.get(addressStreet)});
 
         if (addressTown.getVisibility() == View.VISIBLE)
@@ -895,7 +880,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             } else if (obs[0][0].equals("NEAREST LANDMARK")) {
                 nearestLandmark.getEditText().setText(obs[0][1]);
                 nearestLandmark.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("PERMISSION TO CONTACT FOR CALL AND SMS")) {
+            } else if (obs[0][0].equals("PERMISSION TO USE CONTACT NUMBER")) {
 
                 for (RadioButton rb : contactPermission.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
