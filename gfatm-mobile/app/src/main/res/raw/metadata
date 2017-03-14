@@ -4335,16 +4335,85 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PROTHIONAMIDE',
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TERIZIDONE', 'TRD','N/A','84836AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 
 INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('NOT DETECTED',NULL,'1302AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
-
 INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('MOTHER', NULL,'970AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
 INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('FATHER', NULL,'971AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
 INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('MATERNAL GRANDMOTHER', NULL,'160723AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
 INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('MATERNAL GRANDFATHER', NULL,'160724AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
 INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('PATERNAL GRANDMOTHER', NULL,'160726AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
 INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('PATERNAL GRANDFATHER', NULL,'160725AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
-
 INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('LIFESTYLE',NULL,'135797AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
 
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('SELF',NULL,'978AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('BROTHER',NULL,'160729AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('SISTER',NULL,'160730AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('SON',NULL,'160727AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('AUNT',NULL,'975AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('UNCLE',NULL,'974AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('HEALTH FACILITY',NULL,'1537AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('SPECIAL EDUCATION RECEIVED',NULL,'160293AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('NO FORMAL EDUCATION',NULL,'160294AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('STUDENT',NULL,'159465AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('CASUAL LABOR',NULL,'159613AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('MEDICAL OFFICER/DOCTOR',NULL,'162591AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('DRIVER',NULL,'159466AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('FARMER',NULL,'1538AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('PROFESSIONAL',NULL,'159463AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('TRADER',NULL,'1539AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('HYPERTENSION',NULL,'117399AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('ASTHMA',NULL,'121375AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('EMPHYSEMA',NULL,'141342AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('MENTAL RETARDATION',NULL,'115809AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('DISABILITY',NULL,'162558AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','Coded');
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('HUMAN IMMUNODEFICIENCY VIRUS',NULL,'884AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('HEPATITIS C VIRUS INFECTION',NULL,'156590AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('HEADACHE',NULL,'139084AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('NAUSEA',NULL,'5978AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('VISUAL IMPAIRMENT',NULL,'159298AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('IRON',NULL,'78218AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('VITAMIN D',NULL,'86345AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('ACADEMIC PROBLEM',NULL,'150504AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('TREATMENT COMPLETE',NULL,'160035AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('GENERAL MEDICINE DEPARTMENT',NULL,'N/A','160448AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CHEST MEDICINE DEPARTMENT',NULL,'N/A','160470AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OBSTETRICS AND GYNECOLOGY DEPARTMENT',NULL,'N/A','160456AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PEDIATRIC SURGERY DEPARTMENT',NULL,'N/A','160458AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('EMERGENCY DEPARTMENT',NULL,'N/A','160473AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PRIVATE PRACTIONER','PRIVATE PRACTITIONER','Boolean','1725AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OBSERVATION WARD',NULL,'N/A','161629AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('GENERAL PRACTITIONER',NULL,'N/A','160484AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('FRIEND',NULL,'N/A','5618AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LYMPHOCYTES','LYMPH','Numeric','1021AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PLEURAL EFFUSION',NULL,'N/A','114108AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SALIVA',NULL,'N/A','160013AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MYCOBACTERIUM TUBERCULOSIS DETECTED WITH RIFAMPIN RESISTANCE',NULL,'N/A','162203AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MYCOBACTERIUM TUBERCULOSIS DETECTED WITHOUT RIFAMPIN RESISTANCE',NULL,'N/A','162204AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LOW','LOW','N/A','1407AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MULTI-DRUG RESISTANT TUBERCULOSIS SUSPECTED',NULL,'Coded','160039AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DRUG RESISTANT TUBERCULOSIS',NULL,'N/A','156080AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MYCOBACTERIUM TUBERCULOSIS','M. TUBERCULOSIS','N/A','160007AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PRIMARY RESPIRATORY TUBERCULOSIS, CONFIRMED BACTERIOLOGICALLY',NULL,'N/A','152306AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LYMPH NODE SARCOIDOSIS',NULL,'N/A','135492AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ABDOMEN',NULL,'N/A','1808AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TUBERCULOSIS OF BONES AND JOINTS',NULL,'N/A','112115AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('GENITOURINARY TUBERCULOSIS',NULL,'N/A','117825AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DECEASED',NULL,'N/A','159AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CURE, OUTCOME','CURE','N/A','159791AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TRANSFERRED OUT',NULL,'N/A','159492AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('EAR, NOSE AND THROAT DEPARTMENT''EAR, NOSE AND THROAT DEPARTMENT',NULL,'N/A','160455AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('GENERAL SURGERY DEPARTMENT',NULL,'N/A','160449AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ORTHOPEDIC DEPARTMENT',NULL,'N/A','160465AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DERMATOLOGY DEPARTMENT',NULL,'N/A','160460AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NEUROLOGY DEPARTMENT',NULL,'N/A','160471AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CARDIOLOGY DEPARTMENT',NULL,'N/A','160469AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('UROLOGY DEPARTMENT',NULL,'N/A','160476AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PSYCHIATRY DEPARTMENT',NULL,'N/A','160461AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OPHTHALMOLOGY DEPARTMENT',NULL,'N/A','160454AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ENDOCRINOLOGY DEPARTMENT',NULL,'N/A','160468AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('FEVER LASTING MORE THAN THREE WEEKS',NULL,'Boolean','1494AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 
 -- Program
 INSERT OR IGNORE INTO program VALUES (1, "86ba1232-d576-416e-b102-5f335c6746ce", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
@@ -4474,15 +4543,15 @@ INSERT OR IGNORE INTO location VALUES (16,'SGHKO-KHI','75d6e8a0-f1d9-47e5-bf01-7
 INSERT OR IGNORE INTO location VALUES (17,'SGHLQ-KHI','e743ab51-06ae-49a9-ba59-a95d8425f99d',NULL,'Y','N','N','N','Y','Y',NULL,'Liaqatabad',NULL,NULL,'Karachi','Sindh','Sindh Government Hospital Liaqatabad');
 INSERT OR IGNORE INTO location VALUES (18,'SGOQH-KHI','89eac0b8-b459-40dc-8635-dbea38dd0732',NULL,'Y','N','N','N','N','Y',NULL,'Orangi',NULL,NULL,'Karachi','Sindh','Sindh Government Orangi Qatar Hospital');
 INSERT OR IGNORE INTO location VALUES (19,'DAP-KHI','ef3ec91c-015a-4bc9-b609-55c1117bc6f5',NULL,'Y','N','N','N','N','Y',NULL,'5-E/3 Nazimabad',NULL,NULL,'Karachi','Sindh','Diabetes Association Karachi Pakistan');
-INSERT OR IGNORE INTO location VALUES (20,'BIDE-KHI','0bd86a91-e11d-412b-bfcd-320c827381bc',NULL,'N','N','N','N','N','Y','02136688897','1-2, II-B','Block 2 Nazimabad',NULL,'Karachi','Sindh','Baqai Institute of Diabetology and Endocrinology');
-INSERT OR IGNORE INTO location VALUES (21,'CCH-KHI','87371a38-c483-4bb5-b079-83496460c062',NULL,'N','N','N','N','N','Y','021111160170',NULL,NULL,NULL,'Karachi','Sindh','Children''s Cancer Hospital');
+INSERT OR IGNORE INTO location VALUES (20,'BIDE-KHI','0bd86a91-e11d-412b-bfcd-320c827381bc',NULL,'Y','N','N','N','N','Y','02136688897','1-2, II-B','Block 2 Nazimabad',NULL,'Karachi','Sindh','Baqai Institute of Diabetology and Endocrinology');
+INSERT OR IGNORE INTO location VALUES (21,'CCH-KHI','87371a38-c483-4bb5-b079-83496460c062',NULL,'Y','N','N','N','N','Y','021111160170',NULL,NULL,NULL,'Karachi','Sindh','Children''s Cancer Hospital');
 INSERT OR IGNORE INTO location VALUES (22,'SIUT-KHI','00718ad7-bfc2-44a0-b519-645bb56a0308',NULL,'Y','N','N','N','N','Y',NULL,'Chand Bibi Road',NULL,NULL,'Karachi','Sindh','Sindh Institute of Urology and Transplantation');
 INSERT OR IGNORE INTO location VALUES (23,'KCPTI-KHI','b4fd59e6-383b-46b8-8d58-56f42437b976',NULL,'N','N','N','N','N','N',NULL,'197/9','Rafiqui Shaheed Road',NULL,'Karachi','Sindh','The Kidney Centre Postgraduate Training Institute');
 INSERT OR IGNORE INTO location VALUES (24,'CHS','611618c2-7550-40ec-a0c6-786f711a9143',NULL,'N','N','N','N','N','N',NULL,'508, Ibrahim Trade Towers','Shahra-e-Faisal',NULL,'Karachi','Sindh','Community Health Services');
 INSERT OR IGNORE INTO location VALUES (25,'OICD-KHI','2921cc22-9fbb-49df-b562-c5eefd3a06d4',NULL,'N','N','N','N','N','N',NULL,'DUHS, Gulzar-e-HijrI','Suparco Road',NULL,'Karachi','Sindh','Ojha Institute of Chest Diseases');
 INSERT OR IGNORE INTO location VALUES (26,'KGH-KHI','d994a1d3-efd3-4c85-ba06-11342aa174d9',NULL,'Y','N','Y','N','N','Y',NULL,'Aga Khan Road','Kharadar, Karachi',NULL,'Karachi','Sindh','Kharadar General Hospital');
 INSERT OR IGNORE INTO location VALUES (27,'SGHLD-KHI','5e2eecf8-8e8d-4726-a76b-68b0f0d26544',NULL,'N','N','N','N','N','N',NULL,'Landhi',NULL,NULL,'Karachi','Sindh','Sindh Government Hospital Landhi');
-INSERT OR IGNORE INTO location VALUES (28,'ATSNK-KHI','3910a0a2-98cf-44cc-9cd5-626754deaad0',NULL,'Y','N','Y','Y','Y','Y',NULL,'New Karachi',NULL,NULL,'Karachi','Sindh','Aiwan-e-Tijarat-o-Sanat New Karachi');
+INSERT OR IGNORE INTO location VALUES (28,'ATSNK-KHI','3910a0a2-98cf-44cc-9cd5-626754deaad0',NULL,'n','N','Y','Y','Y','Y',NULL,'New Karachi',NULL,NULL,'Karachi','Sindh','Aiwan-e-Tijarat-o-Sanat New Karachi');
 INSERT OR IGNORE INTO location VALUES (29,'CH-BDN','ea684cae-6274-497f-bc25-87df5d2bf0cd',NULL,'N','N','Y','N','N','N',NULL,'Civil Hospital Road',NULL,NULL,'Badin','Sindh','Civil Hospital Badin');
 INSERT OR IGNORE INTO location VALUES (30,'FH-KHI','6e4faddb-ca58-42e8-b3d6-132d573a7030',NULL,'Y','N','Y','N','N','N',NULL,'51, Deh Tor, Gadap Road','Near Toll Plaza, Super Highway',NULL,'Karachi','Sindh','Fatima Hospital - Teaching hospital of Baqai Medical University');
 INSERT OR IGNORE INTO location VALUES (31,'ICD-KTR','012bccc9-a68f-42b7-8042-043dd7ef4828',NULL,'N','N','Y','N','N','N',NULL,'Khanzada Colony',NULL,NULL,'Kotri','Sindh','Institute of Chest Diseases Kotri');
@@ -4515,4 +4584,5 @@ INSERT OR IGNORE INTO location VALUES (57,'BVH-BWP','10fab16a-ea66-4f3c-840a-5a6
 INSERT OR IGNORE INTO location VALUES (58,'SZH-RYK','21af21f4-903c-4d69-9711-b3f24a92c23f',NULL,'N','N','N','N','Y','N',NULL,'Sheikh Zayed Medical College/Hospital',NULL,NULL,'Rahimyar Khan','Punjab','Sheikh Zayed Hospital, Rahimyar Khan');
 INSERT OR IGNORE INTO location VALUES (59,'DHH-KZD','4229393b-eb7d-454f-8db5-559aa31d7b85',NULL,'N','N','N','N','Y','N',NULL,NULL,NULL,NULL,'Khuzdar','Balochistan','District Headquarter Hospital, Khuzdar');
 INSERT OR IGNORE INTO location VALUES (60,'DHH-TRB','e8e1d4cd-ec9b-4edb-9329-9b9a42db121e',NULL,'N','N','N','N','Y','N',NULL,NULL,NULL,NULL,'Turbat','Balochistan','District Headquarter Hospital, Turbat');
-INSERT OR IGNORE INTO location VALUES (61,'LRBKNG-KHI','1e72a4d8-99ec-4c09-8550-51e101d45fd9',NULL,'Y','N','N','Y','N','N',NULL,'37-C, Sunset Lane 4','24th Commercial Street',NULL,'Karachi','Sindh','Layton Rehmatullah Benevolent Trust Eye Hospital Korangi');
+INSERT OR IGNORE INTO location VALUES (61,'LRBKNG-KHI','1e72a4d8-99ec-4c09-8550-51e101d45fd9',NULL,'N','N','N','Y','N','N',NULL,'37-C, Sunset Lane 4','24th Commercial Street',NULL,'Karachi','Sindh','Layton Rehmatullah Benevolent Trust Eye Hospital Korangi');
+INSERT OR IGNORE INTO location VALUES (62,'IHNK-KHI','43307598-a468-49d0-bca4-d8a23074fc7d',NULL,'Y','N','Y','Y','Y','Y',NULL,'New Karachi', NULL ,NULL,'Karachi','Sindh','Indus Hospital New Karachi');
