@@ -201,7 +201,7 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
         if (!(sampleSubmissionDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString()))) {
 
             String formDa = sampleSubmissionDate.getButton().getText().toString();
-
+            String personDOB = App.getPatient().getPerson().getBirthdate();
 
             Date date = new Date();
             if (secondDateCalendar.after(App.getCalendar(date))) {
@@ -213,7 +213,17 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
 
                 sampleSubmissionDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
 
-            } else
+            }
+            else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                sampleSubmissionDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+            }
+
+            else
                 sampleSubmissionDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
         }
     }
