@@ -54,7 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.06"
-                android:background="@drawable/form_button"
+                android:background="@drawable/template_button"
                 android:text="@string/goto_first" />
 
             <SeekBar
@@ -74,7 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.06"
-                android:background="@drawable/form_button"
+                android:background="@drawable/template_button"
                 android:text="@string/goto_next" />
 
             <Button
@@ -84,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:layout_weight="0.06"
-                android:background="@drawable/form_button"
+                android:background="@drawable/template_button"
                 android:text="@string/goto_last" />
 
         </LinearLayout>
@@ -101,7 +101,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="3.5"
-                android:background="@drawable/form_button"
+                android:background="@drawable/template_button"
                 android:text="@string/save" />
 
             <Button
@@ -110,7 +110,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
-                android:background="@drawable/form_button"
+                android:background="@drawable/template_button"
                 android:text="@string/clear" />
 
             <Button
@@ -119,7 +119,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
-                android:background="@drawable/form_button"
+                android:background="@drawable/template_button"
                 android:text="@string/submit" />
 
         </LinearLayout>

@@ -9,24 +9,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingTop="@dimen/small"
-        android:paddingBottom="@dimen/small">
+        android:paddingBottom="@dimen/small"
+        android:paddingTop="@dimen/small">
 
         <TextView
+            android:id="@+id/formName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/formName"
             android:text="FORM NAME"
             android:textSize="@dimen/xlarge"
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/pageCount"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/pageCount"
+            android:gravity="right"
             android:text="0/0"
-            android:textSize="@dimen/xlarge"
-            android:gravity="right" />
+            android:textSize="@dimen/xlarge" />
 
     </LinearLayout>
 
@@ -50,11 +50,11 @@
 
             <Button
                 android:id="@+id/first_button"
-                android:background="@drawable/form_button"
                 style="@style/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.06"
+                android:background="@drawable/template_button"
                 android:text="@string/goto_first" />
 
             <SeekBar
@@ -71,20 +71,20 @@
 
             <Button
                 android:id="@+id/next_button"
-                android:background="@drawable/form_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.06"
+                android:background="@drawable/template_button"
                 android:text="@string/goto_next" />
 
             <Button
                 android:id="@+id/last_button"
-                android:background="@drawable/form_button"
                 style="@style/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:layout_weight="0.06"
+                android:background="@drawable/template_button"
                 android:text="@string/goto_last" />
 
         </LinearLayout>
@@ -97,29 +97,29 @@
 
             <Button
                 android:id="@+id/saveButton"
-                android:background="@drawable/form_button"
                 style="@style/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="3.5"
+                android:background="@drawable/template_button"
                 android:text="@string/save" />
 
             <Button
                 android:id="@+id/clearButton"
-                android:background="@drawable/form_button"
                 style="@style/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
+                android:background="@drawable/template_button"
                 android:text="@string/clear" />
 
             <Button
                 android:id="@+id/submitButton"
-                android:background="@drawable/form_button"
                 style="@style/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
+                android:background="@drawable/template_button"
                 android:text="@string/submit" />
 
         </LinearLayout>

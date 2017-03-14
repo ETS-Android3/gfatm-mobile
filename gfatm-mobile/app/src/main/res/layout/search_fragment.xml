@@ -286,6 +286,7 @@
                 android:id="@+id/searchPatient"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/template_button"
                 android:text="@string/search"/>
 
         </LinearLayout>
