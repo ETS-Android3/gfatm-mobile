@@ -21,8 +21,10 @@ import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -34,6 +36,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
@@ -155,7 +158,7 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
         referralSite = new TitledSpinner(context, null, getResources().getString(R.string.pet_referral_site), locationArray, "", App.VERTICAL, true);
         othersSite = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         tbRuledOut = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_ruled_out), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, true);
-        petEligiable = new TitledEditText(context, null, getResources().getString(R.string.pet_eligible), getResources().getString(R.string.no), "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        petEligiable = new TitledEditText(context, null, getResources().getString(R.string.pet_eligible), getResources().getString(R.string.yes), "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         petEligiable.getEditText().setKeyListener(null);
         petConsent = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_consent), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, true);
 
@@ -176,7 +179,7 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
 
         viewGroups = new View[][]{{formDate, linearLayout1}};
 
-        View listenerViewer[] = new View[]{formDate, pregnancyHistory, referralSite, tbRuledOut, tbDiagnosis};
+        View listenerViewer[] = new View[]{formDate, pregnancyHistory, tbReferral, referralSite, tbRuledOut, tbDiagnosis};
         for (View v : listenerViewer) {
 
             if (v instanceof TitledButton)
@@ -203,6 +206,7 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
         if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
@@ -214,6 +218,13 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
 
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
             } else
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
@@ -235,11 +246,27 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
 
         String s = App.getPatient().getPerson().getMaritalStatus();
 
-
         if (App.getPatient().getPerson().getAge() < 14 || App.getPatient().getPerson().getMaritalStatus().equalsIgnoreCase("Single"))
             pregnancyHistory.setVisibility(View.GONE);
         else
             pregnancyHistory.setVisibility(View.VISIBLE);
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean openFlag = bundle.getBoolean("open");
+            if (openFlag) {
+
+                bundle.putBoolean("open", false);
+                bundle.putBoolean("save", true);
+
+                String id = bundle.getString("formId");
+                int formId = Integer.valueOf(id);
+
+                refill(formId);
+
+            } else bundle.putBoolean("save", false);
+
+        }
 
     }
 
@@ -309,15 +336,28 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
 
     @Override
     public boolean submit() {
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            String encounterId = bundle.getString("formId");
+            if (saveFlag) {
+                serverService.deleteOfflineForms(encounterId);
+            }
+            bundle.putBoolean("save", false);
+        }
+
         endTime = new Date();
 
         final ArrayList<String[]> observations = new ArrayList<String[]>();
+
         observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
         observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
         /*observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
         observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});*/
-        observations.add(new String[]{"PREGNANCY STATUS", App.get(pregnancyHistory).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        observations.add(new String[]{"PREGNANCY TEST RESULT", App.get(pregnancyTestResult).equals(getResources().getString(R.string.pet_positive)) ? "POSITIVE" :
+        if (pregnancyHistory.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"PREGNANCY STATUS", App.get(pregnancyHistory).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        if (pregnancyTestResult.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"PREGNANCY TEST RESULT", App.get(pregnancyTestResult).equals(getResources().getString(R.string.pet_positive)) ? "POSITIVE" :
                 (App.get(pregnancyTestResult).equals(getResources().getString(R.string.pet_negative)) ? "NEGATIVE" : "PREGNANCY TEST UNDETERMINENT")});
         String evaluationTypeString = "";
         for (CheckBox cb : evaluationType.getCheckedBoxes()) {
@@ -330,8 +370,6 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
         observations.add(new String[]{"TUBERCULOSIS DIAGNOSED", App.get(tbDiagnosis).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         if (infectionType.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TUBERCULOSIS INFECTION TYPE", App.get(infectionType).equals(getResources().getString(R.string.pet_dstb)) ? "DRUG-SENSITIVE TUBERCULOSIS INFECTION" : "DRUG-RESISTANT TUBERCULOSIS INFECTION"});
-        if (tbReferral.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"PATIENT REFERRED", App.get(tbReferral).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         if (tbReferral.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"PATIENT REFERRED", App.get(tbReferral).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         if (referralSite.getVisibility() == View.VISIBLE)
@@ -518,7 +556,10 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
             if (App.get(tbDiagnosis).equals(getResources().getString(R.string.yes))) {
                 infectionType.setVisibility(View.VISIBLE);
                 tbReferral.setVisibility(View.VISIBLE);
-                referralSite.setVisibility(View.VISIBLE);
+                if (App.get(referralSite).equals(getResources().getString(R.string.yes)))
+                    referralSite.setVisibility(View.VISIBLE);
+                else
+                    referralSite.setVisibility(View.GONE);
                 tbRuledOut.setVisibility(View.GONE);
                 petEligiable.getEditText().setText(getResources().getString(R.string.no));
                 if (App.get(referralSite).equals(getResources().getString(R.string.pet_other)))
@@ -537,17 +578,143 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
                 else
                     petEligiable.getEditText().setText(getResources().getString(R.string.no));
             }
-        }
-        if (group == tbRuledOut.getRadioGroup()) {
+        } else if (group == tbRuledOut.getRadioGroup()) {
             if (App.get(tbRuledOut).equals(getResources().getString(R.string.yes)))
                 petEligiable.getEditText().setText(getResources().getString(R.string.yes));
             else
                 petEligiable.getEditText().setText(getResources().getString(R.string.no));
+        } else if (group == tbReferral.getRadioGroup()) {
+            if (App.get(tbReferral).equals(getResources().getString(R.string.yes))) {
+                referralSite.setVisibility(View.GONE);
+                if (App.get(referralSite).equals(getResources().getString(R.string.pet_other)))
+                    othersSite.setVisibility(View.VISIBLE);
+                else
+                    othersSite.setVisibility(View.GONE);
+            } else {
+                referralSite.setVisibility(View.GONE);
+                othersSite.setVisibility(View.GONE);
+            }
         }
     }
 
     @Override
     public void refill(int encounterId) {
+
+        OfflineForm fo = serverService.getOfflineFormById(encounterId);
+        String date = fo.getFormDate();
+        ArrayList<String[][]> obsValue = fo.getObsValue();
+        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        for (int i = 0; i < obsValue.size(); i++) {
+
+            String[][] obs = obsValue.get(i);
+
+            if (obs[0][0].equals("FORM START TIME")) {
+                startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
+            } else if (obs[0][0].equals("PREGNANCY STATUS")) {
+                for (RadioButton rb : pregnancyHistory.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("PREGNANCY TEST RESULT")) {
+                for (RadioButton rb : pregnancyTestResult.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet_positive)) && obs[0][1].equals("POSITIVE")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_negative)) && obs[0][1].equals("NEGATIVE")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_undetermined)) && obs[0][1].equals("PREGNANCY TEST UNDETERMINENT")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("TB EVALUATION TYPE")) {
+                for (CheckBox rb : evaluationType.getCheckedBoxes()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet_evidence_based_evaluation)) && obs[0][1].equals("EVIDENCE BASED EVALUATION")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_clinical_evaluation)) && obs[0][1].equals("CLINICAL EVALUATION")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("TUBERCULOSIS DIAGNOSED")) {
+                for (RadioButton rb : tbDiagnosis.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("TUBERCULOSIS INFECTION TYPE")) {
+                for (RadioButton rb : infectionType.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet_dstb)) && obs[0][1].equals("DRUG-SENSITIVE TUBERCULOSIS INFECTION")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_drtb)) && obs[0][1].equals("DRUG-RESISTANT TUBERCULOSIS INFECTION")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                infectionType.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("PATIENT REFERRED")) {
+                for (RadioButton rb : tbReferral.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                tbReferral.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("REFERRING FACILITY NAME")) {
+                referralSite.getSpinner().selectValue(obs[0][1]);
+                referralSite.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("TB RULED OUT")) {
+                for (RadioButton rb : tbRuledOut.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                tbRuledOut.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("PET ELIGIBLE")) {
+
+                if (obs[0][1].equals("YES")) {
+                    petEligiable.getEditText().setText(getResources().getString(R.string.yes));
+                    break;
+                } else if (obs[0][1].equals("NO")) {
+                    petEligiable.getEditText().setText(getResources().getString(R.string.no));
+                    break;
+                }
+                petEligiable.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("TB CONSENT")) {
+                for (RadioButton rb : petConsent.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                petConsent.setVisibility(View.VISIBLE);
+            }
+
+        }
     }
 
     class MyAdapter extends PagerAdapter {

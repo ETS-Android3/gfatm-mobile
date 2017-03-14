@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -194,6 +195,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
         if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
@@ -205,36 +207,50 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
 
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
             } else
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
+
+            if (secondDateCalendar.after(formDateCalendar)) {
+                treatmentEnrollmentDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+                Date date1 = App.stringToDate(formDate.getButton().getText().toString(), "dd-MMM-yyyy");
+                secondDateCalendar = App.getCalendar(date1);
+            }
+
         }
 
+        String formDa = treatmentEnrollmentDate.getButton().getText().toString();
+        String personDOB = App.getPatient().getPerson().getBirthdate();
 
+        Date date = new Date();
         if (secondDateCalendar.after(formDateCalendar)) {
-            treatmentEnrollmentDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
-            Date date = App.stringToDate(formDate.getButton().getText().toString(), "dd-MMM-yyyy");
-            secondDateCalendar = App.getCalendar(date);
+            secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
 
-        }
+            snackbar = Snackbar.make(mainContent, getResources().getString(R.string.enrollment_date_error), Snackbar.LENGTH_INDEFINITE);
+            snackbar.show();
 
-        if (!treatmentEnrollmentDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString())) {
+            treatmentEnrollmentDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
 
-            Date date = App.stringToDate(formDate.getButton().getText().toString(), "dd-MMM-yyyy");
+        } else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+            secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+            snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+            TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+            tv.setMaxLines(2);
+            snackbar.show();
+            treatmentEnrollmentDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
 
-            if (secondDateCalendar.after(date)) {
+        } else
+            treatmentEnrollmentDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
 
-                Date secondDate = App.stringToDate(treatmentEnrollmentDate.getButton().getText().toString(), "dd-MMM-yyyy");
-                secondDateCalendar = App.getCalendar(secondDate);
-
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.pet_enrollment_date_future), Snackbar.LENGTH_INDEFINITE);
-                snackbar.show();
-
-            } else
-                treatmentEnrollmentDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-
-        }
 
     }
 
@@ -515,9 +531,9 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                             return result;
                     }
 
-                    result = serverService.saveProgramEnrollement(App.getSqlDate(formDateCalendar), "100-0");
-                    if (!result.equals("SUCCESS"))
-                        return result;
+//                    result = serverService.saveProgramEnrollement(App.getSqlDate(formDateCalendar), "100-0");
+//                    if (!result.equals("SUCCESS"))
+//                        return result;
                 }
 
                 return "SUCCESS";
@@ -876,7 +892,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                     if (rb.getText().equals(getResources().getString(R.string.pet_dstb)) && obs[0][1].equals("DRUG-SENSITIVE TUBERCULOSIS INFECTION")) {
                         rb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_drtb)) && obs[0][1].equals("DRUG-RESISTANT TUBERCULOSIS INFECTION")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_drtb)) && obs[0][1].equals("DRUG-RESISTANT TB")) {
                         rb.setChecked(true);
                         break;
                     }

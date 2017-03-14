@@ -23,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -31,6 +32,7 @@ import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
@@ -125,13 +127,13 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
         maritalStatus = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_martial_status), getResources().getStringArray(R.array.pet_martial_statuses), getResources().getString(R.string.pet_single), App.VERTICAL, true);
         emloyementStatus = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_employement_status), getResources().getStringArray(R.array.pet_employement_statuses), getResources().getString(R.string.pet_employed), App.VERTICAL, true);
         occupation = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_occupation), getResources().getStringArray(R.array.pet_occupations), getString(R.string.pet_artist), App.VERTICAL, true);
-        contactIncome = new TitledEditText(context, null, getResources().getString(R.string.pet_contact_income), "0", "", 20, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        contactIncomeGroup = new TitledEditText(context, null, getResources().getString(R.string.pet_contact_income_group), getResources().getString(R.string.pet_none), "", 10, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        contactIncome = new TitledEditText(context, null, getResources().getString(R.string.pet_contact_income), "0", "", 10, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        contactIncomeGroup = new TitledEditText(context, null, getResources().getString(R.string.pet_contact_income_group), getResources().getString(R.string.pet_none), "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         householdHead = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_household_head), getResources().getStringArray(R.array.pet_household_heads), getString(R.string.pet_mother), App.VERTICAL, true);
         otherHouseholdHead = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         householdHeadEducationLevel = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_household_education), getResources().getStringArray(R.array.pet_contact_education_levels), getString(R.string.pet_intermediate), App.VERTICAL);
         motherTongue = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_mother_tongue), getResources().getStringArray(R.array.pet_mother_tongues), getString(R.string.urdu), App.VERTICAL);
-        otherMotherTongue = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        otherMotherTongue = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
 
         views = new View[]{formDate.getButton(), ethinicity.getSpinner(), otherEthinicity.getEditText(), contactEducationLevel.getSpinner(), maritalStatus.getSpinner(), emloyementStatus.getSpinner(), occupation.getSpinner(), contactIncome.getEditText(), contactIncomeGroup.getEditText(),
                 householdHead.getSpinner(), otherHouseholdHead.getEditText(), householdHeadEducationLevel.getSpinner(), motherTongue.getSpinner(), otherMotherTongue.getEditText()};
@@ -195,6 +197,22 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
         otherHouseholdHead.setVisibility(View.GONE);
         otherMotherTongue.setVisibility(View.GONE);
 
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean openFlag = bundle.getBoolean("open");
+            if (openFlag) {
+
+                bundle.putBoolean("open", false);
+                bundle.putBoolean("save", true);
+
+                String id = bundle.getString("formId");
+                int formId = Integer.valueOf(id);
+
+                refill(formId);
+
+            } else bundle.putBoolean("save", false);
+        }
+
     }
 
     @Override
@@ -205,6 +223,7 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
         if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
@@ -216,6 +235,13 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
 
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
             } else
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
@@ -275,6 +301,16 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
 
     @Override
     public boolean submit() {
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            String encounterId = bundle.getString("formId");
+            if (saveFlag) {
+                serverService.deleteOfflineForms(encounterId);
+            }
+            bundle.putBoolean("save", false);
+        }
+
         endTime = new Date();
 
         final ArrayList<String[]> observations = new ArrayList<String[]>();
@@ -289,7 +325,7 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
                         (App.get(ethinicity).equals(getResources().getString(R.string.pet_pakhtun)) ? "PASHTUN" :
                                 (App.get(ethinicity).equals(getResources().getString(R.string.pet_punjabi)) ? "PUNJABI" :
                                         (App.get(ethinicity).equals(getResources().getString(R.string.pet_balochi)) ? "BALOCHI" :
-                                                (App.get(ethinicity).equals(getResources().getString(R.string.pet_bihari)) ? "Bihari" :
+                                                (App.get(ethinicity).equals(getResources().getString(R.string.pet_bihari)) ? "BIHARI" :
                                                         (App.get(ethinicity).equals(getResources().getString(R.string.pet_memon)) ? "MEMON" :
                                                                 (App.get(ethinicity).equals(getResources().getString(R.string.pet_gujrati)) ? "GUJRATI" :
                                                                         (App.get(ethinicity).equals(getResources().getString(R.string.pet_brohi)) ? "BROHI" :
@@ -335,15 +371,13 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
                 (App.get(emloyementStatus).equals(getResources().getString(R.string.pet_unable_to_work)) ? "UNABLE TO WORK" :
                         (App.get(emloyementStatus).equals(getResources().getString(R.string.pet_student)) ? "STUDENT" :
                                 (App.get(emloyementStatus).equals(getResources().getString(R.string.pet_unemployed)) ? "UNEMPLOYED" :
-                                        (App.get(emloyementStatus).equals(getResources().getString(R.string.pet_housework)) ? "DIVORCED" :
+                                        (App.get(emloyementStatus).equals(getResources().getString(R.string.pet_housework)) ? "HOUSEWORK" :
                                                 (App.get(emloyementStatus).equals(getResources().getString(R.string.pet_retired)) ? "RETIRED" :
-                                                        (App.get(emloyementStatus).equals(getResources().getString(R.string.pet_retired)) ? "RETIRED" :
-                                                                (App.get(emloyementStatus).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSE")))))));
+                                                        (App.get(emloyementStatus).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSE"))))));
         observations.add(new String[]{"EMPLOYMENT STATUS", employementStatusString});
 
         final String occupationString = App.get(occupation).equals(getResources().getString(R.string.pet_artist)) ? "ARTIST" :
                 (App.get(occupation).equals(getResources().getString(R.string.pet_beggar)) ? "BEGGAR" :
-                        (App.get(occupation).equals(getResources().getString(R.string.pet_student)) ? "STUDENT" :
                                 (App.get(occupation).equals(getResources().getString(R.string.pet_carpenter)) ? "CARPENTER" :
                                         (App.get(occupation).equals(getResources().getString(R.string.pet_casual_labor)) ? "CASUAL LABOR" :
                                                 (App.get(occupation).equals(getResources().getString(R.string.pet_child_labor)) ? "CHILD LABOR" :
@@ -372,8 +406,8 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
                                                                                                                                                                                                                                         (App.get(occupation).equals(getResources().getString(R.string.pet_teacher)) ? "TEACHER" :
                                                                                                                                                                                                                                                 (App.get(occupation).equals(getResources().getString(R.string.pet_vegetable_fruit_Seller)) ? "VEGETABLE SELLER" :
                                                                                                                                                                                                                                                         (App.get(occupation).equals(getResources().getString(R.string.pet_waiter)) ? "WAITER" :
-                                                                                                                                                                                                                                                                (App.get(occupation).equals(getResources().getString(R.string.pet_other)) ? "OTHER" : "UNKNOWN")))))))))))))))))))))))))))))));
-        observations.add(new String[]{"COMMON OCCUPATIONS", occupationString});
+                                                                                                                                                                                                                                                                (App.get(occupation).equals(getResources().getString(R.string.pet_other)) ? "OTHER" : "UNKNOWN"))))))))))))))))))))))))))))));
+        observations.add(new String[]{"OCCUPATION", occupationString});
         observations.add(new String[]{"MONTHLY INCOME", App.get(contactIncome)});
 
         final String incomeClassString = App.get(contactIncomeGroup).equals(getResources().getString(R.string.pet_none)) ? "NONE" :
@@ -644,7 +678,181 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
     }
 
     @Override
-    public void refill(int encounterId) {
+    public void refill(int formId) {
+
+        OfflineForm fo = serverService.getOfflineFormById(formId);
+        String date = fo.getFormDate();
+        ArrayList<String[][]> obsValue = fo.getObsValue();
+        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        for (int i = 0; i < obsValue.size(); i++) {
+
+            String[][] obs = obsValue.get(i);
+
+            if (obs[0][0].equals("FORM START TIME")) {
+                startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
+            } else if (obs[0][0].equals("ETHNICITY")) {
+                String value = obs[0][1].equals("URDU SPEAKING") ? getResources().getString(R.string.pet_urdu_speaking) :
+                        (obs[0][1].equals("SINDHI") ? getResources().getString(R.string.pet_sindhi) :
+                                (obs[0][1].equals("PASHTUN") ? getResources().getString(R.string.pet_pakhtun) :
+                                        (obs[0][1].equals("PUNJABI") ? getResources().getString(R.string.pet_punjabi) :
+                                                (obs[0][1].equals("BALOCHI") ? getResources().getString(R.string.pet_balochi) :
+                                                        (obs[0][1].equals("BIHARI") ? getResources().getString(R.string.pet_bihari) :
+                                                                (obs[0][1].equals("MEMON") ? getResources().getString(R.string.pet_memon) :
+                                                                        (obs[0][1].equals("GUJRATI") ? getResources().getString(R.string.pet_gujrati) :
+                                                                                (obs[0][1].equals("BROHI") ? getResources().getString(R.string.pet_brohi) :
+                                                                                        (obs[0][1].equals("HINDKO") ? getResources().getString(R.string.pet_hindko) :
+                                                                                                (obs[0][1].equals("GILGITI") ? getResources().getString(R.string.pet_gilgiti_kashmiri) :
+                                                                                                        (obs[0][1].equals("SARAIKI") ? getResources().getString(R.string.pet_siraiki) :
+                                                                                                                (obs[0][1].equals("BANGALI") ? getResources().getString(R.string.pet_benagli) :
+                                                                                                                        (obs[0][1].equals("AFGHAN") ? getResources().getString(R.string.pet_afghani) :
+                                                                                                                                (obs[0][1].equals("HAZARA") ? getResources().getString(R.string.pet_hazara) :
+                                                                                                                                        (obs[0][1].equals("HAZARA") ? getResources().getString(R.string.pet_hazara) :
+                                                                                                                                                (obs[0][1].equals("OTHER ETHNICITY") ? getResources().getString(R.string.pet_other_ethnicity) :
+                                                                                                                                                        (obs[0][1].equals("UNKNOWN") ? getResources().getString(R.string.pet_unknown) : getResources().getString(R.string.refused))))))))))))))))));
+                ethinicity.getSpinner().selectValue(value);
+            } else if (obs[0][0].equals("OTHER ETHNICITY")) {
+                otherEthinicity.getEditText().setText(obs[0][1]);
+                otherEthinicity.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("HIGHEST EDUCATION LEVEL")) {
+                String value = obs[0][1].equals("ELEMENTARY EDUCATION") ? getResources().getString(R.string.pet_elementary) :
+                        (obs[0][1].equals("PRIMARY EDUCATION") ? getResources().getString(R.string.pet_primary) :
+                                (obs[0][1].equals("SECONDARY EDUCATION") ? getResources().getString(R.string.pet_secondary) :
+                                        (obs[0][1].equals("INTERMEDIATE EDUCATION") ? getResources().getString(R.string.pet_intermediate) :
+                                                (obs[0][1].equals("UNDERGRADUATE EDUCATION") ? getResources().getString(R.string.pet_undergraduate) :
+                                                        (obs[0][1].equals("GRADUATE EDUCATION") ? getResources().getString(R.string.pet_graduate) :
+                                                                (obs[0][1].equals("DOCTORATE EDUCATION") ? getResources().getString(R.string.pet_doctorate) :
+                                                                        (obs[0][1].equals("RELIGIOUS EDUCATION") ? getResources().getString(R.string.pet_religious) :
+                                                                                (obs[0][1].equals("POLYTECHNIC EDUCATION") ? getResources().getString(R.string.pet_polytechnic) :
+                                                                                        (obs[0][1].equals("SPECIAL EDUCATION RECEIVED") ? getResources().getString(R.string.pet_special_education) :
+                                                                                                (obs[0][1].equals("NO FORMAL EDUCATION") ? getResources().getString(R.string.pet_no_formal_education) :
+                                                                                                        (obs[0][1].equals("OTHER") ? getResources().getString(R.string.pet_other) :
+                                                                                                                (obs[0][1].equals("UNKNOWN") ? getResources().getString(R.string.unknown) : getResources().getString(R.string.refused)))))))))))));
+                contactEducationLevel.getSpinner().selectValue(value);
+            } else if (obs[0][0].equals("MARITAL STATUS")) {
+                String value = obs[0][1].equals("SINGLE") ? getResources().getString(R.string.pet_single) :
+                        (obs[0][1].equals("ENGAGED") ? getResources().getString(R.string.pet_engaged) :
+                                (obs[0][1].equals("MARRIED") ? getResources().getString(R.string.pet_married) :
+                                        (obs[0][1].equals("SEPARATED") ? getResources().getString(R.string.pet_separated) :
+                                                (obs[0][1].equals("DIVORCED") ? getResources().getString(R.string.pet_divorced) :
+                                                        (obs[0][1].equals("WIDOWED") ? getResources().getString(R.string.pet_widower) :
+                                                                (obs[0][1].equals("OTHER") ? getResources().getString(R.string.pet_other) :
+                                                                        (obs[0][1].equals("UNKNOWN") ? getResources().getString(R.string.unknown) : getResources().getString(R.string.refused))))))));
+                maritalStatus.getSpinner().selectValue(value);
+            } else if (obs[0][0].equals("EMPLOYMENT STATUS")) {
+                String value = obs[0][1].equals("EMPLOYED") ? getResources().getString(R.string.pet_employed) :
+                        (obs[0][1].equals("UNABLE TO WORK") ? getResources().getString(R.string.pet_unable_to_work) :
+                                (obs[0][1].equals("STUDENT") ? getResources().getString(R.string.pet_student) :
+                                        (obs[0][1].equals("UNEMPLOYED") ? getResources().getString(R.string.pet_unemployed) :
+                                                (obs[0][1].equals("HOUSEWORK") ? getResources().getString(R.string.pet_housework) :
+                                                        (obs[0][1].equals("RETIRED") ? getResources().getString(R.string.pet_retired) :
+                                                                (obs[0][1].equals("UNKNOWN") ? getResources().getString(R.string.unknown) : getResources().getString(R.string.refused)))))));
+                emloyementStatus.getSpinner().selectValue(value);
+            } else if (obs[0][0].equals("OCCUPATION")) {
+                String value = obs[0][1].equals("ARTIST") ? getResources().getString(R.string.pet_artist) :
+                        (obs[0][1].equals("BEGGAR") ? getResources().getString(R.string.pet_beggar) :
+                                (obs[0][1].equals("CARPENTER") ? getResources().getString(R.string.pet_carpenter) :
+                                        (obs[0][1].equals("CASUAL LABOR") ? getResources().getString(R.string.pet_casual_labor) :
+                                                (obs[0][1].equals("CHILD LABOR") ? getResources().getString(R.string.pet_child_labor) :
+                                                        (obs[0][1].equals("CLERK") ? getResources().getString(R.string.pet_clerk) :
+                                                                (obs[0][1].equals("MEDICAL OFFICER/DOCTOR") ? getResources().getString(R.string.pet_doctor) :
+                                                                        (obs[0][1].equals("DRIVER") ? getResources().getString(R.string.pet_driver) :
+                                                                                (obs[0][1].equals("ENGINEER") ? getResources().getString(R.string.pet_engineer) :
+                                                                                        (obs[0][1].equals("FARMER") ? getResources().getString(R.string.pet_farmer) :
+                                                                                                (obs[0][1].equals("FISHERMAN") ? getResources().getString(R.string.pet_fisherman) :
+                                                                                                        (obs[0][1].equals("FOOD VENDOR") ? getResources().getString(R.string.pet_food_vendor) :
+                                                                                                                (obs[0][1].equals("FORESTRY WORKER") ? getResources().getString(R.string.pet_forestry_worker) :
+                                                                                                                        (obs[0][1].equals("HOUSEWORK") ? getResources().getString(R.string.pet_housework) :
+                                                                                                                                (obs[0][1].equals("MACHINE OPERATOR") ? getResources().getString(R.string.pet_machine_operator) :
+                                                                                                                                        (obs[0][1].equals("MINER") ? getResources().getString(R.string.pet_miner) :
+                                                                                                                                                (obs[0][1].equals("PILOT") ? getResources().getString(R.string.pet_pilot) :
+                                                                                                                                                        (obs[0][1].equals("PLUMBER") ? getResources().getString(R.string.pet_plumber) :
+                                                                                                                                                                (obs[0][1].equals("PROFESSIONAL") ? getResources().getString(R.string.pet_professional) :
+                                                                                                                                                                        (obs[0][1].equals("REPORTER") ? getResources().getString(R.string.pet_reporter) :
+                                                                                                                                                                                (obs[0][1].equals("SALES REPRESENTATIVE") ? getResources().getString(R.string.pet_sales_representative) :
+                                                                                                                                                                                        (obs[0][1].equals("SECURITY OFFICER") ? getResources().getString(R.string.pet_security_officer) :
+                                                                                                                                                                                                (obs[0][1].equals("SHEPHERD") ? getResources().getString(R.string.pet_shepherd) :
+                                                                                                                                                                                                        (obs[0][1].equals("SLUM WORKER") ? getResources().getString(R.string.pet_slum_worker) :
+                                                                                                                                                                                                                (obs[0][1].equals("SMALL BUSINESS OWNER") ? getResources().getString(R.string.pet_small_bussiness_owner) :
+                                                                                                                                                                                                                        (obs[0][1].equals("TAILOR") ? getResources().getString(R.string.pet_tailor) :
+                                                                                                                                                                                                                                (obs[0][1].equals("TRADER") ? getResources().getString(R.string.pet_trader) :
+                                                                                                                                                                                                                                        (obs[0][1].equals("TEACHER") ? getResources().getString(R.string.pet_teacher) :
+                                                                                                                                                                                                                                                (obs[0][1].equals("VEGETABLE SELLER") ? getResources().getString(R.string.pet_vegetable_fruit_Seller) :
+                                                                                                                                                                                                                                                        (obs[0][1].equals("WAITER") ? getResources().getString(R.string.pet_waiter) :
+                                                                                                                                                                                                                                                                (obs[0][1].equals("OTHER") ? getResources().getString(R.string.pet_other) : getResources().getString(R.string.unknown)))))))))))))))))))))))))))))));
+                occupation.getSpinner().selectValue(value);
+            } else if (obs[0][0].equals("MONTHLY INCOME")) {
+                contactIncome.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("INCOME CLASS")) {
+                String value = obs[0][1].equals("NONE") ? getResources().getString(R.string.pet_none) :
+                        (obs[0][1].equals("LOWER INCOME CLASS") ? getResources().getString(R.string.pet_lower_class) :
+                                (obs[0][1].equals("LOWER MIDDLE INCOME CLASS") ? getResources().getString(R.string.pet_lower_middle_class) :
+                                        (obs[0][1].equals("MIDDLE INCOME CLASS") ? getResources().getString(R.string.pet_middle_class) :
+                                                (obs[0][1].equals("UPPER MIDDLE INCOME CLASS") ? getResources().getString(R.string.pet_upper_middle_class) :
+                                                        (obs[0][1].equals("UPPER INCOME CLASS") ? getResources().getString(R.string.pet_upper_class) : getResources().getString(R.string.unknown))))));
+                contactIncomeGroup.getEditText().setText(value);
+            } else if (obs[0][0].equals("RELATIONSHIP TO HEAD OF HOUSEHOLD")) {
+                String value = obs[0][1].equals("MOTHER") ? getResources().getString(R.string.pet_mother) :
+                        (obs[0][1].equals("FATHER") ? getResources().getString(R.string.pet_father) :
+                                (obs[0][1].equals("MATERNAL GRANDMOTHER") ? getResources().getString(R.string.pet_maternal_grandmother) :
+                                        (obs[0][1].equals("MATERNAL GRANDFATHER") ? getResources().getString(R.string.pet_maternal_grandfather) :
+                                                (obs[0][1].equals("PATERNAL GRANDMOTHER") ? getResources().getString(R.string.pet_paternal_grandmother) :
+                                                        (obs[0][1].equals("PATERNAL GRANDFATHER") ? getResources().getString(R.string.pet_paternal_grandfather) :
+                                                                (obs[0][1].equals("BROTHER") ? getResources().getString(R.string.pet_brother) :
+                                                                        (obs[0][1].equals("SISTER") ? getResources().getString(R.string.pet_sister) :
+                                                                                (obs[0][1].equals("SON") ? getResources().getString(R.string.pet_son) :
+                                                                                        obs[0][1].equals("DAUGHTER") ? getResources().getString(R.string.pet_daughter) :
+                                                                                                obs[0][1].equals("SPOUSE") ? getResources().getString(R.string.pet_spouse) :
+                                                                                                        obs[0][1].equals("AUNT") ? getResources().getString(R.string.pet_aunt) :
+                                                                                                                obs[0][1].equals("UNCLE") ? getResources().getString(R.string.pet_uncle) : getResources().getString(R.string.pet_other)))))))));
+                householdHead.getSpinner().selectValue(value);
+            } else if (obs[0][0].equals("OTHER FAMILY MEMBER")) {
+                otherHouseholdHead.getEditText().setText(obs[0][1]);
+                otherHouseholdHead.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("CURRENT EDUCATION LEVEL OF HEAD OF HOUSEHOLD")) {
+                String value = obs[0][1].equals("ELEMENTARY EDUCATION") ? getResources().getString(R.string.pet_elementary) :
+                        (obs[0][1].equals("PRIMARY EDUCATION") ? getResources().getString(R.string.pet_primary) :
+                                (obs[0][1].equals("SECONDARY EDUCATION") ? getResources().getString(R.string.pet_secondary) :
+                                        (obs[0][1].equals("INTERMEDIATE EDUCATION") ? getResources().getString(R.string.pet_intermediate) :
+                                                (obs[0][1].equals("UNDERGRADUATE EDUCATION") ? getResources().getString(R.string.pet_undergraduate) :
+                                                        (obs[0][1].equals("GRADUATE EDUCATION") ? getResources().getString(R.string.pet_graduate) :
+                                                                (obs[0][1].equals("DOCTORATE EDUCATION") ? getResources().getString(R.string.pet_doctorate) :
+                                                                        (obs[0][1].equals("RELIGIOUS EDUCATION") ? getResources().getString(R.string.pet_religious) :
+                                                                                (obs[0][1].equals("POLYTECHNIC EDUCATION") ? getResources().getString(R.string.pet_polytechnic) :
+                                                                                        (obs[0][1].equals("SPECIAL EDUCATION RECEIVED") ? getResources().getString(R.string.pet_special_education) :
+                                                                                                (obs[0][1].equals("NO FORMAL EDUCATION") ? getResources().getString(R.string.pet_no_formal_education) :
+                                                                                                        (obs[0][1].equals("OTHER") ? getResources().getString(R.string.pet_other) :
+                                                                                                                (obs[0][1].equals("UNKNOWN") ? getResources().getString(R.string.unknown) : getResources().getString(R.string.refused)))))))))))));
+                householdHeadEducationLevel.getSpinner().selectValue(value);
+            } else if (obs[0][0].equals("MOTHER TONGUE")) {
+                String value = obs[0][1].equals("URDU LANGUAGE") ? getResources().getString(R.string.pet_urdu) :
+                        (obs[0][1].equals("PUNJABI LANGUAGE") ? getResources().getString(R.string.pet_punjabi) :
+                                (obs[0][1].equals("SINDHI LANGUAGE") ? getResources().getString(R.string.pet_sindhi) :
+                                        (obs[0][1].equals("PUSHTO LANGUAGE") ? getResources().getString(R.string.pet_pushto) :
+                                                (obs[0][1].equals("BALOCHI LANGUAGE") ? getResources().getString(R.string.pet_balochi) :
+                                                        (obs[0][1].equals("SIRAIKI LANGUAGE") ? getResources().getString(R.string.pet_siraiki) :
+                                                                (obs[0][1].equals("HAZARA LANGUAGE") ? getResources().getString(R.string.pet_hazara) :
+                                                                        (obs[0][1].equals("ENGLISH LANGUAGE") ? getResources().getString(R.string.pet_english) :
+                                                                                (obs[0][1].equals("GUJRATI LANGUAGE") ? getResources().getString(R.string.pet_gujrati) :
+                                                                                        (obs[0][1].equals("MEMONI LANGUAGE") ? getResources().getString(R.string.pet_memoni) :
+                                                                                                (obs[0][1].equals("BRAHUI LANGUAGE") ? getResources().getString(R.string.pet_brahui) :
+                                                                                                        (obs[0][1].equals("CHITRALI LANGUAGE") ? getResources().getString(R.string.pet_chitrali) :
+                                                                                                                (obs[0][1].equals("HINDKO LANGUAGE") ? getResources().getString(R.string.pet_hindko) :
+                                                                                                                        (obs[0][1].equals("KALAASHA LANGUAGE") ? getResources().getString(R.string.pet_kalaasha) :
+                                                                                                                                (obs[0][1].equals("KASHMIRI LANGUAGE") ? getResources().getString(R.string.pet_kashmiri) :
+                                                                                                                                        (obs[0][1].equals("PERSIAN LANGUAGE") ? getResources().getString(R.string.pet_persian) :
+                                                                                                                                                (obs[0][1].equals("BALTI LANGUAGE") ? getResources().getString(R.string.pet_balti) :
+                                                                                                                                                        (obs[0][1].equals("MAKRANI LANGUAGE") ? getResources().getString(R.string.pet_makrani) :
+                                                                                                                                                                (obs[0][1].equals("OTHER") ? getResources().getString(R.string.pet_other) :
+                                                                                                                                                                        (obs[0][1].equals("REFUSED") ? getResources().getString(R.string.refused) : getResources().getString(R.string.pet_unknown))))))))))))))))))));
+                motherTongue.getSpinner().selectValue(value);
+            } else if (obs[0][0].equals("OTHER LANGUAGE")) {
+                otherMotherTongue.getEditText().setText(obs[0][1]);
+                otherMotherTongue.setVisibility(View.VISIBLE);
+            }
+
+        }
     }
 
     class MyAdapter extends PagerAdapter {

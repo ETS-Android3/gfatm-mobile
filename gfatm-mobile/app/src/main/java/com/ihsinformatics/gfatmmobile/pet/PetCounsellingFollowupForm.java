@@ -21,8 +21,10 @@ import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -33,6 +35,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
@@ -157,7 +160,7 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
         referralComplain = new TitledEditText(context, null, getResources().getString(R.string.pet_referral_complain), "", "", 250, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         referralComplain.getEditText().setSingleLine(false);
         referralComplain.getEditText().setMinimumHeight(150);
-        missedDosage = new TitledEditText(context, null, getResources().getString(R.string.pet_missed_dosed), "0", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
+        missedDosage = new TitledEditText(context, null, getResources().getString(R.string.pet_missed_dosed), "0", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
         adherentToPet = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_adherent), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.HORIZONTAL);
         reasonForNonAdherent = new TitledEditText(context, null, getResources().getString(R.string.pet_reason_for_non_adherent), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
 
@@ -237,6 +240,22 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
         infectionControlCounselling.setVisibility(View.GONE);
         misconception.setVisibility(View.GONE);
 
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean openFlag = bundle.getBoolean("open");
+            if (openFlag) {
+
+                bundle.putBoolean("open", false);
+                bundle.putBoolean("save", true);
+
+                String id = bundle.getString("formId");
+                int formId = Integer.valueOf(id);
+
+                refill(formId);
+
+            } else bundle.putBoolean("save", false);
+        }
+
     }
 
     @Override
@@ -248,6 +267,7 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
         if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
@@ -259,6 +279,13 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
 
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
             } else
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
@@ -395,6 +422,16 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
     @Override
     public boolean submit() {
 
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            String encounterId = bundle.getString("formId");
+            if (saveFlag) {
+                serverService.deleteOfflineForms(encounterId);
+            }
+            bundle.putBoolean("save", false);
+        }
+
         endTime = new Date();
 
         final ArrayList<String[]> observations = new ArrayList<String[]>();
@@ -407,7 +444,7 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
         observations.add(new String[]{"NUMBER OF MISSED MEDICATION DOSES IN LAST MONTH", App.get(missedDosage)});
         observations.add(new String[]{"PATIENT ADHERENT TO TRETMENT", App.get(adherentToPet).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         if (reasonForNonAdherent.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"LOW ADHERENCE REASON", App.get(reasonForNonAdherent)});
+            observations.add(new String[]{"NON-ADHERENCE REASON (TEXT)", App.get(reasonForNonAdherent)});
         observations.add(new String[]{"ADVERSE EVENTS REPORTED", App.get(adverseEventReport).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         if (adverseEffectsLayout.getVisibility() == View.VISIBLE) {
             String adverseEffects = "";
@@ -467,9 +504,9 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
         observations.add(new String[]{"TREATMENT SUPPORTER NEGLIGENCE", App.get(treatmentSupportNegligence).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         if (treatmentSupportNegligenceReason.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TREATMENT SUPPORTER NEGLIGENCE REASON", App.get(treatmentSupportNegligenceReason)});
-        observations.add(new String[]{"TREATMENT MISCONCEPTIONS", App.get(misconception).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        if (misconceptionInPet.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TREATMENT MISCONCEPTION (TEXT)", App.get(misconceptionInPet)});
+        observations.add(new String[]{"TREATMENT MISCONCEPTIONS", App.get(misconceptionInPet).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        if (misconception.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"TREATMENT MISCONCEPTION (TEXT)", App.get(misconception)});
         observations.add(new String[]{"INFECTION CONTROL MEASURES FOLLOWED", App.get(infectionControllFollowing).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         if (infectionControlCounselling.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"INFECTION CONTROL COUNSELLING", App.get(infectionControlCounselling).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
@@ -488,11 +525,9 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
             else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_other)))
                 scoialProblem = scoialProblem + "OTHER" + " ; ";
         }
-        observations.add(new String[]{"SOCIAL PROBLEM", App.get(patientFacingProblem).equals(getResources().getString(R.string.pet_academic_problem)) ? "ACADEMIC PROBLEM" :
-                (App.get(patientFacingProblem).equals(getResources().getString(R.string.pet_economic_problem)) ? "ECONOMIC PROBLEM" :
-                        (App.get(patientFacingProblem).equals(getResources().getString(R.string.pet_health_problem)) ? "PERSONAL BARRIER TO HEALTH CARE" :
-                                (App.get(patientFacingProblem).equals(getResources().getString(R.string.pet_unknown)) ? "UNKNOWN" :
-                                        (App.get(patientFacingProblem).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "OTHER"))))});
+        observations.add(new String[]{"SOCIAL PROBLEM", scoialProblem});
+        if (otherProblem.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"OTHER", App.get(otherProblem)});
         observations.add(new String[]{"CARETAKER COMMENTS", App.get(contactComments)});
         observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(psychologistComments)});
 
@@ -736,6 +771,211 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
 
     @Override
     public void refill(int encounterId) {
+
+        OfflineForm fo = serverService.getOfflineFormById(encounterId);
+        String date = fo.getFormDate();
+        ArrayList<String[][]> obsValue = fo.getObsValue();
+        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        for (int i = 0; i < obsValue.size(); i++) {
+
+            String[][] obs = obsValue.get(i);
+
+            if (obs[0][0].equals("FORM START TIME")) {
+                startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
+            } else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
+                followupMonth.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("REFERRAL COMPLAINT")) {
+                referralComplain.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("NUMBER OF MISSED MEDICATION DOSES IN LAST MONTH")) {
+                missedDosage.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("PATIENT ADHERENT TO TRETMENT")) {
+                for (RadioButton rb : adherentToPet.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("NON-ADHERENCE REASON (TEXT)")) {
+                reasonForNonAdherent.getEditText().setText(obs[0][1]);
+                reasonForNonAdherent.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("ADVERSE EVENTS REPORTED")) {
+                for (RadioButton rb : adverseEventReport.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("ADVERSE EVENTS")) {
+                for (CheckBox cb : adverseEffects1.getCheckedBoxes()) {
+                    if (cb.getText().equals(getResources().getString(R.string.pet_joint_pain)) && obs[0][1].equals("JOINT PAIN")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_headache)) && obs[0][1].equals("HEADACHE")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_skin_rash)) && obs[0][1].equals("RASH")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_nausea)) && obs[0][1].equals("NAUSEA")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_dizziness)) && obs[0][1].equals("DIZZINESS AND GIDDINESS")) {
+                        cb.setChecked(true);
+                        break;
+                    }
+                }
+                for (CheckBox cb : adverseEffects2.getCheckedBoxes()) {
+                    if (cb.getText().equals(getResources().getString(R.string.pet_vomiting)) && obs[0][1].equals("VOMITING")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_abdominal_pain)) && obs[0][1].equals("ABDOMINAL PAIN")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_loss_of_appetite)) && obs[0][1].equals("LOSS OF APPETITE")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_visual_impairment)) && obs[0][1].equals("VISUAL IMPAIRMENT")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_other)) && obs[0][1].equals("OTHER ADVERSE EVENT")) {
+                        cb.setChecked(true);
+                        break;
+                    }
+                }
+                adverseEffectsLayout.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("OTHER ADVERSE EVENT")) {
+                otherEffects.getEditText().setText(obs[0][1]);
+                otherEffects.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("TREATMENT SUPPORTER RELATIONSHIP TO PATIENT")) {
+                String value = obs[0][1].equals("MOTHER") ? getResources().getString(R.string.pet_mother) :
+                        (obs[0][1].equals("FATHER") ? getResources().getString(R.string.pet_father) :
+                                (obs[0][1].equals("MATERNAL GRANDMOTHER") ? getResources().getString(R.string.pet_maternal_grandmother) :
+                                        (obs[0][1].equals("MATERNAL GRANDFATHER") ? getResources().getString(R.string.pet_maternal_grandfather) :
+                                                (obs[0][1].equals("PATERNAL GRANDMOTHER") ? getResources().getString(R.string.pet_paternal_grandmother) :
+                                                        (obs[0][1].equals("PATERNAL GRANDFATHER") ? getResources().getString(R.string.pet_paternal_grandfather) :
+                                                                (obs[0][1].equals("BROTHER") ? getResources().getString(R.string.pet_brother) :
+                                                                        (obs[0][1].equals("SISTER") ? getResources().getString(R.string.pet_sister) :
+                                                                                (obs[0][1].equals("SON") ? getResources().getString(R.string.pet_son) :
+                                                                                        obs[0][1].equals("DAUGHTER") ? getResources().getString(R.string.pet_daughter) :
+                                                                                                obs[0][1].equals("SPOUSE") ? getResources().getString(R.string.pet_spouse) :
+                                                                                                        obs[0][1].equals("AUNT") ? getResources().getString(R.string.pet_aunt) :
+                                                                                                                obs[0][1].equals("UNCLE") ? getResources().getString(R.string.pet_uncle) : getResources().getString(R.string.pet_other)))))))));
+                treatmentSuppoterRelation.getSpinner().selectValue(value);
+            } else if (obs[0][0].equals("BEHAVIORAL COMPLAINS AFTER TREATMENT")) {
+                for (RadioButton rb : behavioralComplaint.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("BEHAVIOUR")) {
+                String value = obs[0][1].equals("IRRITABILITY") ? getResources().getString(R.string.pet_irritable) :
+                        (obs[0][1].equals("STUBBORN BEHAVIOUR") ? getResources().getString(R.string.pet_stubborn) :
+                                (obs[0][1].equals("INTROVERTED PERSONALITY") ? getResources().getString(R.string.pet_shy) :
+                                        (obs[0][1].equals("AGGRESSIVE BEHAVIOUR") ? getResources().getString(R.string.pet_aggressive) :
+                                                (obs[0][1].equals("ARGUMENTATIVE BEHAVIOUR") ? getResources().getString(R.string.pet_argumentative) :
+                                                        (obs[0][1].equals("NON COMPLIANT BEHAVIOUR") ? getResources().getString(R.string.pet_non_complaint) :
+                                                                (obs[0][1].equals("COMPLIANT BEHAVIOUR") ? getResources().getString(R.string.pet_complaint) :
+                                                                        (obs[0][1].equals("RESPONSIBLE PERSONALITY") ? getResources().getString(R.string.pet_responsible) :
+                                                                                (obs[0][1].equals("COOPERATIVE BEHAVIOUR") ? getResources().getString(R.string.pet_cooperative) :
+                                                                                        (obs[0][1].equals("NON-COOPERATIVE BEHAVIOUR") ? getResources().getString(R.string.pet_noncooperative) : getResources().getString(R.string.pet_other))))))))));
+                behaviouralComplaintType.getSpinner().selectValue(value);
+                behaviouralComplaintType.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("OTHER PERSONALITY TYPE")) {
+                other.getEditText().setText(obs[0][1]);
+                other.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("TREATMENT SUPPORTER NEGLIGENCE")) {
+                for (RadioButton rb : treatmentSupportNegligence.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("TREATMENT SUPPORTER NEGLIGENCE REASON")) {
+                treatmentSupportNegligenceReason.getEditText().setText(obs[0][1]);
+                treatmentSupportNegligenceReason.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("TREATMENT MISCONCEPTIONS")) {
+                for (RadioButton rb : misconceptionInPet.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("TREATMENT MISCONCEPTION (TEXT)")) {
+                misconception.getEditText().setText(obs[0][1]);
+                misconception.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("INFECTION CONTROL MEASURES FOLLOWED")) {
+                for (RadioButton rb : infectionControllFollowing.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("INFECTION CONTROL COUNSELLING")) {
+                for (RadioButton rb : infectionControlCounselling.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                infectionControlCounselling.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("SOCIAL PROBLEM")) {
+                for (CheckBox cb : patientFacingProblem.getCheckedBoxes()) {
+                    if (cb.getText().equals(getResources().getString(R.string.pet_academic_problem)) && obs[0][1].equals("ACADEMIC PROBLEM")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_economic_problem)) && obs[0][1].equals("ECONOMIC PROBLEM")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_health_problem)) && obs[0][1].equals("PERSONAL BARRIER TO HEALTH CARE")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.refused)) && obs[0][1].equals("REFUSED")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_other)) && obs[0][1].equals("OTHER")) {
+                        cb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("OTHER")) {
+                otherProblem.getEditText().setText(obs[0][1]);
+                otherProblem.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("CARETAKER COMMENTS")) {
+                contactComments.getEditText().setText(obs[0][1]);
+                contactComments.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("CLINICIAN NOTES (TEXT)")) {
+                psychologistComments.getEditText().setText(obs[0][1]);
+                psychologistComments.setVisibility(View.VISIBLE);
+            }
+        }
+
     }
 
     class MyAdapter extends PagerAdapter {

@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -204,13 +205,13 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         phone2Layout.addView(phone2a);
         phone2b = new TitledEditText(context, null, "-", "", "XXXXXXX", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         phone2Layout.addView(phone2b);
-        address1 = new TitledEditText(context, null, getResources().getString(R.string.pet_address_1), "", "", 10, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        address2 = new TitledEditText(context, null, getResources().getString(R.string.pet_address_2), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        town = new TitledEditText(context, null, getResources().getString(R.string.pet_town), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        city = new TitledEditText(context, null, getResources().getString(R.string.pet_city), App.getCity(), "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        address1 = new TitledEditText(context, null, getResources().getString(R.string.pet_address_1), "", "", 10, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        address2 = new TitledEditText(context, null, getResources().getString(R.string.pet_address_2), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        town = new TitledEditText(context, null, getResources().getString(R.string.pet_town), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        city = new TitledEditText(context, null, getResources().getString(R.string.pet_city), App.getCity(), "", 20, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         city.getEditText().setKeyListener(null);
         addressType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_address_type), getResources().getStringArray(R.array.pet_address_types), getResources().getString(R.string.pet_permanent), App.HORIZONTAL, App.VERTICAL);
-        landmark = new TitledEditText(context, null, getResources().getString(R.string.pet_landmark), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        landmark = new TitledEditText(context, null, getResources().getString(R.string.pet_landmark), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         entryLocation = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_event_location), getResources().getStringArray(R.array.pet_locations_of_entry), getResources().getString(R.string.pet_contact_home), App.HORIZONTAL, App.VERTICAL);
 
         // second page views...
@@ -218,11 +219,11 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         cough = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_has_cough), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         coughDuration = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_cough_duration), getResources().getStringArray(R.array.pet_cough_durations), getResources().getString(R.string.pet_less_than_2_weeks), App.VERTICAL, App.VERTICAL);
         haemoptysis = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_haemoptysis), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
-        fever = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_fever), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
-        weightLoss = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_weight_loss), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
+        fever = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_has_fever), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
+        weightLoss = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_have_weight_loss), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         reduceAppetite = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_reduced_appetite), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         reduceActivity = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_reduced_activity), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
-        nightSweats = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_night_sweats), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
+        nightSweats = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_have_night_sweats), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         swelling = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_swelling), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         referral = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_referral), getResources().getStringArray(R.array.yes_no_unknown_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
 
@@ -293,6 +294,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
@@ -304,6 +306,13 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
 
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
             } else
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
@@ -434,6 +443,16 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
     @Override
     public boolean submit() {
 
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            String encounterId = bundle.getString("formId");
+            if (saveFlag) {
+                serverService.deleteOfflineForms(encounterId);
+            }
+            bundle.putBoolean("save", false);
+        }
+
         endTime = new Date();
 
         final ArrayList<String[]> observations = new ArrayList<String[]>();
@@ -489,48 +508,64 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
 
         observations.add(new String[]{"LOCATION OF EVENT", App.get(entryLocation).equals(getResources().getString(R.string.pet_facility)) ? "HEALTH FACILITY" : "HOME"});
 
-        if (cough.getVisibility() == View.VISIBLE)
+        if (linearLayout.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"COUGH", App.get(cough).equals(getResources().getString(R.string.yes)) ? "YES" :
                 (App.get(cough).equals(getResources().getString(R.string.no)) ? "NO" :
                         (App.get(cough).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
-        if (coughDuration.getVisibility() == View.VISIBLE)
+        if (linearLayout.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"COUGH DURATION", App.get(coughDuration).equals(getResources().getString(R.string.pet_less_than_2_weeks)) ? "COUGH LASTING LESS THAN 2 WEEKS" :
                     (App.get(coughDuration).equals(getResources().getString(R.string.pet_two_three_weeks)) ? "COUGH LASTING MORE THAN 2 WEEKS" :
                             (App.get(coughDuration).equals(getResources().getString(R.string.pet_more_than_3_weeks)) ? "COUGH LASTING MORE THAN 3 WEEKS" :
                                     (App.get(coughDuration).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSED")))});
-        if (haemoptysis.getVisibility() == View.VISIBLE)
+        if (linearLayout.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"HEMOPTYSIS", App.get(haemoptysis).equals(getResources().getString(R.string.yes)) ? "YES" :
                     (App.get(haemoptysis).equals(getResources().getString(R.string.no)) ? "NO" :
                             (App.get(haemoptysis).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
-        if (fever.getVisibility() == View.VISIBLE)
+        if (linearLayout.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"FEVER", App.get(fever).equals(getResources().getString(R.string.yes)) ? "YES" :
                 (App.get(fever).equals(getResources().getString(R.string.no)) ? "NO" :
                         (App.get(fever).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
-        if (weightLoss.getVisibility() == View.VISIBLE)
+        if (linearLayout.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"WEIGHT LOSS", App.get(weightLoss).equals(getResources().getString(R.string.yes)) ? "YES" :
                 (App.get(weightLoss).equals(getResources().getString(R.string.no)) ? "NO" :
                         (App.get(weightLoss).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
-        if (reduceAppetite.getVisibility() == View.VISIBLE)
+        if (linearLayout.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"LOSS OF APPETITE", App.get(reduceAppetite).equals(getResources().getString(R.string.yes)) ? "YES" :
                 (App.get(reduceAppetite).equals(getResources().getString(R.string.no)) ? "NO" :
                         (App.get(reduceAppetite).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
-        if (reduceActivity.getVisibility() == View.VISIBLE)
+        if (linearLayout.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"REDUCED MOBILITY", App.get(reduceActivity).equals(getResources().getString(R.string.yes)) ? "YES" :
                 (App.get(reduceActivity).equals(getResources().getString(R.string.no)) ? "NO" :
                         (App.get(reduceActivity).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
-        if (nightSweats.getVisibility() == View.VISIBLE)
+        if (linearLayout.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"NIGHT SWEATS", App.get(nightSweats).equals(getResources().getString(R.string.yes)) ? "YES" :
                 (App.get(nightSweats).equals(getResources().getString(R.string.no)) ? "NO" :
                         (App.get(nightSweats).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
-        if (swelling.getVisibility() == View.VISIBLE)
+        if (linearLayout.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"SWELLING", App.get(swelling).equals(getResources().getString(R.string.yes)) ? "YES" :
                 (App.get(swelling).equals(getResources().getString(R.string.no)) ? "NO" :
                         (App.get(swelling).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
-        if (referral.getVisibility() == View.VISIBLE)
+        if (linearLayout.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"PATIENT REFERRED", App.get(referral).equals(getResources().getString(R.string.yes)) ? "YES" :
                     (App.get(referral).equals(getResources().getString(R.string.no)) ? "NO" : "UNKNOWN")});
-        if (referredFacility.getVisibility() == View.VISIBLE)
+        if (linearLayout.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"REFERRING FACILITY NAME", App.get(referredFacility)});
+
+        if (phone1Layout.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"CONTACT PHONE NUMBER", App.get(phone1a) + "-" + App.get(phone1b)});
+        if (phone2Layout.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"SECONDARY MOBILE NUMBER", App.get(phone2a) + "-" + App.get(phone2b)});
+        if (address1.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"ADDRESS (TEXT)", App.get(address1)});
+        if (address2.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"EXTENDED ADDRESS (TEXT)", App.get(address2)});
+        if (town.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"TOWN", App.get(town)});
+        if (landmark.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"NEAREST LANDMARK", App.get(landmark)});
+        if (addressType.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"TYPE OF ADDRESS", App.get(addressType).equals(getResources().getString(R.string.pet_permanent)) ? "PERMANENT ADDRESS" : "TEMPORARY ADDRESS"});
+
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -558,15 +593,17 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                         encounterId = successArray[1];
                     }
 
+                    if (!(App.get(address1).equals("") && App.get(address2).equals("") && App.get(town).equals("") && App.get(landmark).equals(""))) {
                     result = serverService.savePersonAddress(App.get(address1), App.get(address2), App.getCity(), App.get(town), App.getCountry(), longitude, latitude, App.get(landmark), encounterId);
                     if (!result.equals("SUCCESS"))
                         return result;
+                    }
 
-                    result = serverService.savePersonAttributeType("Primary Contact", App.get(phone1a) + App.get(phone1b), encounterId);
+                    result = serverService.savePersonAttributeType("Primary Contact", App.get(phone1a) + "-" + App.get(phone1b), encounterId);
                     if (!result.equals("SUCCESS"))
                         return result;
 
-                    result = serverService.savePersonAttributeType("Secondary Contact", App.get(phone2a) + App.get(phone2b), encounterId);
+                    result = serverService.savePersonAttributeType("Secondary Contact", App.get(phone2a) + "-" + App.get(phone2b), encounterId);
                     if (!result.equals("SUCCESS"))
                         return result;
 
@@ -758,7 +795,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
             if (App.get(relationship).equals(getResources().getString(R.string.pet_other)))
                 otherRelation.setVisibility(View.VISIBLE);
             else
-                otherCnicOwner.setVisibility(View.GONE);
+                otherRelation.setVisibility(View.GONE);
         }
 
     }
@@ -1167,6 +1204,32 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
             } else if (obs[0][0].equals("REFERRING FACILITY NAME")) {
                 referredFacility.getSpinner().selectValue(obs[0][1]);
                 referredFacility.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("CONTACT PHONE NUMBER")) {
+                String[] phoneArray = obs[0][1].split("-");
+                phone1a.getEditText().setText(phoneArray[0]);
+                phone1b.getEditText().setText(phoneArray[1]);
+            } else if (obs[0][0].equals("SECONDARY MOBILE NUMBER")) {
+                String[] phoneArray = obs[0][1].split("-");
+                phone2a.getEditText().setText(phoneArray[0]);
+                phone2b.getEditText().setText(phoneArray[1]);
+            } else if (obs[0][0].equals("NEAREST LANDMARK")) {
+                landmark.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("ADDRESS (TEXT)")) {
+                address1.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("EXTENDED ADDRESS (TEXT)")) {
+                address2.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("TOWN")) {
+                town.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("TYPE OF ADDRESS")) {
+                for (RadioButton rb : addressType.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet_permanent)) && obs[0][1].equals("PERMANENT ADDRESS")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_permanent)) && obs[0][1].equals("TEMPORARY ADDRESS")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
             }
 
         }

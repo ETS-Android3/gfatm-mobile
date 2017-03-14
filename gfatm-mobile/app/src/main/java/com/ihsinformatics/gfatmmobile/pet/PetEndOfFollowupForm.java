@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -179,6 +180,7 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
         if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
@@ -190,6 +192,13 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
 
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
             } else
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
@@ -262,6 +271,16 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
     @Override
     public boolean submit() {
 
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            String encounterId = bundle.getString("formId");
+            if (saveFlag) {
+                serverService.deleteOfflineForms(encounterId);
+            }
+            bundle.putBoolean("save", false);
+        }
+
         endTime = new Date();
 
         final ArrayList<String[]> observations = new ArrayList<String[]>();
@@ -272,16 +291,16 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
         observations.add(new String[]{"REASON TO END FOLLOW-UP", App.get(reasonForFollowupEnd).equals(getResources().getString(R.string.pet_treatment_completed)) ? "TREATMENT COMPLETE" :
                 (App.get(reasonForFollowupEnd).equals(getResources().getString(R.string.pet_loss_of_followup)) ? "LOST TO FOLLOW-UP" :
                         (App.get(reasonForFollowupEnd).equals(getResources().getString(R.string.pet_enrolled_in_tb)) ? "ENROLLED IN TB PROGRAM" :
-                                (App.get(reasonForFollowupEnd).equals(getResources().getString(R.string.pet_transferred_out)) ? "TRANSFERRED OUT" :
+                                (App.get(reasonForFollowupEnd).equals(getResources().getString(R.string.pet_transferred_out)) ? "PATIENT TRANSFERRED OUT" :
                                         (App.get(reasonForFollowupEnd).equals(getResources().getString(R.string.pet_not_eligible_for_study)) ? "NOT ELIGIBLE FOR PROGRAM" :
                                                 (App.get(reasonForFollowupEnd).equals(getResources().getString(R.string.pet_refused_treatment)) ? "REFUSAL OF TREATMENT BY PATIENT" :
-                                                        (App.get(reasonForFollowupEnd).equals(getResources().getString(R.string.pet_died)) ? "DECEASED" : "OTHER"))))))});
+                                                        (App.get(reasonForFollowupEnd).equals(getResources().getString(R.string.pet_died)) ? "DIED" : "OTHER"))))))});
         if (explanation.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"REASON TO END FOLLOW-UP (TEXT)", App.get(explanation)});
         if (reasonForExclusion.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"REASON FOR EXCLUSION FROM PET PROGRAM", App.get(reasonForExclusion).equals(getResources().getString(R.string.pet_xdr)) ? "EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION" :
                     (App.get(reasonForExclusion).equals(getResources().getString(R.string.pet_pre_xdr)) ? "PRE-EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION" :
-                            (App.get(reasonForExclusion).equals(getResources().getString(R.string.pet_transfered_out_to_other_site)) ? "TRANSFERRED OUT" :
+                            (App.get(reasonForExclusion).equals(getResources().getString(R.string.pet_transfered_out_to_other_site)) ? "PATIENT TRANSFERRED OUT" :
                                     (App.get(reasonForExclusion).equals(getResources().getString(R.string.pet_index_refused_treatment)) ? "REFUSAL OF TREATMENT BY PATIENT" : "OTHER")))});
         if (other.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER", App.get(other)});
@@ -472,15 +491,17 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
 
             String[][] obs = obsValue.get(i);
 
-            if (obs[0][0].equals("REASON TO END FOLLOW-UP")) {
+            if (obs[0][0].equals("FORM START TIME")) {
+                startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
+            } else if (obs[0][0].equals("REASON TO END FOLLOW-UP")) {
 
                 String value = obs[0][1].equals("TREATMENT COMPLETE") ? getResources().getString(R.string.pet_treatment_completed) :
                         (obs[0][1].equals("LOST TO FOLLOW-UP") ? getResources().getString(R.string.pet_loss_of_followup) :
                                 (obs[0][1].equals("ENROLLED IN TB PROGRAM") ? getResources().getString(R.string.pet_enrolled_in_tb) :
-                                        (obs[0][1].equals("TRANSFERRED OUT") ? getResources().getString(R.string.pet_transferred_out) :
+                                        (obs[0][1].equals("PATIENT TRANSFERRED OUT") ? getResources().getString(R.string.pet_transferred_out) :
                                                 (obs[0][1].equals("NOT ELIGIBLE FOR PROGRAM") ? getResources().getString(R.string.pet_not_eligible_for_study) :
                                                         (obs[0][1].equals("REFUSAL OF TREATMENT BY PATIENT") ? getResources().getString(R.string.pet_refused_treatment) :
-                                                                (obs[0][1].equals("DECEASED") ? getResources().getString(R.string.pet_died) : getResources().getString(R.string.pet_other)))))));
+                                                                (obs[0][1].equals("DIED") ? getResources().getString(R.string.pet_died) : getResources().getString(R.string.pet_other)))))));
                 reasonForFollowupEnd.getSpinner().selectValue(value);
 
             } else if (obs[0][0].equals("REASON TO END FOLLOW-UP (TEXT)")) {
@@ -494,7 +515,7 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
                     } else if (rb.getText().equals(getResources().getString(R.string.pet_pre_xdr)) && obs[0][1].equals("PRE-EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION")) {
                         rb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_transfered_out_to_other_site)) && obs[0][1].equals("TRANSFERRED OUT")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_transfered_out_to_other_site)) && obs[0][1].equals("PATIENT TRANSFERRED OUT")) {
                         rb.setChecked(true);
                         break;
                     } else if (rb.getText().equals(getResources().getString(R.string.pet_index_refused_treatment)) && obs[0][1].equals("REFUSAL OF TREATMENT BY PATIENT")) {
