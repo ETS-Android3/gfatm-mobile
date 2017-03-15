@@ -434,7 +434,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         }
 
         endTime = new Date();
-        String cnicNumber = cnic1.getEditText().toString() + cnic2.getEditText().toString() + cnic3.getEditText().toString();
+        String cnicNumber = cnic1.getEditText().toString() +"-"+ cnic2.getEditText().toString() +"-"+ cnic3.getEditText().toString();
 
         final ArrayList<String[]> observations = new ArrayList<String[]>();
         observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
@@ -665,8 +665,8 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             } else if (obs[0][0].equals("NATIONAL IDENTIFICATION NUMBER")) {
                 String data = obs[0][1];
                 cnic1.getEditText().setText(data.substring(0, 5));
-                cnic2.getEditText().setText(data.substring(5, 12));
-                cnic3.getEditText().setText(data.substring(12));
+                cnic2.getEditText().setText(data.substring(6, 13));
+                cnic3.getEditText().setText(data.substring(14));
             } else if (obs[0][0].equals("COMPUTERIZED NATIONAL IDENTIFICATION OWNER")) {
                 String value = obs[0][1].equals("SELF") ? getResources().getString(R.string.fast_self) :
                         (obs[0][1].equals("MOTHER") ? getResources().getString(R.string.fast_mother) :
@@ -986,8 +986,8 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                 if (result.get("NATIONAL IDENTIFICATION NUMBER") != null) {
                     String value = result.get("NATIONAL IDENTIFICATION NUMBER");
                     cnic1.getEditText().setText(value.substring(0, 5));
-                    cnic2.getEditText().setText(value.substring(5, 12));
-                    cnic3.getEditText().setText(value.substring(12));
+                    cnic2.getEditText().setText(value.substring(6, 13));
+                    cnic3.getEditText().setText(value.substring(14));
                 }
 
                 if (result.get("COMPUTERIZED NATIONAL IDENTIFICATION OWNER") != null) {
@@ -996,7 +996,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
                 if (result.get("FORM DATE") != null) {
                     String registerationDate = result.get("FORM DATE");
-                    secondDateCalendar.setTime(App.stringToDate(registerationDate, "dd/MM/yyyy"));
+                    secondDateCalendar.setTime(App.stringToDate(registerationDate, "yyyy-MM-dd"));
                     regDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
                 }
             }

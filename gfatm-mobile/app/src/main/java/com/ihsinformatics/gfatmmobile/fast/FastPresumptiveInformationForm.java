@@ -599,11 +599,11 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
       /*  observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
         observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});*/
 
-        String cnicNumber = cnic1.getEditText().getText().toString() + cnic2.getEditText().getText().toString() + cnic3.getEditText().getText().toString();
-        final String mobileNumber = mobile1.getEditText().getText().toString() + mobile2.getEditText().getText().toString();
-        final String secondaryMobileNumber = secondaryMobile1.getEditText().getText().toString() + secondaryMobile2.getEditText().getText().toString();
-        final String landlineNumber = landline1.getEditText().getText().toString() + landline2.getEditText().getText().toString();
-        final String secondaryLandlineNumber = secondaryLandline1.getEditText().getText().toString() + secondaryLandline2.getEditText().getText().toString();
+        String cnicNumber = cnic1.getEditText().getText().toString() +"-"+ cnic2.getEditText().getText().toString() +"-"+ cnic3.getEditText().getText().toString();
+        final String mobileNumber = mobile1.getEditText().getText().toString() +"-"+ mobile2.getEditText().getText().toString();
+        final String secondaryMobileNumber = secondaryMobile1.getEditText().getText().toString() +"-"+ secondaryMobile2.getEditText().getText().toString();
+        final String landlineNumber = landline1.getEditText().getText().toString() +"-"+ landline2.getEditText().getText().toString();
+        final String secondaryLandlineNumber = secondaryLandline1.getEditText().getText().toString() +"-"+ secondaryLandline2.getEditText().getText().toString();
 
 
         observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnicNumber});
@@ -827,9 +827,9 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
                 startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
             } else if (obs[0][0].equals("NATIONAL IDENTIFICATION NUMBER")) {
                 String data = obs[0][1];
-                cnic1.getEditText().setText(data.substring(0, 5));
-                cnic2.getEditText().setText(data.substring(5, 12));
-                cnic3.getEditText().setText(data.substring(12));
+                cnic1.getEditText().setText(data.substring(0,5));
+                cnic2.getEditText().setText(data.substring(6,13));
+                cnic3.getEditText().setText(data.substring(14));
             } else if (obs[0][0].equals("COMPUTERIZED NATIONAL IDENTIFICATION OWNER")) {
                 String value = obs[0][1].equals("SELF") ? getResources().getString(R.string.fast_self) :
                         (obs[0][1].equals("MOTHER") ? getResources().getString(R.string.fast_mother) :
@@ -917,33 +917,33 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             else if (obs[0][0].equals("CONTACT PHONE NUMBER")) {
                 String mobNum = obs[0][1];
                 mobile1.getEditText().setText(mobNum.substring(0,4));
-                mobile2.getEditText().setText(mobNum.substring(4,11));
+                mobile2.getEditText().setText(mobNum.substring(5,12));
             }
             else if (obs[0][0].equals("SECONDARY MOBILE NUMBER")) {
                 String mobNum2 = obs[0][1];
                 secondaryMobile1.getEditText().setText(mobNum2.substring(0,4));
-                secondaryMobile2.getEditText().setText(mobNum2.substring(4,11));
+                secondaryMobile2.getEditText().setText(mobNum2.substring(5,12));
             }
             else if (obs[0][0].equals("TERTIARY CONTACT NUMBER")) {
                 String landNum = obs[0][1];
                 if(landNum.length() == 11) {
                     landline1.getEditText().setText(landNum.substring(0, 4));
-                    landline2.getEditText().setText(landNum.substring(4, 11));
+                    landline2.getEditText().setText(landNum.substring(5, 12));
                 }
                 else{
                     landline1.getEditText().setText(landNum.substring(0, 3));
-                    landline2.getEditText().setText(landNum.substring(3, 10));
+                    landline2.getEditText().setText(landNum.substring(4, 11));
                 }
             }
             else if (obs[0][0].equals("QUATERNARY CONTACT NUMBER")) {
                 String landNum1 = obs[0][1];
                 if(landNum1.length() == 11) {
                     secondaryLandline1.getEditText().setText(landNum1.substring(0, 4));
-                    secondaryLandline2.getEditText().setText(landNum1.substring(4, 11));
+                    secondaryLandline2.getEditText().setText(landNum1.substring(5, 12));
                 }
                 else{
                     secondaryLandline1.getEditText().setText(landNum1.substring(0, 3));
-                    secondaryLandline2.getEditText().setText(landNum1.substring(3, 10));
+                    secondaryLandline2.getEditText().setText(landNum1.substring(4, 11));
                 }
             }
 
