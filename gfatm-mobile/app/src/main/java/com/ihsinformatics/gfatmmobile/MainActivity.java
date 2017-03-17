@@ -720,6 +720,37 @@ public class MainActivity extends AppCompatActivity
             if (resultCode == RESULT_OK) {
 
                 String returnString = data.getStringExtra("form_id");
+
+                Object[][] form = serverService.getSavedForms(Integer.parseInt(returnString));
+                App.setPatientId(String.valueOf(form[0][3]));
+                App.setPatient(serverService.getPatientBySystemIdFromLocalDB(App.getPatientId()));
+                App.setLocation(String.valueOf(form[0][7]));
+
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(Preferences.PATIENT_ID, App.getPatientId());
+                editor.putString(Preferences.LOCATION, App.getLocation());
+                editor.apply();
+
+                String subtitle = getResources().getString(R.string.program) + " " + App.getProgram() + "  |  " + getResources().getString(R.string.location) + " " + App.getLocation();
+                getSupportActionBar().setSubtitle(subtitle);
+
+                String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
+                String lname = App.getPatient().getPerson().getFamilyName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getFamilyName().substring(1);
+
+                patientName.setText(fname + " " + lname);
+                String dob = App.getPatient().getPerson().getBirthdate().substring(0, 10);
+                if (!dob.equals("")) {
+                    Date date = App.stringToDate(dob, "yyyy-MM-dd");
+                    DateFormat df = new SimpleDateFormat("MMM dd, yyyy");
+                    patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
+                } else patientDob.setText(dob);
+                if (!App.getPatient().getPatientId().equals(""))
+                    id.setVisibility(View.VISIBLE);
+                patientId.setText(App.getPatient().getPatientId());
+
+                fragmentReport.fillReportFragment();
+
                 Boolean openFlag = data.getBooleanExtra("open", false);
                 if (returnString != null) {
                     showFormFragment();
