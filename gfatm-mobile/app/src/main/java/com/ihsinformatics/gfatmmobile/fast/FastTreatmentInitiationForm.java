@@ -995,8 +995,15 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                 }
 
                 if (result.get("FORM DATE") != null) {
+                    String format = "";
                     String registerationDate = result.get("FORM DATE");
-                    secondDateCalendar.setTime(App.stringToDate(registerationDate, "yyyy-MM-dd"));
+                    if(registerationDate.contains("/")){
+                        format = "dd/MM/yyyy";
+                    }
+                    else{
+                        format = "yyyy-MM-dd";
+                    }
+                    secondDateCalendar.setTime(App.stringToDate(registerationDate, format));
                     regDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
                 }
             }
