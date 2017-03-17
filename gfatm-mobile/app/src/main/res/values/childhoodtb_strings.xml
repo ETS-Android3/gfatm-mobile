@@ -188,7 +188,7 @@
     <string name="ctb_speciment_route">Where did the speciment come from?</string>
     <string name="ctb_lymph">Lymph</string>
     <string name="ctb_pleural_fluid">Pleural Fluid</string>
-    <string name="ctb_plus">Plus</string>
+    <string name="ctb_pus">Plus</string>
     <string name="ctb_accepted_by_technician">Where did the speciment come from?</string>
     <string name="ctb_accepted">Accepted</string>
     <string name="ctb_rejected">Rejected</string>
@@ -353,6 +353,16 @@
     <string name="ctb_mott">Mycobacterium other than TB (MOTT)</string>
     <string name="ctb_location_referral_transfer">Location of Referral/transfer</string>
     <string name="ctb_location_other">Location, if Other</string>
+    <string name="ctb_error_checkbox">Please select atleast one checkbox for Close Contact type</string>
+    <string name="ctb_invalid_cnic">Invalid CNIC. Kindly enter valid CNIC</string>
+    <string name="ctb_invalid_number">Invalid Number. Please enter valid Contact number</string>
+    <string name="ctb_patient_have_tb">Does the patient have TB?</string>
+    <string name="ctb_inconclusive">Inconclusive</string>
+    <string name="ctb_patient_need_more_test">Does the patient need more tests?</string>
+    <string name="ctb_end_of_followup">End of follow up?</string>
+    <string name="ctb_schedule_another_followup">Schedule another follow up visit?</string>
+    <string name="ctb_next_appointment_date">Next Appointment Date</string>
+
 
     <string-array name="ctb_screening_location_list">
         <item>@string/ctb_hospital</item>
@@ -537,7 +547,7 @@
     <string-array name="ctb_speciment_route_list">
         <item>@string/ctb_lymph</item>
         <item>@string/ctb_pleural_fluid</item>
-        <item>@string/ctb_plus</item>
+        <item>@string/ctb_pus</item>
         <item>@string/ctb_other_title</item>
     </string-array>
     
@@ -749,6 +759,13 @@
         <item>@string/ctb_mott</item>
         <item>@string/ctb_other_title</item>
     </string-array>
+
+    <string-array name="ctb_patient_have_tb_list">
+        <item>@string/ctb_yes</item>
+        <item>@string/ctb_no</item>
+        <item>@string/ctb_inconclusive</item>
+    </string-array>
+
 
 
 </resources>

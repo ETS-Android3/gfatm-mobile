@@ -3,6 +3,7 @@ package com.ihsinformatics.gfatmmobile.childhoodTb;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -144,7 +145,7 @@ public class ChildhoodTbGXPSpecimenCollection extends AbstractFormActivity imple
         sampleAcceptedByTechnician = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_accepted_by_technician),getResources().getStringArray(R.array.ctb_accepted_by_techician_list),null,App.HORIZONTAL,App.VERTICAL);
         whySampleRejcted = new TitledSpinner(context,null,getResources().getString(R.string.ctb_why_sample_rejected),getResources().getStringArray(R.array.ctb_why_sample_rejected_list),null,App.VERTICAL);
         reasonForRejection = new TitledEditText(context,null,getResources().getString(R.string.ctb_other_reason_rejection),"","",50,RegexUtil.ALPHA_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
-        cartridgeId = new TitledEditText(context,null,getResources().getString(R.string.ctb_cartridge_id),"","",4,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,false);
+        cartridgeId = new TitledEditText(context,null,getResources().getString(R.string.ctb_cartridge_id),"","",10,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,false);
 
 
         views = new View[]{formDate.getButton(),sampleSubmitDate.getButton(),baselineRepeatFollowup.getSpinner(),patientCategory.getRadioGroup(),reasonBaselineRepeat.getSpinner(),
@@ -282,8 +283,158 @@ public class ChildhoodTbGXPSpecimenCollection extends AbstractFormActivity imple
 
     @Override
     public boolean submit() {
+        endTime = new Date();
 
-        return true;
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
+        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+        observations.add(new String[]{"SPECIMEN SUBMISSION DATE", App.getSqlDateTime(secondDateCalendar)});
+        observations.add(new String[]{"TEST CONTEXT STATUS", App.get(baselineRepeatFollowup).equals(getResources().getString(R.string.ctb_baseline)) ? "BASELINE" :
+                (App.get(baselineRepeatFollowup).equals(getResources().getString(R.string.ctb_baseline_repeat)) ? "BASELINE REPEAT" :
+                        "REGULAR FOLLOW UP")});
+
+        if(patientCategory.getVisibility()==View.VISIBLE){
+            observations.add(new String[]{"TB CATEGORY", App.get(patientCategory).equals(getResources().getString(R.string.ctb_categoryI)) ? "CATEGORY I TUBERCULOSIS" :
+                            "CATEGORY II TUBERCULOSIS"});
+        }
+
+        if(reasonBaselineRepeat.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"REASON FOR BASELINE REPEAT TEST", App.get(reasonBaselineRepeat).equals(getResources().getString(R.string.ctb_rr_positive)) ? "RIF RESISTANT POSITIVE" :
+                    (App.get(reasonBaselineRepeat).equals(getResources().getString(R.string.ctb_error_invalid_no_result)) ? "INVALID" :
+                            "INDETERMINATE")});
+        }
+
+        observations.add(new String[]{"SPECIMEN TYPE", App.get(specimenType).equals(getResources().getString(R.string.ctb_sputum)) ? "SPUTUM" :
+                "EXTRA-PULMONARY TUBERCULOSIS"});
+
+        if(specimenComeFrom.getVisibility()==View.VISIBLE){
+            observations.add(new String[]{"SPECIMEN SOURCE", App.get(specimenComeFrom).equals(getResources().getString(R.string.ctb_lymph)) ? "LYMPHOCYTES" :
+                    (App.get(specimenComeFrom).equals(getResources().getString(R.string.ctb_pleural_fluid)) ? "PLEURAL EFFUSION" :
+                            (App.get(specimenComeFrom).equals(getResources().getString(R.string.ctb_pus)) ? "PUS" :
+                            "OTHER SPECIMEN SOURCE"))});
+        }
+
+        if(otherSpecimentComeFrom.getVisibility()==View.VISIBLE){
+            observations.add(new String[]{"OTHER SPECIMEN SOURCE", App.get(otherSpecimentComeFrom)});
+        }
+
+        observations.add(new String[]{"SPECIMEN ACCEPTED", App.get(sampleAcceptedByTechnician).equals(getResources().getString(R.string.ctb_accepted)) ? "ACCEPTED" :
+                "REJECTED"});
+
+        observations.add(new String[]{"SPECIMEN UNSATISFACTORY FOR DIAGNOSIS", App.get(whySampleRejcted).equals(getResources().getString(R.string.ctb_saliva)) ? "SALIVA" :
+                (App.get(whySampleRejcted).equals(getResources().getString(R.string.ctb_blood)) ? "BLOOD IN SAMPLE" :
+                        (App.get(whySampleRejcted).equals(getResources().getString(R.string.ctb_older_than_3_days)) ? "SAMPLE OLDER THAN 3 DAYS" :
+                                (App.get(whySampleRejcted).equals(getResources().getString(R.string.ctb_insufficient_qunatity)) ? "INSUFFICIENT QUANTITY" :
+                        "OTHER REASON OF SAMPLE REJECTION")))});
+
+        if(reasonForRejection.getVisibility()==View.VISIBLE){
+            observations.add(new String[]{"OTHER REASON OF SAMPLE REJECTION", App.get(reasonForRejection)});
+        }
+
+        if(cartridgeId.getVisibility()==View.VISIBLE){
+            observations.add(new String[]{"CARTRIDGE ID", App.get(cartridgeId)});
+        }
+        AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.submitting_form));
+                        loading.show();
+                    }
+                });
+
+                String result = serverService.saveEncounterAndObservation("GXP Specimen Collection", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                if (result.contains("SUCCESS"))
+                    return "SUCCESS";
+
+                return result;
+
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                if (result.equals("SUCCESS")) {
+                    resetViews();
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.form_submitted));
+                    Drawable submitIcon = getResources().getDrawable(R.drawable.ic_submit);
+                    alertDialog.setIcon(submitIcon);
+                    int color = App.getColor(context, R.attr.colorAccent);
+                    DrawableCompat.setTint(submitIcon, color);
+                    alertDialog.setTitle(getResources().getString(R.string.title_completed));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else if (result.equals("CONNECTION_ERROR")) {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
+                    alertDialog.setMessage(message);
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+
+            }
+        };
+        submissionFormTask.execute("");
+
+        return false;
+
     }
 
     @Override
