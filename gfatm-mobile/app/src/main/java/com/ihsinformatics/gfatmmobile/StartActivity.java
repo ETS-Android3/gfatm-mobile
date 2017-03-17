@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.util.DatabaseUtil;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
@@ -28,6 +29,7 @@ public class StartActivity extends Activity {
 
     private static DatabaseUtil dbUtil;
     private Context context;
+    private TextView progressTextView;
 
     public static void resetPreferences(Context context) {
         PreferenceManager.setDefaultValues(context, R.xml.preferences, false);
@@ -85,9 +87,14 @@ public class StartActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        progressTextView = (TextView) findViewById(R.id.progressLabel);
+
         new PrefetchData().execute();
     }
 
+    public void setProgress(String progressLabel) {
+        progressTextView.setText(progressLabel);
+    }
 
     /**
      * Async Task to make http call
@@ -108,8 +115,10 @@ public class StartActivity extends Activity {
 
                 dbUtil = new DatabaseUtil(context);
                 Boolean flag = dbUtil.doesDatabaseExist();
-                if (!flag)
+                if (!flag) {
                     dbUtil.buildDatabase(false);            // build sql lite db in app memory
+                    setProgress("Hello");
+                }
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
             }
