@@ -153,6 +153,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         weight = new TitledEditText(context, null, getResources().getString(R.string.pet_weight), "", "", 5, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         indexPatientId = new TitledEditText(context, null, getResources().getString(R.string.pet_index_patient_id), "", "", RegexUtil.idLength, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        indexPatientId.getEditText().setKeyListener(null);
         tbType = new TitledEditText(context, null, getResources().getString(R.string.pet_tb_type), "", "", 100, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         tbType.getEditText().setKeyListener(null);
         infectionType = new TitledEditText(context, null, getResources().getString(R.string.pet_infection_type), "", "", 100, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
