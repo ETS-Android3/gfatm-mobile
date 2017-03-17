@@ -796,7 +796,7 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('VITAMIN B-COMPL
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('IMP',NULL,'N/A','bad3037f-4512-4381-9f77-3832360ad044');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('IMP + AMX/CLV + KM',NULL,'N/A','4a27dadc-cdc1-445b-932e-3973ee5dfe7d');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER DRUG BY CVAD','drug_cvad_other','Text','ba7866e2-47f0-4436-8c36-342d8a9e785d');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DRUGS RECEIVED BY PATIENT','drugs_received','Boolean','fcd72596-8989-4b20-8c09-ee0171a6d763');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DRUGS RECEIVED BY PATIENT','drugs_received','Coded','fcd72596-8989-4b20-8c09-ee0171a6d763');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DAYS WORTH OF DRUGS DISPERSED','drugs_dispersed_days','Numeric','3b6dcf83-128f-4457-8b1e-851c7529adbc');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('GLUCOSE FASTING',NULL,'N/A','d6616bb1-3b33-4926-9a81-325591fa5d80');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INSULIN 70/30 DOSAGE','insulin_mix_dose','Numeric','400fdb32-1a43-4cf4-a52e-9de41fb16c98');
@@ -4437,7 +4437,7 @@ INSERT OR IGNORE INTO encounter_type VALUES ('PET-Adverse Events','Add PET Forms
 INSERT OR IGNORE INTO encounter_type VALUES ('PET-Incentive Disbursement','Add PET Forms','View PET Forms','74b4901a-6548-41c7-aff5-94c900fe9151');
 INSERT OR IGNORE INTO encounter_type VALUES ('PET-End of Follow-up','Add PET Forms','View PET Forms','811f4928-c55c-4034-a978-16f25351ea26');
 INSERT OR IGNORE INTO encounter_type VALUES ('PET-Socioeconomic Data','Add PET Forms','View PET Forms','906883cd-c0cb-423f-93bb-e9437d5e595e');
-INSERT OR IGNORE INTO encounter_type VALUES ('COMORBIDITIES-Mental Health Screening','Add Comorbidities Forms','View Comorbidities Forms','978a9fab-a66d-483e-8823-11ae7564e72f');
+INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Mental Health Screening','Add Comorbidities Forms','View Comorbidities Forms','978a9fab-a66d-483e-8823-11ae7564e72f');
 INSERT OR IGNORE INTO encounter_type VALUES ('FAST-Screening','Add FAST Forms','View FAST Forms','5e7c8124-0018-4e5d-9156-bf6d58c720e5');
 INSERT OR IGNORE INTO encounter_type VALUES ('FAST-Prompt','Add FAST Forms','View FAST Forms','1284afd6-0928-43ee-be41-a4c259604fc4');
 INSERT OR IGNORE INTO encounter_type VALUES ('FAST-Presumptive','Add FAST Forms','View FAST Forms','a3a60738-cb1f-4c8d-ac78-91204821e0f3');
@@ -4461,7 +4461,8 @@ INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Blood Sugar Test','A
 INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Vitals','Add Comorbidities Forms','View Comorbidities Forms','e112be67-711b-4f07-8115-0959a1ad20c0');
 INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Diabetes Treatment Initiation','Add Comorbidities Forms','View Comorbidities Forms','c9a8e9bf-f522-43c5-ad17-9d9b5c9a9fb3');
 INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Urine Detailed Report','Add Comorbidities Forms','View Comorbidities Forms','f4841a20-4921-442d-b31d-711f89528620');
-INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Creatinine Test','Add Comorbidities Forms','View Comorbidities Forms','f6e5ce53-3156-4627-a7d8-f79d3c2eb33d');
+INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Creatinine Test Order','Add Comorbidities Forms','View Comorbidities Forms','f6e5ce53-3156-4627-a7d8-f79d3c2eb33d');
+INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Creatinine Test Result','Add Comorbidities Forms','View Comorbidities Forms','06802515-bf42-44d7-ac0f-03b9c2aa0ac4');
 INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Lipid Test','Add Comorbidities Forms','View Comorbidities Forms','5d75ef93-f450-4ab8-aef5-1d6e365bad34');
 INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Urine Microalbumin Test','Add Comorbidities Forms','View Comorbidities Forms','dfa44870-c62e-40c5-8ebb-1d7de8af2fd9');
 INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Diabetes Treatment Followup','Add Comorbidities Forms','View Comorbidities Forms','f74dce9d-a739-4e44-b146-4ecfdef9ac33');
@@ -4546,7 +4547,7 @@ INSERT OR IGNORE INTO location VALUES (19,'DAP-KHI','ef3ec91c-015a-4bc9-b609-55c
 INSERT OR IGNORE INTO location VALUES (20,'BIDE-KHI','0bd86a91-e11d-412b-bfcd-320c827381bc',NULL,'Y','N','N','N','N','Y','02136688897','1-2, II-B','Block 2 Nazimabad',NULL,'Karachi','Sindh','Baqai Institute of Diabetology and Endocrinology');
 INSERT OR IGNORE INTO location VALUES (21,'CCH-KHI','87371a38-c483-4bb5-b079-83496460c062',NULL,'Y','N','N','N','N','Y','021111160170',NULL,NULL,NULL,'Karachi','Sindh','Children''s Cancer Hospital');
 INSERT OR IGNORE INTO location VALUES (22,'SIUT-KHI','00718ad7-bfc2-44a0-b519-645bb56a0308',NULL,'Y','N','N','N','N','Y',NULL,'Chand Bibi Road',NULL,NULL,'Karachi','Sindh','Sindh Institute of Urology and Transplantation');
-INSERT OR IGNORE INTO location VALUES (23,'KCPTI-KHI','b4fd59e6-383b-46b8-8d58-56f42437b976',NULL,'N','N','N','N','N','N',NULL,'197/9','Rafiqui Shaheed Road',NULL,'Karachi','Sindh','The Kidney Centre Postgraduate Training Institute');
+INSERT OR IGNORE INTO location VALUES (23,'KCPTI-KHI','b4fd59e6-383b-46b8-8d58-56f42437b976',NULL,'Y','N','N','N','N','N',NULL,'197/9','Rafiqui Shaheed Road',NULL,'Karachi','Sindh','The Kidney Centre Postgraduate Training Institute');
 INSERT OR IGNORE INTO location VALUES (24,'CHS','611618c2-7550-40ec-a0c6-786f711a9143',NULL,'N','N','N','N','N','N',NULL,'508, Ibrahim Trade Towers','Shahra-e-Faisal',NULL,'Karachi','Sindh','Community Health Services');
 INSERT OR IGNORE INTO location VALUES (25,'OICD-KHI','2921cc22-9fbb-49df-b562-c5eefd3a06d4',NULL,'N','N','N','N','N','N',NULL,'DUHS, Gulzar-e-HijrI','Suparco Road',NULL,'Karachi','Sindh','Ojha Institute of Chest Diseases');
 INSERT OR IGNORE INTO location VALUES (26,'KGH-KHI','d994a1d3-efd3-4c85-ba06-11342aa174d9',NULL,'Y','N','Y','N','N','Y',NULL,'Aga Khan Road','Kharadar, Karachi',NULL,'Karachi','Sindh','Kharadar General Hospital');
