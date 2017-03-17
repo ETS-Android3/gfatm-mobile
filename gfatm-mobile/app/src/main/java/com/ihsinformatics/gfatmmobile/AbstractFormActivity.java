@@ -178,6 +178,7 @@ public abstract class AbstractFormActivity extends Fragment
             gps.showSettingsAlert();
         }
 
+        saveButton.setVisibility(View.GONE);
         //snackbar.dismiss();
         return mainContent;
     }
