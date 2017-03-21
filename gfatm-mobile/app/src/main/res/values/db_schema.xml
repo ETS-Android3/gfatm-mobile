@@ -201,15 +201,15 @@
             );
 		</item>
 
-        <!--<item>
-            CREATE TABLE IF NOT EXISTS offline_patient_form
+        <item>
+            CREATE TABLE IF NOT EXISTS test_id
             (
-                offline_form_id NOT NULL,
-                uri TEXT NOT NULL COLLATE NOCASE,
-                content TEXT NOT NULL COLLATE NOCASE,
-                type TEXT NOT NULL COLLATE NOCASE
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                pid TEXT COLLATE NOCASE,
+                form TEXT NOT NULL COLLATE NOCASE,
+                test_id TEXT NOT NULL COLLATE NOCASE
             );
-		</item>-->
+		</item>
 
         <item>
             CREATE TABLE IF NOT EXISTS program
@@ -218,6 +218,54 @@
                 uuid VARCHAR UNIQUE NOT NULL,
                 name TEXT NOT NULL COLLATE NOCASE,
                 description TEXT NOT NULL COLLATE NOCASE
+            );
+		</item>
+
+        <item>
+            CREATE TABLE IF NOT EXISTS country
+            (
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                name VARCHAR UNIQUE NOT NULL
+            );
+		</item>
+
+        <item>
+            CREATE TABLE IF NOT EXISTS province
+            (
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                name VARCHAR UNIQUE NOT NULL
+            );
+		</item>
+
+        <item>
+            CREATE TABLE IF NOT EXISTS district
+            (
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                name VARCHAR UNIQUE NOT NULL
+            );
+		</item>
+
+
+        <item>
+            CREATE TABLE IF NOT EXISTS city
+            (
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                name VARCHAR UNIQUE NOT NULL
+            );
+		</item>
+
+        <item>
+            CREATE TABLE IF NOT EXISTS address_hierarchy
+            (
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                country_id  INT NOT NULL COLLATE NOCASE,
+                province_id INT NOT NULL COLLATE NOCASE,
+                district_id INT NOT NULL COLLATE NOCASE,
+                city_id INT NOT NULL COLLATE NOCASE,
+                FOREIGN KEY (country_id) REFERENCES country(id),
+                FOREIGN KEY (province_id) REFERENCES province(id),
+                FOREIGN KEY (district_id) REFERENCES district(id),
+                FOREIGN KEY (city_id) REFERENCES city(id)
             );
 		</item>
 
