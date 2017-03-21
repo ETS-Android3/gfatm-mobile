@@ -309,6 +309,20 @@
         <item>Zimbabwe</item>
     </string-array>
 
+    <string-array name="provinces">
+        <item>Balochistan</item>
+        <item>Khyber-Pakhtunkhwa</item>
+        <item>Sindh</item>
+        <item>Punjab</item>
+    </string-array>
+
+    <string-array name="districts">
+        <item>Balochistan</item>
+        <item>Khyber-Pakhtunkhwa</item>
+        <item>Sindh</item>
+        <item>Punjab</item>
+    </string-array>
+
     <string name="title_program">Program</string>
     <string name="title_theme">Theme</string>
     <string name="title_language">Language</string>
@@ -329,6 +343,7 @@
     <string name="support_contact_default" translatable="false">03132882088</string>
     <string name="support_email_default" translatable="false">rabbia.hassan@ihsinformatics.com</string>
     <string name="city_default" translatable="false">Karachi</string>
+    <string name="province_default" translatable="false">Sindh</string>
     <string name="country_default" translatable="false">Pakistan</string>
     <string name="ip_default" translatable="false">202.141.249.106</string>
     <string name="port_default" translatable="false">9902</string>
@@ -337,6 +352,7 @@
     <string name="support_email">Support Email</string>
     <string name="city">City</string>
     <string name="country">Country</string>
+    <string name="province">Province</string>
     <string name="ip">Server\'s IP</string>
     <string name="port">Port</string>
 
@@ -457,6 +473,7 @@
     <string name="search_title">Select atleast one option</string>
 
     <string name="submitting_form">Submitting form...</string>
+    <string name="verifying_test_id">Verifying Test ID...</string>
     <string name="form_submitted">Form successfully submitted.</string>
     <string name="forms_submitted">Form(s) successfully submitted.</string>
     <string name="patient_updated">Patient successfully updated.</string>
