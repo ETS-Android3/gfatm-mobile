@@ -108,6 +108,8 @@ public class HttpGet {
 
     private JSONObject get(String requestUri, boolean condition, String resourceName) {
         JSONObject obj = get(requestUri);
+        JSONObject resultObject = null;
+        final String splitKey = "openmrsapi";
         List<String> newArr = new ArrayList<String>();
         try {
             JSONArray arrJson = obj.getJSONArray("results");
@@ -127,7 +129,7 @@ public class HttpGet {
                     String uuid = newObj.getString("uuid");
                     date = date.replace("T", " ");
                     String[] arr = date.split("\\+");
-                    newArr.add(arr[0] + "," + uuid);
+                    newArr.add(arr[0] + splitKey + newObj.toString());
                 }
                 Collections.sort(newArr, new Comparator<String>() {
                     DateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
@@ -135,8 +137,8 @@ public class HttpGet {
                     @Override
                     public int compare(String o1, String o2) {
                         try {
-                            String[] b1 = o1.split(",");
-                            String[] b2 = o2.split(",");
+                            String[] b1 = o1.split(splitKey);
+                            String[] b2 = o2.split(splitKey);
                             return f.parse(b1[0]).compareTo(f.parse(b2[0]));
                         } catch (Exception e) {
                             throw new IllegalArgumentException(e);
@@ -144,17 +146,23 @@ public class HttpGet {
                     }
                 });
                 if (condition) {
-                    String[] splitter = newArr.get(0).split(",");
-                    if (resourceName.equals(ENCOUNTER_RESOURCE))
-                        return getEncounterByUuid(splitter[1]);
-                    else
-                        return getObservationByUuid(splitter[1]);
+                    String[] splitter = newArr.get(0).split(splitKey);
+                    if (resourceName.equals(ENCOUNTER_RESOURCE)) {
+                        resultObject = JSONParser.getJSONObject(splitter[1]);
+                        return resultObject;
+                    } else {
+                        resultObject = JSONParser.getJSONObject(splitter[1]);
+                        return resultObject;
+                    }
                 } else {
-                    String[] splitter = newArr.get(newArr.size() - 1).split(",");
-                    if (resourceName.equals(ENCOUNTER_RESOURCE))
-                        return getEncounterByUuid(splitter[1]);
-                    else
-                        return getObservationByUuid(splitter[1]);
+                    String[] splitter = newArr.get(newArr.size() - 1).split(splitKey);
+                    if (resourceName.equals(ENCOUNTER_RESOURCE)) {
+                        resultObject = JSONParser.getJSONObject(splitter[1]);
+                        return resultObject;
+                    } else {
+                        resultObject = JSONParser.getJSONObject(splitter[1]);
+                        return resultObject;
+                    }
                 }
             }
         } catch (Exception e) {
