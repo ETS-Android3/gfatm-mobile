@@ -152,7 +152,7 @@ public class ComorbiditiesUrineMicroalbuminForm extends AbstractFormActivity imp
         testOrderMicroablbumin.setTypeface(null, Typeface.BOLD);
         microalbuminFollowupMonth = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_mth_txcomorbidities_hba1c), getResources().getStringArray(R.array.comorbidities_followup_month), "1", App.HORIZONTAL);
         microalbuminTestOrderDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1cdate_test_order), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
-        microalbuminTestID = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hhba1c_testid), "", "", 9, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        microalbuminTestID = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hhba1c_testid), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
 
         //second page views...
         testResultMicroalbumin = new MyTextView(context, getResources().getString(R.string.comorbidities_creatinine_test_result));
@@ -207,7 +207,7 @@ public class ComorbiditiesUrineMicroalbuminForm extends AbstractFormActivity imp
             }
         });
 
-        microalbuminTestID.getEditText().addTextChangedListener(new TextWatcher() {
+        /*microalbuminTestID.getEditText().addTextChangedListener(new TextWatcher() {
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -231,7 +231,7 @@ public class ComorbiditiesUrineMicroalbuminForm extends AbstractFormActivity imp
                     //Exception: User might be entering " " (empty) value
                 }
             }
-        });
+        });*/
     }
 
     @Override

@@ -67,6 +67,8 @@ public class ComorbiditiesDiabetesEyeScreeningForm extends AbstractFormActivity 
     TitledRadioGroup diabetesEyeScreeningVisionloss;
     TitledRadioGroup diabetesEyeScreeningRecommendations;
 
+    ScrollView scrollView;
+
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
      *
@@ -118,7 +120,7 @@ public class ComorbiditiesDiabetesEyeScreeningForm extends AbstractFormActivity 
                     View v = viewGroups[i][j];
                     layout.addView(v);
                 }
-                ScrollView scrollView = new ScrollView(mainContent.getContext());
+                scrollView = new ScrollView(mainContent.getContext());
                 scrollView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 scrollView.addView(layout);
                 groups.add(scrollView);
@@ -140,8 +142,8 @@ public class ComorbiditiesDiabetesEyeScreeningForm extends AbstractFormActivity 
         formDate.setTag("formDate");
         diabetesEyeScreeningMonthOfTreatment = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_urinedr_month_of_treatment), getResources().getStringArray(R.array.comorbidities_followup_month), "0", App.HORIZONTAL);
         //diabetesEyeScreeningEyeStatus = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_eye_screening_eye_status), getResources().getStringArray(R.array.comorbidities_eye_screening_eye_status_options), "", App.VERTICAL, App.VERTICAL);
-        diabetesEyeScreeningRightEyeDiagnosed = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_eye_screening_right_eye_diagnosed), getResources().getStringArray(R.array.comorbidities_eye_screening_eye_diagnosed_options), "", App.VERTICAL, App.VERTICAL);
-        diabetesEyeScreeningLeftEyeDiagnosed = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_eye_screening_left_eye_diagnosed), getResources().getStringArray(R.array.comorbidities_eye_screening_eye_diagnosed_options), "", App.VERTICAL, App.VERTICAL);
+        diabetesEyeScreeningRightEyeDiagnosed = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_eye_screening_right_eye_diagnosed), getResources().getStringArray(R.array.comorbidities_eye_screening_eye_diagnosed_options), getResources().getString(R.string.comorbidities_eye_screening_eye_diagnosed_options_yes), App.VERTICAL, App.VERTICAL);
+        diabetesEyeScreeningLeftEyeDiagnosed = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_eye_screening_left_eye_diagnosed), getResources().getStringArray(R.array.comorbidities_eye_screening_eye_diagnosed_options), getResources().getString(R.string.comorbidities_eye_screening_eye_diagnosed_options_yes), App.VERTICAL, App.VERTICAL);
         //diabetesEyeScreeningEvidenceEye = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_eye_screening_evidence_eye), getResources().getStringArray(R.array.comorbidities_eye_screening_evidence_eye_options), "", App.VERTICAL, App.VERTICAL);
         diabetesEyeScreeningEvidenceEye = new TitledCheckBoxes(context, null, getResources().getString(R.string.comorbidities_eye_screening_evidence_eye), getResources().getStringArray(R.array.comorbidities_eye_screening_evidence_eye_options), new Boolean[]{false, false, false, false}, App.VERTICAL, App.VERTICAL);
         diabetesEyeScreeningEvidenceEyeOther  = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_eye_screening_evidence_eye_other), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
@@ -200,6 +202,23 @@ public class ComorbiditiesDiabetesEyeScreeningForm extends AbstractFormActivity 
     public boolean validate() {
 
         Boolean error = false;
+        View view = null;
+
+        Boolean flag = false;
+        if (diabetesEyeScreeningEvidenceEye.getVisibility() == View.VISIBLE) {
+            for (CheckBox cb : diabetesEyeScreeningEvidenceEye.getCheckedBoxes()) {
+                if (cb.isChecked()) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) {
+                diabetesEyeScreeningEvidenceEye.getQuestionView().setError(getString(R.string.empty_field));
+                diabetesEyeScreeningEvidenceEye.getQuestionView().requestFocus();
+                view = diabetesEyeScreeningEvidenceEye;
+                error = true;
+            }
+        }
 
         if (error) {
 
@@ -211,9 +230,17 @@ public class ComorbiditiesDiabetesEyeScreeningForm extends AbstractFormActivity 
             DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_error));
+            final View finalView = view;
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
+                            scrollView.post(new Runnable() {
+                                public void run() {
+                                    if (finalView != null) {
+                                        scrollView.scrollTo(0, finalView.getTop());
+                                    }
+                                }
+                            });
                             try {
                                 InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
@@ -454,6 +481,12 @@ public class ComorbiditiesDiabetesEyeScreeningForm extends AbstractFormActivity 
         else
             diabetesEyeScreeningEvidenceEyeOther.setVisibility(View.GONE);
 
+        for (CheckBox cb : diabetesEyeScreeningEvidenceEye.getCheckedBoxes()) {
+            if (cb.isChecked()) {
+                diabetesEyeScreeningEvidenceEye.getQuestionView().setError(null);
+                break;
+            }
+        }
     }
 
     @Override
@@ -463,6 +496,47 @@ public class ComorbiditiesDiabetesEyeScreeningForm extends AbstractFormActivity 
         //displayReasonForNonCompliance();
         //displayIfOther();
         diabetesEyeScreeningEvidenceEyeOther.setVisibility(View.GONE);
+
+        //HERE FOR AUTOPOPULATING OBS
+        final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
+            @Override
+            protected HashMap<String, String> doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.fetching_data));
+                        loading.show();
+                    }
+                });
+
+                HashMap<String, String> result = new HashMap<String, String>();
+                String monthOfTreatment = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "FOLLOW-UP MONTH");
+
+                if (monthOfTreatment != null)
+                    if (!monthOfTreatment .equals(""))
+                        result.put("FOLLOW-UP MONTH", monthOfTreatment);
+
+
+                return result;
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            @Override
+            protected void onPostExecute(HashMap<String, String> result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                diabetesEyeScreeningMonthOfTreatment.getSpinner().selectValue(result.get("FOLLOW-UP MONTH"));
+
+            }
+        };
+        autopopulateFormTask.execute("");
     }
 
     @Override

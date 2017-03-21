@@ -86,6 +86,8 @@ public class ComorbiditiesPatientInformationForm1 extends AbstractFormActivity i
     TitledSpinner householdHeadEducationLevel;
     TitledSpinner patientEducationalLevel;
 
+    ScrollView scrollView;
+
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
      *
@@ -137,7 +139,7 @@ public class ComorbiditiesPatientInformationForm1 extends AbstractFormActivity i
                     View v = viewGroups[i][j];
                     layout.addView(v);
                 }
-                ScrollView scrollView = new ScrollView(mainContent.getContext());
+                scrollView = new ScrollView(mainContent.getContext());
                 scrollView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 scrollView.addView(layout);
                 groups.add(scrollView);
@@ -165,17 +167,17 @@ public class ComorbiditiesPatientInformationForm1 extends AbstractFormActivity i
         //nic = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_nic), "", "", 15, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
         cnicLayout = new LinearLayout(context);
         cnicLayout.setOrientation(LinearLayout.HORIZONTAL);
-        cnic1 = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_nic), "", "XXXXX", 5, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        cnic1 = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_nic), "", "XXXXX", 5, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         cnicLayout.addView(cnic1);
         cnic2 = new TitledEditText(context, null, "-", "", "XXXXXXX", 7, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         cnicLayout.addView(cnic2);
         cnic3 = new TitledEditText(context, null, "-", "", "X", 1, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         cnicLayout.addView(cnic3);
-        nicOwner = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_patient_information_cnic_owner), getResources().getStringArray(R.array.comorbidities_patient_information_nic_options), "", App.VERTICAL);
+        nicOwner = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_patient_information_cnic_owner), getResources().getStringArray(R.array.comorbidities_patient_information_nic_options), getResources().getString(R.string.comorbidities_patient_information_nic_options_self), App.VERTICAL);
         otherNicOwner = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_other_cnic_owner), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        addressProvided = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_patient_information_address_provided), getResources().getStringArray(R.array.yes_no_options), "", App.HORIZONTAL, App.VERTICAL);
-        address1 = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_address1), "", "", 10, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        address2 = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_address2), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        addressProvided = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_patient_information_address_provided), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL);
+        address1 = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_address1), "", "", 10, RegexUtil.ADDRESS_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        address2 = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_address2), "", "", 50, RegexUtil.ADDRESS_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         town = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_town), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         city = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_city), App.getCity(), "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         city.getEditText().setKeyListener(null);
@@ -212,7 +214,7 @@ public class ComorbiditiesPatientInformationForm1 extends AbstractFormActivity i
         tbStatus = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_patient_information_tb_status), getResources().getStringArray(R.array.comorbidities_patient_information_tb_status_options), getResources().getString(R.string.comorbidities_patient_information_tb_status_positive), App.HORIZONTAL, App.VERTICAL);
         tbCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_patient_information_tb_category), getResources().getStringArray(R.array.comorbidities_patient_information_tb_category_options), getResources().getString(R.string.comorbidities_patient_information_tb_category_cat1), App.HORIZONTAL, App.VERTICAL);
         maritalStatus = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_patient_information_marital_status), getResources().getStringArray(R.array.comorbidities_patient_information_marital_status_options), getResources().getString(R.string.comorbidities_patient_information_marital_status_options_single), App.VERTICAL, true);
-        householdHeadEducationLevel = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_patient_information_head_of_education), getResources().getStringArray(R.array.comorbidities_patient_information_education_options), getString(R.string.comorbidities_patient_information_education_options_ele), App.VERTICAL);
+        householdHeadEducationLevel = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_patient_information_head_of_education), getResources().getStringArray(R.array.comorbidities_patient_information_education_options), getString(R.string.comorbidities_patient_information_education_options_ele), App.VERTICAL, true);
         patientEducationalLevel = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_patient_information_eduaction_level), getResources().getStringArray(R.array.comorbidities_patient_information_education_options), getString(R.string.comorbidities_patient_information_education_options_ele), App.VERTICAL);
 
         // Used for reset fields...
@@ -296,6 +298,13 @@ public class ComorbiditiesPatientInformationForm1 extends AbstractFormActivity i
             error = true;
         }
 
+        if (otherNicOwner.getVisibility() == View.VISIBLE && App.get(specifyOther).isEmpty()) {
+            gotoPage(1);
+            otherNicOwner.getEditText().setError(getString(R.string.empty_field));
+            otherNicOwner.getEditText().requestFocus();
+            error = true;
+        }
+
         if (specifyOther.getVisibility() == View.VISIBLE && App.get(specifyOther).isEmpty()) {
             gotoPage(1);
             specifyOther.getEditText().setError(getString(R.string.empty_field));
@@ -353,6 +362,7 @@ public class ComorbiditiesPatientInformationForm1 extends AbstractFormActivity i
         final ArrayList<String[]> observations = new ArrayList<String[]>();
         observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
         observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+        observations.add(new String[]{"HEALTH CLINIC/POST", App.get(gpClinicCode)});
         observations.add(new String[]{"FATHER NAME", App.get(fatherName)});
         observations.add(new String[]{"PARTNER FULL NAME", App.get(husbandName)});
 
@@ -407,7 +417,7 @@ public class ComorbiditiesPatientInformationForm1 extends AbstractFormActivity i
                                 (App.get(maritalStatus).equals(getResources().getString(R.string.pet_separated)) ? "SEPARATED" :
                                         (App.get(maritalStatus).equals(getResources().getString(R.string.pet_divorced)) ? "DIVORCED" :
                                                 (App.get(maritalStatus).equals(getResources().getString(R.string.pet_widower)) ? "WIDOWED" :
-                                                        (App.get(maritalStatus).equals(getResources().getString(R.string.pet_other)) ? "OTHER" :
+                                                        (App.get(maritalStatus).equals(getResources().getString(R.string.pet_other)) ? "OTHER MARITAL STATUS" :
                                                                 (App.get(maritalStatus).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSE")))))));
         observations.add(new String[]{"MARITAL STATUS", maritalStatusString});
 
@@ -437,7 +447,7 @@ public class ComorbiditiesPatientInformationForm1 extends AbstractFormActivity i
                                                                         (App.get(patientEducationalLevel).equals(getResources().getString(R.string.pet_polytechnic)) ? "POLYTECHNIC EDUCATION" :
                                                                                 (App.get(patientEducationalLevel).equals(getResources().getString(R.string.pet_special_education)) ? "SPECIAL EDUCATION RECEIVED" :
                                                                                         (App.get(patientEducationalLevel).equals(getResources().getString(R.string.pet_no_formal_education)) ? "NO FORMAL EDUCATION" :
-                                                                                                (App.get(patientEducationalLevel).equals(getResources().getString(R.string.pet_other)) ? "OTHER" :
+                                                                                                (App.get(patientEducationalLevel).equals(getResources().getString(R.string.pet_other)) ? "OTHER EDUCATION LEVEL" :
                                                                                                         (App.get(patientEducationalLevel).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSED"))))))))))));
         observations.add(new String[]{"HIGHEST EDUCATION LEVEL", patientEducationLevelString});
 
@@ -645,6 +655,21 @@ public class ComorbiditiesPatientInformationForm1 extends AbstractFormActivity i
         otherNicOwner.setVisibility(View.GONE);
         displayAddressOrNot();
         displayTBCategory();
+
+        if (App.get(indexExternalPatientId).equals("")) {
+            String externalId = App.getPatient().getExternalId();
+            if(externalId != null) {
+                if (externalId.equals("")) {
+                    indexExternalPatientId.getEditText().setText("");
+                } else {
+                    indexExternalPatientId.getEditText().setText(externalId);
+                    indexExternalPatientId.getEditText().setKeyListener(null);
+                }
+            }
+            else {
+                indexExternalPatientId.getEditText().setText("");
+            }
+        }
     }
 
     @Override

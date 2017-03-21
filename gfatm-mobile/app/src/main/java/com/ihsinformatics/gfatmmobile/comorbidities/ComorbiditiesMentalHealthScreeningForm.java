@@ -22,6 +22,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
@@ -313,6 +314,8 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
                 }
             }
         });
+
+        resetViews();
     }
 
     @Override
@@ -637,6 +640,46 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
         super.resetViews();
 
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        //HERE FOR AUTOPOPULATING OBS
+        final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
+            @Override
+            protected HashMap<String, String> doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.fetching_data));
+                        loading.show();
+                    }
+                });
+
+                HashMap<String, String> result = new HashMap<String, String>();
+                String gpClinic = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_PATIENT_INFORMATION_FORM, "HEALTH CLINIC/POST");
+
+                if (gpClinic != null)
+                    if (!gpClinic .equals(""))
+                        result.put("HEALTH CLINIC/POST", gpClinic);
+
+                return result;
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            @Override
+            protected void onPostExecute(HashMap<String, String> result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                gpClinicCode.getEditText().setText(result.get("HEALTH CLINIC/POST"));
+                preferredTherapyLocationSpinner.getSpinner().selectValue(App.getLocation());
+            }
+        };
+        autopopulateFormTask.execute("");
     }
 
     @Override
@@ -737,7 +780,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
     }
 
     void displayPreferredTherapyLocationOrNot() {
-        if (akuadsAgree.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.yes)) && !akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_normal))) {
+        if (akuadsAgree.getVisibility() ==  View.VISIBLE && akuadsAgree.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.yes)) && !akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_normal))) {
             preferredTherapyLocationSpinner.setVisibility(View.VISIBLE);
             gpClinicCode.setVisibility(View.VISIBLE);
         } else if (akuadsAgree.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.no))) {

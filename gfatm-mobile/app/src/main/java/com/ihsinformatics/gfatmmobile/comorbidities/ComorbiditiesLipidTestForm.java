@@ -155,7 +155,7 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
         testOrderLipid.setTypeface(null, Typeface.BOLD);
         lipidMonthOfVisit = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_urinedr_month_of_treatment), getResources().getStringArray(R.array.comorbidities_followup_month), "1", App.HORIZONTAL);
         lipidTestOrderDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1cdate_test_order), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
-        lipidTestID = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hhba1c_testid), "", "", 9, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        lipidTestID = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hhba1c_testid), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
 
         //second page views...
         testResultLipid = new MyTextView(context, getResources().getString(R.string.comorbidities_lipid_test_result));
@@ -187,7 +187,7 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
         lipidTestResultDate.getButton().setOnClickListener(this);
         nextLipidTestDate.getButton().setOnClickListener(this);
 
-        lipidTestID.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        /*lipidTestID.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
@@ -203,7 +203,7 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
                     }
                 }
             }
-        });
+        });*/
 
         lipidTotalCholestrol.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override

@@ -59,6 +59,7 @@
     <string name="comorbidities_hba1c_result">HbA1C Result (%):</string>
     <string name="comorbidities_hba1c_result_range">Range 0&#8211;20 (Including decimal)</string>
     <string name="comorbidities_hba1c_diabetic">Is the patient Diabetic?</string>
+    <string name="comorbidities_form_type_error">Please select Form Type!</string>
 
     <string name="comorbidities_location_other">Other</string>
 
@@ -166,8 +167,8 @@
     <string name="comorbidities_vitals_height_metres">&#160;&#160;Height in meters:&#160;</string>
     <string name="comorbidities_vitals_height_range">Range 30&#8211;260</string>
     <string name="comorbidities_vitals_height_limit">The value should be in the range of 30&#8211;260</string>
-    <string name="comorbidities_vitals_bmi_range">Range 0&#8211;50</string>
-    <string name="comorbidities_vitals_bmi_limit">The value should be in the range of 0&#8211;50</string>
+    <string name="comorbidities_vitals_bmi_range">Range 0&#8211;200</string>
+    <string name="comorbidities_vitals_bmi_limit">The value should be in the range of 0&#8211;200</string>
     <string name="comorbidities_vitals_waist_hip_whr_range">Range 0&#8211;100</string>
     <string name="comorbidities_vitals_waist_hip_whr_limit">The value should be in the range of 0&#8211;100</string>
     <string name="comorbidities_vitals_bp_systolic_diastolic_range">Range 0&#8211;300</string>

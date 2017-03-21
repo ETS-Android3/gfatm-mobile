@@ -179,9 +179,9 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
         diabetesFootScreeningLeftFootVascular = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_foot_screening_left_foot_vascular_assesment), getResources().getStringArray(R.array.comorbidities_foot_screening_vascular_examination_options), getResources().getString(R.string.comorbidities_foot_screening_vascular_examination_options_present), App.VERTICAL, App.VERTICAL);
         diabetesFootScreeningOtherExamination = new MyTextView(context, getResources().getString(R.string.comorbidities_foot_screening_other_examination));
         diabetesFootScreeningOtherExamination.setTypeface(null, Typeface.BOLD);
-        diabetesFootScreeningFootHygiene = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_foot_screening_foot_hygiene), getResources().getStringArray(R.array.comorbidities_foot_screening_foot_hygiene_options), "", App.VERTICAL, App.VERTICAL);
-        diabetesFootScreeningFootwearAppropriate = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_foot_screening_footwear_appropriate), getResources().getStringArray(R.array.comorbidities_yes_no), "", App.VERTICAL, App.VERTICAL);
-        diabetesFootScreeningPreviousUlcer = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_foot_screening_previous_ulcer), getResources().getStringArray(R.array.comorbidities_yes_no), "", App.VERTICAL, App.VERTICAL);
+        diabetesFootScreeningFootHygiene = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_foot_screening_foot_hygiene), getResources().getStringArray(R.array.comorbidities_foot_screening_foot_hygiene_options), getResources().getString(R.string.comorbidities_foot_screening_foot_hygiene_options_average), App.VERTICAL, App.VERTICAL);
+        diabetesFootScreeningFootwearAppropriate = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_foot_screening_footwear_appropriate), getResources().getStringArray(R.array.comorbidities_yes_no), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL);
+        diabetesFootScreeningPreviousUlcer = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_foot_screening_previous_ulcer), getResources().getStringArray(R.array.comorbidities_yes_no), getResources().getString(R.string.no), App.VERTICAL, App.VERTICAL);
         diabetesFootScreeningDetailedClinicalNotes = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_foot_screening_clinical_notes), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         diabetesFootScreeningRecommendations = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_foot_screening_recommendations), getResources().getStringArray(R.array.comorbidities_foot_screening_recommendations_options), getResources().getString(R.string.comorbidities_foot_screening_recommendations_options_management), App.VERTICAL, App.VERTICAL);
 
@@ -548,6 +548,47 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
 
         displayFootComplicationsAndAmputationHistory();
         allExaminationSkipLogic();
+
+        //HERE FOR AUTOPOPULATING OBS
+        final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
+            @Override
+            protected HashMap<String, String> doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.fetching_data));
+                        loading.show();
+                    }
+                });
+
+                HashMap<String, String> result = new HashMap<String, String>();
+                String monthOfTreatment = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "FOLLOW-UP MONTH");
+
+                if (monthOfTreatment != null)
+                    if (!monthOfTreatment .equals(""))
+                        result.put("FOLLOW-UP MONTH", monthOfTreatment);
+
+
+                return result;
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            @Override
+            protected void onPostExecute(HashMap<String, String> result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                diabetesFootScreeningMonthOfVisit.getSpinner().selectValue(result.get("FOLLOW-UP MONTH"));
+
+            }
+        };
+        autopopulateFormTask.execute("");
     }
 
     @Override
