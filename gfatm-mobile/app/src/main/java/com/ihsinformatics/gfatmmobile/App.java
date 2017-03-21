@@ -58,6 +58,7 @@ public class App {
     private static String mode = "";
     private static String supportContact = "";
     private static String supportEmail = "";
+    private static String province = "";
     private static String city = "";
     private static String country = "";
     private static String ip = "";
@@ -150,6 +151,14 @@ public class App {
 
     public static void setCity(String city) {
         App.city = city;
+    }
+
+    public static String getProvince() {
+        return province;
+    }
+
+    public static void setProvince(String province) {
+        App.province = province;
     }
 
     public static String getCountry() {

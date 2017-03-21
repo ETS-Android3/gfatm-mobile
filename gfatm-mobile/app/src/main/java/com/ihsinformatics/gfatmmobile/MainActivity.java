@@ -621,6 +621,7 @@ public class MainActivity extends AppCompatActivity
                                 }
                             });
                     alertDialog.show();
+                    fragmentReport.fillReportFragment();
                 } else if (result.equals("CONNECTION_ERROR")) {
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");

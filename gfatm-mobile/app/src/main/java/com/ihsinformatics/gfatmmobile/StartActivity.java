@@ -42,6 +42,7 @@ public class StartActivity extends Activity {
         App.setSupportEmail(preferences.getString(Preferences.SUPPORT_EMAIL, ""));
         App.setCity(preferences.getString(Preferences.CITY, ""));
         App.setCountry(preferences.getString(Preferences.COUNTRY, ""));
+        App.setProvince(preferences.getString(Preferences.PROVINCE, ""));
         App.setIp(preferences.getString(Preferences.IP, ""));
         App.setPort(preferences.getString(Preferences.PORT, ""));
         App.setSsl(preferences.getString(Preferences.SSL_ENCRYPTION, ""));

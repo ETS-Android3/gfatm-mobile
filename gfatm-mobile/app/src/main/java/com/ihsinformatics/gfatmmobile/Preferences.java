@@ -34,6 +34,7 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
     public static final String SUPPORT_EMAIL = "support_email";
     public static final String CITY = "city";
     public static final String COUNTRY = "country";
+    public static final String PROVINCE = "province";
     public static final String IP = "ip";
     public static final String PORT = "port";
     public static final String SSL_ENCRYPTION = "ssl";
@@ -95,6 +96,8 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
             App.setSupportEmail(sharedPreferences.getString(key, ""));
         } else if (key.equals(CITY)) {
             App.setCity(sharedPreferences.getString(key, ""));
+        } else if (key.equals(PROVINCE)) {
+            App.setProvince(sharedPreferences.getString(key, ""));
         } else if (key.equals(COUNTRY)) {
             App.setCountry(sharedPreferences.getString(key, ""));
         } else if (key.equals(IP)) {

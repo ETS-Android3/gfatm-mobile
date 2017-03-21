@@ -1,24 +1,16 @@
 package com.ihsinformatics.gfatmmobile;
 
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.content.ContextCompat;
 import android.text.InputFilter;
 import android.text.InputType;
-import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -28,8 +20,8 @@ public class DefaultActivity extends AbstractSettingActivity {
 
     EditText supportContact;
     EditText supportEmail;
-    EditText city;
     Spinner country;
+    Spinner province;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +36,7 @@ public class DefaultActivity extends AbstractSettingActivity {
                         AppBarLayout.LayoutParams.MATCH_PARENT,
                         AppBarLayout.LayoutParams.WRAP_CONTENT));
         supportContactLayout.setOrientation(LinearLayout.VERTICAL);
-        supportContactLayout.setPadding(0, 40, 0, 40);
+        supportContactLayout.setPadding(0, 10, 0, 10);
 
         TextView supportContactTextView = new TextView(this);
         supportContactTextView.setText(getString(R.string.support_contact));
@@ -67,7 +59,7 @@ public class DefaultActivity extends AbstractSettingActivity {
                         AppBarLayout.LayoutParams.MATCH_PARENT,
                         AppBarLayout.LayoutParams.WRAP_CONTENT));
         supportEmailLayout.setOrientation(LinearLayout.VERTICAL);
-        supportEmailLayout.setPadding(0, 40, 0, 40);
+        supportEmailLayout.setPadding(0, 10, 0, 10);
 
         TextView supportEmailTextView = new TextView(this);
         supportEmailTextView.setText(getString(R.string.support_email));
@@ -82,34 +74,13 @@ public class DefaultActivity extends AbstractSettingActivity {
 
         layout.addView(supportEmailLayout);
 
-        LinearLayout cityLayout = new LinearLayout(this);
-        cityLayout.setLayoutParams(
-                new LinearLayout.LayoutParams(
-                        AppBarLayout.LayoutParams.MATCH_PARENT,
-                        AppBarLayout.LayoutParams.WRAP_CONTENT));
-        cityLayout.setOrientation(LinearLayout.VERTICAL);
-        cityLayout.setPadding(0, 40, 0, 40);
-
-        TextView cityTextView = new TextView(this);
-        cityTextView.setText(getString(R.string.city));
-        cityTextView.setTextColor(color);
-        cityLayout.addView(cityTextView);
-        city = new EditText(this);
-        city.setMaxEms(RegexUtil.defaultEditTextLength);
-        city.setFilters(new InputFilter[]{new InputFilter.LengthFilter(RegexUtil.defaultEditTextLength)});
-        city.setSingleLine(true);
-        city.setText(App.getCity());
-        cityLayout.addView(city);
-
-        layout.addView(cityLayout);
-
         LinearLayout countryLayout = new LinearLayout(this);
         countryLayout.setLayoutParams(
                 new LinearLayout.LayoutParams(
                         AppBarLayout.LayoutParams.MATCH_PARENT,
                         AppBarLayout.LayoutParams.WRAP_CONTENT));
         countryLayout.setOrientation(LinearLayout.VERTICAL);
-        countryLayout.setPadding(0, 40, 0, 40);
+        countryLayout.setPadding(0, 10, 0, 10);
 
         TextView countryTextView = new TextView(this);
         countryTextView.setText(getString(R.string.country));
@@ -125,6 +96,49 @@ public class DefaultActivity extends AbstractSettingActivity {
 
         layout.addView(countryLayout);
 
+        LinearLayout provinceLayout = new LinearLayout(this);
+        provinceLayout.setLayoutParams(
+                new LinearLayout.LayoutParams(
+                        AppBarLayout.LayoutParams.MATCH_PARENT,
+                        AppBarLayout.LayoutParams.WRAP_CONTENT));
+        provinceLayout.setOrientation(LinearLayout.VERTICAL);
+        provinceLayout.setPadding(0, 10, 0, 10);
+
+        TextView provinceTextView = new TextView(this);
+        provinceTextView.setText(getString(R.string.province));
+        provinceTextView.setTextColor(color);
+        provinceLayout.addView(provinceTextView);
+        province = new Spinner(this);
+        String[] provinces = getResources().getStringArray(R.array.provinces);
+        ArrayAdapter<String> spinnerArrayAdapter1 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, provinces);
+        province.setAdapter(spinnerArrayAdapter1);
+        province.setSelection(App.getIndex(province, App.getProvince()));
+
+        provinceLayout.addView(province);
+
+        layout.addView(provinceLayout);
+
+        /*LinearLayout cityLayout = new LinearLayout(this);
+        cityLayout.setLayoutParams(
+                new LinearLayout.LayoutParams(
+                        AppBarLayout.LayoutParams.MATCH_PARENT,
+                        AppBarLayout.LayoutParams.WRAP_CONTENT));
+        cityLayout.setOrientation(LinearLayout.VERTICAL);
+        cityLayout.setPadding(0, 10, 0, 10);
+
+        TextView cityTextView = new TextView(this);
+        cityTextView.setText(getString(R.string.city));
+        cityTextView.setTextColor(color);
+        cityLayout.addView(cityTextView);
+        city = new EditText(this);
+        city.setMaxEms(RegexUtil.defaultEditTextLength);
+        city.setFilters(new InputFilter[]{new InputFilter.LengthFilter(RegexUtil.defaultEditTextLength)});
+        city.setSingleLine(true);
+        city.setText(App.getCity());
+        cityLayout.addView(city);
+
+        layout.addView(cityLayout);*/
+
         resetButton.setVisibility(View.VISIBLE);
 
     }
@@ -137,11 +151,9 @@ public class DefaultActivity extends AbstractSettingActivity {
 
             supportContact.setError(null);
             supportEmail.setError(null);
-            city.setError(null);
 
             supportContact.setText(getString(R.string.support_contact_default));
             supportEmail.setText(getString(R.string.support_email_default));
-            city.setText(getString(R.string.city_default));
             country.setSelection(App.getIndex(country, getString(R.string.country_default)));
 
         } else if (v == okButton) {
@@ -151,7 +163,6 @@ public class DefaultActivity extends AbstractSettingActivity {
 
                 App.setSupportContact(App.get(supportContact));
                 App.setSupportEmail(App.get(supportEmail));
-                App.setCity(App.get(city));
                 App.setCountry(App.get(country));
 
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(DefaultActivity.this);
@@ -173,22 +184,8 @@ public class DefaultActivity extends AbstractSettingActivity {
 
         supportContact.setError(null);
         supportEmail.setError(null);
-        city.setError(null);
 
         Boolean cancel = false;
-
-        if (App.get(city).isEmpty()) {
-            city.setError(getString(R.string.empty_field));
-            city.requestFocus();
-            cancel = true;
-        } else {
-
-            if (!RegexUtil.isWord(App.get(city))) {
-                city.setError(getString(R.string.invalid_value));
-                city.requestFocus();
-                cancel = true;
-            }
-        }
 
         if (App.get(supportEmail).isEmpty()) {
             supportEmail.setError(getString(R.string.empty_field));

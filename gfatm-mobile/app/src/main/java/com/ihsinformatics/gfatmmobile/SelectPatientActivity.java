@@ -367,7 +367,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                 final String id = App.get(createPatientId);
                 final String fname = App.get(firstName);
                 final String lname = App.get(lastName);
-                final String g = (male.isChecked()) ? "male" : "female";
+                final String g = (male.isChecked()) ? "M" : "F";
                 final String eId = App.get(externalId);
 
                 AsyncTask<String, String, String> createPatientTask = new AsyncTask<String, String, String>() {
