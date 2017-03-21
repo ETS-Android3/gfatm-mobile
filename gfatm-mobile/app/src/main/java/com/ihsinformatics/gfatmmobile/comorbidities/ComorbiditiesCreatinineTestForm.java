@@ -6,6 +6,7 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -19,12 +20,14 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
@@ -49,7 +52,7 @@ import java.util.HashMap;
  * Created by Fawad Jawaid on 17-Jan-17.
  */
 
-public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener, View.OnTouchListener {
 
     public static final int THIRD_DATE_DIALOG_ID = 3;
     // Extra Views for date ...
@@ -64,6 +67,7 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
     MyTextView testOrderCreatinine;
     TitledSpinner creatinineFollowupMonth;
     TitledButton creatinineTestOrderDate;
+    ImageView testIdView;
     TitledEditText creatinineTestID;
     //Views for Test Result Blood Sugar
     MyTextView testResultCreatinine;
@@ -152,7 +156,27 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
         testOrderCreatinine.setTypeface(null, Typeface.BOLD);
         creatinineFollowupMonth = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_mth_txcomorbidities_hba1c), getResources().getStringArray(R.array.comorbidities_followup_month), "1", App.HORIZONTAL);
         creatinineTestOrderDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1cdate_test_order), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
-        creatinineTestID = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hhba1c_testid), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        LinearLayout linearLayout = new LinearLayout(context);
+        creatinineTestID = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hhba1c_testid), "", "", 11, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                0.9f
+        );
+        creatinineTestID.setLayoutParams(param);
+        linearLayout.addView(creatinineTestID);
+        testIdView = new ImageView(context);
+        testIdView.setImageResource(R.drawable.ic_checked);
+        LinearLayout.LayoutParams param1 = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                0.1f
+        );
+        testIdView.setLayoutParams(param1);
+        testIdView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        testIdView.setPadding(0, 5, 0, 0);
+
+        linearLayout.addView(testIdView);
 
         //second page views...
         testResultCreatinine = new MyTextView(context, getResources().getString(R.string.comorbidities_creatinine_test_result));
@@ -162,7 +186,6 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
         creatinineResult = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_creatinine_result), "", getResources().getString(R.string.comorbidities_creatinine_result_range), 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         nextCreatinineTestDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_urinedr_nexttestdate), DateFormat.format("dd-MMM-yyyy", fourthDateCalendar).toString(), App.HORIZONTAL);
         nextCreatinineTestDate.setVisibility(View.GONE);
-        goneVisibility();
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), creatinineTestID.getEditText(), formType.getRadioGroup(), creatinineFollowupMonth.getSpinner(),
@@ -170,7 +193,7 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, creatinineTestID, formType, testOrderCreatinine, creatinineFollowupMonth, creatinineTestOrderDate,
+                {{formDate, formType, linearLayout, testOrderCreatinine, creatinineFollowupMonth, creatinineTestOrderDate,
                         testResultCreatinine, creatinineTestResultDate, creatinineResult}};
 
         formDate.getButton().setOnClickListener(this);
@@ -198,6 +221,7 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
                         if (num < 0 || num > 99.9) {
                             creatinineResult.getEditText().setError(getString(R.string.comorbidities_creatinine_result_limit));
                         } else {
+
                             //Correct value
                         }
                     }
@@ -207,7 +231,7 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
             }
         });
 
-        /*creatinineTestID.getEditText().addTextChangedListener(new TextWatcher() {
+        creatinineTestID.getEditText().addTextChangedListener(new TextWatcher() {
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -225,13 +249,26 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
                     if (creatinineTestID.getEditText().getText().length() > 0) {
                         if (creatinineTestID.getEditText().getText().length() < 11) {
                             creatinineTestID.getEditText().setError(getString(R.string.comorbidities_blood_sugar_testid_format_error));
+                            testIdView.setVisibility(View.INVISIBLE);
+                        } else {
+                            testIdView.setVisibility(View.VISIBLE);
+                            testIdView.setImageResource(R.drawable.ic_checked);
                         }
+                    } else {
+                        testIdView.setVisibility(View.INVISIBLE);
                     }
+                    goneVisibility();
+                    submitButton.setEnabled(false);
+
+
                 } catch (NumberFormatException nfe) {
                     //Exception: User might be entering " " (empty) value
                 }
             }
-        });*/
+        });
+        testIdView.setOnTouchListener(this);
+
+        resetViews();
     }
 
     @Override
@@ -275,13 +312,12 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
             creatinineTestID.getEditText().setError(getString(R.string.empty_field));
             creatinineTestID.getEditText().requestFocus();
             error = true;
-        }
-        /*else if (!App.get(creatinineTestID).isEmpty() && App.get(creatinineTestID).length() < 11) {
+        } else if (!App.get(creatinineTestID).isEmpty() && App.get(creatinineTestID).length() < 11) {
             gotoFirstPage();
             creatinineTestID.getEditText().setError(getString(R.string.comorbidities_blood_sugar_testid_format_error));
             creatinineTestID.getEditText().requestFocus();
             error = true;
-        }*/
+        }
 
         if (error) {
 
@@ -323,9 +359,16 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
         observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
         /*observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
         observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});*/
-        observations.add(new String[]{"FOLLOW-UP MONTH", App.get(creatinineFollowupMonth)});
-        observations.add(new String[]{"DATE TEST ORDERED", App.getSqlDateTime(secondDateCalendar)});
-        observations.add(new String[]{"TEST ID", App.get(creatinineTestID)});
+
+        if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
+            observations.add(new String[]{"FOLLOW-UP MONTH", App.get(creatinineFollowupMonth)});
+            observations.add(new String[]{"DATE TEST ORDERED", App.getSqlDateTime(secondDateCalendar)});
+            observations.add(new String[]{"TEST ID", App.get(creatinineTestID)});
+        } else if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))) {
+            observations.add(new String[]{"TEST RESULT DATE", App.getSqlDateTime(thirdDateCalendar)});
+            observations.add(new String[]{"CREATININE RESULT VALUE", App.get(creatinineResult)});
+            observations.add(new String[]{"TEST ID", App.get(creatinineTestID)});
+        }
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -342,9 +385,16 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
                 });
 
                 String result = "";
-                result = serverService.saveEncounterAndObservation(FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}));
-                if (result.contains("SUCCESS"))
-                    return "SUCCESS";
+
+                if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
+                    result = serverService.saveEncounterAndObservation("Creatinine Test Order", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                    if (result.contains("SUCCESS"))
+                        return "SUCCESS";
+                } else if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))) {
+                    result = serverService.saveEncounterAndObservation("Creatinine Test Result", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                    if (result.contains("SUCCESS"))
+                        return "SUCCESS";
+                }
 
                 return result;
             }
@@ -503,6 +553,12 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
         creatinineTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
         nextCreatinineTestDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", fourthDateCalendar).toString());
 
+        submitButton.setEnabled(false);
+
+        testIdView.setVisibility(View.GONE);
+        creatinineTestID.setVisibility(View.GONE);
+        testIdView.setImageResource(R.drawable.ic_checked);
+
         goneVisibility();
     }
 
@@ -514,7 +570,12 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
         if (radioGroup == formType.getRadioGroup()) {
-            showTestOrderOrTestResult();
+            formDate.setVisibility(View.VISIBLE);
+            creatinineTestID.setVisibility(View.VISIBLE);
+            creatinineTestID.getEditText().setText("");
+            creatinineTestID.getEditText().setError(null);
+            goneVisibility();
+            submitButton.setEnabled(false);
         }
     }
 
@@ -547,6 +608,122 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
             creatinineTestResultDate.setVisibility(View.VISIBLE);
             creatinineResult.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN: {
+                ImageView view = (ImageView) v;
+                //overlay is black with transparency of 0x77 (119)
+                view.getDrawable().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
+                view.invalidate();
+
+                Boolean error = false;
+
+                checkTestId();
+
+
+                break;
+            }
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL: {
+                ImageView view = (ImageView) v;
+                //clear the overlay
+                view.getDrawable().clearColorFilter();
+                view.invalidate();
+                break;
+            }
+        }
+        return true;
+    }
+
+    private void checkTestId() {
+        AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.verifying_test_id));
+                        loading.show();
+                    }
+                });
+
+                String result = "";
+
+                Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "Comorbidities-Creatinine Test Order");
+
+                if (testIds == null || testIds.length < 1) {
+                    if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder)))
+                        return "SUCCESS";
+                    else
+                        return "";
+                }
+
+
+                if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
+                    result = "SUCCESS";
+                    for (int i = 0; i < testIds.length; i++) {
+                        if (String.valueOf(testIds[i][0]).equals(App.get(creatinineTestID))) {
+                            return "";
+                        }
+                    }
+                }
+
+                if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))) {
+                    result = "";
+                    for (int i = 0; i < testIds.length; i++) {
+                        if (String.valueOf(testIds[i][0]).equals(App.get(creatinineTestID))) {
+                            return "SUCCESS";
+                        }
+                    }
+                }
+
+                return result;
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            ;
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                if (result.equals("SUCCESS")) {
+
+                    testIdView.setImageResource(R.drawable.ic_checked_green);
+                    showTestOrderOrTestResult();
+                    submitButton.setEnabled(true);
+
+                } else {
+
+                    if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
+                        creatinineTestID.getEditText().setError("Test Id already used.");
+                    } else {
+                        creatinineTestID.getEditText().setError("No order form found for the test id for patient");
+                    }
+
+                }
+
+                try {
+                    InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                } catch (Exception e) {
+                    // TODO: handle exception
+                }
+
+            }
+        };
+        submissionFormTask.execute("");
+
     }
 
     class MyAdapter extends PagerAdapter {
@@ -614,6 +791,3 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
         }
     }
 }
-
-
-
