@@ -86,6 +86,8 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
     TitledEditText urineDRCrystals;
     TitledButton nextUrineDRTestDate;
 
+    ScrollView scrollView;
+
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
      *
@@ -142,7 +144,7 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
                     View v = viewGroups[i][j];
                     layout.addView(v);
                 }
-                ScrollView scrollView = new ScrollView(mainContent.getContext());
+                scrollView = new ScrollView(mainContent.getContext());
                 scrollView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 scrollView.addView(layout);
                 groups.add(scrollView);
@@ -167,7 +169,7 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
         testOrderUrineDR.setTypeface(null, Typeface.BOLD);
         urineDRMonthOfVisit = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_urinedr_month_of_treatment), getResources().getStringArray(R.array.comorbidities_followup_month), "1", App.HORIZONTAL);
         urineDRTestOrderDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1cdate_test_order), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
-        urineDRTestID = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hhba1c_testid), "", "", 11, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        urineDRTestID = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hhba1c_testid), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
 
         //second page views...
         testResultUrineDR = new MyTextView(context, getResources().getString(R.string.comorbidities_urinedr_test_result));
@@ -444,7 +446,7 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
             }
         });
 
-        urineDRTestID.getEditText().addTextChangedListener(new TextWatcher() {
+        /*urineDRTestID.getEditText().addTextChangedListener(new TextWatcher() {
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -468,7 +470,7 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
                     //Exception: User might be entering " " (empty) value
                 }
             }
-        });
+        });*/
     }
 
     @Override
@@ -487,6 +489,7 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
     public boolean validate() {
 
         Boolean error = false;
+        View view = null;
 
         if (urineDRCrystals.getVisibility() == View.VISIBLE && App.get(urineDRCrystals).isEmpty()) {
             gotoFirstPage();
@@ -680,17 +683,28 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
             error = true;
         }
 
+        Boolean flag = false;
+        if(!App.get(formType).equalsIgnoreCase("")) {
+            flag = true;
+        }
+        if (!flag) {
+            formType.getQuestionView().setError(getString(R.string.empty_field));
+            formType.getQuestionView().requestFocus();
+            view = formType;
+            error = true;
+        }
+
         if (App.get(urineDRTestID).isEmpty()) {
             gotoFirstPage();
             urineDRTestID.getEditText().setError(getString(R.string.empty_field));
             urineDRTestID.getEditText().requestFocus();
             error = true;
-        } else if (!App.get(urineDRTestID).isEmpty() && App.get(urineDRTestID).length() < 11) {
+        } /*else if (!App.get(urineDRTestID).isEmpty() && App.get(urineDRTestID).length() < 11) {
             gotoFirstPage();
             urineDRTestID.getEditText().setError(getString(R.string.comorbidities_blood_sugar_testid_format_error));
             urineDRTestID.getEditText().requestFocus();
             error = true;
-        }
+        }*/
 
         if (error) {
 
@@ -702,9 +716,34 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
             DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_error));
+            final View finalView = view;
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
+                            scrollView.post(new Runnable() {
+                                public void run() {
+                                    if (finalView != null) {
+                                        scrollView.scrollTo(0, finalView.getTop());
+                                        urineDRTestID.clearFocus();
+                                        urineDRQuantity.clearFocus();
+                                        urineDRColor.clearFocus();
+                                        urineDRSpecificGravity.clearFocus();
+                                        urineDRPH.clearFocus();
+                                        urineDRAlbumin.clearFocus();
+                                        urineDRSugar.clearFocus();
+                                        urineDRKetones.clearFocus();
+                                        urineDRBilirubin.clearFocus();
+                                        urineDRBlood.clearFocus();
+                                        urineDRNitrite.clearFocus();
+                                        urineDRUrobilinogen.clearFocus();
+                                        urineDRRedCells.clearFocus();
+                                        urineDRPusCells.clearFocus();
+                                        urineDREpithelialCells.clearFocus();
+                                        urineDRHyalineCasts.clearFocus();
+                                        urineDRCrystals.clearFocus();
+                                    }
+                                }
+                            });
                             try {
                                 InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
@@ -761,8 +800,6 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
             @Override
             protected void onProgressUpdate(String... values) {
             }
-
-            ;
 
             @Override
             protected void onPostExecute(String result) {
@@ -926,6 +963,7 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
         if (radioGroup == formType.getRadioGroup()) {
             showTestOrderOrTestResult();
+            formType.getQuestionView().setError(null);
         }
     }
 

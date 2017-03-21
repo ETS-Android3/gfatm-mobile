@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
@@ -70,6 +71,8 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
     TitledButton hba1cTestResultDate;
     TitledEditText hba1cResult;
     TitledRadioGroup hba1cDiabetic;
+
+    ScrollView scrollView;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -125,7 +128,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
                     View v = viewGroups[i][j];
                     layout.addView(v);
                 }
-                ScrollView scrollView = new ScrollView(mainContent.getContext());
+                scrollView = new ScrollView(mainContent.getContext());
                 scrollView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 scrollView.addView(layout);
                 groups.add(scrollView);
@@ -148,11 +151,11 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
         formType = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_testorder_testresult_form_type), getResources().getStringArray(R.array.comorbidities_testorder_testresult_form_type_options), "", App.HORIZONTAL, App.VERTICAL);
         testOrderHba1C = new MyTextView(context, getResources().getString(R.string.comorbidities_hba1c_test_order));
         testOrderHba1C.setTypeface(null, Typeface.BOLD);
-        hba1cTestType = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_hba1c_testtype), getResources().getStringArray(R.array.comorbidities_HbA1C_test_type), "", App.HORIZONTAL, App.VERTICAL);
+        hba1cTestType = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_hba1c_testtype), getResources().getStringArray(R.array.comorbidities_HbA1C_test_type), getResources().getString(R.string.comorbidities_HbA1C_test_type_baseline), App.HORIZONTAL, App.VERTICAL);
         hba1cFollowupMonth = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_mth_txcomorbidities_hba1c), getResources().getStringArray(R.array.comorbidities_followup_month), "1", App.HORIZONTAL);
         showFollowupField();
         hba1cTestOrderDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1cdate_test_order), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
-        hba1cTestID = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hhba1c_testid), "", "", 9, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        hba1cTestID = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hhba1c_testid), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
 
         //second page views...
         testResultHba1c = new MyTextView(context, getResources().getString(R.string.comorbidities_hba1c_test_result));
@@ -209,7 +212,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
             }
         });
 
-        hba1cTestID.getEditText().addTextChangedListener(new TextWatcher() {
+        /*hba1cTestID.getEditText().addTextChangedListener(new TextWatcher() {
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -233,7 +236,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
                     //Exception: User might be entering " " (empty) value
                 }
             }
-        });
+        });*/
     }
 
     @Override
@@ -248,6 +251,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
     public boolean validate() {
 
         Boolean error = false;
+        View view = null;
 
         if (hba1cResult.getVisibility() == View.VISIBLE && App.get(hba1cResult).isEmpty()) {
             gotoLastPage();
@@ -268,18 +272,29 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
             error = true;
         }
 
+        Boolean flag = false;
+        if(!App.get(formType).equalsIgnoreCase("")) {
+            flag = true;
+        }
+        if (!flag) {
+            formType.getQuestionView().setError(getString(R.string.empty_field));
+            formType.getQuestionView().requestFocus();
+            view = formType;
+            error = true;
+        }
+
         if (App.get(hba1cTestID).isEmpty()) {
             gotoFirstPage();
             hba1cTestID.getEditText().setError(getString(R.string.empty_field));
             hba1cTestID.getEditText().requestFocus();
             error = true;
         }
-        else if (!App.get(hba1cTestID).isEmpty() && App.get(hba1cTestID).length() < 9) {
+        /*else if (!App.get(hba1cTestID).isEmpty() && App.get(hba1cTestID).length() < 9) {
             gotoFirstPage();
             hba1cTestID.getEditText().setError(getString(R.string.comorbidities_hhba1c_testid_format_error1));
             hba1cTestID.getEditText().requestFocus();
             error = true;
-        } /*else if (!RegexUtil.isCorrectTestID(App.get(hba1cTestID))) {
+        } else if (!RegexUtil.isCorrectTestID(App.get(hba1cTestID))) {
             gotoLastPage();
             hba1cTestID.getEditText().setError(getString(R.string.comorbidities_hhba1c_testid_format_dasherror));
             hba1cTestID.getEditText().requestFocus();
@@ -296,9 +311,19 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
             DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_error));
+            final View finalView = view;
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
+                            scrollView.post(new Runnable() {
+                                public void run() {
+                                    if (finalView != null) {
+                                        scrollView.scrollTo(0, finalView.getTop());
+                                        hba1cTestID.clearFocus();
+                                        hba1cResult.clearFocus();
+                                    }
+                                }
+                            });
                             try {
                                 InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
@@ -361,8 +386,6 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
             @Override
             protected void onProgressUpdate(String... values) {
             }
-
-            ;
 
             @Override
             protected void onPostExecute(String result) {
@@ -526,10 +549,12 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
         if (radioGroup == hba1cTestType.getRadioGroup()) {
             showFollowupField();
             showHba1cDiabetic();
+            hba1cTestType.getQuestionView().setError(null);
         }
 
         if (radioGroup == formType.getRadioGroup()) {
             showTestOrderOrTestResult();
+            formType.getQuestionView().setError(null);
         }
     }
 

@@ -50,6 +50,8 @@ public class ComorbiditiesDiabetesEducationForm extends AbstractFormActivity {
     MyTextView diabetesEducationFormEducationalMaterial;
     TitledCheckBoxes diabetesEducationFormDiabetesEducationalMaterial;
 
+    ScrollView scrollView;
+
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
      *
@@ -101,7 +103,7 @@ public class ComorbiditiesDiabetesEducationForm extends AbstractFormActivity {
                     View v = viewGroups[i][j];
                     layout.addView(v);
                 }
-                ScrollView scrollView = new ScrollView(mainContent.getContext());
+                scrollView = new ScrollView(mainContent.getContext());
                 scrollView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 scrollView.addView(layout);
                 groups.add(scrollView);
@@ -137,6 +139,12 @@ public class ComorbiditiesDiabetesEducationForm extends AbstractFormActivity {
                 {{formDate, diabetesEducationFormFollowupMonth, diabetesEducationFormEducationalPlan, diabetesEducationFormDiabetesEducation, diabetesEducationFormEducationalMaterial, diabetesEducationFormDiabetesEducationalMaterial}};
 
         formDate.getButton().setOnClickListener(this);
+
+        for (CheckBox cb : diabetesEducationFormDiabetesEducation.getCheckedBoxes())
+            cb.setOnCheckedChangeListener(this);
+
+        for (CheckBox cb : diabetesEducationFormDiabetesEducationalMaterial.getCheckedBoxes())
+            cb.setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -149,6 +157,39 @@ public class ComorbiditiesDiabetesEducationForm extends AbstractFormActivity {
     public boolean validate() {
 
         Boolean error = false;
+        View view = null;
+
+        Boolean flag = false;
+        if (diabetesEducationFormDiabetesEducationalMaterial.getVisibility() == View.VISIBLE) {
+            for (CheckBox cb : diabetesEducationFormDiabetesEducationalMaterial.getCheckedBoxes()) {
+                if (cb.isChecked()) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) {
+                diabetesEducationFormDiabetesEducationalMaterial.getQuestionView().setError(getString(R.string.empty_field));
+                diabetesEducationFormDiabetesEducationalMaterial.getQuestionView().requestFocus();
+                view = diabetesEducationFormDiabetesEducationalMaterial;
+                error = true;
+            }
+        }
+
+        flag = false;
+        if (diabetesEducationFormDiabetesEducation.getVisibility() == View.VISIBLE) {
+            for (CheckBox cb : diabetesEducationFormDiabetesEducation.getCheckedBoxes()) {
+                if (cb.isChecked()) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) {
+                diabetesEducationFormDiabetesEducation.getQuestionView().setError(getString(R.string.empty_field));
+                diabetesEducationFormDiabetesEducation.getQuestionView().requestFocus();
+                view = diabetesEducationFormDiabetesEducation;
+                error = true;
+            }
+        }
 
         if (error) {
 
@@ -160,9 +201,17 @@ public class ComorbiditiesDiabetesEducationForm extends AbstractFormActivity {
             DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_error));
+            final View finalView = view;
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
+                            scrollView.post(new Runnable() {
+                                public void run() {
+                                    if (finalView != null) {
+                                        scrollView.scrollTo(0, finalView.getTop());
+                                    }
+                                }
+                            });
                             try {
                                 InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
@@ -412,6 +461,20 @@ public class ComorbiditiesDiabetesEducationForm extends AbstractFormActivity {
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
+        for (CheckBox cb : diabetesEducationFormDiabetesEducation.getCheckedBoxes()) {
+            if (cb.isChecked()) {
+                diabetesEducationFormDiabetesEducation.getQuestionView().setError(null);
+                break;
+            }
+        }
+
+        for (CheckBox cb : diabetesEducationFormDiabetesEducationalMaterial.getCheckedBoxes()) {
+            if (cb.isChecked()) {
+                diabetesEducationFormDiabetesEducationalMaterial.getQuestionView().setError(null);
+                break;
+            }
+        }
+
     }
 
     @Override
@@ -419,6 +482,46 @@ public class ComorbiditiesDiabetesEducationForm extends AbstractFormActivity {
         super.resetViews();
 
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        //HERE FOR AUTOPOPULATING OBS
+        final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
+            @Override
+            protected HashMap<String, String> doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.fetching_data));
+                        loading.show();
+                    }
+                });
+
+                HashMap<String, String> result = new HashMap<String, String>();
+                String monthOfTreatment = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_DIABETES_TREATMENT_FOLLOWUP_FORM, "FOLLOW-UP MONTH");
+
+                if (monthOfTreatment != null)
+                    if (!monthOfTreatment .equals(""))
+                        result.put("FOLLOW-UP MONTH", monthOfTreatment);
+
+
+                return result;
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            @Override
+            protected void onPostExecute(HashMap<String, String> result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                diabetesEducationFormFollowupMonth.getSpinner().selectValue(result.get("FOLLOW-UP MONTH"));
+            }
+        };
+        autopopulateFormTask.execute("");
     }
 
     @Override

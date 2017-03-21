@@ -152,7 +152,7 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
         testOrderCreatinine.setTypeface(null, Typeface.BOLD);
         creatinineFollowupMonth = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_mth_txcomorbidities_hba1c), getResources().getStringArray(R.array.comorbidities_followup_month), "1", App.HORIZONTAL);
         creatinineTestOrderDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1cdate_test_order), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
-        creatinineTestID = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hhba1c_testid), "", "", 11, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        creatinineTestID = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hhba1c_testid), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
 
         //second page views...
         testResultCreatinine = new MyTextView(context, getResources().getString(R.string.comorbidities_creatinine_test_result));
@@ -207,7 +207,7 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
             }
         });
 
-        creatinineTestID.getEditText().addTextChangedListener(new TextWatcher() {
+        /*creatinineTestID.getEditText().addTextChangedListener(new TextWatcher() {
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -231,7 +231,7 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
                     //Exception: User might be entering " " (empty) value
                 }
             }
-        });
+        });*/
     }
 
     @Override
@@ -276,12 +276,12 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
             creatinineTestID.getEditText().requestFocus();
             error = true;
         }
-        else if (!App.get(creatinineTestID).isEmpty() && App.get(creatinineTestID).length() < 11) {
+        /*else if (!App.get(creatinineTestID).isEmpty() && App.get(creatinineTestID).length() < 11) {
             gotoFirstPage();
             creatinineTestID.getEditText().setError(getString(R.string.comorbidities_blood_sugar_testid_format_error));
             creatinineTestID.getEditText().requestFocus();
             error = true;
-        }
+        }*/
 
         if (error) {
 
