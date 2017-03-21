@@ -32,6 +32,11 @@
         android:title="Support Email" />
 
     <EditTextPreference
+        android:defaultValue="@string/province_default"
+        android:key="province"
+        android:title="Province" />
+
+    <EditTextPreference
         android:defaultValue="@string/city_default"
         android:key="city"
         android:title="City" />
