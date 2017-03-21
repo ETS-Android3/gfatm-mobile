@@ -41,6 +41,7 @@ public class RegexUtil {
     public static final String floatingPointPatternForTwoDecimalPlaces = "^[0-9]+.{0,2}[0-9]";
     public static final String testIDPattern = "^{0,1}[0-9]{7,7}[-.]{0,1}[0-9]";
     public static final String mobileNumPattern = "[0][3][0-9]{9}";
+    public static final String addressPattern = "^[^÷çþ!$?@%+=_]+$";
 
     public static final int idLength = 7;
     public static final int mobileNumberLength = 11;
@@ -70,6 +71,21 @@ public class RegexUtil {
                 return source;
             }
             if (source.toString().matches(alphaNumPattern)) {
+                return source;
+            }
+            return "";
+
+        }
+    };
+    public static final InputFilter ADDRESS_FILTER = new InputFilter() {
+
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+
+            if (source.equals("")) {
+                return source;
+            }
+            if (source.toString().matches(addressPattern)) {
                 return source;
             }
             return "";
