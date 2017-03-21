@@ -4415,6 +4415,8 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OPHTHALMOLOGY D
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ENDOCRINOLOGY DEPARTMENT',NULL,'N/A','160468AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('FEVER LASTING MORE THAN THREE WEEKS',NULL,'Boolean','1494AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 
+INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('METFORMIN',NULL,'79651AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+
 -- Program
 INSERT OR IGNORE INTO program VALUES (1, "86ba1232-d576-416e-b102-5f335c6746ce", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
 INSERT OR IGNORE INTO program VALUES (2, "5d372a38-ae27-4a68-a8d2-bc517a2c9c40", "PET", "Post-Exposure Treatment");
