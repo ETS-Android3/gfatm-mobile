@@ -58,7 +58,7 @@
             (
                 user_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 provider_uuid VARCHAR UNIQUE NOT NULL,
-                username VARCHAR UNIQUE NOT NULL,
+                username VARCHAR UNIQUE NOT NULL COLLATE NOCASE,
                 fullName VARCHAR NOT NULL,
                 uuid VARCHAR UNIQUE NOT NULL,
                 role VARCHAR NOT NULL,
