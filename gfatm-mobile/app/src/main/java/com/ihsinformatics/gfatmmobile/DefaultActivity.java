@@ -1,13 +1,17 @@
 package com.ihsinformatics.gfatmmobile;
 
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.AppBarLayout;
+import android.support.v7.app.AlertDialog;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -15,18 +19,23 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
+import com.ihsinformatics.gfatmmobile.util.ServerService;
 
-public class DefaultActivity extends AbstractSettingActivity {
+public class DefaultActivity extends AbstractSettingActivity implements AdapterView.OnItemSelectedListener {
 
     EditText supportContact;
     EditText supportEmail;
     Spinner country;
     Spinner province;
+    boolean flag = true;
+    private ServerService serverService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        serverService = new ServerService(getApplicationContext());
 
         int color = App.getColor(this, R.attr.colorAccent);
 
@@ -87,7 +96,7 @@ public class DefaultActivity extends AbstractSettingActivity {
         countryTextView.setTextColor(color);
         countryLayout.addView(countryTextView);
         country = new Spinner(this);
-        String[] countries = getResources().getStringArray(R.array.countries);
+        String[] countries = serverService.getCountryList();
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, countries);
         country.setAdapter(spinnerArrayAdapter);
         country.setSelection(App.getIndex(country, App.getCountry()));
@@ -109,37 +118,31 @@ public class DefaultActivity extends AbstractSettingActivity {
         provinceTextView.setTextColor(color);
         provinceLayout.addView(provinceTextView);
         province = new Spinner(this);
-        String[] provinces = getResources().getStringArray(R.array.provinces);
+        String[] provinces = serverService.getProvinceList(App.getCountry());
         ArrayAdapter<String> spinnerArrayAdapter1 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, provinces);
         province.setAdapter(spinnerArrayAdapter1);
         province.setSelection(App.getIndex(province, App.getProvince()));
 
         provinceLayout.addView(province);
 
+        country.setOnItemSelectedListener(this);
+
         layout.addView(provinceLayout);
 
-        /*LinearLayout cityLayout = new LinearLayout(this);
-        cityLayout.setLayoutParams(
-                new LinearLayout.LayoutParams(
-                        AppBarLayout.LayoutParams.MATCH_PARENT,
-                        AppBarLayout.LayoutParams.WRAP_CONTENT));
-        cityLayout.setOrientation(LinearLayout.VERTICAL);
-        cityLayout.setPadding(0, 10, 0, 10);
-
-        TextView cityTextView = new TextView(this);
-        cityTextView.setText(getString(R.string.city));
-        cityTextView.setTextColor(color);
-        cityLayout.addView(cityTextView);
-        city = new EditText(this);
-        city.setMaxEms(RegexUtil.defaultEditTextLength);
-        city.setFilters(new InputFilter[]{new InputFilter.LengthFilter(RegexUtil.defaultEditTextLength)});
-        city.setSingleLine(true);
-        city.setText(App.getCity());
-        cityLayout.addView(city);
-
-        layout.addView(cityLayout);*/
-
         resetButton.setVisibility(View.VISIBLE);
+
+    }
+
+    public void setProvinceSpinner(String country) {
+
+        String[] provinces = serverService.getProvinceList(country);
+        ArrayAdapter<String> spinnerArrayAdapter1 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, provinces);
+        province.setAdapter(spinnerArrayAdapter1);
+
+        if (flag) {
+            province.setSelection(App.getIndex(province, App.getProvince()));
+            flag = false;
+        }
 
     }
 
@@ -154,7 +157,9 @@ public class DefaultActivity extends AbstractSettingActivity {
 
             supportContact.setText(getString(R.string.support_contact_default));
             supportEmail.setText(getString(R.string.support_email_default));
+            flag = true;
             country.setSelection(App.getIndex(country, getString(R.string.country_default)));
+            province.setSelection(App.getIndex(province, getString(R.string.province_default)));
 
         } else if (v == okButton) {
 
@@ -164,13 +169,14 @@ public class DefaultActivity extends AbstractSettingActivity {
                 App.setSupportContact(App.get(supportContact));
                 App.setSupportEmail(App.get(supportEmail));
                 App.setCountry(App.get(country));
+                App.setProvince(App.get(province));
 
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(DefaultActivity.this);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString(Preferences.SUPPORT_CONTACT, App.getSupportContact());
                 editor.putString(Preferences.SUPPORT_EMAIL, App.getSupportEmail());
-                editor.putString(Preferences.CITY, App.getCity());
                 editor.putString(Preferences.COUNTRY, App.getCountry());
+                editor.putString(Preferences.PROVINCE, App.getProvince());
                 editor.apply();
 
                 onBackPressed();
@@ -213,8 +219,38 @@ public class DefaultActivity extends AbstractSettingActivity {
             }
         }
 
+        if (province.getSelectedItem() == null || province.getSelectedItem().equals("")) {
+            final AlertDialog alertDialog = new AlertDialog.Builder(this, R.style.dialog).create();
+            String message = getResources().getString(R.string.no_province);
+            alertDialog.setMessage(message);
+            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+            alertDialog.setIcon(clearIcon);
+            alertDialog.setTitle(getResources().getString(R.string.title_error));
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
+            cancel = true;
+        }
+
         return cancel;
     }
 
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+        Spinner spinner = (Spinner) parent;
+        String value = (String) spinner.getItemAtPosition(position);
+        setProvinceSpinner(value);
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 }

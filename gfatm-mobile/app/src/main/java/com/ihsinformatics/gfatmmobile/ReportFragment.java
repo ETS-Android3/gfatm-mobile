@@ -128,7 +128,7 @@ public class ReportFragment extends Fragment implements View.OnTouchListener {
                 TextView tv1 = new TextView(context);
                 tv1.setText(getResources().getString(R.string.form_date) + "  ");
                 tv1.setTextSize(getResources().getDimension(R.dimen.small));
-                tv1.setTextColor(color1);
+                tv1.setTextColor(color);
                 tv1.setTypeface(null, Typeface.BOLD);
                 LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 p.weight = 1;
@@ -153,7 +153,7 @@ public class ReportFragment extends Fragment implements View.OnTouchListener {
                 TextView tv3 = new TextView(context);
                 tv3.setText(getResources().getString(R.string.location) + "  ");
                 tv3.setTextSize(getResources().getDimension(R.dimen.small));
-                tv3.setTextColor(color1);
+                tv3.setTextColor(color);
                 tv3.setTypeface(null, Typeface.BOLD);
                 LinearLayout.LayoutParams p2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 p2.weight = 1;
@@ -196,7 +196,7 @@ public class ReportFragment extends Fragment implements View.OnTouchListener {
                                 TextView tv1 = new TextView(context);
                                 tv1.setText(getResources().getString(R.string.form_date) + "  ");
                                 tv1.setTextSize(getResources().getDimension(R.dimen.small));
-                                tv1.setTextColor(color1);
+                                tv1.setTextColor(color);
                                 tv1.setTypeface(null, Typeface.BOLD);
                                 LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                                 p.weight = 1;
@@ -221,7 +221,7 @@ public class ReportFragment extends Fragment implements View.OnTouchListener {
                                 TextView tv3 = new TextView(context);
                                 tv3.setText(getResources().getString(R.string.location) + "  ");
                                 tv3.setTextSize(getResources().getDimension(R.dimen.small));
-                                tv3.setTextColor(color1);
+                                tv3.setTextColor(color);
                                 tv3.setTypeface(null, Typeface.BOLD);
                                 LinearLayout.LayoutParams p2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                                 p2.weight = 1;
@@ -249,7 +249,7 @@ public class ReportFragment extends Fragment implements View.OnTouchListener {
                                 TextView tv8 = new TextView(context);
                                 tv8.setText(App.convertToTitleCase(String.valueOf(obs[j][1])) + ":  ");
                                 tv8.setTextSize(getResources().getDimension(R.dimen.small));
-                                tv8.setTextColor(color1);
+                                tv8.setTextColor(color);
                                 tv8.setTypeface(null, Typeface.BOLD);
                                 LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                                 p.weight = 1;
