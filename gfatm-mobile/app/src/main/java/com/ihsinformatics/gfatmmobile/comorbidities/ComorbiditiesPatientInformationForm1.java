@@ -21,6 +21,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
@@ -32,6 +33,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
@@ -357,6 +359,16 @@ public class ComorbiditiesPatientInformationForm1 extends AbstractFormActivity i
     @Override
     public boolean submit() {
 
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            String encounterId = bundle.getString("formId");
+            if (saveFlag) {
+                serverService.deleteOfflineForms(encounterId);
+            }
+            bundle.putBoolean("save", false);
+        }
+
         endTime = new Date();
 
         final ArrayList<String[]> observations = new ArrayList<String[]>();
@@ -379,9 +391,10 @@ public class ComorbiditiesPatientInformationForm1 extends AbstractFormActivity i
                                                                 (App.get(nicOwner).equals(getResources().getString(R.string.pet_brother)) ? "BROTHER" :
                                                                         (App.get(nicOwner).equals(getResources().getString(R.string.pet_sister)) ? "SISTER" :
                                                                                 (App.get(nicOwner).equals(getResources().getString(R.string.pet_son)) ? "SON" :
-                                                                                        (App.get(nicOwner).equals(getResources().getString(R.string.pet_daughter)) ? "SPOUSE" :
-                                                                                                (App.get(nicOwner).equals(getResources().getString(R.string.pet_aunt)) ? "AUNT" :
-                                                                                                        (App.get(nicOwner).equals(getResources().getString(R.string.pet_uncle)) ? "UNCLE" : "OTHER FAMILY MEMBER"))))))))))));
+                                                                                        (App.get(nicOwner).equals(getResources().getString(R.string.pet_daughter)) ? "DAUGHTER" :
+                                                                                                (App.get(nicOwner).equals(getResources().getString(R.string.pet_spouse)) ? "SPOUSE" :
+                                                                                                        (App.get(nicOwner).equals(getResources().getString(R.string.pet_aunt)) ? "AUNT" :
+                                                                                                                (App.get(nicOwner).equals(getResources().getString(R.string.pet_uncle)) ? "UNCLE" : "OTHER FAMILY MEMBER")))))))))))));
 
         observations.add(new String[]{"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", ownerString});
         if (otherNicOwner.getVisibility() == View.VISIBLE)
@@ -391,7 +404,7 @@ public class ComorbiditiesPatientInformationForm1 extends AbstractFormActivity i
         observations.add(new String[]{"EXTENDED ADDRESS (TEXT)", App.get(address2)});
         observations.add(new String[]{"TOWN", App.get(town)});
         observations.add(new String[]{"VILLAGE", App.get(city)});
-        observations.add(new String[]{"TYPE OF ADDRESS", App.get(addressProvided).equals(getResources().getString(R.string.comorbidities_patient_information_address_type_permanent)) ? "PERMANENT ADDRESS" : "TEMPORARY ADDRESS"});
+        observations.add(new String[]{"TYPE OF ADDRESS", App.get(addressType).equals(getResources().getString(R.string.comorbidities_patient_information_address_type_permanent)) ? "PERMANENT ADDRESS" : "TEMPORARY ADDRESS"});
         observations.add(new String[]{"NEAREST LANDMARK", App.get(landmark)});
 
         final String mobileNumber1 = App.get(mobileNumber1a) + "-" + App.get(mobileNumber1b);
@@ -406,7 +419,7 @@ public class ComorbiditiesPatientInformationForm1 extends AbstractFormActivity i
         final String landline2 = App.get(landline2a) + "-" + App.get(landline2b);
         observations.add(new String[]{"QUATERNARY CONTACT NUMBER", landline2});
 
-        observations.add(new String[]{"TUBERCULOSIS INFECTION TYPE", App.get(addressProvided).equals(getResources().getString(R.string.comorbidities_patient_information_tb_status_positive)) ? "SMEAR POSITIVE TUBERCULOSIS INFECTION" : "SMEAR NEGATIVE TUBERCULOSIS INFECTION"});
+        observations.add(new String[]{"TUBERCULOSIS INFECTION TYPE", App.get(tbStatus).equals(getResources().getString(R.string.comorbidities_patient_information_tb_status_positive)) ? "SMEAR POSITIVE TUBERCULOSIS INFECTION" : "SMEAR NEGATIVE TUBERCULOSIS INFECTION"});
         if (tbCategory.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"TB CATEGORY", App.get(tbCategory).equals(getResources().getString(R.string.comorbidities_patient_information_tb_category_cat1)) ? "CATEGORY I TUBERCULOSIS" :
                     (App.get(tbCategory).equals(getResources().getString(R.string.comorbidities_patient_information_tb_category_cat2)) ? "CATEGORY II TUBERCULOSIS" : "MULTI-DRUG RESISTANT TUBERCULOSIS INFECTION")});
@@ -504,6 +517,15 @@ public class ComorbiditiesPatientInformationForm1 extends AbstractFormActivity i
                     if (!result.equals("SUCCESS"))
                         return result;
 
+                    String[][] concept = serverService.getConceptUuidAndDataType(maritalStatusString);
+                    result = serverService.savePersonAttributeType("Marital Status", concept[0][0], encounterId);
+                    if (!result.equals("SUCCESS"))
+                        return result;
+
+                    concept = serverService.getConceptUuidAndDataType(patientEducationLevelString);
+                    result = serverService.savePersonAttributeType("Education Level", concept[0][0], encounterId);
+                    if (!result.equals("SUCCESS"))
+                        return result;
                 }
 
                 return "SUCCESS";
@@ -603,8 +625,158 @@ public class ComorbiditiesPatientInformationForm1 extends AbstractFormActivity i
     }
 
     @Override
-    public void refill(int encounterId) {
+    public void refill(int formId) {
 
+        OfflineForm fo = serverService.getOfflineFormById(formId);
+        String date = fo.getFormDate();
+        ArrayList<String[][]> obsValue = fo.getObsValue();
+        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        for (int i = 0; i < obsValue.size(); i++) {
+            String[][] obs = obsValue.get(i);
+
+            if (obs[0][0].equals("HEALTH CLINIC/POST")) {
+                gpClinicCode.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("FATHER NAME")) {
+                fatherName.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("PARTNER FULL NAME")) {
+                husbandName.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("NATIONAL IDENTIFICATION NUMBER")) {
+                String[] cnicArray = obs[0][1].split("-");
+                cnic1.getEditText().setText(cnicArray[0]);
+                cnic2.getEditText().setText(cnicArray[1]);
+                cnic3.getEditText().setText(cnicArray[2]);
+            } else if (obs[0][0].equals("COMPUTERIZED NATIONAL IDENTIFICATION OWNER")) {
+                String value = obs[0][1].equals("SELF") ? getResources().getString(R.string.pet_self) :
+                        (obs[0][1].equals("MOTHER") ? getResources().getString(R.string.pet_mother) :
+                                (obs[0][1].equals("FATHER") ? getResources().getString(R.string.pet_father) :
+                                        (obs[0][1].equals("MATERNAL GRANDMOTHER") ? getResources().getString(R.string.pet_maternal_grandmother) :
+                                                (obs[0][1].equals("MATERNAL GRANDFATHER") ? getResources().getString(R.string.pet_maternal_grandfather) :
+                                                        (obs[0][1].equals("PATERNAL GRANDMOTHER") ? getResources().getString(R.string.pet_paternal_grandmother) :
+                                                                (obs[0][1].equals("PATERNAL GRANDFATHER") ? getResources().getString(R.string.pet_paternal_grandfather) :
+                                                                        (obs[0][1].equals("BROTHER") ? getResources().getString(R.string.pet_brother) :
+                                                                                (obs[0][1].equals("SISTER") ? getResources().getString(R.string.pet_sister) :
+                                                                                        (obs[0][1].equals("SON") ? getResources().getString(R.string.pet_son) :
+                                                                                                (obs[0][1].equals("DAUGHTER") ? getResources().getString(R.string.pet_daughter) :
+                                                                                                        (obs[0][1].equals("SPOUSE") ? getResources().getString(R.string.pet_spouse) :
+                                                                                                                (obs[0][1].equals("AUNT") ? getResources().getString(R.string.pet_aunt) :
+                                                                                                                        (obs[0][1].equals("UNCLE") ? getResources().getString(R.string.pet_uncle) : getResources().getString(R.string.pet_other))))))))))))));
+                nicOwner.getSpinner().selectValue(value);
+            } else if (obs[0][0].equals("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER")) {
+                otherNicOwner.getEditText().setText(obs[0][1]);
+                otherNicOwner.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("PATIENT PROVIDED ADDRESS")) {
+                for (RadioButton rb : addressProvided.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("ADDRESS (TEXT)")) {
+                address1.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("EXTENDED ADDRESS (TEXT)")) {
+                address2.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("TOWN")) {
+                town.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("VILLAGE")) {
+                city.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("TYPE OF ADDRESS")) {
+                for (RadioButton rb : addressType.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_patient_information_address_type_permanent)) && obs[0][1].equals("PERMANENT ADDRESS")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_patient_information_address_type_temporary)) && obs[0][1].equals("TEMPORARY ADDRESS")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("NEAREST LANDMARK")) {
+                landmark.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("CONTACT PHONE NUMBER")) {
+                String[] mobileNumberArray = obs[0][1].split("-");
+                mobileNumber1a.getEditText().setText(mobileNumberArray[0]);
+                mobileNumber1b.getEditText().setText(mobileNumberArray[1]);
+            } else if (obs[0][0].equals("SECONDARY MOBILE NUMBER")) {
+                String[] mobileNumberArray = obs[0][1].split("-");
+                mobileNumber2a.getEditText().setText(mobileNumberArray[0]);
+                mobileNumber2b.getEditText().setText(mobileNumberArray[1]);
+            } else if (obs[0][0].equals("TERTIARY CONTACT NUMBER")) {
+                String[] mobileNumberArray = obs[0][1].split("-");
+                landline1a.getEditText().setText(mobileNumberArray[0]);
+                landline1b.getEditText().setText(mobileNumberArray[1]);
+            } else if (obs[0][0].equals("QUATERNARY CONTACT NUMBER")) {
+                String[] mobileNumberArray = obs[0][1].split("-");
+                landline2a.getEditText().setText(mobileNumberArray[0]);
+                landline2b.getEditText().setText(mobileNumberArray[1]);
+            } else if (obs[0][0].equals("TUBERCULOSIS INFECTION TYPE")) {
+                for (RadioButton rb : tbStatus.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_patient_information_tb_status_positive)) && obs[0][1].equals("SMEAR POSITIVE TUBERCULOSIS INFECTION")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_patient_information_tb_status_negative)) && obs[0][1].equals("SMEAR NEGATIVE TUBERCULOSIS INFECTION")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("TB CATEGORY")) {
+                for (RadioButton rb : tbCategory.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_patient_information_tb_category_cat1)) && obs[0][1].equals("CATEGORY I TUBERCULOSIS")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_patient_information_tb_category_cat2)) && obs[0][1].equals("CATEGORY II TUBERCULOSIS")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_patient_information_tb_category_mdr_tb)) && obs[0][1].equals("MULTI-DRUG RESISTANT TUBERCULOSIS INFECTION")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("MARITAL STATUS")) {
+                String value = obs[0][1].equals("SINGLE") ? getResources().getString(R.string.pet_single) :
+                        (obs[0][1].equals("ENGAGED") ? getResources().getString(R.string.pet_engaged) :
+                                (obs[0][1].equals("MARRIED") ? getResources().getString(R.string.pet_married) :
+                                        (obs[0][1].equals("SEPARATED") ? getResources().getString(R.string.pet_separated) :
+                                                (obs[0][1].equals("DIVORCED") ? getResources().getString(R.string.pet_divorced) :
+                                                        (obs[0][1].equals("WIDOWED") ? getResources().getString(R.string.pet_widower) :
+                                                                (obs[0][1].equals("OTHER") ? getResources().getString(R.string.pet_other) :
+                                                                        (obs[0][1].equals("UNKNOWN") ? getResources().getString(R.string.unknown) : getResources().getString(R.string.refused))))))));
+                maritalStatus.getSpinner().selectValue(value);
+            } else if (obs[0][0].equals("CURRENT EDUCATION LEVEL OF HEAD OF HOUSEHOLD")) {
+                String value = obs[0][1].equals("ELEMENTARY EDUCATION") ? getResources().getString(R.string.pet_elementary) :
+                        (obs[0][1].equals("PRIMARY EDUCATION") ? getResources().getString(R.string.pet_primary) :
+                                (obs[0][1].equals("SECONDARY EDUCATION") ? getResources().getString(R.string.pet_secondary) :
+                                        (obs[0][1].equals("INTERMEDIATE EDUCATION") ? getResources().getString(R.string.pet_intermediate) :
+                                                (obs[0][1].equals("UNDERGRADUATE EDUCATION") ? getResources().getString(R.string.pet_undergraduate) :
+                                                        (obs[0][1].equals("GRADUATE EDUCATION") ? getResources().getString(R.string.pet_graduate) :
+                                                                (obs[0][1].equals("DOCTORATE EDUCATION") ? getResources().getString(R.string.pet_doctorate) :
+                                                                        (obs[0][1].equals("RELIGIOUS EDUCATION") ? getResources().getString(R.string.pet_religious) :
+                                                                                (obs[0][1].equals("POLYTECHNIC EDUCATION") ? getResources().getString(R.string.pet_polytechnic) :
+                                                                                        (obs[0][1].equals("SPECIAL EDUCATION RECEIVED") ? getResources().getString(R.string.pet_special_education) :
+                                                                                                (obs[0][1].equals("NO FORMAL EDUCATION") ? getResources().getString(R.string.pet_no_formal_education) :
+                                                                                                        (obs[0][1].equals("OTHER") ? getResources().getString(R.string.pet_other) :
+                                                                                                                (obs[0][1].equals("UNKNOWN") ? getResources().getString(R.string.unknown) : getResources().getString(R.string.refused)))))))))))));
+                householdHeadEducationLevel.getSpinner().selectValue(value);
+            } else if (obs[0][0].equals("HIGHEST EDUCATION LEVEL")) {
+                String value = obs[0][1].equals("ELEMENTARY EDUCATION") ? getResources().getString(R.string.pet_elementary) :
+                        (obs[0][1].equals("PRIMARY EDUCATION") ? getResources().getString(R.string.pet_primary) :
+                                (obs[0][1].equals("SECONDARY EDUCATION") ? getResources().getString(R.string.pet_secondary) :
+                                        (obs[0][1].equals("INTERMEDIATE EDUCATION") ? getResources().getString(R.string.pet_intermediate) :
+                                                (obs[0][1].equals("UNDERGRADUATE EDUCATION") ? getResources().getString(R.string.pet_undergraduate) :
+                                                        (obs[0][1].equals("GRADUATE EDUCATION") ? getResources().getString(R.string.pet_graduate) :
+                                                                (obs[0][1].equals("DOCTORATE EDUCATION") ? getResources().getString(R.string.pet_doctorate) :
+                                                                        (obs[0][1].equals("RELIGIOUS EDUCATION") ? getResources().getString(R.string.pet_religious) :
+                                                                                (obs[0][1].equals("POLYTECHNIC EDUCATION") ? getResources().getString(R.string.pet_polytechnic) :
+                                                                                        (obs[0][1].equals("SPECIAL EDUCATION RECEIVED") ? getResources().getString(R.string.pet_special_education) :
+                                                                                                (obs[0][1].equals("NO FORMAL EDUCATION") ? getResources().getString(R.string.pet_no_formal_education) :
+                                                                                                        (obs[0][1].equals("OTHER") ? getResources().getString(R.string.pet_other) :
+                                                                                                                (obs[0][1].equals("UNKNOWN") ? getResources().getString(R.string.unknown) : getResources().getString(R.string.refused)))))))))))));
+                patientEducationalLevel.getSpinner().selectValue(value);
+            }
+        }
     }
 
     @Override
@@ -656,17 +828,32 @@ public class ComorbiditiesPatientInformationForm1 extends AbstractFormActivity i
         displayAddressOrNot();
         displayTBCategory();
 
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean openFlag = bundle.getBoolean("open");
+            if (openFlag) {
+
+                bundle.putBoolean("open", false);
+                bundle.putBoolean("save", true);
+
+                String id = bundle.getString("formId");
+                int formId = Integer.valueOf(id);
+
+                refill(formId);
+
+            } else bundle.putBoolean("save", false);
+        }
+
         if (App.get(indexExternalPatientId).equals("")) {
             String externalId = App.getPatient().getExternalId();
-            if(externalId != null) {
+            if (externalId != null) {
                 if (externalId.equals("")) {
                     indexExternalPatientId.getEditText().setText("");
                 } else {
                     indexExternalPatientId.getEditText().setText(externalId);
                     indexExternalPatientId.getEditText().setKeyListener(null);
                 }
-            }
-            else {
+            } else {
                 indexExternalPatientId.getEditText().setText("");
             }
         }
