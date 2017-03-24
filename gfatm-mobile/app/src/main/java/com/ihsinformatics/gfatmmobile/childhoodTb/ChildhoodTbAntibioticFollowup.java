@@ -1,9 +1,5 @@
 package com.ihsinformatics.gfatmmobile.childhoodTb;
 
-import android.annotation.SuppressLint;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
@@ -23,7 +19,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
-import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
@@ -40,7 +35,6 @@ import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -48,16 +42,15 @@ import java.util.HashMap;
  * Created by Babar on 31/1/2017.
  */
 
-public class ChildhoodTbReferral extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
-    protected DialogFragment thirdDateFragment;
     Context context;
     TitledButton formDate;
-    TitledRadioGroup patientReferedOrTransfered;
-    TitledSpinner referralTransferReason;
-    TitledEditText otherReferralTransferReason;
-    TitledSpinner referralTransferLocation;
-    TitledEditText otherReferralTransferLocation;
+    TitledRadioGroup patientHaveTb;
+    TitledRadioGroup patientNeedMoreTests;
+    TitledRadioGroup endOfFollowUp;
+    TitledRadioGroup scheduleAnotherVisit;
+    TitledButton appointmentDate;
     Snackbar snackbar;
     ScrollView scrollView;
 
@@ -73,10 +66,9 @@ public class ChildhoodTbReferral extends AbstractFormActivity implements RadioGr
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-
         PAGE_COUNT = 1;
-        FORM_NAME = Forms.CHILDHOODTB_REFERRAL;
-        FORM = Forms.childhoodTb_referral_and_transfer_form;
+        FORM_NAME = Forms.CHILDHOODTB_ANTIBIOTIC_FOLLOWUP;
+        FORM = Forms.childhoodTb_antibiotic_followup_form;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -132,27 +124,33 @@ public class ChildhoodTbReferral extends AbstractFormActivity implements RadioGr
      */
     public void initViews() {
 
-
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        patientReferedOrTransfered = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_referred_transferred), getResources().getStringArray(R.array.ctb_patient_referred_or_tranferred_list),getResources().getString(R.string.ctb_referral_before_starting_treatment), App.VERTICAL, App.VERTICAL, false);
-        referralTransferReason = new TitledSpinner(context, null, getResources().getString(R.string.ctb_reason_for_referral_transfer), getResources().getStringArray(R.array.ctb_reason_for_referral_transfer_list),null, App.VERTICAL, true);
-        otherReferralTransferReason = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
-        referralTransferLocation = new TitledSpinner(context, null, getResources().getString(R.string.ctb_location_referral_transfer), getResources().getStringArray(R.array.ctb_city_list),null, App.VERTICAL, true);
-        otherReferralTransferLocation = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
-        views = new View[]{formDate.getButton(), patientReferedOrTransfered.getRadioGroup(),  referralTransferReason.getSpinner(),referralTransferLocation.getSpinner()};
+        patientHaveTb = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_patient_have_tb),getResources().getStringArray(R.array.ctb_patient_have_tb_list),getResources().getString(R.string.no),App.HORIZONTAL,App.VERTICAL,true);
+        patientNeedMoreTests = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_patient_need_more_test),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL);
+        endOfFollowUp = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_end_of_followup),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL);
+        scheduleAnotherVisit = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_schedule_another_followup),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL);
+        appointmentDate = new TitledButton(context, null, getResources().getString(R.string.ctb_next_appointment_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
+        appointmentDate.setTag("appointmentDate");
+
+
+        views = new View[]{formDate.getButton(),patientHaveTb.getRadioGroup(),patientNeedMoreTests.getRadioGroup(),endOfFollowUp.getRadioGroup(),scheduleAnotherVisit.getRadioGroup(),
+                appointmentDate.getButton(),};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate,patientReferedOrTransfered,referralTransferReason,otherReferralTransferReason,referralTransferLocation,otherReferralTransferLocation
-        }};
+                {{formDate,patientHaveTb,patientNeedMoreTests,endOfFollowUp,scheduleAnotherVisit,appointmentDate}};
 
         formDate.getButton().setOnClickListener(this);
-        patientReferedOrTransfered.getRadioGroup().setOnCheckedChangeListener(this);
-        referralTransferReason.getSpinner().setOnItemSelectedListener(this);
-        referralTransferLocation.getSpinner().setOnItemSelectedListener(this);
+        patientHaveTb.getRadioGroup().setOnCheckedChangeListener(this);
+        patientNeedMoreTests.getRadioGroup().setOnCheckedChangeListener(this);
+        endOfFollowUp.getRadioGroup().setOnCheckedChangeListener(this);
+        scheduleAnotherVisit.getRadioGroup().setOnCheckedChangeListener(this);
+        appointmentDate.getButton().setOnClickListener(this);
+
         resetViews();
+
     }
 
     @Override
@@ -162,23 +160,38 @@ public class ChildhoodTbReferral extends AbstractFormActivity implements RadioGr
             snackbar.dismiss();
 
 
-        Date date = new Date();
+            Date date = new Date();
 
-        if (formDateCalendar.after(date)) {
+            if (formDateCalendar.after(date)) {
 
-            formDateCalendar = App.getCalendar(date);
+                formDateCalendar = App.getCalendar(date);
 
-            snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
-            snackbar.show();
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
 
-        } else
-            formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+            } else
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
-      }
+        if (!appointmentDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString())) {
+
+            //
+            // +Date date = App.stringToDate(sampleSubmitDate.getButton().getText().toString(), "dd-MMM-yyyy");
+
+            if (secondDateCalendar.after(date)) {
+
+                secondDateCalendar = App.getCalendar(date);
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+            } else
+                appointmentDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+        }
+    }
 
     @Override
     public boolean validate() {
-        boolean error = false;
+        boolean error=false;
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
@@ -215,27 +228,15 @@ public class ChildhoodTbReferral extends AbstractFormActivity implements RadioGr
         final ArrayList<String[]> observations = new ArrayList<String[]>();
         observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
         observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
-        observations.add(new String[]{"PATIENT BEING REFEREED OUT OR TRANSFERRED OUT",  App.get(patientReferedOrTransfered).equals(getResources().getString(R.string.ctb_referral_before_starting_treatment)) ? "PATIENT REFERRED" :
-                "PATIENT TRANSFERRED OUT"});
-
-        observations.add(new String[]{"REASON FOR REFERRAL OR TRANSFER", App.get(referralTransferReason).equals(getResources().getString(R.string.ctb_patient_chose_another_facility)) ? "PATIENT CHOOSE ANOTHER FACILITY" :
-                (App.get(referralTransferReason).equals(getResources().getString(R.string.ctb_dr_tb_suspect)) ? "MULTI-DRUG RESISTANT TUBERCULOSIS SUSPECTED" :
-                        (App.get(referralTransferReason).equals(getResources().getString(R.string.ctb_dr_tb)) ? "DRUG RESISTANT TUBERCULOSIS" :
-                                (App.get(referralTransferReason).equals(getResources().getString(R.string.ctb_treatment_failure)) ? "TUBERCULOSIS TREATMENT FAILURE" :
-                                        (App.get(referralTransferReason).equals(getResources().getString(R.string.ctb_complicated_tb)) ? "COMPLICATED TUBERCULOSIS" :
-                                                (App.get(referralTransferReason).equals(getResources().getString(R.string.ctb_mott)) ? "MYCOBACTERIUM TUBERCULOSIS" :
-                                                        "OTHER TRANSFER OR REFERRAL REASON")))))});
-
-        if(otherReferralTransferReason.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"OTHER TRANSFER OR REFERRAL REASON", App.get(otherReferralTransferReason)});
+        observations.add(new String[]{"PATIENT HAVE TB", App.get(patientHaveTb).toUpperCase()});
+        if(patientNeedMoreTests.getVisibility()==View.VISIBLE){
+            observations.add(new String[]{"PRESCRIBE FURTHER TESTS", App.get(patientNeedMoreTests).toUpperCase()});
         }
-
-        observations.add(new String[]{"REFERRING FACILITY NAME", App.get(referralTransferLocation)});
-
-        if(otherReferralTransferLocation.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"LOCATION OF REFERRAL OR TRANSFER OTHER", App.get(otherReferralTransferLocation)});
+        observations.add(new String[]{"END OF FOLLOW UP", App.get(endOfFollowUp).toUpperCase()});
+        observations.add(new String[]{"FOLLOW UP VISIT", App.get(scheduleAnotherVisit).toUpperCase()});
+        if(appointmentDate.getVisibility()==View.VISIBLE){
+            observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDateTime(secondDateCalendar)});
         }
-
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
             protected String doInBackground(String... params) {
@@ -250,7 +251,7 @@ public class ChildhoodTbReferral extends AbstractFormActivity implements RadioGr
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("Referral", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                String result = serverService.saveEncounterAndObservation("Antibiotic Trial Followup", FORM, formDateCalendar, observations.toArray(new String[][]{}));
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 
@@ -369,7 +370,15 @@ public class ChildhoodTbReferral extends AbstractFormActivity implements RadioGr
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
         }
+        if (view == appointmentDate.getButton()) {
+            Bundle args = new Bundle();
+            args.putInt("type", SECOND_DATE_DIALOG_ID);
+            args.putBoolean("allowPastDate", true);
+            args.putBoolean("allowFutureDate", false);
+            secondDateFragment.setArguments(args);
+            secondDateFragment.show(getFragmentManager(), "DatePicker");
         }
+    }
 
     @Override
     public boolean onLongClick(View v) {
@@ -379,20 +388,6 @@ public class ChildhoodTbReferral extends AbstractFormActivity implements RadioGr
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         MySpinner spinner = (MySpinner) parent;
-        if (spinner == referralTransferReason.getSpinner()) {
-            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_other_title))) {
-                otherReferralTransferReason.setVisibility(View.VISIBLE);
-            } else {
-                otherReferralTransferReason.setVisibility(View.GONE);
-            }
-        }
-        if (spinner == referralTransferLocation.getSpinner()) {
-            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_other_title))) {
-                otherReferralTransferLocation.setVisibility(View.VISIBLE);
-            } else {
-                otherReferralTransferLocation.setVisibility(View.GONE);
-            }
-        }
 
     }
 
@@ -409,52 +404,31 @@ public class ChildhoodTbReferral extends AbstractFormActivity implements RadioGr
             snackbar.dismiss();
 
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        otherReferralTransferReason.setVisibility(View.GONE);
-        otherReferralTransferLocation.setVisibility(View.GONE);
+        appointmentDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+        patientNeedMoreTests.setVisibility(View.GONE);
+        appointmentDate.setVisibility(View.GONE);
 
     }
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
-    }
+        if (group == patientHaveTb.getRadioGroup()) {
+            if (patientHaveTb.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_inconclusive))) {
+                patientNeedMoreTests.setVisibility(View.VISIBLE);
 
+            } else {
+                patientNeedMoreTests.setVisibility(View.GONE);
+            }
+        }
+        if (group == scheduleAnotherVisit.getRadioGroup()) {
+            if (scheduleAnotherVisit.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
+                appointmentDate.setVisibility(View.VISIBLE);
 
-    @SuppressLint("ValidFragment")
-    public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final Calendar calendar;
-            if (getArguments().getInt("type") == DATE_DIALOG_ID)
-                calendar = formDateCalendar;
-            else if (getArguments().getInt("type") == SECOND_DATE_DIALOG_ID)
-                calendar = secondDateCalendar;
-
-            else
-                return null;
-
-            int yy = calendar.get(Calendar.YEAR);
-            int mm = calendar.get(Calendar.MONTH);
-            int dd = calendar.get(Calendar.DAY_OF_MONTH);
-            DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, yy, mm, dd);
-            dialog.getDatePicker().setTag(getArguments().getInt("type"));
-            if (!getArguments().getBoolean("allowFutureDate", false))
-                dialog.getDatePicker().setMaxDate(new Date().getTime());
-            if (!getArguments().getBoolean("allowPastDate", false))
-                dialog.getDatePicker().setMinDate(new Date().getTime());
-            return dialog;
+            } else {
+                appointmentDate.setVisibility(View.GONE);
+            }
         }
 
-        @Override
-        public void onDateSet(DatePicker view, int yy, int mm, int dd) {
-
-            if (((int) view.getTag()) == DATE_DIALOG_ID)
-                formDateCalendar.set(yy, mm, dd);
-            else if (((int) view.getTag()) == SECOND_DATE_DIALOG_ID)
-                secondDateCalendar.set(yy, mm, dd);
-            updateDisplay();
-
-        }
     }
 
     class MyAdapter extends PagerAdapter {
