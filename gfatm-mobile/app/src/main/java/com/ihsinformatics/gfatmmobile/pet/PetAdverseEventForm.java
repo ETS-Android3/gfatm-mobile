@@ -448,7 +448,7 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
         if (App.get(weight).isEmpty()) {
             weight.getEditText().setError(getString(R.string.empty_field));
             weight.getEditText().requestFocus();
-            gotoLastPage();
+            gotoFirstPage();
             view = null;
             error = true;
         }

@@ -527,18 +527,21 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
             abdominalExplanation.getEditText().setError(getString(R.string.empty_field));
             abdominalExplanation.getEditText().requestFocus();
             error = true;
+            gotoLastPage();
         }
 
         if (App.get(chestExplanation).isEmpty() && chestExplanation.getVisibility() == View.VISIBLE) {
             chestExplanation.getEditText().setError(getString(R.string.empty_field));
             chestExplanation.getEditText().requestFocus();
             error = true;
+            gotoLastPage();
         }
 
         if (App.get(skinExplanation).isEmpty() && skinExplanation.getVisibility() == View.VISIBLE) {
             skinExplanation.getEditText().setError(getString(R.string.empty_field));
             skinExplanation.getEditText().requestFocus();
             error = true;
+            gotoLastPage();
         }
 
         if (App.get(spineExplanation).isEmpty() && spineExplanation.getVisibility() == View.VISIBLE) {
@@ -612,9 +615,8 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
                     });
             alertDialog.show();
             return false;
-        }
-
-        return true;
+        } else
+            return true;
     }
 
     @Override

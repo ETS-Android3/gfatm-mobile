@@ -15,12 +15,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.format.DateFormat;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
@@ -83,8 +85,8 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
     TitledEditText phone2b;
     TitledEditText address1;
     TitledEditText address2;
-    TitledEditText town;
-    TitledEditText city;
+    TitledSpinner district;
+    TitledSpinner city;
     TitledRadioGroup addressType;
     TitledEditText landmark;
     TitledRadioGroup entryLocation;
@@ -102,6 +104,8 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
     TitledSpinner referredFacility;
 
     MyLinearLayout linearLayout;
+
+    Boolean flag = true;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -207,9 +211,8 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         phone2Layout.addView(phone2b);
         address1 = new TitledEditText(context, null, getResources().getString(R.string.pet_address_1), "", "", 10, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         address2 = new TitledEditText(context, null, getResources().getString(R.string.pet_address_2), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        town = new TitledEditText(context, null, getResources().getString(R.string.pet_town), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        city = new TitledEditText(context, null, getResources().getString(R.string.pet_city), App.getCity(), "", 20, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        city.getEditText().setKeyListener(null);
+        district = new TitledSpinner(context, "", getResources().getString(R.string.pet_district), serverService.getDistrictList(App.getProvince()), "", App.VERTICAL);
+        city = new TitledSpinner(context, "", getResources().getString(R.string.pet_city), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
         addressType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_address_type), getResources().getStringArray(R.array.pet_address_types), getResources().getString(R.string.pet_permanent), App.HORIZONTAL, App.VERTICAL);
         landmark = new TitledEditText(context, null, getResources().getString(R.string.pet_landmark), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         entryLocation = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_event_location), getResources().getStringArray(R.array.pet_locations_of_entry), getResources().getString(R.string.pet_contact_home), App.HORIZONTAL, App.VERTICAL);
@@ -261,7 +264,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), indexPatientId.getEditText(), treatmentStatus.getRadioGroup(), contactRegistered.getRadioGroup(), tbHistory.getRadioGroup(), relationship.getSpinner(), otherRelation.getEditText(),
-                cnic1.getEditText(), cnic2.getEditText(), cnic3.getEditText(), cnicOwner.getSpinner(), otherCnicOwner.getEditText(), phone1a.getEditText(), phone1b.getEditText(), phone2a.getEditText(), phone2b.getEditText(), address1.getEditText(), address2.getEditText(), town.getEditText(), city.getEditText(),
+                cnic1.getEditText(), cnic2.getEditText(), cnic3.getEditText(), cnicOwner.getSpinner(), otherCnicOwner.getEditText(), phone1a.getEditText(), phone1b.getEditText(), phone2a.getEditText(), phone2b.getEditText(), address1.getEditText(), address2.getEditText(), district.getSpinner(), city.getSpinner(),
                 addressType.getRadioGroup(), landmark.getEditText(), entryLocation.getRadioGroup(),
                 cough.getRadioGroup(), coughDuration.getRadioGroup(), haemoptysis.getRadioGroup(), fever.getRadioGroup(), weightLoss.getRadioGroup(), reduceAppetite.getRadioGroup(), reduceActivity.getRadioGroup(),
                 nightSweats.getRadioGroup(), nightSweats.getRadioGroup(), swelling.getRadioGroup(), referral.getRadioGroup(), referredFacility.getSpinner(), treatmentInitiationDate.getButton()};
@@ -269,7 +272,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formDate, indexPatientId, scanQRCode, treatmentStatus, treatmentInitiationDate, contactRegistered, tbHistory, relationship, otherRelation,
-                        cnicLayout, cnicOwner, otherCnicOwner, phone1Layout, phone2Layout, address1, address2, town, city, addressType, landmark, entryLocation, linearLayout},
+                        cnicLayout, cnicOwner, otherCnicOwner, phone1Layout, phone2Layout, address1, address2, district, city, addressType, landmark, entryLocation, linearLayout},
                 };
 
         formDate.getButton().setOnClickListener(this);
@@ -278,6 +281,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         cough.getRadioGroup().setOnCheckedChangeListener(this);
         cnicOwner.getSpinner().setOnItemSelectedListener(this);
         relationship.getSpinner().setOnItemSelectedListener(this);
+        district.getSpinner().setOnItemSelectedListener(this);
         treatmentStatus.getRadioGroup().setOnCheckedChangeListener(this);
         referral.getRadioGroup().setOnCheckedChangeListener(this);
 
@@ -325,11 +329,6 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
 
         Boolean error = false;
 
-        if (App.get(city).isEmpty() && city.getVisibility() == View.VISIBLE) {
-            city.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            city.getEditText().requestFocus();
-            error = true;
-        }
         if (App.get(phone2a).isEmpty()) {
             phone2a.getEditText().setError(getResources().getString(R.string.mandatory_field));
             phone2a.getEditText().requestFocus();
@@ -435,9 +434,8 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                     });
             alertDialog.show();
             return false;
-        }
-
-        return true;
+        } else
+            return true;
     }
 
     @Override
@@ -559,8 +557,10 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
             observations.add(new String[]{"ADDRESS (TEXT)", App.get(address1)});
         if (address2.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"EXTENDED ADDRESS (TEXT)", App.get(address2)});
-        if (town.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TOWN", App.get(town)});
+        if (district.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"DISTRICT", App.get(district)});
+        if (city.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"VILLAGE", App.get(city)});
         if (landmark.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"NEAREST LANDMARK", App.get(landmark)});
         if (addressType.getVisibility() == View.VISIBLE)
@@ -593,8 +593,8 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                         encounterId = successArray[1];
                     }
 
-                    if (!(App.get(address1).equals("") && App.get(address2).equals("") && App.get(town).equals("") && App.get(landmark).equals(""))) {
-                    result = serverService.savePersonAddress(App.get(address1), App.get(address2), App.getCity(), App.get(town), App.getCountry(), longitude, latitude, App.get(landmark), encounterId);
+                    if (!(App.get(address1).equals("") && App.get(address2).equals("") && App.get(district).equals("") && App.get(landmark).equals(""))) {
+                        result = serverService.savePersonAddress(App.get(address1), App.get(address2), App.getCity(), App.get(district), App.getCountry(), longitude, latitude, App.get(landmark), encounterId);
                     if (!result.equals("SUCCESS"))
                         return result;
                     }
@@ -796,6 +796,23 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                 otherRelation.setVisibility(View.VISIBLE);
             else
                 otherRelation.setVisibility(View.GONE);
+        } else if (spinner == district.getSpinner()) {
+
+            String[] cities = serverService.getCityList(App.get(district));
+            city.getSpinner().setAdapter(null);
+
+            ArrayAdapter<String> spinnerArrayAdapter = null;
+            if (App.isLanguageRTL()) {
+                spinnerArrayAdapter = new ArrayAdapter<String>(context, R.layout.custom_rtl_spinner, cities);
+                city.getSpinner().setAdapter(spinnerArrayAdapter);
+                spinnerArrayAdapter.setDropDownViewResource(R.layout.custom_rtl_spinner);
+                city.getSpinner().setGravity(Gravity.RIGHT);
+            } else {
+                spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, cities);
+                city.getSpinner().setAdapter(spinnerArrayAdapter);
+                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                city.getSpinner().setGravity(Gravity.LEFT);
+            }
         }
 
     }
@@ -808,6 +825,8 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
     @Override
     public void resetViews() {
         super.resetViews();
+
+        flag = true;
 
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         coughDuration.setVisibility(View.GONE);
@@ -1218,8 +1237,10 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                 address1.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("EXTENDED ADDRESS (TEXT)")) {
                 address2.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("TOWN")) {
-                town.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("DISTRICT")) {
+                district.getSpinner().selectValue(obs[0][1]);
+            } else if (obs[0][0].equals("VILLAGE")) {
+                city.getSpinner().selectValue(obs[0][1]);
             } else if (obs[0][0].equals("TYPE OF ADDRESS")) {
                 for (RadioButton rb : addressType.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.pet_permanent)) && obs[0][1].equals("PERMANENT ADDRESS")) {

@@ -37,6 +37,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
@@ -56,10 +57,10 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
     TitledButton formDate;
     TitledEditText weight;
     TitledEditText indexPatientId;
-    TitledEditText tbType;
-    TitledEditText infectionType;
-    TitledEditText resistanceType;
-    TitledEditText dstPattern;
+    TitledRadioGroup tbType;
+    TitledRadioGroup infectionType;
+    TitledRadioGroup resistanceType;
+    TitledCheckBoxes dstPattern;
 
     TitledButton treatmentInitiationDate;
     TitledRadioGroup petRegimen;
@@ -154,14 +155,14 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         weight = new TitledEditText(context, null, getResources().getString(R.string.pet_weight), "", "", 5, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         indexPatientId = new TitledEditText(context, null, getResources().getString(R.string.pet_index_patient_id), "", "", RegexUtil.idLength, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         indexPatientId.getEditText().setKeyListener(null);
-        tbType = new TitledEditText(context, null, getResources().getString(R.string.pet_tb_type), "", "", 100, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        tbType.getEditText().setKeyListener(null);
-        infectionType = new TitledEditText(context, null, getResources().getString(R.string.pet_infection_type), "", "", 100, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        infectionType.getEditText().setKeyListener(null);
-        resistanceType = new TitledEditText(context, null, getResources().getString(R.string.pet_resistance_Type), "", "", 100, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        resistanceType.getEditText().setKeyListener(null);
-        dstPattern = new TitledEditText(context, null, getResources().getString(R.string.pet_dst_pattern), "", "", 100, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        dstPattern.getEditText().setKeyListener(null);
+        tbType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_tb_type), getResources().getStringArray(R.array.pet_tb_types), "", App.HORIZONTAL, App.VERTICAL);
+        tbType.setRadioGroupEnabled(false);
+        infectionType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_infection_type), getResources().getStringArray(R.array.pet_infection_types), getResources().getString(R.string.pet_dstb), App.HORIZONTAL, App.VERTICAL);
+        infectionType.setRadioGroupEnabled(false);
+        resistanceType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_resistance_Type), getResources().getStringArray(R.array.pet_resistance_types), getResources().getString(R.string.pet_rr_tb), App.VERTICAL, App.VERTICAL);
+        resistanceType.setRadioGroupEnabled(false);
+        dstPattern = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_dst_pattern), getResources().getStringArray(R.array.pet_dst_patterns), null, App.VERTICAL, App.VERTICAL, true);
+        dstPattern.setCheckedBoxesEnabled(false);
 
         // second page view
         treatmentInitiationDate = new TitledButton(context, null, getResources().getString(R.string.pet_treatment_initiation_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.VERTICAL);
@@ -190,7 +191,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         other = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), weight.getEditText(), indexPatientId.getEditText(), tbType.getEditText(), infectionType.getEditText(), dstPattern.getEditText(), resistanceType.getEditText(),
+        views = new View[]{formDate.getButton(), weight.getEditText(), indexPatientId.getEditText(), tbType.getRadioGroup(), infectionType.getRadioGroup(), dstPattern, resistanceType.getRadioGroup(),
                 treatmentInitiationDate.getButton(), petRegimen.getRadioGroup(), isoniazidDose.getEditText(), rifapentineDose.getEditText(), levofloxacinDose.getEditText(), ethionamideDose.getEditText(),
                 ancillaryNeed.getRadioGroup(), ancillaryDrugs, ancillaryDrugDuration.getEditText(), ancillaryDrugDuration.getEditText(),
                 nameTreatmentSupporter.getEditText(), phone1a.getEditText(), phone1b.getEditText(), typeTreatmentSupporter.getRadioGroup(), relationshipTreatmentSuppoter.getSpinner(), other.getEditText(), rifapentineAvailable.getRadioGroup()};
@@ -393,173 +394,261 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         rifapentineAvailable.setVisibility(View.GONE);
         relationshipTreatmentSuppoter.setVisibility(View.VISIBLE);
 
-        final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
-            @Override
-            protected HashMap<String, String> doInBackground(String... params) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        loading.setInverseBackgroundForced(true);
-                        loading.setIndeterminate(true);
-                        loading.setCancelable(false);
-                        loading.setMessage(getResources().getString(R.string.fetching_data));
-                        loading.show();
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean openFlag = bundle.getBoolean("open");
+            if (openFlag) {
+
+                bundle.putBoolean("open", false);
+                bundle.putBoolean("save", true);
+
+                String id = bundle.getString("formId");
+                int formId = Integer.valueOf(id);
+
+                refill(formId);
+
+            } else bundle.putBoolean("save", false);
+
+        }
+
+        if (App.get(weight).equals("")) {
+            final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
+                @Override
+                protected HashMap<String, String> doInBackground(String... params) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            loading.setInverseBackgroundForced(true);
+                            loading.setIndeterminate(true);
+                            loading.setCancelable(false);
+                            loading.setMessage(getResources().getString(R.string.fetching_data));
+                            loading.show();
+                        }
+                    });
+
+                    HashMap<String, String> result = new HashMap<String, String>();
+                    String weight = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_CONTACT_SCREENING, "WEIGHT (KG)");
+                    String indexId = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "PATIENT ID OF INDEX CASE");
+
+                    String tbType = "";
+                    String infectionType = "";
+                    String resistanceType = "";
+                    String dstbType = "";
+
+                    serverService.getPatient(indexId, false);
+
+                    if (!(indexId == null || indexId.equals(""))) {
+                        String id = serverService.getPatientSystemIdByIdentifierLocalDB(indexId);
+                        tbType = serverService.getObsValue(id, App.getProgram() + "-" + Forms.PET_INDEX_PATIENT_REGISTRATION, "SITE OF TUBERCULOSIS DISEASE");
+                        infectionType = serverService.getObsValue(id, App.getProgram() + "-" + Forms.PET_INDEX_PATIENT_REGISTRATION, "TUBERCULOSIS INFECTION TYPE");
+                        resistanceType = serverService.getObsValue(id, App.getProgram() + "-" + Forms.PET_INDEX_PATIENT_REGISTRATION, "TUBERCULOSIS DRUG RESISTANCE TYPE");
+                        dstbType = serverService.getObsValue(id, App.getProgram() + "-" + Forms.PET_INDEX_PATIENT_REGISTRATION, "RESISTANT TO ANTI-TUBERCULOSIS DRUGS");
                     }
-                });
 
-                HashMap<String, String> result = new HashMap<String, String>();
-                String weight = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_CONTACT_SCREENING, "WEIGHT (KG)");
-                String indexId = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "PATIENT ID OF INDEX CASE");
+                    if (weight != null)
+                        weight = weight.replace(".0", "");
 
-                String tbType = "";
-                String infectionType = "";
-                String resistanceType = "";
-                String dstbType = "";
+                    if (weight != null)
+                        if (!weight.equals(""))
+                            result.put("WEIGHT (KG)", weight);
+                    if (indexId != null)
+                        if (!indexId.equals(""))
+                            result.put("PATIENT ID OF INDEX CASE", indexId);
+                    if (tbType != null)
+                        if (!tbType.equals(""))
+                            result.put("SITE OF TUBERCULOSIS DISEASE", tbType.equals("PULMONARY TUBERCULOSIS") ? getResources().getString(R.string.pet_ptb) : getResources().getString(R.string.pet_eptb));
+                    if (infectionType != null)
+                        if (!infectionType.equals(""))
+                            result.put("TUBERCULOSIS INFECTION TYPE", infectionType.equals("DRUG-SENSITIVE TUBERCULOSIS INFECTION") ? getResources().getString(R.string.pet_dstb) : getResources().getString(R.string.pet_drtb));
+                    if (resistanceType != null)
+                        if (!resistanceType.equals(""))
+                            result.put("TUBERCULOSIS DRUG RESISTANCE TYPE", resistanceType.equals("RIFAMPICIN RESISTANT TUBERCULOSIS INFECTION") ? getResources().getString(R.string.pet_rr_tb) :
+                                    (resistanceType.equals("MONO DRUG RESISTANT TUBERCULOSIS") ? getResources().getString(R.string.pet_dr_tb) :
+                                            (resistanceType.equals("PANDRUG RESISTANT TUBERCULOSIS") ? getResources().getString(R.string.pet_pdr_tb) :
+                                                    (resistanceType.equals("MULTI-DRUG RESISTANT TUBERCULOSIS INFECTION") ? getResources().getString(R.string.pet_mdr_tb) : getResources().getString(R.string.pet_xdr_tb)))));
+                    if (dstbType != null)
+                        if (!dstbType.equals(""))
+                            result.put("RESISTANT TO ANTI-TUBERCULOSIS DRUGS", dstbType);
 
-                if (!(indexId == null || indexId.equals(""))) {
-                    String id = serverService.getPatientSystemIdByIdentifierLocalDB(indexId);
-                    tbType = serverService.getObsValue(id, App.getProgram() + "-" + Forms.PET_INDEX_PATIENT_REGISTRATION, "SITE OF TUBERCULOSIS DISEASE");
-                    infectionType = serverService.getObsValue(id, App.getProgram() + "-" + Forms.PET_INDEX_PATIENT_REGISTRATION, "TUBERCULOSIS INFECTION TYPE");
-                    resistanceType = serverService.getObsValue(id, App.getProgram() + "-" + Forms.PET_INDEX_PATIENT_REGISTRATION, "TUBERCULOSIS DRUG RESISTANCE TYPE");
-                    dstbType = serverService.getObsValue(id, App.getProgram() + "-" + Forms.PET_INDEX_PATIENT_REGISTRATION, "RESISTANT TO ANTI-TUBERCULOSIS DRUGS");
+                    return result;
+
                 }
 
-                if (weight != null)
-                    weight = weight.replace(".0", "");
-
-                if (weight != null)
-                    if (!weight.equals(""))
-                        result.put("WEIGHT (KG)", weight);
-                if (indexId != null)
-                    if (!indexId.equals(""))
-                        result.put("PATIENT ID OF INDEX CASE", indexId);
-                if (tbType != null)
-                    if (!tbType.equals(""))
-                        result.put("SITE OF TUBERCULOSIS DISEASE", tbType.equals("PULMONARY TUBERCULOSIS") ? getResources().getString(R.string.pet_ptb) : getResources().getString(R.string.pet_eptb));
-                if (infectionType != null)
-                    if (!infectionType.equals(""))
-                        result.put("TUBERCULOSIS INFECTION TYPE", infectionType.equals("DRUG-SENSITIVE TUBERCULOSIS INFECTION") ? getResources().getString(R.string.pet_dstb) : getResources().getString(R.string.pet_drtb));
-                if (resistanceType != null)
-                    if (!resistanceType.equals(""))
-                        result.put("TUBERCULOSIS DRUG RESISTANCE TYPE", resistanceType.equals("RIFAMPICIN RESISTANT TUBERCULOSIS INFECTION") ? getResources().getString(R.string.pet_rr_tb) :
-                            (resistanceType.equals("MONO DRUG RESISTANT TUBERCULOSIS") ? getResources().getString(R.string.pet_dr_tb) :
-                                    (resistanceType.equals("PANDRUG RESISTANT TUBERCULOSIS") ? getResources().getString(R.string.pet_pdr_tb) :
-                                            (resistanceType.equals("MULTI-DRUG RESISTANT TUBERCULOSIS INFECTION") ? getResources().getString(R.string.pet_mdr_tb) : getResources().getString(R.string.pet_xdr_tb)))));
-                if (dstbType != null)
-                    if (!dstbType.equals(""))
-                        result.put("RESISTANT TO ANTI-TUBERCULOSIS DRUGS", dstbType);
-
-                return result;
-
-            }
-
-            @Override
-            protected void onProgressUpdate(String... values) {
-            }
-
-            ;
-
-            @Override
-            protected void onPostExecute(HashMap<String, String> result) {
-                super.onPostExecute(result);
-                loading.dismiss();
-
-                if (result.get("PATIENT ID OF INDEX CASE").equals("")) {
-
-                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
-                    alertDialog.setMessage(getResources().getString(R.string.baseline_screening_missing));
-                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-                    alertDialog.setIcon(clearIcon);
-                    alertDialog.setTitle(getResources().getString(R.string.title_error));
-                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    try {
-                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
-                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
-                                    } catch (Exception e) {
-                                        // TODO: handle exception
-                                    }
-                                    dialog.dismiss();
-                                }
-                            });
-                    alertDialog.show();
-
-                    return;
-                } else if (result.get("TUBERCULOSIS INFECTION TYPE") == null || result.get("TUBERCULOSIS INFECTION TYPE").equals("")) {
-
-                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
-                    String indexPatientMissing = getResources().getString(R.string.index_patient_info_missing).replace("()", "(" + result.get("PATIENT ID OF INDEX CASE") + ")");
-                    alertDialog.setMessage(indexPatientMissing);
-                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-                    alertDialog.setIcon(clearIcon);
-                    alertDialog.setTitle(getResources().getString(R.string.title_error));
-                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    try {
-                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
-                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
-                                    } catch (Exception e) {
-                                        // TODO: handle exception
-                                    }
-                                    dialog.dismiss();
-                                }
-                            });
-                    alertDialog.show();
+                @Override
+                protected void onProgressUpdate(String... values) {
                 }
 
+                ;
 
-                weight.getEditText().setText(result.get("WEIGHT (KG)"));
-                indexPatientId.getEditText().setText(result.get("PATIENT ID OF INDEX CASE"));
-                tbType.getEditText().setText(result.get("SITE OF TUBERCULOSIS DISEASE"));
-                infectionType.getEditText().setText(result.get("TUBERCULOSIS INFECTION TYPE"));
-                resistanceType.getEditText().setText(result.get("TUBERCULOSIS DRUG RESISTANCE TYPE"));
-                dstPattern.getEditText().setText(result.get("RESISTANT TO ANTI-TUBERCULOSIS DRUGS"));
-                if (App.get(infectionType).equals(getResources().getString(R.string.pet_drtb))) {
-                    resistanceType.setVisibility(View.VISIBLE);
-                    dstPattern.setVisibility(View.VISIBLE);
+                @Override
+                protected void onPostExecute(HashMap<String, String> result) {
+                    super.onPostExecute(result);
+                    loading.dismiss();
 
-                    for (RadioButton rb : petRegimen.getRadioGroup().getButtons()) {
+                    if (result.get("PATIENT ID OF INDEX CASE") == null || result.get("PATIENT ID OF INDEX CASE").equals("")) {
 
-                        if (rb.getText().equals(getResources().getString(R.string.pet_levofloxacin_ethionamide)))
+                        final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                        alertDialog.setMessage(getResources().getString(R.string.baseline_screening_missing));
+                        Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                        alertDialog.setIcon(clearIcon);
+                        alertDialog.setTitle(getResources().getString(R.string.title_error));
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        try {
+                                            InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                            imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                        } catch (Exception e) {
+                                            // TODO: handle exception
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                });
+                        alertDialog.show();
+
+                        return;
+                    } else if (result.get("TUBERCULOSIS INFECTION TYPE") == null || result.get("TUBERCULOSIS INFECTION TYPE").equals("")) {
+
+                        final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                        String indexPatientMissing = getResources().getString(R.string.index_patient_info_missing).replace("()", "(" + result.get("PATIENT ID OF INDEX CASE") + ")");
+                        alertDialog.setMessage(indexPatientMissing);
+                        Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                        alertDialog.setIcon(clearIcon);
+                        alertDialog.setTitle(getResources().getString(R.string.title_error));
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        try {
+                                            InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                            imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                        } catch (Exception e) {
+                                            // TODO: handle exception
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                });
+                        alertDialog.show();
+                    }
+
+                    weight.getEditText().setText(result.get("WEIGHT (KG)"));
+                    indexPatientId.getEditText().setText(result.get("PATIENT ID OF INDEX CASE"));
+                    for (RadioButton rb : tbType.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.pet_ptb)) && result.get("SITE OF TUBERCULOSIS DISEASE").equals(getResources().getString(R.string.pet_ptb))) {
                             rb.setChecked(true);
-                        else
-                            rb.setChecked(false);
-
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.pet_eptb)) && result.get("SITE OF TUBERCULOSIS DISEASE").equals(getResources().getString(R.string.pet_eptb))) {
+                            rb.setChecked(true);
+                            break;
+                        }
                     }
+                    for (RadioButton rb : infectionType.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.pet_dstb)) && result.get("TUBERCULOSIS INFECTION TYPE").equals(getResources().getString(R.string.pet_dstb))) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.pet_drtb)) && result.get("TUBERCULOSIS INFECTION TYPE").equals(getResources().getString(R.string.pet_drtb))) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    if (result.get("TUBERCULOSIS DRUG RESISTANCE TYPE") != null) {
+                        for (RadioButton rb : resistanceType.getRadioGroup().getButtons()) {
+                            if (rb.getText().equals(getResources().getString(R.string.pet_rr_tb)) && result.get("TUBERCULOSIS DRUG RESISTANCE TYPE").equals(getResources().getString(R.string.pet_rr_tb))) {
+                                rb.setChecked(true);
+                                break;
+                            } else if (rb.getText().equals(getResources().getString(R.string.pet_dr_tb)) && result.get("TUBERCULOSIS DRUG RESISTANCE TYPE").equals(getResources().getString(R.string.pet_dr_tb))) {
+                                rb.setChecked(true);
+                                break;
+                            } else if (rb.getText().equals(getResources().getString(R.string.pet_pdr_tb)) && result.get("TUBERCULOSIS DRUG RESISTANCE TYPE").equals(getResources().getString(R.string.pet_pdr_tb))) {
+                                rb.setChecked(true);
+                                break;
+                            } else if (rb.getText().equals(getResources().getString(R.string.pet_mdr_tb)) && result.get("TUBERCULOSIS DRUG RESISTANCE TYPE").equals(getResources().getString(R.string.pet_mdr_tb))) {
+                                rb.setChecked(true);
+                                break;
+                            } else if (rb.getText().equals(getResources().getString(R.string.pet_xdr_tb)) && result.get("TUBERCULOSIS DRUG RESISTANCE TYPE").equals(getResources().getString(R.string.pet_xdr_tb))) {
+                                rb.setChecked(true);
+                                break;
+                            }
+                        }
+                    }
+                    if (result.get("RESISTANT TO ANTI-TUBERCULOSIS DRUGS") != null) {
+                        for (CheckBox cb : dstPattern.getCheckedBoxes()) {
+                            if (cb.getText().equals(getResources().getString(R.string.pet_isoniazid)) && result.get("RESISTANT TO ANTI-TUBERCULOSIS DRUGS").contains("ISONIAZID")) {
+                                cb.setChecked(true);
+                            }
+                            if (cb.getText().equals(getResources().getString(R.string.pet_rifampicin)) && result.get("RESISTANT TO ANTI-TUBERCULOSIS DRUGS").contains("RIFAMPICIN")) {
+                                cb.setChecked(true);
+                            }
+                            if (cb.getText().equals(getResources().getString(R.string.pet_amikacin)) && result.get("RESISTANT TO ANTI-TUBERCULOSIS DRUGS").contains("AMIKACIN")) {
+                                cb.setChecked(true);
+                            }
+                            if (cb.getText().equals(getResources().getString(R.string.pet_capreomycin)) && result.get("RESISTANT TO ANTI-TUBERCULOSIS DRUGS").contains("CAPREOMYCIN")) {
+                                cb.setChecked(true);
+                            }
+                            if (cb.getText().equals(getResources().getString(R.string.pet_streptpmycin)) && result.get("RESISTANT TO ANTI-TUBERCULOSIS DRUGS").contains("STREPTOMYCIN")) {
+                                cb.setChecked(true);
+                            }
+                            if (cb.getText().equals(getResources().getString(R.string.pet_ofloxacin)) && result.get("RESISTANT TO ANTI-TUBERCULOSIS DRUGS").contains("OFLOXACIN")) {
+                                cb.setChecked(true);
+                            }
+                            if (cb.getText().equals(getResources().getString(R.string.pet_moxifloxacin)) && result.get("RESISTANT TO ANTI-TUBERCULOSIS DRUGS").contains("MOXIFLOXACIN")) {
+                                cb.setChecked(true);
+                            }
+                            if (cb.getText().equals(getResources().getString(R.string.pet_ethambutol)) && result.get("RESISTANT TO ANTI-TUBERCULOSIS DRUGS").contains("ETHAMBUTOL")) {
+                                cb.setChecked(true);
+                            }
+                            if (cb.getText().equals(getResources().getString(R.string.pet_ethionamide)) && result.get("RESISTANT TO ANTI-TUBERCULOSIS DRUGS").contains("ETHIONAMIDE")) {
+                                cb.setChecked(true);
+                            }
+                            if (cb.getText().equals(getResources().getString(R.string.pet_pyrazinamide)) && result.get("RESISTANT TO ANTI-TUBERCULOSIS DRUGS").contains("PYRAZINAMIDE")) {
+                                cb.setChecked(true);
+                            }
 
-                } else {
-                    resistanceType.setVisibility(View.GONE);
-                    dstPattern.setVisibility(View.GONE);
+                        }
+                    }
+                    if (App.get(infectionType).equals(getResources().getString(R.string.pet_drtb))) {
+                        resistanceType.setVisibility(View.VISIBLE);
+                        dstPattern.setVisibility(View.VISIBLE);
 
-                    if (App.getPatient().getPerson().getAge() < 2) {
                         for (RadioButton rb : petRegimen.getRadioGroup().getButtons()) {
 
-                            if (rb.getText().equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy)))
+                            if (rb.getText().equals(getResources().getString(R.string.pet_levofloxacin_ethionamide)))
                                 rb.setChecked(true);
                             else
                                 rb.setChecked(false);
 
                         }
+
                     } else {
-                        for (RadioButton rb : petRegimen.getRadioGroup().getButtons()) {
+                        resistanceType.setVisibility(View.GONE);
+                        dstPattern.setVisibility(View.GONE);
 
-                            if (rb.getText().equals(getResources().getString(R.string.pet_isoniazid_rifapentine)))
-                                rb.setChecked(true);
-                            else
-                                rb.setChecked(false);
+                        if (App.getPatient().getPerson().getAge() < 2) {
+                            for (RadioButton rb : petRegimen.getRadioGroup().getButtons()) {
+
+                                if (rb.getText().equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy)))
+                                    rb.setChecked(true);
+                                else
+                                    rb.setChecked(false);
+
+                            }
+                        } else {
+                            for (RadioButton rb : petRegimen.getRadioGroup().getButtons()) {
+
+                                if (rb.getText().equals(getResources().getString(R.string.pet_isoniazid_rifapentine)))
+                                    rb.setChecked(true);
+                                else
+                                    rb.setChecked(false);
 
 
+                            }
                         }
+
                     }
 
                 }
-
-            }
-        };
-        autopopulateFormTask.execute("");
-
+            };
+            autopopulateFormTask.execute("");
+        }
     }
 
     @Override
@@ -601,6 +690,53 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
     @Override
     public boolean validate() {
 
+        if (App.get(indexPatientId).equals("")) {
+
+            final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+            alertDialog.setMessage(getResources().getString(R.string.baseline_screening_missing));
+            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+            alertDialog.setIcon(clearIcon);
+            alertDialog.setTitle(getResources().getString(R.string.title_error));
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            try {
+                                InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                            } catch (Exception e) {
+                                // TODO: handle exception
+                            }
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
+            gotoFirstPage();
+            return false;
+        } else if (App.get(tbType) == null || App.get(tbType).equals("")) {
+
+            final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+            String indexPatientMissing = getResources().getString(R.string.index_patient_info_missing).replace("()", "(" + App.get(indexPatientId) + ")");
+            alertDialog.setMessage(indexPatientMissing);
+            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+            alertDialog.setIcon(clearIcon);
+            alertDialog.setTitle(getResources().getString(R.string.title_error));
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            try {
+                                InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                            } catch (Exception e) {
+                                // TODO: handle exception
+                            }
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
+            gotoFirstPage();
+            return false;
+        }
+
         Boolean error = false;
         View view = null;
 
@@ -610,26 +746,31 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 other.getQuestionView().requestFocus();
                 view = null;
                 error = true;
+                gotoLastPage();
             }
         }
         if (App.get(phone1a).isEmpty()) {
             phone1a.getEditText().setError(getResources().getString(R.string.mandatory_field));
             phone1a.getEditText().requestFocus();
             error = true;
+            gotoLastPage();
         } else if (App.get(phone1b).isEmpty()) {
             phone1b.getEditText().setError(getResources().getString(R.string.mandatory_field));
             phone1b.getEditText().requestFocus();
             error = true;
+            gotoLastPage();
         } else if (!RegexUtil.isContactNumber(App.get(phone1a) + App.get(phone1b))) {
             phone1b.getEditText().setError(getResources().getString(R.string.invalid_value));
             phone1b.getEditText().requestFocus();
             error = true;
+            gotoLastPage();
         }
         if (App.get(nameTreatmentSupporter).isEmpty()) {
             nameTreatmentSupporter.getQuestionView().setError(getString(R.string.empty_field));
             nameTreatmentSupporter.getQuestionView().requestFocus();
             view = null;
             error = true;
+            gotoLastPage();
         }
         if (ancillaryDrugDuration.getVisibility() == View.VISIBLE) {
             if (App.get(ancillaryDrugDuration).isEmpty()) {
@@ -637,6 +778,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 ancillaryDrugDuration.getQuestionView().requestFocus();
                 view = null;
                 error = true;
+                gotoLastPage();
             }
         }
         Boolean flag = false;
@@ -652,6 +794,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 ancillaryDrugs.getQuestionView().requestFocus();
                 view = ancillaryDrugs;
                 error = true;
+                gotoLastPage();
             }
         }
         if (ethionamideDose.getVisibility() == View.VISIBLE) {
@@ -660,6 +803,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 ethionamideDose.getQuestionView().requestFocus();
                 view = null;
                 error = true;
+                gotoLastPage();
             }
         }
         if (levofloxacinDose.getVisibility() == View.VISIBLE) {
@@ -668,6 +812,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 levofloxacinDose.getQuestionView().requestFocus();
                 view = null;
                 error = true;
+                gotoLastPage();
             }
         }
         if (rifapentineDose.getVisibility() == View.VISIBLE) {
@@ -676,6 +821,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 rifapentineDose.getQuestionView().requestFocus();
                 view = null;
                 error = true;
+                gotoLastPage();
             } else {
                 int dose = Integer.parseInt(App.get(rifapentineDose));
                 String hint = rifapentineDose.getEditText().getHint().toString();
@@ -686,6 +832,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                         rifapentineDose.getQuestionView().requestFocus();
                         view = null;
                         error = true;
+                        gotoLastPage();
                     }
                 } else if (hint.equals("450 - 900 mg")) {
                     if (dose < 450 || dose > 900) {
@@ -693,6 +840,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                         rifapentineDose.getQuestionView().requestFocus();
                         view = null;
                         error = true;
+                        gotoLastPage();
                     }
                 }
             }
@@ -703,6 +851,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 isoniazidDose.getQuestionView().requestFocus();
                 view = null;
                 error = true;
+                gotoLastPage();
             } else {
                 int dose = Integer.parseInt(App.get(isoniazidDose));
                 if (dose > 300) {
@@ -710,16 +859,51 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                     isoniazidDose.getQuestionView().requestFocus();
                     view = null;
                     error = true;
+                    gotoLastPage();
                 }
             }
         }
 
+        if (error) {
 
-        return true;
+            // int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
+
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
+            alertDialog.setMessage(getString(R.string.form_error));
+            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+            // DrawableCompat.setTint(clearIcon, color);
+            alertDialog.setIcon(clearIcon);
+            alertDialog.setTitle(getResources().getString(R.string.title_error));
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            try {
+                                InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                            } catch (Exception e) {
+                                // TODO: handle exception
+                            }
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
+            return false;
+        } else
+            return true;
     }
 
     @Override
     public boolean submit() {
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            String encounterId = bundle.getString("formId");
+            if (saveFlag) {
+                serverService.deleteOfflineForms(encounterId);
+            }
+            bundle.putBoolean("save", false);
+        }
 
         endTime = new Date();
 
@@ -729,6 +913,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         /*observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
         observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});*/
         observations.add(new String[]{"WEIGHT (KG)", App.get(weight)});
+        observations.add(new String[]{"PATIENT ID OF INDEX CASE", App.get(indexPatientId)});
         observations.add(new String[]{"SITE OF TUBERCULOSIS DISEASE", App.get(tbType).equals(getResources().getString(R.string.pet_ptb)) ? "PULMONARY TUBERCULOSIS" : "EXTRA-PULMONARY TUBERCULOSIS"});
         observations.add(new String[]{"TUBERCULOSIS INFECTION TYPE", App.get(infectionType).equals(getResources().getString(R.string.pet_dstb)) ? "DRUG-SENSITIVE TUBERCULOSIS INFECTION" : "DRUG-RESISTANT TB"});
         if (resistanceType.getVisibility() == View.VISIBLE)
@@ -737,7 +922,29 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                             (App.get(resistanceType).equals(getResources().getString(R.string.pet_pdr_tb)) ? "PANDRUG RESISTANT TUBERCULOSIS" :
                                     (App.get(resistanceType).equals(getResources().getString(R.string.pet_mdr_tb))) ? "MULTI-DRUG RESISTANT TUBERCULOSIS INFECTION" : "EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION"))});
         if (dstPattern.getVisibility() == View.VISIBLE) {
-            String dstPatternString = App.get(dstPattern).replace(", ", " ; ");
+            String dstPatternString = "";
+            for (CheckBox cb : dstPattern.getCheckedBoxes()) {
+                if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_isoniazid)))
+                    dstPatternString = dstPatternString + "ISONIAZID" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_rifampicin)))
+                    dstPatternString = dstPatternString + "RIFAMPICIN" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_amikacin)))
+                    dstPatternString = dstPatternString + "AMIKACIN" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_capreomycin)))
+                    dstPatternString = dstPatternString + "CAPREOMYCIN" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_streptpmycin)))
+                    dstPatternString = dstPatternString + "STREPTOMYCIN" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_ofloxacin)))
+                    dstPatternString = dstPatternString + "OFLOXACIN" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_moxifloxacin)))
+                    dstPatternString = dstPatternString + "MOXIFLOXACIN" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_ethambutol)))
+                    dstPatternString = dstPatternString + "ETHAMBUTOL" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_ethionamide)))
+                    dstPatternString = dstPatternString + "ETHIONAMIDE" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_pyrazinamide)))
+                    dstPatternString = dstPatternString + "PYRAZINAMIDE" + " ; ";
+            }
             observations.add(new String[]{"RESISTANT TO ANTI-TUBERCULOSIS DRUGS", dstPatternString});
         }
         observations.add(new String[]{"TREATMENT START DATE", App.getSqlDate(secondDateCalendar)});
@@ -1123,6 +1330,202 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
     @Override
     public void refill(int encounterId) {
+
+        OfflineForm fo = serverService.getOfflineFormById(encounterId);
+        String date = fo.getFormDate();
+        ArrayList<String[][]> obsValue = fo.getObsValue();
+        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        for (int i = 0; i < obsValue.size(); i++) {
+
+            String[][] obs = obsValue.get(i);
+
+            if (obs[0][0].equals("FORM START TIME")) {
+                startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
+            } else if (obs[0][0].equals("WEIGHT (KG)")) {
+                String weightValue = obs[0][1].replace(".0", "");
+                weight.getEditText().setText(weightValue);
+            } else if (obs[0][0].equals("PATIENT ID OF INDEX CASE")) {
+                indexPatientId.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("SITE OF TUBERCULOSIS DISEASE")) {
+
+                for (RadioButton rb : tbType.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet_ptb)) && obs[0][1].equals("PULMONARY TUBERCULOSIS")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_eptb)) && obs[0][1].equals("EXTRA-PULMONARY TUBERCULOSIS")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+
+            } else if (obs[0][0].equals("TUBERCULOSIS INFECTION TYPE")) {
+                for (RadioButton rb : infectionType.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet_dstb)) && obs[0][1].equals("DRUG-SENSITIVE TUBERCULOSIS INFECTION")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_drtb)) && obs[0][1].equals("DRUG-RESISTANT TB")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("TUBERCULOSIS DRUG RESISTANCE TYPE")) {
+                for (RadioButton rb : resistanceType.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet_rr_tb)) && obs[0][1].equals("RIFAMPICIN RESISTANT TUBERCULOSIS INFECTION")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_dr_tb)) && obs[0][1].equals("MONO DRUG RESISTANT TUBERCULOSIS")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_pdr_tb)) && obs[0][1].equals("PANDRUG RESISTANT TUBERCULOSIS")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_mdr_tb)) && obs[0][1].equals("MULTI-DRUG RESISTANT TUBERCULOSIS INFECTION")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_xdr_tb)) && obs[0][1].equals("EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+
+                }
+                resistanceType.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("RESISTANT TO ANTI-TUBERCULOSIS DRUGS")) {
+                for (CheckBox cb : dstPattern.getCheckedBoxes()) {
+                    if (cb.getText().equals(getResources().getString(R.string.pet_isoniazid)) && obs[0][1].equals("ISONIAZID")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_rifampicin)) && obs[0][1].equals("RIFAMPICIN")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_amikacin)) && obs[0][1].equals("AMIKACIN")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_capreomycin)) && obs[0][1].equals("CAPREOMYCIN")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_streptpmycin)) && obs[0][1].equals("STREPTOMYCIN")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_ofloxacin)) && obs[0][1].equals("OFLOXACIN")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_moxifloxacin)) && obs[0][1].equals("MOXIFLOXACIN")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_ethambutol)) && obs[0][1].equals("ETHAMBUTOL")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_ethionamide)) && obs[0][1].equals("ETHIONAMIDE")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_pyrazinamide)) && obs[0][1].equals("PYRAZINAMIDE")) {
+                        cb.setChecked(true);
+                        break;
+                    }
+
+                }
+                dstPattern.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("TREATMENT START DATE")) {
+                String secondDate = obs[0][1];
+                secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
+                treatmentInitiationDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+            } else if (obs[0][0].equals("POST-EXPOSURE TREATMENT REGIMEN")) {
+                for (RadioButton rb : petRegimen.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy)) && obs[0][1].equals("ISONIAZID PROPHYLAXIS")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_isoniazid_rifapentine)) && obs[0][1].equals("ISONIAZID AND RIFAPENTINE")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_levofloxacin_ethionamide)) && obs[0][1].equals("LEVOFLOXACIN AND ETHIONAMIDE")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+
+                }
+                resistanceType.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("ISONIAZID DOSE")) {
+                isoniazidDose.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("RIFAPENTINE DOSE")) {
+                rifapentineDose.getEditText().setText(obs[0][1]);
+                rifapentineAvailable.setVisibility(View.VISIBLE);
+                for (RadioButton rb : rifapentineAvailable.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes))) {
+                        rb.setChecked(true);
+                    }
+                }
+            } else if (obs[0][0].equals("LEVOFLOXACIN DOSE")) {
+                levofloxacinDose.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("ETHIONAMIDE DOSE")) {
+                ethionamideDose.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("ANCILLARY MEDICATION NEEDED")) {
+                for (RadioButton rb : ancillaryNeed.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+
+                }
+                ancillaryNeed.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("ANCILLARY DRUGS")) {
+                for (CheckBox cb : ancillaryDrugs.getCheckedBoxes()) {
+                    if (cb.getText().equals(getResources().getString(R.string.pet_iron_deficiency_prtocol)) && obs[0][1].equals("IRON")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_vitamin_d_protocol)) && obs[0][1].equals("VITAMIN D")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_pcm_protocol)) && obs[0][1].equals("PHENYLEPHRINE, CHLORPHENIRAMINE, AND METHSCOPOLAMINE")) {
+                        cb.setChecked(true);
+                        break;
+                    }
+
+                }
+                ancillaryDrugs.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("MEDICATION DURATION")) {
+                ancillaryDrugDuration.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("NAME OF TREATMENT SUPPORTER")) {
+                nameTreatmentSupporter.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("TREATMENT SUPPORTER CONTACT NUMBER")) {
+                String[] phoneArray = obs[0][1].split("-");
+                phone1a.getEditText().setText(phoneArray[0]);
+                phone1b.getEditText().setText(phoneArray[1]);
+            } else if (obs[0][0].equals("TREATMENT SUPPORTER TYPE")) {
+                for (RadioButton rb : typeTreatmentSupporter.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet_family_treatment_supporter)) && obs[0][1].equals("FAMILY MEMBER")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_non_family_treatment_supporter)) && obs[0][1].equals("NON-FAMILY MEMBER")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+
+                }
+            } else if (obs[0][0].equals("TREATMENT SUPPORTER RELATIONSHIP TO PATIENT")) {
+                String value = obs[0][1].equals("MOTHER") ? getResources().getString(R.string.pet_mother) :
+                        (obs[0][1].equals("FATHER") ? getResources().getString(R.string.pet_father) :
+                                (obs[0][1].equals("MATERNAL GRANDMOTHER") ? getResources().getString(R.string.pet_maternal_grandmother) :
+                                        (obs[0][1].equals("MATERNAL GRANDFATHER") ? getResources().getString(R.string.pet_maternal_grandfather) :
+                                                (obs[0][1].equals("PATERNAL GRANDMOTHER") ? getResources().getString(R.string.pet_paternal_grandmother) :
+                                                        (obs[0][1].equals("PATERNAL GRANDFATHER") ? getResources().getString(R.string.pet_paternal_grandfather) :
+                                                                (obs[0][1].equals("BROTHER") ? getResources().getString(R.string.pet_brother) :
+                                                                        (obs[0][1].equals("SISTER") ? getResources().getString(R.string.pet_sister) :
+                                                                                (obs[0][1].equals("SON") ? getResources().getString(R.string.pet_son) :
+                                                                                        obs[0][1].equals("DAUGHTER") ? getResources().getString(R.string.pet_daughter) :
+                                                                                                obs[0][1].equals("SPOUSE") ? getResources().getString(R.string.pet_spouse) :
+                                                                                                        obs[0][1].equals("AUNT") ? getResources().getString(R.string.pet_aunt) :
+                                                                                                                obs[0][1].equals("UNCLE") ? getResources().getString(R.string.pet_uncle) : getResources().getString(R.string.pet_other)))))))));
+                relationshipTreatmentSuppoter.getSpinner().selectValue(value);
+            } else if (obs[0][0].equals("OTHER FAMILY MEMBER")) {
+                other.getEditText().setText(obs[0][1]);
+                other.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     class MyAdapter extends PagerAdapter {

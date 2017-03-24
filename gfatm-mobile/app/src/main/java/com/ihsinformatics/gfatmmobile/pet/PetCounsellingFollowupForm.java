@@ -414,9 +414,8 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
                     });
             alertDialog.show();
             return false;
-        }
-
-        return true;
+        } else
+            return true;
     }
 
     @Override

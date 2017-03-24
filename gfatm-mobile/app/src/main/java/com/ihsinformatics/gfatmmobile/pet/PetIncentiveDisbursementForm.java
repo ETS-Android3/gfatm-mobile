@@ -258,40 +258,47 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
             otherRelation.getEditText().setError(getString(R.string.empty_field));
             otherRelation.getEditText().requestFocus();
             error = true;
+            gotoLastPage();
         }
 
         if (App.get(recieverName).isEmpty()) {
             recieverName.getEditText().setError(getString(R.string.empty_field));
             recieverName.getEditText().requestFocus();
             error = true;
+            gotoLastPage();
         }
 
         if (App.get(followupMonth).isEmpty()) {
             followupMonth.getEditText().setError(getString(R.string.empty_field));
             followupMonth.getEditText().requestFocus();
             error = true;
+            gotoLastPage();
         }
 
         if (App.get(nameTreatmentSupporter).isEmpty() && nameTreatmentSupporter.getVisibility() == View.VISIBLE) {
             nameTreatmentSupporter.getEditText().setError(getString(R.string.empty_field));
             nameTreatmentSupporter.getEditText().requestFocus();
             error = true;
+            gotoLastPage();
         }
 
         if (App.get(contactNumberTreatmentSupporter).isEmpty() && contactNumberTreatmentSupporter.getVisibility() == View.VISIBLE) {
             contactNumberTreatmentSupporter.getEditText().setError(getString(R.string.empty_field));
             contactNumberTreatmentSupporter.getEditText().requestFocus();
             error = true;
+            gotoLastPage();
         } else if (App.get(contactNumberTreatmentSupporter).length() == RegexUtil.mobileNumberLength) {
             contactNumberTreatmentSupporter.getEditText().setError(getString(R.string.invalid_value));
             contactNumberTreatmentSupporter.getEditText().requestFocus();
             error = true;
+            gotoLastPage();
         }
 
         if (App.get(other).isEmpty() && other.getVisibility() == View.VISIBLE) {
             other.getEditText().setError(getString(R.string.empty_field));
             other.getEditText().requestFocus();
             error = true;
+            gotoFirstPage();
         }
 
 
@@ -299,43 +306,51 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
             otherCnicOwner.getEditText().setError(getString(R.string.empty_field));
             otherCnicOwner.getEditText().requestFocus();
             error = true;
+            gotoFirstPage();
         }
 
         if (App.get(cnic1).isEmpty()) {
             cnic1.getEditText().setError(getResources().getString(R.string.mandatory_field));
             cnic1.getEditText().requestFocus();
             error = true;
+            gotoFirstPage();
         }
         if (App.get(cnic2).isEmpty()) {
             cnic2.getEditText().setError(getResources().getString(R.string.mandatory_field));
             cnic2.getEditText().requestFocus();
             error = true;
+            gotoFirstPage();
         }
         if (App.get(cnic3).isEmpty()) {
             cnic3.getEditText().setError(getResources().getString(R.string.mandatory_field));
             cnic3.getEditText().requestFocus();
             error = true;
+            gotoFirstPage();
         }
         if (App.get(cnic1).length() != 5) {
             cnic1.getEditText().setError(getResources().getString(R.string.invalid_value));
             cnic1.getEditText().requestFocus();
             error = true;
+            gotoFirstPage();
         }
         if (App.get(cnic2).length() != 7) {
             cnic2.getEditText().setError(getResources().getString(R.string.invalid_value));
             cnic2.getEditText().requestFocus();
             error = true;
+            gotoFirstPage();
         }
         if (App.get(cnic3).length() != 1) {
             cnic3.getEditText().setError(getResources().getString(R.string.invalid_value));
             cnic3.getEditText().requestFocus();
             error = true;
+            gotoFirstPage();
         }
 
         if (App.get(indexPatientId).isEmpty()) {
             indexPatientId.getEditText().setError(getString(R.string.empty_field));
             indexPatientId.getEditText().requestFocus();
             error = true;
+            gotoFirstPage();
         }
 
         if (error) {
@@ -360,9 +375,8 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
                     });
             alertDialog.show();
             return false;
-        }
-
-        return true;
+        } else
+            return true;
     }
 
     @Override

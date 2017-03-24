@@ -739,7 +739,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                 husbandName.getEditText().setText("");
             } else {
                 husbandName.getEditText().setText(husbandNameString);
-                husbandName.getEditText().setKeyListener(null);
+                // husbandName.getEditText().setKeyListener(null);
             }
         }
 
@@ -901,9 +901,26 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                 for (RadioButton rb : dstAvailable.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);
+
+                        ArrayList<RadioButton> rbs = resistanceType.getRadioGroup().getButtons();
+                        for (RadioButton button : rbs) {
+
+                            button.setVisibility(View.VISIBLE);
+
+                        }
+
                         break;
                     } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
                         rb.setChecked(true);
+
+                        ArrayList<RadioButton> rbs = resistanceType.getRadioGroup().getButtons();
+                        for (RadioButton button : rbs) {
+                            if (button.getText().equals(getResources().getString(R.string.pet_rr_tb))) {
+                                button.setVisibility(View.VISIBLE);
+                            } else button.setVisibility(View.GONE);
+
+                        }
+
                         break;
                     }
                 }
@@ -913,30 +930,20 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                     if (rb.getText().equals(getResources().getString(R.string.pet_rr_tb)) && obs[0][1].equals("RIFAMPICIN RESISTANT TUBERCULOSIS INFECTION")) {
                         rb.setChecked(true);
                         break;
-                    } else {
-                        ArrayList<RadioButton> rbs = resistanceType.getRadioGroup().getButtons();
-                        for (RadioButton button : rbs) {
-
-                            if (button.getText().equals(getResources().getString(R.string.pet_rr_tb))) {
-                                button.setVisibility(View.VISIBLE);
-                            }
-
-                        }
-
-                        if (rb.getText().equals(getResources().getString(R.string.pet_dr_tb)) && obs[0][1].equals("MONO DRUG RESISTANT TUBERCULOSIS")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.pet_pdr_tb)) && obs[0][1].equals("PANDRUG RESISTANT TUBERCULOSIS")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.pet_mdr_tb)) && obs[0][1].equals("MULTI-DRUG RESISTANT TUBERCULOSIS INFECTION")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.pet_xdr_tb)) && obs[0][1].equals("EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION")) {
-                            rb.setChecked(true);
-                            break;
-                        }
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_dr_tb)) && obs[0][1].equals("MONO DRUG RESISTANT TUBERCULOSIS")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_pdr_tb)) && obs[0][1].equals("PANDRUG RESISTANT TUBERCULOSIS")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_mdr_tb)) && obs[0][1].equals("MULTI-DRUG RESISTANT TUBERCULOSIS INFECTION")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_xdr_tb)) && obs[0][1].equals("EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION")) {
+                        rb.setChecked(true);
+                        break;
                     }
+
                 }
                 resistanceType.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("TB PATIENT TYPE")) {

@@ -294,9 +294,8 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
                     });
             alertDialog.show();
             return false;
-        }
-
-        return true;
+        } else
+            return true;
     }
 
     @Override
