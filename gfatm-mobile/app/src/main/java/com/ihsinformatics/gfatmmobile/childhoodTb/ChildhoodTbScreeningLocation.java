@@ -183,32 +183,67 @@ public class ChildhoodTbScreeningLocation extends AbstractFormActivity implement
     @Override
     public void updateDisplay() {
 
-        if (snackbar != null)
-            snackbar.dismiss();
+        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
 
-        if (!formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString())) {
+            String formDa = formDate.getButton().getText().toString();
 
-            Date date = App.stringToDate(formDate.getButton().getText().toString(), "dd-MMM-yyyy");
+            Date date = new Date();
+            if (formDateCalendar.after(App.getCalendar(date))) {
 
-            if (formDateCalendar.after(date)) {
-
-                formDateCalendar = App.getCalendar(date);
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
+
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
             } else
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
         }
-
-
-
     }
 
     @Override
     public boolean validate() {
         boolean error=false;
+        if(contactTbRegistrationNo.getVisibility()==View.VISIBLE && App.get(contactTbRegistrationNo).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            contactTbRegistrationNo.getEditText().setError(getString(R.string.empty_field));
+            contactTbRegistrationNo.getEditText().requestFocus();
+            error = true;
+        }
+        if(contactExternalIdHospital.getVisibility()==View.VISIBLE && App.get(contactExternalIdHospital).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            contactExternalIdHospital.getEditText().setError(getString(R.string.empty_field));
+            contactExternalIdHospital.getEditText().requestFocus();
+            error = true;
+        }
+        if(contactExternalId.getVisibility()==View.VISIBLE && App.get(contactExternalId).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            contactExternalId.getEditText().setError(getString(R.string.empty_field));
+            contactExternalId.getEditText().requestFocus();
+            error = true;
+        }
+        if(contactPatientId.getVisibility()==View.VISIBLE && App.get(contactPatientId).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            contactPatientId.getEditText().setError(getString(R.string.empty_field));
+            contactPatientId.getEditText().requestFocus();
+            error = true;
+        }
+
+
         if (otherFacilityDeparment.getVisibility() == View.VISIBLE && App.get(otherFacilityDeparment).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);

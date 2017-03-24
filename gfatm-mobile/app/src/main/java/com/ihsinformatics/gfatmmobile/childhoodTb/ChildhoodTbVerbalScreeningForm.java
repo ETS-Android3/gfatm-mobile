@@ -35,6 +35,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
@@ -55,23 +56,23 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
     TitledSpinner facility_section;
     TitledEditText facility_section_other;
     TitledSpinner opd_ward_section;
-    TitledEditText mother_name;
-    TitledEditText father_name;
-    TitledRadioGroup patient_attendant;
+    TitledEditText motherName;
+    TitledEditText fatherName;
+    TitledRadioGroup patientAttendant;
     TitledRadioGroup cough;
-    TitledSpinner cough_duration;
+    TitledSpinner coughDuration;
     TitledRadioGroup fever;
-    TitledRadioGroup night_sweats;
-    TitledRadioGroup weight_loss;
+    TitledRadioGroup nightSweats;
+    TitledRadioGroup weightLoss;
     TitledRadioGroup appeptite;
-    TitledRadioGroup lymphnode_swelling;
-    TitledRadioGroup joint_swelling_2weeks;
-    TitledRadioGroup tb_history;
-    TitledRadioGroup tb_medication;
-    TitledRadioGroup contact_tb_history_2years;
-    TitledCheckBoxes close_contact_type;
-    TitledEditText other_contact_type;
-    TitledRadioGroup presumptive_tb;
+    TitledRadioGroup lymphnodeSwelling;
+    TitledRadioGroup jointSwellingTwoWeeks;
+    TitledRadioGroup tbHistory;
+    TitledRadioGroup tbMedication;
+    TitledRadioGroup contactTbHistoryTwoYears;
+    TitledCheckBoxes closeContactType;
+    TitledEditText otherContactType;
+    TitledRadioGroup presumptiveTb;
 
     Snackbar snackbar;
     ScrollView scrollView;
@@ -149,62 +150,62 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        screeningLocation = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_screening_location), getResources().getStringArray(R.array.ctb_screening_location_list), null, App.HORIZONTAL, App.VERTICAL, true);
+        screeningLocation = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_screening_location), getResources().getStringArray(R.array.ctb_screening_location_list), getResources().getString(R.string.ctb_hospital), App.HORIZONTAL, App.VERTICAL, true);
         hospital = new TitledSpinner(context, null, getResources().getString(R.string.ctb_hospital_specify), getResources().getStringArray(R.array.ctb_hospital_list), null, App.VERTICAL);
         facility_section = new TitledSpinner(context, null, getResources().getString(R.string.ctb_facility_section), getResources().getStringArray(R.array.ctb_facility_section_list), null, App.VERTICAL);
         facility_section_other = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         opd_ward_section = new TitledSpinner(context, null, getResources().getString(R.string.ctb_opd_clinic_or_ward), getResources().getStringArray(R.array.ctb_opd_ward_section_list), null, App.VERTICAL);
-        mother_name = new TitledEditText(context, null, getResources().getString(R.string.ctb_mother_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        father_name = new TitledEditText(context, null, getResources().getString(R.string.ctb_father_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        patient_attendant = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_attendant), getResources().getStringArray(R.array.ctb_patient_attendant_list), getResources().getString(R.string.ctb_patient), App.HORIZONTAL, App.VERTICAL, true);
+        motherName = new TitledEditText(context, null, getResources().getString(R.string.ctb_mother_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        fatherName = new TitledEditText(context, null, getResources().getString(R.string.ctb_father_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        patientAttendant = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_attendant), getResources().getStringArray(R.array.ctb_patient_attendant_list), getResources().getString(R.string.ctb_patient), App.HORIZONTAL, App.VERTICAL, true);
         cough = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_cough), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true);
-        cough_duration = new TitledSpinner(context, null, getResources().getString(R.string.ctb_cough_duration), getResources().getStringArray(R.array.ctb_cough_duration_list), getResources().getString(R.string.ctb_less_than_2_weeks), App.VERTICAL, true);
+        coughDuration = new TitledSpinner(context, null, getResources().getString(R.string.ctb_cough_duration), getResources().getStringArray(R.array.ctb_cough_duration_list), getResources().getString(R.string.ctb_less_than_2_weeks), App.VERTICAL, true);
         fever = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_fever_more_than_2_weeks), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true);
-        night_sweats = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_night_sweats), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.ctb_no), App.HORIZONTAL, App.VERTICAL, true);
-        weight_loss = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_weight_loss), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.ctb_no), App.HORIZONTAL, App.VERTICAL, true);
+        nightSweats = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_night_sweats), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.ctb_no), App.HORIZONTAL, App.VERTICAL, true);
+        weightLoss = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_weight_loss), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.ctb_no), App.HORIZONTAL, App.VERTICAL, true);
         appeptite = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_child_appetite), getResources().getStringArray(R.array.ctb_appetite_list), getResources().getString(R.string.ctb_ok), App.HORIZONTAL, App.VERTICAL, true);
-        lymphnode_swelling = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_lymph_node_swelling), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.ctb_no), App.HORIZONTAL, App.VERTICAL, true);
-        joint_swelling_2weeks = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_joint_spine_swelling), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.ctb_no), App.HORIZONTAL, App.VERTICAL, true);
-        tb_history = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_tb_before), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.ctb_no), App.HORIZONTAL, App.VERTICAL, true);
-        tb_medication = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_tb_medication), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.ctb_no), App.HORIZONTAL, App.VERTICAL, true);
-        contact_tb_history_2years = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_tb_history_2years), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.ctb_no), App.HORIZONTAL, App.VERTICAL, true);
-        close_contact_type = new TitledCheckBoxes(context, null, getResources().getString(R.string.ctb_close_contact_type), getResources().getStringArray(R.array.ctb_close_contact_type_list), null, App.VERTICAL, App.VERTICAL);
-        other_contact_type = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_contact), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        presumptive_tb = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_presumptive_tb), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, true);
+        lymphnodeSwelling = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_lymph_node_swelling), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.ctb_no), App.HORIZONTAL, App.VERTICAL, true);
+        jointSwellingTwoWeeks = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_joint_spine_swelling), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.ctb_no), App.HORIZONTAL, App.VERTICAL, true);
+        tbHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_tb_before), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.ctb_no), App.HORIZONTAL, App.VERTICAL, true);
+        tbMedication = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_tb_medication), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.ctb_no), App.HORIZONTAL, App.VERTICAL, true);
+        contactTbHistoryTwoYears = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_tb_history_2years), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.ctb_no), App.HORIZONTAL, App.VERTICAL, true);
+        closeContactType = new TitledCheckBoxes(context, null, getResources().getString(R.string.ctb_close_contact_type), getResources().getStringArray(R.array.ctb_close_contact_type_list), null, App.VERTICAL, App.VERTICAL);
+        otherContactType = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_contact), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        presumptiveTb = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_presumptive_tb), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, true);
 
 
-        views = new View[]{formDate.getButton(), screeningLocation.getRadioGroup(), hospital.getSpinner(), facility_section.getSpinner(), facility_section_other.getEditText(), opd_ward_section.getSpinner(), mother_name.getEditText(), father_name.getEditText(), patient_attendant.getRadioGroup(),
-                cough.getRadioGroup(), cough_duration.getSpinner(), fever.getRadioGroup(), night_sweats.getRadioGroup(), weight_loss.getRadioGroup(), appeptite.getRadioGroup(),
-                lymphnode_swelling.getRadioGroup(), joint_swelling_2weeks.getRadioGroup(), tb_history.getRadioGroup(), tb_medication.getRadioGroup(), contact_tb_history_2years.getRadioGroup(),
-                close_contact_type, other_contact_type.getEditText(), presumptive_tb.getRadioGroup()};
+        views = new View[]{formDate.getButton(), screeningLocation.getRadioGroup(), hospital.getSpinner(), facility_section.getSpinner(), facility_section_other.getEditText(), opd_ward_section.getSpinner(), motherName.getEditText(), fatherName.getEditText(), patientAttendant.getRadioGroup(),
+                cough.getRadioGroup(), coughDuration.getSpinner(), fever.getRadioGroup(), nightSweats.getRadioGroup(), weightLoss.getRadioGroup(), appeptite.getRadioGroup(),
+                lymphnodeSwelling.getRadioGroup(), jointSwellingTwoWeeks.getRadioGroup(), tbHistory.getRadioGroup(), tbMedication.getRadioGroup(), contactTbHistoryTwoYears.getRadioGroup(),
+                closeContactType, otherContactType.getEditText(), presumptiveTb.getRadioGroup()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, screeningLocation, hospital, facility_section, facility_section_other, opd_ward_section, mother_name, father_name,
-                        patient_attendant, cough, cough_duration, fever, night_sweats, weight_loss, appeptite, lymphnode_swelling, joint_swelling_2weeks, tb_history,
-                        tb_medication, contact_tb_history_2years, close_contact_type, other_contact_type, presumptive_tb}};
+                {{formDate, screeningLocation, hospital, facility_section, facility_section_other, opd_ward_section, motherName, fatherName,
+                        patientAttendant, cough, coughDuration, fever, nightSweats, weightLoss, appeptite, lymphnodeSwelling, jointSwellingTwoWeeks, tbHistory,
+                        tbMedication, contactTbHistoryTwoYears, closeContactType, otherContactType, presumptiveTb}};
 
         formDate.getButton().setOnClickListener(this);
         screeningLocation.getRadioGroup().setOnCheckedChangeListener(this);
         hospital.getSpinner().setOnItemSelectedListener(this);
         facility_section.getSpinner().setOnItemSelectedListener(this);
         opd_ward_section.getSpinner().setOnItemSelectedListener(this);
-        patient_attendant.getRadioGroup().setOnCheckedChangeListener(this);
+        patientAttendant.getRadioGroup().setOnCheckedChangeListener(this);
         cough.getRadioGroup().setOnCheckedChangeListener(this);
-        cough_duration.getSpinner().setOnItemSelectedListener(this);
+        coughDuration.getSpinner().setOnItemSelectedListener(this);
         fever.getRadioGroup().setOnCheckedChangeListener(this);
-        night_sweats.getRadioGroup().setOnCheckedChangeListener(this);
-        weight_loss.getRadioGroup().setOnCheckedChangeListener(this);
+        nightSweats.getRadioGroup().setOnCheckedChangeListener(this);
+        weightLoss.getRadioGroup().setOnCheckedChangeListener(this);
         appeptite.getRadioGroup().setOnCheckedChangeListener(this);
-        lymphnode_swelling.getRadioGroup().setOnCheckedChangeListener(this);
-        joint_swelling_2weeks.getRadioGroup().setOnCheckedChangeListener(this);
-        tb_history.getRadioGroup().setOnCheckedChangeListener(this);
-        tb_medication.getRadioGroup().setOnCheckedChangeListener(this);
-        contact_tb_history_2years.getRadioGroup().setOnCheckedChangeListener(this);
-        presumptive_tb.getRadioGroup().setOnCheckedChangeListener(this);
+        lymphnodeSwelling.getRadioGroup().setOnCheckedChangeListener(this);
+        jointSwellingTwoWeeks.getRadioGroup().setOnCheckedChangeListener(this);
+        tbHistory.getRadioGroup().setOnCheckedChangeListener(this);
+        tbMedication.getRadioGroup().setOnCheckedChangeListener(this);
+        contactTbHistoryTwoYears.getRadioGroup().setOnCheckedChangeListener(this);
+        presumptiveTb.getRadioGroup().setOnCheckedChangeListener(this);
 
-        ArrayList<MyCheckBox> checkBoxList = close_contact_type.getCheckedBoxes();
-        for (CheckBox cb : close_contact_type.getCheckedBoxes())
+        ArrayList<MyCheckBox> checkBoxList = closeContactType.getCheckedBoxes();
+        for (CheckBox cb : closeContactType.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
 
         resetViews();
@@ -217,16 +218,19 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
         if (snackbar != null)
             snackbar.dismiss();
 
-        if (!formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString())) {
+        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
 
-            Date date = App.stringToDate(formDate.getButton().getText().toString(), "dd-MMM-yyyy");
+            String formDa = formDate.getButton().getText().toString();
 
-            if (formDateCalendar.after(date)) {
+            Date date = new Date();
+            if (formDateCalendar.after(App.getCalendar(date))) {
 
-                formDateCalendar = App.getCalendar(date);
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
+
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
             } else
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
@@ -239,22 +243,50 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
     @Override
     public boolean validate() {
         boolean error = false;
-        if(App.get(screeningLocation).isEmpty()){
+        View view = null;
+        Boolean flag = false;
+        if (otherContactType.getVisibility() == View.VISIBLE && App.get(otherContactType).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            screeningLocation.getRadioGroup().getButtons().get(1).setError(getString(R.string.empty_field));
-            screeningLocation.getRadioGroup().requestFocus();
+            otherContactType.getEditText().setError(getString(R.string.empty_field));
+            otherContactType.getEditText().requestFocus();
+            error = true;
+            view = null;
+        }
+        if(closeContactType.getVisibility()==View.VISIBLE){
+            for (CheckBox cb : closeContactType.getCheckedBoxes()) {
+                if (cb.isChecked()) {
+                    flag = true;
+                    break;
+                }
+            }
+        }
+        if (!flag && closeContactType.getVisibility()==View.VISIBLE) {
+            closeContactType.getQuestionView().setError(getString(R.string.empty_field));
+            view = closeContactType;
             error = true;
         }
-        if (other_contact_type.getVisibility() == View.VISIBLE && App.get(other_contact_type).isEmpty()) {
+        flag = false;
+        if(App.get(fatherName).isEmpty()){
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            other_contact_type.getEditText().setError(getString(R.string.empty_field));
-            other_contact_type.getEditText().requestFocus();
+            fatherName.getEditText().setError(getString(R.string.empty_field));
+            fatherName.getEditText().requestFocus();
+            error = true;
+            view = null;
+        }
+        if(App.get(motherName).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            motherName.getEditText().setError(getString(R.string.empty_field));
+            motherName.getEditText().requestFocus();
+            view = null;
             error = true;
         }
         if (facility_section_other.getVisibility() == View.VISIBLE && App.get(facility_section_other).isEmpty()) {
@@ -265,20 +297,34 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
             facility_section_other.getEditText().setError(getString(R.string.empty_field));
             facility_section_other.getEditText().requestFocus();
             error = true;
+            view = null;
         }
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
-            alertDialog.setMessage(getString(R.string.form_error));
+
+                alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_error));
+            final View finalView = view;
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
+                            scrollView.post(new Runnable() {
+                                public void run() {
+                                    if (finalView != null) {
+                                        scrollView.scrollTo(0, finalView.getTop());
+                                        otherContactType.clearFocus();
+                                        facility_section_other.clearFocus();
+                                        motherName.clearFocus();
+                                        fatherName.clearFocus();
+                                    }
+                                }
+                            });
                             try {
                                 InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
@@ -297,15 +343,28 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
 
     @Override
     public boolean submit() {
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            String encounterId = bundle.getString("formId");
+            if (saveFlag) {
+                serverService.deleteOfflineForms(encounterId);
+            }
+            bundle.putBoolean("save", false);
+        }
+
+
         endTime = new Date();
 
         final ArrayList<String[]> observations = new ArrayList<String[]>();
         observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
         observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
-        //  observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
-        //observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});
         observations.add(new String[]{"SCREENING LOCATION", App.get(screeningLocation).toUpperCase()});
 
+        if(hospital.getVisibility()==View.VISIBLE){
+            observations.add(new String[]{"HOSPITAL", App.get(hospital)});
+        }
         if (facility_section.getVisibility() == View.VISIBLE){
             observations.add(new String[]{"HOSPITAL SECTION", App.get(facility_section).equals(getResources().getString(R.string.ctb_opd_clinic)) ? "OPD CLINIC SCREENING" :
                     (App.get(facility_section).equals(getResources().getString(R.string.ctb_ward)) ? "WARD SCREENING" :
@@ -320,59 +379,63 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
             observations.add(new String[]{"OUTPATIENT DEPARTMENT", App.get(opd_ward_section).equals(getResources().getString(R.string.ctb_general_medicine_filter_clinic)) ? "GENERAL MEDICINE DEPARTMENT" :
                     (App.get(opd_ward_section).equals(getResources().getString(R.string.ctb_chest_tb_clinic_screening)) ? "CHEST MEDICINE DEPARTMENT" :
                             (App.get(opd_ward_section).equals(getResources().getString(R.string.ctb_paediatrics)) ? "PEDIATRIC SURGERY DEPARTMENT" :
-                                    (App.get(opd_ward_section).equals(getResources().getString(R.string.ctb_gynae_obstetrics)) ? "OBSTETRICS AND GYNECOLOGY DEPARTMENT" : "EMERGENCY DEPARTMENT")))});
-                                  //  (App.get(opd_ward_section).equals(getResources().getString(R.string.ctb_er)) ? "EMERGENCY DEPARTMENT": "")))
+                                    (App.get(opd_ward_section).equals(getResources().getString(R.string.ctb_gynae_obstetrics)) ? "OBSTETRICS AND GYNECOLOGY DEPARTMENT" :
+                                            (App.get(opd_ward_section).equals(getResources().getString(R.string.ctb_er)) ? "EMERGENCY DEPARTMENT": "SURGICAL PROCEDURE"))))});
+        final String fatherNameString = App.get(fatherName);
+        observations.add(new String[]{"FATHER NAME", fatherNameString});
+        final String motherNameString = App.get(motherName);
+        observations.add(new String[]{"MOTHER NAME", motherNameString});
 
-        observations.add(new String[]{"PERSON ATTENDING FACILITY", App.get(patient_attendant).equals(getResources().getString(R.string.ctb_patient)) ? "SELF" : "ATTENDANT" });
+        observations.add(new String[]{"PERSON ATTENDING FACILITY", App.get(patientAttendant).equals(getResources().getString(R.string.ctb_patient)) ? "SELF" : "ATTENDANT" });
         observations.add(new String[]{"COUGH", App.get(cough).equals(getResources().getString(R.string.yes)) ? "YES" :
                 (App.get(cough).equals(getResources().getString(R.string.no)) ? "NO" :
                         (App.get(cough).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
-        if (cough_duration.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"COUGH DURATION", App.get(cough_duration).equals(getResources().getString(R.string.ctb_less_than_2_weeks)) ? "COUGH LASTING LESS THAN 2 WEEKS (163739)" :
-                    (App.get(cough_duration).equals(getResources().getString(R.string.ctb_2_to_3_weeks)) ? "COUGH LASTING MORE THAN 2 WEEKS" :
-                            (App.get(cough_duration).equals(getResources().getString(R.string.ctb_more_than_3_weeks)) ? "COUGH LASTING MORE THAN 3 WEEKS" :
-                                    (App.get(cough_duration).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSED")))});
+        if (coughDuration.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"COUGH DURATION", App.get(coughDuration).equals(getResources().getString(R.string.ctb_less_than_2_weeks)) ? "COUGH LASTING LESS THAN 2 WEEKS" :
+                    (App.get(coughDuration).equals(getResources().getString(R.string.ctb_2_to_3_weeks)) ? "COUGH LASTING MORE THAN 2 WEEKS" :
+                            (App.get(coughDuration).equals(getResources().getString(R.string.ctb_more_than_3_weeks)) ? "COUGH LASTING MORE THAN 3 WEEKS" :
+                                    (App.get(coughDuration).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSED")))});
 
         observations.add(new String[]{"FEVER", App.get(fever).equals(getResources().getString(R.string.yes)) ? "YES" :
                 (App.get(fever).equals(getResources().getString(R.string.no)) ? "NO" :
                         (App.get(fever).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
 
-        observations.add(new String[]{"NIGHT SWEATS", App.get(night_sweats).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(night_sweats).equals(getResources().getString(R.string.no)) ? "NO" :
-                        (App.get(night_sweats).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+        observations.add(new String[]{"NIGHT SWEATS", App.get(nightSweats).equals(getResources().getString(R.string.yes)) ? "YES" :
+                (App.get(nightSweats).equals(getResources().getString(R.string.no)) ? "NO" :
+                        (App.get(nightSweats).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
 
-        observations.add(new String[]{"WEIGHT LOSS", App.get(weight_loss).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(weight_loss).equals(getResources().getString(R.string.no)) ? "NO" :
-                        (App.get(weight_loss).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+        observations.add(new String[]{"WEIGHT LOSS", App.get(weightLoss).equals(getResources().getString(R.string.yes)) ? "YES" :
+                (App.get(weightLoss).equals(getResources().getString(R.string.no)) ? "NO" :
+                        (App.get(weightLoss).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
 
         observations.add(new String[]{"APPETITE", App.get(appeptite).equals(getResources().getString(R.string.ctb_poor)) ? "POOR APPETITE" :
                 (App.get(appeptite).equals(getResources().getString(R.string.ctb_ok)) ? "OK" :
                         (App.get(appeptite).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
 
-        observations.add(new String[]{"LYMPH NODE SWELLING GREATER THAN 2 WEEKS", App.get(lymphnode_swelling).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(lymphnode_swelling).equals(getResources().getString(R.string.no)) ? "NO" :
-                        (App.get(lymphnode_swelling).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+        observations.add(new String[]{"LYMPH NODE SWELLING GREATER THAN 2 WEEKS", App.get(lymphnodeSwelling).equals(getResources().getString(R.string.yes)) ? "YES" :
+                (App.get(lymphnodeSwelling).equals(getResources().getString(R.string.no)) ? "NO" :
+                        (App.get(lymphnodeSwelling).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
 
-        observations.add(new String[]{"JOINT OR SPINE SWELLING GREATER THAN 2 WEEKS", App.get(joint_swelling_2weeks).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(joint_swelling_2weeks).equals(getResources().getString(R.string.no)) ? "NO" :
-                        (App.get(joint_swelling_2weeks).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+        observations.add(new String[]{"JOINT OR SPINE SWELLING GREATER THAN 2 WEEKS", App.get(jointSwellingTwoWeeks).equals(getResources().getString(R.string.yes)) ? "YES" :
+                (App.get(jointSwellingTwoWeeks).equals(getResources().getString(R.string.no)) ? "NO" :
+                        (App.get(jointSwellingTwoWeeks).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
 
-        observations.add(new String[]{"HISTORY OF TUBERCULOSIS", App.get(tb_history).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(tb_history).equals(getResources().getString(R.string.no)) ? "NO" :
-                        (App.get(tb_history).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+        observations.add(new String[]{"HISTORY OF TUBERCULOSIS", App.get(tbHistory).equals(getResources().getString(R.string.yes)) ? "YES" :
+                (App.get(tbHistory).equals(getResources().getString(R.string.no)) ? "NO" :
+                        (App.get(tbHistory).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
 
-        if(tb_medication.getVisibility()==View.VISIBLE) {
-            observations.add(new String[]{"PATIENT TAKEN TB MEDICATION BEFORE", App.get(tb_medication).equals(getResources().getString(R.string.yes)) ? "YES" :
-                    (App.get(tb_medication).equals(getResources().getString(R.string.no)) ? "NO" :
-                            (App.get(tb_medication).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+        if(tbMedication.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"PATIENT TAKEN TB MEDICATION BEFORE", App.get(tbMedication).equals(getResources().getString(R.string.yes)) ? "YES" :
+                    (App.get(tbMedication).equals(getResources().getString(R.string.no)) ? "NO" :
+                            (App.get(tbMedication).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
 
         }
-        observations.add(new String[]{"PATIENT IS CONTACT OF KNOWN OR SUSPECTED SUSPICIOUS CASE IN PAST 2 YEARS", App.get(contact_tb_history_2years).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(contact_tb_history_2years).equals(getResources().getString(R.string.no)) ? "NO" :
-                        (App.get(contact_tb_history_2years).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+        observations.add(new String[]{"PATIENT IS CONTACT OF KNOWN OR SUSPECTED SUSPICIOUS CASE IN PAST 2 YEARS", App.get(contactTbHistoryTwoYears).equals(getResources().getString(R.string.yes)) ? "YES" :
+                (App.get(contactTbHistoryTwoYears).equals(getResources().getString(R.string.no)) ? "NO" :
+                        (App.get(contactTbHistoryTwoYears).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
 
         String closeContactString = "";
-        for (CheckBox cb : close_contact_type.getCheckedBoxes()) {
+        for (CheckBox cb : closeContactType.getCheckedBoxes()) {
             if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_mother)))
                 closeContactString = closeContactString + "MOTHER" + " ; ";
             else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_father)))
@@ -394,11 +457,11 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
         }
         observations.add(new String[]{"CLOSE CONTACT WITH PATIENT", closeContactString});
 
-        if (other_contact_type.getVisibility() == View.VISIBLE){
-            observations.add(new String[]{"OTHER CONTACT TYPE", App.get(other_contact_type)});
+        if (otherContactType.getVisibility() == View.VISIBLE){
+            observations.add(new String[]{"OTHER CONTACT TYPE", App.get(otherContactType)});
         }
 
-        observations.add(new String[]{"PRESUMPTIVE TUBERCULOSIS", App.get(presumptive_tb).toUpperCase()});
+        observations.add(new String[]{"PRESUMPTIVE TUBERCULOSIS", App.get(presumptiveTb).toUpperCase()});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -415,11 +478,30 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                 });
 
                 String result = serverService.saveEncounterAndObservation("Verbal Screening", FORM, formDateCalendar, observations.toArray(new String[][]{}));
-                if (result.contains("SUCCESS"))
-                    return "SUCCESS";
+                if (!result.contains("SUCCESS"))
+                    return result;
+                else {
 
-                return result;
+                    String encounterId = "";
 
+                    if (result.contains("_")) {
+                        String[] successArray = result.split("_");
+                        encounterId = successArray[1];
+                    }
+
+
+                    //String[][] concept = serverService.getConceptUuidAndDataType(fatherNameString);
+                    result = serverService.savePersonAttributeType("Guardian Name", fatherNameString, encounterId);
+                    if (!result.equals("SUCCESS"))
+                        return result;
+
+                    //concept = serverService.getConceptUuidAndDataType(motherNameString);
+                    result = serverService.savePersonAttributeType("Mother Name", motherNameString, encounterId);
+                    if (!result.equals("SUCCESS"))
+                        return result;
+
+                }
+                return "SUCCESS";
             }
 
             @Override
@@ -515,8 +597,280 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
     }
 
     @Override
-    public void refill(int encounterId) {
+    public void refill(int formId) {
 
+        OfflineForm fo = serverService.getOfflineFormById(formId);
+        String date = fo.getFormDate();
+        ArrayList<String[][]> obsValue = fo.getObsValue();
+        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        for (int i = 0; i < obsValue.size(); i++) {
+
+            String[][] obs = obsValue.get(i);
+
+            if (obs[0][0].equals("SCREENING LOCATION")) {
+                for (RadioButton rb : screeningLocation.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_hospital)) && obs[0][1].equals("HOSPITAL")) {
+                        rb.setChecked(true);
+                        hospital.setVisibility(View.VISIBLE);
+                        facility_section.setVisibility(View.VISIBLE);
+                        opd_ward_section.setVisibility(View.VISIBLE);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_community)) && obs[0][1].equals("COMMUNITY")) {
+                        rb.setChecked(true);
+                        hospital.setVisibility(View.GONE);
+                        facility_section.setVisibility(View.GONE);
+                        opd_ward_section.setVisibility(View.GONE);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("HOSPITAL")) {
+                String value = obs[0][1].equals("Jinnah Hospital") ? getResources().getString(R.string.ctb_jinnah_hospital) : "Indus Hospital";
+                hospital.getSpinner().selectValue(value);
+
+            } else if (obs[0][0].equals("HOSPITAL SECTION")) {
+                String value = obs[0][1].equals("OPD CLINIC SCREENING") ? getResources().getString(R.string.ctb_opd_clinic) :
+                        (obs[0][1].equals("WARD SCREENING") ? getResources().getString(R.string.ctb_ward) :
+                                (obs[0][1].equals("REGISTRATION DESK") ? getResources().getString(R.string.ctb_registration_desk) :
+                                        (obs[0][1].equals("X-RAY VAN") ? getResources().getString(R.string.ctb_xray_van) :
+                                                getResources().getString(R.string.ctb_other_title))));
+                if (value == getResources().getString(R.string.ctb_other_title))
+                    facility_section_other.setVisibility(View.VISIBLE);
+                facility_section.getSpinner().selectValue(value);
+            } else if (obs[0][0].equals("OTHER FACILITY SECTION")) {
+                facility_section_other.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("OUTPATIENT DEPARTMENT")) {
+                String value = obs[0][1].equals("GENERAL MEDICINE DEPARTMENT") ? getResources().getString(R.string.ctb_general_medicine_filter_clinic) :
+                        (obs[0][1].equals("CHEST MEDICINE DEPARTMENT") ? getResources().getString(R.string.ctb_chest_tb_clinic_screening) :
+                                (obs[0][1].equals("PEDIATRIC SURGERY DEPARTMENT") ? getResources().getString(R.string.ctb_paediatrics) :
+                                        (obs[0][1].equals("OBSTETRICS AND GYNECOLOGY DEPARTMENT") ? getResources().getString(R.string.ctb_gynae_obstetrics) :
+                                                (obs[0][1].equals("EMERGENCY DEPARTMENT") ? getResources().getString(R.string.ctb_er) :
+                                                        getResources().getString(R.string.ctb_surgery)))));
+                opd_ward_section.getSpinner().selectValue(value);
+            } else if (obs[0][0].equals("FATHER NAME")) {
+                fatherName.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("MOTHER NAME")) {
+                motherName.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("COUGH")) {
+                for (RadioButton rb : cough.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        coughDuration.setVisibility(View.VISIBLE);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_refused)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("COUGH DURATION")) {
+                String value = obs[0][1].equals("COUGH LASTING LESS THAN 2 WEEKS") ? getResources().getString(R.string.ctb_less_than_2_weeks) :
+                        (obs[0][1].equals("COUGH LASTING MORE THAN 2 WEEKS") ? getResources().getString(R.string.ctb_2_to_3_weeks) :
+                                (obs[0][1].equals("COUGH LASTING MORE THAN 3 WEEKS") ? getResources().getString(R.string.ctb_more_than_3_weeks) :
+                                        (obs[0][1].equals("UNKNOWN") ? getResources().getString(R.string.unknown) :
+                                                getResources().getString(R.string.ctb_refused))));
+                coughDuration.getSpinner().selectValue(value);
+            } else if (obs[0][0].equals("FEVER")) {
+                for (RadioButton rb : fever.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_refused)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("NIGHT SWEATS")) {
+                for (RadioButton rb : nightSweats.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_refused)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("WEIGHT LOSS")) {
+                for (RadioButton rb : weightLoss.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_refused)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("APPETITE")) {
+                for (RadioButton rb : appeptite.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_poor)) && obs[0][1].equals("POOR APPETITE")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_ok)) && obs[0][1].equals("OK")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_refused)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("LYMPH NODE SWELLING GREATER THAN 2 WEEKS")) {
+                for (RadioButton rb : lymphnodeSwelling.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_refused)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("JOINT OR SPINE SWELLING GREATER THAN 2 WEEKS")) {
+                for (RadioButton rb : jointSwellingTwoWeeks.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_refused)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("HISTORY OF TUBERCULOSIS")) {
+                for (RadioButton rb : tbHistory.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        tbMedication.setVisibility(View.VISIBLE);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_refused)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("PATIENT TAKEN TB MEDICATION BEFORE")) {
+                for (RadioButton rb : tbMedication.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_refused)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("PATIENT IS CONTACT OF KNOWN OR SUSPECTED SUSPICIOUS CASE IN PAST 2 YEARS")) {
+                for (RadioButton rb : contactTbHistoryTwoYears.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        closeContactType.setVisibility(View.VISIBLE);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_refused)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("CLOSE CONTACT WITH PATIENT")) {
+                for (CheckBox cb : closeContactType.getCheckedBoxes()) {
+                    if (cb.getText().equals(getResources().getString(R.string.ctb_mother)) && obs[0][1].equals("MOTHER")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.ctb_father)) && obs[0][1].equals("FATHER")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.ctb_brother)) && obs[0][1].equals("BROTHER")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.ctb_sister)) && obs[0][1].equals("SISTER")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.ctb_paternal_grandfather)) && obs[0][1].equals("PATERNAL GRANDFATHER")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.ctb_paternal_grandmother)) && obs[0][1].equals("PATERNAL GRANDMOTHER")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.ctb_maternal_grandfather)) && obs[0][1].equals("MATERNAL GRANDFATHER")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.ctb_maternal_grandmother)) && obs[0][1].equals("MATERNAL GRANDMOTHER")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.ctb_other_title)) && obs[0][1].equals("OTHER CONTACT TYPE")) {
+                        cb.setChecked(true);
+                        otherContactType.setVisibility(View.VISIBLE);
+                        break;
+                    }
+                }
+            }
+            else if (obs[0][0].equals("OTHER CONTACT TYPE")) {
+                otherContactType.getEditText().setText(obs[0][1]);
+            }
+            else if(obs[0][0].equals("PRESUMPTIVE TUBERCULOSIS")) {
+                for (RadioButton rb : presumptiveTb.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            }
+
+        }
     }
 
     @Override
@@ -560,10 +914,10 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        for (CheckBox cb : close_contact_type.getCheckedBoxes()) {
+        for (CheckBox cb : closeContactType.getCheckedBoxes()) {
             if (App.get(cb).equals(getResources().getString(R.string.ctb_mother))) {
                 if (cb.isChecked()) {
-                    for (RadioButton rb : presumptive_tb.getRadioGroup().getButtons()) {
+                    for (RadioButton rb : presumptiveTb.getRadioGroup().getButtons()) {
                         String str = rb.getText().toString();
                         if (str.equals(getResources().getString(R.string.yes)))
                             rb.setChecked(true);
@@ -574,9 +928,9 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
             }
             if (App.get(cb).equals(getResources().getString(R.string.ctb_other_title))) {
                 if (cb.isChecked()) {
-                    other_contact_type.setVisibility(View.VISIBLE);
+                    otherContactType.setVisibility(View.VISIBLE);
                 } else {
-                    other_contact_type.setVisibility(View.GONE);
+                    otherContactType.setVisibility(View.GONE);
                 }
             }
 
@@ -591,14 +945,28 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
             snackbar.dismiss();
 
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        hospital.setVisibility(View.GONE);
-        facility_section.setVisibility(View.GONE);
         facility_section_other.setVisibility(View.GONE);
         opd_ward_section.setVisibility(View.GONE);
-        cough_duration.setVisibility(View.GONE);
-        tb_medication.setVisibility(View.GONE);
-        close_contact_type.setVisibility(View.GONE);
-        other_contact_type.setVisibility(View.GONE);
+        coughDuration.setVisibility(View.GONE);
+        tbMedication.setVisibility(View.GONE);
+        closeContactType.setVisibility(View.GONE);
+        otherContactType.setVisibility(View.GONE);
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean openFlag = bundle.getBoolean("open");
+            if (openFlag) {
+
+                bundle.putBoolean("open", false);
+                bundle.putBoolean("save", true);
+
+                String id = bundle.getString("formId");
+                int formId = Integer.valueOf(id);
+
+                refill(formId);
+
+            } else bundle.putBoolean("save", false);
+
+        }
     }
 
 
@@ -609,18 +977,19 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                 hospital.setVisibility(View.VISIBLE);
                 facility_section.setVisibility(View.VISIBLE);
             } else {
+                opd_ward_section.setVisibility(View.GONE);
                 hospital.setVisibility(View.GONE);
                 facility_section.setVisibility(View.GONE);
             }
         } else if (group == cough.getRadioGroup()) {
             if (cough.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
-                cough_duration.setVisibility(View.VISIBLE);
+                coughDuration.setVisibility(View.VISIBLE);
             } else {
-                cough_duration.setVisibility(View.GONE);
+                coughDuration.setVisibility(View.GONE);
             }
-        } else if (group == lymphnode_swelling.getRadioGroup()) {
-            if (App.get(lymphnode_swelling).equals(getResources().getString(R.string.yes))) {
-                for (RadioButton rb : presumptive_tb.getRadioGroup().getButtons()) {
+        } else if (group == lymphnodeSwelling.getRadioGroup()) {
+            if (App.get(lymphnodeSwelling).equals(getResources().getString(R.string.yes))) {
+                for (RadioButton rb : presumptiveTb.getRadioGroup().getButtons()) {
                     String str = rb.getText().toString();
                     if (str.equals(getResources().getString(R.string.yes)))
                         rb.setChecked(true);
@@ -628,9 +997,9 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                         rb.setChecked(false);
                 }
             }
-        } else if (group == joint_swelling_2weeks.getRadioGroup()) {
-            if (App.get(joint_swelling_2weeks).equals(getResources().getString(R.string.yes))) {
-                for (RadioButton rb : presumptive_tb.getRadioGroup().getButtons()) {
+        } else if (group == jointSwellingTwoWeeks.getRadioGroup()) {
+            if (App.get(jointSwellingTwoWeeks).equals(getResources().getString(R.string.yes))) {
+                for (RadioButton rb : presumptiveTb.getRadioGroup().getButtons()) {
                     String str = rb.getText().toString();
                     if (str.equals(getResources().getString(R.string.yes)))
                         rb.setChecked(true);
@@ -638,17 +1007,17 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                         rb.setChecked(false);
                 }
             }
-        } else if (group == tb_history.getRadioGroup()) {
-            if (App.get(tb_history).equals(getResources().getString(R.string.yes))) {
-                tb_medication.setVisibility(View.VISIBLE);
+        } else if (group == tbHistory.getRadioGroup()) {
+            if (App.get(tbHistory).equals(getResources().getString(R.string.yes))) {
+                tbMedication.setVisibility(View.VISIBLE);
             } else {
-                tb_medication.setVisibility(View.GONE);
+                tbMedication.setVisibility(View.GONE);
             }
-        } else if (group == contact_tb_history_2years.getRadioGroup()) {
-            if (App.get(contact_tb_history_2years).equals(getResources().getString(R.string.yes))) {
-                close_contact_type.setVisibility(View.VISIBLE);
+        } else if (group == contactTbHistoryTwoYears.getRadioGroup()) {
+            if (App.get(contactTbHistoryTwoYears).equals(getResources().getString(R.string.yes))) {
+                closeContactType.setVisibility(View.VISIBLE);
             } else {
-                close_contact_type.setVisibility(View.GONE);
+                closeContactType.setVisibility(View.GONE);
             }
         }
 

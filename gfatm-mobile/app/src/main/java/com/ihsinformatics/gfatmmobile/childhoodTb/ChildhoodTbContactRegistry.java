@@ -31,6 +31,7 @@ import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
@@ -303,8 +304,17 @@ public class ChildhoodTbContactRegistry extends AbstractFormActivity implements 
 
     @Override
     public boolean submit() {
-        endTime = new Date();
 
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            String encounterId = bundle.getString("formId");
+            if (saveFlag) {
+                serverService.deleteOfflineForms(encounterId);
+            }
+            bundle.putBoolean("save", false);
+        }
+        endTime = new Date();
         final ArrayList<String[]> observations = new ArrayList<String[]>();
         observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
         observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
@@ -329,6 +339,9 @@ public class ChildhoodTbContactRegistry extends AbstractFormActivity implements 
                 });
 
                 String result = serverService.saveEncounterAndObservation("Contact Registry", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                if (result.contains("SUCCESS"))
+                    return "SUCCESS";
+
                 return result;
             }
 
@@ -428,8 +441,28 @@ public class ChildhoodTbContactRegistry extends AbstractFormActivity implements 
     }
 
     @Override
-    public void refill(int encounterId) {
+    public void refill(int formId) {
+        OfflineForm fo = serverService.getOfflineFormById(formId);
+        String date = fo.getFormDate();
+        ArrayList<String[][]> obsValue = fo.getObsValue();
+        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
+        for (int i = 0; i < obsValue.size(); i++) {
+
+            String[][] obs = obsValue.get(i);
+            if (obs[0][0].equals("FORM START TIME")) {
+                startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
+            } else if (obs[0][0].equals("NUMBER OF CONTACTS")) {
+                contacts.getEditText().setText(obs[0][1]);
+            }
+            else if (obs[0][0].equals("NUMBER OF ADULT CONTACTS")) {
+                adultContacts.getEditText().setText(obs[0][1]);
+            }
+            else if (obs[0][0].equals("NUMBER OF CHILDHOOD CONTACTS")) {
+                childhoodContacts.getEditText().setText(obs[0][1]);
+            }
+        }
     }
 
     @Override
@@ -472,7 +505,22 @@ public class ChildhoodTbContactRegistry extends AbstractFormActivity implements 
             snackbar.dismiss();
 
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean openFlag = bundle.getBoolean("open");
+            if (openFlag) {
 
+                bundle.putBoolean("open", false);
+                bundle.putBoolean("save", true);
+
+                String id = bundle.getString("formId");
+                int formId = Integer.valueOf(id);
+
+                refill(formId);
+
+            } else bundle.putBoolean("save", false);
+
+        }
     }
 
 
