@@ -2,6 +2,7 @@ package com.ihsinformatics.gfatmmobile.custom;
 
 import android.content.Context;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.App;
@@ -71,6 +72,14 @@ public class TitledRadioGroup extends LinearLayout {
         }
 
         addView(linearLayout);
+    }
+
+    public void setRadioGroupEnabled(Boolean flag) {
+
+        for (RadioButton rg : radioGroup.getButtons()) {
+            rg.setClickable(flag);
+        }
+
     }
 
     public MyTextView getQuestionView() {

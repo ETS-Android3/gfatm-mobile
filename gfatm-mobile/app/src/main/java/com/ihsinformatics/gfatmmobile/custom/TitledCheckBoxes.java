@@ -20,7 +20,6 @@ public class TitledCheckBoxes extends LinearLayout {
     Boolean[] defaultValues;
     Boolean mandatory = false;
 
-
     public TitledCheckBoxes(Context context, String title, String ques, String[] options, Boolean[] defaultValues, int radioButtonsLayout, int layoutOrientation) {
         super(context);
 
@@ -94,6 +93,13 @@ public class TitledCheckBoxes extends LinearLayout {
         addView(linearLayout);
     }
 
+    public void setCheckedBoxesEnabled(Boolean flag) {
+
+        for (MyCheckBox cb : checkedBoxes) {
+            cb.setClickable(flag);
+        }
+
+    }
 
     public MyTextView getQuestionView() {
         return questionView;
