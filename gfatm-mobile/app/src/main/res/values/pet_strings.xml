@@ -188,7 +188,7 @@
     <string name="pet_phone_2">Phone Number 2</string>
     <string name="pet_address_1">Address 1 (House Number, etc.)</string>
     <string name="pet_address_2">Address 2 (Block, Street, Sector, Colony, etc.)</string>
-    <string name="pet_town">Town</string>
+    <string name="pet_district">District</string>
     <string name="pet_city">City</string>
     <string name="pet_address_type">What type of Address is this?</string>
     <string name="pet_permanent">Permanent</string>
@@ -920,5 +920,8 @@
         <item>@string/pet_transfered_out_to_other_site</item>
         <item>@string/pet_index_refused_treatment</item>
         <item>@string/pet_other</item>
+    </string-array>
+
+    <string-array name="pet_empty_array">
     </string-array>
 </resources>
