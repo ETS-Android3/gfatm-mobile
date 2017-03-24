@@ -32,4 +32,10 @@ public class Metadata {
     public static final String PERSON_ATTRIBUTE = "Person Attribute";
     public static final String PATIENT_IDENTIFIER = "Patient Identifier";
 
+    public static final String COUNTRY = "country";
+    public static final String PROVINCE = "province";
+    public static final String DISTRICT = "district";
+    public static final String CITY = "city";
+    public static final String ADDRESS_HIERARCHY = "address_hierarchy";
+
 }
