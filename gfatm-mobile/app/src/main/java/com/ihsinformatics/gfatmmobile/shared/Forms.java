@@ -2,6 +2,7 @@ package com.ihsinformatics.gfatmmobile.shared;
 
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbAFBSmearTest;
+import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbAntibioticFollowup;
 import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbCTScanTest;
 import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbCXRScreeningTest;
 import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbContactRegistry;
@@ -240,6 +241,8 @@ public class Forms{
     public static final FormsObject childhoodTb_missed_visit_followup = new FormsObject(CHILDHOODTB_MISSED_VISIT_FOLLOWUP, ChildhoodTbMissedVisitFollowup.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
     public static final String CHILDHOODTB_REFERRAL = "REFERRAL AND TRANSFER FORM";
     public static final FormsObject childhoodTb_referral_and_transfer_form = new FormsObject(CHILDHOODTB_REFERRAL, ChildhoodTbReferral.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
+    public static final String CHILDHOODTB_ANTIBIOTIC_FOLLOWUP = "ANTIBIOTIC FOLLOWUP FORM";
+    public static final FormsObject childhoodTb_antibiotic_followup_form = new FormsObject(CHILDHOODTB_ANTIBIOTIC_FOLLOWUP, ChildhoodTbAntibioticFollowup.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
     public static FormsObject comorbidities_indexPatientRegistration = new FormsObject(COMORBIDITIES_PATIENT_INFORMATION_FORM, ComorbiditiesPatientInformationForm1.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
     public static FormsObject comorbidities_mentalHealthScreening = new FormsObject(COMORBIDITIES_MENTAL_HEALTH_SCREENING_FORM, ComorbiditiesMentalHealthScreeningForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
     public static FormsObject comorbidities_diabetesMellitusScreening = new FormsObject(COMORBIDITIES_DIABETES_MELLITUS_SCREENING_FORM, ComorbiditiesDiabetesMellitusScreeningForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
@@ -378,9 +381,11 @@ public class Forms{
         childhoodtbList.add(childhoodTb_ct_scan_order_and_result);
         childhoodtbList.add(childhoodTb_mantoux_order_and_result);
         childhoodtbList.add(childhoodTb_histopathology_order_and_result);
+        childhoodtbList.add(childhoodTb_antibiotic_followup_form);
         childhoodtbList.add(childhoodTb_isoniazid_preventive_therapy_followup);
         childhoodtbList.add(childhoodTb_missed_visit_followup);
         childhoodtbList.add(childhoodTb_referral_and_transfer_form);
+
 
         return childhoodtbList;
 
