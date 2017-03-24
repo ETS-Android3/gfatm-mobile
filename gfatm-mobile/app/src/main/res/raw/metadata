@@ -4417,6 +4417,7 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('FEVER LASTING M
 
 INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('METFORMIN',NULL,'79651AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
 
+
 -- Program
 INSERT OR IGNORE INTO program VALUES (1, "86ba1232-d576-416e-b102-5f335c6746ce", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
 INSERT OR IGNORE INTO program VALUES (2, "5d372a38-ae27-4a68-a8d2-bc517a2c9c40", "PET", "Post-Exposure Treatment");
@@ -5181,7 +5182,7 @@ INSERT OR IGNORE INTO city VALUES (248, 'Zafarwal');
 INSERT OR IGNORE INTO city VALUES (249, 'Zhob');
 INSERT OR IGNORE INTO city VALUES (250, 'Sajawal');
 
--- Hirarcchy
+-- Address Hirarcchy
 INSERT OR IGNORE INTO address_hierarchy VALUES (1, 160, 1, 68, 186);
 INSERT OR IGNORE INTO address_hierarchy VALUES (2, 160, 1, 38, 114);
 INSERT OR IGNORE INTO address_hierarchy VALUES (3, 160, 1, 33, 239);
