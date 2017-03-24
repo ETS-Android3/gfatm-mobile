@@ -604,7 +604,7 @@ public class ServerService {
                         values3.put("birthdate", dob);
                         dbUtil.insert(Metadata.PATIENT, values3);
 
-                        getPatient(patientId);
+                        getPatient(patientId, true);
 
                         ContentValues values5 = new ContentValues();
                         values5.put("program", App.getProgram());
@@ -668,7 +668,7 @@ public class ServerService {
 
                     } else {
                         httpPost.savePatientByEntitiy(patient);
-                        getPatient(patientId);
+                        getPatient(patientId, true);
                     }
 
                 } catch (Exception e) {
@@ -696,7 +696,7 @@ public class ServerService {
         return uuid;
     }
 
-    public String getPatient(String patientId) {
+    public String getPatient(String patientId, Boolean select) {
 
         if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
             if (!isURLReachable()) {
@@ -796,8 +796,10 @@ public class ServerService {
                         values.put("country", country);
                         dbUtil.insert(Metadata.PATIENT, values);
 
-                        App.setPatientId(getPatientSystemIdByUuidLocalDB(uuid));
-                        App.setPatient(patient);
+                        if (select) {
+                            App.setPatientId(getPatientSystemIdByUuidLocalDB(uuid));
+                            App.setPatient(patient);
+                        }
 
                         Object[][] encounterTypes = getEncounterTypesFromLocalDBByProgramName(App.getProgram());
 
@@ -807,7 +809,7 @@ public class ServerService {
                                 continue;
 
                             if (String.valueOf(encType[1]).contains("Test Order")) {
-                                JSONArray jsonArray = httpGet.getAllEncountersByPatientAndEncounterType(App.getPatient().getUuid(), String.valueOf(encType[0]));
+                                JSONArray jsonArray = httpGet.getAllEncountersByPatientAndEncounterType(uuid, String.valueOf(encType[0]));
                                 if (jsonArray == null || jsonArray.length() < 1)
                                     continue;
 
@@ -876,11 +878,11 @@ public class ServerService {
                                 }
 
                             } else {
-                                JSONObject jsonObject = httpGet.getLatestEncounter(App.getPatient().getUuid(), String.valueOf(encType[0]));
+                                JSONObject jsonObject = httpGet.getLatestEncounter(uuid, String.valueOf(encType[0]));
                                 if (jsonObject == null)
                                     continue;
                                 com.ihsinformatics.gfatmmobile.model.Encounter encounter = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(jsonObject);
-                                encounter.setPatientId(App.getPatientId());
+                                encounter.setPatientId(getPatientSystemIdByUuidLocalDB(uuid));
 
                                 ContentValues values1 = new ContentValues();
                                 values1.put("uuid", encounter.getUuid());
@@ -911,8 +913,10 @@ public class ServerService {
                             return "OFFLINE_PATIENT";
                     }
 
-                    App.setPatientId(String.valueOf(patient.getPid()));
-                    App.setPatient(patient);
+                    if (select) {
+                        App.setPatientId(String.valueOf(patient.getPid()));
+                        App.setPatient(patient);
+                    }
                 }
 
             } catch (Exception e) {
@@ -2180,7 +2184,70 @@ public class ServerService {
         return "SUCCESS";
     }
 
+    public String[] getCountryList() {
 
+        String[][] result = dbUtil.getTableData(Metadata.COUNTRY, "name", "1 = 1");
+        String[] countryArray = new String[result.length];
+
+        for (int i = 0; i < result.length; i++)
+            countryArray[i] = result[i][0];
+
+        return countryArray;
+
+    }
+
+    public String[] getProvinceList(String country) {
+
+        String[][] result = dbUtil.getTableData(Metadata.COUNTRY, "id", "name = '" + country + "'");
+        String countryId = result[0][0];
+
+        String[][] provinceIds = dbUtil.getTableData(Metadata.ADDRESS_HIERARCHY, "distinct(province_id)", "country_id = " + countryId + "");
+
+        String[] provinceArray = new String[provinceIds.length];
+
+        for (int i = 0; i < provinceIds.length; i++) {
+            String[][] province = dbUtil.getTableData(Metadata.PROVINCE, "name", "id = " + provinceIds[i][0] + "");
+            provinceArray[i] = province[0][0];
+        }
+
+        return provinceArray;
+
+    }
+
+    public String[] getDistrictList(String province) {
+
+        String[][] result = dbUtil.getTableData(Metadata.PROVINCE, "id", "name = '" + province + "'");
+        String provinceId = result[0][0];
+
+        String[][] districtIds = dbUtil.getTableData(Metadata.ADDRESS_HIERARCHY, "distinct(district_id)", "province_id = " + provinceId + "");
+
+        String[] districtArray = new String[districtIds.length];
+
+        for (int i = 0; i < districtIds.length; i++) {
+            String[][] district = dbUtil.getTableData(Metadata.DISTRICT, "name", "id = " + districtIds[i][0] + "");
+            districtArray[i] = district[0][0];
+        }
+
+        return districtArray;
+
+    }
+
+    public String[] getCityList(String district) {
+
+        String[][] result = dbUtil.getTableData(Metadata.DISTRICT, "id", "name = '" + district + "'");
+        String districtId = result[0][0];
+
+        String[][] cityIds = dbUtil.getTableData(Metadata.ADDRESS_HIERARCHY, "distinct(city_id)", "district_id = " + districtId + "");
+
+        String[] cityArray = new String[cityIds.length];
+
+        for (int i = 0; i < cityIds.length; i++) {
+            String[][] city = dbUtil.getTableData(Metadata.CITY, "name", "id = " + cityIds[i][0] + "");
+            cityArray[i] = city[0][0];
+        }
+
+        return cityArray;
+
+    }
 
 }
-
