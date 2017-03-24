@@ -479,6 +479,7 @@
     <string name="patient_updated">Patient successfully updated.</string>
     <string name="title_completed">Compeleted</string>
     <string name="insert_error">Error while trying to submit form to openmrs.</string>
+    <string name="no_province">No province selected.</string>
 
     <string name="latest_encocunter">Latest Encounters</string>
     <string name="no_encounters">No Encounters</string>
