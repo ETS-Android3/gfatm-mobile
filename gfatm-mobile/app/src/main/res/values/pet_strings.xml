@@ -621,6 +621,7 @@
 
     <!-- Treatment Initiation -->
     <string name="baseline_screening_missing">Baseline Screening form is missing. If form is already submitted to openmrs, try updating patient.</string>
+    <string name="treatment_initiation_missing">Treatment initiation form is missing. If form is already submitted to openmrs, try updating patient.</string>
     <string name="index_patient_info_missing">Index Patient () information is missing.</string>
 
     <string name="pet_isoniazid_dose_exceeded">Isoniazid dose shouldn\'t exceed 300mg</string>
