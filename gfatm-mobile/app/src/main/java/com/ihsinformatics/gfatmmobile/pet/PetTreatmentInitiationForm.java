@@ -157,9 +157,9 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         indexPatientId.getEditText().setKeyListener(null);
         tbType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_tb_type), getResources().getStringArray(R.array.pet_tb_types), "", App.HORIZONTAL, App.VERTICAL);
         tbType.setRadioGroupEnabled(false);
-        infectionType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_infection_type), getResources().getStringArray(R.array.pet_infection_types), getResources().getString(R.string.pet_dstb), App.HORIZONTAL, App.VERTICAL);
+        infectionType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_infection_type), getResources().getStringArray(R.array.pet_infection_types), "", App.HORIZONTAL, App.VERTICAL);
         infectionType.setRadioGroupEnabled(false);
-        resistanceType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_resistance_Type), getResources().getStringArray(R.array.pet_resistance_types), getResources().getString(R.string.pet_rr_tb), App.VERTICAL, App.VERTICAL);
+        resistanceType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_resistance_Type), getResources().getStringArray(R.array.pet_resistance_types), "", App.VERTICAL, App.VERTICAL);
         resistanceType.setRadioGroupEnabled(false);
         dstPattern = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_dst_pattern), getResources().getStringArray(R.array.pet_dst_patterns), null, App.VERTICAL, App.VERTICAL, true);
         dstPattern.setCheckedBoxesEnabled(false);
@@ -385,6 +385,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
+        resistanceType.setVisibility(View.GONE);
+        dstPattern.setVisibility(View.GONE);
         isoniazidDose.setVisibility(View.GONE);
         rifapentineDose.setVisibility(View.GONE);
         levofloxacinDose.setVisibility(View.GONE);
@@ -392,6 +394,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         ancillaryDrugs.setVisibility(View.GONE);
         ancillaryDrugDuration.setVisibility(View.GONE);
         rifapentineAvailable.setVisibility(View.GONE);
+        other.setVisibility(View.GONE);
         relationshipTreatmentSuppoter.setVisibility(View.VISIBLE);
 
         Bundle bundle = this.getArguments();
@@ -528,6 +531,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                                     }
                                 });
                         alertDialog.show();
+                        return;
                     }
 
                     weight.getEditText().setText(result.get("WEIGHT (KG)"));
@@ -569,6 +573,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                                 break;
                             }
                         }
+                        if (!result.get("TUBERCULOSIS DRUG RESISTANCE TYPE").equals(""))
+                            resistanceType.setVisibility(View.VISIBLE);
                     }
                     if (result.get("RESISTANT TO ANTI-TUBERCULOSIS DRUGS") != null) {
                         for (CheckBox cb : dstPattern.getCheckedBoxes()) {
@@ -604,10 +610,10 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                             }
 
                         }
+                        if (!result.get("RESISTANT TO ANTI-TUBERCULOSIS DRUGS").equals(""))
+                            dstPattern.setVisibility(View.VISIBLE);
                     }
                     if (App.get(infectionType).equals(getResources().getString(R.string.pet_drtb))) {
-                        resistanceType.setVisibility(View.VISIBLE);
-                        dstPattern.setVisibility(View.VISIBLE);
 
                         for (RadioButton rb : petRegimen.getRadioGroup().getButtons()) {
 
@@ -619,8 +625,6 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                         }
 
                     } else {
-                        resistanceType.setVisibility(View.GONE);
-                        dstPattern.setVisibility(View.GONE);
 
                         if (App.getPatient().getPerson().getAge() < 2) {
                             for (RadioButton rb : petRegimen.getRadioGroup().getButtons()) {
@@ -976,7 +980,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         if (ancillaryDrugDuration.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"MEDICATION DURATION", App.get(ancillaryDrugDuration)});
         observations.add(new String[]{"NAME OF TREATMENT SUPPORTER", App.get(nameTreatmentSupporter)});
-        observations.add(new String[]{"TREATMENT SUPPORTER CONTACT NUMBER", App.get(phone1a) + App.get(phone1b)});
+        observations.add(new String[]{"TREATMENT SUPPORTER CONTACT NUMBER", App.get(phone1a) + "-" + App.get(phone1b)});
         observations.add(new String[]{"TREATMENT SUPPORTER TYPE", App.get(typeTreatmentSupporter).equals(getResources().getString(R.string.pet_family_treatment_supporter)) ? "FAMILY MEMBER" : "NON-FAMILY MEMBER"});
         if (relationshipTreatmentSuppoter.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TREATMENT SUPPORTER RELATIONSHIP TO PATIENT", (App.get(relationshipTreatmentSuppoter).equals(getResources().getString(R.string.pet_mother))) ? "MOTHER" :
@@ -1445,7 +1449,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                     }
 
                 }
-                resistanceType.setVisibility(View.VISIBLE);
+                petRegimen.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("ISONIAZID DOSE")) {
                 isoniazidDose.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("RIFAPENTINE DOSE")) {

@@ -594,7 +594,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                     }
 
                     if (!(App.get(address1).equals("") && App.get(address2).equals("") && App.get(district).equals("") && App.get(landmark).equals(""))) {
-                        result = serverService.savePersonAddress(App.get(address1), App.get(address2), App.getCity(), App.get(district), App.getCountry(), longitude, latitude, App.get(landmark), encounterId);
+                        result = serverService.savePersonAddress(App.get(address1), App.get(address2), App.get(city), App.get(district), App.getProvince(), App.getCountry(), longitude, latitude, App.get(landmark), encounterId);
                     if (!result.equals("SUCCESS"))
                         return result;
                     }

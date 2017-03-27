@@ -1,18 +1,17 @@
 package com.ihsinformatics.gfatmmobile.pet;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.format.DateFormat;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +25,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -37,11 +35,13 @@ import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Created by Rabbia on 11/24/2016.
@@ -64,7 +64,9 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
     TitledRadioGroup incentiveOccasion;
     TitledRadioGroup incentiveFor;
     TitledEditText nameTreatmentSupporter;
-    TitledEditText contactNumberTreatmentSupporter;
+    LinearLayout contactNumberTreatmentSupporter;
+    TitledEditText phone1a;
+    TitledEditText phone1b;
     TitledRadioGroup typeTreatmentSupporter;
     TitledSpinner relationshipTreatmentSuppoter;
     TitledEditText other;
@@ -156,7 +158,12 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
         incentiveFor = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_incentive_for), getResources().getStringArray(R.array.pet_incentive_for), getResources().getString(R.string.pet_contact), App.HORIZONTAL, App.VERTICAL, true);
 
         nameTreatmentSupporter = new TitledEditText(context, null, getResources().getString(R.string.pet_treatment_supporter_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        contactNumberTreatmentSupporter = new TitledEditText(context, null, getResources().getString(R.string.pet_treatment_supporter_contact_number), "", "", 11, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true);
+        contactNumberTreatmentSupporter = new LinearLayout(context);
+        contactNumberTreatmentSupporter.setOrientation(LinearLayout.HORIZONTAL);
+        phone1a = new TitledEditText(context, null, getResources().getString(R.string.pet_treatment_supporter_contact_number), "", "XXXX", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        contactNumberTreatmentSupporter.addView(phone1a);
+        phone1b = new TitledEditText(context, null, "-", "", "XXXXXXX", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        contactNumberTreatmentSupporter.addView(phone1b);
         typeTreatmentSupporter = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_treatment_supporter_type), getResources().getStringArray(R.array.pet_treatment_supporter_type), getResources().getString(R.string.pet_family_treatment_supporter), App.VERTICAL, App.VERTICAL, true);
         relationshipTreatmentSuppoter = new TitledSpinner(context, "", getResources().getString(R.string.pet_treatment_supporter_relationship), getResources().getStringArray(R.array.pet_household_heads), getResources().getString(R.string.pet_mother), App.VERTICAL, true);
         other = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
@@ -179,7 +186,7 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
         linearLayout.addView(otherRelation);
 
         views = new View[]{formDate.getButton(), indexPatientId.getEditText(), scanQRCode, indexExternalPatientId.getEditText(), cnic1.getEditText(), cnic2.getEditText(), cnic3.getEditText(), cnicOwner.getSpinner(), otherCnicOwner.getEditText(), incentiveOccasion.getRadioGroup(), incentiveFor.getRadioGroup(),
-                nameTreatmentSupporter.getEditText(), contactNumberTreatmentSupporter.getEditText(), typeTreatmentSupporter.getRadioGroup(), relationshipTreatmentSuppoter.getSpinner(), other.getEditText(), petRegimen.getRadioGroup(), incentiveAmount.getEditText(),
+                nameTreatmentSupporter.getEditText(), phone1a.getEditText(), phone1b.getEditText(), typeTreatmentSupporter.getRadioGroup(), relationshipTreatmentSuppoter.getSpinner(), other.getEditText(), petRegimen.getRadioGroup(), incentiveAmount.getEditText(),
                 followupMonth.getEditText(), incentiveDisbursalLocation.getRadioGroup(), recieverName.getEditText(), recieverRelationWithContact.getSpinner(), otherRelation.getEditText()
         };
 
@@ -199,20 +206,7 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
 
         }
 
-        incentiveAmount.getEditText().setKeyListener(null);
-        otherCnicOwner.setVisibility(View.GONE);
-        for (RadioButton rb : incentiveFor.getRadioGroup().getButtons()) {
-            if (rb.getText().equals(getResources().getString(R.string.pet_contact)))
-                rb.setChecked(true);
-            else
-                rb.setVisibility(View.GONE);
-        }
-        nameTreatmentSupporter.setVisibility(View.GONE);
-        contactNumberTreatmentSupporter.setVisibility(View.GONE);
-        typeTreatmentSupporter.setVisibility(View.GONE);
-        relationshipTreatmentSuppoter.setVisibility(View.GONE);
-        other.setVisibility(View.GONE);
-        otherRelation.setVisibility(View.GONE);
+        resetViews();
     }
 
     @Override
@@ -282,16 +276,23 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
             gotoLastPage();
         }
 
-        if (App.get(contactNumberTreatmentSupporter).isEmpty() && contactNumberTreatmentSupporter.getVisibility() == View.VISIBLE) {
-            contactNumberTreatmentSupporter.getEditText().setError(getString(R.string.empty_field));
-            contactNumberTreatmentSupporter.getEditText().requestFocus();
-            error = true;
-            gotoLastPage();
-        } else if (App.get(contactNumberTreatmentSupporter).length() == RegexUtil.mobileNumberLength) {
-            contactNumberTreatmentSupporter.getEditText().setError(getString(R.string.invalid_value));
-            contactNumberTreatmentSupporter.getEditText().requestFocus();
-            error = true;
-            gotoLastPage();
+        if (contactNumberTreatmentSupporter.getVisibility() == View.VISIBLE) {
+            if (App.get(phone1a).isEmpty()) {
+                phone1a.getEditText().setError(getResources().getString(R.string.mandatory_field));
+                phone1a.getEditText().requestFocus();
+                error = true;
+                gotoLastPage();
+            } else if (App.get(phone1b).isEmpty()) {
+                phone1b.getEditText().setError(getResources().getString(R.string.mandatory_field));
+                phone1b.getEditText().requestFocus();
+                error = true;
+                gotoLastPage();
+            } else if (!RegexUtil.isContactNumber(App.get(phone1a) + App.get(phone1b))) {
+                phone1b.getEditText().setError(getResources().getString(R.string.invalid_value));
+                phone1b.getEditText().requestFocus();
+                error = true;
+                gotoLastPage();
+            }
         }
 
         if (App.get(other).isEmpty() && other.getVisibility() == View.VISIBLE) {
@@ -381,15 +382,25 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
 
     @Override
     public boolean submit() {
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            String encounterId = bundle.getString("formId");
+            if (saveFlag) {
+                serverService.deleteOfflineForms(encounterId);
+            }
+            bundle.putBoolean("save", false);
+        }
+
         endTime = new Date();
 
-        final ContentValues values = new ContentValues();
-        values.put("formDate", App.getSqlDate(formDateCalendar));
-        // start time...
-        // end time...
-        // gps coordinate...
-
         final ArrayList<String[]> observations = new ArrayList<String[]>();
+        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
+        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+        /*observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
+        observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});*/
+        observations.add(new String[]{"PATIENT ID OF INDEX CASE", App.get(indexPatientId)});
         final String cnic = App.get(cnic1) + "-" + App.get(cnic2) + "-" + App.get(cnic3);
         observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnic});
         observations.add(new String[]{"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(cnicOwner).equals(getResources().getString(R.string.pet_self)) ? "SELF" :
@@ -412,7 +423,7 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
         if (nameTreatmentSupporter.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"NAME OF TREATMENT SUPPORTER", App.get(nameTreatmentSupporter)});
         if (contactNumberTreatmentSupporter.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TELEPHONE NUMBER OF TREATMENT SUPPORTER", App.get(contactNumberTreatmentSupporter)});
+            observations.add(new String[]{"TREATMENT SUPPORTER CONTACT NUMBER", App.get(phone1a) + "-" + App.get(phone1b)});
         if (typeTreatmentSupporter.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TREATMENT SUPPORTER TYPE", App.get(typeTreatmentSupporter).equals(getResources().getString(R.string.pet_family_treatment_supporter)) ? "FAMILY MEMBER" : "NON-FAMILY MEMBER"});
         if (relationshipTreatmentSuppoter.getVisibility() == View.VISIBLE)
@@ -452,7 +463,6 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
         if (otherRelation.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER INCENTIVE RECEIVER", App.get(otherRelation)});
 
-
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
             protected String doInBackground(String... params) {
@@ -462,14 +472,32 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
                         loading.setInverseBackgroundForced(true);
                         loading.setIndeterminate(true);
                         loading.setCancelable(false);
-                        loading.setMessage(getResources().getString(R.string.signing_in));
+                        loading.setMessage(getResources().getString(R.string.submitting_form));
                         loading.show();
                     }
                 });
 
                 String result = serverService.saveEncounterAndObservation(FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}));
-                if (result.contains("SUCCESS"))
-                    return "SUCCESS";
+                if (!result.contains("SUCCESS"))
+                    return result;
+                else {
+
+                    String encounterId = "";
+
+                    if (result.contains("_")) {
+                        String[] successArray = result.split("_");
+                        encounterId = successArray[1];
+                    }
+
+
+                    if (!App.get(indexExternalPatientId).isEmpty() && App.hasKeyListener(indexExternalPatientId)) {
+                        result = serverService.saveIdentifier("External ID", App.get(indexExternalPatientId), encounterId);
+                        if (!result.equals("SUCCESS"))
+                            return result;
+                    } else
+                        return "SUCCESS";
+
+                }
 
                 return result;
 
@@ -486,15 +514,73 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
                 super.onPostExecute(result);
                 loading.dismiss();
 
-                Toast toast = Toast.makeText(context, result, Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.BOTTOM, 0, 0);
-                toast.show();
+                if (result.equals("SUCCESS")) {
+                    resetViews();
 
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.form_submitted));
+                    Drawable submitIcon = getResources().getDrawable(R.drawable.ic_submit);
+                    alertDialog.setIcon(submitIcon);
+                    int color = App.getColor(context, R.attr.colorAccent);
+                    DrawableCompat.setTint(submitIcon, color);
+                    alertDialog.setTitle(getResources().getString(R.string.title_completed));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else if (result.equals("CONNECTION_ERROR")) {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
+                    alertDialog.setMessage(message);
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
             }
         };
         submissionFormTask.execute("");
 
-        resetViews();
         return false;
     }
 
@@ -507,6 +593,7 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
 
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
+        incentiveAmount.getEditText().setKeyListener(null);
         otherCnicOwner.setVisibility(View.GONE);
         for (RadioButton rb : incentiveFor.getRadioGroup().getButtons()) {
             if (rb.getText().equals(getResources().getString(R.string.pet_contact)))
@@ -520,6 +607,257 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
         relationshipTreatmentSuppoter.setVisibility(View.GONE);
         other.setVisibility(View.GONE);
         otherRelation.setVisibility(View.GONE);
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean openFlag = bundle.getBoolean("open");
+            if (openFlag) {
+
+                bundle.putBoolean("open", false);
+                bundle.putBoolean("save", true);
+
+                String id = bundle.getString("formId");
+                int formId = Integer.valueOf(id);
+
+                refill(formId);
+
+            } else bundle.putBoolean("save", false);
+
+        }
+
+        if (App.get(petRegimen).equals("")) {
+            final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
+                @Override
+                protected HashMap<String, String> doInBackground(String... params) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            loading.setInverseBackgroundForced(true);
+                            loading.setIndeterminate(true);
+                            loading.setCancelable(false);
+                            loading.setMessage(getResources().getString(R.string.fetching_data));
+                            loading.show();
+                        }
+                    });
+
+                    HashMap<String, String> result = new HashMap<String, String>();
+
+                    String date1 = "";
+                    String date2 = "";
+                    String date3 = "";
+                    String petRegimen1 = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_ADVERSE_EVENTS, "POST-EXPOSURE TREATMENT REGIMEN");
+                    if (!(petRegimen1 == null || petRegimen1.equals("")))
+                        date1 = serverService.getEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + Forms.PET_ADVERSE_EVENTS);
+                    String petRegimen2 = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "POST-EXPOSURE TREATMENT REGIMEN");
+                    if (!(petRegimen2 == null || petRegimen2.equals("")))
+                        date2 = serverService.getEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP);
+                    String petRegimen3 = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "POST-EXPOSURE TREATMENT REGIMEN");
+                    if (!(petRegimen3 == null || petRegimen3.equals("")))
+                        date3 = serverService.getEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION);
+
+                    if ((date2 == null || date2.equals("")) && (date3 == null || date3.equals(""))) {
+                        if (petRegimen1 == null)
+                            petRegimen1 = "";
+                        result.put("POST-EXPOSURE TREATMENT REGIMEN", petRegimen1);
+                    } else {
+                        if (date2 == null || date2.equals("")) {
+                            if (petRegimen3 == null)
+                                petRegimen3 = "";
+                            result.put("POST-EXPOSURE TREATMENT REGIMEN", petRegimen3);
+                        } else if (date3 == null || date3.equals("")) {
+                            if (petRegimen2 == null)
+                                petRegimen2 = "";
+                            result.put("POST-EXPOSURE TREATMENT REGIMEN", petRegimen2);
+                        } else {
+
+                            Date d2 = null;
+                            Date d3 = null;
+                            if (date2.contains("/")) {
+                                d2 = App.stringToDate(date2, "dd/MM/yyyy");
+                            } else {
+                                d2 = App.stringToDate(date2, "yyyy-MM-dd");
+                            }
+
+                            if (date3.contains("/")) {
+                                d3 = App.stringToDate(date3, "dd/MM/yyyy");
+                            } else {
+                                d3 = App.stringToDate(date3, "yyyy-MM-dd");
+                            }
+
+                            if (d2.equals(d3)) {
+                                if (petRegimen3 == null)
+                                    petRegimen3 = "";
+                                result.put("POST-EXPOSURE TREATMENT REGIMEN", petRegimen3);
+                            } else if (d2.after(d3)) {
+                                if (petRegimen2 == null)
+                                    petRegimen2 = "";
+                                result.put("POST-EXPOSURE TREATMENT REGIMEN", petRegimen2);
+                            } else {
+                                petRegimen3 = "";
+                                result.put("POST-EXPOSURE TREATMENT REGIMEN", petRegimen3);
+                            }
+
+                        }
+                    }
+
+                    String indexId = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "PATIENT ID OF INDEX CASE");
+                    String cnicString = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "NATIONAL IDENTIFICATION NUMBER");
+                    String cnicOwner = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
+                    String otherCnicOwner = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
+                    String treatmentSupporter = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "NAME OF TREATMENT SUPPORTER");
+                    String treatmentSupporterContact = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "TREATMENT SUPPORTER CONTACT NUMBER");
+                    String treatmentSupporterType = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "TREATMENT SUPPORTER TYPE");
+                    String treatmentSupporterRelationship = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "TREATMENT SUPPORTER RELATIONSHIP TO PATIENT");
+                    String treatmentSupporterRelationshipOther = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "OTHER FAMILY MEMBER");
+
+                    if (indexId == null)
+                        indexId = "";
+                    result.put("PATIENT ID OF INDEX CASE", indexId);
+
+                    if (cnicString == null)
+                        cnicString = "";
+                    result.put("NATIONAL IDENTIFICATION NUMBER", cnicString);
+
+                    if (cnicOwner == null)
+                        cnicOwner = "";
+                    result.put("COMPUTERIZED NATIONAL IDENTIFICATION OWNER", cnicOwner);
+
+                    if (otherCnicOwner == null)
+                        otherCnicOwner = "";
+                    result.put("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", otherCnicOwner);
+
+                    if (treatmentSupporter == null)
+                        treatmentSupporter = "";
+                    result.put("NAME OF TREATMENT SUPPORTER", treatmentSupporter);
+
+                    if (treatmentSupporterContact == null)
+                        treatmentSupporterContact = "";
+                    result.put("TREATMENT SUPPORTER CONTACT NUMBER", treatmentSupporterContact);
+
+                    if (treatmentSupporterType == null)
+                        treatmentSupporterType = "";
+                    result.put("TREATMENT SUPPORTER TYPE", treatmentSupporterType);
+
+                    if (treatmentSupporterRelationship == null)
+                        treatmentSupporterRelationship = "";
+                    result.put("TREATMENT SUPPORTER RELATIONSHIP TO PATIENT", treatmentSupporterRelationship);
+
+                    if (treatmentSupporterRelationshipOther == null)
+                        treatmentSupporterRelationshipOther = "";
+                    result.put("OTHER FAMILY MEMBER", treatmentSupporterRelationshipOther);
+
+                    return result;
+
+                }
+
+                @Override
+                protected void onProgressUpdate(String... values) {
+                }
+
+                ;
+
+                @Override
+                protected void onPostExecute(HashMap<String, String> result) {
+                    super.onPostExecute(result);
+                    loading.dismiss();
+
+                    if (!result.get("POST-EXPOSURE TREATMENT REGIMEN").equals("")) {
+                        for (RadioButton rb : petRegimen.getRadioGroup().getButtons()) {
+                            if (rb.getText().equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy)) && result.get("POST-EXPOSURE TREATMENT REGIMEN").equals("ISONIAZID PROPHYLAXIS")) {
+                                rb.setChecked(true);
+                                break;
+                            } else if (rb.getText().equals(getResources().getString(R.string.pet_isoniazid_rifapentine)) && result.get("POST-EXPOSURE TREATMENT REGIMEN").equals("ISONIAZID AND RIFAPENTINE")) {
+                                rb.setChecked(true);
+                                break;
+                            } else if (rb.getText().equals(getResources().getString(R.string.pet_levofloxacin_ethionamide)) && result.get("POST-EXPOSURE TREATMENT REGIMEN").equals("LEVOFLOXACIN AND ETHIONAMIDE")) {
+                                rb.setChecked(true);
+                                break;
+                            }
+
+                        }
+                    }
+                    if (!result.get("PATIENT ID OF INDEX CASE").equals("")) {
+                        indexPatientId.getEditText().setText(result.get("PATIENT ID OF INDEX CASE"));
+                    }
+                    if (App.get(indexExternalPatientId).equals("")) {
+                        String externalId = App.getPatient().getExternalId();
+                        if (externalId.equals("")) {
+                            indexExternalPatientId.getEditText().setText("");
+                        } else {
+                            indexExternalPatientId.getEditText().setText(externalId);
+                            indexExternalPatientId.getEditText().setKeyListener(null);
+                        }
+                    }
+                    if (!result.get("NATIONAL IDENTIFICATION NUMBER").equals("")) {
+                        String[] cnicArray = result.get("NATIONAL IDENTIFICATION NUMBER").split("-");
+                        cnic1.getEditText().setText(cnicArray[0]);
+                        cnic2.getEditText().setText(cnicArray[1]);
+                        cnic3.getEditText().setText(cnicArray[2]);
+                    }
+                    if (!result.get("COMPUTERIZED NATIONAL IDENTIFICATION OWNER").equals("")) {
+                        String value = result.get("COMPUTERIZED NATIONAL IDENTIFICATION OWNER").equals("SELF") ? getResources().getString(R.string.pet_self) :
+                                (result.get("COMPUTERIZED NATIONAL IDENTIFICATION OWNER").equals("MOTHER") ? getResources().getString(R.string.pet_mother) :
+                                        (result.get("COMPUTERIZED NATIONAL IDENTIFICATION OWNER").equals("FATHER") ? getResources().getString(R.string.pet_father) :
+                                                (result.get("COMPUTERIZED NATIONAL IDENTIFICATION OWNER").equals("MATERNAL GRANDMOTHER") ? getResources().getString(R.string.pet_maternal_grandmother) :
+                                                        (result.get("COMPUTERIZED NATIONAL IDENTIFICATION OWNER").equals("MATERNAL GRANDFATHER") ? getResources().getString(R.string.pet_maternal_grandfather) :
+                                                                (result.get("COMPUTERIZED NATIONAL IDENTIFICATION OWNER").equals("PATERNAL GRANDMOTHER") ? getResources().getString(R.string.pet_paternal_grandmother) :
+                                                                        (result.get("COMPUTERIZED NATIONAL IDENTIFICATION OWNER").equals("PATERNAL GRANDFATHER") ? getResources().getString(R.string.pet_paternal_grandfather) :
+                                                                                (result.get("COMPUTERIZED NATIONAL IDENTIFICATION OWNER").equals("BROTHER") ? getResources().getString(R.string.pet_brother) :
+                                                                                        (result.get("COMPUTERIZED NATIONAL IDENTIFICATION OWNER").equals("SISTER") ? getResources().getString(R.string.pet_sister) :
+                                                                                                (result.get("COMPUTERIZED NATIONAL IDENTIFICATION OWNER").equals("SON") ? getResources().getString(R.string.pet_son) :
+                                                                                                        (result.get("COMPUTERIZED NATIONAL IDENTIFICATION OWNER").equals("DAUGHTER") ? getResources().getString(R.string.pet_daughter) :
+                                                                                                                (result.get("COMPUTERIZED NATIONAL IDENTIFICATION OWNER").equals("SPOUSE") ? getResources().getString(R.string.pet_spouse) :
+                                                                                                                        (result.get("COMPUTERIZED NATIONAL IDENTIFICATION OWNER").equals("AUNT") ? getResources().getString(R.string.pet_aunt) :
+                                                                                                                                (result.get("COMPUTERIZED NATIONAL IDENTIFICATION OWNER").equals("UNCLE") ? getResources().getString(R.string.pet_uncle) : getResources().getString(R.string.pet_other))))))))))))));
+                        cnicOwner.getSpinner().selectValue(value);
+                    }
+                    if (!result.get("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER").equals("")) {
+                        otherCnicOwner.getEditText().setText(result.get("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER"));
+                        otherCnicOwner.setVisibility(View.VISIBLE);
+                    }
+                    if (!result.get("NAME OF TREATMENT SUPPORTER").equals("")) {
+                        nameTreatmentSupporter.getEditText().setText(result.get("NAME OF TREATMENT SUPPORTER"));
+                    }
+                    if (!result.get("TREATMENT SUPPORTER CONTACT NUMBER").equals("")) {
+                        String[] phoneArray = result.get("TREATMENT SUPPORTER CONTACT NUMBER").split("-");
+                        phone1a.getEditText().setText(phoneArray[0]);
+                        phone1b.getEditText().setText(phoneArray[1]);
+                    }
+                    if (!result.get("TREATMENT SUPPORTER TYPE").equals("")) {
+                        for (RadioButton rb : typeTreatmentSupporter.getRadioGroup().getButtons()) {
+                            if (rb.getText().equals(getResources().getString(R.string.pet_family_treatment_supporter)) && result.get("TREATMENT SUPPORTER TYPE").equals("FAMILY MEMBER")) {
+                                rb.setChecked(true);
+                                break;
+                            } else if (rb.getText().equals(getResources().getString(R.string.pet_non_family_treatment_supporter)) && result.get("TREATMENT SUPPORTER TYPE").equals("NON-FAMILY MEMBER")) {
+                                rb.setChecked(true);
+                                break;
+                            }
+                        }
+                    }
+                    if (!result.get("TREATMENT SUPPORTER RELATIONSHIP TO PATIENT").equals("")) {
+                        String value = result.get("TREATMENT SUPPORTER RELATIONSHIP TO PATIENT").equals("MOTHER") ? getResources().getString(R.string.pet_mother) :
+                                (result.get("TREATMENT SUPPORTER RELATIONSHIP TO PATIENT").equals("FATHER") ? getResources().getString(R.string.pet_father) :
+                                        (result.get("TREATMENT SUPPORTER RELATIONSHIP TO PATIENT").equals("MATERNAL GRANDMOTHER") ? getResources().getString(R.string.pet_maternal_grandmother) :
+                                                (result.get("TREATMENT SUPPORTER RELATIONSHIP TO PATIENT").equals("MATERNAL GRANDFATHER") ? getResources().getString(R.string.pet_maternal_grandfather) :
+                                                        (result.get("TREATMENT SUPPORTER RELATIONSHIP TO PATIENT").equals("PATERNAL GRANDMOTHER") ? getResources().getString(R.string.pet_paternal_grandmother) :
+                                                                (result.get("TREATMENT SUPPORTER RELATIONSHIP TO PATIENT").equals("PATERNAL GRANDFATHER") ? getResources().getString(R.string.pet_paternal_grandfather) :
+                                                                        (result.get("TREATMENT SUPPORTER RELATIONSHIP TO PATIENT").equals("BROTHER") ? getResources().getString(R.string.pet_brother) :
+                                                                                (result.get("TREATMENT SUPPORTER RELATIONSHIP TO PATIENT").equals("SISTER") ? getResources().getString(R.string.pet_sister) :
+                                                                                        (result.get("TREATMENT SUPPORTER RELATIONSHIP TO PATIENT").equals("SON") ? getResources().getString(R.string.pet_son) :
+                                                                                                (result.get("TREATMENT SUPPORTER RELATIONSHIP TO PATIENT").equals("DAUGHTER") ? getResources().getString(R.string.pet_daughter) :
+                                                                                                        (result.get("TREATMENT SUPPORTER RELATIONSHIP TO PATIENT").equals("SPOUSE") ? getResources().getString(R.string.pet_spouse) :
+                                                                                                                (result.get("TREATMENT SUPPORTER RELATIONSHIP TO PATIENT").equals("AUNT") ? getResources().getString(R.string.pet_aunt) :
+                                                                                                                        (result.get("TREATMENT SUPPORTER RELATIONSHIP TO PATIENT").equals("UNCLE") ? getResources().getString(R.string.pet_uncle) : getResources().getString(R.string.pet_other)))))))))))));
+                        relationshipTreatmentSuppoter.getSpinner().selectValue(value);
+                    }
+                    if (!result.get("OTHER FAMILY MEMBER").equals("")) {
+                        otherRelation.getEditText().setText(result.get("OTHER FAMILY MEMBER"));
+                    }
+                }
+            };
+            autopopulateFormTask.execute("");
+
+        }
     }
 
     @Override
@@ -605,6 +943,163 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
 
     @Override
     public void refill(int encounterId) {
+
+        OfflineForm fo = serverService.getOfflineFormById(encounterId);
+        String date = fo.getFormDate();
+        ArrayList<String[][]> obsValue = fo.getObsValue();
+        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        for (int i = 0; i < obsValue.size(); i++) {
+
+            String[][] obs = obsValue.get(i);
+
+            if (obs[0][0].equals("External ID")) {
+                indexExternalPatientId.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("FORM START TIME")) {
+                startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
+            } else if (obs[0][0].equals("PATIENT ID OF INDEX CASE")) {
+                indexPatientId.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("NATIONAL IDENTIFICATION NUMBER")) {
+                String[] cnicArray = obs[0][1].split("-");
+                cnic1.getEditText().setText(cnicArray[0]);
+                cnic2.getEditText().setText(cnicArray[1]);
+                cnic3.getEditText().setText(cnicArray[2]);
+            } else if (obs[0][0].equals("COMPUTERIZED NATIONAL IDENTIFICATION OWNER")) {
+                String value = obs[0][1].equals("SELF") ? getResources().getString(R.string.pet_self) :
+                        (obs[0][1].equals("MOTHER") ? getResources().getString(R.string.pet_mother) :
+                                (obs[0][1].equals("FATHER") ? getResources().getString(R.string.pet_father) :
+                                        (obs[0][1].equals("MATERNAL GRANDMOTHER") ? getResources().getString(R.string.pet_maternal_grandmother) :
+                                                (obs[0][1].equals("MATERNAL GRANDFATHER") ? getResources().getString(R.string.pet_maternal_grandfather) :
+                                                        (obs[0][1].equals("PATERNAL GRANDMOTHER") ? getResources().getString(R.string.pet_paternal_grandmother) :
+                                                                (obs[0][1].equals("PATERNAL GRANDFATHER") ? getResources().getString(R.string.pet_paternal_grandfather) :
+                                                                        (obs[0][1].equals("BROTHER") ? getResources().getString(R.string.pet_brother) :
+                                                                                (obs[0][1].equals("SISTER") ? getResources().getString(R.string.pet_sister) :
+                                                                                        (obs[0][1].equals("SON") ? getResources().getString(R.string.pet_son) :
+                                                                                                obs[0][1].equals("DAUGHTER") ? getResources().getString(R.string.pet_daughter) :
+                                                                                                        obs[0][1].equals("SPOUSE") ? getResources().getString(R.string.pet_spouse) :
+                                                                                                                obs[0][1].equals("AUNT") ? getResources().getString(R.string.pet_aunt) :
+                                                                                                                        obs[0][1].equals("UNCLE") ? getResources().getString(R.string.pet_uncle) : getResources().getString(R.string.pet_other))))))))));
+                cnicOwner.getSpinner().selectValue(value);
+            } else if (obs[0][0].equals("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER")) {
+                otherCnicOwner.getEditText().setText(obs[0][1]);
+                otherCnicOwner.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("TYPE OF VISIT")) {
+                for (RadioButton rb : incentiveFor.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet_baseline_visit)) && obs[0][1].equals("BASELINE")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_followup)) && obs[0][1].equals("REGULAR FOLLOW UP")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("INCENTIVE BENEFICIARY")) {
+                for (RadioButton rb : incentiveFor.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet_contact)) && obs[0][1].equals("PATIENT")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_treatment_supporter)) && obs[0][1].equals("TREATMENT SUPPORTER")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("NAME OF TREATMENT SUPPORTER")) {
+                nameTreatmentSupporter.getEditText().setText(obs[0][1]);
+                nameTreatmentSupporter.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("TREATMENT SUPPORTER CONTACT NUMBER")) {
+                String[] phoneArray = obs[0][1].split("-");
+                phone1a.getEditText().setText(phoneArray[0]);
+                phone1b.getEditText().setText(phoneArray[1]);
+                contactNumberTreatmentSupporter.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("TREATMENT SUPPORTER TYPE")) {
+                for (RadioButton rb : typeTreatmentSupporter.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet_family_treatment_supporter)) && obs[0][1].equals("FAMILY MEMBER")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_non_family_treatment_supporter)) && obs[0][1].equals("NON-FAMILY MEMBER")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+
+                }
+                typeTreatmentSupporter.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("TREATMENT SUPPORTER RELATIONSHIP TO PATIENT")) {
+                String value = obs[0][1].equals("MOTHER") ? getResources().getString(R.string.pet_mother) :
+                        (obs[0][1].equals("FATHER") ? getResources().getString(R.string.pet_father) :
+                                (obs[0][1].equals("MATERNAL GRANDMOTHER") ? getResources().getString(R.string.pet_maternal_grandmother) :
+                                        (obs[0][1].equals("MATERNAL GRANDFATHER") ? getResources().getString(R.string.pet_maternal_grandfather) :
+                                                (obs[0][1].equals("PATERNAL GRANDMOTHER") ? getResources().getString(R.string.pet_paternal_grandmother) :
+                                                        (obs[0][1].equals("PATERNAL GRANDFATHER") ? getResources().getString(R.string.pet_paternal_grandfather) :
+                                                                (obs[0][1].equals("BROTHER") ? getResources().getString(R.string.pet_brother) :
+                                                                        (obs[0][1].equals("SISTER") ? getResources().getString(R.string.pet_sister) :
+                                                                                (obs[0][1].equals("SON") ? getResources().getString(R.string.pet_son) :
+                                                                                        obs[0][1].equals("DAUGHTER") ? getResources().getString(R.string.pet_daughter) :
+                                                                                                obs[0][1].equals("SPOUSE") ? getResources().getString(R.string.pet_spouse) :
+                                                                                                        obs[0][1].equals("AUNT") ? getResources().getString(R.string.pet_aunt) :
+                                                                                                                obs[0][1].equals("UNCLE") ? getResources().getString(R.string.pet_uncle) : getResources().getString(R.string.pet_other)))))))));
+                relationshipTreatmentSuppoter.getSpinner().selectValue(value);
+                relationshipTreatmentSuppoter.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("OTHER FAMILY MEMBER")) {
+                other.getEditText().setText(obs[0][1]);
+                other.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("POST-EXPOSURE TREATMENT REGIMEN")) {
+                for (RadioButton rb : petRegimen.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy)) && obs[0][1].equals("ISONIAZID PROPHYLAXIS")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_isoniazid_rifapentine)) && obs[0][1].equals("ISONIAZID AND RIFAPENTINE")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_levofloxacin_ethionamide)) && obs[0][1].equals("LEVOFLOXACIN AND ETHIONAMIDE")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+
+                }
+                petRegimen.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("INCENTIVE AMOUNT")) {
+                String amount = obs[0][1].replace(".0", "");
+                incentiveAmount.getEditText().setText(amount);
+            } else if (obs[0][0].equals("MONTH OF INCENTIVE")) {
+                String amount = obs[0][1].replace(".0", "");
+                followupMonth.getEditText().setText(amount);
+            } else if (obs[0][0].equals("LOCATION OF EVENT")) {
+                for (RadioButton rb : incentiveDisbursalLocation.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet_contact_home)) && obs[0][1].equals("HOME")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_facility)) && obs[0][1].equals("HEALTH FACILITY")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+
+                }
+            } else if (obs[0][0].equals("NAME OF INCENTIVE RECEIVER")) {
+                recieverName.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("RELATIONSHIP WITH INCENTIVE RECEIVER")) {
+                String value = (obs[0][1].equals("SELF") ? getResources().getString(R.string.pet_self) :
+                        (obs[0][1].equals("MOTHER") ? getResources().getString(R.string.pet_mother) :
+                                (obs[0][1].equals("FATHER") ? getResources().getString(R.string.pet_father) :
+                                        (obs[0][1].equals("MATERNAL GRANDMOTHER") ? getResources().getString(R.string.pet_maternal_grandmother) :
+                                                (obs[0][1].equals("MATERNAL GRANDFATHER") ? getResources().getString(R.string.pet_maternal_grandfather) :
+                                                        (obs[0][1].equals("PATERNAL GRANDMOTHER") ? getResources().getString(R.string.pet_paternal_grandmother) :
+                                                                (obs[0][1].equals("PATERNAL GRANDFATHER") ? getResources().getString(R.string.pet_paternal_grandfather) :
+                                                                        (obs[0][1].equals("BROTHER") ? getResources().getString(R.string.pet_brother) :
+                                                                                (obs[0][1].equals("SISTER") ? getResources().getString(R.string.pet_sister) :
+                                                                                        (obs[0][1].equals("SON") ? getResources().getString(R.string.pet_son) :
+                                                                                                obs[0][1].equals("DAUGHTER") ? getResources().getString(R.string.pet_daughter) :
+                                                                                                        obs[0][1].equals("SPOUSE") ? getResources().getString(R.string.pet_spouse) :
+                                                                                                                obs[0][1].equals("AUNT") ? getResources().getString(R.string.pet_aunt) :
+                                                                                                                        obs[0][1].equals("UNCLE") ? getResources().getString(R.string.pet_uncle) : getResources().getString(R.string.pet_other)))))))))));
+                recieverRelationWithContact.getSpinner().selectValue(value);
+                recieverRelationWithContact.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("OTHER INCENTIVE RECEIVER")) {
+                otherRelation.getEditText().setText(obs[0][1]);
+                otherRelation.setVisibility(View.VISIBLE);
+            }
+
+        }
     }
 
     class MyAdapter extends PagerAdapter {
