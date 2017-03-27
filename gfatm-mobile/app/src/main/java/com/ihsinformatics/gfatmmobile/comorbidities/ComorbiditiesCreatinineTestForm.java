@@ -63,12 +63,12 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
     // Views...
     TitledButton formDate;
     TitledRadioGroup formType;
+    TitledEditText creatinineTestID;
     //Views for Test Order Blood Sugar
     MyTextView testOrderCreatinine;
     TitledSpinner creatinineFollowupMonth;
     TitledButton creatinineTestOrderDate;
     ImageView testIdView;
-    TitledEditText creatinineTestID;
     //Views for Test Result Blood Sugar
     MyTextView testResultCreatinine;
     TitledButton creatinineTestResultDate;
