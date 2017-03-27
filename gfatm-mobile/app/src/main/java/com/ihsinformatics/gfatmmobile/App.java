@@ -398,7 +398,7 @@ public class App {
      * @return
      */
     public static String getSqlDate(Date date) {
-        return DateFormat.format("yyy-MM-dd", date).toString();
+        return DateFormat.format("yyyy-MM-dd", date).toString();
     }
 
     /**
@@ -408,7 +408,7 @@ public class App {
      * @return
      */
     public static String getSqlDateTime(Date date) {
-        return DateFormat.format("yyy-MM-dd hh:mm:ss", date).toString();
+        return DateFormat.format("yyyy-MM-dd hh:mm:ss", date).toString();
     }
 
     public static int getDiffYears(Date first, Date last) {
