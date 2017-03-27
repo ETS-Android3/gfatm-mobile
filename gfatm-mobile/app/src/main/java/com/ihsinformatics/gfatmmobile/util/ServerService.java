@@ -755,6 +755,7 @@ public class ServerService {
                         String address2 = patient.getPerson().getAddress2();
                         String address3 = patient.getPerson().getAddress3();
                         String stateProvince = patient.getPerson().getStateProvince();
+                        //String countyDistict = patient.getPerson().get;
                         String cityVillage = patient.getPerson().getCityVillage();
                         String country = patient.getPerson().getCountry();
 
@@ -1053,17 +1054,17 @@ public class ServerService {
                 "mothername, primarycontact, primarycontactOwner, secondarycontact, secondarycontactOwner, tertiarycontact, quaternarycontact, ethnicity, " + // 10 - 17
                 "educationlevel, employmentstatus, occupation, incomeclass, mothertongue, nationalid, nationalidowner, guardianname, " + // 18 - 25
                 "identifier, external_id, enrs, endtb_emr_id, " +  // 26 - 29
-                "address1, address2, address3, stateProvince, cityVillage, country, patient_id ", "patient_id = '" + id + "'"); //30 - 36
+                "address1, address2, address3, stateProvince, countyDistrict, cityVillage, country, patient_id ", "patient_id = '" + id + "'"); //30 - 37
 
         Date date = App.stringToDate(result[0][3], "yyyy-MM-dd");
         int age = App.getDiffYears(date, new Date());
         com.ihsinformatics.gfatmmobile.model.Person person1 = new com.ihsinformatics.gfatmmobile.model.Person(result[0][0], result[0][1], result[0][2], age, result[0][3], result[0][4],
                 result[0][5], result[0][6], result[0][7], result[0][8], result[0][9], result[0][10], result[0][11], result[0][12], result[0][13], result[0][14],
                 result[0][15], result[0][16], result[0][17], result[0][18], result[0][19], result[0][20], result[0][21], result[0][22], result[0][23], result[0][24], result[0][25],
-                result[0][30], result[0][31], result[0][32], result[0][33], result[0][34], result[0][35]);
+                result[0][30], result[0][31], result[0][32], result[0][33], result[0][34], result[0][35], result[0][36]);
 
         patient = new com.ihsinformatics.gfatmmobile.model.Patient(result[0][0], result[0][26], result[0][27], result[0][28], result[0][29], person1);
-        patient.setPid(Integer.valueOf(result[0][36]));
+        patient.setPid(Integer.valueOf(result[0][37]));
 
         return patient;
 
@@ -1081,7 +1082,7 @@ public class ServerService {
                 "mothername, primarycontact, primarycontactOwner, secondarycontact, secondarycontactOwner, tertiarycontact, quaternarycontact, ethnicity, " + // 10 - 17
                 "educationlevel, employmentstatus, occupation, incomeclass, mothertongue, nationalid, nationalidowner, guardianname, " + // 18 - 25
                 "identifier, external_id, enrs, endtb_emr_id, " +  // 26 - 29
-                "address1, address2, address3, stateProvince, cityVillage, country, patient_id ", "identifier = '" + patientId + "'"); //30 - 36
+                "address1, address2, address3, stateProvince, countyDistrict, cityVillage, country, patient_id ", "identifier = '" + patientId + "'"); //30 - 37
 
         if (result.length < 1)
             return null;
@@ -1091,10 +1092,10 @@ public class ServerService {
         com.ihsinformatics.gfatmmobile.model.Person person1 = new com.ihsinformatics.gfatmmobile.model.Person(result[0][0], result[0][1], result[0][2], age, result[0][3], result[0][4],
                 result[0][5], result[0][6], result[0][7], result[0][8], result[0][9], result[0][10], result[0][11], result[0][12], result[0][13], result[0][14],
                 result[0][15], result[0][16], result[0][17], result[0][18], result[0][19], result[0][20], result[0][21], result[0][22], result[0][23], result[0][24], result[0][25],
-                result[0][30], result[0][31], result[0][32], result[0][33], result[0][34], result[0][35]);
+                result[0][30], result[0][31], result[0][32], result[0][33], result[0][34], result[0][35], result[0][36]);
 
         com.ihsinformatics.gfatmmobile.model.Patient patient1 = new com.ihsinformatics.gfatmmobile.model.Patient(result[0][0], result[0][26], result[0][27], result[0][28], result[0][29], person1);
-        patient1.setPid(Integer.valueOf(result[0][36]));
+        patient1.setPid(Integer.valueOf(result[0][37]));
 
         return patient1;
     }
@@ -1471,7 +1472,7 @@ public class ServerService {
         return "SUCCESS";
     }
 
-    public String savePersonAddress(String address1, String address2, String city, String province, String country, double longitude, double latitude, String landmark, String encounterId) {
+    public String savePersonAddress(String address1, String address2, String city, String district, String province, String country, double longitude, double latitude, String landmark, String encounterId) {
 
         if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
             if (!isURLReachable()) {
@@ -1489,6 +1490,7 @@ public class ServerService {
                 personAddress.setAddress3(landmark);
                 personAddress.setCityVillage(city);
                 personAddress.setStateProvince(province);
+                personAddress.setCountyDistrict(district);
                 personAddress.setCountry(country);
                 personAddress.setLongitude(String.valueOf(longitude));
                 personAddress.setLatitude(String.valueOf(latitude));
@@ -1518,7 +1520,8 @@ public class ServerService {
                 contentValues.put("address1", address1);
                 contentValues.put("address2", address2);
                 contentValues.put("address3", landmark);
-                contentValues.put("CityVillage", city);
+                contentValues.put("cityVillage", city);
+                contentValues.put("countyDistrict", district);
                 contentValues.put("stateProvince", province);
                 contentValues.put("country", country);
                 contentValues.put("longitude", longitude);

@@ -319,9 +319,11 @@ public class HttpPost {
             personAddressObject.put("address3", personAddress.getAddress3());
             personAddressObject.put("cityVillage", personAddress.getCityVillage());
             personAddressObject.put("stateProvince", personAddress.getStateProvince());
+            personAddressObject.put("countyDistrict", personAddress.getCountyDistrict());
             personAddressObject.put("country", personAddress.getCountry());
             personAddressObject.put("longitude", personAddress.getLongitude());
             personAddressObject.put("latitude", personAddress.getLatitude());
+            personAddressObject.put("preferred", 1);
 
             if (App.getMode().equalsIgnoreCase("OFFLINE")) {
 
