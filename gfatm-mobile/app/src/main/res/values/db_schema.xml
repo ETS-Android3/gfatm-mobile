@@ -118,6 +118,7 @@
                 gender CHAR DEFAULT \'M\' NOT NULL,
                 birthdate DATETIME NOT NULL,
                 cityVillage VARCHAR,
+                countyDistrict VARCHAR,
                 stateProvince VARCHAR,
                 country VARCHAR,
                 latitude DOUBLE,
