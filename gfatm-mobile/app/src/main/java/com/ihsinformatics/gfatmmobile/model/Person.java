@@ -53,6 +53,7 @@ public class Person extends AbstractModel {
     String address3;
     String stateProvince;
     String cityVillage;
+    String countyDistrict;
     String country;
     String tertiaryContact;
     String quaternaryContact;
@@ -62,7 +63,7 @@ public class Person extends AbstractModel {
                   String primaryContact, String primaryContactOwner, String secondaryContact, String secondaryContactOwner, String tertiaryContact, String quaternaryContact,
                   String ethnicity, String educationLevel, String employmentStatus, String occupation, String motherTongue, String incomeClass,
                   String nationalId, String nationalIdOwner, String guardianName,
-                  String address1, String address2, String address3, String stateProvince, String cityVillage, String country) {
+                  String address1, String address2, String address3, String stateProvince, String countyDistrict, String cityVillage, String country) {
 
         super(uuid);
         this.givenName = givenName;
@@ -94,6 +95,7 @@ public class Person extends AbstractModel {
         this.address3 = address3;
         this.stateProvince = stateProvince;
         this.cityVillage = cityVillage;
+        this.countyDistrict = countyDistrict;
         this.country = country;
         this.tertiaryContact = tertiaryContact;
         this.quaternaryContact = quaternaryContact;
@@ -132,6 +134,7 @@ public class Person extends AbstractModel {
         String address3 = "";
         String stateProvince = "";
         String cityVillage = "";
+        String countyDistrict = "";
         String country = "";
         String tertiaryContact = "";
         String quaternaryContact = "";
@@ -154,6 +157,8 @@ public class Person extends AbstractModel {
                 stateProvince = addressObject.getString("stateProvince");
             if (addressObject.getString("cityVillage") == null)
                 cityVillage = addressObject.getString("cityVillage");
+            if (addressObject.getString("countyDistrict") == null)
+                countyDistrict = addressObject.getString("countyDistrict");
             if (addressObject.getString("country") == null)
                 country = addressObject.getString("country");
             if (addressObject.getString("address3") == null)
@@ -238,7 +243,7 @@ public class Person extends AbstractModel {
                 primaryContact, primaryContactOwner, secondaryContact, secondaryContactOwner, tertiaryContact, quaternaryContact,
                 ethnicity, educationLevel, employmentStatus, occupation, motherTongue, incomeClass,
                 nationalId, nationalIdOwner, guardianName,
-                address1, address2, address3, stateProvince, cityVillage, country);
+                address1, address2, address3, stateProvince, countyDistrict, cityVillage, country);
         return person;
     }
 
@@ -475,6 +480,14 @@ public class Person extends AbstractModel {
 
     public void setStateProvince(String stateProvince) {
         this.stateProvince = stateProvince;
+    }
+
+    public String getCountyDistrict() {
+        return countyDistrict;
+    }
+
+    public void setCountyDistrict(String countyDistrict) {
+        this.countyDistrict = countyDistrict;
     }
 
     public String getCityVillage() {
