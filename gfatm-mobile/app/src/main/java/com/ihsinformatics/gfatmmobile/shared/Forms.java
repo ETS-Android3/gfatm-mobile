@@ -72,7 +72,10 @@ import com.ihsinformatics.gfatmmobile.pet.PetSocioecnomicDataForm;
 import com.ihsinformatics.gfatmmobile.pet.PetTreatmentAdherenceForm;
 import com.ihsinformatics.gfatmmobile.pet.PetTreatmentInitiationForm;
 import com.ihsinformatics.gfatmmobile.pmdt.PmdtBasicManagementUnitVistForm;
+import com.ihsinformatics.gfatmmobile.pmdt.PmdtConveyanceAllowanceForm;
 import com.ihsinformatics.gfatmmobile.pmdt.PmdtDailyTreatmentMonitoringForm;
+import com.ihsinformatics.gfatmmobile.pmdt.PmdtNutritionalSupportForm;
+import com.ihsinformatics.gfatmmobile.pmdt.PmdtNutritionalSupportReceivingForm;
 import com.ihsinformatics.gfatmmobile.pmdt.PmdtPatientAssignmentForm;
 import com.ihsinformatics.gfatmmobile.pmdt.PmdtPatientDissociationForm;
 import com.ihsinformatics.gfatmmobile.pmdt.PmdtPatientRegistrationForm;
@@ -192,14 +195,20 @@ public class Forms{
     public static final String PMDT_DAILY_TREATMENT_MONITORING = "Daily Treatment Monitoring";
     public static final String PMDT_TREATMENT_COORDINATOR_MONITORING = "TC Monitoring";
     public static final String PMDT_SOCIAL_SUPPORT_FOOD_BASKET = "Social Support Food Basket";
+    public static final String PMDT_CONVEYANCE_ALLOWANCE = "Conveyance Allowance";
+    public static final String PMDT_NUTRITIONAL_SUPPORT = "Nutritional Support";
+    public static final String PMDT_NUTRITIONAL_SUPPORT_RECEIVING = "Nutritional Support Receiving";
     public static final FormsObject patientRegistration = new FormsObject(PMDT_PATIENT_REGISTRAITON, PmdtPatientRegistrationForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
     public static final FormsObject providerRegistration = new FormsObject(PMDT_PROVIDER_REGISTRAITON, PmdtProviderRegistration.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM);
     public static final FormsObject basicManagementUnitVisit = new FormsObject(PMDT_BASIC_MANAGEMENT_UNIT_VISIT, PmdtBasicManagementUnitVistForm.class, R.drawable.pet_treatment_adherence, FormTypeColor.OTHER_FORM);
     public static final FormsObject patientAssignment = new FormsObject(PMDT_PATIENT_ASSIGNMENT, PmdtPatientAssignmentForm.class, R.drawable.pet_counselling_followup, FormTypeColor.FOLLOWUP_FORM);
     public static final FormsObject patientDissociation = new FormsObject(PMDT_PATIENT_DISSOCIATION, PmdtPatientDissociationForm.class, R.drawable.pet_counselling_followup, FormTypeColor.FOLLOWUP_FORM);
-    public static final FormsObject dailyTreatmentMonitoring = new FormsObject(PMDT_DAILY_TREATMENT_MONITORING, PmdtDailyTreatmentMonitoringForm.class, R.drawable.pet_counselling_followup, FormTypeColor.FOLLOWUP_FORM);
-    public static final FormsObject treatmentCoordinatorcMonitoring = new FormsObject(PMDT_TREATMENT_COORDINATOR_MONITORING, PmdtTreatmentCoordinatorMonitoringForm.class, R.drawable.pet_counselling_followup, FormTypeColor.FOLLOWUP_FORM);
+    public static final FormsObject dailyTreatmentMonitoring = new FormsObject(PMDT_DAILY_TREATMENT_MONITORING, PmdtDailyTreatmentMonitoringForm.class, R.drawable.pet_infection_treatment_eligibility, FormTypeColor.TREATMENT_FORM);
+    public static final FormsObject treatmentCoordinatorcMonitoring = new FormsObject(PMDT_TREATMENT_COORDINATOR_MONITORING, PmdtTreatmentCoordinatorMonitoringForm.class, R.drawable.pet_treatment_adherence, FormTypeColor.TREATMENT_FORM);
     public static final FormsObject socialSupportFoodBasket = new FormsObject(PMDT_SOCIAL_SUPPORT_FOOD_BASKET, PmdtSocialSupportFoodBasketForm.class, R.drawable.pet_counselling_followup, FormTypeColor.FOLLOWUP_FORM);
+    public static final FormsObject conveyanceAllowance = new FormsObject(PMDT_CONVEYANCE_ALLOWANCE, PmdtConveyanceAllowanceForm.class, R.drawable.pet_incentive_disbursement, FormTypeColor.OTHER_FORM);
+    public static final FormsObject nutritionalSupport = new FormsObject(PMDT_NUTRITIONAL_SUPPORT, PmdtNutritionalSupportForm.class, R.drawable.pet_treatment_initiation, FormTypeColor.OTHER_FORM);
+    public static final FormsObject nutritionalSupportReceiving = new FormsObject(PMDT_NUTRITIONAL_SUPPORT_RECEIVING, PmdtNutritionalSupportReceivingForm.class, R.drawable.pet_treatment_initiation, FormTypeColor.OTHER_FORM);
     /********************************
      * CHILDHOOD TB
      ********************************/
@@ -355,6 +364,9 @@ public class Forms{
         pmdtList.add(dailyTreatmentMonitoring);
         pmdtList.add(treatmentCoordinatorcMonitoring);
         pmdtList.add(socialSupportFoodBasket);
+        pmdtList.add(conveyanceAllowance);
+        pmdtList.add(nutritionalSupport);
+        pmdtList.add(nutritionalSupportReceiving);
 
         return pmdtList;
 
