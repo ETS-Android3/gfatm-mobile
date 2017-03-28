@@ -23,6 +23,9 @@
     <string name="comorbidities">Comorbidities</string>
     <string name="childhood_tb">Childhood TB</string>
 
+    <string name="selected_patient_changed">Selected Patient changed to</string>
+    <string name="selected_location_changed">Selected Location changed to</string>
+
     <!-- Settings Values -->
     <string-array name="programs">
         <item>@string/pmdt</item>
@@ -458,11 +461,14 @@
     <string name="address_1">Address 1:</string>
     <string name="address_2">Address 2:</string>
     <string name="city_village">City/Village:</string>
+    <string name="district">District:</string>
+    <string name="state_province">State/Province:</string>
     <string name="description">Description:</string>
     <string name="sync_with_openmrs">Sync with Openmrs</string>
     <string name="last_update_on">Last update on: </string>
     <string name="location">Location:</string>
     <string name="fetching_data">fetching data</string>
+    <string name="search_location">Search...</string>
 
     <!-- Search -->
     <string name="name">Name: </string>
