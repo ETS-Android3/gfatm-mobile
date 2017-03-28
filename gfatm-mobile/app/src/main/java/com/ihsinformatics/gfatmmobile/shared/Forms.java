@@ -303,22 +303,22 @@ public class Forms{
 
         ArrayList<FormsObject> fastList = new ArrayList<>();
 
-        fastList.add(fastScreeningForm);
+      //  fastList.add(fastScreeningForm);
         fastList.add(fastPromptForm);
         fastList.add(fastPresumptiveForm);
         fastList.add(fastPatientLocationForm);
         fastList.add(fastGpxSpecimenCollectionForm);
         fastList.add(fastPresumptiveInformationForm);
         fastList.add(fastGeneXpertResultForm);
-        fastList.add(fastScreeningChestXrayOrderAndResultForm);
-        fastList.add(fastAfbSmearMicroscopyOrderAndResultForm);
-        fastList.add(fastDstOrderAndResultForm);
-        fastList.add(fastContactRegistryForm);
+     //   fastList.add(fastScreeningChestXrayOrderAndResultForm);
+   //     fastList.add(fastAfbSmearMicroscopyOrderAndResultForm);
+    //    fastList.add(fastDstOrderAndResultForm);
+     //   fastList.add(fastContactRegistryForm);
         fastList.add(fastReferralTransferForm);
         fastList.add(fastTreatmentInitiationForm);
-        fastList.add(fastTreatmentFollowupForm);
-        fastList.add(fastMissedVisitFollowupForm);
-        fastList.add(fastEndOfFollowupForm);
+  //      fastList.add(fastTreatmentFollowupForm);
+  //      fastList.add(fastMissedVisitFollowupForm);
+    //    fastList.add(fastEndOfFollowupForm);
 
         return fastList;
 

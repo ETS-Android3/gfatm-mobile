@@ -21,10 +21,12 @@ public class MySpinner extends Spinner {
 
     String defaultValue;
     ArrayAdapter<String> spinnerArrayAdapter;
+    Context context;
 
     public MySpinner(Context context, String[] options, String defaultValue) {
         super(context);
 
+        this.context = context;
         this.defaultValue = defaultValue;
 
         List<String> spinnerList = new ArrayList<String>(Arrays.asList(options));
@@ -60,6 +62,22 @@ public class MySpinner extends Spinner {
 
     public String getValue() {
         return getSelectedItem().toString();
+    }
+
+    public void setSpinnerData(String[] districts){
+
+        if (App.isLanguageRTL()) {
+            spinnerArrayAdapter = new ArrayAdapter<String>(context, R.layout.custom_rtl_spinner, districts);
+            setAdapter(spinnerArrayAdapter);
+            spinnerArrayAdapter.setDropDownViewResource(R.layout.custom_rtl_spinner);
+            setGravity(Gravity.RIGHT);
+        } else {
+            spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, districts);
+            setAdapter(spinnerArrayAdapter);
+            spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            setGravity(Gravity.LEFT);
+        }
+
     }
 
 }
