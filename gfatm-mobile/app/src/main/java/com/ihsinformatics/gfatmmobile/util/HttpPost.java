@@ -293,7 +293,7 @@ public class HttpPost {
 
             if (App.getMode().equalsIgnoreCase("OFFLINE")) {
 
-                String requestURI = "http://serverAddress/openmrs/ws/rest/v1/" + PROGRAM_ENROLLEMENT + "/" + App.getPatient().getUuid() + "/" + "address";
+                String requestURI = "http://serverAddress/openmrs/ws/rest/v1/" + PROGRAM_ENROLLEMENT;
                 String content = programEnrollementObject.toString();
 
                 return requestURI + " ;;;; " + content;
