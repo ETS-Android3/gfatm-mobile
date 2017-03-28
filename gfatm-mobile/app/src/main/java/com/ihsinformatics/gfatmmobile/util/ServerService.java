@@ -759,7 +759,7 @@ public class ServerService {
                         String address2 = patient.getPerson().getAddress2();
                         String address3 = patient.getPerson().getAddress3();
                         String stateProvince = patient.getPerson().getStateProvince();
-                        //String countyDistict = patient.getPerson().get;
+                        String countyDistict = patient.getPerson().getCountyDistrict();
                         String cityVillage = patient.getPerson().getCityVillage();
                         String country = patient.getPerson().getCountry();
 
@@ -798,6 +798,7 @@ public class ServerService {
                         values.put("address3", address3);
                         values.put("stateProvince", stateProvince);
                         values.put("cityVillage", cityVillage);
+                        values.put("countyDistrict", countyDistict);
                         values.put("country", country);
                         dbUtil.insert(Metadata.PATIENT, values);
 
@@ -1584,7 +1585,7 @@ public class ServerService {
                     String[] uriArray = uri.split(" ;;;; ");
 
                     ContentValues values4 = new ContentValues();
-                    values4.put("encounter_id", Integer.valueOf(encounterId));
+                    values4.put("form_id", Integer.valueOf(encounterId));
                     values4.put("uri", uriArray[0]);
                     values4.put("content", uriArray[1]);
                     values4.put("pid", App.getPatientId());
@@ -1771,6 +1772,10 @@ public class ServerService {
                         return "PARSER_ERROR";
                     }
 
+                } else if (String.valueOf(form[1]).equals(Metadata.PERSON_ATTRIBUTE) || String.valueOf(form[1]).equals(Metadata.PERSON_ADDRESS) || String.valueOf(form[1]).equals(Metadata.PATIENT_IDENTIFIER) || String.valueOf(form[1]).equals(Metadata.PROGRAM)) {
+                    String returnString = httpPost.backgroundPost(String.valueOf(form[3]), String.valueOf(form[4]));
+                    if (returnString == null)
+                        return "POST_ERROR";
                 } else {
 
                     String returnString = httpPost.backgroundPost(String.valueOf(form[3]), String.valueOf(form[4]));
@@ -1801,6 +1806,8 @@ public class ServerService {
                             values3.put("encounter_id", id);
                             dbUtil.insert(Metadata.OBS, values3);
                         }
+
+
                     } catch (Exception e) {
                         return "PARSER_ERROR";
                     }
