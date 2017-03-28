@@ -13,6 +13,10 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -114,6 +118,44 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
             contentLinearLayout.addView(text);
         } else {
 
+            final AutoCompleteTextView locationAutocomplete = new AutoCompleteTextView(getApplicationContext());
+            locationAutocomplete.setHint(getResources().getString(R.string.search_location));
+            locationAutocomplete.setHintTextColor(getResources().getColor(R.color.light_grey));
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            layoutParams.setMargins(0, 20, 0, 20);
+            locationAutocomplete.setLayoutParams(layoutParams);
+
+            locationAutocomplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view,
+                                        int position, long id) {
+
+                    String selection = (String) parent.getItemAtPosition(position);
+                    App.setLocation(selection);
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LocationSetupActivity.this);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString(Preferences.LOCATION, App.getLocation());
+                    editor.apply();
+
+                    for (RadioButton rb : radioButtons) {
+
+                        if (rb.getTag().toString().equalsIgnoreCase(selection))
+                            rb.setChecked(true);
+                        else
+                            rb.setChecked(false);
+
+                    }
+
+
+                }
+            });
+
+            contentLinearLayout.addView(locationAutocomplete);
+
+            String[] countries = new String[locations.length];
+
             for (int i = 0; i < locations.length; i++) {
 
                 LinearLayout verticalLayout = new LinearLayout(getApplicationContext());
@@ -135,6 +177,8 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
                 linearLayout.addView(selection);
                 selection.setTag(String.valueOf(locations[i][1]));
                 radioButtons.add(selection);
+
+                countries[i] = String.valueOf(locations[i][1]);
 
                 if (locations[i][1].equals(App.getLocation()))
                     selection.setChecked(true);
@@ -254,6 +298,44 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
                 }
 
                 if (!(locations[i][14] == null || locations[i][14].equals("") || locations[i][14].equals("null"))) {
+                    LinearLayout ll4 = new LinearLayout(this);
+                    ll4.setOrientation(LinearLayout.HORIZONTAL);
+
+                    TextView tv6 = new TextView(this);
+                    tv6.setText(getResources().getString(R.string.district) + " ");
+                    tv6.setTextSize(getResources().getDimension(R.dimen.small));
+                    tv6.setTextColor(color1);
+                    ll4.addView(tv6);
+
+                    TextView tv7 = new TextView(this);
+                    tv7.setText(String.valueOf(locations[i][14]));
+                    tv7.setTextSize(getResources().getDimension(R.dimen.small));
+                    ll4.addView(tv7);
+
+                    moreLayout.addView(ll4);
+                    moreLayout.setVisibility(View.VISIBLE);
+                }
+
+                if (!(locations[i][15] == null || locations[i][15].equals("") || locations[i][15].equals("null"))) {
+                    LinearLayout ll4 = new LinearLayout(this);
+                    ll4.setOrientation(LinearLayout.HORIZONTAL);
+
+                    TextView tv6 = new TextView(this);
+                    tv6.setText(getResources().getString(R.string.province) + " ");
+                    tv6.setTextSize(getResources().getDimension(R.dimen.small));
+                    tv6.setTextColor(color1);
+                    ll4.addView(tv6);
+
+                    TextView tv7 = new TextView(this);
+                    tv7.setText(String.valueOf(locations[i][15]));
+                    tv7.setTextSize(getResources().getDimension(R.dimen.small));
+                    ll4.addView(tv7);
+
+                    moreLayout.addView(ll4);
+                    moreLayout.setVisibility(View.VISIBLE);
+                }
+
+                if (!(locations[i][16] == null || locations[i][16].equals("") || locations[i][16].equals("null"))) {
 
                     LinearLayout ll5 = new LinearLayout(this);
                     ll5.setOrientation(LinearLayout.HORIZONTAL);
@@ -265,7 +347,7 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
                     ll5.addView(tv8);
 
                     TextView tv9 = new TextView(this);
-                    tv9.setText(String.valueOf(locations[i][14]));
+                    tv9.setText(String.valueOf(locations[i][16]));
                     tv9.setTextSize(getResources().getDimension(R.dimen.small));
                     ll5.addView(tv9);
 
@@ -302,6 +384,13 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
                 contentLinearLayout.addView(verticalLayout);
 
             }
+
+            final int color = App.getColor(this, R.attr.colorPrimaryDark);
+
+            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, countries);
+            spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            locationAutocomplete.setAdapter(spinnerArrayAdapter);
+            locationAutocomplete.setTextColor(color);
         }
 
     }
@@ -397,7 +486,12 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
             toast.show();
         }
 
+        try {
+            InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(programName.getWindowToken(), 0);
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+
     }
 }
-
-
