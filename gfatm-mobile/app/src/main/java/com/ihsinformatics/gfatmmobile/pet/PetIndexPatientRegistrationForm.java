@@ -531,9 +531,6 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                             return result;
                     }
 
-//                    result = serverService.saveProgramEnrollement(App.getSqlDate(formDateCalendar), "100-0");
-//                    if (!result.equals("SUCCESS"))
-//                        return result;
                 }
 
                 return "SUCCESS";
