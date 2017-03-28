@@ -396,8 +396,24 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
                 });
 
                 String result = serverService.saveEncounterAndObservation(FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}));
-                if (result.contains("SUCCESS"))
-                    return "SUCCESS";
+                if (!result.contains("SUCCESS"))
+                    return result;
+                else {
+
+                    String encounterId = "";
+
+                    if (result.contains("_")) {
+                        String[] successArray = result.split("_");
+                        encounterId = successArray[1];
+                    }
+
+                    if (App.get(petEligiable).equals(getResources().getString(R.string.yes))) {
+                        result = serverService.saveProgramEnrollement(App.getSqlDate(formDateCalendar), encounterId);
+                        if (!result.equals("SUCCESS"))
+                            return result;
+                    } else
+                        return "SUCCESS";
+                }
 
                 return result;
 
