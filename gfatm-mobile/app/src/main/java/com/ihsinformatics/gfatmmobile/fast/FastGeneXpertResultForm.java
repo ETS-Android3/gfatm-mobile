@@ -307,7 +307,7 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
         if (gxpResult.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"GENEXPERT MTB/RIF RESULT", App.get(gxpResult).equals(getResources().getString(R.string.fast_mtb_detected)) ? "MYCOBACTERIUM TUBERCULOSIS DETECTED WITH RIFAMPIN RESISTANCE" :
                     (App.get(gxpResult).equals(getResources().getString(R.string.fast_mtb_not_detected)) ? "MYCOBACTERIUM TUBERCULOSIS DETECTED WITHOUT RIFAMPIN RESISTANCE" :
-                            (App.get(gxpResult).equals(getResources().getString(R.string.fast_error)) ? "NEGATIVE" :
+                            (App.get(gxpResult).equals(getResources().getString(R.string.fast_error)) ? "ERROR" :
                                     (App.get(gxpResult).equals(getResources().getString(R.string.fast_invalid)) ? "INVALID" : "NO RESULT")))});
 
         if (mtbBurden.getVisibility() == View.VISIBLE)

@@ -420,7 +420,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
         observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
       /*  observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
         observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});*/
-        observations.add(new String[]{"IDENTIFIED PATIENT THROUGH SCREENING", App.get(screening).equals(getResources().getString(R.string.fast_patient_title)) ? "YES" : "NO"});
+        observations.add(new String[]{"IDENTIFIED PATIENT THROUGH SCREENING", App.get(screening).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
 
         if (facilitySection.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"HOSPITAL SECTION", App.get(facilitySection).equals(getResources().getString(R.string.fast_opdclinicscreening_title)) ? "OPD CLINIC SCREENING" :
@@ -437,7 +437,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
             observations.add(new String[]{"OUTPATIENT DEPARTMENT", App.get(opdWardSection).equals(getResources().getString(R.string.fast_generalmedicinefilterclinic_title)) ? "GENERAL MEDICINE DEPARTMENT" :
                     (App.get(opdWardSection).equals(getResources().getString(R.string.fast_chesttbclinic_title)) ? "CHEST MEDICINE DEPARTMENT" :
                             (App.get(opdWardSection).equals(getResources().getString(R.string.fast_gynaeobstetrics_title)) ? "OBSTETRICS AND GYNECOLOGY DEPARTMENT" :
-                                    (App.get(opdWardSection).equals(getResources().getString(R.string.fast_surgery_title)) ? "PEDIATRIC SURGERY DEPARTMENT" : "EMERGENCY DEPARTMENT")))});
+                                    (App.get(opdWardSection).equals(getResources().getString(R.string.fast_surgery_title)) ? "GENERAL SURGERY DEPARTMENT" : "EMERGENCY DEPARTMENT")))});
 
 
         if (patientReferralSource.getVisibility() == View.VISIBLE)
@@ -462,7 +462,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
             observations.add(new String[]{"TYPE OF OPD OR WARD PATIENT REFERRED FROM", App.get(referralWithinOpd).equals(getResources().getString(R.string.fast_generalmedicinefilterclinic_title)) ? "GENERAL MEDICINE DEPARTMENT" :
                     (App.get(referralWithinOpd).equals(getResources().getString(R.string.fast_chesttbclinic_title)) ? "CHEST MEDICINE DEPARTMENT" :
                             (App.get(referralWithinOpd).equals(getResources().getString(R.string.fast_gynaeobstetrics_title)) ? "OBSTETRICS AND GYNECOLOGY DEPARTMENT" :
-                                    (App.get(referralWithinOpd).equals(getResources().getString(R.string.fast_surgery_title)) ? "PEDIATRIC SURGERY DEPARTMENT" :
+                                    (App.get(referralWithinOpd).equals(getResources().getString(R.string.fast_surgery_title)) ? "GENERAL SURGERY DEPARTMENT" :
                                             (App.get(referralWithinOpd).equals(getResources().getString(R.string.fast_emergency_title)) ? "EMERGENCY DEPARTMENT" : "OTHER TYPE OF OPD OR WARD"))))});
 
         if (referralWithinOpdOther.getVisibility() == View.VISIBLE)
@@ -682,7 +682,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
                 String value = obs[0][1].equals("GENERAL MEDICINE DEPARTMENT") ? getResources().getString(R.string.fast_generalmedicinefilterclinic_title) :
                         (obs[0][1].equals("CHEST MEDICINE DEPARTMENT") ? getResources().getString(R.string.fast_chesttbclinic_title) :
                                 (obs[0][1].equals("OBSTETRICS AND GYNECOLOGY DEPARTMENT") ? getResources().getString(R.string.fast_gynaeobstetrics_title) :
-                                        (obs[0][1].equals("PEDIATRIC SURGERY DEPARTMENT") ? getResources().getString(R.string.fast_surgery_title) :
+                                        (obs[0][1].equals("GENERAL SURGERY DEPARTMENT") ? getResources().getString(R.string.fast_surgery_title) :
                                                 getResources().getString(R.string.fast_er_title))));
 
                 opdWardSection.getSpinner().selectValue(value);
@@ -718,11 +718,11 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
             } else if (obs[0][0].equals("OTHER FACILITY DEPARTMENT")) {
                 facilityDepartmentOther.getEditText().setText(obs[0][1]);
                 facilityDepartmentOther.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("OUTPATIENT DEPARTMENT")) {
+            } else if (obs[0][0].equals("TYPE OF OPD OR WARD PATIENT REFERRED FROM")) {
                 String value = obs[0][1].equals("GENERAL MEDICINE DEPARTMENT") ? getResources().getString(R.string.fast_generalmedicinefilterclinic_title) :
                         (obs[0][1].equals("CHEST MEDICINE DEPARTMENT") ? getResources().getString(R.string.fast_chesttbclinic_title) :
                                 (obs[0][1].equals("OBSTETRICS AND GYNECOLOGY DEPARTMENT") ? getResources().getString(R.string.fast_gynaeobstetrics_title) :
-                                        (obs[0][1].equals("PEDIATRIC SURGERY DEPARTMENT") ? getResources().getString(R.string.fast_surgery_title) :
+                                        (obs[0][1].equals("GENERAL SURGERY DEPARTMENT") ? getResources().getString(R.string.fast_surgery_title) :
                                                 (obs[0][1].equals("EMERGENCY DEPARTMENT") ? getResources().getString(R.string.fast_er_title) :
                                                         getResources().getString(R.string.fast_other_title)))));
 

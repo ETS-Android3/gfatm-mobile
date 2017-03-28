@@ -65,6 +65,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
     TitledEditText cnic2;
     TitledEditText cnic3;
     TitledSpinner cnicOwner;
+    TitledEditText cnicOwnerOther;
 
     TitledEditText tbRegisterationNumber;
     TitledRadioGroup diagonosisType;
@@ -165,6 +166,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         cnic3 = new TitledEditText(context, null, "-", "", "#", 1, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         cnicLinearLayout.addView(cnic3);
         cnicOwner = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_cnic), getResources().getStringArray(R.array.fast_whose_nic_is_this_list), getResources().getString(R.string.fast_self), App.VERTICAL);
+        cnicOwnerOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         tbRegisterationNumber = new TitledEditText(context, null, getResources().getString(R.string.fast_tb_registeration_no), "", "", 11, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         diagonosisType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_type_of_diagnosis), getResources().getStringArray(R.array.fast_diagonosis_type_list), getResources().getString(R.string.fast_bactoriologically_confirmed), App.VERTICAL, App.VERTICAL);
         tbType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_what_type_of_tb), getResources().getStringArray(R.array.fast_tb_type_list), getResources().getString(R.string.fast_pulmonary), App.VERTICAL, App.VERTICAL);
@@ -187,14 +189,14 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), regDate.getButton(), cnic1.getEditText(), cnic2.getEditText(), cnic3.getEditText(),
-                cnicOwner.getSpinner(), tbRegisterationNumber.getEditText(), diagonosisType.getRadioGroup(), tbType.getRadioGroup(),
+                cnicOwner.getSpinner(), cnicOwnerOther.getEditText(), tbRegisterationNumber.getEditText(), diagonosisType.getRadioGroup(), tbType.getRadioGroup(),
                 extraPulmonarySite.getSpinner(), extraPulmonarySiteOther.getEditText(), patientType.getSpinner(), treatmentInitiated.getRadioGroup(),
                 reasonTreatmentNotIniated.getSpinner(), reasonTreatmentNotInitiatedOther.getEditText(), tbCategory.getRadioGroup(),
                 historyCategory.getRadioGroup(), outcomePreviousCategory.getSpinner(), weight.getEditText(), returnVisitDate.getButton()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, regDate, cnicLinearLayout, cnicOwner, diagonosisType, tbType, extraPulmonarySite,
+                {{formDate, regDate, cnicLinearLayout, cnicOwner, cnicOwnerOther, diagonosisType, tbType, extraPulmonarySite,
                         extraPulmonarySiteOther, patientType, treatmentInitiated, reasonTreatmentNotIniated, reasonTreatmentNotInitiatedOther,
                         tbRegisterationNumber, tbCategory, historyCategory, outcomePreviousCategory, weight, returnVisitDate}};
         formDate.getButton().setOnClickListener(this);
@@ -205,6 +207,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         treatmentInitiated.getRadioGroup().setOnCheckedChangeListener(this);
         reasonTreatmentNotIniated.getSpinner().setOnItemSelectedListener(this);
         tbCategory.getRadioGroup().setOnCheckedChangeListener(this);
+        cnicOwner.getSpinner().setOnItemSelectedListener(this);
 
         resetViews();
     }
@@ -348,6 +351,16 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             error = true;
         }
 
+        if (cnicOwnerOther.getVisibility() == View.VISIBLE && App.get(cnicOwnerOther).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            cnicOwnerOther.getEditText().setError(getString(R.string.empty_field));
+            cnicOwnerOther.getEditText().requestFocus();
+            error = true;
+        }
+
 
         if (tbRegisterationNumber.getVisibility() == View.VISIBLE && App.get(tbRegisterationNumber).isEmpty()) {
             if (App.isLanguageRTL())
@@ -459,6 +472,10 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                                                                                                     (App.get(cnicOwner).equals(getResources().getString(R.string.fast_aunt)) ? "AUNT" :
                                                                                                             (App.get(cnicOwner).equals(getResources().getString(R.string.fast_son)) ? "SON" :
                                                                                                                     (App.get(cnicOwner).equals(getResources().getString(R.string.fast_daughter)) ? "DAUGHTER" : "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER")))))))))))))});
+
+        if(cnicOwnerOther.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(cnicOwnerOther)});
+
 
         if (tbRegisterationNumber.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TB REGISTRATION NUMBER", App.get(tbRegisterationNumber)});
@@ -687,7 +704,12 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
                 cnicOwner.getSpinner().selectValue(value);
                 cnicOwner.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("TB REGISTRATION NUMBER")) {
+            }
+            else if (obs[0][0].equals("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER")) {
+                cnicOwnerOther.getEditText().setText(obs[0][1]);
+                cnicOwnerOther.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("TB REGISTRATION NUMBER")) {
                 tbRegisterationNumber.getEditText().setText(obs[0][1]);
                 tbRegisterationNumber.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("TUBERCULOSIS DIAGNOSIS METHOD")) {
@@ -871,6 +893,13 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                 reasonTreatmentNotInitiatedOther.setVisibility(View.GONE);
             }
         }
+        else if(spinner == cnicOwner.getSpinner()){
+            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title))) {
+                cnicOwnerOther.setVisibility(View.VISIBLE);
+            } else {
+                cnicOwnerOther.setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override
@@ -922,6 +951,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         regDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
         returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
         extraPulmonarySite.setVisibility(View.GONE);
+        cnicOwnerOther.setVisibility(View.GONE);
         extraPulmonarySiteOther.setVisibility(View.GONE);
         reasonTreatmentNotIniated.setVisibility(View.GONE);
         reasonTreatmentNotInitiatedOther.setVisibility(View.GONE);
@@ -946,6 +976,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                 HashMap<String, String> result = new HashMap<String, String>();
                 String cnic1 = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Information", "NATIONAL IDENTIFICATION NUMBER");
                 String cnicowner1 = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Information", "COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
+                String cnicownerother1 = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Information", "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
                 String regDate = serverService.getEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + "Presumptive Information");
 
                 if (cnic1 != null)
@@ -967,6 +998,10 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                                                                                                                             (cnicowner1.equals("DAUGHTER") ? getResources().getString(R.string.fast_daughter) : getResources().getString(R.string.fast_other_title)))))))))))))));
 
                 }
+
+                if (cnicownerother1 != null)
+                    result.put("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", cnicownerother1);
+
                 if (regDate != null)
                     result.put("FORM DATE", regDate);
 
@@ -992,6 +1027,10 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
                 if (result.get("COMPUTERIZED NATIONAL IDENTIFICATION OWNER") != null) {
                     cnicOwner.getSpinner().selectValue(result.get("COMPUTERIZED NATIONAL IDENTIFICATION OWNER"));
+                }
+
+                if (result.get("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER") != null) {
+                    cnicOwnerOther.getEditText().setText(result.get("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER"));
                 }
 
                 if (result.get("FORM DATE") != null) {
