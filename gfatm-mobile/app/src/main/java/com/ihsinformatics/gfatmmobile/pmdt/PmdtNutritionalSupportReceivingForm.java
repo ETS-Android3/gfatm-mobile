@@ -2,7 +2,6 @@ package com.ihsinformatics.gfatmmobile.pmdt;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.InputType;
@@ -15,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -24,6 +24,7 @@ import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
+import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
@@ -31,26 +32,32 @@ import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 import java.util.ArrayList;
 
 /**
- * Created by Tahira on 2/27/2017.
+ * Created by Tahira on 3/20/2017.
  */
 
-public class PmdtBasicManagementUnitVistForm extends AbstractFormActivity {
+public class PmdtNutritionalSupportReceivingForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
     Context context;
     TitledButton formDate;
     TitledButton visitDate;
-    TitledSpinner district;
-    TitledSpinner townTaluka;
-    // city selected in preferences
-    TitledEditText basicManagmentUnitVisited;
-    TitledEditText doctorVisitedName;
-    TitledEditText numberFailureCases;
+    TitledEditText externalId;
     LinearLayout facilityLinearLayout;
-    TextView referredFacilityText;
-    AutoCompleteTextView referredFacilityAutoCompleteList;
-    TitledEditText numberPatientsEnrolled;
+    TextView treatmentFacilityText;
+    AutoCompleteTextView treatmentFacilityAutoCompleteList;
+    TitledEditText nationalDrTbRegistrationNumber;
+    TitledEditText treatmentMonth;
 
-    Snackbar snackbar;
+    TitledEditText nutritionalSupportVoucherNumber;     // title: Nutritional support eligibility
+    TitledRadioGroup showingSameVoucher;
+    TitledSpinner nutritionalSupportTypeEligible;
+    TitledRadioGroup glucernaGiven;
+    TitledRadioGroup ensureGiven;
+    TitledRadioGroup energidGiven;
+    TitledRadioGroup pediasureGiven;
+    TitledRadioGroup otherNutritionalSupportGiven;
+    TitledEditText reasonNutritionSupportNotGiven;
+
+
     ScrollView scrollView;
 
     /**
@@ -60,11 +67,10 @@ public class PmdtBasicManagementUnitVistForm extends AbstractFormActivity {
      * @return
      */
     @Override
-    public View onCreateView(LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        PAGE_COUNT = 1;
-        FORM_NAME = Forms.PMDT_BASIC_MANAGEMENT_UNIT_VISIT;
-        FORM = Forms.basicManagementUnitVisit;
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        PAGE_COUNT = 2;
+        FORM_NAME = Forms.PMDT_NUTRITIONAL_SUPPORT_RECEIVING;
+        FORM = Forms.nutritionalSupportReceiving;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -109,23 +115,15 @@ public class PmdtBasicManagementUnitVistForm extends AbstractFormActivity {
                 groups.add(scrollView);
             }
         }
-
         return mainContent;
     }
 
-    /**
-     * Initializes all views and ArrayList and Views Array
-     */
     @Override
     public void initViews() {
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         visitDate = new TitledButton(context, null, getResources().getString(R.string.pmdt_visit_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
-        district = new TitledSpinner(context, null, getResources().getString(R.string.pmdt_district), getResources().getStringArray(R.array.pmdt_towns), getResources().getString(R.string.pmdt_gulshan_e_iqbal), App.HORIZONTAL, true);
-        townTaluka = new TitledSpinner(context, null, getResources().getString(R.string.pmdt_town_taluka_tehsil), getResources().getStringArray(R.array.pmdt_towns), getResources().getString(R.string.pmdt_gulshan_e_iqbal), App.HORIZONTAL, true);
-        basicManagmentUnitVisited = new TitledEditText(context, null, getResources().getString(R.string.pmdt_basic_management_unit_visited), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        doctorVisitedName = new TitledEditText(context, null, getResources().getString(R.string.pmdt_doctor_name_visited), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        numberFailureCases = new TitledEditText(context, null, getResources().getString(R.string.pmdt_number_failure_cases), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        externalId = new TitledEditText(context, null, getResources().getString(R.string.pmdt_external_id), "", "", 11, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
 
         // Fetching PMDT Locations
         String program = "";
@@ -146,38 +144,60 @@ public class PmdtBasicManagementUnitVistForm extends AbstractFormActivity {
             locationArray[i] = String.valueOf(locations[i][1]);
         }
 
-        referredFacilityText = new TextView(context);
-        referredFacilityText.setText(getResources().getString(R.string.pmdt_facility_referred));
-        LinearLayout referredFacilityLayout = new LinearLayout(context);
-        MyTextView referredFacilityQuestionRequired = new MyTextView(context, "*");
+        treatmentFacilityText = new TextView(context);
+        treatmentFacilityText.setText(getResources().getString(R.string.pmdt_treatment_facility));
+        LinearLayout requiredTreatmentFacilityLayout = new LinearLayout(context);
+        MyTextView treatmentFacilityQuestionRequired = new MyTextView(context, "*");
         int color1 = App.getColor(context, R.attr.colorAccent);
-        referredFacilityQuestionRequired.setTextColor(color1);
-        referredFacilityLayout.setOrientation(LinearLayout.HORIZONTAL);
-        referredFacilityLayout.addView(referredFacilityQuestionRequired);
-        referredFacilityLayout.addView(referredFacilityText);
-        referredFacilityAutoCompleteList = new AutoCompleteTextView(context);
-        final ArrayAdapter<String> autoCompleteLocationAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, locationArray);
-        referredFacilityAutoCompleteList.setAdapter(autoCompleteLocationAdapter);
-        referredFacilityAutoCompleteList.setHint(getResources().getString(R.string.pmdt_facility_hint));
+        treatmentFacilityQuestionRequired.setTextColor(color1);
+        requiredTreatmentFacilityLayout.setOrientation(LinearLayout.HORIZONTAL);
+        requiredTreatmentFacilityLayout.addView(treatmentFacilityQuestionRequired);
+        requiredTreatmentFacilityLayout.addView(treatmentFacilityText);
+        treatmentFacilityAutoCompleteList = new AutoCompleteTextView(context);
+        final ArrayAdapter<String> autoCompleteFacilityAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, locationArray);
+        treatmentFacilityAutoCompleteList.setAdapter(autoCompleteFacilityAdapter);
+        treatmentFacilityAutoCompleteList.setHint("Enter facility");
         facilityLinearLayout = new LinearLayout(context);
         facilityLinearLayout.setOrientation(LinearLayout.VERTICAL);
-        facilityLinearLayout.addView(referredFacilityLayout);
-        facilityLinearLayout.addView(referredFacilityAutoCompleteList);
+        facilityLinearLayout.addView(requiredTreatmentFacilityLayout);
+        facilityLinearLayout.addView(treatmentFacilityAutoCompleteList);
 
-        numberPatientsEnrolled = new TitledEditText(context, null, getResources().getString(R.string.pmdt_number_patients_enrolled), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        nationalDrTbRegistrationNumber = new TitledEditText(context, null, getResources().getString(R.string.pmdt_national_dr_tb_registration_number), "", "", 25, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        treatmentMonth = new TitledEditText(context, null, getResources().getString(R.string.pmdt_treatment_month), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
 
-        views = new View[]{formDate.getButton(), visitDate.getButton(), district.getSpinner(), townTaluka.getSpinner(),
-                basicManagmentUnitVisited.getEditText(), doctorVisitedName.getEditText(), numberFailureCases.getEditText(),
-                referredFacilityAutoCompleteList, numberPatientsEnrolled.getEditText()};
+        nutritionalSupportVoucherNumber = new TitledEditText(context, getResources().getString(R.string.pmdt_title_nutrition_eligibility), getResources().getString(R.string.pmdt_nutritional_support_voucher_number), "", "", 20, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        showingSameVoucher = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_showing_same_voucher), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL);
+        nutritionalSupportTypeEligible = new TitledSpinner(context, null, getResources().getString(R.string.pmdt_nutrition_support_type), getResources().getStringArray(R.array.pmdt_nutrition_support_types), null, App.VERTICAL, true);
+        glucernaGiven = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_glucerna_given), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.HORIZONTAL, true);
+        ensureGiven = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_ensure_given), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.HORIZONTAL, true);
+        energidGiven = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_energid_given), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.HORIZONTAL, true);
+        pediasureGiven = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_pediasure_given), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.HORIZONTAL, true);
+        otherNutritionalSupportGiven = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_other_nutritioal_support_given), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, true);
+        reasonNutritionSupportNotGiven = new TitledEditText(context, null, getResources().getString(R.string.pmdt_nutritional_support_not_given), "", "", 100, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+
+
+        // Used for reset fields...
+        views = new View[]{formDate.getButton(), visitDate.getButton(), externalId.getEditText(), treatmentFacilityAutoCompleteList, nationalDrTbRegistrationNumber.getEditText(), treatmentMonth.getEditText(),
+                nutritionalSupportVoucherNumber.getEditText(), showingSameVoucher.getRadioGroup(), nutritionalSupportTypeEligible.getSpinner(), glucernaGiven.getRadioGroup(), ensureGiven.getRadioGroup(),
+                energidGiven.getRadioGroup(), pediasureGiven.getRadioGroup(), otherNutritionalSupportGiven.getRadioGroup(), reasonNutritionSupportNotGiven.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, visitDate, district, townTaluka, basicManagmentUnitVisited, doctorVisitedName,
-                        numberFailureCases, facilityLinearLayout, numberPatientsEnrolled}};
+                {{formDate, visitDate, externalId, facilityLinearLayout, nationalDrTbRegistrationNumber, treatmentMonth},
+                        {nutritionalSupportVoucherNumber, showingSameVoucher, nutritionalSupportTypeEligible, glucernaGiven, ensureGiven,
+                                energidGiven, pediasureGiven, otherNutritionalSupportGiven, reasonNutritionSupportNotGiven}};
 
         formDate.getButton().setOnClickListener(this);
         visitDate.getButton().setOnClickListener(this);
-        resetViews();
+        showingSameVoucher.getRadioGroup().setOnCheckedChangeListener(this);
+        nutritionalSupportTypeEligible.getSpinner().setOnItemSelectedListener(this);
+        glucernaGiven.getRadioGroup().setOnCheckedChangeListener(this);
+        ensureGiven.getRadioGroup().setOnCheckedChangeListener(this);
+        energidGiven.getRadioGroup().setOnCheckedChangeListener(this);
+        pediasureGiven.getRadioGroup().setOnCheckedChangeListener(this);
+        otherNutritionalSupportGiven.getRadioGroup().setOnCheckedChangeListener(this);
+
+        // TODO: check if patient is eligible else show pop-up and redirect to main menu. Check concept#165536: ELIGIBLE FOR NUTRITIONAL SUPPORT
 
     }
 
@@ -206,7 +226,6 @@ public class PmdtBasicManagementUnitVistForm extends AbstractFormActivity {
     public void onClick(View view) {
 
         super.onClick(view);
-
         if (view == formDate.getButton()) {
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
@@ -222,7 +241,6 @@ public class PmdtBasicManagementUnitVistForm extends AbstractFormActivity {
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
         }
-
     }
 
     @Override
@@ -241,14 +259,20 @@ public class PmdtBasicManagementUnitVistForm extends AbstractFormActivity {
     }
 
     @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-    }
-
-    @Override
     public void resetViews() {
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         visitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+    }
+
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+
     }
 
     class MyAdapter extends PagerAdapter {

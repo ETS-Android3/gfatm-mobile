@@ -7,6 +7,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -42,7 +43,7 @@ import java.util.Date;
  * Created by Tahira on 3/6/2017.
  */
 
-public class PmdtSocialSupportFoodBasketForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class PmdtConveyanceAllowanceForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
     Context context;
     TitledButton formDate;
@@ -55,6 +56,11 @@ public class PmdtSocialSupportFoodBasketForm extends AbstractFormActivity implem
     TextView treatmentFacilityText;
     AutoCompleteTextView treatmentFacilityAutoCompleteList;
     TitledEditText nationalDrTbRegistrationNumber;
+
+    TitledRadioGroup registerdOutstationFacility;
+    LinearLayout registerdOutstationFacilityLinearLayout;
+    TextView registerdOutstationFacilityText;
+    AutoCompleteTextView registerdOutstationFacilityAutoCompleteList;
 
     LinearLayout patientCnicLayout;
     LinearLayout patientCnicQuestionLayout;
@@ -73,40 +79,18 @@ public class PmdtSocialSupportFoodBasketForm extends AbstractFormActivity implem
     LinearLayout patientAlternatePhoneLayout;
     TitledEditText patientAlternatePhone1a;
     TitledEditText patientAlternatePhone1b;
-    TitledRadioGroup patientAccompanied;
-    TitledEditText treatmentSupporterId;        // include title: Treatment Supporter Information
-    TitledEditText treatmentSupporterFirstName;
-    TitledEditText treatmentSupporterLastName;
-    LinearLayout treatmentSupporterCnicLayout;
-    TitledEditText treatmentSupporterCnic1;
-    TitledEditText treatmentSupporterCnic2;
-    TitledEditText treatmentSupporterCnic3;
-    TitledRadioGroup treatmentSupporterOwnCnic;
-    TitledSpinner treatmentSupporterCnicOwner;
-    TitledEditText otherTreatmentSupporterCnicOwner;
-    TitledEditText nameTreatmentSupporterCnicOwner;
-    LinearLayout treatmentSupporterPrimaryPhoneLayout;
-    TitledEditText treatmentSupporterPrimaryPhone1a;
-    TitledEditText treatmentSupporterPrimaryPhone1b;
-    LinearLayout treatmentSupporterAlternatePhoneLayout;
-    TitledEditText treatmentSupporterAlternatePhone1a;
-    TitledEditText treatmentSupporterAlternatePhone1b;
+
     TitledRadioGroup patientSubmitSputumSample;         // include title: Sample submission information
     TitledEditText sputumSampleId;
     TitledRadioGroup reasonNotSubmittedSample;
     TitledEditText otherReasonNotSubmittedSample;
     TitledRadioGroup visitedDoctor;
-    TitledRadioGroup foodBasketAmount;
-    TitledEditText foodBasketVoucherBookNumber;
-    TitledEditText foodBasketVoucherNumber;
-    TitledButton validityVoucherDate;
+    TitledEditText conveyanceVoucherBookNumber;
+    TitledEditText conveyanceVoucherNumber;
+    TitledEditText amountTransferred;
+    TitledEditText amountTransferredInWords;
 
     ScrollView scrollView;
-
-    public static final int THIRD_DATE_DIALOG_ID = 3;
-    // Extra Views for date ...
-    Calendar thirdDateCalendar;
-    DialogFragment thirdDateFragment;
 
     /**
      * @param inflater
@@ -116,11 +100,9 @@ public class PmdtSocialSupportFoodBasketForm extends AbstractFormActivity implem
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        PAGE_COUNT = 4;
-        FORM_NAME = Forms.PMDT_SOCIAL_SUPPORT_FOOD_BASKET;
-        FORM = Forms.socialSupportFoodBasket;
-        thirdDateCalendar = Calendar.getInstance();
-        thirdDateFragment = new SelectDateFragment();
+        PAGE_COUNT = 3;
+        FORM_NAME = Forms.PMDT_CONVEYANCE_ALLOWANCE;
+        FORM = Forms.conveyanceAllowance;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -173,10 +155,10 @@ public class PmdtSocialSupportFoodBasketForm extends AbstractFormActivity implem
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         visitDate = new TitledButton(context, null, getResources().getString(R.string.pmdt_visit_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
-        externalId = new TitledEditText(context, null, getResources().getString(R.string.pmdt_external_id), "", "", 11, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        externalId = new TitledEditText(context, null, getResources().getString(R.string.pmdt_external_id), "", "", 11, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         typeAssessment = new TitledSpinner(context, null, getResources().getString(R.string.pmdt_assessment_type), getResources().getStringArray(R.array.pmdt_types_of_assessment), getResources().getString(R.string.pmdt_baseline_assessment), App.HORIZONTAL, true);
         otherAssessmentReason = new TitledEditText(context, null, getResources().getString(R.string.pmdt_other_assessment_reason), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        treatmentMonth = new TitledEditText(context, null, getResources().getString(R.string.pmdt_treatment_month), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        treatmentMonth = new TitledEditText(context, null, getResources().getString(R.string.pmdt_treatment_month), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
 
         // Fetching PMDT Locations
         String program = "";
@@ -207,8 +189,8 @@ public class PmdtSocialSupportFoodBasketForm extends AbstractFormActivity implem
         requiredTreatmentFacilityLayout.addView(treatmentFacilityQuestionRequired);
         requiredTreatmentFacilityLayout.addView(treatmentFacilityText);
         treatmentFacilityAutoCompleteList = new AutoCompleteTextView(context);
-        final ArrayAdapter<String> autoCompleteLocationAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, locationArray);
-        treatmentFacilityAutoCompleteList.setAdapter(autoCompleteLocationAdapter);
+        final ArrayAdapter<String> autoCompleteFacilityAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, locationArray);
+        treatmentFacilityAutoCompleteList.setAdapter(autoCompleteFacilityAdapter);
         treatmentFacilityAutoCompleteList.setHint("Enter facility");
         facilityLinearLayout = new LinearLayout(context);
         facilityLinearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -217,13 +199,24 @@ public class PmdtSocialSupportFoodBasketForm extends AbstractFormActivity implem
 
         nationalDrTbRegistrationNumber = new TitledEditText(context, null, getResources().getString(R.string.pmdt_national_dr_tb_registration_number), "", "", 25, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
 
+        registerdOutstationFacility = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_patient_registered_outstation), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, true);
+        registerdOutstationFacilityText = new TextView(context);
+        registerdOutstationFacilityText.setText(getResources().getString(R.string.pmdt_registered_outstation_facility));
+        registerdOutstationFacilityAutoCompleteList = new AutoCompleteTextView(context);
+        registerdOutstationFacilityAutoCompleteList.setAdapter(autoCompleteFacilityAdapter);
+        registerdOutstationFacilityAutoCompleteList.setHint("Enter facility");
+        registerdOutstationFacilityLinearLayout = new LinearLayout(context);
+        registerdOutstationFacilityLinearLayout.setOrientation(LinearLayout.VERTICAL);
+        registerdOutstationFacilityLinearLayout.addView(registerdOutstationFacilityText);
+        registerdOutstationFacilityLinearLayout.addView(registerdOutstationFacilityAutoCompleteList);
+
         // cnic layouts
         patientCnicLayout = new LinearLayout(context);
         patientCnicQuestionLayout = new LinearLayout(context);
         patientCnicLayout.setOrientation(LinearLayout.HORIZONTAL);
         patientCnicQuestionLayout.setOrientation(LinearLayout.HORIZONTAL);
 
-        MyLinearLayout linearLayout1 = new MyLinearLayout(context, getResources().getString(R.string.pmdt_title_cnic_patient), App.VERTICAL);
+        MyLinearLayout linearLayout1 = new MyLinearLayout(context, null, App.VERTICAL);
         patientCnicQuestionRequired = new MyTextView(context, "*");
         int color = App.getColor(context, R.attr.colorAccent);
         patientCnicQuestionRequired.setTextColor(color);
@@ -244,7 +237,7 @@ public class PmdtSocialSupportFoodBasketForm extends AbstractFormActivity implem
         patientOwnCnic = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_patient_own_cnic), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, false);
         patientCnicOwner = new TitledSpinner(context, null, getResources().getString(R.string.pmdt_cnic_owner), getResources().getStringArray(R.array.pmdt_cnic_owners), getResources().getString(R.string.pmdt_father), App.HORIZONTAL, false);
         otherPatientCnicOwner = new TitledEditText(context, null, getResources().getString(R.string.pmdt_other_cnic_owner), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
-        namePatientCnicOwner = new TitledEditText(context, null, getResources().getString(R.string.pmdt_cnic_owner_name), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        namePatientCnicOwner = new TitledEditText(context, null, getResources().getString(R.string.pmdt_cnic_owner_name), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         patientPrimaryPhoneLayout = new LinearLayout(context);
         patientPrimaryPhoneLayout.setOrientation(LinearLayout.HORIZONTAL);
         patientPrimaryPhone1a = new TitledEditText(context, null, getResources().getString(R.string.pmdt_patient_primary_phone_number), "", "XXXX", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
@@ -253,42 +246,10 @@ public class PmdtSocialSupportFoodBasketForm extends AbstractFormActivity implem
         patientPrimaryPhoneLayout.addView(patientPrimaryPhone1b);
         patientAlternatePhoneLayout = new LinearLayout(context);
         patientAlternatePhoneLayout.setOrientation(LinearLayout.HORIZONTAL);
-        patientAlternatePhone1a = new TitledEditText(context, null, getResources().getString(R.string.pmdt_patient_alternate_phone_number), "", "XXXX", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        patientAlternatePhone1a = new TitledEditText(context, null, getResources().getString(R.string.pmdt_patient_alternate_phone_number), "", "XXXX", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         patientAlternatePhoneLayout.addView(patientAlternatePhone1a);
         patientAlternatePhone1b = new TitledEditText(context, null, "-", "", "XXXXXXX", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         patientAlternatePhoneLayout.addView(patientAlternatePhone1b);
-
-        // Visit information
-        patientAccompanied = new TitledRadioGroup(context, getResources().getString(R.string.pmdt_title_treatment_supporter_information), getResources().getString(R.string.pmdt_patient_accompanied), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, true);
-        treatmentSupporterId = new TitledEditText(context, null, getResources().getString(R.string.pmdt_treatment_supporter_id), "", "", 10, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
-        treatmentSupporterFirstName = new TitledEditText(context, null, getResources().getString(R.string.pmdt_treatment_supporter_first_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
-        treatmentSupporterLastName = new TitledEditText(context, null, getResources().getString(R.string.pmdt_treatment_supporter_last_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
-
-        treatmentSupporterCnicLayout = new LinearLayout(context);
-        treatmentSupporterCnicLayout.setOrientation(LinearLayout.HORIZONTAL);
-        treatmentSupporterCnic1 = new TitledEditText(context, null, getResources().getString(R.string.pmdt_treatment_supporter_cnic_provided), "", "XXXXX", 5, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        treatmentSupporterCnicLayout.addView(treatmentSupporterCnic1);
-        treatmentSupporterCnic2 = new TitledEditText(context, null, "-", "", "XXXXXXX", 7, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        treatmentSupporterCnicLayout.addView(treatmentSupporterCnic2);
-        treatmentSupporterCnic3 = new TitledEditText(context, null, "-", "", "X", 1, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        treatmentSupporterCnicLayout.addView(treatmentSupporterCnic3);
-
-        treatmentSupporterOwnCnic = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_treatment_supporter_own_cnic), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, false);
-        treatmentSupporterCnicOwner = new TitledSpinner(context, null, getResources().getString(R.string.pmdt_cnic_owner), getResources().getStringArray(R.array.pmdt_cnic_owners), getResources().getString(R.string.pmdt_father), App.VERTICAL, false);
-        otherTreatmentSupporterCnicOwner = new TitledEditText(context, null, getResources().getString(R.string.pmdt_other_cnic_owner), "", "", 25, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
-        nameTreatmentSupporterCnicOwner = new TitledEditText(context, null, getResources().getString(R.string.pmdt_cnic_owner_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        treatmentSupporterPrimaryPhoneLayout = new LinearLayout(context);
-        treatmentSupporterPrimaryPhoneLayout.setOrientation(LinearLayout.HORIZONTAL);
-        treatmentSupporterPrimaryPhone1a = new TitledEditText(context, null, getResources().getString(R.string.pmdt_patient_primary_phone_number), "", "XXXX", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        treatmentSupporterPrimaryPhoneLayout.addView(treatmentSupporterPrimaryPhone1a);
-        treatmentSupporterPrimaryPhone1b = new TitledEditText(context, null, "-", "", "XXXXXXX", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        treatmentSupporterPrimaryPhoneLayout.addView(treatmentSupporterPrimaryPhone1b);
-        treatmentSupporterAlternatePhoneLayout = new LinearLayout(context);
-        treatmentSupporterAlternatePhoneLayout.setOrientation(LinearLayout.HORIZONTAL);
-        treatmentSupporterAlternatePhone1a = new TitledEditText(context, null, getResources().getString(R.string.pmdt_patient_alternate_phone_number), "", "XXXX", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        treatmentSupporterAlternatePhoneLayout.addView(treatmentSupporterAlternatePhone1a);
-        treatmentSupporterAlternatePhone1b = new TitledEditText(context, null, "-", "", "XXXXXXX", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        treatmentSupporterAlternatePhoneLayout.addView(treatmentSupporterAlternatePhone1b);
 
         // Sample submission information
         patientSubmitSputumSample = new TitledRadioGroup(context, getResources().getString(R.string.pmdt_title_sample_submission_information), getResources().getString(R.string.pmdt_sputum_sample_submitted), getResources().getStringArray(R.array.pmdt_yes_no_not_applicable), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, false);
@@ -296,44 +257,35 @@ public class PmdtSocialSupportFoodBasketForm extends AbstractFormActivity implem
         reasonNotSubmittedSample = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_reason_not_submitted_sputum), getResources().getStringArray(R.array.pmdt_reasons_sputums_not_submitted), getResources().getString(R.string.pmdt_could_not_produce_sputum), App.VERTICAL, App.VERTICAL);
         otherReasonNotSubmittedSample = new TitledEditText(context, null, getResources().getString(R.string.pmdt_other_reason_not_submitted_sputum), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         visitedDoctor = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_patient_visited_doctor), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, false);
-        foodBasketAmount = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_food_baskets_amount), getResources().getStringArray(R.array.pmdt_number_food_baskets), getResources().getString(R.string.pmdt_one), App.HORIZONTAL, App.VERTICAL, false);
-        foodBasketVoucherBookNumber = new TitledEditText(context, null, getResources().getString(R.string.pmdt_food_basket_voucher_book_number), "", "", 20, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true);
-        foodBasketVoucherNumber = new TitledEditText(context, null, getResources().getString(R.string.pmdt_food_basket_voucher_number), "", "", 20, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true);
-        validityVoucherDate = new TitledButton(context, null, getResources().getString(R.string.pmdt_validity_voucher_date), DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
+        conveyanceVoucherBookNumber = new TitledEditText(context, null, getResources().getString(R.string.pmdt_conveyance_voucher_book_number), "", "", 20, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true);
+        conveyanceVoucherNumber = new TitledEditText(context, null, getResources().getString(R.string.pmdt_conveyance_voucher_number), "", "", 20, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true);
+        amountTransferred = new TitledEditText(context, null, getResources().getString(R.string.pmdt_amount_transferred), "", "", 5, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        amountTransferredInWords = new TitledEditText(context, null, getResources().getString(R.string.pmdt_amount_in_words), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), visitDate.getButton(), externalId.getEditText(), typeAssessment.getSpinner(), otherAssessmentReason.getEditText(), treatmentMonth.getEditText(), treatmentFacilityAutoCompleteList,
-                nationalDrTbRegistrationNumber.getEditText(), patientCnic1.getEditText(), patientCnic2.getEditText(), patientCnic3.getEditText(), patientOwnCnic.getRadioGroup(), patientCnicOwner.getSpinner(),
-                otherPatientCnicOwner.getEditText(), namePatientCnicOwner.getEditText(), patientPrimaryPhone1a.getEditText(), patientPrimaryPhone1b.getEditText(), patientAlternatePhone1a.getEditText(), patientAlternatePhone1b.getEditText(),
-                patientAccompanied.getRadioGroup(), treatmentSupporterId.getEditText(), treatmentSupporterFirstName.getEditText(), treatmentSupporterLastName.getEditText(), treatmentSupporterCnic1.getEditText(), treatmentSupporterCnic2.getEditText(),
-                treatmentSupporterCnic3.getEditText(), treatmentSupporterOwnCnic.getRadioGroup(), treatmentSupporterCnicOwner.getSpinner(), otherTreatmentSupporterCnicOwner.getEditText(), nameTreatmentSupporterCnicOwner.getEditText(),
-                treatmentSupporterPrimaryPhone1a.getEditText(), treatmentSupporterPrimaryPhone1b.getEditText(), treatmentSupporterAlternatePhone1a.getEditText(), treatmentSupporterAlternatePhone1b.getEditText(), patientSubmitSputumSample.getRadioGroup(),
-                sputumSampleId.getEditText(), reasonNotSubmittedSample.getRadioGroup(), otherReasonNotSubmittedSample.getEditText(), visitedDoctor.getRadioGroup(), foodBasketAmount.getRadioGroup(), foodBasketVoucherBookNumber.getEditText(),
-                foodBasketVoucherNumber.getEditText(), validityVoucherDate.getButton()};
+                nationalDrTbRegistrationNumber.getEditText(), registerdOutstationFacility.getRadioGroup(), registerdOutstationFacilityAutoCompleteList, patientCnic1.getEditText(), patientCnic2.getEditText(), patientCnic3.getEditText(), patientOwnCnic.getRadioGroup(), patientCnicOwner.getSpinner(),
+                otherPatientCnicOwner.getEditText(), namePatientCnicOwner.getEditText(), patientPrimaryPhone1a.getEditText(), patientPrimaryPhone1b.getEditText(), patientAlternatePhone1a.getEditText(), patientAlternatePhone1b.getEditText(), patientSubmitSputumSample.getRadioGroup(),
+                sputumSampleId.getEditText(), reasonNotSubmittedSample.getRadioGroup(), otherReasonNotSubmittedSample.getEditText(), visitedDoctor.getRadioGroup(), conveyanceVoucherBookNumber.getEditText(),
+                conveyanceVoucherNumber.getEditText(), amountTransferred.getEditText(), amountTransferredInWords.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, visitDate, externalId, typeAssessment, otherAssessmentReason, treatmentMonth, facilityLinearLayout, nationalDrTbRegistrationNumber},
+                {{formDate, visitDate, externalId, typeAssessment, otherAssessmentReason, treatmentMonth, facilityLinearLayout,
+                        nationalDrTbRegistrationNumber, registerdOutstationFacility, registerdOutstationFacilityLinearLayout},
                         {linearLayout1, patientOwnCnic, patientCnicOwner, otherPatientCnicOwner, namePatientCnicOwner, patientPrimaryPhoneLayout, patientAlternatePhoneLayout},
-                        {patientAccompanied, treatmentSupporterId, treatmentSupporterFirstName, treatmentSupporterLastName, treatmentSupporterCnicLayout, treatmentSupporterOwnCnic, treatmentSupporterCnicOwner,
-                                otherTreatmentSupporterCnicOwner, nameTreatmentSupporterCnicOwner, treatmentSupporterPrimaryPhoneLayout, treatmentSupporterAlternatePhoneLayout},
                         {patientSubmitSputumSample, sputumSampleId, reasonNotSubmittedSample, otherReasonNotSubmittedSample, visitedDoctor,
-                                foodBasketAmount, foodBasketVoucherBookNumber, foodBasketVoucherNumber, validityVoucherDate
-                        }};
+                                conveyanceVoucherBookNumber, conveyanceVoucherNumber, amountTransferred, amountTransferredInWords}};
 
         formDate.getButton().setOnClickListener(this);
         visitDate.getButton().setOnClickListener(this);
-        validityVoucherDate.getButton().setOnClickListener(this);
         typeAssessment.getSpinner().setOnItemSelectedListener(this);
+        registerdOutstationFacility.getRadioGroup().setOnCheckedChangeListener(this);
         patientOwnCnic.getRadioGroup().setOnCheckedChangeListener(this);
         patientCnicOwner.getSpinner().setOnItemSelectedListener(this);
-        patientAccompanied.getRadioGroup().setOnCheckedChangeListener(this);
-        treatmentSupporterOwnCnic.getRadioGroup().setOnCheckedChangeListener(this);
-        treatmentSupporterCnicOwner.getSpinner().setOnItemSelectedListener(this);
         patientSubmitSputumSample.getRadioGroup().setOnCheckedChangeListener(this);
         reasonNotSubmittedSample.getRadioGroup().setOnCheckedChangeListener(this);
         visitedDoctor.getRadioGroup().setOnCheckedChangeListener(this);
-        foodBasketAmount.getRadioGroup().setOnCheckedChangeListener(this);
 
     }
 
@@ -341,7 +293,6 @@ public class PmdtSocialSupportFoodBasketForm extends AbstractFormActivity implem
     public void updateDisplay() {
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         visitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-        validityVoucherDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
     }
 
     @Override
@@ -377,13 +328,6 @@ public class PmdtSocialSupportFoodBasketForm extends AbstractFormActivity implem
             args.putBoolean("allowFutureDate", false);
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
-        } else if (view == validityVoucherDate.getButton()) {
-            Bundle args = new Bundle();
-            args.putInt("type", THIRD_DATE_DIALOG_ID);
-            args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", false);
-            thirdDateFragment.setArguments(args);
-            thirdDateFragment.show(getFragmentManager(), "DatePicker");
         }
     }
 
@@ -412,7 +356,6 @@ public class PmdtSocialSupportFoodBasketForm extends AbstractFormActivity implem
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         visitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-        validityVoucherDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
     }
 
     @Override
@@ -447,43 +390,4 @@ public class PmdtSocialSupportFoodBasketForm extends AbstractFormActivity implem
         }
 
     }
-
-
-    public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final Calendar calendar;
-            if (getArguments().getInt("type") == THIRD_DATE_DIALOG_ID)
-                calendar = thirdDateCalendar;
-//            else if (getArguments().getInt("type") == SECOND_DATE_DIALOG_ID)
-//                calendar = secondDateCalendar;
-            else
-                return null;
-
-            int yy = calendar.get(Calendar.YEAR);
-            int mm = calendar.get(Calendar.MONTH);
-            int dd = calendar.get(Calendar.DAY_OF_MONTH);
-            DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, yy, mm, dd);
-            dialog.getDatePicker().setTag(getArguments().getInt("type"));
-            if (!getArguments().getBoolean("allowFutureDate", false)) {
-                Date date = new Date();
-                date.setHours(24);
-                date.setSeconds(60);
-                dialog.getDatePicker().setMaxDate(date.getTime());
-            }
-            if (!getArguments().getBoolean("allowPastDate", false))
-                dialog.getDatePicker().setMinDate(new Date().getTime());
-            return dialog;
-        }
-
-        @Override
-        public void onDateSet(DatePicker view, int yy, int mm, int dd) {
-
-            if (((int) view.getTag()) == THIRD_DATE_DIALOG_ID)
-                thirdDateCalendar.set(yy, mm, dd);
-            updateDisplay();
-        }
-    }
-
 }

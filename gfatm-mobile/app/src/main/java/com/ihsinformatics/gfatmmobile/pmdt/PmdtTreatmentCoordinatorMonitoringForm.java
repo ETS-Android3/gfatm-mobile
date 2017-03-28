@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.renderscript.ScriptGroup;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.InputType;
@@ -66,8 +65,8 @@ public class PmdtTreatmentCoordinatorMonitoringForm extends AbstractFormActivity
     TitledButton contactScreeningPerformedDate;
     TitledRadioGroup patientSatisfied;
     TitledRadioGroup sputumSubmittedLastVisit;
-    TitledRadioGroup reasonNotSubmittedSputum;
-    TitledEditText otherReasonNotSubmittedSputum;
+    TitledRadioGroup reasonNotSubmittedSample;
+    TitledEditText otherReasonNotSubmittedSample;
     TitledRadioGroup foodBasketIncentiveLastMonth;
     TitledRadioGroup adverseEventLastVisit;
     TitledCheckBoxes actionAdverseEvent;
@@ -157,6 +156,7 @@ public class PmdtTreatmentCoordinatorMonitoringForm extends AbstractFormActivity
         visitDate = new TitledButton(context, null, getResources().getString(R.string.pmdt_visit_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         patientUnderstandTbRegimen = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_patient_understand_tb_regimen), getResources().getStringArray(R.array.yes_no_unknown_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL);
         patientKnowSideEffects = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_patient_understand_tb_regimen), getResources().getStringArray(R.array.yes_no_unknown_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL);
+        // second page views...
         treatmentSupporterProvideDot = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_treatment_supporter_provide_dot), getResources().getStringArray(R.array.pmdt_how_often_provide_dot), getResources().getString(R.string.pmdt_regularly), App.VERTICAL, App.VERTICAL);
         treatmentSupporterProvideDotIrregularly = new TitledSpinner(context, null, getResources().getString(R.string.pmdt_treatment_supporter_provide_dot_irregularly), getResources().getStringArray(R.array.irregular_dot_types), getResources().getString(R.string.pmdt_six_days_per_week), App.VERTICAL, false);
         placeDot = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_place_dot), getResources().getStringArray(R.array.pmdt_places_dot_provided), getResources().getString(R.string.pmdt_patient_home), App.VERTICAL, App.VERTICAL);
@@ -166,6 +166,7 @@ public class PmdtTreatmentCoordinatorMonitoringForm extends AbstractFormActivity
         missedDose = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_missed_dose), getResources().getStringArray(R.array.pmdt_missed_drug_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         reasonMissedDose = new TitledSpinner(context, null, getResources().getString(R.string.pmdt_reason_missed_dose), getResources().getStringArray(R.array.pmdt_missed_drug_reasons), getResources().getString(R.string.pmdt_adverse_event), App.VERTICAL);
         otherReasonMissedDose = new TitledEditText(context, null, getResources().getString(R.string.pmdt_other_reason_missed_dose), "", "", 100, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        // third page views...
         practiceInfectionControl = new TitledSpinner(context, null, getResources().getString(R.string.pmdt_practice_infection_control), getResources().getStringArray(R.array.pmdt_infection_control_frequency), getResources().getString(R.string.pmdt_always), App.VERTICAL, false);
         familyPracticeInfectionControl = new TitledSpinner(context, null, getResources().getString(R.string.pmdt_family_practice_infection_control), getResources().getStringArray(R.array.pmdt_infection_control_frequency), getResources().getString(R.string.pmdt_always), App.VERTICAL, true);
         waitAfterAdministerDrug = new TitledSpinner(context, null, getResources().getString(R.string.pmdt_wait_after_administer_drug), getResources().getStringArray(R.array.pmdt_wait_after_drug_time_range), getResources().getString(R.string.pmdt_twenty_to_thirty_mins), App.VERTICAL, true);
@@ -173,8 +174,9 @@ public class PmdtTreatmentCoordinatorMonitoringForm extends AbstractFormActivity
         contactScreeningPerformedDate = new TitledButton(context, null, getResources().getString(R.string.pmdt_contact_screening_performed_date), DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString(), App.VERTICAL);
         patientSatisfied = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_patient_satisfied), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL);
         sputumSubmittedLastVisit = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_sputum_submitted_last_visit), getResources().getStringArray(R.array.pmdt_yes_no_not_applicable), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL);
-        reasonNotSubmittedSputum = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_reason_not_submitted_sputum), getResources().getStringArray(R.array.pmdt_reasons_sputums_not_submitted), getResources().getString(R.string.pmdt_could_not_produce_sputum), App.VERTICAL, App.VERTICAL);
-        otherReasonNotSubmittedSputum = new TitledEditText(context, null, getResources().getString(R.string.pmdt_other_reason_not_submitted_sputum), "", "", 100, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        reasonNotSubmittedSample = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_reason_not_submitted_sputum), getResources().getStringArray(R.array.pmdt_reasons_sputums_not_submitted), getResources().getString(R.string.pmdt_could_not_produce_sputum), App.VERTICAL, App.VERTICAL);
+        otherReasonNotSubmittedSample = new TitledEditText(context, null, getResources().getString(R.string.pmdt_other_reason_not_submitted_sputum), "", "", 100, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        // fourth and last page views...
         foodBasketIncentiveLastMonth = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_food_basket_incentice_last_month), getResources().getStringArray(R.array.pmdt_yes_no_refused), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL);
         adverseEventLastVisit = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_adverse_event_last_visit), getResources().getStringArray(R.array.pmdt_yes_no_refused), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL);
         actionAdverseEvent = new TitledCheckBoxes(context, null, getResources().getString(R.string.pmdt_action_adverse_event), getResources().getStringArray(R.array.pmdt_adverse_actions_treatment_supporter), null, App.VERTICAL, App.VERTICAL, true);
@@ -187,14 +189,14 @@ public class PmdtTreatmentCoordinatorMonitoringForm extends AbstractFormActivity
 
         views = new View[]{formDate.getButton(), treatmentSupporterId.getEditText(), treatmentSupporterFirstName.getEditText(), treatmentSupporterLastName.getEditText(), visitDate.getButton(), patientUnderstandTbRegimen.getRadioGroup(), patientKnowSideEffects.getRadioGroup(), treatmentSupporterProvideDot.getRadioGroup(),
                 treatmentSupporterProvideDotIrregularly.getSpinner(), placeDot.getRadioGroup(), otherPlaceDot.getEditText(), dotLastPrescribedDay.getRadioGroup(), administerInjections.getRadioGroup(), missedDose.getRadioGroup(), reasonMissedDose.getSpinner(), otherReasonMissedDose.getEditText(), practiceInfectionControl.getSpinner(),
-                familyPracticeInfectionControl.getSpinner(), waitAfterAdministerDrug.getSpinner(), registerHouseholdMembers.getRadioGroup(), contactScreeningPerformedDate.getButton(), patientSatisfied.getRadioGroup(), sputumSubmittedLastVisit.getRadioGroup(), reasonNotSubmittedSputum.getRadioGroup(), otherReasonNotSubmittedSputum.getEditText(),
+                familyPracticeInfectionControl.getSpinner(), waitAfterAdministerDrug.getSpinner(), registerHouseholdMembers.getRadioGroup(), contactScreeningPerformedDate.getButton(), patientSatisfied.getRadioGroup(), sputumSubmittedLastVisit.getRadioGroup(), reasonNotSubmittedSample.getRadioGroup(), otherReasonNotSubmittedSample.getEditText(),
                 foodBasketIncentiveLastMonth.getRadioGroup(), adverseEventLastVisit.getRadioGroup(), actionAdverseEvent, otherActionAdverseEvent.getEditText(), addressSocialProblems.getRadioGroup(), referCounseling.getRadioGroup(), counselingType, otherCounselingType.getEditText(), treatmentCoordinatorNotes.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formDate, treatmentSupporterId, treatmentSupporterFirstName, treatmentSupporterLastName, visitDate, patientUnderstandTbRegimen, patientKnowSideEffects},
                         {treatmentSupporterProvideDot, treatmentSupporterProvideDotIrregularly, placeDot, otherPlaceDot, dotLastPrescribedDay, administerInjections, missedDose, reasonMissedDose, otherReasonMissedDose},
-                        {practiceInfectionControl, familyPracticeInfectionControl, waitAfterAdministerDrug, registerHouseholdMembers, contactScreeningPerformedDate, patientSatisfied, sputumSubmittedLastVisit, reasonNotSubmittedSputum, otherReasonNotSubmittedSputum},
+                        {practiceInfectionControl, familyPracticeInfectionControl, waitAfterAdministerDrug, registerHouseholdMembers, contactScreeningPerformedDate, patientSatisfied, sputumSubmittedLastVisit, reasonNotSubmittedSample, otherReasonNotSubmittedSample},
                         {foodBasketIncentiveLastMonth, adverseEventLastVisit, actionAdverseEvent, otherActionAdverseEvent, addressSocialProblems, referCounseling, counselingType, otherCounselingType, treatmentCoordinatorNotes}};
 
         formDate.getButton().setOnClickListener(this);
@@ -210,7 +212,7 @@ public class PmdtTreatmentCoordinatorMonitoringForm extends AbstractFormActivity
         registerHouseholdMembers.getRadioGroup().setOnCheckedChangeListener(this);
         patientSatisfied.getRadioGroup().setOnCheckedChangeListener(this);
         sputumSubmittedLastVisit.getRadioGroup().setOnCheckedChangeListener(this);
-        reasonNotSubmittedSputum.getRadioGroup().setOnCheckedChangeListener(this);
+        reasonNotSubmittedSample.getRadioGroup().setOnCheckedChangeListener(this);
         foodBasketIncentiveLastMonth.getRadioGroup().setOnCheckedChangeListener(this);
         adverseEventLastVisit.getRadioGroup().setOnCheckedChangeListener(this);
         addressSocialProblems.getRadioGroup().setOnCheckedChangeListener(this);
@@ -247,7 +249,6 @@ public class PmdtTreatmentCoordinatorMonitoringForm extends AbstractFormActivity
 
     @Override
     public void onClick(View view) {
-
         super.onClick(view);
 
         if (view == formDate.getButton()) {
@@ -368,8 +369,6 @@ public class PmdtTreatmentCoordinatorMonitoringForm extends AbstractFormActivity
 
             if (((int) view.getTag()) == THIRD_DATE_DIALOG_ID)
                 thirdDateCalendar.set(yy, mm, dd);
-//            else if (((int) view.getTag()) == SECOND_DATE_DIALOG_ID)
-//                secondDateCalendar.set(yy, mm, dd);
             updateDisplay();
         }
     }

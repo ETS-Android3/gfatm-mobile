@@ -114,7 +114,7 @@ public class PmdtPatientRegistrationForm extends AbstractFormActivity {
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         cnic = new TitledEditText(context, null, getResources().getString(R.string.pmdt_cnic), "", getResources().getString(R.string.pmdt_cnic_hint), 15, RegexUtil.NIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        externalPatientId = new TitledEditText(context, "", getResources().getString(R.string.pmdt_external_patient_id), "", getResources().getString(R.string.pmdt_external_patient_id_hint), 11, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        externalPatientId = new TitledEditText(context, "", getResources().getString(R.string.pmdt_external_id), "", getResources().getString(R.string.pmdt_external_patient_id_hint), 11, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         endTbEmrId = new TitledEditText(context, "", getResources().getString(R.string.pmdt_endtb_emr_id), "", getResources().getString(R.string.pmdt_endtb_emr_id_hint), 13, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
 
         // second page views...
