@@ -61,7 +61,6 @@ public class PmdtNutritionalSupportReceivingForm extends AbstractFormActivity im
     ScrollView scrollView;
 
     /**
-     *
      * @param inflater
      * @param container
      * @param savedInstanceState
@@ -69,9 +68,9 @@ public class PmdtNutritionalSupportReceivingForm extends AbstractFormActivity im
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        PAGE_COUNT = 3;
-        FORM_NAME = Forms.PMDT_CONVEYANCE_ALLOWANCE;
-        FORM = Forms.conveyanceAllowance;
+        PAGE_COUNT = 2;
+        FORM_NAME = Forms.PMDT_NUTRITIONAL_SUPPORT_RECEIVING;
+        FORM = Forms.nutritionalSupportReceiving;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -167,11 +166,45 @@ public class PmdtNutritionalSupportReceivingForm extends AbstractFormActivity im
         treatmentMonth = new TitledEditText(context, null, getResources().getString(R.string.pmdt_treatment_month), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
 
         nutritionalSupportVoucherNumber = new TitledEditText(context, getResources().getString(R.string.pmdt_title_nutrition_eligibility), getResources().getString(R.string.pmdt_nutritional_support_voucher_number), "", "", 20, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        showingSameVoucher = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_showing_same_voucher), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL);
+        nutritionalSupportTypeEligible = new TitledSpinner(context, null, getResources().getString(R.string.pmdt_nutrition_support_type), getResources().getStringArray(R.array.pmdt_nutrition_support_types), null, App.VERTICAL, true);
+        glucernaGiven = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_glucerna_given), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.HORIZONTAL, true);
+        ensureGiven = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_ensure_given), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.HORIZONTAL, true);
+        energidGiven = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_energid_given), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.HORIZONTAL, true);
+        pediasureGiven = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_pediasure_given), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.HORIZONTAL, true);
+        otherNutritionalSupportGiven = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_other_nutritioal_support_given), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, true);
+        reasonNutritionSupportNotGiven = new TitledEditText(context, null, getResources().getString(R.string.pmdt_nutritional_support_not_given), "", "", 100, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+
+
+        // Used for reset fields...
+        views = new View[]{formDate.getButton(), visitDate.getButton(), externalId.getEditText(), treatmentFacilityAutoCompleteList, nationalDrTbRegistrationNumber.getEditText(), treatmentMonth.getEditText(),
+                nutritionalSupportVoucherNumber.getEditText(), showingSameVoucher.getRadioGroup(), nutritionalSupportTypeEligible.getSpinner(), glucernaGiven.getRadioGroup(), ensureGiven.getRadioGroup(),
+                energidGiven.getRadioGroup(), pediasureGiven.getRadioGroup(), otherNutritionalSupportGiven.getRadioGroup(), reasonNutritionSupportNotGiven.getEditText()};
+
+        // Array used to display views accordingly...
+        viewGroups = new View[][]
+                {{formDate, visitDate, externalId, facilityLinearLayout, nationalDrTbRegistrationNumber, treatmentMonth},
+                        {nutritionalSupportVoucherNumber, showingSameVoucher, nutritionalSupportTypeEligible, glucernaGiven, ensureGiven,
+                                energidGiven, pediasureGiven, otherNutritionalSupportGiven, reasonNutritionSupportNotGiven}};
+
+        formDate.getButton().setOnClickListener(this);
+        visitDate.getButton().setOnClickListener(this);
+        showingSameVoucher.getRadioGroup().setOnCheckedChangeListener(this);
+        nutritionalSupportTypeEligible.getSpinner().setOnItemSelectedListener(this);
+        glucernaGiven.getRadioGroup().setOnCheckedChangeListener(this);
+        ensureGiven.getRadioGroup().setOnCheckedChangeListener(this);
+        energidGiven.getRadioGroup().setOnCheckedChangeListener(this);
+        pediasureGiven.getRadioGroup().setOnCheckedChangeListener(this);
+        otherNutritionalSupportGiven.getRadioGroup().setOnCheckedChangeListener(this);
+
+        // TODO: check if patient is eligible else show pop-up and redirect to main menu. Check concept#165536: ELIGIBLE FOR NUTRITIONAL SUPPORT
+
     }
 
     @Override
     public void updateDisplay() {
-
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        visitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
     }
 
     @Override
@@ -190,6 +223,27 @@ public class PmdtNutritionalSupportReceivingForm extends AbstractFormActivity im
     }
 
     @Override
+    public void onClick(View view) {
+
+        super.onClick(view);
+        if (view == formDate.getButton()) {
+            Bundle args = new Bundle();
+            args.putInt("type", DATE_DIALOG_ID);
+            args.putBoolean("allowPastDate", true);
+            args.putBoolean("allowFutureDate", false);
+            formDateFragment.setArguments(args);
+            formDateFragment.show(getFragmentManager(), "DatePicker");
+        } else if (view == visitDate.getButton()) {
+            Bundle args = new Bundle();
+            args.putInt("type", SECOND_DATE_DIALOG_ID);
+            args.putBoolean("allowFutureDate", false);
+            args.putBoolean("allowPastDate", true);
+            secondDateFragment.setArguments(args);
+            secondDateFragment.show(getFragmentManager(), "DatePicker");
+        }
+    }
+
+    @Override
     public void refill(int encounterId) {
 
     }
@@ -202,6 +256,13 @@ public class PmdtNutritionalSupportReceivingForm extends AbstractFormActivity im
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+    }
+
+    @Override
+    public void resetViews() {
+        super.resetViews();
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        visitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
     }
 
     @Override

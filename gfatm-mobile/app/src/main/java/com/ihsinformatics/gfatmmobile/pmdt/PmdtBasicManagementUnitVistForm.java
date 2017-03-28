@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.R;
+import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
@@ -120,8 +121,8 @@ public class PmdtBasicManagementUnitVistForm extends AbstractFormActivity {
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         visitDate = new TitledButton(context, null, getResources().getString(R.string.pmdt_visit_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
-        district = new TitledSpinner(context, null, getResources().getString(R.string.pmdt_district), getResources().getStringArray(R.array.pmdt_towns), getResources().getString(R.string.pmdt_gulshan_e_iqbal), App.HORIZONTAL);
-        townTaluka = new TitledSpinner(context, null, getResources().getString(R.string.pmdt_town_taluka_tehsil), getResources().getStringArray(R.array.pmdt_towns), getResources().getString(R.string.pmdt_gulshan_e_iqbal), App.HORIZONTAL);
+        district = new TitledSpinner(context, null, getResources().getString(R.string.pmdt_district), getResources().getStringArray(R.array.pmdt_towns), getResources().getString(R.string.pmdt_gulshan_e_iqbal), App.HORIZONTAL, true);
+        townTaluka = new TitledSpinner(context, null, getResources().getString(R.string.pmdt_town_taluka_tehsil), getResources().getStringArray(R.array.pmdt_towns), getResources().getString(R.string.pmdt_gulshan_e_iqbal), App.HORIZONTAL, true);
         basicManagmentUnitVisited = new TitledEditText(context, null, getResources().getString(R.string.pmdt_basic_management_unit_visited), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         doctorVisitedName = new TitledEditText(context, null, getResources().getString(R.string.pmdt_doctor_name_visited), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         numberFailureCases = new TitledEditText(context, null, getResources().getString(R.string.pmdt_number_failure_cases), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
@@ -147,13 +148,20 @@ public class PmdtBasicManagementUnitVistForm extends AbstractFormActivity {
 
         referredFacilityText = new TextView(context);
         referredFacilityText.setText(getResources().getString(R.string.pmdt_facility_referred));
+        LinearLayout referredFacilityLayout = new LinearLayout(context);
+        MyTextView referredFacilityQuestionRequired = new MyTextView(context, "*");
+        int color1 = App.getColor(context, R.attr.colorAccent);
+        referredFacilityQuestionRequired.setTextColor(color1);
+        referredFacilityLayout.setOrientation(LinearLayout.HORIZONTAL);
+        referredFacilityLayout.addView(referredFacilityQuestionRequired);
+        referredFacilityLayout.addView(referredFacilityText);
         referredFacilityAutoCompleteList = new AutoCompleteTextView(context);
         final ArrayAdapter<String> autoCompleteLocationAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, locationArray);
         referredFacilityAutoCompleteList.setAdapter(autoCompleteLocationAdapter);
         referredFacilityAutoCompleteList.setHint(getResources().getString(R.string.pmdt_facility_hint));
         facilityLinearLayout = new LinearLayout(context);
         facilityLinearLayout.setOrientation(LinearLayout.VERTICAL);
-        facilityLinearLayout.addView(referredFacilityText);
+        facilityLinearLayout.addView(referredFacilityLayout);
         facilityLinearLayout.addView(referredFacilityAutoCompleteList);
 
         numberPatientsEnrolled = new TitledEditText(context, null, getResources().getString(R.string.pmdt_number_patients_enrolled), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);

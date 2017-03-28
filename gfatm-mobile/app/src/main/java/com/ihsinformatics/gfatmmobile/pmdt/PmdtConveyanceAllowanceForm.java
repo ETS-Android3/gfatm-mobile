@@ -275,7 +275,7 @@ public class PmdtConveyanceAllowanceForm extends AbstractFormActivity implements
                         nationalDrTbRegistrationNumber, registerdOutstationFacility, registerdOutstationFacilityLinearLayout},
                         {linearLayout1, patientOwnCnic, patientCnicOwner, otherPatientCnicOwner, namePatientCnicOwner, patientPrimaryPhoneLayout, patientAlternatePhoneLayout},
                         {patientSubmitSputumSample, sputumSampleId, reasonNotSubmittedSample, otherReasonNotSubmittedSample, visitedDoctor,
-                                conveyanceVoucherBookNumber, conveyanceVoucherNumber, amountTransferred, amountTransferredInWords }};
+                                conveyanceVoucherBookNumber, conveyanceVoucherNumber, amountTransferred, amountTransferredInWords}};
 
         formDate.getButton().setOnClickListener(this);
         visitDate.getButton().setOnClickListener(this);

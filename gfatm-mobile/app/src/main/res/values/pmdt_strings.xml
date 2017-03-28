@@ -472,7 +472,6 @@
         <item>@string/pmdt_energid</item>
         <item>@string/pmdt_pediasure</item>
         <item>@string/pmdt_other</item>
-        <item></item>
     </string-array>
     <string name="pmdt_other_nutritional_support_item">Specify other nutritional support item:</string>
     <string name="pmdt_nutritional_support_voucher_number">Nutritional Support Voucher number</string>
