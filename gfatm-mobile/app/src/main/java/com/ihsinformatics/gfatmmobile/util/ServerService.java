@@ -264,12 +264,12 @@ public class ServerService {
     }
 
     public Object[][] getAllLocations() {
-        Object[][] locations = dbUtil.getFormTableData("select location_id, location_name, uuid, parent_uuid, fast_location, pet_location, childhood_tb_location, comorbidities_location, pmdt_location, aic_location, primary_contact, address1, address2, city_village, description from " + Metadata.LOCATION);
+        Object[][] locations = dbUtil.getFormTableData("select location_id, location_name, uuid, parent_uuid, fast_location, pet_location, childhood_tb_location, comorbidities_location, pmdt_location, aic_location, primary_contact, address1, address2, city_village, state_province, county_district, description from " + Metadata.LOCATION);
         return locations;
     }
 
     public Object[][] getAllLocations(String programColumn) {
-        Object[][] locations = dbUtil.getFormTableData("select location_id, location_name, uuid, parent_uuid, fast_location, pet_location, childhood_tb_location, comorbidities_location, pmdt_location, aic_location, primary_contact, address1, address2, city_village, description from " + Metadata.LOCATION + " where " + programColumn + " = 'Y'");
+        Object[][] locations = dbUtil.getFormTableData("select location_id, location_name, uuid, parent_uuid, fast_location, pet_location, childhood_tb_location, comorbidities_location, pmdt_location, aic_location, primary_contact, address1, address2, city_village, state_province, county_district, description from " + Metadata.LOCATION + " where " + programColumn + " = 'Y' and state_province = '" + App.getProvince() + "'");
         return locations;
     }
 
@@ -376,6 +376,8 @@ public class ServerService {
                     String address2 = location.getAddress2();
                     String address3 = location.getAddress3();
                     String city = location.getCity();
+                    String province = location.getProvince();
+                    String district = location.getDistrict();
                     String petLocation = location.getPetLocation();
                     String pmdtLocation = location.getPmdtLocation();
                     String fastLocation = location.getFastLocation();
@@ -391,6 +393,8 @@ public class ServerService {
                     values.put("address2", address2);
                     values.put("address3", address3);
                     values.put("city_village", city);
+                    values.put("county_district", district);
+                    values.put("state_province", province);
                     values.put("pet_location", petLocation);
                     values.put("pmdt_location", pmdtLocation);
                     values.put("fast_location", fastLocation);
@@ -1110,6 +1114,7 @@ public class ServerService {
 
         String concept = "";
         String response = "SUCCESS";
+        String testId = "";
 
         if (App.getCommunicationMode().equals("REST")) {
 
@@ -1153,6 +1158,10 @@ public class ServerService {
 
                     if ("".equals(obss[i][0]) || "".equals(obss[i][1]))
                         continue;
+
+                    if (obss[i][0].equals("TEST ID") && formName.contains("Test Order")) {
+                        testId = obss[i][1];
+                    }
 
                     Obs obs = new Obs();
 
@@ -1342,6 +1351,14 @@ public class ServerService {
                         values3.put("encounter_id", id);
                         dbUtil.insert(Metadata.OBS, values3);
                     }
+                }
+
+                if (!testId.equals("")) {
+                    ContentValues values2 = new ContentValues();
+                    values2.put("pid", App.getPatientId());
+                    values2.put("form", App.getProgram() + "-" + formName);
+                    values2.put("test_id", testId);
+                    dbUtil.insert(Metadata.TEST_ID, values2);
                 }
 
             } catch (Exception e) {
