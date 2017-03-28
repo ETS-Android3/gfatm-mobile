@@ -47,8 +47,9 @@
                 address1 VARCHAR,
                 address2 VARCHAR,
                 address3 VARCHAR,
-                city_village VARCHAR,
-                state_province VARCHAR,
+                city_village VARCHAR COLLATE NOCASE,
+                state_province VARCHAR COLLATE NOCASE,
+                county_district VARCHAR COLLATE NOCASE,
                 description TEXT
             )
         </item>
