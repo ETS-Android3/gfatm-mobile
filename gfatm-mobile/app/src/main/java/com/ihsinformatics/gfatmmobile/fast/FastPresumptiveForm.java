@@ -432,8 +432,22 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
                 });
 
                 String result = serverService.saveEncounterAndObservation("Presumptive", FORM, formDateCalendar, observations.toArray(new String[][]{}));
-                if (result.contains("SUCCESS"))
-                    return "SUCCESS";
+                if (!result.contains("SUCCESS"))
+                    return result;
+                else {
+
+                    String encounterId = "";
+
+                    if (result.contains("_")) {
+                        String[] successArray = result.split("_");
+                        encounterId = successArray[1];
+                    }
+
+                    result = serverService.saveProgramEnrollement(App.getSqlDate(formDateCalendar), encounterId);
+                    if (!result.equals("SUCCESS"))
+                        return result;
+
+                }
 
                 return result;
 

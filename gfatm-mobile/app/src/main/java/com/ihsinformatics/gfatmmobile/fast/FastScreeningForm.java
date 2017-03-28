@@ -287,12 +287,12 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
                     (App.get(tbHistory).equals(getResources().getString(R.string.fast_no_title)) ? "NO" :
                             (App.get(tbHistory).equals(getResources().getString(R.string.fast_refused_title)) ? "REFUSED" : "UNKNOWN"))});
 
-        String result = serverService.saveScreeningForm("Screening Form", values, observations.toArray(new String[][]{}));
+      //  String result = serverService.saveScreeningForm("Screening Form", values, observations.toArray(new String[][]{}));
         // String result = "SUCCESS";
-        if (result.contains("SUCCESS"))
+        //if (result.contains("SUCCESS"))
             return true;
 
-        return false;
+       // return false;
     }
 
     @Override
