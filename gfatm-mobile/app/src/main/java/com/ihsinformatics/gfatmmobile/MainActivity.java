@@ -688,6 +688,7 @@ public class MainActivity extends AppCompatActivity
 
                         fragmentReport.fillReportFragment();
                         fragmentForm.fillMainContent();
+
                     }
                 } else if (returnString != null && returnString.equals("CREATE")) {
 
@@ -723,9 +724,25 @@ public class MainActivity extends AppCompatActivity
                 String returnString = data.getStringExtra("form_id");
 
                 Object[][] form = serverService.getSavedForms(Integer.parseInt(returnString));
-                App.setPatientId(String.valueOf(form[0][3]));
-                App.setPatient(serverService.getPatientBySystemIdFromLocalDB(App.getPatientId()));
-                App.setLocation(String.valueOf(form[0][7]));
+
+                String toastMessage = "";
+
+                if (!App.getPatientId().equals(String.valueOf(form[0][3]))) {
+                    App.setPatientId(String.valueOf(form[0][3]));
+                    App.setPatient(serverService.getPatientBySystemIdFromLocalDB(App.getPatientId()));
+
+                    toastMessage = getResources().getString(R.string.selected_patient_changed) + " " + App.getPatient().getPerson().getGivenName() + " " + App.getPatient().getPerson().getFamilyName() + " (" + App.getPatient().getPatientId() + ")";
+
+                }
+                if (!App.getLocation().equals(String.valueOf(form[0][7]))) {
+                    App.setLocation(String.valueOf(form[0][7]));
+
+                    if (!toastMessage.equals(""))
+                        toastMessage = toastMessage + "\n";
+
+                    toastMessage = toastMessage + getResources().getString(R.string.selected_location_changed) + " " + App.getLocation();
+
+                }
 
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 SharedPreferences.Editor editor = preferences.edit();
@@ -774,6 +791,10 @@ public class MainActivity extends AppCompatActivity
                         e.printStackTrace();
                     }
                 }
+
+                if (!toastMessage.equals(""))
+                    Toast.makeText(getApplicationContext(), toastMessage,
+                            Toast.LENGTH_LONG).show();
 
             }
         }
