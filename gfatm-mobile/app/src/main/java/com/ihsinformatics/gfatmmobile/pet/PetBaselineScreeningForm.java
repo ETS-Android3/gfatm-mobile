@@ -211,7 +211,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         phone2Layout.addView(phone2b);
         address1 = new TitledEditText(context, null, getResources().getString(R.string.pet_address_1), "", "", 10, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         address2 = new TitledEditText(context, null, getResources().getString(R.string.pet_address_2), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        district = new TitledSpinner(context, "", getResources().getString(R.string.pet_district), serverService.getDistrictList(App.getProvince()), "", App.VERTICAL);
+        district = new TitledSpinner(context, "", getResources().getString(R.string.pet_district), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
         city = new TitledSpinner(context, "", getResources().getString(R.string.pet_city), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
         addressType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_address_type), getResources().getStringArray(R.array.pet_address_types), getResources().getString(R.string.pet_permanent), App.HORIZONTAL, App.VERTICAL);
         landmark = new TitledEditText(context, null, getResources().getString(R.string.pet_landmark), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
@@ -837,6 +837,39 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         contactRegistered.setVisibility(View.GONE);
         linearLayout.setVisibility(View.VISIBLE);
         referredFacility.setVisibility(View.GONE);
+
+
+        String[] districts = serverService.getDistrictList(App.getProvince());
+        district.getSpinner().setAdapter(null);
+
+        ArrayAdapter<String> spinnerArrayAdapter = null;
+        if (App.isLanguageRTL()) {
+            spinnerArrayAdapter = new ArrayAdapter<String>(context, R.layout.custom_rtl_spinner, districts);
+            district.getSpinner().setAdapter(spinnerArrayAdapter);
+            spinnerArrayAdapter.setDropDownViewResource(R.layout.custom_rtl_spinner);
+            district.getSpinner().setGravity(Gravity.RIGHT);
+        } else {
+            spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, districts);
+            district.getSpinner().setAdapter(spinnerArrayAdapter);
+            spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            district.getSpinner().setGravity(Gravity.LEFT);
+        }
+
+        String[] cities = serverService.getCityList(App.get(district));
+        city.getSpinner().setAdapter(null);
+
+        spinnerArrayAdapter = null;
+        if (App.isLanguageRTL()) {
+            spinnerArrayAdapter = new ArrayAdapter<String>(context, R.layout.custom_rtl_spinner, cities);
+            city.getSpinner().setAdapter(spinnerArrayAdapter);
+            spinnerArrayAdapter.setDropDownViewResource(R.layout.custom_rtl_spinner);
+            city.getSpinner().setGravity(Gravity.RIGHT);
+        } else {
+            spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, cities);
+            city.getSpinner().setAdapter(spinnerArrayAdapter);
+            spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            city.getSpinner().setGravity(Gravity.LEFT);
+        }
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
