@@ -94,7 +94,7 @@ public class PmdtTreatmentCoordinatorMonitoringForm extends AbstractFormActivity
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         PAGE_COUNT = 4;
         FORM_NAME = Forms.PMDT_TREATMENT_COORDINATOR_MONITORING;
-        FORM = Forms.treatmentCoordinatorcMonitoring;
+        FORM = Forms.pmdtTreatmentCoordinatorcMonitoring;
         thirdDateCalendar = Calendar.getInstance();
         thirdDateFragment = new SelectDateFragment();
 

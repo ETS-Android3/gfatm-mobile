@@ -81,7 +81,7 @@ public class PmdtNutritionalSupportForm extends AbstractFormActivity implements 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         PAGE_COUNT = 3;
         FORM_NAME = Forms.PMDT_NUTRITIONAL_SUPPORT;
-        FORM = Forms.nutritionalSupport;
+        FORM = Forms.pmdtNutritionalSupport;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();

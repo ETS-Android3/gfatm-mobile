@@ -57,7 +57,6 @@ public class PmdtNutritionalSupportReceivingForm extends AbstractFormActivity im
     TitledRadioGroup otherNutritionalSupportGiven;
     TitledEditText reasonNutritionSupportNotGiven;
 
-
     ScrollView scrollView;
 
     /**
@@ -70,7 +69,7 @@ public class PmdtNutritionalSupportReceivingForm extends AbstractFormActivity im
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         PAGE_COUNT = 2;
         FORM_NAME = Forms.PMDT_NUTRITIONAL_SUPPORT_RECEIVING;
-        FORM = Forms.nutritionalSupportReceiving;
+        FORM = Forms.pmdtNutritionalSupportReceiving;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();

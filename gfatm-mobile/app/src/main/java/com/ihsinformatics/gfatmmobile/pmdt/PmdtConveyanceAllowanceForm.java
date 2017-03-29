@@ -1,13 +1,9 @@
 package com.ihsinformatics.gfatmmobile.pmdt;
 
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.text.InputFilter;
 import android.text.InputType;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -17,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.CompoundButton;
-import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
@@ -36,8 +31,6 @@ import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by Tahira on 3/6/2017.
@@ -102,7 +95,7 @@ public class PmdtConveyanceAllowanceForm extends AbstractFormActivity implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         PAGE_COUNT = 3;
         FORM_NAME = Forms.PMDT_CONVEYANCE_ALLOWANCE;
-        FORM = Forms.conveyanceAllowance;
+        FORM = Forms.pmdtConveyanceAllowance;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();

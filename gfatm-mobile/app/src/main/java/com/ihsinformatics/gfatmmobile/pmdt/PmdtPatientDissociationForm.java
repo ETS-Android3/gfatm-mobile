@@ -52,7 +52,7 @@ public class PmdtPatientDissociationForm extends AbstractFormActivity {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         PAGE_COUNT = 1;
         FORM_NAME = Forms.PMDT_PATIENT_DISSOCIATION;
-        FORM = Forms.patientDissociation;
+        FORM = Forms.pmdtPatientDissociation;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
