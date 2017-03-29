@@ -1576,6 +1576,8 @@ public class ServerService {
                     programUuid = "FAST";
                 else if (App.getProgram().equalsIgnoreCase("Childhood TB"))
                     programUuid = "ChildhoodTB";
+                else if (App.getProgram().equalsIgnoreCase("Comorbidities"))
+                    programUuid = "Comorbidities";
 
                 programUuid = getProgramUuidFromProgramName(programUuid);
                 String locationUuid = getLocationUuid(App.getLocation());

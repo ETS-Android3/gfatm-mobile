@@ -21,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
@@ -32,6 +33,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
@@ -93,7 +95,7 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
 
         PAGE_COUNT = 1;
         FORM_NAME = Forms.COMORBIDITIES_DIABETES_FOOT_SCREENING_FORM;
-        FORM =  Forms.comorbidities_diabetesTreatmentFollowupForm;
+        FORM =  Forms.comorbidities_diabetesFootScreeningForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -290,6 +292,16 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
 
     @Override
     public boolean submit() {
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            String encounterId = bundle.getString("formId");
+            if (saveFlag) {
+                serverService.deleteOfflineForms(encounterId);
+            }
+            bundle.putBoolean("save", false);
+        }
 
         endTime = new Date();
 
@@ -508,8 +520,258 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
     }
 
     @Override
-    public void refill(int encounterId) {
+    public void refill(int formId) {
 
+        OfflineForm fo = serverService.getOfflineFormById(formId);
+        String date = fo.getFormDate();
+        ArrayList<String[][]> obsValue = fo.getObsValue();
+        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        for (int i = 0; i < obsValue.size(); i++) {
+
+            String[][] obs = obsValue.get(i);
+
+            if (obs[0][0].equals("FOLLOW-UP MONTH")) {
+                diabetesFootScreeningMonthOfVisit.getSpinner().selectValue(obs[0][1]);
+            } else if (obs[0][0].equals("RIGHT FOOT EXAMINATION")) {
+                for (RadioButton rb : diabetesFootScreeningRightFootExamined.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_foot_options_yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_foot_options_amputation)) && obs[0][1].equals("AMPUTATION")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_foot_options_patient_refusal)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("LEFT FOOT EXAMINATION")) {
+                for (RadioButton rb : diabetesFootScreeningLeftFootExamined.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_foot_options_yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_foot_options_amputation)) && obs[0][1].equals("AMPUTATION")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_foot_options_patient_refusal)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("FOOT COMPLICATIONS")) {
+                for (RadioButton rb : diabetesFootScreeningComplicationsOfFeet.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_complications_of_foot_options_infection)) && obs[0][1].equals("FOOT INFECTION")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_complications_of_foot_options_ulcers)) && obs[0][1].equals("FOOT ULCER")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_complications_of_foot_options_ingrown)) && obs[0][1].equals("INGROWING TOENAIL")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_complications_of_foot_options_other)) && obs[0][1].equals("OTHER INFECTION")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                diabetesFootScreeningComplicationsOfFeet.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("HISTORY OF AMPUTATION")) {
+                for (RadioButton rb : diabetesFootScreeningHistoryOfAmputation.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                diabetesFootScreeningHistoryOfAmputation.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("RIGHT FOOT SKIN EXAMINATION")) {
+                String value = obs[0][1].equals("NORMAL") ? getResources().getString(R.string.comorbidities_foot_screening_skin_foot_options_normal) :
+                        (obs[0][1].equals("THICKENING OF SKIN") ? getResources().getString(R.string.comorbidities_foot_screening_skin_foot_options_thickened) :
+                                (obs[0][1].equals("DRY SKIN") ? getResources().getString(R.string.comorbidities_foot_screening_skin_foot_options_dry) :
+                                        (obs[0][1].equals("CRACKED SKIN") ? getResources().getString(R.string.comorbidities_foot_screening_skin_foot_options_cracked) :
+                                                (obs[0][1].equals("INFECTION OF SKIN") ? getResources().getString(R.string.comorbidities_foot_screening_skin_foot_options_infection) :
+                                                        (obs[0][1].equals("SKIN ULCER") ? getResources().getString(R.string.comorbidities_foot_screening_skin_foot_options_ulceration) : getResources().getString(R.string.comorbidities_foot_screening_skin_foot_options_callus))))));
+                diabetesFootScreeningSkinRightFootExamination.getSpinner().selectValue(value);
+                diabetesFootScreeningSkinRightFootExamination.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("LEFT FOOT SKIN EXAMINATION")) {
+                String value = obs[0][1].equals("NORMAL") ? getResources().getString(R.string.comorbidities_foot_screening_skin_foot_options_normal) :
+                        (obs[0][1].equals("THICKENING OF SKIN") ? getResources().getString(R.string.comorbidities_foot_screening_skin_foot_options_thickened) :
+                                (obs[0][1].equals("DRY SKIN") ? getResources().getString(R.string.comorbidities_foot_screening_skin_foot_options_dry) :
+                                        (obs[0][1].equals("CRACKED SKIN") ? getResources().getString(R.string.comorbidities_foot_screening_skin_foot_options_cracked) :
+                                                (obs[0][1].equals("INFECTION OF SKIN") ? getResources().getString(R.string.comorbidities_foot_screening_skin_foot_options_infection) :
+                                                        (obs[0][1].equals("SKIN ULCER") ? getResources().getString(R.string.comorbidities_foot_screening_skin_foot_options_ulceration) : getResources().getString(R.string.comorbidities_foot_screening_skin_foot_options_callus))))));
+                diabetesFootScreeningSkinLeftFootExamination.getSpinner().selectValue(value);
+                diabetesFootScreeningSkinLeftFootExamination.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("RIGHT FOOT SWEATING")) {
+                for (RadioButton rb : diabetesFootScreeningRightFootSweating.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                diabetesFootScreeningRightFootSweating.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("LEFT FOOT SWEATING")) {
+                for (RadioButton rb : diabetesFootScreeningLeftFootSweating.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                diabetesFootScreeningLeftFootSweating.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("DEFORMITY OF RIGHT FOOT")) {
+                for (RadioButton rb : diabetesFootScreeningRightFootDeformity.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                diabetesFootScreeningRightFootDeformity.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("DEFORMITY OF LEFT FOOT")) {
+                for (RadioButton rb : diabetesFootScreeningLeftFootDeformity.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                diabetesFootScreeningLeftFootDeformity.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("RIGHT FOOT MONOFILAMENT")) {
+                for (RadioButton rb : diabetesFootScreeningRightFootMonofilament.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_neurological_examination_options_detectable)) && obs[0][1].equals("DETECTED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_neurological_examination_options_not_detectable)) && obs[0][1].equals("NOT DETECTED")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                diabetesFootScreeningRightFootMonofilament.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("LEFT FOOT MONOFILAMENT")) {
+                for (RadioButton rb : diabetesFootScreeningLeftFootMonofilament.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_neurological_examination_options_detectable)) && obs[0][1].equals("DETECTED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_neurological_examination_options_not_detectable)) && obs[0][1].equals("NOT DETECTED")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                diabetesFootScreeningLeftFootMonofilament.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("RIGHT FOOT TURING FORK")) {
+                for (RadioButton rb : diabetesFootScreeningRightFootTuningFork.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_neurological_examination_options_detectable)) && obs[0][1].equals("DETECTED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_neurological_examination_options_not_detectable)) && obs[0][1].equals("NOT DETECTED")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                diabetesFootScreeningRightFootTuningFork.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("LEFT FOOT TURING FORK")) {
+                for (RadioButton rb : diabetesFootScreeningLeftFootTuningFork.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_neurological_examination_options_detectable)) && obs[0][1].equals("DETECTED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_neurological_examination_options_not_detectable)) && obs[0][1].equals("NOT DETECTED")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                diabetesFootScreeningLeftFootTuningFork.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("RIGHT FOOT VASCULAR")) {
+                for (RadioButton rb : diabetesFootScreeningRightFootVascular.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_vascular_examination_options_present)) && obs[0][1].equals("PRESENT")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_vascular_examination_options_diminished)) && obs[0][1].equals("REDUCED")) {
+                        rb.setChecked(true);
+                        break;
+                    }  else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_vascular_examination_options_absent)) && obs[0][1].equals("ABSENT")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                diabetesFootScreeningRightFootVascular.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("LEFT FOOT VASCULAR")) {
+                for (RadioButton rb : diabetesFootScreeningLeftFootVascular.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_vascular_examination_options_present)) && obs[0][1].equals("PRESENT")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_vascular_examination_options_diminished)) && obs[0][1].equals("REDUCED")) {
+                        rb.setChecked(true);
+                        break;
+                    }  else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_vascular_examination_options_absent)) && obs[0][1].equals("ABSENT")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                diabetesFootScreeningLeftFootVascular.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("FOOT HYGENE")) {
+                for (RadioButton rb : diabetesFootScreeningFootHygiene.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_foot_hygiene_options_poor)) && obs[0][1].equals("POOR")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_foot_hygiene_options_average)) && obs[0][1].equals("AVERAGE")) {
+                        rb.setChecked(true);
+                        break;
+                    }  else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_foot_hygiene_options_good)) && obs[0][1].equals("GOOD")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                diabetesFootScreeningFootHygiene.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("FOOTWEAR")) {
+                for (RadioButton rb : diabetesFootScreeningFootwearAppropriate.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                diabetesFootScreeningFootwearAppropriate.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("ULCER HISTORY")) {
+                for (RadioButton rb : diabetesFootScreeningPreviousUlcer.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                diabetesFootScreeningPreviousUlcer.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("CLINICIAN NOTES (TEXT)")) {
+                diabetesFootScreeningDetailedClinicalNotes.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("DIABETES RECOMMENDATAION")) {
+                for (RadioButton rb : diabetesFootScreeningRecommendations.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_recommendations_options_referral)) && obs[0][1].equals("PATIENT REFERRED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_recommendations_options_management)) && obs[0][1].equals("DIABETES MANAGEMENT")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -549,6 +811,23 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
         displayFootComplicationsAndAmputationHistory();
         allExaminationSkipLogic();
 
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean openFlag = bundle.getBoolean("open");
+            if (openFlag) {
+
+                bundle.putBoolean("open", false);
+                bundle.putBoolean("save", true);
+
+                String id = bundle.getString("formId");
+                int formId = Integer.valueOf(id);
+
+                refill(formId);
+
+            } else bundle.putBoolean("save", false);
+
+        }
+
         //HERE FOR AUTOPOPULATING OBS
         final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
             @Override
@@ -567,10 +846,12 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
                 HashMap<String, String> result = new HashMap<String, String>();
                 String monthOfTreatment = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "FOLLOW-UP MONTH");
 
+                if (monthOfTreatment != null && !monthOfTreatment .equals(""))
+                    monthOfTreatment = monthOfTreatment.replace(".0", "");
+
                 if (monthOfTreatment != null)
                     if (!monthOfTreatment .equals(""))
                         result.put("FOLLOW-UP MONTH", monthOfTreatment);
-
 
                 return result;
             }

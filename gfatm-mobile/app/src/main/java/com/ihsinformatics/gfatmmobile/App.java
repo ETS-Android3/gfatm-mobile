@@ -76,6 +76,8 @@ public class App {
     private static String roles = "";
     private static String providerUUid = "";
     private static Patient patient = null;
+    private static double longitude = 0.0;
+    private static double latitude = 0.0;
     private static Locale currentLocale;
 
 
@@ -295,6 +297,22 @@ public class App {
 
     public static void setProviderUUid(String providerUUid) {
         App.providerUUid = providerUUid;
+    }
+
+    public static double getLongitude() {
+        return longitude;
+    }
+
+    public static void setLongitude(double longitude) {
+        App.longitude = longitude;
+    }
+
+    public static double getLatitude() {
+        return latitude;
+    }
+
+    public static void setLatitude(double latitude) {
+        App.latitude = latitude;
     }
 
 

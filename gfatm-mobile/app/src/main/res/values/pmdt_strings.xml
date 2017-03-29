@@ -485,6 +485,81 @@
     <string name="pmdt_other_nutritioal_support_given">Other nutritional support given?</string>
     <string name="pmdt_nutritional_support_not_given">If no, then why?</string>
 
+    <!-- Contact Registry Form -->
+    <string name="pmdt_household_contact_registry_date">Date of household contact registry</string>
+    <string name="pmdt_total_contacts">Total Number of contacts</string>
+    <string name="pmdt_total_adult_contacts">Total Number of adult contacts</string>
+    <string name="pmdt_total_childern_contacts">Total Number of childhood contacts</string>
+    <string name="pmdt_contact_count_mismatch">Total count doesn\'t match.</string>
+
+    <!-- Contact Baseline Screening Form -->
+    <string name="pmdt_index_patient_id">Index Patient ID:</string>
+    <string name="pmdt_baseline_screening_date">Date of baseline contact screening</string>
+    <string name="pmdt_relation_with_index_patient">Relation with Index patient. (e.g. \'Mother\' means Index is Mother of Contact)</string>
+    <string name="pmdt_relation_with_index_patient_other">Other Relation</string>
+    <string name="pmdt_title_contact_verbal_symptom_screening">Contact Verbal Symptom Screening</string>
+    <string name="pmdt_contact_cough">Does contact have cough?</string>
+    <string name="pmdt_contact_cough_duration">Cough duration</string>
+    <string name="pmdt_contact_haemoptysis">Haemoptysis</string>
+    <string name="pmdt_contact_fever">Does contact have fever?</string>
+    <string name="pmdt_contact_weight_loss">Does contact have weight loss or failure to thrive?</string>
+    <string name="pmdt_contact_reduced_appetite">Reduced appetite</string>
+    <string name="pmdt_contact_reduced_activity">Does contact have reduced activity?</string>
+    <string name="pmdt_contact_night_sweats">Does contact have night sweats?</string>
+    <string name="pmdt_contact_glandular_swelling">Does the contact have glandular swelling anywhere in body?</string>
+    <string name="pmdt_contact_referred">Has the contact been referred to the facility?</string>
+    <string name="pmdt_contact_referred_facility">Facility patient is referred to</string>
+    <string-array name="pmdt_contact_relation_with_index">
+        <item>@string/pmdt_mother</item>
+        <item>@string/pmdt_father</item>
+        <item>@string/pmdt_husband</item>
+        <item>@string/pmdt_wife</item>
+        <item>@string/pmdt_son</item>
+        <item>@string/pmdt_daughter</item>
+        <item>@string/pmdt_brother</item>
+        <item>@string/pmdt_sister</item>
+        <!--<item>@string/pmdt_nephew</item>-->
+        <!--<item>@string/pmdt_neice</item>-->
+        <item>@string/pmdt_maternal_grandmother</item>
+        <item>@string/pmdt_maternal_grandfather</item>
+        <item>@string/pmdt_paternal_grandmother</item>
+        <item>@string/pmdt_paternal_grandfather</item>
+        <!--<item>@string/pmdt_grandson</item>-->
+        <!--<item>@string/pmdt_granddaughter</item>-->
+        <!--<item>@string/pmdt_father_in_law</item>-->
+        <!--<item>@string/pmdt_mother_in_law</item>-->
+        <!--<item>@string/pmdt_daughter_in_law</item>-->
+        <!--<item>@string/pmdt_son_in_law</item>-->
+        <!--<item>@string/pmdt_brother_in_law</item>-->
+        <!--<item>@string/pmdt_sister_in_law</item>-->
+        <item>@string/pmdt_uncle</item>
+        <item>@string/pmdt_aunt</item>
+        <!--<item>@string/pmdt_cousin</item>-->
+        <item>@string/pmdt_other</item>
+    </string-array>
+    <string-array name="pmdt_yes_no_refused_unknown">
+        <item>@string/yes</item>
+        <item>@string/no</item>
+        <item>@string/pmdt_refused</item>
+        <item>@string/pmdt_unknown</item>
+    </string-array>
+    <string-array name="pmdt_yes_no_unknown">
+        <item>@string/yes</item>
+        <item>@string/no</item>
+        <item>@string/pmdt_unknown</item>
+    </string-array>
+
+    <string name="pmdt_less_than_two_weeks">Less than 2 weeks</string>
+    <string name="pmdt_two_to_three_weeks">2 to 3 weeks</string>
+    <string name="pmdt_more_than_three_weeks">More than 3 weeks</string>
+    <string-array name="pmdt_cough_durations">
+        <item>@string/pmdt_less_than_two_weeks</item>
+        <item>@string/pmdt_two_to_three_weeks</item>
+        <item>@string/pmdt_more_than_three_weeks</item>
+        <item>@string/pmdt_unknown</item>
+        <item>@string/pmdt_refused</item>
+    </string-array>
+
 
     <!--list of occupations-->
     <string name="pmdt_artist">Artist</string>

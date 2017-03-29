@@ -12,7 +12,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.format.DateFormat;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +23,6 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
-import android.widget.SimpleCursorAdapter;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
@@ -694,7 +691,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
                     }
 
                     if (!(App.get(addressHouse).equals("") && App.get(addressStreet).equals("") && App.get(district).equals("") && App.get(nearestLandmark).equals(""))) {
-                        result = serverService.savePersonAddress(App.get(addressHouse), App.get(addressStreet), App.get(city), App.get(district), App.getProvince(), App.getCountry(), longitude, latitude, App.get(nearestLandmark), encounterId);
+                        result = serverService.savePersonAddress(App.get(addressHouse), App.get(addressStreet), App.get(city), App.get(district), App.getProvince(), App.getCountry(), App.getLongitude(), App.getLatitude(), App.get(nearestLandmark), encounterId);
                         if (!result.equals("SUCCESS"))
                             return result;
                     }

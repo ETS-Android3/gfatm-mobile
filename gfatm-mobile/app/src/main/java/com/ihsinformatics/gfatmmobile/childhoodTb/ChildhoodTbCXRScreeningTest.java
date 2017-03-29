@@ -2,23 +2,30 @@ package com.ihsinformatics.gfatmmobile.childhoodTb;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
@@ -30,6 +37,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
@@ -41,10 +49,11 @@ import java.util.HashMap;
  * Created by Babar on 31/1/2017.
  */
 
-public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener, View.OnTouchListener {
 
     Context context;
     TitledButton formDate;
+    TitledRadioGroup formType;
     TitledRadioGroup typeOfXRay;
     TitledEditText monthTreatment;
     TitledButton testDate;
@@ -54,6 +63,7 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
     TitledEditText otherRadiologicalDiagnosis;
     TitledSpinner diseaseExtent;
     TitledEditText radiologistRemarks;
+    ImageView testIdView;
 
     Snackbar snackbar;
     ScrollView scrollView;
@@ -71,8 +81,8 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
                              ViewGroup container, Bundle savedInstanceState) {
 
         PAGE_COUNT = 1;
-        FORM_NAME = Forms.CHILDHOODTB_GXP_SPECIMEN_COLLECTION_FORM;
-        FORM = Forms.childhoodTb_gxp_specimen_form;
+        FORM_NAME = Forms.CHILDHOODTB_CXR_SCREENING_TEST;
+        FORM = Forms.childhoodTb_cxr_screening_test;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -131,29 +141,90 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
+        formType = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_type_of_form), getResources().getStringArray(R.array.ctb_type_of_form_list), null, App.HORIZONTAL, App.VERTICAL, true);
         typeOfXRay = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_type_of_xray),getResources().getStringArray(R.array.ctb_type_of_xray_list),getResources().getString(R.string.ctb_chest_xray_other),App.HORIZONTAL,App.VERTICAL);
         monthTreatment = new TitledEditText(context,null,getResources().getString(R.string.ctb_month_treatment),"1","",2,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,false);
         testDate = new TitledButton(context, null, getResources().getString(R.string.ctb_test_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         testDate.setTag("testDate");
-        testId = new TitledEditText(context,null,getResources().getString(R.string.ctb_test_id),"","",8,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,false);
+        testId = new TitledEditText(context,null,getResources().getString(R.string.ctb_test_id),"","",11,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,false);
         chestXRayScore = new TitledEditText(context,null,getResources().getString(R.string.ctb_chest_xray_cad4tb_score),"","",8,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,false);
         radiologicalDiagnosis = new TitledSpinner(context,null,getResources().getString(R.string.ctb_radiological_diagnosis),getResources().getStringArray(R.array.ctb_radiological_diagnosis_list),null,App.VERTICAL);
         otherRadiologicalDiagnosis = new TitledEditText(context,null,getResources().getString(R.string.ctb_other_specify),"","",50,RegexUtil.ALPHA_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
         diseaseExtent = new TitledSpinner(context,null,getResources().getString(R.string.ctb_extent_disease),getResources().getStringArray(R.array.ctb_disease_extent_list),null,App.VERTICAL);
         radiologistRemarks = new TitledEditText(context,null,getResources().getString(R.string.ctb_radiologist_remark),"","",500,RegexUtil.ALPHA_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
+        LinearLayout linearLayout = new LinearLayout(context);
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                0.9f
+        );
+        testId.setLayoutParams(param);
+        linearLayout.addView(testId);
+        testIdView = new ImageView(context);
+        testIdView.setImageResource(R.drawable.ic_checked);
+        LinearLayout.LayoutParams param1 = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                0.1f
+        );
+        testIdView.setLayoutParams(param1);
+        testIdView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        testIdView.setPadding(0, 5, 0, 0);
 
-        views = new View[]{formDate.getButton(),typeOfXRay.getRadioGroup(),testDate.getButton(),radiologicalDiagnosis.getSpinner(),diseaseExtent.getSpinner()};
+        linearLayout.addView(testIdView);
+
+        views = new View[]{formDate.getButton(),formType.getRadioGroup(),typeOfXRay.getRadioGroup(),testDate.getButton(),radiologicalDiagnosis.getSpinner(),diseaseExtent.getSpinner()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate,typeOfXRay,monthTreatment,testDate,testId,chestXRayScore,radiologicalDiagnosis,otherRadiologicalDiagnosis,diseaseExtent
+                {{formDate,formType, linearLayout, typeOfXRay,monthTreatment,testDate,chestXRayScore,radiologicalDiagnosis,otherRadiologicalDiagnosis,diseaseExtent
                 ,radiologistRemarks}};
 
         formDate.getButton().setOnClickListener(this);
+        formType.getRadioGroup().setOnCheckedChangeListener(this);
         testDate.getButton().setOnClickListener(this);
         radiologicalDiagnosis.getSpinner().setOnItemSelectedListener(this);
         typeOfXRay.getRadioGroup().setOnCheckedChangeListener(this);
         diseaseExtent.getSpinner().setOnItemSelectedListener(this);
+
+
+        testId.getEditText().addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                try {
+                    if (testId.getEditText().getText().length() > 0) {
+                        if (testId.getEditText().getText().length() < 11) {
+                            testId.getEditText().setError(getString(R.string.ctb_test_id_error));
+                            testIdView.setVisibility(View.INVISIBLE);
+                        } else {
+                            testIdView.setVisibility(View.VISIBLE);
+                            testIdView.setImageResource(R.drawable.ic_checked);
+                        }
+                    } else {
+                        testIdView.setVisibility(View.INVISIBLE);
+                    }
+                    goneVisibility();
+                    submitButton.setEnabled(false);
+
+
+                } catch (NumberFormatException nfe) {
+                    //Exception: User might be entering " " (empty) value
+                }
+            }
+        });
+        testIdView.setOnTouchListener(this);
+
 
         resetViews();
 
@@ -255,8 +326,159 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
 
     @Override
     public boolean submit() {
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            String encounterId = bundle.getString("formId");
+            if (saveFlag) {
+                serverService.deleteOfflineForms(encounterId);
+            }
+            bundle.putBoolean("save", false);
+        }
+        endTime = new Date();
 
-        return true;
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
+        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+
+        if (App.get(formType).equals(getResources().getString(R.string.ctb_order))) {
+            observations.add(new String[]{"DATE TEST ORDERED", App.getSqlDateTime(secondDateCalendar)});
+            observations.add(new String[]{"FOLLOW-UP MONTH", App.get(monthTreatment)});
+            observations.add(new String[]{"TYPE OF X RAY", App.get(typeOfXRay).equals(getResources().getString(R.string.ctb_chest_xray_cad4tb)) ? "RADIOLOGICAL DIAGNOSIS" :
+                     "X-RAY, OTHER"});
+            observations.add(new String[]{"TEST ID", App.get(testId)});
+        } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
+            observations.add(new String[]{"CHEST X-RAY SCORE", App.get(chestXRayScore)});
+            observations.add(new String[]{"RADIOLOGICAL DIAGNOSIS", App.get(radiologicalDiagnosis).equals(getResources().getString(R.string.ctb_adenopathy)) ? "ADENOPATHY" :
+                    (App.get(radiologicalDiagnosis).equals(getResources().getString(R.string.ctb_infiltration)) ? "INFILTRATE" :
+                            (App.get(radiologicalDiagnosis).equals(getResources().getString(R.string.ctb_consolidation)) ? "CONSOLIDATION" :
+                                (App.get(radiologicalDiagnosis).equals(getResources().getString(R.string.ctb_effusion)) ? "PLEURAL EFFUSION" :
+                                    (App.get(radiologicalDiagnosis).equals(getResources().getString(R.string.ctb_normal)) ? "NORMAL" :
+                                            (App.get(radiologicalDiagnosis).equals(getResources().getString(R.string.ctb_cavitation)) ? "CAVIATION" :
+                                                    (App.get(radiologicalDiagnosis).equals(getResources().getString(R.string.ctb_miliary_tb)) ? "MILIARY" :
+                                                            "OTHER RADIOLOGICAL DIAGNOSIS REAULT"))))))});
+            if(otherRadiologicalDiagnosis.getVisibility()==View.VISIBLE) {
+                observations.add(new String[]{"OTHER RADIOLOGICAL DIAGNOSIS REAULT", App.get(otherRadiologicalDiagnosis)});
+            }
+            observations.add(new String[]{"EXTENT OF DISEASE", App.get(diseaseExtent).equals(getResources().getString(R.string.ctb_normal)) ? "NORMAL" :
+                    (App.get(diseaseExtent).equals(getResources().getString(R.string.ctb_unilateral_disease)) ? "UNILATERAL":
+                        (App.get(diseaseExtent).equals(getResources().getString(R.string.ctb_bilateral_disease)) ? "BILATERAL" : "ABNORMAL"))});
+            if(!App.get(radiologistRemarks).isEmpty()) {
+                observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(radiologistRemarks)});
+            }
+            observations.add(new String[]{"TEST ID", App.get(testId)});
+        }
+
+        AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.submitting_form));
+                        loading.show();
+                    }
+                });
+
+                String result = "";
+
+                if (App.get(formType).equals(getResources().getString(R.string.ctb_order))){
+                    result = serverService.saveEncounterAndObservation("CXR Screening Test Order", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                    if (result.contains("SUCCESS"))
+                        return "SUCCESS";
+                } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
+                    result = serverService.saveEncounterAndObservation("CXR Screening Test Result", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                    if (result.contains("SUCCESS"))
+                        return "SUCCESS";
+                }
+
+                return result;
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            ;
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                if (result.equals("SUCCESS")) {
+                    resetViews();
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.form_submitted));
+                    Drawable submitIcon = getResources().getDrawable(R.drawable.ic_submit);
+                    alertDialog.setIcon(submitIcon);
+                    int color = App.getColor(context, R.attr.colorAccent);
+                    DrawableCompat.setTint(submitIcon, color);
+                    alertDialog.setTitle(getResources().getString(R.string.title_completed));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else if (result.equals("CONNECTION_ERROR")) {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
+                    alertDialog.setMessage(getResources().getString(R.string.insert_error));
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+
+
+            }
+        };
+        submissionFormTask.execute("");
+
+        return false;
     }
 
     @Override
@@ -273,6 +495,72 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
 
     @Override
     public void refill(int encounterId) {
+
+        OfflineForm fo = serverService.getOfflineFormById(encounterId);
+        String date = fo.getFormDate();
+        ArrayList<String[][]> obsValue = fo.getObsValue();
+
+        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+
+        for (int i = 0; i < obsValue.size(); i++) {
+
+            String[][] obs = obsValue.get(i);
+            if(fo.getFormName().contains("Order")) {
+                formType.getRadioGroup().getButtons().get(0).setChecked(true);
+                formType.getRadioGroup().getButtons().get(1).setEnabled(false);
+                if (obs[0][0].equals("TEST ID")) {
+                    testId.getEditText().setText(obs[0][1]);
+                    checkTestId();
+                } else if (obs[0][0].equals("TYPE OF X RAY")) {
+                    for (RadioButton rb : typeOfXRay.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_chest_xray_cad4tb)) && obs[0][1].equals("RADIOLOGICAL DIAGNOSIS")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_chest_xray_other)) && obs[0][1].equals("X-RAY, OTHER")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                } else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
+                    monthTreatment.getEditText().setText(obs[0][1]);
+                } else if (obs[0][0].equals("DATE TEST ORDERED")) {
+                    String secondDate = obs[0][1];
+                    secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
+                    testDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+                }
+            }else{
+                formType.getRadioGroup().getButtons().get(1).setChecked(true);
+                formType.getRadioGroup().getButtons().get(0).setEnabled(false);
+                if (obs[0][0].equals("TEST ID")) {
+                    testId.getEditText().setText(obs[0][1]);
+                    checkTestId();
+                } else if (obs[0][0].equals("CHEST X-RAY SCORE")) {
+                    chestXRayScore.getEditText().setText(obs[0][1]);
+                } else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
+                    String value = obs[0][1].equals("ADENOPATHY") ? getResources().getString(R.string.ctb_adenopathy) :
+                            (obs[0][1].equals("INFILTRATE") ? getResources().getString(R.string.ctb_infiltration) :
+                                    (obs[0][1].equals("CONSOLIDATION") ? getResources().getString(R.string.ctb_consolidation) :
+                                            (obs[0][1].equals("PLEURAL EFFUSION") ? getResources().getString(R.string.ctb_effusion) :
+                                                    (obs[0][1].equals("NORMAL") ? getResources().getString(R.string.ctb_normal) :
+                                                            (obs[0][1].equals("CAVIATION") ? getResources().getString(R.string.ctb_cavitation) :
+                                                                    (obs[0][1].equals("MILIARY") ? getResources().getString(R.string.ctb_miliary_tb) :
+                                                                            getResources().getString(R.string.ctb_other_title)))))));
+                    radiologicalDiagnosis.getSpinner().selectValue(value);
+                } else if (obs[0][0].equals("OTHER RADIOLOGICAL DIAGNOSIS REAULT")) {
+                    otherRadiologicalDiagnosis.getEditText().setText(obs[0][1]);
+                }else if (obs[0][0].equals("EXTENT OF DISEASE")) {
+                    String value = obs[0][1].equals("NORMAL") ? getResources().getString(R.string.ctb_normal) :
+                            (obs[0][1].equals("UNILATERAL") ? getResources().getString(R.string.ctb_unilateral_disease) :
+                                    (obs[0][1].equals("BILATERAL") ? getResources().getString(R.string.ctb_bilateral_disease) :
+                                                                            getResources().getString(R.string.ctb_abnormal_extend_not_defined)));
+                    radiologicalDiagnosis.getSpinner().selectValue(value);
+                }else if (obs[0][0].equals("CLINICIAN NOTES (TEXT)")) {
+                    radiologistRemarks.getEditText().setText(obs[0][1]);
+                }
+            }
+        }
 
     }
 
@@ -331,21 +619,197 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
 
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         testDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-        chestXRayScore.setVisibility(View.GONE);
-        otherRadiologicalDiagnosis.setVisibility(View.GONE);
+        monthTreatment.getEditText().setText(null);
+        testIdView.setVisibility(View.GONE);
+        testId.setVisibility(View.GONE);
+        testIdView.setImageResource(R.drawable.ic_checked);
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean openFlag = bundle.getBoolean("open");
+            if (openFlag) {
+
+                bundle.putBoolean("open", false);
+                bundle.putBoolean("save", true);
+
+                String id = bundle.getString("formId");
+                int formId = Integer.valueOf(id);
+
+                refill(formId);
+
+            } else bundle.putBoolean("save", false);
+
+        }
+        goneVisibility();
+        submitButton.setEnabled(false);
 
     }
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
-        if (group == typeOfXRay.getRadioGroup()) {
-            if (typeOfXRay.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_chest_xray_cad4tb))) {
-                chestXRayScore.setVisibility(View.VISIBLE);
+        if (group == formType.getRadioGroup()) {
+            formDate.setVisibility(View.VISIBLE);
+            testId.setVisibility(View.VISIBLE);
+            testId.getEditText().setText("");
+            testId.getEditText().setError(null);
+            goneVisibility();
+            submitButton.setEnabled(false);
+        }
 
-            } else {
-                chestXRayScore.setVisibility(View.GONE);
+    }
+    void goneVisibility() {
+
+        typeOfXRay.setVisibility(View.GONE);
+        monthTreatment.setVisibility(View.GONE);
+        testDate.setVisibility(View.GONE);
+
+        chestXRayScore.setVisibility(View.GONE);
+        radiologicalDiagnosis.setVisibility(View.GONE);
+        otherRadiologicalDiagnosis.setVisibility(View.GONE);
+        diseaseExtent.setVisibility(View.GONE);
+        radiologistRemarks.setVisibility(View.GONE);
+    }
+
+    void showTestOrderOrTestResult() {
+        if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.ctb_order))) {
+            testDate.setVisibility(View.VISIBLE);
+            monthTreatment.setVisibility(View.VISIBLE);
+            typeOfXRay.setVisibility(View.VISIBLE);
+
+            chestXRayScore.setVisibility(View.GONE);
+            radiologicalDiagnosis.setVisibility(View.GONE);
+            otherRadiologicalDiagnosis.setVisibility(View.GONE);
+            diseaseExtent.setVisibility(View.GONE);
+            radiologistRemarks.setVisibility(View.GONE);
+
+        } else {
+            String typeofXray = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "CXR Screening Test Order", "TYPE OF X RAY");
+            if(typeofXray.equalsIgnoreCase("RADIOLOGICAL DIAGNOSIS")){
+                chestXRayScore.setVisibility(View.VISIBLE);
+            }
+            radiologicalDiagnosis.setVisibility(View.VISIBLE);
+            diseaseExtent.setVisibility(View.VISIBLE);
+            radiologistRemarks.setVisibility(View.VISIBLE);
+
+            testDate.setVisibility(View.GONE);
+            monthTreatment.setVisibility(View.GONE);
+            typeOfXRay.setVisibility(View.GONE);
+
+        }
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN: {
+                ImageView view = (ImageView) v;
+                //overlay is black with transparency of 0x77 (119)
+                view.getDrawable().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
+                view.invalidate();
+
+                Boolean error = false;
+
+                checkTestId();
+
+
+                break;
+            }
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL: {
+                ImageView view = (ImageView) v;
+                //clear the overlay
+                view.getDrawable().clearColorFilter();
+                view.invalidate();
+                break;
             }
         }
+        return true;
+    }
+
+    private void checkTestId() {
+        AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.verifying_test_id));
+                        loading.show();
+                    }
+                });
+
+                String result = "";
+
+                Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "Childhood TB-CXR Screening Test Order");
+
+                if (testIds == null || testIds.length < 1) {
+                    if (App.get(formType).equals(getResources().getString(R.string.ctb_order)))
+                        return "SUCCESS";
+                    else
+                        return "";
+                }
+
+
+                if (App.get(formType).equals(getResources().getString(R.string.ctb_order))) {
+                    result = "SUCCESS";
+                    for (int i = 0; i < testIds.length; i++) {
+                        if (String.valueOf(testIds[i][0]).equals(App.get(testId))) {
+                            return "";
+                        }
+                    }
+                }
+
+                if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
+                    result = "";
+                    for (int i = 0; i < testIds.length; i++) {
+                        if (String.valueOf(testIds[i][0]).equals(App.get(testId))) {
+                            return "SUCCESS";
+                        }
+                    }
+                }
+
+                return result;
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            ;
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                if (result.equals("SUCCESS")) {
+
+                    testIdView.setImageResource(R.drawable.ic_checked_green);
+                    showTestOrderOrTestResult();
+                    submitButton.setEnabled(true);
+
+                } else {
+
+                    if (App.get(formType).equals(getResources().getString(R.string.ctb_order))) {
+                        testId.getEditText().setError("Test Id already used.");
+                    } else {
+                        testId.getEditText().setError("No order form found for the test id for patient");
+                    }
+
+                }
+
+                try {
+                    InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                } catch (Exception e) {
+                    // TODO: handle exception
+                }
+
+            }
+        };
+        submissionFormTask.execute("");
 
     }
 

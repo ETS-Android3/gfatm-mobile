@@ -398,8 +398,8 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
         final ArrayList<String[]> observations = new ArrayList<String[]>();
         observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
         observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
-        /*observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
-        observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});*/
+        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
+        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         observations.add(new String[]{"PATIENT ID OF INDEX CASE", App.get(indexPatientId)});
         final String cnic = App.get(cnic1) + "-" + App.get(cnic2) + "-" + App.get(cnic3);
         observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnic});

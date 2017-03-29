@@ -1,7 +1,6 @@
 package com.ihsinformatics.gfatmmobile.pmdt;
 
 import android.content.Context;
-import android.hardware.TriggerEvent;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -52,7 +51,7 @@ public class PmdtDailyTreatmentMonitoringForm extends AbstractFormActivity imple
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         PAGE_COUNT = 1;
         FORM_NAME = Forms.PMDT_DAILY_TREATMENT_MONITORING;
-        FORM = Forms.dailyTreatmentMonitoring;
+        FORM = Forms.pmdtDailyTreatmentMonitoring;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();

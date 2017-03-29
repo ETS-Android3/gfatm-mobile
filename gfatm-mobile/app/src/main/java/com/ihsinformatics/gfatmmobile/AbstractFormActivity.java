@@ -44,7 +44,6 @@ import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.shared.FormsObject;
-import com.ihsinformatics.gfatmmobile.util.GPSTracker;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 import java.util.ArrayList;
@@ -98,9 +97,6 @@ public abstract class AbstractFormActivity extends Fragment
 
     protected Date startTime = null;
     protected Date endTime = null;
-
-    protected double latitude = 0;
-    protected double longitude = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -161,21 +157,6 @@ public abstract class AbstractFormActivity extends Fragment
             lastButton.setVisibility(View.GONE);
             nextButton.setVisibility(View.GONE);
             navigationSeekbar.setVisibility(View.GONE);
-        }
-
-        GPSTracker gps = new GPSTracker(mainContent.getContext());
-
-        // check if GPS enabled
-        if (gps.canGetLocation()) {
-
-            latitude = gps.getLatitude();
-            longitude = gps.getLongitude();
-
-        } else {
-            // can't get location
-            // GPS or Network is not enabled
-            // Ask user to enable GPS/network in settings
-            gps.showSettingsAlert();
         }
 
         saveButton.setVisibility(View.GONE);

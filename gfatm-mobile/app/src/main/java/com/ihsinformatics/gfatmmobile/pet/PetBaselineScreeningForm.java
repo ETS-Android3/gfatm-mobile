@@ -457,8 +457,8 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
 
         observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
         observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
-        /*observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
-        observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});*/
+        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
+        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
 
         observations.add(new String[]{"PATIENT ID OF INDEX CASE", App.get(indexPatientId)});
         observations.add(new String[]{"TUBERCULOSIS TREATMENT STATUS", App.get(treatmentStatus).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
@@ -594,7 +594,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                     }
 
                     if (!(App.get(address1).equals("") && App.get(address2).equals("") && App.get(district).equals("") && App.get(landmark).equals(""))) {
-                        result = serverService.savePersonAddress(App.get(address1), App.get(address2), App.get(city), App.get(district), App.getProvince(), App.getCountry(), longitude, latitude, App.get(landmark), encounterId);
+                        result = serverService.savePersonAddress(App.get(address1), App.get(address2), App.get(city), App.get(district), App.getProvince(), App.getCountry(), App.getLongitude(), App.getLatitude(), App.get(landmark), encounterId);
                     if (!result.equals("SUCCESS"))
                         return result;
                     }
@@ -838,38 +838,11 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         linearLayout.setVisibility(View.VISIBLE);
         referredFacility.setVisibility(View.GONE);
 
-
         String[] districts = serverService.getDistrictList(App.getProvince());
-        district.getSpinner().setAdapter(null);
-
-        ArrayAdapter<String> spinnerArrayAdapter = null;
-        if (App.isLanguageRTL()) {
-            spinnerArrayAdapter = new ArrayAdapter<String>(context, R.layout.custom_rtl_spinner, districts);
-            district.getSpinner().setAdapter(spinnerArrayAdapter);
-            spinnerArrayAdapter.setDropDownViewResource(R.layout.custom_rtl_spinner);
-            district.getSpinner().setGravity(Gravity.RIGHT);
-        } else {
-            spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, districts);
-            district.getSpinner().setAdapter(spinnerArrayAdapter);
-            spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            district.getSpinner().setGravity(Gravity.LEFT);
-        }
+        district.getSpinner().setSpinnerData(districts);
 
         String[] cities = serverService.getCityList(App.get(district));
-        city.getSpinner().setAdapter(null);
-
-        spinnerArrayAdapter = null;
-        if (App.isLanguageRTL()) {
-            spinnerArrayAdapter = new ArrayAdapter<String>(context, R.layout.custom_rtl_spinner, cities);
-            city.getSpinner().setAdapter(spinnerArrayAdapter);
-            spinnerArrayAdapter.setDropDownViewResource(R.layout.custom_rtl_spinner);
-            city.getSpinner().setGravity(Gravity.RIGHT);
-        } else {
-            spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, cities);
-            city.getSpinner().setAdapter(spinnerArrayAdapter);
-            spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            city.getSpinner().setGravity(Gravity.LEFT);
-        }
+        city.getSpinner().setSpinnerData(cities);
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -916,9 +889,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                 referredFacility.setVisibility(View.VISIBLE);
             else
                 referredFacility.setVisibility(View.GONE);
-
         }
-
     }
 
     @Override
