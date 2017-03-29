@@ -23,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
@@ -294,6 +295,8 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
 
         for (CheckBox cb : diabetesTreatmentInitiation.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
+
+        resetViews();
     }
 
     @Override
@@ -552,7 +555,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
                 (App.get(hxDiabeticNephropathy).equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_no)) ? "NO" : "UNKNOWN")});
 
         String hxDiabeticInfectionsString = "";
-        for(CheckBox cb : diabetesFamilyHistorySpecify.getCheckedBoxes()){
+        for(CheckBox cb : hxDiabeticInfections.getCheckedBoxes()){
             if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_infections_skin)))
                 hxDiabeticInfectionsString = hxDiabeticInfectionsString + "INFECTION OF SKIN" + " ; ";
             else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_infections_foot)))
@@ -737,6 +740,300 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
 
         for (int i = 0; i < obsValue.size(); i++) {
             String[][] obs = obsValue.get(i);
+
+            if (obs[0][0].equals("FAMILY HISTORY OF DIABETES MELLITUS")) {
+                for (RadioButton rb : diabetesFamilyHistory.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_refused)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_dont_know)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("FAMILY MEMBERS WITH DIABETES")) {
+                for (CheckBox cb : diabetesFamilyHistorySpecify.getCheckedBoxes()) {
+                    if (cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_specify_mother)) && obs[0][1].equals("MOTHER")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_specify_father)) && obs[0][1].equals("FATHER")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_specify_maternalgm)) && obs[0][1].equals("MATERNAL GRANDMOTHER")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_specify_maternalgf)) && obs[0][1].equals("MATERNAL GRANDFATHER")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_specify_paternalgm)) && obs[0][1].equals("PATERNAL GRANDMOTHER")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_specify_paternalgf)) && obs[0][1].equals("PATERNAL GRANDFATHER")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_specify_brother)) && obs[0][1].equals("BROTHER")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_specify_sister)) && obs[0][1].equals("SISTER")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_specify_son)) && obs[0][1].equals("SON")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_specify_daughter)) && obs[0][1].equals("DAUGHTER")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_specify_spouse)) && obs[0][1].equals("SPOUSE")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_specify_aunt)) && obs[0][1].equals("AUNT")) {
+                        cb.setChecked(true);
+                        break;
+                    }  else if (cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_specify_uncle)) && obs[0][1].equals("UNCLE")) {
+                        cb.setChecked(true);
+                        break;
+                    }  else if (cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_specify_other1)) && obs[0][1].equals("OTHER")) {
+                        cb.setChecked(true);
+                        break;
+                    }
+
+                }
+                diabetesFamilyHistorySpecify.setVisibility(View.VISIBLE);
+            } else  if (obs[0][0].equals("DIABETES MELLITUS MEDICATION HISTORY")) {
+                for (RadioButton rb : previousDiabetesTreatmentHistory.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else  if (obs[0][0].equals("SELF REPORTED DIABETES MEDICATION")) {
+                for (RadioButton rb : selfReportedDiabetesTreatmentHistory.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_self_reported_diabetes_treatment_history_oha)) && obs[0][1].equals("ORAL ANTIHYPERCLYCEMIC MEDICATION")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_self_reported_diabetes_treatment_history_insulin)) && obs[0][1].equals("INSULIN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else  if (obs[0][0].equals("TYPE OF DIABETES MELLITUS")) {
+                for (RadioButton rb : selfReportedDiabetesTreatmentHistory.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_type_diabetes_type1)) && obs[0][1].equals("DIABETES MELLITUS TYPE 1")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_type_diabetes_type2)) && obs[0][1].equals("DIABETES MELLITUS TYPE II")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                selfReportedDiabetesTreatmentHistory.setVisibility(View.VISIBLE);
+            } else  if (obs[0][0].equals("DIABETES CONTROL STATUS")) {
+                for (RadioButton rb : statusDiabetes.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_status_diabetes_controlled)) && obs[0][1].equals("CONTROLLED DIABETES MELLITUS")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_status_diabetes_uncontrolled)) && obs[0][1].equals("UNCONTROLLED DIABETES MELLITUS")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else  if (obs[0][0].equals("DIABETIC HYPOGLYCEMIA")) {
+                for (RadioButton rb : hxHypoglycemia.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else  if (obs[0][0].equals("DIABETIC RETINOPATHY")) {
+                for (RadioButton rb : hxDiabeticRetinopathy.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else  if (obs[0][0].equals("\"DIABETIC AUTONOMIC NEUROPATHY")) {
+                for (RadioButton rb : hxDiabeticNeuropathy.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else  if (obs[0][0].equals("DIABETIC NEPHROPATHY")) {
+                for (RadioButton rb : hxDiabeticNephropathy.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("HISTORY OF INFECTIONS")) {
+                for (CheckBox cb : hxDiabeticInfections.getCheckedBoxes()) {
+                    if (cb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_infections_skin)) && obs[0][1].equals("INFECTION OF SKIN")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_infections_foot)) && obs[0][1].equals("FOOT INFECTION")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_infections_dental)) && obs[0][1].equals("INFECTED DENTAL CARIES")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_infections_gu)) && obs[0][1].equals("GENITOURINARY SYMPTOMS")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_infections_pelvic)) && obs[0][1].equals("GENITAL INFECTION")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_infections_upper_respiratory)) && obs[0][1].equals("UPPER RESPIRATORY INFECTION")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_infections_other)) && obs[0][1].equals("OTHER INFECTION")) {
+                        cb.setChecked(true);
+                        break;
+                    }
+                }
+                hxDiabeticInfections.setVisibility(View.VISIBLE);
+            } else  if (obs[0][0].equals("PERIPHERAL VASCULAR DISEASE")) {
+                for (RadioButton rb : hxDiabeticPvd.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else  if (obs[0][0].equals("CORONARY HEART DISEASE")) {
+                for (RadioButton rb : hxDiabeticCad.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("GESTATIONAL DIABETES DURING PREGNENCY")) {
+                for (RadioButton rb : hxDiabeticHypertension.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                hxDiabeticHypertension.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("GESTATIONAL DIABETES CONTINUED AFTER DELIVERY")) {
+                for (RadioButton rb : hxDiabeticGestationalDiabetes.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                hxDiabeticHypertension.setVisibility(View.VISIBLE);
+            }  else if (obs[0][0].equals("DIABETES MEDICATIONS")) {
+                for (CheckBox cb : diabetesTreatmentInitiation.getCheckedBoxes()) {
+                    if (cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_metformin_option)) && obs[0][1].equals("METFORMIN")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_sulfonlyurea_option)) && obs[0][1].equals("SULFONLYUREAS")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_tzd_option)) && obs[0][1].equals("PIOGLITAZONE")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_dpp4i_option)) && obs[0][1].equals("DIPEPTIDYL PEPTIDASE 4 INHIBITOR")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_insulinN_option)) && obs[0][1].equals("INSULIN, ISOPHANE, HUMAN")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_insulinR_option)) && obs[0][1].equals("INSULIN, REGULAR, HUMAN")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_insulin_mix_option)) && obs[0][1].equals("INSULIN 70/30")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_other_option)) && obs[0][1].equals("OTHER DRUG NAME")) {
+                        cb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("CLINICIAN NOTES (TEXT)")) {
+                diabetesTreatmentDetail.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("METFORMIN DOSE")) {
+                for (RadioButton rb : diabetesTreatmentInitiationMetformin.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_metformin_500)) && obs[0][1].equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_metformin_500))) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_metformin_1000)) && obs[0][1].equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_metformin_1000))) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_metformin_1500)) && obs[0][1].equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_metformin_1500))) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_metformin_2000)) && obs[0][1].equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_metformin_2000))) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_metformin_2500)) && obs[0][1].equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_metformin_2500))) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("INSULIN N DOSAGE")) {
+                diabetesTreatmentInitiationInsulinN.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("INSULIN R DOSAGE")) {
+                diabetesTreatmentInitiationInsulinR.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("INSULIN 70/30 DOSAGE")) {
+                diabetesTreatmentInitiationInsulinMix.getEditText().setText(obs[0][1]);
+            }
 
         }
     }
