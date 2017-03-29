@@ -162,15 +162,23 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
 
             Date date = new Date();
 
-            if (formDateCalendar.after(date)) {
+            if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
+
+                String formDa = formDate.getButton().getText().toString();
 
                 formDateCalendar = App.getCalendar(date);
+                if (formDateCalendar.after(App.getCalendar(date))) {
 
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
-                snackbar.show();
+                    formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
 
-            } else
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                    snackbar.show();
+
+                    formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+                } else
+                    formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                }
 
         if (!appointmentDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString())) {
 
@@ -228,6 +236,8 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
         final ArrayList<String[]> observations = new ArrayList<String[]>();
         observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
         observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
+        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         observations.add(new String[]{"PATIENT HAVE TB", App.get(patientHaveTb).toUpperCase()});
         if(patientNeedMoreTests.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"PRESCRIBE FURTHER TESTS", App.get(patientNeedMoreTests).toUpperCase()});

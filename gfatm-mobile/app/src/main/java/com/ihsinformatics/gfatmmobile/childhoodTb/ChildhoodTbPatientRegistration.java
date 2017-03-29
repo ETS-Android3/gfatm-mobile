@@ -653,6 +653,8 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         final ArrayList<String[]> observations = new ArrayList<String[]>();
         observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
         observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
+        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         String cnic = cnic1.getEditText().getText().toString() + "-" + cnic2.getEditText().getText().toString() + "-" + cnic3.getEditText().getText().toString();
         observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnic});
         observations.add(new String[]{"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(cnicOwner).equals(getResources().getString(R.string.ctb_mother)) ? "MOTHER" :
@@ -795,9 +797,22 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                 });
 
                 String result = serverService.saveEncounterAndObservation("Patient Registration", FORM, formDateCalendar, observations.toArray(new String[][]{}));
-                if (result.contains("SUCCESS"))
-                    return "SUCCESS";
+                if (!result.contains("SUCCESS"))
+                    return result;
+                else {
 
+                    String encounterId = "";
+
+                    if (result.contains("_")) {
+                        String[] successArray = result.split("_");
+                        encounterId = successArray[1];
+                    }
+
+                    result = serverService.saveProgramEnrollement(App.getSqlDate(formDateCalendar), encounterId);
+                    if (!result.equals("SUCCESS"))
+                        return result;
+
+                }
                 return result;
 
             }

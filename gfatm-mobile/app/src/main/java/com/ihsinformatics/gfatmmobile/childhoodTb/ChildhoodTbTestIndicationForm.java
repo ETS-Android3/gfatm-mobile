@@ -219,6 +219,8 @@ public class ChildhoodTbTestIndicationForm extends AbstractFormActivity implemen
         final ArrayList<String[]> observations = new ArrayList<String[]>();
         observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
         observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
+        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         observations.add(new String[]{"REFERRED CHEST X RAY", App.get(chestXray).toUpperCase()});
         observations.add(new String[]{"REFERRED ULTRASOUND", App.get(ultraSound).toUpperCase()});
         observations.add(new String[]{"REFERRED CT SCAN", App.get(ctScan).toUpperCase()});
