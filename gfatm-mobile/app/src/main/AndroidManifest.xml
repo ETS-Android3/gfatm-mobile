@@ -2,13 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ihsinformatics.gfatmmobile"
     android:versionCode="2"
-    android:versionName="0.0.2">
+    android:versionName="0.4.0-beta">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <!-- Needed only if your app targets Android 5.0 (API level 21) or higher. -->
     <uses-feature android:name="android.hardware.location.gps" />
 
     <application
@@ -116,6 +117,8 @@
             android:screenOrientation="portrait"
             android:theme="@style/dialog"
             android:windowSoftInputMode="stateHidden"></activity>
+
+        <service android:name="com.ihsinformatics.gfatmmobile.util.LocationService"></service>
     </application>
 
 </manifest>
