@@ -20,8 +20,10 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
@@ -33,6 +35,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
@@ -635,6 +638,16 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
 
     @Override
     public boolean submit() {
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            String encounterId = bundle.getString("formId");
+            if (saveFlag) {
+                serverService.deleteOfflineForms(encounterId);
+            }
+            bundle.putBoolean("save", false);
+        }
+
         endTime = new Date();
 
         final ArrayList<String[]> observations = new ArrayList<String[]>();
@@ -680,7 +693,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         if(!App.get(nearestLandmark).isEmpty()){
             observations.add(new String[]{"NEAREST LANDMARK", App.get(nearestLandmark)});
         }
-        String primaryMobile = mobileNumber1.getEditText().getText().toString() + mobileNumber2.getEditText().getText().toString();
+        String primaryMobile = mobileNumber1.getEditText().getText().toString() + "-" + mobileNumber2.getEditText().getText().toString();
         observations.add(new String[]{"CONTACT PHONE NUMBER", primaryMobile});
 
         if(mobileNumberContact.getVisibility()==View.VISIBLE){
@@ -700,7 +713,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
             observations.add(new String[]{"PERMISSION TO USE CONTACT NUMBER", App.get(permissionMobileNumberContact).toUpperCase()});
         }
 
-        String landlineNumber = landlineNumber1.getEditText().getText().toString() + landlineNumber2.getEditText().getText().toString();
+        String landlineNumber = landlineNumber1.getEditText().getText().toString() + "-" + landlineNumber2.getEditText().getText().toString();
         observations.add(new String[]{"TERTIARY CONTACT NUMBER", landlineNumber});
 
         if(landlineNumberContact.getVisibility()==View.VISIBLE){
@@ -721,10 +734,9 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         }
 
         if(!App.get(secondaryMobileNumber1).isEmpty() && !App.get(secondaryMobileNumber2).isEmpty() ){
-            String secondaryMobileNumber = secondaryMobileNumber1.getEditText().getText().toString() + secondaryMobileNumber2.getEditText().getText().toString();
-            if(RegexUtil.isMobileNumber(secondaryMobileNumber)){
-                observations.add(new String[]{"SECONDARY MOBILE NUMBER", secondaryMobileNumber});
-            }
+            String secondaryMobileNumber = secondaryMobileNumber1.getEditText().getText().toString() + "-" + secondaryMobileNumber2.getEditText().getText().toString();
+            observations.add(new String[]{"SECONDARY MOBILE NUMBER", secondaryMobileNumber});
+
         }
 
         if(secondaryMobileNumberContact.getVisibility()==View.VISIBLE){
@@ -745,10 +757,9 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         }
 
         if(!App.get(secondaryLandlineNumber1).isEmpty() && !App.get(secondaryLandlineNumber2).isEmpty() ){
-            String secondaryLandlineNumber = secondaryLandlineNumber1.getEditText().getText().toString() + secondaryLandlineNumber2.getEditText().getText().toString();
-            if(RegexUtil.isLandlineNumber(secondaryLandlineNumber)){
-                observations.add(new String[]{"QUATERNARY CONTACT NUMBER", secondaryLandlineNumber});
-            }
+            String secondaryLandlineNumber = secondaryLandlineNumber1.getEditText().getText().toString() + "-" + secondaryLandlineNumber2.getEditText().getText().toString();
+            observations.add(new String[]{"QUATERNARY CONTACT NUMBER", secondaryLandlineNumber});
+
         }
 
         if(secondaryLandlineContact.getVisibility()==View.VISIBLE){
@@ -885,8 +896,184 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
     }
 
     @Override
-    public void refill(int encounterId) {
+    public void refill(int formId) {
+        OfflineForm fo = serverService.getOfflineFormById(formId);
+        String date = fo.getFormDate();
+        ArrayList<String[][]> obsValue = fo.getObsValue();
+        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
+        for (int i = 0; i < obsValue.size(); i++) {
+
+            String[][] obs = obsValue.get(i);
+
+            if (obs[0][0].equals("NATIONAL IDENTIFICATION NUMBER")) {
+                String[] cnicParts = obs[0][1].split("-");
+                cnic1.getEditText().setText(cnicParts[0]);
+                cnic2.getEditText().setText(cnicParts[1]);
+                cnic3.getEditText().setText(cnicParts[2]);
+            } else if (obs[0][0].equals("COMPUTERIZED NATIONAL IDENTIFICATION OWNER")) {
+                String value = obs[0][1].equals("MOTHER") ? getResources().getString(R.string.ctb_mother) :
+                        (obs[0][1].equals("FATHER") ? getResources().getString(R.string.ctb_father) :
+                                (obs[0][1].equals("BROTHER") ? getResources().getString(R.string.ctb_brother) :
+                                        (obs[0][1].equals("SISTER") ? getResources().getString(R.string.ctb_sister) :
+                                                (obs[0][1].equals("PATERNAL GRANDFATHER") ? getResources().getString(R.string.ctb_paternal_grandfather) :
+                                                        (obs[0][1].equals("PATERNAL GRANDMOTHER") ? getResources().getString(R.string.ctb_paternal_grandmother) :
+                                                                (obs[0][1].equals("MATERNAL GRANDFATHER") ? getResources().getString(R.string.ctb_maternal_grandfather) :
+                                                                        (obs[0][1].equals("MATERNAL GRANDMOTHER") ? getResources().getString(R.string.ctb_maternal_grandmother) :
+                                                                                (obs[0][1].equals("UNCLE") ? getResources().getString(R.string.ctb_uncle) :
+                                                                                        (obs[0][1].equals("AUNT") ? getResources().getString(R.string.ctb_aunt) :
+                                                                                                getResources().getString(R.string.ctb_other_title))))))))));
+                cnicOwner.getSpinner().selectValue(value);
+                if(value.equals(getResources().getString(R.string.ctb_other_title))){
+                    cnicOwnerOther.setVisibility(View.VISIBLE);
+                }
+            } else if (obs[0][0].equals("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER")) {
+                cnicOwnerOther.getEditText().setText(obs[0][1]);
+            }else if (obs[0][0].equals("PATIENT PROVIDED ADDRESS")) {
+                for (RadioButton rb : addressProvided.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        address1.setVisibility(View.VISIBLE);
+                        address2.setVisibility(View.VISIBLE);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("ADDRESS (TEXT)")) {
+                address1.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("EXTENDED ADDRESS (TEXT)")) {
+                address2.getEditText().setText(obs[0][1]);
+            }else if (obs[0][0].equals("VILLAGE")) {
+                city.getSpinner().selectValue(obs[0][1]);
+            }
+            else if (obs[0][0].equals("TOWN")) {
+                addressTown.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("TYPE OF ADDRESS")) {
+                for (RadioButton rb : addressType.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_permanent)) && obs[0][1].equals("PERMANENT ADDRESS")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_temporary)) && obs[0][1].equals("TEMPORARY ADDRESS")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            }else if (obs[0][0].equals("NEAREST LANDMARK")) {
+                nearestLandmark.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("CONTACT PHONE NUMBER")) {
+                String[] phoneNumberParts = obs[0][1].split("-");
+                mobileNumber1.getEditText().setText(phoneNumberParts[0]);
+                mobileNumber2.getEditText().setText(phoneNumberParts[1]);
+            } else if (obs[0][0].equals("CONTACT OWNER")) {
+                String value = obs[0][1].equals("MOTHER") ? getResources().getString(R.string.ctb_mother) :
+                        (obs[0][1].equals("FATHER") ? getResources().getString(R.string.ctb_father) :
+                                (obs[0][1].equals("BROTHER") ? getResources().getString(R.string.ctb_brother) :
+                                        (obs[0][1].equals("SISTER") ? getResources().getString(R.string.ctb_sister) :
+                                                (obs[0][1].equals("PATERNAL GRANDFATHER") ? getResources().getString(R.string.ctb_paternal_grandfather) :
+                                                        (obs[0][1].equals("PATERNAL GRANDMOTHER") ? getResources().getString(R.string.ctb_paternal_grandmother) :
+                                                                (obs[0][1].equals("MATERNAL GRANDFATHER") ? getResources().getString(R.string.ctb_maternal_grandfather) :
+                                                                        (obs[0][1].equals("MATERNAL GRANDMOTHER") ? getResources().getString(R.string.ctb_maternal_grandmother) :
+                                                                                (obs[0][1].equals("UNCLE") ? getResources().getString(R.string.ctb_uncle) :
+                                                                                        (obs[0][1].equals("AUNT") ? getResources().getString(R.string.ctb_aunt) :
+                                                                                                getResources().getString(R.string.ctb_other_title))))))))));
+                mobileNumberContact.getSpinner().selectValue(value);
+            }else if (obs[0][0].equals("PERMISSION TO USE CONTACT NUMBER")) {
+                for (RadioButton rb : permissionMobileNumberContact.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            }else if (obs[0][0].equals("TERTIARY CONTACT NUMBER")) {
+                String[] phoneNumberParts = obs[0][1].split("-");
+                landlineNumber1.getEditText().setText(phoneNumberParts[0]);
+                landlineNumber2.getEditText().setText(phoneNumberParts[1]);
+            } else if (obs[0][0].equals("TERTIARY CONTACT OWNER")) {
+                String value = obs[0][1].equals("MOTHER") ? getResources().getString(R.string.ctb_mother) :
+                        (obs[0][1].equals("FATHER") ? getResources().getString(R.string.ctb_father) :
+                                (obs[0][1].equals("BROTHER") ? getResources().getString(R.string.ctb_brother) :
+                                        (obs[0][1].equals("SISTER") ? getResources().getString(R.string.ctb_sister) :
+                                                (obs[0][1].equals("PATERNAL GRANDFATHER") ? getResources().getString(R.string.ctb_paternal_grandfather) :
+                                                        (obs[0][1].equals("PATERNAL GRANDMOTHER") ? getResources().getString(R.string.ctb_paternal_grandmother) :
+                                                                (obs[0][1].equals("MATERNAL GRANDFATHER") ? getResources().getString(R.string.ctb_maternal_grandfather) :
+                                                                        (obs[0][1].equals("MATERNAL GRANDMOTHER") ? getResources().getString(R.string.ctb_maternal_grandmother) :
+                                                                                (obs[0][1].equals("UNCLE") ? getResources().getString(R.string.ctb_uncle) :
+                                                                                        (obs[0][1].equals("AUNT") ? getResources().getString(R.string.ctb_aunt) :
+                                                                                                getResources().getString(R.string.ctb_other_title))))))))));
+                landlineNumberContact.getSpinner().selectValue(value);
+            }else if (obs[0][0].equals("PERMISSION TO USE TERTIARY CONTACT")) {
+                for (RadioButton rb : permissionLandlineNumber.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            }else if (obs[0][0].equals("SECONDARY MOBILE NUMBER")) {
+                String[] phoneNumberParts = obs[0][1].split("-");
+                secondaryMobileNumber1.getEditText().setText(phoneNumberParts[0]);
+                secondaryMobileNumber2.getEditText().setText(phoneNumberParts[1]);
+            } else if (obs[0][0].equals("SECONDARY CONTACT OWNER")) {
+                String value = obs[0][1].equals("MOTHER") ? getResources().getString(R.string.ctb_mother) :
+                        (obs[0][1].equals("FATHER") ? getResources().getString(R.string.ctb_father) :
+                                (obs[0][1].equals("BROTHER") ? getResources().getString(R.string.ctb_brother) :
+                                        (obs[0][1].equals("SISTER") ? getResources().getString(R.string.ctb_sister) :
+                                                (obs[0][1].equals("PATERNAL GRANDFATHER") ? getResources().getString(R.string.ctb_paternal_grandfather) :
+                                                        (obs[0][1].equals("PATERNAL GRANDMOTHER") ? getResources().getString(R.string.ctb_paternal_grandmother) :
+                                                                (obs[0][1].equals("MATERNAL GRANDFATHER") ? getResources().getString(R.string.ctb_maternal_grandfather) :
+                                                                        (obs[0][1].equals("MATERNAL GRANDMOTHER") ? getResources().getString(R.string.ctb_maternal_grandmother) :
+                                                                                (obs[0][1].equals("UNCLE") ? getResources().getString(R.string.ctb_uncle) :
+                                                                                        (obs[0][1].equals("AUNT") ? getResources().getString(R.string.ctb_aunt) :
+                                                                                                getResources().getString(R.string.ctb_other_title))))))))));
+                secondaryMobileNumberContact.getSpinner().selectValue(value);
+            }else if (obs[0][0].equals("PERMISSION TO USE SECONDARY CONTACT")) {
+                for (RadioButton rb : permissionSecondaryMobileNumber.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            }
+            else if (obs[0][0].equals("QUATERNARY CONTACT NUMBER")) {
+                String[] phoneNumberParts = obs[0][1].split("-");
+                secondaryLandlineNumber1.getEditText().setText(phoneNumberParts[0]);
+                secondaryLandlineNumber2.getEditText().setText(phoneNumberParts[1]);
+            } else if (obs[0][0].equals("QUATERNARY CONTACT OWNER")) {
+                String value = obs[0][1].equals("MOTHER") ? getResources().getString(R.string.ctb_mother) :
+                        (obs[0][1].equals("FATHER") ? getResources().getString(R.string.ctb_father) :
+                                (obs[0][1].equals("BROTHER") ? getResources().getString(R.string.ctb_brother) :
+                                        (obs[0][1].equals("SISTER") ? getResources().getString(R.string.ctb_sister) :
+                                                (obs[0][1].equals("PATERNAL GRANDFATHER") ? getResources().getString(R.string.ctb_paternal_grandfather) :
+                                                        (obs[0][1].equals("PATERNAL GRANDMOTHER") ? getResources().getString(R.string.ctb_paternal_grandmother) :
+                                                                (obs[0][1].equals("MATERNAL GRANDFATHER") ? getResources().getString(R.string.ctb_maternal_grandfather) :
+                                                                        (obs[0][1].equals("MATERNAL GRANDMOTHER") ? getResources().getString(R.string.ctb_maternal_grandmother) :
+                                                                                (obs[0][1].equals("UNCLE") ? getResources().getString(R.string.ctb_uncle) :
+                                                                                        (obs[0][1].equals("AUNT") ? getResources().getString(R.string.ctb_aunt) :
+                                                                                                getResources().getString(R.string.ctb_other_title))))))))));
+                secondaryLandlineContact.getSpinner().selectValue(value);
+            }else if (obs[0][0].equals("PERMISSION TO USE QUATERNARY CONTACT")) {
+                for (RadioButton rb : permissionSecondaryLandlineNumber.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -964,6 +1151,22 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         landlineNumber2.getEditText().setError(null);
         secondaryMobileNumber2.getEditText().setError(null);
         secondaryLandlineNumber2.getEditText().setError(null);
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean openFlag = bundle.getBoolean("open");
+            if (openFlag) {
+
+                bundle.putBoolean("open", false);
+                bundle.putBoolean("save", true);
+
+                String id = bundle.getString("formId");
+                int formId = Integer.valueOf(id);
+
+                refill(formId);
+
+            } else bundle.putBoolean("save", false);
+
+        }
 
 
     }
