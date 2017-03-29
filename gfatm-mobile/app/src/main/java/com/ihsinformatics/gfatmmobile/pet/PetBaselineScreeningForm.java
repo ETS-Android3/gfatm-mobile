@@ -838,38 +838,11 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         linearLayout.setVisibility(View.VISIBLE);
         referredFacility.setVisibility(View.GONE);
 
-
         String[] districts = serverService.getDistrictList(App.getProvince());
-        district.getSpinner().setAdapter(null);
-
-        ArrayAdapter<String> spinnerArrayAdapter = null;
-        if (App.isLanguageRTL()) {
-            spinnerArrayAdapter = new ArrayAdapter<String>(context, R.layout.custom_rtl_spinner, districts);
-            district.getSpinner().setAdapter(spinnerArrayAdapter);
-            spinnerArrayAdapter.setDropDownViewResource(R.layout.custom_rtl_spinner);
-            district.getSpinner().setGravity(Gravity.RIGHT);
-        } else {
-            spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, districts);
-            district.getSpinner().setAdapter(spinnerArrayAdapter);
-            spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            district.getSpinner().setGravity(Gravity.LEFT);
-        }
+        district.getSpinner().setSpinnerData(districts);
 
         String[] cities = serverService.getCityList(App.get(district));
-        city.getSpinner().setAdapter(null);
-
-        spinnerArrayAdapter = null;
-        if (App.isLanguageRTL()) {
-            spinnerArrayAdapter = new ArrayAdapter<String>(context, R.layout.custom_rtl_spinner, cities);
-            city.getSpinner().setAdapter(spinnerArrayAdapter);
-            spinnerArrayAdapter.setDropDownViewResource(R.layout.custom_rtl_spinner);
-            city.getSpinner().setGravity(Gravity.RIGHT);
-        } else {
-            spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, cities);
-            city.getSpinner().setAdapter(spinnerArrayAdapter);
-            spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            city.getSpinner().setGravity(Gravity.LEFT);
-        }
+        city.getSpinner().setSpinnerData(cities);
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -916,9 +889,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                 referredFacility.setVisibility(View.VISIBLE);
             else
                 referredFacility.setVisibility(View.GONE);
-
         }
-
     }
 
     @Override
