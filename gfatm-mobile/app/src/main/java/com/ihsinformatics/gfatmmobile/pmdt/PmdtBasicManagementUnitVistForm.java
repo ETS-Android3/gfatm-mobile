@@ -64,7 +64,7 @@ public class PmdtBasicManagementUnitVistForm extends AbstractFormActivity {
                              ViewGroup container, Bundle savedInstanceState) {
         PAGE_COUNT = 1;
         FORM_NAME = Forms.PMDT_BASIC_MANAGEMENT_UNIT_VISIT;
-        FORM = Forms.basicManagementUnitVisit;
+        FORM = Forms.pmdtBasicManagementUnitVisit;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
