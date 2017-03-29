@@ -4441,8 +4441,9 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('AVERAGE',NULL,'
 -- Program
 INSERT OR IGNORE INTO program VALUES (1, "86ba1232-d576-416e-b102-5f335c6746ce", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
 INSERT OR IGNORE INTO program VALUES (2, "5d372a38-ae27-4a68-a8d2-bc517a2c9c40", "PET", "Post-Exposure Treatment");
-INSERT OR IGNORE INTO program VALUES (3, "d056c989-7b3d-4be7-91b6-b751963081e3", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
+INSERT OR IGNORE INTO program VALUES (3, "1c793f05-2986-4871-8a5f-327b850b08e1", "FAST", "Finding, Actively, Separating, and Treating Program for Zero-TB cities");
 INSERT OR IGNORE INTO program VALUES (4, "d056c989-7b3d-4be7-91b6-b751963081e3", "ChildhoodTB", "Paediatric Tuberculosis Program");
+INSERT OR IGNORE INTO program VALUES (5, "fbab6ec8-dca5-421c-aef1-283a439d310b", "Comorbidities", "Co-morbidities Program");
 
 -- Encounter Types: select name as encounter_type, edit_privilege, view_privilege, uuid from encounter_type where retired = 0
 INSERT OR IGNORE INTO encounter_type VALUES ('PET-Contact Registry','Add PET Forms','View PET Forms','ca3aed11-1aa4-42a1-b85c-8332fc8001fc');
