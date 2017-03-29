@@ -30,6 +30,7 @@ import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
@@ -366,7 +367,7 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
             }
         });
 
-
+        resetViews();
     }
 
     @Override
@@ -531,6 +532,16 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
     @Override
     public boolean submit() {
 
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            String encounterId = bundle.getString("formId");
+            if (saveFlag) {
+                serverService.deleteOfflineForms(encounterId);
+            }
+            bundle.putBoolean("save", false);
+        }
+
         endTime = new Date();
 
         final ArrayList<String[]> observations = new ArrayList<String[]>();
@@ -664,8 +675,38 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
     }
 
     @Override
-    public void refill(int encounterId) {
+    public void refill(int formId) {
 
+        OfflineForm fo = serverService.getOfflineFormById(formId);
+        String date = fo.getFormDate();
+        ArrayList<String[][]> obsValue = fo.getObsValue();
+        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        for (int i = 0; i < obsValue.size(); i++) {
+
+            String[][] obs = obsValue.get(i);
+
+            if (obs[0][0].equals("FOLLOW-UP MONTH")) {
+                vitalsMonthOfVisit.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("WEIGHT (KG)")) {
+                vitalsWeight.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("HEIGHT (CM)")) {
+                vitalsHeight.getEditText().setText(obs[0][1]);
+            }  else if (obs[0][0].equals("BODY MASS INDEX")) {
+                vitalsBodyMassIndex.getEditText().setText(obs[0][1]);
+            }  else if (obs[0][0].equals("WAIST CIRCUMFERENCE (CM)")) {
+                vitalsWaistCircumference.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("HIP CIRCUMFERENCE (CM)")) {
+                vitalsHipCircumference.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("WAIST-HIP RATIO")) {
+                vitalsWaistHipRatio.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("SYSTOLIC BLOOD PRESSURE")) {
+                vitalsBloodPressureSystolic.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("DIASTOLIC BLOOD PRESSURE")) {
+                vitalsBloodPressureDiastolic.getEditText().setText(obs[0][1]);
+            }
+        }
     }
 
     @Override
@@ -703,6 +744,23 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
         super.resetViews();
 
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean openFlag = bundle.getBoolean("open");
+            if (openFlag) {
+
+                bundle.putBoolean("open", false);
+                bundle.putBoolean("save", true);
+
+                String id = bundle.getString("formId");
+                int formId = Integer.valueOf(id);
+
+                refill(formId);
+
+            } else bundle.putBoolean("save", false);
+
+        }
     }
 
     @Override

@@ -435,7 +435,7 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
 
         observations.add(new String[]{"NUMBER OF MISSED MEDICATION DOSES IN LAST MONTH", App.get(adherence)});
         observations.add(new String[]{"DRUG DISPERSAL NUMBER", App.get(drugDistributionNumber)});
-        //--> Check this, observations.add(new String[]{"DRUGS RECEIVED BY PATIENT", App.get(drugsPickedUp).equals(getResources().getString(R.string.yes)) ? "true" : "false"});
+        observations.add(new String[]{"DRUGS RECEIVED BY PATIENT", App.get(drugsPickedUp).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         observations.add(new String[]{"NEXT DATE OF DRUG DISPERSAL", App.getSqlDate(secondDateCalendar)});
         observations.add(new String[]{"DAYS WORTH OF DRUGS DISPERSED", App.get(drugsDispersedDays)});
         observations.add(new String[]{"METFORMIN DOSE", App.get(metformin)});
