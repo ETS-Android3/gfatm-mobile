@@ -4416,7 +4416,27 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ENDOCRINOLOGY D
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('FEVER LASTING MORE THAN THREE WEEKS',NULL,'Boolean','1494AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 
 INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('METFORMIN',NULL,'79651AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('UNCONTROLLED DIABETES MELLITUS',NULL,'N/A','123579AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DIABETES MELLITUS TYPE 1',NULL,'N/A','142474AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INFECTION OF SKIN',NULL,'N/A','137293AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('FOOT INFECTION',NULL,'N/A','152805AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INFECTED DENTAL CARIES',NULL,'N/A','110979AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('GENITOURINARY SYMPTOMS',NULL,'N/A','156475AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('GENITAL INFECTION',NULL,'N/A','139510AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('UPPER RESPIRATORY INFECTION',NULL,'N/A','123565AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INSULIN, ISOPHANE, HUMAN',NULL,'N/A','78068AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INSULIN, REGULAR, HUMAN',NULL,'N/A','78082AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INSULIN 70/30',NULL,'N/A','159459AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NORMAL',NULL,'N/A','1115AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('THICKENING OF SKIN',NULL,'N/A','112438AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DRY SKIN',NULL,'N/A','141692AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SKIN ULCER',NULL,'N/A','112934AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SKIN CALLUS',NULL,'N/A','120944AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DISCOLORATION OF SKIN',NULL,'N/A','155973AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('POOR',NULL,'N/A','159407AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('GOOD',NULL,'N/A','159405AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('AVERAGE',NULL,'N/A','160487AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 
 -- Program
 INSERT OR IGNORE INTO program VALUES (1, "86ba1232-d576-416e-b102-5f335c6746ce", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
@@ -4459,15 +4479,10 @@ INSERT OR IGNORE INTO encounter_type VALUES ('FAST-Missed Visit Followup','Add F
 INSERT OR IGNORE INTO encounter_type VALUES ('FAST-End of Followup','Add FAST Forms','View FAST Forms','c910157c-843d-4e08-8458-c003ac76a5c7');
 INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Patient Information','Add Comorbidities Forms','View Comorbidities Forms','9542faf2-5c44-4302-b91a-6af78b4f986c');
 INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Diabetes Mellitus Screening','Add Comorbidities Forms','View Comorbidities Forms','1f525dd2-6620-44bb-989e-b5d7ccc98825');
-INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-HbA1C Test','Add Comorbidities Forms','View Comorbidities Forms','4f1faaa7-ac38-4c97-9f1e-ae8ef31da24d');
-INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Blood Sugar Test','Add Comorbidities Forms','View Comorbidities Forms','224e4898-2246-4e48-bc12-03fa0dab53e3');
 INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Vitals','Add Comorbidities Forms','View Comorbidities Forms','e112be67-711b-4f07-8115-0959a1ad20c0');
 INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Diabetes Treatment Initiation','Add Comorbidities Forms','View Comorbidities Forms','c9a8e9bf-f522-43c5-ad17-9d9b5c9a9fb3');
-INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Urine Detailed Report','Add Comorbidities Forms','View Comorbidities Forms','f4841a20-4921-442d-b31d-711f89528620');
 INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Creatinine Test Order','Add Comorbidities Forms','View Comorbidities Forms','f6e5ce53-3156-4627-a7d8-f79d3c2eb33d');
 INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Creatinine Test Result','Add Comorbidities Forms','View Comorbidities Forms','06802515-bf42-44d7-ac0f-03b9c2aa0ac4');
-INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Lipid Test','Add Comorbidities Forms','View Comorbidities Forms','5d75ef93-f450-4ab8-aef5-1d6e365bad34');
-INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Urine Microalbumin Test','Add Comorbidities Forms','View Comorbidities Forms','dfa44870-c62e-40c5-8ebb-1d7de8af2fd9');
 INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Diabetes Treatment Followup','Add Comorbidities Forms','View Comorbidities Forms','f74dce9d-a739-4e44-b146-4ecfdef9ac33');
 INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Diabetes Education','Add Comorbidities Forms','View Comorbidities Forms','30baff98-e1ed-4815-ac6c-fa8fab648ab5');
 INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Diabetes Foot Screening','Add Comorbidities Forms','View Comorbidities Forms','dddf11da-d117-417c-b5ac-57550b101df0');
