@@ -302,7 +302,7 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
                     ll4.setOrientation(LinearLayout.HORIZONTAL);
 
                     TextView tv6 = new TextView(this);
-                    tv6.setText(getResources().getString(R.string.district) + " ");
+                    tv6.setText(getResources().getString(R.string.province) + " ");
                     tv6.setTextSize(getResources().getDimension(R.dimen.small));
                     tv6.setTextColor(color1);
                     ll4.addView(tv6);
@@ -321,7 +321,7 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
                     ll4.setOrientation(LinearLayout.HORIZONTAL);
 
                     TextView tv6 = new TextView(this);
-                    tv6.setText(getResources().getString(R.string.province) + " ");
+                    tv6.setText(getResources().getString(R.string.district) + " ");
                     tv6.setTextSize(getResources().getDimension(R.dimen.small));
                     tv6.setTextColor(color1);
                     ll4.addView(tv6);
