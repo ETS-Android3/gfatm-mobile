@@ -353,8 +353,6 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
             }
             bundle.putBoolean("save", false);
         }
-
-
         endTime = new Date();
 
         final ArrayList<String[]> observations = new ArrayList<String[]>();
