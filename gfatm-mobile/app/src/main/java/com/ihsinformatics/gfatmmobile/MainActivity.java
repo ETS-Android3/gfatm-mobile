@@ -35,6 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.shared.FormsObject;
+import com.ihsinformatics.gfatmmobile.util.LocationService;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 import java.io.ByteArrayInputStream;
@@ -76,6 +77,9 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent intent = new Intent(this, LocationService.class);
+        startService(intent);
 
         loading = new ProgressDialog(this);
         serverService = new ServerService(getApplicationContext());
@@ -544,6 +548,9 @@ public class MainActivity extends AppCompatActivity
     public boolean onTouch(View v, MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN: {
+
+                /*Intent gpsCoordinate = new Intent(this, LocationService.class);
+                startActivity(gpsCoordinate);*/
 
                 ImageView view = (ImageView) v;
                 view.getDrawable().setColorFilter(getResources().getColor(R.color.dark_grey), PorterDuff.Mode.SRC_ATOP);
