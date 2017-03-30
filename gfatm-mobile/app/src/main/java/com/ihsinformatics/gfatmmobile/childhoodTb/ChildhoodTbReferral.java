@@ -161,19 +161,24 @@ public class ChildhoodTbReferral extends AbstractFormActivity implements RadioGr
         if (snackbar != null)
             snackbar.dismiss();
 
+        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
 
-        Date date = new Date();
+            String formDa = formDate.getButton().getText().toString();
 
-        if (formDateCalendar.after(date)) {
+            Date date = new Date();
+            if (formDateCalendar.after(App.getCalendar(date))) {
 
-            formDateCalendar = App.getCalendar(date);
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
 
-            snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
-            snackbar.show();
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
 
-        } else
-            formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
+            } else
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        }
       }
 
     @Override
