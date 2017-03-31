@@ -599,8 +599,8 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         final ArrayList<String[]> observations = new ArrayList<String[]>();
         observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
         observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
-      /*  observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
-        observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});*/
+        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
+        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
 
         String cnicNumber = cnic1.getEditText().getText().toString() +"-"+ cnic2.getEditText().getText().toString() +"-"+ cnic3.getEditText().getText().toString();
         final String mobileNumber = mobile1.getEditText().getText().toString() +"-"+ mobile2.getEditText().getText().toString();
