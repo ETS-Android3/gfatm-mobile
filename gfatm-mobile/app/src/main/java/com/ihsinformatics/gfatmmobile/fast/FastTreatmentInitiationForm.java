@@ -515,7 +515,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         if (reasonTreatmentNotIniated.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TREATMENT NOT STARTED", App.get(reasonTreatmentNotIniated).equals(getResources().getString(R.string.fast_patient_refused_treatment)) ? "REFUSAL OF TREATMENT BY PATIENT" :
                     (App.get(reasonTreatmentNotIniated).equals(getResources().getString(R.string.fast_patient_loss_to_follow_up)) ? "LOST TO FOLLOW-UP" :
-                            (App.get(reasonTreatmentNotIniated).equals(getResources().getString(R.string.fast_patient_died)) ? "DECEASED" :
+                            (App.get(reasonTreatmentNotIniated).equals(getResources().getString(R.string.fast_patient_died)) ? "DIED" :
                                     (App.get(reasonTreatmentNotIniated).equals(getResources().getString(R.string.fast_referred_before_start_of_treatment)) ? "PATIENT REFERRED" : "TREATMENT NOT INITIATED OTHER REASON")))});
 
         if (reasonTreatmentNotInitiatedOther.getVisibility() == View.VISIBLE)
@@ -776,7 +776,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             } else if (obs[0][0].equals("TREATMENT NOT STARTED")) {
                 String value = obs[0][1].equals("REFUSAL OF TREATMENT BY PATIENT") ? getResources().getString(R.string.fast_patient_refused_treatment) :
                         (obs[0][1].equals("LOST TO FOLLOW-UP") ? getResources().getString(R.string.fast_patient_loss_to_follow_up) :
-                                (obs[0][1].equals("DECEASED") ? getResources().getString(R.string.fast_patient_died) :
+                                (obs[0][1].equals("DIED") ? getResources().getString(R.string.fast_patient_died) :
                                         (obs[0][1].equals("PATIENT REFERRED") ? getResources().getString(R.string.fast_referral) :
                                                 getResources().getString(R.string.fast_other_title))));
 
