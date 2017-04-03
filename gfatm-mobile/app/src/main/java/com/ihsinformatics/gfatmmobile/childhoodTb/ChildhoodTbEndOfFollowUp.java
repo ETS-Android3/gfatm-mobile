@@ -260,6 +260,15 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
             enrsNumber.getEditText().requestFocus();
             error = true;
         }
+        if(otherReasonTreatmentNotIntiated.getVisibility()==View.VISIBLE && App.get(otherReasonTreatmentNotIntiated).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            otherReasonTreatmentNotIntiated.getEditText().setError(getString(R.string.empty_field));
+            otherReasonTreatmentNotIntiated.getEditText().requestFocus();
+            error = true;
+        }
         if (App.get(drConfirmation).equalsIgnoreCase(getResources().getString(R.string.yes)) && !App.get(enrsNumber).isEmpty()) {
             if (!RegexUtil.isValidErnsNumber(App.get(enrsNumber))) {
                 enrsNumber.getEditText().setError(getString(R.string.invalid_value));
@@ -268,6 +277,16 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
             }
             enrsNumber.clearFocus();
         }
+        if(otherReasonRemarks.getVisibility()==View.VISIBLE && App.get(otherReasonRemarks).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            otherReasonRemarks.getEditText().setError(getString(R.string.empty_field));
+            otherReasonRemarks.getEditText().requestFocus();
+            error = true;
+        }
+
 
 
             if (error) {
@@ -606,16 +625,16 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
             }
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_referral)) || parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_transfer_out))) {
                 String referralTransferLocation = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Referral", "REFERRING FACILITY NAME");
-                if(referralTransferLocation.equalsIgnoreCase(getResources().getString(R.string.ctb_other_title))){
-                    String otherReferralTransferLocation = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Referral", "LOCATION OF REFERRAL OR TRANSFER OTHER");
-                    locationOfTransferOutReferral.setVisibility(View.VISIBLE);
-                    locationOfTransferOutReferral.getEditText().setText(otherReferralTransferLocation);
-                }
-                else{
-                    locationOfTransferOutReferral.setVisibility(View.VISIBLE);
-                    locationOfTransferOutReferral.getEditText().setText(referralTransferLocation);
-                }
+                locationOfTransferOutReferral.setVisibility(View.VISIBLE);
                 locationOfTransferOutReferral.getEditText().setKeyListener(null);
+                if(referralTransferLocation!=null) {
+                    if (referralTransferLocation.equalsIgnoreCase(getResources().getString(R.string.ctb_other_title))) {
+                        String otherReferralTransferLocation = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Referral", "LOCATION OF REFERRAL OR TRANSFER OTHER");
+                        locationOfTransferOutReferral.getEditText().setText(otherReferralTransferLocation);
+                    } else {
+                        locationOfTransferOutReferral.getEditText().setText(referralTransferLocation);
+                    }
+                }
             } else {
                 locationOfTransferOutReferral.setVisibility(View.GONE);
             }

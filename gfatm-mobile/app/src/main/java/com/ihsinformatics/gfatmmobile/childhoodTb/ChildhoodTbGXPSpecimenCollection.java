@@ -219,6 +219,17 @@ public class ChildhoodTbGXPSpecimenCollection extends AbstractFormActivity imple
     @Override
     public boolean validate() {
         boolean error = false;
+        if(App.get(sampleAcceptedByTechnician).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            sampleAcceptedByTechnician.getRadioGroup().getButtons().get(1).setError(getString(R.string.empty_field));
+            sampleAcceptedByTechnician.getRadioGroup().requestFocus();
+            error = true;
+        } else {
+            sampleAcceptedByTechnician.getRadioGroup().getButtons().get(1).setError(null);
+        }
         if (patientCategory.getVisibility() == View.VISIBLE && App.get(patientCategory).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);

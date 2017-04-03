@@ -461,7 +461,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate,cnicLinearLayout,cnicOwner,cnicOwnerOther,addressProvided,address1,address2,city,district,addressType,nearestLandmark,mobileLinearLayout,mobileNumberContact,permissionMobileNumberContact,secondaryMobileLinearLayout,secondaryMobileNumberContact,permissionSecondaryMobileNumber,landlineLayout,landlineNumberContact,permissionLandlineNumber,secondaryLandlineNumber,secondaryLandlineContact,permissionSecondaryLandlineNumber}};
+                {{formDate,cnicLinearLayout,cnicOwner,cnicOwnerOther,addressProvided,address1,address2,district,city,addressType,nearestLandmark,mobileLinearLayout,mobileNumberContact,permissionMobileNumberContact,secondaryMobileLinearLayout,secondaryMobileNumberContact,permissionSecondaryMobileNumber,landlineLayout,landlineNumberContact,permissionLandlineNumber,secondaryLandlineNumber,secondaryLandlineContact,permissionSecondaryLandlineNumber}};
 
         formDate.getButton().setOnClickListener(this);
         cnicOwner.getSpinner().setOnItemSelectedListener(this);

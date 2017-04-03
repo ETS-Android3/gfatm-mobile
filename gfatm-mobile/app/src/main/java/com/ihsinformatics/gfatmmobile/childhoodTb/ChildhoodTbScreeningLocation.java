@@ -145,7 +145,7 @@ public class ChildhoodTbScreeningLocation extends AbstractFormActivity implement
 
         screeningReferral = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_screening_referral),getResources().getStringArray(R.array.ctb_screening_referral_list),getResources().getString(R.string.ctb_screening),App.HORIZONTAL,App.VERTICAL,true);
         referralSource = new TitledSpinner(context,null,getResources().getString(R.string.ctb_patient_referral_source),getResources().getStringArray(R.array.ctb_patient_referral_source_list),null,App.VERTICAL);
-        facilityDepartment = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_facility_department),getResources().getStringArray(R.array.ctb_facility_department_list),null,App.HORIZONTAL,App.VERTICAL);
+        facilityDepartment = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_facility_department),getResources().getStringArray(R.array.ctb_facility_department_list),getResources().getString(R.string.ctb_opd_clinic),App.HORIZONTAL,App.VERTICAL);
         otherFacilityDeparment = new TitledEditText(context,null,getResources().getString(R.string.ctb_other_specify),"","",20,RegexUtil.ALPHA_FILTER,InputType.TYPE_CLASS_TEXT,App.VERTICAL,false);
         referralWithinOpd = new TitledSpinner(context,null,getResources().getString(R.string.ctb_referral_inside),getResources().getStringArray(R.array.ctb_opd_ward_section_list),null,App.VERTICAL);
         referralOutsideOpd = new TitledSpinner(context,null,getResources().getString(R.string.ctb_referral_outside),getResources().getStringArray(R.array.ctb_referral_outside_list),null,App.VERTICAL);
@@ -210,6 +210,15 @@ public class ChildhoodTbScreeningLocation extends AbstractFormActivity implement
     @Override
     public boolean validate() {
         boolean error=false;
+        if(App.get(facilityDepartment).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            facilityDepartment.getRadioGroup().getButtons().get(2).setError(getString(R.string.empty_field));
+            facilityDepartment.getRadioGroup().requestFocus();
+            error = true;
+        }
         if(contactTbRegistrationNo.getVisibility()==View.VISIBLE && App.get(contactTbRegistrationNo).isEmpty()){
             if (App.isLanguageRTL())
                 gotoPage(0);
@@ -765,6 +774,7 @@ public class ChildhoodTbScreeningLocation extends AbstractFormActivity implement
         otherFacilityDeparment.setVisibility(View.GONE);
         referralWithinOpd.setVisibility(View.GONE);
         referralOutsideOpd.setVisibility(View.GONE);
+        facilityDepartment.setVisibility(View.GONE);
         referralOutsideOther.setVisibility(View.GONE);
         hearAboutUs.setVisibility(View.GONE);
         hearAboutUsOther.setVisibility(View.GONE);
