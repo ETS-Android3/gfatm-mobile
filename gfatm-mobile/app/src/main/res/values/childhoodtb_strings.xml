@@ -364,6 +364,24 @@
     <string name="ctb_next_appointment_date">Next Appointment Date</string>
     <string name="ctb_test_id_error">It should be 11 digits number</string>
     <string name="ctb_sample_accepted_lab_techician">Sample Accepted by Lab Technician?</string>
+    <string name="ctb_treatment_outcome">Treatment Outcome</string>
+    <string name="ctb_cured">Cured</string>
+    <string name="ctb_treatment_completed">Treatment Completed</string>
+    <string name="ctb_died">Died</string>
+    <string name="ctb_transfer_out">Transfer Out</string>
+    <string name="ctb_referral">Referral</string>
+    <string name="ctb_treatment_intiated_at_referral_transfer">Treatment initiated at Referral / Transfer site</string>
+    <string name="ctb_reason_treatment_not_intiated">Reason treatment not initiated at referral / transfer site</string>
+    <string name="ctb_patient_can_not_contacted">Patient could not be contacted</string>
+    <string name="ctb_patient_left_city">Patient left the city</string>
+    <string name="ctb_dr_not_confirmed">DR not confirmed by baseline repeat test</string>
+    <string name="ctb_other_reason_not_intiated">If other reason treatment not initiatied at referral / transfer site, please specify</string>
+    <string name="ctb_dr_confirmation">DR Confirmation</string>
+    <string name="ctb_enrs_number">ENRS Number</string>
+    <string name="ctb_contact_number">Contact Number</string>
+    <string name="ctb_name_of_person_provided_details">Provide name and contact number of person at referral / transfer site who provided details about the patient		</string>
+    <string name="ctb_other_reason_remarks">Other Reason/Remarks</string>
+
     <string-array name="ctb_screening_location_list">
         <item>@string/ctb_hospital</item>
         <item>@string/ctb_community</item>
@@ -765,6 +783,25 @@
         <item>@string/ctb_inconclusive</item>
     </string-array>
 
+    <string-array name="ctb_treatment_outcome_list">
+        <item>@string/ctb_cured</item>
+        <item>@string/ctb_treatment_completed</item>
+        <item>@string/ctb_treatment_failure</item>
+        <item>@string/ctb_died</item>
+        <item>@string/ctb_transfer_out</item>
+        <item>@string/ctb_referral</item>
+        <item>@string/ctb_lost_to_followup</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
+
+    <string-array name="ctb_reason_not_intiated_list">
+        <item>@string/ctb_patient_can_not_contacted</item>
+        <item>@string/ctb_patient_left_city</item>
+        <item>@string/ctb_patient_refused_treatment</item>
+        <item>@string/ctb_patient_died</item>
+        <item>@string/ctb_dr_not_confirmed</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
 
 
 </resources>

@@ -302,6 +302,18 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
                 monthTreatment.getEditText().setError(null);
             }
         }
+        if(chestXRayScore.getVisibility()==View.VISIBLE && App.get(chestXRayScore).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            chestXRayScore.getEditText().setError(getString(R.string.empty_field));
+            chestXRayScore.getEditText().requestFocus();
+            error = true;
+        }else {
+            chestXRayScore.getEditText().setError(null);
+        }
+
 
         if (error) {
 
@@ -351,13 +363,16 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
         observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         if (App.get(formType).equals(getResources().getString(R.string.ctb_order))) {
+            observations.add(new String[]{"TEST ID", App.get(testId)});
             observations.add(new String[]{"DATE TEST ORDERED", App.getSqlDateTime(secondDateCalendar)});
             observations.add(new String[]{"FOLLOW-UP MONTH", App.get(monthTreatment)});
             observations.add(new String[]{"TYPE OF X RAY", App.get(typeOfXRay).equals(getResources().getString(R.string.ctb_chest_xray_cad4tb)) ? "RADIOLOGICAL DIAGNOSIS" :
                      "X-RAY, OTHER"});
-            observations.add(new String[]{"TEST ID", App.get(testId)});
         } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
-            observations.add(new String[]{"CHEST X-RAY SCORE", App.get(chestXRayScore)});
+            observations.add(new String[]{"TEST ID", App.get(testId)});
+            if(!App.get(chestXRayScore).isEmpty()) {
+                observations.add(new String[]{"CHEST X-RAY SCORE", App.get(chestXRayScore)});
+            }
             observations.add(new String[]{"RADIOLOGICAL DIAGNOSIS", App.get(radiologicalDiagnosis).equals(getResources().getString(R.string.ctb_adenopathy)) ? "ADENOPATHY" :
                     (App.get(radiologicalDiagnosis).equals(getResources().getString(R.string.ctb_infiltration)) ? "INFILTRATE" :
                             (App.get(radiologicalDiagnosis).equals(getResources().getString(R.string.ctb_consolidation)) ? "CONSOLIDATION" :
@@ -375,7 +390,7 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
             if(!App.get(radiologistRemarks).isEmpty()) {
                 observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(radiologistRemarks)});
             }
-            observations.add(new String[]{"TEST ID", App.get(testId)});
+
         }
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
@@ -519,9 +534,13 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
             if(fo.getFormName().contains("Order")) {
                 formType.getRadioGroup().getButtons().get(0).setChecked(true);
                 formType.getRadioGroup().getButtons().get(1).setEnabled(false);
+                testIdView.setImageResource(R.drawable.ic_checked_green
+                );
                 if (obs[0][0].equals("TEST ID")) {
+                    testId.getEditText().setEnabled(false);
+                    testIdView.setEnabled(false);
+                    testIdView.setImageResource(R.drawable.ic_checked_green);
                     testId.getEditText().setText(obs[0][1]);
-                    checkTestId();
                 } else if (obs[0][0].equals("TYPE OF X RAY")) {
                     for (RadioButton rb : typeOfXRay.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.ctb_chest_xray_cad4tb)) && obs[0][1].equals("RADIOLOGICAL DIAGNOSIS")) {
@@ -532,18 +551,25 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
                             break;
                         }
                     }
+                    typeOfXRay.setVisibility(View.VISIBLE);
                 } else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
                     monthTreatment.getEditText().setText(obs[0][1]);
+                    monthTreatment.setVisibility(View.VISIBLE);
                 } else if (obs[0][0].equals("DATE TEST ORDERED")) {
                     String secondDate = obs[0][1];
                     secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                     testDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+                    testDate.setVisibility(View.VISIBLE);
                 }
+                submitButton.setEnabled(true);
             }else{
                 formType.getRadioGroup().getButtons().get(1).setChecked(true);
                 formType.getRadioGroup().getButtons().get(0).setEnabled(false);
                 if (obs[0][0].equals("TEST ID")) {
                     testId.getEditText().setText(obs[0][1]);
+                    testId.getEditText().setEnabled(false);
+                    testIdView.setEnabled(false);
+                    testIdView.setImageResource(R.drawable.ic_checked);
                     checkTestId();
                 } else if (obs[0][0].equals("CHEST X-RAY SCORE")) {
                     chestXRayScore.getEditText().setText(obs[0][1]);
@@ -556,14 +582,18 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
                                                             (obs[0][1].equals("CAVIATION") ? getResources().getString(R.string.ctb_cavitation) :
                                                                     (obs[0][1].equals("MILIARY") ? getResources().getString(R.string.ctb_miliary_tb) :
                                                                             getResources().getString(R.string.ctb_other_title)))))));
+                    if(value.equalsIgnoreCase(getResources().getString(R.string.ctb_other_title))){
+                        otherRadiologicalDiagnosis.setVisibility(View.VISIBLE);
+                    }
                     radiologicalDiagnosis.getSpinner().selectValue(value);
+
                 } else if (obs[0][0].equals("OTHER RADIOLOGICAL DIAGNOSIS REAULT")) {
                     otherRadiologicalDiagnosis.getEditText().setText(obs[0][1]);
                 }else if (obs[0][0].equals("EXTENT OF DISEASE")) {
                     String value = obs[0][1].equals("NORMAL") ? getResources().getString(R.string.ctb_normal) :
                             (obs[0][1].equals("UNILATERAL") ? getResources().getString(R.string.ctb_unilateral_disease) :
                                     (obs[0][1].equals("BILATERAL") ? getResources().getString(R.string.ctb_bilateral_disease) :
-                                                                            getResources().getString(R.string.ctb_abnormal_extend_not_defined)));
+                                            getResources().getString(R.string.ctb_abnormal_extend_not_defined)));
                     radiologicalDiagnosis.getSpinner().selectValue(value);
                 }else if (obs[0][0].equals("CLINICIAN NOTES (TEXT)")) {
                     radiologistRemarks.getEditText().setText(obs[0][1]);
@@ -632,6 +662,8 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
         testIdView.setVisibility(View.GONE);
         testId.setVisibility(View.GONE);
         testIdView.setImageResource(R.drawable.ic_checked);
+        goneVisibility();
+        submitButton.setEnabled(false);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");
@@ -648,8 +680,7 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
             } else bundle.putBoolean("save", false);
 
         }
-        goneVisibility();
-        submitButton.setEnabled(false);
+
 
     }
 

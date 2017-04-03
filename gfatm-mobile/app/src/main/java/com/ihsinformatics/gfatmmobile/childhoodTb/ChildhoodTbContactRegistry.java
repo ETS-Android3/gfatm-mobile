@@ -132,7 +132,7 @@ public class ChildhoodTbContactRegistry extends AbstractFormActivity implements 
         adultContacts = new TitledEditText(context,null,getResources().getString(R.string.ctb_adult_contacts),"","",2,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,true);
         childhoodContacts = new TitledEditText(context,null,getResources().getString(R.string.ctb_childhood_contacts),"","",2,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.VERTICAL,true);
 
-        views = new View[]{formDate.getButton()};
+        views = new View[]{formDate.getButton(),contacts.getEditText(),adultContacts.getEditText(),childhoodContacts.getEditText()};
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formDate, contacts, adultContacts, childhoodContacts}};
@@ -147,11 +147,6 @@ public class ChildhoodTbContactRegistry extends AbstractFormActivity implements 
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
                 if(s.length()>0){
                     if(Integer.parseInt(s.toString())<0 || Integer.parseInt(s.toString())>50) {
                         contacts.getEditText().setError("Error, enter value between 0-50");
@@ -160,6 +155,11 @@ public class ChildhoodTbContactRegistry extends AbstractFormActivity implements 
                         contacts.getEditText().setError(null);
                     }
                 }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
 
             }
         });
@@ -172,18 +172,35 @@ public class ChildhoodTbContactRegistry extends AbstractFormActivity implements 
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
                 if(s.length()>0){
                     if(Integer.parseInt(s.toString())<0 || Integer.parseInt(s.toString())>25) {
                         adultContacts.getEditText().setError("Error, enter value between 0-25");
                     }
                     else{
+                        if(!App.get(childhoodContacts).isEmpty()) {
+                            int sum = Integer.parseInt(App.get(adultContacts))+ Integer.parseInt(App.get(childhoodContacts));
+                            contacts.getEditText().setText(String.valueOf(sum));
+                        }else{
+                            int sum = Integer.parseInt(App.get(adultContacts));
+                            contacts.getEditText().setText(String.valueOf(sum));
+                        }
                         adultContacts.getEditText().setError(null);
                     }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(App.get(adultContacts).isEmpty() && App.get(childhoodContacts).isEmpty()){
+                    contacts.getEditText().setText(null);
+                }
+                else if(App.get(adultContacts).isEmpty()){
+                    int sum = Integer.parseInt(App.get(childhoodContacts));
+                    contacts.getEditText().setText(String.valueOf(sum));
+                }
+                else if(App.get(childhoodContacts).isEmpty()){
+                    int sum = Integer.parseInt(App.get(adultContacts));
+                    contacts.getEditText().setText(String.valueOf(sum));
                 }
             }
         });
@@ -196,18 +213,36 @@ public class ChildhoodTbContactRegistry extends AbstractFormActivity implements 
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
                 if(s.length()>0){
                     if(Integer.parseInt(s.toString())<0 || Integer.parseInt(s.toString())>25) {
                         childhoodContacts.getEditText().setError("Error, enter value between 0-25");
                     }
                     else{
+                        if(!App.get(adultContacts).isEmpty()){
+                            int sum = Integer.parseInt(App.get(adultContacts)) + Integer.parseInt(App.get(childhoodContacts));
+                            contacts.getEditText().setText(String.valueOf(sum));
+                        }
+                        else {
+                            int sum = Integer.parseInt(App.get(childhoodContacts));
+                            contacts.getEditText().setText(String.valueOf(sum));
+                        }
                         childhoodContacts.getEditText().setError(null);
                     }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(App.get(adultContacts).isEmpty() && App.get(childhoodContacts).isEmpty()){
+                    contacts.getEditText().setText(null);
+                }
+                else if(App.get(adultContacts).isEmpty()){
+                    int sum = Integer.parseInt(App.get(childhoodContacts));
+                    contacts.getEditText().setText(String.valueOf(sum));
+                }
+                else if(App.get(childhoodContacts).isEmpty()){
+                    int sum = Integer.parseInt(App.get(adultContacts));
+                    contacts.getEditText().setText(String.valueOf(sum));
                 }
             }
         });
@@ -508,6 +543,8 @@ public class ChildhoodTbContactRegistry extends AbstractFormActivity implements 
             snackbar.dismiss();
 
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        contacts.getEditText().setKeyListener(null);
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");
