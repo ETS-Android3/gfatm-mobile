@@ -164,7 +164,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
             columnName = "childhood_tb_location";
 
         final Object[][] locations = serverService.getAllLocations(columnName);
-        String[] locationArray = new String[locations.length+1];
+        String[] locationArray = new String[locations.length];
         for (int i = 0; i < locations.length; i++) {
             Object objLoc = locations[i][1];
             locationArray[i] = objLoc.toString();

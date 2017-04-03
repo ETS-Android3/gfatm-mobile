@@ -148,7 +148,7 @@ public class ChildhoodTbTestIndicationForm extends AbstractFormActivity implemen
         drugSensitivityTest = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_drug_sensitivity),getResources().getStringArray(R.array.yes_no_options),getResources().getString(R.string.no),App.HORIZONTAL,App.VERTICAL,true);
         doctorNotes = new TitledEditText(context,null,getResources().getString(R.string.ctb_doctor_notes),"","",1000,RegexUtil.ALPHA_FILTER,InputType.TYPE_CLASS_TEXT,App.VERTICAL,false);
         views = new View[]{formDate.getButton(),chestXray.getRadioGroup(),ultraSound.getRadioGroup(),ctScan.getRadioGroup(),geneXpert.getRadioGroup(),mantouxTest.getRadioGroup(),smearMicroscopy.getRadioGroup(),
-                histopathology.getRadioGroup(),cbc.getRadioGroup(),esr.getRadioGroup(),drugSensitivityTest.getRadioGroup()};
+                histopathology.getRadioGroup(),cbc.getRadioGroup(),esr.getRadioGroup(),drugSensitivityTest.getRadioGroup(),doctorNotes.getEditText()};
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formDate, chestXray,ultraSound,ctScan,geneXpert,mantouxTest,smearMicroscopy,
