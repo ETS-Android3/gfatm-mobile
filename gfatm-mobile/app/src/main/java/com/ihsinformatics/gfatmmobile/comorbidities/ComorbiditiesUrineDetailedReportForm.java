@@ -922,11 +922,11 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
                     return "SUCCESS";*/
 
                 if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
-                    result = serverService.saveEncounterAndObservation("Urine Detailed Report Order", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                    result = serverService.saveEncounterAndObservation("Urine Detailed Report Order", FORM, formDateCalendar, observations.toArray(new String[][]{}), true);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 } else if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))) {
-                    result = serverService.saveEncounterAndObservation("Urine Detailed Report Result", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                    result = serverService.saveEncounterAndObservation("Urine Detailed Report Result", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 }

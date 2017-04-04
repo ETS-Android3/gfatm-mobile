@@ -454,11 +454,11 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";*/
                 if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
-                    result = serverService.saveEncounterAndObservation("HbA1C Test Order", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                    result = serverService.saveEncounterAndObservation("HbA1C Test Order", FORM, formDateCalendar, observations.toArray(new String[][]{}), true);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 } else if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))) {
-                    result = serverService.saveEncounterAndObservation("HbA1C Test Result", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                    result = serverService.saveEncounterAndObservation("HbA1C Test Result", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 }
