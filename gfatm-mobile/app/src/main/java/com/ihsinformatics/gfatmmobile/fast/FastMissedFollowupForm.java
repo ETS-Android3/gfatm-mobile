@@ -488,10 +488,10 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
 
             else if (obs[0][0].equals("CONTACT TO THE PATIENT")) {
                 for (RadioButton rb : patientContacted.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_referral)) && obs[0][1].equals("YES")) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_transfer)) && obs[0][1].equals("NO")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
                         rb.setChecked(true);
                         break;
                     }

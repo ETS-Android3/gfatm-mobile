@@ -19,6 +19,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -31,6 +32,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
@@ -42,7 +44,7 @@ import java.util.HashMap;
  * Created by Haris on 2/21/2017.
  */
 
-public class FastEndOfFollowupForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener{
+public class FastEndOfFollowupForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
     Context context;
 
     // Views...
@@ -149,7 +151,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
         for (int i = 0; i < locations.length; i++) {
             locationArray[i] = String.valueOf(locations[i][1]);
         }
-        transferOutLocations = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_location_of_transfer_out),locationArray, "", App.VERTICAL);
+        transferOutLocations = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_location_of_transfer_out), locationArray, "", App.VERTICAL);
         remarks = new TitledEditText(context, null, getResources().getString(R.string.fast_other_reason_remarks), "", "", 250, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         treatmentInitiatedReferralSite = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_treatment_initiated_at_transfer_referral_site), getResources().getStringArray(R.array.fast_yes_no_unknown_list), getResources().getString(R.string.fast_dont_know_title), App.VERTICAL, App.VERTICAL);
         treatmentNotInitiatedReferralSite = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_reason_treatment_not_initiated_at_referral_site), getResources().getStringArray(R.array.fast_reason_treatment_not_initiated_referral_site_list), getResources().getString(R.string.fast_patient_could_not_be_contacted), App.VERTICAL);
@@ -168,13 +170,13 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), treatmentOutcome.getSpinner(), transferOutLocations.getSpinner(), remarks.getEditText()
-        , treatmentInitiatedReferralSite.getRadioGroup(), treatmentNotInitiatedReferralSite.getSpinner(), treatmentNotInitiatedReferralSiteOther.getEditText(),
-        drConfirmation.getRadioGroup(), enrsId.getEditText(), firstName.getEditText(), lastName.getEditText(), mobile1.getEditText(), mobile2.getEditText()};
+                , treatmentInitiatedReferralSite.getRadioGroup(), treatmentNotInitiatedReferralSite.getSpinner(), treatmentNotInitiatedReferralSiteOther.getEditText(),
+                drConfirmation.getRadioGroup(), enrsId.getEditText(), firstName.getEditText(), lastName.getEditText(), mobile1.getEditText(), mobile2.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formDate, treatmentOutcome, transferOutLocations, remarks, treatmentInitiatedReferralSite, treatmentNotInitiatedReferralSite
-                , treatmentNotInitiatedReferralSiteOther, drConfirmation, enrsId, firstName, lastName, mobileLinearLayout}};
+                        , treatmentNotInitiatedReferralSiteOther, drConfirmation, enrsId, firstName, lastName, mobileLinearLayout}};
 
         formDate.getButton().setOnClickListener(this);
         treatmentOutcome.getSpinner().setOnItemSelectedListener(this);
@@ -205,15 +207,14 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
 
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
-            }else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-            }
-            else
+            } else
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         }
     }
@@ -305,7 +306,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
 
         final String mobileNumber = mobile1.getEditText().getText().toString() + mobile2.getEditText().getText().toString();
 
-        if (!RegexUtil.isContactNumber(mobileNumber)) {
+        if (!RegexUtil.isMobileNumber(mobileNumber)) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -361,14 +362,14 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
 
         endTime = new Date();
 
-        final String mobileNumber = mobile1.getEditText().getText().toString() + mobile2.getEditText().getText().toString();
+        final String mobileNumber = mobile1.getEditText().getText().toString() + "-" + mobile2.getEditText().getText().toString();
 
 
         final ArrayList<String[]> observations = new ArrayList<String[]>();
         observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
         observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
-        observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
-        observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
+        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
+        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
 
 
         if (treatmentOutcome.getVisibility() == View.VISIBLE)
@@ -428,11 +429,10 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("Referral Form", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                String result = serverService.saveEncounterAndObservation("End of Followup", FORM, formDateCalendar, observations.toArray(new String[][]{}));
                 if (!result.contains("SUCCESS"))
                     return result;
                 else {
-
                     String encounterId = "";
 
                     if (result.contains("_")) {
@@ -440,15 +440,14 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
                         encounterId = successArray[1];
                     }
 
-                    if (App.hasKeyListener(enrsId)) {
+                    if (getEnrsVisibility()) {
                         result = serverService.saveIdentifier("ENRS", App.get(enrsId), encounterId);
                         if (!result.equals("SUCCESS"))
                             return result;
                     }
                 }
 
-                return result;
-
+                return "SUCCESS";
             }
 
             @Override
@@ -547,8 +546,93 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
     }
 
     @Override
-    public void refill(int encounterId) {
+    public void refill(int formId) {
 
+        OfflineForm fo = serverService.getOfflineFormById(formId);
+        String date = fo.getFormDate();
+        ArrayList<String[][]> obsValue = fo.getObsValue();
+        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        for (int i = 0; i < obsValue.size(); i++) {
+
+            String[][] obs = obsValue.get(i);
+            if (obs[0][0].equals("FORM START TIME")) {
+                startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
+            } else if (obs[0][0].equals("TUBERCULOUS TREATMENT OUTCOME")) {
+                String value = obs[0][1].equals("CURE, OUTCOME") ? getResources().getString(R.string.fast_cured) :
+                        (obs[0][1].equals("TREATMENT COMPLETE") ? getResources().getString(R.string.fast_treatment_completed) :
+                                (obs[0][1].equals("TUBERCULOSIS TREATMENT FAILURE") ? getResources().getString(R.string.fast_treatment_failure) :
+                                        (obs[0][1].equals("DIED") ? getResources().getString(R.string.fast_died) :
+                                                (obs[0][1].equals("TRANSFERRED OUT") ? getResources().getString(R.string.fast_transfer_out) :
+                                                        (obs[0][1].equals("PATIENT REFERRED") ? getResources().getString(R.string.fast_referral) :
+                                                                (obs[0][1].equals("LOST TO FOLLOW-UP") ? getResources().getString(R.string.fast_treatment_after_loss_to_follow_up) :
+                                                                        getResources().getString(R.string.fast_other_title)))))));
+
+                treatmentOutcome.getSpinner().selectValue(value);
+                treatmentOutcome.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("TRANSFER OUT LOCATION")) {
+                transferOutLocations.getSpinner().selectValue(obs[0][1]);
+                transferOutLocations.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("OTHER REASON TO END FOLLOW UP")) {
+                remarks.getEditText().setText(obs[0][1]);
+                remarks.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("TREATMENT INITIATED AT REFERRAL OR TRANSFER SITE")) {
+                for (RadioButton rb : treatmentInitiatedReferralSite.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_dont_know_title)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                treatmentInitiatedReferralSite.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("TREATMENT NOT INITIATED AT REFERRAL OR TRANSFER SITE")) {
+                String value = obs[0][1].equals("PATIENT COULD NOT BE CONTACTED") ? getResources().getString(R.string.fast_cured) :
+                        (obs[0][1].equals("PATIENT LEFT THE CITY") ? getResources().getString(R.string.fast_treatment_completed) :
+                                (obs[0][1].equals("REFUSAL OF TREATMENT BY PATIENT") ? getResources().getString(R.string.fast_treatment_failure) :
+                                        (obs[0][1].equals("DIED") ? getResources().getString(R.string.fast_died) :
+                                                (obs[0][1].equals("DR NOT CONFIRMED BY BASELINE REPEAT TEST") ? getResources().getString(R.string.fast_transfer_out) :
+                                                        getResources().getString(R.string.fast_other_title)))));
+
+                treatmentNotInitiatedReferralSite.getSpinner().selectValue(value);
+                treatmentNotInitiatedReferralSite.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("OTHER REASON FOR TREATMENT NOT INITIATED")) {
+                treatmentNotInitiatedReferralSiteOther.getEditText().setText(obs[0][1]);
+                treatmentNotInitiatedReferralSiteOther.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("DRUG RESISTANCE CONFIRMATION")) {
+                for (RadioButton rb : drConfirmation.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                drConfirmation.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("ENRS")) {
+                enrsId.getEditText().setText(obs[0][1]);
+                enrsId.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("REFERRAL CONTACT FIRST NAME")) {
+                firstName.getEditText().setText(obs[0][1]);
+                firstName.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("REFERRAL CONTACT LAST NAME")) {
+                lastName.getEditText().setText(obs[0][1]);
+                lastName.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("REFERRAL CONTACT NUMBER")) {
+                String mobileNumArr[] = obs[0][1].split("-");
+                mobile1.getEditText().setText(mobileNumArr[0]);
+                mobile2.getEditText().setText(mobileNumArr[1]);
+                mobile1.setVisibility(View.VISIBLE);
+                mobile2.setVisibility(View.VISIBLE);
+                mobileLinearLayout.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     @Override
@@ -582,20 +666,17 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
             }
 
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title)) ||
-                    parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_referral_new))||
+                    parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_referral_new)) ||
                     parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_patient_loss_to_follow_up))) {
-                    remarks.setVisibility(View.VISIBLE);
+                remarks.setVisibility(View.VISIBLE);
 
             } else {
                 remarks.setVisibility(View.GONE);
             }
-        }
-
-        else if(spinner == treatmentNotInitiatedReferralSite.getSpinner()){
-            if(parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title))){
+        } else if (spinner == treatmentNotInitiatedReferralSite.getSpinner()) {
+            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title))) {
                 treatmentNotInitiatedReferralSiteOther.setVisibility(View.VISIBLE);
-            }
-            else{
+            } else {
                 treatmentNotInitiatedReferralSiteOther.setVisibility(View.GONE);
             }
         }
@@ -604,6 +685,13 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
+    }
+
+    private boolean getEnrsVisibility(){
+      if(enrsId.getVisibility() == View.VISIBLE){
+          return true;
+      }
+        return false;
     }
 
     @Override
@@ -636,22 +724,18 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
 
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
-        if(radioGroup == treatmentInitiatedReferralSite.getRadioGroup()){
-            if(treatmentInitiatedReferralSite.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))){
+        if (radioGroup == treatmentInitiatedReferralSite.getRadioGroup()) {
+            if (treatmentInitiatedReferralSite.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))) {
                 treatmentNotInitiatedReferralSite.setVisibility(View.VISIBLE);
 
-            }
-            else{
+            } else {
                 treatmentNotInitiatedReferralSite.setVisibility(View.GONE);
 
             }
-        }
-
-        else if(radioGroup == drConfirmation.getRadioGroup()){
-            if(drConfirmation.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))){
+        } else if (radioGroup == drConfirmation.getRadioGroup()) {
+            if (drConfirmation.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
                 enrsId.setVisibility(View.VISIBLE);
-            }
-            else{
+            } else {
                 enrsId.setVisibility(View.GONE);
             }
         }
