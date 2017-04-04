@@ -1107,7 +1107,7 @@ public class ServerService {
         return patient1;
     }
 
-    public String saveEncounterAndObservation(String formName, FormsObject form, Calendar encounterDateTime, String[][] obss) {
+    public String saveEncounterAndObservation(String formName, FormsObject form, Calendar encounterDateTime, String[][] obss, Boolean orderForm) {
 
         if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
             if (!isURLReachable()) {
@@ -1163,7 +1163,7 @@ public class ServerService {
                     if ("".equals(obss[i][0]) || "".equals(obss[i][1]))
                         continue;
 
-                    if (obss[i][0].equals("TEST ID") && formName.contains("Test Order")) {
+                    if (obss[i][0].equals("TEST ID") && orderForm) {
                         testId = obss[i][1];
                     }
 
