@@ -2754,7 +2754,7 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('COUNSELING TYPE
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TREATMENT COORDINATOR MONITORING NOTES','treatment_coordinator_notes','Text','d82419b2-6a28-4f07-8e57-fcf74c3f4e3b');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REFERRAL CONTACT FIRST NAME','refcontact_firstname','Text','1934376b-67a3-4313-9f31-44abfe673f23');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REFERRAL CONTACT LAST NAME','refcontact_lastname','Text','90afadff-7ead-4c30-a38e-591203a8e136');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REFERRAL CONTACT NUMBER','refcontact_number','Numeric','3def1e9a-0790-4856-9d16-4c4b6fdf0d76');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REFERRAL CONTACT NUMBER','refcontact_number','Text','3def1e9a-0790-4856-9d16-4c4b6fdf0d76');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('THERAPY CONSENT','therapy_consent','Coded','4cc5f452-d7c9-45db-86a5-fd8904b4d2ec');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('FOOD CONSUMPTION IN PAST 2 HOURS','had_food_in_two_hours','Coded','863f221b-f555-4a2d-9347-aa911c14befe');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MEETING DATE','date_meeting','Date','e244d18e-94dc-4b9f-9149-c60817c65a55');
@@ -4414,8 +4414,34 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PSYCHIATRY DEPA
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OPHTHALMOLOGY DEPARTMENT',NULL,'N/A','160454AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ENDOCRINOLOGY DEPARTMENT',NULL,'N/A','160468AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('FEVER LASTING MORE THAN THREE WEEKS',NULL,'Boolean','1494AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
-
 INSERT INTO concept(full_name,var_name,uuid,data_type) VALUES ('METFORMIN',NULL,'79651AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','N/A');
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MOTHER NAME','mother_name','Text','1593AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('X-RAY, OTHER',NULL,'Coded','309AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CAVIATION',NULL,'N/A','c9aaf094-94b9-4e3f-bf34-1a0d5697d0c1');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INFILTRATE',NULL,'N/A','6049AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CONTINUE REGIMEN',NULL,'N/A','1257AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CATARACT',NULL,'N/A','120860AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OPTIC PAPILLITIS',NULL,'N/A','131755AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ISCHAEMIC OPTIC NEUROPATHY',NULL,'N/A','136503AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ILLNESS',NULL,'N/A','137793AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DAILY ACTIVITY',NULL,'Text','159397AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SUBSTANCE ABUSE',NULL,'Coded','112603AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PHYSICAL ABUSE',NULL,'N/A','152292AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SEVERE',NULL,'N/A','1500AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MODERATE',NULL,'N/A','1499AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MILD',NULL,'N/A','1498AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RARELY',NULL,'N/A','159416AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('EXERCISE THERAPY',NULL,'N/A','151321AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INSULIN',NULL,'N/A','78056AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DAUGHTER',NULL,'N/A','160728AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PIOGLITAZONE',NULL,'N/A','82111AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PHYSICAL EXERCISE','EXERCISE','N/A','159364AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('COLOURLESS',NULL,'N/A','162099AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('YELLOW-GREEN COLOUR',NULL,'N/A','162105AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('WHITE COLOR','WHITE','N/A','1075AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('UNCONTROLLED DIABETES MELLITUS',NULL,'N/A','123579AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DIABETES MELLITUS TYPE 1',NULL,'N/A','142474AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INFECTION OF SKIN',NULL,'N/A','137293AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
@@ -4424,6 +4450,7 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INFECTED DENTAL
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('GENITOURINARY SYMPTOMS',NULL,'N/A','156475AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('GENITAL INFECTION',NULL,'N/A','139510AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('UPPER RESPIRATORY INFECTION',NULL,'N/A','123565AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER INFECTION',NULL,'N/A','c14db5d8-db0c-4ac3-a9a4-3de50cfbeeb1');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INSULIN, ISOPHANE, HUMAN',NULL,'N/A','78068AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INSULIN, REGULAR, HUMAN',NULL,'N/A','78082AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INSULIN 70/30',NULL,'N/A','159459AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
@@ -4437,11 +4464,6 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DISCOLORATION O
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('POOR',NULL,'N/A','159407AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('GOOD',NULL,'N/A','159405AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('AVERAGE',NULL,'N/A','160487AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
-
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MOTHER NAME','mother_name','Text','1593AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('X-RAY, OTHER',NULL,'Coded','309AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CAVIATION',NULL,'N/A','c9aaf094-94b9-4e3f-bf34-1a0d5697d0c1');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INFILTRATE',NULL,'N/A','6049AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 
 -- Program
 INSERT OR IGNORE INTO program VALUES (1, "86ba1232-d576-416e-b102-5f335c6746ce", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
@@ -4521,6 +4543,16 @@ INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-Drug Dispersal Form',
 INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-Referral','Add Childhood TB Forms','View Childhood TB Forms','920cbf06-ce86-43be-b9b8-1fcdc92bec82');
 INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-Missed Visit Followup','Add Childhood TB Forms','View Childhood TB Forms','5a9588f3-9abc-4387-92bb-f1ab3565bbd6');
 INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-End of Followup','Add Childhood TB Forms','View Childhood TB Forms','39686bc2-1af0-4f61-a4cf-ce987d9dbcbb');
+INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Blood Sugar Test Order','Add Comorbidities Forms','View Comorbidities Forms','224e4898-2246-4e48-bc12-03fa0dab53e3');
+INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Blood Sugar Test Result','Add Comorbidities Forms','View Comorbidities Forms','    2f23e428-417e-4fbd-a6d7-1e0dcf05578d');
+INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-HbA1C Test Order','Add Comorbidities Forms','View Comorbidities Forms','4f1faaa7-ac38-4c97-9f1e-ae8ef31da24d');
+INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-HbA1C Test Result','Add Comorbidities Forms','View Comorbidities Forms','39cd9f67-bf76-4f7f-83cc-696d83848466');
+INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Lipid Test Order','Add Comorbidities Forms','View Comorbidities Forms','5d75ef93-f450-4ab8-aef5-1d6e365bad34');
+INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Lipid Test Result','Add Comorbidities Forms','View Comorbidities Forms','6a0097cf-0251-49d9-ba9b-584ee4ed6cf6');
+INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Urine Detailed Report Order','Add Comorbidities Forms','View Comorbidities Forms','f4841a20-4921-442d-b31d-711f89528620');
+INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Urine Detailed Report Result','Add Comorbidities Forms','View Comorbidities Forms','93654afa-1c93-4874-aca4-b1f4829b2670');
+INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Urine Microalbumin Test Order','Add Comorbidities Forms','View Comorbidities Forms','dfa44870-c62e-40c5-8ebb-1d7de8af2fd9');
+INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Urine Microalbumin Test Result','Add Comorbidities Forms','View Comorbidities Forms','ae75b596-4b8b-4045-ad39-82c407387984');
 
 -- Person Attribute Types: select name as person_attribute_type, format, uuid from person_attribute_type
 INSERT OR IGNORE INTO person_attribute_type VALUES ('Race','java.lang.String','8d871386-c2cc-11de-8d13-0010c6dffd0f');
