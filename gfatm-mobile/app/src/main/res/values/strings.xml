@@ -348,8 +348,8 @@
     <string name="city_default" translatable="false">Karachi</string>
     <string name="province_default" translatable="false">Sindh</string>
     <string name="country_default" translatable="false">Pakistan</string>
-    <string name="ip_default" translatable="false">202.141.249.106</string>
-    <string name="port_default" translatable="false">9902</string>
+    <string name="ip_default" translatable="false">175.107.206.186</string>
+    <string name="port_default" translatable="false">80</string>
 
     <string name="support_contact">Support Contact</string>
     <string name="support_email">Support Email</string>
@@ -517,5 +517,7 @@
         <item>@string/no</item>
         <item>@string/unknown</item>
     </string-array>
+
+    <string name="trust_store_password">jingle94</string>
 
 </resources>
