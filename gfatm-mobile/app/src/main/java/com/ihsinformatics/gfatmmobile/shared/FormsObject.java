@@ -12,12 +12,14 @@ public class FormsObject implements Serializable {
     private Class<?> className;
     private int icon;
     private int color;
+    private String[] roles;
 
-    public FormsObject(String name, Class<?> className, int icon, int color) {
+    public FormsObject(String name, Class<?> className, int icon, int color, String[] roles) {
         this.name = name;
         this.className = className;
         this.icon = icon;
         this.color = color;
+        this.roles = roles;
     }
 
     public int getColor() {
@@ -50,6 +52,14 @@ public class FormsObject implements Serializable {
 
     public void setClassName(Class<?> className) {
         this.className = className;
+    }
+
+    public String[] getRoles() {
+        return roles;
+    }
+
+    public void setRoles(String[] roles) {
+        this.roles = roles;
     }
 
 
