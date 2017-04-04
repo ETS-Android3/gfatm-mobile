@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.shared.FormsObject;
+import com.ihsinformatics.gfatmmobile.shared.Roles;
 
 import java.util.ArrayList;
 
@@ -67,19 +68,44 @@ public class FormFragment extends Fragment {
         else if (App.getProgram().equalsIgnoreCase("CHILDHOOD TB"))
             forms = Forms.getChildhoodTBFormList();
 
+        ArrayList<FormsObject> formsShown = new ArrayList<FormsObject>();
         for (int i = 0; i < forms.size(); i++) {
+            final FormsObject form = forms.get(i);
+
+            Boolean add = false;
+
+            if (!App.getRoles().contains(Roles.DEVELOPER)) {
+                for (int k = 0; k < form.getRoles().length; k++) {
+                    String role = form.getRoles()[k];
+                    if (App.getRoles().contains(role)) {
+                        add = true;
+                        break;
+                    }
+                }
+            } else
+                add = true;
+
+            if (add)
+                formsShown.add(form);
+        }
+
+        int formsInRow = 3;
+        if (formsShown.size() < 12)
+            formsInRow = 2;
+
+        for (int i = 0; i < formsShown.size(); i++) {
 
             LinearLayout layout = new LinearLayout(mainContent.getContext());
             layout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f));
             layout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
             layout.setDividerDrawable(getResources().getDrawable(R.drawable.divider));
 
-            for (int j = 0; j < 3; j++) {
+            for (int j = 0; j < formsInRow; j++) {
 
-                if (i >= forms.size())
+                if (i >= formsShown.size())
                     break;
 
-                final FormsObject form = forms.get(i);
+                final FormsObject form = formsShown.get(i);
 
                 Button b = new Button(mainContent.getContext());
                 int color = App.getColor(mainContent.getContext(), R.attr.colorBackground);
@@ -133,6 +159,7 @@ public class FormFragment extends Fragment {
 
             i--;
             mainContent.addView(layout);
+
         }
 
     }
