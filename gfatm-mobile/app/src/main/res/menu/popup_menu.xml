@@ -10,6 +10,10 @@
         android:icon="@drawable/ic_server"
         android:title="@string/title_server_address" />
     <item
+        android:id="@+id/nav_ssl_encryption"
+        android:icon="@drawable/ic_ssl_encryption"
+        android:title="@string/title_ssl" />
+    <item
         android:id="@+id/menu_defaults"
         android:icon="@drawable/ic_defaults"
         android:title="@string/title_defaults"
