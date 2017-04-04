@@ -1,5 +1,6 @@
 package com.ihsinformatics.gfatmmobile.util;
 
+import android.content.Context;
 import android.os.StrictMode;
 import android.util.Base64;
 import android.util.Log;
@@ -42,8 +43,10 @@ public class HttpPost {
     private static String PROGRAM_ENROLLEMENT = "programenrollment";
     private static String TAG = "";
     private String serverAddress = "";
+    private Context context = null;
 
-    public HttpPost(String serverIP, String port) {
+    public HttpPost(String serverIP, String port, Context context) {
+        this.context = context;
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         serverAddress = serverIP;
@@ -54,7 +57,6 @@ public class HttpPost {
     }
 
     private String post(String postUri, String content) {
-        HttpClient client = new DefaultHttpClient();
         HttpUriRequest request = null;
         HttpResponse response = null;
         HttpEntity entity;
@@ -72,7 +74,13 @@ public class HttpPost {
                     (App.getUsername() + ":" + App.getPassword()).getBytes("UTF-8"),
                     Base64.NO_WRAP);
             request.addHeader("Authorization", "Basic " + auth);
-            response = client.execute(request);
+            if (App.getSsl().equalsIgnoreCase("Enabled")) {
+                HttpsClient client = new HttpsClient(context);
+                response = client.execute(request);
+            } else {
+                HttpClient client = new DefaultHttpClient();
+                response = client.execute(request);
+            }
             StatusLine statusLine = response.getStatusLine();
             Log.d(TAG, "Http response code: " + statusLine.getStatusCode());
             if (statusLine.getStatusCode() == HttpStatus.SC_OK || statusLine.getStatusCode() == HttpStatus.SC_CREATED) {
@@ -93,7 +101,14 @@ public class HttpPost {
     }
 
     private String postJSONObject(String resourceName, JSONObject contentObject) {
-        String requestURI = "http://" + serverAddress + "/openmrs/ws/rest/v1/" + resourceName;
+
+        String http = "";
+        if (App.getSsl().equalsIgnoreCase("Enabled"))
+            http = "https://";
+        else
+            http = "http://";
+
+        String requestURI = http + serverAddress + "/openmrs/ws/rest/v1/" + resourceName;
         String content = contentObject.toString();
         return post(requestURI, content);
     }
@@ -104,6 +119,15 @@ public class HttpPost {
 
     public String backgroundPost(String uri, String content) {
         String requestURI = uri.replace("serverAddress", serverAddress);
+
+        String http = "";
+        if (App.getSsl().equalsIgnoreCase("Enabled"))
+            http = "https://";
+        else
+            http = "http://";
+
+        requestURI = http + requestURI;
+
         return post(requestURI, content);
     }
 
@@ -132,7 +156,7 @@ public class HttpPost {
             String offlineReturnString = "";
             if (App.getMode().equalsIgnoreCase("OFFLINE")) {
 
-                String requestURI = "http://serverAddress/openmrs/ws/rest/v1/" + PERSON_RESOURCE;
+                String requestURI = "serverAddress/openmrs/ws/rest/v1/" + PERSON_RESOURCE;
                 String content = personObj.toString();
 
                 offlineReturnString = requestURI + " ;;;; " + content;
@@ -162,7 +186,7 @@ public class HttpPost {
 
             if (App.getMode().equalsIgnoreCase("OFFLINE")) {
 
-                String requestURI = "http://serverAddress/openmrs/ws/rest/v1/" + PATIENT_RESOURCE;
+                String requestURI = "serverAddress/openmrs/ws/rest/v1/" + PATIENT_RESOURCE;
                 String content = patientObject.toString();
 
                 offlineReturnString = offlineReturnString + " ;;;; " + requestURI + " ;;;; " + content;
@@ -237,7 +261,7 @@ public class HttpPost {
 
             if (App.getMode().equalsIgnoreCase("OFFLINE")) {
 
-                String requestURI = "http://serverAddress/openmrs/ws/rest/v1/" + ENCOUNTER_RESOURCE;
+                String requestURI = "serverAddress/openmrs/ws/rest/v1/" + ENCOUNTER_RESOURCE;
                 String content = encounterObject.toString();
 
                 return requestURI + " ;;;; " + content;
@@ -265,7 +289,7 @@ public class HttpPost {
 
             if (App.getMode().equalsIgnoreCase("OFFLINE")) {
 
-                String requestURI = "http://serverAddress/openmrs/ws/rest/v1/" + PATIENT_RESOURCE + "/" + patientUuid + "/" + "identifier";
+                String requestURI = "serverAddress/openmrs/ws/rest/v1/" + PATIENT_RESOURCE + "/" + patientUuid + "/" + "identifier";
                 String content = identifierObject.toString();
 
                 return requestURI + " ;;;; " + content;
@@ -293,7 +317,7 @@ public class HttpPost {
 
             if (App.getMode().equalsIgnoreCase("OFFLINE")) {
 
-                String requestURI = "http://serverAddress/openmrs/ws/rest/v1/" + PROGRAM_ENROLLEMENT;
+                String requestURI = "serverAddress/openmrs/ws/rest/v1/" + PROGRAM_ENROLLEMENT;
                 String content = programEnrollementObject.toString();
 
                 return requestURI + " ;;;; " + content;
@@ -327,7 +351,7 @@ public class HttpPost {
 
             if (App.getMode().equalsIgnoreCase("OFFLINE")) {
 
-                String requestURI = "http://serverAddress/openmrs/ws/rest/v1/" + PERSON_RESOURCE + "/" + patientUuid + "/" + "address";
+                String requestURI = "serverAddress/openmrs/ws/rest/v1/" + PERSON_RESOURCE + "/" + patientUuid + "/" + "address";
                 String content = personAddressObject.toString();
 
                 return requestURI + " ;;;; " + content;
@@ -352,7 +376,7 @@ public class HttpPost {
 
             if (App.getMode().equalsIgnoreCase("OFFLINE")) {
 
-                String requestURI = "http://serverAddress/openmrs/ws/rest/v1/" + PERSON_RESOURCE + "/" + patientUuid + "/" + "attribute";
+                String requestURI = "serverAddress/openmrs/ws/rest/v1/" + PERSON_RESOURCE + "/" + patientUuid + "/" + "attribute";
                 String content = personAttributeObject.toString();
 
                 return requestURI + " ;;;; " + content;

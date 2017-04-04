@@ -1,5 +1,6 @@
 package com.ihsinformatics.gfatmmobile.util;
 
+import android.content.Context;
 import android.os.StrictMode;
 import android.util.Base64;
 import android.util.Log;
@@ -59,8 +60,10 @@ public class HttpGet {
     Properties properties = new Properties();
     private boolean early = true;
     private String serverAdress = "";
+    private Context context = null;
 
-    public HttpGet(String serverIP, String port) {
+    public HttpGet(String serverIP, String port, Context context) {
+        this.context = context;
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         serverAdress = serverIP;
@@ -75,20 +78,21 @@ public class HttpGet {
         HttpUriRequest request = null;
         String responseString = "";
         String auth = "";
+        HttpResponse response = null;
 
         try {
-            //    String file = "res/raw/openmrs.properties";
-            //    InputStream propertiesFile = this.getClass().getClassLoader().getResourceAsStream(file);
-            //    properties.load(propertiesFile);
-            //    String id = properties.getProperty(PropertyName.OPENMRS_USER);
-            //    String password = properties.getProperty(PropertyName.OPENMRS_PASSWORD);
             request = new org.apache.http.client.methods.HttpGet(requestUri);
             auth = Base64.encodeToString(
                     (App.getUsername() + ":" + App.getPassword()).getBytes("UTF-8"),
                     Base64.NO_WRAP);
             request.addHeader("Authorization", "Basic " + auth);
-            HttpClient client = new DefaultHttpClient();
-            HttpResponse response = client.execute(request);
+            if (App.getSsl().equalsIgnoreCase("Enabled")) {
+                HttpsClient client = new HttpsClient(context);
+                response = client.execute(request);
+            } else {
+                HttpClient client = new DefaultHttpClient();
+                response = client.execute(request);
+            }
             StatusLine statusLine = response.getStatusLine();
             Log.d(TAG, "Http response code: " + statusLine.getStatusCode());
             if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
@@ -174,28 +178,47 @@ public class HttpGet {
     private JSONObject getJsonObjectByName(String resourceName, String content) {
         if (content == null)
             return null;
+
+        String http = "";
+        if (App.getSsl().equalsIgnoreCase("Enabled"))
+            http = "https://";
+        else
+            http = "http://";
+
         content = content.trim();
         content = content.replaceAll(" ", "%20");
-        String requestUri = "http://" + serverAdress + "/openmrs/ws/rest/v1/" + resourceName +
-                "?q=" + content + "&v=full";
+        String requestUri = http + serverAdress + "/openmrs/ws/rest/v1/" + resourceName + "?q=" + content + "&v=full";
         return get(requestUri);
     }
 
     private JSONObject getJsonObject(String resourceName, String parameter, String content) {
         if (content == null)
             return null;
+
+        String http = "";
+        if (App.getSsl().equalsIgnoreCase("Enabled"))
+            http = "https://";
+        else
+            http = "http://";
+
         content = content.trim();
         content = content.replaceAll(" ", "%20");
-        String requestUri = "http://" + serverAdress + "/openmrs/ws/rest/v1/" + resourceName + "/" + parameter +
-                "/" + content;
+        String requestUri = http + serverAdress + "/openmrs/ws/rest/v1/" + resourceName + "/" + parameter + "/" + content;
         return get(requestUri);
     }
 
     private JSONObject getJsonObjectByUuid(String resourceName, String content) {
         if (content == null)
             return null;
+
+        String http = "";
+        if (App.getSsl().equalsIgnoreCase("Enabled"))
+            http = "https://";
+        else
+            http = "http://";
+
         content = content.trim();
-        String requestUri = "http://" + serverAdress + "/openmrs/ws/rest/v1/" + resourceName +
+        String requestUri = http + serverAdress + "/openmrs/ws/rest/v1/" + resourceName +
                 "/" + content + "?v=full";
         return get(requestUri);
     }
@@ -203,9 +226,16 @@ public class HttpGet {
     private JSONObject getCustomJsonObject(String resourceName, String param1, String param2, String param3, boolean condition) {
         if (param1 == null || param2 == null)
             return null;
+
+        String http = "";
+        if (App.getSsl().equalsIgnoreCase("Enabled"))
+            http = "https://";
+        else
+            http = "http://";
+
         param1 = param1.trim();
         param2 = param2.trim();
-        String requestUri = "http://" + serverAdress + "/openmrs/ws/rest/v1/" + resourceName +
+        String requestUri = http + serverAdress + "/openmrs/ws/rest/v1/" + resourceName +
                 "?patient=" + param1 + "&v=full&" + param3 + "=" + param2;
         return get(requestUri, condition, resourceName);
     }
@@ -213,7 +243,14 @@ public class HttpGet {
     private JSONArray getCustomJsonArray(String resourceName, String variables, String value) {
         JSONArray jsonArray = null;
         try {
-            String requestUri = "http://" + serverAdress + "/openmrs/ws/rest/v1/" + resourceName + "?v=custom:(" + variables + ")&q=" + value + "";
+
+            String http = "";
+            if (App.getSsl().equalsIgnoreCase("Enabled"))
+                http = "https://";
+            else
+                http = "http://";
+
+            String requestUri = http + serverAdress + "/openmrs/ws/rest/v1/" + resourceName + "?v=custom:(" + variables + ")&q=" + value + "";
             JSONObject obj = get(requestUri);
             jsonArray = obj.getJSONArray("results");
         } catch (Exception e) {
@@ -225,7 +262,14 @@ public class HttpGet {
     private JSONArray getCustomJsonArray(String resourceName, String variables) {
         JSONArray jsonArray = null;
         try {
-            String requestUri = "http://" + serverAdress + "/openmrs/ws/rest/v1/" + resourceName + "?v=custom:(" + variables + ")";
+
+            String http = "";
+            if (App.getSsl().equalsIgnoreCase("Enabled"))
+                http = "https://";
+            else
+                http = "http://";
+
+            String requestUri = http + serverAdress + "/openmrs/ws/rest/v1/" + resourceName + "?v=custom:(" + variables + ")";
             JSONObject obj = get(requestUri);
             jsonArray = obj.getJSONArray("results");
         } catch (Exception e) {
@@ -237,7 +281,14 @@ public class HttpGet {
     private JSONArray getJSONArray(String resourceName) {
         JSONArray jsonArray = null;
         try {
-            String requestUri = "http://" + serverAdress + "/openmrs/ws/rest/v1/" + resourceName + "?v=full";
+
+            String http = "";
+            if (App.getSsl().equalsIgnoreCase("Enabled"))
+                http = "https://";
+            else
+                http = "http://";
+
+            String requestUri = http + serverAdress + "/openmrs/ws/rest/v1/" + resourceName + "?v=full";
             JSONObject obj = get(requestUri);
             jsonArray = obj.getJSONArray("results");
         } catch (Exception e) {
@@ -249,7 +300,14 @@ public class HttpGet {
     private JSONArray getJSONArray(String resourceName, String param1, String param2, String searchResource) {
         JSONArray jsonArray = null;
         try {
-            String requestUri = "http://" + serverAdress + "/openmrs/ws/rest/v1/" + resourceName +
+
+            String http = "";
+            if (App.getSsl().equalsIgnoreCase("Enabled"))
+                http = "https://";
+            else
+                http = "http://";
+
+            String requestUri = http + serverAdress + "/openmrs/ws/rest/v1/" + resourceName +
                     "?patient=" + param1 + "&v=full&" + searchResource + "=" + param2;
             JSONObject obj = get(requestUri);
             jsonArray = obj.getJSONArray("results");
@@ -262,7 +320,14 @@ public class HttpGet {
     private JSONArray getJSONArray(String resourceName, String searchParam, String content) {
         JSONArray jsonArray = null;
         try {
-            String requestUri = "http://" + serverAdress + "/openmrs/ws/rest/v1/" + resourceName +
+
+            String http = "";
+            if (App.getSsl().equalsIgnoreCase("Enabled"))
+                http = "https://";
+            else
+                http = "http://";
+
+            String requestUri = http + serverAdress + "/openmrs/ws/rest/v1/" + resourceName +
                     "?" + searchParam + "=" + content + "&v=full";
             JSONObject obj = get(requestUri);
             jsonArray = obj.getJSONArray("results");

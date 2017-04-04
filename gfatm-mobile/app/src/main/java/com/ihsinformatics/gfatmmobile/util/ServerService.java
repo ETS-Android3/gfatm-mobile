@@ -27,8 +27,6 @@ import com.ihsinformatics.gfatmmobile.App;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.ihsinformatics.gfatmmobile.App;
@@ -59,9 +57,6 @@ import org.openmrs.Provider;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.Format;
@@ -93,8 +88,8 @@ public class ServerService {
     public ServerService(Context context) {
         this.context = context;
         // Specify REST module link
-        httpGet = new HttpGet(App.getIp(), App.getPort());
-        httpPost = new HttpPost(App.getIp(), App.getPort());
+        httpGet = new HttpGet(App.getIp(), App.getPort(), context);
+        httpPost = new HttpPost(App.getIp(), App.getPort(), context);
         dbUtil = new DatabaseUtil(this.context);
     }
     /**
@@ -103,26 +98,33 @@ public class ServerService {
      * @return status
      */
     static public boolean isURLReachable() {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo != null && netInfo.isConnected()) {
-            try {
-                URL url = new URL("http://" + App.getIp() + ":" + App.getPort());   // Change to "http://google.com" for www  PetContactRegistryForm.
-                HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
-                urlc.setConnectTimeout(10 * 1000);          // 10 s.
-                urlc.connect();
-                if (urlc.getResponseCode() == 200) {        // 200 = "OK" code (http connection is fine).
-                    return true;
-                } else {
-                    return false;
-                }
-            } catch (MalformedURLException e1) {
-                return false;
-            } catch (IOException e) {
-                return false;
-            }
-        }
-        return false;
+//        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+//        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+//        if (netInfo != null && netInfo.isConnected()) {
+//            try {
+//                if(App.getSsl().equalsIgnoreCase("Enabled")) {
+//                    HttpsClient httpsClient = new HttpsClient(context);
+//                    httpsClient.
+//                }
+//                else {
+//                    URL url = new URL("http://" + App.getIp() + ":" + App.getPort());
+//                    HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
+//                    urlc.setConnectTimeout(10 * 1000);
+//                    urlc.connect();
+//                    if (urlc.getResponseCode() == 200) {
+//                        return true;
+//                    } else {
+//                        return false;
+//                    }
+//                }
+//
+//            } catch (MalformedURLException e1) {
+//                return false;
+//            } catch (IOException e) {
+//                return false;
+//            }
+//        }
+        return true;
     }
 
     public String getPatientSystemIdByUuidLocalDB(String uuid) {
@@ -829,7 +831,7 @@ public class ServerService {
                                     String[] arr = date.split("\\+");
                                     newArr.add(arr[0] + "," + i);
 
-                                    com.ihsinformatics.gfatmmobile.model.Encounter encounter = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(newObj);
+                                    com.ihsinformatics.gfatmmobile.model.Encounter encounter = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(newObj, context);
                                     encounter.setPatientId(App.getPatientId());
 
                                     for (com.ihsinformatics.gfatmmobile.model.Obs obs : encounter.getObsGroup()) {
@@ -861,7 +863,7 @@ public class ServerService {
                                 String[] splitter = newArr.get(newArr.size() - 1).split(",");
                                 JSONObject newObj = jsonArray.getJSONObject(Integer.valueOf(splitter[1]));
 
-                                com.ihsinformatics.gfatmmobile.model.Encounter encounter = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(newObj);
+                                com.ihsinformatics.gfatmmobile.model.Encounter encounter = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(newObj, context);
                                 encounter.setPatientId(App.getPatientId());
 
                                 ContentValues values1 = new ContentValues();
@@ -887,7 +889,7 @@ public class ServerService {
                                 JSONObject jsonObject = httpGet.getLatestEncounter(uuid, String.valueOf(encType[0]));
                                 if (jsonObject == null)
                                     continue;
-                                com.ihsinformatics.gfatmmobile.model.Encounter encounter = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(jsonObject);
+                                com.ihsinformatics.gfatmmobile.model.Encounter encounter = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(jsonObject, context);
                                 encounter.setPatientId(getPatientSystemIdByUuidLocalDB(uuid));
 
                                 ContentValues values1 = new ContentValues();
@@ -1324,12 +1326,20 @@ public class ServerService {
                     values4.put("username", App.getUsername());
                     dbUtil.insert(Metadata.OFFLINE_FORM, values4);
 
+                    if (!testId.equals("")) {
+                        ContentValues values = new ContentValues();
+                        values.put("pid", App.getPatientId());
+                        values.put("form", App.getProgram() + "-" + formName);
+                        values.put("test_id", testId);
+                        dbUtil.insert(Metadata.TEST_ID, values);
+                    }
+
                     return "SUCCESS_" + formId;
 
                 } else {
                     String returnString = httpPost.saveEncounterWithObservationByEntity(encounter);
                     JSONObject jsonObject = JSONParser.getJSONObject("{" + returnString.toString() + "}");
-                    com.ihsinformatics.gfatmmobile.model.Encounter encounter1 = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(jsonObject);
+                    com.ihsinformatics.gfatmmobile.model.Encounter encounter1 = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(jsonObject, context);
                     encounter1.setPatientId(App.getPatientId());
 
                     deleteEncounter(App.getPatientId(), encounter1.getEncounterType());
@@ -1786,7 +1796,7 @@ public class ServerService {
 
                     try {
                         JSONObject jsonObject = JSONParser.getJSONObject("{" + returnString.toString() + "}");
-                        com.ihsinformatics.gfatmmobile.model.Encounter encounter1 = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(jsonObject);
+                        com.ihsinformatics.gfatmmobile.model.Encounter encounter1 = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(jsonObject, context);
 
                         deleteEncounter(App.getPatientId(), encounter1.getEncounterType());
 
@@ -1887,7 +1897,7 @@ public class ServerService {
                 String returnString = httpPost.backgroundPost(String.valueOf(form[3]), patientContent);
 
                 JSONObject jsonObject = JSONParser.getJSONObject("{" + returnString.toString() + "}");
-                com.ihsinformatics.gfatmmobile.model.Encounter encounter1 = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(jsonObject);
+                com.ihsinformatics.gfatmmobile.model.Encounter encounter1 = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(jsonObject, context);
                 String patientSystemId = "";
                 try {
                     JSONObject patientObject = jsonObject.getJSONObject("patient");
@@ -2122,7 +2132,7 @@ public class ServerService {
                                 String[] arr = date.split("\\+");
                                 newArr.add(arr[0] + "," + i);
 
-                                com.ihsinformatics.gfatmmobile.model.Encounter encounter = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(newObj);
+                                com.ihsinformatics.gfatmmobile.model.Encounter encounter = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(newObj, context);
                                 encounter.setPatientId(App.getPatientId());
 
                                 for (com.ihsinformatics.gfatmmobile.model.Obs obs : encounter.getObsGroup()) {
@@ -2154,7 +2164,7 @@ public class ServerService {
                             String[] splitter = newArr.get(newArr.size() - 1).split(",");
                             JSONObject newObj = jsonArray.getJSONObject(Integer.valueOf(splitter[1]));
 
-                            com.ihsinformatics.gfatmmobile.model.Encounter encounter = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(newObj);
+                            com.ihsinformatics.gfatmmobile.model.Encounter encounter = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(newObj, context);
                             encounter.setPatientId(App.getPatientId());
 
                             ContentValues values1 = new ContentValues();
@@ -2180,7 +2190,7 @@ public class ServerService {
                             JSONObject jsonObject = httpGet.getLatestEncounter(App.getPatient().getUuid(), String.valueOf(encType[0]));
                             if (jsonObject == null)
                                 continue;
-                            com.ihsinformatics.gfatmmobile.model.Encounter encounter = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(jsonObject);
+                            com.ihsinformatics.gfatmmobile.model.Encounter encounter = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(jsonObject, context);
                             encounter.setPatientId(App.getPatientId());
 
                             ContentValues values1 = new ContentValues();
