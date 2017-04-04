@@ -4,6 +4,8 @@ package com.ihsinformatics.gfatmmobile.model;
  * Created by Rabbia on 1/9/2017.
  */
 
+import android.content.Context;
+
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.util.HttpGet;
 
@@ -39,7 +41,7 @@ public class Encounter extends AbstractModel {
         this.encounterLocation = encounterLocation;
     }
 
-    public static Encounter parseJSONObject(JSONObject json) {
+    public static Encounter parseJSONObject(JSONObject json, Context context) {
         Encounter encounter = null;
         String uuid = "";
         String encounterType = "";
@@ -71,7 +73,7 @@ public class Encounter extends AbstractModel {
                                 obsGroup.add(obs1);
                         }
                     } else { //post returns doesn't indlude group members :/
-                        HttpGet httpGet = new HttpGet(App.getIp(), App.getPort());
+                        HttpGet httpGet = new HttpGet(App.getIp(), App.getPort(), context);
                         JSONArray linkJsonArray = jsonObject.getJSONArray("links");
                         JSONObject linkObject = linkJsonArray.getJSONObject(0);
                         String link = linkObject.getString("uri");
