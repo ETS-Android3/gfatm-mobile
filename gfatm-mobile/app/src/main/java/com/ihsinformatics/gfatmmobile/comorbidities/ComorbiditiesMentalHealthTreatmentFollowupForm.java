@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
@@ -30,6 +31,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
@@ -237,11 +239,23 @@ public class ComorbiditiesMentalHealthTreatmentFollowupForm extends AbstractForm
     @Override
     public boolean submit() {
 
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            String encounterId = bundle.getString("formId");
+            if (saveFlag) {
+                serverService.deleteOfflineForms(encounterId);
+            }
+            bundle.putBoolean("save", false);
+        }
+
         endTime = new Date();
 
         final ArrayList<String[]> observations = new ArrayList<String[]>();
         observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
         observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
+        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         observations.add(new String[]{"HEALTH CLINIC/POST", App.get(gpClinicCode)});
         observations.add(new String[]{"SESSION NUMBER", App.get(treatmentFollowupMHSessionNumber)});
 
@@ -409,8 +423,160 @@ public class ComorbiditiesMentalHealthTreatmentFollowupForm extends AbstractForm
     }
 
     @Override
-    public void refill(int encounterId) {
+    public void refill(int formId) {
+        OfflineForm fo = serverService.getOfflineFormById(formId);
+        String date = fo.getFormDate();
+        ArrayList<String[][]> obsValue = fo.getObsValue();
+        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
+        for (int i = 0; i < obsValue.size(); i++) {
+
+            String[][] obs = obsValue.get(i);
+
+            if (obs[0][0].equals("HEALTH CLINIC/POST")) {
+                gpClinicCode.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("SESSION NUMBER")) {
+                treatmentFollowupMHSessionNumber.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("MILD NON PROLIFERATIVE DIABETIC RETINOPATHY")) {
+                for (RadioButton rb : treatmentFollowupMHConditionBeforeSession.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_condition_before_session_options_very_bad)) && obs[0][1].equals("VERY BAD")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_condition_before_session_options_bad)) && obs[0][1].equals("POOR")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_condition_before_session_options_neutral)) && obs[0][1].equals("AVERAGE")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_condition_before_session_options_good)) && obs[0][1].equals("GOOD")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_condition_before_session_options_very_good)) && obs[0][1].equals("VERY GOOD")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                treatmentFollowupMHConditionBeforeSession.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("CHIEF COMPLAINT")) {
+                String value = obs[0][1].equals("RELATIONSHIP PROBLEMS") ? getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options_relationship_problems) :
+                        (obs[0][1].equals("ILLNESS") ? getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options_physical_illness) :
+                                (obs[0][1].equals("DAILY ACTIVITY") ? getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options_daily_life) :
+                                        (obs[0][1].equals("SUBSTANCE ABUSE") ? getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options_subtance) :
+                                                (obs[0][1].equals("ECONOMIC PROBLEM") ? getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options_financial) :
+                                                        (obs[0][1].equals("PHYSICAL ABUSE") ? getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options_physical_abuse) :
+                                                                (obs[0][1].equals("SEXUAL PROBLEM") ? getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options_sexual_problems) : getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options_other)))))));
+                treatmentFollowupMHClientsComplaint.getSpinner().selectValue(value);
+            } else if (obs[0][0].equals("CO-OPERATION")) {
+                for (RadioButton rb : treatmentFollowupMHCooperation.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_cooperation_options_complaint)) && obs[0][1].equals("COOPERATIVE BEHAVIOUR")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_cooperation_options_uncomfortable)) && obs[0][1].equals("UNCOMFORTABLE")) {
+                        rb.setChecked(true);
+                        break;
+                    }  else if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_cooperation_options_uncooperative)) && obs[0][1].equals("NON-COOPERATIVE BEHAVIOUR")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                treatmentFollowupMHCooperation.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("DEFENSIVE")) {
+                for (RadioButton rb : treatmentFollowupMHDefensiveness.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_defensiveness_options_reserved)) && obs[0][1].equals("RESERVED BEHAVIOUR")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_defensiveness_options_aggressive)) && obs[0][1].equals("AGGRESSIVE BEHAVIOUR")) {
+                        rb.setChecked(true);
+                        break;
+                    }  else if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_defensiveness_options_normal)) && obs[0][1].equals("NORMAL")) {
+                        rb.setChecked(true);
+                        break;
+                    }  else if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_defensiveness_options_open)) && obs[0][1].equals("OPEN BEHAVIOUR")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                treatmentFollowupMHDefensiveness.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("MENTAL DISTRESS")) {
+                for (RadioButton rb : treatmentFollowupMHDistress.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_distress_options_severly)) && obs[0][1].equals("SEVERE")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_distress_options_moderately)) && obs[0][1].equals("MODERATE")) {
+                        rb.setChecked(true);
+                        break;
+                    }  else if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_distress_options_mildly)) && obs[0][1].equals("MILD")) {
+                        rb.setChecked(true);
+                        break;
+                    }  else if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_distress_options_rarely)) && obs[0][1].equals("RARELY")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_distress_options_not_at_all)) && obs[0][1].equals("NONE")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                treatmentFollowupMHDistress.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("CONDITION AFTER SESSION")) {
+                for (RadioButton rb : treatmentFollowupMHConditionAfterSession.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_condition_before_session_options_very_bad)) && obs[0][1].equals("VERY BAD")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_condition_before_session_options_bad)) && obs[0][1].equals("POOR")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_condition_before_session_options_neutral)) && obs[0][1].equals("AVERAGE")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_condition_before_session_options_good)) && obs[0][1].equals("GOOD")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_condition_before_session_options_very_good)) && obs[0][1].equals("VERY GOOD")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                treatmentFollowupMHConditionAfterSession.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("IMPROVED")) {
+                for (RadioButton rb : treatmentFollowupMHImprovedStatus.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                treatmentFollowupMHImprovedStatus.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("MEDICAL ADVICE GIVEN")) {
+                treatmentFollowupMHAdviceForClient.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("CONTINUATION STATUS")) {
+                for (RadioButton rb : treatmentFollowupMHContinuationStatus.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_continuation_status_options_continue)) && obs[0][1].equals("EXERCISE THERAPY")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_continuation_status_options_last)) && obs[0][1].equals("END OF THERAPY")) {
+                        rb.setChecked(true);
+                        break;
+                    }  else if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_continuation_status_options_referred)) && obs[0][1].equals("PATIENT REFERRED")) {
+                        rb.setChecked(true);
+                        break;
+                    }  else if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_continuation_status_options_other)) && obs[0][1].equals("OTHER CONTINUATION STATUS")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                treatmentFollowupMHContinuationStatus.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("PREFERRED HEALTH FACILITY")) {
+                preferredTherapyLocationSpinner.getSpinner().selectValue(obs[0][1]);
+                preferredTherapyLocationSpinner.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("RETURN VISIT DATE")) {
+                String secondDate = obs[0][1];
+                secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
+                treatmentFollowupMHNextAppointmentDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+            }
+        }
     }
 
     @Override
@@ -457,6 +623,23 @@ public class ComorbiditiesMentalHealthTreatmentFollowupForm extends AbstractForm
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         treatmentFollowupMHNextAppointmentDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
         displayPreferredLocationAndNextAppointmentDate();
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean openFlag = bundle.getBoolean("open");
+            if (openFlag) {
+
+                bundle.putBoolean("open", false);
+                bundle.putBoolean("save", true);
+
+                String id = bundle.getString("formId");
+                int formId = Integer.valueOf(id);
+
+                refill(formId);
+
+            } else bundle.putBoolean("save", false);
+
+        }
 
         //HERE FOR AUTOPOPULATING OBS
         final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {

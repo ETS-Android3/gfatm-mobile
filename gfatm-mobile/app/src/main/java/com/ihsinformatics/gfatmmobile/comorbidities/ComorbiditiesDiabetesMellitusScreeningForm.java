@@ -250,8 +250,8 @@ public class ComorbiditiesDiabetesMellitusScreeningForm extends AbstractFormActi
         final ArrayList<String[]> observations = new ArrayList<String[]>();
         observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
         observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
-        /*observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
-        observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});*/
+        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
+        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         observations.add(new String[]{"FOOD CONSUMPTION IN PAST 2 HOURS", App.get(screeningFood).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         observations.add(new String[]{"RANDOM BLOOD SUGAR", App.get(screeningRBS)});
         if(hba1cTestVoucher.getVisibility() == View.VISIBLE) {

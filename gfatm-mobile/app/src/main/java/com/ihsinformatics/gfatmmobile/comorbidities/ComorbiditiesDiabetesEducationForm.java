@@ -251,6 +251,8 @@ public class ComorbiditiesDiabetesEducationForm extends AbstractFormActivity {
         final ArrayList<String[]> observations = new ArrayList<String[]>();
         observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
         observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
+        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         observations.add(new String[]{"FOLLOW-UP MONTH", App.get(diabetesEducationFormFollowupMonth)});
 
         String diabetesEducationFormDiabetesEducationString = "";
@@ -650,10 +652,12 @@ public class ComorbiditiesDiabetesEducationForm extends AbstractFormActivity {
                 HashMap<String, String> result = new HashMap<String, String>();
                 String monthOfTreatment = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_DIABETES_TREATMENT_FOLLOWUP_FORM, "FOLLOW-UP MONTH");
 
+                if (monthOfTreatment != null && !monthOfTreatment .equals(""))
+                    monthOfTreatment = monthOfTreatment.replace(".0", "");
+
                 if (monthOfTreatment != null)
                     if (!monthOfTreatment.equals(""))
                         result.put("FOLLOW-UP MONTH", monthOfTreatment);
-
 
                 return result;
             }
