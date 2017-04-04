@@ -22,7 +22,6 @@ import android.text.Spanned;
  */
 public class RegexUtil {
     public static final String numericPattern = "^[0-9]+";
-    public static final String floatingPointPattern = "^[0-9]+.{0,1}[0-9]";
     public static final String alphaPattern = "^[A-Za-z. ]+";
     public static final String alphaNumPattern = "^[A-Za-z0-9]+";
     public static final String emailPattern = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
@@ -37,11 +36,12 @@ public class RegexUtil {
     public static final String urlPattern = "^(((ht|f)tp(s?))\\:\\/\\/)?(localhost|([0-9]{1,2}|1[0-9]{2}|2[0-4][0-9]|25[0-5]|.){3}([0-9]{1,2}|1[0-9]{2}|2[0-4][0-9]|25[0-5])|(www.|[a-zA-Z].)[a-zA-Z0-9\\-\\.]+\\.(com|edu|gov|mil|net|org|biz|info|name|museum|us|ca|uk|pk|co|))(\\:[0-9]+)*(\\/($|[a-zA-Z0-9\\.\\,\\;\\?\\\\'\\\\\\\\\\\\+&amp;%\\\\$#\\\\=~_\\\\-]+))*$";
     public static final String smsPattern = "[A-Z0-9]{2,2}[0-9]{9,9} [0-3][0-9](JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)20[1-3][0-9] [YN]";
     public static final String ernsNumberPattern = "[0-9]{3,4}/[0-9]{2,2}";
-    public static final String floatingPointPatternForThreeDecimalPlaces = "^[0-9]+.{0,3}[0-9]";
-    public static final String floatingPointPatternForTwoDecimalPlaces = "^[0-9]+.{0,2}[0-9]";
     public static final String testIDPattern = "^{0,1}[0-9]{7,7}[-.]{0,1}[0-9]";
     public static final String mobileNumPattern = "[0][3][0-9]{9}";
     public static final String addressPattern = "^[^÷çþ!$?@%+=_]+$";
+    public static final String floatingPointPattern = "^[0-9]+\\.[0-9]$";
+    public static final String floatingPointPatternForThreeDecimalPlaces = "^[0-9]+\\.[0-9]{3}$";
+    public static final String floatingPointPatternForTwoDecimalPlaces = "^[0-9]+\\.[0-9]{2}$";
 
     public static final int idLength = 7;
     public static final int mobileNumberLength = 11;
