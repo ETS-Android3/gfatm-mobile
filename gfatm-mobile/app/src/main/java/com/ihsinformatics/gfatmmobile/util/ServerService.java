@@ -1150,6 +1150,7 @@ public class ServerService {
                 Provider provider = new Provider();
                 provider.setUuid(App.getProviderUUid());
 
+                /*** Form not submitting without encounter role ***/
                 EncounterRole encounterRole = new EncounterRole();
                 encounterRole.setUuid("a0b03050-c99b-11e0-9572-0800200c9a66");
 
