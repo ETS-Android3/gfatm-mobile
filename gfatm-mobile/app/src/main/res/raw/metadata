@@ -1661,7 +1661,6 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DIABETES MELLIT
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CONTROLLED DIABETES MELLITUS',NULL,'N/A','eb5baed3-db44-427f-8339-257e443e4233');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DIABETES CONTROL STATUS','diabetes_status','Coded','25d2fa85-9b4b-4ecd-85f5-f1e5d4551eef');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('HISTORY OF INFECTIONS','infection_history','Coded','5f04e036-5e80-48e4-b10d-8329f8cffef3');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER INFECTION',NULL,'Text','c14db5d8-db0c-4ac3-a9a4-3de50cfbeeb1');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('GESTATIONAL DIABETES DURING PREGNENCY','diabetes_in_pregnancy','Coded','77a598e6-ee97-45b5-8cf2-e2349c24e3ec');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('GESTATIONAL DIABETES CONTINUED AFTER DELIVERY','diabetes_after_delivery','Coded','fc4e7883-0b93-469e-babe-2a3cae590997');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CULTURE MEDIUM TYPE','dst_medium','Coded','5ce41c45-6068-4dc5-a29c-898320797f8d');
