@@ -1,5 +1,6 @@
 package com.ihsinformatics.gfatmmobile;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -754,6 +755,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
         }
     }
 
+    @SuppressLint("ValidFragment")
     public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
         @Override

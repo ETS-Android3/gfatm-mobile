@@ -242,6 +242,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             startActivity(themeActivityIntent);
 
             return true;
+        } else if (id == R.id.nav_ssl_encryption) {
+
+            Intent sslActivityIntent = new Intent(this, SSLEncryptionActivity.class);
+            startActivity(sslActivityIntent);
+
         }
 
 

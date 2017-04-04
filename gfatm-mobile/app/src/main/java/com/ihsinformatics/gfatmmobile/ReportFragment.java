@@ -184,9 +184,10 @@ public class ReportFragment extends Fragment implements View.OnTouchListener {
                             text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
                         } else {
 
+                            moreLayout.removeAllViews();
                             Object[][] obs = serverService.getAllObsFromEncounterId(Integer.parseInt(String.valueOf(text.getTag())));
                             if (obs.length == 0) {
-                                moreLayout.removeAllViews();
+
                                 Object[][] encounterObject = serverService.getEncounterIdByEncounterType(text.getText().toString());
                                 text.setTag(String.valueOf(encounterObject[0][1]));
 

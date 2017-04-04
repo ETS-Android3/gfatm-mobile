@@ -123,15 +123,7 @@ public class ServerActivity extends AbstractSettingActivity {
             port.setError(getString(R.string.empty_field));
             port.requestFocus();
             cancel = true;
-        } else {
-
-            if (App.get(port).length() != 4) {
-                port.setError(getString(R.string.invalid_value));
-                port.requestFocus();
-                cancel = true;
-            }
-
-        }
+        } 
 
         if (App.get(ip).isEmpty()) {
             ip.setError(getString(R.string.empty_field));
