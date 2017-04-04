@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -14,15 +15,19 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
@@ -48,7 +53,7 @@ import java.util.HashMap;
  * Created by Haris on 1/26/2017.
  */
 
-public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener, View.OnTouchListener {
     public static final int THIRD_DATE_DIALOG_ID = 3;
     public static final int FORTH_DATE_DIALOG_ID = 4;
     protected Calendar thirdDateCalendar;
@@ -72,6 +77,7 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
     TitledButton dateTestResult;
     TitledSpinner smearResult;
     TitledEditText noAfb;
+    ImageView testIdView;
 
 
     /**
@@ -148,8 +154,8 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
         forthDateFragment = new SelectDateFragment();
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        testId = new TitledEditText(context, null, getResources().getString(R.string.fast_test_id), "", "", 50, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
-        formType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_select_form_type), getResources().getStringArray(R.array.fast_order_and_result_list), "", App.VERTICAL, App.VERTICAL);
+        testId = new TitledEditText(context, null, getResources().getString(R.string.fast_test_id), "", "", 11, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        formType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_select_form_type), getResources().getStringArray(R.array.fast_order_and_result_list), "", App.HORIZONTAL, App.HORIZONTAL);
         afbSmearOrder = new MyTextView(context, getResources().getString(R.string.fast_afb_smear_order));
         afbSmearOrder.setTypeface(null, Typeface.BOLD);
         dateOfSubmission = new TitledButton(context, null, getResources().getString(R.string.fast_date_of_submission), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
@@ -165,6 +171,28 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
         smearResult = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_smear_result), getResources().getStringArray(R.array.fast_smear_result_list), getResources().getString(R.string.fast_negative), App.VERTICAL);
         noAfb = new TitledEditText(context, null, getResources().getString(R.string.fast_number_of_afb_seen_in_one_field), "", "", 10, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
 
+        LinearLayout linearLayout = new LinearLayout(context);
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                0.9f
+        );
+        testId.setLayoutParams(param);
+        linearLayout.addView(testId);
+        testIdView = new ImageView(context);
+        testIdView.setImageResource(R.drawable.ic_checked);
+        LinearLayout.LayoutParams param1 = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                0.1f
+        );
+        testIdView.setLayoutParams(param1);
+        testIdView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        testIdView.setPadding(0, 5, 0, 0);
+
+        linearLayout.addView(testIdView);
+
+
         // Used for reset fields...
         views = new View[]{formDate.getButton(), testId.getEditText(), formType.getRadioGroup(), dateOfSubmission.getButton(),
                 testDate.getButton(), testContextStatus.getRadioGroup(), monthOfTreatment.getSpinner(), specimenType.getRadioGroup(),
@@ -172,7 +200,7 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, testId, formType, afbSmearOrder, dateOfSubmission, testDate, testContextStatus, monthOfTreatment, specimenType,
+                {{formDate, formType, linearLayout, afbSmearOrder, dateOfSubmission, testDate, testContextStatus, monthOfTreatment, specimenType,
                         specimenSource, specimenSourceOther, afbSmearResult, dateTestResult, smearResult, noAfb}};
 
         formDate.getButton().setOnClickListener(this);
@@ -186,7 +214,176 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
         specimenType.getRadioGroup().setOnCheckedChangeListener(this);
         smearResult.getSpinner().setOnItemSelectedListener(this);
 
+
+        testId.getEditText().addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                try {
+                    if (testId.getEditText().getText().length() > 0) {
+                        if (testId.getEditText().getText().length() < 11) {
+                            testId.getEditText().setError(getString(R.string.ctb_test_id_error));
+                            testIdView.setVisibility(View.INVISIBLE);
+                        } else {
+                            testIdView.setVisibility(View.VISIBLE);
+                            testIdView.setImageResource(R.drawable.ic_checked);
+                        }
+                    } else {
+                        testIdView.setVisibility(View.INVISIBLE);
+                    }
+                    goneVisibility();
+                    submitButton.setEnabled(false);
+
+
+                } catch (NumberFormatException nfe) {
+                    //Exception: User might be entering " " (empty) value
+                }
+            }
+        });
+        testIdView.setOnTouchListener(this);
+
         resetViews();
+    }
+
+    private void checkTestId() {
+        AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.verifying_test_id));
+                        loading.show();
+                    }
+                });
+
+                String result = "";
+
+                Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "FAST-AFB Smear Test Order");
+
+                if (testIds == null || testIds.length < 1) {
+                    if (App.get(formType).equals(getResources().getString(R.string.fast_order)))
+                        return "SUCCESS";
+                    else
+                        return "";
+                }
+
+
+                if (App.get(formType).equals(getResources().getString(R.string.fast_order))) {
+                    result = "SUCCESS";
+                    for (int i = 0; i < testIds.length; i++) {
+                        if (String.valueOf(testIds[i][0]).equals(App.get(testId))) {
+                            return "";
+                        }
+                    }
+                }
+
+                if (App.get(formType).equals(getResources().getString(R.string.fast_result))) {
+                    result = "";
+                    for (int i = 0; i < testIds.length; i++) {
+                        if (String.valueOf(testIds[i][0]).equals(App.get(testId))) {
+                            return "SUCCESS";
+                        }
+                    }
+                }
+
+                return result;
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            ;
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                if (result.equals("SUCCESS")) {
+
+                    testIdView.setImageResource(R.drawable.ic_checked_green);
+                    showTestOrderOrTestResult();
+                    submitButton.setEnabled(true);
+
+                } else {
+
+                    if (App.get(formType).equals(getResources().getString(R.string.ctb_order))) {
+                        testId.getEditText().setError("Test Id already used.");
+                    } else {
+                        testId.getEditText().setError("No order form found for the test id for patient");
+                    }
+
+                }
+
+                try {
+                    InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                } catch (Exception e) {
+                    // TODO: handle exception
+                }
+
+            }
+        };
+        submissionFormTask.execute("");
+
+    }
+
+    void showTestOrderOrTestResult() {
+        if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_order))) {
+            afbSmearOrder.setVisibility(View.VISIBLE);
+            dateOfSubmission.setVisibility(View.VISIBLE);
+            testDate.setVisibility(View.VISIBLE);
+            testContextStatus.setVisibility(View.VISIBLE);
+            if (testContextStatus.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_followup_test))) {
+                monthOfTreatment.setVisibility(View.VISIBLE);
+            }
+            specimenType.setVisibility(View.VISIBLE);
+            if (specimenType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_extra_pulmonary))) {
+                specimenSource.setVisibility(View.VISIBLE);
+
+                if (specimenSource.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))) {
+                    specimenSourceOther.setVisibility(View.VISIBLE);
+                }
+            }
+
+            afbSmearResult.setVisibility(View.GONE);
+            dateTestResult.setVisibility(View.GONE);
+            smearResult.setVisibility(View.GONE);
+            noAfb.setVisibility(View.GONE);
+
+        } else {
+            afbSmearOrder.setVisibility(View.GONE);
+            dateOfSubmission.setVisibility(View.GONE);
+            testDate.setVisibility(View.GONE);
+            testContextStatus.setVisibility(View.GONE);
+            monthOfTreatment.setVisibility(View.GONE);
+            specimenType.setVisibility(View.GONE);
+            specimenSource.setVisibility(View.GONE);
+            specimenSourceOther.setVisibility(View.GONE);
+
+            afbSmearResult.setVisibility(View.VISIBLE);
+            dateTestResult.setVisibility(View.VISIBLE);
+            smearResult.setVisibility(View.VISIBLE);
+
+            if (smearResult.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_negative))) {
+                noAfb.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     @Override
@@ -417,6 +614,21 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
         return false;
     }
 
+    void goneVisibility() {
+        afbSmearOrder.setVisibility(View.GONE);
+        dateOfSubmission.setVisibility(View.GONE);
+        testDate.setVisibility(View.GONE);
+        testContextStatus.setVisibility(View.GONE);
+        monthOfTreatment.setVisibility(View.GONE);
+        specimenType.setVisibility(View.GONE);
+        specimenSource.setVisibility(View.GONE);
+        specimenSourceOther.setVisibility(View.GONE);
+        afbSmearResult.setVisibility(View.GONE);
+        dateTestResult.setVisibility(View.GONE);
+        smearResult.setVisibility(View.GONE);
+        noAfb.setVisibility(View.GONE);
+    }
+
     @Override
     public boolean save() {
 
@@ -491,18 +703,29 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
         dateOfSubmission.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
         testDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
         dateTestResult.getButton().setText(DateFormat.format("dd-MMM-yyyy", forthDateCalendar).toString());
-        afbSmearOrder.setVisibility(View.GONE);
-        dateOfSubmission.setVisibility(View.GONE);
-        testDate.setVisibility(View.GONE);
-        testContextStatus.setVisibility(View.GONE);
-        monthOfTreatment.setVisibility(View.GONE);
-        specimenType.setVisibility(View.GONE);
-        specimenSource.setVisibility(View.GONE);
-        specimenSourceOther.setVisibility(View.GONE);
-        afbSmearResult.setVisibility(View.GONE);
-        dateTestResult.setVisibility(View.GONE);
-        smearResult.setVisibility(View.GONE);
-        noAfb.setVisibility(View.GONE);
+
+        testIdView.setVisibility(View.GONE);
+        testId.setVisibility(View.GONE);
+        testIdView.setImageResource(R.drawable.ic_checked);
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean openFlag = bundle.getBoolean("open");
+            if (openFlag) {
+
+                bundle.putBoolean("open", false);
+                bundle.putBoolean("save", true);
+
+                String id = bundle.getString("formId");
+                int formId = Integer.valueOf(id);
+
+                refill(formId);
+
+            } else bundle.putBoolean("save", false);
+
+        }
+        goneVisibility();
+        submitButton.setEnabled(false);
     }
 
     @Override
@@ -537,47 +760,15 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
         if (radioGroup == formType.getRadioGroup()) {
-            if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_order))) {
-                afbSmearOrder.setVisibility(View.VISIBLE);
-                dateOfSubmission.setVisibility(View.VISIBLE);
-                testDate.setVisibility(View.VISIBLE);
-                testContextStatus.setVisibility(View.VISIBLE);
-                if (testContextStatus.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_followup_test))) {
-                    monthOfTreatment.setVisibility(View.VISIBLE);
-                }
-                specimenType.setVisibility(View.VISIBLE);
-                if (specimenType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_extra_pulmonary))) {
-                    specimenSource.setVisibility(View.VISIBLE);
+            formDate.setVisibility(View.VISIBLE);
+            testId.setVisibility(View.VISIBLE);
+            testId.getEditText().setText("");
+            testId.getEditText().setError(null);
+            goneVisibility();
+            submitButton.setEnabled(false);
+        }
 
-                    if (specimenSource.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))) {
-                        specimenSourceOther.setVisibility(View.VISIBLE);
-                    }
-                }
-
-                afbSmearResult.setVisibility(View.GONE);
-                dateTestResult.setVisibility(View.GONE);
-                smearResult.setVisibility(View.GONE);
-                noAfb.setVisibility(View.GONE);
-
-            } else {
-                afbSmearOrder.setVisibility(View.GONE);
-                dateOfSubmission.setVisibility(View.GONE);
-                testDate.setVisibility(View.GONE);
-                testContextStatus.setVisibility(View.GONE);
-                monthOfTreatment.setVisibility(View.GONE);
-                specimenType.setVisibility(View.GONE);
-                specimenSource.setVisibility(View.GONE);
-                specimenSourceOther.setVisibility(View.GONE);
-
-                afbSmearResult.setVisibility(View.VISIBLE);
-                dateTestResult.setVisibility(View.VISIBLE);
-                smearResult.setVisibility(View.VISIBLE);
-
-                if (smearResult.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_negative))) {
-                    noAfb.setVisibility(View.VISIBLE);
-                }
-            }
-        } else if (radioGroup == testContextStatus.getRadioGroup()) {
+        else if (radioGroup == testContextStatus.getRadioGroup()) {
             if (testContextStatus.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_followup_test))) {
                 monthOfTreatment.setVisibility(View.VISIBLE);
             } else {
@@ -596,6 +787,34 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
                 specimenSourceOther.setVisibility(View.GONE);
             }
         }
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN: {
+                ImageView view = (ImageView) v;
+                //overlay is black with transparency of 0x77 (119)
+                view.getDrawable().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
+                view.invalidate();
+
+                Boolean error = false;
+
+                checkTestId();
+
+
+                break;
+            }
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL: {
+                ImageView view = (ImageView) v;
+                //clear the overlay
+                view.getDrawable().clearColorFilter();
+                view.invalidate();
+                break;
+            }
+        }
+        return true;
     }
 
     class MyAdapter extends PagerAdapter {

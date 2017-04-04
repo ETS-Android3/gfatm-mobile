@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -20,6 +21,7 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -185,7 +187,35 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
 
     @Override
     public void updateDisplay() {
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        if (snackbar != null)
+            snackbar.dismiss();
+
+        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
+
+            String formDa = formDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
+
+            Date date = new Date();
+            if (formDateCalendar.after(App.getCalendar(date))) {
+
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+            }else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+            }
+            else
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        }
     }
 
     @Override
@@ -319,33 +349,70 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
     @Override
     public boolean submit() {
 
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            String encounterId = bundle.getString("formId");
+            if (saveFlag) {
+                serverService.deleteOfflineForms(encounterId);
+            }
+            bundle.putBoolean("save", false);
+        }
+
         endTime = new Date();
-/*
+
+        final String mobileNumber = mobile1.getEditText().getText().toString() + mobile2.getEditText().getText().toString();
+
+
         final ArrayList<String[]> observations = new ArrayList<String[]>();
         observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
         observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
-        /*observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
-        observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});
-        if (referralTransfer.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"PATIENT BEING REFEREED OUT OR TRANSFERRED OUT", App.get(referralTransfer).equals(getResources().getString(R.string.fast_referral)) ? "PATIENT REFERRED" : "PATIENT TRANSFERRED OUT"});
+        observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
+        observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
 
 
-        if (reasonReferralTransfer.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"REASON FOR REFERRAL OR TRANSFER", App.get(reasonReferralTransfer).equals(getResources().getString(R.string.fast_patient_choose_another_facility)) ? "PATIENT CHOOSE ANOTHER FACILITY" :
-                    (App.get(reasonReferralTransfer).equals(getResources().getString(R.string.fast_drtb_suspect)) ? "MULTI-DRUG RESISTANT TUBERCULOSIS SUSPECTED" :
-                            (App.get(reasonReferralTransfer).equals(getResources().getString(R.string.fast_drtb)) ? "DRUG RESISTANT TUBERCULOSIS" :
-                                    (App.get(reasonReferralTransfer).equals(getResources().getString(R.string.fast_treatment_failure)) ? "TUBERCULOSIS TREATMENT FAILURE" :
-                                            (App.get(reasonReferralTransfer).equals(getResources().getString(R.string.fast_complicated_tb)) ? "COMPLICATED TUBERCULOSIS" :
-                                                    (App.get(reasonReferralTransfer).equals(getResources().getString(R.string.fast_mycobacterium_other_than_tb)) ? "MYCOBACTERIUM TUBERCULOSIS" : "OTHER TRANSFER OR REFERRAL REASON")))))});
+        if (treatmentOutcome.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"TUBERCULOUS TREATMENT OUTCOME", App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_cured)) ? "CURE, OUTCOME" :
+                    (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_treatment_completed)) ? "TREATMENT COMPLETE" :
+                            (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_treatment_failure)) ? "TUBERCULOSIS TREATMENT FAILURE" :
+                                    (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_died)) ? "DIED" :
+                                            (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_transfer_out)) ? "TRANSFERRED OUT" :
+                                                    (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_referral)) ? "PATIENT REFERRED" :
+                                                            (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_treatment_after_loss_to_follow_up)) ? "LOST TO FOLLOW-UP" : "OTHER TREATMENT OUTCOME"))))))});
 
-        if (reasonReferralTransferOther.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER TRANSFER OR REFERRAL REASON", App.get(reasonReferralTransferOther)});
 
-        if (referralSite.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"REFERRING FACILITY NAME", referralSite.getSpinner().getSelectedItem().toString()});
+        if (transferOutLocations.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"TRANSFER OUT LOCATION", App.get(transferOutLocations)});
 
-        if (referralSiteOther.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"LOCATION OF REFERRAL OR TRANSFER OTHER", App.get(referralSiteOther)});
+        if (remarks.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"OTHER REASON TO END FOLLOW UP", App.get(remarks)});
+
+        if (treatmentInitiatedReferralSite.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"TREATMENT INITIATED AT REFERRAL OR TRANSFER SITE", App.get(treatmentInitiatedReferralSite).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
+                    (App.get(treatmentInitiatedReferralSite).equals(getResources().getString(R.string.fast_no_title)) ? "NO" : "UNKNOWN")});
+
+
+        if (treatmentNotInitiatedReferralSite.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"TREATMENT NOT INITIATED AT REFERRAL OR TRANSFER SITE", App.get(treatmentNotInitiatedReferralSite).equals(getResources().getString(R.string.fast_patient_could_not_be_contacted)) ? "PATIENT COULD NOT BE CONTACTED" :
+                    (App.get(treatmentNotInitiatedReferralSite).equals(getResources().getString(R.string.fast_patient_left_the_city)) ? "PATIENT LEFT THE CITY" :
+                            (App.get(treatmentNotInitiatedReferralSite).equals(getResources().getString(R.string.fast_patient_refused_treatment)) ? "REFUSAL OF TREATMENT BY PATIENT" :
+                                    (App.get(treatmentNotInitiatedReferralSite).equals(getResources().getString(R.string.fast_patient_died)) ? "DIED" :
+                                            (App.get(treatmentNotInitiatedReferralSite).equals(getResources().getString(R.string.fast_dr_not_confirmed_by_baseline_repeat_test)) ? "DR NOT CONFIRMED BY BASELINE REPEAT TEST" : "OTHER REASON FOR TREATMENT NOT INITIATED"))))});
+
+
+        if (treatmentNotInitiatedReferralSiteOther.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"OTHER REASON FOR TREATMENT NOT INITIATED", App.get(treatmentNotInitiatedReferralSiteOther)});
+
+        if (drConfirmation.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"DRUG RESISTANCE CONFIRMATION", App.get(drConfirmation).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
+
+        if (firstName.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"REFERRAL CONTACT FIRST NAME", App.get(firstName)});
+
+        if (lastName.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"REFERRAL CONTACT LAST NAME", App.get(lastName)});
+
+        observations.add(new String[]{"REFERRAL CONTACT NUMBER", mobileNumber});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -362,8 +429,23 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
                 });
 
                 String result = serverService.saveEncounterAndObservation("Referral Form", FORM, formDateCalendar, observations.toArray(new String[][]{}));
-                if (result.contains("SUCCESS"))
-                    return "SUCCESS";
+                if (!result.contains("SUCCESS"))
+                    return result;
+                else {
+
+                    String encounterId = "";
+
+                    if (result.contains("_")) {
+                        String[] successArray = result.split("_");
+                        encounterId = successArray[1];
+                    }
+
+                    if (App.hasKeyListener(enrsId)) {
+                        result = serverService.saveIdentifier("ENRS", App.get(enrsId), encounterId);
+                        if (!result.equals("SUCCESS"))
+                            return result;
+                    }
+                }
 
                 return result;
 
@@ -444,7 +526,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
 
             }
         };
-        submissionFormTask.execute("");*/
+        submissionFormTask.execute("");
 
         return false;
     }
@@ -533,6 +615,23 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
         treatmentNotInitiatedReferralSite.setVisibility(View.GONE);
         treatmentNotInitiatedReferralSiteOther.setVisibility(View.GONE);
         enrsId.setVisibility(View.GONE);
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean openFlag = bundle.getBoolean("open");
+            if (openFlag) {
+
+                bundle.putBoolean("open", false);
+                bundle.putBoolean("save", true);
+
+                String id = bundle.getString("formId");
+                int formId = Integer.valueOf(id);
+
+                refill(formId);
+
+            } else bundle.putBoolean("save", false);
+
+        }
     }
 
     @Override
