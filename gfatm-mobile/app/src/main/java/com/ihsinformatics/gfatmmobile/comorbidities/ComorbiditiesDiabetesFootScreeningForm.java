@@ -308,6 +308,8 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
         final ArrayList<String[]> observations = new ArrayList<String[]>();
         observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
         observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
+        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         observations.add(new String[]{"FOLLOW-UP MONTH", App.get(diabetesFootScreeningMonthOfVisit)});
         observations.add(new String[]{"RIGHT FOOT EXAMINATION", App.get(diabetesFootScreeningRightFootExamined).equals(getResources().getString(R.string.comorbidities_foot_screening_foot_options_yes)) ? "YES" :
                 (App.get(diabetesFootScreeningRightFootExamined).equals(getResources().getString(R.string.comorbidities_foot_screening_foot_options_amputation)) ? "AMPUTATION" : "REFUSED")});

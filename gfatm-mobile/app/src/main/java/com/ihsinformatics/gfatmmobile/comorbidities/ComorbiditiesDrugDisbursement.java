@@ -22,6 +22,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
@@ -32,6 +33,7 @@ import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
@@ -299,7 +301,7 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
             }
         });
 
-
+        resetViews();
     }
 
     @Override
@@ -421,11 +423,23 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
     @Override
     public boolean submit() {
 
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            String encounterId = bundle.getString("formId");
+            if (saveFlag) {
+                serverService.deleteOfflineForms(encounterId);
+            }
+            bundle.putBoolean("save", false);
+        }
+
         endTime = new Date();
 
         final ArrayList<String[]> observations = new ArrayList<String[]>();
         observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
         observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
+        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
 
         //Alternate of Aherence
         /*final String treatmentFollowupMHDefensivenessString = App.get(aherence).equals(getResources().getString(R.string.comorbidities_drug_disbursement_adherence_options_no_dose_missed)) ? "RESERVED BEHAVIOUR" :
@@ -558,8 +572,45 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
     }
 
     @Override
-    public void refill(int encounterId) {
+    public void refill(int formId) {
+        OfflineForm fo = serverService.getOfflineFormById(formId);
+        String date = fo.getFormDate();
+        ArrayList<String[][]> obsValue = fo.getObsValue();
+        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
+        for (int i = 0; i < obsValue.size(); i++) {
+
+            String[][] obs = obsValue.get(i);
+
+            if (obs[0][0].equals("NUMBER OF MISSED MEDICATION DOSES IN LAST MONTH")) {
+                adherence.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("DRUG DISPERSAL NUMBER")) {
+                drugDistributionNumber.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("DRUGS RECEIVED BY PATIENT")) {
+                for (RadioButton rb : drugsPickedUp.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("NEXT DATE OF DRUG DISPERSAL")) {
+                String secondDate = obs[0][1];
+                secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
+                drugDistributionDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+            } else if (obs[0][0].equals("DAYS WORTH OF DRUGS DISPERSED")) {
+                drugsDispersedDays.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("METFORMIN DOSE")) {
+                metformin.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("INSULIN N DOSAGE")) {
+                insulinN.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("INSULIN R DOSAGE")) {
+                insulinR.getEditText().setText(obs[0][1]);
+            }
+        }
     }
 
     @Override
@@ -605,6 +656,23 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
 
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         drugDistributionDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean openFlag = bundle.getBoolean("open");
+            if (openFlag) {
+
+                bundle.putBoolean("open", false);
+                bundle.putBoolean("save", true);
+
+                String id = bundle.getString("formId");
+                int formId = Integer.valueOf(id);
+
+                refill(formId);
+
+            } else bundle.putBoolean("save", false);
+
+        }
     }
 
     @Override

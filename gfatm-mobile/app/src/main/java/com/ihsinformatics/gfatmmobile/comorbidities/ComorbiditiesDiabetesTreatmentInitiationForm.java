@@ -57,7 +57,8 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
     TitledRadioGroup diabetesFamilyHistory;
     TitledCheckBoxes diabetesFamilyHistorySpecify;
     TitledRadioGroup previousDiabetesTreatmentHistory;
-    TitledRadioGroup selfReportedDiabetesTreatmentHistory;
+    //TitledRadioGroup selfReportedDiabetesTreatmentHistory;
+    TitledCheckBoxes selfReportedDiabetesTreatmentHistory;
     TitledRadioGroup typeDiabetes;
     TitledRadioGroup statusDiabetes;
     TitledRadioGroup hxHypoglycemia;
@@ -158,7 +159,8 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
         diabetesFamilyHistorySpecify = new TitledCheckBoxes(context, null, getResources().getString(R.string.comorbidities_diabetes_family_history_specify), getResources().getStringArray(R.array.comorbidities_diabetes_family_history_specify_options1), new Boolean[]{true, false, false, false, false, false, false, false, false, false, false, false, false, false}, App.VERTICAL, App.VERTICAL);
         previousDiabetesTreatmentHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_previous_diabetes_treatment_history), getResources().getStringArray(R.array.comorbidities_yes_no), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         showDiabetesFamilyHistorySpecify();
-        selfReportedDiabetesTreatmentHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_self_reported_diabetes_treatment_history), getResources().getStringArray(R.array.comorbidities_self_reported_diabetes_treatment_history_options), getResources().getString(R.string.comorbidities_self_reported_diabetes_treatment_history_both), App.HORIZONTAL, App.VERTICAL);
+        //selfReportedDiabetesTreatmentHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_self_reported_diabetes_treatment_history), getResources().getStringArray(R.array.comorbidities_self_reported_diabetes_treatment_history_options), getResources().getString(R.string.comorbidities_self_reported_diabetes_treatment_history_both), App.HORIZONTAL, App.VERTICAL);
+        selfReportedDiabetesTreatmentHistory = new TitledCheckBoxes(context, null, getResources().getString(R.string.comorbidities_self_reported_diabetes_treatment_history), getResources().getStringArray(R.array.comorbidities_self_reported_diabetes_treatment_history_options), new Boolean[]{true, true}, App.VERTICAL, App.VERTICAL);
         showSelfReportedDiabetesTreatmentHistory();
         typeDiabetes = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_type_diabetes), getResources().getStringArray(R.array.comorbidities_type_diabetes_types), getResources().getString(R.string.comorbidities_type_diabetes_type2), App.HORIZONTAL, App.VERTICAL);
         statusDiabetes = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_status_diabetes), getResources().getStringArray(R.array.comorbidities_status_diabetes_options), getResources().getString(R.string.comorbidities_status_diabetes_uncontrolled), App.HORIZONTAL, App.VERTICAL);
@@ -184,7 +186,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
         diabetesTreatmentInitiationInsulinMix = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_insulin_mix), "", getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_insulin_mix_range), 100, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         // Used for reset fields...
         views = new View[]{formDate.getButton(), diabetesFamilyHistory.getRadioGroup(), diabetesFamilyHistorySpecify,
-                previousDiabetesTreatmentHistory.getRadioGroup(), selfReportedDiabetesTreatmentHistory.getRadioGroup(), typeDiabetes.getRadioGroup(), statusDiabetes.getRadioGroup(),
+                previousDiabetesTreatmentHistory.getRadioGroup(), selfReportedDiabetesTreatmentHistory, typeDiabetes.getRadioGroup(), statusDiabetes.getRadioGroup(),
                 hxHypoglycemia.getRadioGroup(), hxDiabeticRetinopathy.getRadioGroup(), hxDiabeticNeuropathy.getRadioGroup(), hxDiabeticNephropathy.getRadioGroup(),
                 hxDiabeticInfections, hxDiabeticPvd.getRadioGroup(),
                 hxDiabeticCad.getRadioGroup(), hxDiabeticHypertension.getRadioGroup(), hxDiabeticGestationalDiabetes.getRadioGroup(), hxDiabeticBirth.getRadioGroup(),
@@ -294,6 +296,9 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
             cb.setOnCheckedChangeListener(this);
 
         for (CheckBox cb : diabetesTreatmentInitiation.getCheckedBoxes())
+            cb.setOnCheckedChangeListener(this);
+
+        for (CheckBox cb : selfReportedDiabetesTreatmentHistory.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
 
         resetViews();
@@ -416,6 +421,26 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
         }
 
         flag = false;
+        if (selfReportedDiabetesTreatmentHistory.getVisibility() == View.VISIBLE) {
+            for (CheckBox cb : selfReportedDiabetesTreatmentHistory.getCheckedBoxes()) {
+                if (cb.isChecked()) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) {
+                if (App.isLanguageRTL())
+                    gotoPage(5);
+                else
+                    gotoPage(1);
+                selfReportedDiabetesTreatmentHistory.getQuestionView().setError(getString(R.string.empty_field));
+                selfReportedDiabetesTreatmentHistory.getQuestionView().requestFocus();
+                view = selfReportedDiabetesTreatmentHistory;
+                error = true;
+            }
+        }
+
+        flag = false;
         if (diabetesFamilyHistorySpecify.getVisibility() == View.VISIBLE) {
             for (CheckBox cb : diabetesFamilyHistorySpecify.getCheckedBoxes()) {
                 if (cb.isChecked()) {
@@ -495,6 +520,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
         final ArrayList<String[]> observations = new ArrayList<String[]>();
         observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
         observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+
         observations.add(new String[]{"FAMILY HISTORY OF DIABETES MELLITUS", App.get(diabetesFamilyHistory).equals(getResources().getString(R.string.comorbidities_diabetes_family_history_yes)) ? "YES" :
                 (App.get(diabetesFamilyHistory).equals(getResources().getString(R.string.comorbidities_diabetes_family_history_no)) ? "NO" :
                         App.get(diabetesFamilyHistory).equals(getResources().getString(R.string.comorbidities_diabetes_family_history_refused)) ? "REFUSED" : "UNKNOWN")});
@@ -536,8 +562,19 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
 
         observations.add(new String[]{"DIABETES MELLITUS MEDICATION HISTORY", App.get(previousDiabetesTreatmentHistory).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
 
-        if(selfReportedDiabetesTreatmentHistory.getVisibility() == View.VISIBLE) {
+        /*if(selfReportedDiabetesTreatmentHistory.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"SELF REPORTED DIABETES MEDICATION", App.get(selfReportedDiabetesTreatmentHistory).equals(getResources().getString(R.string.comorbidities_self_reported_diabetes_treatment_history_oha)) ? "ORAL ANTIHYPERCLYCEMIC MEDICATION" : "INSULIN"});
+        }*/
+
+        if(selfReportedDiabetesTreatmentHistory.getVisibility() == View.VISIBLE) {
+            String diabetesFamilyHistoryString = "";
+            for (CheckBox cb : selfReportedDiabetesTreatmentHistory.getCheckedBoxes()) {
+                if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_self_reported_diabetes_treatment_history_oha)))
+                    diabetesFamilyHistoryString = diabetesFamilyHistoryString + "ORAL ANTIHYPERCLYCEMIC MEDICATION" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_self_reported_diabetes_treatment_history_insulin)))
+                    diabetesFamilyHistoryString = diabetesFamilyHistoryString + "INSULIN" + " ; ";
+            }
+            observations.add(new String[]{"SELF REPORTED DIABETES MEDICATION", diabetesFamilyHistoryString});
         }
 
         if(typeDiabetes.getVisibility() == View.VISIBLE) {
@@ -815,7 +852,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
                         break;
                     }
                 }
-            } else  if (obs[0][0].equals("SELF REPORTED DIABETES MEDICATION")) {
+            } /*else  if (obs[0][0].equals("SELF REPORTED DIABETES MEDICATION")) {
                 for (RadioButton rb : selfReportedDiabetesTreatmentHistory.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.comorbidities_self_reported_diabetes_treatment_history_oha)) && obs[0][1].equals("ORAL ANTIHYPERCLYCEMIC MEDICATION")) {
                         rb.setChecked(true);
@@ -825,8 +862,18 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
                         break;
                     }
                 }
+            }*/ else if (obs[0][0].equals("SELF REPORTED DIABETES MEDICATION")) {
+                for (CheckBox cb : selfReportedDiabetesTreatmentHistory.getCheckedBoxes()) {
+                    if (cb.getText().equals(getResources().getString(R.string.comorbidities_self_reported_diabetes_treatment_history_oha)) && obs[0][1].equals("ORAL ANTIHYPERCLYCEMIC MEDICATION")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_self_reported_diabetes_treatment_history_insulin)) && obs[0][1].equals("INSULIN")) {
+                        cb.setChecked(true);
+                        break;
+                    }
+                }
             } else  if (obs[0][0].equals("TYPE OF DIABETES MELLITUS")) {
-                for (RadioButton rb : selfReportedDiabetesTreatmentHistory.getRadioGroup().getButtons()) {
+                for (RadioButton rb : typeDiabetes.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.comorbidities_type_diabetes_type1)) && obs[0][1].equals("DIABETES MELLITUS TYPE 1")) {
                         rb.setChecked(true);
                         break;
@@ -835,7 +882,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
                         break;
                     }
                 }
-                selfReportedDiabetesTreatmentHistory.setVisibility(View.VISIBLE);
+                typeDiabetes.setVisibility(View.VISIBLE);
             } else  if (obs[0][0].equals("DIABETES CONTROL STATUS")) {
                 for (RadioButton rb : statusDiabetes.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.comorbidities_status_diabetes_controlled)) && obs[0][1].equals("CONTROLLED DIABETES MELLITUS")) {
@@ -1082,6 +1129,13 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
         for (CheckBox cb : diabetesTreatmentInitiation.getCheckedBoxes()) {
             if (cb.isChecked()) {
                 diabetesTreatmentInitiation.getQuestionView().setError(null);
+                break;
+            }
+        }
+
+        for (CheckBox cb : selfReportedDiabetesTreatmentHistory.getCheckedBoxes()) {
+            if (cb.isChecked()) {
+                selfReportedDiabetesTreatmentHistory.getQuestionView().setError(null);
                 break;
             }
         }

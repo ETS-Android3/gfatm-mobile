@@ -6,6 +6,7 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -14,18 +15,23 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
 import android.text.InputType;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
+import android.text.TextWatcher;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -35,10 +41,12 @@ import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -47,7 +55,7 @@ import java.util.HashMap;
  * Created by Fawad Jawaid on 23-Jan-17.
  */
 
-public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener, View.OnTouchListener {
 
     public static final int THIRD_DATE_DIALOG_ID = 3;
     // Extra Views for date ...
@@ -63,6 +71,7 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
     MyTextView testOrderLipid;
     TitledSpinner lipidMonthOfVisit;
     TitledButton lipidTestOrderDate;
+    ImageView testIdView;
     //Views for Test Result
     MyTextView testResultLipid;
     TitledButton lipidTestResultDate;
@@ -155,7 +164,27 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
         testOrderLipid.setTypeface(null, Typeface.BOLD);
         lipidMonthOfVisit = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_urinedr_month_of_treatment), getResources().getStringArray(R.array.comorbidities_followup_month), "1", App.HORIZONTAL);
         lipidTestOrderDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1cdate_test_order), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
+        LinearLayout linearLayout = new LinearLayout(context);
         lipidTestID = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hhba1c_testid), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                0.9f
+        );
+        lipidTestID.setLayoutParams(param);
+        linearLayout.addView(lipidTestID);
+        testIdView = new ImageView(context);
+        testIdView.setImageResource(R.drawable.ic_checked);
+        LinearLayout.LayoutParams param1 = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                0.1f
+        );
+        testIdView.setLayoutParams(param1);
+        testIdView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        testIdView.setPadding(0, 5, 0, 0);
+
+        linearLayout.addView(testIdView);
 
         //second page views...
         testResultLipid = new MyTextView(context, getResources().getString(R.string.comorbidities_lipid_test_result));
@@ -168,7 +197,7 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
         lipidVLDL = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_lipid_test_vldl), "", getResources().getString(R.string.comorbidities_lipid_test_vldl_range), 7, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         lipidNonHDLCholestrol = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_lipid_test_non_hdl), "", getResources().getString(R.string.comorbidities_lipid_test_non_hdl_range), 7, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         nextLipidTestDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_urinedr_nexttestdate), DateFormat.format("dd-MMM-yyyy", fourthDateCalendar).toString(), App.HORIZONTAL);
-        nextLipidTestDate.setVisibility(View.GONE);
+        //nextLipidTestDate.setVisibility(View.GONE);
         goneVisibility();
 
         // Used for reset fields...
@@ -177,7 +206,7 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, lipidTestID, formType, testOrderLipid, lipidMonthOfVisit, lipidTestOrderDate, testResultLipid, lipidTestResultDate,
+                {{formDate, formType, linearLayout, testOrderLipid, lipidMonthOfVisit, lipidTestOrderDate, testResultLipid, lipidTestResultDate,
                         lipidTotalCholestrol, lipidTriglycerides, lipidHDL, lipidLDL, lipidVLDL, lipidNonHDLCholestrol, nextLipidTestDate}};
 
         formDate.getButton().setOnClickListener(this);
@@ -310,7 +339,7 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
             }
         });
 
-        lipidNonHDLCholestrol.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        /*lipidNonHDLCholestrol.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
@@ -474,7 +503,7 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
                     //Exception: User might be entering " " (empty) value
                 }
             }
-        });
+        });*/
 
         lipidNonHDLCholestrol.getEditText().addTextChangedListener(new TextWatcher() {
 
@@ -493,8 +522,8 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
                 try {
                     if (lipidNonHDLCholestrol.getEditText().getText().length() > 0) {
                         double num = Double.parseDouble(lipidNonHDLCholestrol.getEditText().getText().toString());
-                        if (num < 0 || num > 50) {
-                            lipidNonHDLCholestrol.getEditText().setError(getString(R.string.comorbidities_vitals_bmi_limit));
+                        if (num < 1 || num > 300) {
+                            lipidNonHDLCholestrol.getEditText().setError(getString(R.string.comorbidities_lipid_test_non_hdl_limit));
                         } else {
                             //Correct value
                         }
@@ -521,15 +550,25 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
                                       int before, int count) {
                 try {
                     if (lipidTestID.getEditText().getText().length() > 0) {
-                        if (lipidTestID.getEditText().getText().length() < 11) {
+                     /*   if (lipidTestID.getEditText().getText().length() < 11) {
                             lipidTestID.getEditText().setError(getString(R.string.comorbidities_blood_sugar_testid_format_error));
                         }
-                    }
+                    }*/
+                    testIdView.setVisibility(View.VISIBLE);
+                    testIdView.setImageResource(R.drawable.ic_checked);
+                } else {
+                    testIdView.setVisibility(View.INVISIBLE);
+                }
+                goneVisibility();
+                submitButton.setEnabled(false);
                 } catch (NumberFormatException nfe) {
                     //Exception: User might be entering " " (empty) value
                 }
             }
-        });*/
+        });
+        testIdView.setOnTouchListener(this);
+
+        resetViews();
     }
 
     @Override
@@ -538,7 +577,10 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         lipidTestOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
         lipidTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
-        fourthDateCalendar = thirdDateCalendar;
+        //fourthDateCalendar = thirdDateCalendar;
+        fourthDateCalendar.set(Calendar.YEAR, secondDateCalendar.get(Calendar.YEAR));
+        fourthDateCalendar.set(Calendar.MONTH, secondDateCalendar.get(Calendar.MONTH));
+        fourthDateCalendar.set(Calendar.DAY_OF_MONTH, secondDateCalendar.get(Calendar.DAY_OF_MONTH));
         fourthDateCalendar.add(Calendar.MONTH, 2);
         fourthDateCalendar.add(Calendar.DAY_OF_MONTH, 20);
         nextLipidTestDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", fourthDateCalendar).toString());
@@ -656,12 +698,12 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
             lipidTestID.getEditText().setError(getString(R.string.empty_field));
             lipidTestID.getEditText().requestFocus();
             error = true;
-        } else if (!App.get(lipidTestID).isEmpty() && App.get(lipidTestID).length() < 9) {
+        } /*else if (!App.get(lipidTestID).isEmpty() && App.get(lipidTestID).length() < 9) {
             gotoFirstPage();
             lipidTestID.getEditText().setError(getString(R.string.comorbidities_hhba1c_testid_format_error1));
             lipidTestID.getEditText().requestFocus();
             error = true;
-        } /*else if (!RegexUtil.isCorrectTestID(App.get(lipidTestID))) {
+        } else if (!RegexUtil.isCorrectTestID(App.get(lipidTestID))) {
             gotoLastPage();
             lipidTestID.getEditText().setError(getString(R.string.comorbidities_hhba1c_testid_format_dasherror));
             lipidTestID.getEditText().requestFocus();
@@ -701,16 +743,38 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
     @Override
     public boolean submit() {
 
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            String encounterId = bundle.getString("formId");
+            if (saveFlag) {
+                serverService.deleteOfflineForms(encounterId);
+            }
+            bundle.putBoolean("save", false);
+        }
+
         endTime = new Date();
 
         final ArrayList<String[]> observations = new ArrayList<String[]>();
         observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
         observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
-        /*observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
-        observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});*/
-        observations.add(new String[]{"FOLLOW-UP MONTH", App.get(lipidMonthOfVisit)});
-        observations.add(new String[]{"DATE TEST ORDERED", App.getSqlDateTime(secondDateCalendar)});
+        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
+        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         observations.add(new String[]{"TEST ID", App.get(lipidTestID)});
+
+        if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
+            observations.add(new String[]{"FOLLOW-UP MONTH", App.get(lipidMonthOfVisit)});
+            observations.add(new String[]{"DATE TEST ORDERED", App.getSqlDateTime(secondDateCalendar)});
+        } else if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))) {
+            observations.add(new String[]{"TEST RESULT DATE", App.getSqlDateTime(thirdDateCalendar)});
+            observations.add(new String[]{"TOTAL CHOLESTEROL", App.get(lipidTotalCholestrol)});
+            observations.add(new String[]{"TRIGLYCERIDES", App.get(lipidTriglycerides)});
+            observations.add(new String[]{"HIGH-DENSITY LIPOPROTEIN CHOLESTEROL", App.get(lipidHDL)});
+            observations.add(new String[]{"LOW-DENSITY LIPOPROTEIN CHOLESTEROL", App.get(lipidLDL)});
+            observations.add(new String[]{"VERY LOW DENSITY LIPOPROTEIN", App.get(lipidVLDL)});
+            observations.add(new String[]{"NON HIGH-DENSITY LIPOPROTEIN CHOLESTEROL", App.get(lipidNonHDLCholestrol)});
+            observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDateTime(fourthDateCalendar)});
+        }
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -727,9 +791,15 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
                 });
 
                 String result = "";
-                result = serverService.saveEncounterAndObservation(FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}));
-                if (result.contains("SUCCESS"))
-                    return "SUCCESS";
+                if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
+                    result = serverService.saveEncounterAndObservation("Lipid Test Order", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                    if (result.contains("SUCCESS"))
+                        return "SUCCESS";
+                } else if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))) {
+                    result = serverService.saveEncounterAndObservation("Lipid Test Result", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                    if (result.contains("SUCCESS"))
+                        return "SUCCESS";
+                }
 
                 return result;
             }
@@ -834,6 +904,66 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
     @Override
     public void refill(int encounterId) {
 
+        OfflineForm fo = serverService.getOfflineFormById(encounterId);
+        String date = fo.getFormDate();
+        ArrayList<String[][]> obsValue = fo.getObsValue();
+        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        for (int i = 0; i < obsValue.size(); i++) {
+
+            String[][] obs = obsValue.get(i);
+
+            if (fo.getFormName().contains("Order")) {
+                formType.getRadioGroup().getButtons().get(0).setChecked(true);
+                formType.getRadioGroup().getButtons().get(1).setEnabled(false);
+                if (obs[0][0].equals("TEST ID")) {
+                    lipidTestID.getEditText().setText(obs[0][1]);
+                    lipidTestID.getEditText().setEnabled(false);
+                    testIdView.setEnabled(false);
+                    testIdView.setImageResource(R.drawable.ic_checked_green);
+                    //checkTestId();
+                } else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
+                    lipidMonthOfVisit.getSpinner().selectValue(obs[0][1]);
+                    lipidMonthOfVisit.setVisibility(View.VISIBLE);
+                } else if (obs[0][0].equals("DATE TEST ORDERED")) {
+                    String secondDate = obs[0][1];
+                    secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
+                    lipidTestOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+                    lipidTestOrderDate.setVisibility(View.VISIBLE);
+                }
+                submitButton.setEnabled(true);
+            } else {
+                formType.getRadioGroup().getButtons().get(1).setChecked(true);
+                formType.getRadioGroup().getButtons().get(0).setEnabled(false);
+                if (obs[0][0].equals("TEST ID")) {
+                    lipidTestID.getEditText().setText(obs[0][1]);
+                    checkTestId();
+                    lipidTestID.getEditText().setEnabled(false);
+                    testIdView.setEnabled(false);
+                } else if (obs[0][0].equals("TEST RESULT DATE")) {
+                    String secondDate = obs[0][1];
+                    thirdDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
+                    lipidTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+                } else if (obs[0][0].equals("TOTAL CHOLESTEROL")) {
+                    lipidTotalCholestrol.getEditText().setText(obs[0][1]);
+                } else if (obs[0][0].equals("TRIGLYCERIDES")) {
+                    lipidTriglycerides.getEditText().setText(obs[0][1]);
+                } else if (obs[0][0].equals("HIGH-DENSITY LIPOPROTEIN CHOLESTEROL")) {
+                    lipidHDL.getEditText().setText(obs[0][1]);
+                } else if (obs[0][0].equals("LOW-DENSITY LIPOPROTEIN CHOLESTEROL")) {
+                    lipidLDL.getEditText().setText(obs[0][1]);
+                } else if (obs[0][0].equals("VERY LOW DENSITY LIPOPROTEIN")) {
+                    lipidVLDL.getEditText().setText(obs[0][1]);
+                } else if (obs[0][0].equals("NON HIGH-DENSITY LIPOPROTEIN CHOLESTEROL")) {
+                    lipidNonHDLCholestrol.getEditText().setText(obs[0][1]);
+                } else if (obs[0][0].equals("RETURN VISIT DATE")) {
+                    String secondDate = obs[0][1];
+                    fourthDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
+                    nextLipidTestDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", fourthDateCalendar).toString());
+                }
+            }
+        }
     }
 
     @Override
@@ -884,13 +1014,46 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
     public void resetViews() {
         super.resetViews();
 
+        lipidTestID.getEditText().setEnabled(true);
+        testIdView.setEnabled(true);
+        formType.getRadioGroup().getButtons().get(0).setEnabled(true);
+        formType.getRadioGroup().getButtons().get(1).setEnabled(true);
+
         thirdDateCalendar = Calendar.getInstance();
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         lipidTestOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
         lipidTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+        fourthDateCalendar.set(Calendar.YEAR, secondDateCalendar.get(Calendar.YEAR));
+        fourthDateCalendar.set(Calendar.MONTH, secondDateCalendar.get(Calendar.MONTH));
+        fourthDateCalendar.set(Calendar.DAY_OF_MONTH, secondDateCalendar.get(Calendar.DAY_OF_MONTH));
+        fourthDateCalendar.add(Calendar.MONTH, 2);
+        fourthDateCalendar.add(Calendar.DAY_OF_MONTH, 20);
         nextLipidTestDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", fourthDateCalendar).toString());
 
+        submitButton.setEnabled(false);
+
+        testIdView.setVisibility(View.GONE);
+        lipidTestID.setVisibility(View.GONE);
+        testIdView.setImageResource(R.drawable.ic_checked);
+
         goneVisibility();
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean openFlag = bundle.getBoolean("open");
+            if (openFlag) {
+
+                bundle.putBoolean("open", false);
+                bundle.putBoolean("save", true);
+
+                String id = bundle.getString("formId");
+                int formId = Integer.valueOf(id);
+
+                refill(formId);
+
+            } else bundle.putBoolean("save", false);
+
+        }
     }
 
     @Override
@@ -901,7 +1064,13 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
         if (radioGroup == formType.getRadioGroup()) {
-            showTestOrderOrTestResult();
+            //showTestOrderOrTestResult();
+            formDate.setVisibility(View.VISIBLE);
+            lipidTestID.setVisibility(View.VISIBLE);
+            lipidTestID.getEditText().setText("");
+            lipidTestID.getEditText().setError(null);
+            goneVisibility();
+            submitButton.setEnabled(false);
         }
     }
 
@@ -955,6 +1124,123 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
             lipidVLDL.setVisibility(View.VISIBLE);
             lipidNonHDLCholestrol.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN: {
+                ImageView view = (ImageView) v;
+                //overlay is black with transparency of 0x77 (119)
+                view.getDrawable().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
+                view.invalidate();
+
+                Boolean error = false;
+
+                checkTestId();
+
+
+                break;
+            }
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL: {
+                ImageView view = (ImageView) v;
+                //clear the overlay
+                view.getDrawable().clearColorFilter();
+                view.invalidate();
+                break;
+            }
+        }
+        return true;
+    }
+
+    private void checkTestId() {
+        AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.verifying_test_id));
+                        loading.show();
+                    }
+                });
+
+                String result = "";
+
+                Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "Comorbidities-Lipid Test Order");
+
+                Log.d("TEST_IDS_L", Arrays.deepToString(testIds));
+
+                if (testIds == null || testIds.length < 1) {
+                    if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder)))
+                        return "SUCCESS";
+                    else
+                        return "";
+                }
+
+                if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
+                    result = "SUCCESS";
+                    for (int i = 0; i < testIds.length; i++) {
+                        if (String.valueOf(testIds[i][0]).equals(App.get(lipidTestID))) {
+                            return "";
+                        }
+                    }
+                }
+
+                if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))) {
+                    result = "";
+                    for (int i = 0; i < testIds.length; i++) {
+                        if (String.valueOf(testIds[i][0]).equals(App.get(lipidTestID))) {
+                            return "SUCCESS";
+                        }
+                    }
+                }
+
+                return result;
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            ;
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                if (result.equals("SUCCESS")) {
+
+                    testIdView.setImageResource(R.drawable.ic_checked_green);
+                    showTestOrderOrTestResult();
+                    submitButton.setEnabled(true);
+
+                } else {
+
+                    if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
+                        lipidTestID.getEditText().setError("Test Id already used.");
+                    } else {
+                        lipidTestID.getEditText().setError("No order form found for the test id for patient");
+                    }
+
+                }
+
+                try {
+                    InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                } catch (Exception e) {
+                    // TODO: handle exception
+                }
+
+            }
+        };
+        submissionFormTask.execute("");
+
     }
 
     class MyAdapter extends PagerAdapter {

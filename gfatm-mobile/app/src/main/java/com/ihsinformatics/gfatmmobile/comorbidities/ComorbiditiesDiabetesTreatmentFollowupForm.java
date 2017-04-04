@@ -710,6 +710,8 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
         final ArrayList<String[]> observations = new ArrayList<String[]>();
         observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
         observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
+        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         observations.add(new String[]{"FOLLOW-UP MONTH", App.get(diabetesFollowupMonthOfVisit)});
         observations.add(new String[]{"BODY MASS INDEX", App.get(diabetesFollowupBodyMassIndex)});
         observations.add(new String[]{"WAIST-HIP RATIO", App.get(diabetesFollowupWaistHipRatio)});
@@ -1113,6 +1115,9 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
                 String diastolicBP = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "DIASTOLIC BLOOD PRESSURE");
                 //String hba1cResult = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "DIASTOLIC BLOOD PRESSURE");
                 //String bloodSugarResult = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "DIASTOLIC BLOOD PRESSURE");
+
+                if (monthOfTreatment != null && !monthOfTreatment .equals(""))
+                    monthOfTreatment = monthOfTreatment.replace(".0", "");
 
                 if (monthOfTreatment != null)
                     if (!monthOfTreatment .equals(""))

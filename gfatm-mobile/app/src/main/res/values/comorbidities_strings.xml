@@ -385,6 +385,38 @@
     <string name="comorbidities_urinedr_sugar_ketones_uro_limit">The value should be in the range of 0&#8211;400</string>
     <string name="comorbidities_upto_three_decimal_places_error">The value is not valid. It must be up to three decimal places</string>
 
+    <string name="comorbidities_urinedr_test_color_options_colourless">Colourless</string>
+    <string name="comorbidities_urinedr_test_color_options_red">Red</string>
+    <string name="comorbidities_urinedr_test_color_light_yellow">Light Yellow</string>
+    <string name="comorbidities_urinedr_test_color_options_yellow_green">Yellow-Green</string>
+    <string name="comorbidities_urinedr_test_color_options_dark_yellow">Dark Yellow</string>
+    <string name="comorbidities_urinedr_test_color_options_orange">Orange</string>
+    <string name="comorbidities_urinedr_test_color_options_brown">Brown</string>
+    <string name="comorbidities_urinedr_test_color_options_white">White</string>
+    <string name="comorbidities_urinedr_test_color_options_grey">Grey</string>
+
+    <string-array name="comorbidities_urinedr_test_color_options">
+        <item>@string/comorbidities_urinedr_test_color_options_colourless</item>
+        <item>@string/comorbidities_urinedr_test_color_options_red</item>
+        <item>@string/comorbidities_urinedr_test_color_light_yellow</item>
+        <item>@string/comorbidities_urinedr_test_color_options_yellow_green</item>
+        <item>@string/comorbidities_urinedr_test_color_options_dark_yellow</item>
+        <item>@string/comorbidities_urinedr_test_color_options_orange</item>
+        <item>@string/comorbidities_urinedr_test_color_options_brown</item>
+        <item>@string/comorbidities_urinedr_test_color_options_white</item>
+        <item>@string/comorbidities_urinedr_test_color_options_grey</item>
+    </string-array>
+
+    <string name="comorbidities_urinedr_test_some_options_neg">Negative</string>
+    <string name="comorbidities_urinedr_test_some_options_pos">Positive</string>
+    <string name="comorbidities_urinedr_test_some_options_ind">Indeterminate</string>
+
+    <string-array name="comorbidities_urinedr_test_some_options">
+    <item>@string/comorbidities_urinedr_test_some_options_neg</item>
+    <item>@string/comorbidities_urinedr_test_some_options_pos</item>
+    <item>@string/comorbidities_urinedr_test_some_options_ind</item>
+    </string-array>
+
     <!-- Strings for ComorbiditiesCreatinineTestForm -->
     <string name="comorbidities_creatinine_test_order">Test Order Creatinine</string>
     <string name="comorbidities_creatinine_test_result">Test Result  Creatinine</string>
