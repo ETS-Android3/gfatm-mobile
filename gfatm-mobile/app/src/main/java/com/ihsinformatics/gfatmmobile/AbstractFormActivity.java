@@ -6,6 +6,7 @@ package com.ihsinformatics.gfatmmobile;
  * Created by Rabbia on 11/10/2016.
  */
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -465,6 +466,7 @@ public abstract class AbstractFormActivity extends Fragment
         return currentPageNo;
     }
 
+    @SuppressLint("ValidFragment")
     public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
         @Override
