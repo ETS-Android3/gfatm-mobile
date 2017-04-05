@@ -143,7 +143,7 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
 
 
         views = new View[]{formDate.getButton(),resultRecieveDate.getButton(),geneXpertMTBResult.getSpinner(),mtbBurden.getRadioGroup(),mtbRIFResult.getSpinner(),
-                };
+                errorCode.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
@@ -173,6 +173,8 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
         if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
+
 
             if (formDateCalendar.after(App.getCalendar(date))) {
 
@@ -183,7 +185,14 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
 
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
-            } else
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+            }  else
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
         }

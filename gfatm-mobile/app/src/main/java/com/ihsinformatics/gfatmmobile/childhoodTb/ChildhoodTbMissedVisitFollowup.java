@@ -7,6 +7,7 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -24,8 +25,10 @@ import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -35,6 +38,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
@@ -142,16 +146,17 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        missedVisitDate = new TitledButton(context, null,  getResources().getString(R.string.ctb_ipt_start_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
+        missedVisitDate = new TitledButton(context, null,  getResources().getString(R.string.ctb_missed_visit_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         missedVisitDate.setTag("missedVisitDate");
         ableToContact = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_able_to_contact_patient), getResources().getStringArray(R.array.yes_no_options),getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL, true);
-        whyUnableToContact = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_why_unable_to_contact), getResources().getStringArray(R.array.ctb_unable_to_contact_list),null, App.VERTICAL, App.VERTICAL, true);
+        whyUnableToContact = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_why_unable_to_contact), getResources().getStringArray(R.array.ctb_unable_to_contact_list),null, App.VERTICAL, App.VERTICAL);
         otherUnableToContact = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 250, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         missedVisitReason = new TitledSpinner(context, null, getResources().getString(R.string.ctb_reason_why_missed), getResources().getStringArray(R.array.ctb_why_missed_reason_list),null, App.VERTICAL, true);
         otherMissedVisitReason = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 250, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         nextVisitDate = new TitledButton(context, null,  getResources().getString(R.string.ctb_next_visit_date), DateFormat.format("dd-MMM-yyyy", thirdDateCalender).toString(), App.HORIZONTAL);
         nextVisitDate.setTag("nextVisitDate");
-        views = new View[]{formDate.getButton(), missedVisitDate.getButton(),  nextVisitDate.getButton(),ableToContact.getRadioGroup(),whyUnableToContact.getRadioGroup(),missedVisitReason.getSpinner()};
+        views = new View[]{formDate.getButton(), missedVisitDate.getButton(),  nextVisitDate.getButton(),ableToContact.getRadioGroup(),whyUnableToContact.getRadioGroup(),missedVisitReason.getSpinner(),otherUnableToContact.getEditText(),otherMissedVisitReason.getEditText()
+        };
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
@@ -180,6 +185,7 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
         if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
 
             if (formDateCalendar.after(App.getCalendar(date))) {
 
@@ -190,7 +196,14 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
 
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
-            } else
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+            }else
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
         }
@@ -257,7 +270,149 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
     @Override
     public boolean submit() {
 
-        return true;
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            String encounterId = bundle.getString("formId");
+            if (saveFlag) {
+                serverService.deleteOfflineForms(encounterId);
+            }
+            bundle.putBoolean("save", false);
+        }
+        endTime = new Date();
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
+        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
+        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
+        observations.add(new String[]{"DATE OF MISSED VISIT", App.getSqlDateTime(secondDateCalendar)});
+
+        observations.add(new String[]{"CONTACT TO THE PATIENT", App.get(ableToContact).toUpperCase()});
+
+        if(whyUnableToContact.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"UNABLE TO CONTACT THE PATIENT", App.get(whyUnableToContact).equals(getResources().getString(R.string.ctb_phone_switched_off)) ? "PHONE SWITCHED OFF" :
+                    (App.get(whyUnableToContact).equals(getResources().getString(R.string.ctb_patient_did_not_recieve_call)) ? "PATIENT DID NOT RECEIVE CALL" :
+                            (App.get(whyUnableToContact).equals(getResources().getString(R.string.ctb_incorrect_contact_number)) ? "INCORRECT CONTACT NUMBER" :
+                                                    "OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT"))});
+
+        }
+        if(otherUnableToContact.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT", App.get(otherUnableToContact).toUpperCase()});
+        }
+        observations.add(new String[]{"REASON FOR MISSED VISIT", App.get(missedVisitReason).equals(getResources().getString(R.string.ctb_pateint_moved)) ? "PATIENT MOVED" :
+                (App.get(missedVisitReason).equals(getResources().getString(R.string.ctb_pateint_continue_another_location)) ? "PATIENT CHOOSE ANOTHER FACILITY" :
+                            (App.get(missedVisitReason).equals(getResources().getString(R.string.ctb_patient_unable_to_visit_due_to_reason)) ? "PATIENT UNABLE TO VISIT HOSPITAL DUE TO PERSONAL REASON" :
+                                    (App.get(missedVisitReason).equals(getResources().getString(R.string.ctb_patient_died)) ? "DIED":
+                                            (App.get(missedVisitReason).equals(getResources().getString(R.string.ctb_patient_refused_treatment)) ? "REFUSAL OF TREATMENT BY PATIENT" :
+                                                    "OTHER REASON TO MISSED VISIT"))))});
+
+        if (otherMissedVisitReason.getVisibility() == View.VISIBLE){
+            observations.add(new String[]{"OTHER REASON TO MISSED VISIT", App.get(otherMissedVisitReason)});
+        }
+
+        if (nextVisitDate.getVisibility() == View.VISIBLE){
+            observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDateTime(thirdDateCalender).toUpperCase()});
+        }
+
+        AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.submitting_form));
+                        loading.show();
+                    }
+                });
+
+                String result = serverService.saveEncounterAndObservation("Missed Visit Followup", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                if (!result.contains("SUCCESS"))
+                    return result;
+
+                return "SUCCESS";
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                if (result.equals("SUCCESS")) {
+                    resetViews();
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.form_submitted));
+                    Drawable submitIcon = getResources().getDrawable(R.drawable.ic_submit);
+                    alertDialog.setIcon(submitIcon);
+                    int color = App.getColor(context, R.attr.colorAccent);
+                    DrawableCompat.setTint(submitIcon, color);
+                    alertDialog.setTitle(getResources().getString(R.string.title_completed));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else if (result.equals("CONNECTION_ERROR")) {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
+                    alertDialog.setMessage(message);
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+
+            }
+        };
+        submissionFormTask.execute("");
+
+        return false;
     }
 
     @Override
@@ -273,8 +428,67 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
     }
 
     @Override
-    public void refill(int encounterId) {
+    public void refill(int formId) {
+        OfflineForm fo = serverService.getOfflineFormById(formId);
+        String date = fo.getFormDate();
+        ArrayList<String[][]> obsValue = fo.getObsValue();
+        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
+        for (int i = 0; i < obsValue.size(); i++) {
+
+            String[][] obs = obsValue.get(i);
+            if (obs[0][0].equals("DATE OF MISSED VISIT")) {
+                String secondDate = obs[0][1];
+                secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
+                missedVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+            } else if (obs[0][0].equals("CONTACT TO THE PATIENT")) {
+                for (RadioButton rb : ableToContact.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("UNABLE TO CONTACT THE PATIENT")) {
+                for (RadioButton rb : whyUnableToContact.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_phone_switched_off)) && obs[0][1].equals("PHONE SWITCHED OFF")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_patient_did_not_recieve_call)) && obs[0][1].equals("PATIENT DID NOT RECEIVE CALL")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_incorrect_contact_number)) && obs[0][1].equals("INCORRECT CONTACT NUMBER")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_other_title)) && obs[0][1].equals("OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT")) {
+                otherUnableToContact.getEditText().setText(obs[0][1]);
+            }
+            else if (obs[0][0].equals("REASON FOR MISSED VISIT")) {
+                String value = obs[0][1].equals("PATIENT MOVED") ? getResources().getString(R.string.ctb_pateint_moved) :
+                        (obs[0][1].equals("PATIENT CHOOSE ANOTHER FACILITY") ? getResources().getString(R.string.ctb_pateint_continue_another_location) :
+                                (obs[0][1].equals("PATIENT UNABLE TO VISIT HOSPITAL DUE TO PERSONAL REASON") ? getResources().getString(R.string.ctb_patient_unable_to_visit_due_to_reason) :
+                                        (obs[0][1].equals("DIED") ? getResources().getString(R.string.ctb_patient_died) :
+                                                (obs[0][1].equals("REFUSAL OF TREATMENT BY PATIENT") ? getResources().getString(R.string.ctb_patient_refused_treatment) :
+                                                        getResources().getString(R.string.ctb_other_title)))));
+                missedVisitReason.getSpinner().selectValue(value);
+            }
+            else if (obs[0][0].equals("OTHER REASON TO MISSED VISIT")) {
+                otherMissedVisitReason.getEditText().setText(obs[0][1]);
+            }
+            else if (obs[0][0].equals("RETURN VISIT DATE")) {
+                String secondDate = obs[0][1];
+                thirdDateCalender.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
+                nextVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalender).toString());
+            }
+        }
     }
 
     @Override
@@ -343,6 +557,22 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
         whyUnableToContact.setVisibility(View.GONE);
         otherUnableToContact.setVisibility(View.GONE);
         otherMissedVisitReason.setVisibility(View.GONE);
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean openFlag = bundle.getBoolean("open");
+            if (openFlag) {
+
+                bundle.putBoolean("open", false);
+                bundle.putBoolean("save", true);
+
+                String id = bundle.getString("formId");
+                int formId = Integer.valueOf(id);
+
+                refill(formId);
+
+            } else bundle.putBoolean("save", false);
+
+        }
     }
 
     @Override
@@ -350,6 +580,9 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
         if (group == ableToContact.getRadioGroup()) {
             if (ableToContact.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.no))) {
                 whyUnableToContact.setVisibility(View.VISIBLE);
+                if(App.get(whyUnableToContact).equals(getResources().getString(R.string.ctb_other_title))){
+                    otherUnableToContact.setVisibility(View.VISIBLE);
+                }
                 nextVisitDate.setVisibility(View.GONE);
             } else {
                 whyUnableToContact.setVisibility(View.GONE);

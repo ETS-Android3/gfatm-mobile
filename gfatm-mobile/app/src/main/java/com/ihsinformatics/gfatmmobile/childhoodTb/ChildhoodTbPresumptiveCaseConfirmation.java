@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -170,7 +171,30 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
      * Initializes all views and ArrayList and Views Array
      */
     public void initViews() {
+        if (App.getPatient().getPerson().getAge() > 15) {
 
+            int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
+
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+            alertDialog.setMessage(getString(R.string.ctb_age_greater_than_15));
+            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+            DrawableCompat.setTint(clearIcon, color);
+            alertDialog.setIcon(clearIcon);
+            alertDialog.setTitle(getResources().getString(R.string.title_error));
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            try {
+                                InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                            } catch (Exception e) {
+                                // TODO: handle exception
+                            }
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
+        }
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
@@ -243,7 +267,12 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                 tbExamOutcome.getRadioGroup(), bcgScar.getRadioGroup(), bcgScar.getRadioGroup(), tbBefore.getRadioGroup(), tbMedication.getRadioGroup(),
                 contactTbHistory.getRadioGroup(), tbInfectionForm.getRadioGroup(), tbType.getRadioGroup(), smearPositive.getRadioGroup(),
                 childPrimaryCaregiver.getRadioGroup(), sameBedAsChild.getRadioGroup(), sameRoomRAsChild.getRadioGroup(), liveInSameHoushold.getRadioGroup(),
-                seeChildEveryday.getRadioGroup(), contactCoughing.getRadioGroup(), oneCloseContactInHousehold.getRadioGroup(), conclusion.getRadioGroup()};
+                seeChildEveryday.getRadioGroup(), contactCoughing.getRadioGroup(), oneCloseContactInHousehold.getRadioGroup(), conclusion.getRadioGroup(),
+                weight.getEditText(),height.getEditText(),generalAppearanceExplanation.getEditText(),headEyeEearNoseThroatExplanation.getEditText(),
+                lymphNodeExplanation.getEditText(),spineExplanation.getEditText(),jointsExplanation.getEditText(),
+                skinExplanation.getEditText(),chestExplanation.getEditText(),abdominalExplanation.getEditText(),othersExplanation.getEditText(),
+                otherContactType.getEditText(),additionalCommentHistoryOfPatient.getEditText(),doctorNotes.getEditText()
+        };
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
@@ -298,135 +327,45 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
         if (snackbar != null)
             snackbar.dismiss();
 
-        if (!formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString())) {
+        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
 
-            Date date = App.stringToDate(formDate.getButton().getText().toString(), "dd-MMM-yyyy");
+            String formDa = formDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
 
-            if (formDateCalendar.after(date)) {
 
-                formDateCalendar = App.getCalendar(date);
+            Date date = new Date();
+            if (formDateCalendar.after(App.getCalendar(date))) {
+
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-            } else
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+            }
+            else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+            }
+            else
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
         }
-
 
     }
 
     @Override
     public boolean validate() {
-        boolean error = false;
-        if (App.get(weight).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            weight.getEditText().setError(getString(R.string.empty_field));
-            weight.getEditText().requestFocus();
-            error = true;
-        }
-        if (App.get(height).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            height.getEditText().setError(getString(R.string.empty_field));
-            height.getEditText().requestFocus();
-            error = true;
-        }
-        if (generalAppearanceExplanation.getVisibility() == View.VISIBLE && App.get(generalAppearanceExplanation).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            generalAppearanceExplanation.getEditText().setError(getString(R.string.empty_field));
-            generalAppearanceExplanation.getEditText().requestFocus();
-            error = true;
-        }
-        if (headEyeEearNoseThroatExplanation.getVisibility() == View.VISIBLE && App.get(headEyeEearNoseThroatExplanation).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            headEyeEearNoseThroatExplanation.getEditText().setError(getString(R.string.empty_field));
-            headEyeEearNoseThroatExplanation.getEditText().requestFocus();
-            error = true;
-        }
-        if (lymphNodeExplanation.getVisibility() == View.VISIBLE && App.get(lymphNodeExplanation).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            lymphNodeExplanation.getEditText().setError(getString(R.string.empty_field));
-            lymphNodeExplanation.getEditText().requestFocus();
-            error = true;
-        }
-        if (spineExplanation.getVisibility() == View.VISIBLE && App.get(spineExplanation).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            spineExplanation.getEditText().setError(getString(R.string.empty_field));
-            spineExplanation.getEditText().requestFocus();
-            error = true;
-        }
-        if (jointsExplanation.getVisibility() == View.VISIBLE && App.get(jointsExplanation).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            jointsExplanation.getEditText().setError(getString(R.string.empty_field));
-            jointsExplanation.getEditText().requestFocus();
-            error = true;
-        }
-        if (skinExplanation.getVisibility() == View.VISIBLE && App.get(skinExplanation).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            skinExplanation.getEditText().setError(getString(R.string.empty_field));
-            skinExplanation.getEditText().requestFocus();
-            error = true;
-        }
-        if (chestExplanation.getVisibility() == View.VISIBLE && App.get(chestExplanation).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            chestExplanation.getEditText().setError(getString(R.string.empty_field));
-            chestExplanation.getEditText().requestFocus();
-            error = true;
-        }
-        if (abdominalExplanation.getVisibility() == View.VISIBLE && App.get(abdominalExplanation).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            abdominalExplanation.getEditText().setError(getString(R.string.empty_field));
-            abdominalExplanation.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (otherContactType.getVisibility() == View.VISIBLE && App.get(otherContactType).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            otherContactType.getEditText().setError(getString(R.string.empty_field));
-            otherContactType.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (error) {
+        if (App.getPatient().getPerson().getAge() > 15) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
-            alertDialog.setMessage(getString(R.string.form_error));
+            alertDialog.setMessage(getString(R.string.ctb_age_greater_than_15));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
@@ -438,16 +377,144 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                                 InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
                             } catch (Exception e) {
-// TODO: handle exception
+                                // TODO: handle exception
                             }
                             dialog.dismiss();
                         }
                     });
             alertDialog.show();
-
             return false;
+        } else {
+            boolean error = false;
+            if (App.get(weight).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                weight.getEditText().setError(getString(R.string.empty_field));
+                weight.getEditText().requestFocus();
+                error = true;
+            }
+            if (App.get(height).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                height.getEditText().setError(getString(R.string.empty_field));
+                height.getEditText().requestFocus();
+                error = true;
+            }
+            if (generalAppearanceExplanation.getVisibility() == View.VISIBLE && App.get(generalAppearanceExplanation).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                generalAppearanceExplanation.getEditText().setError(getString(R.string.empty_field));
+                generalAppearanceExplanation.getEditText().requestFocus();
+                error = true;
+            }
+            if (headEyeEearNoseThroatExplanation.getVisibility() == View.VISIBLE && App.get(headEyeEearNoseThroatExplanation).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                headEyeEearNoseThroatExplanation.getEditText().setError(getString(R.string.empty_field));
+                headEyeEearNoseThroatExplanation.getEditText().requestFocus();
+                error = true;
+            }
+            if (lymphNodeExplanation.getVisibility() == View.VISIBLE && App.get(lymphNodeExplanation).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                lymphNodeExplanation.getEditText().setError(getString(R.string.empty_field));
+                lymphNodeExplanation.getEditText().requestFocus();
+                error = true;
+            }
+            if (spineExplanation.getVisibility() == View.VISIBLE && App.get(spineExplanation).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                spineExplanation.getEditText().setError(getString(R.string.empty_field));
+                spineExplanation.getEditText().requestFocus();
+                error = true;
+            }
+            if (jointsExplanation.getVisibility() == View.VISIBLE && App.get(jointsExplanation).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                jointsExplanation.getEditText().setError(getString(R.string.empty_field));
+                jointsExplanation.getEditText().requestFocus();
+                error = true;
+            }
+            if (skinExplanation.getVisibility() == View.VISIBLE && App.get(skinExplanation).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                skinExplanation.getEditText().setError(getString(R.string.empty_field));
+                skinExplanation.getEditText().requestFocus();
+                error = true;
+            }
+            if (chestExplanation.getVisibility() == View.VISIBLE && App.get(chestExplanation).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                chestExplanation.getEditText().setError(getString(R.string.empty_field));
+                chestExplanation.getEditText().requestFocus();
+                error = true;
+            }
+            if (abdominalExplanation.getVisibility() == View.VISIBLE && App.get(abdominalExplanation).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                abdominalExplanation.getEditText().setError(getString(R.string.empty_field));
+                abdominalExplanation.getEditText().requestFocus();
+                error = true;
+            }
+
+            if (otherContactType.getVisibility() == View.VISIBLE && App.get(otherContactType).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                otherContactType.getEditText().setError(getString(R.string.empty_field));
+                otherContactType.getEditText().requestFocus();
+                error = true;
+            }
+
+            if (error) {
+
+                int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
+
+                final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+                alertDialog.setMessage(getString(R.string.form_error));
+                Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                DrawableCompat.setTint(clearIcon, color);
+                alertDialog.setIcon(clearIcon);
+                alertDialog.setTitle(getResources().getString(R.string.title_error));
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                try {
+                                    InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
+                                    imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                } catch (Exception e) {
+// TODO: handle exception
+                                }
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();
+
+                return false;
+            }
+            return true;
         }
-        return true;
     }
 
     @Override
@@ -471,7 +538,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         observations.add(new String[]{"WEIGHT (KG)", App.get(weight)});
         observations.add(new String[]{"HEIGHT (CM)", App.get(height)});
-        observations.add(new String[]{"WEIGHT PERCENTILE", App.get(weightPercentile)});
+        //observations.add(new String[]{"WEIGHT PERCENTILE", App.get(weightPercentile)});
         observations.add(new String[]{"COUGH", App.get(cough).equals(getResources().getString(R.string.yes)) ? "YES" :
                 (App.get(cough).equals(getResources().getString(R.string.no)) ? "NO" :
                         (App.get(cough).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});

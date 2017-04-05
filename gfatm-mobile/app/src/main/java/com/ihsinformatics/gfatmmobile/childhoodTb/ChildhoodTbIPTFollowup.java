@@ -7,6 +7,7 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -24,8 +25,10 @@ import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -34,7 +37,7 @@ import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
-import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
@@ -52,6 +55,8 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
 
     Context context;
     TitledButton formDate;
+    TitledEditText fathersName;
+    TitledEditText weightAtBaseline;
     TitledButton iptStartDate;
     TitledEditText dose;
     TitledEditText weightVisit;
@@ -133,25 +138,52 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
      * Initializes all views and ArrayList and Views Array
      */
     public void initViews() {
+        if (App.getPatient().getPerson().getAge() > 15) {
 
+            int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
+
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+            alertDialog.setMessage(getString(R.string.ctb_age_greater_than_15));
+            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+            DrawableCompat.setTint(clearIcon, color);
+            alertDialog.setIcon(clearIcon);
+            alertDialog.setTitle(getResources().getString(R.string.title_error));
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            try {
+                                InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                            } catch (Exception e) {
+                                // TODO: handle exception
+                            }
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
+        }
 
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
+        fathersName = new TitledEditText(context, null, getResources().getString(R.string.ctb_father_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        weightAtBaseline = new TitledEditText(context, null, getResources().getString(R.string.ctb_weight_at_baseline), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
         iptStartDate = new TitledButton(context, null,  getResources().getString(R.string.ctb_ipt_start_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         iptStartDate.setTag("iptStartDate");
         dose = new TitledEditText(context, null, getResources().getString(R.string.ctb_dose_at_intiation_point), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
         weightVisit = new TitledEditText(context, null, getResources().getString(R.string.ctb_weight_visit), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
         complaints = new TitledEditText(context, null, getResources().getString(R.string.ctb_complaints), "", "", 500, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         iptDose = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_dose), getResources().getStringArray(R.array.ctb_dose_list),getResources().getString(R.string.ctb_quater_per_day), App.VERTICAL, App.VERTICAL, true);
-        iptCompliance = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ipt_compliance), getResources().getStringArray(R.array.yes_no_options), null, App.VERTICAL, App.VERTICAL, true);
+        iptCompliance = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ipt_compliance), getResources().getStringArray(R.array.yes_no_options), null, App.VERTICAL, App.VERTICAL);
         iptOutcome = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ipt_outcome), getResources().getStringArray(R.array.ctb_ipt_outcome_list),getResources().getString(R.string.ctb_complete), App.VERTICAL, App.VERTICAL, true);
 
-        views = new View[]{formDate.getButton(), iptStartDate.getButton(), iptDose.getRadioGroup(),iptCompliance.getRadioGroup(),iptOutcome.getRadioGroup()};
+        views = new View[]{formDate.getButton(), fathersName.getEditText(),weightAtBaseline.getEditText(),iptStartDate.getButton(), iptDose.getRadioGroup(),iptCompliance.getRadioGroup(),iptOutcome.getRadioGroup(),
+                dose.getEditText(),weightVisit.getEditText(),complaints.getEditText(),
+        };
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate,iptStartDate,dose,weightVisit,complaints,iptDose,iptCompliance,iptOutcome
+                {{formDate, fathersName,weightAtBaseline,iptStartDate,dose,weightVisit,complaints,iptDose,iptCompliance,iptOutcome
         }};
 
         formDate.getButton().setOnClickListener(this);
@@ -174,6 +206,8 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
         if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
+
             if (formDateCalendar.after(App.getCalendar(date))) {
 
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
@@ -183,7 +217,14 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
 
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
-            } else
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+            }else
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
         }
@@ -202,17 +243,18 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
             } else
                 iptStartDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
         }
+
+
       }
 
     @Override
     public boolean validate() {
-        boolean error = false;
-        if (error) {
+        if (App.getPatient().getPerson().getAge() > 15) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
-            alertDialog.setMessage(getString(R.string.form_error));
+            alertDialog.setMessage(getString(R.string.ctb_age_greater_than_15));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
@@ -224,22 +266,179 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
                                 InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
                             } catch (Exception e) {
-// TODO: handle exception
+                                // TODO: handle exception
                             }
                             dialog.dismiss();
                         }
                     });
             alertDialog.show();
-
             return false;
+        }else {
+            boolean error = false;
+            if (error) {
+
+                int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
+
+                final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+                alertDialog.setMessage(getString(R.string.form_error));
+                Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                DrawableCompat.setTint(clearIcon, color);
+                alertDialog.setIcon(clearIcon);
+                alertDialog.setTitle(getResources().getString(R.string.title_error));
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                try {
+                                    InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
+                                    imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                } catch (Exception e) {
+// TODO: handle exception
+                                }
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();
+
+                return false;
+            }
+            return true;
         }
-        return true;
     }
 
     @Override
     public boolean submit() {
 
-        return true;
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            String encounterId = bundle.getString("formId");
+            if (saveFlag) {
+                serverService.deleteOfflineForms(encounterId);
+            }
+            bundle.putBoolean("save", false);
+        }
+        endTime = new Date();
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
+        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
+        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
+        observations.add(new String[]{"IPT START DATE", App.getSqlDateTime(secondDateCalendar)});
+
+        observations.add(new String[]{"DOSE AT TREATMENT INITIATION POINT", App.get(dose)});
+        observations.add(new String[]{"WEIGHT (KG)", App.get(weightVisit)});
+        observations.add(new String[]{"COMPLAINTS", App.get(complaints)});
+
+        observations.add(new String[]{"IPT DOSE", App.get(iptDose).equals(getResources().getString(R.string.ctb_quater_per_day)) ? "1/4 TAB ONCE ADAY" :
+                (App.get(iptDose).equals(getResources().getString(R.string.ctb_half_per_day)) ? "1/2 TAB ONCE A DAY" :
+                        "1 TAB ONCE A DAY")});
+
+        if(!App.get(iptCompliance).isEmpty()) {
+            observations.add(new String[]{"IPT COMPLIANCE", App.get(iptCompliance).toUpperCase()});
+        }
+        observations.add(new String[]{"IPT OUTCOME", App.get(iptOutcome).equals(getResources().getString(R.string.ctb_complete)) ? "COMPLETED" :
+                (App.get(iptOutcome).equals(getResources().getString(R.string.ctb_continuing)) ? "CONTINUING" :
+                        "LOST TO FOLLOW-UP")});
+
+        AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.submitting_form));
+                        loading.show();
+                    }
+                });
+
+                String result = serverService.saveEncounterAndObservation("IPT Followup", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                if (!result.contains("SUCCESS"))
+                    return result;
+
+                return "SUCCESS";
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                if (result.equals("SUCCESS")) {
+                    resetViews();
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.form_submitted));
+                    Drawable submitIcon = getResources().getDrawable(R.drawable.ic_submit);
+                    alertDialog.setIcon(submitIcon);
+                    int color = App.getColor(context, R.attr.colorAccent);
+                    DrawableCompat.setTint(submitIcon, color);
+                    alertDialog.setTitle(getResources().getString(R.string.title_completed));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else if (result.equals("CONNECTION_ERROR")) {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
+                    alertDialog.setMessage(message);
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+
+            }
+        };
+        submissionFormTask.execute("");
+
+        return false;
     }
 
     @Override
@@ -255,8 +454,68 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
     }
 
     @Override
-    public void refill(int encounterId) {
+    public void refill(int formId) {
+        OfflineForm fo = serverService.getOfflineFormById(formId);
+        String date = fo.getFormDate();
+        ArrayList<String[][]> obsValue = fo.getObsValue();
+        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
+        for (int i = 0; i < obsValue.size(); i++) {
+
+            String[][] obs = obsValue.get(i);
+            if (obs[0][0].equals("IPT START DATE")) {
+                String secondDate = obs[0][1];
+                secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
+                iptStartDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+            } else if (obs[0][0].equals("DOSE AT TREATMENT INITIATION POINT")) {
+                dose.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("WEIGHT (KG)")) {
+                weightVisit.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("COMPLAINTS")) {
+                complaints.getEditText().setText(obs[0][1]);
+            }
+            else if (obs[0][0].equals("IPT DOSE")) {
+                for (RadioButton rb : iptDose.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_quater_per_day)) && obs[0][1].equals("1/4 TAB ONCE ADAY")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_half_per_day)) && obs[0][1].equals("1/2 TAB ONCE A DAY")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_per_day)) && obs[0][1].equals("1 TAB ONCE A DAY")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            }else if (obs[0][0].equals("IPT COMPLIANCE")) {
+                for (RadioButton rb : iptCompliance.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            }
+            else if (obs[0][0].equals("IPT OUTCOME")) {
+                for (RadioButton rb : iptOutcome.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_complete)) && obs[0][1].equals("LOST TO FOLLOW-UP")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_continuing)) && obs[0][1].equals("CONTINUING")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_lost_to_followup)) && obs[0][1].equals("LOST TO FOLLOW-UP")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            }
+
+
+        }
     }
 
     @Override
@@ -307,6 +566,36 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
 
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         iptStartDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean openFlag = bundle.getBoolean("open");
+            if (openFlag) {
+
+                bundle.putBoolean("open", false);
+                bundle.putBoolean("save", true);
+
+                String id = bundle.getString("formId");
+                int formId = Integer.valueOf(id);
+
+                refill(formId);
+
+            } else bundle.putBoolean("save", false);
+
+        }
+        String husbandNameString = App.getPatient().getPerson().getGuardianName();
+        if(husbandNameString!=null) {
+            fathersName.getEditText().setText(husbandNameString);
+        }
+        fathersName.getEditText().setKeyListener(null);
+        String referralTransferLocation = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Case Confirmation", "WEIGHT (KG)");
+        if(referralTransferLocation!=null){
+            String weight = referralTransferLocation.split("\\.")[0];
+            weightAtBaseline.getEditText().setText(weight);
+
+        }
+        weightAtBaseline.getEditText().setKeyListener(null);
+
+
     }
 
     @Override

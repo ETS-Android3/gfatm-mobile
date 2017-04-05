@@ -26,6 +26,7 @@ import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -160,7 +161,7 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
         histopathologyResult = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_histopathology_result),getResources().getStringArray(R.array.ctb_suggestive_tb_normal),getResources().getString(R.string.ctb_suggestive_tb),App.VERTICAL,App.VERTICAL);
 
 
-        views = new View[]{formDate.getButton(),formType.getRadioGroup(),testOrderDate.getButton(),pointTestBeingDone.getRadioGroup()
+        views = new View[]{formDate.getButton(),formType.getRadioGroup(),testId.getEditText(),testOrderDate.getButton(),pointTestBeingDone.getRadioGroup()
                 ,testResultDate.getButton(),histopathologyResult.getRadioGroup()};
 
         // Array used to display views accordingly...
@@ -190,6 +191,7 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
         if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
 
             if (formDateCalendar.after(App.getCalendar(date))) {
 
@@ -200,6 +202,13 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
 
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
+            }  else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
             } else
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 

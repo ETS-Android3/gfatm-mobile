@@ -28,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -173,7 +174,9 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
 
         linearLayout.addView(testIdView);
 
-        views = new View[]{formDate.getButton(),formType.getRadioGroup(),typeOfXRay.getRadioGroup(),testDate.getButton(),radiologicalDiagnosis.getSpinner(),diseaseExtent.getSpinner()};
+        views = new View[]{formDate.getButton(),formType.getRadioGroup(),typeOfXRay.getRadioGroup(),testDate.getButton(),radiologicalDiagnosis.getSpinner(),diseaseExtent.getSpinner(),
+                monthTreatment.getEditText(),testId.getEditText(),chestXRayScore.getEditText(),otherRadiologicalDiagnosis.getEditText(),radiologistRemarks.getEditText(),
+        };
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
@@ -243,6 +246,7 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
         if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
 
             if (formDateCalendar.after(App.getCalendar(date))) {
 
@@ -253,6 +257,13 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
 
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
+            }  else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
             } else
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         }
@@ -682,7 +693,6 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
         testIdView.setEnabled(true);
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         testDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-        monthTreatment.getEditText().setText(null);
         testIdView.setVisibility(View.GONE);
         testId.setVisibility(View.GONE);
         testIdView.setImageResource(R.drawable.ic_checked);

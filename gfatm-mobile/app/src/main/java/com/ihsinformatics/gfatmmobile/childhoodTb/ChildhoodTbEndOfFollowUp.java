@@ -215,6 +215,8 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
         if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
+
 
             if (formDateCalendar.after(App.getCalendar(date))) {
 
@@ -225,6 +227,13 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
 
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
+            }  else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
             } else
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
@@ -562,6 +571,7 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
                                         (obs[0][1].equals("DECEASED") ? getResources().getString(R.string.ctb_patient_died) :
                                                 (obs[0][1].equals("DR NOT CONFIRMED BY BASELINE REPEAT TEST") ? getResources().getString(R.string.ctb_dr_not_confirmed) :
                                                                         getResources().getString(R.string.ctb_other_title)))));
+                reasonTreatmentNotIntiated.getSpinner().selectValue(value);
             } else if (obs[0][0].equals("OTHER REASON FOR TREATMENT NOT INITIATED")) {
                 otherReasonTreatmentNotIntiated.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("DRUG RESISTANCE CONFIRMATION")) {

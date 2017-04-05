@@ -188,7 +188,7 @@
     <string name="ctb_speciment_route">Where did the speciment come from?</string>
     <string name="ctb_lymph">Lymph</string>
     <string name="ctb_pleural_fluid">Pleural Fluid</string>
-    <string name="ctb_pus">Plus</string>
+    <string name="ctb_pus">Pus</string>
     <string name="ctb_accepted_by_technician">Where did the speciment come from?</string>
     <string name="ctb_accepted">Accepted</string>
     <string name="ctb_rejected">Rejected</string>
@@ -381,6 +381,10 @@
     <string name="ctb_contact_number">Contact Number</string>
     <string name="ctb_name_of_person_provided_details">Provide name and contact number of person at referral / transfer site who provided details about the patient		</string>
     <string name="ctb_other_reason_remarks">Other Reason/Remarks</string>
+    <string name="ctb_age_greater_than_15">Child age can not be greater than 15</string>
+    <string name="ctb_incorrect_contact_number">Incorrect contact number</string>
+    <string name="ctb_son_daughter_of">S/O D/O</string>
+    <string name="ctb_weight_at_baseline">Weight at baseline (kg)</string>
 
     <string-array name="ctb_screening_location_list">
         <item>@string/ctb_hospital</item>
@@ -750,6 +754,7 @@
     <string-array name="ctb_unable_to_contact_list">
         <item>@string/ctb_phone_switched_off</item>
         <item>@string/ctb_patient_did_not_recieve_call</item>
+        <item>@string/ctb_incorrect_contact_number</item>
         <item>@string/ctb_other_title</item>
     </string-array>
 
