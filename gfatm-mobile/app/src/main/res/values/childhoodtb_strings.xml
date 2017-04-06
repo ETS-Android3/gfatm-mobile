@@ -385,6 +385,7 @@
     <string name="ctb_incorrect_contact_number">Incorrect contact number</string>
     <string name="ctb_son_daughter_of">S/O D/O</string>
     <string name="ctb_weight_at_baseline">Weight at baseline (kg)</string>
+    <string name="ctb_spaces_only">Can not contains space only</string>
 
     <string-array name="ctb_screening_location_list">
         <item>@string/ctb_hospital</item>

@@ -211,7 +211,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
         tbHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_tb_before), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.ctb_no), App.HORIZONTAL, App.VERTICAL, true);
         tbMedication = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_tb_medication), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.ctb_no), App.HORIZONTAL, App.VERTICAL, true);
         contactTbHistoryTwoYears = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_tb_history_2years), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.ctb_no), App.HORIZONTAL, App.VERTICAL, true);
-        closeContactType = new TitledCheckBoxes(context, null, getResources().getString(R.string.ctb_close_contact_type), getResources().getStringArray(R.array.ctb_close_contact_type_list), null, App.VERTICAL, App.VERTICAL);
+        closeContactType = new TitledCheckBoxes(context, null, getResources().getString(R.string.ctb_close_contact_type), getResources().getStringArray(R.array.ctb_close_contact_type_list), new Boolean[] {true,false,false,false,false,false,false,false,false,false,false}, App.VERTICAL, App.VERTICAL);
         otherContactType = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_contact), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         presumptiveTb = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_presumptive_tb), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, true);
 
@@ -323,12 +323,23 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
             boolean error = false;
             View view = null;
             Boolean flag = false;
+
             if (otherContactType.getVisibility() == View.VISIBLE && App.get(otherContactType).isEmpty()) {
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
                     gotoPage(0);
                 otherContactType.getEditText().setError(getString(R.string.empty_field));
+                otherContactType.getEditText().requestFocus();
+                error = true;
+                view = null;
+            }
+            if (otherContactType.getVisibility() == View.VISIBLE && App.get(otherContactType).trim().length() <= 0){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                otherContactType.getEditText().setError(getString(R.string.ctb_spaces_only));
                 otherContactType.getEditText().requestFocus();
                 error = true;
                 view = null;
@@ -356,6 +367,15 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                 fatherName.getEditText().requestFocus();
                 error = true;
                 view = null;
+            }else if(App.get(fatherName).trim().length() <= 0){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                fatherName.getEditText().setError(getString(R.string.ctb_spaces_only));
+                fatherName.getEditText().requestFocus();
+                error = true;
+                view = null;
             }
             if (App.get(motherName).isEmpty()) {
                 if (App.isLanguageRTL())
@@ -366,6 +386,15 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                 motherName.getEditText().requestFocus();
                 view = null;
                 error = true;
+            }else if(App.get(motherName).trim().length() <= 0){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                motherName.getEditText().setError(getString(R.string.ctb_spaces_only));
+                motherName.getEditText().requestFocus();
+                error = true;
+                view = null;
             }
             if (facility_section_other.getVisibility() == View.VISIBLE && App.get(facility_section_other).isEmpty()) {
                 if (App.isLanguageRTL())
@@ -377,7 +406,16 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                 error = true;
                 view = null;
             }
-            if (error) {
+            if(facility_section_other.getVisibility() == View.VISIBLE && App.get(facility_section_other).trim().length() <= 0) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                facility_section_other.getEditText().setError(getString(R.string.ctb_spaces_only));
+                facility_section_other.getEditText().requestFocus();
+                error = true;
+            }
+                if (error) {
 
                 int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
@@ -531,6 +569,10 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                 closeContactString = closeContactString + "MATERNAL GRANDFATHER" + " ; ";
             else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_maternal_grandmother)))
                 closeContactString = closeContactString + "MATERNAL GRANDMOTHER" + " ; ";
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_uncle)))
+                closeContactString = closeContactString + "UNCLE" + " ; ";
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_aunt)))
+                closeContactString = closeContactString + "AUNT" + " ; ";
             else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_other_title)))
                 closeContactString = closeContactString + "OTHER CONTACT TYPE" + " ; ";
         }
@@ -1104,6 +1146,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                 closeContactType.setVisibility(View.VISIBLE);
             } else {
                 closeContactType.setVisibility(View.GONE);
+                otherContactType.setVisibility(View.GONE);
             }
         }
 

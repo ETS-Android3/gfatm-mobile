@@ -221,7 +221,7 @@ public class ChildhoodTbScreeningLocation extends AbstractFormActivity implement
     @Override
     public boolean validate() {
         boolean error=false;
-        if(App.get(facilityDepartment).isEmpty()){
+        if(facilityDepartment.getVisibility()==View.VISIBLE && App.get(facilityDepartment).isEmpty()){
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
