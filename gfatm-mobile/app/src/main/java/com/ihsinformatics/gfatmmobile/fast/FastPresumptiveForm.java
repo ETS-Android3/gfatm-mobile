@@ -350,7 +350,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
                                                     (App.get(patientConsultation).equals(getResources().getString(R.string.fast_surgery_title)) ? "GENERAL SURGERY DEPARTMENT" :
                                                             (App.get(patientConsultation).equals(getResources().getString(R.string.fast_orthopedics_title)) ? "ORTHOPEDIC DEPARTMENT" :
                                                                     (App.get(patientConsultation).equals(getResources().getString(R.string.fast_emergency_title)) ? "EMERGENCY DEPARTMENT" :
-                                                                            (App.get(patientConsultation).equals(getResources().getString(R.string.fast_paediatrics_title)) ? "PEDIATRIC MEDICINE DEPARTMENT" :
+                                                                            (App.get(patientConsultation).equals(getResources().getString(R.string.fast_paediatrics_title)) ? "PAEDIATRICS DEPARTMENT" :
                                                                                     (App.get(patientConsultation).equals(getResources().getString(R.string.fast_dermatology)) ? "DERMATOLOGY DEPARTMENT" :
                                                                                             (App.get(patientConsultation).equals(getResources().getString(R.string.fast_neurology_title)) ? "NEUROLOGY DEPARTMENT" :
                                                                                                     (App.get(patientConsultation).equals(getResources().getString(R.string.fast_cardiology_title)) ? "CARDIOLOGY DEPARTMENT" :
@@ -593,7 +593,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
                                                         (obs[0][1].equals("GENERAL SURGERY DEPARTMENT") ? getResources().getString(R.string.fast_surgery_title) :
                                                                 (obs[0][1].equals("ORTHOPEDIC DEPARTMENT") ? getResources().getString(R.string.fast_orthopedics_title) :
                                                                         (obs[0][1].equals("EMERGENCY DEPARTMENT") ? getResources().getString(R.string.fast_emergency_title) :
-                                                                                (obs[0][1].equals("PEDIATRIC MEDICINE DEPARTMENT") ? getResources().getString(R.string.fast_paediatrics_title) :
+                                                                                (obs[0][1].equals("PAEDIATRICS DEPARTMENT") ? getResources().getString(R.string.fast_paediatrics_title) :
                                                                                         (obs[0][1].equals("DERMATOLOGY DEPARTMENT") ? getResources().getString(R.string.fast_dermatology) :
                                                                                                 (obs[0][1].equals("NEUROLOGY DEPARTMENT") ? getResources().getString(R.string.fast_neurology_title) :
                                                                                                         (obs[0][1].equals("CARDIOLOGY DEPARTMENT") ? getResources().getString(R.string.fast_cardiology_title) :

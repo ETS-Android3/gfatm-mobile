@@ -214,6 +214,8 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
     @Override
     public void updateDisplay() {
+        if (snackbar != null)
+            snackbar.dismiss();
 
         if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
 
