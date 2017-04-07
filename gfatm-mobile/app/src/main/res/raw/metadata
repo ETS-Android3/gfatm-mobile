@@ -3817,7 +3817,7 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SECOND-LINE TB 
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PHONE SWITCHED OFF',NULL,'N/A','dbbc05c8-b96e-4379-a29f-07e9845f65d8');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT DID NOT RECEIVE CALL',NULL,'N/A','f988d2da-1e20-42ca-9546-9ee111f903a8');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INCORRECT CONTACT NUMBER',NULL,'N/A','cd8417c2-d214-426c-82f0-57052e5ee963');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT','reason_patient_not_contacted_other','N/A','a6f1393f-79ed-430a-9192-1c4e077a77bb');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT','reason_patient_not_contacted_other','Text','a6f1393f-79ed-430a-9192-1c4e077a77bb');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REGULARLY',NULL,'N/A','44618fed-c1a2-471d-a4db-759284cb85f8');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('IRREGULARLY',NULL,'N/A','1a084c1c-44dd-40e7-b0cc-6fa187047acb');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('2-3 DAYS A WEEK',NULL,'N/A','99b0c6aa-6fe5-478b-835a-712b1afa5eb5');
@@ -4464,6 +4464,11 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('POOR',NULL,'N/A
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('GOOD',NULL,'N/A','159405AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('AVERAGE',NULL,'N/A','160487AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('THREE PLUS','+++','Boolean','1364AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ONE PLUS','	+','Boolean','1362AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TWO PLUS','++','Boolean','1363AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CRYSTALS IN URINE','urine_crystals','Coded','06d12fea-2285-471c-8348-218bea48b214');
+
 -- Program
 INSERT OR IGNORE INTO program VALUES (1, "86ba1232-d576-416e-b102-5f335c6746ce", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
 INSERT OR IGNORE INTO program VALUES (2, "5d372a38-ae27-4a68-a8d2-bc517a2c9c40", "PET", "Post-Exposure Treatment");
@@ -4527,13 +4532,20 @@ INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-PPA Score','Add Child
 INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-Test Indication','Add Childhood TB Forms','View Childhood TB Forms','35399a25-8d00-4617-ad03-745deb73e2e2');
 INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-GXP Specimen Collection','Add Childhood TB Forms','View Childhood TB Forms','0475133c-9a81-4a61-823f-2c4ba803432d');
 INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-GXP Test','Add Childhood TB Forms','View Childhood TB Forms','9fd7bfb9-f784-4db2-8930-eb77356a83ee');
-INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-CXR Screening Test','Add Childhood TB Forms','View Childhood TB Forms','6d328b7b-2e25-454b-9179-06623d76931a');
-INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-AFB Smear Test','Add Childhood TB Forms','View Childhood TB Forms','2d5f3f8e-fd2d-4683-b111-00817cb63bf4');
-INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-DST Culture Test','Add Childhood TB Forms','View Childhood TB Forms','00034fee-85f7-4262-881a-4c7fbe0fe5c9');
-INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-Ultrasound Test','Add Childhood TB Forms','View Childhood TB Forms','df0f335d-f524-40d0-a252-1f210621b5bb');
-INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-CT Scan Test','Add Childhood TB Forms','View Childhood TB Forms','c85020fd-9654-4c8d-9626-c3b1cb8122fb');
-INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-Mantoux Test','Add Childhood TB Forms','View Childhood TB Forms','de09af4a-78e7-4b64-ade1-808a45f83e9f');
-INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-Histopathology Test','Add Childhood TB Forms','View Childhood TB Forms','f5d1ef41-fdbf-4254-aa8f-0673a5553a83');
+INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-CXR Screening Test Order','Add Childhood TB Forms','View Childhood TB Forms','6d328b7b-2e25-454b-9179-06623d76931a');
+INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-CXR Screening Test Result','Add Childhood TB Forms','View Childhood TB Forms','8d984cdd-299a-4e0a-acd5-f29c45211b56');
+INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-AFB Smear Test Order','Add Childhood TB Forms','View Childhood TB Forms','2d5f3f8e-fd2d-4683-b111-00817cb63bf4');
+INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-AFB Smear Test Result','Add Childhood TB Forms','View Childhood TB Forms','1139a871-5f4d-48c4-b957-e71f3a84c55a');
+INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-DST Culture Test Order','Add Childhood TB Forms','View Childhood TB Forms','00034fee-85f7-4262-881a-4c7fbe0fe5c9');
+INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-DST Culture Test Result','Add Childhood TB Forms','View Childhood TB Forms','3c632fcb-9715-4ba8-8ebd-7f5ed248ab8c');
+INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-Ultrasound Test Order','Add Childhood TB Forms','View Childhood TB Forms','df0f335d-f524-40d0-a252-1f210621b5bb');
+INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-Ultrasound Test Result','Add Childhood TB Forms','View Childhood TB Forms','b59d01b6-b835-4f61-81de-6bd48abfc5cc');
+INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-CT Scan Test Order','Add Childhood TB Forms','View Childhood TB Forms','c85020fd-9654-4c8d-9626-c3b1cb8122fb');
+INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-CT Scan Test Result','Add Childhood TB Forms','View Childhood TB Forms','6ad529b7-041c-485a-a178-1a628bc50365');
+INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-Mantoux Test Order','Add Childhood TB Forms','View Childhood TB Forms','de09af4a-78e7-4b64-ade1-808a45f83e9f');
+INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-Mantoux Test Result','Add Childhood TB Forms','View Childhood TB Forms','0fd12941-b66e-454b-9d45-35d3ad0b456a');
+INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-Histopathology Test Order','Add Childhood TB Forms','View Childhood TB Forms','f5d1ef41-fdbf-4254-aa8f-0673a5553a83');
+INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-Histopathology Test Result','Add Childhood TB Forms','View Childhood TB Forms','046d7dae-c004-460c-bb76-93d11397335f');
 INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-Treatment Initiation','Add Childhood TB Forms','View Childhood TB Forms','05d8692c-8689-4755-adb5-83561aaf6b82');
 INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-TB Treatment Followup','Add Childhood TB Forms','View Childhood TB Forms','ad1f8d4d-04f7-42ee-8f0e-9b51bd4eb36e');
 INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-IPT Followup','Add Childhood TB Forms','View Childhood TB Forms','27f5215e-631b-432b-a0b9-6058fb16a4ee');
