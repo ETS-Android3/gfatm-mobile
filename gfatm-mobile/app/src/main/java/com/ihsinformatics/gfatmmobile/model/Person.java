@@ -190,9 +190,9 @@ public class Person extends AbstractModel {
                     } else if (displayString[0].equals("Guardian Name")) {
                         guardianName = displayString[1];
                     } else if (displayString[0].equals("Tertiary Contact")) {
-                        guardianName = displayString[1];
+                        tertiaryContact = displayString[1];
                     } else if (displayString[0].equals("Quaternary Contact")) {
-                        guardianName = displayString[1];
+                        quaternaryContact = displayString[1];
                     }
                 } else {
 
@@ -226,9 +226,9 @@ public class Person extends AbstractModel {
                     } else if (attributeType.equals("Guardian Name")) {
                         guardianName = display;
                     } else if (displayString[0].equals("Tertiary Contact")) {
-                        guardianName = displayString[1];
+                        tertiaryContact = displayString[1];
                     } else if (displayString[0].equals("Quaternary Contact")) {
-                        guardianName = displayString[1];
+                        quaternaryContact = displayString[1];
                     }
 
                 }
