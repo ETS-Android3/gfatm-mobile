@@ -340,7 +340,7 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("Treatment Followup", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                String result = serverService.saveEncounterAndObservation("Treatment Followup", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 

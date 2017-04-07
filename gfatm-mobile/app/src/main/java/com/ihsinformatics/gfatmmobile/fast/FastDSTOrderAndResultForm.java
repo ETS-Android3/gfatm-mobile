@@ -647,11 +647,11 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                 String result = "";
 
                 if (App.get(formType).equals(getResources().getString(R.string.fast_order))){
-                    result = serverService.saveEncounterAndObservation("DST Culture Test Order", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                    result = serverService.saveEncounterAndObservation("DST Culture Test Order", FORM, formDateCalendar, observations.toArray(new String[][]{}), true);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 } else if (App.get(formType).equals(getResources().getString(R.string.fast_result))) {
-                    result = serverService.saveEncounterAndObservation("DST Culture Test Result", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                    result = serverService.saveEncounterAndObservation("DST Culture Test Result", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 }
