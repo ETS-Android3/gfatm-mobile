@@ -734,7 +734,8 @@ public class MainActivity extends AppCompatActivity
 
                 String toastMessage = "";
 
-                if (!App.getPatientId().equals(String.valueOf(form[0][3]))) {
+
+                if (App.getPatientId() == null || !App.getPatientId().equals(String.valueOf(form[0][3]))) {
                     App.setPatientId(String.valueOf(form[0][3]));
                     App.setPatient(serverService.getPatientBySystemIdFromLocalDB(App.getPatientId()));
 
