@@ -246,10 +246,12 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
 
         String s = App.getPatient().getPerson().getMaritalStatus();
 
-        if (App.getPatient().getPerson().getAge() < 14 || App.getPatient().getPerson().getMaritalStatus().equalsIgnoreCase("Single"))
-            pregnancyHistory.setVisibility(View.GONE);
-        else
+        if (App.getPatient().getPerson().getAge() > 14 && !(App.getPatient().getPerson().getMaritalStatus().equalsIgnoreCase("Single")))
             pregnancyHistory.setVisibility(View.VISIBLE);
+        else
+            pregnancyHistory.setVisibility(View.GONE);
+
+
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
