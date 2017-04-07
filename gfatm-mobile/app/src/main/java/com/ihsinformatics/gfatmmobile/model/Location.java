@@ -79,13 +79,18 @@ public class Location extends AbstractModel {
         try {
             uuid = json.getString("uuid");
             name = json.getString("name");
-            address1 = json.getString("address1");
-            address2 = json.getString("address2");
-            address3 = json.getString("address3");
-            city = json.getString("cityVillage");
-            district = json.getString("countyDistrict");
-            province = json.getString("stateProvince");
-            description = json.getString("description");
+            if (json.has("address1") && (json.get("address1") == null || json.getString("address1").equals("null")))
+                address1 = json.getString("address1");
+            if (json.has("address2") && (json.get("address2") == null || json.getString("address2").equals("null")))
+                address2 = json.getString("address2");
+            if (json.has("address3") && (json.get("address3") == null || json.getString("address3").equals("null")))
+                address3 = json.getString("address3");
+            if (json.has("cityVillage") && (json.get("cityVillage") == null || json.getString("cityVillage").equals("null")))
+                city = json.getString("cityVillage");
+            if (json.has("countyDistrict") && (json.get("countyDistrict") == null || json.getString("countyDistrict").equals("null")))
+                district = json.getString("countyDistrict");
+            if (json.has("stateProvince") && (json.get("stateProvince") == null || json.getString("stateProvince").equals("null")))
+                province = json.getString("stateProvince");
             description = json.getString("description");
             JSONArray attributes = json.getJSONArray("attributes");
             try {
@@ -103,12 +108,14 @@ public class Location extends AbstractModel {
                         fastLocation = "Y";
                     } else if (display.contains("PET Location") && display.contains("true")) {
                         petLocation = "Y";
-                    } else if (display.contains("Co-Morbidities Location") && display.contains("true")) {
+                    } else if (display.contains("Comorbidities Location") && display.contains("true")) {
                         comorbiditiesLocation = "Y";
                     } else if (display.contains("PET Location") && display.contains("true")) {
                         petLocation = "Y";
                     } else if (display.contains("Childhood TB Location") && display.contains("true")) {
                         childhoodTbLocation = "Y";
+                    } else if (display.contains("PMDT Location") && display.contains("true")) {
+                        pmdtLocation = "Y";
                     }
 
                 }
