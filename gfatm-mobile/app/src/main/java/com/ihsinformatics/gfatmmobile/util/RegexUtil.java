@@ -39,9 +39,9 @@ public class RegexUtil {
     public static final String testIDPattern = "^{0,1}[0-9]{7,7}[-.]{0,1}[0-9]";
     public static final String mobileNumPattern = "[0][3][0-9]{9}";
     public static final String addressPattern = "^[^÷çþ!$?@%+=_]+$";
-    public static final String floatingPointPattern = "^[0-9]+\\.[0-9]$";
-    public static final String floatingPointPatternForThreeDecimalPlaces = "^[0-9]+\\.[0-9]{3}$";
-    public static final String floatingPointPatternForTwoDecimalPlaces = "^[0-9]+\\.[0-9]{2}$";
+    public static final String floatingPointPattern = "^[0-9]*.[0-9]{0,1}$";
+    public static final String floatingPointPatternForThreeDecimalPlaces = "^[0-9]*.[0-9]{0,3}$";
+    public static final String floatingPointPatternForTwoDecimalPlaces = "^[0-9]*.[0-9]{0,2}$";
 
     public static final int idLength = 7;
     public static final int mobileNumberLength = 11;

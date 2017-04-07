@@ -30,6 +30,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.ihsinformatics.gfatmmobile.App;
+import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.model.Concept;
 import com.ihsinformatics.gfatmmobile.model.EncounterType;
 import com.ihsinformatics.gfatmmobile.model.Location;
@@ -253,6 +254,10 @@ public class ServerService {
         return dbUtil.delete(Metadata.LOCATION, null, null);
     }
 
+    public boolean deleteLocationsByProgram(String columnName) {
+        return dbUtil.delete(Metadata.LOCATION, columnName + "=?", new String[]{"Y"});
+    }
+
     public boolean deleteAllConcepts() {
         return dbUtil.delete(Metadata.CONCEPT, null, null);
     }
@@ -365,7 +370,19 @@ public class ServerService {
             if (response == null)
                 return "AUTHENTICATION_ERROR";
 
-            deleteAllLocations();
+            String columnName = "";
+            if (App.getProgram().equals(context.getResources().getString(R.string.pet)))
+                columnName = "pet_location";
+            else if (App.getProgram().equals(context.getResources().getString(R.string.fast)))
+                columnName = "fast_location";
+            else if (App.getProgram().equals(context.getResources().getString(R.string.comorbidities)))
+                columnName = "comorbidities_location";
+            else if (App.getProgram().equals(context.getResources().getString(R.string.pmdt)))
+                columnName = "pmdt_location";
+            else if (App.getProgram().equals(context.getResources().getString(R.string.childhood_tb)))
+                columnName = "childhood_tb_location";
+
+            deleteLocationsByProgram(columnName);
             try {
                 for (int i = 0; i < response.length(); i++) {
                     JSONObject jsonobject = response.getJSONObject(i);
@@ -385,6 +402,17 @@ public class ServerService {
                     String fastLocation = location.getFastLocation();
                     String comorbiditiesLocation = location.getComorbiditiesLocation();
                     String childhoodtbLocation = location.getChildhoodTbLocation();
+
+                    if (App.getProgram().equals(context.getResources().getString(R.string.pet)) && location.getPetLocation().equals("Y"))
+                        columnName = "pet_location";
+                    else if (App.getProgram().equals(context.getResources().getString(R.string.fast)) && location.getFastLocation().equals("Y"))
+                        columnName = "fast_location";
+                    else if (App.getProgram().equals(context.getResources().getString(R.string.comorbidities)) && location.getComorbiditiesLocation().equals("Y"))
+                        columnName = "comorbidities_location";
+                    else if (App.getProgram().equals(context.getResources().getString(R.string.pmdt)))
+                        columnName = "pmdt_location";
+                    else if (App.getProgram().equals(context.getResources().getString(R.string.childhood_tb)))
+                        columnName = "childhood_tb_location";
 
                     ContentValues values = new ContentValues();
                     values.put("location_name", name);
