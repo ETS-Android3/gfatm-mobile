@@ -409,7 +409,7 @@
     <string name="title_close">Close App</string>
     <string name="warning_before_close">Are you sure you want to close the App?</string>
     <string name="title_error">Error!</string>
-    <string name="form_error">Resolve the  all the issue(s) to continue.</string>
+    <string name="form_error">Resolve all the issue(s) to continue.</string>
     <string name="enrollment_date_error">Enrollment Date can\'t be after form date.</string>
     <string name="duplicate_patient_id">Patient ID already exists.</string>
     <string name="barcode_scanner_missing">Missing Barcode Scanner. Please download and install Barcode Scanner from Play Store to be able to scan the QR Codes.</string>
