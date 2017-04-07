@@ -161,7 +161,8 @@ public abstract class AbstractFormActivity extends Fragment
         }
 
         saveButton.setVisibility(View.GONE);
-        //snackbar.dismiss();
+        if (snackbar != null)
+            snackbar.dismiss();
         return mainContent;
     }
 
@@ -338,7 +339,8 @@ public abstract class AbstractFormActivity extends Fragment
             gotoNextPage();
         } else if (view == clearButton) {
 
-            //snackbar.dismiss();
+            if (snackbar != null)
+                snackbar.dismiss();
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
@@ -369,7 +371,8 @@ public abstract class AbstractFormActivity extends Fragment
             alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
 
         } else if (view == submitButton) {
-            //snackbar.dismiss();
+            if (snackbar != null)
+                snackbar.dismiss();
             if (validate()) {
 
                 int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
@@ -425,7 +428,8 @@ public abstract class AbstractFormActivity extends Fragment
 
     public void resetViews() {
 
-        //snackbar.dismiss();
+        if (snackbar != null)
+            snackbar.dismiss();
         startTime = new Date();
         endTime = null;
 
