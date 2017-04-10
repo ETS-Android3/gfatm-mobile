@@ -348,8 +348,8 @@
     <string name="city_default" translatable="false">Karachi</string>
     <string name="province_default" translatable="false">Sindh</string>
     <string name="country_default" translatable="false">Pakistan</string>
-    <!-- <string name="ip_default" translatable="false">175.107.206.186</string>
-     <string name="port_default" translatable="false">80</string>-->
+    <!--<string name="ip_default" translatable="false">mrs.ghd.ihn.org.pk</string>
+    <string name="port_default" translatable="false">443</string>-->
     <string name="ip_default" translatable="false">202.141.249.106</string>
     <string name="port_default" translatable="false">9902</string>
 
@@ -358,7 +358,8 @@
     <string name="city">City</string>
     <string name="country">Country</string>
     <string name="province">Province</string>
-    <string name="ip">Server\'s IP</string>
+    <string name="server_address">Server\'s Address</string>
+    <string name="ip">Server\'s IP/Domain Name</string>
     <string name="port">Port</string>
 
     <string name="ok">OK</string>
@@ -521,5 +522,8 @@
     </string-array>
 
     <string name="trust_store_password">jingle94</string>
+
+    <string name="result_id_error">Test Id already used.</string>
+    <string name="order_id_error">No order form entered for specific Test ID.</string>
 
 </resources>
