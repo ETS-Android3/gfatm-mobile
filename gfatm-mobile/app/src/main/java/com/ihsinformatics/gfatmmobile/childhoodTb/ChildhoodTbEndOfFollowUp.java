@@ -144,7 +144,7 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         treatmentOutcome = new TitledSpinner(context,null,getResources().getString(R.string.ctb_treatment_outcome),getResources().getStringArray(R.array.ctb_treatment_outcome_list),getResources().getString(R.string.ctb_cured),App.HORIZONTAL,true);
-        otherReasonRemarks = new TitledEditText(context,null,getResources().getString(R.string.ctb_other_reason_remarks),"","",250,RegexUtil.ALPHA_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
+        otherReasonRemarks = new TitledEditText(context,null,getResources().getString(R.string.ctb_other_reason_remarks),"","",250,null,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
         locationOfTransferOutReferral = new TitledEditText(context, null, getResources().getString(R.string.ctb_location_referral_transfer),"","",100,null,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,true);
         treatmentIntiatedAtReferralTransfer = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_treatment_intiated_at_referral_transfer),getResources().getStringArray(R.array.yes_no_unknown_options),getResources().getString(R.string.yes),App.HORIZONTAL,App.VERTICAL,true);
         reasonTreatmentNotIntiated = new TitledSpinner(context,null,getResources().getString(R.string.ctb_reason_treatment_not_intiated),getResources().getStringArray(R.array.ctb_reason_not_intiated_list),null,App.VERTICAL,true);
@@ -155,7 +155,7 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
         lastName = new TitledEditText(context,null,getResources().getString(R.string.last_name),"","",50,RegexUtil.ALPHA_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,true);
         contactNumberLayout = new LinearLayout(context);
         contactNumberLayout.setOrientation(LinearLayout.HORIZONTAL);
-        contactNumber1 = new TitledEditText(context, null, getResources().getString(R.string.ctb_contact_number), "", "####", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        contactNumber1 = new TitledEditText(context, null, getResources().getString(R.string.ctb_contact_number), "", "####", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL,true);
         contactNumberLayout.addView(contactNumber1);
         contactNumber2 = new TitledEditText(context, null, "-", "", "#######", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         contactNumberLayout.addView(contactNumber2);
@@ -178,24 +178,6 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
         reasonTreatmentNotIntiated.getSpinner().setOnItemSelectedListener(this);
         drConfirmation.getRadioGroup().setOnCheckedChangeListener(this);
 
-        locationOfTransferOutReferral.getEditText().addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(s.length()>0){
-                    treatmentIntiatedAtReferralTransfer.setVisibility(View.VISIBLE);
-                }
-            }
-        });
 
 
         resetViews();
@@ -283,7 +265,15 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
                 enrsNumber.getEditText().setError(getString(R.string.invalid_value));
                 enrsNumber.getEditText().requestFocus();
                 error = true;
+            }else{
+                String enrsId = App.getPatient().getEnrs();
+                if(enrsId.equalsIgnoreCase(App.get(enrsNumber))){
+                    enrsNumber.getEditText().setError(getString(R.string.ctb_duplicate_enrs));
+                    enrsNumber.getEditText().requestFocus();
+                    error = true;
+                }
             }
+
             enrsNumber.clearFocus();
         }
         if(otherReasonRemarks.getVisibility()==View.VISIBLE && App.get(otherReasonRemarks).isEmpty()){
@@ -340,8 +330,7 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
         }
         endTime = new Date();
         final ArrayList<String[]> observations = new ArrayList<String[]>();
-        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
-        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+        observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
 
@@ -638,14 +627,23 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
                 locationOfTransferOutReferral.setVisibility(View.VISIBLE);
                 locationOfTransferOutReferral.getEditText().setKeyListener(null);
                 if(referralTransferLocation!=null) {
+                    treatmentIntiatedAtReferralTransfer.setVisibility(View.VISIBLE);
                     if (referralTransferLocation.equalsIgnoreCase(getResources().getString(R.string.ctb_other_title))) {
                         String otherReferralTransferLocation = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Referral", "LOCATION OF REFERRAL OR TRANSFER OTHER");
                         locationOfTransferOutReferral.getEditText().setText(otherReferralTransferLocation);
                     } else {
                         locationOfTransferOutReferral.getEditText().setText(referralTransferLocation);
                     }
+                }else{
+                    treatmentIntiatedAtReferralTransfer.setVisibility(View.GONE);
+                    reasonTreatmentNotIntiated.setVisibility(View.GONE);
+                    otherReasonTreatmentNotIntiated.setVisibility(View.GONE);
                 }
             } else {
+                treatmentIntiatedAtReferralTransfer.getRadioGroup().getButtons().get(0).setChecked(true);
+                treatmentIntiatedAtReferralTransfer.setVisibility(View.GONE);
+                reasonTreatmentNotIntiated.setVisibility(View.GONE);
+                otherReasonTreatmentNotIntiated.setVisibility(View.GONE);
                 locationOfTransferOutReferral.setVisibility(View.GONE);
             }
         }else if(spinner == reasonTreatmentNotIntiated.getSpinner()) {
@@ -701,8 +699,12 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
         if (group == treatmentIntiatedAtReferralTransfer.getRadioGroup()) {
             if (treatmentIntiatedAtReferralTransfer.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.no)) || treatmentIntiatedAtReferralTransfer.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.unknown))) {
                 reasonTreatmentNotIntiated.setVisibility(View.VISIBLE);
+                if(App.get(reasonTreatmentNotIntiated).equalsIgnoreCase(getResources().getString(R.string.ctb_other_title))){
+                    otherReasonTreatmentNotIntiated.setVisibility(View.VISIBLE);
+                }
             } else {
                 reasonTreatmentNotIntiated.setVisibility(View.GONE);
+                otherReasonTreatmentNotIntiated.setVisibility(View.GONE);
             }
         }
         if (group == drConfirmation.getRadioGroup()) {

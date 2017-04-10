@@ -186,7 +186,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         nearestLandmark = new TitledEditText(context,null,getResources().getString(R.string.ctb_nearest_landmark),"","",50,null,InputType.TYPE_CLASS_TEXT,App.VERTICAL,false);
         mobileLinearLayout = new LinearLayout(context);
         mobileLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
-        mobileNumber1 = new TitledEditText(context, null, getResources().getString(R.string.mobile_number), "", "####", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        mobileNumber1 = new TitledEditText(context, null, getResources().getString(R.string.mobile_number), "", "####", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         mobileLinearLayout.addView(mobileNumber1);
         mobileNumber2 = new TitledEditText(context, null, "-", "", "#######", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         mobileLinearLayout.addView(mobileNumber2);
@@ -202,7 +202,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         permissionSecondaryMobileNumber = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_permission),getResources().getStringArray(R.array.yes_no_options),getResources().getString(R.string.no),App.HORIZONTAL,App.VERTICAL,true);
         landlineLayout = new LinearLayout(context);
         landlineLayout.setOrientation(LinearLayout.HORIZONTAL);
-        landlineNumber1 = new TitledEditText(context, null, getResources().getString(R.string.ctb_landline_number), "", "###", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        landlineNumber1 = new TitledEditText(context, null, getResources().getString(R.string.ctb_landline_number), "", "###", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         landlineLayout.addView(landlineNumber1);
         landlineNumber2 = new TitledEditText(context, null, "-", "", "########", 8, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         landlineLayout.addView(landlineNumber2);
@@ -533,6 +533,16 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
             error = true;
             view = null;
         }
+        else if (cnicOwnerOther.getVisibility() == View.VISIBLE && App.get(cnicOwnerOther).trim().length() <= 0){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            cnicOwnerOther.getEditText().setError(getString(R.string.empty_field));
+            cnicOwnerOther.getEditText().requestFocus();
+            error = true;
+            view = null;
+        }
         if(!App.get(secondaryLandlineNumber1).isEmpty() || !App.get(secondaryLandlineNumber2).isEmpty()){
             String secondaryLandline = secondaryLandlineNumber1.getEditText().getText().toString() + secondaryLandlineNumber2.getEditText().getText().toString();
             if (!RegexUtil.isLandlineNumber(secondaryLandline)) {
@@ -583,6 +593,60 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                 error = true;
                 view = mobileLinearLayout;
             }
+        }if(address1.getVisibility()==View.VISIBLE){
+            if(App.get(address1).isEmpty()){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                address1.getEditText().setError(getString(R.string.empty_field));
+                address1.getEditText().requestFocus();
+                error = true;
+                view = null;
+            }
+            else if(App.get(address1).trim().length() <= 0){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                address1.getEditText().setError(getString(R.string.ctb_spaces_only));
+                address1.getEditText().requestFocus();
+                error = true;
+                view = null;
+            }
+        }
+
+        if(address2.getVisibility()==View.VISIBLE){
+            if(App.get(address2).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                address2.getEditText().setError(getString(R.string.empty_field));
+                address2.getEditText().requestFocus();
+                error = true;
+                view = null;
+            }
+            else if (App.get(address2).trim().length() <= 0){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                address2.getEditText().setError(getString(R.string.ctb_spaces_only));
+                address2.getEditText().requestFocus();
+                error = true;
+                view = null;
+            }
+        }
+        if (App.get(nearestLandmark).trim().length() <= 0 && !App.get(nearestLandmark).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            nearestLandmark.getEditText().setError(getString(R.string.ctb_spaces_only));
+            nearestLandmark.getEditText().requestFocus();
+            error = true;
+            view = null;
         }
         if(App.get(cnic1).isEmpty() && App.get(cnic2).isEmpty() && App.get(cnic3).isEmpty()){
             if (App.isLanguageRTL())
@@ -658,8 +722,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         endTime = new Date();
 
         final ArrayList<String[]> observations = new ArrayList<String[]>();
-        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
-        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+        observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         String cnic = cnic1.getEditText().getText().toString() + "-" + cnic2.getEditText().getText().toString() + "-" + cnic3.getEditText().getText().toString();

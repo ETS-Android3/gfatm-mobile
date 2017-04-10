@@ -143,16 +143,16 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         formType = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_type_of_form), getResources().getStringArray(R.array.ctb_type_of_form_list), null, App.HORIZONTAL, App.VERTICAL, true);
-        typeOfXRay = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_type_of_xray),getResources().getStringArray(R.array.ctb_type_of_xray_list),getResources().getString(R.string.ctb_chest_xray_other),App.HORIZONTAL,App.VERTICAL);
-        monthTreatment = new TitledEditText(context,null,getResources().getString(R.string.ctb_month_treatment),"1","",2,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,false);
+        typeOfXRay = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_type_of_xray),getResources().getStringArray(R.array.ctb_type_of_xray_list),getResources().getString(R.string.ctb_chest_xray_other),App.HORIZONTAL,App.VERTICAL,true);
+        monthTreatment = new TitledEditText(context,null,getResources().getString(R.string.ctb_month_treatment),"1","",2,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,true);
         testDate = new TitledButton(context, null, getResources().getString(R.string.ctb_test_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         testDate.setTag("testDate");
-        testId = new TitledEditText(context,null,getResources().getString(R.string.ctb_test_id),"","",11,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,false);
-        chestXRayScore = new TitledEditText(context,null,getResources().getString(R.string.ctb_chest_xray_cad4tb_score),"","",8,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,false);
-        radiologicalDiagnosis = new TitledSpinner(context,null,getResources().getString(R.string.ctb_radiological_diagnosis),getResources().getStringArray(R.array.ctb_radiological_diagnosis_list),null,App.VERTICAL);
+        testId = new TitledEditText(context,null,getResources().getString(R.string.ctb_test_id),"","",20,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,true);
+        chestXRayScore = new TitledEditText(context,null,getResources().getString(R.string.ctb_chest_xray_cad4tb_score),"","",3,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,true);
+        radiologicalDiagnosis = new TitledSpinner(context,null,getResources().getString(R.string.ctb_radiological_diagnosis),getResources().getStringArray(R.array.ctb_radiological_diagnosis_list),null,App.VERTICAL,true);
         otherRadiologicalDiagnosis = new TitledEditText(context,null,getResources().getString(R.string.ctb_other_specify),"","",50,RegexUtil.ALPHA_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
         diseaseExtent = new TitledSpinner(context,null,getResources().getString(R.string.ctb_extent_disease),getResources().getStringArray(R.array.ctb_disease_extent_list),null,App.VERTICAL);
-        radiologistRemarks = new TitledEditText(context,null,getResources().getString(R.string.ctb_radiologist_remark),"","",500,RegexUtil.ALPHA_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
+        radiologistRemarks = new TitledEditText(context,null,getResources().getString(R.string.ctb_radiologist_remark),"","",500,null,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
         LinearLayout linearLayout = new LinearLayout(context);
         LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -390,8 +390,7 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
         endTime = new Date();
 
         final ArrayList<String[]> observations = new ArrayList<String[]>();
-        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
-        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+        observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         if (App.get(formType).equals(getResources().getString(R.string.ctb_order))) {
@@ -867,9 +866,9 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
                 } else {
 
                     if (App.get(formType).equals(getResources().getString(R.string.ctb_order))) {
-                        testId.getEditText().setError("Test Id already used.");
+                        testId.getEditText().setError(getResources().getString(R.string.result_id_error));
                     } else {
-                        testId.getEditText().setError("No order form found for the test id for patient");
+                        testId.getEditText().setError(getResources().getString(R.string.order_id_error));
                     }
 
                 }

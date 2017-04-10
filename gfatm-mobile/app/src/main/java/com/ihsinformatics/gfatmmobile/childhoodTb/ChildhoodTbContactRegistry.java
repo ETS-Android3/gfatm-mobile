@@ -311,6 +311,18 @@ public class ChildhoodTbContactRegistry extends AbstractFormActivity implements 
             adultContacts.getEditText().requestFocus();
             error = true;
         }
+        else{
+            int adultContactsInt = Integer.parseInt(App.get(adultContacts));
+            if(adultContactsInt<0 || adultContactsInt>25){
+                    if (App.isLanguageRTL())
+                        gotoPage(0);
+                    else
+                        gotoPage(0);
+                    adultContacts.getEditText().setError("Error, enter value between 0-25");
+                    adultContacts.getEditText().requestFocus();
+                    error = true;
+            }
+        }
         if (App.get(childhoodContacts).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
@@ -319,6 +331,17 @@ public class ChildhoodTbContactRegistry extends AbstractFormActivity implements 
             childhoodContacts.getEditText().setError(getString(R.string.empty_field));
             childhoodContacts.getEditText().requestFocus();
             error = true;
+        } else{
+            int childhoodContactInt = Integer.parseInt(App.get(childhoodContacts));
+            if(childhoodContactInt<0 || childhoodContactInt>25){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                childhoodContacts.getEditText().setError("Error, enter value between 0-25");
+                childhoodContacts.getEditText().requestFocus();
+                error = true;
+            }
         }
 
         if (error) {
@@ -363,8 +386,7 @@ public class ChildhoodTbContactRegistry extends AbstractFormActivity implements 
         }
         endTime = new Date();
         final ArrayList<String[]> observations = new ArrayList<String[]>();
-        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
-        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+        observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         observations.add(new String[]{"NUMBER OF CONTACTS", App.get(contacts)});

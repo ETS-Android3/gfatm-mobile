@@ -212,6 +212,18 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
             ppaScore.getEditText().requestFocus();
             error = true;
         }
+        else if(!App.get(ppaScore).isEmpty()){
+            int ppaScoreInt = Integer.parseInt(App.get(ppaScore));
+            if(ppaScoreInt<0 || ppaScoreInt>15){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                ppaScore.getEditText().setError(getString(R.string.ctb_ppa_score_validate));
+                ppaScore.getEditText().requestFocus();
+                error = true;
+            }
+        }
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
@@ -255,8 +267,7 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
         endTime = new Date();
 
         final ArrayList<String[]> observations = new ArrayList<String[]>();
-        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
-        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+        observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         observations.add(new String[]{"PPA SCORE", App.get(ppaScore)});

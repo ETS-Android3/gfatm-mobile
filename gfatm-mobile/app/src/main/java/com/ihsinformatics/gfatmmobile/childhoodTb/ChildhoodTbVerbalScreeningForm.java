@@ -473,8 +473,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
         endTime = new Date();
 
         final ArrayList<String[]> observations = new ArrayList<String[]>();
-        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
-        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+        observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         observations.add(new String[]{"SCREENING LOCATION", App.get(screeningLocation).toUpperCase()});
@@ -1066,8 +1065,8 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
             snackbar.dismiss();
 
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        facility_section.getSpinner().selectValue(getResources().getString(R.string.ctb_opd_clinic));
         facility_section_other.setVisibility(View.GONE);
-        opd_ward_section.setVisibility(View.GONE);
         coughDuration.setVisibility(View.GONE);
         tbMedication.setVisibility(View.GONE);
         closeContactType.setVisibility(View.GONE);
