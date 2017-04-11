@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 public class ServerActivity extends AbstractSettingActivity {
@@ -41,8 +40,8 @@ public class ServerActivity extends AbstractSettingActivity {
         ipLayout.addView(ipTextView);
         ip = new EditText(this);
         ip.setInputType(InputType.TYPE_CLASS_PHONE);
-        ip.setMaxEms(15);
-        ip.setFilters(new InputFilter[]{new InputFilter.LengthFilter(15)});
+        ip.setMaxEms(50);
+        ip.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
         ip.setSingleLine(true);
         ip.setText(App.getIp());
         ip.setGravity(Gravity.LEFT);
@@ -63,7 +62,7 @@ public class ServerActivity extends AbstractSettingActivity {
         portTextView.setTextColor(color);
         portLayout.addView(portTextView);
         port = new EditText(this);
-        port.setInputType(InputType.TYPE_CLASS_NUMBER);
+        port.setInputType(InputType.TYPE_CLASS_TEXT);
         port.setMaxEms(4);
         port.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
         port.setSingleLine(true);
@@ -129,15 +128,6 @@ public class ServerActivity extends AbstractSettingActivity {
             ip.setError(getString(R.string.empty_field));
             ip.requestFocus();
             cancel = true;
-        } else {
-
-            if (!RegexUtil.isIpAddress(App.get(ip))) {
-                ip.setError(getString(R.string.invalid_value));
-                ip.requestFocus();
-                cancel = true;
-            }
-
-
         }
 
         return cancel;
