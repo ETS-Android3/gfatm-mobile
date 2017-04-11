@@ -189,6 +189,8 @@ public class Forms{
     /********************************
      * PMDT
      ********************************/
+    public static final String PMDT_TREATMENT_INITIATION = "Treatment Initiation";
+
     public static final String PMDT_PATIENT_REGISTRAITON = "Patient Registration";
     public static final String PMDT_PROVIDER_REGISTRAITON = "Provider Registration";
     public static final String PMDT_BASIC_MANAGEMENT_UNIT_VISIT = "Basic Management Unit Visit";
