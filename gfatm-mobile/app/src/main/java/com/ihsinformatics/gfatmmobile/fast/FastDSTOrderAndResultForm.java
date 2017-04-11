@@ -527,8 +527,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
         endTime = new Date();
 
         final ArrayList<String[]> observations = new ArrayList<String[]>();
-        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
-        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+        observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
 
