@@ -2,6 +2,7 @@ package com.ihsinformatics.gfatmmobile.pmdt;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.renderscript.ScriptGroup;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.InputType;
@@ -41,8 +42,9 @@ public class PmdtPatientAssignmentForm extends AbstractFormActivity implements R
 
     TitledEditText address1;
     TitledEditText address2;
-    TitledSpinner addressCityDistrict;  // List - To be decided by Program Team later
-    TitledSpinner addressTownTaluka;       // Towns - To be decided by Program Team later
+    TitledSpinner addressDistrict;
+    TitledSpinner addressCityVillage;
+    TitledEditText addressTownTaluka;
     TitledEditText addressLandmark;
 
     TitledRadioGroup treatmentSupporterHouseholdMember;
@@ -120,11 +122,12 @@ public class PmdtPatientAssignmentForm extends AbstractFormActivity implements R
         treatmentSupporterFirstName.setFocusableInTouchMode(true);
         treatmentSupporterLastName = new TitledEditText(context, "", getResources().getString(R.string.pmdt_treatment_supporter_last_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         treatmentSupporterLastName.setFocusableInTouchMode(true);
-        address1 = new TitledEditText(context, "", getResources().getString(R.string.pmdt_current_address_1), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        address2 = new TitledEditText(context, "", getResources().getString(R.string.pmdt_current_address_2), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        addressCityDistrict = new TitledSpinner(context, "", getResources().getString(R.string.pmdt_current_address_city), getResources().getStringArray(R.array.pmdt_cities), getResources().getString(R.string.pmdt_karachi), App.HORIZONTAL);
-        // Taluka to be considered
-        addressLandmark = new TitledEditText(context, "", getResources().getString(R.string.pmdt_current_address_landmark), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        address1 = new TitledEditText(context, "", getResources().getString(R.string.pmdt_address_one), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        address2 = new TitledEditText(context, "", getResources().getString(R.string.pmdt_address_two), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        addressDistrict = new TitledSpinner(context, "", getResources().getString(R.string.pmdt_address_district), getResources().getStringArray(R.array.pmdt_empty_array), "", App.VERTICAL);
+        addressCityVillage = new TitledSpinner(context, "", getResources().getString(R.string.pmdt_address_city_village), getResources().getStringArray(R.array.pmdt_empty_array), "", App.VERTICAL);
+        addressTownTaluka = new TitledEditText(context, null, getResources().getString(R.string.pmdt_address_town_taluka), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        addressLandmark = new TitledEditText(context, "", getResources().getString(R.string.pmdt_address_landmark), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         treatmentSupporterHouseholdMember = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_treatment_supporter_household_member), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         treatmentSupporterPatientRelationship = new TitledSpinner(context, "", getResources().getString(R.string.pmdt_treatment_supporter_patient_relationship), getResources().getStringArray(R.array.pmdt_treatment_supporter_patient_relation), getResources().getString(R.string.pmdt_father), App.VERTICAL);
         otherRelationship = new TitledEditText(context, "", getResources().getString(R.string.pmdt_other_relationship), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
@@ -132,14 +135,14 @@ public class PmdtPatientAssignmentForm extends AbstractFormActivity implements R
         otherReasonTreatmentSupporterHouseholdMember = new TitledEditText(context, "", getResources().getString(R.string.pmdt_other_reason_having_treatment_supporter), "", "", 255, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
 
         views = new View[]{formDate.getButton(), treatmentSupporterId.getEditText(), treatmentSupporterFirstName.getEditText(), treatmentSupporterLastName.getEditText(),
-                address1.getEditText(), address2.getEditText(), addressCityDistrict.getSpinner(), /* Taluka, if required*/ addressLandmark.getEditText(),
+                address1.getEditText(), address2.getEditText(), addressCityVillage.getSpinner(), /* Taluka, if required*/ addressLandmark.getEditText(),
                 treatmentSupporterHouseholdMember.getRadioGroup(), treatmentSupporterPatientRelationship.getSpinner(), otherRelationship.getEditText(),
                 otherReasonTreatmentSupporterHouseholdMember.getEditText(), otherReasonTreatmentSupporterHouseholdMember.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formDate, treatmentSupporterId, treatmentSupporterFirstName, treatmentSupporterLastName, address1, address2,
-                        addressCityDistrict, addressLandmark, treatmentSupporterHouseholdMember, treatmentSupporterPatientRelationship,
+                        addressCityVillage, addressLandmark, treatmentSupporterHouseholdMember, treatmentSupporterPatientRelationship,
                         otherRelationship, reasonTreatmentSupporterHouseholdMember, otherReasonTreatmentSupporterHouseholdMember}};
 
         formDate.getButton().setOnClickListener(this);

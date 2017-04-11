@@ -7,6 +7,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.InputType;
 import android.text.format.DateFormat;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.R;
+import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
@@ -40,8 +42,9 @@ public class PmdtBasicManagementUnitVistForm extends AbstractFormActivity {
     TitledButton formDate;
     TitledButton visitDate;
     TitledSpinner district;
-    TitledSpinner townTaluka;
-    // city selected in preferences
+    TitledSpinner cityVillage;
+    // province selected in preferences
+    TitledEditText townTaluka;
     TitledEditText basicManagmentUnitVisited;
     TitledEditText doctorVisitedName;
     TitledEditText numberFailureCases;
@@ -121,9 +124,10 @@ public class PmdtBasicManagementUnitVistForm extends AbstractFormActivity {
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         visitDate = new TitledButton(context, null, getResources().getString(R.string.pmdt_visit_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
-        district = new TitledSpinner(context, null, getResources().getString(R.string.pmdt_district), getResources().getStringArray(R.array.pmdt_towns), getResources().getString(R.string.pmdt_gulshan_e_iqbal), App.HORIZONTAL, true);
-        townTaluka = new TitledSpinner(context, null, getResources().getString(R.string.pmdt_town_taluka_tehsil), getResources().getStringArray(R.array.pmdt_towns), getResources().getString(R.string.pmdt_gulshan_e_iqbal), App.HORIZONTAL, true);
-        basicManagmentUnitVisited = new TitledEditText(context, null, getResources().getString(R.string.pmdt_basic_management_unit_visited), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        district = new TitledSpinner(context, "", getResources().getString(R.string.pmdt_district), getResources().getStringArray(R.array.pmdt_empty_array), "", App.VERTICAL);
+        cityVillage = new TitledSpinner(context, "", getResources().getString(R.string.pmdt_city_village), getResources().getStringArray(R.array.pmdt_empty_array), "", App.VERTICAL);
+        townTaluka = new TitledEditText(context, null, getResources().getString(R.string.pmdt_town_taluka_tehsil), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        basicManagmentUnitVisited = new TitledEditText(context, null, getResources().getString(R.string.pmdt_basic_management_unit_visited), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         doctorVisitedName = new TitledEditText(context, null, getResources().getString(R.string.pmdt_doctor_name_visited), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         numberFailureCases = new TitledEditText(context, null, getResources().getString(R.string.pmdt_number_failure_cases), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
 
@@ -166,17 +170,18 @@ public class PmdtBasicManagementUnitVistForm extends AbstractFormActivity {
 
         numberPatientsEnrolled = new TitledEditText(context, null, getResources().getString(R.string.pmdt_number_patients_enrolled), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
 
-        views = new View[]{formDate.getButton(), visitDate.getButton(), district.getSpinner(), townTaluka.getSpinner(),
+        views = new View[]{formDate.getButton(), visitDate.getButton(), district.getSpinner(), cityVillage.getSpinner(), townTaluka.getEditText(),
                 basicManagmentUnitVisited.getEditText(), doctorVisitedName.getEditText(), numberFailureCases.getEditText(),
                 referredFacilityAutoCompleteList, numberPatientsEnrolled.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, visitDate, district, townTaluka, basicManagmentUnitVisited, doctorVisitedName,
+                {{formDate, visitDate, district, cityVillage, townTaluka, basicManagmentUnitVisited, doctorVisitedName,
                         numberFailureCases, facilityLinearLayout, numberPatientsEnrolled}};
 
         formDate.getButton().setOnClickListener(this);
         visitDate.getButton().setOnClickListener(this);
+        district.getSpinner().setOnItemSelectedListener(this);
         resetViews();
 
     }
@@ -238,6 +243,25 @@ public class PmdtBasicManagementUnitVistForm extends AbstractFormActivity {
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+        MySpinner spinner = (MySpinner) parent;
+        if (spinner == district.getSpinner()) {
+
+            String[] cities = serverService.getCityList(App.get(district));
+            cityVillage.getSpinner().setAdapter(null);
+
+            ArrayAdapter<String> spinnerArrayAdapter = null;
+            if (App.isLanguageRTL()) {
+                spinnerArrayAdapter = new ArrayAdapter<String>(context, R.layout.custom_rtl_spinner, cities);
+                cityVillage.getSpinner().setAdapter(spinnerArrayAdapter);
+                spinnerArrayAdapter.setDropDownViewResource(R.layout.custom_rtl_spinner);
+                cityVillage.getSpinner().setGravity(Gravity.RIGHT);
+            } else {
+                spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, cities);
+                cityVillage.getSpinner().setAdapter(spinnerArrayAdapter);
+                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                cityVillage.getSpinner().setGravity(Gravity.LEFT);
+            }
+        }
     }
 
     @Override
@@ -249,6 +273,38 @@ public class PmdtBasicManagementUnitVistForm extends AbstractFormActivity {
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         visitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+
+        String[] districts = serverService.getDistrictList(App.getProvince());
+        district.getSpinner().setAdapter(null);
+
+        ArrayAdapter<String> spinnerArrayAdapter = null;
+        if (App.isLanguageRTL()) {
+            spinnerArrayAdapter = new ArrayAdapter<String>(context, R.layout.custom_rtl_spinner, districts);
+            district.getSpinner().setAdapter(spinnerArrayAdapter);
+            spinnerArrayAdapter.setDropDownViewResource(R.layout.custom_rtl_spinner);
+            district.getSpinner().setGravity(Gravity.RIGHT);
+        } else {
+            spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, districts);
+            district.getSpinner().setAdapter(spinnerArrayAdapter);
+            spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            district.getSpinner().setGravity(Gravity.LEFT);
+        }
+
+        String[] cities = serverService.getCityList(App.get(district));
+        cityVillage.getSpinner().setAdapter(null);
+
+        spinnerArrayAdapter = null;
+        if (App.isLanguageRTL()) {
+            spinnerArrayAdapter = new ArrayAdapter<String>(context, R.layout.custom_rtl_spinner, cities);
+            cityVillage.getSpinner().setAdapter(spinnerArrayAdapter);
+            spinnerArrayAdapter.setDropDownViewResource(R.layout.custom_rtl_spinner);
+            cityVillage.getSpinner().setGravity(Gravity.RIGHT);
+        } else {
+            spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, cities);
+            cityVillage.getSpinner().setAdapter(spinnerArrayAdapter);
+            spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            cityVillage.getSpinner().setGravity(Gravity.LEFT);
+        }
     }
 
     class MyAdapter extends PagerAdapter {
