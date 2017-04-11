@@ -10,9 +10,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.design.widget.NavigationView;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
@@ -77,9 +79,6 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Intent intent = new Intent(this, LocationService.class);
-        startService(intent);
 
         loading = new ProgressDialog(this);
         serverService = new ServerService(getApplicationContext());
@@ -214,6 +213,18 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
+
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            showLocationAlert();
+        } else {
+
+            if (!LocationService.isInstanceCreated()) {
+                Intent intent = new Intent(MainActivity.this, LocationService.class);
+                startService(intent);
+            }
+        }
+
 
         if (!getSupportActionBar().getSubtitle().toString().contains(App.getProgram())) {
             String subtitle = getResources().getString(R.string.program) + " " + App.getProgram() + "  |  " + getResources().getString(R.string.location) + " " + App.getLocation();
@@ -739,6 +750,7 @@ public class MainActivity extends AppCompatActivity
                     App.setPatientId(String.valueOf(form[0][3]));
                     App.setPatient(serverService.getPatientBySystemIdFromLocalDB(App.getPatientId()));
 
+
                     toastMessage = getResources().getString(R.string.selected_patient_changed) + " " + App.getPatient().getPerson().getGivenName() + " " + App.getPatient().getPerson().getFamilyName() + " (" + App.getPatient().getPatientId() + ")";
 
                 }
@@ -811,6 +823,30 @@ public class MainActivity extends AppCompatActivity
     public void openLocationSelectionDialog() {
         Intent languageActivityIntent = new Intent(this, LocationSelectionDialog.class);
         startActivity(languageActivityIntent);
+    }
+
+    public void showLocationAlert() {
+        final AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this, R.style.dialog).create();
+        alertDialog.setMessage(getResources().getString(R.string.gps_not_enabled));
+        Drawable clearIcon = getResources().getDrawable(R.drawable.ic_gps);
+        int color = App.getColor(context, R.attr.colorAccent);
+        DrawableCompat.setTint(clearIcon, color);
+        alertDialog.setIcon(clearIcon);
+        alertDialog.setTitle(getResources().getString(R.string.gps_settings));
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivity(intent);
+                    }
+                });
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
     }
 
 }
