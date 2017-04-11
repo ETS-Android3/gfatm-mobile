@@ -526,4 +526,6 @@
     <string name="result_id_error">Test Id already used.</string>
     <string name="order_id_error">No order form entered for specific Test ID.</string>
 
+    <string name="gps_not_enabled">GPS is not enabled. Do you want to go to settings menu?</string>
+    <string name="gps_settings">GPS settings</string>
 </resources>
