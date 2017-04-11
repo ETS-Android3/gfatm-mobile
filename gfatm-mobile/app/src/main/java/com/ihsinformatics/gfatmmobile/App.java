@@ -483,6 +483,11 @@ public class App {
         }
     }
 
+    public static int getTimeDurationBetween(Date startTime, Date endTime) {
+        Long secondsBetween = (endTime.getTime() - startTime.getTime()) / 1000;
+        return secondsBetween.intValue();
+    }
+
     public enum dialogButtonPosition {
         LEFT, CENTER, RIGHT
     }
