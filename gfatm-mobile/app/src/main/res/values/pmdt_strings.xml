@@ -51,9 +51,10 @@
 
     <!-- Basic Management Unit Visit -->
     <string name="pmdt_visit_date">Date of Visit</string>
+    <string name="pmdt_city_village">City/Village</string>
     <string name="pmdt_district">District</string>
     <string name="pmdt_town_taluka_tehsil">Town/Taluka/Tehsil</string>
-    <string name="pmdt_city_uc_sector">City/Sector/UC/Village</string>
+
     <string name="pmdt_basic_management_unit_visited">Name of Basic Management unit visited</string>
     <string name="pmdt_doctor_name_visited">Name of doctor visited</string>
     <string name="pmdt_number_failure_cases">Number of failure cases found</string>
@@ -62,6 +63,12 @@
     <string name="pmdt_number_patients_enrolled">Number of patients enrolled in PMDT</string>
 
     <!-- Patient Assignment Form -->
+    <string name="pmdt_address_one">Address 1 (House number, street number/name, sector number/name)</string>
+    <string name="pmdt_address_two">Address 2 (Colony, Union Council)</string>
+    <string name="pmdt_address_city_village">Address City/Village</string>
+    <string name="pmdt_address_district">Address District</string>
+    <string name="pmdt_address_town_taluka">Address Town/Taluka</string>
+    <string name="pmdt_address_landmark">Address Land mark</string>
     <string name="pmdt_treatment_supporter_id">Treatment Supporter ID</string>
     <string name="pmdt_treatment_supporter_first_name">Treatment Supporter First Name</string>
     <string name="pmdt_treatment_supporter_last_name">Treatment Supporter Last Name</string>
@@ -166,6 +173,7 @@
     <string name="pmdt_reason_dissociation_other">If reason \'other\', then specify</string>
 
     <!-- Daily Treatment Monitoring -->
+    <string name="pmdt_treatment_initiation_missing">Treatment Initiation form is missing. If form is already submitted to openmrs, please try updating patient.</string>
     <string name="pmdt_reporting_date">Date of reporting</string>
     <string name="pmdt_day_of_treatment">Which day of treatment?</string>
     <string name="pmdt_treatment_day_type">Is it a fully observed day, missed prescribed day, or an incomplete prescribed day?</string>
@@ -494,6 +502,10 @@
 
     <!-- Contact Baseline Screening Form -->
     <string name="pmdt_index_patient_id">Index Patient ID:</string>
+    <string name="pmdt_valid_index_case">VALID INDEX CASE</string>
+    <string name="pmdt_fetch_patient_online_mode">Please work in online mode to verify index case.</string>
+    <string name="pmdt_index_case_not_found">INDEX CASE NOT FOUND</string>
+    <string name="pmdt_index_contact_id_same_error">Index Id and Contact id can\'t be same.</string>
     <string name="pmdt_baseline_screening_date">Date of baseline contact screening</string>
     <string name="pmdt_relation_with_index_patient">Relation with Index patient. (e.g. \'Mother\' means Index is Mother of Contact)</string>
     <string name="pmdt_relation_with_index_patient_other">Other Relation</string>
@@ -513,8 +525,6 @@
         <item>@string/pmdt_mother</item>
         <item>@string/pmdt_father</item>
         <item>@string/pmdt_husband</item>
-        <item>@string/pmdt_wife</item>
-        <item>@string/pmdt_son</item>
         <item>@string/pmdt_daughter</item>
         <item>@string/pmdt_brother</item>
         <item>@string/pmdt_sister</item>
@@ -532,6 +542,7 @@
         <!--<item>@string/pmdt_son_in_law</item>-->
         <!--<item>@string/pmdt_brother_in_law</item>-->
         <!--<item>@string/pmdt_sister_in_law</item>-->
+        <item>@string/pmdt_spouse</item>
         <item>@string/pmdt_uncle</item>
         <item>@string/pmdt_aunt</item>
         <!--<item>@string/pmdt_cousin</item>-->
@@ -737,6 +748,7 @@
         <item>@string/pmdt_refused</item>
     </string-array>
 
-
+    <string-array name="pmdt_empty_array">
+    </string-array>
 
 </resources>

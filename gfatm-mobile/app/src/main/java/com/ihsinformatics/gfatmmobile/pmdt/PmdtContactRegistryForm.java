@@ -46,7 +46,7 @@ public class PmdtContactRegistryForm extends AbstractFormActivity {
     TitledEditText totalContacts;
     TitledButton householdContactRegistryDate;
     TitledEditText totalAdultContacts;
-    TitledEditText totalChildrenContacts;
+    TitledEditText totalChildhoodContacts;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -111,13 +111,13 @@ public class PmdtContactRegistryForm extends AbstractFormActivity {
 
         formDate = new TitledButton(context, null, getResources().getString(R.string.form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         householdContactRegistryDate = new TitledButton(context, null, getResources().getString(R.string.pmdt_household_contact_registry_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
-        totalContacts = new TitledEditText(context, null, getResources().getString(R.string.pmdt_total_contacts), "", getResources().getString(R.string.pet_total_contacts_hint), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        totalAdultContacts = new TitledEditText(context, null, getResources().getString(R.string.pmdt_total_adult_contacts), "", getResources().getString(R.string.pet_total_adult_contacts_hint), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        totalChildrenContacts = new TitledEditText(context, null, getResources().getString(R.string.pmdt_total_childern_contacts), "", getResources().getString(R.string.pet_total_childern_contacts_hint), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        totalContacts = new TitledEditText(context, null, getResources().getString(R.string.pmdt_total_contacts), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        totalAdultContacts = new TitledEditText(context, null, getResources().getString(R.string.pmdt_total_adult_contacts), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        totalChildhoodContacts = new TitledEditText(context, null, getResources().getString(R.string.pmdt_total_childern_contacts), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
 
-        views = new View[]{formDate.getButton(), householdContactRegistryDate.getButton(), totalContacts.getEditText(), totalAdultContacts.getEditText(), totalChildrenContacts.getEditText()};
+        views = new View[]{formDate.getButton(), householdContactRegistryDate.getButton(), totalContacts.getEditText(), totalAdultContacts.getEditText(), totalChildhoodContacts.getEditText()};
 
-        viewGroups = new View[][]{{formDate, householdContactRegistryDate, totalContacts, totalAdultContacts, totalChildrenContacts}};
+        viewGroups = new View[][]{{formDate, householdContactRegistryDate, totalContacts, totalAdultContacts, totalChildhoodContacts}};
 
         formDate.getButton().setOnClickListener(this);
         householdContactRegistryDate.getButton().setOnClickListener(this);
@@ -128,9 +128,6 @@ public class PmdtContactRegistryForm extends AbstractFormActivity {
 
     @Override
     public void updateDisplay() {
-
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        householdContactRegistryDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
 
         if (snackbar != null)
             snackbar.dismiss();
@@ -160,6 +157,14 @@ public class PmdtContactRegistryForm extends AbstractFormActivity {
             } else
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
+
+            if (secondDateCalendar.after(formDateCalendar)) {
+                householdContactRegistryDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+                Date date1 = App.stringToDate(formDate.getButton().getText().toString(), "dd-MMM-yyyy");
+                secondDateCalendar = App.getCalendar(date1);
+            }
+
         }
     }
 
@@ -169,49 +174,28 @@ public class PmdtContactRegistryForm extends AbstractFormActivity {
 
         Boolean error = false;
 
-        if (App.get(totalChildrenContacts).isEmpty()) {
-            totalChildrenContacts.getEditText().setError(getString(R.string.empty_field));
-            totalChildrenContacts.getEditText().requestFocus();
+        if (App.get(totalChildhoodContacts).isEmpty()) {
+            totalChildhoodContacts.getEditText().setError(getString(R.string.empty_field));
+            totalChildhoodContacts.getEditText().requestFocus();
             error = true;
-        } else {
-            int no = Integer.parseInt(App.get(totalChildrenContacts));
-            if (no < 0 || no > 25) {
-                totalChildrenContacts.getEditText().setError(getString(R.string.value_out_of_range));
-                totalChildrenContacts.getEditText().requestFocus();
-                error = true;
-            }
         }
 
         if (App.get(totalAdultContacts).isEmpty()) {
             totalAdultContacts.getEditText().setError(getString(R.string.empty_field));
             totalAdultContacts.getEditText().requestFocus();
             error = true;
-        } else {
-            int no = Integer.parseInt(App.get(totalAdultContacts));
-            if (no < 0 || no > 25) {
-                totalAdultContacts.getEditText().setError(getString(R.string.value_out_of_range));
-                totalAdultContacts.getEditText().requestFocus();
-                error = true;
-            }
         }
 
         if (App.get(totalContacts).isEmpty()) {
             totalContacts.getEditText().setError(getString(R.string.empty_field));
             totalContacts.getEditText().requestFocus();
             error = true;
-        } else {
-            int no = Integer.parseInt(App.get(totalContacts));
-            if (no < 0 || no > 50) {
-                totalContacts.getEditText().setError(getString(R.string.value_out_of_range));
-                totalContacts.getEditText().requestFocus();
-                error = true;
-            }
         }
 
         if (!error) {
             int totalContactsNo = Integer.parseInt(App.get(totalContacts));
             int totalAdultContactNo = Integer.parseInt(App.get(totalAdultContacts));
-            int totalChildrenContactNo = Integer.parseInt(App.get(totalChildrenContacts));
+            int totalChildrenContactNo = Integer.parseInt(App.get(totalChildhoodContacts));
 
             if (totalContactsNo != totalAdultContactNo + totalChildrenContactNo) {
                 totalContacts.getEditText().setError(getString(R.string.pet_count_mismatch));
@@ -261,13 +245,13 @@ public class PmdtContactRegistryForm extends AbstractFormActivity {
         endTime = new Date();
 
         final ArrayList<String[]> observations = new ArrayList<String[]>();
-        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
-        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
-        /*observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(longitude)});
-        observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(latitude)});*/
+        observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
+        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
+        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
+        observations.add(new String[]{"HOUSEHOLD CONTACT REGISTRY DATE", App.getSqlDate(secondDateCalendar)});
         observations.add(new String[]{"NUMBER OF CONTACTS", App.get(totalContacts)});
         observations.add(new String[]{"NUMBER OF ADULT CONTACTS", App.get(totalAdultContacts)});
-        observations.add(new String[]{"NUMBER OF CHILDHOOD CONTACTS", App.get(totalChildrenContacts)});
+        observations.add(new String[]{"NUMBER OF CHILDHOOD CONTACTS", App.get(totalChildhoodContacts)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -294,8 +278,6 @@ public class PmdtContactRegistryForm extends AbstractFormActivity {
             @Override
             protected void onProgressUpdate(String... values) {
             }
-
-            ;
 
             @Override
             protected void onPostExecute(String result) {
@@ -402,9 +384,9 @@ public class PmdtContactRegistryForm extends AbstractFormActivity {
     @Override
     public void refill(int formId) {
 
-        OfflineForm fo = serverService.getOfflineFormById(formId);
-        String date = fo.getFormDate();
-        ArrayList<String[][]> obsValue = fo.getObsValue();
+        OfflineForm offlineForm = serverService.getOfflineFormById(formId);
+        String date = offlineForm.getFormDate();
+        ArrayList<String[][]> obsValue = offlineForm.getObsValue();
         formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
@@ -414,6 +396,13 @@ public class PmdtContactRegistryForm extends AbstractFormActivity {
 
             if (obs[0][0].equals("FORM START TIME")) {
                 startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
+
+            } else if (obs[0][0].equals("HOUSEHOLD CONTACT REGISTRY DATE")) {
+
+                String secondDate = obs[0][1];
+                secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
+                householdContactRegistryDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+
             } else if (obs[0][0].equals("NUMBER OF CONTACTS")) {
 
                 String value = obs[0][1].replace(".0", "");
@@ -427,7 +416,7 @@ public class PmdtContactRegistryForm extends AbstractFormActivity {
             } else if (obs[0][0].equals("NUMBER OF CHILDHOOD CONTACTS")) {
 
                 String value = obs[0][1].replace(".0", "");
-                totalChildrenContacts.getEditText().setText(value);
+                totalChildhoodContacts.getEditText().setText(value);
 
             }
         }
@@ -450,8 +439,7 @@ public class PmdtContactRegistryForm extends AbstractFormActivity {
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
-        }
-        else if (view == householdContactRegistryDate.getButton()) {
+        } else if (view == householdContactRegistryDate.getButton()) {
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
