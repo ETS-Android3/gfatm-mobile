@@ -195,7 +195,7 @@ public class Forms{
     public static final String PMDT_PATIENT_ASSIGNMENT = "Patient Assignment";
     public static final String PMDT_PATIENT_DISSOCIATION = "Patient Disscociation";
     public static final String PMDT_DAILY_TREATMENT_MONITORING = "Daily Treatment Monitoring";
-    public static final String PMDT_TREATMENT_COORDINATOR_MONITORING = "TC Monitoring";
+    public static final String PMDT_TREATMENT_COORDINATOR_MONITORING = "Treatment Coordinator Monitoring";
     public static final String PMDT_SOCIAL_SUPPORT_FOOD_BASKET = "Social Support Food Basket";
     public static final String PMDT_CONVEYANCE_ALLOWANCE = "Conveyance Allowance";
     public static final String PMDT_NUTRITIONAL_SUPPORT = "Nutritional Support";
