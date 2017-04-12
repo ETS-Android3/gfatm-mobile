@@ -438,23 +438,31 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
     @Override
     public boolean submit() {
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean saveFlag = bundle.getBoolean("save", false);
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
+            }else {
+                endTime = new Date();
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
             bundle.putBoolean("save", false);
+        } else {
+            endTime = new Date();
+            observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
 
-        endTime = new Date();
-        String cnicNumber = cnic1.getEditText().toString() +"-"+ cnic2.getEditText().toString() +"-"+ cnic3.getEditText().toString();
-
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
-        observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
+
+
+        String cnicNumber = cnic1.getEditText().toString() +"-"+ cnic2.getEditText().toString() +"-"+ cnic3.getEditText().toString();
+
         observations.add(new String[]{"REGISTRATION DATE", App.getSqlDateTime(secondDateCalendar)});
         observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnicNumber});
 
@@ -673,8 +681,8 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("FORM START TIME")) {
-                startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
+            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+                timeTakeToFill = obs[0][1];
             } else if (obs[0][0].equals("REGISTRATION DATE")) {
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
