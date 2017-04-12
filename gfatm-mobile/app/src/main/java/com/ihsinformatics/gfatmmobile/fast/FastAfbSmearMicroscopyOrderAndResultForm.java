@@ -158,7 +158,7 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
         forthDateFragment = new SelectDateFragment();
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        testId = new TitledEditText(context, null, getResources().getString(R.string.fast_test_id), "", "", 11, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        testId = new TitledEditText(context, null, getResources().getString(R.string.fast_test_id), "", "", 20, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         formType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_select_form_type), getResources().getStringArray(R.array.fast_order_and_result_list), "", App.HORIZONTAL, App.HORIZONTAL);
         afbSmearOrder = new MyTextView(context, getResources().getString(R.string.fast_afb_smear_order));
         afbSmearOrder.setTypeface(null, Typeface.BOLD);
@@ -235,14 +235,10 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
                                       int before, int count) {
                 try {
                     if (testId.getEditText().getText().length() > 0) {
-                        if (testId.getEditText().getText().length() < 11) {
-                            testId.getEditText().setError(getString(R.string.ctb_test_id_error));
-                            testIdView.setVisibility(View.INVISIBLE);
-                        } else {
-                            testIdView.setVisibility(View.VISIBLE);
-                            testIdView.setImageResource(R.drawable.ic_checked);
-                        }
+                        testIdView.setVisibility(View.VISIBLE);
+                        testIdView.setImageResource(R.drawable.ic_checked);
                     } else {
+                        testId.getEditText().setError(getString(R.string.fast_test_id_error));
                         testIdView.setVisibility(View.INVISIBLE);
                     }
                     goneVisibility();
@@ -411,15 +407,14 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
 
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
-            }else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-            }
-            else
+            } else
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         }
         if (!(dateOfSubmission.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString()))) {
@@ -437,17 +432,14 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
 
                 dateOfSubmission.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
 
-            }
-            else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+            } else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
                 secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 dateOfSubmission.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-            }
-
-            else
+            } else
                 dateOfSubmission.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
         }
         if (!(testDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString()))) {
@@ -465,17 +457,14 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
 
                 testDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
 
-            }
-            else if (thirdDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+            } else if (thirdDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
                 thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 testDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
-            }
-
-            else
+            } else
                 testDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
         }
         if (!(dateTestResult.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", forthDateCalendar).toString()))) {
@@ -493,17 +482,14 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
 
                 dateTestResult.getButton().setText(DateFormat.format("dd-MMM-yyyy", forthDateCalendar).toString());
 
-            }
-            else if (forthDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+            } else if (forthDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
                 forthDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 dateTestResult.getButton().setText(DateFormat.format("dd-MMM-yyyy", forthDateCalendar).toString());
-            }
-
-            else
+            } else
                 dateTestResult.getButton().setText(DateFormat.format("dd-MMM-yyyy", forthDateCalendar).toString());
         }
     }
@@ -531,7 +517,7 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
             error = true;
         }
 
-        if (specimenSourceOther.getVisibility() == View.VISIBLE && App.get(specimenSourceOther).isEmpty()) {
+        if (specimenSourceOther.getVisibility() == View.VISIBLE && specimenSourceOther.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -541,7 +527,7 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
             error = true;
         }
 
-        if (noAfb.getVisibility() == View.VISIBLE && App.get(noAfb).isEmpty()) {
+        if (noAfb.getVisibility() == View.VISIBLE && noAfb.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -597,7 +583,7 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
-            }else {
+            } else {
                 endTime = new Date();
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
@@ -663,7 +649,7 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
 
                 String result = "";
 
-                if (App.get(formType).equals(getResources().getString(R.string.fast_order))){
+                if (App.get(formType).equals(getResources().getString(R.string.fast_order))) {
                     result = serverService.saveEncounterAndObservation("AFB Smear Test Order", FORM, formDateCalendar, observations.toArray(new String[][]{}), true);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
@@ -799,10 +785,10 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
             }
-            if(fo.getFormName().contains("Order")) {
+            if (fo.getFormName().contains("Order")) {
                 formType.getRadioGroup().getButtons().get(0).setChecked(true);
                 formType.getRadioGroup().getButtons().get(1).setEnabled(false);
                 testIdView.setImageResource(R.drawable.ic_checked_green);
@@ -829,15 +815,15 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
                         } else if (rb.getText().equals(getResources().getString(R.string.fast_baseline_repeat)) && obs[0][1].equals("BASELINE REPEAT")) {
                             rb.setChecked(true);
                             break;
-                        }else if (rb.getText().equals(getResources().getString(R.string.fast_followup_test)) && obs[0][1].equals("REGULAR FOLLOW UP")) {
+                        } else if (rb.getText().equals(getResources().getString(R.string.fast_followup_test)) && obs[0][1].equals("REGULAR FOLLOW UP")) {
                             rb.setChecked(true);
                             break;
                         }
                     }
                     testContextStatus.setVisibility(View.VISIBLE);
-                }  else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
+                } else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
                     monthOfTreatment.getSpinner().selectValue(obs[0][1]);
-                }else if (obs[0][0].equals("SPECIMEN TYPE")) {
+                } else if (obs[0][0].equals("SPECIMEN TYPE")) {
                     for (RadioButton rb : specimenType.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.fast_sputum)) && obs[0][1].equals("SPUTUM")) {
                             rb.setChecked(true);
@@ -848,13 +834,12 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
                         }
                     }
                     specimenType.setVisibility(View.VISIBLE);
-                }
-                else if (obs[0][0].equals("SPECIMEN SOURCE")) {
+                } else if (obs[0][0].equals("SPECIMEN SOURCE")) {
                     String value = obs[0][1].equals("LYMPHOCYTES") ? getResources().getString(R.string.fast_lymph) :
                             (obs[0][1].equals("PLEURAL EFFUSION") ? getResources().getString(R.string.fast_pleural_fluid) :
                                     (obs[0][1].equals("PUS") ? getResources().getString(R.string.fast_pus) :
                                             getResources().getString(R.string.fast_other_title)));
-                    if(value.equalsIgnoreCase(getResources().getString(R.string.fast_other_title))){
+                    if (value.equalsIgnoreCase(getResources().getString(R.string.fast_other_title))) {
                         specimenSourceOther.setVisibility(View.VISIBLE);
                     }
                     specimenSource.getSpinner().selectValue(value);
@@ -863,7 +848,7 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
                     specimenSourceOther.getEditText().setText(obs[0][1]);
                 }
                 submitButton.setEnabled(true);
-            }else{
+            } else {
                 formType.getRadioGroup().getButtons().get(1).setChecked(true);
                 formType.getRadioGroup().getButtons().get(0).setEnabled(false);
                 if (obs[0][0].equals("TEST ID")) {
@@ -883,7 +868,7 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
                                     (obs[0][1].equals("ONE PLUS") ? getResources().getString(R.string.fast_1_plus) :
                                             (obs[0][1].equals("TWO PLUS") ? getResources().getString(R.string.fast_2_plus) :
                                                     getResources().getString(R.string.fast_3_plus))));
-                    if(value.equalsIgnoreCase(getResources().getString(R.string.fast_scanty_3_to_24))){
+                    if (value.equalsIgnoreCase(getResources().getString(R.string.fast_scanty_3_to_24))) {
                         noAfb.setVisibility(View.VISIBLE);
                     }
                     smearResult.getSpinner().selectValue(value);

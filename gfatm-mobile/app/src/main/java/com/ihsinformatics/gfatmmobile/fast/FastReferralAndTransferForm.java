@@ -205,6 +205,26 @@ public class FastReferralAndTransferForm extends AbstractFormActivity implements
     public boolean validate() {
         Boolean error = false;
 
+        if (reasonReferralTransferOther.getVisibility() == View.VISIBLE && reasonReferralTransferOther.getEditText().getText().toString().trim().isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            reasonReferralTransferOther.getEditText().setError(getString(R.string.empty_field));
+            reasonReferralTransferOther.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (referralSiteOther.getVisibility() == View.VISIBLE && referralSiteOther.getEditText().getText().toString().trim().isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            referralSiteOther.getEditText().setError(getString(R.string.empty_field));
+            referralSiteOther.getEditText().requestFocus();
+            error = true;
+        }
+
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);

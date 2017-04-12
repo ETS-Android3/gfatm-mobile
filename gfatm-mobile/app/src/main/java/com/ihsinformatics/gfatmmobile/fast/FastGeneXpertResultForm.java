@@ -221,7 +221,7 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
     public boolean validate() {
         Boolean error = false;
 
-        if (cartridgeId.getVisibility() == View.VISIBLE && App.get(cartridgeId).isEmpty()) {
+        if (cartridgeId.getVisibility() == View.VISIBLE && cartridgeId.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -241,7 +241,7 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
             error = true;
         }
 
-        if (errorCode.getVisibility() == View.VISIBLE && App.get(errorCode).isEmpty()) {
+        if (errorCode.getVisibility() == View.VISIBLE && errorCode.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else

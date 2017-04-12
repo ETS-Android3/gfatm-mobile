@@ -282,7 +282,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
     public boolean validate() {
         Boolean error = false;
 
-        if (facilitySectionOther.getVisibility() == View.VISIBLE && App.get(facilitySectionOther).isEmpty()) {
+        if (facilitySectionOther.getVisibility() == View.VISIBLE && facilitySectionOther.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -292,7 +292,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
             error = true;
         }
 
-        if (otherReferral.getVisibility() == View.VISIBLE && App.get(otherReferral).isEmpty()) {
+        if (otherReferral.getVisibility() == View.VISIBLE && otherReferral.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -302,7 +302,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
             error = true;
         }
 
-        if (facilityDepartmentOther.getVisibility() == View.VISIBLE && App.get(facilityDepartmentOther).isEmpty()) {
+        if (facilityDepartmentOther.getVisibility() == View.VISIBLE && facilityDepartmentOther.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -312,7 +312,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
             error = true;
         }
 
-        if (referralWithinOpdOther.getVisibility() == View.VISIBLE && App.get(referralWithinOpd).isEmpty()) {
+        if (referralWithinOpdOther.getVisibility() == View.VISIBLE && referralWithinOpdOther.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -322,7 +322,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
             error = true;
         }
 
-        if (hearAboutUsOther.getVisibility() == View.VISIBLE && App.get(hearAboutUsOther).isEmpty()) {
+        if (hearAboutUsOther.getVisibility() == View.VISIBLE && hearAboutUsOther.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -332,7 +332,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
             error = true;
         }
 
-        if (contactPatientId.getVisibility() == View.VISIBLE && App.get(contactPatientId).isEmpty()) {
+        if (contactPatientId.getVisibility() == View.VISIBLE && contactPatientId.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -373,7 +373,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
         }
 
 
-        if (contactExternalId.getVisibility() == View.VISIBLE && App.get(contactExternalId).isEmpty()) {
+        if (contactExternalId.getVisibility() == View.VISIBLE &&contactPatientId.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -383,7 +383,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
             error = true;
         }
 
-        if (contactTbRegisternationNo.getVisibility() == View.VISIBLE && App.get(contactTbRegisternationNo).isEmpty()) {
+        if (contactTbRegisternationNo.getVisibility() == View.VISIBLE && contactTbRegisternationNo.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else

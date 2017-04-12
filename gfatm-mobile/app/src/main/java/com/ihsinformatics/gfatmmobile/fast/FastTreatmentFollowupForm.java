@@ -261,7 +261,7 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
     @Override
     public boolean validate() {
         Boolean error = false;
-        if (weight.getVisibility() == View.VISIBLE && App.get(weight).isEmpty()) {
+        if (weight.getVisibility() == View.VISIBLE && weight.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else

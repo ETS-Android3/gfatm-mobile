@@ -232,7 +232,7 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
     public boolean validate() {
         Boolean error = false;
 
-        if (specimenSourceOther.getVisibility() == View.VISIBLE && App.get(specimenSourceOther).isEmpty()) {
+        if (specimenSourceOther.getVisibility() == View.VISIBLE &&specimenSourceOther.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -242,7 +242,7 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
             error = true;
         }
 
-        if (otherReasonRejected.getVisibility() == View.VISIBLE && App.get(otherReasonRejected).isEmpty()) {
+        if (otherReasonRejected.getVisibility() == View.VISIBLE && otherReasonRejected.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -252,7 +252,7 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
             error = true;
         }
 
-        if (cartridgeId.getVisibility() == View.VISIBLE && App.get(cartridgeId).isEmpty()) {
+        if (cartridgeId.getVisibility() == View.VISIBLE && cartridgeId.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else

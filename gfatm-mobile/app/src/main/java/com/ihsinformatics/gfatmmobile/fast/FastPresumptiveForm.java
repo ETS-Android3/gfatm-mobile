@@ -227,15 +227,14 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
 
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
-            }else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-            }
-            else
+            } else
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         }
     }
@@ -270,7 +269,27 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
         } else {
             Boolean error = false;
 
-            if (patientConsultationOther.getVisibility() == View.VISIBLE && App.get(patientConsultationOther).isEmpty()) {
+            if (fatherName.getEditText().getText().toString().length() > 0 && fatherName.getEditText().getText().toString().trim().isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(2);
+                else
+                    gotoPage(0);
+                fatherName.getEditText().setError(getString(R.string.fast_invalid_father_name));
+                fatherName.getEditText().requestFocus();
+                error = true;
+            }
+
+            if (husbandName.getVisibility() == View.VISIBLE && husbandName.getEditText().getText().toString().length() > 0 && husbandName.getEditText().getText().toString().trim().isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(2);
+                else
+                    gotoPage(0);
+                husbandName.getEditText().setError(getString(R.string.fast_invalid_father_name));
+                husbandName.getEditText().requestFocus();
+                error = true;
+            }
+
+            if (patientConsultationOther.getVisibility() == View.VISIBLE && patientConsultationOther.getEditText().getText().toString().trim().isEmpty()) {
                 if (App.isLanguageRTL())
                     gotoPage(2);
                 else
@@ -343,7 +362,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
-            }else {
+            } else {
                 endTime = new Date();
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
@@ -583,19 +602,13 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
-            }
-
-            else if (obs[0][0].equals("PARTNER FULL NAME")) {
+            } else if (obs[0][0].equals("PARTNER FULL NAME")) {
                 husbandName.getEditText().setText(obs[0][1]);
-            }
-
-            else if (obs[0][0].equals("FATHER NAME")) {
+            } else if (obs[0][0].equals("FATHER NAME")) {
                 fatherName.getEditText().setText(obs[0][1]);
-            }
-
-            else if (obs[0][0].equals("PERSON ATTENDING FACILITY")) {
+            } else if (obs[0][0].equals("PERSON ATTENDING FACILITY")) {
 
                 for (RadioButton rb : patientAttendant.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_patient_title)) && obs[0][1].equals("SELF")) {
@@ -875,7 +888,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
     public void resetViews() {
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        if(App.getPatient().getPerson().getGender().equals("male")){
+        if (App.getPatient().getPerson().getGender().equals("male")) {
             husbandName.setVisibility(View.GONE);
         }
         patientConsultationOther.setVisibility(View.GONE);

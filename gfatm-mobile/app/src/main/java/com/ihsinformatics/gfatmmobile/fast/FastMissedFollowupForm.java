@@ -248,7 +248,7 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
     @Override
     public boolean validate() {
         Boolean error = false;
-        if (reasonPatientNotContactedOther.getVisibility() == View.VISIBLE && App.get(reasonPatientNotContactedOther).isEmpty()) {
+        if (reasonPatientNotContactedOther.getVisibility() == View.VISIBLE && reasonPatientNotContactedOther.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -258,7 +258,7 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
             error = true;
         }
 
-        if (reasonMissedVisitOther.getVisibility() == View.VISIBLE && App.get(reasonMissedVisitOther).isEmpty()) {
+        if (reasonMissedVisitOther.getVisibility() == View.VISIBLE && reasonMissedVisitOther.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else

@@ -293,7 +293,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
     public boolean validate() {
         Boolean error = false;
 
-        if (App.get(cnic1).isEmpty()) {
+        if (cnic1.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -303,7 +303,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             error = true;
         }
 
-        if (App.get(cnic2).isEmpty()) {
+        if (cnic2.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -313,7 +313,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             error = true;
         }
 
-        if (App.get(cnic3).isEmpty()) {
+        if (cnic3.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -353,7 +353,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             error = true;
         }
 
-        if (cnicOwnerOther.getVisibility() == View.VISIBLE && App.get(cnicOwnerOther).isEmpty()) {
+        if (cnicOwnerOther.getVisibility() == View.VISIBLE && cnicOwnerOther.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -364,7 +364,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         }
 
 
-        if (tbRegisterationNumber.getVisibility() == View.VISIBLE && App.get(tbRegisterationNumber).isEmpty()) {
+        if (tbRegisterationNumber.getVisibility() == View.VISIBLE && tbRegisterationNumber.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -375,7 +375,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         }
 
 
-        if (extraPulmonarySiteOther.getVisibility() == View.VISIBLE && App.get(extraPulmonarySiteOther).isEmpty()) {
+        if (extraPulmonarySiteOther.getVisibility() == View.VISIBLE && extraPulmonarySiteOther.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -386,7 +386,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         }
 
 
-        if (reasonTreatmentNotInitiatedOther.getVisibility() == View.VISIBLE && App.get(reasonTreatmentNotInitiatedOther).isEmpty()) {
+        if (reasonTreatmentNotInitiatedOther.getVisibility() == View.VISIBLE && reasonTreatmentNotInitiatedOther.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -397,7 +397,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         }
 
 
-        if (weight.getVisibility() == View.VISIBLE && App.get(weight).isEmpty()) {
+        if (weight.getVisibility() == View.VISIBLE && weight.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else

@@ -329,14 +329,10 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                                       int before, int count) {
                 try {
                     if (testId.getEditText().getText().length() > 0) {
-                        if (testId.getEditText().getText().length() < 11) {
-                            testId.getEditText().setError(getString(R.string.ctb_test_id_error));
-                            testIdView.setVisibility(View.INVISIBLE);
-                        } else {
-                            testIdView.setVisibility(View.VISIBLE);
-                            testIdView.setImageResource(R.drawable.ic_checked);
-                        }
+                        testIdView.setVisibility(View.VISIBLE);
+                        testIdView.setImageResource(R.drawable.ic_checked);
                     } else {
+                        testId.getEditText().setError(getString(R.string.fast_test_id_error));
                         testIdView.setVisibility(View.INVISIBLE);
                     }
                     goneVisibility();
@@ -468,7 +464,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
             error = true;
         }
 
-        if (specimenSourceOther.getVisibility() == View.VISIBLE && App.get(specimenSourceOther).isEmpty()) {
+        if (specimenSourceOther.getVisibility() == View.VISIBLE && specimenSourceOther.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -478,7 +474,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
             error = true;
         }
 
-        if (otherDrugName.getVisibility() == View.VISIBLE && App.get(otherDrugName).isEmpty()) {
+        if (otherDrugName.getVisibility() == View.VISIBLE && otherDrugName.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else

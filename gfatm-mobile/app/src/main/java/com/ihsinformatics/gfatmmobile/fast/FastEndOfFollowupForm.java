@@ -224,7 +224,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
         Boolean error = false;
 
 
-        if (remarks.getVisibility() == View.VISIBLE && App.get(remarks).isEmpty()) {
+        if (remarks.getVisibility() == View.VISIBLE && remarks.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -234,7 +234,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
             error = true;
         }
 
-        if (enrsId.getVisibility() == View.VISIBLE && App.get(enrsId).isEmpty()) {
+        if (enrsId.getVisibility() == View.VISIBLE && enrsId.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -244,7 +244,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
             error = true;
         }
 
-        if (firstName.getVisibility() == View.VISIBLE && App.get(firstName).isEmpty()) {
+        if (firstName.getVisibility() == View.VISIBLE && firstName.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -254,7 +254,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
             error = true;
         }
 
-        if (lastName.getVisibility() == View.VISIBLE && App.get(lastName).isEmpty()) {
+        if (lastName.getVisibility() == View.VISIBLE && lastName.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -264,7 +264,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
             error = true;
         }
 
-        if (App.get(mobile1).isEmpty()) {
+        if (mobile1.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -274,7 +274,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
             error = true;
         }
 
-        if (App.get(mobile2).isEmpty()) {
+        if (mobile2.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
