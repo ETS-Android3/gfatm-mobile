@@ -346,6 +346,23 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
         } else {
             otherRadiologicalDiagnosis.getEditText().setError(null);
         }
+        if(radiologistRemarks.getVisibility()==View.VISIBLE && App.get(radiologistRemarks).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            radiologistRemarks.getEditText().setError(getString(R.string.empty_field));
+            radiologistRemarks.getEditText().requestFocus();
+            error = true;
+        }else if(App.get(radiologistRemarks).trim().length() <= 0){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            radiologistRemarks.getEditText().setError(getString(R.string.ctb_spaces_only));
+            radiologistRemarks.getEditText().requestFocus();
+            error = true;
+        }
 
         if (error) {
 
@@ -378,21 +395,27 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
 
     @Override
     public boolean submit() {
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean saveFlag = bundle.getBoolean("save", false);
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
+            }else {
+                endTime = new Date();
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
             bundle.putBoolean("save", false);
+        } else {
+            endTime = new Date();
+            observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
-        endTime = new Date();
 
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
-        observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
-        observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
-        observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
+        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
+        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         if (App.get(formType).equals(getResources().getString(R.string.ctb_order))) {
             observations.add(new String[]{"TEST ID", App.get(testId)});
             observations.add(new String[]{"DATE TEST ORDERED", App.getSqlDateTime(secondDateCalendar)});
@@ -560,9 +583,10 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
 
 
         for (int i = 0; i < obsValue.size(); i++) {
-
             String[][] obs = obsValue.get(i);
-            if(fo.getFormName().contains("Order")) {
+            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+                timeTakeToFill = obs[0][1];
+            }else if(fo.getFormName().contains("Order")) {
                 formType.getRadioGroup().getButtons().get(0).setChecked(true);
                 formType.getRadioGroup().getButtons().get(1).setEnabled(false);
                 testIdView.setImageResource(R.drawable.ic_checked_green);

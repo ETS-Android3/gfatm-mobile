@@ -47,6 +47,7 @@
     <string name="ctb_tb_medication">Has your child taken TB medication before?</string>
     <string name="ctb_tb_history_2years">Has your child been in close contact with someone diagnosed with TB or a history of contact/family with TB patient in the past 2 years? (e.g. family member you live with, lived with anyone who has TB, close friend etc).</string>
     <string name="ctb_close_contact_type">Who was the close contact?</string>
+    <string name="ctb_self">Self</string>
     <string name="ctb_mother">Mother</string>
     <string name="ctb_father">Father</string>
     <string name="ctb_brother">Brother</string>
@@ -446,6 +447,13 @@
     <string name="ctb_ppa_score_validate">PPA Score should be between 0 to 15</string>
     <string name="ctb_invalid_value_weight">Invalid value for Weight</string>
     <string name="ctb_duplicate_enrs">Duplicate enrs. Please enter unique enrs number</string>
+    <string name="ctb_duplicate_contact_id">Contact patient Id can not be same as Patient Id. Please enter different Id</string>
+    <string name="ctb_length_less_than_3">Length can not be less than 3</string>
+    <string name="ctb_are_you_intiating_treatment">Are you initiating TB treatment?</string>
+    <string name="ctb_form_date_less_than_patient_dob">Form Date can not be less than Patient Date of birth</string>
+    <string name="ctb_cnic_number">CNIC Number</string>
+
+
 
     <string-array name="ctb_screening_location_list">
         <item>@string/ctb_hospital</item>
@@ -954,5 +962,13 @@
     <string-array name="ctb_extra_pulomonary_and_pulmonary">
         <item>@string/ctb_extra_pulmonary</item>
         <item>@string/ctb_pulmonary</item>
+    </string-array>
+
+    <string-array name="ctb_reason_treatment_not_intiated_list">
+        <item>@string/ctb_patient_refused_treatment</item>
+        <item>@string/ctb_patient_loss_to_followup</item>
+        <item>@string/ctb_patient_died</item>
+        <item>@string/ctb_referral_before_starting_treatment</item>
+        <item>@string/ctb_other_title</item>
     </string-array>
 </resources>

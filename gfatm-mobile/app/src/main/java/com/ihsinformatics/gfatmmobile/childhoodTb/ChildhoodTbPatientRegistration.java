@@ -347,7 +347,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String landlineNumber = landlineNumber1.getEditText().getText() + s.toString();
-                if(RegexUtil.isLandlineNumber(landlineNumber)){
+                if(RegexUtil.isContactNumber(landlineNumber)){
                     landlineNumberContact.setVisibility(View.VISIBLE);
                     permissionLandlineNumber.setVisibility(View.VISIBLE);
                     landlineNumber2.getEditText().setError(null);
@@ -375,7 +375,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String landlineNumber = s.toString() + landlineNumber2.getEditText().getText().toString();
-                if(RegexUtil.isLandlineNumber(landlineNumber)){
+                if(RegexUtil.isContactNumber(landlineNumber)){
                     landlineNumberContact.setVisibility(View.VISIBLE);
                     permissionLandlineNumber.setVisibility(View.VISIBLE);
                     landlineNumber2.getEditText().setError(null);
@@ -406,7 +406,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String landlineNumber = secondaryLandlineNumber1.getEditText().getText() + s.toString();
-                if(RegexUtil.isLandlineNumber(landlineNumber)){
+                if(RegexUtil.isContactNumber(landlineNumber)){
                     secondaryLandlineNumber2.getEditText().setError(null);
                     secondaryLandlineContact.setVisibility(View.VISIBLE);
                     permissionSecondaryLandlineNumber.setVisibility(View.VISIBLE);
@@ -434,7 +434,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String landlineNumber = secondaryLandlineNumber2.getEditText().getText() + s.toString();
-                if(RegexUtil.isLandlineNumber(landlineNumber)){
+                if(RegexUtil.isContactNumber(landlineNumber)){
                     secondaryLandlineNumber2.getEditText().setError(null);
                     secondaryLandlineContact.setVisibility(View.VISIBLE);
                     permissionSecondaryLandlineNumber.setVisibility(View.VISIBLE);
@@ -545,7 +545,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         }
         if(!App.get(secondaryLandlineNumber1).isEmpty() || !App.get(secondaryLandlineNumber2).isEmpty()){
             String secondaryLandline = secondaryLandlineNumber1.getEditText().getText().toString() + secondaryLandlineNumber2.getEditText().getText().toString();
-            if (!RegexUtil.isLandlineNumber(secondaryLandline)) {
+            if (!RegexUtil.isContactNumber(secondaryLandline)) {
                 secondaryLandlineNumber2.getEditText().setError(getResources().getString(R.string.ctb_invalid_number));
                 error = true;
                 view = secondaryLandlineNumber;
@@ -562,7 +562,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         }
         else{
             String landline = landlineNumber1.getEditText().getText().toString() + landlineNumber2.getEditText().getText().toString();
-            if (!RegexUtil.isLandlineNumber(landline)) {
+            if (!RegexUtil.isContactNumber(landline)) {
                 landlineNumber2.getEditText().setError(getResources().getString(R.string.ctb_invalid_number));
                 error = true;
                 view = landlineLayout;
@@ -709,20 +709,25 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
 
     @Override
     public boolean submit() {
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean saveFlag = bundle.getBoolean("save", false);
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
+            }else {
+                endTime = new Date();
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
             bundle.putBoolean("save", false);
+        } else {
+            endTime = new Date();
+            observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
 
-        endTime = new Date();
-
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
-        observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         String cnic = cnic1.getEditText().getText().toString() + "-" + cnic2.getEditText().getText().toString() + "-" + cnic3.getEditText().getText().toString();
@@ -1030,8 +1035,9 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-
-            if (obs[0][0].equals("NATIONAL IDENTIFICATION NUMBER")) {
+            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+                timeTakeToFill = obs[0][1];
+            }else if (obs[0][0].equals("NATIONAL IDENTIFICATION NUMBER")) {
                 String[] cnicParts = obs[0][1].split("-");
                 cnic1.getEditText().setText(cnicParts[0]);
                 cnic2.getEditText().setText(cnicParts[1]);
