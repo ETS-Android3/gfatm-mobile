@@ -966,7 +966,6 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         reasonTreatmentNotInitiatedOther.setVisibility(View.GONE);
         historyCategory.setVisibility(View.GONE);
         outcomePreviousCategory.setVisibility(View.GONE);
-        updateDisplay();
 
         final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
             @Override
@@ -1052,6 +1051,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                         format = "yyyy-MM-dd";
                     }
                     secondDateCalendar.setTime(App.stringToDate(registerationDate, format));
+                    updateDisplay();
                     regDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
                 }
             }
@@ -1074,7 +1074,6 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             } else bundle.putBoolean("save", false);
 
         }
-
 
     }
 
