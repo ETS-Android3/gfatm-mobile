@@ -452,7 +452,29 @@
     <string name="ctb_are_you_intiating_treatment">Are you initiating TB treatment?</string>
     <string name="ctb_form_date_less_than_patient_dob">Form Date can not be less than Patient Date of birth</string>
     <string name="ctb_cnic_number">CNIC Number</string>
-
+    <string name="ctb_treatment_initiated_date">Treatment Initiation Date</string>
+    <string name="ctb_treatment_plan">Treatment Plan</string>
+    <string name="ctb_intensive_phase">Intensive phase</string>
+    <string name="ctb_continuation_phase">Continuation Phase</string>
+    <string name="ctb_end_treatment">End Treatment</string>
+    <string name="ctb_intensive_phase_regimen">Intensive phase regimen</string>
+    <string name="ctb_continuation_phase_regimen">Continuation phase regimen</string>
+    <string name="ctb_rh">RH</string>
+    <string name="ctb_rhe">RHE</string>
+    <string name="ctb_current_formulation_continuation">Current formulation (RH 60/30 mg per tablet), E = 100 mg per tablet</string>
+    <string name="ctb_new_formulation_continuation">New formulation (RH: 75/50 mg per tablet), E = 100 mg per tablet</string>
+    <string name="ctb_adult_formulation_continuation_rh">Adult formulation - RH (RH: 300/150 mg per tablet) - for children over 25 kgs</string>
+    <string name="ctb_adult_formulation_continuation_rhe">Adult formulation - RHE (RHE: 300/150/275 mg per tablet - for children over 25 kgs</string>
+    <string name="ctb_current_formulation_continuation_rh">If current formulation, choose number of tablets of RH </string>
+    <string name="ctb_current_formulation_continuation_e">If current formulation, choose number of tablets of E</string>
+    <string name="ctb_new_formulation_continuation_rh">If new formulation, choose number of tablets of RH </string>
+    <string name="ctb_new_formulation_continuation_e">If new formulation, choose number of tablets of E</string>
+    <string name="ctb_if_adult_formulation_continuation_rh">If adult formulation of RH, choose number of tablets of RH</string>
+    <string name="ctb_if_adult_formulation_continuation_rhe">If adult formulation of RHE, choose number of tablets of RHE</string>
+    <string name="ctb_conclusion_of_treatment">Conclusion of treatment follow up</string>
+    <string name="ctb_improved">Improved</string>
+    <string name="ctb_no_improvement">No improvement</string>
+    <string name="ctb_month_treatment_greater_than_12">Month of treatment can not be greater than 12</string>
 
 
     <string-array name="ctb_screening_location_list">
@@ -971,4 +993,30 @@
         <item>@string/ctb_referral_before_starting_treatment</item>
         <item>@string/ctb_other_title</item>
     </string-array>
+
+
+    <string-array name="ctb_treatment_plan_list">
+        <item>@string/ctb_intensive_phase</item>
+        <item>@string/ctb_continuation_phase</item>
+        <item>@string/ctb_end_treatment</item>
+    </string-array>
+
+    <string-array name="ctb_continuation_phase_regimen_list">
+        <item>@string/ctb_rh</item>
+        <item>@string/ctb_rhe</item>
+    </string-array>
+
+    <string-array name="ctb_type_of_dose_continuation_list">
+        <item>@string/ctb_current_formulation_continuation</item>
+        <item>@string/ctb_new_formulation_continuation</item>
+        <item>@string/ctb_adult_formulation_continuation_rh</item>
+        <item>@string/ctb_adult_formulation_continuation_rhe</item>
+    </string-array>
+
+    <string-array name="ctb_improve_no_improvement">
+        <item>@string/ctb_improved</item>
+        <item>@string/ctb_no_improvement</item>
+    </string-array>
+
+
 </resources>
