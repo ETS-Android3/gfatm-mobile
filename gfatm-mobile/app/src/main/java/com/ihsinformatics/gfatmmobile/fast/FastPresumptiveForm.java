@@ -274,7 +274,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
                     gotoPage(2);
                 else
                     gotoPage(0);
-                fatherName.getEditText().setError(getString(R.string.fast_invalid_father_name));
+                fatherName.getEditText().setError(getString(R.string.empty_field));
                 fatherName.getEditText().requestFocus();
                 error = true;
             }
@@ -284,7 +284,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
                     gotoPage(2);
                 else
                     gotoPage(0);
-                husbandName.getEditText().setError(getString(R.string.fast_invalid_father_name));
+                husbandName.getEditText().setError(getString(R.string.empty_field));
                 husbandName.getEditText().requestFocus();
                 error = true;
             }

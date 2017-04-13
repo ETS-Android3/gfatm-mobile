@@ -781,6 +781,8 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
+            args.putBoolean("allowPastDate", true);
+            args.putBoolean("allowFutureDate", false);
         }
     }
 
