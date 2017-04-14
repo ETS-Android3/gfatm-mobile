@@ -683,7 +683,7 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
         View view = null;
         Boolean error = false;
 
-        if (App.get(newInstruction).isEmpty()) {
+        if (App.get(newInstruction).trim().isEmpty()) {
             newInstruction.getEditText().setError(getString(R.string.empty_field));
             newInstruction.getEditText().requestFocus();
             gotoLastPage();
@@ -868,20 +868,25 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
     @Override
     public boolean submit() {
 
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean saveFlag = bundle.getBoolean("save", false);
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
+            }else {
+                endTime = new Date();
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
             bundle.putBoolean("save", false);
+        } else {
+            endTime = new Date();
+            observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
 
-        endTime = new Date();
-
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
-        observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         observations.add(new String[]{"WEIGHT (KG)", App.get(weight)});
@@ -1330,9 +1335,9 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
 
             String[][] obs = obsValue.get(i);
 
-            if (obs[0][0].equals("FORM START TIME")) {
-                startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
-            } else if (obs[0][0].equals("WEIGHT (KG)")) {
+            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+                timeTakeToFill = obs[0][1];
+            }else if (obs[0][0].equals("WEIGHT (KG)")) {
                 weight.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("DIZZINESS AND GIDDINESS")) {
                 for (RadioButton rb : dizziness.getRadioGroup().getButtons()) {
