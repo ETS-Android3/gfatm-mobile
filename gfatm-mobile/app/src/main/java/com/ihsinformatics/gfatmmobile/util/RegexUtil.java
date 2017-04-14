@@ -38,15 +38,165 @@ public class RegexUtil {
     public static final String ernsNumberPattern = "[0-9]{3,4}/[0-9]{2,2}";
     public static final String testIDPattern = "^{0,1}[0-9]{7,7}[-.]{0,1}[0-9]";
     public static final String mobileNumPattern = "[0][3][0-9]{9}";
-    public static final String addressPattern = "^[^÷çþ!$?@%+=_]+$";
     public static final String floatingPointPattern = "^[0-9]*.[0-9]{0,1}$";
     public static final String floatingPointPatternForThreeDecimalPlaces = "^[0-9]*.[0-9]{0,3}$";
     public static final String floatingPointPatternForTwoDecimalPlaces = "^[0-9]*.[0-9]{0,2}$";
+    public static final String addressPattern ="^[-A-Za-z0-9.#&():;,'\" \\/]+";
+    public static final String otherPattern ="^[-A-Za-z0-9.#&():;,'\"+%*=!| \\/]+";
 
     public static final int idLength = 7;
     public static final int mobileNumberLength = 11;
     public static final int defaultEditTextLength = 50;
     public static final int landlineNumberLength = 10;
+    public static final InputFilter OTHER_FILTER = new InputFilter() {
+
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+
+            if (source.equals("")) { // for backspace
+                return source;
+            }
+            if (source.toString().matches(otherPattern)) {
+                return source;
+            }
+            return "";
+
+        }
+    };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public static final InputFilter FLOAT_FILTER = new InputFilter() {
 
         @Override
