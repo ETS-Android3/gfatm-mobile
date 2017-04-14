@@ -13,6 +13,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -888,7 +889,8 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
     public void resetViews() {
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        if (App.getPatient().getPerson().getGender().equals("male")) {
+        Log.d("abc", App.getPatient().getPerson().getGender());
+        if (App.getPatient().getPerson().getGender().equals("male") || App.getPatient().getPerson().getGender().equals("M") ) {
             husbandName.setVisibility(View.GONE);
         }
         patientConsultationOther.setVisibility(View.GONE);
