@@ -143,9 +143,9 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
         missedVisitDate = new TitledButton(context, null, getResources().getString(R.string.fast_date_of_missed_visit), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         patientContacted = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_have_you_been_able_to_contact_the_patient), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
         reasonPatientNotContacted = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_why_were_you_unable_to_contact_the_patient), getResources().getStringArray(R.array.fast_reason_patient_not_contacted_list), getResources().getString(R.string.fast_phone_switched_off), App.VERTICAL, App.VERTICAL);
-        reasonPatientNotContactedOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 250, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        reasonPatientNotContactedOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 250, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         reasonMissedVisit = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_why_missed_visit), getResources().getStringArray(R.array.fast_reason_missed_visit_list), getResources().getString(R.string.fast_patient_moved), App.VERTICAL);
-        reasonMissedVisitOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 250, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        reasonMissedVisitOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 250, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         returnVisitDate = new TitledButton(context, null, getResources().getString(R.string.fast_date_of_next_visit), DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
 
         // Used for reset fields...
@@ -248,7 +248,7 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
     @Override
     public boolean validate() {
         Boolean error = false;
-        if (reasonPatientNotContactedOther.getVisibility() == View.VISIBLE && App.get(reasonPatientNotContactedOther).isEmpty()) {
+        if (reasonPatientNotContactedOther.getVisibility() == View.VISIBLE && reasonPatientNotContactedOther.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -258,7 +258,7 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
             error = true;
         }
 
-        if (reasonMissedVisitOther.getVisibility() == View.VISIBLE && App.get(reasonMissedVisitOther).isEmpty()) {
+        if (reasonMissedVisitOther.getVisibility() == View.VISIBLE && reasonMissedVisitOther.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -300,21 +300,25 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
     @Override
     public boolean submit() {
 
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean saveFlag = bundle.getBoolean("save", false);
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
+            }else {
+                endTime = new Date();
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
             bundle.putBoolean("save", false);
+        } else {
+            endTime = new Date();
+            observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
 
-        endTime = new Date();
-
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
-        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
-        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         observations.add(new String[]{"DATE OF MISSED VISIT", App.getSqlDateTime(secondDateCalendar)});
@@ -475,8 +479,8 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("FORM START TIME")) {
-                startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
+            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+                timeTakeToFill = obs[0][1];
             }
 
             else if (obs[0][0].equals("DATE OF MISSED VISIT")) {

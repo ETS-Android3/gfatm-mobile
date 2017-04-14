@@ -293,7 +293,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
     public boolean validate() {
         Boolean error = false;
 
-        if (App.get(cnic1).isEmpty()) {
+        if (cnic1.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -303,7 +303,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             error = true;
         }
 
-        if (App.get(cnic2).isEmpty()) {
+        if (cnic2.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -313,7 +313,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             error = true;
         }
 
-        if (App.get(cnic3).isEmpty()) {
+        if (cnic3.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -353,7 +353,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             error = true;
         }
 
-        if (cnicOwnerOther.getVisibility() == View.VISIBLE && App.get(cnicOwnerOther).isEmpty()) {
+        if (cnicOwnerOther.getVisibility() == View.VISIBLE && cnicOwnerOther.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -364,7 +364,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         }
 
 
-        if (tbRegisterationNumber.getVisibility() == View.VISIBLE && App.get(tbRegisterationNumber).isEmpty()) {
+        if (tbRegisterationNumber.getVisibility() == View.VISIBLE && tbRegisterationNumber.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -375,7 +375,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         }
 
 
-        if (extraPulmonarySiteOther.getVisibility() == View.VISIBLE && App.get(extraPulmonarySiteOther).isEmpty()) {
+        if (extraPulmonarySiteOther.getVisibility() == View.VISIBLE && extraPulmonarySiteOther.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -386,7 +386,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         }
 
 
-        if (reasonTreatmentNotInitiatedOther.getVisibility() == View.VISIBLE && App.get(reasonTreatmentNotInitiatedOther).isEmpty()) {
+        if (reasonTreatmentNotInitiatedOther.getVisibility() == View.VISIBLE && reasonTreatmentNotInitiatedOther.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -397,7 +397,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         }
 
 
-        if (weight.getVisibility() == View.VISIBLE && App.get(weight).isEmpty()) {
+        if (weight.getVisibility() == View.VISIBLE && weight.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -438,24 +438,31 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
     @Override
     public boolean submit() {
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean saveFlag = bundle.getBoolean("save", false);
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
+            }else {
+                endTime = new Date();
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
             bundle.putBoolean("save", false);
+        } else {
+            endTime = new Date();
+            observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
 
-        endTime = new Date();
-        String cnicNumber = cnic1.getEditText().toString() +"-"+ cnic2.getEditText().toString() +"-"+ cnic3.getEditText().toString();
-
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
-        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
-        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
+
+
+        String cnicNumber = cnic1.getEditText().toString() +"-"+ cnic2.getEditText().toString() +"-"+ cnic3.getEditText().toString();
+
         observations.add(new String[]{"REGISTRATION DATE", App.getSqlDateTime(secondDateCalendar)});
         observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnicNumber});
 
@@ -674,8 +681,8 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("FORM START TIME")) {
-                startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
+            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+                timeTakeToFill = obs[0][1];
             } else if (obs[0][0].equals("REGISTRATION DATE")) {
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
@@ -959,7 +966,6 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         reasonTreatmentNotInitiatedOther.setVisibility(View.GONE);
         historyCategory.setVisibility(View.GONE);
         outcomePreviousCategory.setVisibility(View.GONE);
-        updateDisplay();
 
         final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
             @Override
@@ -1045,6 +1051,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                         format = "yyyy-MM-dd";
                     }
                     secondDateCalendar.setTime(App.stringToDate(registerationDate, format));
+                    updateDisplay();
                     regDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
                 }
             }
@@ -1067,7 +1074,6 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             } else bundle.putBoolean("save", false);
 
         }
-
 
     }
 

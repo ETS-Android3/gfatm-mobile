@@ -190,7 +190,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
 
         specimenSource = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_where_did_the_specimen_come_from), getResources().getStringArray(R.array.fast_specimen_come_from_list), getResources().getString(R.string.fast_lymph), App.VERTICAL);
 
-        specimenSourceOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        specimenSourceOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
 
         dstResult = new MyTextView(context, getResources().getString(R.string.fast_dst_result));
         dstResult.setTypeface(null, Typeface.BOLD);
@@ -239,7 +239,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
 
         cfzResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_clofazamine), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
 
-        otherDrugName = new TitledEditText(context, null, getResources().getString(R.string.fast_other_drug_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        otherDrugName = new TitledEditText(context, null, getResources().getString(R.string.fast_other_drug_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
 
         otherDrugResult = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_other_drug_result), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
 
@@ -329,14 +329,10 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                                       int before, int count) {
                 try {
                     if (testId.getEditText().getText().length() > 0) {
-                        if (testId.getEditText().getText().length() < 11) {
-                            testId.getEditText().setError(getString(R.string.ctb_test_id_error));
-                            testIdView.setVisibility(View.INVISIBLE);
-                        } else {
-                            testIdView.setVisibility(View.VISIBLE);
-                            testIdView.setImageResource(R.drawable.ic_checked);
-                        }
+                        testIdView.setVisibility(View.VISIBLE);
+                        testIdView.setImageResource(R.drawable.ic_checked);
                     } else {
+                        testId.getEditText().setError(getString(R.string.fast_test_id_error));
                         testIdView.setVisibility(View.INVISIBLE);
                     }
                     goneVisibility();
@@ -468,7 +464,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
             error = true;
         }
 
-        if (specimenSourceOther.getVisibility() == View.VISIBLE && App.get(specimenSourceOther).isEmpty()) {
+        if (specimenSourceOther.getVisibility() == View.VISIBLE && specimenSourceOther.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -478,7 +474,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
             error = true;
         }
 
-        if (otherDrugName.getVisibility() == View.VISIBLE && App.get(otherDrugName).isEmpty()) {
+        if (otherDrugName.getVisibility() == View.VISIBLE && otherDrugName.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -524,13 +520,27 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
     @Override
     public boolean submit() {
 
-        endTime = new Date();
-
         final ArrayList<String[]> observations = new ArrayList<String[]>();
-        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
-        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
-        observations.add (new String[] {"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
-        observations.add (new String[] {"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            String encounterId = bundle.getString("formId");
+            if (saveFlag) {
+                serverService.deleteOfflineForms(encounterId);
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
+            }else {
+                endTime = new Date();
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
+            }
+            bundle.putBoolean("save", false);
+        } else {
+            endTime = new Date();
+            observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
+        }
+
+        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
+        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
 
         observations.add(new String[]{"TEST ID", App.get(testId)});
 
@@ -968,8 +978,10 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
 
 
         for (int i = 0; i < obsValue.size(); i++) {
-
             String[][] obs = obsValue.get(i);
+            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+                timeTakeToFill = obs[0][1];
+            }
             if(fo.getFormName().contains("Order")) {
                 formType.getRadioGroup().getButtons().get(0).setChecked(true);
                 formType.getRadioGroup().getButtons().get(1).setEnabled(false);
