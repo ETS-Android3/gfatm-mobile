@@ -155,7 +155,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
         remarks = new TitledEditText(context, null, getResources().getString(R.string.fast_other_reason_remarks), "", "", 250, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         treatmentInitiatedReferralSite = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_treatment_initiated_at_transfer_referral_site), getResources().getStringArray(R.array.fast_yes_no_unknown_list), getResources().getString(R.string.fast_dont_know_title), App.VERTICAL, App.VERTICAL);
         treatmentNotInitiatedReferralSite = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_reason_treatment_not_initiated_at_referral_site), getResources().getStringArray(R.array.fast_reason_treatment_not_initiated_referral_site_list), getResources().getString(R.string.fast_patient_could_not_be_contacted), App.VERTICAL);
-        treatmentNotInitiatedReferralSiteOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        treatmentNotInitiatedReferralSiteOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         drConfirmation = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_dr_confirmation), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_no_title), App.VERTICAL, App.VERTICAL);
         enrsId = new TitledEditText(context, null, getResources().getString(R.string.fast_enrs_number), "", "", 10, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         firstName = new TitledEditText(context, null, getResources().getString(R.string.fast_first_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
@@ -224,7 +224,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
         Boolean error = false;
 
 
-        if (remarks.getVisibility() == View.VISIBLE && App.get(remarks).isEmpty()) {
+        if (remarks.getVisibility() == View.VISIBLE && remarks.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -234,7 +234,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
             error = true;
         }
 
-        if (enrsId.getVisibility() == View.VISIBLE && App.get(enrsId).isEmpty()) {
+        if (enrsId.getVisibility() == View.VISIBLE && enrsId.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -244,7 +244,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
             error = true;
         }
 
-        if (firstName.getVisibility() == View.VISIBLE && App.get(firstName).isEmpty()) {
+        if (firstName.getVisibility() == View.VISIBLE && firstName.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -254,7 +254,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
             error = true;
         }
 
-        if (lastName.getVisibility() == View.VISIBLE && App.get(lastName).isEmpty()) {
+        if (lastName.getVisibility() == View.VISIBLE && lastName.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -264,7 +264,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
             error = true;
         }
 
-        if (App.get(mobile1).isEmpty()) {
+        if (mobile1.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -274,7 +274,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
             error = true;
         }
 
-        if (App.get(mobile2).isEmpty()) {
+        if (mobile2.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -350,26 +350,29 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
     @Override
     public boolean submit() {
 
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean saveFlag = bundle.getBoolean("save", false);
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
+            }else {
+                endTime = new Date();
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
             bundle.putBoolean("save", false);
+        } else {
+            endTime = new Date();
+            observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
 
-        endTime = new Date();
-
-        final String mobileNumber = mobile1.getEditText().getText().toString() + "-" + mobile2.getEditText().getText().toString();
-
-
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
-        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
-        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
+
+        final String mobileNumber = mobile1.getEditText().getText().toString() + "-" + mobile2.getEditText().getText().toString();
 
 
         if (treatmentOutcome.getVisibility() == View.VISIBLE)
@@ -557,8 +560,8 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("FORM START TIME")) {
-                startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
+            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+                timeTakeToFill = obs[0][1];
             } else if (obs[0][0].equals("TUBERCULOUS TREATMENT OUTCOME")) {
                 String value = obs[0][1].equals("CURE, OUTCOME") ? getResources().getString(R.string.fast_cured) :
                         (obs[0][1].equals("TREATMENT COMPLETE") ? getResources().getString(R.string.fast_treatment_completed) :

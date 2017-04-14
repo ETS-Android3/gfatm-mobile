@@ -413,10 +413,16 @@
     <string name="fast_accepted">Accepted</string>
     <string name="fast_rejected">Rejected</string>
     <string name="fast_date_of_result_recieved_cannot_be_less_than_submission_date">Date of result received cannot be before sample submission date</string>
-    <string name="fast_form_cannot_be_before_person_dob">Form date cannot be before person date of birth</string>
+    <string name="fast_form_cannot_be_before_person_dob">This date cannot be before person date of birth</string>
+    <string name="fast_test_cannot_be_before_form_date">Test date cannot be before form date</string>
     <string name="fast_please_select_atleast_one_checkbox_for_identification_ids">Please select atleast one checkbox for identifcation IDs</string>
-
-
+    <string name="fast_contact_patient_id_cannot_be_same_as_patient_id">Contact patient id cannot be same as patient id</string>
+    <string name="fast_husband_name_cannot_be_less_than_2_characters">Husband name cannot be less than 2 characters</string>
+    <string name="fast_father_name_cannot_be_less_than_2_characters">Father name cannot be less than 2 characters</string>
+    <string name="fast_scan_qr_code">Scan QR code</string>
+    <string name="fast_test_id_error">Invalid test id</string>
+    <string name="fast_invalid_father_name">Invalid father name</string>
+    <string name="fast_invalid_husband_name">Invalid husband name</string>
 
     <string-array name="fast_locations">
         <item>@string/fast_community_title</item>

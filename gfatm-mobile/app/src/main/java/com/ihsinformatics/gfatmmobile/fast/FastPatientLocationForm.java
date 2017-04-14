@@ -1,7 +1,10 @@
 package com.ihsinformatics.gfatmmobile.fast;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
@@ -29,6 +33,7 @@ import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
+import com.ihsinformatics.gfatmmobile.Barcode;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.MyCheckBox;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
@@ -44,6 +49,10 @@ import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
+
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by Haris on 1/13/2017.
@@ -69,6 +78,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
     TitledRadioGroup contactReferral;
     TitledCheckBoxes contactIdType;
     TitledEditText contactPatientId;
+    Button scanQRCode;
     TitledEditText contactExternalId;
     TitledSpinner contactExternalIdHospital;
     TitledEditText contactTbRegisternationNo;
@@ -154,6 +164,8 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
         contactReferral = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_enrolled_in_any_tb_program), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_no_title), App.VERTICAL, App.VERTICAL);
         contactIdType = new TitledCheckBoxes(context, null, getResources().getString(R.string.fast_tb_contact_any_identifications_id), getResources().getStringArray(R.array.fast_tb_contact_identification_list), null, App.VERTICAL, App.VERTICAL);
         contactPatientId = new TitledEditText(context, null, getResources().getString(R.string.fast_patient_id), "", "#####-#", 7, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        scanQRCode = new Button(context);
+        scanQRCode.setText(R.string.fast_scan_qr_code);
         contactExternalId = new TitledEditText(context, null, getResources().getString(R.string.fast_external_id), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
 
         String columnName = "";
@@ -186,11 +198,12 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, screening, facilitySection, facilitySectionOther, opdWardSection, patientReferralSource, otherReferral, facilityDepartment, facilityDepartmentOther, referralWithinOpd, referralWithinOpdOther, facilityType, hearAboutUs, hearAboutUsOther, contactReferral, contactIdType, contactPatientId, contactExternalId, contactExternalIdHospital, contactTbRegisternationNo},};
+                {{formDate, screening, facilitySection, facilitySectionOther, opdWardSection, patientReferralSource, otherReferral, facilityDepartment, facilityDepartmentOther, referralWithinOpd, referralWithinOpdOther, facilityType, hearAboutUs, hearAboutUsOther, contactReferral, contactIdType, contactPatientId, scanQRCode, contactExternalId, contactExternalIdHospital, contactTbRegisternationNo},};
 
         formDate.getButton().setOnClickListener(this);
         screening.getRadioGroup().setOnCheckedChangeListener(this);
         facilitySection.getSpinner().setOnItemSelectedListener(this);
+        scanQRCode.setOnClickListener(this);
         opdWardSection.getSpinner().setOnItemSelectedListener(this);
         patientReferralSource.getSpinner().setOnItemSelectedListener(this);
         facilityDepartment.getRadioGroup().setOnCheckedChangeListener(this);
@@ -269,7 +282,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
     public boolean validate() {
         Boolean error = false;
 
-        if (facilitySectionOther.getVisibility() == View.VISIBLE && App.get(facilitySectionOther).isEmpty()) {
+        if (facilitySectionOther.getVisibility() == View.VISIBLE && facilitySectionOther.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -279,7 +292,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
             error = true;
         }
 
-        if (otherReferral.getVisibility() == View.VISIBLE && App.get(otherReferral).isEmpty()) {
+        if (otherReferral.getVisibility() == View.VISIBLE && otherReferral.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -289,7 +302,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
             error = true;
         }
 
-        if (facilityDepartmentOther.getVisibility() == View.VISIBLE && App.get(facilityDepartmentOther).isEmpty()) {
+        if (facilityDepartmentOther.getVisibility() == View.VISIBLE && facilityDepartmentOther.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -299,7 +312,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
             error = true;
         }
 
-        if (referralWithinOpdOther.getVisibility() == View.VISIBLE && App.get(referralWithinOpd).isEmpty()) {
+        if (referralWithinOpdOther.getVisibility() == View.VISIBLE && referralWithinOpdOther.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -309,7 +322,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
             error = true;
         }
 
-        if (hearAboutUsOther.getVisibility() == View.VISIBLE && App.get(hearAboutUsOther).isEmpty()) {
+        if (hearAboutUsOther.getVisibility() == View.VISIBLE && hearAboutUsOther.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -319,7 +332,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
             error = true;
         }
 
-        if (contactPatientId.getVisibility() == View.VISIBLE && App.get(contactPatientId).isEmpty()) {
+        if (contactPatientId.getVisibility() == View.VISIBLE && contactPatientId.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -349,8 +362,18 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
             error = true;
         }
 
+        if (contactPatientId.getVisibility() == View.VISIBLE && App.getPatient().getPatientId().equals(contactPatientId.getEditText().getText().toString())) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            contactPatientId.getEditText().setError(getString(R.string.fast_contact_patient_id_cannot_be_same_as_patient_id));
+            contactPatientId.getEditText().requestFocus();
+            error = true;
+        }
 
-        if (contactExternalId.getVisibility() == View.VISIBLE && App.get(contactExternalId).isEmpty()) {
+
+        if (contactExternalId.getVisibility() == View.VISIBLE &&contactPatientId.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -360,7 +383,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
             error = true;
         }
 
-        if (contactTbRegisternationNo.getVisibility() == View.VISIBLE && App.get(contactTbRegisternationNo).isEmpty()) {
+        if (contactTbRegisternationNo.getVisibility() == View.VISIBLE && contactTbRegisternationNo.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -403,21 +426,27 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
     @Override
     public boolean submit() {
 
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean saveFlag = bundle.getBoolean("save", false);
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
+            }else {
+                endTime = new Date();
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
             bundle.putBoolean("save", false);
+        } else {
+            endTime = new Date();
+            observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
 
-        endTime = new Date();
-
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
-        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
-        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
+        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         observations.add(new String[]{"IDENTIFIED PATIENT THROUGH SCREENING", App.get(screening).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
@@ -652,8 +681,8 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("FORM START TIME")) {
-                startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
+            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+                timeTakeToFill = obs[0][1];
             } else if (obs[0][0].equals("IDENTIFIED PATIENT THROUGH SCREENING")) {
 
                 for (RadioButton rb : screening.getRadioGroup().getButtons()) {
@@ -823,6 +852,109 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
             args.putBoolean("allowPastDate", true);
             args.putBoolean("allowFutureDate", false);
         }
+        else if (view == scanQRCode) {
+            try {
+                Intent intent = new Intent(Barcode.BARCODE_INTENT);
+                if (App.isCallable(context, intent)) {
+                    intent.putExtra(Barcode.SCAN_MODE, Barcode.QR_MODE);
+                    startActivityForResult(intent, Barcode.BARCODE_RESULT);
+                } else {
+                    //int color = App.getColor(SelectPatientActivity.this, R.attr.colorAccent);
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getString(R.string.barcode_scanner_missing));
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    //DrawableCompat.setTint(clearIcon, color);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+            } catch (ActivityNotFoundException e) {
+                //int color = App.getColor(SelectPatientActivity.this, R.attr.colorAccent);
+                final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                alertDialog.setMessage(getString(R.string.barcode_scanner_missing));
+                Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                //DrawableCompat.setTint(clearIcon, color);
+                alertDialog.setIcon(clearIcon);
+                alertDialog.setTitle(getResources().getString(R.string.title_error));
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Retrieve barcode scan results
+        if (requestCode == Barcode.BARCODE_RESULT) {
+            if (resultCode == RESULT_OK) {
+                String str = data.getStringExtra(Barcode.SCAN_RESULT);
+                // Check for valid Id
+                if (RegexUtil.isValidId(str)) {
+                    contactPatientId.getEditText().setText(str);
+                    contactPatientId.getEditText().requestFocus();
+                } else {
+
+                    //int color = App.getColor(SelectPatientActivity.this, R.attr.colorAccent);
+
+                    contactPatientId.getEditText().setText("");
+                    contactPatientId.getEditText().requestFocus();
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getString(R.string.invalid_scanned_id));
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    //DrawableCompat.setTint(clearIcon, color);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+
+                }
+            } else if (resultCode == RESULT_CANCELED) {
+
+                int color = App.getColor(context, R.attr.colorAccent);
+
+                contactPatientId.getEditText().setText("");
+                contactPatientId.getEditText().requestFocus();
+
+                /*final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this).create();
+                alertDialog.setMessage(getString(R.string.warning_before_clear));
+                Drawable clearIcon = getResources().getDrawable(R.drawable.ic_clear);
+                DrawableCompat.setTint(clearIcon, color);
+                alertDialog.setIcon(clearIcon);
+                alertDialog.setTitle(getResources().getString(R.string.title_clear));
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();*/
+
+            }
+            // Set the locale again, since the Barcode app restores system's
+            // locale because of orientation
+            Locale.setDefault(App.getCurrentLocale());
+            Configuration config = new Configuration();
+            config.locale = App.getCurrentLocale();
+            context.getResources().updateConfiguration(config, null);
+        }
     }
 
     @Override
@@ -902,8 +1034,10 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
                     ArrayList<MyCheckBox> myCheckBoxes = contactIdType.getCheckedBoxes();
                     if (myCheckBoxes.get(0).getValue() == true) {
                         contactPatientId.setVisibility(View.VISIBLE);
+                        scanQRCode.setVisibility(View.VISIBLE);
                     } else {
                         contactPatientId.setVisibility(View.GONE);
+                        scanQRCode.setVisibility(View.GONE);
                     }
                     if (myCheckBoxes.get(1).getValue() == true) {
                         contactExternalId.setVisibility(View.VISIBLE);
@@ -926,6 +1060,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
                 } else {
                     contactIdType.setVisibility(View.GONE);
                     contactPatientId.setVisibility(View.GONE);
+                    scanQRCode.setVisibility(View.GONE);
                     contactExternalId.setVisibility(View.GONE);
                     contactExternalIdHospital.setVisibility(View.GONE);
                     contactTbRegisternationNo.setVisibility(View.GONE);
@@ -934,6 +1069,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
                 contactReferral.setVisibility(View.GONE);
                 contactIdType.setVisibility(View.GONE);
                 contactPatientId.setVisibility(View.GONE);
+                scanQRCode.setVisibility(View.GONE);
                 contactExternalId.setVisibility(View.GONE);
                 contactExternalIdHospital.setVisibility(View.GONE);
                 contactTbRegisternationNo.setVisibility(View.GONE);
@@ -980,6 +1116,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
                 contactReferral.setVisibility(View.GONE);
                 contactIdType.setVisibility(View.GONE);
                 contactPatientId.setVisibility(View.GONE);
+                scanQRCode.setVisibility(View.GONE);
                 contactExternalId.setVisibility(View.GONE);
                 contactExternalIdHospital.setVisibility(View.GONE);
                 contactTbRegisternationNo.setVisibility(View.GONE);
@@ -1014,6 +1151,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
                         ArrayList<MyCheckBox> myCheckBoxes = contactIdType.getCheckedBoxes();
                         if (myCheckBoxes.get(0).getValue() == true) {
                             contactPatientId.setVisibility(View.VISIBLE);
+                            scanQRCode.setVisibility(View.VISIBLE);
                         }
                         if (myCheckBoxes.get(1).getValue() == true) {
                             contactExternalId.setVisibility(View.VISIBLE);
@@ -1026,6 +1164,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
                         }
                     } else {
                         contactPatientId.setVisibility(View.GONE);
+                        scanQRCode.setVisibility(View.GONE);
                         contactExternalId.setVisibility(View.GONE);
                         contactExternalIdHospital.setVisibility(View.GONE);
                         contactTbRegisternationNo.setVisibility(View.GONE);
@@ -1063,8 +1202,10 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
                 ArrayList<MyCheckBox> myCheckBoxes = contactIdType.getCheckedBoxes();
                 if (myCheckBoxes.get(0).getValue() == true) {
                     contactPatientId.setVisibility(View.VISIBLE);
+                    scanQRCode.setVisibility(View.VISIBLE);
                 } else {
                     contactPatientId.setVisibility(View.GONE);
+                    scanQRCode.setVisibility(View.GONE);
                 }
                 if (myCheckBoxes.get(1).getValue() == true) {
                     contactExternalId.setVisibility(View.VISIBLE);
@@ -1087,6 +1228,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
             } else {
                 contactIdType.setVisibility(View.GONE);
                 contactPatientId.setVisibility(View.GONE);
+                scanQRCode.setVisibility(View.GONE);
                 contactExternalId.setVisibility(View.GONE);
                 contactExternalIdHospital.setVisibility(View.GONE);
                 contactTbRegisternationNo.setVisibility(View.GONE);
@@ -1099,8 +1241,10 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (patientIdCheckbox.isChecked() && patientIdCheckbox.getVisibility() == View.VISIBLE) {
             contactPatientId.setVisibility(View.VISIBLE);
+            scanQRCode.setVisibility(View.VISIBLE);
         } else {
             contactPatientId.setVisibility(View.GONE);
+            scanQRCode.setVisibility(View.GONE);
         }
 
         if (externalIdCheckbox.isChecked() && externalIdCheckbox.getVisibility() == View.VISIBLE) {
@@ -1141,6 +1285,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
         contactIdType.setVisibility(View.GONE);
         contactPatientId.setVisibility(View.GONE);
         contactExternalId.setVisibility(View.GONE);
+        scanQRCode.setVisibility(View.GONE);
         contactExternalIdHospital.setVisibility(View.GONE);
         contactTbRegisternationNo.setVisibility(View.GONE);
 

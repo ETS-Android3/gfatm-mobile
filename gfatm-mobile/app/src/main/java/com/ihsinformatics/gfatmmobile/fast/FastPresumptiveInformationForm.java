@@ -161,8 +161,8 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         cnicOwner = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_whose_nic_is_this), getResources().getStringArray(R.array.fast_whose_nic_is_this_list), getResources().getString(R.string.fast_self), App.VERTICAL);
         otherCnicOwner = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         addressProvided = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_provided_their_address), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
-        addressHouse = new TitledEditText(context, null, getResources().getString(R.string.fast_address_1), "", "", 10, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        addressStreet = new TitledEditText(context, null, getResources().getString(R.string.fast_address_2), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        addressHouse = new TitledEditText(context, null, getResources().getString(R.string.fast_address_1), "", "", 10, RegexUtil.ADD_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        addressStreet = new TitledEditText(context, null, getResources().getString(R.string.fast_address_2), "", "", 50, RegexUtil.ADD_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         district = new TitledSpinner(context, "", getResources().getString(R.string.pet_district), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
         city = new TitledSpinner(context, "", getResources().getString(R.string.pet_city), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
         addressType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_type_of_address_is_this), getResources().getStringArray(R.array.fast_type_of_address_list), getResources().getString(R.string.fast_perminant), App.VERTICAL, App.VERTICAL);
@@ -254,7 +254,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
     public boolean validate() {
         Boolean error = false;
 
-        if (App.get(cnic1).isEmpty()) {
+        if (cnic1.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -264,7 +264,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             error = true;
         }
 
-        if (App.get(cnic2).isEmpty()) {
+        if (cnic2.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -274,7 +274,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             error = true;
         }
 
-        if (App.get(cnic3).isEmpty()) {
+        if (cnic3.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -314,7 +314,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             error = true;
         }
 
-        if (otherCnicOwner.getVisibility() == View.VISIBLE && App.get(otherCnicOwner).isEmpty()) {
+        if (otherCnicOwner.getVisibility() == View.VISIBLE && otherCnicOwner.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -324,7 +324,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             error = true;
         }
 
-        if (App.get(mobile1).isEmpty()) {
+        if (mobile1.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -334,7 +334,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             error = true;
         }
 
-        if (App.get(mobile2).isEmpty()) {
+        if (mobile2.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -344,7 +344,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             error = true;
         }
 
-        if (App.get(secondaryMobile1).isEmpty() && !App.get(secondaryMobile2).isEmpty()) {
+        if (secondaryMobile1.getEditText().getText().toString().trim().isEmpty() && !secondaryMobile2.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -356,7 +356,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             secondaryMobile1.getEditText().setError(null);
         }
 
-        if (App.get(secondaryMobile2).isEmpty() && !App.get(secondaryMobile1).isEmpty()) {
+        if (secondaryMobile2.getEditText().getText().toString().trim().isEmpty() && !secondaryMobile1.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -368,7 +368,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             secondaryMobile2.getEditText().setError(null);
         }
 
-        if (App.get(landline1).isEmpty() && !App.get(landline2).isEmpty()) {
+        if (landline1.getEditText().getText().toString().trim().isEmpty() && !landline2.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -380,7 +380,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             landline1.getEditText().setError(null);
         }
 
-        if (App.get(landline2).isEmpty() && !App.get(landline1).isEmpty()) {
+        if (landline2.getEditText().getText().toString().trim().isEmpty() && !landline1.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -392,7 +392,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             landline2.getEditText().setError(null);
         }
 
-        if (App.get(secondaryLandline1).isEmpty() && !App.get(secondaryLandline2).isEmpty()) {
+        if (secondaryLandline1.getEditText().getText().toString().trim().isEmpty() && !secondaryLandline2.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -404,7 +404,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             secondaryLandline1.getEditText().setError(null);
         }
 
-        if (App.get(secondaryLandline2).isEmpty() && !App.get(secondaryLandline1).isEmpty()) {
+        if (secondaryLandline2.getEditText().getText().toString().trim().isEmpty() && !secondaryLandline1.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -436,7 +436,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             error = true;
         }
 
-        if (!(App.get(secondaryMobile1).isEmpty() && App.get(secondaryMobile2).isEmpty()) && App.get(secondaryMobile1).length() != 4) {
+        if (!(secondaryMobile1.getEditText().getText().toString().trim().isEmpty() && secondaryMobile2.getEditText().getText().toString().trim().isEmpty()) && App.get(secondaryMobile1).length() != 4) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -446,7 +446,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             error = true;
         }
 
-        if (!(App.get(secondaryMobile1).isEmpty() && App.get(secondaryMobile2).isEmpty()) && App.get(secondaryMobile2).length() != 7) {
+        if (!(secondaryMobile1.getEditText().getText().toString().trim().isEmpty() && secondaryMobile2.getEditText().getText().toString().trim().isEmpty()) && App.get(secondaryMobile2).length() != 7) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -456,7 +456,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             error = true;
         }
 
-        if (!(App.get(landline1).isEmpty() && App.get(landline2).isEmpty()) && !(App.get(landline1).length() == 3 || App.get(landline1).length() == 4)) {
+        if (!(landline1.getEditText().getText().toString().trim().isEmpty() && landline2.getEditText().getText().toString().trim().isEmpty()) && !(App.get(landline1).length() == 3 || App.get(landline1).length() == 4)) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -466,7 +466,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             error = true;
         }
 
-        if (!(App.get(landline1).isEmpty() && App.get(landline2).isEmpty()) && App.get(landline2).length() != 7) {
+        if (!(landline1.getEditText().getText().toString().trim().isEmpty() && landline2.getEditText().getText().toString().trim().isEmpty()) && App.get(landline2).length() != 7) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -476,7 +476,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             error = true;
         }
 
-        if (!(App.get(secondaryLandline1).isEmpty() && App.get(secondaryLandline2).isEmpty()) && !(App.get(secondaryLandline1).length() == 3 || App.get(secondaryLandline1).length() == 4)) {
+        if (!(secondaryLandline1.getEditText().getText().toString().trim().isEmpty() && secondaryLandline2.getEditText().getText().toString().trim().isEmpty()) && !(App.get(secondaryLandline1).length() == 3 || App.get(secondaryLandline1).length() == 4)) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -486,7 +486,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             error = true;
         }
 
-        if (!(App.get(secondaryLandline1).isEmpty() && App.get(secondaryLandline2).isEmpty()) && App.get(secondaryLandline2).length() != 7) {
+        if (!(secondaryLandline1.getEditText().getText().toString().trim().isEmpty() && secondaryLandline2.getEditText().getText().toString().trim().isEmpty()) && App.get(secondaryLandline2).length() != 7) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -584,21 +584,25 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
     @Override
     public boolean submit() {
 
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean saveFlag = bundle.getBoolean("save", false);
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
+            }else {
+                endTime = new Date();
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
             bundle.putBoolean("save", false);
+        } else {
+            endTime = new Date();
+            observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
 
-        endTime = new Date();
-
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
-        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
-        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
 
@@ -831,8 +835,8 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("FORM START TIME")) {
-                startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
+            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+                timeTakeToFill = obs[0][1];
             } else if (obs[0][0].equals("NATIONAL IDENTIFICATION NUMBER")) {
                 String data = obs[0][1];
                 cnic1.getEditText().setText(data.substring(0,5));
