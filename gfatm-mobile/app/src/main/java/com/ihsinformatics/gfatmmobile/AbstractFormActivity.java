@@ -98,6 +98,7 @@ public abstract class AbstractFormActivity extends Fragment
 
     protected Date startTime = null;
     protected Date endTime = null;
+    protected String timeTakeToFill;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
