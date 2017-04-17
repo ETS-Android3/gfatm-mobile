@@ -422,7 +422,6 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
 
 
     public void syncLocation() {
-        // Authenticate from server
         AsyncTask<String, String, String> syncTask = new AsyncTask<String, String, String>() {
             @Override
             protected String doInBackground(String... params) {
