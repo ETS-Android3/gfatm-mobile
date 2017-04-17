@@ -12,8 +12,11 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -45,6 +48,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.shared.FormsObject;
+import com.ihsinformatics.gfatmmobile.util.LocationService;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 import java.util.ArrayList;
@@ -164,6 +168,7 @@ public abstract class AbstractFormActivity extends Fragment
         saveButton.setVisibility(View.GONE);
         if (snackbar != null)
             snackbar.dismiss();
+
         return mainContent;
     }
 
