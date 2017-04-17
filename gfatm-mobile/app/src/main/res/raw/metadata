@@ -4469,6 +4469,8 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ONE PLUS','	+',
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TWO PLUS','++','Boolean','1363AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CRYSTALS IN URINE','urine_crystals','Coded','06d12fea-2285-471c-8348-218bea48b214');
 
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL PROPHYLAXIS','RHZE PROPHYLAXIS','N/A','1675AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+
 -- Program
 INSERT OR IGNORE INTO program VALUES (1, "86ba1232-d576-416e-b102-5f335c6746ce", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
 INSERT OR IGNORE INTO program VALUES (2, "5d372a38-ae27-4a68-a8d2-bc517a2c9c40", "PET", "Post-Exposure Treatment");
