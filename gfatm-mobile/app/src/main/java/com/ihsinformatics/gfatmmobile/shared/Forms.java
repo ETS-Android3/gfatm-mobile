@@ -189,6 +189,7 @@ public class Forms{
     /********************************
      * PMDT
      ********************************/
+    // Form names created for HTML form based encounters
     public static final String PMDT_TREATMENT_INITIATION = "Treatment Initiation";
 
     public static final String PMDT_PATIENT_REGISTRAITON = "Patient Registration";
