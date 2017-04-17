@@ -331,16 +331,6 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
             error = true;
         }
 
-        if (radiologistRemarks.getVisibility() == View.VISIBLE && radiologistRemarks.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            radiologistRemarks.getEditText().setError(getString(R.string.empty_field));
-            radiologistRemarks.getEditText().requestFocus();
-            error = true;
-        }
-
 
         if (error) {
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
