@@ -22,7 +22,7 @@ import org.json.JSONObject;
  * @author owais.hussain@irdresearch.org
  */
 public class Location extends AbstractModel {
-    public static final String FIELDS = "uuid,name,address1,address2,address3,cityVillage,description,attributes";
+    public static final String FIELDS = "uuid,name,address1,address2,address3,cityVillage,countyDistrict,stateProvince,description,attributes";
     private String name;
     private String locationId;
     private String primaryContact;
@@ -79,17 +79,17 @@ public class Location extends AbstractModel {
         try {
             uuid = json.getString("uuid");
             name = json.getString("name");
-            if (json.has("address1") && (json.get("address1") == null || json.getString("address1").equals("null")))
+            if (json.has("address1") && !(json.get("address1") == null || json.getString("address1").equals("null")))
                 address1 = json.getString("address1");
             if (json.has("address2") && (json.get("address2") == null || json.getString("address2").equals("null")))
                 address2 = json.getString("address2");
-            if (json.has("address3") && (json.get("address3") == null || json.getString("address3").equals("null")))
+            if (json.has("address3") && !(json.get("address3") == null || json.getString("address3").equals("null")))
                 address3 = json.getString("address3");
-            if (json.has("cityVillage") && (json.get("cityVillage") == null || json.getString("cityVillage").equals("null")))
+            if (json.has("cityVillage") && !(json.get("cityVillage") == null || json.getString("cityVillage").equals("null")))
                 city = json.getString("cityVillage");
-            if (json.has("countyDistrict") && (json.get("countyDistrict") == null || json.getString("countyDistrict").equals("null")))
+            if (json.has("countyDistrict") && !(json.get("countyDistrict") == null || json.getString("countyDistrict").equals("null")))
                 district = json.getString("countyDistrict");
-            if (json.has("stateProvince") && (json.get("stateProvince") == null || json.getString("stateProvince").equals("null")))
+            if (json.has("stateProvince") && !(json.get("stateProvince") == null || json.getString("stateProvince").equals("null")))
                 province = json.getString("stateProvince");
             description = json.getString("description");
             JSONArray attributes = json.getJSONArray("attributes");
