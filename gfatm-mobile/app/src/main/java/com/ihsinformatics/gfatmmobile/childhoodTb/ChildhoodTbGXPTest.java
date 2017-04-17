@@ -22,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -34,6 +35,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
@@ -141,7 +143,7 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
 
 
         views = new View[]{formDate.getButton(),resultRecieveDate.getButton(),geneXpertMTBResult.getSpinner(),mtbBurden.getRadioGroup(),mtbRIFResult.getSpinner(),
-                };
+                errorCode.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
@@ -167,16 +169,33 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
 
             Date date = new Date();
 
-            if (formDateCalendar.after(date)) {
 
-                formDateCalendar = App.getCalendar(date);
+        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
+
+            String formDa = formDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
+
+
+            if (formDateCalendar.after(App.getCalendar(date))) {
+
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-            } else
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+            }  else
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        }
         if (!resultRecieveDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString())) {
 
             //
@@ -240,12 +259,29 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
 
     @Override
     public boolean submit() {
-        endTime = new Date();
         final ArrayList<String[]> observations = new ArrayList<String[]>();
-        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
-        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            String encounterId = bundle.getString("formId");
+            if (saveFlag) {
+                serverService.deleteOfflineForms(encounterId);
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
+            }else {
+                endTime = new Date();
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
+            }
+            bundle.putBoolean("save", false);
+        } else {
+            endTime = new Date();
+            observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
+        }
+
+        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
+        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         observations.add(new String[]{"CARTRIDGE ID", App.get(cartridgeId)});
-        observations.add(new String[]{"DATE OF TEST RESULT RECEIVED", App.getSqlDateTime(secondDateCalendar)});
+        observations.add(new String[]{"DATE OF  TEST RESULT RECEIVED", App.getSqlDateTime(secondDateCalendar)});
 
         observations.add(new String[]{"GENEXPERT MTB/RIF RESULT", App.get(geneXpertMTBResult).equals(getResources().getString(R.string.ctb_mtb_detected)) ? "DETECTED" :
                 (App.get(geneXpertMTBResult).equals(getResources().getString(R.string.ctb_mtb_not_detected)) ? "NOT DETECTED" :
@@ -380,8 +416,55 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
     }
 
     @Override
-    public void refill(int encounterId) {
+    public void refill(int formId) {
+        OfflineForm fo = serverService.getOfflineFormById(formId);
+        String date = fo.getFormDate();
+        ArrayList<String[][]> obsValue = fo.getObsValue();
+        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
+        for (int i = 0; i < obsValue.size(); i++) {
+            String[][] obs = obsValue.get(i);
+            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+                timeTakeToFill = obs[0][1];
+            }else if (obs[0][0].equals("CARTRIDGE ID")) {
+                cartridgeId.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("DATE OF  TEST RESULT RECEIVED")) {
+                String secondDate = obs[0][1];
+                secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
+                resultRecieveDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+            } else if (obs[0][0].equals("GENEXPERT MTB/RIF RESULT")) {
+                String value = obs[0][1].equals("DETECTED") ? getResources().getString(R.string.ctb_mtb_detected) :
+                        (obs[0][1].equals("NOT DETECTED") ? getResources().getString(R.string.ctb_mtb_not_detected) :
+                                (obs[0][1].equals("ERROR") ? getResources().getString(R.string.ctb_error) :
+                                        (obs[0][1].equals("INVALID") ? getResources().getString(R.string.ctb_invalid) :
+                                                getResources().getString(R.string.ctb_no_result))));
+                geneXpertMTBResult.getSpinner().selectValue(value);
+            } else if (obs[0][0].equals("MTB BURDEN")) {
+                for (RadioButton rb : mtbBurden.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_very_low)) && obs[0][1].equals("VERY LOW")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_low)) && obs[0][1].equals("LOW")) {
+                        rb.setChecked(true);
+                        break;
+                    }else if (rb.getText().equals(getResources().getString(R.string.ctb_medium)) && obs[0][1].equals("MEDIUM")) {
+                        rb.setChecked(true);
+                        break;
+                    }else if (rb.getText().equals(getResources().getString(R.string.ctb_high)) && obs[0][1].equals("HIGH")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("RIF RESISTANCE RESULT")) {
+                String value = obs[0][1].equals("NOT DETECTED") ? getResources().getString(R.string.ctb_not_detected) :
+                        (obs[0][1].equals("DETECTED") ? getResources().getString(R.string.ctb_detected) :
+                                getResources().getString(R.string.ctb_indeterminate));
+                mtbRIFResult.getSpinner().selectValue(value);
+            } else if (obs[0][0].equals("ERROR CODE")) {
+                errorCode.getEditText().setText(obs[0][1]);
+            }
+        }
     }
 
     @Override
@@ -449,7 +532,23 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
         mtbBurden.setVisibility(View.GONE);
         mtbRIFResult.setVisibility(View.GONE);
         errorCode.setVisibility(View.GONE);
+        cartridgeId.getEditText().setText(null);
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean openFlag = bundle.getBoolean("open");
+            if (openFlag) {
 
+                bundle.putBoolean("open", false);
+                bundle.putBoolean("save", true);
+
+                String id = bundle.getString("formId");
+                int formId = Integer.valueOf(id);
+
+                refill(formId);
+
+            } else bundle.putBoolean("save", false);
+
+        }
     }
 
     @Override

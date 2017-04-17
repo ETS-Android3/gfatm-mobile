@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -146,12 +147,53 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
      * Initializes all views and ArrayList and Views Array
      */
     public void initViews() {
+        if (App.getPatient().getPerson().getAge() > 15) {
 
+            int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
+
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+            alertDialog.setMessage(getString(R.string.ctb_age_greater_than_15));
+            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+            DrawableCompat.setTint(clearIcon, color);
+            alertDialog.setIcon(clearIcon);
+            alertDialog.setTitle(getResources().getString(R.string.title_error));
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            try {
+                                InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                            } catch (Exception e) {
+                                // TODO: handle exception
+                            }
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
+        }
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         screeningLocation = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_screening_location), getResources().getStringArray(R.array.ctb_screening_location_list), getResources().getString(R.string.ctb_hospital), App.HORIZONTAL, App.VERTICAL, true);
-        hospital = new TitledSpinner(context, null, getResources().getString(R.string.ctb_hospital_specify), getResources().getStringArray(R.array.ctb_hospital_list), null, App.VERTICAL);
+        String columnName = "";
+        if (App.getProgram().equals(getResources().getString(R.string.pet)))
+            columnName = "pet_location";
+        else if (App.getProgram().equals(getResources().getString(R.string.fast)))
+            columnName = "fast_location";
+        else if (App.getProgram().equals(getResources().getString(R.string.comorbidities)))
+            columnName = "comorbidities_location";
+        else if (App.getProgram().equals(getResources().getString(R.string.pmdt)))
+            columnName = "pmdt_location";
+        else if (App.getProgram().equals(getResources().getString(R.string.childhood_tb)))
+            columnName = "childhood_tb_location";
+
+        final Object[][] locations = serverService.getAllLocations(columnName);
+        String[] locationArray = new String[locations.length];
+        for (int i = 0; i < locations.length; i++) {
+            Object objLoc = locations[i][1];
+            locationArray[i] = objLoc.toString();
+        }
+        hospital = new TitledSpinner(context, null, getResources().getString(R.string.ctb_hospital_specify), locationArray, null, App.VERTICAL);
         facility_section = new TitledSpinner(context, null, getResources().getString(R.string.ctb_facility_section), getResources().getStringArray(R.array.ctb_facility_section_list), null, App.VERTICAL);
         facility_section_other = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         opd_ward_section = new TitledSpinner(context, null, getResources().getString(R.string.ctb_opd_clinic_or_ward), getResources().getStringArray(R.array.ctb_opd_ward_section_list), null, App.VERTICAL);
@@ -169,7 +211,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
         tbHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_tb_before), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.ctb_no), App.HORIZONTAL, App.VERTICAL, true);
         tbMedication = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_tb_medication), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.ctb_no), App.HORIZONTAL, App.VERTICAL, true);
         contactTbHistoryTwoYears = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_tb_history_2years), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.ctb_no), App.HORIZONTAL, App.VERTICAL, true);
-        closeContactType = new TitledCheckBoxes(context, null, getResources().getString(R.string.ctb_close_contact_type), getResources().getStringArray(R.array.ctb_close_contact_type_list), null, App.VERTICAL, App.VERTICAL);
+        closeContactType = new TitledCheckBoxes(context, null, getResources().getString(R.string.ctb_close_contact_type), getResources().getStringArray(R.array.ctb_close_contact_type_list), new Boolean[] {true,false,false,false,false,false,false,false,false,false,false}, App.VERTICAL, App.VERTICAL);
         otherContactType = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_contact), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         presumptiveTb = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_presumptive_tb), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, true);
 
@@ -221,6 +263,8 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
         if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
+
 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
@@ -231,8 +275,16 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                 snackbar.show();
 
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-
-            } else
+            }
+            else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+            }
+ else
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
         }
@@ -242,107 +294,192 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
 
     @Override
     public boolean validate() {
-        boolean error = false;
-        View view = null;
-        Boolean flag = false;
-        if (otherContactType.getVisibility() == View.VISIBLE && App.get(otherContactType).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            otherContactType.getEditText().setError(getString(R.string.empty_field));
-            otherContactType.getEditText().requestFocus();
-            error = true;
-            view = null;
-        }
-        if(closeContactType.getVisibility()==View.VISIBLE){
-            for (CheckBox cb : closeContactType.getCheckedBoxes()) {
-                if (cb.isChecked()) {
-                    flag = true;
-                    break;
-                }
-            }
-        }
-        if (!flag && closeContactType.getVisibility()==View.VISIBLE) {
-            closeContactType.getQuestionView().setError(getString(R.string.empty_field));
-            view = closeContactType;
-            error = true;
-        }
-        flag = false;
-        if(App.get(fatherName).isEmpty()){
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            fatherName.getEditText().setError(getString(R.string.empty_field));
-            fatherName.getEditText().requestFocus();
-            error = true;
-            view = null;
-        }
-        if(App.get(motherName).isEmpty()){
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            motherName.getEditText().setError(getString(R.string.empty_field));
-            motherName.getEditText().requestFocus();
-            view = null;
-            error = true;
-        }
-        if (facility_section_other.getVisibility() == View.VISIBLE && App.get(facility_section_other).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            facility_section_other.getEditText().setError(getString(R.string.empty_field));
-            facility_section_other.getEditText().requestFocus();
-            error = true;
-            view = null;
-        }
-        if (error) {
+        if (App.getPatient().getPerson().getAge() > 15) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
-
-                alertDialog.setMessage(getString(R.string.form_error));
+            alertDialog.setMessage(getString(R.string.ctb_age_greater_than_15));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_error));
-            final View finalView = view;
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            scrollView.post(new Runnable() {
-                                public void run() {
-                                    if (finalView != null) {
-                                        scrollView.scrollTo(0, finalView.getTop());
-                                        otherContactType.clearFocus();
-                                        facility_section_other.clearFocus();
-                                        motherName.clearFocus();
-                                        fatherName.clearFocus();
-                                    }
-                                }
-                            });
                             try {
                                 InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
                             } catch (Exception e) {
-// TODO: handle exception
+                                // TODO: handle exception
                             }
                             dialog.dismiss();
                         }
                     });
             alertDialog.show();
-
             return false;
+        } else {
+
+            boolean error = false;
+            View view = null;
+            Boolean flag = false;
+
+            if (otherContactType.getVisibility() == View.VISIBLE && App.get(otherContactType).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                otherContactType.getEditText().setError(getString(R.string.empty_field));
+                otherContactType.getEditText().requestFocus();
+                error = true;
+                view = null;
+            }
+            if (otherContactType.getVisibility() == View.VISIBLE && App.get(otherContactType).trim().length() <= 0){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                otherContactType.getEditText().setError(getString(R.string.ctb_spaces_only));
+                otherContactType.getEditText().requestFocus();
+                error = true;
+                view = null;
+            }
+            if (closeContactType.getVisibility() == View.VISIBLE) {
+                for (CheckBox cb : closeContactType.getCheckedBoxes()) {
+                    if (cb.isChecked()) {
+                        flag = true;
+                        break;
+                    }
+                }
+            }
+            if (!flag && closeContactType.getVisibility() == View.VISIBLE) {
+                closeContactType.getQuestionView().setError(getString(R.string.empty_field));
+                view = closeContactType;
+                error = true;
+            }
+            flag = false;
+            if (App.get(fatherName).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                fatherName.getEditText().setError(getString(R.string.empty_field));
+                fatherName.getEditText().requestFocus();
+                error = true;
+                view = null;
+            }else if(App.get(fatherName).trim().length() <= 0){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                fatherName.getEditText().setError(getString(R.string.ctb_spaces_only));
+                fatherName.getEditText().requestFocus();
+                error = true;
+                view = null;
+            }else if(App.get(fatherName).length() <3){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                fatherName.getEditText().setError(getString(R.string.ctb_length_less_than_3));
+                fatherName.getEditText().requestFocus();
+                error = true;
+                view = null;
+            }
+            if (App.get(motherName).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                motherName.getEditText().setError(getString(R.string.empty_field));
+                motherName.getEditText().requestFocus();
+                view = null;
+                error = true;
+            }else if(App.get(motherName).trim().length() <= 0){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                motherName.getEditText().setError(getString(R.string.ctb_spaces_only));
+                motherName.getEditText().requestFocus();
+                error = true;
+                view = null;
+            }else if(App.get(motherName).length() < 3){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                motherName.getEditText().setError(getString(R.string.ctb_length_less_than_3));
+                motherName.getEditText().requestFocus();
+                error = true;
+                view = null;
+            }
+            if (facility_section_other.getVisibility() == View.VISIBLE && App.get(facility_section_other).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                facility_section_other.getEditText().setError(getString(R.string.empty_field));
+                facility_section_other.getEditText().requestFocus();
+                error = true;
+                view = null;
+            }
+            if(facility_section_other.getVisibility() == View.VISIBLE && App.get(facility_section_other).trim().length() <= 0) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                facility_section_other.getEditText().setError(getString(R.string.ctb_spaces_only));
+                facility_section_other.getEditText().requestFocus();
+                error = true;
+            }
+                if (error) {
+
+                int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
+
+                final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+
+                alertDialog.setMessage(getString(R.string.form_error));
+                Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                DrawableCompat.setTint(clearIcon, color);
+                alertDialog.setIcon(clearIcon);
+                alertDialog.setTitle(getResources().getString(R.string.title_error));
+                final View finalView = view;
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                scrollView.post(new Runnable() {
+                                    public void run() {
+                                        if (finalView != null) {
+                                            scrollView.scrollTo(0, finalView.getTop());
+                                            otherContactType.clearFocus();
+                                            facility_section_other.clearFocus();
+                                            motherName.clearFocus();
+                                            fatherName.clearFocus();
+                                        }
+                                    }
+                                });
+                                try {
+                                    InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
+                                    imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                } catch (Exception e) {
+// TODO: handle exception
+                                }
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();
+
+                return false;
+            }
+            return true;
         }
-        return true;
     }
 
     @Override
     public boolean submit() {
+
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -350,14 +487,19 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
+            }else {
+                endTime = new Date();
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
             bundle.putBoolean("save", false);
+        } else {
+            endTime = new Date();
+            observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
-        endTime = new Date();
 
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
-        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
-        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
+        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
+        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         observations.add(new String[]{"SCREENING LOCATION", App.get(screeningLocation).toUpperCase()});
 
         if(hospital.getVisibility()==View.VISIBLE){
@@ -450,6 +592,10 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                 closeContactString = closeContactString + "MATERNAL GRANDFATHER" + " ; ";
             else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_maternal_grandmother)))
                 closeContactString = closeContactString + "MATERNAL GRANDMOTHER" + " ; ";
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_uncle)))
+                closeContactString = closeContactString + "UNCLE" + " ; ";
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_aunt)))
+                closeContactString = closeContactString + "AUNT" + " ; ";
             else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_other_title)))
                 closeContactString = closeContactString + "OTHER CONTACT TYPE" + " ; ";
         }
@@ -606,8 +752,9 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-
-            if (obs[0][0].equals("SCREENING LOCATION")) {
+            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+                timeTakeToFill = obs[0][1];
+            }else if (obs[0][0].equals("SCREENING LOCATION")) {
                 for (RadioButton rb : screeningLocation.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.ctb_hospital)) && obs[0][1].equals("HOSPITAL")) {
                         rb.setChecked(true);
@@ -943,8 +1090,8 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
             snackbar.dismiss();
 
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        facility_section.getSpinner().selectValue(getResources().getString(R.string.ctb_opd_clinic));
         facility_section_other.setVisibility(View.GONE);
-        opd_ward_section.setVisibility(View.GONE);
         coughDuration.setVisibility(View.GONE);
         tbMedication.setVisibility(View.GONE);
         closeContactType.setVisibility(View.GONE);
@@ -974,10 +1121,17 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
             if (screeningLocation.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_hospital))) {
                 hospital.setVisibility(View.VISIBLE);
                 facility_section.setVisibility(View.VISIBLE);
+                if(App.get(facility_section).equals(getResources().getString(R.string.ctb_opd_clinic)) || App.get(facility_section).equals(getResources().getString(R.string.ctb_ward))) {
+                    opd_ward_section.setVisibility(View.VISIBLE);
+                }
+                else if(App.get(facility_section).equals(getResources().getString(R.string.ctb_other_title))){
+                    facility_section_other.setVisibility(View.VISIBLE);
+                }
             } else {
                 opd_ward_section.setVisibility(View.GONE);
                 hospital.setVisibility(View.GONE);
                 facility_section.setVisibility(View.GONE);
+                facility_section_other.setVisibility(View.GONE);
             }
         } else if (group == cough.getRadioGroup()) {
             if (cough.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
@@ -1016,6 +1170,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                 closeContactType.setVisibility(View.VISIBLE);
             } else {
                 closeContactType.setVisibility(View.GONE);
+                otherContactType.setVisibility(View.GONE);
             }
         }
 
