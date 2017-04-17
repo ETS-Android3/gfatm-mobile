@@ -784,7 +784,7 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ADULT FORMULATI
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ADULT FORMULATION OF TABLETS OF RHE FOR CONTINUATION PHASE','adult_formulation_RHE_continuation','Coded','e47a17e2-6c6c-4ea2-bd5a-98df64cf43da');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CURRENT FORMULATION OF TABLETS OF RH','current_formulation_RH_continuation','Coded','79c6ff56-f91f-4a46-8b8d-6454a8860004');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CURRENT FORMULATION OF TABLETS OF E FOR CONTINUATION PHASE','current_formulation_E_continuation','Coded','7b806412-722b-410a-bd09-ec2686094b74');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('EW FORMULATION OF TABLETS OF RH FOR CONTINUATION PHASE','new_formulation_RH_continuation','Coded','b67bb382-8e25-4fc0-8a76-851bc8fb1432');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NEW FORMULATION OF TABLETS OF RH FOR CONTINUATION PHASE','new_formulation_RH_continuation','Coded','b67bb382-8e25-4fc0-8a76-851bc8fb1432');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NEW FORMULATION OF TABLET OF E FOR CONTINUATION PHASE','new_formulation_E_continuation','Coded','fd1e8cf9-a6e4-4d26-92aa-806d1bdef8bd');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('IF NEW FORMULATION, E TABLETS DISPERSED','new_formulation_E_dispersed','Coded','73b89d3b-fb0f-4fd4-b48b-77b05a708324');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('IF ADULT FORMULATION, HRZE TABLETS DISPERSED','adult_formulation_HRZE_dispersed','Coded','77890f49-7006-490e-b26d-e41b78cd7580');
