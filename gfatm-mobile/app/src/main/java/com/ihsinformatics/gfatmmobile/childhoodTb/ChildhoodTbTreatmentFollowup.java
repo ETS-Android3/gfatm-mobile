@@ -1134,6 +1134,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         }
 
 
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");
@@ -1227,6 +1228,22 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 newTabletsofRHZ.setVisibility(View.GONE);
                 newTabletsofE.setVisibility(View.GONE);
                 adultFormulationofHRZE.setVisibility(View.GONE);
+            }else if(treatmentPlan.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_end_treatment))){
+                intensivePhaseRegimen.setVisibility(View.GONE);
+                typeFixedDosePrescribedIntensive.setVisibility(View.GONE);
+                currentTabletsofRHZ.setVisibility(View.GONE);
+                currentTabletsofE.setVisibility(View.GONE);
+                newTabletsofRHZ.setVisibility(View.GONE);
+                newTabletsofE.setVisibility(View.GONE);
+                adultFormulationofHRZE.setVisibility(View.GONE);
+                continuationPhaseRegimen.setVisibility(View.GONE);
+                typeFixedDosePrescribedContinuation.setVisibility(View.GONE);
+                currentTabletsOfContinuationRH.setVisibility(View.GONE);
+                currentTabletsOfContinuationE.setVisibility(View.GONE);
+                newTabletsOfContinuationRH.setVisibility(View.GONE);
+                newTabletsOfContinuationE.setVisibility(View.GONE);
+                adultFormulationOfContinuationRHE.setVisibility(View.GONE);
+                adultFormulationOfContinuationRH.setVisibility(View.GONE);
             }
         }else if (group == intensivePhaseRegimen.getRadioGroup()) {
             if (intensivePhaseRegimen.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_rhz))) {

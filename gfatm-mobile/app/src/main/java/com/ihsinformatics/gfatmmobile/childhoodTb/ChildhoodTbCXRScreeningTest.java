@@ -207,13 +207,8 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
                                       int before, int count) {
                 try {
                     if (testId.getEditText().getText().length() > 0) {
-                        if (testId.getEditText().getText().length() < 11) {
-                            testId.getEditText().setError(getString(R.string.ctb_test_id_error));
-                            testIdView.setVisibility(View.INVISIBLE);
-                        } else {
-                            testIdView.setVisibility(View.VISIBLE);
+                        testIdView.setVisibility(View.VISIBLE);
                             testIdView.setImageResource(R.drawable.ic_checked);
-                        }
                     } else {
                         testIdView.setVisibility(View.INVISIBLE);
                     }
@@ -336,32 +331,46 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
             monthTreatment.getEditText().setError(null);
         }
         if(otherRadiologicalDiagnosis.getVisibility()==View.VISIBLE){
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            otherRadiologicalDiagnosis.getEditText().setError(getString(R.string.empty_field));
-            otherRadiologicalDiagnosis.getEditText().requestFocus();
-            error = true;
+            if(App.get(otherRadiologicalDiagnosis).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                otherRadiologicalDiagnosis.getEditText().setError(getString(R.string.empty_field));
+                otherRadiologicalDiagnosis.getEditText().requestFocus();
+                error = true;
+            }
+            else if((App.get(otherRadiologicalDiagnosis).trim().length() <= 0)){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                otherRadiologicalDiagnosis.getEditText().setError(getString(R.string.ctb_spaces_only));
+                otherRadiologicalDiagnosis.getEditText().requestFocus();
+                error = true;
+            }
         } else {
             otherRadiologicalDiagnosis.getEditText().setError(null);
         }
-        if(radiologistRemarks.getVisibility()==View.VISIBLE && App.get(radiologistRemarks).isEmpty()){
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            radiologistRemarks.getEditText().setError(getString(R.string.empty_field));
-            radiologistRemarks.getEditText().requestFocus();
-            error = true;
-        }else if(App.get(radiologistRemarks).trim().length() <= 0){
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            radiologistRemarks.getEditText().setError(getString(R.string.ctb_spaces_only));
-            radiologistRemarks.getEditText().requestFocus();
-            error = true;
+        if(radiologistRemarks.getVisibility()==View.VISIBLE){
+            if(App.get(radiologistRemarks).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                radiologistRemarks.getEditText().setError(getString(R.string.empty_field));
+                radiologistRemarks.getEditText().requestFocus();
+                error = true;
+            }
+            else if(App.get(radiologistRemarks).trim().length() <= 0){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                radiologistRemarks.getEditText().setError(getString(R.string.ctb_spaces_only));
+                radiologistRemarks.getEditText().requestFocus();
+                error = true;
+            }
         }
 
         if (error) {

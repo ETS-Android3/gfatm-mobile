@@ -475,6 +475,30 @@
     <string name="ctb_improved">Improved</string>
     <string name="ctb_no_improvement">No improvement</string>
     <string name="ctb_month_treatment_greater_than_12">Month of treatment can not be greater than 12</string>
+    <string name="ctb_incomplete">Incomplete</string>
+    <string name="ctb_intensive_current_rhz_dispersed">If current formulation, RHZ tablets dispersed?</string>
+    <string name="ctb_intensive_current_e_dispersed">If current formulation,  E tablets dispersed?</string>
+    <string name="ctb_intensive_new_formulation_rhz_dispersed">If new formulation, RHZ tablets dispersed?</string>
+    <string name="ctb_intensive_new_formulation_e_dispersed">If new formulation, E tablets dispersed?</string>
+    <string name="ctb_intensive_adult_hrze_dispersed">If adult formulation, HRZE tablets dispersed?</string>
+    <string name="ctb_continuation_current_rh_dispersed">If current formulation, RH tablets dispersed?</string>
+    <string name="ctb_continuation_current_e_dispersed">If current formulation, E tablets dispersed?</string>
+    <string name="ctb_continuation_new_formulation_rh">If new formulation, RH tablets dispersed?</string>
+    <string name="ctb_continuation_new_formulation_e">If new formulation, E tablets dispersed?</string>
+    <string name="ctb_continuation_adult_formulation_rh_rh_dispersed">If adult formulation of RH, RH tablets dispersed?</string>
+    <string name="ctb_continuation_adult_formulation_rhe_e_dispersed">If adult formulation of RHE, E tablets dispersed?</string>
+    <string name="ctb_continuation_adult_formulation_rhe_rhe_dispersed">If adult formation of RHE, RHE tablets dispersed?</string>
+    <string name="ctb_mo_initiate_additional_treatment">Did the MO initiate additional treatment? Please select one or more treatment options if applicable to patient</string>
+    <string name="ctb_pediasure_dispersed">Pediasure dispersed?</string>
+    <string name="ctb_vitamin_b_complex_dispersed">Vitamin B-complex dispersed?</string>
+    <string name="ctb_iron_dispersed">Iron dispersed?</string>
+    <string name="ctb_anthelminthic_dispersed">Anthelminthic dispersed?</string>
+    <string name="ctb_ipt_dispersed">IPT Drug Dispersed?</string>
+    <string name="ctb_multivitmins_dispersed">Multivitamins dispersed?</string>
+    <string name="ctb_anthelminthic_albendazole_dispersed">Anthelmintic (Albendazole) dispersed?</string>
+    <string name="ctb_antibiotic_trial_dispersed">Antibiotic trial dispersed?</string>
+    <string name="ctb_next_date_drug_dispersal">Next Date of Drug Dispersal</string>
+
 
 
     <string-array name="ctb_screening_location_list">
@@ -1018,5 +1042,15 @@
         <item>@string/ctb_no_improvement</item>
     </string-array>
 
+    <string-array name="ctb_intensive_continuation">
+        <item>@string/ctb_intensive_phase</item>
+        <item>@string/ctb_continuation_phase</item>
+    </string-array>
+    
+    <string-array name="ctb_yes_no_incomplete">
+        <item>@string/ctb_yes</item>
+        <item>@string/ctb_no</item>
+        <item>@string/ctb_incomplete</item>
+    </string-array>
 
 </resources>
