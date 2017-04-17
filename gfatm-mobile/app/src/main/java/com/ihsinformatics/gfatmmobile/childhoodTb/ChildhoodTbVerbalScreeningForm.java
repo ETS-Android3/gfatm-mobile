@@ -621,7 +621,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("Verbal Screening", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                String result = serverService.saveEncounterAndObservation("Verbal Screening", FORM, formDateCalendar, observations.toArray(new String[][]{}),false);
                 if (!result.contains("SUCCESS"))
                     return result;
                 else {

@@ -414,7 +414,7 @@ public class ChildhoodTbContactRegistry extends AbstractFormActivity implements 
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("Contact Registry", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                String result = serverService.saveEncounterAndObservation("Contact Registry", FORM, formDateCalendar, observations.toArray(new String[][]{}),false);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 

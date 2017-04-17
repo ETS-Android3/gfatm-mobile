@@ -473,11 +473,11 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
                 String result = "";
 
                 if (App.get(formType).equals(getResources().getString(R.string.ctb_order))){
-                    result = serverService.saveEncounterAndObservation("CXR Screening Test Order", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                    result = serverService.saveEncounterAndObservation("CXR Screening Test Order", FORM, formDateCalendar, observations.toArray(new String[][]{}),true);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
-                    result = serverService.saveEncounterAndObservation("CXR Screening Test Result", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                    result = serverService.saveEncounterAndObservation("CXR Screening Test Result", FORM, formDateCalendar, observations.toArray(new String[][]{}),false);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 }

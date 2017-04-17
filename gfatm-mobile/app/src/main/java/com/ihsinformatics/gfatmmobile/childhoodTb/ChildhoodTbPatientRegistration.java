@@ -871,7 +871,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("Patient Registration", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                String result = serverService.saveEncounterAndObservation("Patient Registration", FORM, formDateCalendar, observations.toArray(new String[][]{}),false);
                 if (!result.contains("SUCCESS"))
                     return result;
                 else {

@@ -301,7 +301,7 @@ public class ChildhoodTbReferral extends AbstractFormActivity implements RadioGr
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("Referral", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                String result = serverService.saveEncounterAndObservation("Referral", FORM, formDateCalendar, observations.toArray(new String[][]{}),false);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 

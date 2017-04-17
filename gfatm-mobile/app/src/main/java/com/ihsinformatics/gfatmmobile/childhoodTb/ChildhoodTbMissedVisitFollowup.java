@@ -334,7 +334,7 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("Missed Visit Followup", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                String result = serverService.saveEncounterAndObservation("Missed Visit Followup", FORM, formDateCalendar, observations.toArray(new String[][]{}),false);
                 if (!result.contains("SUCCESS"))
                     return result;
 

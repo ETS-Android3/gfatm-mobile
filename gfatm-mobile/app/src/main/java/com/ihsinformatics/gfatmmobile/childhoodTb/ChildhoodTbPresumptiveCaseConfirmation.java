@@ -735,7 +735,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("Presumptive Case Confirmation", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                String result = serverService.saveEncounterAndObservation("Presumptive Case Confirmation", FORM, formDateCalendar, observations.toArray(new String[][]{}),false);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 

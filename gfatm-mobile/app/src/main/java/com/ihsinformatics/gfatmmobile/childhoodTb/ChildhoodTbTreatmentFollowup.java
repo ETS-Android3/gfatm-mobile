@@ -519,7 +519,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("TB Treatment Followup", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                String result = serverService.saveEncounterAndObservation("TB Treatment Followup", FORM, formDateCalendar, observations.toArray(new String[][]{}),false);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 
