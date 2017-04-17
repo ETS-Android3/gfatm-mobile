@@ -47,6 +47,7 @@
     <string name="ctb_tb_medication">Has your child taken TB medication before?</string>
     <string name="ctb_tb_history_2years">Has your child been in close contact with someone diagnosed with TB or a history of contact/family with TB patient in the past 2 years? (e.g. family member you live with, lived with anyone who has TB, close friend etc).</string>
     <string name="ctb_close_contact_type">Who was the close contact?</string>
+    <string name="ctb_self">Self</string>
     <string name="ctb_mother">Mother</string>
     <string name="ctb_father">Father</string>
     <string name="ctb_brother">Brother</string>
@@ -188,7 +189,7 @@
     <string name="ctb_speciment_route">Where did the speciment come from?</string>
     <string name="ctb_lymph">Lymph</string>
     <string name="ctb_pleural_fluid">Pleural Fluid</string>
-    <string name="ctb_pus">Plus</string>
+    <string name="ctb_pus">Pus</string>
     <string name="ctb_accepted_by_technician">Where did the speciment come from?</string>
     <string name="ctb_accepted">Accepted</string>
     <string name="ctb_rejected">Rejected</string>
@@ -321,7 +322,7 @@
     <string name="ctb_dose_at_intiation_point">Dose at treatment initiation point</string>
     <string name="ctb_weight_visit">Weight at visit(kg)</string>
     <string name="ctb_complaints">Complaints</string>
-    <string name="ctb_dose">Dose</string>
+    <string name="ctb_dose">IPT Dose</string>
     <string name="ctb_quater_per_day">(1/4 tab) once a day</string>
     <string name="ctb_half_per_day">(1/2 tab) once a day</string>
     <string name="ctb_per_day">(1 tab) once a day</string>
@@ -364,6 +365,142 @@
     <string name="ctb_next_appointment_date">Next Appointment Date</string>
     <string name="ctb_test_id_error">It should be 11 digits number</string>
     <string name="ctb_sample_accepted_lab_techician">Sample Accepted by Lab Technician?</string>
+    <string name="ctb_treatment_outcome">Treatment Outcome</string>
+    <string name="ctb_cured">Cured</string>
+    <string name="ctb_treatment_completed">Treatment Completed</string>
+    <string name="ctb_died">Died</string>
+    <string name="ctb_transfer_out">Transfer Out</string>
+    <string name="ctb_referral">Referral</string>
+    <string name="ctb_treatment_intiated_at_referral_transfer">Treatment initiated at Referral / Transfer site</string>
+    <string name="ctb_reason_treatment_not_intiated">Reason treatment not initiated at referral / transfer site</string>
+    <string name="ctb_patient_can_not_contacted">Patient could not be contacted</string>
+    <string name="ctb_patient_left_city">Patient left the city</string>
+    <string name="ctb_dr_not_confirmed">DR not confirmed by baseline repeat test</string>
+    <string name="ctb_other_reason_not_intiated">If other reason treatment not initiatied at referral / transfer site, please specify</string>
+    <string name="ctb_dr_confirmation">DR Confirmation</string>
+    <string name="ctb_enrs_number">ENRS Number</string>
+    <string name="ctb_contact_number">Contact Number</string>
+    <string name="ctb_name_of_person_provided_details">Provide name and contact number of person at referral / transfer site who provided details about the patient		</string>
+    <string name="ctb_other_reason_remarks">Other Reason/Remarks</string>
+    <string name="ctb_age_greater_than_15">Child age can not be greater than 15</string>
+    <string name="ctb_incorrect_contact_number">Incorrect contact number</string>
+    <string name="ctb_son_daughter_of">S/O D/O</string>
+    <string name="ctb_weight_at_baseline">Weight at baseline (kg)</string>
+    <string name="ctb_spaces_only">Can not contains space only</string>
+    <string name="ctb_registration_date">Registration Date</string>
+    <string name="ctb_type_of_diagnosis">Type of Diagnosis</string>
+    <string name="ctb_bacteriologically_confirmed">Bacteriologically confirmed</string>
+    <string name="ctb_clinically_diagnosed">Clinically diagnosed</string>
+    <string name="ctb_site_of_extra_pulmonary">Site of Extra-Pulmonary TB</string>
+    <string name="ctb_lymph_node">Lymph Node</string>
+    <string name="ctb_cns">CNS (includes meningeal,brain)</string>
+    <string name="ctb_renal">Renal</string>
+    <string name="ctb_bones">Bones (includes spine)</string>
+    <string name="ctb_genitourinary">Genitourinary</string>
+    <string name="ctb_other_extra_pulmonary_site">Other Extra-Pulmonary TB Site</string>
+    <string name="ctb_patient_type">Patient Type</string>
+    <string name="ctb_new">New</string>
+    <string name="ctb_relapse">Relapse</string>
+    <string name="ctb_referred_transferred">Referred/Transferred in</string>
+    <string name="ctb_treatment_after_followup">Treatment after loss to follow up (default)</string>
+    <string name="ctb_treatment_after_failure">Treatment after failure</string>
+    <string name="ctb_treatment_initiated">Was treatment initiated?</string>
+    <string name="ctb_reason_not_initaited">Reason the treatment was not initiated?</string>
+    <string name="ctb_patient_loss_to_followup">Patient loss to followup</string>
+    <string name="ctb_initiating_additional_treatment">Are you initiating additional treatment? Please select one or more treatment options if applicable to patient.</string>
+    <string name="ctb_pediasure">Pediasure</string>
+    <string name="ctb_vitamin_B_complex">Vitamin B-complex</string>
+    <string name="ctb_iron">Iron</string>
+    <string name="ctb_anthelminthic">Anthelminthic</string>
+    <string name="ctb_category_3">Category III</string>
+    <string name="ctb_regimen">Regimen</string>
+    <string name="ctb_rhze">RHZE</string>
+    <string name="ctb_rhz">RHZ</string>
+    <string name="ctb_type_of_fixed_dose">Type of fixed dose combination being prescribed</string>
+    <string name="ctb_current_formulation">Current formulation (RHZ 60/30/150 mg per tablet, E 100 mg per tablet)</string>
+    <string name="ctb_new_formulation">New formulation (RHZ: 75/50/150, E: 100mg per tablet)</string>
+    <string name="ctb_adult_formulation">Adult formulation (HRZE 75/150/400/275 mg per tablet) - for children over 25 kgs</string>
+    <string name="ctb_current_formulation_number_of_tablet_rhz">If current formulation, choose number of tablets of RHZ</string>
+    <string name="ctb_current_formulation_number_of_tablet_e">If current formulation, choose number of tablets of E</string>
+    <string name="ctb_new_formulation_number_of_tablet_rhz">If new formulation, choose number of tablets of RHZ</string>
+    <string name="ctb_new_formulation_number_of_tablet_e">If new formulation, choose number of tablets of E</string>
+    <string name="ctb_1">1</string>
+    <string name="ctb_2">2</string>
+    <string name="ctb_3">3</string>
+    <string name="ctb_4">4</string>
+    <string name="ctb_histopathologiacal_evidence">Histopathological evidence</string>
+    <string name="ctb_radiological_evidence">Radiological evidence</string>
+    <string name="ctb_treatment_supporter">Name of Treatment Supporter</string>
+    <string name="ctb_treatment_supporter_phone_number">Treatment Supporter Phone Number</string>
+    <string name="ctb_close_contact_supporter_with_patient">Close contact type of treatment supporter with the patient</string>
+    <string name="ctb_bcg_scar">BCG Scar</string>
+    <string name="ctb_eligible_for_ipt">Eligible for IPT?</string>
+    <string name="ctb_ipt_dose">IPT Dose</string>
+    <string name="ctb_multivitamins">Multivitamins</string>
+    <string name="ctb_anthelmintic_albendazole">Anthelmintic (Albendazole)</string>
+    <string name="ctb_none">None</string>
+    <string name="ctb_prescribing_antibiotic_trial">Are you prescribing an antibiotic trial?</string>
+    <string name="ctb_prescribing_further_tests">Are you prescribing further tests?</string>
+    <string name="ctb_type_of_tb_name">What Type of TB?</string>
+    <string name="ctb_patient_weight">Patient Weight (kg)</string>
+    <string name="ctb_cartridge_id_length">Cartridge ID length should be 10</string>
+    <string name="ctb_ppa_score_validate">PPA Score should be between 0 to 15</string>
+    <string name="ctb_invalid_value_weight">Invalid value for Weight</string>
+    <string name="ctb_duplicate_enrs">Duplicate enrs. Please enter unique enrs number</string>
+    <string name="ctb_duplicate_contact_id">Contact patient Id can not be same as Patient Id. Please enter different Id</string>
+    <string name="ctb_length_less_than_3">Length can not be less than 3</string>
+    <string name="ctb_are_you_intiating_treatment">Are you initiating TB treatment?</string>
+    <string name="ctb_form_date_less_than_patient_dob">Form Date can not be less than Patient Date of birth</string>
+    <string name="ctb_cnic_number">CNIC Number</string>
+    <string name="ctb_treatment_initiated_date">Treatment Initiation Date</string>
+    <string name="ctb_treatment_plan">Treatment Plan</string>
+    <string name="ctb_intensive_phase">Intensive phase</string>
+    <string name="ctb_continuation_phase">Continuation Phase</string>
+    <string name="ctb_end_treatment">End Treatment</string>
+    <string name="ctb_intensive_phase_regimen">Intensive phase regimen</string>
+    <string name="ctb_continuation_phase_regimen">Continuation phase regimen</string>
+    <string name="ctb_rh">RH</string>
+    <string name="ctb_rhe">RHE</string>
+    <string name="ctb_current_formulation_continuation">Current formulation (RH 60/30 mg per tablet), E = 100 mg per tablet</string>
+    <string name="ctb_new_formulation_continuation">New formulation (RH: 75/50 mg per tablet), E = 100 mg per tablet</string>
+    <string name="ctb_adult_formulation_continuation_rh">Adult formulation - RH (RH: 300/150 mg per tablet) - for children over 25 kgs</string>
+    <string name="ctb_adult_formulation_continuation_rhe">Adult formulation - RHE (RHE: 300/150/275 mg per tablet - for children over 25 kgs</string>
+    <string name="ctb_current_formulation_continuation_rh">If current formulation, choose number of tablets of RH </string>
+    <string name="ctb_current_formulation_continuation_e">If current formulation, choose number of tablets of E</string>
+    <string name="ctb_new_formulation_continuation_rh">If new formulation, choose number of tablets of RH </string>
+    <string name="ctb_new_formulation_continuation_e">If new formulation, choose number of tablets of E</string>
+    <string name="ctb_if_adult_formulation_continuation_rh">If adult formulation of RH, choose number of tablets of RH</string>
+    <string name="ctb_if_adult_formulation_continuation_rhe">If adult formulation of RHE, choose number of tablets of RHE</string>
+    <string name="ctb_conclusion_of_treatment">Conclusion of treatment follow up</string>
+    <string name="ctb_improved">Improved</string>
+    <string name="ctb_no_improvement">No improvement</string>
+    <string name="ctb_month_treatment_greater_than_12">Month of treatment can not be greater than 12</string>
+    <string name="ctb_incomplete">Incomplete</string>
+    <string name="ctb_intensive_current_rhz_dispersed">If current formulation, RHZ tablets dispersed?</string>
+    <string name="ctb_intensive_current_e_dispersed">If current formulation,  E tablets dispersed?</string>
+    <string name="ctb_intensive_new_formulation_rhz_dispersed">If new formulation, RHZ tablets dispersed?</string>
+    <string name="ctb_intensive_new_formulation_e_dispersed">If new formulation, E tablets dispersed?</string>
+    <string name="ctb_intensive_adult_hrze_dispersed">If adult formulation, HRZE tablets dispersed?</string>
+    <string name="ctb_continuation_current_rh_dispersed">If current formulation, RH tablets dispersed?</string>
+    <string name="ctb_continuation_current_e_dispersed">If current formulation, E tablets dispersed?</string>
+    <string name="ctb_continuation_new_formulation_rh">If new formulation, RH tablets dispersed?</string>
+    <string name="ctb_continuation_new_formulation_e">If new formulation, E tablets dispersed?</string>
+    <string name="ctb_continuation_adult_formulation_rh_rh_dispersed">If adult formulation of RH, RH tablets dispersed?</string>
+    <string name="ctb_continuation_adult_formulation_rhe_e_dispersed">If adult formulation of RHE, E tablets dispersed?</string>
+    <string name="ctb_continuation_adult_formulation_rhe_rhe_dispersed">If adult formation of RHE, RHE tablets dispersed?</string>
+    <string name="ctb_mo_initiate_additional_treatment">Did the MO initiate additional treatment? Please select one or more treatment options if applicable to patient</string>
+    <string name="ctb_pediasure_dispersed">Pediasure dispersed?</string>
+    <string name="ctb_vitamin_b_complex_dispersed">Vitamin B-complex dispersed?</string>
+    <string name="ctb_iron_dispersed">Iron dispersed?</string>
+    <string name="ctb_anthelminthic_dispersed">Anthelminthic dispersed?</string>
+    <string name="ctb_ipt_dispersed">IPT Drug Dispersed?</string>
+    <string name="ctb_multivitmins_dispersed">Multivitamins dispersed?</string>
+    <string name="ctb_anthelminthic_albendazole_dispersed">Anthelmintic (Albendazole) dispersed?</string>
+    <string name="ctb_antibiotic_trial_dispersed">Antibiotic trial dispersed?</string>
+    <string name="ctb_next_date_drug_dispersal">Next Date of Drug Dispersal</string>
+
+
+
     <string-array name="ctb_screening_location_list">
         <item>@string/ctb_hospital</item>
         <item>@string/ctb_community</item>
@@ -732,6 +869,7 @@
     <string-array name="ctb_unable_to_contact_list">
         <item>@string/ctb_phone_switched_off</item>
         <item>@string/ctb_patient_did_not_recieve_call</item>
+        <item>@string/ctb_incorrect_contact_number</item>
         <item>@string/ctb_other_title</item>
     </string-array>
 
@@ -765,6 +903,154 @@
         <item>@string/ctb_inconclusive</item>
     </string-array>
 
+    <string-array name="ctb_treatment_outcome_list">
+        <item>@string/ctb_cured</item>
+        <item>@string/ctb_treatment_completed</item>
+        <item>@string/ctb_treatment_failure</item>
+        <item>@string/ctb_died</item>
+        <item>@string/ctb_transfer_out</item>
+        <item>@string/ctb_referral</item>
+        <item>@string/ctb_lost_to_followup</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
 
+    <string-array name="ctb_reason_not_intiated_list">
+        <item>@string/ctb_patient_can_not_contacted</item>
+        <item>@string/ctb_patient_left_city</item>
+        <item>@string/ctb_patient_refused_treatment</item>
+        <item>@string/ctb_patient_died</item>
+        <item>@string/ctb_dr_not_confirmed</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
+
+    <string-array name="ctb_extra_pulmonary_tb_site">
+        <item>@string/ctb_lymph_node</item>
+        <item>@string/ctb_abdomen</item>
+        <item>@string/ctb_cns</item>
+        <item>@string/ctb_renal</item>
+        <item>@string/ctb_bones</item>
+        <item>@string/ctb_genitourinary</item>
+        <item>@string/ctb_pleural_effusion</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
+
+
+    <string-array name="ctb_patient_type_list">
+        <item>@string/ctb_new</item>
+        <item>@string/ctb_relapse</item>
+        <item>@string/ctb_referred_transferred</item>
+        <item>@string/ctb_treatment_after_followup</item>
+        <item>@string/ctb_treatment_after_failure</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
+
+    <string-array name="ctb_reason_not_initiated">
+        <item>@string/ctb_patient_refused_treatment</item>
+        <item>@string/ctb_patient_loss_to_followup</item>
+        <item>@string/ctb_patient_died</item>
+        <item>@string/ctb_referral</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
+
+    <string-array name="ctb_patient_category3_list">
+        <item>@string/ctb_categoryI</item>
+        <item>@string/ctb_categoryII</item>
+        <item>@string/ctb_category_3</item>
+    </string-array>
+
+    <string-array name="ctb_regimen_list">
+        <item>@string/ctb_rhze</item>
+        <item>@string/ctb_rhz</item>
+    </string-array>
+
+    <string-array name="ctb_type_of_fixed_dose_list">
+        <item>@string/ctb_current_formulation</item>
+        <item>@string/ctb_new_formulation</item>
+        <item>@string/ctb_adult_formulation</item>
+    </string-array>
+
+    <string-array name="ctb_number_of_tablets">
+        <item>@string/ctb_1</item>
+        <item>@string/ctb_2</item>
+        <item>@string/ctb_3</item>
+        <item>@string/ctb_4</item>
+    </string-array>
+
+    <string-array name="ctb_type_of_diagnosis_list">
+        <item>@string/ctb_bacteriologically_confirmed</item>
+        <item>@string/ctb_clinically_diagnosed</item>
+    </string-array>
+
+
+    
+    <string-array name="ctb_pediasure_vitamin_iron_anthelminthic">
+        <item>@string/ctb_pediasure</item>
+        <item>@string/ctb_vitamin_B_complex</item>
+        <item>@string/ctb_iron</item>
+        <item>@string/ctb_anthelminthic</item>
+    </string-array>
+
+    <string-array name="ctb_iron_multivitamins_anthelmintic">
+        <item>@string/ctb_iron</item>
+        <item>@string/ctb_multivitamins</item>
+        <item>@string/ctb_anthelmintic_albendazole</item>
+    </string-array>
+
+    <string-array name="ctb_iron_multivitamins_anthelmintic_other_none">
+        <item>@string/ctb_iron</item>
+        <item>@string/ctb_multivitamins</item>
+        <item>@string/ctb_anthelminthic</item>
+        <item>@string/ctb_other_title</item>
+        <item>@string/ctb_none</item>
+    </string-array>
+
+
+    <string-array name="ctb_extra_pulomonary_and_pulmonary">
+        <item>@string/ctb_extra_pulmonary</item>
+        <item>@string/ctb_pulmonary</item>
+    </string-array>
+
+    <string-array name="ctb_reason_treatment_not_intiated_list">
+        <item>@string/ctb_patient_refused_treatment</item>
+        <item>@string/ctb_patient_loss_to_followup</item>
+        <item>@string/ctb_patient_died</item>
+        <item>@string/ctb_referral_before_starting_treatment</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
+
+
+    <string-array name="ctb_treatment_plan_list">
+        <item>@string/ctb_intensive_phase</item>
+        <item>@string/ctb_continuation_phase</item>
+        <item>@string/ctb_end_treatment</item>
+    </string-array>
+
+    <string-array name="ctb_continuation_phase_regimen_list">
+        <item>@string/ctb_rh</item>
+        <item>@string/ctb_rhe</item>
+    </string-array>
+
+    <string-array name="ctb_type_of_dose_continuation_list">
+        <item>@string/ctb_current_formulation_continuation</item>
+        <item>@string/ctb_new_formulation_continuation</item>
+        <item>@string/ctb_adult_formulation_continuation_rh</item>
+        <item>@string/ctb_adult_formulation_continuation_rhe</item>
+    </string-array>
+
+    <string-array name="ctb_improve_no_improvement">
+        <item>@string/ctb_improved</item>
+        <item>@string/ctb_no_improvement</item>
+    </string-array>
+
+    <string-array name="ctb_intensive_continuation">
+        <item>@string/ctb_intensive_phase</item>
+        <item>@string/ctb_continuation_phase</item>
+    </string-array>
+    
+    <string-array name="ctb_yes_no_incomplete">
+        <item>@string/ctb_yes</item>
+        <item>@string/ctb_no</item>
+        <item>@string/ctb_incomplete</item>
+    </string-array>
 
 </resources>

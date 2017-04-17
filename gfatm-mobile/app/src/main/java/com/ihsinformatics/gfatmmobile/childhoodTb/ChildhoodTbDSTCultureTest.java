@@ -6,7 +6,9 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -18,6 +20,7 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -25,9 +28,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -37,6 +43,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
@@ -49,7 +56,7 @@ import java.util.HashMap;
  * Created by Babar on 31/1/2017.
  */
 
-public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener, View.OnTouchListener {
 
     public static final int THIRD_DIALOG_ID = 3;
     protected Calendar thirdDateCalender;
@@ -88,6 +95,8 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
     TitledRadioGroup clofazamine;
     TitledEditText otherDrug;
     TitledRadioGroup otherDrugResult;
+    ImageView testIdView;
+
     Snackbar snackbar;
     ScrollView scrollView;
 
@@ -169,12 +178,12 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        testId = new TitledEditText(context, null, getResources().getString(R.string.ctb_test_id), "", "", 50, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
+        testId = new TitledEditText(context, null, getResources().getString(R.string.ctb_test_id), "", "", 20, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         formType = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_type_of_form), getResources().getStringArray(R.array.ctb_type_of_form_list), null, App.HORIZONTAL, App.VERTICAL, true);
         dateSubmission = new TitledButton(context, null, getResources().getString(R.string.ctb_date_submission), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         dateSubmission.setTag("dateSubmission");
         pointTestBeingDone = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_point_test_being_done), getResources().getStringArray(R.array.ctb_point_test_being_done_list), getResources().getString(R.string.ctb_baseline), App.VERTICAL, App.VERTICAL);
-        monthTreatment = new TitledEditText(context, null, getResources().getString(R.string.ctb_month_treatment), "1", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
+        monthTreatment = new TitledEditText(context, null, getResources().getString(R.string.ctb_month_treatment), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
         specimenType = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_specimen_type), getResources().getStringArray(R.array.ctb_specimen_type_list), null, App.HORIZONTAL, App.VERTICAL);
         specimenComeFrom = new TitledSpinner(context, null, getResources().getString(R.string.ctb_speciment_route), getResources().getStringArray(R.array.ctb_speciment_route_list), null, App.VERTICAL);
         otherSpecimentComeFrom = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
@@ -204,6 +213,29 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
         clofazamine = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_clofazamine), getResources().getStringArray(R.array.ctb_susceptible_resistant_indeterminate), null, App.HORIZONTAL, App.VERTICAL);
         otherDrug = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_drug_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         otherDrugResult = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_other_drug_result), getResources().getStringArray(R.array.ctb_susceptible_resistant_indeterminate), null, App.HORIZONTAL, App.VERTICAL);
+        LinearLayout linearLayout = new LinearLayout(context);
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                0.9f
+        );
+        testId.setLayoutParams(param);
+        linearLayout.addView(testId);
+        testIdView = new ImageView(context);
+        testIdView.setImageResource(R.drawable.ic_checked);
+        LinearLayout.LayoutParams param1 = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                0.1f
+        );
+        testIdView.setLayoutParams(param1);
+        testIdView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        testIdView.setPadding(0, 5, 0, 0);
+
+        linearLayout.addView(testIdView);
+
+
+
 
         views = new View[]{formDate.getButton(), formType.getRadioGroup(), dateSubmission.getButton(), pointTestBeingDone.getRadioGroup(),
                 specimenType.getRadioGroup(), specimenComeFrom.getSpinner(), resultRecievedDate.getButton(), typeOfMediaDst.getSpinner(),
@@ -213,11 +245,13 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
                 moxifloxacin2.getRadioGroup(), amikacin.getRadioGroup(), kanamycin.getRadioGroup(),
                 capreomycin.getRadioGroup(), ethionamide.getRadioGroup(), cycloserine.getRadioGroup(),
                 pas.getRadioGroup(), bedaquiline.getRadioGroup(), delamanid.getRadioGroup(), linezolid.getRadioGroup(),
-                clofazamine.getRadioGroup(), otherDrugResult.getRadioGroup()};
+                clofazamine.getRadioGroup(), otherDrugResult.getRadioGroup(),testId.getEditText(),
+                monthTreatment.getEditText(), otherSpecimentComeFrom.getEditText()
+        };
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, testId, formType, dateSubmission, pointTestBeingDone, monthTreatment, specimenType, specimenComeFrom, otherSpecimentComeFrom, resultRecievedDate, typeOfMediaDst, isoniazidPoint2, isoniazid1, rifampicin,
+                {{formDate, formType, linearLayout, dateSubmission, pointTestBeingDone, monthTreatment, specimenType, specimenComeFrom, otherSpecimentComeFrom, resultRecievedDate, typeOfMediaDst, isoniazidPoint2, isoniazid1, rifampicin,
                         ethambuthol, streptomycin, pyrazinamide,
                         ofloxacin, levofloxacin, moxifloxacinPoint5,
                         moxifloxacin2, amikacin, kanamycin,
@@ -275,6 +309,37 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
                 }
             }
         });
+        testId.getEditText().addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                try {
+                    if (testId.getEditText().getText().length() > 0) {
+                        testIdView.setVisibility(View.VISIBLE);
+                            testIdView.setImageResource(R.drawable.ic_checked);
+                    } else {
+                        testIdView.setVisibility(View.INVISIBLE);
+                    }
+                    goneVisibility();
+                    submitButton.setEnabled(false);
+
+
+                } catch (NumberFormatException nfe) {
+                    //Exception: User might be entering " " (empty) value
+                }
+            }
+        });
+        testIdView.setOnTouchListener(this);
 
         resetViews();
 
@@ -289,16 +354,31 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
 
         Date date = new Date();
 
-        if (formDateCalendar.after(date)) {
+        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
 
-            formDateCalendar = App.getCalendar(date);
+            String formDa = formDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
 
-            snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
-            snackbar.show();
+            if (formDateCalendar.after(App.getCalendar(date))) {
 
-        } else
-            formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
 
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+            } else
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        }
         if (!dateSubmission.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString())) {
 
             //
@@ -374,14 +454,35 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
         } else {
             specimenType.getRadioGroup().getButtons().get(1).setError(null);
         }
-        if (otherSpecimentComeFrom.getVisibility() == View.VISIBLE && App.get(otherSpecimentComeFrom).isEmpty()) {
+
+        if(otherDrug.getVisibility()==View.VISIBLE && App.get(otherDrug).trim().length() <= 0){
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            otherSpecimentComeFrom.getEditText().setError(getString(R.string.empty_field));
-            otherSpecimentComeFrom.getEditText().requestFocus();
+            otherDrug.getEditText().setError(getString(R.string.ctb_spaces_only));
+            otherDrug.getEditText().requestFocus();
             error = true;
+        }
+        if (otherSpecimentComeFrom.getVisibility() == View.VISIBLE ) {
+            if(App.get(otherSpecimentComeFrom).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                otherSpecimentComeFrom.getEditText().setError(getString(R.string.empty_field));
+                otherSpecimentComeFrom.getEditText().requestFocus();
+                error = true;
+            }
+            else if(App.get(otherSpecimentComeFrom).trim().length() <= 0){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                otherSpecimentComeFrom.getEditText().setError(getString(R.string.ctb_spaces_only));
+                otherSpecimentComeFrom.getEditText().requestFocus();
+                error = true;
+            }
         }
         if (!App.get(monthTreatment).isEmpty()) {
             if (Integer.parseInt(App.get(monthTreatment)) < 1 || Integer.parseInt(App.get(monthTreatment)) > 24) {
@@ -427,8 +528,237 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
 
     @Override
     public boolean submit() {
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
 
-        return true;
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            String encounterId = bundle.getString("formId");
+            if (saveFlag) {
+                serverService.deleteOfflineForms(encounterId);
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
+            }else {
+                endTime = new Date();
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
+            }
+            bundle.putBoolean("save", false);
+        } else {
+            endTime = new Date();
+            observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
+        }
+
+        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
+        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
+        if (App.get(formType).equals(getResources().getString(R.string.ctb_order))) {
+            observations.add(new String[]{"TEST ID", App.get(testId)});
+            observations.add(new String[]{"SPECIMEN SUBMISSION DATE", App.getSqlDateTime(secondDateCalendar)});
+            observations.add(new String[]{"TEST CONTEXT STATUS", App.get(pointTestBeingDone).equals(getResources().getString(R.string.ctb_baseline)) ? "BASELINE" :
+                    App.get(pointTestBeingDone).equals(getResources().getString(R.string.ctb_baseline_repeat)) ? "BASELINE REPEAT" :
+                            "REGULAR FOLLOW UP"});
+            if(monthTreatment.getVisibility()==View.VISIBLE){
+                observations.add(new String[]{"FOLLOW-UP MONTH", App.get(monthTreatment)});
+            }
+
+            observations.add(new String[]{"SPECIMEN TYPE", App.get(specimenType).equals(getResources().getString(R.string.ctb_sputum)) ? "SPUTUM" :
+                    "EXTRA-PULMONARY TUBERCULOSIS"});
+
+            if(specimenComeFrom.getVisibility()==View.VISIBLE){
+                observations.add(new String[]{"SPECIMEN SOURCE", App.get(specimenComeFrom).equals(getResources().getString(R.string.ctb_lymph)) ? "LYMPHOCYTES" :
+                        (App.get(specimenComeFrom).equals(getResources().getString(R.string.ctb_pleural_fluid)) ? "PLEURAL EFFUSION" :
+                                (App.get(specimenComeFrom).equals(getResources().getString(R.string.ctb_pus)) ? "PUS" :
+                                        "OTHER SPECIMEN SOURCE"))});
+            }
+            if(otherSpecimentComeFrom.getVisibility()==View.VISIBLE){
+                observations.add(new String[]{"OTHER SPECIMEN SOURCE", App.get(otherSpecimentComeFrom)});
+            }
+        } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
+            observations.add(new String[]{"TEST ID", App.get(testId)});
+            observations.add(new String[]{"DATE OF  TEST RESULT RECEIVED", App.getSqlDateTime(thirdDateCalender)});
+            observations.add(new String[]{"CULTURE MEDIUM TYPE", App.get(typeOfMediaDst).equals(getResources().getString(R.string.ctb_lowenstein_jensen)) ? "LOWENSTEIN-JENSEN MYCOBACTERIA CULTURE METHOD" :
+                    (App.get(typeOfMediaDst).equals(getResources().getString(R.string.ctb_mycobacteria_growth_indicator)) ? "MYCOBACTERIA GROWTH INDICATOR TUBE" :
+                            (App.get(typeOfMediaDst).equals(getResources().getString(R.string.ctb_middlebrook_7h11s)) ? "MIDDLEBROOK 7H11S" :
+                                    (App.get(typeOfMediaDst).equals(getResources().getString(R.string.ctb_laboratory_automation)) ? "TOTAL LABORATORY AUTOMATION" :
+                                            "OTHER DST MEDIUM")))});
+
+            observations.add(new String[]{"ISONIAZID 0.2 µg/ml RESISTANT", App.get(isoniazidPoint2).equals(getResources().getString(R.string.ctb_susceptible)) ? "SUSCEPTIBLE" :
+                    (App.get(isoniazidPoint2).equals(getResources().getString(R.string.ctb_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+
+            observations.add(new String[]{"ISONIAZID 1 µg/ml RESISTANT RESULT", App.get(isoniazid1).equals(getResources().getString(R.string.ctb_susceptible)) ? "SUSCEPTIBLE" :
+                    (App.get(isoniazid1).equals(getResources().getString(R.string.ctb_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+
+            observations.add(new String[]{"RIFAMPICIN RESISTANT", App.get(rifampicin).equals(getResources().getString(R.string.ctb_susceptible)) ? "SUSCEPTIBLE" :
+                    (App.get(rifampicin).equals(getResources().getString(R.string.ctb_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+
+            observations.add(new String[]{"ETHAMBUTOL RESISTANT", App.get(ethambuthol).equals(getResources().getString(R.string.ctb_susceptible)) ? "SUSCEPTIBLE" :
+                    (App.get(ethambuthol).equals(getResources().getString(R.string.ctb_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+
+            observations.add(new String[]{"STREPTOMYCIN RESISITANT", App.get(streptomycin).equals(getResources().getString(R.string.ctb_susceptible)) ? "SUSCEPTIBLE" :
+                    (App.get(streptomycin).equals(getResources().getString(R.string.ctb_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+
+            observations.add(new String[]{"PYRAZINAMIDE RESISTANT", App.get(pyrazinamide).equals(getResources().getString(R.string.ctb_susceptible)) ? "SUSCEPTIBLE" :
+                    (App.get(pyrazinamide).equals(getResources().getString(R.string.ctb_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+
+            observations.add(new String[]{"OFLOAXCIN RESISTANT", App.get(ofloxacin).equals(getResources().getString(R.string.ctb_susceptible)) ? "SUSCEPTIBLE" :
+                    (App.get(ofloxacin).equals(getResources().getString(R.string.ctb_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+
+            observations.add(new String[]{"LEVOFLOXACIN RESISTANT", App.get(levofloxacin).equals(getResources().getString(R.string.ctb_susceptible)) ? "SUSCEPTIBLE" :
+                    (App.get(levofloxacin).equals(getResources().getString(R.string.ctb_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+
+            observations.add(new String[]{"MOXIFLOXACIN 0.5 µg/ml RESISTANT RESULT", App.get(moxifloxacinPoint5).equals(getResources().getString(R.string.ctb_susceptible)) ? "SUSCEPTIBLE" :
+                    (App.get(moxifloxacinPoint5).equals(getResources().getString(R.string.ctb_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+
+            observations.add(new String[]{"MOXIFLOXACIN 2 µg/ml RESISTANT RESULT", App.get(moxifloxacin2).equals(getResources().getString(R.string.ctb_susceptible)) ? "SUSCEPTIBLE" :
+                    (App.get(moxifloxacin2).equals(getResources().getString(R.string.ctb_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+
+            observations.add(new String[]{"AMIKACIN RESISTANT", App.get(amikacin).equals(getResources().getString(R.string.ctb_susceptible)) ? "SUSCEPTIBLE" :
+                    (App.get(amikacin).equals(getResources().getString(R.string.ctb_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+
+            observations.add(new String[]{"KANAMYCIN RESISTANT", App.get(kanamycin).equals(getResources().getString(R.string.ctb_susceptible)) ? "SUSCEPTIBLE" :
+                    (App.get(kanamycin).equals(getResources().getString(R.string.ctb_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+
+            observations.add(new String[]{"CAPREOMYCIN RESISTANT", App.get(capreomycin).equals(getResources().getString(R.string.ctb_susceptible)) ? "SUSCEPTIBLE" :
+                    (App.get(capreomycin).equals(getResources().getString(R.string.ctb_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+
+            observations.add(new String[]{"ETHIONAMIDE RESISTANT Ethionamide", App.get(ethionamide).equals(getResources().getString(R.string.ctb_susceptible)) ? "SUSCEPTIBLE" :
+                    (App.get(ethionamide).equals(getResources().getString(R.string.ctb_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+
+            observations.add(new String[]{"CYCLOSERINE RESISTANT", App.get(cycloserine).equals(getResources().getString(R.string.ctb_susceptible)) ? "SUSCEPTIBLE" :
+                    (App.get(cycloserine).equals(getResources().getString(R.string.ctb_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+
+            observations.add(new String[]{"P AMINOSALICYLIC ACID RESISTANT", App.get(pas).equals(getResources().getString(R.string.ctb_susceptible)) ? "SUSCEPTIBLE" :
+                    (App.get(pas).equals(getResources().getString(R.string.ctb_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+
+            observations.add(new String[]{"BEDAQUILINE RESISTANT", App.get(bedaquiline).equals(getResources().getString(R.string.ctb_susceptible)) ? "SUSCEPTIBLE" :
+                    (App.get(bedaquiline).equals(getResources().getString(R.string.ctb_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+
+            observations.add(new String[]{"DELAMANID RESISTANT", App.get(delamanid).equals(getResources().getString(R.string.ctb_susceptible)) ? "SUSCEPTIBLE" :
+                    (App.get(delamanid).equals(getResources().getString(R.string.ctb_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+
+            observations.add(new String[]{"LINEZOLID RESISTANT", App.get(linezolid).equals(getResources().getString(R.string.ctb_susceptible)) ? "SUSCEPTIBLE" :
+                    (App.get(linezolid).equals(getResources().getString(R.string.ctb_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+
+            observations.add(new String[]{"CLOFAZAMINE RESISTANT", App.get(clofazamine).equals(getResources().getString(R.string.ctb_susceptible)) ? "SUSCEPTIBLE" :
+                    (App.get(clofazamine).equals(getResources().getString(R.string.ctb_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+
+            observations.add(new String[]{"OTHER DRUG NAME", App.get(otherDrug)});
+
+            if(otherDrugResult.getVisibility()==View.VISIBLE) {
+                observations.add(new String[]{"OTHER DRUG RESISTANT RESULT", App.get(otherDrugResult).equals(getResources().getString(R.string.ctb_susceptible)) ? "SUSCEPTIBLE" :
+                        (App.get(otherDrugResult).equals(getResources().getString(R.string.ctb_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+            }
+
+        }
+
+        AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.submitting_form));
+                        loading.show();
+                    }
+                });
+
+                String result = "";
+
+                if (App.get(formType).equals(getResources().getString(R.string.ctb_order))){
+                    result = serverService.saveEncounterAndObservation("DST Culture Test Order", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                    if (result.contains("SUCCESS"))
+                        return "SUCCESS";
+                } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
+                    result = serverService.saveEncounterAndObservation("DST Culture Test Result", FORM, formDateCalendar, observations.toArray(new String[][]{}));
+                    if (result.contains("SUCCESS"))
+                        return "SUCCESS";
+                }
+
+                return result;
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            ;
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                if (result.equals("SUCCESS")) {
+                    resetViews();
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.form_submitted));
+                    Drawable submitIcon = getResources().getDrawable(R.drawable.ic_submit);
+                    alertDialog.setIcon(submitIcon);
+                    int color = App.getColor(context, R.attr.colorAccent);
+                    DrawableCompat.setTint(submitIcon, color);
+                    alertDialog.setTitle(getResources().getString(R.string.title_completed));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else if (result.equals("CONNECTION_ERROR")) {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
+                    alertDialog.setMessage(getResources().getString(R.string.insert_error));
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+
+
+            }
+        };
+        submissionFormTask.execute("");
+
+        return false;
     }
 
     @Override
@@ -445,7 +775,423 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
 
     @Override
     public void refill(int encounterId) {
+        OfflineForm fo = serverService.getOfflineFormById(encounterId);
+        String date = fo.getFormDate();
+        ArrayList<String[][]> obsValue = fo.getObsValue();
 
+        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+
+        for (int i = 0; i < obsValue.size(); i++) {
+            String[][] obs = obsValue.get(i);
+            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+                timeTakeToFill = obs[0][1];
+            }else if(fo.getFormName().contains("Order")) {
+                formType.getRadioGroup().getButtons().get(0).setChecked(true);
+                formType.getRadioGroup().getButtons().get(1).setEnabled(false);
+                testIdView.setImageResource(R.drawable.ic_checked_green);
+                if (obs[0][0].equals("TEST ID")) {
+                    testId.getEditText().setEnabled(false);
+                    testIdView.setEnabled(false);
+                    testIdView.setImageResource(R.drawable.ic_checked_green);
+                    testId.getEditText().setText(obs[0][1]);
+                }else if (obs[0][0].equals("SPECIMEN SUBMISSION DATE")) {
+                    String secondDate = obs[0][1];
+                    secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
+                    dateSubmission.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+                    dateSubmission.setVisibility(View.VISIBLE);
+                } else if (obs[0][0].equals("TEST CONTEXT STATUS")) {
+                    for (RadioButton rb : pointTestBeingDone.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_baseline)) && obs[0][1].equals("BASELINE")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_baseline_repeat)) && obs[0][1].equals("BASELINE REPEAT")) {
+                            rb.setChecked(true);
+                            break;
+                        }else if (rb.getText().equals(getResources().getString(R.string.ctb_followup)) && obs[0][1].equals("REGULAR FOLLOW UP")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    pointTestBeingDone.setVisibility(View.VISIBLE);
+                }  else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
+                    monthTreatment.getEditText().setText(obs[0][1]);
+                }else if (obs[0][0].equals("SPECIMEN TYPE")) {
+                    for (RadioButton rb : specimenType.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_sputum)) && obs[0][1].equals("SPUTUM")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_extra_pulmonary)) && obs[0][1].equals("EXTRA-PULMONARY TUBERCULOSIS")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    specimenType.setVisibility(View.VISIBLE);
+                }
+                else if (obs[0][0].equals("SPECIMEN SOURCE")) {
+                    String value = obs[0][1].equals("LYMPHOCYTES") ? getResources().getString(R.string.ctb_lymph) :
+                            (obs[0][1].equals("PLEURAL EFFUSION") ? getResources().getString(R.string.ctb_pleural_fluid) :
+                                    (obs[0][1].equals("PUS") ? getResources().getString(R.string.ctb_pus) :
+                                            getResources().getString(R.string.ctb_other_title)));
+                    if(value.equalsIgnoreCase(getResources().getString(R.string.ctb_other_title))){
+                        otherSpecimentComeFrom.setVisibility(View.VISIBLE);
+                    }
+                    specimenComeFrom.getSpinner().selectValue(value);
+                    specimenComeFrom.setVisibility(View.VISIBLE);
+                } else if (obs[0][0].equals("OTHER SPECIMEN SOURCE")) {
+                    otherSpecimentComeFrom.getEditText().setText(obs[0][1]);
+                }
+                submitButton.setEnabled(true);
+            }else{
+                formType.getRadioGroup().getButtons().get(1).setChecked(true);
+                formType.getRadioGroup().getButtons().get(0).setEnabled(false);
+                if (obs[0][0].equals("TEST ID")) {
+                    testId.getEditText().setText(obs[0][1]);
+                    testId.getEditText().setEnabled(false);
+                    testIdView.setEnabled(false);
+                    testIdView.setImageResource(R.drawable.ic_checked);
+                    checkTestId();
+                }else if (obs[0][0].equals("DATE OF  TEST RESULT RECEIVED")) {
+                    String thirdDate = obs[0][1];
+                    thirdDateCalender.setTime(App.stringToDate(thirdDate, "yyyy-MM-dd"));
+                    resultRecievedDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalender).toString());
+                    resultRecievedDate.setVisibility(View.VISIBLE);
+                }else if (obs[0][0].equals("CULTURE MEDIUM TYPE")) {
+                    String value = obs[0][1].equals("LOWENSTEIN-JENSEN MYCOBACTERIA CULTURE METHOD") ? getResources().getString(R.string.ctb_lowenstein_jensen) :
+                            (obs[0][1].equals("MYCOBACTERIA GROWTH INDICATOR TUBE") ? getResources().getString(R.string.ctb_mycobacteria_growth_indicator) :
+                                    (obs[0][1].equals("MIDDLEBROOK 7H11S") ? getResources().getString(R.string.ctb_middlebrook_7h11s) :
+                                            (obs[0][1].equals("TOTAL LABORATORY AUTOMATION") ? getResources().getString(R.string.ctb_laboratory_automation) :
+                                                    getResources().getString(R.string.ctb_other_title))));
+                    typeOfMediaDst.getSpinner().selectValue(value);
+
+                }else if (obs[0][0].equals("ISONIAZID 0.2 µg/ml RESISTANT")) {
+                    for (RadioButton rb : isoniazidPoint2.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_resistant)) && obs[0][1].equals("RESISTANT")) {
+                            rb.setChecked(true);
+                            break;
+                        }else if (rb.getText().equals(getResources().getString(R.string.ctb_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    isoniazidPoint2.setVisibility(View.VISIBLE);
+                }else if (obs[0][0].equals("ISONIAZID 1 µg/ml RESISTANT RESULT")) {
+                    for (RadioButton rb : isoniazid1.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_resistant)) && obs[0][1].equals("RESISTANT")) {
+                            rb.setChecked(true);
+                            break;
+                        }else if (rb.getText().equals(getResources().getString(R.string.ctb_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    isoniazid1.setVisibility(View.VISIBLE);
+                } else if (obs[0][0].equals("RIFAMPICIN RESISTANT")) {
+                    for (RadioButton rb : rifampicin.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_resistant)) && obs[0][1].equals("RESISTANT")) {
+                            rb.setChecked(true);
+                            break;
+                        }else if (rb.getText().equals(getResources().getString(R.string.ctb_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    rifampicin.setVisibility(View.VISIBLE);
+                }else if (obs[0][0].equals("ETHAMBUTOL RESISTANT")) {
+                    for (RadioButton rb : ethambuthol.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_resistant)) && obs[0][1].equals("RESISTANT")) {
+                            rb.setChecked(true);
+                            break;
+                        }else if (rb.getText().equals(getResources().getString(R.string.ctb_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    ethambuthol.setVisibility(View.VISIBLE);
+                }else if (obs[0][0].equals("STREPTOMYCIN RESISITANT")) {
+                    for (RadioButton rb : streptomycin.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_resistant)) && obs[0][1].equals("RESISTANT")) {
+                            rb.setChecked(true);
+                            break;
+                        }else if (rb.getText().equals(getResources().getString(R.string.ctb_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    streptomycin.setVisibility(View.VISIBLE);
+                } else if (obs[0][0].equals("PYRAZINAMIDE RESISTANT")) {
+                    for (RadioButton rb : pyrazinamide.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_resistant)) && obs[0][1].equals("RESISTANT")) {
+                            rb.setChecked(true);
+                            break;
+                        }else if (rb.getText().equals(getResources().getString(R.string.ctb_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    pyrazinamide.setVisibility(View.VISIBLE);
+                }
+                else if (obs[0][0].equals("OFLOAXCIN RESISTANT")) {
+                    for (RadioButton rb : ofloxacin.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_resistant)) && obs[0][1].equals("RESISTANT")) {
+                            rb.setChecked(true);
+                            break;
+                        }else if (rb.getText().equals(getResources().getString(R.string.ctb_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    ofloxacin.setVisibility(View.VISIBLE);
+                }
+                else if (obs[0][0].equals("LEVOFLOXACIN RESISTANT")) {
+                    for (RadioButton rb : levofloxacin.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_resistant)) && obs[0][1].equals("RESISTANT")) {
+                            rb.setChecked(true);
+                            break;
+                        }else if (rb.getText().equals(getResources().getString(R.string.ctb_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    levofloxacin.setVisibility(View.VISIBLE);
+                }
+                else if (obs[0][0].equals("MOXIFLOXACIN 0.5 µg/ml RESISTANT RESULT")) {
+                    for (RadioButton rb : moxifloxacinPoint5.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_resistant)) && obs[0][1].equals("RESISTANT")) {
+                            rb.setChecked(true);
+                            break;
+                        }else if (rb.getText().equals(getResources().getString(R.string.ctb_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    moxifloxacinPoint5.setVisibility(View.VISIBLE);
+                }else if (obs[0][0].equals("MOXIFLOXACIN 2 µg/ml RESISTANT RESULT")) {
+                    for (RadioButton rb : moxifloxacin2.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_resistant)) && obs[0][1].equals("RESISTANT")) {
+                            rb.setChecked(true);
+                            break;
+                        }else if (rb.getText().equals(getResources().getString(R.string.ctb_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    moxifloxacin2.setVisibility(View.VISIBLE);
+                }
+                else if (obs[0][0].equals("AMIKACIN RESISTANT")) {
+                    for (RadioButton rb : amikacin.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_resistant)) && obs[0][1].equals("RESISTANT")) {
+                            rb.setChecked(true);
+                            break;
+                        }else if (rb.getText().equals(getResources().getString(R.string.ctb_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    amikacin.setVisibility(View.VISIBLE);
+                }
+                else if (obs[0][0].equals("LEVOFLOXACIN RESISTANT")) {
+                    for (RadioButton rb : levofloxacin.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_resistant)) && obs[0][1].equals("RESISTANT")) {
+                            rb.setChecked(true);
+                            break;
+                        }else if (rb.getText().equals(getResources().getString(R.string.ctb_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    levofloxacin.setVisibility(View.VISIBLE);
+                }
+                else if (obs[0][0].equals("KANAMYCIN RESISTANT")) {
+                    for (RadioButton rb : kanamycin.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_resistant)) && obs[0][1].equals("RESISTANT")) {
+                            rb.setChecked(true);
+                            break;
+                        }else if (rb.getText().equals(getResources().getString(R.string.ctb_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    kanamycin.setVisibility(View.VISIBLE);
+                }else if (obs[0][0].equals("CAPREOMYCIN RESISTANT")) {
+                    for (RadioButton rb : capreomycin.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_resistant)) && obs[0][1].equals("RESISTANT")) {
+                            rb.setChecked(true);
+                            break;
+                        }else if (rb.getText().equals(getResources().getString(R.string.ctb_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    capreomycin.setVisibility(View.VISIBLE);
+                }
+                else if (obs[0][0].equals("ETHIONAMIDE RESISTANT Ethionamide")) {
+                    for (RadioButton rb : ethionamide.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_resistant)) && obs[0][1].equals("RESISTANT")) {
+                            rb.setChecked(true);
+                            break;
+                        }else if (rb.getText().equals(getResources().getString(R.string.ctb_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    ethionamide.setVisibility(View.VISIBLE);
+                }
+                else if (obs[0][0].equals("CYCLOSERINE RESISTANT")) {
+                    for (RadioButton rb : cycloserine.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_resistant)) && obs[0][1].equals("RESISTANT")) {
+                            rb.setChecked(true);
+                            break;
+                        }else if (rb.getText().equals(getResources().getString(R.string.ctb_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    cycloserine.setVisibility(View.VISIBLE);
+                }
+                else if (obs[0][0].equals("P AMINOSALICYLIC ACID RESISTANT")) {
+                    for (RadioButton rb : pas.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_resistant)) && obs[0][1].equals("RESISTANT")) {
+                            rb.setChecked(true);
+                            break;
+                        }else if (rb.getText().equals(getResources().getString(R.string.ctb_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    pas.setVisibility(View.VISIBLE);
+                } else if (obs[0][0].equals("BEDAQUILINE RESISTANT")) {
+                    for (RadioButton rb : bedaquiline.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_resistant)) && obs[0][1].equals("RESISTANT")) {
+                            rb.setChecked(true);
+                            break;
+                        }else if (rb.getText().equals(getResources().getString(R.string.ctb_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    bedaquiline.setVisibility(View.VISIBLE);
+                }
+                else if (obs[0][0].equals("DELAMANID RESISTANT")) {
+                    for (RadioButton rb : delamanid.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_resistant)) && obs[0][1].equals("RESISTANT")) {
+                            rb.setChecked(true);
+                            break;
+                        }else if (rb.getText().equals(getResources().getString(R.string.ctb_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    delamanid.setVisibility(View.VISIBLE);
+                }
+                else if (obs[0][0].equals("LINEZOLID RESISTANT")) {
+                    for (RadioButton rb : linezolid.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_resistant)) && obs[0][1].equals("RESISTANT")) {
+                            rb.setChecked(true);
+                            break;
+                        }else if (rb.getText().equals(getResources().getString(R.string.ctb_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    linezolid.setVisibility(View.VISIBLE);
+                }
+                else if (obs[0][0].equals("CLOFAZAMINE RESISTANT")) {
+                    for (RadioButton rb : clofazamine.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_resistant)) && obs[0][1].equals("RESISTANT")) {
+                            rb.setChecked(true);
+                            break;
+                        }else if (rb.getText().equals(getResources().getString(R.string.ctb_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    clofazamine.setVisibility(View.VISIBLE);
+                }
+
+                else if (obs[0][0].equals("OTHER DRUG NAME")) {
+                        otherDrug.getEditText().setText(obs[0][1]);
+                } else if (obs[0][0].equals("OTHER DRUG RESISTANT RESULT")) {
+                    for (RadioButton rb : otherDrugResult.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_resistant)) && obs[0][1].equals("RESISTANT")) {
+                            rb.setChecked(true);
+                            break;
+                        }else if (rb.getText().equals(getResources().getString(R.string.ctb_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    otherDrugResult.setVisibility(View.VISIBLE);
+                }
+            }
+        }
     }
 
     @Override
@@ -508,12 +1254,37 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
 
         if (snackbar != null)
             snackbar.dismiss();
-
+        testId.getEditText().setEnabled(true);
+        formType.getRadioGroup().getButtons().get(0).setEnabled(true);
+        formType.getRadioGroup().getButtons().get(1).setEnabled(true);
+        testIdView.setEnabled(true);
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         dateSubmission.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
         resultRecievedDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalender).toString());
-        testId.getEditText().setText("");
-        monthTreatment.getEditText().setText("");
+        testIdView.setVisibility(View.GONE);
+        testId.setVisibility(View.GONE);
+        testIdView.setImageResource(R.drawable.ic_checked);
+        goneVisibility();
+        submitButton.setEnabled(false);
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean openFlag = bundle.getBoolean("open");
+            if (openFlag) {
+
+                bundle.putBoolean("open", false);
+                bundle.putBoolean("save", true);
+
+                String id = bundle.getString("formId");
+                int formId = Integer.valueOf(id);
+
+                refill(formId);
+
+            } else bundle.putBoolean("save", false);
+
+        }
+    }
+
+    void goneVisibility(){
         dateSubmission.setVisibility(View.GONE);
         pointTestBeingDone.setVisibility(View.GONE);
         monthTreatment.setVisibility(View.GONE);
@@ -546,73 +1317,78 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
         otherDrug.setVisibility(View.GONE);
         otherDrugResult.setVisibility(View.GONE);
     }
+    void showTestOrderOrTestResult() {
+        if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.ctb_order))) {
+            dateSubmission.setVisibility(View.VISIBLE);
+            pointTestBeingDone.setVisibility(View.VISIBLE);
+            specimenType.setVisibility(View.VISIBLE);
+
+            resultRecievedDate.setVisibility(View.GONE);
+            typeOfMediaDst.setVisibility(View.GONE);
+            isoniazidPoint2.setVisibility(View.GONE);
+            isoniazid1.setVisibility(View.GONE);
+            rifampicin.setVisibility(View.GONE);
+            ethambuthol.setVisibility(View.GONE);
+            streptomycin.setVisibility(View.GONE);
+            pyrazinamide.setVisibility(View.GONE);
+            ofloxacin.setVisibility(View.GONE);
+            levofloxacin.setVisibility(View.GONE);
+            moxifloxacinPoint5.setVisibility(View.GONE);
+            moxifloxacin2.setVisibility(View.GONE);
+            amikacin.setVisibility(View.GONE);
+            kanamycin.setVisibility(View.GONE);
+            capreomycin.setVisibility(View.GONE);
+            ethionamide.setVisibility(View.GONE);
+            cycloserine.setVisibility(View.GONE);
+            pas.setVisibility(View.GONE);
+            bedaquiline.setVisibility(View.GONE);
+            delamanid.setVisibility(View.GONE);
+            linezolid.setVisibility(View.GONE);
+            clofazamine.setVisibility(View.GONE);
+            otherDrug.setVisibility(View.GONE);
+        }else{
+            resultRecievedDate.setVisibility(View.VISIBLE);
+            typeOfMediaDst.setVisibility(View.VISIBLE);
+            isoniazidPoint2.setVisibility(View.VISIBLE);
+            isoniazid1.setVisibility(View.VISIBLE);
+            rifampicin.setVisibility(View.VISIBLE);
+            ethambuthol.setVisibility(View.VISIBLE);
+            streptomycin.setVisibility(View.VISIBLE);
+            pyrazinamide.setVisibility(View.VISIBLE);
+            ofloxacin.setVisibility(View.VISIBLE);
+            levofloxacin.setVisibility(View.VISIBLE);
+            moxifloxacinPoint5.setVisibility(View.VISIBLE);
+            moxifloxacin2.setVisibility(View.VISIBLE);
+            amikacin.setVisibility(View.VISIBLE);
+            kanamycin.setVisibility(View.VISIBLE);
+            capreomycin.setVisibility(View.VISIBLE);
+            ethionamide.setVisibility(View.VISIBLE);
+            cycloserine.setVisibility(View.VISIBLE);
+            pas.setVisibility(View.VISIBLE);
+            bedaquiline.setVisibility(View.VISIBLE);
+            delamanid.setVisibility(View.VISIBLE);
+            linezolid.setVisibility(View.VISIBLE);
+            clofazamine.setVisibility(View.VISIBLE);
+            otherDrug.setVisibility(View.VISIBLE);
+
+            dateSubmission.setVisibility(View.GONE);
+            pointTestBeingDone.setVisibility(View.GONE);
+            monthTreatment.setVisibility(View.GONE);
+            specimenType.setVisibility(View.GONE);
+            specimenComeFrom.setVisibility(View.GONE);
+            otherSpecimentComeFrom.setVisibility(View.GONE);
+        }
+    }
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         if (group == formType.getRadioGroup()) {
-            if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_order))) {
-                dateSubmission.setVisibility(View.VISIBLE);
-                pointTestBeingDone.setVisibility(View.VISIBLE);
-                specimenType.setVisibility(View.VISIBLE);
-            } else {
-                dateSubmission.setVisibility(View.GONE);
-                pointTestBeingDone.setVisibility(View.GONE);
-                monthTreatment.setVisibility(View.GONE);
-                specimenType.setVisibility(View.GONE);
-                specimenComeFrom.setVisibility(View.GONE);
-                otherSpecimentComeFrom.setVisibility(View.GONE);
-            }
-            if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_result))) {
-                resultRecievedDate.setVisibility(View.VISIBLE);
-                typeOfMediaDst.setVisibility(View.VISIBLE);
-                isoniazidPoint2.setVisibility(View.VISIBLE);
-                isoniazid1.setVisibility(View.VISIBLE);
-                rifampicin.setVisibility(View.VISIBLE);
-                ethambuthol.setVisibility(View.VISIBLE);
-                streptomycin.setVisibility(View.VISIBLE);
-                pyrazinamide.setVisibility(View.VISIBLE);
-                ofloxacin.setVisibility(View.VISIBLE);
-                levofloxacin.setVisibility(View.VISIBLE);
-                moxifloxacinPoint5.setVisibility(View.VISIBLE);
-                moxifloxacin2.setVisibility(View.VISIBLE);
-                amikacin.setVisibility(View.VISIBLE);
-                kanamycin.setVisibility(View.VISIBLE);
-                capreomycin.setVisibility(View.VISIBLE);
-                ethionamide.setVisibility(View.VISIBLE);
-                cycloserine.setVisibility(View.VISIBLE);
-                pas.setVisibility(View.VISIBLE);
-                bedaquiline.setVisibility(View.VISIBLE);
-                delamanid.setVisibility(View.VISIBLE);
-                linezolid.setVisibility(View.VISIBLE);
-                clofazamine.setVisibility(View.VISIBLE);
-                otherDrug.setVisibility(View.VISIBLE);
-
-            } else {
-                resultRecievedDate.setVisibility(View.GONE);
-                resultRecievedDate.setVisibility(View.GONE);
-                typeOfMediaDst.setVisibility(View.GONE);
-                isoniazidPoint2.setVisibility(View.GONE);
-                isoniazid1.setVisibility(View.GONE);
-                rifampicin.setVisibility(View.GONE);
-                ethambuthol.setVisibility(View.GONE);
-                streptomycin.setVisibility(View.GONE);
-                pyrazinamide.setVisibility(View.GONE);
-                ofloxacin.setVisibility(View.GONE);
-                levofloxacin.setVisibility(View.GONE);
-                moxifloxacinPoint5.setVisibility(View.GONE);
-                moxifloxacin2.setVisibility(View.GONE);
-                amikacin.setVisibility(View.GONE);
-                kanamycin.setVisibility(View.GONE);
-                capreomycin.setVisibility(View.GONE);
-                ethionamide.setVisibility(View.GONE);
-                cycloserine.setVisibility(View.GONE);
-                pas.setVisibility(View.GONE);
-                bedaquiline.setVisibility(View.GONE);
-                delamanid.setVisibility(View.GONE);
-                linezolid.setVisibility(View.GONE);
-                clofazamine.setVisibility(View.GONE);
-                otherDrug.setVisibility(View.GONE);
-            }
+            formDate.setVisibility(View.VISIBLE);
+            testId.setVisibility(View.VISIBLE);
+            testId.getEditText().setText("");
+            testId.getEditText().setError(null);
+            goneVisibility();
+            submitButton.setEnabled(false);
         }
         if (group == specimenType.getRadioGroup()) {
             if (specimenType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_extra_pulmonary))) {
@@ -631,6 +1407,122 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
                 monthTreatment.setVisibility(View.GONE);
             }
         }
+
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN: {
+                ImageView view = (ImageView) v;
+                //overlay is black with transparency of 0x77 (119)
+                view.getDrawable().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
+                view.invalidate();
+
+                Boolean error = false;
+
+                checkTestId();
+
+
+                break;
+            }
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL: {
+                ImageView view = (ImageView) v;
+                //clear the overlay
+                view.getDrawable().clearColorFilter();
+                view.invalidate();
+                break;
+            }
+        }
+        return true;
+    }
+
+    private void checkTestId() {
+        AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.verifying_test_id));
+                        loading.show();
+                    }
+                });
+
+                String result = "";
+
+                Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "Childhood TB-DST Culture Test Order");
+
+                if (testIds == null || testIds.length < 1) {
+                    if (App.get(formType).equals(getResources().getString(R.string.ctb_order)))
+                        return "SUCCESS";
+                    else
+                        return "";
+                }
+
+
+                if (App.get(formType).equals(getResources().getString(R.string.ctb_order))) {
+                    result = "SUCCESS";
+                    for (int i = 0; i < testIds.length; i++) {
+                        if (String.valueOf(testIds[i][0]).equals(App.get(testId))) {
+                            return "";
+                        }
+                    }
+                }
+
+                if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
+                    result = "";
+                    for (int i = 0; i < testIds.length; i++) {
+                        if (String.valueOf(testIds[i][0]).equals(App.get(testId))) {
+                            return "SUCCESS";
+                        }
+                    }
+                }
+
+                return result;
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            ;
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                if (result.equals("SUCCESS")) {
+
+                    testIdView.setImageResource(R.drawable.ic_checked_green);
+                    showTestOrderOrTestResult();
+                    submitButton.setEnabled(true);
+
+                } else {
+
+                    if (App.get(formType).equals(getResources().getString(R.string.ctb_order))) {
+                        testId.getEditText().setError(getResources().getString(R.string.result_id_error));
+                    } else {
+                        testId.getEditText().setError(getResources().getString(R.string.order_id_error));
+                    }
+
+                }
+
+                try {
+                    InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                } catch (Exception e) {
+                    // TODO: handle exception
+                }
+
+            }
+        };
+        submissionFormTask.execute("");
 
     }
 
