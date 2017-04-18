@@ -7,10 +7,14 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +26,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -29,9 +34,11 @@ import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
+import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
+import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,7 +53,8 @@ public class ComorbiditiesDiabetesEducationForm extends AbstractFormActivity {
 
     // Views...
     TitledButton formDate;
-    TitledSpinner diabetesEducationFormFollowupMonth;
+    //TitledSpinner diabetesEducationFormFollowupMonth;
+    TitledEditText diabetesEducationFormFollowupMonth;
     MyTextView diabetesEducationFormEducationalPlan;
     TitledCheckBoxes diabetesEducationFormDiabetesEducation;
     MyTextView diabetesEducationFormEducationalMaterial;
@@ -127,14 +135,15 @@ public class ComorbiditiesDiabetesEducationForm extends AbstractFormActivity {
         formDate.setTag("formDate");
         diabetesEducationFormEducationalPlan = new MyTextView(context, getResources().getString(R.string.comorbidities_education_form_educational_plan));
         diabetesEducationFormEducationalPlan.setTypeface(null, Typeface.BOLD);
-        diabetesEducationFormFollowupMonth = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_mth_txcomorbidities_hba1c), getResources().getStringArray(R.array.comorbidities_followup_month), "1", App.HORIZONTAL);
+        //diabetesEducationFormFollowupMonth = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_mth_txcomorbidities_hba1c), getResources().getStringArray(R.array.comorbidities_followup_month), "0", App.HORIZONTAL);
+        diabetesEducationFormFollowupMonth = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_month_of_treatment), "", getResources().getString(R.string.comorbidities_vitals_month_of_visit_range), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         diabetesEducationFormDiabetesEducation = new TitledCheckBoxes(context, null, getResources().getString(R.string.comorbidities_education_form_educational_plan_text), getResources().getStringArray(R.array.comorbidities_education_form_educational_plan_text_options), new Boolean[]{true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false}, App.VERTICAL, App.VERTICAL);
         diabetesEducationFormEducationalMaterial = new MyTextView(context, getResources().getString(R.string.comorbidities_education_form_educational_material));
         diabetesEducationFormEducationalMaterial.setTypeface(null, Typeface.BOLD);
         diabetesEducationFormDiabetesEducationalMaterial = new TitledCheckBoxes(context, null, getResources().getString(R.string.comorbidities_education_form_educational_material_text), getResources().getStringArray(R.array.comorbidities_education_form_educational_material_text_options), new Boolean[]{true, false, false, false, false, false, false, false, false, false, false}, App.VERTICAL, App.VERTICAL);
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), diabetesEducationFormFollowupMonth.getSpinner(), diabetesEducationFormDiabetesEducation, diabetesEducationFormDiabetesEducationalMaterial};
+        views = new View[]{formDate.getButton(), diabetesEducationFormFollowupMonth.getEditText(), diabetesEducationFormDiabetesEducation, diabetesEducationFormDiabetesEducationalMaterial};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
@@ -148,13 +157,71 @@ public class ComorbiditiesDiabetesEducationForm extends AbstractFormActivity {
         for (CheckBox cb : diabetesEducationFormDiabetesEducationalMaterial.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
 
+        diabetesEducationFormFollowupMonth.getEditText().addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                try {
+                    if (diabetesEducationFormFollowupMonth.getEditText().getText().length() > 0) {
+                        int num = Integer.parseInt(diabetesEducationFormFollowupMonth.getEditText().getText().toString());
+                        if (num < 0 || num > 24) {
+                            diabetesEducationFormFollowupMonth.getEditText().setError(getString(R.string.comorbidities_vitals_month_of_visit_limit));
+                        } else {
+                            //Correct value
+                        }
+                    }
+                } catch (NumberFormatException nfe) {
+                    //Exception: User might be entering " " (empty) value
+                }
+            }
+        });
+
         resetViews();
     }
 
     @Override
     public void updateDisplay() {
 
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        //formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        if (snackbar != null)
+            snackbar.dismiss();
+
+        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
+
+            String formDa = formDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
+
+            Date date = new Date();
+            if (formDateCalendar.after(App.getCalendar(date))) {
+
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+            } else
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        }
     }
 
     @Override
@@ -193,6 +260,12 @@ public class ComorbiditiesDiabetesEducationForm extends AbstractFormActivity {
                 view = diabetesEducationFormDiabetesEducation;
                 error = true;
             }
+        }
+
+        if (App.get(diabetesEducationFormFollowupMonth).isEmpty()) {
+            diabetesEducationFormFollowupMonth.getEditText().setError(getString(R.string.empty_field));
+            diabetesEducationFormFollowupMonth.getEditText().requestFocus();
+            error = true;
         }
 
         if (error) {
@@ -236,21 +309,24 @@ public class ComorbiditiesDiabetesEducationForm extends AbstractFormActivity {
     @Override
     public boolean submit() {
 
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean saveFlag = bundle.getBoolean("save", false);
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
+            }else {
+                endTime = new Date();
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
             bundle.putBoolean("save", false);
+        } else {
+            endTime = new Date();
+            observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
-
-        endTime = new Date();
-
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
-        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
-        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         observations.add(new String[]{"FOLLOW-UP MONTH", App.get(diabetesEducationFormFollowupMonth)});
@@ -456,8 +532,12 @@ public class ComorbiditiesDiabetesEducationForm extends AbstractFormActivity {
 
             String[][] obs = obsValue.get(i);
 
+            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+                timeTakeToFill = obs[0][1];
+            }
+
             if (obs[0][0].equals("FOLLOW-UP MONTH")) {
-                diabetesEducationFormFollowupMonth.getSpinner().selectValue(obs[0][1]);
+                diabetesEducationFormFollowupMonth.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("DIABETES EDUCATION")) {
                 for (CheckBox cb : diabetesEducationFormDiabetesEducation.getCheckedBoxes()) {
                     if (cb.getText().equals(getResources().getString(R.string.comorbidities_education_form_educational_plan_text_option1)) && obs[0][1].equals("TYPES OF DIABETES")) {
@@ -671,7 +751,7 @@ public class ComorbiditiesDiabetesEducationForm extends AbstractFormActivity {
                 super.onPostExecute(result);
                 loading.dismiss();
 
-                diabetesEducationFormFollowupMonth.getSpinner().selectValue(result.get("FOLLOW-UP MONTH"));
+                diabetesEducationFormFollowupMonth.getEditText().setText(result.get("FOLLOW-UP MONTH"));
             }
         };
         autopopulateFormTask.execute("");

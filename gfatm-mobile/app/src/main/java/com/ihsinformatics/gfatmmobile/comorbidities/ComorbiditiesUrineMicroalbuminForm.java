@@ -11,6 +11,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -33,6 +34,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -158,7 +160,7 @@ public class ComorbiditiesUrineMicroalbuminForm extends AbstractFormActivity imp
         formType = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_testorder_testresult_form_type), getResources().getStringArray(R.array.comorbidities_testorder_testresult_form_type_options), "", App.HORIZONTAL, App.VERTICAL);
         testOrderMicroablbumin = new MyTextView(context, getResources().getString(R.string.comorbidities_creatinine_test_order));
         testOrderMicroablbumin.setTypeface(null, Typeface.BOLD);
-        microalbuminFollowupMonth = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_mth_txcomorbidities_hba1c), getResources().getStringArray(R.array.comorbidities_followup_month), "1", App.HORIZONTAL);
+        microalbuminFollowupMonth = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_urinedr_month_of_treatment), getResources().getStringArray(R.array.comorbidities_followup_month), "0", App.HORIZONTAL);
         microalbuminTestOrderDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1cdate_test_order), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         LinearLayout linearLayout = new LinearLayout(context);
         microalbuminTestID = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hhba1c_testid), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
@@ -187,8 +189,8 @@ public class ComorbiditiesUrineMicroalbuminForm extends AbstractFormActivity imp
         testResultMicroalbumin.setTypeface(null, Typeface.BOLD);
         microalbuminTestResultDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1c_resultdate), DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
         //microalbuminResult = new TitledEditText(context, null, getResources().getString(R.string.hba1c_result), "", "", 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        microalbuminResult = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_creatinine_result), "", getResources().getString(R.string.comorbidities_vitals_bp_systolic_diastolic_range), 6, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        nextMicroalbuminTestDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_urinedr_nexttestdate), DateFormat.format("dd-MMM-yyyy", fourthDateCalendar).toString(), App.HORIZONTAL);
+        microalbuminResult = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_microalbumin_result), "", getResources().getString(R.string.comorbidities_vitals_bp_systolic_diastolic_range), 6, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        nextMicroalbuminTestDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_microalbumin_nexttestdate), DateFormat.format("dd-MMM-yyyy", fourthDateCalendar).toString(), App.HORIZONTAL);
         //nextMicroalbuminTestDate.setVisibility(View.GONE);
         goneVisibility();
 
@@ -298,9 +300,93 @@ public class ComorbiditiesUrineMicroalbuminForm extends AbstractFormActivity imp
     @Override
     public void updateDisplay() {
 
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        microalbuminTestOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-        microalbuminTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+        //formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        if (snackbar != null)
+            snackbar.dismiss();
+
+        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
+
+            String formDa = formDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
+
+            Date date = new Date();
+            if (formDateCalendar.after(App.getCalendar(date))) {
+
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+            } else
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        }
+
+        //microalbuminTestOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+        if (!(microalbuminTestOrderDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString()))) {
+
+            String formDa = microalbuminTestOrderDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
+
+            Date date = new Date();
+            if (secondDateCalendar.after(App.getCalendar(date))) {
+
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                microalbuminTestOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+
+            } else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                microalbuminTestOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+            } else
+                microalbuminTestOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+
+        }
+
+        //microalbuminTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+        if (!(microalbuminTestResultDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString()))) {
+
+            String formDa = microalbuminTestResultDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
+
+            Date date = new Date();
+            if (thirdDateCalendar.after(App.getCalendar(date))) {
+
+                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                microalbuminTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+
+            } else if (thirdDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                microalbuminTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+            } else
+                microalbuminTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+
+        }
+
         //fourthDateCalendar = thirdDateCalendar;
         fourthDateCalendar.set(Calendar.YEAR, secondDateCalendar.get(Calendar.YEAR));
         fourthDateCalendar.set(Calendar.MONTH, secondDateCalendar.get(Calendar.MONTH));
@@ -384,6 +470,7 @@ public class ComorbiditiesUrineMicroalbuminForm extends AbstractFormActivity imp
 
     @Override
     public boolean submit() {
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -391,15 +478,16 @@ public class ComorbiditiesUrineMicroalbuminForm extends AbstractFormActivity imp
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
+            }else {
+                endTime = new Date();
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
             bundle.putBoolean("save", false);
+        } else {
+            endTime = new Date();
+            observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
-
-        endTime = new Date();
-
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
-        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
-        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         observations.add(new String[]{"TEST ID", App.get(microalbuminTestID)});
@@ -497,7 +585,7 @@ public class ComorbiditiesUrineMicroalbuminForm extends AbstractFormActivity imp
                 } else {
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
-                    alertDialog.setMessage(getResources().getString(R.string.insert_error));
+                    alertDialog.setMessage(message);
                     Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                     alertDialog.setIcon(clearIcon);
                     alertDialog.setTitle(getResources().getString(R.string.title_error));
@@ -548,6 +636,10 @@ public class ComorbiditiesUrineMicroalbuminForm extends AbstractFormActivity imp
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
+
+            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+                timeTakeToFill = obs[0][1];
+            }
 
             if (fo.getFormName().contains("Order")) {
                 formType.getRadioGroup().getButtons().get(0).setChecked(true);
