@@ -303,32 +303,65 @@ public class ChildhoodTbScreeningLocation extends AbstractFormActivity implement
         }
 
 
-        if (otherFacilityDeparment.getVisibility() == View.VISIBLE && App.get(otherFacilityDeparment).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            otherFacilityDeparment.getEditText().setError(getString(R.string.empty_field));
-            otherFacilityDeparment.getEditText().requestFocus();
-            error = true;
+        if (otherFacilityDeparment.getVisibility() == View.VISIBLE ) {
+            if(App.get(otherFacilityDeparment).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                otherFacilityDeparment.getEditText().setError(getString(R.string.empty_field));
+                otherFacilityDeparment.getEditText().requestFocus();
+                error = true;
+            }
+            else if(App.get(otherFacilityDeparment).trim().length() <= 0){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                otherFacilityDeparment.getEditText().setError(getString(R.string.ctb_spaces_only));
+                otherFacilityDeparment.getEditText().requestFocus();
+                error = true;
+            }
         }
-        if (referralOutsideOther.getVisibility() == View.VISIBLE && App.get(referralOutsideOther).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            referralOutsideOther.getEditText().setError(getString(R.string.empty_field));
-            referralOutsideOther.getEditText().requestFocus();
-            error = true;
+        if (referralOutsideOther.getVisibility() == View.VISIBLE) {
+            if(App.get(referralOutsideOther).isEmpty()){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                referralOutsideOther.getEditText().setError(getString(R.string.empty_field));
+                referralOutsideOther.getEditText().requestFocus();
+                error = true;
+            }
+            else if(App.get(referralOutsideOther).trim().length() <= 0){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                referralOutsideOther.getEditText().setError(getString(R.string.ctb_spaces_only));
+                referralOutsideOther.getEditText().requestFocus();
+                error = true;
+            }
         }
-        if (hearAboutUsOther.getVisibility() == View.VISIBLE && App.get(hearAboutUsOther).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            hearAboutUsOther.getEditText().setError(getString(R.string.empty_field));
-            hearAboutUsOther.getEditText().requestFocus();
-            error = true;
+        if (hearAboutUsOther.getVisibility() == View.VISIBLE) {
+            if(App.get(hearAboutUsOther).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                hearAboutUsOther.getEditText().setError(getString(R.string.empty_field));
+                hearAboutUsOther.getEditText().requestFocus();
+                error = true;
+            }
+            else if(App.get(hearAboutUsOther).trim().length() <= 0){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                hearAboutUsOther.getEditText().setError(getString(R.string.ctb_spaces_only));
+                hearAboutUsOther.getEditText().requestFocus();
+                error = true;
+            }
         }
         if (error) {
 

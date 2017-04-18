@@ -177,11 +177,11 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         cnicOwnerOther = new TitledEditText(context,null,getResources().getString(R.string.ctb_other_specify),"","",20,RegexUtil.ALPHA_FILTER,InputType.TYPE_CLASS_TEXT,App.VERTICAL,false);
 
         addressProvided = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_address_provided),getResources().getStringArray(R.array.yes_no_options),getResources().getString(R.string.no),App.HORIZONTAL,App.VERTICAL,true);
-        address1 = new TitledEditText(context,null,getResources().getString(R.string.ctb_address1),"","",10,null,InputType.TYPE_CLASS_TEXT,App.VERTICAL,false);
+        address1 = new TitledEditText(context,null,getResources().getString(R.string.ctb_address1),"","",10,RegexUtil.ADDRESS_FILTER,InputType.TYPE_CLASS_TEXT,App.VERTICAL,true);
 
-        address2 = new TitledEditText(context,null,getResources().getString(R.string.ctb_address2),"","",50,null,InputType.TYPE_CLASS_TEXT,App.VERTICAL,false);
+        address2 = new TitledEditText(context,null,getResources().getString(R.string.ctb_address2),"","",50,RegexUtil.ADDRESS_FILTER,InputType.TYPE_CLASS_TEXT,App.VERTICAL,true);
+        city = new TitledSpinner(context, "", getResources().getString(R.string.pet_city), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL,true);
         district = new TitledSpinner(context, "", getResources().getString(R.string.pet_district), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
-        city = new TitledSpinner(context, "", getResources().getString(R.string.pet_city), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
         addressType = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_address_type),getResources().getStringArray(R.array.ctb_address_type_list),null,App.HORIZONTAL,App.VERTICAL,true);
         nearestLandmark = new TitledEditText(context,null,getResources().getString(R.string.ctb_nearest_landmark),"","",50,null,InputType.TYPE_CLASS_TEXT,App.VERTICAL,false);
         mobileLinearLayout = new LinearLayout(context);
@@ -462,7 +462,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate,cnicLinearLayout,cnicOwner,cnicOwnerOther,addressProvided,address1,address2,district,city,addressType,nearestLandmark,mobileLinearLayout,mobileNumberContact,permissionMobileNumberContact,secondaryMobileLinearLayout,secondaryMobileNumberContact,permissionSecondaryMobileNumber,landlineLayout,landlineNumberContact,permissionLandlineNumber,secondaryLandlineNumber,secondaryLandlineContact,permissionSecondaryLandlineNumber}};
+                {{formDate,cnicLinearLayout,cnicOwner,cnicOwnerOther,addressProvided,address1,address2,city,district,addressType,nearestLandmark,mobileLinearLayout,mobileNumberContact,permissionMobileNumberContact,secondaryMobileLinearLayout,secondaryMobileNumberContact,permissionSecondaryMobileNumber,landlineLayout,landlineNumberContact,permissionLandlineNumber,secondaryLandlineNumber,secondaryLandlineContact,permissionSecondaryLandlineNumber}};
 
         formDate.getButton().setOnClickListener(this);
         cnicOwner.getSpinner().setOnItemSelectedListener(this);
@@ -523,25 +523,27 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         boolean error=false;
         View view = null;
         Boolean flag = false;
-        if (cnicOwnerOther.getVisibility() == View.VISIBLE && App.get(cnicOwnerOther).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            cnicOwnerOther.getEditText().setError(getString(R.string.empty_field));
-            cnicOwnerOther.getEditText().requestFocus();
-            error = true;
-            view = null;
-        }
-        else if (cnicOwnerOther.getVisibility() == View.VISIBLE && App.get(cnicOwnerOther).trim().length() <= 0){
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            cnicOwnerOther.getEditText().setError(getString(R.string.empty_field));
-            cnicOwnerOther.getEditText().requestFocus();
-            error = true;
-            view = null;
+        if (cnicOwnerOther.getVisibility() == View.VISIBLE) {
+            if(App.get(cnicOwnerOther).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                cnicOwnerOther.getEditText().setError(getString(R.string.empty_field));
+                cnicOwnerOther.getEditText().requestFocus();
+                error = true;
+                view = null;
+            }
+            else if(App.get(cnicOwnerOther).trim().length() <= 0){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                cnicOwnerOther.getEditText().setError(getString(R.string.ctb_spaces_only));
+                cnicOwnerOther.getEditText().requestFocus();
+                error = true;
+                view = null;
+            }
         }
         if(!App.get(secondaryLandlineNumber1).isEmpty() || !App.get(secondaryLandlineNumber2).isEmpty()){
             String secondaryLandline = secondaryLandlineNumber1.getEditText().getText().toString() + secondaryLandlineNumber2.getEditText().getText().toString();

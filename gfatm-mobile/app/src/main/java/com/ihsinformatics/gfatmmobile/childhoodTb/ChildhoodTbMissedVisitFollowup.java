@@ -238,6 +238,51 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
     @Override
     public boolean validate() {
         boolean error = false;
+        if(otherUnableToContact.getVisibility()==View.VISIBLE){
+            if(App.get(otherUnableToContact).isEmpty()){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                otherUnableToContact.getEditText().setError(getString(R.string.empty_field));
+                otherUnableToContact.getEditText().requestFocus();
+                error = true;
+            }
+            if(!App.get(otherUnableToContact).isEmpty()){
+                if (App.get(otherUnableToContact).trim().length() <= 0) {
+                    if (App.isLanguageRTL())
+                        gotoPage(0);
+                    else
+                        gotoPage(0);
+                    otherUnableToContact.getEditText().setError(getString(R.string.ctb_spaces_only));
+                    otherUnableToContact.getEditText().requestFocus();
+                    error = true;
+                }
+            }
+        }
+        if(otherMissedVisitReason.getVisibility()==View.VISIBLE){
+            if(App.get(otherMissedVisitReason).isEmpty()){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                otherMissedVisitReason.getEditText().setError(getString(R.string.empty_field));
+                otherMissedVisitReason.getEditText().requestFocus();
+                error = true;
+            }
+            if(!App.get(otherMissedVisitReason).isEmpty()){
+                if (App.get(otherMissedVisitReason).trim().length() <= 0) {
+                    if (App.isLanguageRTL())
+                        gotoPage(0);
+                    else
+                        gotoPage(0);
+                    otherMissedVisitReason.getEditText().setError(getString(R.string.ctb_spaces_only));
+                    otherMissedVisitReason.getEditText().requestFocus();
+                    error = true;
+                }
+            }
+        }
+
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);

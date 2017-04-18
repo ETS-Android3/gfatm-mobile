@@ -275,7 +275,13 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-            } else
+            } else if (secondDateCalendar.before(formDateCalendar)) {
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.ctb_test_date_less_than_form_date), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", date).toString());
+            }else
                 testDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
         }
     }

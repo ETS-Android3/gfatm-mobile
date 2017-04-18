@@ -133,13 +133,13 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        cartridgeId = new TitledEditText(context,null,getResources().getString(R.string.ctb_cartridge_id),"","",4,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,false);
+        cartridgeId = new TitledEditText(context,null,getResources().getString(R.string.ctb_cartridge_id),"","",10,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,false);
         resultRecieveDate = new TitledButton(context, null, getResources().getString(R.string.ctb_date_result_recieve), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         resultRecieveDate.setTag("resultRecieveDate");
-        geneXpertMTBResult = new TitledSpinner(context,null,getResources().getString(R.string.ctb_mtb_result),getResources().getStringArray(R.array.ctb_mtb_result_list),getResources().getString(R.string.ctb_mtb_not_detected),App.HORIZONTAL);
-        mtbBurden = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_mtb_burden),getResources().getStringArray(R.array.ctb_mtb_burden_list),getResources().getString(R.string.ctb_very_low),App.HORIZONTAL,App.VERTICAL);
-        mtbRIFResult = new TitledSpinner(context,null,getResources().getString(R.string.ctb_mtb_rif_result),getResources().getStringArray(R.array.ctb_mtb_rif_result_list),getResources().getString(R.string.ctb_not_detected),App.HORIZONTAL);
-        errorCode = new TitledEditText(context,null,getResources().getString(R.string.ctb_error_code),"","",8,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,false);
+        geneXpertMTBResult = new TitledSpinner(context,null,getResources().getString(R.string.ctb_mtb_result),getResources().getStringArray(R.array.ctb_mtb_result_list),getResources().getString(R.string.ctb_mtb_not_detected),App.HORIZONTAL,true);
+        mtbBurden = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_mtb_burden),getResources().getStringArray(R.array.ctb_mtb_burden_list),getResources().getString(R.string.ctb_very_low),App.HORIZONTAL,App.VERTICAL,true);
+        mtbRIFResult = new TitledSpinner(context,null,getResources().getString(R.string.ctb_mtb_rif_result),getResources().getStringArray(R.array.ctb_mtb_rif_result_list),getResources().getString(R.string.ctb_not_detected),App.HORIZONTAL,true);
+        errorCode = new TitledEditText(context,null,getResources().getString(R.string.ctb_error_code),"","",4,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,true);
 
 
         views = new View[]{formDate.getButton(),resultRecieveDate.getButton(),geneXpertMTBResult.getSpinner(),mtbBurden.getRadioGroup(),mtbRIFResult.getSpinner(),
@@ -227,6 +227,17 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
         }
         else{
             errorCode.getEditText().setError(null);
+        }
+        if(App.get(cartridgeId).length()<10){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            cartridgeId.getEditText().setError(getString(R.string.ctb_cartridge_id_length));
+            cartridgeId.getEditText().requestFocus();
+            error = true;
+        }else{
+            cartridgeId.getEditText().setError(null);
         }
         if (error) {
 

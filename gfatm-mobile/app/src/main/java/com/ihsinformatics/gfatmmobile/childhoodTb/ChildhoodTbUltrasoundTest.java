@@ -157,11 +157,11 @@ public class ChildhoodTbUltrasoundTest extends AbstractFormActivity implements R
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        testId = new TitledEditText(context,null,getResources().getString(R.string.ctb_test_id),"","",11,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,false);
+        testId = new TitledEditText(context,null,getResources().getString(R.string.ctb_test_id),"","",20,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,true);
         formType = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_type_of_form),getResources().getStringArray(R.array.ctb_type_of_form_list),null,App.HORIZONTAL,App.VERTICAL,true);
-        pointTestBeingDone = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_point_test_being_done),getResources().getStringArray(R.array.ctb_ultrasound_test_point_list),getResources().getString(R.string.ctb_diagnostic),App.VERTICAL,App.VERTICAL);
-        monthTreatment= new TitledEditText(context,null,getResources().getString(R.string.ctb_month_treatment),"1","",2,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,false);
-        ultrasoundSite = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_site_ultrasound),getResources().getStringArray(R.array.ctb_site_of_ultrasound_list),getResources().getString(R.string.ctb_diagnostic),App.VERTICAL,App.VERTICAL);
+        pointTestBeingDone = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_point_test_being_done),getResources().getStringArray(R.array.ctb_ultrasound_test_point_list),getResources().getString(R.string.ctb_diagnostic),App.VERTICAL,App.VERTICAL,true);
+        monthTreatment= new TitledEditText(context,null,getResources().getString(R.string.ctb_month_treatment),"","",2,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,true);
+        ultrasoundSite = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_site_ultrasound),getResources().getStringArray(R.array.ctb_site_of_ultrasound_list),getResources().getString(R.string.ctb_diagnostic),App.VERTICAL,App.VERTICAL,true);
         otherUltrasoundSite = new TitledEditText(context,null,getResources().getString(R.string.ctb_other_specify),"","",50,RegexUtil.ALPHA_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
         testOrderDate = new TitledButton(context, null, getResources().getString(R.string.ctb_test_order_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         testOrderDate.setTag("testOrderDate");
@@ -169,7 +169,7 @@ public class ChildhoodTbUltrasoundTest extends AbstractFormActivity implements R
         ultrasoundResultRecievedDate.setTag("ultrasoundResultRecievedDate");
         ultrasoundResult = new TitledSpinner(context,null,getResources().getString(R.string.ctb_ultrasound_result),getResources().getStringArray(R.array.ctb_ultrasound_result_list),null,App.VERTICAL);
         otherUltrasoundResult = new TitledEditText(context,null,getResources().getString(R.string.ctb_other_specify),"","",50,RegexUtil.ALPHA_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
-        ultrasoundInterpretation = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_ultrasound_interpretation),getResources().getStringArray(R.array.ctb_ultrasound_interpretation_list),getResources().getString(R.string.ctb_diagnostic),App.VERTICAL,App.VERTICAL);
+        ultrasoundInterpretation = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_ultrasound_interpretation),getResources().getStringArray(R.array.ctb_ultrasound_interpretation_list),getResources().getString(R.string.ctb_diagnostic),App.VERTICAL,App.VERTICAL,true);
         LinearLayout linearLayout = new LinearLayout(context);
         LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -225,13 +225,8 @@ public class ChildhoodTbUltrasoundTest extends AbstractFormActivity implements R
                                       int before, int count) {
                 try {
                     if (testId.getEditText().getText().length() > 0) {
-                        if (testId.getEditText().getText().length() < 11) {
-                            testId.getEditText().setError(getString(R.string.ctb_test_id_error));
-                            testIdView.setVisibility(View.INVISIBLE);
-                        } else {
-                            testIdView.setVisibility(View.VISIBLE);
-                            testIdView.setImageResource(R.drawable.ic_checked);
-                        }
+                        testIdView.setVisibility(View.VISIBLE);
+                        testIdView.setImageResource(R.drawable.ic_checked);
                     } else {
                         testIdView.setVisibility(View.INVISIBLE);
                     }
@@ -364,14 +359,45 @@ public class ChildhoodTbUltrasoundTest extends AbstractFormActivity implements R
                 monthTreatment.getEditText().setError(null);
             }
         }
-        if (otherUltrasoundSite.getVisibility() == View.VISIBLE && App.get(otherUltrasoundSite).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            otherUltrasoundSite.getEditText().setError(getString(R.string.empty_field));
-            otherUltrasoundSite.getEditText().requestFocus();
-            error = true;
+        if (otherUltrasoundSite.getVisibility() == View.VISIBLE) {
+            if(App.get(otherUltrasoundSite).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                otherUltrasoundSite.getEditText().setError(getString(R.string.empty_field));
+                otherUltrasoundSite.getEditText().requestFocus();
+                error = true;
+            }
+            else if(App.get(otherUltrasoundSite).trim().length() <= 0){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                otherUltrasoundSite.getEditText().setError(getString(R.string.ctb_spaces_only));
+                otherUltrasoundSite.getEditText().requestFocus();
+                error = true;
+            }
+        }
+        if(otherUltrasoundResult.getVisibility()==View.VISIBLE){
+            if(App.get(otherUltrasoundResult).isEmpty()){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                otherUltrasoundResult.getEditText().setError(getString(R.string.empty_field));
+                otherUltrasoundResult.getEditText().requestFocus();
+                error = true;
+            }
+            else if(App.get(otherUltrasoundResult).trim().length() <= 0){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                otherUltrasoundResult.getEditText().setError(getString(R.string.ctb_spaces_only));
+                otherUltrasoundResult.getEditText().requestFocus();
+                error = true;
+            }
         }
         if (error) {
 

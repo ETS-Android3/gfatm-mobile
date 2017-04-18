@@ -414,86 +414,194 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                 height.getEditText().requestFocus();
                 error = true;
             }
-            if (generalAppearanceExplanation.getVisibility() == View.VISIBLE && App.get(generalAppearanceExplanation).isEmpty()) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                generalAppearanceExplanation.getEditText().setError(getString(R.string.empty_field));
-                generalAppearanceExplanation.getEditText().requestFocus();
-                error = true;
+            if (generalAppearanceExplanation.getVisibility() == View.VISIBLE) {
+                if(App.get(generalAppearanceExplanation).isEmpty()) {
+                    if (App.isLanguageRTL())
+                        gotoPage(0);
+                    else
+                        gotoPage(0);
+                    generalAppearanceExplanation.getEditText().setError(getString(R.string.empty_field));
+                    generalAppearanceExplanation.getEditText().requestFocus();
+                    error = true;
+                }
+                else if(App.get(generalAppearanceExplanation).trim().length() <= 0){
+                    if (App.isLanguageRTL())
+                        gotoPage(0);
+                    else
+                        gotoPage(0);
+                    generalAppearanceExplanation.getEditText().setError(getString(R.string.ctb_spaces_only));
+                    generalAppearanceExplanation.getEditText().requestFocus();
+                    error = true;
+                }
             }
-            if (headEyeEearNoseThroatExplanation.getVisibility() == View.VISIBLE && App.get(headEyeEearNoseThroatExplanation).isEmpty()) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                headEyeEearNoseThroatExplanation.getEditText().setError(getString(R.string.empty_field));
-                headEyeEearNoseThroatExplanation.getEditText().requestFocus();
-                error = true;
+            if (headEyeEearNoseThroatExplanation.getVisibility() == View.VISIBLE) {
+                if(App.get(headEyeEearNoseThroatExplanation).isEmpty()) {
+                    if (App.isLanguageRTL())
+                        gotoPage(0);
+                    else
+                        gotoPage(0);
+                    headEyeEearNoseThroatExplanation.getEditText().setError(getString(R.string.empty_field));
+                    headEyeEearNoseThroatExplanation.getEditText().requestFocus();
+                    error = true;
+                }
+                else if(App.get(headEyeEearNoseThroatExplanation).trim().length() <= 0){
+                    if (App.isLanguageRTL())
+                        gotoPage(0);
+                    else
+                        gotoPage(0);
+                    headEyeEearNoseThroatExplanation.getEditText().setError(getString(R.string.ctb_spaces_only));
+                    headEyeEearNoseThroatExplanation.getEditText().requestFocus();
+                    error = true;
+                }
             }
-            if (lymphNodeExplanation.getVisibility() == View.VISIBLE && App.get(lymphNodeExplanation).isEmpty()) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                lymphNodeExplanation.getEditText().setError(getString(R.string.empty_field));
-                lymphNodeExplanation.getEditText().requestFocus();
-                error = true;
+            if (lymphNodeExplanation.getVisibility() == View.VISIBLE) {
+                if(App.get(lymphNodeExplanation).isEmpty()) {
+                    if (App.isLanguageRTL())
+                        gotoPage(0);
+                    else
+                        gotoPage(0);
+                    lymphNodeExplanation.getEditText().setError(getString(R.string.empty_field));
+                    lymphNodeExplanation.getEditText().requestFocus();
+                    error = true;
+                }
+                else if(App.get(lymphNodeExplanation).trim().length() <= 0){
+                    if (App.isLanguageRTL())
+                        gotoPage(0);
+                    else
+                        gotoPage(0);
+                    lymphNodeExplanation.getEditText().setError(getString(R.string.ctb_spaces_only));
+                    lymphNodeExplanation.getEditText().requestFocus();
+                    error = true;
+                }
             }
-            if (spineExplanation.getVisibility() == View.VISIBLE && App.get(spineExplanation).isEmpty()) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                spineExplanation.getEditText().setError(getString(R.string.empty_field));
-                spineExplanation.getEditText().requestFocus();
-                error = true;
+            if (spineExplanation.getVisibility() == View.VISIBLE) {
+                if(App.get(spineExplanation).isEmpty()) {
+                    if (App.isLanguageRTL())
+                        gotoPage(0);
+                    else
+                        gotoPage(0);
+                    spineExplanation.getEditText().setError(getString(R.string.empty_field));
+                    spineExplanation.getEditText().requestFocus();
+                    error = true;
+                }
+                else if(App.get(spineExplanation).trim().length() <= 0){
+                    if (App.isLanguageRTL())
+                        gotoPage(0);
+                    else
+                        gotoPage(0);
+                    spineExplanation.getEditText().setError(getString(R.string.ctb_spaces_only));
+                    spineExplanation.getEditText().requestFocus();
+                    error = true;
+                }
             }
-            if (jointsExplanation.getVisibility() == View.VISIBLE && App.get(jointsExplanation).isEmpty()) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                jointsExplanation.getEditText().setError(getString(R.string.empty_field));
-                jointsExplanation.getEditText().requestFocus();
-                error = true;
+            if (jointsExplanation.getVisibility() == View.VISIBLE) {
+                if(App.get(jointsExplanation).isEmpty()) {
+                    if (App.isLanguageRTL())
+                        gotoPage(0);
+                    else
+                        gotoPage(0);
+                    jointsExplanation.getEditText().setError(getString(R.string.empty_field));
+                    jointsExplanation.getEditText().requestFocus();
+                    error = true;
+                }
+                else if(App.get(jointsExplanation).trim().length() <= 0){
+                    if (App.isLanguageRTL())
+                        gotoPage(0);
+                    else
+                        gotoPage(0);
+                    jointsExplanation.getEditText().setError(getString(R.string.ctb_spaces_only));
+                    jointsExplanation.getEditText().requestFocus();
+                    error = true;
+                }
             }
-            if (skinExplanation.getVisibility() == View.VISIBLE && App.get(skinExplanation).isEmpty()) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                skinExplanation.getEditText().setError(getString(R.string.empty_field));
-                skinExplanation.getEditText().requestFocus();
-                error = true;
+            if (skinExplanation.getVisibility() == View.VISIBLE) {
+                if(App.get(skinExplanation).isEmpty()) {
+                    if (App.isLanguageRTL())
+                        gotoPage(0);
+                    else
+                        gotoPage(0);
+                    skinExplanation.getEditText().setError(getString(R.string.empty_field));
+                    skinExplanation.getEditText().requestFocus();
+                    error = true;
+                }
+                else if(App.get(skinExplanation).trim().length() <= 0){
+                    if (App.isLanguageRTL())
+                        gotoPage(0);
+                    else
+                        gotoPage(0);
+                    skinExplanation.getEditText().setError(getString(R.string.ctb_spaces_only));
+                    skinExplanation.getEditText().requestFocus();
+                    error = true;
+                }
             }
-            if (chestExplanation.getVisibility() == View.VISIBLE && App.get(chestExplanation).isEmpty()) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                chestExplanation.getEditText().setError(getString(R.string.empty_field));
-                chestExplanation.getEditText().requestFocus();
-                error = true;
+            if (chestExplanation.getVisibility() == View.VISIBLE) {
+                if(App.get(chestExplanation).isEmpty()) {
+                    if (App.isLanguageRTL())
+                        gotoPage(0);
+                    else
+                        gotoPage(0);
+                    chestExplanation.getEditText().setError(getString(R.string.empty_field));
+                    chestExplanation.getEditText().requestFocus();
+                    error = true;
+                }
+                else if(App.get(chestExplanation).trim().length() <= 0){
+                    if (App.isLanguageRTL())
+                        gotoPage(0);
+                    else
+                        gotoPage(0);
+                    chestExplanation.getEditText().setError(getString(R.string.ctb_spaces_only));
+                    chestExplanation.getEditText().requestFocus();
+                    error = true;
+                }
             }
-            if (abdominalExplanation.getVisibility() == View.VISIBLE && App.get(abdominalExplanation).isEmpty()) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                abdominalExplanation.getEditText().setError(getString(R.string.empty_field));
-                abdominalExplanation.getEditText().requestFocus();
-                error = true;
+            if (abdominalExplanation.getVisibility() == View.VISIBLE) {
+                if(App.get(abdominalExplanation).isEmpty()) {
+                    if (App.isLanguageRTL())
+                        gotoPage(0);
+                    else
+                        gotoPage(0);
+                    abdominalExplanation.getEditText().setError(getString(R.string.empty_field));
+                    abdominalExplanation.getEditText().requestFocus();
+                    error = true;
+                }
+                else if(App.get(abdominalExplanation).trim().length() <= 0){
+                    if (App.isLanguageRTL())
+                        gotoPage(0);
+                    else
+                        gotoPage(0);
+                    abdominalExplanation.getEditText().setError(getString(R.string.ctb_spaces_only));
+                    abdominalExplanation.getEditText().requestFocus();
+                    error = true;
+                }
             }
 
-            if (otherContactType.getVisibility() == View.VISIBLE && App.get(otherContactType).isEmpty()) {
+            if (otherContactType.getVisibility() == View.VISIBLE ) {
+                if(App.get(otherContactType).isEmpty()) {
+                    if (App.isLanguageRTL())
+                        gotoPage(0);
+                    else
+                        gotoPage(0);
+                    otherContactType.getEditText().setError(getString(R.string.empty_field));
+                    otherContactType.getEditText().requestFocus();
+                    error = true;
+                }
+                else if(App.get(otherContactType).trim().length() <= 0){
+                    if (App.isLanguageRTL())
+                        gotoPage(0);
+                    else
+                        gotoPage(0);
+                    otherContactType.getEditText().setError(getString(R.string.ctb_spaces_only));
+                    otherContactType.getEditText().requestFocus();
+                    error = true;
+                }
+            }
+            if(!App.get(doctorNotes).isEmpty() && App.get(doctorNotes).trim().length() <= 0){
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
                     gotoPage(0);
-                otherContactType.getEditText().setError(getString(R.string.empty_field));
-                otherContactType.getEditText().requestFocus();
+                doctorNotes.getEditText().setError(getString(R.string.ctb_spaces_only));
+                doctorNotes.getEditText().requestFocus();
                 error = true;
             }
 

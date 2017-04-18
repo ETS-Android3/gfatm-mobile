@@ -498,7 +498,7 @@
     <string name="ctb_anthelminthic_albendazole_dispersed">Anthelmintic (Albendazole) dispersed?</string>
     <string name="ctb_antibiotic_trial_dispersed">Antibiotic trial dispersed?</string>
     <string name="ctb_next_date_drug_dispersal">Next Date of Drug Dispersal</string>
-
+    <string name="ctb_test_date_less_than_form_date">Test date can not be less than form date</string>
 
 
     <string-array name="ctb_screening_location_list">
