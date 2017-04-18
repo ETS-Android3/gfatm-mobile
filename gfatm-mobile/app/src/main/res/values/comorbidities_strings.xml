@@ -379,6 +379,8 @@
     <string name="comorbidities_urinedr_crystals">Crystals:</string>
     <string name="comorbidities_urinedr_nexttestdate">Next Urine DR Test Date:</string>
 
+    <string name="comorbidities_urinedr_quantity_range">Range 0&#8211;50</string>
+    <string name="comorbidities_urinedr_quantity_limit">The value should be in the range of 0&#8211;50</string>
     <string name="comorbidities_urinedr_spgravity_ph_range">Range 0&#8211;10</string>
     <string name="comorbidities_urinedr_spgravity_ph_limit">The value should be in the range of 0&#8211;10</string>
     <string name="comorbidities_urinedr_sugar_ketones_uro_range">Range 0&#8211;400</string>
@@ -423,6 +425,7 @@
     <string name="comorbidities_creatinine_result_limit">The value should be in the range of 0.0&#8211;99.9</string>
     <string name="comorbidities_creatinine_result_range">Range 0.0&#8211;99.9</string>
     <string name="comorbidities_creatinine_result">Creatinine Result (mg/dl):</string>
+    <string name="comorbidities_creatinine_nexttestdate">Next Creatinine Test Date:</string>
 
     <!-- Strings for ComorbiditiesLipidTestForm -->
     <string name="comorbidities_lipid_test_order">Test Order Lipid</string>
@@ -445,12 +448,14 @@
     <string name="comorbidities_lipid_test_vldl_range">Range 30&#8211;400</string>
     <string name="comorbidities_lipid_test_non_hdl_limit">The value should be in the range of 1&#8211;300</string>
     <string name="comorbidities_lipid_test_non_hdl_range">Range 1&#8211;300</string>
+    <string name="comorbidities_lipid_nexttestdate">Next Lipid Test Date:</string>
 
     <!-- Strings for MicroalbuminTestForm -->
     <string name="comorbidities_microalbumin_test_order">Test Order Microalbumin</string>
     <string name="comorbidities_microalbumin_test_result">Test Result Microalbumin</string>
     <string name="comorbidities_microalbumin_result">Urine Microalbumin (mg/l):</string>
     <string name="comorbidities_upto_two_decimal_places_error">The value is not valid. It must be up to two decimal places</string>
+    <string name="comorbidities_microalbumin_nexttestdate">Next Microalbumin Test Date:</string>
 
     <!-- Strings for ComorbiditiesDiabetesEducationForm-->
     <string name="comorbidities_education_form_educational_plan">Educational Plan</string>
@@ -548,6 +553,7 @@
     <string name="comorbidities_diabetes_followup_isulinN">Dosage of Insulin N (Units/Day):</string>
     <string name="comorbidities_diabetes_followup_isulinR">Dosage of Insulin R (Units/Day:</string>
     <string name="comorbidities_diabetes_followup_next_scheduled_visit">Next Scheduled Visit:</string>
+    <string name="next_visit_date_cannot_before_form_date">This Date can\'t be before FormDate.</string>
 
     <string name="comorbidities_diabetes_followup_non_compliance_options_side_effects">Side Effects</string>
     <string name="comorbidities_diabetes_followup_non_compliance_options_misunderstandings">Misunderstanding of Prescriptions</string>
@@ -921,6 +927,8 @@
 
     <!-- Strings for ComorbiditiesAssessmentFormMentalHealth -->
     <string name="comorbidities_assessment_form_MH_rescreening">Type of rescreening:</string>
+    <string name="comorbidities_assessment_form_MH_appointment_date">Next Appointment Date:</string>
+    <string name="next_date_past">Date can\'t be in past.</string>
 
     <string name="comorbidities_assessment_form_MH_rescreening_options_6th_session">6th session</string>
     <string name="comorbidities_assessment_form_MH_rescreening_options_end">End of treatment</string>
@@ -1002,7 +1010,7 @@
 
     <!-- Strings for ComorbiditiesDrugDisbursement -->
     <string name="comorbidities_drug_disbursement_adherence_text">ADHERENCE</string>
-    <string name="comorbidities_drug_disbursement_adherence">Adherence:</string>
+    <string name="comorbidities_drug_disbursement_adherence">No. of doses missed in the past month?</string>
     <string name="comorbidities_drug_disbursement_drug_distribution">DRUG DISTRIBUTION RECORD</string>
     <string name="comorbidities_drug_disbursement_drug_distribution_number">Drug Distribution Number:</string>
     <string name="comorbidities_drug_disbursement_drug_distribution_number_range">Range 0&#8211;999</string>
