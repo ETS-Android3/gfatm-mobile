@@ -112,7 +112,7 @@ public class Location extends AbstractModel {
                         comorbiditiesLocation = "Y";
                     } else if (display.contains("PET Location") && display.contains("true")) {
                         petLocation = "Y";
-                    } else if (display.contains("Childhood TB Location") && display.contains("true")) {
+                    } else if (display.contains("ChildhoodTB Location") && display.contains("true")) {
                         childhoodTbLocation = "Y";
                     } else if (display.contains("PMDT Location") && display.contains("true")) {
                         pmdtLocation = "Y";
