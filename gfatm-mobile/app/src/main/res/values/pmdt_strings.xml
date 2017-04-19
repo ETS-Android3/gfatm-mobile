@@ -197,7 +197,7 @@
     <string name="pmdt_dot_last_prescribed_day">Did the Treatment Supporter provide DOT on last prescribed day prior to this visit?</string>
     <string name="pmdt_administer_injections">Does the Treatment Supporter administer injectables?</string>
     <string name="pmdt_missed_dose">Did the patient miss any drug dose since the last monitoring visit?</string>
-    <string name="pmdt_reason_missed_dose">If yes, then why</string>
+    <string name="pmdt_reason_missed_dose">If yes, then why?</string>
     <string name="pmdt_other_reason_missed_dose">If reason for missed dose \'other\', then specify</string>
     <string name="pmdt_practice_infection_control">Does the Treatment Supporter practice appropriate infection control measures when he visits the patient?</string>
     <string name="pmdt_family_practice_infection_control">Does the patient and his/her family practice infection control measures at home?</string>
@@ -524,7 +524,7 @@
     <string-array name="pmdt_contact_relation_with_index">
         <item>@string/pmdt_mother</item>
         <item>@string/pmdt_father</item>
-        <item>@string/pmdt_husband</item>
+        <item>@string/pmdt_son</item>
         <item>@string/pmdt_daughter</item>
         <item>@string/pmdt_brother</item>
         <item>@string/pmdt_sister</item>
