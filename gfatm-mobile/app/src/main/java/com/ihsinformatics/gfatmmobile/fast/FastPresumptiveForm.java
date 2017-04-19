@@ -133,13 +133,13 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
 
         // first page views...
         if (App.getPatient().getPerson().getAge() <= 15) {
-
+            submitButton.setEnabled(false);
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
             alertDialog.setMessage(getString(R.string.fast_patient_age_less_than_15));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-            DrawableCompat.setTint(clearIcon, color);
+           // DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_error));
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
@@ -327,7 +327,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
                 final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
                 alertDialog.setMessage(getString(R.string.form_error));
                 Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-                DrawableCompat.setTint(clearIcon, color);
+             //   DrawableCompat.setTint(clearIcon, color);
                 alertDialog.setIcon(clearIcon);
                 alertDialog.setTitle(getResources().getString(R.string.title_error));
                 alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
