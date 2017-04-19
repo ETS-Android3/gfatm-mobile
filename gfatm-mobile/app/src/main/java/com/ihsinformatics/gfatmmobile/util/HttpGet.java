@@ -10,6 +10,7 @@ import com.ihsinformatics.gfatmmobile.model.Concept;
 import com.ihsinformatics.gfatmmobile.model.EncounterType;
 import com.ihsinformatics.gfatmmobile.model.Location;
 import com.ihsinformatics.gfatmmobile.model.PersonAttributeType;
+import com.ihsinformatics.gfatmmobile.model.User;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -18,6 +19,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -39,13 +41,14 @@ public class HttpGet {
     private static final String PATIENT_RESOURCE = "patient";
     private static final String PROVIDER = "provider";
     private static final String ATTRIBUTE = "attribute";
+    private static final String ADDRESS = "address";
     private static final String PROGRAM_RESOURCE = "program";
     private static final String CONCEPT_RESOURCE = "concept";
     private static final String ENCOUNTER_RESOURCE = "encounter";
     private static final String LOCATION_RESOURCE = "location";
     private static final String USER_RESOURCE = "user";
     private static final String PRIVILEGE_RESOURCE = "privelge";
-    private static final String ROLE_RESOURCE = "role";
+    private static final String ROLE_RESOURCE = "roles";
     private static final String PATIENT_IDENTIFIER_TYPE_RESOURCE = "patientidentifiertype";
     private static final String IDENTIFIER_TYPE_RESOURCE = "patientidentifiertype";
     private static final String PERSON_ATTRIBUTE_TYPE_RESOURCE = "personattributetype";
@@ -207,6 +210,30 @@ public class HttpGet {
         return get(requestUri);
     }
 
+    private JSONArray getJsonArray(String resourceName, String parameter, String content) {
+        JSONArray jsonArray  = null;
+
+        if (content == null)
+            return null;
+
+        String http = "";
+        if (App.getSsl().equalsIgnoreCase("Enabled"))
+            http = "https://";
+        else
+            http = "http://";
+
+        content = content.trim();
+        content = content.replaceAll(" ", "%20");
+        try {
+            String requestUri = http + serverAdress + "/openmrs/ws/rest/v1/" + resourceName + "/" + parameter + "/" + content;
+            JSONObject obj = get(requestUri);
+            jsonArray = obj.getJSONArray("results");
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return jsonArray;
+    }
+
     private JSONObject getJsonObjectByUuid(String resourceName, String content) {
         if (content == null)
             return null;
@@ -270,6 +297,25 @@ public class HttpGet {
                 http = "http://";
 
             String requestUri = http + serverAdress + "/openmrs/ws/rest/v1/" + resourceName + "?v=custom:(" + variables + ")";
+            JSONObject obj = get(requestUri);
+            jsonArray = obj.getJSONArray("results");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return jsonArray;
+    }
+
+    private JSONArray getCustomJsonArray(String resourceName, String variables, String param1, String param2) {
+        JSONArray jsonArray = null;
+        try {
+
+            String http = "";
+            if (App.getSsl().equalsIgnoreCase("Enabled"))
+                http = "https://";
+            else
+                http = "http://";
+
+            String requestUri = http + serverAdress + "/openmrs/ws/rest/v1/" + resourceName + "?v=custom:(" + variables + ")" + "&" + param1 + "=" + param2;
             JSONObject obj = get(requestUri);
             jsonArray = obj.getJSONArray("results");
         } catch (Exception e) {
@@ -537,8 +583,23 @@ public class HttpGet {
         return getJsonObjectByName(PROVIDER_RESOURCE, userId);
     }
 
+    public JSONArray getUsersByRole(String role){
+        return getCustomJsonArray(USER_RESOURCE, "uuid,username,person", ROLE_RESOURCE, role);
+    }
+
     public JSONObject getAllPersonAttributesByPersonUuid(String personUuid) {
         return getJsonObject(PERSON_RESOURCE, personUuid, ATTRIBUTE);
+    }
+
+    public JSONObject getPersonAddressByPersonUuid(String personUuid) {
+        JSONObject json = null;
+        JSONArray jsonArray = getJsonArray(PERSON_RESOURCE, personUuid, ADDRESS);
+        try {
+            json = jsonArray.getJSONObject(0);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return json;
     }
 
 }
