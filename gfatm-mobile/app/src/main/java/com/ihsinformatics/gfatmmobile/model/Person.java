@@ -151,17 +151,17 @@ public class Person extends AbstractModel {
             JSONObject addressObject = json.getJSONObject("preferredAddress");
             if (addressObject.getString("address1") != null)
                 address1 = addressObject.getString("address1");
-            if (addressObject.getString("address2") == null)
+            if (addressObject.getString("address2") != null)
                 address2 = addressObject.getString("address2");
-            if (addressObject.getString("stateProvince") == null)
+            if (addressObject.getString("stateProvince") != null)
                 stateProvince = addressObject.getString("stateProvince");
-            if (addressObject.getString("cityVillage") == null)
+            if (addressObject.getString("cityVillage") != null)
                 cityVillage = addressObject.getString("cityVillage");
-            if (addressObject.getString("countyDistrict") == null)
+            if (addressObject.getString("countyDistrict") != null)
                 countyDistrict = addressObject.getString("countyDistrict");
-            if (addressObject.getString("country") == null)
+            if (addressObject.getString("country") != null)
                 country = addressObject.getString("country");
-            if (addressObject.getString("address3") == null)
+            if (addressObject.getString("address3") != null)
                 address3 = addressObject.getString("address3");
 
             JSONArray attributes = json.getJSONArray("attributes");

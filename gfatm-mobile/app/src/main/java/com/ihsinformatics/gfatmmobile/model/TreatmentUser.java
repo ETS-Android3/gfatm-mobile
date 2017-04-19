@@ -4,7 +4,6 @@ package com.ihsinformatics.gfatmmobile.model;
  * Created by Rabbia on 1/9/2017.
  */
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,54 +18,36 @@ You can also access the license on the internet at the address: http://www.gnu.o
 
 Interactive Health Solutions, hereby disclaims all copyright interest in this program written by the contributors. */
 
-public class User extends AbstractModel {
+public class TreatmentUser extends AbstractModel {
     private String username;
     private String fullName;
-    private String roles;
-    private String identifier;
+    private String personUuid;
 
 
-    public User(String uuid, String username, String fullName, String roles, String identifier) {
+    public TreatmentUser(String uuid, String username, String fullName, String personUuid) {
         super(uuid);
         this.username = username;
         this.fullName = fullName;
-        this.roles = roles;
-        this.identifier = identifier;
+        this.personUuid = personUuid;
     }
 
-    public static User parseJSONObject(JSONObject json) {
-        User user = null;
+    public static TreatmentUser parseJSONObject(JSONObject json) {
+        TreatmentUser user = null;
         String uuid = "";
         String username = "";
         String fullName = "";
-        String roles = "";
-        String identifier = "";
+        String personUuid = "";
         try {
             uuid = json.getString("uuid");
             username = json.getString("username");
-            identifier = json.getString("systemId");
             JSONObject person = json.getJSONObject("person");
             fullName = person.getString("display");
-            JSONArray rolesArray = json.getJSONArray("roles");
-
-            for (int i = 0; i < rolesArray.length(); i++) {
-
-                JSONObject jsonobject = rolesArray.getJSONObject(i);
-
-                if (!jsonobject.get("name").equals("Provider")) {
-                    if (!roles.equals(""))
-                        roles = roles + " , ";
-
-                    roles = roles + jsonobject.get("name");
-                }
-
-            }
-
+            personUuid = person.getString("uuid");
         } catch (JSONException e) {
             e.printStackTrace();
             user = null;
         }
-        user = new User(uuid, username, fullName, roles, identifier);
+        user = new TreatmentUser(uuid, username, fullName, personUuid);
         return user;
     }
 
@@ -99,21 +80,6 @@ public class User extends AbstractModel {
         this.fullName = fullName;
     }
 
-    public String getRoles() {
-        return roles;
-    }
-
-    public void setRoles(String roles) {
-        this.roles = roles;
-    }
-
-    public String getIdentifier() {
-        return identifier;
-    }
-
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
 
     @Override
     public String toString() {
