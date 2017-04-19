@@ -35,6 +35,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ihsinformatics.gfatmmobile.model.Address;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
@@ -179,7 +180,9 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
 
 
         /*ServerService serverService = new ServerService(getApplicationContext());
-        serverService.submitOfflineForms();*/
+        Address address = serverService.getPreferredAddressByPersonUuid("ac5b13a6-6412-4c7e-b234-1b9e255ca407");
+
+        String i = address.getAddress1();*/
 
         /*ServerService serverService = new ServerService(getApplicationContext());
         Object[][] encounterTypes = serverService.getAllEncounterTypesFromLocalDB();
