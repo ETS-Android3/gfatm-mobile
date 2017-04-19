@@ -30,6 +30,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -166,7 +167,7 @@ public class PmdtContactBaselineScreening extends AbstractFormActivity implement
         linearLayout.addView(validateIndexPatientIdView);
 
         relationWithIndex = new TitledSpinner(context, null, getResources().getString(R.string.pmdt_relation_with_index_patient), getResources().getStringArray(R.array.pmdt_contact_relation_with_index), getResources().getString(R.string.pmdt_other), App.VERTICAL, true);
-        otherRelationWithIndex = new TitledEditText(context, null, getResources().getString(R.string.pmdt_relation_with_index_patient_other), "", "", 15, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        otherRelationWithIndex = new TitledEditText(context, null, getResources().getString(R.string.pmdt_relation_with_index_patient_other), "", "", 15, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         contactCough = new TitledRadioGroup(context, getResources().getString(R.string.pmdt_title_contact_verbal_symptom_screening), getResources().getString(R.string.pmdt_contact_cough), getResources().getStringArray(R.array.pmdt_yes_no_refused_unknown), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, true);
         contactCoughDuration = new TitledSpinner(context, null, getResources().getString(R.string.pmdt_contact_cough_duration), getResources().getStringArray(R.array.pmdt_cough_durations), getResources().getString(R.string.pmdt_less_than_two_weeks), App.VERTICAL);
         contactHaemoptysis = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_contact_haemoptysis), getResources().getStringArray(R.array.pmdt_yes_no_refused_unknown), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL);
@@ -267,7 +268,6 @@ public class PmdtContactBaselineScreening extends AbstractFormActivity implement
 
     @Override
     public void updateDisplay() {
-        baselineContactScreeningDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
 
         if (snackbar != null)
             snackbar.dismiss();
@@ -372,21 +372,25 @@ public class PmdtContactBaselineScreening extends AbstractFormActivity implement
     @Override
     public boolean submit() {
 
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean saveFlag = bundle.getBoolean("save", false);
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
+            } else {
+                endTime = new Date();
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
             bundle.putBoolean("save", false);
+        } else {
+            endTime = new Date();
+            observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
 
-        endTime = new Date();
-
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
-
-        observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
 
@@ -419,10 +423,15 @@ public class PmdtContactBaselineScreening extends AbstractFormActivity implement
                             (App.get(contactCoughDuration).equals(getResources().getString(R.string.pmdt_more_than_three_weeks)) ? "COUGH LASTING MORE THAN 3 WEEKS" :
                                     (App.get(contactCoughDuration).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSED")))});
 
+        String contactDuration = App.get(contactCoughDuration);
+
         if (contactHaemoptysis.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"HEMOPTYSIS", App.get(contactHaemoptysis).equals(getResources().getString(R.string.yes)) ? "YES" :
                     (App.get(contactHaemoptysis).equals(getResources().getString(R.string.no)) ? "NO" :
                             (App.get(contactHaemoptysis).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+
+        String haemoptysis = App.get(contactHaemoptysis);
+
 
         observations.add(new String[]{"FEVER", App.get(contactFever).equals(getResources().getString(R.string.yes)) ? "YES" :
                 (App.get(contactFever).equals(getResources().getString(R.string.no)) ? "NO" :
@@ -448,10 +457,14 @@ public class PmdtContactBaselineScreening extends AbstractFormActivity implement
                 (App.get(contactGlandularSwelling).equals(getResources().getString(R.string.no)) ? "NO" :
                         (App.get(contactGlandularSwelling).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
 
+        String patientReferred = App.get(contactReferred);
+
         observations.add(new String[]{"PATIENT REFERRED", App.get(contactReferred).equals(getResources().getString(R.string.yes)) ? "YES" :
                 (App.get(contactReferred).equals(getResources().getString(R.string.no)) ? "NO" : "UNKNOWN")});
 
-        observations.add(new String[]{"REFERRING FACILITY NAME", App.get(referredFacilityAutoCompleteList)});
+
+        if (facilityLinearLayout.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"REFERRING FACILITY NAME", App.get(referredFacilityAutoCompleteList)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -782,10 +795,202 @@ public class PmdtContactBaselineScreening extends AbstractFormActivity implement
 
     @Override
     public void refill(int encounterId) {
+
         OfflineForm offlineForm = serverService.getOfflineFormById(encounterId);
         String date = offlineForm.getFormDate();
-        // TODO: complete this
+        ArrayList<String[][]> obsValue = offlineForm.getObsValue();
+        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
+        for (int i = 0; i < obsValue.size(); i++) {
+
+            String[][] obs = obsValue.get(i);
+
+            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
+                timeTakeToFill = obs[0][1];
+            } else if (obs[0][0].equals("PATIENT ID OF INDEX CASE")) {
+                indexPatientId.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("BASELINE CONTACT SCREENING DATE")) {
+                String secondDate = obs[0][1];
+                secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
+                baselineContactScreeningDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+
+            } else if (obs[0][0].equals("FAMILY MEMBER")) {
+                String value = obs[0][1].equals("MOTHER") ? getResources().getString(R.string.pet_mother) :
+                        (obs[0][1].equals("FATHER") ? getResources().getString(R.string.pet_father) :
+                                (obs[0][1].equals("MATERNAL GRANDMOTHER") ? getResources().getString(R.string.pet_maternal_grandmother) :
+                                        (obs[0][1].equals("MATERNAL GRANDFATHER") ? getResources().getString(R.string.pet_maternal_grandfather) :
+                                                (obs[0][1].equals("PATERNAL GRANDMOTHER") ? getResources().getString(R.string.pet_paternal_grandmother) :
+                                                        (obs[0][1].equals("PATERNAL GRANDFATHER") ? getResources().getString(R.string.pet_paternal_grandfather) :
+                                                                (obs[0][1].equals("BROTHER") ? getResources().getString(R.string.pet_brother) :
+                                                                        (obs[0][1].equals("SISTER") ? getResources().getString(R.string.pet_sister) :
+                                                                                (obs[0][1].equals("SON") ? getResources().getString(R.string.pet_son) :
+                                                                                        obs[0][1].equals("DAUGHTER") ? getResources().getString(R.string.pet_daughter) :
+                                                                                                obs[0][1].equals("SPOUSE") ? getResources().getString(R.string.pet_spouse) :
+                                                                                                        obs[0][1].equals("AUNT") ? getResources().getString(R.string.pet_aunt) :
+                                                                                                                obs[0][1].equals("UNCLE") ? getResources().getString(R.string.pet_uncle) : getResources().getString(R.string.pet_other)))))))));
+                relationWithIndex.getSpinner().selectValue(value);
+            } else if (obs[0][0].equals("OTHER FAMILY MEMBER")) {
+                otherRelationWithIndex.getEditText().setText(obs[0][1]);
+                otherRelationWithIndex.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("COUGH")) {
+                for (RadioButton rb : contactCough.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.refused)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("COUGH DURATION")) {
+
+                String value = obs[0][1].equals("COUGH LASTING LESS THAN 2 WEEKS") ? getResources().getString(R.string.pmdt_less_than_two_weeks) :
+                        (obs[0][1].equals("COUGH LASTING MORE THAN 2 WEEKS") ? getResources().getString(R.string.pmdt_two_to_three_weeks) :
+                                (obs[0][1].equals("COUGH LASTING MORE THAN 3 WEEKS") ? getResources().getString(R.string.pmdt_more_than_three_weeks) :
+                                        (obs[0][1].equals("UNKNOWN") ? getResources().getString(R.string.unknown) : getResources().getString(R.string.refused))));
+
+                contactCoughDuration.getSpinner().selectValue(value);
+                contactCoughDuration.setVisibility(View.VISIBLE);
+
+            } else if (obs[0][0].equals("HEMOPTYSIS")) {
+                for (RadioButton rb : contactHaemoptysis.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.refused)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                contactHaemoptysis.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("FEVER")) {
+                for (RadioButton rb : contactFever.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.refused)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("WEIGHT LOSS")) {
+                for (RadioButton rb : contactWeightLoss.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.refused)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("LOSS OF APPETITE")) {
+                for (RadioButton rb : contactReducedAppetite.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.refused)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("REDUCED MOBILITY")) {
+                for (RadioButton rb : contactReducedActivity.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.refused)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("NIGHT SWEATS")) {
+                for (RadioButton rb : contactNightSweats.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.refused)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("SWELLING")) {
+                for (RadioButton rb : contactGlandularSwelling.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.refused)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("PATIENT REFERRED")) {
+                for (RadioButton rb : contactReferred.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("REFERRING FACILITY NAME")) {
+                referredFacilityAutoCompleteList.setText(obs[0][1]);
+                facilityLinearLayout.setVisibility(View.VISIBLE);
+            }
+        }
+        submitButton.setEnabled(true);
     }
 
     @Override
@@ -812,10 +1017,9 @@ public class PmdtContactBaselineScreening extends AbstractFormActivity implement
         baselineContactScreeningDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
 
         otherRelationWithIndex.setVisibility(View.GONE);
-        contactCoughDuration.setVisibility(View.GONE);
-        contactHaemoptysis.setVisibility(View.GONE);
-        facilityLinearLayout.setVisibility(View.GONE);
-        referredFacilityAutoCompleteList.setVisibility(View.GONE);
+//        contactCoughDuration.setVisibility(View.GONE);    // should be visible, since cough default value is Yes
+//        contactHaemoptysis.setVisibility(View.GONE);      // should be visible, since cough default value is Yes
+//        facilityLinearLayout.setVisibility(View.GONE);    // should be visible, since facilityReferred default value is Yes
         submitButton.setEnabled(false);
 
         Bundle bundle = this.getArguments();
