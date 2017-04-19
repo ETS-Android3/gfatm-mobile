@@ -214,9 +214,6 @@ public class Forms{
     /********************************
      * PMDT
      ********************************/
-    // Form names created for HTML form based encounters
-    public static final String PMDT_TREATMENT_INITIATION = "Treatment Initiation";
-
     public static final String PMDT_PATIENT_REGISTRAITON = "Patient Registration";
     public static final String PMDT_PROVIDER_REGISTRAITON = "Provider Registration";
     public static final String PMDT_BASIC_MANAGEMENT_UNIT_VISIT = "Basic Management Unit Visit";
@@ -230,7 +227,10 @@ public class Forms{
     public static final String PMDT_NUTRITIONAL_SUPPORT_RECEIVING = "Nutritional Support Receiving";
     public static final String PMDT_CONTACT_REGISTRY = "Contact Registry";
     public static final String PMDT_CONTACT_BASELINE_SCREENING = "Contact Baseline Screening";
-    
+
+    // Form names created for HTML form based encounters
+    public static final String PMDT_TREATMENT_INITIATION = "Treatment Initiation";
+
     public static final FormsObject pmdtPatientRegistration = new FormsObject(PMDT_PATIENT_REGISTRAITON, PmdtPatientRegistrationForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.PMDT_PROGRAM_MANAGER});
     public static final FormsObject pmdtProviderRegistration = new FormsObject(PMDT_PROVIDER_REGISTRAITON, PmdtProviderRegistration.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.PMDT_PROGRAM_MANAGER});
     public static final FormsObject pmdtBasicManagementUnitVisit = new FormsObject(PMDT_BASIC_MANAGEMENT_UNIT_VISIT, PmdtBasicManagementUnitVistForm.class, R.drawable.pet_treatment_adherence, FormTypeColor.OTHER_FORM, new String[]{Roles.PMDT_PROGRAM_MANAGER});
