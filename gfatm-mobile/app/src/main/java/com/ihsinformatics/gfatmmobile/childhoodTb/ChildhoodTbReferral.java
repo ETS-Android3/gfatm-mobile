@@ -214,6 +214,44 @@ public class ChildhoodTbReferral extends AbstractFormActivity implements RadioGr
     @Override
     public boolean validate() {
         boolean error = false;
+        if(otherReferralTransferReason.getVisibility()==View.VISIBLE){
+            if(App.get(otherReferralTransferReason).isEmpty()){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                otherReferralTransferReason.getEditText().setError(getString(R.string.empty_field));
+                otherReferralTransferReason.getEditText().requestFocus();
+                error = true;
+            } else if (App.get(otherReferralTransferReason).trim().length() <= 0){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                otherReferralTransferReason.getEditText().setError(getString(R.string.ctb_spaces_only));
+                otherReferralTransferReason.getEditText().requestFocus();
+                error = true;
+            }
+        }
+        if(otherReferralTransferLocation.getVisibility()==View.VISIBLE){
+            if(App.get(otherReferralTransferLocation).isEmpty()){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                otherReferralTransferLocation.getEditText().setError(getString(R.string.empty_field));
+                otherReferralTransferLocation.getEditText().requestFocus();
+                error = true;
+            } else if (App.get(otherReferralTransferLocation).trim().length() <= 0){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                otherReferralTransferLocation.getEditText().setError(getString(R.string.ctb_spaces_only));
+                otherReferralTransferLocation.getEditText().requestFocus();
+                error = true;
+            }
+        }
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);

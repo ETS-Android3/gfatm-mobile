@@ -208,7 +208,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         formDate = new TitledButton(context, "Section A: TB Treatment Initiation ", getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         weightAtBaseline = new TitledEditText(context, null, getResources().getString(R.string.ctb_weight_at_baseline), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
-        patientHaveTb = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_have_tb), getResources().getStringArray(R.array.ctb_patient_have_tb_list),null, App.HORIZONTAL, App.VERTICAL);
+        patientHaveTb = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_have_tb), getResources().getStringArray(R.array.ctb_patient_have_tb_list),null, App.HORIZONTAL, App.VERTICAL,true);
         regDate = new TitledButton(context, null, getResources().getString(R.string.ctb_registration_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         cnicLinearLayout = new LinearLayout(context);
         cnicLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -228,7 +228,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         treatmentInitiated = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_are_you_intiating_treatment), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL,true);
         reasonTreatmentNotIniated = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_reason_treatment_not_intiated), getResources().getStringArray(R.array.ctb_reason_treatment_not_intiated_list), getResources().getString(R.string.ctb_patient_refused_treatment), App.VERTICAL,true);
         initiatingAdditionalTreatment = new TitledCheckBoxes(context, null, getResources().getString(R.string.ctb_initiating_additional_treatment), getResources().getStringArray(R.array.ctb_pediasure_vitamin_iron_anthelminthic), null, App.VERTICAL, App.VERTICAL);
-        patientCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_category), getResources().getStringArray(R.array.ctb_patient_category3_list), getResources().getString(R.string.ctb_categoryI), App.VERTICAL, App.VERTICAL);
+        patientCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_category), getResources().getStringArray(R.array.ctb_patient_category3_list), getResources().getString(R.string.ctb_categoryI), App.VERTICAL, App.VERTICAL,true);
         weight = new TitledEditText(context, null, getResources().getString(R.string.ctb_patient_weight), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
         regimen = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_regimen), getResources().getStringArray(R.array.ctb_regimen_list), getResources().getString(R.string.ctb_rhz), App.HORIZONTAL, App.VERTICAL);
         typeFixedDosePrescribed = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_type_of_fixed_dose), getResources().getStringArray(R.array.ctb_type_of_fixed_dose_list), null, App.VERTICAL);
@@ -241,10 +241,10 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
 
         histopathologicalEvidence = new TitledRadioGroup(context, "If clinically diagnosed, specify evidence", getResources().getString(R.string.ctb_histopathologiacal_evidence), getResources().getStringArray(R.array.yes_no_options), null, App.VERTICAL, App.VERTICAL);
         radiologicalEvidence = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_radiological_evidence), getResources().getStringArray(R.array.yes_no_options), null, App.VERTICAL, App.VERTICAL);
-        nameOfSupporter = new TitledEditText(context, null, getResources().getString(R.string.ctb_treatment_supporter), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL,false);
+        nameOfSupporter = new TitledEditText(context, null, getResources().getString(R.string.ctb_treatment_supporter), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL,true);
         mobileLinearLayout = new LinearLayout(context);
         mobileLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
-        mobileNumber1 = new TitledEditText(context, null, getResources().getString(R.string.ctb_treatment_supporter_phone_number), "", "####", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        mobileNumber1 = new TitledEditText(context, null, getResources().getString(R.string.ctb_treatment_supporter_phone_number), "", "####", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         mobileLinearLayout.addView(mobileNumber1);
         mobileNumber2 = new TitledEditText(context, null, "-", "", "#######", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         mobileLinearLayout.addView(mobileNumber2);
@@ -489,6 +489,90 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             }
         });
 
+        weight.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.length()>0){
+                    int value = Integer.parseInt(s.toString());
+
+                    //CURRENT FORMULATION
+                    if(value>=4 && value<=6){
+                        currentTabletsofRHZ.getRadioGroup().getButtons().get(0).setChecked(true);
+                        currentTabletsofE.getRadioGroup().getButtons().get(0).setChecked(true);
+                    }
+                    else if(value>=7 && value<=10){
+                        currentTabletsofRHZ.getRadioGroup().getButtons().get(1).setChecked(true);
+                        currentTabletsofE.getRadioGroup().getButtons().get(1).setChecked(true);
+
+                    }
+                    else if(value>=11 && value<=14){
+                        currentTabletsofRHZ.getRadioGroup().getButtons().get(2).setChecked(true);
+                        currentTabletsofE.getRadioGroup().getButtons().get(2).setChecked(true);
+
+                    }
+                    else if(value>=15 && value<=19){
+                        currentTabletsofRHZ.getRadioGroup().getButtons().get(3).setChecked(true);
+                        currentTabletsofE.getRadioGroup().getButtons().get(3).setChecked(true);
+
+                    }
+                    else if(value>=20 && value<=24){
+                        //Value for 5 tablets
+                    }
+                    else if(value>=25){
+                        typeFixedDosePrescribed.getSpinner().selectValue(getResources().getString(R.string.ctb_adult_formulation));
+                    }
+
+
+                    //NEW FORMULATION
+                    if(value>=4 && value<=7){
+                        newTabletsofRHZ.getRadioGroup().getButtons().get(0).setChecked(true);
+                        newTabletsofE.getRadioGroup().getButtons().get(0).setChecked(true);
+                    }
+                    else if(value>=8 && value<=11){
+                        newTabletsofRHZ.getRadioGroup().getButtons().get(1).setChecked(true);
+                        newTabletsofE.getRadioGroup().getButtons().get(1).setChecked(true);
+                    }
+                    else if(value>=12 && value<=15){
+                        newTabletsofRHZ.getRadioGroup().getButtons().get(2).setChecked(true);
+                        newTabletsofE.getRadioGroup().getButtons().get(2).setChecked(true);
+                    }
+                    else if(value>=16 && value<=24){
+                        newTabletsofRHZ.getRadioGroup().getButtons().get(3).setChecked(true);
+                        newTabletsofE.getRadioGroup().getButtons().get(3).setChecked(true);
+                    }
+                    else if(value>=25){
+                        typeFixedDosePrescribed.getSpinner().selectValue(getResources().getString(R.string.ctb_adult_formulation));
+                    }
+
+
+
+                    //ADULT FORMULATION
+                    if(value>=26 && value<=29){
+                        adultFormulationofHRZE.getRadioGroup().getButtons().get(1).setChecked(true);
+                    }
+                    else if(value>=30 && value<=39){
+                        adultFormulationofHRZE.getRadioGroup().getButtons().get(1).setChecked(true);
+                    }
+                    else if(value>=40 && value<=54){
+                        adultFormulationofHRZE.getRadioGroup().getButtons().get(2).setChecked(true);
+                    }
+                    else if(value>=55 && value<=70){
+                        adultFormulationofHRZE.getRadioGroup().getButtons().get(3).setChecked(true);
+                    }
+                }
+            }
+        });
+
         resetViews();
 
     }
@@ -638,36 +722,69 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             }
 
         }
-        if (cnicOwnerOther.getVisibility() == View.VISIBLE && App.get(cnicOwnerOther).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            cnicOwnerOther.getEditText().setError(getString(R.string.empty_field));
-            cnicOwnerOther.getEditText().requestFocus();
-            error = true;
+        if (cnicOwnerOther.getVisibility() == View.VISIBLE) {
+            if(App.get(cnicOwnerOther).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                cnicOwnerOther.getEditText().setError(getString(R.string.empty_field));
+                cnicOwnerOther.getEditText().requestFocus();
+                error = true;
+            }
+            else if(App.get(cnicOwnerOther).trim().length() <= 0){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                cnicOwnerOther.getEditText().setError(getString(R.string.ctb_spaces_only));
+                cnicOwnerOther.getEditText().requestFocus();
+                error = true;
+            }
         }
 
 
-        if (tbRegisterationNumber.getVisibility() == View.VISIBLE && App.get(tbRegisterationNumber).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            tbRegisterationNumber.getEditText().setError(getString(R.string.empty_field));
-            tbRegisterationNumber.getEditText().requestFocus();
-            error = true;
+        if (tbRegisterationNumber.getVisibility() == View.VISIBLE) {
+            if(App.get(tbRegisterationNumber).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                tbRegisterationNumber.getEditText().setError(getString(R.string.empty_field));
+                tbRegisterationNumber.getEditText().requestFocus();
+                error = true;
+            }
+            else if(App.get(tbRegisterationNumber).trim().length() <= 0){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                tbRegisterationNumber.getEditText().setError(getString(R.string.ctb_spaces_only));
+                tbRegisterationNumber.getEditText().requestFocus();
+                error = true;
+            }
         }
 
 
-        if (extraPulmonarySiteOther.getVisibility() == View.VISIBLE && App.get(extraPulmonarySiteOther).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            extraPulmonarySiteOther.getEditText().setError(getString(R.string.empty_field));
-            extraPulmonarySiteOther.getEditText().requestFocus();
-            error = true;
+        if (extraPulmonarySiteOther.getVisibility() == View.VISIBLE) {
+            if(App.get(extraPulmonarySiteOther).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                extraPulmonarySiteOther.getEditText().setError(getString(R.string.empty_field));
+                extraPulmonarySiteOther.getEditText().requestFocus();
+                error = true;
+            }
+            else if(App.get(extraPulmonarySiteOther).trim().length() <= 0){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                extraPulmonarySiteOther.getEditText().setError(getString(R.string.ctb_spaces_only));
+                extraPulmonarySiteOther.getEditText().requestFocus();
+                error = true;
+            }
         }
         if (weight.getVisibility() == View.VISIBLE && App.get(weight).isEmpty()) {
             if (App.isLanguageRTL())
@@ -748,6 +865,15 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 eligibleForIpt.getRadioGroup().requestFocus();
                 error = true;
             }
+        }
+        if(!App.get(doctorNotes).isEmpty() && App.get(doctorNotes).trim().length() <= 0){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            doctorNotes.getEditText().setError(getString(R.string.ctb_spaces_only));
+            doctorNotes.getEditText().requestFocus();
+            error = true;
         }
 
         if (error) {
@@ -899,7 +1025,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             observations.add(new String[]{"CURRENT FORMULATION OF TABLETS OF RHZ", App.get(currentTabletsofRHZ)});
         }
         if(currentTabletsofE.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"CURRENT FORMULATION OF TABLETS OF E", App.get(currentTabletsofE)});
+            observations.add(new String[]{"CURRENT FORMULATION OF TABLETS OF  E", App.get(currentTabletsofE)});
         }
         if(newTabletsofE.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"NEW FORMULATION OF TABLETS OF E", App.get(newTabletsofE)});
@@ -1935,6 +2061,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 weight.setVisibility(View.VISIBLE);
                 regimen.setVisibility(View.VISIBLE);
                 typeFixedDosePrescribed.setVisibility(View.VISIBLE);
+                currentTabletsofRHZ.setVisibility(View.VISIBLE);
                 initiatingAdditionalTreatment.setVisibility(View.VISIBLE);
                 typeOfDiagnosis.setVisibility(View.VISIBLE);
                 nameOfSupporter.setVisibility(View.VISIBLE);

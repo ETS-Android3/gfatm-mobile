@@ -310,6 +310,8 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
                 moInitiatingAdditionalTreatmentAntibiotic.setVisibility(View.VISIBLE);
             }
         });
+
+
         resetViews();
 
     }

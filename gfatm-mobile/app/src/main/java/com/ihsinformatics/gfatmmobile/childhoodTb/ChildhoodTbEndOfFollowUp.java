@@ -241,24 +241,48 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
             firstName.getEditText().requestFocus();
             error = true;
         }
+        if (!App.get(firstName).isEmpty()) {
+            if(App.get(firstName).trim().length() <= 0) {
+                firstName.getEditText().setError(getString(R.string.ctb_spaces_only));
+                firstName.getEditText().requestFocus();
+                error = true;
+            }
+        }
         if (App.get(lastName).isEmpty()) {
             lastName.getEditText().setError(getString(R.string.empty_field));
             lastName.getEditText().requestFocus();
             error = true;
+        }
+        if (!App.get(lastName).isEmpty()) {
+            if(App.get(lastName).trim().length() <= 0) {
+                lastName.getEditText().setError(getString(R.string.ctb_spaces_only));
+                lastName.getEditText().requestFocus();
+                error = true;
+            }
         }
         if (App.get(drConfirmation).equalsIgnoreCase(getResources().getString(R.string.yes)) && App.get(enrsNumber).isEmpty()) {
             enrsNumber.getEditText().setError(getString(R.string.empty_field));
             enrsNumber.getEditText().requestFocus();
             error = true;
         }
-        if(otherReasonTreatmentNotIntiated.getVisibility()==View.VISIBLE && App.get(otherReasonTreatmentNotIntiated).isEmpty()){
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            otherReasonTreatmentNotIntiated.getEditText().setError(getString(R.string.empty_field));
-            otherReasonTreatmentNotIntiated.getEditText().requestFocus();
-            error = true;
+        if(otherReasonTreatmentNotIntiated.getVisibility()==View.VISIBLE ){
+            if(App.get(otherReasonTreatmentNotIntiated).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                otherReasonTreatmentNotIntiated.getEditText().setError(getString(R.string.empty_field));
+                otherReasonTreatmentNotIntiated.getEditText().requestFocus();
+                error = true;
+            }else if(App.get(otherReasonTreatmentNotIntiated).trim().length() <= 0){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                otherReasonTreatmentNotIntiated.getEditText().setError(getString(R.string.ctb_spaces_only));
+                otherReasonTreatmentNotIntiated.getEditText().requestFocus();
+                error = true;
+            }
         }
         if (App.get(drConfirmation).equalsIgnoreCase(getResources().getString(R.string.yes)) && !App.get(enrsNumber).isEmpty()) {
             if (!RegexUtil.isValidErnsNumber(App.get(enrsNumber))) {
@@ -276,14 +300,25 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
 
             enrsNumber.clearFocus();
         }
-        if(otherReasonRemarks.getVisibility()==View.VISIBLE && App.get(otherReasonRemarks).isEmpty()){
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            otherReasonRemarks.getEditText().setError(getString(R.string.empty_field));
-            otherReasonRemarks.getEditText().requestFocus();
-            error = true;
+        if(otherReasonRemarks.getVisibility()==View.VISIBLE ){
+            if(App.get(otherReasonRemarks).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                otherReasonRemarks.getEditText().setError(getString(R.string.empty_field));
+                otherReasonRemarks.getEditText().requestFocus();
+                error = true;
+            }
+            else if(App.get(otherReasonRemarks).trim().length() <= 0){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                otherReasonRemarks.getEditText().setError(getString(R.string.ctb_spaces_only));
+                otherReasonRemarks.getEditText().requestFocus();
+                error = true;
+            }
         }
 
 

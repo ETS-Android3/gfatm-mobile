@@ -15,7 +15,9 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -255,6 +257,117 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         returnVisitDate.getButton().setOnClickListener(this);
         treatmentInitiationDate.getButton().setOnClickListener(this);
 
+
+        weight.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.length()>0){
+                    int value = Integer.parseInt(s.toString());
+
+                    //CURRENT FORMULATION
+                    if(value>=4 && value<=6){
+                        currentTabletsOfContinuationRH.getRadioGroup().getButtons().get(0).setChecked(true);
+                        currentTabletsOfContinuationE.getRadioGroup().getButtons().get(0).setChecked(true);
+                        currentTabletsofRHZ.getRadioGroup().getButtons().get(0).setChecked(true);
+                        currentTabletsofE.getRadioGroup().getButtons().get(0).setChecked(true);
+                    }
+                    else if(value>=7 && value<=10){
+                        currentTabletsOfContinuationRH.getRadioGroup().getButtons().get(1).setChecked(true);
+                        currentTabletsOfContinuationE.getRadioGroup().getButtons().get(1).setChecked(true);
+                        currentTabletsofRHZ.getRadioGroup().getButtons().get(1).setChecked(true);
+                        currentTabletsofE.getRadioGroup().getButtons().get(1).setChecked(true);
+
+                    }
+                    else if(value>=11 && value<=14){
+                        currentTabletsOfContinuationRH.getRadioGroup().getButtons().get(2).setChecked(true);
+                        currentTabletsOfContinuationE.getRadioGroup().getButtons().get(2).setChecked(true);
+                        currentTabletsofRHZ.getRadioGroup().getButtons().get(2).setChecked(true);
+                        currentTabletsofE.getRadioGroup().getButtons().get(2).setChecked(true);
+
+                    }
+                    else if(value>=15 && value<=19){
+                        currentTabletsOfContinuationRH.getRadioGroup().getButtons().get(3).setChecked(true);
+                        currentTabletsOfContinuationE.getRadioGroup().getButtons().get(3).setChecked(true);
+                        currentTabletsofRHZ.getRadioGroup().getButtons().get(3).setChecked(true);
+                        currentTabletsofE.getRadioGroup().getButtons().get(3).setChecked(true);
+
+                    }
+                    else if(value>=20 && value<=24){
+                       //Value for 5 tablets
+                    }
+                    else if(value>=25){
+                        typeFixedDosePrescribedIntensive.getSpinner().selectValue(getResources().getString(R.string.ctb_adult_formulation));
+                        typeFixedDosePrescribedContinuation.getSpinner().selectValue(getResources().getString(R.string.ctb_adult_formulation_continuation_rh));
+                    }
+
+
+                    //NEW FORMULATION
+                    if(value>=4 && value<=7){
+                        newTabletsofRHZ.getRadioGroup().getButtons().get(0).setChecked(true);
+                        newTabletsofE.getRadioGroup().getButtons().get(0).setChecked(true);
+                        newTabletsOfContinuationRH.getRadioGroup().getButtons().get(0).setChecked(true);
+                        newTabletsOfContinuationE.getRadioGroup().getButtons().get(0).setChecked(true);
+                    }
+                    else if(value>=8 && value<=11){
+                        newTabletsofRHZ.getRadioGroup().getButtons().get(1).setChecked(true);
+                        newTabletsofE.getRadioGroup().getButtons().get(1).setChecked(true);
+                        newTabletsOfContinuationRH.getRadioGroup().getButtons().get(1).setChecked(true);
+                        newTabletsOfContinuationE.getRadioGroup().getButtons().get(1).setChecked(true);
+                    }
+                    else if(value>=12 && value<=15){
+                        newTabletsofRHZ.getRadioGroup().getButtons().get(2).setChecked(true);
+                        newTabletsofE.getRadioGroup().getButtons().get(2).setChecked(true);
+                        newTabletsOfContinuationRH.getRadioGroup().getButtons().get(2).setChecked(true);
+                        newTabletsOfContinuationE.getRadioGroup().getButtons().get(2).setChecked(true);
+                    }
+                    else if(value>=16 && value<=24){
+                        newTabletsofRHZ.getRadioGroup().getButtons().get(3).setChecked(true);
+                        newTabletsofE.getRadioGroup().getButtons().get(3).setChecked(true);
+                        newTabletsOfContinuationRH.getRadioGroup().getButtons().get(3).setChecked(true);
+                        newTabletsOfContinuationE.getRadioGroup().getButtons().get(3).setChecked(true);
+                    }
+                    else if(value>=25){
+                        typeFixedDosePrescribedIntensive.getSpinner().selectValue(getResources().getString(R.string.ctb_adult_formulation));
+                        typeFixedDosePrescribedContinuation.getSpinner().selectValue(getResources().getString(R.string.ctb_adult_formulation_continuation_rh));
+                    }
+
+
+
+                    //ADULT FORMULATION
+                    if(value>=26 && value<=29){
+                        adultFormulationOfContinuationRHE.getRadioGroup().getButtons().get(1).setChecked(true);
+                        adultFormulationOfContinuationRH.getRadioGroup().getButtons().get(1).setChecked(true);
+                        adultFormulationofHRZE.getRadioGroup().getButtons().get(1).setChecked(true);
+                    }
+                    else if(value>=30 && value<=39){
+                        adultFormulationOfContinuationRHE.getRadioGroup().getButtons().get(1).setChecked(true);
+                        adultFormulationOfContinuationRH.getRadioGroup().getButtons().get(1).setChecked(true);
+                        adultFormulationofHRZE.getRadioGroup().getButtons().get(1).setChecked(true);
+                    }
+                    else if(value>=40 && value<=54){
+                        adultFormulationOfContinuationRHE.getRadioGroup().getButtons().get(2).setChecked(true);
+                        adultFormulationOfContinuationRH.getRadioGroup().getButtons().get(2).setChecked(true);
+                        adultFormulationofHRZE.getRadioGroup().getButtons().get(2).setChecked(true);
+                    }
+                    else if(value>=55 && value<=70){
+                        adultFormulationOfContinuationRHE.getRadioGroup().getButtons().get(3).setChecked(true);
+                        adultFormulationOfContinuationRH.getRadioGroup().getButtons().get(3).setChecked(true);
+                        adultFormulationofHRZE.getRadioGroup().getButtons().get(3).setChecked(true);
+                    }
+                }
+            }
+        });
+
         resetViews();
 
     }
@@ -461,7 +574,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
             observations.add(new String[]{"CURRENT FORMULATION OF TABLETS OF RHZ", App.get(currentTabletsofRHZ)});
         }
         if(currentTabletsofE.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"CURRENT FORMULATION OF TABLETS OF E", App.get(currentTabletsofE)});
+            observations.add(new String[]{"CURRENT FORMULATION OF TABLETS OF  E", App.get(currentTabletsofE)});
         }
         if(newTabletsofE.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"NEW FORMULATION OF TABLETS OF E", App.get(newTabletsofE)});
@@ -488,7 +601,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
             observations.add(new String[]{"CURRENT FORMULATION OF TABLETS OF E FOR CONTINUATION PHASE", App.get(currentTabletsOfContinuationE)});
         }
         if(newTabletsOfContinuationRH.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"EW FORMULATION OF TABLETS OF RH FOR CONTINUATION PHASE", App.get(newTabletsOfContinuationRH)});
+            observations.add(new String[]{"NEW FORMULATION OF TABLETS OF RH FOR CONTINUATION PHASE", App.get(newTabletsOfContinuationRH)});
         }
         if(newTabletsOfContinuationE.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"NEW FORMULATION OF TABLET OF E FOR CONTINUATION PHASE", App.get(newTabletsOfContinuationE)});
@@ -844,7 +957,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                     }
                 }
                 currentTabletsOfContinuationE.setVisibility(View.VISIBLE);
-            }else if (obs[0][0].equals("EW FORMULATION OF TABLETS OF RH FOR CONTINUATION PHASE")) {
+            }else if (obs[0][0].equals("NEW FORMULATION OF TABLETS OF RH FOR CONTINUATION PHASE")) {
                 for (RadioButton rb : newTabletsOfContinuationRH.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
                         rb.setChecked(true);
