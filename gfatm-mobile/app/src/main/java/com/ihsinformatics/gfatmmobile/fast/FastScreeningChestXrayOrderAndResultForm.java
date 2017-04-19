@@ -331,16 +331,6 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
             error = true;
         }
 
-        if (radiologistRemarks.getVisibility() == View.VISIBLE && radiologistRemarks.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            radiologistRemarks.getEditText().setError(getString(R.string.empty_field));
-            radiologistRemarks.getEditText().requestFocus();
-            error = true;
-        }
-
 
         if (error) {
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
@@ -352,7 +342,7 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
                 alertDialog.setMessage(getString(R.string.form_error));
             }
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-            DrawableCompat.setTint(clearIcon, color);
+          //  DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_error));
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),

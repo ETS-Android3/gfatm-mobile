@@ -161,8 +161,8 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         cnicOwner = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_whose_nic_is_this), getResources().getStringArray(R.array.fast_whose_nic_is_this_list), getResources().getString(R.string.fast_self), App.VERTICAL);
         otherCnicOwner = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         addressProvided = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_provided_their_address), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
-        addressHouse = new TitledEditText(context, null, getResources().getString(R.string.fast_address_1), "", "", 10, RegexUtil.ADD_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        addressStreet = new TitledEditText(context, null, getResources().getString(R.string.fast_address_2), "", "", 50, RegexUtil.ADD_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        addressHouse = new TitledEditText(context, null, getResources().getString(R.string.fast_address_1), "", "", 10, RegexUtil.ADDRESS_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        addressStreet = new TitledEditText(context, null, getResources().getString(R.string.fast_address_2), "", "", 50, RegexUtil.ADDRESS_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         district = new TitledSpinner(context, "", getResources().getString(R.string.pet_district), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
         city = new TitledSpinner(context, "", getResources().getString(R.string.pet_city), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
         addressType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_type_of_address_is_this), getResources().getStringArray(R.array.fast_type_of_address_list), getResources().getString(R.string.fast_perminant), App.VERTICAL, App.VERTICAL);
@@ -261,6 +261,36 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
                 gotoPage(0);
             cnic1.getEditText().setError(getString(R.string.empty_field));
             cnic1.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (addressHouse.getEditText().getText().toString().length() > 0 && addressHouse.getEditText().getText().toString().trim().isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            addressHouse.getEditText().setError(getString(R.string.invalid_value));
+            addressHouse.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (addressStreet.getEditText().getText().toString().length() > 0 && addressStreet.getEditText().getText().toString().trim().isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            addressStreet.getEditText().setError(getString(R.string.invalid_value));
+            addressStreet.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (nearestLandmark.getEditText().getText().toString().length() > 0 && nearestLandmark.getEditText().getText().toString().trim().isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            nearestLandmark.getEditText().setError(getString(R.string.invalid_value));
+            nearestLandmark.getEditText().requestFocus();
             error = true;
         }
 
@@ -557,7 +587,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
             alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-            DrawableCompat.setTint(clearIcon, color);
+         //   DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_error));
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),

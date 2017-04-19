@@ -173,7 +173,7 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
         afbSmearResult.setTypeface(null, Typeface.BOLD);
         dateTestResult = new TitledButton(context, null, getResources().getString(R.string.fast_date_of_result_recieved), DateFormat.format("dd-MMM-yyyy", forthDateCalendar).toString(), App.HORIZONTAL);
         smearResult = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_smear_result), getResources().getStringArray(R.array.fast_smear_result_list), getResources().getString(R.string.fast_negative), App.VERTICAL);
-        noAfb = new TitledEditText(context, null, getResources().getString(R.string.fast_number_of_afb_seen_in_one_field), "", "", 10, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        noAfb = new TitledEditText(context, null, getResources().getString(R.string.fast_number_of_afb_seen_in_one_field), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
 
         LinearLayout linearLayout = new LinearLayout(context);
         LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
@@ -527,7 +527,7 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
             error = true;
         }
 
-        if (noAfb.getVisibility() == View.VISIBLE && noAfb.getEditText().getText().toString().trim().isEmpty()) {
+       /* if (noAfb.getVisibility() == View.VISIBLE && noAfb.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -535,7 +535,7 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
             noAfb.getEditText().setError(getString(R.string.empty_field));
             noAfb.getEditText().requestFocus();
             error = true;
-        }
+        }*/
 
 
         if (error) {
@@ -547,7 +547,7 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
                 alertDialog.setMessage(getString(R.string.form_error));
             }
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-            DrawableCompat.setTint(clearIcon, color);
+          //  DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_error));
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
