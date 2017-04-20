@@ -28,17 +28,19 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.util.Log;
 
+import com.ihsinformatics.gfatmmobile.App;
+
 /**
  * @author owais.hussain@irdinformatics.org
  *
  */
 @SuppressWarnings("deprecation")
-public class HttpRequest {
-    private static final String TAG = "HttpRequest";
+public class HttpGwtRequest {
+    private static final String TAG = "HttpGwtRequest";
     private final Context context;
     HttpClient httpClient = new DefaultHttpClient();
 
-    public HttpRequest(Context context) {
+    public HttpGwtRequest(Context context) {
         this.context = context;
     }
 
@@ -92,29 +94,51 @@ public class HttpRequest {
      * @return
      */
     public String clientPost(String postUri, String content) {
-        HttpsClient client = new HttpsClient(context);
+
         HttpUriRequest request = null;
         HttpResponse response = null;
         HttpEntity entity;
+
+        String http = "";
+        if (App.getSsl().equalsIgnoreCase("Enabled"))
+            http = "https://";
+        else
+            http = "http://";
+
+        postUri = http + postUri;
+
+        try {
+            if (App.getSsl().equalsIgnoreCase("Enabled")) {
+                HttpsClient client = new HttpsClient(context);
+
+                HttpPost httpPost = new HttpPost(postUri);
+                httpPost.setHeader("Accept", "application/json");
+                httpPost.setHeader("Content-Type", "application/json");
+                StringEntity stringEntity = new StringEntity(content);
+                httpPost.setEntity(stringEntity);
+                request = httpPost;
+
+                response = client.execute(request);
+            } else {
+                HttpClient client = new DefaultHttpClient();
+
+                HttpPost httpPost = new HttpPost(postUri);
+                httpPost.setHeader("Accept", "application/json");
+                httpPost.setHeader("Content-Type", "application/json");
+                StringEntity stringEntity = new StringEntity(content);
+                httpPost.setEntity(stringEntity);
+                request = httpPost;
+
+                response = client.execute(request);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         StringBuilder builder = new StringBuilder();
         String auth = "";
         try {
 
-			/*
-			 * Uncomment if you do not want to send data in Parameters HttpPost
-			 * httpPost = new HttpPost (postUri); httpPost.setHeader ("Accept",
-			 * "application/json"); httpPost.setHeader ("Content-Type",
-			 * "application/json"); StringEntity stringEntity = new StringEntity
-			 * (content); httpPost.setEntity (stringEntity); request = httpPost;
-			 */
-
-            HttpPost httpPost = new HttpPost(postUri);
-            httpPost.setHeader("Accept", "application/json");
-            httpPost.setHeader("Content-Type", "application/json");
-            StringEntity stringEntity = new StringEntity(content);
-            httpPost.setEntity(stringEntity);
-            request = httpPost;
-            response = client.execute(request);
             entity = response.getEntity();
             InputStream is = entity.getContent();
             BufferedReader bufferedReader = new BufferedReader(
@@ -136,7 +160,7 @@ public class HttpRequest {
         return builder.toString();
     }
 
-    public static String makeRequest(String uri, String json) {
+    /*public static String makeRequest(String uri, String json) {
         HttpURLConnection httpConnection = null;
         int responseCode = 0;
         String response = "";
@@ -193,11 +217,11 @@ public class HttpRequest {
             InputStream inputstream = resultentity.getContent();
             Header contentencoding = httpresponse
                     .getFirstHeader("Content-Encoding");
-			/*
+			*//*
 			 * if(contentencoding != null &&
 			 * contentencoding.getValue().equalsIgnoreCase("gzip")) {
 			 * inputstream = new GZIPInputStream(inputstream); }
-			 */
+			 *//*
             String resultstring = convertStreamToString(inputstream);
             inputstream.close();
             return resultstring;
@@ -209,7 +233,7 @@ public class HttpRequest {
             e.printStackTrace();
         }
         return null;
-    }
+    }*/
 
     private static String convertStreamToString(InputStream is) {
         String line = "";

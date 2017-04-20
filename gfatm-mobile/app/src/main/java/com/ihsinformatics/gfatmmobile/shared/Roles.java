@@ -45,6 +45,7 @@ public class Roles {
     public static final String CHILDHOODTB_MONITOR = "ChildhoodTB Monitor";
     public static final String CHILDHOODTB_NURSE = "ChildhoodTB Nurse";
     public static final String CHILDHOODTB_PROGRAM_ASSISTANT = "ChildhoodTB Program Assistant";
+    public static final String CHILDHOODTB_LAB_TECHNICIAN = "ChildhoodTB Lab Technician";
 
 
 }

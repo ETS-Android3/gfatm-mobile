@@ -30,6 +30,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.ihsinformatics.gfatmmobile.App;
+import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.model.Address;
 import com.ihsinformatics.gfatmmobile.model.Concept;
 import com.ihsinformatics.gfatmmobile.model.EncounterType;
@@ -85,7 +86,8 @@ public class ServerService {
     private static HttpGet httpGet;
     private static HttpPost httpPost;
     private static Context context;
-
+    private static String gfatmUri;
+    private HttpGwtRequest httpGwtClient;
 
     public ServerService(Context context) {
         this.context = context;
@@ -93,6 +95,10 @@ public class ServerService {
         httpGet = new HttpGet(App.getIp(), App.getPort(), context);
         httpPost = new HttpPost(App.getIp(), App.getPort(), context);
         dbUtil = new DatabaseUtil(this.context);
+
+        // GWT Connections
+        gfatmUri = App.getIp() + ":s" + App.getPort() + "/gfatmweb.jsp";
+        httpGwtClient = new HttpGwtRequest(this.context);
     }
     /**
      * Checks to see if the client is connected to any network (GPRS/Wi-Fi)
@@ -2315,6 +2321,73 @@ public class ServerService {
             }
         }
         return null;
+    }
+
+    public String submitToGwtApp(String encounterType, ContentValues values, String[][] observations) {
+
+        if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
+            if (!isURLReachable()) {
+                return null;
+            }
+        }
+
+        String response = "";
+
+        String formDate = values.getAsString("entereddate");
+        String location = values.getAsString("location");
+
+        try {
+
+            // Save Form
+            JSONObject json = new JSONObject();
+            json.put("app_ver", App.getVersion());
+            json.put("type", encounterType);
+            json.put("username", App.getUsername());
+            json.put("password", App.getPassword());
+            json.put("location", location);
+            json.put("entereddate", formDate);
+
+            JSONArray obs = new JSONArray();
+            for (int i = 0; i < observations.length; i++) {
+                if ("".equals(observations[i][0])
+                        || "".equals(observations[i][1]))
+                    continue;
+                JSONObject obsJson = new JSONObject();
+                obsJson.put("name", observations[i][0]);
+                obsJson.put("value", observations[i][1]);
+
+                obs.put(obsJson);
+            }
+            json.put("results", obs);
+
+            String val = json.toString();
+
+            // Save form locally if in offline mode
+            if (App.getMode().equalsIgnoreCase("OFFLINE")) {
+
+                //TODO: lllll
+
+                return "SUCCESS";
+            }
+
+            String res = httpGwtClient.clientPost(gfatmUri, val);
+            JSONObject jsonResponse = JSONParser.getJSONObject(res);
+            if (jsonResponse == null) {
+                return response;
+            }
+            if (jsonResponse.has("response")) {
+                String result = jsonResponse.getString("response");
+                if (jsonResponse.getString("response").equals("ERROR"))
+                    result = result + " <br> "
+                            + jsonResponse.getString("details");
+                return result;
+            }
+            return response;
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+            response = "POST_ERROR";
+        }
+        return response;
     }
 
 }

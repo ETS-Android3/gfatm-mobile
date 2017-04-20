@@ -168,6 +168,7 @@ public class Forms{
     public static final FormsObject fastTreatmentFollowupForm = new FormsObject(FAST_TREATMENT_FOLLOWUP_FORM, FastTreatmentFollowupForm.class, R.drawable.pet_treatment_adherence, FormTypeColor.FOLLOWUP_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SITE_MANAGER, Roles.FAST_FACILITATOR});
     public static final FormsObject fastMissedVisitFollowupForm = new FormsObject(FAST_MISSED_VISIT_FOLLOWUP_FORM, FastMissedFollowupForm.class, R.drawable.ctb_missed_followup, FormTypeColor.FOLLOWUP_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SITE_MANAGER, Roles.FAST_FACILITATOR});
     public static final FormsObject fastEndOfFollowupForm = new FormsObject(FAST_END_OF_FOLLOWUP_FORM, FastEndOfFollowupForm.class, R.drawable.pet_followup_end, FormTypeColor.TREATMENT_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SITE_MANAGER, Roles.FAST_FACILITATOR});
+
     /********************************
      * COMORBIDITIES
      ********************************/
@@ -244,6 +245,7 @@ public class Forms{
     public static final FormsObject pmdtNutritionalSupportReceiving = new FormsObject(PMDT_NUTRITIONAL_SUPPORT_RECEIVING, PmdtNutritionalSupportReceivingForm.class, R.drawable.pet_treatment_initiation, FormTypeColor.OTHER_FORM, new String[]{Roles.PMDT_PROGRAM_MANAGER});
     public static final FormsObject pmdtContactRegistry = new FormsObject(PMDT_CONTACT_REGISTRY, PmdtContactRegistryForm.class, R.drawable.pet_contact, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.PMDT_PROGRAM_MANAGER});
     public static final FormsObject pmdtContactBaselineScreening = new FormsObject(PMDT_CONTACT_BASELINE_SCREENING, PmdtContactBaselineScreening.class, R.drawable.pet_baseline_screening, FormTypeColor.TEST_FORM, new String[]{Roles.PMDT_PROGRAM_MANAGER});
+
     /********************************
      * CHILDHOOD TB
      ********************************/
@@ -262,9 +264,9 @@ public class Forms{
     public static final String CHILDHOODTB_TEST_INDICATION_FORM = "Test Indication Form";
     public static final FormsObject childhoodTb_test_indication_form = new FormsObject(CHILDHOODTB_TEST_INDICATION_FORM, ChildhoodTbTestIndicationForm.class, R.drawable.ctb_test_indication_form, FormTypeColor.TEST_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_MEDICAL_OFFICER});
     public static final String CHILDHOODTB_GXP_SPECIMEN_COLLECTION_FORM = "GXP Specimen Collection Form";
-    public static final FormsObject childhoodTb_gxp_specimen_form = new FormsObject(CHILDHOODTB_GXP_SPECIMEN_COLLECTION_FORM, ChildhoodTbGXPSpecimenCollection.class, R.drawable.pet_treatment_adherence, FormTypeColor.TEST_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER});
+    public static final FormsObject childhoodTb_gxp_specimen_form = new FormsObject(CHILDHOODTB_GXP_SPECIMEN_COLLECTION_FORM, ChildhoodTbGXPSpecimenCollection.class, R.drawable.pet_treatment_adherence, FormTypeColor.TEST_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER, Roles.CHILDHOODTB_LAB_TECHNICIAN});
     public static final String CHILDHOODTB_GXP_TEST = "GXP Test";
-    public static final FormsObject childhoodTb_gxp_test = new FormsObject(CHILDHOODTB_GXP_TEST, ChildhoodTbGXPTest.class, R.drawable.fast_result_form, FormTypeColor.TEST_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER});
+    public static final FormsObject childhoodTb_gxp_test = new FormsObject(CHILDHOODTB_GXP_TEST, ChildhoodTbGXPTest.class, R.drawable.fast_result_form, FormTypeColor.TEST_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER, Roles.CHILDHOODTB_LAB_TECHNICIAN});
     public static final String CHILDHOODTB_CXR_SCREENING_TEST = "CXR Screening Test";
     public static final FormsObject childhoodTb_cxr_screening_test = new FormsObject(CHILDHOODTB_CXR_SCREENING_TEST, ChildhoodTbCXRScreeningTest.class, R.drawable.ctb_xray, FormTypeColor.TEST_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_MEDICAL_OFFICER});
     public static final String CHILDHOODTB_AFB_SMEAR_ORDER_AND_RESULT = "AFB Smear Order & Result Form";
@@ -298,7 +300,6 @@ public class Forms{
     public static final FormsObject childhoodTb_end_of_followup = new FormsObject(CHILDHOODTB_END_OF_FOLLOWUP, ChildhoodTbEndOfFollowUp.class, R.drawable.pet_followup_end, FormTypeColor.FOLLOWUP_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER});
 
     /********************************************************************************************************************************/
-
 
     public static ArrayList<FormsObject> getPETFormList() {
 
@@ -428,7 +429,6 @@ public class Forms{
         childhoodtbList.add(childhoodTb_missed_visit_followup);
         childhoodtbList.add(childhoodTb_referral_and_transfer_form);
         childhoodtbList.add(childhoodTb_end_of_followup);
-
 
         return childhoodtbList;
 
