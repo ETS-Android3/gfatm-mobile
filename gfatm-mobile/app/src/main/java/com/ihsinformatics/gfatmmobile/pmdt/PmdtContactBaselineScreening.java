@@ -423,15 +423,10 @@ public class PmdtContactBaselineScreening extends AbstractFormActivity implement
                             (App.get(contactCoughDuration).equals(getResources().getString(R.string.pmdt_more_than_three_weeks)) ? "COUGH LASTING MORE THAN 3 WEEKS" :
                                     (App.get(contactCoughDuration).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSED")))});
 
-        String contactDuration = App.get(contactCoughDuration);
-
         if (contactHaemoptysis.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"HEMOPTYSIS", App.get(contactHaemoptysis).equals(getResources().getString(R.string.yes)) ? "YES" :
                     (App.get(contactHaemoptysis).equals(getResources().getString(R.string.no)) ? "NO" :
                             (App.get(contactHaemoptysis).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
-
-        String haemoptysis = App.get(contactHaemoptysis);
-
 
         observations.add(new String[]{"FEVER", App.get(contactFever).equals(getResources().getString(R.string.yes)) ? "YES" :
                 (App.get(contactFever).equals(getResources().getString(R.string.no)) ? "NO" :
@@ -1020,6 +1015,7 @@ public class PmdtContactBaselineScreening extends AbstractFormActivity implement
 //        contactCoughDuration.setVisibility(View.GONE);    // should be visible, since cough default value is Yes
 //        contactHaemoptysis.setVisibility(View.GONE);      // should be visible, since cough default value is Yes
 //        facilityLinearLayout.setVisibility(View.GONE);    // should be visible, since facilityReferred default value is Yes
+
         submitButton.setEnabled(false);
 
         Bundle bundle = this.getArguments();

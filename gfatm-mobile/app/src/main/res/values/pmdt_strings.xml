@@ -188,6 +188,7 @@
     </string-array>
 
     <!-- Treatment Coordinator Monitoring -->
+    <string name="pmdt_patient_assignment_missing">Treatment Supporter is not assigned to this patient. If Patient Assignment form is already submitted to openmrs, please try updating patient.</string>
     <string name="pmdt_patient_understand_tb_regimen">Does the patient understand his/her TB regimen (drug names and doses)?</string>
     <string name="pmdt_patient_know_side_effects">Does the patient know about common side effects of his/her TB drugs?</string>
     <string name="pmdt_treatment_supporter_provide_dot">How often does the patient\'s Treatment Supporter provide DOT?</string>
