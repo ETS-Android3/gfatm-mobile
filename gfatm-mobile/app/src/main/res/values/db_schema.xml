@@ -209,7 +209,8 @@
                 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 pid TEXT COLLATE NOCASE,
                 form TEXT NOT NULL COLLATE NOCASE,
-                test_id TEXT NOT NULL COLLATE NOCASE
+                test_id TEXT NOT NULL COLLATE NOCASE,
+                encounterDateTime TEXT NOT NULL COLLATE NOCASE
             );
 		</item>
 
