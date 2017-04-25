@@ -28,11 +28,11 @@
 
     <!-- Settings Values -->
     <string-array name="programs">
-        <item>@string/pmdt</item>
+        <!--<item>@string/pmdt</item>-->
         <item>@string/pet</item>
         <item>@string/fast</item>
-        <item>@string/comorbidities</item>
-        <item>@string/childhood_tb</item>
+        <!--<item>@string/comorbidities</item>
+        <item>@string/childhood_tb</item>-->
     </string-array>
 
     <string name="dark_theme">Dark theme</string>
@@ -339,19 +339,20 @@
     <string name="title_search_patient">Search Patient</string>
     <string name="title_create_new_patient">Create New Patient</string>
     <string name="title_update_database">Update Database</string>
+    <string name="title_feedback">Feedback</string>
     <string name="title_advanced">Advanced</string>
     <string name="title_others">Others</string>
     <string name="title_location">Location Setup</string>
 
-    <string name="support_contact_default" translatable="false">03132882088</string>
+    <string name="support_contact_default" translatable="false">+000000000000</string>
     <string name="support_email_default" translatable="false">developer.gfatm@gmail.com</string>
     <string name="city_default" translatable="false">Karachi</string>
     <string name="province_default" translatable="false">Sindh</string>
     <string name="country_default" translatable="false">Pakistan</string>
-    <!--<string name="ip_default" translatable="false">mrs.ghd.ihn.org.pk</string>
-    <string name="port_default" translatable="false">443</string>-->
-    <string name="ip_default" translatable="false">202.141.249.106</string>
-    <string name="port_default" translatable="false">9902</string>
+    <string name="ip_default" translatable="false">mrs.ghd.ihn.org.pk</string>
+    <string name="port_default" translatable="false">443</string>
+    <!--<string name="ip_default" translatable="false">202.141.249.106</string>
+    <string name="port_default" translatable="false">9902</string>-->
 
     <string name="support_contact">Support Contact</string>
     <string name="support_email">Support Email</string>
@@ -528,4 +529,13 @@
 
     <string name="gps_not_enabled">GPS is not enabled. Do you want to go to settings menu?</string>
     <string name="gps_settings">GPS settings</string>
+
+    <string name="complain">Complain</string>
+    <string name="suggestion">Suggestion</string>
+    <string name="other">Other</string>
+    <string-array name="feedback_types">
+        <item>@string/complain</item>
+        <item>@string/suggestion</item>
+        <item>@string/other</item>
+    </string-array>
 </resources>
