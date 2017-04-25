@@ -102,6 +102,9 @@ public class ReportFragment extends Fragment implements View.OnTouchListener {
                 linearLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
                 linearLayout.setDividerDrawable(getResources().getDrawable(R.drawable.divider));
 
+                final LinearLayout encounterDetailsLayout = new LinearLayout(context);
+                encounterDetailsLayout.setOrientation(LinearLayout.VERTICAL);
+
                 final LinearLayout moreLayout = new LinearLayout(context);
                 moreLayout.setOrientation(LinearLayout.VERTICAL);
 
@@ -112,7 +115,7 @@ public class ReportFragment extends Fragment implements View.OnTouchListener {
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
                 text.setLayoutParams(params);
                 text.setText(String.valueOf(encounters[i][0]));
-                text.setTextSize(getResources().getDimension(R.dimen.medium));
+                text.setTextSize(getResources().getDimension(R.dimen.small));
                 text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
                 text.setPadding(10, 0, 0, 0);
                 DrawableCompat.setTint(text.getCompoundDrawables()[2], color);
@@ -120,6 +123,7 @@ public class ReportFragment extends Fragment implements View.OnTouchListener {
                 linearLayout.addView(text);
 
                 verticalLayout.addView(linearLayout);
+                verticalLayout.addView(encounterDetailsLayout);
                 verticalLayout.addView(moreLayout);
 
                 LinearLayout ll1 = new LinearLayout(context);
@@ -144,7 +148,7 @@ public class ReportFragment extends Fragment implements View.OnTouchListener {
                 tv2.setLayoutParams(p1);
                 ll1.addView(tv2);
 
-                moreLayout.addView(ll1);
+                encounterDetailsLayout.addView(ll1);
 
                 LinearLayout ll2 = new LinearLayout(context);
                 ll2.setOrientation(LinearLayout.HORIZONTAL);
@@ -169,8 +173,9 @@ public class ReportFragment extends Fragment implements View.OnTouchListener {
                 tv4.setLayoutParams(p3);
                 ll2.addView(tv4);
 
-                moreLayout.addView(ll2);
+                encounterDetailsLayout.addView(ll2);
 
+                encounterDetailsLayout.setVisibility(View.GONE);
                 moreLayout.setVisibility(View.GONE);
 
                 reportLayout.addView(verticalLayout);
@@ -180,6 +185,7 @@ public class ReportFragment extends Fragment implements View.OnTouchListener {
                     public void onClick(View v) {
                         if (moreLayout.getVisibility() == View.VISIBLE) {
                             moreLayout.setVisibility(View.GONE);
+                            encounterDetailsLayout.setVisibility(View.GONE);
                             DrawableCompat.setTint(text.getCompoundDrawables()[2], color);
                             text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
                         } else {
@@ -187,6 +193,7 @@ public class ReportFragment extends Fragment implements View.OnTouchListener {
                             moreLayout.removeAllViews();
                             Object[][] obs = serverService.getAllObsFromEncounterId(Integer.parseInt(String.valueOf(text.getTag())));
                             if (obs.length == 0) {
+                                encounterDetailsLayout.removeAllViews();
 
                                 Object[][] encounterObject = serverService.getEncounterIdByEncounterType(text.getText().toString());
                                 text.setTag(String.valueOf(encounterObject[0][1]));
@@ -213,7 +220,7 @@ public class ReportFragment extends Fragment implements View.OnTouchListener {
                                 tv2.setLayoutParams(p1);
                                 ll1.addView(tv2);
 
-                                moreLayout.addView(ll1);
+                                encounterDetailsLayout.addView(ll1);
 
                                 LinearLayout ll2 = new LinearLayout(context);
                                 ll2.setOrientation(LinearLayout.HORIZONTAL);
@@ -238,9 +245,11 @@ public class ReportFragment extends Fragment implements View.OnTouchListener {
                                 tv4.setLayoutParams(p3);
                                 ll2.addView(tv4);
 
-                                moreLayout.addView(ll2);
+                                encounterDetailsLayout.addView(ll2);
 
                                 obs = serverService.getAllObsFromEncounterId(Integer.parseInt(String.valueOf(text.getTag())));
+                            } else{
+
                             }
 
                             for (int j = 0; j < obs.length; j++) {
@@ -285,6 +294,7 @@ public class ReportFragment extends Fragment implements View.OnTouchListener {
                             }
 
                             moreLayout.setVisibility(View.VISIBLE);
+                            encounterDetailsLayout.setVisibility(View.VISIBLE);
                             DrawableCompat.setTint(text.getCompoundDrawables()[2], color);
                             text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_less, 0);
                         }

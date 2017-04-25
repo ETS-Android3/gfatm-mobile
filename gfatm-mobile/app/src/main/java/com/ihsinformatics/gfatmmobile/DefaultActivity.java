@@ -54,7 +54,7 @@ public class DefaultActivity extends AbstractSettingActivity implements AdapterV
         supportContact = new EditText(this);
         supportContact.setInputType(InputType.TYPE_CLASS_PHONE);
         supportContact.setMaxEms(RegexUtil.mobileNumberLength);
-        supportContact.setFilters(new InputFilter[]{new InputFilter.LengthFilter(RegexUtil.mobileNumberLength)});
+        supportContact.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
         supportContact.setSingleLine(true);
         supportContact.setText(App.getSupportContact());
         supportContact.setGravity(Gravity.LEFT);
@@ -210,13 +210,6 @@ public class DefaultActivity extends AbstractSettingActivity implements AdapterV
             supportContact.setError(getString(R.string.empty_field));
             supportContact.requestFocus();
             cancel = true;
-        } else {
-
-            if (!RegexUtil.isContactNumber(App.get(supportContact))) {
-                supportContact.setError(getString(R.string.invalid_value));
-                supportContact.requestFocus();
-                cancel = true;
-            }
         }
 
         if (province.getSelectedItem() == null || province.getSelectedItem().equals("")) {

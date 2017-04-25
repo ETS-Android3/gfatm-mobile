@@ -206,8 +206,6 @@ public class MainActivity extends AppCompatActivity
         else
             showProgramSelection();
 
-        //serverService.submitOfflineForms();
-
     }
 
     @Override
@@ -357,9 +355,9 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.offline_forms) {
             Intent savedFormActivityIntent = new Intent(this, OfflineFormActivity.class);
             startActivityForResult(savedFormActivityIntent, SAVED_FORM_ACTIVITY);
-        } else if (id == R.id.update_database) {
-            Intent fetchMetadataActivityIntent = new Intent(this, UpdateDatabaseActivity.class);
-            startActivity(fetchMetadataActivityIntent);
+        } else if (id == R.id.feedback) {
+            Intent feedbackActivityIntent = new Intent(this, FeedbackActivity.class);
+            startActivity(feedbackActivityIntent);
         } else if (id == R.id.location_setup) {
             Intent locationSetupActivityIntent = new Intent(this, LocationSetupActivity.class);
             startActivity(locationSetupActivityIntent);
