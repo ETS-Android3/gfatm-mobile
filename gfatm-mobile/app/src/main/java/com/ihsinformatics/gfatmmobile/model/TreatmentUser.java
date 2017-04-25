@@ -80,6 +80,14 @@ public class TreatmentUser extends AbstractModel {
         this.fullName = fullName;
     }
 
+    public String getPersonUuid() {
+        return personUuid;
+    }
+
+    public void setPersonUuid(String personUuid) {
+        this.personUuid = personUuid;
+    }
+
 
     @Override
     public String toString() {
