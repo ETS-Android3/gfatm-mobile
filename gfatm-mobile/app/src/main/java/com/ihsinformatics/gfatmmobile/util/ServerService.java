@@ -86,7 +86,7 @@ public class ServerService {
     private static HttpGet httpGet;
     private static HttpPost httpPost;
     private static Context context;
-    private static String gfatmUri;
+    private static String fastGfatmUri;
     private HttpGwtRequest httpGwtClient;
 
     public ServerService(Context context) {
@@ -97,7 +97,8 @@ public class ServerService {
         dbUtil = new DatabaseUtil(this.context);
 
         // GWT Connections
-        gfatmUri = App.getIp() + ":s" + App.getPort() + "/gfatmweb.jsp";
+        // GWT Connections
+        fastGfatmUri = App.getIp() + ":" + App.getPort() + "/fastweb.jsp";
         httpGwtClient = new HttpGwtRequest(this.context);
     }
     /**
@@ -872,6 +873,7 @@ public class ServerService {
                                             values2.put("pid", encounter.getPatientId());
                                             values2.put("form", encounter.getEncounterType());
                                             values2.put("test_id", obs.getValue());
+                                            values2.put("encounterDateTime", encounter.getEncounterDatetime());
                                             dbUtil.insert(Metadata.TEST_ID, values2);
                                         }
                                     }
@@ -1387,6 +1389,7 @@ public class ServerService {
                         values.put("pid", App.getPatientId());
                         values.put("form", App.getProgram() + "-" + formName);
                         values.put("test_id", testId);
+                        values.put("encounterDateTime", App.getSqlDate(encounterDateTime));
                         dbUtil.insert(Metadata.TEST_ID, values);
                     }
 
@@ -1443,6 +1446,7 @@ public class ServerService {
                     values2.put("pid", App.getPatientId());
                     values2.put("form", App.getProgram() + "-" + formName);
                     values2.put("test_id", testId);
+                    values2.put("encounterDateTime", App.getSqlDate(encounterDateTime));
                     dbUtil.insert(Metadata.TEST_ID, values2);
                 }
 
@@ -1974,7 +1978,7 @@ public class ServerService {
 
     public Object[][] getTestIdByPatientAndEncounterType(String patientId, String encounterType) {
 
-        Object[][] testId = dbUtil.getFormTableData("select test_id from " + Metadata.TEST_ID + " where pid='" + patientId + "' and form = '" + encounterType + "'");
+        Object[][] testId = dbUtil.getFormTableData("select test_id, encounterDateTime from " + Metadata.TEST_ID + " where pid='" + patientId + "' and form = '" + encounterType + "'");
         return testId;
 
     }
@@ -2342,9 +2346,9 @@ public class ServerService {
             JSONObject json = new JSONObject();
             json.put("app_ver", App.getVersion());
             json.put("type", encounterType);
-            json.put("username", App.getUsername());
-            json.put("password", App.getPassword());
-            json.put("location", location);
+            json.put("username", "admin");
+            json.put("password", "Admin123");
+            json.put("location", "IHS");
             json.put("entereddate", formDate);
 
             JSONArray obs = new JSONArray();
@@ -2363,14 +2367,14 @@ public class ServerService {
             String val = json.toString();
 
             // Save form locally if in offline mode
-            if (App.getMode().equalsIgnoreCase("OFFLINE")) {
+           /* if (App.getMode().equalsIgnoreCase("OFFLINE")) {
 
                 //TODO: lllll
 
                 return "SUCCESS";
-            }
+            }*/
 
-            String res = httpGwtClient.clientPost(gfatmUri, val);
+            String res = httpGwtClient.clientPost(fastGfatmUri, val);
             JSONObject jsonResponse = JSONParser.getJSONObject(res);
             if (jsonResponse == null) {
                 return response;
