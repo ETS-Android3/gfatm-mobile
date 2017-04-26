@@ -58,10 +58,10 @@ import java.util.HashMap;
  */
 
 public class FastDSTOrderAndResultForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener, View.OnTouchListener {
-    public static final int THIRD_DATE_DIALOG_ID = 3;
+    //  public static final int THIRD_DATE_DIALOG_ID = 3;
 
-    protected Calendar thirdDateCalendar;
-    protected DialogFragment thirdDateFragment;
+    // protected Calendar thirdDateCalendar;
+    //  protected DialogFragment thirdDateFragment;
 
     Context context;
     // Views...
@@ -74,9 +74,9 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
     TitledRadioGroup testContextStatus;
     TitledSpinner monthOfTreatment;
     TitledRadioGroup specimenType;
-    TitledSpinner specimenSource;
+    TitledRadioGroup specimenSource;
     TitledEditText specimenSourceOther;
-    TitledButton dateTestResult;
+    //TitledButton dateTestResult;
     TitledSpinner dstMedium;
     TitledRadioGroup inh02Resistant;
     TitledRadioGroup inh1Resistant;
@@ -170,12 +170,12 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
      */
     public void initViews() {
 
-        thirdDateCalendar = Calendar.getInstance();
-        thirdDateFragment = new SelectDateFragment();
+        //    thirdDateCalendar = Calendar.getInstance();
+        //   thirdDateFragment = new SelectDateFragment();
 
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        testId = new TitledEditText(context, null, getResources().getString(R.string.fast_test_id), "", "", 20, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
+        testId = new TitledEditText(context, null, getResources().getString(R.string.fast_test_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         formType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_select_form_type), getResources().getStringArray(R.array.fast_order_and_result_list), "", App.HORIZONTAL, App.HORIZONTAL);
         dstOrder = new MyTextView(context, getResources().getString(R.string.fast_dst_order));
         dstOrder.setTypeface(null, Typeface.BOLD);
@@ -184,18 +184,20 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
 
         testContextStatus = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_at_what_point_test_being_done), getResources().getStringArray(R.array.fast_test_being_done_list), getResources().getString(R.string.fast_baseline_new), App.VERTICAL, App.VERTICAL);
 
-        monthOfTreatment = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_month_of_treatment), getResources().getStringArray(R.array.fast_number_list), getResources().getString(R.string.fast_one), App.HORIZONTAL);
+        monthOfTreatment = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_month_of_treatment), getResources().getStringArray(R.array.fast_number_list), getResources().getString(R.string.fast_zero), App.HORIZONTAL);
+
+        updateFollowUpMonth();
 
         specimenType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_specimen_type), getResources().getStringArray(R.array.fast_specimen_type_list), getResources().getString(R.string.fast_sputum), App.VERTICAL, App.VERTICAL);
 
-        specimenSource = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_where_did_the_specimen_come_from), getResources().getStringArray(R.array.fast_specimen_come_from_list), getResources().getString(R.string.fast_lymph), App.VERTICAL);
+        specimenSource = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_where_did_the_specimen_come_from), getResources().getStringArray(R.array.fast_specimen_come_from_list), getResources().getString(R.string.fast_lymph), App.VERTICAL, App.VERTICAL);
 
         specimenSourceOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
 
         dstResult = new MyTextView(context, getResources().getString(R.string.fast_dst_result));
         dstResult.setTypeface(null, Typeface.BOLD);
 
-        dateTestResult = new TitledButton(context, null, getResources().getString(R.string.fast_date_of_result_recieved), DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
+        // dateTestResult = new TitledButton(context, null, getResources().getString(R.string.fast_date_of_result_recieved), DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
 
         dstMedium = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_type_of_media_for_dst), getResources().getStringArray(R.array.fast_dst_medium_list), getResources().getString(R.string.fast_lowenstein_jensen), App.VERTICAL);
 
@@ -265,11 +267,10 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
         linearLayout.addView(testIdView);
 
 
-
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), testId.getEditText(), formType.getRadioGroup(), dateOfSubmission.getButton(),
+        views = new View[]{testId.getEditText(), formType.getRadioGroup(), formDate.getButton(), dateOfSubmission.getButton(),
                 testContextStatus.getRadioGroup(), monthOfTreatment.getSpinner(), specimenType.getRadioGroup(),
-                specimenSource.getSpinner(), specimenSourceOther.getEditText(), dateTestResult.getButton(), dstMedium.getSpinner(),
+                specimenSource.getRadioGroup(), specimenSourceOther.getEditText(), dstMedium.getSpinner(),
                 inh02Resistant.getRadioGroup(), inh1Resistant.getRadioGroup(), rifResistant.getRadioGroup(), etbResistant.getRadioGroup(),
                 smResistant.getRadioGroup(), pzaResistant.getRadioGroup(), ofxResistant.getRadioGroup(), levoResistant.getRadioGroup(),
                 moxi05Resistant.getRadioGroup(), moxi2Resistant.getRadioGroup(), amkResistant.getRadioGroup(), kmResistant.getRadioGroup(),
@@ -278,17 +279,17 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, formType,linearLayout,dstOrder, dateOfSubmission, testContextStatus, monthOfTreatment, specimenType,
-                        specimenSource, specimenSourceOther, dstResult, dateTestResult, dstMedium, inh02Resistant, inh1Resistant,
+                {{formType, linearLayout, dstOrder, formDate, dateOfSubmission, testContextStatus, monthOfTreatment, specimenType,
+                        specimenSource, specimenSourceOther, dstResult, dstMedium, inh02Resistant, inh1Resistant,
                         rifResistant, etbResistant, smResistant, pzaResistant, ofxResistant, levoResistant, moxi05Resistant, moxi2Resistant
                         , amkResistant, kmResistant, cmResistant, pasResistant, bdqResistant, dlmResistant, lzdResistant, cfzResistant,
                         otherDrugName, otherDrugResult}};
 
         formDate.getButton().setOnClickListener(this);
-        dateOfSubmission.getButton().setOnClickListener(this);
-        dateTestResult.getButton().setOnClickListener(this);
+        // dateOfSubmission.getButton().setOnClickListener(this);
+        //dateTestResult.getButton().setOnClickListener(this);
         formType.getRadioGroup().setOnCheckedChangeListener(this);
-        specimenSource.getSpinner().setOnItemSelectedListener(this);
+        specimenSource.getRadioGroup().setOnCheckedChangeListener(this);
         testContextStatus.getRadioGroup().setOnCheckedChangeListener(this);
         specimenType.getRadioGroup().setOnCheckedChangeListener(this);
 
@@ -351,12 +352,68 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
 
     }
 
+    public void updateFollowUpMonth(){
+        String treatmentDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+        String format = "";
+
+
+        if (treatmentDate.contains("/")) {
+            format = "dd/MM/yyyy";
+        } else {
+            format = "yyyy-MM-dd";
+        }
+        Date convertedDate = App.stringToDate(treatmentDate, format);
+        Calendar treatmentDateCalender = App.getCalendar(convertedDate);
+        int diffYear = formDateCalendar.get(Calendar.YEAR) - treatmentDateCalender.get(Calendar.YEAR);
+        int diffMonth = diffYear * 12 + formDateCalendar.get(Calendar.MONTH) - treatmentDateCalender.get(Calendar.MONTH);
+
+        String [] monthArray = new String[diffMonth + 1];
+
+        for(int i =0 ; i <= diffMonth ; i++){
+            monthArray[i] = String.valueOf(i);
+        }
+
+        monthOfTreatment.getSpinner().setSpinnerData(monthArray);
+    }
+
     @Override
     public void updateDisplay() {
         if (snackbar != null)
             snackbar.dismiss();
 
-        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
+        if(formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result))){
+            Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "FAST-DST Culture Test Order");
+            String format = "";
+            String formDa = formDate.getButton().getText().toString();
+
+            for(int i =0 ; i < testIds.length ; i++){
+                if(testIds[i][0].equals(testId.getEditText().getText().toString())){
+                    String date = testIds[i][1].toString();
+                    if (date.contains("/")) {
+                        format = "dd/MM/yyyy";
+                    } else {
+                        format = "yyyy-MM-dd";
+                    }
+
+                    Date orderDate = App.stringToDate(date, format);
+
+                    if(formDateCalendar.before(App.getCalendar(orderDate))){
+                        formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+
+                        snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
+                        snackbar.show();
+
+                        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                        break;
+                    }
+                    else {
+                        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                    }
+                }
+            }
+        }
+
+        else if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
@@ -372,16 +429,32 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
 
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
-            }else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+            }
+         /*   else if (dateOfSubmission.getVisibility() == View.VISIBLE && formDateCalendar.before(secondDateCalendar)) {
+
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+            }*/
+            else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-            }
-            else
+            } else {
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                // if(dateOfSubmission.getVisibility() == View.GONE){
+                // secondDateCalendar.setTime(formDateCalendar.getTime());
+                dateOfSubmission.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+
+                //}
+            }
         }
         if (!(dateOfSubmission.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString()))) {
 
@@ -398,8 +471,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
 
                 dateOfSubmission.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
 
-            }
-            else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+            } else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
                 secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
@@ -408,10 +480,20 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                 dateOfSubmission.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
             }
 
+          /*  else if (secondDateCalendar.before(formDateCalendar)) {
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_order_date_cannot_be_before_form_date), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                dateOfSubmission.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+            }*/
+
+
             else
                 dateOfSubmission.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
         }
-        if (!(dateTestResult.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString()))) {
+       /* if (!(dateTestResult.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString()))) {
 
             String formDa = dateTestResult.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
@@ -438,7 +520,9 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
 
             else
                 dateTestResult.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
-        }
+        }*/
+
+        updateFollowUpMonth();
     }
 
     @Override
@@ -446,10 +530,9 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
         Boolean error = false;
         Boolean formCheck = false;
 
-        if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_order)) || formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result))){
+        if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_order)) || formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result))) {
 
-        }
-        else{
+        } else {
             formCheck = true;
             error = true;
         }
@@ -488,13 +571,13 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
         if (error) {
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
-            if(formCheck){
+            if (formCheck) {
                 alertDialog.setMessage(getString(R.string.fast_please_select_form_type));
-            }
-            else{
+            } else {
                 alertDialog.setMessage(getString(R.string.form_error));
-            }            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-          //  DrawableCompat.setTint(clearIcon, color);
+            }
+            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+            //  DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_error));
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
@@ -529,7 +612,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
-            }else {
+            } else {
                 endTime = new Date();
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
@@ -544,12 +627,15 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
 
         observations.add(new String[]{"TEST ID", App.get(testId)});
 
-        if(formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_order))) {
+        if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_order))) {
+
+            if (formDate.getVisibility() == View.VISIBLE)
+                observations.add(new String[]{"DATE TEST ORDERED", App.getSqlDateTime(formDateCalendar)});
             if (dateOfSubmission.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"SPECIMEN SUBMISSION DATE", App.getSqlDateTime(secondDateCalendar)});
             if (testContextStatus.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"TEST CONTEXT STATUS", App.get(testContextStatus).equals(getResources().getString(R.string.fast_baseline_new)) ? "BASELINE" :
-                        (App.get(testContextStatus).equals(getResources().getString(R.string.fast_baseline_repeat)) ? "BASELINE REPEAT":"CONFIRMATION")});
+                        (App.get(testContextStatus).equals(getResources().getString(R.string.fast_baseline_repeat)) ? "BASELINE REPEAT" : "CONFIRMATION")});
             if (monthOfTreatment.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"FOLLOW-UP MONTH", monthOfTreatment.getSpinner().getSelectedItem().toString()});
 
@@ -558,14 +644,13 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
 
             if (specimenSource.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"SPECIMEN SOURCE", App.get(specimenSource).equals(getResources().getString(R.string.fast_lymph)) ? "LYMPHOCYTES" :
-                        (App.get(specimenSource).equals(getResources().getString(R.string.fast_pleural_fluid)) ? "PLEURAL EFFUSION":
+                        (App.get(specimenSource).equals(getResources().getString(R.string.fast_pleural_fluid)) ? "PLEURAL EFFUSION" :
                                 (App.get(specimenSource).equals(getResources().getString(R.string.fast_pus)) ? "PUS" : "OTHER SPECIMEN SOURCE"))});
 
             if (specimenSourceOther.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"OTHER SPECIMEN SOURCE", App.get(specimenSourceOther)});
-        }
-        else{
-            observations.add(new String[]{"DATE OF  TEST RESULT RECEIVED", App.getSqlDateTime(thirdDateCalendar)});
+        } else {
+            observations.add(new String[]{"DATE OF  TEST RESULT RECEIVED", App.getSqlDateTime(formDateCalendar)});
             observations.add(new String[]{"CULTURE MEDIUM TYPE", App.get(dstMedium).equals(getResources().getString(R.string.fast_lowenstein_jensen)) ? "LOWENSTEIN-JENSEN MYCOBACTERIA CULTURE METHOD" :
                     (App.get(dstMedium).equals(getResources().getString(R.string.fast_mycobacteria_growth_indicator_tube)) ? "MYCOBACTERIA GROWTH INDICATOR TUBE" :
                             (App.get(dstMedium).equals(getResources().getString(R.string.fast_middlebrook_7h11s)) ? "MIDDLEBROOK 7H11S" :
@@ -573,70 +658,70 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                                             "OTHER DST MEDIUM")))});
 
             observations.add(new String[]{"ISONIAZID 0.2 µg/ml RESISTANT", App.get(inh02Resistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(inh02Resistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+                    (App.get(inh02Resistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
 
             observations.add(new String[]{"ISONIAZID 1 µg/ml RESISTANT RESULT", App.get(inh1Resistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(inh1Resistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+                    (App.get(inh1Resistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
 
             observations.add(new String[]{"RIFAMPICIN RESISTANT", App.get(rifResistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(rifResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+                    (App.get(rifResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
 
             observations.add(new String[]{"ETHAMBUTOL RESISTANT", App.get(etbResistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(etbResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+                    (App.get(etbResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
 
             observations.add(new String[]{"STREPTOMYCIN RESISITANT", App.get(smResistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(smResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+                    (App.get(smResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
 
             observations.add(new String[]{"PYRAZINAMIDE RESISTANT", App.get(pzaResistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(pzaResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+                    (App.get(pzaResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
 
             observations.add(new String[]{"OFLOAXCIN RESISTANT", App.get(ofxResistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(ofxResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+                    (App.get(ofxResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
 
             observations.add(new String[]{"LEVOFLOXACIN RESISTANT", App.get(levoResistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(levoResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+                    (App.get(levoResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
 
             observations.add(new String[]{"MOXIFLOXACIN 0.5 µg/ml RESISTANT RESULT", App.get(moxi05Resistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(moxi05Resistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+                    (App.get(moxi05Resistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
 
             observations.add(new String[]{"MOXIFLOXACIN 2 µg/ml RESISTANT RESULT", App.get(moxi2Resistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(moxi2Resistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+                    (App.get(moxi2Resistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
 
             observations.add(new String[]{"AMIKACIN RESISTANT", App.get(amkResistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(amkResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+                    (App.get(amkResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
 
             observations.add(new String[]{"KANAMYCIN RESISTANT", App.get(kmResistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(kmResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+                    (App.get(kmResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
 
             observations.add(new String[]{"CAPREOMYCIN RESISTANT", App.get(cmResistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(cmResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+                    (App.get(cmResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
 
             observations.add(new String[]{"ETHIONAMIDE RESISTANT Ethionamide", App.get(ethioResistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(ethioResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+                    (App.get(ethioResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
 
             observations.add(new String[]{"CYCLOSERINE RESISTANT", App.get(csResistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(csResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+                    (App.get(csResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
 
             observations.add(new String[]{"P AMINOSALICYLIC ACID RESISTANT", App.get(pasResistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(pasResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+                    (App.get(pasResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
 
             observations.add(new String[]{"BEDAQUILINE RESISTANT", App.get(bdqResistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(bdqResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+                    (App.get(bdqResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
 
             observations.add(new String[]{"DELAMANID RESISTANT", App.get(dlmResistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(dlmResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+                    (App.get(dlmResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
 
             observations.add(new String[]{"LINEZOLID RESISTANT", App.get(lzdResistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(lzdResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+                    (App.get(lzdResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
 
             observations.add(new String[]{"CLOFAZAMINE RESISTANT", App.get(cfzResistant).equals(getResources().getString(R.string.fast_resistant)) ? "SUSCEPTIBLE" :
-                    (App.get(cfzResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+                    (App.get(cfzResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
 
             observations.add(new String[]{"OTHER DRUG NAME", App.get(otherDrugName)});
 
-            if(otherDrugResult.getVisibility()==View.VISIBLE) {
+            if (otherDrugResult.getVisibility() == View.VISIBLE) {
                 observations.add(new String[]{"OTHER DRUG RESISTANT RESULT", App.get(otherDrugResult).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                        (App.get(otherDrugResult).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT":  "INDETERMINATE")});
+                        (App.get(otherDrugResult).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
             }
         }
 
@@ -656,7 +741,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
 
                 String result = "";
 
-                if (App.get(formType).equals(getResources().getString(R.string.fast_order))){
+                if (App.get(formType).equals(getResources().getString(R.string.fast_order))) {
                     result = serverService.saveEncounterAndObservation("DST Culture Test Order", FORM, formDateCalendar, observations.toArray(new String[][]{}), true);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
@@ -794,8 +879,10 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
     }
 
     void showTestOrderOrTestResult() {
+        formDate.setVisibility(View.VISIBLE);
         if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_order))) {
             dstOrder.setVisibility(View.VISIBLE);
+            formDate.getQuestionView().setText(getResources().getString(R.string.fast_test_date));
             dateOfSubmission.setVisibility(View.VISIBLE);
             testContextStatus.setVisibility(View.VISIBLE);
             if (testContextStatus.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_followup_test))) {
@@ -805,7 +892,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
             if (specimenType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_extra_pulmonary))) {
                 specimenSource.setVisibility(View.VISIBLE);
 
-                if (specimenSource.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))) {
+                if (specimenSource.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_other_title))) {
                     specimenSourceOther.setVisibility(View.VISIBLE);
                 } else {
                     specimenSourceOther.setVisibility(View.GONE);
@@ -816,7 +903,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
             }
 
             dstResult.setVisibility(View.GONE);
-            dateTestResult.setVisibility(View.GONE);
+            // dateTestResult.setVisibility(View.GONE);
             dstMedium.setVisibility(View.GONE);
             inh02Resistant.setVisibility(View.GONE);
             inh1Resistant.setVisibility(View.GONE);
@@ -841,9 +928,9 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
             otherDrugName.setVisibility(View.GONE);
             otherDrugResult.setVisibility(View.GONE);
         } else {
-
+            formDate.getQuestionView().setText(getResources().getString(R.string.fast_date_of_result_recieved));
             dstResult.setVisibility(View.VISIBLE);
-            dateTestResult.setVisibility(View.VISIBLE);
+            //  dateTestResult.setVisibility(View.VISIBLE);
             dstMedium.setVisibility(View.VISIBLE);
             inh02Resistant.setVisibility(View.VISIBLE);
             inh1Resistant.setVisibility(View.VISIBLE);
@@ -978,11 +1065,12 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
 
 
         for (int i = 0; i < obsValue.size(); i++) {
+            formDate.setVisibility(View.VISIBLE);
             String[][] obs = obsValue.get(i);
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
             }
-            if(fo.getFormName().contains("Order")) {
+            if (fo.getFormName().contains("Order")) {
                 formType.getRadioGroup().getButtons().get(0).setChecked(true);
                 formType.getRadioGroup().getButtons().get(1).setEnabled(false);
                 testIdView.setImageResource(R.drawable.ic_checked_green);
@@ -991,7 +1079,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                     testIdView.setEnabled(false);
                     testIdView.setImageResource(R.drawable.ic_checked_green);
                     testId.getEditText().setText(obs[0][1]);
-                }else if (obs[0][0].equals("SPECIMEN SUBMISSION DATE")) {
+                } else if (obs[0][0].equals("SPECIMEN SUBMISSION DATE")) {
                     String secondDate = obs[0][1];
                     secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                     dateOfSubmission.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
@@ -1004,15 +1092,15 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                         } else if (rb.getText().equals(getResources().getString(R.string.fast_baseline_repeat)) && obs[0][1].equals("BASELINE REPEAT")) {
                             rb.setChecked(true);
                             break;
-                        }else if (rb.getText().equals(getResources().getString(R.string.fast_followup_test)) && obs[0][1].equals("REGULAR FOLLOW UP")) {
+                        } else if (rb.getText().equals(getResources().getString(R.string.fast_followup_test)) && obs[0][1].equals("REGULAR FOLLOW UP")) {
                             rb.setChecked(true);
                             break;
                         }
                     }
                     testContextStatus.setVisibility(View.VISIBLE);
-                }  else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
+                } else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
                     monthOfTreatment.getSpinner().selectValue(obs[0][1]);
-                }else if (obs[0][0].equals("SPECIMEN TYPE")) {
+                } else if (obs[0][0].equals("SPECIMEN TYPE")) {
                     for (RadioButton rb : specimenType.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.fast_sputum)) && obs[0][1].equals("SPUTUM")) {
                             rb.setChecked(true);
@@ -1023,22 +1111,29 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                         }
                     }
                     specimenType.setVisibility(View.VISIBLE);
-                }
-                else if (obs[0][0].equals("SPECIMEN SOURCE")) {
-                    String value = obs[0][1].equals("LYMPHOCYTES") ? getResources().getString(R.string.fast_lymph) :
-                            (obs[0][1].equals("PLEURAL EFFUSION") ? getResources().getString(R.string.fast_pleural_effusion) :
-                                    (obs[0][1].equals("PUS") ? getResources().getString(R.string.fast_pus) :
-                                            getResources().getString(R.string.fast_other_title)));
-                    if(value.equalsIgnoreCase(getResources().getString(R.string.fast_other_title))){
-                        specimenSourceOther.setVisibility(View.VISIBLE);
+                }    else if (obs[0][0].equals("SPECIMEN SOURCE")) {
+                    for (RadioButton rb : specimenSource.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.fast_lymph)) && obs[0][1].equals("LYMPHOCYTES")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.fast_pleural_fluid)) && obs[0][1].equals("PLEURAL EFFUSION")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.fast_pus)) && obs[0][1].equals("PUS")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                        else if (rb.getText().equals(getResources().getString(R.string.fast_other_title)) && obs[0][1].equals("OTHER SPECIMEN SOURCE")) {
+                            rb.setChecked(true);
+                            break;
+                        }
                     }
-                    specimenSource.getSpinner().selectValue(value);
                     specimenSource.setVisibility(View.VISIBLE);
                 } else if (obs[0][0].equals("OTHER SPECIMEN SOURCE")) {
                     specimenSourceOther.getEditText().setText(obs[0][1]);
                 }
                 submitButton.setEnabled(true);
-            }else{
+            } else {
                 formType.getRadioGroup().getButtons().get(1).setChecked(true);
                 formType.getRadioGroup().getButtons().get(0).setEnabled(false);
                 if (obs[0][0].equals("TEST ID")) {
@@ -1047,12 +1142,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                     testIdView.setEnabled(false);
                     testIdView.setImageResource(R.drawable.ic_checked);
                     checkTestId();
-                }else if (obs[0][0].equals("DATE OF  TEST RESULT RECEIVED")) {
-                    String thirdDate = obs[0][1];
-                    thirdDateCalendar.setTime(App.stringToDate(thirdDate, "yyyy-MM-dd"));
-                    dateTestResult.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
-                    dateTestResult.setVisibility(View.VISIBLE);
-                }else if (obs[0][0].equals("CULTURE MEDIUM TYPE")) {
+                } else if (obs[0][0].equals("CULTURE MEDIUM TYPE")) {
                     String value = obs[0][1].equals("LOWENSTEIN-JENSEN MYCOBACTERIA CULTURE METHOD") ? getResources().getString(R.string.fast_lowenstein_jensen) :
                             (obs[0][1].equals("MYCOBACTERIA GROWTH INDICATOR TUBE") ? getResources().getString(R.string.fast_mycobacteria_growth_indicator_tube) :
                                     (obs[0][1].equals("MIDDLEBROOK 7H11S") ? getResources().getString(R.string.fast_middlebrook_7h11s) :
@@ -1060,7 +1150,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                                                     getResources().getString(R.string.fast_other_title))));
                     dstMedium.getSpinner().selectValue(value);
 
-                }else if (obs[0][0].equals("ISONIAZID 0.2 µg/ml RESISTANT")) {
+                } else if (obs[0][0].equals("ISONIAZID 0.2 µg/ml RESISTANT")) {
                     for (RadioButton rb : inh02Resistant.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
                             rb.setChecked(true);
@@ -1068,13 +1158,13 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                         } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
                             rb.setChecked(true);
                             break;
-                        }else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
                             rb.setChecked(true);
                             break;
                         }
                     }
                     inh02Resistant.setVisibility(View.VISIBLE);
-                }else if (obs[0][0].equals("ISONIAZID 1 µg/ml RESISTANT RESULT")) {
+                } else if (obs[0][0].equals("ISONIAZID 1 µg/ml RESISTANT RESULT")) {
                     for (RadioButton rb : inh1Resistant.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
                             rb.setChecked(true);
@@ -1082,7 +1172,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                         } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
                             rb.setChecked(true);
                             break;
-                        }else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
                             rb.setChecked(true);
                             break;
                         }
@@ -1096,13 +1186,13 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                         } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
                             rb.setChecked(true);
                             break;
-                        }else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
                             rb.setChecked(true);
                             break;
                         }
                     }
                     rifResistant.setVisibility(View.VISIBLE);
-                }else if (obs[0][0].equals("ETHAMBUTOL RESISTANT")) {
+                } else if (obs[0][0].equals("ETHAMBUTOL RESISTANT")) {
                     for (RadioButton rb : etbResistant.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
                             rb.setChecked(true);
@@ -1110,13 +1200,13 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                         } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
                             rb.setChecked(true);
                             break;
-                        }else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
                             rb.setChecked(true);
                             break;
                         }
                     }
                     etbResistant.setVisibility(View.VISIBLE);
-                }else if (obs[0][0].equals("STREPTOMYCIN RESISITANT")) {
+                } else if (obs[0][0].equals("STREPTOMYCIN RESISITANT")) {
                     for (RadioButton rb : smResistant.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
                             rb.setChecked(true);
@@ -1124,7 +1214,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                         } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
                             rb.setChecked(true);
                             break;
-                        }else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
                             rb.setChecked(true);
                             break;
                         }
@@ -1138,14 +1228,13 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                         } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
                             rb.setChecked(true);
                             break;
-                        }else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
                             rb.setChecked(true);
                             break;
                         }
                     }
                     pzaResistant.setVisibility(View.VISIBLE);
-                }
-                else if (obs[0][0].equals("OFLOAXCIN RESISTANT")) {
+                } else if (obs[0][0].equals("OFLOAXCIN RESISTANT")) {
                     for (RadioButton rb : ofxResistant.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
                             rb.setChecked(true);
@@ -1153,14 +1242,13 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                         } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
                             rb.setChecked(true);
                             break;
-                        }else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
                             rb.setChecked(true);
                             break;
                         }
                     }
                     ofxResistant.setVisibility(View.VISIBLE);
-                }
-                else if (obs[0][0].equals("LEVOFLOXACIN RESISTANT")) {
+                } else if (obs[0][0].equals("LEVOFLOXACIN RESISTANT")) {
                     for (RadioButton rb : levoResistant.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
                             rb.setChecked(true);
@@ -1168,14 +1256,13 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                         } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
                             rb.setChecked(true);
                             break;
-                        }else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
                             rb.setChecked(true);
                             break;
                         }
                     }
                     levoResistant.setVisibility(View.VISIBLE);
-                }
-                else if (obs[0][0].equals("MOXIFLOXACIN 0.5 µg/ml RESISTANT RESULT")) {
+                } else if (obs[0][0].equals("MOXIFLOXACIN 0.5 µg/ml RESISTANT RESULT")) {
                     for (RadioButton rb : moxi05Resistant.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
                             rb.setChecked(true);
@@ -1183,13 +1270,13 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                         } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
                             rb.setChecked(true);
                             break;
-                        }else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
                             rb.setChecked(true);
                             break;
                         }
                     }
                     moxi05Resistant.setVisibility(View.VISIBLE);
-                }else if (obs[0][0].equals("MOXIFLOXACIN 2 µg/ml RESISTANT RESULT")) {
+                } else if (obs[0][0].equals("MOXIFLOXACIN 2 µg/ml RESISTANT RESULT")) {
                     for (RadioButton rb : moxi2Resistant.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
                             rb.setChecked(true);
@@ -1197,14 +1284,13 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                         } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
                             rb.setChecked(true);
                             break;
-                        }else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
                             rb.setChecked(true);
                             break;
                         }
                     }
                     moxi2Resistant.setVisibility(View.VISIBLE);
-                }
-                else if (obs[0][0].equals("AMIKACIN RESISTANT")) {
+                } else if (obs[0][0].equals("AMIKACIN RESISTANT")) {
                     for (RadioButton rb : amkResistant.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
                             rb.setChecked(true);
@@ -1212,14 +1298,13 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                         } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
                             rb.setChecked(true);
                             break;
-                        }else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
                             rb.setChecked(true);
                             break;
                         }
                     }
                     amkResistant.setVisibility(View.VISIBLE);
-                }
-                else if (obs[0][0].equals("KANAMYCIN RESISTANT")) {
+                } else if (obs[0][0].equals("KANAMYCIN RESISTANT")) {
                     for (RadioButton rb : kmResistant.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
                             rb.setChecked(true);
@@ -1227,14 +1312,13 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                         } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
                             rb.setChecked(true);
                             break;
-                        }else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
                             rb.setChecked(true);
                             break;
                         }
                     }
                     kmResistant.setVisibility(View.VISIBLE);
-                }
-                else if (obs[0][0].equals("CAPREOMYCIN RESISTANT")) {
+                } else if (obs[0][0].equals("CAPREOMYCIN RESISTANT")) {
                     for (RadioButton rb : cmResistant.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
                             rb.setChecked(true);
@@ -1242,14 +1326,13 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                         } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
                             rb.setChecked(true);
                             break;
-                        }else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
                             rb.setChecked(true);
                             break;
                         }
                     }
                     cmResistant.setVisibility(View.VISIBLE);
-                }
-                else if (obs[0][0].equals("ETHIONAMIDE RESISTANT Ethionamide")) {
+                } else if (obs[0][0].equals("ETHIONAMIDE RESISTANT Ethionamide")) {
                     for (RadioButton rb : ethioResistant.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
                             rb.setChecked(true);
@@ -1257,14 +1340,13 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                         } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
                             rb.setChecked(true);
                             break;
-                        }else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
                             rb.setChecked(true);
                             break;
                         }
                     }
                     ethioResistant.setVisibility(View.VISIBLE);
-                }
-                else if (obs[0][0].equals("CYCLOSERINE RESISTANT")) {
+                } else if (obs[0][0].equals("CYCLOSERINE RESISTANT")) {
                     for (RadioButton rb : csResistant.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
                             rb.setChecked(true);
@@ -1272,14 +1354,13 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                         } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
                             rb.setChecked(true);
                             break;
-                        }else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
                             rb.setChecked(true);
                             break;
                         }
                     }
                     csResistant.setVisibility(View.VISIBLE);
-                }
-                else if (obs[0][0].equals("PAMINOSALICYLIC ACID RESISTANT")) {
+                } else if (obs[0][0].equals("PAMINOSALICYLIC ACID RESISTANT")) {
                     for (RadioButton rb : pasResistant.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
                             rb.setChecked(true);
@@ -1287,7 +1368,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                         } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
                             rb.setChecked(true);
                             break;
-                        }else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
                             rb.setChecked(true);
                             break;
                         }
@@ -1301,14 +1382,13 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                         } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
                             rb.setChecked(true);
                             break;
-                        }else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
                             rb.setChecked(true);
                             break;
                         }
                     }
                     bdqResistant.setVisibility(View.VISIBLE);
-                }
-                else if (obs[0][0].equals("DELAMANID RESISTANT")) {
+                } else if (obs[0][0].equals("DELAMANID RESISTANT")) {
                     for (RadioButton rb : dlmResistant.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
                             rb.setChecked(true);
@@ -1316,14 +1396,13 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                         } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
                             rb.setChecked(true);
                             break;
-                        }else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
                             rb.setChecked(true);
                             break;
                         }
                     }
                     dlmResistant.setVisibility(View.VISIBLE);
-                }
-                else if (obs[0][0].equals("LINEZOLID RESISTANT")) {
+                } else if (obs[0][0].equals("LINEZOLID RESISTANT")) {
                     for (RadioButton rb : lzdResistant.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
                             rb.setChecked(true);
@@ -1331,14 +1410,13 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                         } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
                             rb.setChecked(true);
                             break;
-                        }else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
                             rb.setChecked(true);
                             break;
                         }
                     }
                     lzdResistant.setVisibility(View.VISIBLE);
-                }
-                else if (obs[0][0].equals("CLOFAZAMINE RESISTANT")) {
+                } else if (obs[0][0].equals("CLOFAZAMINE RESISTANT")) {
                     for (RadioButton rb : cfzResistant.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
                             rb.setChecked(true);
@@ -1346,15 +1424,13 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                         } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
                             rb.setChecked(true);
                             break;
-                        }else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
                             rb.setChecked(true);
                             break;
                         }
                     }
                     cfzResistant.setVisibility(View.VISIBLE);
-                }
-
-                else if (obs[0][0].equals("OTHER DRUG NAME")) {
+                } else if (obs[0][0].equals("OTHER DRUG NAME")) {
                     otherDrugName.getEditText().setText(obs[0][1]);
                 } else if (obs[0][0].equals("OTHER DRUG RESISTANT RESULT")) {
                     for (RadioButton rb : otherDrugResult.getRadioGroup().getButtons()) {
@@ -1364,7 +1440,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                         } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
                             rb.setChecked(true);
                             break;
-                        }else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
                             rb.setChecked(true);
                             break;
                         }
@@ -1398,14 +1474,14 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
             args.putBoolean("allowFutureDate", false);
         }
 
-        if (view == dateTestResult.getButton()) {
+      /*  if (view == dateTestResult.getButton()) {
             Bundle args = new Bundle();
             args.putInt("type", THIRD_DATE_DIALOG_ID);
             thirdDateFragment.setArguments(args);
             thirdDateFragment.show(getFragmentManager(), "DatePicker");
             args.putBoolean("allowPastDate", true);
             args.putBoolean("allowFutureDate", false);
-        }
+        }*/
 
 
     }
@@ -1426,11 +1502,13 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         dateOfSubmission.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-        dateTestResult.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+        // dateTestResult.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
 
         testIdView.setVisibility(View.GONE);
         testId.setVisibility(View.GONE);
         testIdView.setImageResource(R.drawable.ic_checked);
+        goneVisibility();
+        submitButton.setEnabled(false);
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -1448,11 +1526,10 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
             } else bundle.putBoolean("save", false);
 
         }
-        goneVisibility();
-        submitButton.setEnabled(false);
     }
 
-    void goneVisibility(){
+    void goneVisibility() {
+        formDate.setVisibility(View.GONE);
         dstOrder.setVisibility(View.GONE);
         dateOfSubmission.setVisibility(View.GONE);
         testContextStatus.setVisibility(View.GONE);
@@ -1461,7 +1538,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
         specimenSource.setVisibility(View.GONE);
         specimenSourceOther.setVisibility(View.GONE);
         dstResult.setVisibility(View.GONE);
-        dateTestResult.setVisibility(View.GONE);
+        // dateTestResult.setVisibility(View.GONE);
         dstMedium.setVisibility(View.GONE);
         inh02Resistant.setVisibility(View.GONE);
         inh1Resistant.setVisibility(View.GONE);
@@ -1491,13 +1568,13 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         MySpinner spinner = (MySpinner) parent;
 
-        if (spinner == specimenSource.getSpinner()) {
+      /*  if (spinner == specimenSource.getSpinner()) {
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title))) {
                 specimenSourceOther.setVisibility(View.VISIBLE);
             } else {
                 specimenSourceOther.setVisibility(View.GONE);
             }
-        }
+        }*/
     }
 
     @Override
@@ -1519,10 +1596,18 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
             }
         }
 
+        if (radioGroup == specimenSource.getRadioGroup()) {
+            if (specimenSource.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_other_title))) {
+                specimenSourceOther.setVisibility(View.VISIBLE);
+            } else {
+                specimenSourceOther.setVisibility(View.GONE);
+            }
+        }
+
         if (radioGroup == specimenType.getRadioGroup()) {
             if (specimenType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_extra_pulmonary))) {
                 specimenSource.setVisibility(View.VISIBLE);
-                if (specimenSource.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))) {
+                if (specimenSource.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_other_title))) {
                     specimenSourceOther.setVisibility(View.VISIBLE);
                 } else {
                     specimenSourceOther.setVisibility(View.GONE);
@@ -1571,8 +1656,8 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                 calendar = formDateCalendar;
             else if (getArguments().getInt("type") == SECOND_DATE_DIALOG_ID)
                 calendar = secondDateCalendar;
-            else if (getArguments().getInt("type") == THIRD_DATE_DIALOG_ID)
-                calendar = thirdDateCalendar;
+           /* else if (getArguments().getInt("type") == THIRD_DATE_DIALOG_ID)
+                calendar = thirdDateCalendar;*/
             else
                 return null;
 
@@ -1592,8 +1677,8 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                 formDateCalendar.set(yy, mm, dd);
             else if (((int) view.getTag()) == SECOND_DATE_DIALOG_ID)
                 secondDateCalendar.set(yy, mm, dd);
-            else if (((int) view.getTag()) == THIRD_DATE_DIALOG_ID)
-                thirdDateCalendar.set(yy, mm, dd);
+            //  else if (((int) view.getTag()) == THIRD_DATE_DIALOG_ID)
+            //   thirdDateCalendar.set(yy, mm, dd);
 
             updateDisplay();
         }

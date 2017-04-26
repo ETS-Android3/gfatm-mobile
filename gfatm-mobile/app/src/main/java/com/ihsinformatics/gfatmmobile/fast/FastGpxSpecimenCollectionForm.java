@@ -141,7 +141,7 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
         sampleAccepted = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_accepted_lab_technician), getResources().getStringArray(R.array.fast_accepted_rejected_list), getResources().getString(R.string.fast_accepted), App.VERTICAL, App.VERTICAL);
         reasonRejected = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_why_was_the_sample_rejected), getResources().getStringArray(R.array.fast_sample_rejected_list), getResources().getString(R.string.fast_saliva), App.VERTICAL);
         otherReasonRejected = new TitledEditText(context, null, getResources().getString(R.string.fast_other_reason_for_rejection), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        cartridgeId = new TitledEditText(context, null, getResources().getString(R.string.fast_cartridge_id), "", "", 10,null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        cartridgeId = new TitledEditText(context, null, getResources().getString(R.string.fast_test_id), "", "", 20,RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
 
 
         // Used for reset fields...
@@ -367,7 +367,7 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
             observations.add(new String[]{"OTHER REASON OF SAMPLE REJECTION", App.get(otherReasonRejected)});
 
         if (cartridgeId.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"CARTRIDGE ID", App.get(cartridgeId)});
+            observations.add(new String[]{"TEST ID", App.get(cartridgeId)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -606,7 +606,7 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
             } else if (obs[0][0].equals("OTHER REASON OF SAMPLE REJECTION")) {
                 otherReasonRejected.getEditText().setText(obs[0][1]);
                 otherReasonRejected.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("CARTRIDGE ID")) {
+            } else if (obs[0][0].equals("TEST ID")) {
                 cartridgeId.getEditText().setText(obs[0][1]);
                 cartridgeId.setVisibility(View.VISIBLE);
             }
@@ -717,7 +717,7 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
                 specimenSourceOther.setVisibility(View.GONE);
             }
         } else if (radioGroup == sampleAccepted.getRadioGroup()) {
-            if (sampleAccepted.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))) {
+            if (sampleAccepted.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_rejected))) {
                 reasonRejected.setVisibility(View.VISIBLE);
                 if (reasonRejected.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))) {
                     otherReasonRejected.setVisibility(View.VISIBLE);

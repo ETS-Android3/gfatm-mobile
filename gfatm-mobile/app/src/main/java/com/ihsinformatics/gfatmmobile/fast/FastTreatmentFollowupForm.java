@@ -220,11 +220,17 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
             else
                 treatmentStartDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
         }
-        if(!dateChoose) {
-            thirdDateCalendar.set(Calendar.YEAR, secondDateCalendar.get(Calendar.YEAR));
-            thirdDateCalendar.set(Calendar.DAY_OF_MONTH, secondDateCalendar.get(Calendar.DAY_OF_MONTH));
-            thirdDateCalendar.set(Calendar.MONTH, secondDateCalendar.get(Calendar.MONTH));
-            thirdDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
+        if (!dateChoose) {
+            Calendar requiredDate = secondDateCalendar.getInstance();
+            requiredDate.setTime(secondDateCalendar.getTime());
+            requiredDate.add(Calendar.DATE, 30);
+
+            if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                thirdDateCalendar.setTime(requiredDate.getTime());
+            } else {
+                requiredDate.add(Calendar.DATE, 1);
+                thirdDateCalendar.setTime(requiredDate.getTime());
+            }
         }
 
         if (!(returnVisitDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString()))) {
@@ -557,6 +563,58 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
         treatmentStartDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
         returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
         updateDisplay();
+
+
+        final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
+            @Override
+            protected HashMap<String, String> doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.fetching_data));
+                        loading.show();
+                    }
+                });
+
+                HashMap<String, String> result = new HashMap<String, String>();
+
+                String regDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+
+                if (regDate != null)
+                    result.put("REGISTRATION DATE", regDate);
+
+                return result;
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+
+            @Override
+            protected void onPostExecute(HashMap<String, String> result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                if (result.get("REGISTRATION DATE") != null) {
+                    String format = "";
+                    String registerationDate = result.get("REGISTRATION DATE");
+                    if (registerationDate.contains("/")) {
+                        format = "dd/MM/yyyy";
+                    } else {
+                        format = "yyyy-MM-dd";
+                    }
+                    secondDateCalendar.setTime(App.stringToDate(registerationDate, format));
+                    updateDisplay();
+                    treatmentStartDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+                }
+            }
+        };
+        autopopulateFormTask.execute("");
+
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {

@@ -31,6 +31,11 @@
     <string name="fast_surgery_title">Surgery</string>
     <string name="fast_er_title">Emergency (ER)</string>
     <string name="fast_form_date_past">Date can\'t be in past.</string>
+    <string name="fast_next_visit_date">Next visit date can\'t be before form date.</string>
+    <string name="fast_date_cant_be_greater_than_24_months">Date can\'t be greater than 24 months.</string>
+    <string name="fast_order_date_cannot_be_before_form_date">Order date cannot be before form date</string>
+    <string name="fast_form_date_cannot_be_before_order_date">Form date cannot be before order date</string>
+    <string name="fast_result_date_cannot_be_before_order_date">Result date can\'t be before test order date.</string>
     <string name="fast_patient_title">Patient</string>
     <string name="fast_attendant_title">Attendant</string>
     <string name="fast_greater_title">&gt;= 15 years old</string>
@@ -218,6 +223,7 @@
     <string name="fast_unilateral_disease">Unilateral Disease</string>
     <string name="fast_bilateral_disease">Bilateral Disease</string>
     <string name="fast_abnormal_but_extent_not_defined">Abnormal but extent not defined</string>
+    <string name="fast_zero">0</string>
     <string name="fast_one">1</string>
     <string name="fast_two">2</string>
     <string name="fast_three">3</string>
@@ -270,6 +276,8 @@
     <string name="fast_fifty">50</string>
     <string name="fast_order">Order</string>
     <string name="fast_result">Result</string>
+    <string name="fast_enter_value_between_0_25">Error, enter value between 0-25</string>
+    <string name="fast_enter_value_between_0_50">Error, enter value between 0-50</string>
     <string name="fast_select_form_type">Please select form type:</string>
     <string name="fast_afb_smear_microscopy_order_and_result_form">AFB Smear Microscopy Order and Result Form</string>
     <string name="fast_afb_smear_order">AFB Smear Order</string>
@@ -368,6 +376,7 @@
     <string name="fast_treatment_completed">Treatment Completed</string>
     <string name="fast_transfer_out">Transfer Out</string>
     <string name="fast_loss_to_follow_up_default">Loss To Follow Up (Default)</string>
+    <string name="fast_loss_to_follow_up">Loss To Follow Up</string>
     <string name="fast_patient_weight">Patient Weight (kg)</string>
     <string name="fast_next_appointment_date">Next Appointment Date</string>
     <string name="fast_treatment_initiation_date">Treatment Initiation Date</string>
@@ -420,6 +429,7 @@
     <string name="fast_husband_name_cannot_be_less_than_2_characters">Husband name cannot be less than 2 characters</string>
     <string name="fast_father_name_cannot_be_less_than_2_characters">Father name cannot be less than 2 characters</string>
     <string name="fast_scan_qr_code">Scan QR code</string>
+    <string name="fast_invalid_name">Invalid Name</string>
     <string name="fast_test_id_error">Invalid test id</string>
     <string name="fast_invalid_father_name">Invalid father name</string>
     <string name="fast_invalid_husband_name">Invalid husband name</string>
@@ -929,7 +939,7 @@
         <item>@string/fast_died</item>
         <item>@string/fast_transfer_out</item>
         <item>@string/fast_referral_new</item>
-        <item>@string/fast_treatment_after_loss_to_follow_up_without_default</item>
+        <item>@string/fast_loss_to_follow_up</item>
         <item>@string/fast_other_title</item>
     </string-array>
 

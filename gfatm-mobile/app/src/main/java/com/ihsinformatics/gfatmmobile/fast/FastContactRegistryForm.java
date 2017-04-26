@@ -10,6 +10,9 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,9 +29,11 @@ import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
+import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
+import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,9 +48,9 @@ public class FastContactRegistryForm extends AbstractFormActivity implements Rad
 
     // Views...
     TitledButton formDate;
-    TitledSpinner contacts;
-    TitledSpinner adultContacts;
-    TitledSpinner childhoodContacts;
+    TitledEditText contacts;
+    TitledEditText adultContacts;
+    TitledEditText childhoodContacts;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -117,19 +122,120 @@ public class FastContactRegistryForm extends AbstractFormActivity implements Rad
 
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        contacts = new TitledEditText(context, null, getResources().getString(R.string.fast_how_many_people_sleep_in_your_home), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
+        adultContacts = new TitledEditText(context, null, getResources().getString(R.string.fast_total_number_of_adult_contacts), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        childhoodContacts = new TitledEditText(context, null, getResources().getString(R.string.fast_total_number_of_childhood_contacts), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
 
-        contacts = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_how_many_people_sleep_in_your_home), getResources().getStringArray(R.array.fast_0_50_list), getResources().getString(R.string.fast_one), App.VERTICAL);
-        adultContacts = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_total_number_of_adult_contacts), getResources().getStringArray(R.array.fast_0_25_list), getResources().getString(R.string.fast_one), App.HORIZONTAL);
-        childhoodContacts = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_total_number_of_childhood_contacts), getResources().getStringArray(R.array.fast_0_25_list), getResources().getString(R.string.fast_one), App.HORIZONTAL);
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), contacts.getSpinner(), adultContacts.getSpinner(),
-                childhoodContacts.getSpinner()};
+        views = new View[]{formDate.getButton(), contacts.getEditText(), adultContacts.getEditText(),
+                childhoodContacts.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formDate, contacts, adultContacts, childhoodContacts}};
         formDate.getButton().setOnClickListener(this);
+
+        contacts.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > 0) {
+                    if (Integer.parseInt(s.toString()) < 0 || Integer.parseInt(s.toString()) > 50) {
+                        contacts.getEditText().setError(getResources().getString(R.string.fast_enter_value_between_0_50));
+                    } else {
+                        contacts.getEditText().setError(null);
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+
+            }
+        });
+
+        adultContacts.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > 0) {
+                    if (Integer.parseInt(s.toString()) < 0 || Integer.parseInt(s.toString()) > 25) {
+                        adultContacts.getEditText().setError(getResources().getString(R.string.fast_enter_value_between_0_25));
+                    } else {
+                        if (!App.get(childhoodContacts).isEmpty()) {
+                            int sum = Integer.parseInt(App.get(adultContacts)) + Integer.parseInt(App.get(childhoodContacts));
+                            contacts.getEditText().setText(String.valueOf(sum));
+                        } else {
+                            int sum = Integer.parseInt(App.get(adultContacts));
+                            contacts.getEditText().setText(String.valueOf(sum));
+                        }
+                        adultContacts.getEditText().setError(null);
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (App.get(adultContacts).isEmpty() && App.get(childhoodContacts).isEmpty()) {
+                    contacts.getEditText().setText(null);
+                } else if (App.get(adultContacts).isEmpty()) {
+                    int sum = Integer.parseInt(App.get(childhoodContacts));
+                    contacts.getEditText().setText(String.valueOf(sum));
+                } else if (App.get(childhoodContacts).isEmpty()) {
+                    int sum = Integer.parseInt(App.get(adultContacts));
+                    contacts.getEditText().setText(String.valueOf(sum));
+                }
+            }
+        });
+
+        childhoodContacts.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > 0) {
+                    if (Integer.parseInt(s.toString()) < 0 || Integer.parseInt(s.toString()) > 25) {
+                        childhoodContacts.getEditText().setError(getResources().getString(R.string.fast_enter_value_between_0_25));
+                    } else {
+                        if (!App.get(adultContacts).isEmpty()) {
+                            int sum = Integer.parseInt(App.get(adultContacts)) + Integer.parseInt(App.get(childhoodContacts));
+                            contacts.getEditText().setText(String.valueOf(sum));
+                        } else {
+                            int sum = Integer.parseInt(App.get(childhoodContacts));
+                            contacts.getEditText().setText(String.valueOf(sum));
+                        }
+                        childhoodContacts.getEditText().setError(null);
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (App.get(adultContacts).isEmpty() && App.get(childhoodContacts).isEmpty()) {
+                    contacts.getEditText().setText(null);
+                } else if (App.get(adultContacts).isEmpty()) {
+                    int sum = Integer.parseInt(App.get(childhoodContacts));
+                    contacts.getEditText().setText(String.valueOf(sum));
+                } else if (App.get(childhoodContacts).isEmpty()) {
+                    int sum = Integer.parseInt(App.get(adultContacts));
+                    contacts.getEditText().setText(String.valueOf(sum));
+                }
+            }
+        });
+
 
         resetViews();
     }
@@ -155,15 +261,14 @@ public class FastContactRegistryForm extends AbstractFormActivity implements Rad
 
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
-            }else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-            }
-            else
+            } else
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         }
     }
@@ -172,6 +277,66 @@ public class FastContactRegistryForm extends AbstractFormActivity implements Rad
     public boolean validate() {
         Boolean error = false;
 
+        if (contacts.getVisibility() == View.VISIBLE && contacts.getEditText().getText().toString().trim().isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            contacts.getEditText().setError(getString(R.string.empty_field));
+            contacts.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (adultContacts.getVisibility() == View.VISIBLE && adultContacts.getEditText().getText().toString().trim().isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            adultContacts.getEditText().setError(getString(R.string.empty_field));
+            adultContacts.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (childhoodContacts.getVisibility() == View.VISIBLE && childhoodContacts.getEditText().getText().toString().trim().isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            childhoodContacts.getEditText().setError(getString(R.string.empty_field));
+            childhoodContacts.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (contacts.getVisibility() == View.VISIBLE && Integer.parseInt(contacts.getEditText().getText().toString()) > 50) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            contacts.getEditText().setError(getString(R.string.fast_enter_value_between_0_50));
+            contacts.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (adultContacts.getVisibility() == View.VISIBLE && Integer.parseInt(adultContacts.getEditText().getText().toString()) > 25) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            adultContacts.getEditText().setError(getString(R.string.fast_enter_value_between_0_25));
+            adultContacts.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (childhoodContacts.getVisibility() == View.VISIBLE && Integer.parseInt(childhoodContacts.getEditText().getText().toString()) > 25){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            childhoodContacts.getEditText().setError(getString(R.string.fast_enter_value_between_0_25));
+            childhoodContacts.getEditText().requestFocus();
+            error = true;
+        }
+
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
@@ -179,7 +344,7 @@ public class FastContactRegistryForm extends AbstractFormActivity implements Rad
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
             alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-           // DrawableCompat.setTint(clearIcon, color);
+            // DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_error));
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
@@ -213,7 +378,7 @@ public class FastContactRegistryForm extends AbstractFormActivity implements Rad
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
-            }else {
+            } else {
                 endTime = new Date();
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
@@ -225,9 +390,9 @@ public class FastContactRegistryForm extends AbstractFormActivity implements Rad
 
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-        observations.add(new String[]{"NUMBER OF CONTACTS", contacts.getSpinner().getSelectedItem().toString()});
-        observations.add(new String[]{"NUMBER OF ADULT CONTACTS", adultContacts.getSpinner().getSelectedItem().toString()});
-        observations.add(new String[]{"NUMBER OF CHILDHOOD CONTACTS", childhoodContacts.getSpinner().getSelectedItem().toString()});
+        observations.add(new String[]{"NUMBER OF CONTACTS", App.get(contacts)});
+        observations.add(new String[]{"NUMBER OF ADULT CONTACTS", App.get(adultContacts)});
+        observations.add(new String[]{"NUMBER OF CHILDHOOD CONTACTS", App.get(childhoodContacts)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -358,105 +523,99 @@ public class FastContactRegistryForm extends AbstractFormActivity implements Rad
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
-            }
-            else if (obs[0][0].equals("NUMBER OF CONTACTS")) {
-                contacts.getSpinner().selectValue(obs[0][1]);
-                contacts.setVisibility(View.VISIBLE);
-            }
-            else if (obs[0][0].equals("NUMBER OF ADULT CONTACTS")) {
-                adultContacts.getSpinner().selectValue(obs[0][1]);
-                adultContacts.setVisibility(View.VISIBLE);
-            }
-            else if (obs[0][0].equals("NUMBER OF CHILDHOOD CONTACTS")) {
-                childhoodContacts.getSpinner().selectValue(obs[0][1]);
-                childhoodContacts.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("NUMBER OF CONTACTS")) {
+                contacts.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("NUMBER OF ADULT CONTACTS")) {
+                adultContacts.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("NUMBER OF CHILDHOOD CONTACTS")) {
+                childhoodContacts.getEditText().setText(obs[0][1]);
             }
         }
     }
 
-    @Override
-    public void onClick(View view) {
-
-        super.onClick(view);
-
-        if (view == formDate.getButton()) {
-            Bundle args = new Bundle();
-            args.putInt("type", DATE_DIALOG_ID);
-            formDateFragment.setArguments(args);
-            formDateFragment.show(getFragmentManager(), "DatePicker");
-            args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", false);
-        }
-    }
-
-    @Override
-    public boolean onLongClick(View v) {
-        return false;
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-    }
-
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-    }
-
-    @Override
-    public void resetViews() {
-        super.resetViews();
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            Boolean openFlag = bundle.getBoolean("open");
-            if (openFlag) {
-
-                bundle.putBoolean("open", false);
-                bundle.putBoolean("save", true);
-
-                String id = bundle.getString("formId");
-                int formId = Integer.valueOf(id);
-
-                refill(formId);
-
-            } else bundle.putBoolean("save", false);
-
-        }
-    }
-
-    @Override
-    public void onCheckedChanged(RadioGroup radioGroup, int i) {
-    }
-
-    class MyAdapter extends PagerAdapter {
-
         @Override
-        public int getCount() {
-            return PAGE_COUNT;
+        public void onClick (View view){
+
+            super.onClick(view);
+
+            if (view == formDate.getButton()) {
+                Bundle args = new Bundle();
+                args.putInt("type", DATE_DIALOG_ID);
+                formDateFragment.setArguments(args);
+                formDateFragment.show(getFragmentManager(), "DatePicker");
+                args.putBoolean("allowPastDate", true);
+                args.putBoolean("allowFutureDate", false);
+            }
         }
 
         @Override
-        public Object instantiateItem(View container, int position) {
-
-            ViewGroup viewGroup = groups.get(position);
-            ((ViewPager) container).addView(viewGroup, 0);
-
-            return viewGroup;
+        public boolean onLongClick (View v){
+            return false;
         }
 
         @Override
-        public void destroyItem(View container, int position, Object obj) {
-            ((ViewPager) container).removeView((View) obj);
+        public void onItemSelected (AdapterView < ? > parent, View view,int position, long id){
+
         }
 
         @Override
-        public boolean isViewFromObject(View container, Object obj) {
-            return container == obj;
+        public void onCheckedChanged (CompoundButton buttonView,boolean isChecked){
+
+        }
+
+        @Override
+        public void resetViews () {
+            super.resetViews();
+            formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+            Bundle bundle = this.getArguments();
+            if (bundle != null) {
+                Boolean openFlag = bundle.getBoolean("open");
+                if (openFlag) {
+
+                    bundle.putBoolean("open", false);
+                    bundle.putBoolean("save", true);
+
+                    String id = bundle.getString("formId");
+                    int formId = Integer.valueOf(id);
+
+                    refill(formId);
+
+                } else bundle.putBoolean("save", false);
+
+            }
+        }
+
+        @Override
+        public void onCheckedChanged (RadioGroup radioGroup,int i){
+        }
+
+        class MyAdapter extends PagerAdapter {
+
+            @Override
+            public int getCount() {
+                return PAGE_COUNT;
+            }
+
+            @Override
+            public Object instantiateItem(View container, int position) {
+
+                ViewGroup viewGroup = groups.get(position);
+                ((ViewPager) container).addView(viewGroup, 0);
+
+                return viewGroup;
+            }
+
+            @Override
+            public void destroyItem(View container, int position, Object obj) {
+                ((ViewPager) container).removeView((View) obj);
+            }
+
+            @Override
+            public boolean isViewFromObject(View container, Object obj) {
+                return container == obj;
+            }
         }
     }
-}
