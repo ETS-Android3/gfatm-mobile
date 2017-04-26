@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?colorBackground"
+    android:orientation="vertical">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/toolbarParent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/DarkTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?colorPrimary"
+            app:popupTheme="@style/DarkTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/mainlayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="@dimen/small">
+
+            <TextView
+                android:paddingTop="@dimen/small"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Feedback Type:"/>
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/feedbacktype"
+                android:spinnerMode="dialog"
+                android:entries="@array/feedback_types"/>
+
+            <TextView
+                android:paddingTop="@dimen/small"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Description:"/>
+
+            <EditText
+                android:id="@+id/description"
+                android:inputType="textMultiLine"
+                android:lines="8"
+                android:minLines="6"
+                android:gravity="top|left"
+                android:maxLines="10"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:scrollbars="vertical" />
+
+            <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:padding="@dimen/small">
+
+                <TextView
+                    android:id="@+id/cancelButton"
+                    android:paddingTop="@dimen/small"
+                    android:gravity="right"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:textStyle="bold"
+                    android:paddingRight="@dimen/small"
+                    android:text="@string/cancel" />
+
+                <TextView
+                    android:id="@+id/sendButton"
+                    android:paddingTop="@dimen/small"
+                    android:gravity="right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textStyle="bold"
+                    android:textColor="?colorAccent"
+                    android:text="Send" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>
