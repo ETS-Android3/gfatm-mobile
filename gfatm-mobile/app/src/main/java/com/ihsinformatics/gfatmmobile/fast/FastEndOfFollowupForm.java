@@ -122,7 +122,6 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
         }
 
         gotoFirstPage();
-
         return mainContent;
     }
 
@@ -152,21 +151,20 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
             locationArray[i] = String.valueOf(locations[i][1]);
         }
         transferOutLocations = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_location_of_transfer_out), locationArray, "", App.VERTICAL);
-        remarks = new TitledEditText(context, null, getResources().getString(R.string.fast_other_reason_remarks), "", "", 250, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        remarks = new TitledEditText(context, null, getResources().getString(R.string.fast_other_reason_remarks), "", "", 250, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         treatmentInitiatedReferralSite = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_treatment_initiated_at_transfer_referral_site), getResources().getStringArray(R.array.fast_yes_no_unknown_list), getResources().getString(R.string.fast_dont_know_title), App.VERTICAL, App.VERTICAL);
         treatmentNotInitiatedReferralSite = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_reason_treatment_not_initiated_at_referral_site), getResources().getStringArray(R.array.fast_reason_treatment_not_initiated_referral_site_list), getResources().getString(R.string.fast_patient_could_not_be_contacted), App.VERTICAL);
         treatmentNotInitiatedReferralSiteOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         drConfirmation = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_dr_confirmation), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_no_title), App.VERTICAL, App.VERTICAL);
-        enrsId = new TitledEditText(context, null, getResources().getString(R.string.fast_enrs_number), "", "", 10, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        firstName = new TitledEditText(context, null, getResources().getString(R.string.fast_first_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        lastName = new TitledEditText(context, null, getResources().getString(R.string.fast_last_name), "", "", 10, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        enrsId = new TitledEditText(context, null, getResources().getString(R.string.fast_enrs_number), "", "", RegexUtil.idLength, RegexUtil.ERNS_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        firstName = new TitledEditText(context, null, getResources().getString(R.string.fast_first_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        lastName = new TitledEditText(context, null, getResources().getString(R.string.fast_last_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         mobileLinearLayout = new LinearLayout(context);
         mobileLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
-        mobile1 = new TitledEditText(context, null, getResources().getString(R.string.fast_contact_number), "", "####", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        mobile1 = new TitledEditText(context, null, getResources().getString(R.string.fast_contact_number), "", "####", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         mobileLinearLayout.addView(mobile1);
         mobile2 = new TitledEditText(context, null, "-", "", "#######", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         mobileLinearLayout.addView(mobile2);
-
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), treatmentOutcome.getSpinner(), transferOutLocations.getSpinner(), remarks.getEditText()
@@ -244,6 +242,12 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
             error = true;
         }
 
+        if (!RegexUtil.isValidErnsNumber(App.get(enrsId))) {
+            enrsId.getEditText().setError(getString(R.string.invalid_value));
+            enrsId.getEditText().requestFocus();
+            error = true;
+        }
+
         if (firstName.getVisibility() == View.VISIBLE && firstName.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
@@ -254,12 +258,33 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
             error = true;
         }
 
+
         if (lastName.getVisibility() == View.VISIBLE && lastName.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
             lastName.getEditText().setError(getString(R.string.empty_field));
+            lastName.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (firstName.getVisibility() == View.VISIBLE && App.get(firstName).length() == 1) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            firstName.getEditText().setError(getString(R.string.fast_invalid_name));
+            firstName.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (lastName.getVisibility() == View.VISIBLE && App.get(lastName).length() == 1) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            lastName.getEditText().setError(getString(R.string.fast_invalid_name));
             lastName.getEditText().requestFocus();
             error = true;
         }
@@ -670,7 +695,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
 
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title)) ||
                     parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_referral_new)) ||
-                    parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_patient_loss_to_follow_up))) {
+                    parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_loss_to_follow_up))) {
                 remarks.setVisibility(View.VISIBLE);
 
             } else {
