@@ -262,7 +262,7 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
             error = true;
         }
 
-        if (cartridgeId.getVisibility() == View.VISIBLE && App.get(cartridgeId).length()!=10) {
+      /*  if (cartridgeId.getVisibility() == View.VISIBLE && App.get(cartridgeId).length()!=10) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -270,7 +270,7 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
             cartridgeId.getEditText().setError(getString(R.string.invalid_value));
             cartridgeId.getEditText().requestFocus();
             error = true;
-        }
+        }*/
 
         if (error) {
 
@@ -383,7 +383,7 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("GXP Specimen Collection", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
+                String result = serverService.saveEncounterAndObservation("Specimen Collection", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 
