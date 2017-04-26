@@ -310,7 +310,12 @@ public class HttpPost {
         try {
 
             JSONObject programEnrollementObject = new JSONObject();
-            programEnrollementObject.put("patient", App.getPatient().getUuid());
+
+            if (App.getPatient().getUuid() == null || App.getPatient().getUuid().equals(""))
+                programEnrollementObject.put("patient", "uuid-replacement-string");
+            else
+                programEnrollementObject.put("patient", App.getPatient().getUuid());
+
             programEnrollementObject.put("program", programName);
             programEnrollementObject.put("location", location);
             programEnrollementObject.put("dateEnrolled", enrollmentDate);

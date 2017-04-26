@@ -1840,11 +1840,20 @@ public class ServerService {
                         for (int j = 0; j < encounterForms.length; j++) {
                             Object[] encounterForm = encounterForms[j];
 
-                            if (String.valueOf(form[4]).contains("uuid-replacement-string")) {
+                            if (String.valueOf(encounterForm[4]).contains("uuid-replacement-string")) {
                                 String content = String.valueOf(encounterForm[4]).replace("uuid-replacement-string", String.valueOf(newPerson.get("uuid")));
 
                                 ContentValues values = new ContentValues();
                                 values.put("content", content);
+
+                                dbUtil.update(Metadata.OFFLINE_FORM, values, "id=?", new String[]{String.valueOf(encounterForm[0])});
+                            }
+
+                            if (String.valueOf(encounterForm[3]).contains("uuid-replacement-string")) {
+                                String uri = String.valueOf(encounterForm[3]).replace("uuid-replacement-string", String.valueOf(newPerson.get("uuid")));
+
+                                ContentValues values = new ContentValues();
+                                values.put("uri", uri);
 
                                 dbUtil.update(Metadata.OFFLINE_FORM, values, "id=?", new String[]{String.valueOf(encounterForm[0])});
                             }
