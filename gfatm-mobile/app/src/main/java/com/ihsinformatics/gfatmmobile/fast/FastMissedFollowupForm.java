@@ -16,6 +16,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,8 +53,11 @@ import java.util.HashMap;
 
 public class FastMissedFollowupForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
     public static final int THIRD_DATE_DIALOG_ID = 3;
+    public static final int daysRange = 30;
     protected Calendar thirdDateCalendar;
     protected DialogFragment thirdDateFragment;
+
+    Boolean dateChoose = false;
     Context context;
 
     // Views...
@@ -225,7 +229,22 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
                 missedVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
         }
 
+        if (!dateChoose) {
+            Calendar requiredDate = secondDateCalendar.getInstance();
+            requiredDate.setTime(secondDateCalendar.getTime());
+            requiredDate.add(Calendar.DATE, 30);
+
+            if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                thirdDateCalendar.setTime(requiredDate.getTime());
+            } else {
+                requiredDate.add(Calendar.DATE, 1);
+                thirdDateCalendar.setTime(requiredDate.getTime());
+            }
+        }
+
         if (!(returnVisitDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString()))) {
+            Calendar dateToday = Calendar.getInstance();
+            dateToday.add(Calendar.MONTH, 24);
 
             String formDa = returnVisitDate.getButton().getText().toString();
 
@@ -239,9 +258,30 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
 
                 returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
 
-            } else
+            }
+            else if(thirdDateCalendar.after(dateToday)){
+                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_date_cant_be_greater_than_24_months), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
                 returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+            }
+
+            else if(thirdDateCalendar.equals(formDateCalendar) || thirdDateCalendar.before(formDateCalendar)){
+                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_date_of_next_visit), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+            }
+
+            else
+                returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+
         }
+        dateChoose = false;
 
     }
 
@@ -275,7 +315,7 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
             alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-          //  DrawableCompat.setTint(clearIcon, color);
+            //  DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_error));
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
@@ -309,7 +349,7 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
-            }else {
+            } else {
                 endTime = new Date();
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
@@ -479,18 +519,14 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
-            }
-
-            else if (obs[0][0].equals("DATE OF MISSED VISIT")) {
+            } else if (obs[0][0].equals("DATE OF MISSED VISIT")) {
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                 missedVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
                 missedVisitDate.setVisibility(View.VISIBLE);
-            }
-
-            else if (obs[0][0].equals("CONTACT TO THE PATIENT")) {
+            } else if (obs[0][0].equals("CONTACT TO THE PATIENT")) {
                 for (RadioButton rb : patientContacted.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);
@@ -501,9 +537,7 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
                     }
                 }
                 patientContacted.setVisibility(View.VISIBLE);
-            }
-
-            else if (obs[0][0].equals("UNABLE TO CONTACT THE PATIENT")) {
+            } else if (obs[0][0].equals("UNABLE TO CONTACT THE PATIENT")) {
                 for (RadioButton rb : reasonPatientNotContacted.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_phone_switched_off)) && obs[0][1].equals("PHONE SWITCHED OFF")) {
                         rb.setChecked(true);
@@ -511,26 +545,19 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
                     } else if (rb.getText().equals(getResources().getString(R.string.fast_patient_did_not_recieve_call)) && obs[0][1].equals("PATIENT DID NOT RECEIVE CALL")) {
                         rb.setChecked(true);
                         break;
-                    }
-                    else if (rb.getText().equals(getResources().getString(R.string.fast_incorrect_contact_number)) && obs[0][1].equals("INCORRECT CONTACT NUMBER")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_incorrect_contact_number)) && obs[0][1].equals("INCORRECT CONTACT NUMBER")) {
                         rb.setChecked(true);
                         break;
-                    }
-                    else if (rb.getText().equals(getResources().getString(R.string.fast_other_title)) && obs[0][1].equals("OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_other_title)) && obs[0][1].equals("OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT")) {
                         rb.setChecked(true);
                         break;
                     }
                 }
                 reasonPatientNotContacted.setVisibility(View.VISIBLE);
-            }
-
-            else if (obs[0][0].equals("OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT")) {
+            } else if (obs[0][0].equals("OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT")) {
                 reasonPatientNotContactedOther.getEditText().setText(obs[0][1]);
                 reasonPatientNotContactedOther.setVisibility(View.VISIBLE);
-            }
-
-
-            else if (obs[0][0].equals("REASON FOR MISSED VISIT")) {
+            } else if (obs[0][0].equals("REASON FOR MISSED VISIT")) {
                 String value = obs[0][1].equals("PATIENT MOVED") ? getResources().getString(R.string.fast_patient_moved) :
                         (obs[0][1].equals("PATIENT CHOOSE ANOTHER FACILITY") ? getResources().getString(R.string.fast_patient_continuing_treatment_at_another_location) :
                                 (obs[0][1].equals("PATIENT UNABLE TO VISIT HOSPITAL DUE TO PERSONAL REASON") ? getResources().getString(R.string.fast_patient_unable_to_visit_hospital) :
@@ -541,14 +568,10 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
 
                 reasonMissedVisit.getSpinner().selectValue(value);
                 reasonMissedVisit.setVisibility(View.VISIBLE);
-            }
-
-            else if (obs[0][0].equals("OTHER REASON TO MISSED VISIT")) {
+            } else if (obs[0][0].equals("OTHER REASON TO MISSED VISIT")) {
                 reasonMissedVisitOther.getEditText().setText(obs[0][1]);
                 reasonMissedVisitOther.setVisibility(View.VISIBLE);
-            }
-
-            else if (obs[0][0].equals("RETURN VISIT DATE")) {
+            } else if (obs[0][0].equals("RETURN VISIT DATE")) {
                 String secondDate = obs[0][1];
                 thirdDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                 returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
@@ -587,6 +610,7 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
             thirdDateFragment.show(getFragmentManager(), "DatePicker");
             args.putBoolean("allowPastDate", false);
             args.putBoolean("allowFutureDate", true);
+            dateChoose = true;
         }
     }
 

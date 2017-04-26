@@ -233,15 +233,14 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
-            }else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-            }
-            else
+            } else
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         }
 
@@ -264,10 +263,16 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         }
 
         if (!dateChoose) {
-            thirdDateCalendar.set(Calendar.YEAR, secondDateCalendar.get(Calendar.YEAR));
-            thirdDateCalendar.set(Calendar.DAY_OF_MONTH, secondDateCalendar.get(Calendar.DAY_OF_MONTH));
-            thirdDateCalendar.set(Calendar.MONTH, secondDateCalendar.get(Calendar.MONTH));
-            thirdDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
+            Calendar requiredDate = secondDateCalendar.getInstance();
+            requiredDate.setTime(secondDateCalendar.getTime());
+            requiredDate.add(Calendar.DATE, 30);
+
+            if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                thirdDateCalendar.setTime(requiredDate.getTime());
+            } else {
+                requiredDate.add(Calendar.DATE, 1);
+                thirdDateCalendar.setTime(requiredDate.getTime());
+            }
         }
         if (!(returnVisitDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString()))) {
 
@@ -414,7 +419,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
             alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-          //  DrawableCompat.setTint(clearIcon, color);
+            //  DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_error));
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
@@ -447,7 +452,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
-            }else {
+            } else {
                 endTime = new Date();
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
@@ -461,7 +466,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
 
 
-        String cnicNumber = cnic1.getEditText().toString() +"-"+ cnic2.getEditText().toString() +"-"+ cnic3.getEditText().toString();
+        String cnicNumber = cnic1.getEditText().getText().toString() + "-" + cnic2.getEditText().getText().toString() + "-" + cnic3.getEditText().getText().toString();
 
         observations.add(new String[]{"REGISTRATION DATE", App.getSqlDateTime(secondDateCalendar)});
         observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnicNumber});
@@ -482,7 +487,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                                                                                                             (App.get(cnicOwner).equals(getResources().getString(R.string.fast_son)) ? "SON" :
                                                                                                                     (App.get(cnicOwner).equals(getResources().getString(R.string.fast_daughter)) ? "DAUGHTER" : "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER")))))))))))))});
 
-        if(cnicOwnerOther.getVisibility() == View.VISIBLE)
+        if (cnicOwnerOther.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(cnicOwnerOther)});
 
 
@@ -681,7 +686,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
             } else if (obs[0][0].equals("REGISTRATION DATE")) {
                 String secondDate = obs[0][1];
@@ -713,12 +718,10 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
                 cnicOwner.getSpinner().selectValue(value);
                 cnicOwner.setVisibility(View.VISIBLE);
-            }
-            else if (obs[0][0].equals("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER")) {
+            } else if (obs[0][0].equals("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER")) {
                 cnicOwnerOther.getEditText().setText(obs[0][1]);
                 cnicOwnerOther.setVisibility(View.VISIBLE);
-            }
-            else if (obs[0][0].equals("TB REGISTRATION NUMBER")) {
+            } else if (obs[0][0].equals("TB REGISTRATION NUMBER")) {
                 tbRegisterationNumber.getEditText().setText(obs[0][1]);
                 tbRegisterationNumber.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("TUBERCULOSIS DIAGNOSIS METHOD")) {
@@ -901,8 +904,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             } else {
                 reasonTreatmentNotInitiatedOther.setVisibility(View.GONE);
             }
-        }
-        else if(spinner == cnicOwner.getSpinner()){
+        } else if (spinner == cnicOwner.getSpinner()) {
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title))) {
                 cnicOwnerOther.setVisibility(View.VISIBLE);
             } else {
@@ -1044,10 +1046,9 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                 if (result.get("FORM DATE") != null) {
                     String format = "";
                     String registerationDate = result.get("FORM DATE");
-                    if(registerationDate.contains("/")){
+                    if (registerationDate.contains("/")) {
                         format = "dd/MM/yyyy";
-                    }
-                    else{
+                    } else {
                         format = "yyyy-MM-dd";
                     }
                     secondDateCalendar.setTime(App.stringToDate(registerationDate, format));
