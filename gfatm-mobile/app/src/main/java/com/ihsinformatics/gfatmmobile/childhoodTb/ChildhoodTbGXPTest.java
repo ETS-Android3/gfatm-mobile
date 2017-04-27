@@ -133,7 +133,7 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        cartridgeId = new TitledEditText(context,null,getResources().getString(R.string.ctb_cartridge_id),"","",10,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,false);
+        cartridgeId = new TitledEditText(context,null,getResources().getString(R.string.ctb_cartridge_id),"","",10,RegexUtil.CARTRIDGE_ID_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
         resultRecieveDate = new TitledButton(context, null, getResources().getString(R.string.ctb_date_result_recieve), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         resultRecieveDate.setTag("resultRecieveDate");
         geneXpertMTBResult = new TitledSpinner(context,null,getResources().getString(R.string.ctb_mtb_result),getResources().getStringArray(R.array.ctb_mtb_result_list),getResources().getString(R.string.ctb_mtb_not_detected),App.HORIZONTAL,true);

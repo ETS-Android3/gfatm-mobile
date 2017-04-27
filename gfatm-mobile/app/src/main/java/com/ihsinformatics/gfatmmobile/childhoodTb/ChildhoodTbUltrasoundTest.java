@@ -58,16 +58,13 @@ import java.util.HashMap;
 
 public class ChildhoodTbUltrasoundTest extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener, View.OnTouchListener {
 
-    public static final int THIRD_DIALOG_ID = 3;
-    protected Calendar thirdDateCalender;
-    protected DialogFragment thirdDateFragment;
     Context context;
     TitledButton formDate;
     TitledRadioGroup formType;
     TitledEditText testId;
     TitledButton testOrderDate;
     TitledRadioGroup pointTestBeingDone;
-    TitledEditText monthTreatment;
+    TitledSpinner monthTreatment;
     TitledRadioGroup ultrasoundSite;
     TitledEditText otherUltrasoundSite;
     TitledButton ultrasoundResultRecievedDate;
@@ -151,22 +148,15 @@ public class ChildhoodTbUltrasoundTest extends AbstractFormActivity implements R
     public void initViews() {
 
 
-        thirdDateCalender = Calendar.getInstance();
-        thirdDateFragment = new SelectDateFragment();
-
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        testId = new TitledEditText(context,null,getResources().getString(R.string.ctb_test_id),"","",20,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,true);
+        testId = new TitledEditText(context,null,getResources().getString(R.string.ctb_test_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,true);
         formType = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_type_of_form),getResources().getStringArray(R.array.ctb_type_of_form_list),null,App.HORIZONTAL,App.VERTICAL,true);
         pointTestBeingDone = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_point_test_being_done),getResources().getStringArray(R.array.ctb_ultrasound_test_point_list),getResources().getString(R.string.ctb_diagnostic),App.VERTICAL,App.VERTICAL,true);
-        monthTreatment= new TitledEditText(context,null,getResources().getString(R.string.ctb_month_treatment),"","",2,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,true);
+        monthTreatment= new TitledSpinner(context,null,getResources().getString(R.string.ctb_month_treatment),getResources().getStringArray(R.array.ctb_0_to_24),null,App.HORIZONTAL);
         ultrasoundSite = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_site_ultrasound),getResources().getStringArray(R.array.ctb_site_of_ultrasound_list),getResources().getString(R.string.ctb_diagnostic),App.VERTICAL,App.VERTICAL,true);
         otherUltrasoundSite = new TitledEditText(context,null,getResources().getString(R.string.ctb_other_specify),"","",50,RegexUtil.ALPHA_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
-        testOrderDate = new TitledButton(context, null, getResources().getString(R.string.ctb_test_order_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
-        testOrderDate.setTag("testOrderDate");
-        ultrasoundResultRecievedDate = new TitledButton(context, null, getResources().getString(R.string.ctb_ultrasound_result_date), DateFormat.format("dd-MMM-yyyy", thirdDateCalender).toString(), App.HORIZONTAL);
-        ultrasoundResultRecievedDate.setTag("ultrasoundResultRecievedDate");
         ultrasoundResult = new TitledSpinner(context,null,getResources().getString(R.string.ctb_ultrasound_result),getResources().getStringArray(R.array.ctb_ultrasound_result_list),null,App.VERTICAL);
         otherUltrasoundResult = new TitledEditText(context,null,getResources().getString(R.string.ctb_other_specify),"","",50,RegexUtil.ALPHA_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
         ultrasoundInterpretation = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_ultrasound_interpretation),getResources().getStringArray(R.array.ctb_ultrasound_interpretation_list),getResources().getString(R.string.ctb_diagnostic),App.VERTICAL,App.VERTICAL,true);
@@ -194,7 +184,7 @@ public class ChildhoodTbUltrasoundTest extends AbstractFormActivity implements R
 
         views = new View[]{formDate.getButton(),formType.getRadioGroup(),pointTestBeingDone.getRadioGroup(),ultrasoundSite.getRadioGroup(),testOrderDate.getButton(),
                 ultrasoundResultRecievedDate.getButton(),ultrasoundResult.getSpinner(),ultrasoundInterpretation.getRadioGroup(),
-                testId.getEditText(),monthTreatment.getEditText(),otherUltrasoundSite.getEditText(),otherUltrasoundResult
+                testId.getEditText(),monthTreatment.getSpinner(),otherUltrasoundSite.getEditText(),otherUltrasoundResult
         };
 
         // Array used to display views accordingly...
@@ -207,6 +197,7 @@ public class ChildhoodTbUltrasoundTest extends AbstractFormActivity implements R
         pointTestBeingDone.getRadioGroup().setOnCheckedChangeListener(this);
         ultrasoundSite.getRadioGroup().setOnCheckedChangeListener(this);
         ultrasoundResultRecievedDate.getButton().setOnClickListener(this);
+        monthTreatment.getSpinner().setOnItemSelectedListener(this);
         ultrasoundResult.getSpinner().setOnItemSelectedListener(this);
         ultrasoundInterpretation.getRadioGroup().setOnCheckedChangeListener(this);
         testId.getEditText().addTextChangedListener(new TextWatcher() {
@@ -294,17 +285,6 @@ public class ChildhoodTbUltrasoundTest extends AbstractFormActivity implements R
             } else
                 testOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
         }
-        if (!ultrasoundResultRecievedDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", thirdDateCalender).toString())) {
-            if (thirdDateCalender.after(date)) {
-
-                thirdDateCalender = App.getCalendar(date);
-
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
-                snackbar.show();
-
-            } else
-                ultrasoundResultRecievedDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalender).toString());
-        }
        }
 
     @Override
@@ -333,31 +313,6 @@ public class ChildhoodTbUltrasoundTest extends AbstractFormActivity implements R
         }
         else{
             formType.getRadioGroup().getButtons().get(1).setError(null);
-        }
-        if (monthTreatment.getVisibility() == View.VISIBLE && App.get(monthTreatment).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            monthTreatment.getEditText().setError(getString(R.string.empty_field));
-            monthTreatment.getEditText().requestFocus();
-            error = true;
-        }
-        else{
-            monthTreatment.getEditText().setError(null);
-        }
-        if (!App.get(monthTreatment).isEmpty()) {
-            if (Integer.parseInt(App.get(monthTreatment))<1 || Integer.parseInt(App.get(monthTreatment)) > 24) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                monthTreatment.getEditText().setError(getString(R.string.ctb_range_1_to_24));
-                monthTreatment.getEditText().requestFocus();
-                error = true;
-            } else {
-                monthTreatment.getEditText().setError(null);
-            }
         }
         if (otherUltrasoundSite.getVisibility() == View.VISIBLE) {
             if(App.get(otherUltrasoundSite).isEmpty()) {
@@ -468,7 +423,6 @@ public class ChildhoodTbUltrasoundTest extends AbstractFormActivity implements R
 
         }else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
             observations.add(new String[]{"TEST ID", App.get(testId)});
-            observations.add(new String[]{"DATE OF  TEST RESULT RECEIVED", App.getSqlDateTime(thirdDateCalender)});
             observations.add(new String[]{"ULTRASOUND RESULT", App.get(ultrasoundResult).equals(getResources().getString(R.string.ctb_abdomen_adenopathy)) ? "ABDOMEN ADENOPATHY" :
                     (App.get(ultrasoundResult).equals(getResources().getString(R.string.ctb_intestinal_wall_thickening)) ? "INTESTINAL WALL THICKENING" :
                             (App.get(ultrasoundResult).equals(getResources().getString(R.string.ctb_ascites)) ? "ASCITES" :
@@ -647,7 +601,7 @@ public class ChildhoodTbUltrasoundTest extends AbstractFormActivity implements R
                     }
                 }
                 else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
-                    monthTreatment.getEditText().setText(obs[0][1]);
+                    monthTreatment.getSpinner().selectValue(obs[0][1]);
                 }else if (obs[0][0].equals("ULTRASOUND SITE")) {
                     for (RadioButton rb : ultrasoundSite.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.ctb_abdomen)) && obs[0][1].equals("ULTRASOUND, ABDOMEN")) {
@@ -673,12 +627,7 @@ public class ChildhoodTbUltrasoundTest extends AbstractFormActivity implements R
                     testIdView.setImageResource(R.drawable.ic_checked);
                     checkTestId();
                 }
-                else if (obs[0][0].equals("DATE OF  TEST RESULT RECEIVED")) {
-                    String thirdDate = obs[0][1];
-                    thirdDateCalender.setTime(App.stringToDate(thirdDate, "yyyy-MM-dd"));
-                    ultrasoundResultRecievedDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalender).toString());
-                    ultrasoundResultRecievedDate.setVisibility(View.VISIBLE);
-                }else if (obs[0][0].equals("ULTRASOUND RESULT")) {
+               else if (obs[0][0].equals("ULTRASOUND RESULT")) {
                     String value = obs[0][1].equals("ABDOMEN ADENOPATHY") ? getResources().getString(R.string.ctb_abdomen_adenopathy) :
                             (obs[0][1].equals("INTESTINAL WALL THICKENING") ? getResources().getString(R.string.ctb_intestinal_wall_thickening) :
                                     (obs[0][1].equals("ASCITES") ? getResources().getString(R.string.ctb_ascites) :
@@ -733,14 +682,6 @@ public class ChildhoodTbUltrasoundTest extends AbstractFormActivity implements R
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
         }
-        if (view == ultrasoundResultRecievedDate.getButton()) {
-            Bundle args = new Bundle();
-            args.putInt("type", THIRD_DIALOG_ID);
-            args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", false);
-            thirdDateFragment.setArguments(args);
-            thirdDateFragment.show(getFragmentManager(), "DatePicker");
-        }
     }
 
     @Override
@@ -782,7 +723,6 @@ public class ChildhoodTbUltrasoundTest extends AbstractFormActivity implements R
 
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         testOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-        ultrasoundResultRecievedDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalender).toString());
         goneVisibility();
         submitButton.setEnabled(false);
         Bundle bundle = this.getArguments();
@@ -999,10 +939,6 @@ public class ChildhoodTbUltrasoundTest extends AbstractFormActivity implements R
                 calendar = formDateCalendar;
             else if (getArguments().getInt("type") == SECOND_DATE_DIALOG_ID)
                 calendar = secondDateCalendar;
-
-            else if (getArguments().getInt("type") == THIRD_DIALOG_ID)
-                calendar = thirdDateCalender;
-
             else
                 return null;
 
@@ -1025,8 +961,6 @@ public class ChildhoodTbUltrasoundTest extends AbstractFormActivity implements R
                 formDateCalendar.set(yy, mm, dd);
             else if (((int) view.getTag()) == SECOND_DATE_DIALOG_ID)
                 secondDateCalendar.set(yy, mm, dd);
-            else if(((int) view.getTag()) == THIRD_DIALOG_ID)
-                thirdDateCalender.set(yy, mm, dd);
             updateDisplay();
 
         }
