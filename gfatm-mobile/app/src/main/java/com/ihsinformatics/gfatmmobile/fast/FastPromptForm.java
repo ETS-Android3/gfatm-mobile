@@ -400,7 +400,7 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
         String date = fo.getFormDate();
         ArrayList<String[][]> obsValue = fo.getObsValue();
         formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         for (int i = 0; i < obsValue.size(); i++) {
 
@@ -446,7 +446,7 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
             } else if (obs[0][0].equals("SPUTUM SAMPLE DUE DATE")) {
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
-                dueDateSample.getEditText().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+                dueDateSample.getEditText().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
                 dueDateSample.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("VOUCHER GIVEN FOR TEST")) {
 
