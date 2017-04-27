@@ -416,7 +416,7 @@
     <string name="fast_dr_not_confirmed_by_baseline_repeat_test">DR not confirmed by baseline repeat test</string>
     <string name="fast_treatment_after_loss_to_follow_up_without_default">Treatment after loss to follow up</string>
     <string name="fast_please_select_form_type">Please select form type!</string>
-    <string name="fast_patient_age_less_than_15">Form will not be submitted as patient age is less than 16</string>
+    <string name="fast_patient_age_less_than_15">Form will not be submitted as patient age is less than 15</string>
     <string name="fast_patient_age_less_than_15_cant_submit">Form cannot not be submitted as patient age is less than 16</string>
     <string name="fast_husband_name">Husband\'s Name</string>
     <string name="fast_father_name">Father\'s Name</string>

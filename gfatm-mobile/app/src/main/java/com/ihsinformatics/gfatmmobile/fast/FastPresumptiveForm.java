@@ -132,7 +132,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
     public void initViews() {
 
         // first page views...
-        if (App.getPatient().getPerson().getAge() <= 15) {
+        if (App.getPatient().getPerson().getAge() < 15) {
             submitButton.setEnabled(false);
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
