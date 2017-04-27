@@ -139,7 +139,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
             alertDialog.setMessage(getString(R.string.fast_patient_age_less_than_15));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-           // DrawableCompat.setTint(clearIcon, color);
+            // DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_error));
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
@@ -217,12 +217,11 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
-            personDOB = personDOB.substring(0,10);
 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
 
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
@@ -230,15 +229,14 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
             } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
             } else
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-
         }
     }
 
@@ -329,7 +327,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
                 final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
                 alertDialog.setMessage(getString(R.string.form_error));
                 Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-             //   DrawableCompat.setTint(clearIcon, color);
+                //   DrawableCompat.setTint(clearIcon, color);
                 alertDialog.setIcon(clearIcon);
                 alertDialog.setTitle(getResources().getString(R.string.title_error));
                 alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
@@ -389,7 +387,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
         if (patientConsultation.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"PATIENT CONSULTATION DEPARTMENT", App.get(patientConsultation).equals(getResources().getString(R.string.fast_chesttbclinic_title)) ? "CHEST MEDICINE DEPARTMENT" :
                     (App.get(patientConsultation).equals(getResources().getString(R.string.fast_medicine_title)) ? "GENERAL MEDICINE DEPARTMENT" :
-                            (App.get(patientConsultation).equals(getResources().getString(R.string.fast_ent_title)) ? "EAR, NOSE AND THROAT DEPARTMENT" :
+                            (App.get(patientConsultation).equals(getResources().getString(R.string.fast_ent_title)) ? "EAR, NOSE AND THROAT DEPARTMENT\'\'EAR, NOSE AND THROAT DEPARTMENT" :
                                     (App.get(patientConsultation).equals(getResources().getString(R.string.fast_gynaeobstetrics_otherthen_title)) ? "OBSTETRICS AND GYNECOLOGY DEPARTMENT" :
                                             (App.get(patientConsultation).equals(getResources().getString(R.string.fast_pregnancy_title)) ? "ANTENATAL DEPARTMENT" :
                                                     (App.get(patientConsultation).equals(getResources().getString(R.string.fast_surgery_title)) ? "GENERAL SURGERY DEPARTMENT" :
@@ -600,7 +598,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
         String date = fo.getFormDate();
         ArrayList<String[][]> obsValue = fo.getObsValue();
         formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         for (int i = 0; i < obsValue.size(); i++) {
 
@@ -626,7 +624,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
             } else if (obs[0][0].equals("PATIENT CONSULTATION DEPARTMENT")) {
                 String value = obs[0][1].equals("CHEST MEDICINE DEPARTMENT") ? getResources().getString(R.string.fast_chesttbclinic_title) :
                         (obs[0][1].equals("GENERAL MEDICINE DEPARTMENT") ? getResources().getString(R.string.fast_medicine_title) :
-                                (obs[0][1].equals("EAR, NOSE AND THROAT DEPARTMENT") ? getResources().getString(R.string.fast_ent_title) :
+                                (obs[0][1].equals("EAR, NOSE AND THROAT DEPARTMENT\'\'EAR, NOSE AND THROAT DEPARTMENT") ? getResources().getString(R.string.fast_ent_title) :
                                         (obs[0][1].equals("OBSTETRICS AND GYNECOLOGY DEPARTMENT") ? getResources().getString(R.string.fast_gynaeobstetrics_otherthen_title) :
                                                 (obs[0][1].equals("ANTENATAL DEPARTMENT") ? getResources().getString(R.string.fast_pregnancy_title) :
                                                         (obs[0][1].equals("GENERAL SURGERY DEPARTMENT") ? getResources().getString(R.string.fast_surgery_title) :

@@ -19,6 +19,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
@@ -30,6 +31,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
@@ -210,7 +212,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
             alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-          //  DrawableCompat.setTint(clearIcon, color);
+            //  DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_error));
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
@@ -265,13 +267,13 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
 
 
         if (patientAttendant.getVisibility() == View.VISIBLE)
-        observations.add(new String[]{"PATIENT_OR_ATTENDANT", App.get(patientAttendant).equals(getResources().getString(R.string.fast_patient_title)) ? "PATIENT" : "ATTENDANT"});
+            observations.add(new String[]{"PATIENT_OR_ATTENDANT", App.get(patientAttendant).equals(getResources().getString(R.string.fast_patient_title)) ? "PATIENT" : "ATTENDANT"});
 
         if (ageRange.getVisibility() == View.VISIBLE)
-        observations.add(new String[]{"AGE_RANGE", App.get(ageRange).equals(getResources().getString(R.string.fast_greater_title)) ? ">= 15 YEARS OLD" : "<15 YEARS OLD"});
+            observations.add(new String[]{"AGE_RANGE", App.get(ageRange).equals(getResources().getString(R.string.fast_greater_title)) ? ">= 15 YEARS OLD" : "<15 YEARS OLD"});
 
         if (gender.getVisibility() == View.VISIBLE)
-        observations.add(new String[]{"GENDER", App.get(gender).equals(getResources().getString(R.string.fast_male_title)) ? "MALE" : "FEMALE"});
+            observations.add(new String[]{"GENDER", App.get(gender).equals(getResources().getString(R.string.fast_male_title)) ? "MALE" : "FEMALE"});
 
         if (coughTwoWeeks.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TWO_WEEKS_COUGH", App.get(tbContact).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
@@ -290,107 +292,107 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
 
 
 
-    AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
-        @Override
-        protected String doInBackground(String... params) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    loading.setInverseBackgroundForced(true);
-                    loading.setIndeterminate(true);
-                    loading.setCancelable(false);
-                    loading.setMessage(getResources().getString(R.string.submitting_form));
-                    loading.show();
-                }
-            });
+        AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.submitting_form));
+                        loading.show();
+                    }
+                });
 
-            String result = serverService.submitToGwtApp("fast_screening", values, observations.toArray(new String[][]{}));
-            if (result.contains("SUCCESS"))
-                return "SUCCESS";
+                String result = serverService.submitToGwtApp("fast_screening", values, observations.toArray(new String[][]{}));
+                if (result.contains("SUCCESS"))
+                    return "SUCCESS";
 
-            return result;
+                return result;
 
-        }
-
-        @Override
-        protected void onProgressUpdate(String... values) {
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            loading.dismiss();
-
-            if (result.equals("SUCCESS")) {
-                resetViews();
-
-                final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
-                alertDialog.setMessage(getResources().getString(R.string.form_submitted));
-                Drawable submitIcon = getResources().getDrawable(R.drawable.ic_submit);
-                alertDialog.setIcon(submitIcon);
-                int color = App.getColor(context, R.attr.colorAccent);
-                DrawableCompat.setTint(submitIcon, color);
-                alertDialog.setTitle(getResources().getString(R.string.title_completed));
-                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
-                                    imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
-                                } catch (Exception e) {
-                                    // TODO: handle exception
-                                }
-                                dialog.dismiss();
-                            }
-                        });
-                alertDialog.show();
-            } else if (result.equals("CONNECTION_ERROR")) {
-                final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
-                alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
-                Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-                alertDialog.setIcon(clearIcon);
-                alertDialog.setTitle(getResources().getString(R.string.title_error));
-                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
-                                    imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
-                                } catch (Exception e) {
-                                    // TODO: handle exception
-                                }
-                                dialog.dismiss();
-                            }
-                        });
-                alertDialog.show();
-            } else {
-                final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
-                String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
-                alertDialog.setMessage(message);
-                Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-                alertDialog.setIcon(clearIcon);
-                alertDialog.setTitle(getResources().getString(R.string.title_error));
-                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
-                                    imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
-                                } catch (Exception e) {
-                                    // TODO: handle exception
-                                }
-                                dialog.dismiss();
-                            }
-                        });
-                alertDialog.show();
             }
 
-        }
-    };
-    submissionFormTask.execute("");
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
 
-    return false;
-}
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                if (result.equals("SUCCESS")) {
+                    resetViews();
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.form_submitted));
+                    Drawable submitIcon = getResources().getDrawable(R.drawable.ic_submit);
+                    alertDialog.setIcon(submitIcon);
+                    int color = App.getColor(context, R.attr.colorAccent);
+                    DrawableCompat.setTint(submitIcon, color);
+                    alertDialog.setTitle(getResources().getString(R.string.title_completed));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else if (result.equals("CONNECTION_ERROR")) {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
+                    alertDialog.setMessage(message);
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+
+            }
+        };
+        submissionFormTask.execute("");
+
+        return false;
+    }
 
     @Override
     public boolean save() {
@@ -408,7 +410,163 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
     }
 
     @Override
-    public void refill(int encounterId) {
+    public void refill(int formId) {
+
+        OfflineForm fo = serverService.getOfflineFormById(formId);
+        String date = fo.getFormDate();
+        ArrayList<String[][]> obsValue = fo.getObsValue();
+        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
+        for (int i = 0; i < obsValue.size(); i++) {
+
+            String[][] obs = obsValue.get(i);
+            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+                timeTakeToFill = obs[0][1];
+            } else if (obs[0][0].equals("SCREENING_LOCATION")) {
+
+                for (RadioButton rb : screeningLocation.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_community_title)) && obs[0][1].equals("COMMUNITY")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_hospital_title)) && obs[0][1].equals("HOSPITAL")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                screeningLocation.setVisibility(View.VISIBLE);
+            }
+
+            else if (obs[0][0].equals("SPUTUM HOSPITAL_FACILITY_NAME")) {
+                hospital.getSpinner().selectValue(obs[0][1]);
+                hospital.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("HOSPITAL_SECTION")) {
+                String value = obs[0][1].equals("OPD CLINIC SCREENING") ? getResources().getString(R.string.fast_opdclinicscreening_title) :
+                        (obs[0][1].equals("WARD SCREENING") ? getResources().getString(R.string.fast_wardscreening_title) :
+                                (obs[0][1].equals("REGISTRATION DESK") ? getResources().getString(R.string.fast_registrationdesk_title) :
+                                        (obs[0][1].equals("X-RAY VAN") ? getResources().getString(R.string.fast_nexttoxrayvan_title) :
+                                                getResources().getString(R.string.fast_other_title))));
+
+                hospitalSection.getSpinner().selectValue(value);
+                hospitalSection.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("HOSPITAL_SECTION_OTHER")) {
+                hospitalSectionOther.getEditText().setText(obs[0][1]);
+                hospitalSectionOther.setVisibility(View.VISIBLE);
+            }
+
+            else if (obs[0][0].equals("OPD_WARD_SECTION")) {
+                String value = obs[0][1].equals("GENERAL MEDICINE DEPARTMENT") ? getResources().getString(R.string.fast_generalmedicinefilterclinic_title) :
+                        (obs[0][1].equals("CHEST MEDICINE DEPARTMENT") ? getResources().getString(R.string.fast_chesttbclinic_title) :
+                                (obs[0][1].equals("OBSTETRICS AND GYNECOLOGY DEPARTMENT") ? getResources().getString(R.string.fast_gynaeobstetrics_title) :
+                                        (obs[0][1].equals("GENERAL SURGERY DEPARTMENT") ? getResources().getString(R.string.fast_surgery_title) :
+                                                getResources().getString(R.string.fast_er_title))));
+
+                opdWardSection.getSpinner().selectValue(value);
+                opdWardSection.setVisibility(View.VISIBLE);
+            }
+
+            else if (obs[0][0].equals("PATIENT_OR_ATTENDANT")) {
+
+                for (RadioButton rb : patientAttendant.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_patient_title)) && obs[0][1].equals("PATIENT")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_attendant_title)) && obs[0][1].equals("ATTENDANT")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                patientAttendant.setVisibility(View.VISIBLE);
+            }
+
+            else if (obs[0][0].equals("AGE_RANGE")) {
+
+                for (RadioButton rb : ageRange.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_greater_title)) && obs[0][1].equals(">= 15 YEARS OLD")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_less_title)) && obs[0][1].equals("<15 YEARS OLD")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                ageRange.setVisibility(View.VISIBLE);
+            }
+
+            else if (obs[0][0].equals("GENDER")) {
+
+                for (RadioButton rb : gender.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_male_title)) && obs[0][1].equals("MALE")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_female_title)) && obs[0][1].equals("FEMALE")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                gender.setVisibility(View.VISIBLE);
+            }
+
+
+            else if (obs[0][0].equals("TWO_WEEKS_COUGH")) {
+                for (RadioButton rb : coughTwoWeeks.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_refused_title)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_dont_know_title)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                coughTwoWeeks.setVisibility(View.VISIBLE);
+            }
+
+            else if (obs[0][0].equals("TUBERCULOSIS_CONTACT")) {
+                for (RadioButton rb : tbContact.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_refused_title)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_dont_know_title)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                tbContact.setVisibility(View.VISIBLE);
+            }
+
+            else if (obs[0][0].equals("HISTORY_OF_TUBERCULOSIS")) {
+                for (RadioButton rb : tbHistory.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_refused_title)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_dont_know_title)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                tbHistory.setVisibility(View.VISIBLE);
+            }
+        }
 
     }
 
