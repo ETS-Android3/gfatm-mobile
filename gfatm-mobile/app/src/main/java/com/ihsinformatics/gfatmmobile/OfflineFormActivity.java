@@ -281,56 +281,104 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                 view.getDrawable().setColorFilter(getResources().getColor(R.color.dark_grey), PorterDuff.Mode.SRC_ATOP);
                 view.invalidate();
 
-                if (v == deleteIcon) {
+                Boolean selected = false;
+                for (CheckBox cb : checkBoxes) {
+                    if (cb.isChecked())
+                       selected = true;
+                }
 
-                    int color = App.getColor(OfflineFormActivity.this, R.attr.colorAccent);
+                if(!selected){
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
-                    alertDialog.setMessage(getString(R.string.warning_before_delete));
-                    Drawable clearIcon = getResources().getDrawable(R.drawable.ic_delete);
-                    DrawableCompat.setTint(clearIcon, color);
+                    alertDialog.setMessage(getString(R.string.error_no_selection));
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                     alertDialog.setIcon(clearIcon);
-                    alertDialog.setTitle(getResources().getString(R.string.title_delete));
-                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    deleteForms();
-                                }
-                            });
-                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
+                                    alertDialog.dismiss();
                                 }
                             });
                     alertDialog.show();
-                    alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
+                }
+                else {
+                    if (v == deleteIcon) {
 
-                } else if (v == submitIcon) {
+                        int color = App.getColor(OfflineFormActivity.this, R.attr.colorAccent);
 
-                    int color = App.getColor(OfflineFormActivity.this, R.attr.colorAccent);
+                        final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
+                        alertDialog.setMessage(getString(R.string.warning_before_delete));
+                        Drawable clearIcon = getResources().getDrawable(R.drawable.ic_delete);
+                        DrawableCompat.setTint(clearIcon, color);
+                        alertDialog.setIcon(clearIcon);
+                        alertDialog.setTitle(getResources().getString(R.string.title_delete));
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        deleteForms();
+                                    }
+                                });
+                        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                        alertDialog.show();
+                        alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
 
-                    final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
-                    alertDialog.setMessage(getString(R.string.warning_before_submit));
-                    Drawable clearIcon = getResources().getDrawable(R.drawable.ic_submit);
-                    DrawableCompat.setTint(clearIcon, color);
-                    alertDialog.setIcon(clearIcon);
-                    alertDialog.setTitle(getResources().getString(R.string.title_submit));
-                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    submitForms();
-                                }
-                            });
-                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            });
-                    alertDialog.show();
-                    alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
+                    } else if (v == submitIcon) {
 
+                        int color = App.getColor(OfflineFormActivity.this, R.attr.colorAccent);
+
+                        final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
+                        alertDialog.setMessage(getString(R.string.warning_before_sync));
+                        Drawable clearIcon = getResources().getDrawable(R.drawable.ic_submit);
+                        DrawableCompat.setTint(clearIcon, color);
+                        alertDialog.setIcon(clearIcon);
+                        alertDialog.setTitle(getResources().getString(R.string.title_sync));
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        submitForms();
+                                    }
+                                });
+                        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                        alertDialog.show();
+                        alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
+
+                    } else if (v == emailIcon) {
+
+                        int color = App.getColor(OfflineFormActivity.this, R.attr.colorAccent);
+
+                        final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
+                        alertDialog.setMessage(getString(R.string.warning_before_email));
+                        Drawable clearIcon = getResources().getDrawable(R.drawable.ic_submit);
+                        DrawableCompat.setTint(clearIcon, color);
+                        alertDialog.setIcon(clearIcon);
+                        alertDialog.setTitle(getResources().getString(R.string.title_email));
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        emailForms();
+                                    }
+                                });
+                        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                        alertDialog.show();
+                        alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
+
+                    }
                 }
 
                 break;
@@ -442,6 +490,70 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                 }
 
                 fillList();
+            }
+        };
+        submissionTask.execute("");
+
+    }
+
+    public void emailForms(){
+
+        final ArrayList<String> checkedTag = new ArrayList<>();
+        for (CheckBox cb : checkBoxes) {
+            if (cb.isChecked()) {
+                checkedTag.add(cb.getTag().toString());
+            }
+        }
+
+
+        AsyncTask<String, String, String> submissionTask = new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.submitting_form));
+                        loading.show();
+                    }
+                });
+
+                StringBuilder formsData = new StringBuilder ();
+
+                for (int i = 0; i < checkedTag.size(); i++) {
+                    formsData.append(serverService.emailOfflineForm(checkedTag.get(i)));
+                }
+
+                return formsData.toString();
+
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            ;
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                String[] emailAddreses = {App.getSupportEmail ()};
+                Intent emailIntent = new Intent (Intent.ACTION_SEND);
+                emailIntent.putExtra (Intent.EXTRA_EMAIL, emailAddreses);
+                StringBuilder subject = new StringBuilder ();
+                subject.append (getResources ().getString (R.string.app_name));
+                subject.append (" : ");
+                subject.append (App.getUsername ());
+                emailIntent.putExtra (Intent.EXTRA_SUBJECT, subject.toString ());
+                emailIntent.setType ("plain/text");
+                emailIntent.putExtra (Intent.EXTRA_TEXT, result.toString ());
+
+                startActivity (emailIntent);
+
             }
         };
         submissionTask.execute("");
