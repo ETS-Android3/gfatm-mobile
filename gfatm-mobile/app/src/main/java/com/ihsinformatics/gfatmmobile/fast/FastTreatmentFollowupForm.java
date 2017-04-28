@@ -233,13 +233,17 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
             }
         }
 
+        Calendar maxDateCalender = formDateCalendar.getInstance();
+        maxDateCalender.setTime(formDateCalendar.getTime());
+        maxDateCalender.add(Calendar.YEAR, 2);
+
         if (!(returnVisitDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString()))) {
 
             String formDa = returnVisitDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
 
-            Date date = new Date();
-            if (thirdDateCalendar.before(App.getCalendar(date))) {
+            //  Date date = new Date();
+            if (thirdDateCalendar.before(secondDateCalendar)) {
 
                 thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
 
@@ -256,6 +260,17 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
                 tv.setMaxLines(2);
                 snackbar.show();
                 returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+            }
+
+            else if (thirdDateCalendar.after(maxDateCalender)) {
+
+                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_return_date_future), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+
             }
 
             else
@@ -284,7 +299,7 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
             alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-           // DrawableCompat.setTint(clearIcon, color);
+            // DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_error));
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
@@ -332,7 +347,7 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
         observations.add(new String[]{"TREATMENT START DATE", App.getSqlDateTime(secondDateCalendar)});
         observations.add(new String[]{"WEIGHT (KG)", App.get(weight)});
         observations.add(new String[]{"TREATMENT PLAN", App.get(treatmentPlan).equals(getResources().getString(R.string.fast_intensive_phase)) ? "INTENSIVE PHASE" :
-                    (App.get(treatmentPlan).equals(getResources().getString(R.string.fast_continuation_phase)) ? "CONTINUE REGIMEN" : "TREATMENT COMPLETE")});
+                (App.get(treatmentPlan).equals(getResources().getString(R.string.fast_continuation_phase)) ? "CONTINUE REGIMEN" : "TREATMENT COMPLETE")});
         observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDateTime(thirdDateCalendar)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
@@ -535,7 +550,7 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
             args.putInt("type", THIRD_DATE_DIALOG_ID);
             thirdDateFragment.setArguments(args);
             thirdDateFragment.show(getFragmentManager(), "DatePicker");
-            args.putBoolean("allowPastDate", false);
+            args.putBoolean("allowPastDate", true);
             args.putBoolean("allowFutureDate", true);
             dateChoose = true;
         }

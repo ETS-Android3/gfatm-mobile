@@ -31,6 +31,7 @@
     <string name="fast_surgery_title">Surgery</string>
     <string name="fast_er_title">Emergency (ER)</string>
     <string name="fast_form_date_past">Date can\'t be in past.</string>
+    <string name="fast_return_date_future">Next appointment date cannot be more than 24 months.</string>
     <string name="fast_next_visit_date">Next visit date can\'t be before form date.</string>
     <string name="fast_date_cant_be_greater_than_24_months">Date can\'t be greater than 24 months.</string>
     <string name="fast_order_date_cannot_be_before_form_date">Order date cannot be before form date</string>
@@ -415,7 +416,7 @@
     <string name="fast_dr_not_confirmed_by_baseline_repeat_test">DR not confirmed by baseline repeat test</string>
     <string name="fast_treatment_after_loss_to_follow_up_without_default">Treatment after loss to follow up</string>
     <string name="fast_please_select_form_type">Please select form type!</string>
-    <string name="fast_patient_age_less_than_15">Form will not be submitted as patient age is less than 16</string>
+    <string name="fast_patient_age_less_than_15">Form will not be submitted as patient age is less than 15</string>
     <string name="fast_patient_age_less_than_15_cant_submit">Form cannot not be submitted as patient age is less than 16</string>
     <string name="fast_husband_name">Husband\'s Name</string>
     <string name="fast_father_name">Father\'s Name</string>
@@ -931,7 +932,7 @@
         <item>@string/fast_patient_unwell</item>
         <item>@string/fast_other_title</item>
     </string-array>
-    
+
     <string-array name="fast_treatment_outcome_list">
         <item>@string/fast_cured</item>
         <item>@string/fast_treatment_completed</item>
@@ -943,7 +944,7 @@
         <item>@string/fast_other_title</item>
     </string-array>
 
-    
+
     <string-array name="fast_reason_treatment_not_initiated_referral_site_list">
         <item>@string/fast_patient_could_not_be_contacted</item>
         <item>@string/fast_patient_left_the_city</item>
