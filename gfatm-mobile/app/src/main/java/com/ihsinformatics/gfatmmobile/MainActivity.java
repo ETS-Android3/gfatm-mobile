@@ -56,14 +56,14 @@ public class MainActivity extends AppCompatActivity
     Context context = this;
     LinearLayout buttonLayout;
     LinearLayout programLayout;
-    LinearLayout headerLayout;
+    public static LinearLayout headerLayout;
     Button formButton;
     Button reportButton;
     Button searchButton;
     RadioGroup radioGroup;
-    FormFragment fragmentForm = new FormFragment();
-    ReportFragment fragmentReport = new ReportFragment();
-    SearchFragment fragmentSearch = new SearchFragment();
+    public static FormFragment fragmentForm = new FormFragment();
+    public static ReportFragment fragmentReport = new ReportFragment();
+    public static SearchFragment fragmentSearch = new SearchFragment();
     ImageView change;
     ImageView update;
 
@@ -264,6 +264,11 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    public static void backToMainMenu(){
+        fragmentForm.setMainContentVisible(true);
+        headerLayout.setVisibility(View.VISIBLE);
+    }
+
     @Override
     public void onBackPressed() {
 
@@ -291,6 +296,7 @@ public class MainActivity extends AppCompatActivity
                             dialog.dismiss();
 
                             fragmentForm.setMainContentVisible(true);
+                            headerLayout.setVisibility(View.VISIBLE);
                         }
                     });
             alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
@@ -743,23 +749,26 @@ public class MainActivity extends AppCompatActivity
 
                 String toastMessage = "";
 
+                String pid = String.valueOf(form[0][3]);
+                if(!(pid == null || pid.equals("null"))) {
 
-                if (App.getPatientId() == null || !App.getPatientId().equals(String.valueOf(form[0][3]))) {
-                    App.setPatientId(String.valueOf(form[0][3]));
-                    App.setPatient(serverService.getPatientBySystemIdFromLocalDB(App.getPatientId()));
+                    if (App.getPatientId() == null || !App.getPatientId().equals(String.valueOf(form[0][3]))) {
 
+                        App.setPatientId(String.valueOf(form[0][3]));
+                        App.setPatient(serverService.getPatientBySystemIdFromLocalDB(App.getPatientId()));
 
-                    toastMessage = getResources().getString(R.string.selected_patient_changed) + " " + App.getPatient().getPerson().getGivenName() + " " + App.getPatient().getPerson().getFamilyName() + " (" + App.getPatient().getPatientId() + ")";
+                        toastMessage = getResources().getString(R.string.selected_patient_changed) + " " + App.getPatient().getPerson().getGivenName() + " " + App.getPatient().getPerson().getFamilyName() + " (" + App.getPatient().getPatientId() + ")";
 
-                }
-                if (!App.getLocation().equals(String.valueOf(form[0][7]))) {
-                    App.setLocation(String.valueOf(form[0][7]));
+                    }
+                    if (!App.getLocation().equals(String.valueOf(form[0][7]))) {
+                        App.setLocation(String.valueOf(form[0][7]));
 
-                    if (!toastMessage.equals(""))
-                        toastMessage = toastMessage + "\n";
+                        if (!toastMessage.equals(""))
+                            toastMessage = toastMessage + "\n";
 
-                    toastMessage = toastMessage + getResources().getString(R.string.selected_location_changed) + " " + App.getLocation();
+                        toastMessage = toastMessage + getResources().getString(R.string.selected_location_changed) + " " + App.getLocation();
 
+                    }
                 }
 
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -771,19 +780,25 @@ public class MainActivity extends AppCompatActivity
                 String subtitle = getResources().getString(R.string.program) + " " + App.getProgram() + "  |  " + getResources().getString(R.string.location) + " " + App.getLocation();
                 getSupportActionBar().setSubtitle(subtitle);
 
+                if(!(pid == null || pid.equals("null"))) {
                 String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
                 String lname = App.getPatient().getPerson().getFamilyName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getFamilyName().substring(1);
 
-                patientName.setText(fname + " " + lname);
-                String dob = App.getPatient().getPerson().getBirthdate().substring(0, 10);
-                if (!dob.equals("")) {
-                    Date date = App.stringToDate(dob, "yyyy-MM-dd");
-                    DateFormat df = new SimpleDateFormat("MMM dd, yyyy");
-                    patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
-                } else patientDob.setText(dob);
-                if (!App.getPatient().getPatientId().equals(""))
-                    id.setVisibility(View.VISIBLE);
-                patientId.setText(App.getPatient().getPatientId());
+                    patientName.setText(fname + " " + lname);
+                    String dob = App.getPatient().getPerson().getBirthdate().substring(0, 10);
+                    if (!dob.equals("")) {
+                        Date date = App.stringToDate(dob, "yyyy-MM-dd");
+                        DateFormat df = new SimpleDateFormat("MMM dd, yyyy");
+                        patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
+                    } else patientDob.setText(dob);
+                    if (!App.getPatient().getPatientId().equals(""))
+                        id.setVisibility(View.VISIBLE);
+                    patientId.setText(App.getPatient().getPatientId());
+
+                    headerLayout.setVisibility(View.VISIBLE);
+                }
+                else
+                    headerLayout.setVisibility(View.GONE);
 
                 fragmentReport.fillReportFragment();
 

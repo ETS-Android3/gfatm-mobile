@@ -489,6 +489,12 @@ public abstract class AbstractFormActivity extends Fragment
             else
                 return null;
 
+            Calendar today = Calendar.getInstance();
+            String d = getArguments().getString("formDate",null);
+            if(d != null)
+                today = App.getCalendar(App.stringToDate(d, "EEEE, MMM dd,yyyy"));
+
+
             int yy = calendar.get(Calendar.YEAR);
             int mm = calendar.get(Calendar.MONTH);
             int dd = calendar.get(Calendar.DAY_OF_MONTH);
@@ -498,10 +504,10 @@ public abstract class AbstractFormActivity extends Fragment
                 Date date = new Date();
                 date.setHours(24);
                 date.setSeconds(60);
-                dialog.getDatePicker().setMaxDate(date.getTime());
+                dialog.getDatePicker().setMaxDate(today.getTime().getTime());
             }
             if (!getArguments().getBoolean("allowPastDate", false))
-                dialog.getDatePicker().setMinDate(new Date().getTime());
+                dialog.getDatePicker().setMinDate(today.getTime().getTime());
             return dialog;
         }
 

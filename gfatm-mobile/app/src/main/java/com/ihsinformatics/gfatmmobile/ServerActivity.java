@@ -39,7 +39,7 @@ public class ServerActivity extends AbstractSettingActivity {
         ipTextView.setTextColor(color);
         ipLayout.addView(ipTextView);
         ip = new EditText(this);
-        ip.setInputType(InputType.TYPE_CLASS_PHONE);
+        ip.setInputType(InputType.TYPE_CLASS_TEXT);
         ip.setMaxEms(50);
         ip.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
         ip.setSingleLine(true);
@@ -62,7 +62,7 @@ public class ServerActivity extends AbstractSettingActivity {
         portTextView.setTextColor(color);
         portLayout.addView(portTextView);
         port = new EditText(this);
-        port.setInputType(InputType.TYPE_CLASS_TEXT);
+        port.setInputType(InputType.TYPE_CLASS_PHONE);
         port.setMaxEms(4);
         port.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
         port.setSingleLine(true);

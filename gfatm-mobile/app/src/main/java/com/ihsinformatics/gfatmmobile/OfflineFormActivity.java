@@ -183,22 +183,25 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
 
                     verticalLayout.addView(linearLayout);
 
-                    LinearLayout ll1 = new LinearLayout(this);
-                    ll1.setOrientation(LinearLayout.HORIZONTAL);
+                    if (!(forms[i][3] == null || forms[i][3].equals("") || forms[i][3].equals("null"))) {
 
-                    TextView tv = new TextView(this);
-                    tv.setText(getResources().getString(R.string.patient_id) + " ");
-                    tv.setTextSize(getResources().getDimension(R.dimen.small));
-                    tv.setTextColor(color1);
-                    ll1.addView(tv);
+                        LinearLayout ll1 = new LinearLayout(this);
+                        ll1.setOrientation(LinearLayout.HORIZONTAL);
 
-                    String identifier = serverService.getPatientIdentifierBySystemIdLocalDB(String.valueOf(forms[i][3]));
-                    TextView tv1 = new TextView(this);
-                    tv1.setText(identifier);
-                    tv1.setTextSize(getResources().getDimension(R.dimen.small));
-                    ll1.addView(tv1);
+                        TextView tv = new TextView(this);
+                        tv.setText(getResources().getString(R.string.patient_id) + " ");
+                        tv.setTextSize(getResources().getDimension(R.dimen.small));
+                        tv.setTextColor(color1);
+                        ll1.addView(tv);
 
-                    moreLayout.addView(ll1);
+                        String identifier = serverService.getPatientIdentifierBySystemIdLocalDB(String.valueOf(forms[i][3]));
+                        TextView tv1 = new TextView(this);
+                        tv1.setText(identifier);
+                        tv1.setTextSize(getResources().getDimension(R.dimen.small));
+                        ll1.addView(tv1);
+
+                        moreLayout.addView(ll1);
+                    }
 
                     LinearLayout ll2 = new LinearLayout(this);
                     ll2.setOrientation(LinearLayout.HORIZONTAL);

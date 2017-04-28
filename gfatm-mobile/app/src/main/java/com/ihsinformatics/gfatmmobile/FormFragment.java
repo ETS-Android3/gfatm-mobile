@@ -126,15 +126,19 @@ public class FormFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
 
-                        if (App.getPatient() == null) {
-                            Toast toast = Toast.makeText(mainContent.getContext(), getResources().getString(R.string.patient_not_select), Toast.LENGTH_LONG);
-                            toast.setGravity(Gravity.CENTER, 0, 0);
-                            toast.show();
-                        } else if (App.getLocation() == null || App.getLocation().equals("")) {
+                        if (App.getLocation() == null || App.getLocation().equals("")) {
                             Toast toast = Toast.makeText(mainContent.getContext(), getResources().getString(R.string.location_not_select), Toast.LENGTH_LONG);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
+                        } else if (!(form.getName().equals(Forms.FAST_SCREENING_FORM) || form.getName().equals(Forms.PMDT_BASIC_MANAGEMENT_UNIT_VISIT)) && App.getPatient() == null) {
+                            Toast toast = Toast.makeText(mainContent.getContext(), getResources().getString(R.string.patient_not_select), Toast.LENGTH_LONG);
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
                         } else {
+
+                            if(form.getName().equals(Forms.FAST_SCREENING_FORM) || form.getName().equals(Forms.PMDT_BASIC_MANAGEMENT_UNIT_VISIT))
+                                MainActivity.headerLayout.setVisibility(View.GONE);
+
                             mainContent.setVisibility(View.GONE);
 
                             FragmentManager fm = getFragmentManager();
