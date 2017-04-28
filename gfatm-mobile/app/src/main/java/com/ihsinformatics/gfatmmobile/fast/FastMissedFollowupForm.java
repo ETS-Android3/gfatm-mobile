@@ -143,14 +143,14 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
         thirdDateFragment = new SelectDateFragment();
 
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        missedVisitDate = new TitledButton(context, null, getResources().getString(R.string.fast_date_of_missed_visit), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        missedVisitDate = new TitledButton(context, null, getResources().getString(R.string.fast_date_of_missed_visit), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         patientContacted = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_have_you_been_able_to_contact_the_patient), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
         reasonPatientNotContacted = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_why_were_you_unable_to_contact_the_patient), getResources().getStringArray(R.array.fast_reason_patient_not_contacted_list), getResources().getString(R.string.fast_phone_switched_off), App.VERTICAL, App.VERTICAL);
         reasonPatientNotContactedOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 250, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         reasonMissedVisit = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_why_missed_visit), getResources().getStringArray(R.array.fast_reason_missed_visit_list), getResources().getString(R.string.fast_patient_moved), App.VERTICAL);
         reasonMissedVisitOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 250, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        returnVisitDate = new TitledButton(context, null, getResources().getString(R.string.fast_date_of_next_visit), DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
+        returnVisitDate = new TitledButton(context, null, getResources().getString(R.string.fast_date_of_next_visit), DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), missedVisitDate.getButton(), patientContacted.getRadioGroup(), reasonPatientNotContacted.getRadioGroup(),
@@ -176,7 +176,7 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
         if (snackbar != null)
             snackbar.dismiss();
 
-        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
+        if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
@@ -189,21 +189,21 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
-            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
             } else
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         }
 
 
-        if (!(missedVisitDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString()))) {
+        if (!(missedVisitDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
 
             String formDa = missedVisitDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
@@ -218,15 +218,15 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
 
                 missedVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
 
-            } else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+            } else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
-                missedVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+                missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
             } else
-                missedVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+                missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         }
 
         if (!dateChoose) {
@@ -242,7 +242,7 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
             }
         }
 
-        if (!(returnVisitDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString()))) {
+        if (!(returnVisitDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString()))) {
             Calendar dateToday = Calendar.getInstance();
             dateToday.add(Calendar.MONTH, 24);
 
@@ -256,7 +256,7 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_date_past), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-                returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
 
             }
             else if(thirdDateCalendar.after(dateToday)){
@@ -265,7 +265,7 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_date_cant_be_greater_than_24_months), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-                returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
             }
 
             else if(thirdDateCalendar.equals(formDateCalendar) || thirdDateCalendar.before(formDateCalendar)){
@@ -274,11 +274,11 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_date_of_next_visit), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-                returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
             }
 
             else
-                returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
 
         }
         dateChoose = false;
@@ -514,7 +514,7 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
         String date = fo.getFormDate();
         ArrayList<String[][]> obsValue = fo.getObsValue();
         formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         for (int i = 0; i < obsValue.size(); i++) {
 
@@ -524,7 +524,7 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
             } else if (obs[0][0].equals("DATE OF MISSED VISIT")) {
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
-                missedVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+                missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
                 missedVisitDate.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("CONTACT TO THE PATIENT")) {
                 for (RadioButton rb : patientContacted.getRadioGroup().getButtons()) {
@@ -574,7 +574,7 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
             } else if (obs[0][0].equals("RETURN VISIT DATE")) {
                 String secondDate = obs[0][1];
                 thirdDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
-                returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
                 returnVisitDate.setVisibility(View.VISIBLE);
             }
         }
@@ -664,9 +664,9 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
     @Override
     public void resetViews() {
         super.resetViews();
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        missedVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-        returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+        returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
         reasonPatientNotContacted.setVisibility(View.GONE);
         reasonPatientNotContactedOther.setVisibility(View.GONE);
         reasonMissedVisitOther.setVisibility(View.GONE);
