@@ -499,7 +499,28 @@
     <string name="ctb_antibiotic_trial_dispersed">Antibiotic trial dispersed?</string>
     <string name="ctb_next_date_drug_dispersal">Next Date of Drug Dispersal</string>
     <string name="ctb_test_date_less_than_form_date">Test date can not be less than form date</string>
-
+    <string name="ctb_0">0</string>
+    <string name="ctb_5">5</string>
+    <string name="ctb_6">6</string>
+    <string name="ctb_7">7</string>
+    <string name="ctb_8">8</string>
+    <string name="ctb_9">9</string>
+    <string name="ctb_10">10</string>
+    <string name="ctb_11">11</string>
+    <string name="ctb_12">12</string>
+    <string name="ctb_13">13</string>
+    <string name="ctb_14">14</string>
+    <string name="ctb_15">15</string>
+    <string name="ctb_16">16</string>
+    <string name="ctb_17">17</string>
+    <string name="ctb_18">18</string>
+    <string name="ctb_19">19</string>
+    <string name="ctb_20">20</string>
+    <string name="ctb_21">21</string>
+    <string name="ctb_22">22</string>
+    <string name="ctb_23">23</string>
+    <string name="ctb_24">24</string>
+    <string name="ctb_other_dst_media">Other DST Media</string>
 
     <string-array name="ctb_screening_location_list">
         <item>@string/ctb_hospital</item>
@@ -771,7 +792,7 @@
         <item>@string/ctb_mycobacteria_growth_indicator</item>
         <item>@string/ctb_middlebrook_7h11s</item>
         <item>@string/ctb_laboratory_automation</item>
-        <item>@string/ctb_other_title</item>
+        <item>@string/ctb_other_dst_media</item>
     </string-array>
 
     <string-array name="ctb_susceptible_resistant_indeterminate">
@@ -1051,6 +1072,37 @@
         <item>@string/ctb_yes</item>
         <item>@string/ctb_no</item>
         <item>@string/ctb_incomplete</item>
+    </string-array>
+
+    <string-array name="ctb_0_to_24">
+        <item>@string/ctb_0</item>
+        <item>@string/ctb_1</item>
+        <item>@string/ctb_2</item>
+        <item>@string/ctb_3</item>
+        <item>@string/ctb_4</item>
+        <item>@string/ctb_5</item>
+        <item>@string/ctb_6</item>
+        <item>@string/ctb_7</item>
+        <item>@string/ctb_8</item>
+        <item>@string/ctb_9</item>
+        <item>@string/ctb_10</item>
+        <item>@string/ctb_11</item>
+        <item>@string/ctb_12</item>
+        <item>@string/ctb_13</item>
+        <item>@string/ctb_14</item>
+        <item>@string/ctb_15</item>
+        <item>@string/ctb_16</item>
+        <item>@string/ctb_17</item>
+        <item>@string/ctb_18</item>
+        <item>@string/ctb_19</item>
+        <item>@string/ctb_20</item>
+        <item>@string/ctb_21</item>
+        <item>@string/ctb_22</item>
+        <item>@string/ctb_23</item>
+        <item>@string/ctb_24</item>
+
+
+
     </string-array>
 
 </resources>

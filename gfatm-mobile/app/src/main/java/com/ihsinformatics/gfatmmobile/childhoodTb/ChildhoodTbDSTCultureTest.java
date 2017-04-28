@@ -58,20 +58,16 @@ import java.util.HashMap;
 
 public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener, View.OnTouchListener {
 
-    public static final int THIRD_DIALOG_ID = 3;
-    protected Calendar thirdDateCalender;
-    protected DialogFragment thirdDateFragment;
     Context context;
     TitledButton formDate;
     TitledRadioGroup formType;
     TitledEditText testId;
     TitledButton dateSubmission;
     TitledRadioGroup pointTestBeingDone;
-    TitledEditText monthTreatment;
+    TitledSpinner monthTreatment;
     TitledRadioGroup specimenType;
     TitledSpinner specimenComeFrom;
     TitledEditText otherSpecimentComeFrom;
-    TitledButton resultRecievedDate;
     TitledSpinner typeOfMediaDst;
     TitledRadioGroup isoniazidPoint2;
     TitledRadioGroup isoniazid1;
@@ -171,25 +167,19 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
      */
     public void initViews() {
 
-
-        thirdDateCalender = Calendar.getInstance();
-        thirdDateFragment = new SelectDateFragment();
-
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        testId = new TitledEditText(context, null, getResources().getString(R.string.ctb_test_id), "", "", 20, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        testId = new TitledEditText(context, null, getResources().getString(R.string.ctb_test_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         formType = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_type_of_form), getResources().getStringArray(R.array.ctb_type_of_form_list), null, App.HORIZONTAL, App.VERTICAL, true);
         dateSubmission = new TitledButton(context, null, getResources().getString(R.string.ctb_date_submission), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         dateSubmission.setTag("dateSubmission");
         pointTestBeingDone = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_point_test_being_done), getResources().getStringArray(R.array.ctb_point_test_being_done_list), getResources().getString(R.string.ctb_baseline), App.VERTICAL, App.VERTICAL);
-        monthTreatment = new TitledEditText(context, null, getResources().getString(R.string.ctb_month_treatment), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
+        monthTreatment = new TitledSpinner(context, null, getResources().getString(R.string.ctb_month_treatment), getResources().getStringArray(R.array.ctb_0_to_24), null, App.HORIZONTAL);
         specimenType = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_specimen_type), getResources().getStringArray(R.array.ctb_specimen_type_list), null, App.HORIZONTAL, App.VERTICAL);
         specimenComeFrom = new TitledSpinner(context, null, getResources().getString(R.string.ctb_speciment_route), getResources().getStringArray(R.array.ctb_speciment_route_list), null, App.VERTICAL);
         otherSpecimentComeFrom = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
 
-        resultRecievedDate = new TitledButton(context, null, getResources().getString(R.string.ctb_date_result_recieved), DateFormat.format("dd-MMM-yyyy", thirdDateCalender).toString(), App.HORIZONTAL);
-        resultRecievedDate.setTag("resultRecievedDate");
         typeOfMediaDst = new TitledSpinner(context, null, getResources().getString(R.string.ctb_type_of_media_dst), getResources().getStringArray(R.array.ctb_type_of_media_dst_list), null, App.VERTICAL);
         isoniazidPoint2 = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_isoniazid_point_2_result), getResources().getStringArray(R.array.ctb_susceptible_resistant_indeterminate), null, App.HORIZONTAL, App.VERTICAL);
         isoniazid1 = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_isoniazid_1_result), getResources().getStringArray(R.array.ctb_susceptible_resistant_indeterminate), null, App.HORIZONTAL, App.VERTICAL);
@@ -238,7 +228,7 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
 
 
         views = new View[]{formDate.getButton(), formType.getRadioGroup(), dateSubmission.getButton(), pointTestBeingDone.getRadioGroup(),
-                specimenType.getRadioGroup(), specimenComeFrom.getSpinner(), resultRecievedDate.getButton(), typeOfMediaDst.getSpinner(),
+                specimenType.getRadioGroup(), specimenComeFrom.getSpinner(), typeOfMediaDst.getSpinner(),
                 isoniazidPoint2.getRadioGroup(), isoniazid1.getRadioGroup(), rifampicin.getRadioGroup(),
                 ethambuthol.getRadioGroup(), streptomycin.getRadioGroup(), pyrazinamide.getRadioGroup(),
                 ofloxacin.getRadioGroup(), levofloxacin.getRadioGroup(), moxifloxacinPoint5.getRadioGroup(),
@@ -246,12 +236,12 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
                 capreomycin.getRadioGroup(), ethionamide.getRadioGroup(), cycloserine.getRadioGroup(),
                 pas.getRadioGroup(), bedaquiline.getRadioGroup(), delamanid.getRadioGroup(), linezolid.getRadioGroup(),
                 clofazamine.getRadioGroup(), otherDrugResult.getRadioGroup(),testId.getEditText(),
-                monthTreatment.getEditText(), otherSpecimentComeFrom.getEditText()
+                monthTreatment.getSpinner(), otherSpecimentComeFrom.getEditText()
         };
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, formType, linearLayout, dateSubmission, pointTestBeingDone, monthTreatment, specimenType, specimenComeFrom, otherSpecimentComeFrom, resultRecievedDate, typeOfMediaDst, isoniazidPoint2, isoniazid1, rifampicin,
+                {{formDate, formType, linearLayout, dateSubmission, pointTestBeingDone, monthTreatment, specimenType, specimenComeFrom, otherSpecimentComeFrom, typeOfMediaDst, isoniazidPoint2, isoniazid1, rifampicin,
                         ethambuthol, streptomycin, pyrazinamide,
                         ofloxacin, levofloxacin, moxifloxacinPoint5,
                         moxifloxacin2, amikacin, kanamycin,
@@ -265,7 +255,6 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
         pointTestBeingDone.getRadioGroup().setOnCheckedChangeListener(this);
         specimenType.getRadioGroup().setOnCheckedChangeListener(this);
         specimenComeFrom.getSpinner().setOnItemSelectedListener(this);
-        resultRecievedDate.getButton().setOnClickListener(this);
         typeOfMediaDst.getSpinner().setOnItemSelectedListener(this);
         isoniazidPoint2.getRadioGroup().setOnCheckedChangeListener(this);
         isoniazid1.getRadioGroup().setOnCheckedChangeListener(this);
@@ -282,6 +271,7 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
         capreomycin.getRadioGroup().setOnCheckedChangeListener(this);
         ethionamide.getRadioGroup().setOnCheckedChangeListener(this);
         cycloserine.getRadioGroup().setOnCheckedChangeListener(this);
+        monthTreatment.getSpinner().setOnItemSelectedListener(this);
         pas.getRadioGroup().setOnCheckedChangeListener(this);
         bedaquiline.getRadioGroup().setOnCheckedChangeListener(this);
         delamanid.getRadioGroup().setOnCheckedChangeListener(this);
@@ -394,17 +384,6 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
             } else
                 dateSubmission.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
         }
-        if (!resultRecievedDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", thirdDateCalender).toString())) {
-            if (thirdDateCalender.after(date)) {
-
-                thirdDateCalender = App.getCalendar(date);
-
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
-                snackbar.show();
-
-            } else
-                resultRecievedDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalender).toString());
-        }
     }
 
     @Override
@@ -431,17 +410,6 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
             error = true;
         } else {
             formType.getRadioGroup().getButtons().get(1).setError(null);
-        }
-        if (monthTreatment.getVisibility() == View.VISIBLE && App.get(monthTreatment).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            monthTreatment.getEditText().setError(getString(R.string.empty_field));
-            monthTreatment.getEditText().requestFocus();
-            error = true;
-        } else {
-            monthTreatment.getEditText().setError(null);
         }
         if (specimenType.getVisibility() == View.VISIBLE && App.get(specimenType).isEmpty()) {
             if (App.isLanguageRTL())
@@ -484,19 +452,7 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
                 error = true;
             }
         }
-        if (!App.get(monthTreatment).isEmpty()) {
-            if (Integer.parseInt(App.get(monthTreatment)) < 1 || Integer.parseInt(App.get(monthTreatment)) > 24) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                monthTreatment.getEditText().setError(getString(R.string.ctb_range_1_to_24));
-                monthTreatment.getEditText().requestFocus();
-                error = true;
-            } else {
-                monthTreatment.getEditText().setError(null);
-            }
-        }
+
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
@@ -573,7 +529,6 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
             }
         } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
             observations.add(new String[]{"TEST ID", App.get(testId)});
-            observations.add(new String[]{"DATE OF  TEST RESULT RECEIVED", App.getSqlDateTime(thirdDateCalender)});
             observations.add(new String[]{"CULTURE MEDIUM TYPE", App.get(typeOfMediaDst).equals(getResources().getString(R.string.ctb_lowenstein_jensen)) ? "LOWENSTEIN-JENSEN MYCOBACTERIA CULTURE METHOD" :
                     (App.get(typeOfMediaDst).equals(getResources().getString(R.string.ctb_mycobacteria_growth_indicator)) ? "MYCOBACTERIA GROWTH INDICATOR TUBE" :
                             (App.get(typeOfMediaDst).equals(getResources().getString(R.string.ctb_middlebrook_7h11s)) ? "MIDDLEBROOK 7H11S" :
@@ -816,7 +771,7 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
                     }
                     pointTestBeingDone.setVisibility(View.VISIBLE);
                 }  else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
-                    monthTreatment.getEditText().setText(obs[0][1]);
+                    monthTreatment.getSpinner().selectValue(obs[0][1]);
                 }else if (obs[0][0].equals("SPECIMEN TYPE")) {
                     for (RadioButton rb : specimenType.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.ctb_sputum)) && obs[0][1].equals("SPUTUM")) {
@@ -852,11 +807,6 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
                     testIdView.setEnabled(false);
                     testIdView.setImageResource(R.drawable.ic_checked);
                     checkTestId();
-                }else if (obs[0][0].equals("DATE OF  TEST RESULT RECEIVED")) {
-                    String thirdDate = obs[0][1];
-                    thirdDateCalender.setTime(App.stringToDate(thirdDate, "yyyy-MM-dd"));
-                    resultRecievedDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalender).toString());
-                    resultRecievedDate.setVisibility(View.VISIBLE);
                 }else if (obs[0][0].equals("CULTURE MEDIUM TYPE")) {
                     String value = obs[0][1].equals("LOWENSTEIN-JENSEN MYCOBACTERIA CULTURE METHOD") ? getResources().getString(R.string.ctb_lowenstein_jensen) :
                             (obs[0][1].equals("MYCOBACTERIA GROWTH INDICATOR TUBE") ? getResources().getString(R.string.ctb_mycobacteria_growth_indicator) :
@@ -1215,14 +1165,6 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
         }
-        if (view == resultRecievedDate.getButton()) {
-            Bundle args = new Bundle();
-            args.putInt("type", THIRD_DIALOG_ID);
-            args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", false);
-            thirdDateFragment.setArguments(args);
-            thirdDateFragment.show(getFragmentManager(), "DatePicker");
-        }
     }
 
     @Override
@@ -1260,7 +1202,6 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
         testIdView.setEnabled(true);
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         dateSubmission.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-        resultRecievedDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalender).toString());
         testIdView.setVisibility(View.GONE);
         testId.setVisibility(View.GONE);
         testIdView.setImageResource(R.drawable.ic_checked);
@@ -1292,7 +1233,6 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
         specimenComeFrom.setVisibility(View.GONE);
         otherSpecimentComeFrom.setVisibility(View.GONE);
         otherSpecimentComeFrom.getEditText().setText("");
-        resultRecievedDate.setVisibility(View.GONE);
         typeOfMediaDst.setVisibility(View.GONE);
         isoniazidPoint2.setVisibility(View.GONE);
         isoniazid1.setVisibility(View.GONE);
@@ -1323,7 +1263,6 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
             pointTestBeingDone.setVisibility(View.VISIBLE);
             specimenType.setVisibility(View.VISIBLE);
 
-            resultRecievedDate.setVisibility(View.GONE);
             typeOfMediaDst.setVisibility(View.GONE);
             isoniazidPoint2.setVisibility(View.GONE);
             isoniazid1.setVisibility(View.GONE);
@@ -1347,7 +1286,6 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
             clofazamine.setVisibility(View.GONE);
             otherDrug.setVisibility(View.GONE);
         }else{
-            resultRecievedDate.setVisibility(View.VISIBLE);
             typeOfMediaDst.setVisibility(View.VISIBLE);
             isoniazidPoint2.setVisibility(View.VISIBLE);
             isoniazid1.setVisibility(View.VISIBLE);
@@ -1538,8 +1476,6 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
             else if (getArguments().getInt("type") == SECOND_DATE_DIALOG_ID)
                 calendar = secondDateCalendar;
 
-            else if (getArguments().getInt("type") == THIRD_DIALOG_ID)
-                calendar = thirdDateCalender;
 
             else
                 return null;
@@ -1563,8 +1499,6 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
                 formDateCalendar.set(yy, mm, dd);
             else if (((int) view.getTag()) == SECOND_DATE_DIALOG_ID)
                 secondDateCalendar.set(yy, mm, dd);
-            else if (((int) view.getTag()) == THIRD_DIALOG_ID)
-                thirdDateCalender.set(yy, mm, dd);
             updateDisplay();
 
         }
