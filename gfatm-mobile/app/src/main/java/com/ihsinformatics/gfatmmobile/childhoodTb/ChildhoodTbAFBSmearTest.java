@@ -37,6 +37,7 @@ import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
+import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
@@ -148,11 +149,11 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
 
 
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         testId = new TitledEditText(context,null,getResources().getString(R.string.ctb_test_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,true);
         formType = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_type_of_form),getResources().getStringArray(R.array.ctb_type_of_form_list),null,App.HORIZONTAL,App.VERTICAL,true);
-        dateSubmission = new TitledButton(context, null, getResources().getString(R.string.ctb_date_submission), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
+        dateSubmission = new TitledButton(context, null, getResources().getString(R.string.ctb_date_submission), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         dateSubmission.setTag("dateSubmission");
         pointTestBeingDone = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_point_test_being_done),getResources().getStringArray(R.array.ctb_point_test_being_done_list),getResources().getString(R.string.ctb_baseline),App.VERTICAL,App.VERTICAL,true);
         monthTreatment= new TitledSpinner(context,null,getResources().getString(R.string.ctb_month_treatment),getResources().getStringArray(R.array.ctb_0_to_24),null,App.HORIZONTAL,true);
@@ -247,7 +248,7 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
 
 
         Date date = new Date();
-        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
+        if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
@@ -256,24 +257,24 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
 
             if (formDateCalendar.after(App.getCalendar(date))) {
 
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
-            }  else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+            }  else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
             }else
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
             }
-        if (!dateSubmission.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString())) {
+        if (!dateSubmission.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString())) {
 
             //
             // +Date date = App.stringToDate(sampleSubmitDate.getButton().getText().toString(), "dd-MMM-yyyy");
@@ -286,7 +287,7 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
                 snackbar.show();
 
             } else
-                dateSubmission.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+                dateSubmission.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         }
     }
 
@@ -479,7 +480,14 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
                 loading.dismiss();
 
                 if (result.equals("SUCCESS")) {
-                    resetViews();
+
+                    MainActivity.backToMainMenu();
+                    try {
+                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                    } catch (Exception e) {
+                        // TODO: handle exception
+                    }
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.form_submitted));
@@ -569,7 +577,7 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
         ArrayList<String[][]> obsValue = fo.getObsValue();
 
         formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
 
         for (int i = 0; i < obsValue.size(); i++) {
@@ -588,7 +596,7 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
                 } else if (obs[0][0].equals("SPECIMEN SUBMISSION DATE")) {
                     String secondDate = obs[0][1];
                     secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
-                    dateSubmission.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+                    dateSubmission.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
                     dateSubmission.setVisibility(View.VISIBLE);
                 } else if (obs[0][0].equals("TEST CONTEXT STATUS")) {
                     for (RadioButton rb : pointTestBeingDone.getRadioGroup().getButtons()) {
@@ -719,7 +727,7 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
         if (snackbar != null)
             snackbar.dismiss();
 
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         testId.getEditText().setEnabled(true);
         formType.getRadioGroup().getButtons().get(0).setEnabled(true);
         formType.getRadioGroup().getButtons().get(1).setEnabled(true);
@@ -727,8 +735,8 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
         testIdView.setVisibility(View.GONE);
         testId.setVisibility(View.GONE);
         testIdView.setImageResource(R.drawable.ic_checked);
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        dateSubmission.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        dateSubmission.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         goneVisibility();
         submitButton.setEnabled(false);
         Bundle bundle = this.getArguments();
