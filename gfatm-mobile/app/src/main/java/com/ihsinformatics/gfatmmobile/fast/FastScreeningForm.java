@@ -338,7 +338,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
                     }
                 });
 
-                String result = serverService.submitToGwtApp("fast_screening", values, observations.toArray(new String[][]{}));
+                String result = serverService.submitToGwtApp("fast_screening", FORM, values, observations.toArray(new String[][]{}));
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 
