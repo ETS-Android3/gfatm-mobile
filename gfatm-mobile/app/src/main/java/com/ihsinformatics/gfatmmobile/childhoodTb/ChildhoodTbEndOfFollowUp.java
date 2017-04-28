@@ -144,13 +144,13 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         treatmentOutcome = new TitledSpinner(context,null,getResources().getString(R.string.ctb_treatment_outcome),getResources().getStringArray(R.array.ctb_treatment_outcome_list),getResources().getString(R.string.ctb_cured),App.HORIZONTAL,true);
-        otherReasonRemarks = new TitledEditText(context,null,getResources().getString(R.string.ctb_other_reason_remarks),"","",250,null,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
+        otherReasonRemarks = new TitledEditText(context,null,getResources().getString(R.string.ctb_other_reason_remarks),"","",250,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
         locationOfTransferOutReferral = new TitledEditText(context, null, getResources().getString(R.string.ctb_location_referral_transfer),"","",100,null,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,true);
         treatmentIntiatedAtReferralTransfer = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_treatment_intiated_at_referral_transfer),getResources().getStringArray(R.array.yes_no_unknown_options),getResources().getString(R.string.yes),App.HORIZONTAL,App.VERTICAL,true);
         reasonTreatmentNotIntiated = new TitledSpinner(context,null,getResources().getString(R.string.ctb_reason_treatment_not_intiated),getResources().getStringArray(R.array.ctb_reason_not_intiated_list),null,App.VERTICAL,true);
         otherReasonTreatmentNotIntiated = new TitledEditText(context,null,getResources().getString(R.string.ctb_other_reason_not_intiated),"","",500,RegexUtil.ALPHA_FILTER,InputType.TYPE_CLASS_TEXT,App.VERTICAL,false);
         drConfirmation = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_dr_confirmation),getResources().getStringArray(R.array.yes_no_options),getResources().getString(R.string.no),App.HORIZONTAL,App.VERTICAL,true);
-        enrsNumber = new TitledEditText(context,null,getResources().getString(R.string.ctb_enrs_number),"","",RegexUtil.idLength, RegexUtil.ERNS_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        enrsNumber = new TitledEditText(context,null,getResources().getString(R.string.ctb_enrs_number),"","####/##",RegexUtil.idLength, RegexUtil.ERNS_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         firstName = new TitledEditText(context,getResources().getString(R.string.ctb_name_of_person_provided_details),getResources().getString(R.string.first_name),"","",50,RegexUtil.ALPHA_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,true);
         lastName = new TitledEditText(context,null,getResources().getString(R.string.last_name),"","",50,RegexUtil.ALPHA_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,true);
         contactNumberLayout = new LinearLayout(context);

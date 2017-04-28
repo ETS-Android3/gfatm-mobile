@@ -45,7 +45,7 @@ import java.util.HashMap;
  * Created by Babar on 31/1/2017.
  */
 
-public class ChildhoodTbGXPSpecimenCollection extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
     Context context;
     TitledButton formDate;
@@ -59,7 +59,7 @@ public class ChildhoodTbGXPSpecimenCollection extends AbstractFormActivity imple
     TitledRadioGroup sampleAcceptedByTechnician;
     TitledSpinner whySampleRejcted;
     TitledEditText reasonForRejection;
-    TitledEditText cartridgeId;
+    TitledEditText testId;
 
     Snackbar snackbar;
     ScrollView scrollView;
@@ -77,7 +77,7 @@ public class ChildhoodTbGXPSpecimenCollection extends AbstractFormActivity imple
                              ViewGroup container, Bundle savedInstanceState) {
 
         PAGE_COUNT = 1;
-        FORM_NAME = Forms.CHILDHOODTB_GXP_SPECIMEN_COLLECTION_FORM;
+        FORM_NAME = Forms.CHILDHOODTB_SPECIMEN_COLLECTION_FORM;
         FORM = Forms.childhoodTb_gxp_specimen_form;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
@@ -148,17 +148,17 @@ public class ChildhoodTbGXPSpecimenCollection extends AbstractFormActivity imple
         sampleAcceptedByTechnician = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_sample_accepted_lab_techician), getResources().getStringArray(R.array.ctb_accepted_by_techician_list), null, App.HORIZONTAL, App.VERTICAL,true);
         whySampleRejcted = new TitledSpinner(context, null, getResources().getString(R.string.ctb_why_sample_rejected), getResources().getStringArray(R.array.ctb_why_sample_rejected_list), null, App.VERTICAL);
         reasonForRejection = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_reason_rejection), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
-        cartridgeId = new TitledEditText(context, null, getResources().getString(R.string.ctb_cartridge_id), "", "", 10, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        testId = new TitledEditText(context, null, getResources().getString(R.string.ctb_test_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
 
 
         views = new View[]{formDate.getButton(), sampleSubmitDate.getButton(), baselineRepeatFollowup.getRadioGroup(), patientCategory.getRadioGroup(), reasonBaselineRepeat.getSpinner(),
                 specimenType.getRadioGroup(), specimenComeFrom.getRadioGroup(), sampleAcceptedByTechnician.getRadioGroup(), whySampleRejcted.getSpinner(),
-                otherSpecimentComeFrom.getEditText(), reasonForRejection.getEditText(),cartridgeId.getEditText()};
+                otherSpecimentComeFrom.getEditText(), reasonForRejection.getEditText(), testId.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formDate, sampleSubmitDate, baselineRepeatFollowup, patientCategory, reasonBaselineRepeat, specimenType, specimenComeFrom, otherSpecimentComeFrom, sampleAcceptedByTechnician
-                        , whySampleRejcted, reasonForRejection, cartridgeId}};
+                        , whySampleRejcted, reasonForRejection, testId}};
 
         formDate.getButton().setOnClickListener(this);
         sampleSubmitDate.getButton().setOnClickListener(this);
@@ -230,22 +230,22 @@ public class ChildhoodTbGXPSpecimenCollection extends AbstractFormActivity imple
     @Override
     public boolean validate() {
         boolean error = false;
-        if(cartridgeId.getVisibility()==View.VISIBLE) {
-            if (App.get(cartridgeId).isEmpty()) {
+        if(testId.getVisibility()==View.VISIBLE) {
+            if (App.get(testId).isEmpty()) {
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
                     gotoPage(0);
-                cartridgeId.getEditText().setError(getString(R.string.empty_field));
-                cartridgeId.getEditText().requestFocus();
+                testId.getEditText().setError(getString(R.string.empty_field));
+                testId.getEditText().requestFocus();
                 error = true;
-            } else if (App.get(cartridgeId).length() < 10) {
+            } else if (App.get(testId).length() < 10) {
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
                     gotoPage(0);
-                cartridgeId.getEditText().setError(getString(R.string.ctb_cartridge_id_length));
-                cartridgeId.getEditText().requestFocus();
+                testId.getEditText().setError(getString(R.string.ctb_cartridge_id_length));
+                testId.getEditText().requestFocus();
                 error = true;
             }
         }
@@ -447,8 +447,8 @@ public class ChildhoodTbGXPSpecimenCollection extends AbstractFormActivity imple
             observations.add(new String[]{"OTHER REASON OF SAMPLE REJECTION", App.get(reasonForRejection)});
         }
 
-        if (cartridgeId.getVisibility() == View.VISIBLE) {
-            observations.add(new String[]{"CARTRIDGE ID", App.get(cartridgeId)});
+        if (testId.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"CARTRIDGE ID", App.get(testId)});
         }
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -659,7 +659,7 @@ public class ChildhoodTbGXPSpecimenCollection extends AbstractFormActivity imple
             } else if (obs[0][0].equals("OTHER REASON OF SAMPLE REJECTION")) {
                 reasonForRejection.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("CARTRIDGE ID")) {
-                cartridgeId.getEditText().setText(obs[0][1]);
+                testId.getEditText().setText(obs[0][1]);
             }
         }
     }
@@ -725,8 +725,8 @@ public class ChildhoodTbGXPSpecimenCollection extends AbstractFormActivity imple
         otherSpecimentComeFrom.setVisibility(View.GONE);
         whySampleRejcted.setVisibility(View.GONE);
         reasonForRejection.setVisibility(View.GONE);
-        cartridgeId.setVisibility(View.GONE);
-        cartridgeId.getEditText().setText(null);
+        testId.setVisibility(View.GONE);
+        testId.getEditText().setText(null);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");
@@ -766,12 +766,12 @@ public class ChildhoodTbGXPSpecimenCollection extends AbstractFormActivity imple
                 whySampleRejcted.setVisibility(View.GONE);
             }
             if (sampleAcceptedByTechnician.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_accepted))) {
-                cartridgeId.setVisibility(View.VISIBLE);
+                testId.setVisibility(View.VISIBLE);
                 reasonForRejection.setVisibility(View.GONE);
 
 
             } else {
-                cartridgeId.setVisibility(View.GONE);
+                testId.setVisibility(View.GONE);
             }
         }
         if (group == baselineRepeatFollowup.getRadioGroup()) {

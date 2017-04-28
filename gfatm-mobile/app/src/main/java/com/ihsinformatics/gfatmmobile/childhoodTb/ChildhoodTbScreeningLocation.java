@@ -168,8 +168,8 @@ public class ChildhoodTbScreeningLocation extends AbstractFormActivity implement
         contactPatientId = new TitledEditText(context,null,getResources().getString(R.string.ctb_contact_patient_id),"","",7,RegexUtil.ID_FILTER,InputType.TYPE_CLASS_TEXT,App.VERTICAL,false);
         scanQRCode = new Button(context);
         scanQRCode.setText("Scan QR Code");
-        contactExternalId = new TitledEditText(context,null,getResources().getString(R.string.ctb_contact_external_id),"","",20,RegexUtil.ALPHANUMERIC_FILTER,InputType.TYPE_CLASS_TEXT,App.VERTICAL,false);
-        contactExternalIdHospital = new TitledEditText(context,null,getResources().getString(R.string.ctb_contact_external_id_hospital),"","",20,RegexUtil.ALPHANUMERIC_FILTER,InputType.TYPE_CLASS_TEXT,App.VERTICAL,false);
+        contactExternalId = new TitledEditText(context,null,getResources().getString(R.string.ctb_contact_external_id),"","",20,RegexUtil.EXTERNAL_ID_FILTER,InputType.TYPE_CLASS_TEXT,App.VERTICAL,false);
+        contactExternalIdHospital = new TitledEditText(context,null,getResources().getString(R.string.ctb_contact_external_id_hospital),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.VERTICAL,false);
         contactTbRegistrationNo = new TitledEditText(context,null,getResources().getString(R.string.ctb_contact_tb_registration_no),"","",20,RegexUtil.ALPHANUMERIC_FILTER,InputType.TYPE_CLASS_TEXT,App.VERTICAL,false);
 
 
@@ -1034,11 +1034,16 @@ public class ChildhoodTbScreeningLocation extends AbstractFormActivity implement
         if (group == screeningReferral.getRadioGroup()) {
             if(screeningReferral.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_reffered))){
                 referralSource.setVisibility(View.VISIBLE);
-                referralWithinOpd.setVisibility(View.VISIBLE);
                 facilityDepartment.setVisibility(View.VISIBLE);
                 screeningReferralBoolean = true;
-                referralWithinOpd.setVisibility(View.VISIBLE);
                 referralSource.getSpinner().selectValue(getResources().getString(R.string.ctb_doctor_healthworker_in_hospital));
+                if(App.get(facilityDepartment).equals(getResources().getString(R.string.ctb_opd_clinic)) || App.get(facilityDepartment).equals(getResources().getString(R.string.ctb_ward))){
+                    referralWithinOpd.setVisibility(View.VISIBLE);
+                }
+                if(App.get(facilityDepartment).equals(getResources().getString(R.string.ctb_other_title))){
+                    otherFacilityDeparment.setVisibility(View.VISIBLE);
+                }
+
             }
             else{
                 referralWithinOpd.setVisibility(View.GONE);

@@ -58,19 +58,14 @@ import java.util.HashMap;
 
 public class ChildhoodTbCTScanTest extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener, View.OnTouchListener {
 
-    public static final int THIRD_DIALOG_ID = 3;
-    protected Calendar thirdDateCalender;
-    protected DialogFragment thirdDateFragment;
 
     Context context;
     TitledButton formDate;
     TitledRadioGroup formType;
     TitledEditText testId;
-    TitledButton testOrderDate;
     TitledSpinner ctScanSite;
-    TitledEditText monthTreatment;
+    TitledSpinner monthTreatment;
 
-    TitledButton testResultDate;
     TitledRadioGroup ctChestTbSuggestive;
     TitledRadioGroup ctChestInterpretation;
     TitledRadioGroup ctAbdomenTbSuggestive;
@@ -157,21 +152,15 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
     public void initViews() {
 
 
-        thirdDateCalender = Calendar.getInstance();
-        thirdDateFragment = new SelectDateFragment();
 
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        testId = new TitledEditText(context, null, getResources().getString(R.string.ctb_test_id), "", "", 20, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        testId = new TitledEditText(context, null, getResources().getString(R.string.ctb_test_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         formType = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_type_of_form), getResources().getStringArray(R.array.ctb_type_of_form_list), null, App.HORIZONTAL, App.VERTICAL, true);
-        testOrderDate = new TitledButton(context, null, getResources().getString(R.string.ctb_test_order_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
-        testOrderDate.setTag("testOrderDate");
         ctScanSite = new TitledSpinner(context, null, getResources().getString(R.string.ctb_ct_scan_site), getResources().getStringArray(R.array.ctb_ct_scan_site_list), null, App.VERTICAL);
-        monthTreatment = new TitledEditText(context, null, getResources().getString(R.string.ctb_month_treatment), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        monthTreatment = new TitledSpinner(context, null, getResources().getString(R.string.ctb_month_treatment), getResources().getStringArray(R.array.ctb_0_to_24), null, App.HORIZONTAL);
 
-        testResultDate = new TitledButton(context, null, getResources().getString(R.string.ctb_test_result_date), DateFormat.format("dd-MMM-yyyy", thirdDateCalender).toString(), App.HORIZONTAL);
-        testResultDate.setTag("testResultDate");
         ctChestTbSuggestive = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_chest_suggestive_tb), getResources().getStringArray(R.array.ctb_ct_chest_suggestive_tb_list), getResources().getString(R.string.ctb_adenopathy), App.VERTICAL, App.VERTICAL, false);
         ctChestInterpretation = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_chest_interpretation), getResources().getStringArray(R.array.ctb_suggestive_not_suggestive), null, App.HORIZONTAL, App.VERTICAL, false);
         ctAbdomenTbSuggestive = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_abdomen_suggestive_tb), getResources().getStringArray(R.array.ctb_ct_abdomen_suggestive_tb_list), getResources().getString(R.string.ctb_adenopathy), App.HORIZONTAL, App.VERTICAL, false);
@@ -201,15 +190,14 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
 
         linearLayout.addView(testIdView);
 
-        views = new View[]{formDate.getButton(), formType.getRadioGroup(), testOrderDate.getButton(), ctScanSite.getSpinner(),
-                testResultDate.getButton(), ctChestTbSuggestive.getRadioGroup(), ctChestInterpretation.getRadioGroup(),
+        views = new View[]{formDate.getButton(), formType.getRadioGroup(), ctScanSite.getSpinner(), ctChestTbSuggestive.getRadioGroup(), ctChestInterpretation.getRadioGroup(),
                 ctAbdomenTbSuggestive.getRadioGroup(), ctAbdomenInterpretation.getRadioGroup(), ctBrainTbSuggestive.getRadioGroup(),
                 ctBrainInterpretation.getRadioGroup(), ctBoneSTbSuggestive.getRadioGroup(), ctSpineTbSuggestive.getRadioGroup(),testId.getEditText(),
-                monthTreatment.getEditText()};
+                monthTreatment.getSpinner()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate,formType, linearLayout,testOrderDate, ctScanSite, monthTreatment, testResultDate,
+                {{formDate,formType, linearLayout,ctScanSite, monthTreatment,
                         ctChestTbSuggestive,
                         ctChestInterpretation,
                         ctAbdomenTbSuggestive,
@@ -221,9 +209,8 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
 
         formDate.getButton().setOnClickListener(this);
         formType.getRadioGroup().setOnCheckedChangeListener(this);
-        testOrderDate.getButton().setOnClickListener(this);
         ctScanSite.getSpinner().setOnItemSelectedListener(this);
-        testResultDate.getButton().setOnClickListener(this);
+        monthTreatment.getSpinner().setOnItemSelectedListener(this);
         ctChestTbSuggestive.getRadioGroup().setOnCheckedChangeListener(this);
         ctChestInterpretation.getRadioGroup().setOnCheckedChangeListener(this);
         ctAbdomenTbSuggestive.getRadioGroup().setOnCheckedChangeListener(this);
@@ -302,33 +289,6 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
         }
-
-        if (!testOrderDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString())) {
-
-            //
-            // +Date date = App.stringToDate(sampleSubmitDate.getButton().getText().toString(), "dd-MMM-yyyy");
-
-            if (secondDateCalendar.after(date)) {
-
-                secondDateCalendar = App.getCalendar(date);
-
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
-                snackbar.show();
-
-            } else
-                testOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-        }
-        if (!testResultDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", thirdDateCalender).toString())) {
-            if (thirdDateCalender.after(date)) {
-
-                thirdDateCalender = App.getCalendar(date);
-
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
-                snackbar.show();
-
-            } else
-                testResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalender).toString());
-        }
       }
 
     @Override
@@ -355,30 +315,6 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
             error = true;
         } else {
             formType.getRadioGroup().getButtons().get(1).setError(null);
-        }
-        if (monthTreatment.getVisibility() == View.VISIBLE && App.get(monthTreatment).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            monthTreatment.getEditText().setError(getString(R.string.empty_field));
-            monthTreatment.getEditText().requestFocus();
-            error = true;
-        } else {
-            monthTreatment.getEditText().setError(null);
-        }
-        if (!App.get(monthTreatment).isEmpty()) {
-            if (Integer.parseInt(App.get(monthTreatment)) < 1 || Integer.parseInt(App.get(monthTreatment)) > 24) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                monthTreatment.getEditText().setError(getString(R.string.ctb_range_1_to_24));
-                monthTreatment.getEditText().requestFocus();
-                error = true;
-            } else {
-                monthTreatment.getEditText().setError(null);
-            }
         }
         if (error) {
 
@@ -434,7 +370,6 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         if (App.get(formType).equals(getResources().getString(R.string.ctb_order))) {
             observations.add(new String[]{"TEST ID", App.get(testId)});
-            observations.add(new String[]{"DATE TEST ORDERED", App.getSqlDateTime(secondDateCalendar)});
             observations.add(new String[]{"CT SCAN SITE", App.get(ctScanSite).equals(getResources().getString(R.string.ctb_chest_name)) ? "CT SCAN, CHEST" :
                     (App.get(ctScanSite).equals(getResources().getString(R.string.ctb_abdomen)) ? "COMPUTED TOMOGRAPHY OF ABDOMEN WITH CONTRAST" :
                             (App.get(ctScanSite).equals(getResources().getString(R.string.ctb_joint_bone)) ? "BONE SCAN" :
@@ -445,7 +380,6 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
 
         } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
             observations.add(new String[]{"TEST ID", App.get(testId)});
-            observations.add(new String[]{"DATE OF  TEST RESULT RECEIVED", App.getSqlDateTime(thirdDateCalender)});
 
             if(ctChestTbSuggestive.getVisibility()==View.VISIBLE) {
                 observations.add(new String[]{"CT CHEST SUGGESTIVE OF TB", App.get(ctChestTbSuggestive).equals(getResources().getString(R.string.ctb_consolidation)) ? "CONSOLIDATION" :
@@ -648,12 +582,7 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
                     ctScanSite.getSpinner().selectValue(value);
                 }
                 else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
-                    monthTreatment.getEditText().setText(obs[0][1]);
-                }else if (obs[0][0].equals("DATE TEST ORDERED")) {
-                    String secondDate = obs[0][1];
-                    secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
-                    testOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-                    testOrderDate.setVisibility(View.VISIBLE);
+                    monthTreatment.getSpinner().selectValue(obs[0][1]);
                 }
                 submitButton.setEnabled(true);
             }else{
@@ -665,14 +594,7 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
                     testIdView.setEnabled(false);
                     testIdView.setImageResource(R.drawable.ic_checked);
                     checkTestId();
-                }
-                else if (obs[0][0].equals("DATE OF  TEST RESULT RECEIVED")) {
-                    String thirdDate = obs[0][1];
-                    thirdDateCalender.setTime(App.stringToDate(thirdDate, "yyyy-MM-dd"));
-                    testResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalender).toString());
-                    testResultDate.setVisibility(View.VISIBLE);
-                }
-                else if (obs[0][0].equals("CT CHEST SUGGESTIVE OF TB")) {
+                }else if (obs[0][0].equals("CT CHEST SUGGESTIVE OF TB")) {
                     for (RadioButton rb : ctChestTbSuggestive.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.ctb_consolidation)) && obs[0][1].equals("CONSOLIDATION")) {
                             rb.setChecked(true);
@@ -790,22 +712,6 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
         }
-        if (view == testOrderDate.getButton()) {
-            Bundle args = new Bundle();
-            args.putInt("type", SECOND_DATE_DIALOG_ID);
-            args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", false);
-            secondDateFragment.setArguments(args);
-            secondDateFragment.show(getFragmentManager(), "DatePicker");
-        }
-        if (view == testResultDate.getButton()) {
-            Bundle args = new Bundle();
-            args.putInt("type", THIRD_DIALOG_ID);
-            args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", false);
-            thirdDateFragment.setArguments(args);
-            thirdDateFragment.show(getFragmentManager(), "DatePicker");
-        }
        }
 
     @Override
@@ -837,8 +743,6 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
         testId.setVisibility(View.GONE);
         testIdView.setImageResource(R.drawable.ic_checked);
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        testOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-        testResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalender).toString());
         goneVisibility();
         submitButton.setEnabled(false);
         Bundle bundle = this.getArguments();
@@ -860,10 +764,8 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
     }
 
     void goneVisibility(){
-        testOrderDate.setVisibility(View.GONE);
         ctScanSite.setVisibility(View.GONE);
         monthTreatment.setVisibility(View.GONE);
-        testResultDate.setVisibility(View.GONE);
         ctChestTbSuggestive.setVisibility(View.GONE);
         ctChestInterpretation.setVisibility(View.GONE);
         ctAbdomenTbSuggestive.setVisibility(View.GONE);
@@ -1005,11 +907,8 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
 
     void showTestOrderOrTestResult() {
         if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.ctb_order))) {
-            testOrderDate.setVisibility(View.VISIBLE);
             ctScanSite.setVisibility(View.VISIBLE);
             monthTreatment.setVisibility(View.VISIBLE);
-
-            testResultDate.setVisibility(View.GONE);
             ctChestTbSuggestive.setVisibility(View.GONE);
             ctChestInterpretation.setVisibility(View.GONE);
             ctAbdomenTbSuggestive.setVisibility(View.GONE);
@@ -1019,7 +918,6 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
             ctBoneSTbSuggestive.setVisibility(View.GONE);
             ctSpineTbSuggestive.setVisibility(View.GONE);
         } else {
-            testResultDate.setVisibility(View.VISIBLE);
             String ctScan = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "CT Scan Test Order", "CT SCAN SITE");
             if(ctScan!=null){
                 if(ctScan.equalsIgnoreCase("CT SCAN, CHEST")){
@@ -1040,7 +938,6 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
                     ctSpineTbSuggestive.setVisibility(View.VISIBLE);
                 }
             }
-            testOrderDate.setVisibility(View.GONE);
             ctScanSite.setVisibility(View.GONE);
             monthTreatment.setVisibility(View.GONE);
 
@@ -1057,10 +954,6 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
                 calendar = formDateCalendar;
             else if (getArguments().getInt("type") == SECOND_DATE_DIALOG_ID)
                 calendar = secondDateCalendar;
-
-            else if (getArguments().getInt("type") == THIRD_DIALOG_ID)
-                calendar = thirdDateCalender;
-
             else
                 return null;
 
@@ -1083,8 +976,6 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
                 formDateCalendar.set(yy, mm, dd);
             else if (((int) view.getTag()) == SECOND_DATE_DIALOG_ID)
                 secondDateCalendar.set(yy, mm, dd);
-            else if (((int) view.getTag()) == THIRD_DIALOG_ID)
-                thirdDateCalender.set(yy, mm, dd);
 
             updateDisplay();
 

@@ -147,7 +147,7 @@ public class ChildhoodTbTestIndicationForm extends AbstractFormActivity implemen
         cbc = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_cbc),getResources().getStringArray(R.array.yes_no_options),getResources().getString(R.string.no),App.HORIZONTAL,App.VERTICAL,true);
         esr = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_esr),getResources().getStringArray(R.array.yes_no_options),getResources().getString(R.string.no),App.HORIZONTAL,App.VERTICAL,true);
         drugSensitivityTest = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_drug_sensitivity),getResources().getStringArray(R.array.yes_no_options),getResources().getString(R.string.no),App.HORIZONTAL,App.VERTICAL,true);
-        doctorNotes = new TitledEditText(context,null,getResources().getString(R.string.ctb_doctor_notes),"","",1000,null,InputType.TYPE_CLASS_TEXT,App.VERTICAL,false);
+        doctorNotes = new TitledEditText(context,null,getResources().getString(R.string.ctb_doctor_notes),"","",1000,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.VERTICAL,false);
         views = new View[]{formDate.getButton(),chestXray.getRadioGroup(),ultraSound.getRadioGroup(),ctScan.getRadioGroup(),geneXpert.getRadioGroup(),mantouxTest.getRadioGroup(),smearMicroscopy.getRadioGroup(),
                 histopathology.getRadioGroup(),cbc.getRadioGroup(),esr.getRadioGroup(),drugSensitivityTest.getRadioGroup(),doctorNotes.getEditText()};
         // Array used to display views accordingly...
