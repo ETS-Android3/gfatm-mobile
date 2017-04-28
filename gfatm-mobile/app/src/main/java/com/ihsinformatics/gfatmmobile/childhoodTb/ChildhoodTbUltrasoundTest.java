@@ -408,7 +408,6 @@ public class ChildhoodTbUltrasoundTest extends AbstractFormActivity implements R
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         if (App.get(formType).equals(getResources().getString(R.string.ctb_order))) {
             observations.add(new String[]{"TEST ID", App.get(testId)});
-            observations.add(new String[]{"DATE TEST ORDERED", App.getSqlDateTime(secondDateCalendar)});
             observations.add(new String[]{"TEST CONTEXT STATUS", App.get(pointTestBeingDone).equals(getResources().getString(R.string.ctb_diagnostic)) ? "DIAGNOSTIC TESTING" :
                             "REGULAR FOLLOW UP"});
             if(monthTreatment.getVisibility()==View.VISIBLE){

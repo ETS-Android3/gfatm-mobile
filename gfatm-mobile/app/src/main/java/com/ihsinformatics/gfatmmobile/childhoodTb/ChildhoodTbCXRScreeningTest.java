@@ -385,7 +385,6 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         if (App.get(formType).equals(getResources().getString(R.string.ctb_order))) {
             observations.add(new String[]{"TEST ID", App.get(testId)});
-            observations.add(new String[]{"DATE TEST ORDERED", App.getSqlDateTime(secondDateCalendar)});
             observations.add(new String[]{"FOLLOW-UP MONTH", App.get(monthTreatment)});
             observations.add(new String[]{"TYPE OF X RAY", App.get(typeOfXRay).equals(getResources().getString(R.string.ctb_chest_xray_cad4tb)) ? "RADIOLOGICAL DIAGNOSIS" :
                      "X-RAY, OTHER"});

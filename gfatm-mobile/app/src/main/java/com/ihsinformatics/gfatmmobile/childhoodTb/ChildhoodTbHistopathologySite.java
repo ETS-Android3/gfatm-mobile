@@ -60,19 +60,14 @@ import java.util.HashMap;
 
 public class ChildhoodTbHistopathologySite extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener, View.OnTouchListener {
 
-    public static final int THIRD_DIALOG_ID = 3;
-    protected Calendar thirdDateCalender;
-    protected DialogFragment thirdDateFragment;
     Context context;
     TitledButton formDate;
     TitledRadioGroup formType;
-    TitledButton testOrderDate;
     TitledEditText testId;
     TitledRadioGroup pointTestBeingDone;
-    TitledEditText monthTreatment;
+    TitledSpinner monthTreatment;
     TitledEditText histopathologySite;
 
-    TitledButton testResultDate;
     TitledRadioGroup histopathologyResult;
 
     ImageView testIdView;
@@ -151,23 +146,15 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
      */
     public void initViews() {
 
-
-        thirdDateCalender = Calendar.getInstance();
-        thirdDateFragment = new SelectDateFragment();
-
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         testId = new TitledEditText(context,null,getResources().getString(R.string.ctb_test_id),"","",20,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,true);
         formType = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_type_of_form),getResources().getStringArray(R.array.ctb_type_of_form_list),null,App.HORIZONTAL,App.VERTICAL,true);
-        testOrderDate = new TitledButton(context, null, getResources().getString(R.string.ctb_test_order_date), DateFormat.format("dd-MMM-yyyy", thirdDateCalender).toString(), App.HORIZONTAL);
-        testOrderDate.setTag("testOrderDate");
         pointTestBeingDone = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_point_test_being_done),getResources().getStringArray(R.array.ctb_ultrasound_test_point_list),getResources().getString(R.string.ctb_diagnostic),App.VERTICAL,App.VERTICAL,true);
-        monthTreatment= new TitledEditText(context,null,getResources().getString(R.string.ctb_month_treatment),"","",2,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,true);
+        monthTreatment= new TitledSpinner(context,null,getResources().getString(R.string.ctb_month_treatment),getResources().getStringArray(R.array.ctb_0_to_24),null,App.HORIZONTAL,true);
         histopathologySite = new TitledEditText(context,null,getResources().getString(R.string.ctb_histopathology_site),"","",50,RegexUtil.ALPHA_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,true);
 
-        testResultDate = new TitledButton(context, null, getResources().getString(R.string.ctb_test_result_date), DateFormat.format("dd-MMM-yyyy", thirdDateCalender).toString(), App.HORIZONTAL);
-        testResultDate.setTag("testResultDate");
         histopathologyResult = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_histopathology_result),getResources().getStringArray(R.array.ctb_suggestive_tb_normal),getResources().getString(R.string.ctb_suggestive_tb),App.VERTICAL,App.VERTICAL,true);
         LinearLayout linearLayout = new LinearLayout(context);
         LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
@@ -190,18 +177,17 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
 
         linearLayout.addView(testIdView);
 
-        views = new View[]{formDate.getButton(),formType.getRadioGroup(),testId.getEditText(),testOrderDate.getButton(),pointTestBeingDone.getRadioGroup()
-                ,testResultDate.getButton(),histopathologyResult.getRadioGroup()};
+        views = new View[]{formDate.getButton(),formType.getRadioGroup(),testId.getEditText(),pointTestBeingDone.getRadioGroup()
+                ,histopathologyResult.getRadioGroup()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate,formType,linearLayout,pointTestBeingDone,monthTreatment,histopathologySite,testOrderDate,testResultDate,histopathologyResult}};
+                {{formDate,formType,linearLayout,pointTestBeingDone,monthTreatment,histopathologySite,histopathologyResult}};
 
         formDate.getButton().setOnClickListener(this);
         formType.getRadioGroup().setOnCheckedChangeListener(this);
-        testOrderDate.getButton().setOnClickListener(this);
         pointTestBeingDone.getRadioGroup().setOnCheckedChangeListener(this);
-        testResultDate.getButton().setOnClickListener(this);
+        monthTreatment.getSpinner().setOnItemSelectedListener(this);
         histopathologyResult.getRadioGroup().setOnCheckedChangeListener(this);
 
 
@@ -275,33 +261,6 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
                 formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
         }
-        if (!testOrderDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString())) {
-
-            //
-            // +Date date = App.stringToDate(sampleSubmitDate.getButton().getText().toString(), "dd-MMM-yyyy");
-
-            if (secondDateCalendar.after(date)) {
-
-                secondDateCalendar = App.getCalendar(date);
-
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
-                snackbar.show();
-
-            } else
-                testOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-        }
-        if (!testResultDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", thirdDateCalender).toString())) {
-            if (thirdDateCalender.after(date)) {
-
-                thirdDateCalender = App.getCalendar(date);
-
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
-                snackbar.show();
-
-            } else
-                testResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalender).toString());
-        }
-
     }
 
     @Override
@@ -330,31 +289,6 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
         }
         else{
             formType.getRadioGroup().getButtons().get(1).setError(null);
-        }
-        if (monthTreatment.getVisibility() == View.VISIBLE && App.get(monthTreatment).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            monthTreatment.getEditText().setError(getString(R.string.empty_field));
-            monthTreatment.getEditText().requestFocus();
-            error = true;
-        }
-        else{
-            monthTreatment.getEditText().setError(null);
-        }
-        if (!App.get(monthTreatment).isEmpty()) {
-            if (Integer.parseInt(App.get(monthTreatment))<1 || Integer.parseInt(App.get(monthTreatment)) > 24) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                monthTreatment.getEditText().setError(getString(R.string.ctb_range_1_to_24));
-                monthTreatment.getEditText().requestFocus();
-                error = true;
-            } else {
-                monthTreatment.getEditText().setError(null);
-            }
         }
         if(histopathologySite.getVisibility()==View.VISIBLE){
             if(!App.get(histopathologySite).isEmpty()) {
@@ -430,11 +364,9 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
                 observations.add(new String[]{"FOLLOW-UP MONTH", App.get(monthTreatment)});
             }
             observations.add(new String[]{"HISTOPATHOLOGY SITE", App.get(histopathologySite)});
-            observations.add(new String[]{"DATE TEST ORDERED", App.getSqlDateTime(secondDateCalendar)});
 
         } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
             observations.add(new String[]{"TEST ID", App.get(testId)});
-            observations.add(new String[]{"DATE OF  TEST RESULT RECEIVED", App.getSqlDateTime(thirdDateCalender)});
             observations.add(new String[]{"HISTOPATHOLOGY RESULT", App.get(histopathologyResult).equals(getResources().getString(R.string.ctb_suggestive_tb)) ? "SUGGESTIVE OF TB" :
                     "NORMAL"});
         }
@@ -598,14 +530,9 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
                         }
                         pointTestBeingDone.setVisibility(View.VISIBLE);
                     }else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
-                        monthTreatment.getEditText().setText(obs[0][1]);
+                        monthTreatment.getSpinner().selectValue(obs[0][1]);
                     }else if (obs[0][0].equals("HISTOPATHOLOGY SITE")) {
                         histopathologySite.getEditText().setText(obs[0][1]);
-                    }else if (obs[0][0].equals("DATE TEST ORDERED")) {
-                        String secondDate = obs[0][1];
-                        secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
-                        testOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-                        testOrderDate.setVisibility(View.VISIBLE);
                     }
                     submitButton.setEnabled(true);
                 }else{
@@ -617,12 +544,6 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
                         testIdView.setEnabled(false);
                         testIdView.setImageResource(R.drawable.ic_checked);
                         checkTestId();
-                    }
-                    else if (obs[0][0].equals("DATE OF  TEST RESULT RECEIVED")) {
-                        String thirdDate = obs[0][1];
-                        thirdDateCalender.setTime(App.stringToDate(thirdDate, "yyyy-MM-dd"));
-                        testResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalender).toString());
-                        testResultDate.setVisibility(View.VISIBLE);
                     } else if (obs[0][0].equals("HISTOPATHOLOGY RESULT")) {
                         for (RadioButton rb : histopathologyResult.getRadioGroup().getButtons()) {
                             if (rb.getText().equals(getResources().getString(R.string.ctb_suggestive_tb)) && obs[0][1].equals("SUGGESTIVE OF TB")) {
@@ -651,22 +572,6 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
-        }
-        if (view == testOrderDate.getButton()) {
-            Bundle args = new Bundle();
-            args.putInt("type", SECOND_DATE_DIALOG_ID);
-            args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", false);
-            secondDateFragment.setArguments(args);
-            secondDateFragment.show(getFragmentManager(), "DatePicker");
-        }
-        if (view == testResultDate.getButton()) {
-            Bundle args = new Bundle();
-            args.putInt("type", THIRD_DIALOG_ID);
-            args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", false);
-            thirdDateFragment.setArguments(args);
-            thirdDateFragment.show(getFragmentManager(), "DatePicker");
         }
 
     }
@@ -701,8 +606,6 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
         testId.setVisibility(View.GONE);
         testIdView.setImageResource(R.drawable.ic_checked);
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        testOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-        testResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalender).toString());
         goneVisibility();
         submitButton.setEnabled(false);
         Bundle bundle = this.getArguments();
@@ -724,8 +627,6 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
     }
 
     void goneVisibility(){
-        testResultDate.setVisibility(View.GONE);
-        testOrderDate.setVisibility(View.GONE);
         pointTestBeingDone.setVisibility(View.GONE);
         monthTreatment.setVisibility(View.GONE);
         histopathologySite.setVisibility(View.GONE);
@@ -757,17 +658,13 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
 
     void showTestOrderOrTestResult() {
         if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.ctb_order))) {
-            testOrderDate.setVisibility(View.VISIBLE);
             pointTestBeingDone.setVisibility(View.VISIBLE);
             histopathologySite.setVisibility(View.VISIBLE);
 
-            testResultDate.setVisibility(View.GONE);
             histopathologyResult.setVisibility(View.GONE);
         } else {
-            testResultDate.setVisibility(View.VISIBLE);
             histopathologyResult.setVisibility(View.VISIBLE);
 
-            testOrderDate.setVisibility(View.GONE);
             pointTestBeingDone.setVisibility(View.GONE);
             histopathologySite.setVisibility(View.GONE);
             monthTreatment.setVisibility(View.GONE);
@@ -900,10 +797,6 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
                 calendar = formDateCalendar;
             else if (getArguments().getInt("type") == SECOND_DATE_DIALOG_ID)
                 calendar = secondDateCalendar;
-
-            else if (getArguments().getInt("type") == THIRD_DIALOG_ID)
-                calendar = thirdDateCalender;
-
             else
                 return null;
 
@@ -926,8 +819,6 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
                 formDateCalendar.set(yy, mm, dd);
             else if (((int) view.getTag()) == SECOND_DATE_DIALOG_ID)
                 secondDateCalendar.set(yy, mm, dd);
-            else if(((int) view.getTag()) == THIRD_DIALOG_ID)
-                thirdDateCalender.set(yy, mm, dd);
             updateDisplay();
 
         }
