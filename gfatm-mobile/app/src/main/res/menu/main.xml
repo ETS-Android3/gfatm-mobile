@@ -14,9 +14,9 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/update_database"
+        android:id="@+id/feedback"
         android:orderInCategory="100"
-        android:title="@string/title_update_database"
+        android:title="@string/title_feedback"
         app:showAsAction="never" />
 
 </menu>
