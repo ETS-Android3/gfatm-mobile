@@ -27,6 +27,7 @@ import com.ihsinformatics.gfatmmobile.App;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import com.ihsinformatics.gfatmmobile.App;
@@ -1925,6 +1926,56 @@ public class ServerService {
 
     }
 
+    public String emailOfflineForm(String formId) {
+
+        if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
+            if (!isURLReachable()) {
+                return "CONNECTION_ERROR";
+            }
+        }
+
+        StringBuilder formsData = new StringBuilder ();
+        if (App.getCommunicationMode().equals("REST")) {
+            Object[][] forms = dbUtil.getFormTableData("select id, form, pid, uri, content, form_id from " + Metadata.OFFLINE_FORM + " where form_id='" + formId + "'");
+
+
+            for (int i = 0; i < forms.length; i++) {
+
+                Object[] form = forms[i];
+
+                formsData.append(String.valueOf(form[1]));
+                formsData.append ("\n");
+                formsData.append ("uri:\n");
+                formsData.append(String.valueOf(form[3]));
+                formsData.append ("\n");
+                formsData.append ("content:\n");
+                formsData.append(String.valueOf(form[4]));
+
+                formsData.append ("\n\n\n");
+
+                if (String.valueOf(form[1]).contains("CREATE")) {
+                    i++;
+                    form = forms[i];
+                    formsData.append(String.valueOf(form[1]));
+                    formsData.append ("\n");
+                    formsData.append ("uri:\n");
+                    formsData.append(String.valueOf(form[3]));
+                    formsData.append ("\n");
+                    formsData.append ("content:\n");
+                    formsData.append(String.valueOf(form[4]));
+
+                    formsData.append ("\n\n\n");
+                }
+
+            }
+
+            formsData.append ("---------------------------------------------------------------");
+            formsData.append ("\n\n\n");
+        }
+
+        return formsData.toString();
+    }
+
     public com.ihsinformatics.gfatmmobile.model.Encounter getEncounterAndObservationFromLocalDb(int encounterId) {
 
         Object[][] encounterObject = dbUtil.getFormTableData("select encounter_id, uuid, encounterType, encounterDatetime, encounterLocation, patientId from " + Metadata.ENCOUNTER + " where encounter_id=" + encounterId + "");
@@ -2336,7 +2387,7 @@ public class ServerService {
         return null;
     }
 
-    public String submitToGwtApp(String encounterType, ContentValues values, String[][] observations) {
+    public String submitToGwtApp(String encounterType, FormsObject form, ContentValues values, String[][] observations) {
 
         if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
             if (!isURLReachable()) {
@@ -2376,12 +2427,72 @@ public class ServerService {
             String val = json.toString();
 
             // Save form locally if in offline mode
-           /* if (App.getMode().equalsIgnoreCase("OFFLINE")) {
+            if (App.getMode().equalsIgnoreCase("OFFLINE")) {
 
-                //TODO: lllll
+                ContentValues values5 = new ContentValues();
+                values5.put("program", App.getProgram());
+                values5.put("form_name", encounterType);
+                //values5.put("p_id", App.getPatientId());
+                values5.put("form_date", formDate);
+                Date date = new Date();
+                values5.put("timestamp", date.getTime());
+                values5.put("location", location);
+                //values5.put("encounter_id", encounterId);
+                values5.put("username", App.getUsername());
+                ByteArrayOutputStream bos = null;
+                ObjectOutputStream oos = null;
+                try {
+                    bos = new ByteArrayOutputStream();
+                    oos = new ObjectOutputStream(bos);
+                    oos.writeObject(form);
+                    oos.flush();
+                    oos.close();
+                    bos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                byte[] data = bos.toByteArray();
+                values5.put("form_object", data);
+                dbUtil.insert(Metadata.FORMS, values5);
+
+                String formId = dbUtil.getObject(Metadata.FORMS, "id", "timestamp='" + date.getTime() + "'");
+
+                for (int i = 0; i < observations.length; i++) {
+
+                    if (observations[i][1].contains(" ; ")) {
+                        String[] valueArray = observations[i][1].split(" ; ");
+                        for (int j = 0; j < valueArray.length; j++) {
+
+                            ContentValues values6 = new ContentValues();
+                            values6.put("field_name", observations[i][0]);
+                            values6.put("value", valueArray[j]);
+                            values6.put("form_id", formId);
+                            dbUtil.insert(Metadata.FORMS_VALUE, values6);
+
+                        }
+
+                    } else {
+
+                        ContentValues values6 = new ContentValues();
+                        values6.put("field_name", observations[i][0]);
+                        values6.put("value", observations[i][1]);
+                        values6.put("form_id", formId);
+                        dbUtil.insert(Metadata.FORMS_VALUE, values6);
+                    }
+                }
+
+                ContentValues values4 = new ContentValues();
+                values4.put("form_id", formId);
+                values4.put("uri", fastGfatmUri);
+                values4.put("content", val);
+                values4.put("pid", App.getPatientId());
+                values4.put("form", App.getProgram() + "-" + encounterType);
+                values4.put("username", App.getUsername());
+                dbUtil.insert(Metadata.OFFLINE_FORM, values4);
 
                 return "SUCCESS";
-            }*/
+
+            }
 
             String res = httpGwtClient.clientPost(fastGfatmUri, val);
             JSONObject jsonResponse = JSONParser.getJSONObject(res);

@@ -43,6 +43,7 @@ public class RegexUtil {
     public static final String floatingPointPatternForTwoDecimalPlaces = "^[0-9]*.[0-9]{0,2}$";
     public static final String addressPattern ="^[-A-Za-z0-9.#&():;,'\" \\/]+";
     public static final String otherPattern ="^[-A-Za-z0-9.#&():;,'\"+%*=!| \\/]+";
+    public static final String cartridgeIdPattern = "^[-A-Za-z0-9]+";
 
     public static final int idLength = 7;
     public static final int mobileNumberLength = 11;
@@ -64,138 +65,21 @@ public class RegexUtil {
         }
     };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    public static final InputFilter CARTRIDGE_ID_FILTER = new InputFilter() {
+
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+
+            if (source.equals("")) { // for backspace
+                return source;
+            }
+            if (source.toString().matches(cartridgeIdPattern)) {
+                return source;
+            }
+            return "";
+
+        }
+    };
 
     public static final InputFilter FLOAT_FILTER = new InputFilter() {
 
