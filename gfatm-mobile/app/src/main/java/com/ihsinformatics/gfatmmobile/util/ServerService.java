@@ -373,6 +373,32 @@ public class ServerService {
         return "SUCCESS";
     }
 
+    public User getUser(String username) {
+
+        User user = null;
+        if (!isURLReachable()) {
+            return user;
+        }
+        if (App.getCommunicationMode().equals("REST")) {
+            JSONObject response = httpGet.getUserByName(App.getUsername());
+            if (response == null)
+                return user;
+            JSONObject[] jsonObjects = JSONParser.getJSONArrayFromObject(response, "results");
+            if (jsonObjects == null)
+                return user;
+            if (jsonObjects.length == 0)
+                return user;
+
+            JSONObject j = jsonObjects[0];
+
+            user = User.parseJSONObject(j);
+            return user;
+
+        }
+        return user;
+    }
+
+
 
     public String getLocations() {
 
