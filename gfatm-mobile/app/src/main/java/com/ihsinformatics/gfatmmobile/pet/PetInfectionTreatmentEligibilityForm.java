@@ -634,7 +634,7 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
         String date = fo.getFormDate();
         ArrayList<String[][]> obsValue = fo.getObsValue();
         formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         for (int i = 0; i < obsValue.size(); i++) {
 
@@ -642,7 +642,7 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
 
             if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
                 timeTakeToFill = obs[0][1];
-            }else if (obs[0][0].equals("PREGNANCY STATUS")) {
+            } else if (obs[0][0].equals("PREGNANCY STATUS")) {
                 for (RadioButton rb : pregnancyHistory.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);

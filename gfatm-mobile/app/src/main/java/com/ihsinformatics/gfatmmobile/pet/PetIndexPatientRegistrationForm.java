@@ -874,8 +874,6 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                 ernsNumber.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("Gaurdian Name")) {
                 husbandName.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("FORM START TIME")) {
-                startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
             } else if (obs[0][0].equals("SITE OF TUBERCULOSIS DISEASE")) {
 
                 for (RadioButton rb : tbType.getRadioGroup().getButtons()) {

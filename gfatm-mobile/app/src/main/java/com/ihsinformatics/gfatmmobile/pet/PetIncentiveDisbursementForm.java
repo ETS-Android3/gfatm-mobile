@@ -957,21 +957,20 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
 
     @Override
     public void refill(int encounterId) {
-
         OfflineForm fo = serverService.getOfflineFormById(encounterId);
         String date = fo.getFormDate();
         ArrayList<String[][]> obsValue = fo.getObsValue();
         formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
 
-            if (obs[0][0].equals("External ID")) {
+            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+                timeTakeToFill = obs[0][1];
+            } else if (obs[0][0].equals("External ID")) {
                 indexExternalPatientId.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("FORM START TIME")) {
-                startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
             } else if (obs[0][0].equals("PATIENT ID OF INDEX CASE")) {
                 indexPatientId.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("NATIONAL IDENTIFICATION NUMBER")) {

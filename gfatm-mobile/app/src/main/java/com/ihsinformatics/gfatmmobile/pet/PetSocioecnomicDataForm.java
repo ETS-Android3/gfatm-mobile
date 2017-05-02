@@ -694,15 +694,15 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
         String date = fo.getFormDate();
         ArrayList<String[][]> obsValue = fo.getObsValue();
         formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
 
-            if (obs[0][0].equals("FORM START TIME")) {
-                startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
-            } else if (obs[0][0].equals("ETHNICITY")) {
+            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+                timeTakeToFill = obs[0][1];
+            }  else if (obs[0][0].equals("ETHNICITY")) {
                 String value = obs[0][1].equals("URDU SPEAKING") ? getResources().getString(R.string.pet_urdu_speaking) :
                         (obs[0][1].equals("SINDHI") ? getResources().getString(R.string.pet_sindhi) :
                                 (obs[0][1].equals("PASHTUN") ? getResources().getString(R.string.pet_pakhtun) :
