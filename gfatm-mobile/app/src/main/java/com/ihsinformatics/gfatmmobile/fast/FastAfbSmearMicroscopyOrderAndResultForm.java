@@ -1012,6 +1012,58 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
         goneVisibility();
         submitButton.setEnabled(false);
 
+        final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
+            @Override
+            protected HashMap<String, String> doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.fetching_data));
+                        loading.show();
+                    }
+                });
+
+                HashMap<String, String> result = new HashMap<String, String>();
+                String submissionDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "GXP Specimen Collection", "SPECIMEN SUBMISSION DATE");
+
+                if (submissionDate != null)
+                    result.put("SPECIMEN SUBMISSION DATE", submissionDate);
+
+                return result;
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+
+            @Override
+            protected void onPostExecute(HashMap<String, String> result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+
+                if (result.get("SPECIMEN SUBMISSION DATE") != null) {
+                    String format = "";
+                    String registerationDate = result.get("SPECIMEN SUBMISSION DATE");
+                    if (registerationDate.contains("/")) {
+                        format = "dd/MM/yyyy";
+                    } else if(registerationDate.contains("-")) {
+                        format = "yyyy-MM-dd";
+                    }
+                    else {
+                        format = "dd MMM yyyy HH:mm:ss";
+                    }
+                    secondDateCalendar.setTime(App.stringToDate(registerationDate, format));
+                    dateOfSubmission.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+                }
+            }
+        };
+        autopopulateFormTask.execute("");
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");
