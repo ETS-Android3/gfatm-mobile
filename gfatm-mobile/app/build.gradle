@@ -3,15 +3,16 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 24
     useLibrary 'org.apache.http.legacy'
-    buildToolsVersion "24.0.3"
+    buildToolsVersion '25.0.0'
     defaultConfig {
         applicationId "com.ihsinformatics.gfatmmobile"
         minSdkVersion 19
         targetSdkVersion 24
-        versionCode 5
-        versionName "1.0.1"
+        versionCode 8
+        versionName "1.2.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
