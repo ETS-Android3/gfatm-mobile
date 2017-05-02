@@ -137,7 +137,7 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
         secondDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
         secondDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
         secondDateCalendar.add(Calendar.DAY_OF_MONTH, 1);
-        dueDateSample = new TitledEditText(context, null, getResources().getString(R.string.fast_date_sputum_sample), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        dueDateSample = new TitledEditText(context, null, getResources().getString(R.string.fast_date_sputum_sample), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         dueDateSample.getEditText().setKeyListener(null);
         dueDateSample.getEditText().setFocusable(false);
         freeXrayVoucher = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_given_free_chest_xray), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
@@ -202,7 +202,7 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
         dueDateSample.getEditText().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         dueDateSample.getEditText().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
-        Log.d("formdate", DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        Log.d("formdate", DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         Log.d("formdate", formDate.getButton().getText().toString());
     }
 

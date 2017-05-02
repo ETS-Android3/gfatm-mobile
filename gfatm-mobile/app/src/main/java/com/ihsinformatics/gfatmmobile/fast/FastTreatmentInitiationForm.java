@@ -184,7 +184,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         thirdDateCalendar.set(Calendar.DAY_OF_MONTH, secondDateCalendar.get(Calendar.DAY_OF_MONTH));
         thirdDateCalendar.set(Calendar.MONTH, secondDateCalendar.get(Calendar.MONTH));
         thirdDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
-        returnVisitDate = new TitledButton(context, null, getResources().getString(R.string.fast_next_appointment_date), DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
+        returnVisitDate = new TitledButton(context, null, getResources().getString(R.string.fast_next_appointment_date), DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
 
 
         // Used for reset fields...
