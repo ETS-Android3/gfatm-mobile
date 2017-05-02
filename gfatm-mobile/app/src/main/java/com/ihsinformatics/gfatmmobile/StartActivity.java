@@ -118,7 +118,9 @@ public class StartActivity extends Activity {
                 Boolean flag = dbUtil.doesDatabaseExist();
                 if (!flag) {
                     dbUtil.buildDatabase(false);            // build sql lite db in app memory
-                    setProgress("Hello");
+                }
+                else{
+                    dbUtil.getWritableDatabase();
                 }
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
