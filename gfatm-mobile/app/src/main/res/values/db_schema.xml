@@ -4,7 +4,7 @@
     <string-array name="tables">
 
         <item>
-            CREATE TABLE IF NOT EXISTS form
+            CREATE TABLE IF NOT EXISTS FORM
             (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 program TEXT NOT NULL COLLATE NOCASE,
@@ -26,7 +26,7 @@
                 form_id INT NOT NULL COLLATE NOCASE,
                 field_name TEXT NOT NULL COLLATE NOCASE,
                 value TEXT NOT NULL COLLATE NOCASE,
-                FOREIGN KEY (form_id) REFERENCES FORMS(id)
+                FOREIGN KEY (form_id) REFERENCES FORM(id)
             )
 		</item>
 
