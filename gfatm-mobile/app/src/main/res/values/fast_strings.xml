@@ -31,6 +31,7 @@
     <string name="fast_surgery_title">Surgery</string>
     <string name="fast_er_title">Emergency (ER)</string>
     <string name="fast_form_date_past">Date can\'t be in past.</string>
+    <string name="fast_form_date_past_treatment">Next appointment date can\'t be before treatment start date.</string>
     <string name="fast_return_date_future">Next appointment date cannot be more than 24 months.</string>
     <string name="fast_next_visit_date">Next visit date can\'t be before form date.</string>
     <string name="fast_date_cant_be_greater_than_24_months">Date can\'t be greater than 24 months.</string>
@@ -434,6 +435,7 @@
     <string name="fast_test_id_error">Invalid test id</string>
     <string name="fast_invalid_father_name">Invalid father name</string>
     <string name="fast_invalid_husband_name">Invalid husband name</string>
+    <string name="fast_tb_symptoms">TB SYMPTOMS</string>
 
     <string-array name="fast_locations">
         <item>@string/fast_community_title</item>
