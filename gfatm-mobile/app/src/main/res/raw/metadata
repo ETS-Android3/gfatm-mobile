@@ -4473,6 +4473,19 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RIFAMPICIN/ISON
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NEVER',NULL,'N/A','1090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LOWENSTEIN-JENSEN MYCOBACTERIA CULTURE METHOD','L-J CULTURE METHOD','N/A','160011AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 
+
+----------
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('FATHER-IN-LAW',NULL,'N/A','159720AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MOTHER-IN-LAW',NULL,'N/A','159684AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PAST DS-TB TREATMENT REGISTRATION FACILITY OTHER','treatment_past_ds_facility_other','Text','ee16d818-dd2b-4f0e-8816-949c0a148b00');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PAST DR-TB TREATMENT REGISTRATION FACILITY OTHER','treatment_past_dr_facility_other','Text','b33bc584-f9bd-4ba0-af5d-f7e2b7779382');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PAST TB TREATMENT REGISTRATION FACILITY OTHER','past_reg_facility_treatment_other','Text','0458911b-9d00-42e3-bfb0-2c31693a079d');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TRANSFERRED OUT FACILITY OTHER','transfer_out_facility_other','Text','7bedfa4d-7ab3-40ff-867d-25ac5ece523f');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER HOSPITAL','hospital_admit_facility_other','Text','6b3ef9dc-d8c3-4c64-b781-5239dbf3abdd');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TREATMENT FACILITY OTHER','facility_treatment_other','Text','053704c0-5322-4ebf-b46c-f2eae42fb2f3');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TRANSFERRED IN FACILITY OTHER','transfer_in_facility_other','Text','f11fa671-caf6-4a5e-acf4-16b2fa2025f8');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REFERRING FACILITY NAME OTHER','referral_site_other','Text','ae27f0c0-04e3-42b7-b766-ffdb28123403');
+
 -- Program
 INSERT OR IGNORE INTO program VALUES (1, "86ba1232-d576-416e-b102-5f335c6746ce", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
 INSERT OR IGNORE INTO program VALUES (2, "5d372a38-ae27-4a68-a8d2-bc517a2c9c40", "PET", "Post-Exposure Treatment");
