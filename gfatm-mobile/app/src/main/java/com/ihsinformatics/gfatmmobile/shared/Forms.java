@@ -9,7 +9,7 @@ import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbContactRegistry;
 import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbDSTCultureTest;
 import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbDrugDrugDispersal;
 import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbEndOfFollowUp;
-import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbGXPSpecimenCollection;
+import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbSpecimenCollection;
 import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbGXPTest;
 import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbHistopathologySite;
 import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbIPTFollowup;
@@ -142,7 +142,7 @@ public class Forms{
     public static final String FAST_GXP_SPECIMEN_COLLECTION_FORM = "Specimen Collection Form";
     public static final String FAST_PRESUMPTIVE_INFORMATION_FORM = "Presumptive Information Form";
     public static final String FAST_GENEXPERT_RESULT_FORM = "GeneXpert Result Form";
-    public static final String FAST_SCREENING_CHEST_XRAY_ORDER_AND_RESULT_FORM = "Screening Chest X-Ray(CAD4TB) Order and Result Form";
+    public static final String FAST_SCREENING_CHEST_XRAY_ORDER_AND_RESULT_FORM = "Screening CXR(CAD4TB) Order and Result Form";
     public static final String FAST_AFB_SMEAR_MICROSCOPY_ORDER_AND_RESULT_FORM = "AFB Smear Microscopy Order and Result Form";
     public static final String FAST_DST_ORDER_AND_RESULT_FORM = "DST Order And Result Form";
     public static final String FAST_CONTACT_REGISTRY_FORM = "Contact Registry Form";
@@ -263,8 +263,8 @@ public class Forms{
     public static final FormsObject childhoodTb_ppa_score = new FormsObject(CHILDHOODTB_PPA_SCORE, ChildhoodTbPPAScore.class, R.drawable.ctb_score, FormTypeColor.OTHER_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_MEDICAL_OFFICER});
     public static final String CHILDHOODTB_TEST_INDICATION_FORM = "Test Indication Form";
     public static final FormsObject childhoodTb_test_indication_form = new FormsObject(CHILDHOODTB_TEST_INDICATION_FORM, ChildhoodTbTestIndicationForm.class, R.drawable.ctb_test_indication_form, FormTypeColor.TEST_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_MEDICAL_OFFICER});
-    public static final String CHILDHOODTB_GXP_SPECIMEN_COLLECTION_FORM = "GXP Specimen Collection Form";
-    public static final FormsObject childhoodTb_gxp_specimen_form = new FormsObject(CHILDHOODTB_GXP_SPECIMEN_COLLECTION_FORM, ChildhoodTbGXPSpecimenCollection.class, R.drawable.pet_treatment_adherence, FormTypeColor.TEST_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER, Roles.CHILDHOODTB_LAB_TECHNICIAN});
+    public static final String CHILDHOODTB_SPECIMEN_COLLECTION_FORM = "GXP Specimen Collection Form";
+    public static final FormsObject childhoodTb_gxp_specimen_form = new FormsObject(CHILDHOODTB_SPECIMEN_COLLECTION_FORM, ChildhoodTbSpecimenCollection.class, R.drawable.pet_treatment_adherence, FormTypeColor.TEST_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER, Roles.CHILDHOODTB_LAB_TECHNICIAN});
     public static final String CHILDHOODTB_GXP_TEST = "GXP Test";
     public static final FormsObject childhoodTb_gxp_test = new FormsObject(CHILDHOODTB_GXP_TEST, ChildhoodTbGXPTest.class, R.drawable.fast_result_form, FormTypeColor.TEST_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER, Roles.CHILDHOODTB_LAB_TECHNICIAN});
     public static final String CHILDHOODTB_CXR_SCREENING_TEST = "CXR Screening Test";
@@ -329,7 +329,7 @@ public class Forms{
 
         ArrayList<FormsObject> fastList = new ArrayList<>();
 
-      //  fastList.add(fastScreeningForm);
+        fastList.add(fastScreeningForm);
         fastList.add(fastPromptForm);
         fastList.add(fastPresumptiveForm);
         fastList.add(fastPatientLocationForm);
