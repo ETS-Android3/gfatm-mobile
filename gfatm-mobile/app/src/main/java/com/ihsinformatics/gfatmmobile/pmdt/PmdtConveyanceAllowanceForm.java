@@ -2,6 +2,7 @@ package com.ihsinformatics.gfatmmobile.pmdt;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.InputType;
@@ -10,8 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
@@ -22,6 +21,7 @@ import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.MyLinearLayout;
+import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
@@ -31,6 +31,7 @@ import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Tahira on 3/6/2017.
@@ -40,20 +41,18 @@ public class PmdtConveyanceAllowanceForm extends AbstractFormActivity implements
 
     Context context;
     TitledButton formDate;
-    TitledButton visitDate;
     TitledEditText externalId;
     TitledSpinner typeAssessment;
     TitledEditText otherAssessmentReason;
     TitledEditText treatmentMonth;
-    LinearLayout facilityLinearLayout;
-    TextView treatmentFacilityText;
-    AutoCompleteTextView treatmentFacilityAutoCompleteList;
-    TitledEditText nationalDrTbRegistrationNumber;
 
-    TitledRadioGroup registerdOutstationFacility;
-    LinearLayout registerdOutstationFacilityLinearLayout;
-    TextView registerdOutstationFacilityText;
-    AutoCompleteTextView registerdOutstationFacilityAutoCompleteList;
+    TitledSpinner treatmentFacility;
+    TitledEditText otherTreatmentFacility;
+
+    TitledEditText nationalDrTbRegistrationNumber;
+    TitledRadioGroup isRegistered;
+
+    TitledSpinner registeredOutstationFacility;
 
     LinearLayout patientCnicLayout;
     LinearLayout patientCnicQuestionLayout;
@@ -146,8 +145,7 @@ public class PmdtConveyanceAllowanceForm extends AbstractFormActivity implements
     @Override
     public void initViews() {
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        visitDate = new TitledButton(context, null, getResources().getString(R.string.pmdt_visit_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pmdt_visit_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         externalId = new TitledEditText(context, null, getResources().getString(R.string.pmdt_external_id), "", "", 11, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         typeAssessment = new TitledSpinner(context, null, getResources().getString(R.string.pmdt_assessment_type), getResources().getStringArray(R.array.pmdt_types_of_assessment), getResources().getString(R.string.pmdt_baseline_assessment), App.HORIZONTAL, true);
         otherAssessmentReason = new TitledEditText(context, null, getResources().getString(R.string.pmdt_other_assessment_reason), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
@@ -156,7 +154,7 @@ public class PmdtConveyanceAllowanceForm extends AbstractFormActivity implements
         // Fetching PMDT Locations
         String program = "";
         if (App.getProgram().equals(getResources().getString(R.string.pet)))
-            program = "pet_location";
+            program = "pmdt_location";
         else if (App.getProgram().equals(getResources().getString(R.string.fast)))
             program = "fast_location";
         else if (App.getProgram().equals(getResources().getString(R.string.comorbidities)))
@@ -167,41 +165,21 @@ public class PmdtConveyanceAllowanceForm extends AbstractFormActivity implements
             program = "childhood_tb_location";
 
         final Object[][] locations = serverService.getAllLocations(program);
-        String[] locationArray = new String[locations.length];
+        String[] locationArray = new String[locations.length + 1];
         for (int i = 0; i < locations.length; i++) {
             locationArray[i] = String.valueOf(locations[i][1]);
         }
+        locationArray[locationArray.length - 1] = getResources().getString(R.string.pmdt_other);
 
-        treatmentFacilityText = new TextView(context);
-        treatmentFacilityText.setText(getResources().getString(R.string.pmdt_treatment_facility));
-        LinearLayout requiredTreatmentFacilityLayout = new LinearLayout(context);
-        MyTextView treatmentFacilityQuestionRequired = new MyTextView(context, "*");
-        int color1 = App.getColor(context, R.attr.colorAccent);
-        treatmentFacilityQuestionRequired.setTextColor(color1);
-        requiredTreatmentFacilityLayout.setOrientation(LinearLayout.HORIZONTAL);
-        requiredTreatmentFacilityLayout.addView(treatmentFacilityQuestionRequired);
-        requiredTreatmentFacilityLayout.addView(treatmentFacilityText);
-        treatmentFacilityAutoCompleteList = new AutoCompleteTextView(context);
-        final ArrayAdapter<String> autoCompleteFacilityAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, locationArray);
-        treatmentFacilityAutoCompleteList.setAdapter(autoCompleteFacilityAdapter);
-        treatmentFacilityAutoCompleteList.setHint("Enter facility");
-        facilityLinearLayout = new LinearLayout(context);
-        facilityLinearLayout.setOrientation(LinearLayout.VERTICAL);
-        facilityLinearLayout.addView(requiredTreatmentFacilityLayout);
-        facilityLinearLayout.addView(treatmentFacilityAutoCompleteList);
+        treatmentFacility = new TitledSpinner(context, null, getResources().getString(R.string.pmdt_treatment_facility), locationArray, "", App.VERTICAL);
+        otherTreatmentFacility = new TitledEditText(context, "", getResources().getString(R.string.pmdt_other_treatment_facility), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+
 
         nationalDrTbRegistrationNumber = new TitledEditText(context, null, getResources().getString(R.string.pmdt_national_dr_tb_registration_number), "", "", 25, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
 
-        registerdOutstationFacility = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_patient_registered_outstation), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, true);
-        registerdOutstationFacilityText = new TextView(context);
-        registerdOutstationFacilityText.setText(getResources().getString(R.string.pmdt_registered_outstation_facility));
-        registerdOutstationFacilityAutoCompleteList = new AutoCompleteTextView(context);
-        registerdOutstationFacilityAutoCompleteList.setAdapter(autoCompleteFacilityAdapter);
-        registerdOutstationFacilityAutoCompleteList.setHint("Enter facility");
-        registerdOutstationFacilityLinearLayout = new LinearLayout(context);
-        registerdOutstationFacilityLinearLayout.setOrientation(LinearLayout.VERTICAL);
-        registerdOutstationFacilityLinearLayout.addView(registerdOutstationFacilityText);
-        registerdOutstationFacilityLinearLayout.addView(registerdOutstationFacilityAutoCompleteList);
+        isRegistered = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_patient_registered_outstation), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, true);
+
+        registeredOutstationFacility = new TitledSpinner(context, null, getResources().getString(R.string.pmdt_registered_outstation_facility), locationArray, "", App.VERTICAL);
 
         // cnic layouts
         patientCnicLayout = new LinearLayout(context);
@@ -256,24 +234,23 @@ public class PmdtConveyanceAllowanceForm extends AbstractFormActivity implements
         amountTransferredInWords = new TitledEditText(context, null, getResources().getString(R.string.pmdt_amount_in_words), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), visitDate.getButton(), externalId.getEditText(), typeAssessment.getSpinner(), otherAssessmentReason.getEditText(), treatmentMonth.getEditText(), treatmentFacilityAutoCompleteList,
-                nationalDrTbRegistrationNumber.getEditText(), registerdOutstationFacility.getRadioGroup(), registerdOutstationFacilityAutoCompleteList, patientCnic1.getEditText(), patientCnic2.getEditText(), patientCnic3.getEditText(), patientOwnCnic.getRadioGroup(), patientCnicOwner.getSpinner(),
+        views = new View[]{formDate.getButton(), externalId.getEditText(), typeAssessment.getSpinner(), otherAssessmentReason.getEditText(), treatmentMonth.getEditText(), treatmentFacility.getSpinner(), otherTreatmentFacility.getEditText(),
+                nationalDrTbRegistrationNumber.getEditText(), isRegistered.getRadioGroup(), registeredOutstationFacility.getSpinner(), patientCnic1.getEditText(), patientCnic2.getEditText(), patientCnic3.getEditText(), patientOwnCnic.getRadioGroup(), patientCnicOwner.getSpinner(),
                 otherPatientCnicOwner.getEditText(), namePatientCnicOwner.getEditText(), patientPrimaryPhone1a.getEditText(), patientPrimaryPhone1b.getEditText(), patientAlternatePhone1a.getEditText(), patientAlternatePhone1b.getEditText(), patientSubmitSputumSample.getRadioGroup(),
                 sputumSampleId.getEditText(), reasonNotSubmittedSample.getRadioGroup(), otherReasonNotSubmittedSample.getEditText(), visitedDoctor.getRadioGroup(), conveyanceVoucherBookNumber.getEditText(),
                 conveyanceVoucherNumber.getEditText(), amountTransferred.getEditText(), amountTransferredInWords.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, visitDate, externalId, typeAssessment, otherAssessmentReason, treatmentMonth, facilityLinearLayout,
-                        nationalDrTbRegistrationNumber, registerdOutstationFacility, registerdOutstationFacilityLinearLayout},
+                {{formDate, externalId, typeAssessment, otherAssessmentReason, treatmentMonth, treatmentFacility, otherTreatmentFacility,
+                        nationalDrTbRegistrationNumber, isRegistered, registeredOutstationFacility},
                         {linearLayout1, patientOwnCnic, patientCnicOwner, otherPatientCnicOwner, namePatientCnicOwner, patientPrimaryPhoneLayout, patientAlternatePhoneLayout},
                         {patientSubmitSputumSample, sputumSampleId, reasonNotSubmittedSample, otherReasonNotSubmittedSample, visitedDoctor,
                                 conveyanceVoucherBookNumber, conveyanceVoucherNumber, amountTransferred, amountTransferredInWords}};
 
         formDate.getButton().setOnClickListener(this);
-        visitDate.getButton().setOnClickListener(this);
         typeAssessment.getSpinner().setOnItemSelectedListener(this);
-        registerdOutstationFacility.getRadioGroup().setOnCheckedChangeListener(this);
+        isRegistered.getRadioGroup().setOnCheckedChangeListener(this);
         patientOwnCnic.getRadioGroup().setOnCheckedChangeListener(this);
         patientCnicOwner.getSpinner().setOnItemSelectedListener(this);
         patientSubmitSputumSample.getRadioGroup().setOnCheckedChangeListener(this);
@@ -284,8 +261,37 @@ public class PmdtConveyanceAllowanceForm extends AbstractFormActivity implements
 
     @Override
     public void updateDisplay() {
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        visitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+        if (snackbar != null)
+            snackbar.dismiss();
+
+        if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
+
+            String formDa = formDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
+            personDOB = personDOB.substring(0, 10);
+
+            Date date = new Date();
+            if (formDateCalendar.after(App.getCalendar(date))) {
+
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+            } else
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
+        }
+
     }
 
     @Override
@@ -314,13 +320,6 @@ public class PmdtConveyanceAllowanceForm extends AbstractFormActivity implements
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
-        } else if (view == visitDate.getButton()) {
-            Bundle args = new Bundle();
-            args.putInt("type", SECOND_DATE_DIALOG_ID);
-            args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", false);
-            secondDateFragment.setArguments(args);
-            secondDateFragment.show(getFragmentManager(), "DatePicker");
         }
     }
 
@@ -337,6 +336,37 @@ public class PmdtConveyanceAllowanceForm extends AbstractFormActivity implements
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+        MySpinner spinner = (MySpinner) parent;
+
+        if (spinner == typeAssessment.getSpinner()) {
+
+            if (App.get(typeAssessment).equals(getResources().getString(R.string.pmdt_other)))
+                otherAssessmentReason.setVisibility(View.VISIBLE);
+            else
+                otherAssessmentReason.setVisibility(View.GONE);
+
+            if (App.get(typeAssessment).equals(getResources().getString(R.string.pmdt_planened_monthly_assessment)))
+                treatmentMonth.setVisibility(View.VISIBLE);
+            else
+                treatmentMonth.setVisibility(View.GONE);
+
+        } else if (spinner == treatmentFacility.getSpinner()) {
+
+            if (App.get(treatmentFacility).equals(getResources().getString(R.string.pmdt_other)))
+                otherTreatmentFacility.setVisibility(View.VISIBLE);
+            else
+                otherTreatmentFacility.setVisibility(View.GONE);
+
+        } else if (spinner == patientCnicOwner.getSpinner()) {
+
+            if (App.get(patientCnicOwner).equals(getResources().getString(R.string.pmdt_other))) {
+                otherPatientCnicOwner.setVisibility(View.VISIBLE);
+                namePatientCnicOwner.setVisibility(View.VISIBLE);
+            } else {
+                otherPatientCnicOwner.setVisibility(View.GONE);
+                namePatientCnicOwner.setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override
@@ -345,15 +375,42 @@ public class PmdtConveyanceAllowanceForm extends AbstractFormActivity implements
     }
 
     @Override
-    public void resetViews() {
-        super.resetViews();
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        visitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+        if (group == patientSubmitSputumSample.getRadioGroup()) {
+
+            if (App.get(patientSubmitSputumSample).equals(getResources().getString(R.string.no))) {
+                reasonNotSubmittedSample.setVisibility(View.VISIBLE);
+            } else {
+                reasonNotSubmittedSample.setVisibility(View.GONE);
+            }
+        } else if (group == reasonNotSubmittedSample.getRadioGroup()) {
+
+            if (App.get(reasonNotSubmittedSample).equals(getResources().getString(R.string.pmdt_other))) {
+                otherReasonNotSubmittedSample.setVisibility(View.VISIBLE);
+            } else {
+                otherReasonNotSubmittedSample.setVisibility(View.GONE);
+            }
+        } else if (group == patientOwnCnic.getRadioGroup()) {
+
+            if (App.get(patientOwnCnic).equals(getResources().getString(R.string.no))) {
+                patientCnicOwner.setVisibility(View.VISIBLE);
+
+                if (App.get(patientCnicOwner).equals(getResources().getString(R.string.pmdt_other)))
+                    otherPatientCnicOwner.setVisibility(View.VISIBLE);
+                else
+                    otherPatientCnicOwner.setVisibility(View.GONE);
+
+            } else {
+                patientCnicOwner.setVisibility(View.GONE);
+                otherPatientCnicOwner.setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override
-    public void onCheckedChanged(RadioGroup group, int checkedId) {
-
+    public void resetViews() {
+        super.resetViews();
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
     }
 
     class MyAdapter extends PagerAdapter {

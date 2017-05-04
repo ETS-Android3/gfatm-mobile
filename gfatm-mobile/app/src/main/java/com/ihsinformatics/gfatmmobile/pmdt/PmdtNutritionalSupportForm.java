@@ -2,6 +2,7 @@ package com.ihsinformatics.gfatmmobile.pmdt;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.InputType;
@@ -10,8 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
@@ -21,8 +20,6 @@ import android.widget.TextView;
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.R;
-import com.ihsinformatics.gfatmmobile.custom.MyLinearLayout;
-import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
@@ -30,7 +27,10 @@ import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Tahira on 3/17/2017.
@@ -40,20 +40,20 @@ public class PmdtNutritionalSupportForm extends AbstractFormActivity implements 
 
     Context context;
     TitledButton formDate;
-    TitledButton visitDate;
     TitledEditText externalId;
     TitledSpinner typeAssessment;
     TitledEditText otherAssessmentReason;
     TitledEditText treatmentMonth;
-    LinearLayout facilityLinearLayout;
-    TextView treatmentFacilityText;
-    AutoCompleteTextView treatmentFacilityAutoCompleteList;
+
+    TitledSpinner treatmentFacility;
+    TitledEditText otherTreatmentFacility;
+
     TitledEditText nationalDrTbRegistrationNumber;
 
-    TitledRadioGroup registerdOutstationFacility;
-    MyLinearLayout registerdOutstationFacilityLinearLayout;
-    TextView registerdOutstationFacilityText;
-    AutoCompleteTextView registerdOutstationFacilityAutoCompleteList;
+    TitledRadioGroup isRegisteredOutstationFacility;
+
+    TitledSpinner outstationFacility;
+
 
     TitledRadioGroup referredNutritionist;      // title: Nutritionist's verification
     TitledRadioGroup diabetic;
@@ -132,8 +132,7 @@ public class PmdtNutritionalSupportForm extends AbstractFormActivity implements 
     @Override
     public void initViews() {
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        visitDate = new TitledButton(context, null, getResources().getString(R.string.pmdt_visit_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pmdt_visit_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         externalId = new TitledEditText(context, null, getResources().getString(R.string.pmdt_external_id), "", "", 11, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         typeAssessment = new TitledSpinner(context, null, getResources().getString(R.string.pmdt_assessment_type), getResources().getStringArray(R.array.pmdt_types_of_assessment), getResources().getString(R.string.pmdt_baseline_assessment), App.HORIZONTAL, true);
         otherAssessmentReason = new TitledEditText(context, null, getResources().getString(R.string.pmdt_other_assessment_reason), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
@@ -142,7 +141,7 @@ public class PmdtNutritionalSupportForm extends AbstractFormActivity implements 
         // Fetching PMDT Locations
         String program = "";
         if (App.getProgram().equals(getResources().getString(R.string.pet)))
-            program = "pet_location";
+            program = "pmdt_location";
         else if (App.getProgram().equals(getResources().getString(R.string.fast)))
             program = "fast_location";
         else if (App.getProgram().equals(getResources().getString(R.string.comorbidities)))
@@ -153,48 +152,20 @@ public class PmdtNutritionalSupportForm extends AbstractFormActivity implements 
             program = "childhood_tb_location";
 
         final Object[][] locations = serverService.getAllLocations(program);
-        String[] locationArray = new String[locations.length];
+        String[] locationArray = new String[locations.length + 1];
         for (int i = 0; i < locations.length; i++) {
             locationArray[i] = String.valueOf(locations[i][1]);
         }
+        locationArray[locationArray.length - 1] = getResources().getString(R.string.pmdt_other);
 
-        int color = App.getColor(context, R.attr.colorAccent);  // hint color for customized Facility TextViews
-
-        treatmentFacilityText = new TextView(context);
-        treatmentFacilityText.setText(getResources().getString(R.string.pmdt_treatment_facility));
-        LinearLayout requiredTreatmentFacilityLayout = new LinearLayout(context);
-        MyTextView treatmentFacilityQuestionRequired = new MyTextView(context, "*");
-        treatmentFacilityQuestionRequired.setTextColor(color);
-        requiredTreatmentFacilityLayout.setOrientation(LinearLayout.HORIZONTAL);
-        requiredTreatmentFacilityLayout.addView(treatmentFacilityQuestionRequired);
-        requiredTreatmentFacilityLayout.addView(treatmentFacilityText);
-        treatmentFacilityAutoCompleteList = new AutoCompleteTextView(context);
-        final ArrayAdapter<String> autoCompleteFacilityAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, locationArray);
-        treatmentFacilityAutoCompleteList.setAdapter(autoCompleteFacilityAdapter);
-        treatmentFacilityAutoCompleteList.setHint("Enter facility");
-        facilityLinearLayout = new LinearLayout(context);
-        facilityLinearLayout.setOrientation(LinearLayout.VERTICAL);
-        facilityLinearLayout.addView(requiredTreatmentFacilityLayout);
-        facilityLinearLayout.addView(treatmentFacilityAutoCompleteList);
-
+        treatmentFacility = new TitledSpinner(context, null, getResources().getString(R.string.pmdt_treatment_facility), locationArray, "", App.VERTICAL);
+        otherTreatmentFacility = new TitledEditText(context, "", getResources().getString(R.string.pmdt_other_treatment_facility), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         nationalDrTbRegistrationNumber = new TitledEditText(context, null, getResources().getString(R.string.pmdt_national_dr_tb_registration_number), "", "", 25, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
 
-        registerdOutstationFacility = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_patient_registered_outstation), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, true);
-
-        registerdOutstationFacilityText = new TextView(context);
-        registerdOutstationFacilityText.setText(getResources().getString(R.string.pmdt_registered_outstation_facility));
-        LinearLayout registerdOutstationFacilityLayout = new LinearLayout(context);
-        MyTextView registerdOutstationFacilityQuestionRequired = new MyTextView(context, "*");
-        registerdOutstationFacilityQuestionRequired.setTextColor(color);
-        registerdOutstationFacilityLayout.setOrientation(LinearLayout.HORIZONTAL);
-        registerdOutstationFacilityLayout.addView(registerdOutstationFacilityQuestionRequired);
-        registerdOutstationFacilityLayout.addView(registerdOutstationFacilityText);
-        registerdOutstationFacilityAutoCompleteList = new AutoCompleteTextView(context);
-        registerdOutstationFacilityAutoCompleteList.setAdapter(autoCompleteFacilityAdapter);
-        registerdOutstationFacilityAutoCompleteList.setHint("Enter facility");
-        registerdOutstationFacilityLinearLayout = new MyLinearLayout(context, null, LinearLayout.VERTICAL);
-        registerdOutstationFacilityLinearLayout.addView(registerdOutstationFacilityLayout);
-        registerdOutstationFacilityLinearLayout.addView(registerdOutstationFacilityAutoCompleteList);
+        // removing 'Other' option from the facility list
+        locationArray = ArrayUtils.removeElement(locationArray, locationArray[locationArray.length - 1]);
+        isRegisteredOutstationFacility = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_patient_registered_outstation), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, true);
+        outstationFacility = new TitledSpinner(context, null, getResources().getString(R.string.pmdt_registered_outstation_facility), locationArray, "", App.VERTICAL);
 
         referredNutritionist = new TitledRadioGroup(context, getResources().getString(R.string.pmdt_title_nutritionist_verification), getResources().getString(R.string.pmdt_referred_nutritionist), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, true);
         diabetic = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_patient_diabetic), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, true);
@@ -211,22 +182,22 @@ public class PmdtNutritionalSupportForm extends AbstractFormActivity implements 
         nutritionalSupportVoucherNumber = new TitledEditText(context, null, getResources().getString(R.string.pmdt_nutritional_support_voucher_number), "", "", 20, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), visitDate.getButton(), externalId.getEditText(), typeAssessment.getSpinner(), otherAssessmentReason.getEditText(), treatmentMonth.getEditText(), treatmentFacilityAutoCompleteList,
-                nationalDrTbRegistrationNumber.getEditText(), registerdOutstationFacility.getRadioGroup(), registerdOutstationFacilityAutoCompleteList, referredNutritionist.getRadioGroup(), diabetic.getRadioGroup(), height.getEditText(),
+        views = new View[]{formDate.getButton(), externalId.getEditText(), typeAssessment.getSpinner(), otherAssessmentReason.getEditText(), treatmentMonth.getEditText(), treatmentFacility.getSpinner(), otherTreatmentFacility.getEditText(),
+                nationalDrTbRegistrationNumber.getEditText(), isRegisteredOutstationFacility.getRadioGroup(), outstationFacility, referredNutritionist.getRadioGroup(), diabetic.getRadioGroup(), height.getEditText(),
                 weight.getEditText(), currentBmi.getEditText(), baselineBmi.getEditText(), currentBmiCategory.getRadioGroup(), baselineBmiCategory.getRadioGroup(), eligibleNutritionalSupport.getRadioGroup(), nutritionalSupportType.getSpinner(),
                 otherNutritionalSupportType.getEditText(), nutritionalSupportVoucherNumber.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, visitDate, externalId, typeAssessment, otherAssessmentReason, treatmentMonth, facilityLinearLayout, nationalDrTbRegistrationNumber},
-                        {registerdOutstationFacility, registerdOutstationFacilityLinearLayout, referredNutritionist, diabetic, height, weight, currentBmi, baselineBmi,
+                {{formDate, externalId, typeAssessment, otherAssessmentReason, treatmentMonth, treatmentFacility,  otherTreatmentFacility, nationalDrTbRegistrationNumber},
+                        {isRegisteredOutstationFacility, outstationFacility, referredNutritionist, diabetic, height, weight, currentBmi, baselineBmi,
                                 currentBmiCategory, baselineBmiCategory},
                         {eligibleNutritionalSupport, nutritionalSupportType, otherNutritionalSupportType, nutritionalSupportVoucherNumber}};
 
         formDate.getButton().setOnClickListener(this);
-        visitDate.getButton().setOnClickListener(this);
+        treatmentFacility.getSpinner().setOnItemSelectedListener(this);
         typeAssessment.getSpinner().setOnItemSelectedListener(this);
-        registerdOutstationFacility.getRadioGroup().setOnCheckedChangeListener(this);
+        isRegisteredOutstationFacility.getRadioGroup().setOnCheckedChangeListener(this);
         referredNutritionist.getRadioGroup().setOnCheckedChangeListener(this);
         diabetic.getRadioGroup().setOnCheckedChangeListener(this);
         currentBmiCategory.getRadioGroup().setOnCheckedChangeListener(this);
@@ -237,8 +208,38 @@ public class PmdtNutritionalSupportForm extends AbstractFormActivity implements 
 
     @Override
     public void updateDisplay() {
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        visitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+        if (snackbar != null)
+            snackbar.dismiss();
+
+        if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
+
+            String formDa = formDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
+            personDOB = personDOB.substring(0, 10);
+
+            Date date = new Date();
+            if (formDateCalendar.after(App.getCalendar(date))) {
+
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+            } else
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
+        }
+
+
     }
 
     @Override
@@ -267,13 +268,6 @@ public class PmdtNutritionalSupportForm extends AbstractFormActivity implements 
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
-        } else if (view == visitDate.getButton()) {
-            Bundle args = new Bundle();
-            args.putInt("type", SECOND_DATE_DIALOG_ID);
-            args.putBoolean("allowFutureDate", false);
-            args.putBoolean("allowPastDate", true);
-            secondDateFragment.setArguments(args);
-            secondDateFragment.show(getFragmentManager(), "DatePicker");
         }
     }
 
@@ -301,8 +295,7 @@ public class PmdtNutritionalSupportForm extends AbstractFormActivity implements 
     @Override
     public void resetViews() {
         super.resetViews();
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        visitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
     }
 
     @Override

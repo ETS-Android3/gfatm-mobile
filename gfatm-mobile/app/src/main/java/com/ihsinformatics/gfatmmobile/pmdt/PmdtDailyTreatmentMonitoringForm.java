@@ -50,13 +50,11 @@ public class PmdtDailyTreatmentMonitoringForm extends AbstractFormActivity imple
 
     Context context;
     TitledButton formDate;
-    TitledButton reportingDate;
     TitledEditText treatmentDay;
     TitledRadioGroup treatmentDayType;
     TitledRadioGroup patientAdverseEvent;
     // Extra Views for date (to fetch treatment start date)...
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-    Calendar thirdDateCalendar;
     String treatmentStartDate;
 
     ScrollView scrollView;
@@ -72,8 +70,6 @@ public class PmdtDailyTreatmentMonitoringForm extends AbstractFormActivity imple
         PAGE_COUNT = 1;
         FORM_NAME = Forms.PMDT_DAILY_TREATMENT_MONITORING;
         FORM = Forms.pmdtDailyTreatmentMonitoring;
-        thirdDateCalendar = Calendar.getInstance();
-//        thirdDateFragment = new PmdtDailyTreatmentMonitoringForm.SelectDateFragment();
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -124,23 +120,21 @@ public class PmdtDailyTreatmentMonitoringForm extends AbstractFormActivity imple
     @Override
     public void initViews() {
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pmdt_reporting_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        reportingDate = new TitledButton(context, null, getResources().getString(R.string.pmdt_reporting_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         treatmentDay = new TitledEditText(context, null, getResources().getString(R.string.pmdt_day_of_treatment), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
 //        treatmentDay.setFocusableInTouchMode(true);
         treatmentDayType = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_treatment_day_type), getResources().getStringArray(R.array.pmdt_types_treatment_day), getResources().getString(R.string.pmdt_fully_observed_day), App.VERTICAL, App.VERTICAL);
         patientAdverseEvent = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_patient_adverse_event), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL);
 
-        views = new View[]{formDate.getButton(), reportingDate.getButton(), treatmentDay.getEditText(), treatmentDayType.getRadioGroup(),
+        views = new View[]{formDate.getButton(), treatmentDay.getEditText(), treatmentDayType.getRadioGroup(),
                 patientAdverseEvent.getRadioGroup()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, reportingDate, treatmentDay, treatmentDayType, patientAdverseEvent}};
+                {{formDate, treatmentDay, treatmentDayType, patientAdverseEvent}};
 
         formDate.getButton().setOnClickListener(this);
-        reportingDate.getButton().setOnClickListener(this);
         treatmentDayType.getRadioGroup().setOnCheckedChangeListener(this);
         patientAdverseEvent.getRadioGroup().setOnCheckedChangeListener(this);
         treatmentDay.getEditText().setKeyListener(null);
@@ -152,38 +146,31 @@ public class PmdtDailyTreatmentMonitoringForm extends AbstractFormActivity imple
         if (snackbar != null)
             snackbar.dismiss();
 
-        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
+        if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
+            personDOB = personDOB.substring(0, 10);
 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
 
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
-            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
             } else
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-
-
-            if (secondDateCalendar.after(formDateCalendar)) {
-                reportingDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-
-                Date date1 = App.stringToDate(formDate.getButton().getText().toString(), "dd-MMM-yyyy");
-                secondDateCalendar = App.getCalendar(date1);
-            }
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         }
 
@@ -260,7 +247,6 @@ public class PmdtDailyTreatmentMonitoringForm extends AbstractFormActivity imple
 
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-        observations.add(new String[]{"REPORTING DATE", App.getSqlDate(secondDateCalendar)});
         observations.add(new String[]{"DAY OF TREATMENT", App.get(treatmentDay)});
         observations.add(new String[]{"DAY OF TREATMENT ADHERENCE", App.get(treatmentDayType).equals(getResources().getString(R.string.pmdt_fully_observed_day)) ? "FULLY OBSERVED DAY" :
                 (App.get(treatmentDayType).equals(getResources().getString(R.string.pmdt_missed_prescribed_day)) ? "MISSED PRESCRIBED DAY" : "INCOMPLETE PRESCRIBED DAY")});
@@ -385,13 +371,6 @@ public class PmdtDailyTreatmentMonitoringForm extends AbstractFormActivity imple
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
-        } else if (view == reportingDate.getButton()) {
-            Bundle args = new Bundle();
-            args.putInt("type", SECOND_DATE_DIALOG_ID);
-            args.putBoolean("allowFutureDate", false);
-            args.putBoolean("allowPastDate", true);
-            secondDateFragment.setArguments(args);
-            secondDateFragment.show(getFragmentManager(), "DatePicker");
         }
 
     }
@@ -403,7 +382,7 @@ public class PmdtDailyTreatmentMonitoringForm extends AbstractFormActivity imple
         String date = offlineForm.getFormDate();
         ArrayList<String[][]> obsValue = offlineForm.getObsValue();
         formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         for (int i = 0; i < obsValue.size(); i++) {
 
@@ -411,11 +390,6 @@ public class PmdtDailyTreatmentMonitoringForm extends AbstractFormActivity imple
 
             if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
-            } else if (obs[0][0].equals("REPORTING DATE")) {
-                String secondDate = obs[0][1];
-                secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
-                reportingDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-
             } else if (obs[0][0].equals("DAY OF TREATMENT")) {
                 treatmentDay.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("DAY OF TREATMENT ADHERENCE")) {
@@ -468,8 +442,7 @@ public class PmdtDailyTreatmentMonitoringForm extends AbstractFormActivity imple
     @Override
     public void resetViews() {
         super.resetViews();
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        reportingDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -552,14 +525,14 @@ public class PmdtDailyTreatmentMonitoringForm extends AbstractFormActivity imple
                     } else {
                         format = "yyyy-MM-dd";
                     }
-                    thirdDateCalendar.setTime(App.stringToDate(treatmentStartDate, format));
+                    secondDateCalendar.setTime(App.stringToDate(treatmentStartDate, format));
 
                     // Auto-calculate day of treatment - date difference between reporting date and treatment start date
                     int daysDifference = 0;
 
                     try {
-                        Date treatmentStartDate = formatter.parse(DateFormat.format("yyyy-MM-dd", thirdDateCalendar).toString());
-                        Date reportingDate = formatter.parse(DateFormat.format("yyyy-MM-dd", secondDateCalendar).toString());
+                        Date treatmentStartDate = formatter.parse(DateFormat.format("yyyy-MM-dd", secondDateCalendar).toString());
+                        Date reportingDate = formatter.parse(DateFormat.format("yyyy-MM-dd", formDateCalendar).toString());
                         long diff = treatmentStartDate.getTime() - reportingDate.getTime();
                         daysDifference = (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
                         treatmentDay.getEditText().setText(String.valueOf(Math.abs(daysDifference)));

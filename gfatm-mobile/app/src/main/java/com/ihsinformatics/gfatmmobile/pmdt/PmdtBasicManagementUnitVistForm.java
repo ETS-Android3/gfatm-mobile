@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -23,7 +22,6 @@ import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
-import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
@@ -31,6 +29,7 @@ import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Tahira on 2/27/2017.
@@ -40,17 +39,13 @@ public class PmdtBasicManagementUnitVistForm extends AbstractFormActivity {
 
     Context context;
     TitledButton formDate;
-    TitledButton visitDate;
-    TitledSpinner district;
     TitledSpinner cityVillage;
+    TitledSpinner district;
     // province selected in preferences
-    TitledEditText townTaluka;
-    TitledEditText basicManagmentUnitVisited;
+    TitledEditText basicManagementUnitVisited;
     TitledEditText doctorVisitedName;
     TitledEditText numberFailureCases;
-    LinearLayout facilityLinearLayout;
-    TextView referredFacilityText;
-    AutoCompleteTextView referredFacilityAutoCompleteList;
+    TitledSpinner referredFacility;
     TitledEditText numberPatientsEnrolled;
 
     Snackbar snackbar;
@@ -122,65 +117,25 @@ public class PmdtBasicManagementUnitVistForm extends AbstractFormActivity {
     @Override
     public void initViews() {
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        visitDate = new TitledButton(context, null, getResources().getString(R.string.pmdt_visit_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pmdt_visit_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         district = new TitledSpinner(context, "", getResources().getString(R.string.pmdt_district), getResources().getStringArray(R.array.pmdt_empty_array), "", App.VERTICAL);
         cityVillage = new TitledSpinner(context, "", getResources().getString(R.string.pmdt_city_village), getResources().getStringArray(R.array.pmdt_empty_array), "", App.VERTICAL);
-        townTaluka = new TitledEditText(context, null, getResources().getString(R.string.pmdt_town_taluka_tehsil), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        basicManagmentUnitVisited = new TitledEditText(context, null, getResources().getString(R.string.pmdt_basic_management_unit_visited), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        basicManagementUnitVisited = new TitledEditText(context, null, getResources().getString(R.string.pmdt_basic_management_unit_visited), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         doctorVisitedName = new TitledEditText(context, null, getResources().getString(R.string.pmdt_doctor_name_visited), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         numberFailureCases = new TitledEditText(context, null, getResources().getString(R.string.pmdt_number_failure_cases), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-
-        // Fetching PMDT Locations
-        String program = "";
-        if (App.getProgram().equals(getResources().getString(R.string.pet)))
-            program = "pet_location";
-        else if (App.getProgram().equals(getResources().getString(R.string.fast)))
-            program = "fast_location";
-        else if (App.getProgram().equals(getResources().getString(R.string.comorbidities)))
-            program = "comorbidities_location";
-        else if (App.getProgram().equals(getResources().getString(R.string.pmdt)))
-            program = "pmdt_location";
-        else if (App.getProgram().equals(getResources().getString(R.string.childhood_tb)))
-            program = "childhood_tb_location";
-
-        final Object[][] locations = serverService.getAllLocations(program);
-        String[] locationArray = new String[locations.length];
-        for (int i = 0; i < locations.length; i++) {
-            locationArray[i] = String.valueOf(locations[i][1]);
-        }
-
-        referredFacilityText = new TextView(context);
-        referredFacilityText.setText(getResources().getString(R.string.pmdt_facility_referred));
-        LinearLayout referredFacilityLayout = new LinearLayout(context);
-        MyTextView referredFacilityQuestionRequired = new MyTextView(context, "*");
-        int color1 = App.getColor(context, R.attr.colorAccent);
-        referredFacilityQuestionRequired.setTextColor(color1);
-        referredFacilityLayout.setOrientation(LinearLayout.HORIZONTAL);
-        referredFacilityLayout.addView(referredFacilityQuestionRequired);
-        referredFacilityLayout.addView(referredFacilityText);
-        referredFacilityAutoCompleteList = new AutoCompleteTextView(context);
-        final ArrayAdapter<String> autoCompleteLocationAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, locationArray);
-        referredFacilityAutoCompleteList.setAdapter(autoCompleteLocationAdapter);
-        referredFacilityAutoCompleteList.setHint(getResources().getString(R.string.pmdt_facility_hint));
-        facilityLinearLayout = new LinearLayout(context);
-        facilityLinearLayout.setOrientation(LinearLayout.VERTICAL);
-        facilityLinearLayout.addView(referredFacilityLayout);
-        facilityLinearLayout.addView(referredFacilityAutoCompleteList);
-
+        referredFacility = new TitledSpinner(context, "", getResources().getString(R.string.pmdt_facility_referred), getResources().getStringArray(R.array.pmdt_empty_array), "", App.VERTICAL);
         numberPatientsEnrolled = new TitledEditText(context, null, getResources().getString(R.string.pmdt_number_patients_enrolled), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
 
-        views = new View[]{formDate.getButton(), visitDate.getButton(), district.getSpinner(), cityVillage.getSpinner(), townTaluka.getEditText(),
-                basicManagmentUnitVisited.getEditText(), doctorVisitedName.getEditText(), numberFailureCases.getEditText(),
-                referredFacilityAutoCompleteList, numberPatientsEnrolled.getEditText()};
+        views = new View[]{formDate.getButton(), district.getSpinner(), cityVillage.getSpinner(),
+                basicManagementUnitVisited.getEditText(), doctorVisitedName.getEditText(), numberFailureCases.getEditText(),
+                referredFacility.getSpinner(), numberPatientsEnrolled.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, visitDate, district, cityVillage, townTaluka, basicManagmentUnitVisited, doctorVisitedName,
-                        numberFailureCases, facilityLinearLayout, numberPatientsEnrolled}};
+                {{formDate, district, cityVillage, basicManagementUnitVisited, doctorVisitedName,
+                        numberFailureCases, referredFacility, numberPatientsEnrolled}};
 
         formDate.getButton().setOnClickListener(this);
-        visitDate.getButton().setOnClickListener(this);
         district.getSpinner().setOnItemSelectedListener(this);
         resetViews();
 
@@ -188,8 +143,36 @@ public class PmdtBasicManagementUnitVistForm extends AbstractFormActivity {
 
     @Override
     public void updateDisplay() {
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        visitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+        if (snackbar != null)
+            snackbar.dismiss();
+
+        if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
+
+            String formDa = formDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
+            personDOB = personDOB.substring(0,10);
+
+            Date date = new Date();
+            if (formDateCalendar.after(App.getCalendar(date))) {
+
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+            } else
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
+        }
     }
 
     @Override
@@ -219,15 +202,7 @@ public class PmdtBasicManagementUnitVistForm extends AbstractFormActivity {
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
-        } else if (view == visitDate.getButton()) {
-            Bundle args = new Bundle();
-            args.putInt("type", SECOND_DATE_DIALOG_ID);
-            args.putBoolean("allowFutureDate", false);
-            args.putBoolean("allowPastDate", true);
-            secondDateFragment.setArguments(args);
-            secondDateFragment.show(getFragmentManager(), "DatePicker");
         }
-
     }
 
     @Override
@@ -271,9 +246,9 @@ public class PmdtBasicManagementUnitVistForm extends AbstractFormActivity {
     @Override
     public void resetViews() {
         super.resetViews();
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        visitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
+        // fetching districts
         String[] districts = serverService.getDistrictList(App.getProvince());
         district.getSpinner().setAdapter(null);
 
@@ -290,6 +265,7 @@ public class PmdtBasicManagementUnitVistForm extends AbstractFormActivity {
             district.getSpinner().setGravity(Gravity.LEFT);
         }
 
+        // fetching cities
         String[] cities = serverService.getCityList(App.get(district));
         cityVillage.getSpinner().setAdapter(null);
 
@@ -305,6 +281,42 @@ public class PmdtBasicManagementUnitVistForm extends AbstractFormActivity {
             spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             cityVillage.getSpinner().setGravity(Gravity.LEFT);
         }
+
+
+        // Fetching PMDT Locations
+        String program = "";
+        if (App.getProgram().equals(getResources().getString(R.string.pet)))
+            program = "pet_location";
+        else if (App.getProgram().equals(getResources().getString(R.string.fast)))
+            program = "fast_location";
+        else if (App.getProgram().equals(getResources().getString(R.string.comorbidities)))
+            program = "comorbidities_location";
+        else if (App.getProgram().equals(getResources().getString(R.string.pmdt)))
+            program = "pmdt_location";
+        else if (App.getProgram().equals(getResources().getString(R.string.childhood_tb)))
+            program = "childhood_tb_location";
+
+        final Object[][] locations = serverService.getAllLocations(program);
+        String[] locationArray = new String[locations.length];
+        for (int i = 0; i < locations.length; i++) {
+            locationArray[i] = String.valueOf(locations[i][1]);
+        }
+
+        referredFacility.getSpinner().setAdapter(null);
+
+        spinnerArrayAdapter = null;
+        if (App.isLanguageRTL()) {
+            spinnerArrayAdapter = new ArrayAdapter<String>(context, R.layout.custom_rtl_spinner, locationArray);
+            referredFacility.getSpinner().setAdapter(spinnerArrayAdapter);
+            spinnerArrayAdapter.setDropDownViewResource(R.layout.custom_rtl_spinner);
+            referredFacility.getSpinner().setGravity(Gravity.RIGHT);
+        } else {
+            spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, locationArray);
+            referredFacility.getSpinner().setAdapter(spinnerArrayAdapter);
+            spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            referredFacility.getSpinner().setGravity(Gravity.LEFT);
+        }
+
     }
 
     class MyAdapter extends PagerAdapter {
