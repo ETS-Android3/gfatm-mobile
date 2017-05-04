@@ -2675,7 +2675,7 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT ADHEREN
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NON-ADHERENCE REASON (TEXT)','nonadherence_reasons','Text','0029e93f-07d9-4fde-9e03-18ec621ae24e');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TREATMENT SUPPORTER NEGLIGENCE','treatment_supporter_negligence','Coded','73e20ea0-c9d6-462e-8555-64cf16d64dfc');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TREATMENT SUPPORTER NEGLIGENCE REASON','treatment_supporter_negligence_reason','Text','6a7c0963-fd9c-49fd-bbc4-c69220c06269');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('HEALTH WORKER IN PAST','person_past','Coded','034071d8-df1d-42db-ad5e-63423d208fec');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('HEALTH WORKER IN PAST','person_healthworker','Coded','034071d8-df1d-42db-ad5e-63423d208fec');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('HEALTH WORKER','person_healthworker','Coded','4d4d0404-14b8-46c9-9d64-1ff535e79b34');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TREATMENT SUPPORTER ADMINISTER INJECTION','administer_injection','Coded','9758fdee-a13d-463d-ae2c-978fc5b900fb');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TREATMENT SUPPORTER TRAINING','treatment_supporter_training','Coded','c4b7b8c0-bf6e-435b-ada2-0257c28c0998');
@@ -4473,18 +4473,6 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RIFAMPICIN/ISON
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NEVER',NULL,'N/A','1090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LOWENSTEIN-JENSEN MYCOBACTERIA CULTURE METHOD','L-J CULTURE METHOD','N/A','160011AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 
-
-----------
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('FATHER-IN-LAW',NULL,'N/A','159720AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MOTHER-IN-LAW',NULL,'N/A','159684AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PAST DS-TB TREATMENT REGISTRATION FACILITY OTHER','treatment_past_ds_facility_other','Text','ee16d818-dd2b-4f0e-8816-949c0a148b00');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PAST DR-TB TREATMENT REGISTRATION FACILITY OTHER','treatment_past_dr_facility_other','Text','b33bc584-f9bd-4ba0-af5d-f7e2b7779382');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PAST TB TREATMENT REGISTRATION FACILITY OTHER','past_reg_facility_treatment_other','Text','0458911b-9d00-42e3-bfb0-2c31693a079d');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TRANSFERRED OUT FACILITY OTHER','transfer_out_facility_other','Text','7bedfa4d-7ab3-40ff-867d-25ac5ece523f');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER HOSPITAL','hospital_admit_facility_other','Text','6b3ef9dc-d8c3-4c64-b781-5239dbf3abdd');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TREATMENT FACILITY OTHER','facility_treatment_other','Text','053704c0-5322-4ebf-b46c-f2eae42fb2f3');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TRANSFERRED IN FACILITY OTHER','transfer_in_facility_other','Text','f11fa671-caf6-4a5e-acf4-16b2fa2025f8');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REFERRING FACILITY NAME OTHER','referral_site_other','Text','ae27f0c0-04e3-42b7-b766-ffdb28123403');
 
 -- Program
 INSERT OR IGNORE INTO program VALUES (1, "86ba1232-d576-416e-b102-5f335c6746ce", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
