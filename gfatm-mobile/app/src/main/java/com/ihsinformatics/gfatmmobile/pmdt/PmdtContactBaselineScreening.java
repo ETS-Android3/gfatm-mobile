@@ -24,8 +24,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -63,7 +61,6 @@ public class PmdtContactBaselineScreening extends AbstractFormActivity implement
 
     Context context;
     TitledButton formDate;
-    TitledButton baselineContactScreeningDate;
     TitledEditText indexPatientId;
     ImageView validateIndexPatientIdView;
     Button scanQRCode;
@@ -79,9 +76,8 @@ public class PmdtContactBaselineScreening extends AbstractFormActivity implement
     TitledRadioGroup contactNightSweats;
     TitledRadioGroup contactGlandularSwelling;
     TitledRadioGroup contactReferred;
-    LinearLayout facilityLinearLayout;
-    TextView referredFacilityText;
-    AutoCompleteTextView referredFacilityAutoCompleteList;
+    TitledSpinner referredFacility;
+    TitledEditText otherReferredFacility;
 
     ScrollView scrollView;
 
@@ -138,8 +134,7 @@ public class PmdtContactBaselineScreening extends AbstractFormActivity implement
 
     @Override
     public void initViews() {
-        formDate = new TitledButton(context, null, getResources().getString(R.string.form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        baselineContactScreeningDate = new TitledButton(context, null, getResources().getString(R.string.pmdt_baseline_screening_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.VERTICAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pmdt_baseline_screening_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         scanQRCode = new Button(context);
         scanQRCode.setText("Scan QR Code");
         indexPatientId = new TitledEditText(context, null, getResources().getString(R.string.pmdt_index_patient_id), "", "", RegexUtil.idLength, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
@@ -193,39 +188,33 @@ public class PmdtContactBaselineScreening extends AbstractFormActivity implement
             program = "childhood_tb_location";
 
         final Object[][] locations = serverService.getAllLocations(program);
-        String[] locationArray = new String[locations.length];
+        String[] locationArray = new String[locations.length + 1];
         for (int i = 0; i < locations.length; i++) {
             locationArray[i] = String.valueOf(locations[i][1]);
         }
 
-        referredFacilityText = new TextView(context);
-        referredFacilityText.setText(getResources().getString(R.string.pmdt_contact_referred_facility));
-        referredFacilityAutoCompleteList = new AutoCompleteTextView(context);
-        final ArrayAdapter<String> autoCompleteFacilityAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, locationArray);
-        referredFacilityAutoCompleteList.setAdapter(autoCompleteFacilityAdapter);
-        referredFacilityAutoCompleteList.setHint("Enter facility");
-        facilityLinearLayout = new LinearLayout(context);
-        facilityLinearLayout.setOrientation(LinearLayout.VERTICAL);
-        facilityLinearLayout.addView(referredFacilityText);
-        facilityLinearLayout.addView(referredFacilityAutoCompleteList);
+        locationArray[locationArray.length - 1] = getResources().getString(R.string.pmdt_other);
+
+        referredFacility = new TitledSpinner(context, null, getResources().getString(R.string.pmdt_contact_referred_facility), locationArray, "", App.VERTICAL);
+        otherReferredFacility = new TitledEditText(context, "", getResources().getString(R.string.pmdt_other_facility), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), baselineContactScreeningDate.getButton(), indexPatientId.getEditText(), relationWithIndex.getSpinner(), otherRelationWithIndex.getEditText(), contactCough.getRadioGroup(), contactCoughDuration.getSpinner(),
+        views = new View[]{formDate.getButton(), indexPatientId.getEditText(), relationWithIndex.getSpinner(), otherRelationWithIndex.getEditText(), contactCough.getRadioGroup(), contactCoughDuration.getSpinner(),
                 contactHaemoptysis.getRadioGroup(), contactFever.getRadioGroup(), contactWeightLoss.getRadioGroup(), contactReducedAppetite.getRadioGroup(), contactReducedActivity.getRadioGroup(), contactNightSweats.getRadioGroup(),
-                contactGlandularSwelling.getRadioGroup(), contactReferred.getRadioGroup(), referredFacilityAutoCompleteList};
+                contactGlandularSwelling.getRadioGroup(), contactReferred.getRadioGroup(), referredFacility.getSpinner(), otherReferredFacility.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, baselineContactScreeningDate, linearLayout, scanQRCode, relationWithIndex, otherRelationWithIndex, contactCough, contactCoughDuration, contactHaemoptysis, contactFever},
-                        {contactWeightLoss, contactReducedAppetite, contactReducedActivity, contactNightSweats, contactGlandularSwelling, contactReferred, facilityLinearLayout}};
+                {{formDate, linearLayout, scanQRCode, relationWithIndex, otherRelationWithIndex, contactCough, contactCoughDuration, contactHaemoptysis, contactFever},
+                        {contactWeightLoss, contactReducedAppetite, contactReducedActivity, contactNightSweats, contactGlandularSwelling, contactReferred, referredFacility, otherReferredFacility}};
 
         formDate.getButton().setOnClickListener(this);
-        baselineContactScreeningDate.getButton().setOnClickListener(this);
         scanQRCode.setOnClickListener(this);
         relationWithIndex.getSpinner().setOnItemSelectedListener(this);
         contactCough.getRadioGroup().setOnCheckedChangeListener(this);
         contactReferred.getRadioGroup().setOnCheckedChangeListener(this);
         validateIndexPatientIdView.setOnTouchListener(this);
+        referredFacility.getSpinner().setOnItemSelectedListener(this);
 
         indexPatientId.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
@@ -272,38 +261,32 @@ public class PmdtContactBaselineScreening extends AbstractFormActivity implement
         if (snackbar != null)
             snackbar.dismiss();
 
-        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
+        if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
+            personDOB = personDOB.substring(0, 10);
 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
 
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
-            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
             } else
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
-        }
-
-        if (secondDateCalendar.after(formDateCalendar)) {
-            baselineContactScreeningDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-
-            Date date1 = App.stringToDate(formDate.getButton().getText().toString(), "dd-MMM-yyyy");
-            secondDateCalendar = App.getCalendar(date1);
         }
 
     }
@@ -312,9 +295,6 @@ public class PmdtContactBaselineScreening extends AbstractFormActivity implement
     public boolean validate() {
 
         Boolean error = false;
-
-        String facilityText = App.get(referredFacilityAutoCompleteList);
-        boolean facilityVisibility = (facilityLinearLayout.getVisibility() == View.VISIBLE) ? true : false;
 
         if (App.get(otherRelationWithIndex).isEmpty() && otherRelationWithIndex.getVisibility() == View.VISIBLE) {
             otherRelationWithIndex.getEditText().setError(getResources().getString(R.string.mandatory_field));
@@ -334,9 +314,9 @@ public class PmdtContactBaselineScreening extends AbstractFormActivity implement
             indexPatientId.getEditText().requestFocus();
             error = true;
         }
-        if ("".equals(App.get(referredFacilityAutoCompleteList)) && facilityLinearLayout.getVisibility() == View.VISIBLE) {
-            referredFacilityAutoCompleteList.setError(getResources().getString(R.string.mandatory_field));
-            referredFacilityAutoCompleteList.requestFocus();
+        if (App.get(otherReferredFacility).isEmpty() && otherReferredFacility.getVisibility() == View.VISIBLE) {
+            otherReferredFacility.getEditText().setError(getResources().getString(R.string.mandatory_field));
+            otherReferredFacility.requestFocus();
             error = true;
         }
 
@@ -395,7 +375,6 @@ public class PmdtContactBaselineScreening extends AbstractFormActivity implement
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
 
         observations.add(new String[]{"PATIENT ID OF INDEX CASE", App.get(indexPatientId)});
-        observations.add(new String[]{"BASELINE CONTACT SCREENING DATE", App.getSqlDate(secondDateCalendar)});
 
         observations.add(new String[]{"FAMILY MEMBER", App.get(relationWithIndex).equals(getResources().getString(R.string.pmdt_mother)) ? "MOTHER" :
                 (App.get(relationWithIndex).equals(getResources().getString(R.string.pmdt_father)) ? "FATHER" :
@@ -452,14 +431,15 @@ public class PmdtContactBaselineScreening extends AbstractFormActivity implement
                 (App.get(contactGlandularSwelling).equals(getResources().getString(R.string.no)) ? "NO" :
                         (App.get(contactGlandularSwelling).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
 
-        String patientReferred = App.get(contactReferred);
-
         observations.add(new String[]{"PATIENT REFERRED", App.get(contactReferred).equals(getResources().getString(R.string.yes)) ? "YES" :
                 (App.get(contactReferred).equals(getResources().getString(R.string.no)) ? "NO" : "UNKNOWN")});
 
 
-        if (facilityLinearLayout.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"REFERRING FACILITY NAME", App.get(referredFacilityAutoCompleteList)});
+        if (referredFacility.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"REFERRING FACILITY NAME", App.get(referredFacility)});
+
+        if (otherReferredFacility.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"REFERRING FACILITY NAME OTHER", App.get(otherReferredFacility)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -492,7 +472,15 @@ public class PmdtContactBaselineScreening extends AbstractFormActivity implement
                 loading.dismiss();
 
                 if (result.equals("SUCCESS")) {
-                    resetViews();
+
+//                    MainActivity.backToMainMenu();
+//                    try {
+//                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+//                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+//                    } catch (Exception e) {
+//                        // TODO: handle exception
+//                    }
+
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.form_submitted));
@@ -740,13 +728,6 @@ public class PmdtContactBaselineScreening extends AbstractFormActivity implement
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
-        } else if (view == baselineContactScreeningDate.getButton()) {
-            Bundle args = new Bundle();
-            args.putInt("type", SECOND_DATE_DIALOG_ID);
-            args.putBoolean("allowFutureDate", false);
-            args.putBoolean("allowPastDate", true);
-            secondDateFragment.setArguments(args);
-            secondDateFragment.show(getFragmentManager(), "DatePicker");
         } else if (view == scanQRCode) {
             try {
                 Intent intent = new Intent(Barcode.BARCODE_INTENT);
@@ -795,7 +776,7 @@ public class PmdtContactBaselineScreening extends AbstractFormActivity implement
         String date = offlineForm.getFormDate();
         ArrayList<String[][]> obsValue = offlineForm.getObsValue();
         formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         for (int i = 0; i < obsValue.size(); i++) {
 
@@ -805,11 +786,6 @@ public class PmdtContactBaselineScreening extends AbstractFormActivity implement
                 timeTakeToFill = obs[0][1];
             } else if (obs[0][0].equals("PATIENT ID OF INDEX CASE")) {
                 indexPatientId.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("BASELINE CONTACT SCREENING DATE")) {
-                String secondDate = obs[0][1];
-                secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
-                baselineContactScreeningDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-
             } else if (obs[0][0].equals("FAMILY MEMBER")) {
                 String value = obs[0][1].equals("MOTHER") ? getResources().getString(R.string.pet_mother) :
                         (obs[0][1].equals("FATHER") ? getResources().getString(R.string.pet_father) :
@@ -981,8 +957,12 @@ public class PmdtContactBaselineScreening extends AbstractFormActivity implement
                     }
                 }
             } else if (obs[0][0].equals("REFERRING FACILITY NAME")) {
-                referredFacilityAutoCompleteList.setText(obs[0][1]);
-                facilityLinearLayout.setVisibility(View.VISIBLE);
+                referredFacility.getSpinner().selectValue(obs[0][1]);
+                referredFacility.setVisibility(View.VISIBLE);
+
+            } else if (obs[0][0].equals("REFERRING FACILITY NAME OTHER")) {
+                otherReferredFacility.getEditText().setText(obs[0][1]);
+                otherReferredFacility.setVisibility(View.VISIBLE);
             }
         }
         submitButton.setEnabled(true);
@@ -1003,19 +983,21 @@ public class PmdtContactBaselineScreening extends AbstractFormActivity implement
             else
                 otherRelationWithIndex.setVisibility(View.GONE);
         }
+        else if(spinner == referredFacility.getSpinner()) {
+            if (App.get(referredFacility).equals(getResources().getString(R.string.pmdt_other)))
+                otherReferredFacility.setVisibility(View.VISIBLE);
+            else
+                otherReferredFacility.setVisibility(View.GONE);
+        }
     }
 
     @Override
     public void resetViews() {
+
         super.resetViews();
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        baselineContactScreeningDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         otherRelationWithIndex.setVisibility(View.GONE);
-//        contactCoughDuration.setVisibility(View.GONE);    // should be visible, since cough default value is Yes
-//        contactHaemoptysis.setVisibility(View.GONE);      // should be visible, since cough default value is Yes
-//        facilityLinearLayout.setVisibility(View.GONE);    // should be visible, since facilityReferred default value is Yes
-
+        otherReferredFacility.setVisibility(View.GONE);
         submitButton.setEnabled(false);
 
         Bundle bundle = this.getArguments();
@@ -1052,10 +1034,16 @@ public class PmdtContactBaselineScreening extends AbstractFormActivity implement
                 contactHaemoptysis.setVisibility(View.GONE);
             }
         } else if (group == contactReferred.getRadioGroup()) {
-            if (App.get(contactReferred).equals(getResources().getString(R.string.yes)))
-                facilityLinearLayout.setVisibility(View.VISIBLE);
-            else
-                facilityLinearLayout.setVisibility(View.GONE);
+            if (App.get(contactReferred).equals(getResources().getString(R.string.yes))) {
+                referredFacility.setVisibility(View.VISIBLE);
+
+                if (App.get(referredFacility).equals(getResources().getString(R.string.pmdt_other))) {
+                    otherReferredFacility.setVisibility(View.VISIBLE);
+                }
+            } else {
+                referredFacility.setVisibility(View.GONE);
+                otherReferredFacility.setVisibility(View.GONE);
+            }
         }
     }
 

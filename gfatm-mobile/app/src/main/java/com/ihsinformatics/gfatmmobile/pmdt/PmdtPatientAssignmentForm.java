@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -21,6 +22,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -28,12 +30,14 @@ import android.widget.TextView;
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.R;
+import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.model.Address;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.model.TreatmentUser;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
@@ -136,7 +140,7 @@ public class PmdtPatientAssignmentForm extends AbstractFormActivity implements R
     @Override
     public void initViews() {
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
 
         treatmentSupporterText = new TextView(context);
         treatmentSupporterText.setText(getResources().getString(R.string.pmdt_select_treatment_supporter));
@@ -271,37 +275,47 @@ public class PmdtPatientAssignmentForm extends AbstractFormActivity implements R
                         super.onPostExecute(result);
                         loading.dismiss();
 
-                        if (result.get("ADDRESS1") == null || result.get("ADDRESS1").isEmpty()) {
-                            final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
-                            alertDialog.setMessage(getResources().getString(R.string.pmdt_user_address_not_assigned));
-                            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-                            alertDialog.setIcon(clearIcon);
-                            alertDialog.setTitle(getResources().getString(R.string.title_error));
-                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            try {
-                                                InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
-                                                imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
-                                            } catch (Exception e) {
-                                                // TODO: handle exception
-                                            }
-                                            dialog.dismiss();
-                                        }
-                                    });
-                            alertDialog.show();
+//                        if (result.get("ADDRESS1") == null || result.get("ADDRESS1").isEmpty()) {
+//                            final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+//                            alertDialog.setMessage(getResources().getString(R.string.pmdt_user_address_not_assigned));
+//                            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+//                            alertDialog.setIcon(clearIcon);
+//                            alertDialog.setTitle(getResources().getString(R.string.title_error));
+//                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+//                                    new DialogInterface.OnClickListener() {
+//                                        public void onClick(DialogInterface dialog, int which) {
+//                                            try {
+//                                                InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+//                                                imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+//                                            } catch (Exception e) {
+//                                                // TODO: handle exception
+//                                            }
+//                                            dialog.dismiss();
+//                                        }
+//                                    });
+//                            alertDialog.show();
+//
+//                            submitButton.setEnabled(false);
+//
+//                            return;
+//                        } else
+//                            submitButton.setEnabled(true);
 
-                            submitButton.setEnabled(false);
+                        if (result.get("ADDRESS1") != null || !result.get("ADDRESS1").isEmpty())
+                            address1.getEditText().setText(result.get("ADDRESS1"));
 
-                            return;
-                        } else
-                            submitButton.setEnabled(true);
+                        if (result.get("ADDRESS2") != null || !result.get("ADDRESS2").isEmpty())
+                            address2.getEditText().setText(result.get("ADDRESS2"));
 
-                        address1.getEditText().setText(result.get("ADDRESS1"));
-                        address2.getEditText().setText(result.get("ADDRESS2"));
-                        addressDistrict.getEditText().setText(result.get("DISTRICT"));
-                        addressCityVillage.getEditText().setText(result.get("CITY_VILLAGE"));
-                        addressLandmark.getEditText().setText(result.get("LANDMARK"));
+                        if (result.get("DISTRICT") != null || !result.get("DISTRICT").isEmpty())
+                            addressDistrict.getEditText().setText(result.get("DISTRICT"));
+
+                        if (result.get("CITY_VILLAGE") != null || !result.get("CITY_VILLAGE").isEmpty())
+                            addressCityVillage.getEditText().setText(result.get("CITY_VILLAGE"));
+
+                        if (result.get("LANDMARK") != null || !result.get("LANDMARK").isEmpty())
+                            addressLandmark.getEditText().setText(result.get("LANDMARK"));
+
                     }
                 };
                 autopopulateFormTask.execute("");
@@ -311,17 +325,105 @@ public class PmdtPatientAssignmentForm extends AbstractFormActivity implements R
 
     @Override
     public void updateDisplay() {
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        if (snackbar != null)
+            snackbar.dismiss();
+
+        if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
+
+            String formDa = formDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
+            personDOB = personDOB.substring(0,10);
+
+            Date date = new Date();
+            if (formDateCalendar.after(App.getCalendar(date))) {
+
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+            } else
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
+        }
     }
 
     @Override
     public boolean validate() {
-        return false;
+
+        Boolean error = false;
+
+        if (App.get(treatmentSupporterId).isEmpty()) {
+            treatmentSupporterId.getEditText().setError(getResources().getString(R.string.mandatory_field));
+            treatmentSupporterId.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (App.get(treatmentSupporterFirstName).isEmpty()) {
+            treatmentSupporterFirstName.getEditText().setError(getResources().getString(R.string.mandatory_field));
+            treatmentSupporterFirstName.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (App.get(treatmentSupporterLastName).isEmpty()) {
+            treatmentSupporterLastName.getEditText().setError(getResources().getString(R.string.mandatory_field));
+            treatmentSupporterLastName.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (otherRelationship.getVisibility() == View.VISIBLE && App.get(otherRelationship).isEmpty()) {
+            otherRelationship.getEditText().setError(getResources().getString(R.string.mandatory_field));
+            otherRelationship.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (otherReasonHouseholdMember.getVisibility() == View.VISIBLE && App.get(otherReasonHouseholdMember).isEmpty()) {
+            otherReasonHouseholdMember.getEditText().setError(getResources().getString(R.string.mandatory_field));
+            otherReasonHouseholdMember.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (error) {
+
+            // int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
+
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
+            alertDialog.setMessage(getString(R.string.form_error));
+            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+            // DrawableCompat.setTint(clearIcon, color);
+            alertDialog.setIcon(clearIcon);
+            alertDialog.setTitle(getResources().getString(R.string.title_error));
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            try {
+                                InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                            } catch (Exception e) {
+                                // TODO: handle exception
+                            }
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
+
+            return false;
+        }
+
+        return true;
     }
 
     @Override
     public boolean submit() {
-
 
         final ArrayList<String[]> observations = new ArrayList<String[]>();
 
@@ -344,8 +446,6 @@ public class PmdtPatientAssignmentForm extends AbstractFormActivity implements R
 
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-
-//        observations.add(new String[]{"VISIT DATE", App.getSqlDate(secondDateCalendar)});
 
         observations.add(new String[]{"TREATMENT SUPPORTER ID", App.get(treatmentSupporterId)});
 
@@ -380,126 +480,20 @@ public class PmdtPatientAssignmentForm extends AbstractFormActivity implements R
                                                                                                                                                                                 (App.get(relationshipWithPatient).equals(getResources().getString(R.string.pmdt_brother_in_law)) ? "BROTHER IN LAW" :
                                                                                                                                                                                         (App.get(relationshipWithPatient).equals(getResources().getString(R.string.pmdt_sister_in_law)) ? "SISTER IN LAW" :
                                                                                                                                                                                                 (App.get(relationshipWithPatient).equals(getResources().getString(R.string.pmdt_cousin)) ? "COUSIN" :
-                                                                                                                                                                                "OTHER FAMILY MEMBER")))))))))))))))))))))))});
+                                                                                                                                                                                                        "OTHER FAMILY MEMBER")))))))))))))))))))))))});
 
 
         if (otherRelationship.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER FAMILY MEMBER", App.get(otherRelationship)});
 
-//        if (dotLastPrescribedDay.getVisibility() == View.VISIBLE)
-//            observations.add(new String[]{"DOT AT LAST PRESCRIBED DAY", App.get(dotLastPrescribedDay).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-//
-//        if (administerInjections.getVisibility() == View.VISIBLE)
-//            observations.add(new String[]{"TREATMENT SUPPORTER ADMINISTER INJECTION", App.get(administerInjections).equals(getResources().getString(R.string.yes)) ? "YES" :
-//                    (App.get(administerInjections).equals(getResources().getString(R.string.no)) ? "NO" : "NOT APPLICABLE")});
-//
-//        if (missedDose.getVisibility() == View.VISIBLE)
-//            observations.add(new String[]{"PATIENT MISSED DOSE", App.get(missedDose).equals(getResources().getString(R.string.yes)) ? "YES" :
-//                    (App.get(missedDose).equals(getResources().getString(R.string.no)) ? "NO" :
-//                            (App.get(missedDose).equals(getResources().getString(R.string.pmdt_refused)) ? "REFUSED" : "UNKNOWN"))});
-//
-//        if (reasonMissedDose.getVisibility() == View.VISIBLE)
-//            observations.add(new String[]{"REASON MISSED DOSE", App.get(reasonMissedDose).equals(getResources().getString(R.string.pmdt_adverse_events)) ? "ADVERSE EVENTS" :
-//                    (App.get(reasonMissedDose).equals(getResources().getString(R.string.pmdt_drug_not_available)) ? "DRUG NOT AVAILABLE" :
-//                            (App.get(reasonMissedDose).equals(getResources().getString(R.string.pmdt_treatment_supporter_did_not_come)) ? "TREATMENT SUPPORTER DID NOT COME" :
-//                                    (App.get(reasonMissedDose).equals(getResources().getString(R.string.pmdt_refused)) ? "REFUSED" :
-//                                            (App.get(reasonMissedDose).equals(getResources().getString(R.string.pmdt_unknown)) ? "UNKNOWN" : "OTHER REASON MISSED DOSE"))))});
-//
-//        if (otherReasonMissedDose.getVisibility() == View.VISIBLE)
-//            observations.add(new String[]{"OTHER REASON MISSED DOSE", App.get(otherReasonMissedDose)});
-//
-//        observations.add(new String[]{"TREATMENT SUPPORTER PRACTICE INFECTION CONTROL MEASURES", App.get(practiceInfectionControl).equals(getResources().getString(R.string.pmdt_always)) ? "ALWAYS" :
-//                (App.get(practiceInfectionControl).equals(getResources().getString(R.string.pmdt_sometimes)) ? "SOMETIMES" :
-//                        (App.get(practiceInfectionControl).equals(getResources().getString(R.string.pmdt_rarely)) ? "RARELY" :
-//                                (App.get(practiceInfectionControl).equals(getResources().getString(R.string.pmdt_never)) ? "NEVER" : "UNKNOWN")))});
-//
-//
-//        observations.add(new String[]{"FAMILY PRACTICE INFECTION CONTROL MEASURES", App.get(familyPracticeInfectionControl).equals(getResources().getString(R.string.pmdt_always)) ? "ALWAYS" :
-//                (App.get(familyPracticeInfectionControl).equals(getResources().getString(R.string.pmdt_sometimes)) ? "SOMETIMES" :
-//                        (App.get(familyPracticeInfectionControl).equals(getResources().getString(R.string.pmdt_rarely)) ? "RARELY" :
-//                                (App.get(familyPracticeInfectionControl).equals(getResources().getString(R.string.pmdt_never)) ? "NEVER" : "UNKNOWN")))});
-//
-//        observations.add(new String[]{"TREATMENT SUPPORTER WAIT AFTER ADMINISTERING DRUGS", App.get(waitAfterAdministerDrug).equals(getResources().getString(R.string.pmdt_does_not_wait)) ? "DOES NOT WAIT" :
-//                (App.get(waitAfterAdministerDrug).equals(getResources().getString(R.string.pmdt_less_than_ten_mins)) ? "LESS THAN 10 MINUTES" :
-//                        (App.get(waitAfterAdministerDrug).equals(getResources().getString(R.string.pmdt_ten_to_twenty_mins)) ? "10 TO 20 MINUTES" :
-//                                (App.get(waitAfterAdministerDrug).equals(getResources().getString(R.string.pmdt_twenty_to_thirty_mins)) ? "20 TO 30 MINUTES" :
-//                                        (App.get(waitAfterAdministerDrug).equals(getResources().getString(R.string.pmdt_thirty_mins_an_hour)) ? "30 MINUTES TO ONE HOUR" : "MORE THAN AN HOUR"))))});
-//
-//        observations.add(new String[]{"TREATMENT SUPPORTER CONTACT SCREENING", App.get(registerHouseholdMembers).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-//
-//        if (contactScreeningPerformedDate.getVisibility() == View.VISIBLE)
-//            observations.add(new String[]{"LAST CONTACT SCREENING PERFORMED DATE", App.getSqlDate(thirdDateCalendar)});
-//
-//        observations.add(new String[]{"PATIENT SATISFIED WITH TREATMENT SUPPORTER", App.get(patientSatisfied).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-//
-//        observations.add(new String[]{"PATIENT SUBMITTED SPUTUM LAST VISIT", App.get(sputumSubmittedLastVisit).equals(getResources().getString(R.string.yes)) ? "YES" :
-//                (App.get(sputumSubmittedLastVisit).equals(getResources().getString(R.string.no)) ? "NO" : "NOT APPLICABLE")});
-//
-//        if (reasonNotSubmittedSample.getVisibility() == View.VISIBLE)
-//            observations.add(new String[]{"REASON NOT SUBMITTED SPUTUM", App.get(sputumSubmittedLastVisit).equals(getResources().getString(R.string.pmdt_could_not_produce_sputum)) ? "COULD NOT PRODUCE SAMPLE" :
-//                    (App.get(sputumSubmittedLastVisit).equals(getResources().getString(R.string.pmdt_doctor_did_not_request)) ? "DOCTOR DID NOT REQUEST" : "OTHER REASON NOT SUBMITTED SPUTUM")});
-//
-//        if (otherReasonNotSubmittedSample.getVisibility() == View.VISIBLE)
-//            observations.add(new String[]{"OTHER REASON NOT SUBMITTED SPUTUM", App.get(otherReasonNotSubmittedSample)});
-//
-//        observations.add(new String[]{"PATIENT FOOD BASKET INCENTIVE", App.get(foodBasketIncentiveLastMonth).equals(getResources().getString(R.string.yes)) ? "YES" :
-//                (App.get(foodBasketIncentiveLastMonth).equals(getResources().getString(R.string.no)) ? "NO" : "REFUSED")});
-//
-//
-//        observations.add(new String[]{"ADVERSE EVENT REPORTED", App.get(adverseEventLastVisit).equals(getResources().getString(R.string.yes)) ? "YES" :
-//                (App.get(adverseEventLastVisit).equals(getResources().getString(R.string.no)) ? "NO" : "REFUSED")});
-//
-//        //actionAdverseEvent
-//        if (actionAdverseEvent.getVisibility() == View.VISIBLE) {
-//            String actionAdverseEventString = "";
-//            for (CheckBox cb : actionAdverseEvent.getCheckedBoxes()) {
-//                if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pmdt_arranged_follow_up)))
-//                    actionAdverseEventString = actionAdverseEventString + "ARRANGED FOLLOW UP NEXT DAY FOR CLINICAL REVIEW" + " ; ";
-//                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pmdt_consulted_and_advised)))
-//                    actionAdverseEventString = actionAdverseEventString + "CONSULTED ON PHONE WITH TB DOCTOR AND ADVISED ANCILLARY MEDICATIONS" + " ; ";
-//                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pmdt_consulted_and_arranged_transfer)))
-//                    actionAdverseEventString = actionAdverseEventString + "CONSULTED ON PHONE WITH TB DOCTOR AND ARRANGED TRANSFER TO REFERRAL HOSPITAL" + " ; ";
-//                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pmdt_no_action_required)))
-//                    actionAdverseEventString = actionAdverseEventString + "NO ACTION WAS REQUIRED" + " ; ";
-//                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pmdt_other)))
-//                    actionAdverseEventString = actionAdverseEventString + "OTHER ACTION ADVERSE EVENT" + " ; ";
-//            }
-//            observations.add(new String[]{"ACTION ADVERSE EVENT", actionAdverseEventString});
-//        }
-//
-//        if (otherActionAdverseEvent.getVisibility() == View.VISIBLE)
-//            observations.add(new String[]{"OTHER ACTION ADVERSE EVENT", App.get(otherActionAdverseEvent)});
-//
-//        observations.add(new String[]{"TREATMENT SUPPORTER ADDRESS SOCIAL PROBLEMS", App.get(addressSocialProblems).equals(getResources().getString(R.string.yes)) ? "YES" :
-//                (App.get(addressSocialProblems).equals(getResources().getString(R.string.no)) ? "NO" : "REFUSED")});
-//
-//
-//        observations.add(new String[]{"REFER FOR COUNSELING", App.get(referCounseling).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-//
-//        if (counselingType.getVisibility() == View.VISIBLE) {
-//            String conselingTypeString = "";
-//            for (CheckBox cb : counselingType.getCheckedBoxes()) {
-//                if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pmdt_adherence)))
-//                    conselingTypeString = conselingTypeString + "ADHERENCE" + " ; ";
-//                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pmdt_infection_control)))
-//                    conselingTypeString = conselingTypeString + "INFECTION CONTROL COUNSELLING" + " ; ";
-//                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pmdt_adverse_events)))
-//                    conselingTypeString = conselingTypeString + "ADVERSE EVENTS" + " ; ";
-//                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pmdt_psychosocial_issues)))
-//                    conselingTypeString = conselingTypeString + "PSYCHOSOCIAL COUNSELING" + " ; ";
-//                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pmdt_substance_abuse)))
-//                    conselingTypeString = conselingTypeString + "SUBSTANCE ABUSE" + " ; ";
-//                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pmdt_other)))
-//                    conselingTypeString = conselingTypeString + "OTHER COUNSELING TYPE" + " ; ";
-//            }
-//            observations.add(new String[]{"COUNSELING TYPE", conselingTypeString});
-//        }
-//
-//        if (otherCounselingType.getVisibility() == View.VISIBLE)
-//            observations.add(new String[]{"OTHER COUNSELING TYPE", App.get(otherCounselingType)});
-//
-//        if (!App.get(treatmentCoordinatorNotes).isEmpty())
-//            observations.add(new String[]{"TREATMENT COORDINATOR MONITORING NOTES", App.get(treatmentCoordinatorNotes)});
+        if (reasonHouseholdMember.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"REASON FOR HOUSEHOLD TREATMENT SUPPORTER", App.get(reasonHouseholdMember).equals(getResources().getString(R.string.pmdt_family_refused_treatment_supporter)) ? "FAMILY-REFUSED NON-HOUSEHOLD TREATMENT SUPPORTER" :
+                    (App.get(reasonHouseholdMember).equals(getResources().getString(R.string.pmdt_patient_refused_treatment_supporter)) ? "PATIENT-REFUSED NON-HOUSEHOLD TREATMENT SUPPORTER" :
+                            (App.get(reasonHouseholdMember).equals(getResources().getString(R.string.pmdt_unable_to_appoint_treatment_supporter)) ? "NO INCENTIVE FOR TREATMENT SUPPORTER" : "OTHER REASON FOR HOUSEHOLD TREATMENT SUPPORTER"))});
+
+        if (otherReasonHouseholdMember.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"OTHER REASON FOR HOUSEHOLD TREATMENT SUPPORTER", App.get(otherReasonHouseholdMember)});
+
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -628,6 +622,87 @@ public class PmdtPatientAssignmentForm extends AbstractFormActivity implements R
     @Override
     public void refill(int encounterId) {
 
+        OfflineForm offlineForm = serverService.getOfflineFormById(encounterId);
+        String date = offlineForm.getFormDate();
+        ArrayList<String[][]> obsValue = offlineForm.getObsValue();
+        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
+        for (int i = 0; i < obsValue.size(); i++) {
+
+            String[][] obs = obsValue.get(i);
+
+            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
+                timeTakeToFill = obs[0][1];
+            } else if (obs[0][0].equals("TREATMENT SUPPORTER ID")) {
+                treatmentSupporterId.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("TREATMENT SUPPORTER FIRST NAME")) {
+                treatmentSupporterFirstName.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("TREATMENT SUPPORTER LAST NAME")) {
+                treatmentSupporterFirstName.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("")) {
+                for (RadioButton rb : isHouseholdMember.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("TREATMENT SUPPORTER RELATIONSHIP TO PATIENT")) {
+                String value = obs[0][1].equals("MOTHER") ? getResources().getString(R.string.pmdt_mother) :
+                        (obs[0][1].equals("FATHER") ? getResources().getString(R.string.pmdt_father) :
+                                (obs[0][1].equals("MATERNAL GRANDMOTHER") ? getResources().getString(R.string.pmdt_maternal_grandmother) :
+                                        (obs[0][1].equals("MATERNAL GRANDFATHER") ? getResources().getString(R.string.pmdt_maternal_grandfather) :
+                                                (obs[0][1].equals("PATERNAL GRANDMOTHER") ? getResources().getString(R.string.pmdt_paternal_grandmother) :
+                                                        (obs[0][1].equals("PATERNAL GRANDFATHER") ? getResources().getString(R.string.pmdt_paternal_grandfather) :
+                                                                (obs[0][1].equals("GRANDSON") ? getResources().getString(R.string.pmdt_grandson) :
+                                                                        (obs[0][1].equals("GRANDDAUGHTER") ? getResources().getString(R.string.pmdt_granddaughter) :
+                                                                                (obs[0][1].equals("BROTHER") ? getResources().getString(R.string.pmdt_brother) :
+                                                                                        (obs[0][1].equals("SISTER") ? getResources().getString(R.string.pmdt_sister) :
+                                                                                                (obs[0][1].equals("SON") ? getResources().getString(R.string.pmdt_son) :
+                                                                                                        obs[0][1].equals("DAUGHTER") ? getResources().getString(R.string.pmdt_daughter) :
+                                                                                                                obs[0][1].equals("NEPHEW") ? getResources().getString(R.string.pmdt_nephew) :
+                                                                                                                        obs[0][1].equals("NIECE") ? getResources().getString(R.string.pmdt_niece) :
+                                                                                                                                obs[0][1].equals("FATHER-IN-LAW") ? getResources().getString(R.string.pmdt_father_in_law) :
+                                                                                                                                        obs[0][1].equals("MOTHER-IN-LAW") ? getResources().getString(R.string.pmdt_mother_in_law) :
+                                                                                                                                                obs[0][1].equals("DAUGHTER IN LAW") ? getResources().getString(R.string.pmdt_daughter_in_law) :
+                                                                                                                                                        obs[0][1].equals("SON IN LAW") ? getResources().getString(R.string.pmdt_son_in_law) :
+                                                                                                                                                                obs[0][1].equals("BROTHER IN LAW") ? getResources().getString(R.string.pmdt_brother_in_law) :
+                                                                                                                                                                        obs[0][1].equals("SISTER IN LAW") ? getResources().getString(R.string.pmdt_sister_in_law) :
+                                                                                                                                                                                obs[0][1].equals("SPOUSE") ? getResources().getString(R.string.pmdt_spouse) :
+                                                                                                                                                                                        obs[0][1].equals("COUSIN") ? getResources().getString(R.string.pmdt_cousin) :
+                                                                                                                                                                                                obs[0][1].equals("AUNT") ? getResources().getString(R.string.pmdt_aunt) :
+                                                                                                                                                                                                        obs[0][1].equals("UNCLE") ? getResources().getString(R.string.pmdt_uncle) : getResources().getString(R.string.pmdt_other)))))))))));
+
+                relationshipWithPatient.getSpinner().selectValue(value);
+
+            } else if (obs[0][0].equals("OTHER FAMILY MEMBER")) {
+                otherRelationship.getEditText().setText(obs[0][1]);
+                otherRelationship.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("REASON FOR HOUSEHOLD TREATMENT SUPPORTER")) {
+                for (RadioButton rb : reasonHouseholdMember.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pmdt_family_refused_treatment_supporter)) && obs[0][1].equals("FAMILY-REFUSED NON-HOUSEHOLD TREATMENT SUPPORTER")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pmdt_patient_refused_treatment_supporter)) && obs[0][1].equals("PATIENT-REFUSED NON-HOUSEHOLD TREATMENT SUPPORTER")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pmdt_unable_to_appoint_treatment_supporter)) && obs[0][1].equals("NO INCENTIVE FOR TREATMENT SUPPORTER")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pmdt_other)) && obs[0][1].equals("OTHER REASON FOR HOUSEHOLD TREATMENT SUPPORTER")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("OTHER REASON FOR HOUSEHOLD TREATMENT SUPPORTER")) {
+                otherReasonHouseholdMember.getEditText().setText(obs[0][1]);
+                otherReasonHouseholdMember.setVisibility(View.VISIBLE);
+            }
+        }
+        submitButton.setEnabled(true);
     }
 
     @Override
@@ -637,7 +712,13 @@ public class PmdtPatientAssignmentForm extends AbstractFormActivity implements R
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+        MySpinner spinner = (MySpinner) parent;
+        if (spinner == relationshipWithPatient.getSpinner()) {
+            if (App.get(relationshipWithPatient).equals(getResources().getString(R.string.pmdt_other)))
+                otherRelationship.setVisibility(View.VISIBLE);
+            else
+                otherRelationship.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -646,13 +727,44 @@ public class PmdtPatientAssignmentForm extends AbstractFormActivity implements R
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
+        if(group == isHouseholdMember.getRadioGroup()) {
+            if (App.get(isHouseholdMember).equals(getResources().getString(R.string.yes))) {
+                relationshipWithPatient.setVisibility(View.VISIBLE);
+
+                if (App.get(relationshipWithPatient).equals(getResources().getString(R.string.pmdt_other)))
+                    otherRelationship.setVisibility(View.VISIBLE);
+                else
+                    otherRelationship.setVisibility(View.GONE);
+
+                reasonHouseholdMember.setVisibility(View.VISIBLE);
+
+                if (App.get(reasonHouseholdMember).equals(getResources().getString(R.string.pmdt_other)))
+                    otherReasonHouseholdMember.setVisibility(View.VISIBLE);
+                else
+                    otherReasonHouseholdMember.setVisibility(View.GONE);
+
+            } else {
+                relationshipWithPatient.setVisibility(View.GONE);
+                otherRelationship.setVisibility(View.GONE);
+
+                reasonHouseholdMember.setVisibility(View.GONE);
+                otherReasonHouseholdMember.setVisibility(View.GONE);
+
+            }
+        } else if(group == reasonHouseholdMember.getRadioGroup()) {
+            if (App.get(relationshipWithPatient).equals(getResources().getString(R.string.pmdt_other)))
+                otherRelationship.setVisibility(View.VISIBLE);
+            else
+                otherRelationship.setVisibility(View.GONE);
+
+        }
 
     }
 
     @Override
     public void resetViews() {
         super.resetViews();
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
             @Override

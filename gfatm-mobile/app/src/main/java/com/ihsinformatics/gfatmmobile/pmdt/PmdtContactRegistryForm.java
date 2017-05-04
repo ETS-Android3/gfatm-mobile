@@ -44,7 +44,6 @@ public class PmdtContactRegistryForm extends AbstractFormActivity {
     Context context;
     TitledButton formDate;
     TitledEditText totalContacts;
-    TitledButton householdContactRegistryDate;
     TitledEditText totalAdultContacts;
     TitledEditText totalChildhoodContacts;
 
@@ -109,18 +108,16 @@ public class PmdtContactRegistryForm extends AbstractFormActivity {
     @Override
     public void initViews() {
 
-        formDate = new TitledButton(context, null, getResources().getString(R.string.form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        householdContactRegistryDate = new TitledButton(context, null, getResources().getString(R.string.pmdt_household_contact_registry_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pmdt_household_contact_registry_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         totalContacts = new TitledEditText(context, null, getResources().getString(R.string.pmdt_total_contacts), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         totalAdultContacts = new TitledEditText(context, null, getResources().getString(R.string.pmdt_total_adult_contacts), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         totalChildhoodContacts = new TitledEditText(context, null, getResources().getString(R.string.pmdt_total_childern_contacts), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
 
-        views = new View[]{formDate.getButton(), householdContactRegistryDate.getButton(), totalContacts.getEditText(), totalAdultContacts.getEditText(), totalChildhoodContacts.getEditText()};
+        views = new View[]{formDate.getButton(), totalContacts.getEditText(), totalAdultContacts.getEditText(), totalChildhoodContacts.getEditText()};
 
-        viewGroups = new View[][]{{formDate, householdContactRegistryDate, totalContacts, totalAdultContacts, totalChildhoodContacts}};
+        viewGroups = new View[][]{{formDate, totalContacts, totalAdultContacts, totalChildhoodContacts}};
 
         formDate.getButton().setOnClickListener(this);
-        householdContactRegistryDate.getButton().setOnClickListener(this);
 
         resetViews();
 
@@ -132,38 +129,31 @@ public class PmdtContactRegistryForm extends AbstractFormActivity {
         if (snackbar != null)
             snackbar.dismiss();
 
-        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
+        if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
+            personDOB = personDOB.substring(0,10);
 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
 
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
-            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
             } else
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-
-
-            if (secondDateCalendar.after(formDateCalendar)) {
-                householdContactRegistryDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-
-                Date date1 = App.stringToDate(formDate.getButton().getText().toString(), "dd-MMM-yyyy");
-                secondDateCalendar = App.getCalendar(date1);
-            }
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         }
     }
@@ -253,7 +243,6 @@ public class PmdtContactRegistryForm extends AbstractFormActivity {
 
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-        observations.add(new String[]{"HOUSEHOLD CONTACT REGISTRY DATE", App.getSqlDate(secondDateCalendar)});
         observations.add(new String[]{"NUMBER OF CONTACTS", App.get(totalContacts)});
         observations.add(new String[]{"NUMBER OF ADULT CONTACTS", App.get(totalAdultContacts)});
         observations.add(new String[]{"NUMBER OF CHILDHOOD CONTACTS", App.get(totalChildhoodContacts)});
@@ -365,8 +354,7 @@ public class PmdtContactRegistryForm extends AbstractFormActivity {
     public void resetViews() {
         super.resetViews();
 
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        householdContactRegistryDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -393,7 +381,7 @@ public class PmdtContactRegistryForm extends AbstractFormActivity {
         String date = offlineForm.getFormDate();
         ArrayList<String[][]> obsValue = offlineForm.getObsValue();
         formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         for (int i = 0; i < obsValue.size(); i++) {
 
@@ -401,12 +389,6 @@ public class PmdtContactRegistryForm extends AbstractFormActivity {
 
             if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
-            } else if (obs[0][0].equals("HOUSEHOLD CONTACT REGISTRY DATE")) {
-
-                String secondDate = obs[0][1];
-                secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
-                householdContactRegistryDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-
             } else if (obs[0][0].equals("NUMBER OF CONTACTS")) {
 
                 String value = obs[0][1].replace(".0", "");
@@ -443,13 +425,6 @@ public class PmdtContactRegistryForm extends AbstractFormActivity {
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
-        } else if (view == householdContactRegistryDate.getButton()) {
-            Bundle args = new Bundle();
-            args.putInt("type", DATE_DIALOG_ID);
-            args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", false);
-            secondDateFragment.setArguments(args);
-            secondDateFragment.show(getFragmentManager(), "DatePicker");
         }
 
     }

@@ -60,7 +60,6 @@ public class PmdtTreatmentCoordinatorMonitoringForm extends AbstractFormActivity
     TitledEditText treatmentSupporterId;
     TitledEditText treatmentSupporterFirstName;
     TitledEditText treatmentSupporterLastName;
-    TitledButton visitDate;
     TitledRadioGroup patientUnderstandTbRegimen;
     TitledRadioGroup patientKnowSideEffects;
     TitledRadioGroup treatmentSupporterProvideDot;
@@ -93,11 +92,6 @@ public class PmdtTreatmentCoordinatorMonitoringForm extends AbstractFormActivity
 
     ScrollView scrollView;
 
-    public static final int THIRD_DATE_DIALOG_ID = 3;
-    // Extra Views for date ...
-    Calendar thirdDateCalendar;
-    DialogFragment thirdDateFragment;
-
     /**
      * @param inflater
      * @param container
@@ -109,8 +103,6 @@ public class PmdtTreatmentCoordinatorMonitoringForm extends AbstractFormActivity
         PAGE_COUNT = 4;
         FORM_NAME = Forms.PMDT_TREATMENT_COORDINATOR_MONITORING;
         FORM = Forms.pmdtTreatmentCoordinatorcMonitoring;
-        thirdDateCalendar = Calendar.getInstance();
-        thirdDateFragment = new SelectDateFragment();
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -161,13 +153,12 @@ public class PmdtTreatmentCoordinatorMonitoringForm extends AbstractFormActivity
     @Override
     public void initViews() {
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pmdt_visit_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         treatmentSupporterId = new TitledEditText(context, "", getResources().getString(R.string.pmdt_treatment_supporter_id), "", "", 10, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         treatmentSupporterFirstName = new TitledEditText(context, "", getResources().getString(R.string.pmdt_treatment_supporter_first_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         treatmentSupporterFirstName.setFocusableInTouchMode(true);
         treatmentSupporterLastName = new TitledEditText(context, "", getResources().getString(R.string.pmdt_treatment_supporter_last_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         treatmentSupporterLastName.setFocusableInTouchMode(true);
-        visitDate = new TitledButton(context, null, getResources().getString(R.string.pmdt_visit_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         patientUnderstandTbRegimen = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_patient_understand_tb_regimen), getResources().getStringArray(R.array.yes_no_unknown_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL);
         patientKnowSideEffects = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_patient_know_side_effects), getResources().getStringArray(R.array.yes_no_unknown_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL);
         // second page views...
@@ -185,7 +176,7 @@ public class PmdtTreatmentCoordinatorMonitoringForm extends AbstractFormActivity
         familyPracticeInfectionControl = new TitledSpinner(context, null, getResources().getString(R.string.pmdt_family_practice_infection_control), getResources().getStringArray(R.array.pmdt_infection_control_frequency), getResources().getString(R.string.pmdt_always), App.VERTICAL, false);
         waitAfterAdministerDrug = new TitledSpinner(context, null, getResources().getString(R.string.pmdt_wait_after_administer_drug), getResources().getStringArray(R.array.pmdt_wait_after_drug_time_range), getResources().getString(R.string.pmdt_twenty_to_thirty_mins), App.VERTICAL, false);
         registerHouseholdMembers = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_register_household_members), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL);
-        contactScreeningPerformedDate = new TitledButton(context, null, getResources().getString(R.string.pmdt_contact_screening_performed_date), DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString(), App.VERTICAL);
+        contactScreeningPerformedDate = new TitledButton(context, null, getResources().getString(R.string.pmdt_contact_screening_performed_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.VERTICAL);
         patientSatisfied = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_patient_satisfied), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL);
         sputumSubmittedLastVisit = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_sputum_submitted_last_visit), getResources().getStringArray(R.array.pmdt_yes_no_not_applicable), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL);
         reasonNotSubmittedSample = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_reason_not_submitted_sputum), getResources().getStringArray(R.array.pmdt_reasons_sputums_not_submitted), getResources().getString(R.string.pmdt_could_not_produce_sputum), App.VERTICAL, App.VERTICAL);
@@ -203,14 +194,14 @@ public class PmdtTreatmentCoordinatorMonitoringForm extends AbstractFormActivity
         treatmentCoordinatorNotes.getEditText().setSingleLine(false);
         treatmentCoordinatorNotes.getEditText().setMinimumHeight(150);
 
-        views = new View[]{formDate.getButton(), treatmentSupporterId.getEditText(), treatmentSupporterFirstName.getEditText(), treatmentSupporterLastName.getEditText(), visitDate.getButton(), patientUnderstandTbRegimen.getRadioGroup(), patientKnowSideEffects.getRadioGroup(), treatmentSupporterProvideDot.getRadioGroup(),
+        views = new View[]{formDate.getButton(), treatmentSupporterId.getEditText(), treatmentSupporterFirstName.getEditText(), treatmentSupporterLastName.getEditText(), patientUnderstandTbRegimen.getRadioGroup(), patientKnowSideEffects.getRadioGroup(), treatmentSupporterProvideDot.getRadioGroup(),
                 treatmentSupporterProvideDotIrregularly.getSpinner(), placeDot.getRadioGroup(), otherPlaceDot.getEditText(), dotLastPrescribedDay.getRadioGroup(), administerInjections.getRadioGroup(), missedDose.getRadioGroup(), reasonMissedDose.getSpinner(), otherReasonMissedDose.getEditText(), practiceInfectionControl.getSpinner(),
                 familyPracticeInfectionControl.getSpinner(), waitAfterAdministerDrug.getSpinner(), registerHouseholdMembers.getRadioGroup(), contactScreeningPerformedDate.getButton(), patientSatisfied.getRadioGroup(), sputumSubmittedLastVisit.getRadioGroup(), reasonNotSubmittedSample.getRadioGroup(), otherReasonNotSubmittedSample.getEditText(),
                 foodBasketIncentiveLastMonth.getRadioGroup(), adverseEventLastVisit.getRadioGroup(), actionAdverseEvent, otherActionAdverseEvent.getEditText(), addressSocialProblems.getRadioGroup(), referCounseling.getRadioGroup(), counselingType, otherCounselingType.getEditText(), treatmentCoordinatorNotes.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, treatmentSupporterId, treatmentSupporterFirstName, treatmentSupporterLastName, visitDate, patientUnderstandTbRegimen, patientKnowSideEffects},
+                {{formDate, treatmentSupporterId, treatmentSupporterFirstName, treatmentSupporterLastName, patientUnderstandTbRegimen, patientKnowSideEffects},
                         {treatmentSupporterProvideDot, treatmentSupporterProvideDotIrregularly, placeDot, otherPlaceDot, dotLastPrescribedDay, administerInjections, missedDose, reasonMissedDose, otherReasonMissedDose},
                         {practiceInfectionControl, familyPracticeInfectionControl, waitAfterAdministerDrug, registerHouseholdMembers, contactScreeningPerformedDate, patientSatisfied, sputumSubmittedLastVisit, reasonNotSubmittedSample, otherReasonNotSubmittedSample},
                         {foodBasketIncentiveLastMonth, adverseEventLastVisit, actionAdverseEvent, otherActionAdverseEvent, addressSocialProblems, referCounseling, counselingType, otherCounselingType, treatmentCoordinatorNotes}};
@@ -221,7 +212,6 @@ public class PmdtTreatmentCoordinatorMonitoringForm extends AbstractFormActivity
         treatmentSupporterLastName.getEditText().setKeyListener(null);
 
         formDate.getButton().setOnClickListener(this);
-        visitDate.getButton().setOnClickListener(this);
         contactScreeningPerformedDate.getButton().setOnClickListener(this);
         treatmentSupporterProvideDot.getRadioGroup().setOnCheckedChangeListener(this);
         placeDot.getRadioGroup().setOnCheckedChangeListener(this);
@@ -244,45 +234,44 @@ public class PmdtTreatmentCoordinatorMonitoringForm extends AbstractFormActivity
     @Override
     public void updateDisplay() {
 
-        contactScreeningPerformedDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
-
         if (snackbar != null)
             snackbar.dismiss();
 
-        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
+        if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
+            personDOB = personDOB.substring(0, 10);
 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
 
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
-            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
             } else
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         }
 
         if (secondDateCalendar.after(formDateCalendar)) {
-            visitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+            contactScreeningPerformedDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
-            Date date1 = App.stringToDate(formDate.getButton().getText().toString(), "dd-MMM-yyyy");
+            Date date1 = App.stringToDate(formDate.getButton().getText().toString(), "EEEE, MMM dd,yyyy");
             secondDateCalendar = App.getCalendar(date1);
         } else
-            visitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+            contactScreeningPerformedDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
     }
 
@@ -459,7 +448,7 @@ public class PmdtTreatmentCoordinatorMonitoringForm extends AbstractFormActivity
         observations.add(new String[]{"TREATMENT SUPPORTER CONTACT SCREENING", App.get(registerHouseholdMembers).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
 
         if (contactScreeningPerformedDate.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"LAST CONTACT SCREENING PERFORMED DATE", App.getSqlDate(thirdDateCalendar)});
+            observations.add(new String[]{"LAST CONTACT SCREENING PERFORMED DATE", App.getSqlDate(secondDateCalendar)});
 
         observations.add(new String[]{"PATIENT SATISFIED WITH TREATMENT SUPPORTER", App.get(patientSatisfied).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
 
@@ -652,20 +641,13 @@ public class PmdtTreatmentCoordinatorMonitoringForm extends AbstractFormActivity
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
-        } else if (view == visitDate.getButton()) {
+        } else if (view == contactScreeningPerformedDate.getButton()) {
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
             args.putBoolean("allowFutureDate", false);
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
-        } else if (view == contactScreeningPerformedDate.getButton()) {
-            Bundle args = new Bundle();
-            args.putInt("type", THIRD_DATE_DIALOG_ID);
-            args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", false);
-            thirdDateFragment.setArguments(args);
-            thirdDateFragment.show(getFragmentManager(), "DatePicker");
         }
     }
 
@@ -676,7 +658,7 @@ public class PmdtTreatmentCoordinatorMonitoringForm extends AbstractFormActivity
         String date = offlineForm.getFormDate();
         ArrayList<String[][]> obsValue = offlineForm.getObsValue();
         formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         for (int i = 0; i < obsValue.size(); i++) {
 
@@ -690,11 +672,6 @@ public class PmdtTreatmentCoordinatorMonitoringForm extends AbstractFormActivity
                 treatmentSupporterLastName.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("TREATMENT SUPPORTER LAST NAME")) {
                 treatmentSupporterLastName.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("VISIT DATE")) {
-                String secondDate = obs[0][1];
-                secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
-                visitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-
             } else if (obs[0][0].equals("PATIENT UNDERSTAND TB REGIMEN")) {
                 for (RadioButton rb : patientUnderstandTbRegimen.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
@@ -860,8 +837,8 @@ public class PmdtTreatmentCoordinatorMonitoringForm extends AbstractFormActivity
                 }
             } else if (obs[0][0].equals("LAST CONTACT SCREENING PERFORMED DATE")) {
                 String secondDate = obs[0][1];
-                thirdDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
-                contactScreeningPerformedDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+                secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
+                contactScreeningPerformedDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
             } else if (obs[0][0].equals("PATIENT SATISFIED WITH TREATMENT SUPPORTER")) {
                 for (RadioButton rb : patientSatisfied.getRadioGroup().getButtons()) {
@@ -1064,9 +1041,8 @@ public class PmdtTreatmentCoordinatorMonitoringForm extends AbstractFormActivity
     @Override
     public void resetViews() {
         super.resetViews();
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        visitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-        contactScreeningPerformedDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        contactScreeningPerformedDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -1290,42 +1266,5 @@ public class PmdtTreatmentCoordinatorMonitoringForm extends AbstractFormActivity
             return container == obj;
         }
 
-    }
-
-    public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final Calendar calendar;
-            if (getArguments().getInt("type") == THIRD_DATE_DIALOG_ID)
-                calendar = thirdDateCalendar;
-//            else if (getArguments().getInt("type") == SECOND_DATE_DIALOG_ID)
-//                calendar = secondDateCalendar;
-            else
-                return null;
-
-            int yy = calendar.get(Calendar.YEAR);
-            int mm = calendar.get(Calendar.MONTH);
-            int dd = calendar.get(Calendar.DAY_OF_MONTH);
-            DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, yy, mm, dd);
-            dialog.getDatePicker().setTag(getArguments().getInt("type"));
-            if (!getArguments().getBoolean("allowFutureDate", false)) {
-                Date date = new Date();
-                date.setHours(24);
-                date.setSeconds(60);
-                dialog.getDatePicker().setMaxDate(date.getTime());
-            }
-            if (!getArguments().getBoolean("allowPastDate", false))
-                dialog.getDatePicker().setMinDate(new Date().getTime());
-            return dialog;
-        }
-
-        @Override
-        public void onDateSet(DatePicker view, int yy, int mm, int dd) {
-
-            if (((int) view.getTag()) == THIRD_DATE_DIALOG_ID)
-                thirdDateCalendar.set(yy, mm, dd);
-            updateDisplay();
-        }
     }
 }

@@ -1,10 +1,8 @@
 package com.ihsinformatics.gfatmmobile.pmdt;
 
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.InputType;
@@ -13,10 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.CompoundButton;
-import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
@@ -35,7 +30,6 @@ import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -46,14 +40,13 @@ public class PmdtSocialSupportFoodBasketForm extends AbstractFormActivity implem
 
     Context context;
     TitledButton formDate;
-    TitledButton visitDate;
     TitledEditText externalId;
     TitledSpinner typeAssessment;
     TitledEditText otherAssessmentReason;
     TitledEditText treatmentMonth;
-    LinearLayout facilityLinearLayout;
-    TextView treatmentFacilityText;
-    AutoCompleteTextView treatmentFacilityAutoCompleteList;
+
+    TitledSpinner treatmentFacility;
+    TitledEditText otherTreatmentFacility;
     TitledEditText nationalDrTbRegistrationNumber;
 
     LinearLayout patientCnicLayout;
@@ -103,11 +96,6 @@ public class PmdtSocialSupportFoodBasketForm extends AbstractFormActivity implem
 
     ScrollView scrollView;
 
-    public static final int THIRD_DATE_DIALOG_ID = 3;
-    // Extra Views for date ...
-    Calendar thirdDateCalendar;
-    DialogFragment thirdDateFragment;
-
     /**
      * @param inflater
      * @param container
@@ -119,8 +107,6 @@ public class PmdtSocialSupportFoodBasketForm extends AbstractFormActivity implem
         PAGE_COUNT = 4;
         FORM_NAME = Forms.PMDT_SOCIAL_SUPPORT_FOOD_BASKET;
         FORM = Forms.pmdtSocialSupportFoodBasket;
-        thirdDateCalendar = Calendar.getInstance();
-        thirdDateFragment = new SelectDateFragment();
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -171,8 +157,7 @@ public class PmdtSocialSupportFoodBasketForm extends AbstractFormActivity implem
     @Override
     public void initViews() {
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        visitDate = new TitledButton(context, null, getResources().getString(R.string.pmdt_visit_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pmdt_visit_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         externalId = new TitledEditText(context, null, getResources().getString(R.string.pmdt_external_id), "", "", 11, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         typeAssessment = new TitledSpinner(context, null, getResources().getString(R.string.pmdt_assessment_type), getResources().getStringArray(R.array.pmdt_types_of_assessment), getResources().getString(R.string.pmdt_baseline_assessment), App.HORIZONTAL, true);
         otherAssessmentReason = new TitledEditText(context, null, getResources().getString(R.string.pmdt_other_assessment_reason), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
@@ -181,7 +166,7 @@ public class PmdtSocialSupportFoodBasketForm extends AbstractFormActivity implem
         // Fetching PMDT Locations
         String program = "";
         if (App.getProgram().equals(getResources().getString(R.string.pet)))
-            program = "pet_location";
+            program = "pmdt_location";
         else if (App.getProgram().equals(getResources().getString(R.string.fast)))
             program = "fast_location";
         else if (App.getProgram().equals(getResources().getString(R.string.comorbidities)))
@@ -192,28 +177,14 @@ public class PmdtSocialSupportFoodBasketForm extends AbstractFormActivity implem
             program = "childhood_tb_location";
 
         final Object[][] locations = serverService.getAllLocations(program);
-        String[] locationArray = new String[locations.length];
+        String[] locationArray = new String[locations.length + 1];
         for (int i = 0; i < locations.length; i++) {
             locationArray[i] = String.valueOf(locations[i][1]);
         }
+        locationArray[locationArray.length - 1] = getResources().getString(R.string.pmdt_other);
 
-        treatmentFacilityText = new TextView(context);
-        treatmentFacilityText.setText(getResources().getString(R.string.pmdt_treatment_facility));
-        LinearLayout requiredTreatmentFacilityLayout = new LinearLayout(context);
-        MyTextView treatmentFacilityQuestionRequired = new MyTextView(context, "*");
-        int color1 = App.getColor(context, R.attr.colorAccent);
-        treatmentFacilityQuestionRequired.setTextColor(color1);
-        requiredTreatmentFacilityLayout.setOrientation(LinearLayout.HORIZONTAL);
-        requiredTreatmentFacilityLayout.addView(treatmentFacilityQuestionRequired);
-        requiredTreatmentFacilityLayout.addView(treatmentFacilityText);
-        treatmentFacilityAutoCompleteList = new AutoCompleteTextView(context);
-        final ArrayAdapter<String> autoCompleteLocationAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, locationArray);
-        treatmentFacilityAutoCompleteList.setAdapter(autoCompleteLocationAdapter);
-        treatmentFacilityAutoCompleteList.setHint("Enter facility");
-        facilityLinearLayout = new LinearLayout(context);
-        facilityLinearLayout.setOrientation(LinearLayout.VERTICAL);
-        facilityLinearLayout.addView(requiredTreatmentFacilityLayout);
-        facilityLinearLayout.addView(treatmentFacilityAutoCompleteList);
+        treatmentFacility = new TitledSpinner(context, null, getResources().getString(R.string.pmdt_treatment_facility), locationArray, "", App.VERTICAL);
+        otherTreatmentFacility = new TitledEditText(context, "", getResources().getString(R.string.pmdt_other_treatment_facility), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
 
         nationalDrTbRegistrationNumber = new TitledEditText(context, null, getResources().getString(R.string.pmdt_national_dr_tb_registration_number), "", "", 25, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
 
@@ -299,10 +270,10 @@ public class PmdtSocialSupportFoodBasketForm extends AbstractFormActivity implem
         foodBasketAmount = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_food_baskets_amount), getResources().getStringArray(R.array.pmdt_number_food_baskets), getResources().getString(R.string.pmdt_one), App.HORIZONTAL, App.VERTICAL, false);
         foodBasketVoucherBookNumber = new TitledEditText(context, null, getResources().getString(R.string.pmdt_food_basket_voucher_book_number), "", "", 20, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true);
         foodBasketVoucherNumber = new TitledEditText(context, null, getResources().getString(R.string.pmdt_food_basket_voucher_number), "", "", 20, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true);
-        validityVoucherDate = new TitledButton(context, null, getResources().getString(R.string.pmdt_validity_voucher_date), DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
+        validityVoucherDate = new TitledButton(context, null, getResources().getString(R.string.pmdt_validity_voucher_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), visitDate.getButton(), externalId.getEditText(), typeAssessment.getSpinner(), otherAssessmentReason.getEditText(), treatmentMonth.getEditText(), treatmentFacilityAutoCompleteList,
+        views = new View[]{formDate.getButton(), externalId.getEditText(), typeAssessment.getSpinner(), otherAssessmentReason.getEditText(), treatmentMonth.getEditText(), treatmentFacility, otherTreatmentFacility,
                 nationalDrTbRegistrationNumber.getEditText(), patientCnic1.getEditText(), patientCnic2.getEditText(), patientCnic3.getEditText(), patientOwnCnic.getRadioGroup(), patientCnicOwner.getSpinner(),
                 otherPatientCnicOwner.getEditText(), namePatientCnicOwner.getEditText(), patientPrimaryPhone1a.getEditText(), patientPrimaryPhone1b.getEditText(), patientAlternatePhone1a.getEditText(), patientAlternatePhone1b.getEditText(),
                 patientAccompanied.getRadioGroup(), treatmentSupporterId.getEditText(), treatmentSupporterFirstName.getEditText(), treatmentSupporterLastName.getEditText(), treatmentSupporterCnic1.getEditText(), treatmentSupporterCnic2.getEditText(),
@@ -313,7 +284,7 @@ public class PmdtSocialSupportFoodBasketForm extends AbstractFormActivity implem
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, visitDate, externalId, typeAssessment, otherAssessmentReason, treatmentMonth, facilityLinearLayout, nationalDrTbRegistrationNumber},
+                {{formDate, externalId, typeAssessment, otherAssessmentReason, treatmentMonth, treatmentFacility, otherTreatmentFacility, nationalDrTbRegistrationNumber},
                         {linearLayout1, patientOwnCnic, patientCnicOwner, otherPatientCnicOwner, namePatientCnicOwner, patientPrimaryPhoneLayout, patientAlternatePhoneLayout},
                         {patientAccompanied, treatmentSupporterId, treatmentSupporterFirstName, treatmentSupporterLastName, treatmentSupporterCnicLayout, treatmentSupporterOwnCnic, treatmentSupporterCnicOwner,
                                 otherTreatmentSupporterCnicOwner, nameTreatmentSupporterCnicOwner, treatmentSupporterPrimaryPhoneLayout, treatmentSupporterAlternatePhoneLayout},
@@ -322,7 +293,6 @@ public class PmdtSocialSupportFoodBasketForm extends AbstractFormActivity implem
                         }};
 
         formDate.getButton().setOnClickListener(this);
-        visitDate.getButton().setOnClickListener(this);
         validityVoucherDate.getButton().setOnClickListener(this);
         typeAssessment.getSpinner().setOnItemSelectedListener(this);
         patientOwnCnic.getRadioGroup().setOnCheckedChangeListener(this);
@@ -339,9 +309,40 @@ public class PmdtSocialSupportFoodBasketForm extends AbstractFormActivity implem
 
     @Override
     public void updateDisplay() {
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        visitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-        validityVoucherDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+
+        if (snackbar != null)
+            snackbar.dismiss();
+
+        if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
+
+            String formDa = formDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
+            personDOB = personDOB.substring(0,10);
+
+            Date date = new Date();
+            if (formDateCalendar.after(App.getCalendar(date))) {
+
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+            } else
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
+        }
+
+
+        validityVoucherDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
     }
 
     @Override
@@ -370,20 +371,13 @@ public class PmdtSocialSupportFoodBasketForm extends AbstractFormActivity implem
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
-        } else if (view == visitDate.getButton()) {
+        } else if (view == validityVoucherDate.getButton()) {
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
             args.putBoolean("allowFutureDate", false);
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
-        } else if (view == validityVoucherDate.getButton()) {
-            Bundle args = new Bundle();
-            args.putInt("type", THIRD_DATE_DIALOG_ID);
-            args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", false);
-            thirdDateFragment.setArguments(args);
-            thirdDateFragment.show(getFragmentManager(), "DatePicker");
         }
     }
 
@@ -410,9 +404,8 @@ public class PmdtSocialSupportFoodBasketForm extends AbstractFormActivity implem
     @Override
     public void resetViews() {
         super.resetViews();
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        visitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-        validityVoucherDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        validityVoucherDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
     }
 
     @Override
@@ -447,43 +440,4 @@ public class PmdtSocialSupportFoodBasketForm extends AbstractFormActivity implem
         }
 
     }
-
-
-    public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final Calendar calendar;
-            if (getArguments().getInt("type") == THIRD_DATE_DIALOG_ID)
-                calendar = thirdDateCalendar;
-//            else if (getArguments().getInt("type") == SECOND_DATE_DIALOG_ID)
-//                calendar = secondDateCalendar;
-            else
-                return null;
-
-            int yy = calendar.get(Calendar.YEAR);
-            int mm = calendar.get(Calendar.MONTH);
-            int dd = calendar.get(Calendar.DAY_OF_MONTH);
-            DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, yy, mm, dd);
-            dialog.getDatePicker().setTag(getArguments().getInt("type"));
-            if (!getArguments().getBoolean("allowFutureDate", false)) {
-                Date date = new Date();
-                date.setHours(24);
-                date.setSeconds(60);
-                dialog.getDatePicker().setMaxDate(date.getTime());
-            }
-            if (!getArguments().getBoolean("allowPastDate", false))
-                dialog.getDatePicker().setMinDate(new Date().getTime());
-            return dialog;
-        }
-
-        @Override
-        public void onDateSet(DatePicker view, int yy, int mm, int dd) {
-
-            if (((int) view.getTag()) == THIRD_DATE_DIALOG_ID)
-                thirdDateCalendar.set(yy, mm, dd);
-            updateDisplay();
-        }
-    }
-
 }

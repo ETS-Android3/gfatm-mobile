@@ -57,13 +57,13 @@
     <string name="pmdt_visit_date">Date of Visit</string>
     <string name="pmdt_city_village">City/Village</string>
     <string name="pmdt_district">District</string>
-    <string name="pmdt_town_taluka_tehsil">Town/Taluka/Tehsil</string>
+    <!--<string name="pmdt_town_taluka_tehsil">Town/Taluka/Tehsil</string>-->
 
     <string name="pmdt_basic_management_unit_visited">Name of Basic Management unit visited</string>
     <string name="pmdt_doctor_name_visited">Name of doctor visited</string>
     <string name="pmdt_number_failure_cases">Number of failure cases found</string>
     <string name="pmdt_facility_referred">To which facility have the patients been referred?</string>
-    <string name="pmdt_facility_hint">Enter facility</string>
+    <!--<string name="pmdt_facility_hint">Enter facility</string>-->
     <string name="pmdt_number_patients_enrolled">Number of patients enrolled in PMDT</string>
 
     <!-- Patient Assignment Form -->
@@ -115,6 +115,7 @@
     <string name="pmdt_son">Son</string>
     <string name="pmdt_daughter">Daughter</string>
     <string name="pmdt_cousin">Cousin</string>
+
     <string-array name="pmdt_treatment_supporter_patient_relation">
         <item>@string/pmdt_mother</item>
         <item>@string/pmdt_father</item>
@@ -529,7 +530,8 @@
     <string name="pmdt_contact_night_sweats">Does contact have night sweats?</string>
     <string name="pmdt_contact_glandular_swelling">Does the contact have glandular swelling anywhere in body?</string>
     <string name="pmdt_contact_referred">Has the contact been referred to the facility?</string>
-    <string name="pmdt_contact_referred_facility">Facility patient is referred to</string>
+    <string name="pmdt_contact_referred_facility">Facility patient is referred to:</string>
+    <string name="pmdt_other_facility">If facility \'Other\', then specify</string>
     <string-array name="pmdt_contact_relation_with_index">
         <item>@string/pmdt_mother</item>
         <item>@string/pmdt_father</item>
