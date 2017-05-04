@@ -135,6 +135,10 @@ public class HttpGwtRequest {
             e.printStackTrace();
         }
 
+        if(response == null){
+            return "CONNECTION_ERROR";
+        }
+
         StringBuilder builder = new StringBuilder();
         String auth = "";
         try {
@@ -156,6 +160,10 @@ public class HttpGwtRequest {
         } catch (IOException e) {
             Log.e(TAG, e.getMessage());
             builder.append("SERVER_NOT_RESPONDING");
+        } catch (NullPointerException e) {
+            Log.e(TAG, e.getMessage());
+            builder.append("SERVER_NOT_RESPONDING");
+            return null;
         }
         return builder.toString();
     }

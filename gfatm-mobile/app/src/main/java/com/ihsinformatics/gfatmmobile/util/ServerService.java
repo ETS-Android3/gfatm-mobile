@@ -98,8 +98,7 @@ public class ServerService {
         dbUtil = new DatabaseUtil(this.context);
 
         // GWT Connections
-        // GWT Connections
-        fastGfatmUri = App.getIp() + ":" + App.getPort() + "/fastweb.jsp";
+        fastGfatmUri = "199.172.1.44:8888" + "/fastweb.jsp";
         httpGwtClient = new HttpGwtRequest(this.context);
     }
     /**
@@ -2432,8 +2431,8 @@ public class ServerService {
             JSONObject json = new JSONObject();
             json.put("app_ver", App.getVersion());
             json.put("type", encounterType);
-            json.put("username", "admin");
-            json.put("password", "Admin123");
+            json.put("username", App.getUsername());
+            json.put("password", App.getPassword());
             json.put("location", "IHS");
             json.put("entereddate", formDate);
 
@@ -2520,8 +2519,8 @@ public class ServerService {
 
             }
 
-            String res = httpGwtClient.clientPost(fastGfatmUri, val);
-            JSONObject jsonResponse = JSONParser.getJSONObject(res);
+            response = httpGwtClient.clientPost(fastGfatmUri, val);
+            JSONObject jsonResponse = JSONParser.getJSONObject(response);
             if (jsonResponse == null) {
                 return response;
             }
