@@ -214,6 +214,8 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
                 dateTestResult.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         }
 
+        formDate.getButton().setEnabled(true);
+        dateTestResult.getButton().setEnabled(true);
 
     }
 
@@ -527,6 +529,7 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
         super.onClick(view);
 
         if (view == formDate.getButton()) {
+            formDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             formDateFragment.setArguments(args);
@@ -536,6 +539,7 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
         }
 
         if (view == dateTestResult.getButton()) {
+            dateTestResult.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             secondDateFragment.setArguments(args);

@@ -283,7 +283,9 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
 
         }
         dateChoose = false;
-
+        formDate.getButton().setEnabled(true);
+        missedVisitDate.getButton().setEnabled(true);
+        returnVisitDate.getButton().setEnabled(true);
     }
 
     @Override
@@ -593,6 +595,7 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
         super.onClick(view);
 
         if (view == formDate.getButton()) {
+            formDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             formDateFragment.setArguments(args);
@@ -602,6 +605,7 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
         }
 
         if (view == missedVisitDate.getButton()) {
+            missedVisitDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             secondDateFragment.setArguments(args);
@@ -611,6 +615,7 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
         }
 
         if (view == returnVisitDate.getButton()) {
+            returnVisitDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", THIRD_DATE_DIALOG_ID);
             thirdDateFragment.setArguments(args);
@@ -734,6 +739,12 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
                 secondDateCalendar.set(yy, mm, dd);
             else if (((int) view.getTag()) == THIRD_DATE_DIALOG_ID)
                 thirdDateCalendar.set(yy, mm, dd);
+            updateDisplay();
+        }
+
+        @Override
+        public void onCancel(DialogInterface dialog) {
+            super.onCancel(dialog);
             updateDisplay();
         }
     }

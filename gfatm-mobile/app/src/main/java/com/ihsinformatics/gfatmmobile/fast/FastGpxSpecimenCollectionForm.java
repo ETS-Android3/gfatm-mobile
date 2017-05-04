@@ -227,6 +227,9 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
             else
                 sampleSubmissionDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         }
+
+        formDate.getButton().setEnabled(true);
+        sampleSubmissionDate.getButton().setEnabled(true);
     }
 
     @Override
@@ -628,6 +631,7 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
         super.onClick(view);
 
         if (view == formDate.getButton()) {
+            formDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             formDateFragment.setArguments(args);
@@ -637,6 +641,7 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
         }
 
         if (view == sampleSubmissionDate.getButton()) {
+            sampleSubmissionDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             secondDateFragment.setArguments(args);

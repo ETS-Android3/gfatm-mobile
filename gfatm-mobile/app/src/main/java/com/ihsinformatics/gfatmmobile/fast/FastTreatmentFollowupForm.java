@@ -293,6 +293,10 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
         }
         dateChoose = false;
+
+        formDate.getButton().setEnabled(true);
+        treatmentStartDate.getButton().setEnabled(true);
+        returnVisitDate.getButton().setEnabled(true);
     }
 
     @Override
@@ -550,6 +554,7 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
         super.onClick(view);
 
         if (view == formDate.getButton()) {
+            formDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             formDateFragment.setArguments(args);
@@ -559,6 +564,7 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
         }
 
         if (view == treatmentStartDate.getButton()) {
+            treatmentStartDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             secondDateFragment.setArguments(args);
@@ -568,6 +574,7 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
         }
 
         if (view == returnVisitDate.getButton()) {
+            returnVisitDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", THIRD_DATE_DIALOG_ID);
             thirdDateFragment.setArguments(args);
@@ -711,6 +718,12 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
                 secondDateCalendar.set(yy, mm, dd);
             else if (((int) view.getTag()) == THIRD_DATE_DIALOG_ID)
                 thirdDateCalendar.set(yy, mm, dd);
+            updateDisplay();
+        }
+
+        @Override
+        public void onCancel(DialogInterface dialog) {
+            super.onCancel(dialog);
             updateDisplay();
         }
     }

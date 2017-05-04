@@ -535,6 +535,8 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
         }*/
 
         updateFollowUpMonth();
+        formDate.getButton().setEnabled(true);
+        dateOfSubmission.getButton().setEnabled(true);
     }
 
     @Override
@@ -964,6 +966,7 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
         super.onClick(view);
 
         if (view == formDate.getButton()) {
+            formDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             formDateFragment.setArguments(args);
@@ -973,6 +976,7 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
         }
 
         if (view == dateOfSubmission.getButton()) {
+            dateOfSubmission.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             secondDateFragment.setArguments(args);
@@ -1153,48 +1157,5 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
             return container == obj;
         }
     }
-
-    @SuppressLint("ValidFragment")
-    public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final Calendar calendar;
-            if (getArguments().getInt("type") == DATE_DIALOG_ID)
-                calendar = formDateCalendar;
-            else if (getArguments().getInt("type") == SECOND_DATE_DIALOG_ID)
-                calendar = secondDateCalendar;
-            /*else if (getArguments().getInt("type") == THIRD_DATE_DIALOG_ID)
-                calendar = thirdDateCalendar;
-            else if (getArguments().getInt("type") == FORTH_DATE_DIALOG_ID)
-                calendar = forthDateCalendar;*/
-            else
-                return null;
-
-            int yy = calendar.get(Calendar.YEAR);
-            int mm = calendar.get(Calendar.MONTH);
-            int dd = calendar.get(Calendar.DAY_OF_MONTH);
-            DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, yy, mm, dd);
-            dialog.getDatePicker().setTag(getArguments().getInt("type"));
-            dialog.getDatePicker().setMaxDate(new Date().getTime());
-            return dialog;
-        }
-
-        @Override
-        public void onDateSet(DatePicker view, int yy, int mm, int dd) {
-
-            if (((int) view.getTag()) == DATE_DIALOG_ID)
-                formDateCalendar.set(yy, mm, dd);
-            else if (((int) view.getTag()) == SECOND_DATE_DIALOG_ID)
-                secondDateCalendar.set(yy, mm, dd);
-          /*  else if (((int) view.getTag()) == THIRD_DATE_DIALOG_ID)
-                thirdDateCalendar.set(yy, mm, dd);
-            else if (((int) view.getTag()) == FORTH_DATE_DIALOG_ID)
-                forthDateCalendar.set(yy, mm, dd);*/
-
-            updateDisplay();
-        }
-    }
-
 
 }

@@ -249,6 +249,8 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         }
+
+        formDate.getButton().setEnabled(true);
     }
 
     @Override
@@ -1006,6 +1008,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         super.onClick(view);
 
         if (view == formDate.getButton()) {
+            formDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             formDateFragment.setArguments(args);

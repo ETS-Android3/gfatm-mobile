@@ -293,6 +293,9 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
         }
         dateChoose = false;
+        formDate.getButton().setEnabled(true);
+        regDate.getButton().setEnabled(true);
+        returnVisitDate.getButton().setEnabled(true);
     }
 
     @Override
@@ -862,6 +865,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         super.onClick(view);
 
         if (view == formDate.getButton()) {
+            formDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             formDateFragment.setArguments(args);
@@ -871,6 +875,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         }
 
         if (view == regDate.getButton()) {
+            regDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             secondDateFragment.setArguments(args);
@@ -880,6 +885,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         }
 
         if (view == returnVisitDate.getButton()) {
+            returnVisitDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", THIRD_DATE_DIALOG_ID);
             thirdDateFragment.setArguments(args);
@@ -1122,6 +1128,12 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                 secondDateCalendar.set(yy, mm, dd);
             else if (((int) view.getTag()) == THIRD_DATE_DIALOG_ID)
                 thirdDateCalendar.set(yy, mm, dd);
+            updateDisplay();
+        }
+
+        @Override
+        public void onCancel(DialogInterface dialog) {
+            super.onCancel(dialog);
             updateDisplay();
         }
     }
