@@ -243,7 +243,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
             error = true;
         }
 
-        if (!RegexUtil.isValidErnsNumber(App.get(enrsId))) {
+        if (enrsId.getVisibility() == View.VISIBLE && !RegexUtil.isValidErnsNumber(App.get(enrsId))) {
             enrsId.getEditText().setError(getString(R.string.invalid_value));
             enrsId.getEditText().requestFocus();
             error = true;
@@ -676,6 +676,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
         super.onClick(view);
 
         if (view == formDate.getButton()) {
+            formDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             formDateFragment.setArguments(args);

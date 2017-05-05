@@ -205,6 +205,8 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
 
         Log.d("formdate", DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         Log.d("formdate", formDate.getButton().getText().toString());
+
+        formDate.getButton().setEnabled(true);
     }
 
     @Override
@@ -490,6 +492,7 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
         super.onClick(view);
 
         if (view == formDate.getButton()) {
+            formDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             formDateFragment.setArguments(args);

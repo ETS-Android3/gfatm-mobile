@@ -325,6 +325,7 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
         }*/
 
         updateFollowUpMonth();
+        formDate.getButton().setEnabled(true);
     }
 
     public void updateFollowUpMonth(){
@@ -862,6 +863,7 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
         super.onClick(view);
 
         if (view == formDate.getButton()) {
+            formDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             formDateFragment.setArguments(args);
