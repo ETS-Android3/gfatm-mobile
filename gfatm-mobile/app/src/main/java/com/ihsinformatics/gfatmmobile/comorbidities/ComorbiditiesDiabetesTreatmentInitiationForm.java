@@ -593,7 +593,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
                 else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_specify_uncle)))
                     diabetesFamilyHistoryString = diabetesFamilyHistoryString + "UNCLE" + " ; ";
                 else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_specify_other1)))
-                    diabetesFamilyHistoryString = diabetesFamilyHistoryString + "OTHER" + " ; ";
+                    diabetesFamilyHistoryString = diabetesFamilyHistoryString + "OTHER FAMILY MEMBER" + " ; ";
             }
             observations.add(new String[]{"FAMILY MEMBERS WITH DIABETES", diabetesFamilyHistoryString});
         }
@@ -877,7 +877,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
                     }  else if (cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_specify_uncle)) && obs[0][1].equals("UNCLE")) {
                         cb.setChecked(true);
                         break;
-                    }  else if (cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_specify_other1)) && obs[0][1].equals("OTHER")) {
+                    }  else if (cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_family_history_specify_other1)) && obs[0][1].equals("OTHER FAMILY MEMBER")) {
                         cb.setChecked(true);
                         break;
                     }

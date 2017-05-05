@@ -513,7 +513,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
 
         if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
             observations.add(new String[]{"TEST CONTEXT STATUS", App.get(hba1cTestType).equals(getResources().getString(R.string.comorbidities_HbA1C_test_type_baseline)) ? "BASELINE" :
-                    (App.get(hba1cTestType).equals(getResources().getString(R.string.comorbidities_HbA1C_test_type_baseline)) ? "BASELINE REPEAT" : "REGULAR FOLLOW UP")});
+                    (App.get(hba1cTestType).equals(getResources().getString(R.string.comorbidities_HbA1C_test_type_baseline_repeat)) ? "BASELINE REPEAT" : "REGULAR FOLLOW UP")});
             if (hba1cFollowupMonth.getVisibility() == View.VISIBLE) {
                 observations.add(new String[]{"FOLLOW-UP MONTH", App.get(hba1cFollowupMonth)});
             }
@@ -680,7 +680,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
                         if (rb.getText().equals(getResources().getString(R.string.comorbidities_HbA1C_test_type_baseline)) && obs[0][1].equals("BASELINE")) {
                             rb.setChecked(true);
                             break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_HbA1C_test_type_baseline)) && obs[0][1].equals("BASELINE REPEAT")) {
+                        } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_HbA1C_test_type_baseline_repeat)) && obs[0][1].equals("BASELINE REPEAT")) {
                             rb.setChecked(true);
                             break;
                         } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_HbA1C_test_type_followup)) && obs[0][1].equals("REGULAR FOLLOW UP")) {
