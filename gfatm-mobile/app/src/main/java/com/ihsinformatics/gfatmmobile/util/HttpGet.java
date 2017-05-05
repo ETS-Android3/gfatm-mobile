@@ -591,6 +591,27 @@ public class HttpGet {
         return getJsonObject(PERSON_RESOURCE, personUuid, ATTRIBUTE);
     }
 
+    public JSONObject getSystemSetting(String setting){
+
+        JSONObject json = null;
+
+        String http = "";
+        if (App.getSsl().equalsIgnoreCase("Enabled"))
+            http = "https://";
+        else
+            http = "http://";
+
+        try {
+            JSONObject jsonObject = getJsonObjectByName("systemsetting",setting);
+            JSONArray jsonArray = jsonObject.getJSONArray("results");
+            json = jsonArray.getJSONObject(0);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return json;
+
+    }
+
     public JSONObject getPersonAddressByPersonUuid(String personUuid) {
         JSONObject json = null;
         JSONArray jsonArray = getJsonArray(PERSON_RESOURCE, personUuid, ADDRESS);

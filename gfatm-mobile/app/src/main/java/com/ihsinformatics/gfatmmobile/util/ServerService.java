@@ -28,6 +28,9 @@ import com.ihsinformatics.gfatmmobile.App;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.util.Base64;
 import android.util.Log;
 
 import com.ihsinformatics.gfatmmobile.App;
@@ -43,6 +46,12 @@ import com.ihsinformatics.gfatmmobile.model.User;
 import com.ihsinformatics.gfatmmobile.shared.FormsObject;
 import com.ihsinformatics.gfatmmobile.shared.Metadata;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -61,6 +70,9 @@ import org.openmrs.Provider;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.Format;
@@ -107,32 +119,45 @@ public class ServerService {
      * @return status
      */
     static public boolean isURLReachable() {
-//        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-//        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-//        if (netInfo != null && netInfo.isConnected()) {
-//            try {
-//                if(App.getSsl().equalsIgnoreCase("Enabled")) {
-//                    HttpsClient httpsClient = new HttpsClient(context);
-//                    httpsClient.
-//                }
-//                else {
-//                    URL url = new URL("http://" + App.getIp() + ":" + App.getPort());
-//                    HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
-//                    urlc.setConnectTimeout(10 * 1000);
-//                    urlc.connect();
-//                    if (urlc.getResponseCode() == 200) {
-//                        return true;
-//                    } else {
-//                        return false;
-//                    }
-//                }
-//
-//            } catch (MalformedURLException e1) {
-//                return false;
-//            } catch (IOException e) {
-//                return false;
-//            }
-//        }
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnected()) {
+            try {
+
+                 if(!App.getSsl().equalsIgnoreCase("Enabled")) {
+                     URL url = new URL("http://" + App.getIp() + ":" + App.getPort());
+                     HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
+                     urlc.setConnectTimeout(10 * 1000);
+                     urlc.connect();
+                     if (urlc.getResponseCode() == 200) {
+                         return true;
+                     } else {
+                         return false;
+                     }
+                 }
+                 else{
+                     try {
+                         HttpUriRequest request = new org.apache.http.client.methods.HttpGet("https://" + App.getIp() + ":" + App.getPort());
+                         HttpsClient client = new HttpsClient(context);
+                         HttpResponse response = client.execute(request);
+                         StatusLine statusLine = response.getStatusLine();
+                         Log.d(TAG, "Http response code: " + statusLine.getStatusCode());
+                         if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
+                             return true;
+                         } else {
+                             return false;
+                         }
+                     } catch (Exception e) {
+                         e.printStackTrace();
+                     }
+                 }
+
+            } catch (MalformedURLException e1) {
+                return false;
+            } catch (IOException e) {
+                return false;
+            }
+        }
         return true;
     }
 
@@ -353,6 +378,9 @@ public class ServerService {
             if (providerUUid == "")
                 return "PROVIDER_NOT_FOUND";
 
+            if (!isMobileAppCompatible())
+                return "VERSION_MISMATCH";
+
             App.setUserFullName(user.getFullName());
             App.setRoles(user.getRoles());
             App.setProviderUUid(providerUUid);
@@ -397,7 +425,32 @@ public class ServerService {
         return user;
     }
 
+    public boolean isMobileAppCompatible(){
 
+        try {
+
+            JSONObject j = httpGet.getSystemSetting("gfatm-mobile-version");
+            String version = j.getString("value");
+            String appVersion = App.getVersion();
+
+            if(version.equals(appVersion))
+                return true;
+            else{
+                String[] systemVersions = version.split("\\.");
+                String[] appVersions = appVersion.split("\\.");
+
+                if(appVersions[0].equals(systemVersions[0]) && systemVersions[1].equals(appVersions[1]))
+                    return true;
+                else
+                    return false;
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
 
     public String getLocations() {
 
@@ -410,18 +463,6 @@ public class ServerService {
             JSONArray response = httpGet.getAllLocations();
             if (response == null)
                 return "AUTHENTICATION_ERROR";
-
-            /*String columnName = "";
-            if (App.getProgram().equals(context.getResources().getString(R.string.pet)))
-                columnName = "pet_location";
-            else if (App.getProgram().equals(context.getResources().getString(R.string.fast)))
-                columnName = "fast_location";
-            else if (App.getProgram().equals(context.getResources().getString(R.string.comorbidities)))
-                columnName = "comorbidities_location";
-            else if (App.getProgram().equals(context.getResources().getString(R.string.pmdt)))
-                columnName = "pmdt_location";
-            else if (App.getProgram().equals(context.getResources().getString(R.string.childhood_tb)))
-                columnName = "childhood_tb_location";*/
 
             deleteAllLocations();
             try {
@@ -1422,6 +1463,7 @@ public class ServerService {
                     return "SUCCESS_" + formId;
 
                 } else {
+
                     String returnString = httpPost.saveEncounterWithObservationByEntity(encounter);
                     JSONObject jsonObject = JSONParser.getJSONObject("{" + returnString.toString() + "}");
                     com.ihsinformatics.gfatmmobile.model.Encounter encounter1 = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(jsonObject, context);
