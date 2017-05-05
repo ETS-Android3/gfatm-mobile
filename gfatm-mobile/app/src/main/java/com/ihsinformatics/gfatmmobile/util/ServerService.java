@@ -110,7 +110,7 @@ public class ServerService {
         dbUtil = new DatabaseUtil(this.context);
 
         // GWT Connections
-        fastGfatmUri = "199.172.1.44:8888" + "/fastweb.jsp";
+        fastGfatmUri = App.getIp()+":"+App.getPort() + "/gfatmweb/fastweb.jsp";
         httpGwtClient = new HttpGwtRequest(this.context);
     }
     /**

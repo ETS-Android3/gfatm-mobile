@@ -66,6 +66,7 @@ public abstract class AbstractFormActivity extends Fragment
 
     public static final int DATE_DIALOG_ID = 1;
     public static final int SECOND_DATE_DIALOG_ID = 2;
+    public static final String DATE_DISPLAY_FORMAT = "EEEE, MMM dd,yyyy";
     protected static ProgressDialog loading;
     // main Layout
     protected View mainContent;
