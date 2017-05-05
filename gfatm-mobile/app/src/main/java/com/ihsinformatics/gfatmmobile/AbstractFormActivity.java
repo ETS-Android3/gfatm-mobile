@@ -521,6 +521,12 @@ public abstract class AbstractFormActivity extends Fragment
             updateDisplay();
 
         }
+
+        @Override
+        public void onCancel(DialogInterface dialog) {
+            super.onCancel(dialog);
+            updateDisplay();
+        }
     }
 
 }
