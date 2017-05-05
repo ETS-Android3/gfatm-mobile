@@ -415,7 +415,6 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
                     }
 
                     Date orderDate = App.stringToDate(date, format);
-
                     if(formDateCalendar.before(App.getCalendar(orderDate))){
                         formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
