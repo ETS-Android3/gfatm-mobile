@@ -66,6 +66,8 @@
     <string name="enabled">Enabled</string>
     <string name="disabled">Disabled</string>
 
+    <string name="rest">REST</string>
+
     <string-array name="ssl_encryption">
         <item>Enabled</item>
         <item>Disabled</item>
@@ -349,7 +351,7 @@
     <string name="city_default" translatable="false">Karachi</string>
     <string name="province_default" translatable="false">Sindh</string>
     <string name="country_default" translatable="false">Pakistan</string>
-    <!--<string name="ip_default" translatable="false">mrs.ghd.ihn.org.pk</string>
+    <!--string name="ip_default" translatable="false">mrs.ghd.ihn.org.pk</string>
     <string name="port_default" translatable="false">443</string>-->
     <string name="ip_default" translatable="false">202.141.249.106</string>
     <string name="port_default" translatable="false">9902</string>
