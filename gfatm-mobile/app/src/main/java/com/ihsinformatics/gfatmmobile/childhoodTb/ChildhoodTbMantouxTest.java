@@ -153,7 +153,7 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
         weightPercentile = new TitledSpinner(context,null,getResources().getString(R.string.ctb_weight_percentile),getResources().getStringArray(R.array.ctb_weight_percentile_list),null,App.VERTICAL,true);
         pointTestBeingDone = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_point_test_being_done),getResources().getStringArray(R.array.ctb_ultrasound_test_point_list),getResources().getString(R.string.ctb_diagnostic),App.VERTICAL,App.VERTICAL,true);
         monthTreatment= new TitledSpinner(context,null,getResources().getString(R.string.ctb_month_treatment),getResources().getStringArray(R.array.ctb_0_to_24),null,App.HORIZONTAL,true);
-
+        updateFollowUpMonth();
         tuberculinSkinTest = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_tuberculin_skin_test),getResources().getStringArray(R.array.ctb_tuberculin_skin_test_list),getResources().getString(R.string.ctb_less_than_5mm),App.VERTICAL,App.VERTICAL,true);
         interpretationMantouxTest = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_interpretation_mantoux),getResources().getStringArray(R.array.ctb_positive_negative),null,App.VERTICAL,App.VERTICAL);
         LinearLayout linearLayout = new LinearLayout(context);
@@ -183,7 +183,7 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate,formType,linearLayout,weightPercentile,pointTestBeingDone,monthTreatment,tuberculinSkinTest
+                {{formType,linearLayout,formDate,weightPercentile,pointTestBeingDone,monthTreatment,tuberculinSkinTest
                 ,interpretationMantouxTest}};
 
         formDate.getButton().setOnClickListener(this);
@@ -228,7 +228,29 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
         resetViews();
 
     }
+    public void updateFollowUpMonth(){
+        String treatmentDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+        String format = "";
 
+
+        if (treatmentDate.contains("/")) {
+            format = "dd/MM/yyyy";
+        } else {
+            format = "yyyy-MM-dd";
+        }
+        Date convertedDate = App.stringToDate(treatmentDate, format);
+        Calendar treatmentDateCalender = App.getCalendar(convertedDate);
+        int diffYear = formDateCalendar.get(Calendar.YEAR) - treatmentDateCalender.get(Calendar.YEAR);
+        int diffMonth = diffYear * 12 + formDateCalendar.get(Calendar.MONTH) - treatmentDateCalender.get(Calendar.MONTH);
+
+        String [] monthArray = new String[diffMonth + 1];
+
+        for(int i =0 ; i <= diffMonth ; i++){
+            monthArray[i] = String.valueOf(i);
+        }
+
+        monthTreatment.getSpinner().setSpinnerData(monthArray);
+    }
     @Override
     public void updateDisplay() {
 
@@ -237,32 +259,64 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
 
 
             Date date = new Date();
+        if(formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_result))){
+            Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), " TB-Mantoux Test Result");
+            String format = "";
+            String formDa = formDate.getButton().getText().toString();
 
-        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
+            for(int i =0 ; i < testIds.length ; i++){
+                if(testIds[i][0].equals(testId.getEditText().getText().toString())){
+                    String orderdate = testIds[i][1].toString();
+                    if (orderdate.contains("/")) {
+                        format = "dd/MM/yyyy";
+                    } else {
+                        format = "yyyy-MM-dd";
+                    }
+
+                    Date orderDate = App.stringToDate(orderdate, format);
+
+                    if(formDateCalendar.before(App.getCalendar(orderDate))){
+                        formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                        snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
+                        snackbar.show();
+
+                        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        break;
+                    }
+                    else {
+                        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                    }
+                }
+            }
+        }
+        if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
 
             if (formDateCalendar.after(App.getCalendar(date))) {
 
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
-            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
             } else
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         }
+        updateFollowUpMonth();
+        formDate.getButton().setEnabled(true);
     }
 
     @Override
@@ -570,6 +624,7 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
         super.onClick(view);
 
         if (view == formDate.getButton()) {
+            formDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
@@ -607,7 +662,7 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
         testIdView.setVisibility(View.GONE);
         testId.setVisibility(View.GONE);
         testIdView.setImageResource(R.drawable.ic_checked);
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         goneVisibility();
         submitButton.setEnabled(false);
         Bundle bundle = this.getArguments();
@@ -637,6 +692,7 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
         }
 
     void goneVisibility(){
+        formDate.setVisibility(View.GONE);
         pointTestBeingDone.setVisibility(View.GONE);
         monthTreatment.setVisibility(View.GONE);
         weightPercentile.setVisibility(View.GONE);
@@ -680,12 +736,14 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
 
     void showTestOrderOrTestResult() {
         if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.ctb_order))) {
+            formDate.setVisibility(View.VISIBLE);
             weightPercentile.setVisibility(View.VISIBLE);
             pointTestBeingDone.setVisibility(View.VISIBLE);
 
             tuberculinSkinTest.setVisibility(View.GONE);
             interpretationMantouxTest.setVisibility(View.GONE);
         } else {
+            formDate.setVisibility(View.VISIBLE);
             tuberculinSkinTest.setVisibility(View.VISIBLE);
             interpretationMantouxTest.setVisibility(View.VISIBLE);
 

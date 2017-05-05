@@ -176,6 +176,7 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
         dateSubmission.setTag("dateSubmission");
         pointTestBeingDone = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_point_test_being_done), getResources().getStringArray(R.array.ctb_point_test_being_done_list), getResources().getString(R.string.ctb_baseline), App.VERTICAL, App.VERTICAL);
         monthTreatment = new TitledSpinner(context, null, getResources().getString(R.string.ctb_month_treatment), getResources().getStringArray(R.array.ctb_0_to_24), null, App.HORIZONTAL);
+        updateFollowUpMonth();
         specimenType = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_specimen_type), getResources().getStringArray(R.array.ctb_specimen_type_list), null, App.HORIZONTAL, App.VERTICAL);
         specimenComeFrom = new TitledSpinner(context, null, getResources().getString(R.string.ctb_speciment_route), getResources().getStringArray(R.array.ctb_speciment_route_list), null, App.VERTICAL);
         otherSpecimentComeFrom = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
@@ -241,7 +242,7 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, formType, linearLayout, dateSubmission, pointTestBeingDone, monthTreatment, specimenType, specimenComeFrom, otherSpecimentComeFrom, typeOfMediaDst, isoniazidPoint2, isoniazid1, rifampicin,
+                {{formType, linearLayout, formDate, dateSubmission, pointTestBeingDone, monthTreatment, specimenType, specimenComeFrom, otherSpecimentComeFrom, typeOfMediaDst, isoniazidPoint2, isoniazid1, rifampicin,
                         ethambuthol, streptomycin, pyrazinamide,
                         ofloxacin, levofloxacin, moxifloxacinPoint5,
                         moxifloxacin2, amikacin, kanamycin,
@@ -335,6 +336,30 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
 
     }
 
+    public void updateFollowUpMonth(){
+        String treatmentDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+        String format = "";
+
+
+        if (treatmentDate.contains("/")) {
+            format = "dd/MM/yyyy";
+        } else {
+            format = "yyyy-MM-dd";
+        }
+        Date convertedDate = App.stringToDate(treatmentDate, format);
+        Calendar treatmentDateCalender = App.getCalendar(convertedDate);
+        int diffYear = formDateCalendar.get(Calendar.YEAR) - treatmentDateCalender.get(Calendar.YEAR);
+        int diffMonth = diffYear * 12 + formDateCalendar.get(Calendar.MONTH) - treatmentDateCalender.get(Calendar.MONTH);
+
+        String [] monthArray = new String[diffMonth + 1];
+
+        for(int i =0 ; i <= diffMonth ; i++){
+            monthArray[i] = String.valueOf(i);
+        }
+
+        monthTreatment.getSpinner().setSpinnerData(monthArray);
+    }
+
     @Override
     public void updateDisplay() {
 
@@ -343,33 +368,63 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
 
 
         Date date = new Date();
+        if(formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_result))){
+            Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "Childhood TB-DST Culture Test Order");
+            String format = "";
+            String formDa = formDate.getButton().getText().toString();
 
-        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
+            for(int i =0 ; i < testIds.length ; i++){
+                if(testIds[i][0].equals(testId.getEditText().getText().toString())){
+                    String orderdate = testIds[i][1].toString();
+                    if (orderdate.contains("/")) {
+                        format = "dd/MM/yyyy";
+                    } else {
+                        format = "yyyy-MM-dd";
+                    }
+
+                    Date orderDate = App.stringToDate(orderdate, format);
+
+                    if(formDateCalendar.before(App.getCalendar(orderDate))){
+                        formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                        snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
+                        snackbar.show();
+
+                        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        break;
+                    }
+                    else {
+                        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                    }
+                }
+            }
+        }
+        if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
 
             if (formDateCalendar.after(App.getCalendar(date))) {
 
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
-            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
             } else
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         }
-        if (!dateSubmission.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString())) {
+        if (!dateSubmission.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString())) {
 
             //
             // +Date date = App.stringToDate(sampleSubmitDate.getButton().getText().toString(), "dd-MMM-yyyy");
@@ -382,8 +437,13 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
                 snackbar.show();
 
             } else
-                dateSubmission.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+                dateSubmission.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         }
+        formDate.getButton().setEnabled(true);
+        dateSubmission.getButton().setEnabled(true);
+        updateFollowUpMonth();
+
+
     }
 
     @Override
@@ -1150,6 +1210,7 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
         super.onClick(view);
 
         if (view == formDate.getButton()) {
+            formDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
@@ -1158,6 +1219,7 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
             formDateFragment.show(getFragmentManager(), "DatePicker");
         }
         if (view == dateSubmission.getButton()) {
+            dateSubmission.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
@@ -1200,8 +1262,8 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
         formType.getRadioGroup().getButtons().get(0).setEnabled(true);
         formType.getRadioGroup().getButtons().get(1).setEnabled(true);
         testIdView.setEnabled(true);
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        dateSubmission.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        dateSubmission.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         testIdView.setVisibility(View.GONE);
         testId.setVisibility(View.GONE);
         testIdView.setImageResource(R.drawable.ic_checked);
@@ -1226,6 +1288,7 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
     }
 
     void goneVisibility(){
+        formDate.setVisibility(View.GONE);
         dateSubmission.setVisibility(View.GONE);
         pointTestBeingDone.setVisibility(View.GONE);
         monthTreatment.setVisibility(View.GONE);
@@ -1259,6 +1322,7 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
     }
     void showTestOrderOrTestResult() {
         if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.ctb_order))) {
+            formDate.setVisibility(View.VISIBLE);
             dateSubmission.setVisibility(View.VISIBLE);
             pointTestBeingDone.setVisibility(View.VISIBLE);
             specimenType.setVisibility(View.VISIBLE);
@@ -1286,6 +1350,7 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
             clofazamine.setVisibility(View.GONE);
             otherDrug.setVisibility(View.GONE);
         }else{
+            formDate.setVisibility(View.VISIBLE);
             typeOfMediaDst.setVisibility(View.VISIBLE);
             isoniazidPoint2.setVisibility(View.VISIBLE);
             isoniazid1.setVisibility(View.VISIBLE);

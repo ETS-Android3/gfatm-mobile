@@ -153,6 +153,7 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
         formType = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_type_of_form),getResources().getStringArray(R.array.ctb_type_of_form_list),null,App.HORIZONTAL,App.VERTICAL,true);
         pointTestBeingDone = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_point_test_being_done),getResources().getStringArray(R.array.ctb_ultrasound_test_point_list),getResources().getString(R.string.ctb_diagnostic),App.VERTICAL,App.VERTICAL,true);
         monthTreatment= new TitledSpinner(context,null,getResources().getString(R.string.ctb_month_treatment),getResources().getStringArray(R.array.ctb_0_to_24),null,App.HORIZONTAL,true);
+        updateFollowUpMonth();
         histopathologySite = new TitledEditText(context,null,getResources().getString(R.string.ctb_histopathology_site),"","",50,RegexUtil.ALPHA_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,true);
 
         histopathologyResult = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_histopathology_result),getResources().getStringArray(R.array.ctb_suggestive_tb_normal),getResources().getString(R.string.ctb_suggestive_tb),App.VERTICAL,App.VERTICAL,true);
@@ -182,7 +183,7 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate,formType,linearLayout,pointTestBeingDone,monthTreatment,histopathologySite,histopathologyResult}};
+                {{formType,linearLayout,formDate,pointTestBeingDone,monthTreatment,histopathologySite,histopathologyResult}};
 
         formDate.getButton().setOnClickListener(this);
         formType.getRadioGroup().setOnCheckedChangeListener(this);
@@ -227,6 +228,32 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
 
     }
 
+
+    public void updateFollowUpMonth(){
+        String treatmentDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+        String format = "";
+
+
+        if (treatmentDate.contains("/")) {
+            format = "dd/MM/yyyy";
+        } else {
+            format = "yyyy-MM-dd";
+        }
+        Date convertedDate = App.stringToDate(treatmentDate, format);
+        Calendar treatmentDateCalender = App.getCalendar(convertedDate);
+        int diffYear = formDateCalendar.get(Calendar.YEAR) - treatmentDateCalender.get(Calendar.YEAR);
+        int diffMonth = diffYear * 12 + formDateCalendar.get(Calendar.MONTH) - treatmentDateCalender.get(Calendar.MONTH);
+
+        String [] monthArray = new String[diffMonth + 1];
+
+        for(int i =0 ; i <= diffMonth ; i++){
+            monthArray[i] = String.valueOf(i);
+        }
+
+        monthTreatment.getSpinner().setSpinnerData(monthArray);
+    }
+
+
     @Override
     public void updateDisplay() {
 
@@ -235,32 +262,65 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
 
 
             Date date = new Date();
+        if(formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_result))){
+            Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "Childhood TB-Histopathology Test Order");
+            String format = "";
+            String formDa = formDate.getButton().getText().toString();
 
-        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
+            for(int i =0 ; i < testIds.length ; i++){
+                if(testIds[i][0].equals(testId.getEditText().getText().toString())){
+                    String orderdate = testIds[i][1].toString();
+                    if (orderdate.contains("/")) {
+                        format = "dd/MM/yyyy";
+                    } else {
+                        format = "yyyy-MM-dd";
+                    }
+
+                    Date orderDate = App.stringToDate(orderdate, format);
+
+                    if(formDateCalendar.before(App.getCalendar(orderDate))){
+                        formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                        snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
+                        snackbar.show();
+
+                        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        break;
+                    }
+                    else {
+                        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                    }
+                }
+            }
+        }
+        if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
 
             if (formDateCalendar.after(App.getCalendar(date))) {
 
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
-            }  else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+            }  else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
             } else
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         }
+        updateFollowUpMonth();
+        formDate.getButton().setEnabled(true);
+
     }
 
     @Override
@@ -566,6 +626,7 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
         super.onClick(view);
 
         if (view == formDate.getButton()) {
+            formDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
@@ -605,7 +666,7 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
         testIdView.setVisibility(View.GONE);
         testId.setVisibility(View.GONE);
         testIdView.setImageResource(R.drawable.ic_checked);
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         goneVisibility();
         submitButton.setEnabled(false);
         Bundle bundle = this.getArguments();
@@ -627,6 +688,7 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
     }
 
     void goneVisibility(){
+        formDate.setVisibility(View.GONE);
         pointTestBeingDone.setVisibility(View.GONE);
         monthTreatment.setVisibility(View.GONE);
         histopathologySite.setVisibility(View.GONE);
@@ -658,11 +720,13 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
 
     void showTestOrderOrTestResult() {
         if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.ctb_order))) {
+            formDate.setVisibility(View.VISIBLE);
             pointTestBeingDone.setVisibility(View.VISIBLE);
             histopathologySite.setVisibility(View.VISIBLE);
 
             histopathologyResult.setVisibility(View.GONE);
         } else {
+            formDate.setVisibility(View.VISIBLE);
             histopathologyResult.setVisibility(View.VISIBLE);
 
             pointTestBeingDone.setVisibility(View.GONE);
