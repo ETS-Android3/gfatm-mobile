@@ -24,14 +24,15 @@ public class User extends AbstractModel {
     private String fullName;
     private String roles;
     private String identifier;
+    private String personUuid;
 
-
-    public User(String uuid, String username, String fullName, String roles, String identifier) {
+    public User(String uuid, String username, String fullName, String roles, String identifier, String personUuid) {
         super(uuid);
         this.username = username;
         this.fullName = fullName;
         this.roles = roles;
         this.identifier = identifier;
+        this.personUuid = personUuid;
     }
 
     public static User parseJSONObject(JSONObject json) {
@@ -41,12 +42,14 @@ public class User extends AbstractModel {
         String fullName = "";
         String roles = "";
         String identifier = "";
+        String personUuid = "";
         try {
             uuid = json.getString("uuid");
             username = json.getString("username");
             identifier = json.getString("systemId");
             JSONObject person = json.getJSONObject("person");
             fullName = person.getString("display");
+            personUuid = person.getString("uuid");
             JSONArray rolesArray = json.getJSONArray("roles");
 
             for (int i = 0; i < rolesArray.length(); i++) {
@@ -66,7 +69,7 @@ public class User extends AbstractModel {
             e.printStackTrace();
             user = null;
         }
-        user = new User(uuid, username, fullName, roles, identifier);
+        user = new User(uuid, username, fullName, roles, identifier, personUuid);
         return user;
     }
 
@@ -113,6 +116,14 @@ public class User extends AbstractModel {
 
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
+    }
+
+    public String getPersonUuid() {
+        return personUuid;
+    }
+
+    public void setPersonUuid(String personUuid) {
+        this.personUuid = personUuid;
     }
 
     @Override
