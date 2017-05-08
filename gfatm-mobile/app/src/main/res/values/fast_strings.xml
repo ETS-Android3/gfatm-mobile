@@ -431,6 +431,7 @@
     <string name="fast_rejected">Rejected</string>
     <string name="fast_date_of_result_recieved_cannot_be_less_than_submission_date">Date of result received cannot be before sample submission date</string>
     <string name="fast_form_cannot_be_before_person_dob">This date cannot be before person date of birth</string>
+    <string name="fast_form_date_cannot_be_before_treatment_initiation_form">Form date cannot be before treatment initiation date</string>
     <string name="fast_test_cannot_be_before_form_date">Test date cannot be before form date</string>
     <string name="fast_missed_visit_date_cannot_be_before_form_date">Missed visit date can\'t be before form date</string>
     <string name="fast_date_of_next_visit_cant_be_before_missed_visit_date">Next visit date cannot be before missed visit date</string>
