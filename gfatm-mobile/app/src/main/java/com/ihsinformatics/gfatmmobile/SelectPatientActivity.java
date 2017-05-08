@@ -180,9 +180,9 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
         this.setFinishOnTouchOutside(false);
 
 
-        ServerService serverService = new ServerService(getApplicationContext());
-        User user = serverService.getUser("rabbia.hassan");
-        String roles = user.getRoles();
+//        ServerService serverService = new ServerService(getApplicationContext());
+//        User user = serverService.getUser("rabbia.hassan");
+//        String roles = user.getRoles();
 
         /*String i = address.getAddress1();*/
 
