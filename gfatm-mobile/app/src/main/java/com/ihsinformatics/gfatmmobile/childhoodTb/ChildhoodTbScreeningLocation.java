@@ -229,7 +229,7 @@ public class ChildhoodTbScreeningLocation extends AbstractFormActivity implement
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         }
-        formDate.getButton().setEnabled(false);
+        formDate.getButton().setEnabled(true);
     }
 
     @Override

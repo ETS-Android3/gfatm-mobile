@@ -160,7 +160,7 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
         formType = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_type_of_form), getResources().getStringArray(R.array.ctb_type_of_form_list), null, App.HORIZONTAL, App.VERTICAL, true);
         ctScanSite = new TitledSpinner(context, null, getResources().getString(R.string.ctb_ct_scan_site), getResources().getStringArray(R.array.ctb_ct_scan_site_list), null, App.VERTICAL);
         monthTreatment = new TitledSpinner(context, null, getResources().getString(R.string.ctb_month_treatment), getResources().getStringArray(R.array.ctb_0_to_24), null, App.HORIZONTAL);
-
+        updateFollowUpMonth();
         ctChestTbSuggestive = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_chest_suggestive_tb), getResources().getStringArray(R.array.ctb_ct_chest_suggestive_tb_list), getResources().getString(R.string.ctb_adenopathy), App.VERTICAL, App.VERTICAL, false);
         ctChestInterpretation = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_chest_interpretation), getResources().getStringArray(R.array.ctb_suggestive_not_suggestive), null, App.HORIZONTAL, App.VERTICAL, false);
         ctAbdomenTbSuggestive = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_abdomen_suggestive_tb), getResources().getStringArray(R.array.ctb_ct_abdomen_suggestive_tb_list), getResources().getString(R.string.ctb_adenopathy), App.HORIZONTAL, App.VERTICAL, false);
@@ -254,6 +254,29 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
 
         resetViews();
     }
+    public void updateFollowUpMonth(){
+        String treatmentDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+        String format = "";
+
+
+        if (treatmentDate.contains("/")) {
+            format = "dd/MM/yyyy";
+        } else {
+            format = "yyyy-MM-dd";
+        }
+        Date convertedDate = App.stringToDate(treatmentDate, format);
+        Calendar treatmentDateCalender = App.getCalendar(convertedDate);
+        int diffYear = formDateCalendar.get(Calendar.YEAR) - treatmentDateCalender.get(Calendar.YEAR);
+        int diffMonth = diffYear * 12 + formDateCalendar.get(Calendar.MONTH) - treatmentDateCalender.get(Calendar.MONTH);
+
+        String [] monthArray = new String[diffMonth + 1];
+
+        for(int i =0 ; i <= diffMonth ; i++){
+            monthArray[i] = String.valueOf(i);
+        }
+
+        monthTreatment.getSpinner().setSpinnerData(monthArray);
+    }
 
     @Override
     public void updateDisplay() {
@@ -288,6 +311,7 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
             } else
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         }
+        updateFollowUpMonth();
         formDate.getButton().setEnabled(false);
       }
 
