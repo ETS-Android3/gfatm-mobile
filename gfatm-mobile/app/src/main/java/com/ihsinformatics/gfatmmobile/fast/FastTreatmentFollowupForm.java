@@ -198,18 +198,7 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
             String formDa = treatmentStartDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
 
-            Date date = new Date();
-            if (secondDateCalendar.after(App.getCalendar(date))) {
-
-                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
-                snackbar.show();
-
-                treatmentStartDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-
-            }
-            else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+            if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
@@ -222,8 +211,8 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
                 treatmentStartDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         }
         if (!dateChoose) {
-            Calendar requiredDate = secondDateCalendar.getInstance();
-            requiredDate.setTime(secondDateCalendar.getTime());
+            Calendar requiredDate = formDateCalendar.getInstance();
+            requiredDate.setTime(formDateCalendar.getTime());
             requiredDate.add(Calendar.DATE, 30);
 
             if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
@@ -237,6 +226,13 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
         Calendar maxDateCalender = formDateCalendar.getInstance();
         maxDateCalender.setTime(formDateCalendar.getTime());
         maxDateCalender.add(Calendar.YEAR, 2);
+
+        String nextAppointmentDateString = App.getSqlDate(thirdDateCalendar);
+        Date nextAppointmentDate = App.stringToDate(nextAppointmentDateString, "yyyy-MM-dd");
+
+        String treatStartDateString = App.getSqlDate(secondDateCalendar);
+        Date treatmentStDate = App.stringToDate(treatStartDateString, "yyyy-MM-dd");
+
 
 
         if (!(returnVisitDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString()))) {
@@ -267,6 +263,15 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
 
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
 
+            }
+
+            else if(nextAppointmentDate.compareTo(treatmentStDate) == 0){
+                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_treatment_start_date_and_next_visit_date_cant_be_same), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
             }
 
             else if (thirdDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {

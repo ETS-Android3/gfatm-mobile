@@ -31,6 +31,9 @@
     <string name="fast_surgery_title">Surgery</string>
     <string name="fast_er_title">Emergency (ER)</string>
     <string name="fast_form_date_past">Date can\'t be in past.</string>
+    <string name="fast_treatment_start_date_and_next_visit_date_cant_be_same">Treatment start date and return visit date can\'t be same.</string>
+    <string name="fast_next_appointment_date_cant_be_before_registeration_date">Next appointment date can\'t be before registeration date.</string>
+    <string name="fast_registeration_date_and_next_visit_date_cant_be_same">Registeration date and return visit date can\'t be same.</string>
     <string name="fast_form_date_past_treatment">Next appointment date can\'t be before treatment start date.</string>
     <string name="fast_return_date_future">Next appointment date cannot be more than 24 months.</string>
     <string name="fast_next_visit_date">Next visit date can\'t be before form date.</string>
@@ -418,6 +421,7 @@
     <string name="fast_treatment_after_loss_to_follow_up_without_default">Treatment after loss to follow up</string>
     <string name="fast_please_select_form_type">Please select form type!</string>
     <string name="fast_patient_age_less_than_15">Form will not be submitted as patient age is less than 15</string>
+    <string name="fast_form_cannot_be_submitted_without_submitting_treatment_initiation_form">Form will not be submitted as treatment initiation form for this patient is not submitted previously</string>
     <string name="fast_patient_age_less_than_15_cant_submit">Form cannot not be submitted as patient age is less than 15</string>
     <string name="fast_husband_name">Husband\'s Name</string>
     <string name="fast_father_name">Father\'s Name</string>
@@ -426,6 +430,7 @@
     <string name="fast_date_of_result_recieved_cannot_be_less_than_submission_date">Date of result received cannot be before sample submission date</string>
     <string name="fast_form_cannot_be_before_person_dob">This date cannot be before person date of birth</string>
     <string name="fast_test_cannot_be_before_form_date">Test date cannot be before form date</string>
+    <string name="fast_missed_visit_date_cannot_be_before_form_date">Missed visit date can\'t be before form date</string>
     <string name="fast_please_select_atleast_one_checkbox_for_identification_ids">Please select atleast one checkbox for identifcation IDs</string>
     <string name="fast_contact_patient_id_cannot_be_same_as_patient_id">Contact patient id cannot be same as patient id</string>
     <string name="fast_husband_name_cannot_be_less_than_2_characters">Husband name cannot be less than 2 characters</string>

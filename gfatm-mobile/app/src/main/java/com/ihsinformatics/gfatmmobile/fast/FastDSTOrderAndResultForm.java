@@ -63,6 +63,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
 
     // protected Calendar thirdDateCalendar;
     //  protected DialogFragment thirdDateFragment;
+    Boolean canSubmit = true;
 
     Context context;
     // Views...
@@ -354,27 +355,58 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
     }
 
     public void updateFollowUpMonth(){
+
         String treatmentDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
         String format = "";
 
+        if (treatmentDate == null) {
+            canSubmit = false;
+            String[] monthArray = new String[1];
+            monthArray[0] = "0";
+            monthOfTreatment.getSpinner().setSpinnerData(monthArray);
 
-        if (treatmentDate.contains("/")) {
-            format = "dd/MM/yyyy";
+            submitButton.setEnabled(false);
+            int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
+
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+            alertDialog.setMessage(getString(R.string.fast_form_cannot_be_submitted_without_submitting_treatment_initiation_form));
+            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+            // DrawableCompat.setTint(clearIcon, color);
+            alertDialog.setIcon(clearIcon);
+            alertDialog.setTitle(getResources().getString(R.string.title_error));
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            try {
+                                InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                            } catch (Exception e) {
+                                // TODO: handle exception
+                            }
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
         } else {
-            format = "yyyy-MM-dd";
+            canSubmit = true;
+            if (treatmentDate.contains("/")) {
+                format = "dd/MM/yyyy";
+            } else {
+                format = "yyyy-MM-dd";
+            }
+            Date convertedDate = App.stringToDate(treatmentDate, format);
+            Calendar treatmentDateCalender = App.getCalendar(convertedDate);
+            int diffYear = formDateCalendar.get(Calendar.YEAR) - treatmentDateCalender.get(Calendar.YEAR);
+            int diffMonth = diffYear * 12 + formDateCalendar.get(Calendar.MONTH) - treatmentDateCalender.get(Calendar.MONTH);
+
+            String[] monthArray = new String[diffMonth + 1];
+
+            for (int i = 0; i <= diffMonth; i++) {
+                monthArray[i] = String.valueOf(i);
+            }
+
+            monthOfTreatment.getSpinner().setSpinnerData(monthArray);
         }
-        Date convertedDate = App.stringToDate(treatmentDate, format);
-        Calendar treatmentDateCalender = App.getCalendar(convertedDate);
-        int diffYear = formDateCalendar.get(Calendar.YEAR) - treatmentDateCalender.get(Calendar.YEAR);
-        int diffMonth = diffYear * 12 + formDateCalendar.get(Calendar.MONTH) - treatmentDateCalender.get(Calendar.MONTH);
-
-        String [] monthArray = new String[diffMonth + 1];
-
-        for(int i =0 ; i <= diffMonth ; i++){
-            monthArray[i] = String.valueOf(i);
-        }
-
-        monthOfTreatment.getSpinner().setSpinnerData(monthArray);
     }
 
     @Override
@@ -1037,7 +1069,8 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
 
                     testIdView.setImageResource(R.drawable.ic_checked_green);
                     showTestOrderOrTestResult();
-                    submitButton.setEnabled(true);
+                    if(canSubmit)
+                        submitButton.setEnabled(true);
 
                 } else {
 

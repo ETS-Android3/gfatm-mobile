@@ -250,6 +250,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         if (!(regDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
 
             String formDa = regDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
 
             Date date = new Date();
             if (secondDateCalendar.after(App.getCalendar(date))) {
@@ -261,13 +262,24 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
                 regDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
-            } else
+            }
+
+            else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                regDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+            }
+
+            else
                 regDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         }
 
         if (!dateChoose) {
-            Calendar requiredDate = secondDateCalendar.getInstance();
-            requiredDate.setTime(secondDateCalendar.getTime());
+            Calendar requiredDate = formDateCalendar.getInstance();
+            requiredDate.setTime(formDateCalendar.getTime());
             requiredDate.add(Calendar.DATE, 30);
 
             if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
@@ -277,12 +289,20 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                 thirdDateCalendar.setTime(requiredDate.getTime());
             }
         }
+
+        String nextAppointmentDateString = App.getSqlDate(thirdDateCalendar);
+        Date nextAppointmentDate = App.stringToDate(nextAppointmentDateString, "yyyy-MM-dd");
+
+        String treatStartDateString = App.getSqlDate(secondDateCalendar);
+        Date treatmentStDate = App.stringToDate(treatStartDateString, "yyyy-MM-dd");
+
+
         if (!(returnVisitDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString()))) {
 
             String formDa = returnVisitDate.getButton().getText().toString();
 
-            Date date = new Date();
-            if (thirdDateCalendar.before(App.getCalendar(date))) {
+            //Date date = new Date();
+            if (thirdDateCalendar.before(formDateCalendar)){
 
                 thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
@@ -291,7 +311,29 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
 
-            } else
+            }
+
+            else if (thirdDateCalendar.before(secondDateCalendar)) {
+
+                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_next_appointment_date_cant_be_before_registeration_date), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
+            }
+
+            else if(nextAppointmentDate.compareTo(treatmentStDate) == 0){
+                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_registeration_date_and_next_visit_date_cant_be_same), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
+            }
+
+            else
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
         }
         dateChoose = false;
@@ -899,7 +941,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             args.putInt("type", THIRD_DATE_DIALOG_ID);
             thirdDateFragment.setArguments(args);
             thirdDateFragment.show(getFragmentManager(), "DatePicker");
-            args.putBoolean("allowPastDate", false);
+            args.putBoolean("allowPastDate", true);
             args.putBoolean("allowFutureDate", true);
             dateChoose = true;
         }
