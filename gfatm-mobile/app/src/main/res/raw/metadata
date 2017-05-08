@@ -4453,7 +4453,6 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER INFECTION
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INSULIN, ISOPHANE, HUMAN',NULL,'N/A','78068AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INSULIN, REGULAR, HUMAN',NULL,'N/A','78082AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INSULIN 70/30',NULL,'N/A','159459AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
-
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NORMAL',NULL,'N/A','1115AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('THICKENING OF SKIN',NULL,'N/A','112438AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DRY SKIN',NULL,'N/A','141692AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
@@ -4463,16 +4462,17 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DISCOLORATION O
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('POOR',NULL,'N/A','159407AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('GOOD',NULL,'N/A','159405AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('AVERAGE',NULL,'N/A','160487AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
-
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('THREE PLUS','+++','Boolean','1364AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ONE PLUS','	+','Boolean','1362AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TWO PLUS','++','Boolean','1363AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CRYSTALS IN URINE','urine_crystals','Coded','06d12fea-2285-471c-8348-218bea48b214');
-
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL PROPHYLAXIS','RHZE PROPHYLAXIS','N/A','1675AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NEVER',NULL,'N/A','1090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LOWENSTEIN-JENSEN MYCOBACTERIA CULTURE METHOD','L-J CULTURE METHOD','N/A','160011AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 
+----------
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CT SCAN, CHEST',NULL,'N/A','161165AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('BONE SCAN',NULL,'N/A','161161AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 
 -- Program
 INSERT OR IGNORE INTO program VALUES (1, "86ba1232-d576-416e-b102-5f335c6746ce", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
