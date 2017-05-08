@@ -28,11 +28,11 @@
 
     <!-- Settings Values -->
     <string-array name="programs">
-        <item>@string/pmdt</item>
+        <!--<item>@string/pmdt</item>-->
         <item>@string/pet</item>
         <item>@string/fast</item>
-        <item>@string/comorbidities</item>
-        <item>@string/childhood_tb</item>
+        <!--<item>@string/comorbidities</item>
+        <item>@string/childhood_tb</item>-->
     </string-array>
 
     <string name="dark_theme">Dark theme</string>
@@ -351,10 +351,10 @@
     <string name="city_default" translatable="false">Karachi</string>
     <string name="province_default" translatable="false">Sindh</string>
     <string name="country_default" translatable="false">Pakistan</string>
-    <!--string name="ip_default" translatable="false">mrs.ghd.ihn.org.pk</string>
-    <string name="port_default" translatable="false">443</string>-->
-    <string name="ip_default" translatable="false">202.141.249.106</string>
-    <string name="port_default" translatable="false">9902</string>
+    <string name="ip_default" translatable="false">mrs.ghd.ihn.org.pk</string>
+    <string name="port_default" translatable="false">443</string>
+    <!--<string name="ip_default" translatable="false">202.141.249.106</string>
+    <string name="port_default" translatable="false">9902</string>-->
 
     <string name="support_contact">Support Contact</string>
     <string name="support_email">Support Email</string>
