@@ -246,7 +246,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
     @Override
     public boolean validate() {
 
-        if (App.getPatient().getPerson().getAge() <= 15) {
+        if (App.getPatient().getPerson().getAge() <= 14) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
