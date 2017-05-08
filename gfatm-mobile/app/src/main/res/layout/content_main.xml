@@ -44,7 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/small"
-                android:src="@drawable/ic_update_patient" />
+                app:srcCompat="@drawable/ic_update_patient" />
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -60,7 +60,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/small"
-                        android:src="@drawable/ic_create_patient" />
+                        app:srcCompat="@drawable/ic_create_patient" />
 
                 </LinearLayout>
 
