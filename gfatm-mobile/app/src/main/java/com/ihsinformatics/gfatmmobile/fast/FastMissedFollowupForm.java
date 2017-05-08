@@ -199,7 +199,9 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-            } else
+            }
+
+            else
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         }
 
@@ -226,13 +228,24 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
                 tv.setMaxLines(2);
                 snackbar.show();
                 missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-            } else
+            }
+
+            else if (secondDateCalendar.before(formDateCalendar)){
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_missed_visit_date_cannot_be_before_form_date), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+
+            }
+            else
                 missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         }
 
         if (!dateChoose) {
-            Calendar requiredDate = secondDateCalendar.getInstance();
-            requiredDate.setTime(secondDateCalendar.getTime());
+            Calendar requiredDate = formDateCalendar.getInstance();
+            requiredDate.setTime(formDateCalendar.getTime());
             requiredDate.add(Calendar.DATE, 30);
 
             if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
@@ -249,8 +262,7 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
 
             String formDa = returnVisitDate.getButton().getText().toString();
 
-            Date date = new Date();
-            if (thirdDateCalendar.before(App.getCalendar(date))) {
+            if (thirdDateCalendar.before(formDateCalendar)) {
 
                 thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
@@ -620,7 +632,7 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
             args.putInt("type", THIRD_DATE_DIALOG_ID);
             thirdDateFragment.setArguments(args);
             thirdDateFragment.show(getFragmentManager(), "DatePicker");
-            args.putBoolean("allowPastDate", false);
+            args.putBoolean("allowPastDate", true);
             args.putBoolean("allowFutureDate", true);
             dateChoose = true;
         }
