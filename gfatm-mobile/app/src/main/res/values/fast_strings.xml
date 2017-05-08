@@ -32,6 +32,8 @@
     <string name="fast_er_title">Emergency (ER)</string>
     <string name="fast_form_date_past">Date can\'t be in past.</string>
     <string name="fast_treatment_start_date_and_next_visit_date_cant_be_same">Treatment start date and return visit date can\'t be same.</string>
+    <string name="fast_form_start_date_and_next_visit_date_cant_be_same">Form start date and return visit date can\'t be same.</string>
+    <string name="fast_missed_visit_date_and_next_visit_date_cant_be_same">Missed visit date and return visit date can\'t be same.</string>
     <string name="fast_next_appointment_date_cant_be_before_registeration_date">Next appointment date can\'t be before registeration date.</string>
     <string name="fast_registeration_date_and_next_visit_date_cant_be_same">Registeration date and return visit date can\'t be same.</string>
     <string name="fast_form_date_past_treatment">Next appointment date can\'t be before treatment start date.</string>
@@ -431,6 +433,7 @@
     <string name="fast_form_cannot_be_before_person_dob">This date cannot be before person date of birth</string>
     <string name="fast_test_cannot_be_before_form_date">Test date cannot be before form date</string>
     <string name="fast_missed_visit_date_cannot_be_before_form_date">Missed visit date can\'t be before form date</string>
+    <string name="fast_date_of_next_visit_cant_be_before_missed_visit_date">Next visit date cannot be before missed visit date</string>
     <string name="fast_please_select_atleast_one_checkbox_for_identification_ids">Please select atleast one checkbox for identifcation IDs</string>
     <string name="fast_contact_patient_id_cannot_be_same_as_patient_id">Contact patient id cannot be same as patient id</string>
     <string name="fast_husband_name_cannot_be_less_than_2_characters">Husband name cannot be less than 2 characters</string>

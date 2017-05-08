@@ -256,6 +256,16 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
             }
         }
 
+        String nextAppointmentDateString = App.getSqlDate(thirdDateCalendar);
+        Date nextAppointmentDate = App.stringToDate(nextAppointmentDateString, "yyyy-MM-dd");
+
+        String formDateString = App.getSqlDate(formDateCalendar);
+        Date formStDate = App.stringToDate(formDateString, "yyyy-MM-dd");
+
+        String missedVisitDateString = App.getSqlDate(secondDateCalendar);
+        Date missedVisitDt = App.stringToDate(missedVisitDateString, "yyyy-MM-dd");
+
+
         if (!(returnVisitDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString()))) {
             Calendar dateToday = Calendar.getInstance();
             dateToday.add(Calendar.MONTH, 24);
@@ -281,10 +291,28 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
             }
 
-            else if(thirdDateCalendar.equals(formDateCalendar) || thirdDateCalendar.before(formDateCalendar)){
+            else if(thirdDateCalendar.before(secondDateCalendar)){
                 thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_date_of_next_visit), Snackbar.LENGTH_INDEFINITE);
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_date_of_next_visit_cant_be_before_missed_visit_date), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
+            }
+
+            else if(nextAppointmentDate.compareTo(formStDate) == 0){
+                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_start_date_and_next_visit_date_cant_be_same), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
+            }
+
+            else if(nextAppointmentDate.compareTo(missedVisitDt) == 0){
+                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_missed_visit_date_and_next_visit_date_cant_be_same), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
