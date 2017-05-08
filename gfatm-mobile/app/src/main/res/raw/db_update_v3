@@ -1,0 +1,2 @@
+update encounter_type set uuid='2f23e428-417e-4fbd-a6d7-1e0dcf05578d' where encounter_type = 'Comorbidities-Blood Sugar Test Result';
+
