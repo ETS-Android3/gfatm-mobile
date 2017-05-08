@@ -521,7 +521,8 @@
     <string name="ctb_23">23</string>
     <string name="ctb_24">24</string>
     <string name="ctb_other_dst_media">Other DST Media</string>
-
+    <string name="ctb_form_can_not_be_submitted">Form will not be submitted as treatment initiation form for this patient is not submitted previously</string>
+    <string name="ctb_submission_can_not_be_less_than_form_date">Submission date can not be less than form date</string>
     <string-array name="ctb_screening_location_list">
         <item>@string/ctb_hospital</item>
         <item>@string/ctb_community</item>

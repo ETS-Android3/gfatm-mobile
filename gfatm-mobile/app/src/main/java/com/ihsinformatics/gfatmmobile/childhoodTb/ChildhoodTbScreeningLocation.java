@@ -826,6 +826,7 @@ public class ChildhoodTbScreeningLocation extends AbstractFormActivity implement
                 contactExternalId.setVisibility(View.GONE);
                 contactExternalIdHospital.setVisibility(View.GONE);
                 contactTbRegistrationNo.setVisibility(View.GONE);
+                scanQRCode.setVisibility(View.GONE);
 
             } else if(parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_doctor_healthworker_out_hospital))) {
                 referralOutsideOpd.setVisibility(View.VISIBLE);
@@ -844,6 +845,7 @@ public class ChildhoodTbScreeningLocation extends AbstractFormActivity implement
                 contactExternalId.setVisibility(View.GONE);
                 contactExternalIdHospital.setVisibility(View.GONE);
                 contactTbRegistrationNo.setVisibility(View.GONE);
+                scanQRCode.setVisibility(View.GONE);
             } else if(parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_child_tested_for_tb))) {
                 hearAboutUs.setVisibility(View.VISIBLE);
                 if(App.get(hearAboutUs).equalsIgnoreCase(getResources().getString(R.string.ctb_other_title))){
@@ -861,6 +863,7 @@ public class ChildhoodTbScreeningLocation extends AbstractFormActivity implement
                 contactExternalId.setVisibility(View.GONE);
                 contactExternalIdHospital.setVisibility(View.GONE);
                 contactTbRegistrationNo.setVisibility(View.GONE);
+                scanQRCode.setVisibility(View.GONE);
             } else if(parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_family_member_tb_patient))) {
                 patientEnrolledTb.getRadioGroup().clearCheck();
                 patientEnrolledTb.setVisibility(View.VISIBLE);
@@ -1069,6 +1072,7 @@ public class ChildhoodTbScreeningLocation extends AbstractFormActivity implement
                 contactExternalId.setVisibility(View.GONE);
                 contactExternalIdHospital.setVisibility(View.GONE);
                 contactTbRegistrationNo.setVisibility(View.GONE);
+                scanQRCode.setVisibility(View.GONE);
                 screeningReferralBoolean = false;
             }
 

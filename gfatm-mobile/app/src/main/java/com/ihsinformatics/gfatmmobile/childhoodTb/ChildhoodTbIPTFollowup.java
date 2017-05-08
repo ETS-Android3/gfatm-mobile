@@ -168,7 +168,7 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         fathersName = new TitledEditText(context, null, getResources().getString(R.string.ctb_father_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
-        weightAtBaseline = new TitledEditText(context, null, getResources().getString(R.string.ctb_weight_at_baseline), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
+        weightAtBaseline = new TitledEditText(context, null, getResources().getString(R.string.ctb_weight_at_baseline), "", "", 3, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
         iptStartDate = new TitledButton(context, null,  getResources().getString(R.string.ctb_ipt_start_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         iptStartDate.setTag("iptStartDate");
         dose = new TitledEditText(context, null, getResources().getString(R.string.ctb_dose_at_intiation_point), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
@@ -621,10 +621,17 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
         fathersName.getEditText().setKeyListener(null);
         String referralTransferLocation = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Case Confirmation", "WEIGHT (KG)");
         if(referralTransferLocation!=null){
-            String weight = referralTransferLocation.split("\\.")[0];
-            weightAtBaseline.getEditText().setText(weight);
-
+            weightAtBaseline.getEditText().setText(referralTransferLocation);
+            double weightValue = Double.parseDouble(referralTransferLocation);
+            if(weightValue<2.5){
+                iptDose.getRadioGroup().getButtons().get(0).setChecked(true);
+            }else if(weightValue>2.5 && weightValue<5.0){
+                iptDose.getRadioGroup().getButtons().get(1).setChecked(true);
+            }else if(weightValue>5.0){
+                iptDose.getRadioGroup().getButtons().get(2).setChecked(true);
+            }
         }
+
         weightAtBaseline.getEditText().setKeyListener(null);
 
 

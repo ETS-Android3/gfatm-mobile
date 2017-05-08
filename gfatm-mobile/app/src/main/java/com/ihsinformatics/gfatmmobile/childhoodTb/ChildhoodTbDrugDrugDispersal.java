@@ -43,6 +43,8 @@ import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 
+import org.openmrs.api.impl.VisitServiceImpl;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -434,8 +436,9 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
 
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-        observations.add(new String[]{"PATIENT HAVE TB", App.get(patientHaveTb).toUpperCase()});
-
+        if(!App.get(patientHaveTb).isEmpty()) {
+            observations.add(new String[]{"PATIENT HAVE TB", App.get(patientHaveTb).toUpperCase()});
+        }
         if(treatmentPlan.getVisibility()==View.VISIBLE) {
             observations.add(new String[]{"TREATMENT PLAN", App.get(treatmentPlan).equals(getResources().getString(R.string.ctb_intensive_phase)) ? "INTENSIVE PHASE" :
                     App.get(treatmentPlan).equals(getResources().getString(R.string.ctb_continuation_phase)) ? "CONTINUE REGIMEN"
@@ -1696,6 +1699,15 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
             int patientAge = App.getPatient().getPerson().getAge();
             if (patientHaveTb.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
                 treatmentPlan.setVisibility(View.VISIBLE);
+                treatmentPlan.getRadioGroup().getButtons().get(0).setChecked(true);
+                if(App.get(treatmentPlan).equals(getResources().getString(R.string.ctb_intensive_phase))){
+                    intensivePhaseRegimen.setVisibility(View.VISIBLE);
+                    intensivePhaseRegimen.getRadioGroup().getButtons().get(0).setChecked(true);
+                    typeFixedDosePrescribedIntensive.setVisibility(View.VISIBLE);
+                    typeFixedDosePrescribedIntensive.getSpinner().selectValue(getResources().getString(R.string.ctb_current_formulation));
+                    currentTabletsofE.setVisibility(View.VISIBLE);
+                    currentTabletsofRHZ.setVisibility(View.VISIBLE);
+                }
                 moAdditionalTreatment.setVisibility(View.VISIBLE);
 
                 iptDose.setVisibility(View.GONE);

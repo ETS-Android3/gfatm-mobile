@@ -208,7 +208,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         // first page views...
         formDate = new TitledButton(context, "Section A: TB Treatment Initiation ", getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        weightAtBaseline = new TitledEditText(context, null, getResources().getString(R.string.ctb_weight_at_baseline), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
+        weightAtBaseline = new TitledEditText(context, null, getResources().getString(R.string.ctb_weight_at_baseline), "", "", 3, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
         patientHaveTb = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_have_tb), getResources().getStringArray(R.array.ctb_patient_have_tb_list),null, App.HORIZONTAL, App.VERTICAL,true);
         regDate = new TitledButton(context, null, getResources().getString(R.string.ctb_registration_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         cnicLinearLayout = new LinearLayout(context);
@@ -1975,9 +1975,15 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         autopopulateFormTask.execute("");
         String referralTransferLocation = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Case Confirmation", "WEIGHT (KG)");
         if(referralTransferLocation!=null){
-            String weight = referralTransferLocation.split("\\.")[0];
-            weightAtBaseline.getEditText().setText(weight);
-
+            weightAtBaseline.getEditText().setText(referralTransferLocation);
+            double weightValue = Double.parseDouble(referralTransferLocation);
+            if(weightValue<2.5){
+                iptDose.getRadioGroup().getButtons().get(0).setChecked(true);
+            }else if(weightValue>2.5 && weightValue<5.0){
+                iptDose.getRadioGroup().getButtons().get(1).setChecked(true);
+            }else if(weightValue>5.0){
+                iptDose.getRadioGroup().getButtons().get(2).setChecked(true);
+            }
         }
         weightAtBaseline.getEditText().setKeyListener(null);
         Bundle bundle = this.getArguments();
