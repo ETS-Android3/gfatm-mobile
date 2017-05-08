@@ -961,7 +961,10 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                 weight.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("HEIGHT (CM)")) {
                 height.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("COUGH")) {
+            }
+            else if (obs[0][0].equals("WEIGHT PERCENTILE GROUP")) {
+                weightPercentile.getSpinner().selectValue(obs[0][1]);
+            }else if (obs[0][0].equals("COUGH")) {
                 for (RadioButton rb : cough.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.ctb_yes)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);

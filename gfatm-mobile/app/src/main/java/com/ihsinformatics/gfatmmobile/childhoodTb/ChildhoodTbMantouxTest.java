@@ -148,7 +148,7 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        testId = new TitledEditText(context,null,getResources().getString(R.string.ctb_test_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,true);
+        testId = new TitledEditText(context,null,getResources().getString(R.string.ctb_test_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,true);
         formType = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_type_of_form),getResources().getStringArray(R.array.ctb_type_of_form_list),null,App.HORIZONTAL,App.VERTICAL,true);
         weightPercentile = new TitledSpinner(context,null,getResources().getString(R.string.ctb_weight_percentile),getResources().getStringArray(R.array.ctb_weight_percentile_list),null,App.VERTICAL,true);
         pointTestBeingDone = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_point_test_being_done),getResources().getStringArray(R.array.ctb_ultrasound_test_point_list),getResources().getString(R.string.ctb_diagnostic),App.VERTICAL,App.VERTICAL,true);
@@ -401,6 +401,7 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         if (App.get(formType).equals(getResources().getString(R.string.ctb_order))) {
             observations.add(new String[]{"TEST ID", App.get(testId)});
+            observations.add(new String[]{"WEIGHT PERCENTILE GROUP", App.get(weightPercentile)});
             observations.add(new String[]{"TEST CONTEXT STATUS", App.get(pointTestBeingDone).equals(getResources().getString(R.string.ctb_diagnostic)) ? "DIAGNOSTIC TESTING" :
                     "REGULAR FOLLOW UP"});
             if(monthTreatment.getVisibility()==View.VISIBLE){
@@ -563,6 +564,8 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
                     testIdView.setEnabled(false);
                     testIdView.setImageResource(R.drawable.ic_checked_green);
                     testId.getEditText().setText(obs[0][1]);
+                }  else if (obs[0][0].equals("WEIGHT PERCENTILE GROUP")) {
+                    weightPercentile.getSpinner().selectValue(obs[0][1]);
                 }else if (obs[0][0].equals("TEST CONTEXT STATUS")) {
                     for (RadioButton rb : pointTestBeingDone.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.ctb_diagnostic)) && obs[0][1].equals("DIAGNOSTIC TESTING")) {
@@ -682,7 +685,7 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
 
         }
 
-        String weightPercentileString = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Case Confirmation", "WEIGHT PERCENTILE");
+        String weightPercentileString = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Case Confirmation", "WEIGHT PERCENTILE GROUP");
         if(weightPercentileString!=null){
             weightPercentile.getSpinner().selectValue(weightPercentileString);
         }
