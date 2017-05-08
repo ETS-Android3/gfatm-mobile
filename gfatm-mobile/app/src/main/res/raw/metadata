@@ -4560,7 +4560,7 @@ INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-Referral','Add Childh
 INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-Missed Visit Followup','Add Childhood TB Forms','View Childhood TB Forms','5a9588f3-9abc-4387-92bb-f1ab3565bbd6');
 INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-End of Followup','Add Childhood TB Forms','View Childhood TB Forms','39686bc2-1af0-4f61-a4cf-ce987d9dbcbb');
 INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Blood Sugar Test Order','Add Comorbidities Forms','View Comorbidities Forms','224e4898-2246-4e48-bc12-03fa0dab53e3');
-INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Blood Sugar Test Result','Add Comorbidities Forms','View Comorbidities Forms','    2f23e428-417e-4fbd-a6d7-1e0dcf05578d');
+INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Blood Sugar Test Result','Add Comorbidities Forms','View Comorbidities Forms','2f23e428-417e-4fbd-a6d7-1e0dcf05578d');
 INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-HbA1C Test Order','Add Comorbidities Forms','View Comorbidities Forms','4f1faaa7-ac38-4c97-9f1e-ae8ef31da24d');
 INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-HbA1C Test Result','Add Comorbidities Forms','View Comorbidities Forms','39cd9f67-bf76-4f7f-83cc-696d83848466');
 INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Lipid Test Order','Add Comorbidities Forms','View Comorbidities Forms','5d75ef93-f450-4ab8-aef5-1d6e365bad34');
