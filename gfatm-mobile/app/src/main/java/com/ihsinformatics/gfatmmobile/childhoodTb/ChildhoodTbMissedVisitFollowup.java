@@ -182,32 +182,32 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
 
         Date date = new Date();
 
-        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
+        if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
 
             if (formDateCalendar.after(App.getCalendar(date))) {
 
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
-            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
             }else
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         }
-        if (!missedVisitDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString())) {
+        if (!missedVisitDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString())) {
 
             //
             // +Date date = App.stringToDate(sampleSubmitDate.getButton().getText().toString(), "dd-MMM-yyyy");
@@ -220,9 +220,9 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
                 snackbar.show();
 
             } else
-                missedVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+                missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         }
-        if (!nextVisitDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", thirdDateCalender).toString())) {
+        if (!nextVisitDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalender).toString())) {
             if (thirdDateCalender.after(date)) {
 
                 thirdDateCalender = App.getCalendar(date);
@@ -231,8 +231,12 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
                 snackbar.show();
 
             } else
-                nextVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalender).toString());
+                nextVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalender).toString());
         }
+
+        formDate.getButton().setEnabled(true);
+        missedVisitDate.getButton().setEnabled(true);
+        nextVisitDate.getButton().setEnabled(true);
       }
 
     @Override
@@ -549,6 +553,7 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
         super.onClick(view);
 
         if (view == formDate.getButton()) {
+            formDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
@@ -557,6 +562,7 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
             formDateFragment.show(getFragmentManager(), "DatePicker");
         }
         if (view == missedVisitDate.getButton()) {
+            missedVisitDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
@@ -565,6 +571,7 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
             secondDateFragment.show(getFragmentManager(), "DatePicker");
         }
         if (view == nextVisitDate.getButton()) {
+            nextVisitDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", THIRD_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
@@ -603,9 +610,9 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
         if (snackbar != null)
             snackbar.dismiss();
 
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        missedVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-        nextVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+        nextVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         whyUnableToContact.setVisibility(View.GONE);
         otherUnableToContact.setVisibility(View.GONE);
         otherMissedVisitReason.setVisibility(View.GONE);
@@ -694,6 +701,14 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
             updateDisplay();
 
         }
+
+
+        @Override
+        public void onCancel(DialogInterface dialog) {
+            super.onCancel(dialog);
+            updateDisplay();
+        }
+
     }
 
     class MyAdapter extends PagerAdapter {

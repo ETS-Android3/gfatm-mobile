@@ -151,12 +151,13 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        testId = new TitledEditText(context,null,getResources().getString(R.string.ctb_test_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,true);
+        testId = new TitledEditText(context,null,getResources().getString(R.string.ctb_test_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,true);
         formType = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_type_of_form),getResources().getStringArray(R.array.ctb_type_of_form_list),null,App.HORIZONTAL,App.VERTICAL,true);
         dateSubmission = new TitledButton(context, null, getResources().getString(R.string.ctb_date_submission), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         dateSubmission.setTag("dateSubmission");
         pointTestBeingDone = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_point_test_being_done),getResources().getStringArray(R.array.ctb_point_test_being_done_list),getResources().getString(R.string.ctb_baseline),App.VERTICAL,App.VERTICAL,true);
         monthTreatment= new TitledSpinner(context,null,getResources().getString(R.string.ctb_month_treatment),getResources().getStringArray(R.array.ctb_0_to_24),null,App.HORIZONTAL,true);
+        updateFollowUpMonth();
         specimenType = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_specimen_type),getResources().getStringArray(R.array.ctb_specimen_type_list),null,App.HORIZONTAL,App.VERTICAL,true);
         specimenComeFrom = new TitledSpinner(context,null,getResources().getString(R.string.ctb_speciment_route),getResources().getStringArray(R.array.ctb_speciment_route_list),null,App.VERTICAL,true);
         otherSpecimentComeFrom = new TitledEditText(context,null,getResources().getString(R.string.ctb_other_specify),"","",50,RegexUtil.ALPHA_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
@@ -191,7 +192,7 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate,formType,linearLayout,dateSubmission,pointTestBeingDone,monthTreatment,specimenType,specimenComeFrom,otherSpecimentComeFrom,smearResult
+                {{formType,linearLayout,formDate,dateSubmission,pointTestBeingDone,monthTreatment,specimenType,specimenComeFrom,otherSpecimentComeFrom,smearResult
                 ,afbSeenOneField}};
 
         formDate.getButton().setOnClickListener(this);
@@ -240,6 +241,32 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
 
     }
 
+
+    public void updateFollowUpMonth(){
+        String treatmentDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+        String format = "";
+
+
+        if (treatmentDate.contains("/")) {
+            format = "dd/MM/yyyy";
+        } else {
+            format = "yyyy-MM-dd";
+        }
+        Date convertedDate = App.stringToDate(treatmentDate, format);
+        Calendar treatmentDateCalender = App.getCalendar(convertedDate);
+        int diffYear = formDateCalendar.get(Calendar.YEAR) - treatmentDateCalender.get(Calendar.YEAR);
+        int diffMonth = diffYear * 12 + formDateCalendar.get(Calendar.MONTH) - treatmentDateCalender.get(Calendar.MONTH);
+
+        String [] monthArray = new String[diffMonth + 1];
+
+        for(int i =0 ; i <= diffMonth ; i++){
+            monthArray[i] = String.valueOf(i);
+        }
+
+        monthTreatment.getSpinner().setSpinnerData(monthArray);
+    }
+
+
     @Override
     public void updateDisplay() {
 
@@ -248,6 +275,37 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
 
 
         Date date = new Date();
+        if(formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_result))){
+            Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "Childhood TB-AFB Smear Test Order");
+            String format = "";
+            String formDa = formDate.getButton().getText().toString();
+
+            for(int i =0 ; i < testIds.length ; i++){
+                if(testIds[i][0].equals(testId.getEditText().getText().toString())){
+                    String orderdate = testIds[i][1].toString();
+                    if (orderdate.contains("/")) {
+                        format = "dd/MM/yyyy";
+                    } else {
+                        format = "yyyy-MM-dd";
+                    }
+
+                    Date orderDate = App.stringToDate(orderdate, format);
+
+                    if(formDateCalendar.before(App.getCalendar(orderDate))){
+                        formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                        snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
+                        snackbar.show();
+
+                        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        break;
+                    }
+                    else {
+                        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                    }
+                }
+            }
+        }
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
@@ -289,6 +347,9 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
             } else
                 dateSubmission.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         }
+        updateFollowUpMonth();
+        formDate.getButton().setEnabled(true);
+        dateSubmission.getButton().setEnabled(true);
     }
 
     @Override
@@ -673,6 +734,7 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
         super.onClick(view);
 
         if (view == formDate.getButton()) {
+            formDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
@@ -681,6 +743,7 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
             formDateFragment.show(getFragmentManager(), "DatePicker");
         }
         if (view == dateSubmission.getButton()) {
+            dateSubmission.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
@@ -791,6 +854,7 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
     }
 
     void goneVisibility() {
+        formDate.setVisibility(View.GONE);
         dateSubmission.setVisibility(View.GONE);
         pointTestBeingDone.setVisibility(View.GONE);
         monthTreatment.setVisibility(View.GONE);
@@ -803,6 +867,7 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
     }
     void showTestOrderOrTestResult() {
         if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.ctb_order))) {
+            formDate.setVisibility(View.VISIBLE);
             dateSubmission.setVisibility(View.VISIBLE);
             pointTestBeingDone.setVisibility(View.VISIBLE);
             specimenType.setVisibility(View.VISIBLE);
@@ -811,6 +876,7 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
             afbSeenOneField.setVisibility(View.GONE);
 
         } else {
+            formDate.setVisibility(View.VISIBLE);
             smearResult.setVisibility(View.VISIBLE);
 
             dateSubmission.setVisibility(View.GONE);

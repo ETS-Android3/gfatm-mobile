@@ -117,11 +117,11 @@
     <string name="ctb_weight">Weight (kg)</string>
     <string name="ctb_height">Height (cm)</string>
     <string name="ctb_weight_percentile">Weight Percentile</string>
-    <string name="ctb_less_than_5">≤5th percentile</string>
-    <string name="ctb_less_than_10">6-≤10th percentile</string>
-    <string name="ctb_less_than_25">11-≤25th percentile</string>
-    <string name="ctb_less_than_50">26-≤50th percentile</string>
-    <string name="ctb_greater_than_50">>50th percentile</string>
+    <string name="ctb_less_than_5">&lt;=5th percentile</string>
+    <string name="ctb_less_than_10">6-&lt;=10th percentile</string>
+    <string name="ctb_less_than_25">11-&lt;=25th percentile</string>
+    <string name="ctb_less_than_50">26-&lt;=50th percentile</string>
+    <string name="ctb_greater_than_50">&gt;50th percentile</string>
     <string name="ctb_fever">Does the child have a fever?</string>
     <string name="ctb_general_appearance">General Appearance</string>
     <string name="ctb_remarkable">Remarkable</string>

@@ -322,7 +322,7 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
         if (snackbar != null)
             snackbar.dismiss();
         Date date = new Date();
-        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
+        if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
 
@@ -331,25 +331,25 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
 
             if (formDateCalendar.after(App.getCalendar(date))) {
 
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
-            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.ctb_form_date_less_than_patient_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
             } else
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         }
-        if (!nextDateOfDrug.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString())) {
+        if (!nextDateOfDrug.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString())) {
 
             //
             // +Date date = App.stringToDate(sampleSubmitDate.getButton().getText().toString(), "dd-MMM-yyyy");
@@ -362,9 +362,11 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
                 snackbar.show();
 
             } else {
-                nextDateOfDrug.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+                nextDateOfDrug.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
             }
         }
+        formDate.getButton().setEnabled(true);
+        nextDateOfDrug.getButton().setEnabled(true);
     }
 
     @Override
@@ -1193,6 +1195,7 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
         super.onClick(view);
 
         if (view == formDate.getButton()) {
+            formDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
@@ -1201,6 +1204,7 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
             formDateFragment.show(getFragmentManager(), "DatePicker");
         }
         if (view == nextDateOfDrug.getButton()) {
+            nextDateOfDrug.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
@@ -1388,7 +1392,8 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
         if (snackbar != null)
             snackbar.dismiss();
 
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        nextDateOfDrug.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         treatmentPlan.setVisibility(View.GONE);
         intensivePhaseRegimen.setVisibility(View.GONE);
         typeFixedDosePrescribedIntensive.setVisibility(View.GONE);
@@ -1454,7 +1459,6 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
         String date2 = "";
         String ctbRegimen1 = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.CHILDHOODTB_TREATMENT_INITIATION, "REGIMEN");
         String ctbTypeOfDose1 = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.CHILDHOODTB_TREATMENT_INITIATION, "PAEDIATRIC DOSE COMBINATION");
-
         if (!(ctbRegimen1 == null || ctbRegimen1.equals("")))
             date1 = serverService.getEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + Forms.CHILDHOODTB_TREATMENT_INITIATION);
         String ctbRegimen2 = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.CHILDHOODTB_TB_TREATMENT_FOLLOWUP, "REGIMEN");
@@ -1462,7 +1466,27 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
 
         if (!(ctbRegimen2 == null || ctbRegimen2.equals("")))
             date2 = serverService.getEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + Forms.CHILDHOODTB_TB_TREATMENT_FOLLOWUP);
-        if(!date2.equals("") || !date2.equals("")) {
+        if(!date1.equals("") && date2.equals("")) {
+            for (RadioButton rb : intensivePhaseRegimen.getRadioGroup().getButtons()) {
+                if (rb.getText().equals(getResources().getString(R.string.ctb_rhze)) && ctbRegimen1.equals("RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL PROPHYLAXIS")) {
+                    rb.setChecked(true);
+                    break;
+                } else if (rb.getText().equals(getResources().getString(R.string.ctb_rhz)) && ctbRegimen1.equals("RIFAMPICIN/ISONIAZID/PYRAZINAMIDE")) {
+                    rb.setChecked(true);
+                    break;
+                }
+            }
+        }else if(date1.equals("") && !date2.equals("")) {
+            for (RadioButton rb : intensivePhaseRegimen.getRadioGroup().getButtons()) {
+                if (rb.getText().equals(getResources().getString(R.string.ctb_rhze)) && ctbRegimen2.equals("RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL PROPHYLAXIS")) {
+                    rb.setChecked(true);
+                    break;
+                } else if (rb.getText().equals(getResources().getString(R.string.ctb_rhz)) && ctbRegimen2.equals("RIFAMPICIN/ISONIAZID/PYRAZINAMIDE")) {
+                    rb.setChecked(true);
+                    break;
+                }
+            }
+        }else if(!date2.equals("") || !date1.equals("")) {
             Date d1 = null;
             Date d2 = null;
             if (date1.contains("/")) {
@@ -1505,26 +1529,6 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
                         rb.setChecked(true);
                         break;
                     }
-                }
-            }
-        }else if(date1!=null && date2==null) {
-            for (RadioButton rb : intensivePhaseRegimen.getRadioGroup().getButtons()) {
-                if (rb.getText().equals(getResources().getString(R.string.ctb_rhze)) && ctbRegimen1.equals("RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL PROPHYLAXIS")) {
-                    rb.setChecked(true);
-                    break;
-                } else if (rb.getText().equals(getResources().getString(R.string.ctb_rhz)) && ctbRegimen1.equals("RIFAMPICIN/ISONIAZID/PYRAZINAMIDE")) {
-                    rb.setChecked(true);
-                    break;
-                }
-            }
-        }else if(date1==null && date2!=null) {
-            for (RadioButton rb : intensivePhaseRegimen.getRadioGroup().getButtons()) {
-                if (rb.getText().equals(getResources().getString(R.string.ctb_rhze)) && ctbRegimen2.equals("RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL PROPHYLAXIS")) {
-                    rb.setChecked(true);
-                    break;
-                } else if (rb.getText().equals(getResources().getString(R.string.ctb_rhz)) && ctbRegimen2.equals("RIFAMPICIN/ISONIAZID/PYRAZINAMIDE")) {
-                    rb.setChecked(true);
-                    break;
                 }
             }
         }
