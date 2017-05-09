@@ -171,7 +171,7 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
         dateOfSubmission = new TitledButton(context, null, getResources().getString(R.string.fast_date_of_submission), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         // testDate = new TitledButton(context, null, getResources().getString(R.string.fast_test_date), DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
         testContextStatus = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_at_what_point_test_being_done), getResources().getStringArray(R.array.fast_test_being_done_list), getResources().getString(R.string.fast_baseline_new), App.VERTICAL, App.VERTICAL);
-        monthOfTreatment = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_month_of_treatment), getResources().getStringArray(R.array.fast_number_list), getResources().getString(R.string.fast_zero), App.HORIZONTAL);
+        monthOfTreatment = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_month_of_treatment), getResources().getStringArray(R.array.fast_number_list), "", App.HORIZONTAL);
         updateFollowUpMonth();
         specimenType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_specimen_type), getResources().getStringArray(R.array.fast_specimen_type_list), getResources().getString(R.string.fast_sputum), App.VERTICAL, App.VERTICAL);
         specimenSource = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_where_did_the_specimen_come_from), getResources().getStringArray(R.array.fast_specimen_come_from_list), getResources().getString(R.string.fast_lymph), App.VERTICAL, App.VERTICAL);
@@ -449,7 +449,10 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
                                 snackbar.show();
                                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
                                 break;
-                            } else
+                            }
+
+
+                            else
                                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
                         }
 
@@ -460,10 +463,16 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
         }
 
 
-        if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
+         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
+
+            String treatmentDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+
+            if(treatmentDate != null){
+                treatDateCalender = App.getCalendar(App.stringToDate(treatmentDate, "yyyy-MM-dd"));
+            }
 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
@@ -482,7 +491,7 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-            } /*else if (treatDateCalender != null) {
+            } else if (treatDateCalender != null) {
                 if (formDateCalendar.before(treatDateCalender)) {
                     formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
@@ -493,7 +502,7 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
                 } else {
                     formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
                 }
-            }*/ else
+            } else
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         }
         if (!(dateOfSubmission.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
@@ -884,14 +893,14 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
             int diffYear = formDateCalendar.get(Calendar.YEAR) - treatmentDateCalender.get(Calendar.YEAR);
             int diffMonth = diffYear * 12 + formDateCalendar.get(Calendar.MONTH) - treatmentDateCalender.get(Calendar.MONTH);
 
-            if (diffMonth < 0) {
+            if (diffMonth == 0) {
                 monthArray = new String[1];
-                monthArray[0] = "0";
+                monthArray[0] = "1";
                 monthOfTreatment.getSpinner().setSpinnerData(monthArray);
             } else {
-                monthArray = new String[diffMonth + 1];
-                for (int i = 0; i <= diffMonth; i++) {
-                    monthArray[i] = String.valueOf(i);
+                monthArray = new String[diffMonth];
+                for (int i = 0; i < diffMonth; i++) {
+                    monthArray[i] = String.valueOf(i+1);
                 }
                 monthOfTreatment.getSpinner().setSpinnerData(monthArray);
             }

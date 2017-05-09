@@ -308,11 +308,11 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
             String personDOB = App.getPatient().getPerson().getBirthdate();
 
 
-          //  String treatmentDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+            String treatmentDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
 
-         /*   if(treatmentDate != null){
+           if(treatmentDate != null){
                 treatDateCalender = App.getCalendar(App.stringToDate(treatmentDate, "yyyy-MM-dd"));
-            }*/
+            }
 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
@@ -333,7 +333,7 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyyy", formDateCalendar).toString());
             }
 
-         /*   else if (treatDateCalender != null) {
+           else if (treatDateCalender != null) {
                 if(formDateCalendar.before(treatDateCalender)) {
                     formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
@@ -345,7 +345,7 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
                 else {
                     formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
                 }
-            }*/
+            }
 
             else
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
@@ -401,14 +401,14 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
             int diffYear = formDateCalendar.get(Calendar.YEAR) - treatmentDateCalender.get(Calendar.YEAR);
             int diffMonth = diffYear * 12 + formDateCalendar.get(Calendar.MONTH) - treatmentDateCalender.get(Calendar.MONTH);
 
-            if (diffMonth < 0) {
+            if (diffMonth == 0) {
                 monthArray = new String[1];
-                monthArray[0] = "0";
+                monthArray[0] = "1";
                 monthOfTreatment.getSpinner().setSpinnerData(monthArray);
             } else {
-                monthArray = new String[diffMonth + 1];
-                for (int i = 0; i <= diffMonth; i++) {
-                    monthArray[i] = String.valueOf(i);
+                monthArray = new String[diffMonth];
+                for (int i = 0; i < diffMonth; i++) {
+                    monthArray[i] = String.valueOf(i+1);
                 }
                 monthOfTreatment.getSpinner().setSpinnerData(monthArray);
             }
