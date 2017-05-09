@@ -39,6 +39,7 @@ import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -135,6 +136,8 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
         patientNeedMoreTests = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_patient_need_more_test),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL);
         endOfFollowUp = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_end_of_followup),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL);
         scheduleAnotherVisit = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_schedule_another_followup),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL);
+
+        secondDateCalendar.add(secondDateCalendar.DAY_OF_MONTH, 30);
         appointmentDate = new TitledButton(context, null, getResources().getString(R.string.ctb_next_appointment_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         appointmentDate.setTag("appointmentDate");
 

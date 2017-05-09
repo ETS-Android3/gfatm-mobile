@@ -53,7 +53,7 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
     TitledButton sampleSubmitDate;
     TitledRadioGroup baselineRepeatFollowup;
     TitledRadioGroup patientCategory;
-    TitledSpinner reasonBaselineRepeat;
+    TitledRadioGroup reasonBaselineRepeat;
     TitledRadioGroup specimenType;
     TitledRadioGroup specimenComeFrom;
     TitledEditText otherSpecimentComeFrom;
@@ -142,7 +142,7 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
         sampleSubmitDate.setTag("sampleSubmitDate");
         baselineRepeatFollowup = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_baseline_repeat_followup), getResources().getStringArray(R.array.ctb_ctb_baseline_repeat_followup_list), null, App.VERTICAL,App.VERTICAL,true);
         patientCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_category), getResources().getStringArray(R.array.ctb_patient_category_list), null, App.HORIZONTAL, App.VERTICAL);
-        reasonBaselineRepeat = new TitledSpinner(context, null, getResources().getString(R.string.ctb_reason_for_repeating), getResources().getStringArray(R.array.ctb_reason_for_repeating_list), null, App.VERTICAL);
+        reasonBaselineRepeat = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_reason_for_repeating), getResources().getStringArray(R.array.ctb_reason_for_repeating_list), null, App.HORIZONTAL,App.VERTICAL,true);
         specimenType = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_specimen_type), getResources().getStringArray(R.array.ctb_specimen_type_list), null, App.HORIZONTAL, App.VERTICAL,true);
         specimenComeFrom = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_speciment_route), getResources().getStringArray(R.array.ctb_speciment_route_list), null, App.HORIZONTAL,App.VERTICAL,true);
         otherSpecimentComeFrom = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
@@ -152,7 +152,7 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
         testId = new TitledEditText(context, null, getResources().getString(R.string.ctb_test_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
 
 
-        views = new View[]{formDate.getButton(), sampleSubmitDate.getButton(), baselineRepeatFollowup.getRadioGroup(), patientCategory.getRadioGroup(), reasonBaselineRepeat.getSpinner(),
+        views = new View[]{formDate.getButton(), sampleSubmitDate.getButton(), baselineRepeatFollowup.getRadioGroup(), patientCategory.getRadioGroup(), reasonBaselineRepeat.getRadioGroup(),
                 specimenType.getRadioGroup(), specimenComeFrom.getRadioGroup(), sampleAcceptedByTechnician.getRadioGroup(), whySampleRejcted.getSpinner(),
                 otherSpecimentComeFrom.getEditText(), reasonForRejection.getEditText(), testId.getEditText()};
 
@@ -165,7 +165,7 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
         sampleSubmitDate.getButton().setOnClickListener(this);
         baselineRepeatFollowup.getRadioGroup().setOnCheckedChangeListener(this);
         patientCategory.getRadioGroup().setOnCheckedChangeListener(this);
-        reasonBaselineRepeat.getSpinner().setOnItemSelectedListener(this);
+        reasonBaselineRepeat.getRadioGroup().setOnCheckedChangeListener(this);
         specimenType.getRadioGroup().setOnCheckedChangeListener(this);
         specimenComeFrom.getRadioGroup().setOnCheckedChangeListener(this);
         sampleAcceptedByTechnician.getRadioGroup().setOnCheckedChangeListener(this);
@@ -181,14 +181,13 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
 
         if (snackbar != null)
             snackbar.dismiss();
-
+        String formDa = formDate.getButton().getText().toString();
+        String personDOB = App.getPatient().getPerson().getBirthdate();
 
         Date date = new Date();
 
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
-            String formDa = formDate.getButton().getText().toString();
-            String personDOB = App.getPatient().getPerson().getBirthdate();
 
 
             if (formDateCalendar.after(App.getCalendar(date))) {
@@ -216,14 +215,22 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
             //
             // +Date date = App.stringToDate(sampleSubmitDate.getButton().getText().toString(), "dd-MMM-yyyy");
 
-            if (secondDateCalendar.after(date)) {
+            if (secondDateCalendar.after(App.getCalendar(date))) {
 
                 secondDateCalendar = App.getCalendar(date);
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-            } else
+            }else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                sampleSubmitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+            }
+            else
                 sampleSubmitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         }
         formDate.getButton().setEnabled(true);
@@ -323,36 +330,6 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
                 reasonForRejection.getEditText().requestFocus();
                 error = true;
             }
-        }
-        if(!formDateCalendar.before(secondDateCalendar)){
-            formDate.getButton().setError("Form date should be less than Sample submit Date");
-            formDate.getButton().requestFocus();
-
-            int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
-
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
-            alertDialog.setMessage(getString(R.string.form_error));
-            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-            DrawableCompat.setTint(clearIcon, color);
-            alertDialog.setIcon(clearIcon);
-            alertDialog.setTitle(getResources().getString(R.string.title_error));
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            try {
-                                InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
-                                imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
-                            } catch (Exception e) {
-// TODO: handle exception
-                            }
-                            dialog.dismiss();
-                        }
-                    });
-            alertDialog.show();
-            error = true;
-        }
-        else{
-            formDate.getButton().setError(null);
         }
         if (error) {
 
@@ -615,10 +592,18 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
                     }
                 }
             } else if (obs[0][0].equals("REASON FOR BASELINE REPEAT TEST")) {
-                String value = obs[0][1].equals("RIF RESISTANT POSITIVE") ? getResources().getString(R.string.ctb_rr_positive) :
-                        (obs[0][1].equals("INVALID") ? getResources().getString(R.string.ctb_error_invalid_no_result) :
-                                getResources().getString(R.string.ctb_indeterminate));
-                reasonBaselineRepeat.getSpinner().selectValue(value);
+                for (RadioButton rb : reasonBaselineRepeat.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_rr_positive)) && obs[0][1].equals("RIF RESISTANT POSITIVE")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_error_invalid_no_result)) && obs[0][1].equals("INVALID")) {
+                        rb.setChecked(true);
+                        break;
+                    }else if (rb.getText().equals(getResources().getString(R.string.ctb_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
             } else if (obs[0][0].equals("SPECIMEN TYPE")) {
                 for (RadioButton rb : specimenType.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.ctb_sputum)) && obs[0][1].equals("SPUTUM")) {

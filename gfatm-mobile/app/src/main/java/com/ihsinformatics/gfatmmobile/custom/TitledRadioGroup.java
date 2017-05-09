@@ -21,7 +21,10 @@ public class TitledRadioGroup extends LinearLayout {
 
     public TitledRadioGroup(Context context, String title, String ques, String[] options, String defaultValue, int radioButtonsLayout, int layoutOrientation) {
         super(context);
-
+        if(!App.isTabletDevice(context)){
+            layoutOrientation = App.VERTICAL;
+            radioButtonsLayout = App.VERTICAL;
+        }
         MyLinearLayout linearLayout = new MyLinearLayout(context, title, layoutOrientation);
 
         questionView = new MyTextView(context, ques);
@@ -42,7 +45,10 @@ public class TitledRadioGroup extends LinearLayout {
 
     public TitledRadioGroup(Context context, String title, String ques, String[] options, String defaultValue, int radioButtonsLayout, int layoutOrientation, boolean mandatory) {
         super(context);
-
+        if(!App.isTabletDevice(context)){
+            layoutOrientation = App.VERTICAL;
+            radioButtonsLayout = App.VERTICAL;
+        }
         MyLinearLayout linearLayout = new MyLinearLayout(context, title, layoutOrientation);
         this.mandatory = mandatory;
 

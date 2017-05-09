@@ -22,7 +22,10 @@ public class TitledCheckBoxes extends LinearLayout {
 
     public TitledCheckBoxes(Context context, String title, String ques, String[] options, Boolean[] defaultValues, int radioButtonsLayout, int layoutOrientation) {
         super(context);
-
+        if(!App.isTabletDevice(context)){
+            layoutOrientation = App.VERTICAL;
+            radioButtonsLayout = App.VERTICAL;
+        }
         MyLinearLayout linearLayout = new MyLinearLayout(context, title, layoutOrientation);
         this.defaultValues = defaultValues;
 
@@ -52,7 +55,10 @@ public class TitledCheckBoxes extends LinearLayout {
 
     public TitledCheckBoxes(Context context, String title, String ques, String[] options, Boolean[] defaultValues, int radioButtonsLayout, int layoutOrientation, Boolean mandatory) {
         super(context);
-
+        if(!App.isTabletDevice(context)){
+            layoutOrientation = App.VERTICAL;
+            radioButtonsLayout = App.VERTICAL;
+        }
         MyLinearLayout linearLayout = new MyLinearLayout(context, title, layoutOrientation);
         this.defaultValues = defaultValues;
         this.mandatory = mandatory;

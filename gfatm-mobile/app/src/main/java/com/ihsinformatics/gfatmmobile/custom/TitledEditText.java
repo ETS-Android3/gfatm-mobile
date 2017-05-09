@@ -22,7 +22,9 @@ public class TitledEditText extends LinearLayout {
 
     public TitledEditText(Context context, String title, String ques, String defaultValue, String hint, int length, InputFilter filter, int inputType, int layoutOrientation, Boolean mandatory) {
         super(context);
-
+        if(!App.isTabletDevice(context)){
+            layoutOrientation = App.VERTICAL;
+        }
         MyLinearLayout linearLayout = new MyLinearLayout(context, title, layoutOrientation);
         this.mandatory = mandatory;
 
