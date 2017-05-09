@@ -290,6 +290,16 @@ public class FastContactRegistryForm extends AbstractFormActivity implements Rad
             error = true;
         }
 
+        else if (contacts.getVisibility() == View.VISIBLE  && Integer.parseInt(contacts.getEditText().getText().toString()) > 50) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            contacts.getEditText().setError(getString(R.string.fast_enter_value_between_0_50));
+            contacts.getEditText().requestFocus();
+            error = true;
+        }
+
         if (adultContacts.getVisibility() == View.VISIBLE && adultContacts.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
@@ -299,6 +309,18 @@ public class FastContactRegistryForm extends AbstractFormActivity implements Rad
             adultContacts.getEditText().requestFocus();
             error = true;
         }
+
+
+        else if (adultContacts.getVisibility() == View.VISIBLE  && Integer.parseInt(adultContacts.getEditText().getText().toString()) > 25) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            adultContacts.getEditText().setError(getString(R.string.fast_enter_value_between_0_25));
+            adultContacts.getEditText().requestFocus();
+            error = true;
+        }
+
 
         if (childhoodContacts.getVisibility() == View.VISIBLE && childhoodContacts.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
@@ -310,27 +332,8 @@ public class FastContactRegistryForm extends AbstractFormActivity implements Rad
             error = true;
         }
 
-        if (contacts.getVisibility() == View.VISIBLE && Integer.parseInt(contacts.getEditText().getText().toString()) > 50) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            contacts.getEditText().setError(getString(R.string.fast_enter_value_between_0_50));
-            contacts.getEditText().requestFocus();
-            error = true;
-        }
 
-        if (adultContacts.getVisibility() == View.VISIBLE && Integer.parseInt(adultContacts.getEditText().getText().toString()) > 25) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            adultContacts.getEditText().setError(getString(R.string.fast_enter_value_between_0_25));
-            adultContacts.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (childhoodContacts.getVisibility() == View.VISIBLE && Integer.parseInt(childhoodContacts.getEditText().getText().toString()) > 25){
+        else if (childhoodContacts.getVisibility() == View.VISIBLE && Integer.parseInt(childhoodContacts.getEditText().getText().toString()) > 25){
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
