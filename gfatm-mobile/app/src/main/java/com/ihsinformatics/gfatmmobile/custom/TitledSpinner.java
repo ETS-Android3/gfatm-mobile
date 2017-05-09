@@ -21,7 +21,9 @@ public class TitledSpinner extends LinearLayout {
 
     public TitledSpinner(Context context, String title, String ques, String[] options, String defaultValue, int layoutOrientation) {
         super(context);
-
+        if(!App.isTabletDevice(context)){
+            layoutOrientation = App.VERTICAL;
+        }
         MyLinearLayout linearLayout = new MyLinearLayout(context, title, layoutOrientation);
 
         questionView = new MyTextView(context, ques);
@@ -35,6 +37,10 @@ public class TitledSpinner extends LinearLayout {
 
     public TitledSpinner(Context context, String title, String ques, String[] options, String defaultValue, int layoutOrientation, boolean mandatory) {
         super(context);
+
+        if(!App.isTabletDevice(context)){
+            layoutOrientation = App.VERTICAL;
+        }
 
         MyLinearLayout linearLayout = new MyLinearLayout(context, title, layoutOrientation);
         this.mandatory = mandatory;
