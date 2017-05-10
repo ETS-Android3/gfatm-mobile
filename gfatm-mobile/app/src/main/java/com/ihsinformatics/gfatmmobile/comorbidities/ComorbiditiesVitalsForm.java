@@ -131,7 +131,7 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
     public void initViews() {
 
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         vitalsMonthOfVisit = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_month_of_visit), "", getResources().getString(R.string.comorbidities_vitals_month_of_visit_range), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         vitalsWeight = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_weight), "", getResources().getString(R.string.comorbidities_vitals_weight_range), 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
@@ -139,7 +139,7 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
         vitalsHeightInMeters = new MyTextView(context, "");
         vitalsHeightInMeters.setVisibility(View.GONE);
         vitalsBodyMassIndex = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_bmi), "", getResources().getString(R.string.comorbidities_vitals_bmi_range), 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        vitalsBodyMassIndex.getEditText().setFocusable(false);
+        //vitalsBodyMassIndex.getEditText().setFocusable(false);
         vitalsWaistCircumference = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_waist_circumference), "", getResources().getString(R.string.comorbidities_vitals_waist_hip_whr_range), 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         vitalsHipCircumference = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_hip_circumference), "", getResources().getString(R.string.comorbidities_vitals_waist_hip_whr_range), 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         vitalsWaistHipRatio = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_whr), "", getResources().getString(R.string.comorbidities_vitals_waist_hip_whr_range), 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
@@ -205,10 +205,45 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
                             vitalsWeight.getEditText().setError(getString(R.string.comorbidities_vitals_weight_limit));
                         } else {
                             if (!App.get(vitalsWeight).isEmpty() && !App.get(vitalsHeight).isEmpty()) {
-                                vitalsBodyMassIndex.getEditText().setText(String.valueOf(calculateBMI()));
-                                vitalsBodyMassIndex.getEditText().setError(null);
+
+                                if(calculateBMI() < 0 || calculateBMI() > 200) {
+
+                                    //For Invalid BMI
+                                    vitalsBodyMassIndex.getEditText().setError(getString(R.string.comorbidities_vitals_bmi_invalid));
+
+                                    int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
+
+                                    final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+                                    alertDialog.setMessage(getString(R.string.comorbidities_vitals_bmi_invalid));
+                                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                                    DrawableCompat.setTint(clearIcon, color);
+                                    alertDialog.setIcon(clearIcon);
+                                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    try {
+                                                        InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
+                                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                                    } catch (Exception e) {
+                                                        // TODO: handle exception
+                                                    }
+                                                    dialog.dismiss();
+                                                }
+                                            });
+                                    alertDialog.show();
+                                }
+                                else {
+                                    //For Valid BMI
+                                    vitalsBodyMassIndex.getEditText().setText(String.valueOf(calculateBMI()));
+                                    vitalsBodyMassIndex.getEditText().setError(null);
+                                }
                             }
                         }
+                    }
+                    else if (vitalsWeight.getEditText().getText().length() == 0) {
+                        vitalsBodyMassIndex.getEditText().setText("");
+                        vitalsBodyMassIndex.getEditText().setError(null);
                     }
                 } catch (NumberFormatException nfe) {
                     //Exception: User might be entering " " (empty) value
@@ -239,12 +274,46 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
                             vitalsHeightInMeters.setText(getResources().getString(R.string.comorbidities_vitals_height_metres) + String.valueOf(convertCentimeterToMeter(Double.parseDouble(vitalsHeight.getEditText().getText().toString()))) + " m");
                             vitalsHeightInMeters.setVisibility(View.VISIBLE);
                             if (!App.get(vitalsWeight).isEmpty() && !App.get(vitalsHeight).isEmpty()) {
-                                vitalsBodyMassIndex.getEditText().setText(String.valueOf(calculateBMI()));
-                                vitalsBodyMassIndex.getEditText().setError(null);
+
+                                if(calculateBMI() < 0 || calculateBMI() > 200) {
+
+                                    //For Invalid BMI
+                                    vitalsBodyMassIndex.getEditText().setError(getString(R.string.comorbidities_vitals_bmi_invalid));
+
+                                    int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
+
+                                    final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+                                    alertDialog.setMessage(getString(R.string.comorbidities_vitals_bmi_invalid));
+                                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                                    DrawableCompat.setTint(clearIcon, color);
+                                    alertDialog.setIcon(clearIcon);
+                                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    try {
+                                                        InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
+                                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                                    } catch (Exception e) {
+                                                        // TODO: handle exception
+                                                    }
+                                                    dialog.dismiss();
+                                                }
+                                            });
+                                    alertDialog.show();
+                                }
+                                else {
+
+                                    //For Valid BMI
+                                    vitalsBodyMassIndex.getEditText().setText(String.valueOf(calculateBMI()));
+                                    vitalsBodyMassIndex.getEditText().setError(null);
+                                }
                             }
                         }
                     } else if (vitalsHeight.getEditText().getText().length() == 0) {
                         vitalsHeightInMeters.setVisibility(View.GONE);
+                        vitalsBodyMassIndex.getEditText().setText("");
+                        vitalsBodyMassIndex.getEditText().setError(null);
                     }
                 } catch (NumberFormatException nfe) {
                     //Exception: User might be entering " " (empty) value
@@ -273,10 +342,48 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
                             vitalsWaistCircumference.getEditText().setError(getString(R.string.comorbidities_vitals_waist_hip_whr_limit));
                         } else {
                             if (!App.get(vitalsWaistCircumference).isEmpty() && !App.get(vitalsHipCircumference).isEmpty()) {
-                                vitalsWaistHipRatio.getEditText().setText(String.valueOf(calculateWHR()));
-                                vitalsWaistHipRatio.getEditText().setError(null);
+                                //vitalsWaistHipRatio.getEditText().setText(String.valueOf(calculateWHR()));
+                                //vitalsWaistHipRatio.getEditText().setError(null);
+
+                                if(calculateWHR() < 0 || calculateWHR() > 100) {
+
+                                    //For Invalid WHR
+                                    vitalsWaistHipRatio.getEditText().setError(getString(R.string.comorbidities_vitals_whr_invalid));
+
+                                    int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
+
+                                    final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+                                    alertDialog.setMessage(getString(R.string.comorbidities_vitals_whr_invalid));
+                                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                                    DrawableCompat.setTint(clearIcon, color);
+                                    alertDialog.setIcon(clearIcon);
+                                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    try {
+                                                        InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
+                                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                                    } catch (Exception e) {
+                                                        // TODO: handle exception
+                                                    }
+                                                    dialog.dismiss();
+                                                }
+                                            });
+                                    alertDialog.show();
+                                }
+                                else {
+
+                                    //For Valid WHR
+                                    vitalsWaistHipRatio.getEditText().setText(String.valueOf(calculateWHR()));
+                                    vitalsWaistHipRatio.getEditText().setError(null);
+                                }
+
                             }
                         }
+                    } else if (vitalsWaistCircumference.getEditText().getText().length() == 0) {
+                        vitalsWaistHipRatio.getEditText().setText("");
+                        vitalsWaistHipRatio.getEditText().setError(null);
                     }
                 } catch (NumberFormatException nfe) {
                     //Exception: User might be entering " " (empty) value
@@ -305,10 +412,47 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
                             vitalsHipCircumference.getEditText().setError(getString(R.string.comorbidities_vitals_waist_hip_whr_limit));
                         } else {
                             if (!App.get(vitalsWaistCircumference).isEmpty() && !App.get(vitalsHipCircumference).isEmpty()) {
-                                vitalsWaistHipRatio.getEditText().setText(String.valueOf(calculateWHR()));
-                                vitalsWaistHipRatio.getEditText().setError(null);
+                                //vitalsWaistHipRatio.getEditText().setText(String.valueOf(calculateWHR()));
+                                //vitalsWaistHipRatio.getEditText().setError(null);
+
+                                if(calculateWHR() < 0 || calculateWHR() > 100) {
+
+                                    //For Invalid WHR
+                                    vitalsWaistHipRatio.getEditText().setError(getString(R.string.comorbidities_vitals_whr_invalid));
+
+                                    int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
+
+                                    final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+                                    alertDialog.setMessage(getString(R.string.comorbidities_vitals_whr_invalid));
+                                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                                    DrawableCompat.setTint(clearIcon, color);
+                                    alertDialog.setIcon(clearIcon);
+                                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    try {
+                                                        InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
+                                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                                    } catch (Exception e) {
+                                                        // TODO: handle exception
+                                                    }
+                                                    dialog.dismiss();
+                                                }
+                                            });
+                                    alertDialog.show();
+                                }
+                                else {
+
+                                    //For Valid WHR
+                                    vitalsWaistHipRatio.getEditText().setText(String.valueOf(calculateWHR()));
+                                    vitalsWaistHipRatio.getEditText().setError(null);
+                                }
                             }
                         }
+                    }  else if (vitalsHipCircumference.getEditText().getText().length() == 0) {
+                        vitalsWaistHipRatio.getEditText().setText("");
+                        vitalsWaistHipRatio.getEditText().setError(null);
                     }
                 } catch (NumberFormatException nfe) {
                     //Exception: User might be entering " " (empty) value
@@ -376,11 +520,11 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
     @Override
     public void updateDisplay() {
 
-        //formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        //formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         if (snackbar != null)
             snackbar.dismiss();
 
-        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
+        if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
@@ -388,22 +532,22 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
 
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
-            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
             } else
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         }
     }
@@ -722,7 +866,7 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
         String date = fo.getFormDate();
         ArrayList<String[][]> obsValue = fo.getObsValue();
         formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         for (int i = 0; i < obsValue.size(); i++) {
 
@@ -788,7 +932,7 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
     public void resetViews() {
         super.resetViews();
 
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {

@@ -181,13 +181,13 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
     public void initViews() {
 
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         formType = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_testorder_testresult_form_type), getResources().getStringArray(R.array.comorbidities_testorder_testresult_form_type_options), "", App.HORIZONTAL, App.VERTICAL);
         testOrderUrineDR = new MyTextView(context, getResources().getString(R.string.comorbidities_urinedr_test_order));
         testOrderUrineDR.setTypeface(null, Typeface.BOLD);
-        urineDRMonthOfVisit = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_urinedr_month_of_treatment), getResources().getStringArray(R.array.comorbidities_followup_month), "0", App.HORIZONTAL);
-        urineDRTestOrderDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1cdate_test_order), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
+        urineDRMonthOfVisit = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_urinedr_month_of_treatment), getResources().getStringArray(R.array.comorbidities_followup_month), "1", App.HORIZONTAL);
+        urineDRTestOrderDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1cdate_test_order), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         //urineDRTestID = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hhba1c_testid), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         LinearLayout linearLayout = new LinearLayout(context);
         urineDRTestID = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hhba1c_testid), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
@@ -214,7 +214,7 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
         //second page views...
         testResultUrineDR = new MyTextView(context, getResources().getString(R.string.comorbidities_urinedr_test_result));
         testResultUrineDR.setTypeface(null, Typeface.BOLD);
-        urineDRTestResultDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1c_resultdate), DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
+        urineDRTestResultDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1c_resultdate), DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
         urineDRQuantity = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_quantity), "", getResources().getString(R.string.comorbidities_urinedr_quantity_range), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         urineDRColor = new TitledSpinner(context, null, getResources().getString(R.string.comorbidities_urinedr_color), getResources().getStringArray(R.array.comorbidities_urinedr_test_color_options), getResources().getString(R.string.comorbidities_urinedr_test_color_light_yellow), App.HORIZONTAL);
         //urineDRColor = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_color), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
@@ -239,7 +239,7 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
         urineDRHyalineCasts = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_urinedr_hyaline_casts), getResources().getStringArray(R.array.comorbidities_urinedr_test_some_options), getResources().getString(R.string.comorbidities_urinedr_test_some_options_neg), App.HORIZONTAL, App.VERTICAL);
         //urineDRCrystals = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_crystals), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         urineDRCrystals = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_urinedr_crystals), getResources().getStringArray(R.array.comorbidities_urinedr_test_some_options), getResources().getString(R.string.comorbidities_urinedr_test_some_options_neg), App.HORIZONTAL, App.VERTICAL);
-        nextUrineDRTestDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_urinedr_nexttestdate), DateFormat.format("dd-MMM-yyyy", fourthDateCalendar).toString(), App.HORIZONTAL);
+        nextUrineDRTestDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_urinedr_nexttestdate), DateFormat.format("EEEE, MMM dd,yyyy", fourthDateCalendar).toString(), App.HORIZONTAL);
         //nextUrineDRTestDate.setVisibility(View.GONE);
         goneVisibility();
 
@@ -251,7 +251,7 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, formType, linearLayout, testOrderUrineDR, urineDRMonthOfVisit, urineDRTestOrderDate, testResultUrineDR, urineDRTestResultDate, urineDRQuantity,
+                {{formType, linearLayout, formDate, testOrderUrineDR, urineDRMonthOfVisit, urineDRTestOrderDate, testResultUrineDR, urineDRTestResultDate, urineDRQuantity,
                         urineDRColor, urineDRSpecificGravity, urineDRPH, urineDRAlbumin, urineDRSugar, urineDRKetones, urineDRBilirubin, urineDRBlood, urineDRNitrite, urineDRUrobilinogen,
                         urineDRRedCells, urineDRPusCells, urineDREpithelialCells, urineDRHyalineCasts, urineDRCrystals, nextUrineDRTestDate}};
 
@@ -556,11 +556,44 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
     @Override
     public void updateDisplay() {
 
-        //formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        //formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         if (snackbar != null)
             snackbar.dismiss();
 
-        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
+
+        if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))){
+            Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "Comorbidities-Urine Detailed Report Order");
+            String format = "";
+            String formDa = formDate.getButton().getText().toString();
+
+            for(int i =0 ; i < testIds.length ; i++){
+                if(testIds[i][0].equals(urineDRTestID.getEditText().getText().toString())){
+                    String date = testIds[i][1].toString();
+                    if (date.contains("/")) {
+                        format = "dd/MM/yyyy";
+                    } else {
+                        format = "yyyy-MM-dd";
+                    }
+
+                    Date orderDate = App.stringToDate(date, format);
+
+                    if(formDateCalendar.before(App.getCalendar(orderDate))){
+                        formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                        snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
+                        snackbar.show();
+
+                        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        break;
+                    }
+                    else {
+                        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                    }
+                }
+            }
+        }
+
+        if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
@@ -568,27 +601,27 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
 
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
-            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
             } else
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         }
 
-        //urineDRTestOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-        if (!(urineDRTestOrderDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString()))) {
+        //urineDRTestOrderDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+        if (!(urineDRTestOrderDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
 
             String formDa = urineDRTestOrderDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
@@ -596,27 +629,27 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
             Date date = new Date();
             if (secondDateCalendar.after(App.getCalendar(date))) {
 
-                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-                urineDRTestOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+                urineDRTestOrderDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
-            } else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
-                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+            } else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
-                urineDRTestOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+                urineDRTestOrderDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
             } else
-                urineDRTestOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+                urineDRTestOrderDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
         }
 
-        //urineDRTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
-        if (!(urineDRTestResultDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString()))) {
+        //urineDRTestResultDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
+        if (!(urineDRTestResultDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString()))) {
 
             String formDa = urineDRTestResultDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
@@ -624,31 +657,31 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
             Date date = new Date();
             if (thirdDateCalendar.after(App.getCalendar(date))) {
 
-                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-                urineDRTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+                urineDRTestResultDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
 
-            } else if (thirdDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
-                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+            } else if (thirdDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
-                urineDRTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+                urineDRTestResultDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
             } else
-                urineDRTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+                urineDRTestResultDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
         }
 
         //fourthDateCalendar = thirdDateCalendar;
-        fourthDateCalendar.set(Calendar.YEAR, secondDateCalendar.get(Calendar.YEAR));
-        fourthDateCalendar.set(Calendar.MONTH, secondDateCalendar.get(Calendar.MONTH));
-        fourthDateCalendar.set(Calendar.DAY_OF_MONTH, secondDateCalendar.get(Calendar.DAY_OF_MONTH));
+        fourthDateCalendar.set(Calendar.YEAR, formDateCalendar.get(Calendar.YEAR));
+        fourthDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
+        fourthDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
         fourthDateCalendar.add(Calendar.MONTH, 2);
         fourthDateCalendar.add(Calendar.DAY_OF_MONTH, 20);
-        nextUrineDRTestDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", fourthDateCalendar).toString());
+        nextUrineDRTestDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", fourthDateCalendar).toString());
     }
 
     @Override
@@ -949,15 +982,13 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
         }
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-        //observations.add(new String[]{"FOLLOW-UP MONTH", App.get(urineDRMonthOfVisit)});
-        //observations.add(new String[]{"DATE TEST ORDERED", App.getSqlDateTime(secondDateCalendar)});
         observations.add(new String[]{"TEST ID", App.get(urineDRTestID)});
 
         if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
             observations.add(new String[]{"FOLLOW-UP MONTH", App.get(urineDRMonthOfVisit)});
-            observations.add(new String[]{"DATE TEST ORDERED", App.getSqlDateTime(secondDateCalendar)});
+            //observations.add(new String[]{"DATE TEST ORDERED", App.getSqlDateTime(secondDateCalendar)});
         } else if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))) {
-            observations.add(new String[]{"TEST RESULT DATE", App.getSqlDateTime(thirdDateCalendar)});
+            //observations.add(new String[]{"TEST RESULT DATE", App.getSqlDateTime(thirdDateCalendar)});
             observations.add(new String[]{"SAMPLE QUANTITY", App.get(urineDRQuantity)});
             final String ownerString = App.get(urineDRColor).equals(getResources().getString(R.string.comorbidities_urinedr_test_color_options_colourless)) ? "COLOURLESS" :
                     (App.get(urineDRColor).equals(getResources().getString(R.string.comorbidities_urinedr_test_color_options_red)) ? "RED COLOR" :
@@ -1127,7 +1158,7 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
         String date = fo.getFormDate();
         ArrayList<String[][]> obsValue = fo.getObsValue();
         formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         for (int i = 0; i < obsValue.size(); i++) {
 
@@ -1149,12 +1180,12 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
                 } else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
                     urineDRMonthOfVisit.getSpinner().selectValue(obs[0][1]);
                     urineDRMonthOfVisit.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("DATE TEST ORDERED")) {
+                } /*else if (obs[0][0].equals("DATE TEST ORDERED")) {
                     String secondDate = obs[0][1];
                     secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
-                    urineDRTestOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+                    urineDRTestOrderDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
                     urineDRTestOrderDate.setVisibility(View.VISIBLE);
-                }
+                }*/
                 submitButton.setEnabled(true);
             } else {
                 formType.getRadioGroup().getButtons().get(1).setChecked(true);
@@ -1164,11 +1195,11 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
                     checkTestId();
                     urineDRTestID.getEditText().setEnabled(false);
                     testIdView.setEnabled(false);
-                } else if (obs[0][0].equals("TEST RESULT DATE")) {
+                } /*else if (obs[0][0].equals("TEST RESULT DATE")) {
                     String secondDate = obs[0][1];
                     thirdDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
-                    urineDRTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
-                } else if (obs[0][0].equals("SAMPLE QUANTITY")) {
+                    urineDRTestResultDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
+                }*/ else if (obs[0][0].equals("SAMPLE QUANTITY")) {
                     urineDRQuantity.getEditText().setText(obs[0][1]);
                 } else if (obs[0][0].equals("URINE COLOR")) {
                     String value = obs[0][1].equals("COLOURLESS") ? getResources().getString(R.string.comorbidities_urinedr_test_color_options_colourless) :
@@ -1288,7 +1319,7 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
                 } else if (obs[0][0].equals("RETURN VISIT DATE")) {
                     String secondDate = obs[0][1];
                     fourthDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
-                    urineDRTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", fourthDateCalendar).toString());
+                    nextUrineDRTestDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", fourthDateCalendar).toString());
                 }
             }
         }
@@ -1348,15 +1379,15 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
         formType.getRadioGroup().getButtons().get(1).setEnabled(true);
 
         thirdDateCalendar = Calendar.getInstance();
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        urineDRTestOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-        urineDRTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        urineDRTestOrderDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+        urineDRTestResultDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
         fourthDateCalendar.set(Calendar.YEAR, secondDateCalendar.get(Calendar.YEAR));
         fourthDateCalendar.set(Calendar.MONTH, secondDateCalendar.get(Calendar.MONTH));
         fourthDateCalendar.set(Calendar.DAY_OF_MONTH, secondDateCalendar.get(Calendar.DAY_OF_MONTH));
         fourthDateCalendar.add(Calendar.MONTH, 2);
         fourthDateCalendar.add(Calendar.DAY_OF_MONTH, 20);
-        nextUrineDRTestDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", fourthDateCalendar).toString());
+        nextUrineDRTestDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", fourthDateCalendar).toString());
 
         submitButton.setEnabled(false);
 
@@ -1405,6 +1436,7 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
     }
 
     void goneVisibility() {
+        formDate.setVisibility(View.GONE);
         testOrderUrineDR.setVisibility(View.GONE);
         urineDRMonthOfVisit.setVisibility(View.GONE);
         urineDRTestOrderDate.setVisibility(View.GONE);
@@ -1433,10 +1465,11 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
     }
 
     void showTestOrderOrTestResult() {
+        formDate.setVisibility(View.VISIBLE);
         if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
             testOrderUrineDR.setVisibility(View.VISIBLE);
             urineDRMonthOfVisit.setVisibility(View.VISIBLE);
-            urineDRTestOrderDate.setVisibility(View.VISIBLE);
+            //urineDRTestOrderDate.setVisibility(View.VISIBLE);
 
             //second page views...
             testResultUrineDR.setVisibility(View.GONE);
@@ -1466,7 +1499,7 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
 
             //second page views...
             testResultUrineDR.setVisibility(View.VISIBLE);
-            urineDRTestResultDate.setVisibility(View.VISIBLE);
+            //urineDRTestResultDate.setVisibility(View.VISIBLE);
             urineDRQuantity.setVisibility(View.VISIBLE);
             urineDRColor.setVisibility(View.VISIBLE);
             urineDRSpecificGravity.setVisibility(View.VISIBLE);
