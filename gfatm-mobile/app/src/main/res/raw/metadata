@@ -2925,7 +2925,6 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CAUSE OF DEATH'
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DEATH AFTER SURGERY','cause_death_surgery','Text','3ebee459-b1ea-4456-abb6-951729cc9a70');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SESSION NUMBER','session_number','Numeric','b7fd7f33-5ccf-40e1-abf4-3c065b43611e');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REASON FOR TREATMENT FAILURE','reason_failure','Coded','acb0130e-6d3d-44b5-8b8a-668e3eace10b');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REASON FOR TREATMENT INTERRUPTION','reason_follow_up','Coded','1af886ab-a290-4aeb-aa62-d42365e90c1e');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CONDITION BEFORE SESSION','condition_before_session','Coded','66ab8b05-4b1e-4808-9944-616b36fd4dc5');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER REASON FOR NOT EVALUATED','reason_not_evaluated_other','Text','77a9a878-55da-4dc1-8193-da4530396172');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('POST TREATMENT OUTCOME DATE','date_post_treatment_outcome','Date','fcdbf9cf-fb5e-4cc2-bc27-61f6f4887697');
@@ -3972,7 +3971,6 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ADVERSE DRUG RE
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT REFUSED FOLLOW-UP',NULL,'N/A','ee14faa6-de7e-4382-b8ca-c549ec3685f3');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LEFT REGION/COUNTRY',NULL,'N/A','40fbc897-7dd6-4510-bbbe-e1917d8cdc5b');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NO CONFIDENCE IN TREATMENT',NULL,'N/A','8d822b66-a6bc-4733-af54-ba2ee3e8093b');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER REASON FOR TREATMENT INTERRUPTION','reason_follow_up_other','N/A','0964ea7d-5de2-4628-bc59-ab89614d61f8');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('VERY BAD',NULL,'N/A','3d7d43e3-0061-47f9-897d-166c089639ff');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NO CHANGE IN OUTCOME SINCE END OF TREATMENT',NULL,'N/A','3101f416-a64b-4bcf-9fdc-fd7b17c4759e');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DIED POST TREATMENT',NULL,'N/A','c39a41e1-fa0b-4829-aebc-7bed4c352596');
@@ -4278,7 +4276,7 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('cells/µL',NULL
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('copies/ml',NULL,'N/A','07be4048-4494-4dfb-b7d7-d508b0d481ab');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('pg',NULL,'N/A','4db255af-1c26-4968-90af-03499f48f6f7');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('fl',NULL,'N/A','43248118-cb44-43a7-a09f-b1cf89802c99');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER TEST UNIT','test_unit_other','N/A','4413f26c-ef11-4d04-af86-ce49aeaf005c');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER TEST UNIT','test_unit_other','Text','4413f26c-ef11-4d04-af86-ce49aeaf005c');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('gm/L',NULL,'N/A','198bac0d-d77b-4e3e-ada2-308423bad0d0');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('mg/L',NULL,'N/A','24c931cc-046f-4d17-a556-52bda88fc6a1');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PLATELET COUNT RESULT UNIT','platelet_unit','Coded','f83a7fd2-d7bc-4d1e-b2bd-b59256af9ebe');
@@ -4402,7 +4400,7 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('GENITOURINARY T
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DECEASED',NULL,'N/A','159AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CURE, OUTCOME','CURE','N/A','159791AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TRANSFERRED OUT',NULL,'N/A','159492AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('EAR, NOSE AND THROAT DEPARTMENT''EAR, NOSE AND THROAT DEPARTMENT',NULL,'N/A','160455AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('EAR, NOSE AND THROAT DEPARTMENT',NULL,'N/A','160455AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('GENERAL SURGERY DEPARTMENT',NULL,'N/A','160449AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ORTHOPEDIC DEPARTMENT',NULL,'N/A','160465AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DERMATOLOGY DEPARTMENT',NULL,'N/A','160460AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
