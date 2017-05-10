@@ -149,7 +149,8 @@
                 address3 VARCHAR,
                 description VARCHAR,
                 tertiarycontact VARCHAR,
-                quaternarycontact VARCHAR
+                quaternarycontact VARCHAR,
+                treatmentsupporter VARCHAR
             );
         </item>
 
