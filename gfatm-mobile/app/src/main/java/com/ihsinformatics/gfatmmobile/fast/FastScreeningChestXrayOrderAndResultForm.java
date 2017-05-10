@@ -550,6 +550,7 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
 
 
             if (abnormalDetailedDiagnosis.getVisibility() == View.VISIBLE) {
+
                 String abnormalDetailedDiagnosisString = "";
                 for(CheckBox cb : abnormalDetailedDiagnosis.getCheckedBoxes()){
                     if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_adenopathy)))
