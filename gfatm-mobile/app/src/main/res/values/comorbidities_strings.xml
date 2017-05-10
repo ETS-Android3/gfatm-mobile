@@ -32,6 +32,7 @@
     <string name="comorbidities_akuads_totalscore">AKUADS score:</string>
     <string name="comorbidities_akuads_severity">Severity level:</string>
     <string name="comorbidities_agree_AKUADS">Does the client agree to therapy?</string>
+    <string name="comorbidities_akuads_screener_instructions">Screener Instructions: Kindly give the comorbidities conditions brochure to the patient.</string>
     <string name="comorbidities_preferredlocation_id">Preferred location for Therapy:</string>
     <string name="comorbidities_preferredlocation_gpcliniccode">GP Clinic Code:</string>
     <string name="comorbidities_preferredlocation_gpcliniccode_range">Range 1&#8211;50</string>
@@ -39,6 +40,7 @@
     <string name="comorbidities_preferredlocation_other_comorbidities">Other preferred location:</string>
     <string name="comorbidities_dm_screening">DIABETES MELLITUS SCREENING</string>
     <string name="comorbidities_dmscrnng_food">Have you had something to eat within the last two hours?</string>
+    <string name="comorbidities_dmscrnng_screener_instructions">Screener Instructions: Kindly ensure that the patient waits two hours before getting the RBS.</string>
     <string name="comorbidities_scrnng_rbs">Random Blood Sugar (RBS):</string>
     <string name="comorbidities_scrnng_rbs_range">Range 1&#8211;500</string>
     <string name="comorbidities_scrnng_rbs_limit">The value should be in the range of 1&#8211;500</string>
@@ -60,6 +62,7 @@
     <string name="comorbidities_hba1c_result_range">Range 0&#8211;20 (Including decimal)</string>
     <string name="comorbidities_hba1c_diabetic">Is the patient Diabetic?</string>
     <string name="comorbidities_form_type_error">Please select Form Type!</string>
+    <string name="comorbidities_hba1c_screener_instructions">Screener Instructions: If the patient is present at the time of handing over the result then kindly give the Zero TB Pamphlet to the patient.</string>
 
     <string name="comorbidities_location_other">Other</string>
 
@@ -94,10 +97,10 @@
     <string name="comorbidities_MH_severity_level_normal">Normal</string>
 
     <string-array name="comorbidities_MH_severity_level">
+        <item>@string/comorbidities_MH_severity_level_normal</item>
         <item>@string/comorbidities_MH_severity_level_mild</item>
         <item>@string/comorbidities_MH_severity_level_moderate</item>
         <item>@string/comorbidities_MH_severity_level_severe</item>
-        <item>@string/comorbidities_MH_severity_level_normal</item>
     </string-array>
 
     <string name="comorbidities_HbA1C_test_type_baseline">Baseline</string>
@@ -169,8 +172,10 @@
     <string name="comorbidities_vitals_height_limit">The value should be in the range of 30&#8211;260</string>
     <string name="comorbidities_vitals_bmi_range">Range 0&#8211;200</string>
     <string name="comorbidities_vitals_bmi_limit">The value should be in the range of 0&#8211;200</string>
+    <string name="comorbidities_vitals_bmi_invalid">Invalid BMI. Something is wrong with Weight and Height values combination. Please change Height or Weight values.</string>
     <string name="comorbidities_vitals_waist_hip_whr_range">Range 0&#8211;100</string>
     <string name="comorbidities_vitals_waist_hip_whr_limit">The value should be in the range of 0&#8211;100</string>
+    <string name="comorbidities_vitals_whr_invalid">Invalid WHR. Something is wrong with Waist Circumference and Hip Circumference values combination. Please change Waist Circumference or Hip Circumference values.</string>
     <string name="comorbidities_vitals_bp_systolic_diastolic_range">Range 0&#8211;300</string>
     <string name="comorbidities_vitals_bp_systolic_diastolic_limit">The value should be in the range of 0&#8211;300</string>
 
@@ -1059,16 +1064,16 @@
     <string name="comorbidities_patient_information_address1">Address 1 (House Number, etc.):</string>
     <string name="comorbidities_patient_information_address2">Address 2 (Block, Street, Gali, Colony, etc.):</string>
     <string name="comorbidities_patient_information_town">Town:</string>
-    <string name="comorbidities_patient_information_city">City:</string>
+    <string name="comorbidities_patient_information_city">City / Village:</string>
     <string name="comorbidities_patient_information_address_type">What type of Address is this?</string>
     <string name="comorbidities_patient_information_nearest_landmark">Nearest Landmark:</string>
     <string name="comorbidities_patient_information_mobile_number">Mobile Number:</string>
-    <string name="comorbidities_patient_information_mobile_number_format_hint">####-#######</string>
-    <string name="comorbidities_patient_information_mobile_number_format_dasherror">The format should be ####-#######</string>
+    <string name="comorbidities_patient_information_mobile_number_format_hint">03##-#######</string>
+    <string name="comorbidities_patient_information_mobile_number_format_dasherror">The format should be 03##-#######</string>
     <string name="comorbidities_patient_information_secondary_mobile">Secondary Mobile Number:</string>
     <string name="comorbidities_patient_information_landline">Landline Number:</string>
-    <string name="comorbidities_patient_information_landline_format_hint">###-########</string>
-    <string name="comorbidities_patient_information_landline_format_dasherror">The format should be ###-########</string>
+    <string name="comorbidities_patient_information_landline_format_hint">0##-########</string>
+    <string name="comorbidities_patient_information_landline_format_dasherror">The format should be 0##-########</string>
     <string name="comorbidities_patient_information_secondary_landline">Secondary Landline Number:</string>
     <string name="comorbidities_patient_information_tb_status">TB Status:</string>
     <string name="comorbidities_patient_information_tb_category">If TB +ve what is the category of treatment:</string>
