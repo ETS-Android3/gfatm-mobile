@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity
             String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
             String lname = App.getPatient().getPerson().getFamilyName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getFamilyName().substring(1);
 
-            patientName.setText(fname + " " + lname);
+            patientName.setText(fname + " " + lname + " (" + App.getPatient().getPerson().getGender() + ")");
             String dob = App.getPatient().getPerson().getBirthdate().substring(0, 10);
             if (!dob.equals("")) {
                 Date date = App.stringToDate(dob, "yyyy-MM-dd");
@@ -629,6 +629,24 @@ public class MainActivity extends AppCompatActivity
                 if (result.equals("SUCCESS")) {
                     //resetViews();
 
+                    String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
+                    String lname = App.getPatient().getPerson().getFamilyName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getFamilyName().substring(1);
+
+                    patientName.setText(fname + " " + lname + " (" + App.getPatient().getPerson().getGender() + ")");
+                    String dob = App.getPatient().getPerson().getBirthdate().substring(0, 10);
+                    if (!dob.equals("")) {
+                        Date date = App.stringToDate(dob, "yyyy-MM-dd");
+                        DateFormat df = new SimpleDateFormat("MMM dd, yyyy");
+                        patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
+                    } else patientDob.setText(dob);
+                    if (!App.getPatient().getPatientId().equals(""))
+                        id.setVisibility(View.VISIBLE);
+                    patientId.setText(App.getPatient().getPatientId());
+
+                    fragmentReport.fillReportFragment();
+                    fragmentForm.fillMainContent();
+
+
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.patient_updated));
                     Drawable submitIcon = getResources().getDrawable(R.drawable.ic_submit);
@@ -697,7 +715,7 @@ public class MainActivity extends AppCompatActivity
                         String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
                         String lname = App.getPatient().getPerson().getFamilyName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getFamilyName().substring(1);
 
-                        patientName.setText(fname + " " + lname);
+                        patientName.setText(fname + " " + lname + " (" + App.getPatient().getPerson().getGender() + ")");
                         String dob = App.getPatient().getPerson().getBirthdate().substring(0, 10);
                         if (!dob.equals("")) {
                             Date date = App.stringToDate(dob, "yyyy-MM-dd");
@@ -718,7 +736,7 @@ public class MainActivity extends AppCompatActivity
                         String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
                         String lname = App.getPatient().getPerson().getFamilyName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getFamilyName().substring(1);
 
-                        patientName.setText(fname + " " + lname);
+                        patientName.setText(fname + " " + lname + " (" + App.getPatient().getPerson().getGender() + ")");
                         String dob = App.getPatient().getPerson().getBirthdate().substring(0, 10);
                         if (!dob.equals("")) {
                             Date date = App.stringToDate(dob, "yyyy-MM-dd");
@@ -729,9 +747,9 @@ public class MainActivity extends AppCompatActivity
                             id.setVisibility(View.VISIBLE);
                         patientId.setText(App.getPatient().getPatientId());
 
-                        Toast toast = Toast.makeText(MainActivity.this, getResources().getString(R.string.patient_created_successfully), Toast.LENGTH_LONG);
+                        /*Toast toast = Toast.makeText(MainActivity.this, getResources().getString(R.string.patient_created_successfully), Toast.LENGTH_LONG);
                         toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();
+                        toast.show();*/
 
                         fragmentReport.fillReportFragment();
                         fragmentForm.fillMainContent();
@@ -784,7 +802,7 @@ public class MainActivity extends AppCompatActivity
                 String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
                 String lname = App.getPatient().getPerson().getFamilyName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getFamilyName().substring(1);
 
-                    patientName.setText(fname + " " + lname);
+                    patientName.setText(fname + " " + lname + " (" + App.getPatient().getPerson().getGender() + ")");
                     String dob = App.getPatient().getPerson().getBirthdate().substring(0, 10);
                     if (!dob.equals("")) {
                         Date date = App.stringToDate(dob, "yyyy-MM-dd");

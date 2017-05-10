@@ -479,12 +479,6 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
             }
         }
 
-        if (!flag) {
-            Toast toast = Toast.makeText(LocationSetupActivity.this, getResources().getString(R.string.no_location_select), Toast.LENGTH_LONG);
-            toast.setGravity(Gravity.CENTER, 0, 0);
-            toast.show();
-        }
-
         try {
             InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(programName.getWindowToken(), 0);

@@ -339,24 +339,4 @@ public class LocationSelectionDialog extends AbstractSettingActivity {
 
     }
 
-    @Override
-    public void onBackPressed() {
-
-        Boolean flag = false;
-
-        for (RadioButton rb : radioButtons) {
-            if (rb.isChecked()) {
-                flag = true;
-                super.onBackPressed();
-            }
-        }
-
-        if (!flag) {
-            Toast toast = Toast.makeText(LocationSelectionDialog.this, getResources().getString(R.string.no_location_select), Toast.LENGTH_LONG);
-            toast.setGravity(Gravity.CENTER, 0, 0);
-            toast.show();
-        }
-
-    }
-
 }

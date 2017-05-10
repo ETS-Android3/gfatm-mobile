@@ -147,8 +147,10 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                         dob.setText(DateFormat.format("dd-MMM-yyyy", dateOfBirthCalendar).toString());
                     }
 
-                    if (Integer.parseInt(age.getText().toString()) > 130)
+                    if (Integer.parseInt(age.getText().toString()) >= 120) {
                         age.setError(getResources().getString(R.string.age_invalid));
+                        age.requestFocus();
+                    }
                     else
                         age.setError(null);
 
@@ -179,20 +181,6 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
 
         this.setFinishOnTouchOutside(false);
 
-
-//        ServerService serverService = new ServerService(getApplicationContext());
-//        User user = serverService.getUser("rabbia.hassan");
-//        String roles = user.getRoles();
-
-        /*String i = address.getAddress1();*/
-
-        /*ServerService serverService = new ServerService(getApplicationContext());
-        Object[][] encounterTypes = serverService.getAllEncounterTypesFromLocalDB();
-
-
-        Toast.makeText(getApplicationContext(), String.valueOf(encounterTypes.length),
-                Toast.LENGTH_LONG).show();
-*/
     }
 
     @Override
@@ -728,8 +716,9 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
             dob.setError(getString(R.string.empty_field));
             error = true;
         } else {
-            if (Integer.parseInt(age.getText().toString()) > 130) {
+            if (Integer.parseInt(age.getText().toString()) >= 120) {
                 age.setError(getResources().getString(R.string.age_invalid));
+                age.requestFocus();
                 error = true;
             }
             else
