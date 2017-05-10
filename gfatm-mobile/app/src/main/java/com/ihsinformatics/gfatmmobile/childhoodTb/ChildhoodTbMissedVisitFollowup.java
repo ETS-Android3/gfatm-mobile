@@ -53,7 +53,6 @@ import java.util.HashMap;
  */
 
 public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
-
     public static final int THIRD_DIALOG_ID = 3;
     protected Calendar thirdDateCalender;
     protected DialogFragment thirdDateFragment;
@@ -154,6 +153,11 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
         otherUnableToContact = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 250, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         missedVisitReason = new TitledSpinner(context, null, getResources().getString(R.string.ctb_reason_why_missed), getResources().getStringArray(R.array.ctb_why_missed_reason_list),null, App.VERTICAL, true);
         otherMissedVisitReason = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 250, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        thirdDateCalender.set(Calendar.YEAR, formDateCalendar.get(Calendar.YEAR));
+        thirdDateCalender.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
+        thirdDateCalender.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
+        thirdDateCalender.add(Calendar.DAY_OF_MONTH, 30);
+
         nextVisitDate = new TitledButton(context, null,  getResources().getString(R.string.ctb_next_visit_date), DateFormat.format("dd-MMM-yyyy", thirdDateCalender).toString(), App.HORIZONTAL);
         nextVisitDate.setTag("nextVisitDate");
         views = new View[]{formDate.getButton(), missedVisitDate.getButton(),  nextVisitDate.getButton(),ableToContact.getRadioGroup(),whyUnableToContact.getRadioGroup(),missedVisitReason.getSpinner(),otherUnableToContact.getEditText(),otherMissedVisitReason.getEditText()
@@ -238,7 +242,18 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
                 tv.setMaxLines(2);
                 snackbar.show();
                 nextVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalender).toString());
-            }else{
+            }
+            else if (thirdDateCalender.before(secondDateCalendar)) {
+
+                thirdDateCalender = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.ctb_next_visit_less_than_form_date), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                nextVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalender).toString());
+            }
+            else{
                 nextVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalender).toString());
             }
 
@@ -628,7 +643,7 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-        nextVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+        nextVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalender).toString());
         whyUnableToContact.setVisibility(View.GONE);
         otherUnableToContact.setVisibility(View.GONE);
         otherMissedVisitReason.setVisibility(View.GONE);

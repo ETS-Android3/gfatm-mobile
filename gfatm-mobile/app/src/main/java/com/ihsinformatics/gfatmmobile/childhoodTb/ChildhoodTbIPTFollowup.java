@@ -293,6 +293,24 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
                     error = true;
                 }
             }
+            if(App.get(iptDose).isEmpty()){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                iptDose.getRadioGroup().getButtons().get(2).setError(getString(R.string.empty_field));
+                iptDose.getRadioGroup().requestFocus();
+                error = true;
+            }
+            if(App.get(weightVisit).isEmpty()){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                weightVisit.getEditText().setError(getString(R.string.empty_field));
+                weightVisit.getEditText().requestFocus();
+                error = true;
+            }
             if (error) {
 
                 int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);

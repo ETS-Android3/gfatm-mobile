@@ -293,10 +293,12 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
                 error = true;
             }else{
                 String enrsId = App.getPatient().getEnrs();
-                if(enrsId.equalsIgnoreCase(App.get(enrsNumber))){
-                    enrsNumber.getEditText().setError(getString(R.string.ctb_duplicate_enrs));
-                    enrsNumber.getEditText().requestFocus();
-                    error = true;
+                if(enrsId!=null) {
+                    if (enrsId.equalsIgnoreCase(App.get(enrsNumber))) {
+                        enrsNumber.getEditText().setError(getString(R.string.ctb_duplicate_enrs));
+                        enrsNumber.getEditText().requestFocus();
+                        error = true;
+                    }
                 }
             }
 
