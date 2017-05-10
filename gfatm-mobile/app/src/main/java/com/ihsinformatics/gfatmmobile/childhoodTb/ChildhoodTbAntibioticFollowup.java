@@ -170,13 +170,13 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
         if (snackbar != null)
             snackbar.dismiss();
 
+        String formDa = formDate.getButton().getText().toString();
+        String personDOB = App.getPatient().getPerson().getBirthdate();
 
-            Date date = new Date();
+        Date date = new Date();
 
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
-            String formDa = formDate.getButton().getText().toString();
-            String personDOB = App.getPatient().getPerson().getBirthdate();
 
             if (formDateCalendar.after(App.getCalendar(date))) {
 
@@ -211,7 +211,21 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-            } else
+            } else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                appointmentDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+            }else if (secondDateCalendar.before(formDateCalendar)) {
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.ctb_date_can_not_be_less_than_form_date), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                appointmentDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+            }else
                 appointmentDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         }
         formDate.getButton().setEnabled(true);
@@ -490,7 +504,7 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", false);
+            args.putBoolean("allowFutureDate", true);
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
         }
@@ -520,6 +534,12 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
             snackbar.dismiss();
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        secondDateCalendar.set(Calendar.YEAR, formDateCalendar.get(Calendar.YEAR));
+        secondDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
+        secondDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
+        secondDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
+
+
         appointmentDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         patientNeedMoreTests.setVisibility(View.GONE);
         appointmentDate.setVisibility(View.GONE);

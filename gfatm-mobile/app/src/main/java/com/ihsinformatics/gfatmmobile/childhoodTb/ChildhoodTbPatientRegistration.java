@@ -203,7 +203,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         permissionSecondaryMobileNumber = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_permission),getResources().getStringArray(R.array.yes_no_options),getResources().getString(R.string.no),App.HORIZONTAL,App.VERTICAL,true);
         landlineLayout = new LinearLayout(context);
         landlineLayout.setOrientation(LinearLayout.HORIZONTAL);
-        landlineNumber1 = new TitledEditText(context, null, getResources().getString(R.string.ctb_landline_number), "", "###", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        landlineNumber1 = new TitledEditText(context, null, getResources().getString(R.string.ctb_landline_number), "", "###", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         landlineLayout.addView(landlineNumber1);
         landlineNumber2 = new TitledEditText(context, null, "-", "", "########", 8, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         landlineLayout.addView(landlineNumber2);
@@ -553,24 +553,14 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                 view = secondaryLandlineNumber;
             }
         }
-        if (App.get(landlineNumber1).isEmpty() && App.get(landlineNumber2).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            landlineNumber2.getEditText().setError(getString(R.string.empty_field));
-            error = true;
-            view = landlineLayout;
-        }
-        else{
-            String landline = landlineNumber1.getEditText().getText().toString() + landlineNumber2.getEditText().getText().toString();
-            if (!RegexUtil.isContactNumber(landline)) {
+        if(!App.get(landlineNumber1).isEmpty() || !App.get(landlineNumber2).isEmpty()){
+            String landlineNumber = landlineNumber1.getEditText().getText().toString() + landlineNumber2.getEditText().getText().toString();
+            if (!RegexUtil.isContactNumber(landlineNumber)) {
                 landlineNumber2.getEditText().setError(getResources().getString(R.string.ctb_invalid_number));
                 error = true;
                 view = landlineLayout;
             }
         }
-
         if(!App.get(secondaryMobileNumber2).isEmpty() || !App.get(secondaryMobileNumber1).isEmpty()){
             String secondaryMobileNumber = secondaryMobileNumber1.getEditText().getText().toString() + secondaryMobileNumber2.getEditText().getText().toString();
             if (!RegexUtil.isMobileNumber(secondaryMobileNumber)) {

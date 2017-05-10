@@ -2063,6 +2063,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         if (group == patientHaveTb.getRadioGroup()) {
+            patientHaveTb.getRadioGroup().getButtons().get(2).setError(null);
             int patientAge = App.getPatient().getPerson().getAge();
             if (patientHaveTb.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
                 regDate.setVisibility(View.VISIBLE);

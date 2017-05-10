@@ -524,7 +524,7 @@
     <string name="ctb_submission_can_not_be_less_than_form_date">Submission date can not be less than form date</string>
     <string name="ctb_next_visit_less_than_form_date">Next visit date can not be less than Form Date</string>
     <string name="ctb_form_date_less_than_treatment_initiation">Form date cannot be before treatment initiation date</string>
-
+    <string name="ctb_date_can_not_be_less_than_form_date">Date can not be less than Form Date</string>
 
 
 

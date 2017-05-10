@@ -169,6 +169,7 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
         formDate.setTag("formDate");
         fathersName = new TitledEditText(context, null, getResources().getString(R.string.ctb_father_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         weightAtBaseline = new TitledEditText(context, null, getResources().getString(R.string.ctb_weight_at_baseline), "", "", 3, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
+
         iptStartDate = new TitledButton(context, null,  getResources().getString(R.string.ctb_ipt_start_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         iptStartDate.setTag("iptStartDate");
         dose = new TitledEditText(context, null, getResources().getString(R.string.ctb_dose_at_intiation_point), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
@@ -615,7 +616,7 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
             snackbar.dismiss();
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-        iptStartDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");
@@ -632,6 +633,7 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
             } else bundle.putBoolean("save", false);
 
         }
+
         String husbandNameString = App.getPatient().getPerson().getGuardianName();
         if(husbandNameString!=null) {
             fathersName.getEditText().setText(husbandNameString);
@@ -651,53 +653,16 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
         }
 
         weightAtBaseline.getEditText().setKeyListener(null);
-
-
+        String iptStartDateString = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "IPT START DATE");
+        if(iptStartDateString != null){
+            secondDateCalendar = App.getCalendar(App.stringToDate(iptStartDateString, "yyyy-MM-dd"));
+        }
+        iptStartDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
     }
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
 
-    }
-
-
-    @SuppressLint("ValidFragment")
-    public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final Calendar calendar;
-            if (getArguments().getInt("type") == DATE_DIALOG_ID)
-                calendar = formDateCalendar;
-            else if (getArguments().getInt("type") == SECOND_DATE_DIALOG_ID)
-                calendar = secondDateCalendar;
-
-            else
-                return null;
-
-            int yy = calendar.get(Calendar.YEAR);
-            int mm = calendar.get(Calendar.MONTH);
-            int dd = calendar.get(Calendar.DAY_OF_MONTH);
-            DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, yy, mm, dd);
-            dialog.getDatePicker().setTag(getArguments().getInt("type"));
-            if (!getArguments().getBoolean("allowFutureDate", false))
-                dialog.getDatePicker().setMaxDate(new Date().getTime());
-            if (!getArguments().getBoolean("allowPastDate", false))
-                dialog.getDatePicker().setMinDate(new Date().getTime());
-            return dialog;
-        }
-
-        @Override
-        public void onDateSet(DatePicker view, int yy, int mm, int dd) {
-
-            if (((int) view.getTag()) == DATE_DIALOG_ID)
-                formDateCalendar.set(yy, mm, dd);
-            else if (((int) view.getTag()) == SECOND_DATE_DIALOG_ID)
-                secondDateCalendar.set(yy, mm, dd);
-
-            updateDisplay();
-
-        }
     }
 
     class MyAdapter extends PagerAdapter {

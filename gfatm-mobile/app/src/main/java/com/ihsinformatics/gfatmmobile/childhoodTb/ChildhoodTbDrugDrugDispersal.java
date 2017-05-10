@@ -1603,7 +1603,7 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
         }
         String additionalTreatmentIpt = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "ADDITIONAL TREATMENT IPT PATIENT");
         if(additionalTreatmentIpt!=null) {
-            for (CheckBox cb : moInitiatingAdditionalTreatmentAntibiotic.getCheckedBoxes()) {
+            for (CheckBox cb : moInitiateTreatmentIpt.getCheckedBoxes()) {
                 if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && additionalTreatmentIpt.equals("IRON")) {
                     cb.setChecked(true);
                     break;
@@ -1811,7 +1811,11 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
         } else if (group == treatmentPlan.getRadioGroup()) {
             if (treatmentPlan.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_intensive_phase))) {
                 intensivePhaseRegimen.setVisibility(View.VISIBLE);
+                intensivePhaseRegimen.getRadioGroup().getButtons().get(0).setChecked(true);
                 typeFixedDosePrescribedIntensive.setVisibility(View.VISIBLE);
+                typeFixedDosePrescribedIntensive.getSpinner().selectValue(getResources().getString(R.string.ctb_current_formulation));
+                currentTabletsofE.setVisibility(View.VISIBLE);
+                currentTabletsofRHZ.setVisibility(View.VISIBLE);
 
 
                 continuationPhaseRegimen.setVisibility(View.GONE);
@@ -1825,7 +1829,9 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
                 adultFormulationOfContinuationRHE_RHE.setVisibility(View.GONE);
             } else if (treatmentPlan.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_continuation_phase))) {
                 continuationPhaseRegimen.setVisibility(View.VISIBLE);
+                continuationPhaseRegimen.getRadioGroup().clearCheck();
                 typeFixedDosePrescribedContinuation.setVisibility(View.VISIBLE);
+                typeFixedDosePrescribedContinuation.getSpinner().selectValue(getResources().getString(R.string.ctb_current_formulation_continuation));
                 currentTabletsOfContinuationRH.setVisibility(View.VISIBLE);
                 currentTabletsOfContinuationE.setVisibility(View.VISIBLE);
 
