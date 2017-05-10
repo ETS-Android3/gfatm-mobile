@@ -44,6 +44,8 @@ public class RegexUtil {
     public static final String addressPattern ="^[-A-Za-z0-9.#&():;,'\" \\/]+";
     public static final String otherPattern ="^[-A-Za-z0-9.#&():;,'\"+%*=!| \\/]+";
     public static final String cartridgeIdPattern = "^[-A-Za-z0-9]+";
+    public static final String treatmentSupporterIdPattern = "^[0-9]{7,7}";
+    public static final String otherPatternWithNewline = "^[-A-Za-z0-9.#&():;,'\"+%*=!| \r\n\\/]+";
 
     public static final int idLength = 7;
     public static final int mobileNumberLength = 11;
@@ -64,6 +66,23 @@ public class RegexUtil {
 
         }
     };
+
+    public static final InputFilter TREATMENT_SUPPORTER_ID_FILTER = new InputFilter() {
+
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+
+            if (source.equals("")) { // for backspace
+                return source;
+            }
+            if (source.toString().matches(treatmentSupporterIdPattern)) {
+                return source;
+            }
+            return "";
+
+        }
+    };
+
 
     public static final InputFilter CARTRIDGE_ID_FILTER = new InputFilter() {
 
@@ -529,4 +548,20 @@ public class RegexUtil {
             return false;
         }
     }
+
+    public static final InputFilter OTHER_WITH_NEWLINE_FILTER = new InputFilter() {
+
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+
+            if (source.equals("")) { // for backspace
+                return source;
+            }
+            if (source.toString().matches(otherPatternWithNewline)) {
+                return source;
+            }
+            return "";
+
+        }
+    };
 }
