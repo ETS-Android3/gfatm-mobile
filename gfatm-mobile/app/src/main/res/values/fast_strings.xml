@@ -445,10 +445,19 @@
     <string name="fast_invalid_father_name">Invalid father name</string>
     <string name="fast_invalid_husband_name">Invalid husband name</string>
     <string name="fast_tb_symptoms">TB SYMPTOMS</string>
+    <string name="fast_if_abnormal_detailed_diagnosis">If Abnormal, Detailed Diagnosis</string>
+    <string name="fast_abnormal_suggestive_of_tb">Abnormal Suggestive of TB</string>
+    <string name="fast_abnormal_not_suggestive_of_tb">Abnormal Not Suggestive of TB</string>
 
     <string-array name="fast_locations">
         <item>@string/fast_community_title</item>
         <item>@string/fast_hospital_title</item>
+    </string-array>
+    
+    <string-array name="fast_radiological_diagonosis_list">
+        <item>@string/fast_normal</item>
+        <item>@string/fast_abnormal_suggestive_of_tb</item>
+        <item>@string/fast_abnormal_not_suggestive_of_tb</item>
     </string-array>
 
     <string-array name="fast_hospital_parts">
@@ -689,7 +698,7 @@
         <item>@string/fast_chest_xray_other</item>
     </string-array>
 
-    <string-array name="fast_radiologists_diagnosis_list">
+    <string-array name="fast_abnormal_detailed_diagnosis_list">
         <item>@string/fast_adenopathy</item>
         <item>@string/fast_infiltration</item>
         <item>@string/fast_consolidation</item>
