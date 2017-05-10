@@ -28,11 +28,11 @@
 
     <!-- Settings Values -->
     <string-array name="programs">
-        <item>@string/pmdt</item>
+        <!--<item>@string/pmdt</item>-->
         <item>@string/pet</item>
         <item>@string/fast</item>
-        <item>@string/comorbidities</item>
-        <item>@string/childhood_tb</item>
+        <!--<item>@string/comorbidities</item>
+        <item>@string/childhood_tb</item>-->
     </string-array>
 
     <string name="dark_theme">Dark theme</string>
@@ -351,10 +351,10 @@
     <string name="city_default" translatable="false">Karachi</string>
     <string name="province_default" translatable="false">Sindh</string>
     <string name="country_default" translatable="false">Pakistan</string>
-    <!--<string name="ip_default" translatable="false">mrs.ghd.ihn.org.pk</string>
-    <string name="port_default" translatable="false">443</string>-->
-    <string name="ip_default" translatable="false">202.141.249.106</string>
-    <string name="port_default" translatable="false">9902</string>
+    <string name="ip_default" translatable="false">mrs.ghd.ihn.org.pk</string>
+    <string name="port_default" translatable="false">443</string>
+    <!--<string name="ip_default" translatable="false">202.141.249.106</string>
+    <string name="port_default" translatable="false">9902</string>-->
 
     <string name="support_contact">Support Contact</string>
     <string name="support_email">Support Email</string>
@@ -377,7 +377,7 @@
     <!-- Errors String -->
     <string name="user_not_found">No record of username found in local DB.</string>
     <string name="version_mismatch">Please update the app from playstore to continue.</string>
-    <string name="age_invalid">Age can\'t exceed 130</string>
+    <string name="age_invalid">Age can\'t exceed 120</string>
     <string name="provider_not_found">No provider associated with the user. Please contact Admin to create your user provider.</string>
     <string name="patient_not_select">SELECT PATIENT TO CONTINUE.</string>
     <string name="location_not_select">SELECT LOCATION TO CONTINUE.</string>
