@@ -431,6 +431,7 @@
     <string name="fast_rejected">Rejected</string>
     <string name="fast_date_of_result_recieved_cannot_be_less_than_submission_date">Date of result received cannot be before sample submission date</string>
     <string name="fast_form_cannot_be_before_person_dob">This date cannot be before person date of birth</string>
+    <string name="fast_form_date_cannot_be_before_treatment_initiation_form">Form date cannot be before treatment initiation date</string>
     <string name="fast_test_cannot_be_before_form_date">Test date cannot be before form date</string>
     <string name="fast_missed_visit_date_cannot_be_before_form_date">Missed visit date can\'t be before form date</string>
     <string name="fast_date_of_next_visit_cant_be_before_missed_visit_date">Next visit date cannot be before missed visit date</string>
@@ -444,10 +445,19 @@
     <string name="fast_invalid_father_name">Invalid father name</string>
     <string name="fast_invalid_husband_name">Invalid husband name</string>
     <string name="fast_tb_symptoms">TB SYMPTOMS</string>
+    <string name="fast_if_abnormal_detailed_diagnosis">If Abnormal, Detailed Diagnosis</string>
+    <string name="fast_abnormal_suggestive_of_tb">Abnormal Suggestive of TB</string>
+    <string name="fast_abnormal_not_suggestive_of_tb">Abnormal Not Suggestive of TB</string>
 
     <string-array name="fast_locations">
         <item>@string/fast_community_title</item>
         <item>@string/fast_hospital_title</item>
+    </string-array>
+    
+    <string-array name="fast_radiological_diagonosis_list">
+        <item>@string/fast_normal</item>
+        <item>@string/fast_abnormal_suggestive_of_tb</item>
+        <item>@string/fast_abnormal_not_suggestive_of_tb</item>
     </string-array>
 
     <string-array name="fast_hospital_parts">
@@ -688,7 +698,7 @@
         <item>@string/fast_chest_xray_other</item>
     </string-array>
 
-    <string-array name="fast_radiologists_diagnosis_list">
+    <string-array name="fast_abnormal_detailed_diagnosis_list">
         <item>@string/fast_adenopathy</item>
         <item>@string/fast_infiltration</item>
         <item>@string/fast_consolidation</item>

@@ -63,7 +63,6 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
 
     // protected Calendar thirdDateCalendar;
     //  protected DialogFragment thirdDateFragment;
-    Boolean canSubmit = true;
 
     Context context;
     // Views...
@@ -288,7 +287,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                         otherDrugName, otherDrugResult}};
 
         formDate.getButton().setOnClickListener(this);
-        // dateOfSubmission.getButton().setOnClickListener(this);
+         dateOfSubmission.getButton().setOnClickListener(this);
         //dateTestResult.getButton().setOnClickListener(this);
         formType.getRadioGroup().setOnCheckedChangeListener(this);
         specimenSource.getRadioGroup().setOnCheckedChangeListener(this);
@@ -354,41 +353,17 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
 
     }
 
-    public void updateFollowUpMonth(){
+    public void updateFollowUpMonth() {
 
         String treatmentDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
         String format = "";
+        String[] monthArray;
 
         if (treatmentDate == null) {
-            canSubmit = false;
-            String[] monthArray = new String[1];
+            monthArray = new String[1];
             monthArray[0] = "0";
             monthOfTreatment.getSpinner().setSpinnerData(monthArray);
-
-            submitButton.setEnabled(false);
-            int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
-
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
-            alertDialog.setMessage(getString(R.string.fast_form_cannot_be_submitted_without_submitting_treatment_initiation_form));
-            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-            // DrawableCompat.setTint(clearIcon, color);
-            alertDialog.setIcon(clearIcon);
-            alertDialog.setTitle(getResources().getString(R.string.title_error));
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            try {
-                                InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
-                                imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
-                            } catch (Exception e) {
-                                // TODO: handle exception
-                            }
-                            dialog.dismiss();
-                        }
-                    });
-            alertDialog.show();
         } else {
-            canSubmit = true;
             if (treatmentDate.contains("/")) {
                 format = "dd/MM/yyyy";
             } else {
@@ -399,18 +374,23 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
             int diffYear = formDateCalendar.get(Calendar.YEAR) - treatmentDateCalender.get(Calendar.YEAR);
             int diffMonth = diffYear * 12 + formDateCalendar.get(Calendar.MONTH) - treatmentDateCalender.get(Calendar.MONTH);
 
-            String[] monthArray = new String[diffMonth + 1];
-
-            for (int i = 0; i <= diffMonth; i++) {
-                monthArray[i] = String.valueOf(i);
+            if (diffMonth == 0) {
+                monthArray = new String[1];
+                monthArray[0] = "1";
+                monthOfTreatment.getSpinner().setSpinnerData(monthArray);
+            } else {
+                monthArray = new String[diffMonth];
+                for (int i = 0; i < diffMonth; i++) {
+                    monthArray[i] = String.valueOf(i+1);
+                }
+                monthOfTreatment.getSpinner().setSpinnerData(monthArray);
             }
-
-            monthOfTreatment.getSpinner().setSpinnerData(monthArray);
         }
     }
 
     @Override
     public void updateDisplay() {
+        Calendar treatDateCalender = null;
         if (snackbar != null)
             snackbar.dismiss();
 
@@ -440,16 +420,48 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                         break;
                     }
                     else {
-                        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
+
+                            String personDOB = App.getPatient().getPerson().getBirthdate();
+
+                            Date date1 = new Date();
+                            if (formDateCalendar.after(App.getCalendar(date1))) {
+
+                                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                                snackbar.show();
+
+                                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                                break;
+
+                            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                                tv.setMaxLines(2);
+                                snackbar.show();
+                                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                                break;
+                            } else
+                                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        }
                     }
                 }
             }
         }
 
-        else if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
+        if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
+
+            String treatmentDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+
+            if(treatmentDate != null){
+                treatDateCalender = App.getCalendar(App.stringToDate(treatmentDate, "yyyy-MM-dd"));
+            }
+
 
 
             Date date = new Date();
@@ -463,7 +475,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
             }
-         /*   else if (dateOfSubmission.getVisibility() == View.VISIBLE && formDateCalendar.before(secondDateCalendar)) {
+            else if (dateOfSubmission.getVisibility() == View.VISIBLE && formDateCalendar.before(secondDateCalendar)) {
 
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
@@ -472,7 +484,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
 
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
-            }*/
+            }
             else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
@@ -480,7 +492,23 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-            } else {
+            }
+
+            else if (treatDateCalender != null) {
+                if(formDateCalendar.before(treatDateCalender)) {
+                    formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_date_cannot_be_before_treatment_initiation_form), Snackbar.LENGTH_INDEFINITE);
+                    snackbar.show();
+
+                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                }
+                else {
+                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                }
+            }
+
+            else {
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
                 // if(dateOfSubmission.getVisibility() == View.GONE){
                 // secondDateCalendar.setTime(formDateCalendar.getTime());
@@ -1069,8 +1097,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
 
                     testIdView.setImageResource(R.drawable.ic_checked_green);
                     showTestOrderOrTestResult();
-                    if(canSubmit)
-                        submitButton.setEnabled(true);
+                    submitButton.setEnabled(true);
 
                 } else {
 
