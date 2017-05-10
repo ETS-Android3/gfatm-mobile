@@ -195,12 +195,12 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
         goneVisibility();
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), bloodSugarTestID.getEditText(), formType.getRadioGroup(), bloodSugarTestType.getRadioGroup(), bloodSugarFollowupMonth.getSpinner(),
+        views = new View[]{bloodSugarTestID.getEditText(), formDate.getButton(), formType.getRadioGroup(), bloodSugarTestType.getRadioGroup(), bloodSugarFollowupMonth.getSpinner(),
                 bloodSugarTestOrderDate.getButton(), bloodSugarTestResultDate.getButton(), bloodSugarResult.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, formType, linearLayout, testOrderBloodSugar, bloodSugarTestType, bloodSugarFollowupMonth, bloodSugarTestOrderDate,
+                {{formType, linearLayout, formDate, testOrderBloodSugar, bloodSugarTestType, bloodSugarFollowupMonth, bloodSugarTestOrderDate,
                         testResultBloodSugar, bloodSugarTestResultDate, bloodSugarResult}};
 
         formDate.getButton().setOnClickListener(this);
@@ -304,6 +304,38 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
         //formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         if (snackbar != null)
             snackbar.dismiss();
+
+        if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))){
+            Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "Comorbidities-Blood Sugar Test Order");
+            String format = "";
+            String formDa = formDate.getButton().getText().toString();
+
+            for(int i =0 ; i < testIds.length ; i++){
+                if(testIds[i][0].equals(bloodSugarTestID.getEditText().getText().toString())){
+                    String date = testIds[i][1].toString();
+                    if (date.contains("/")) {
+                        format = "dd/MM/yyyy";
+                    } else {
+                        format = "yyyy-MM-dd";
+                    }
+
+                    Date orderDate = App.stringToDate(date, format);
+
+                    if(formDateCalendar.before(App.getCalendar(orderDate))){
+                        formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                        snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
+                        snackbar.show();
+
+                        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        break;
+                    }
+                    else {
+                        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                    }
+                }
+            }
+        }
 
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
@@ -504,9 +536,9 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
             if (bloodSugarFollowupMonth.getVisibility() == View.VISIBLE) {
                 observations.add(new String[]{"FOLLOW-UP MONTH", App.get(bloodSugarFollowupMonth)});
             }
-            observations.add(new String[]{"DATE TEST ORDERED", App.getSqlDateTime(secondDateCalendar)});
+            //observations.add(new String[]{"DATE TEST ORDERED", App.getSqlDateTime(secondDateCalendar)});
         } else if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))) {
-            observations.add(new String[]{"TEST RESULT DATE", App.getSqlDateTime(thirdDateCalendar)});
+            //observations.add(new String[]{"TEST RESULT DATE", App.getSqlDateTime(thirdDateCalendar)});
             observations.add(new String[]{"RANDOM BLOOD SUGAR", App.get(bloodSugarResult)});
         }
 
@@ -685,12 +717,12 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
                 } else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
                     bloodSugarFollowupMonth.getSpinner().selectValue(obs[0][1]);
                     bloodSugarFollowupMonth.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("DATE TEST ORDERED")) {
+                } /*else if (obs[0][0].equals("DATE TEST ORDERED")) {
                     String secondDate = obs[0][1];
                     secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                     bloodSugarTestOrderDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
                     bloodSugarTestOrderDate.setVisibility(View.VISIBLE);
-                }
+                }*/
                 submitButton.setEnabled(true);
             } else {
                 formType.getRadioGroup().getButtons().get(1).setChecked(true);
@@ -700,11 +732,11 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
                     checkTestId();
                     bloodSugarTestID.getEditText().setEnabled(false);
                     testIdView.setEnabled(false);
-                } else if (obs[0][0].equals("TEST RESULT DATE")) {
+                } /*else if (obs[0][0].equals("TEST RESULT DATE")) {
                     String secondDate = obs[0][1];
                     thirdDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                     bloodSugarTestResultDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
-                } else if (obs[0][0].equals("RANDOM BLOOD SUGAR")) {
+                }*/ else if (obs[0][0].equals("RANDOM BLOOD SUGAR")) {
                     bloodSugarResult.getEditText().setText(obs[0][1]);
                 }
             }
@@ -828,6 +860,7 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
     }
 
     void goneVisibility() {
+        formDate.setVisibility(View.GONE);
         testOrderBloodSugar.setVisibility(View.GONE);
         bloodSugarTestType.setVisibility(View.GONE);
         bloodSugarFollowupMonth.setVisibility(View.GONE);
@@ -839,12 +872,13 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
     }
 
     void showTestOrderOrTestResult() {
+        formDate.setVisibility(View.VISIBLE);
         if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
             testOrderBloodSugar.setVisibility(View.VISIBLE);
             bloodSugarTestType.setVisibility(View.VISIBLE);
             bloodSugarFollowupMonth.setVisibility(View.VISIBLE);
             showFollowupField();
-            bloodSugarTestOrderDate.setVisibility(View.VISIBLE);
+            //bloodSugarTestOrderDate.setVisibility(View.VISIBLE);
 
             testResultBloodSugar.setVisibility(View.GONE);
             bloodSugarTestResultDate.setVisibility(View.GONE);
@@ -857,7 +891,7 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
             bloodSugarTestOrderDate.setVisibility(View.GONE);
 
             testResultBloodSugar.setVisibility(View.VISIBLE);
-            bloodSugarTestResultDate.setVisibility(View.VISIBLE);
+            //bloodSugarTestResultDate.setVisibility(View.VISIBLE);
             bloodSugarResult.setVisibility(View.VISIBLE);
         }
     }

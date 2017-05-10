@@ -160,13 +160,13 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
     public void initViews() {
 
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         formType = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_testorder_testresult_form_type), getResources().getStringArray(R.array.comorbidities_testorder_testresult_form_type_options), "", App.HORIZONTAL, App.VERTICAL);
         testOrderLipid = new MyTextView(context, getResources().getString(R.string.comorbidities_lipid_test_order));
         testOrderLipid.setTypeface(null, Typeface.BOLD);
         lipidMonthOfVisit = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_urinedr_month_of_treatment), getResources().getStringArray(R.array.comorbidities_followup_month), "0", App.HORIZONTAL);
-        lipidTestOrderDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1cdate_test_order), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
+        lipidTestOrderDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1cdate_test_order), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         LinearLayout linearLayout = new LinearLayout(context);
         lipidTestID = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hhba1c_testid), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
@@ -192,14 +192,14 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
         //second page views...
         testResultLipid = new MyTextView(context, getResources().getString(R.string.comorbidities_lipid_test_result));
         testResultLipid.setTypeface(null, Typeface.BOLD);
-        lipidTestResultDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1c_resultdate), DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
+        lipidTestResultDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1c_resultdate), DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
         lipidTotalCholestrol = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_lipid_test_cholestrol), "", getResources().getString(R.string.comorbidities_lipid_test_total_cholestrol_range), 7, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         lipidTriglycerides = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_lipid_test_triglycerides), "", getResources().getString(R.string.comorbidities_lipid_test_triglycerides_range), 7, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         lipidHDL = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_lipid_test_hdl), "", getResources().getString(R.string.comorbidities_lipid_test_hdl_range), 7, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         lipidLDL = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_lipid_test_ldl), "", getResources().getString(R.string.comorbidities_lipid_test_ldl_range), 7, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         lipidVLDL = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_lipid_test_vldl), "", getResources().getString(R.string.comorbidities_lipid_test_vldl_range), 7, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         lipidNonHDLCholestrol = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_lipid_test_non_hdl), "", getResources().getString(R.string.comorbidities_lipid_test_non_hdl_range), 7, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        nextLipidTestDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_lipid_nexttestdate), DateFormat.format("dd-MMM-yyyy", fourthDateCalendar).toString(), App.HORIZONTAL);
+        nextLipidTestDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_lipid_nexttestdate), DateFormat.format("EEEE, MMM dd,yyyy", fourthDateCalendar).toString(), App.HORIZONTAL);
         //nextLipidTestDate.setVisibility(View.GONE);
         goneVisibility();
 
@@ -209,7 +209,7 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, formType, linearLayout, testOrderLipid, lipidMonthOfVisit, lipidTestOrderDate, testResultLipid, lipidTestResultDate,
+                {{formType, linearLayout, formDate, testOrderLipid, lipidMonthOfVisit, lipidTestOrderDate, testResultLipid, lipidTestResultDate,
                         lipidTotalCholestrol, lipidTriglycerides, lipidHDL, lipidLDL, lipidVLDL, lipidNonHDLCholestrol, nextLipidTestDate}};
 
         formDate.getButton().setOnClickListener(this);
@@ -577,11 +577,43 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
     @Override
     public void updateDisplay() {
 
-        //formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        //formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         if (snackbar != null)
             snackbar.dismiss();
 
-        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
+        if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))){
+            Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "Comorbidities-Lipid Test Order");
+            String format = "";
+            String formDa = formDate.getButton().getText().toString();
+
+            for(int i =0 ; i < testIds.length ; i++){
+                if(testIds[i][0].equals(lipidTestID.getEditText().getText().toString())){
+                    String date = testIds[i][1].toString();
+                    if (date.contains("/")) {
+                        format = "dd/MM/yyyy";
+                    } else {
+                        format = "yyyy-MM-dd";
+                    }
+
+                    Date orderDate = App.stringToDate(date, format);
+
+                    if(formDateCalendar.before(App.getCalendar(orderDate))){
+                        formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                        snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
+                        snackbar.show();
+
+                        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        break;
+                    }
+                    else {
+                        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                    }
+                }
+            }
+        }
+
+        if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
@@ -589,27 +621,27 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
 
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
-            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
             } else
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         }
 
-        //lipidTestOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-        if (!(lipidTestOrderDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString()))) {
+        //lipidTestOrderDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+        if (!(lipidTestOrderDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
 
             String formDa = lipidTestOrderDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
@@ -617,27 +649,27 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
             Date date = new Date();
             if (secondDateCalendar.after(App.getCalendar(date))) {
 
-                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-                lipidTestOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+                lipidTestOrderDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
-            } else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
-                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+            } else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
-                lipidTestOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+                lipidTestOrderDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
             } else
-                lipidTestOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+                lipidTestOrderDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
         }
 
-        //lipidTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
-        if (!(lipidTestResultDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString()))) {
+        //lipidTestResultDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
+        if (!(lipidTestResultDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString()))) {
 
             String formDa = lipidTestResultDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
@@ -645,32 +677,32 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
             Date date = new Date();
             if (thirdDateCalendar.after(App.getCalendar(date))) {
 
-                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-                lipidTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+                lipidTestResultDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
 
-            } else if (thirdDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
-                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+            } else if (thirdDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
-                lipidTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+                lipidTestResultDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
             } else
-                lipidTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+                lipidTestResultDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
 
         }
 
         //fourthDateCalendar = thirdDateCalendar;
-        fourthDateCalendar.set(Calendar.YEAR, secondDateCalendar.get(Calendar.YEAR));
-        fourthDateCalendar.set(Calendar.MONTH, secondDateCalendar.get(Calendar.MONTH));
-        fourthDateCalendar.set(Calendar.DAY_OF_MONTH, secondDateCalendar.get(Calendar.DAY_OF_MONTH));
+        fourthDateCalendar.set(Calendar.YEAR, formDateCalendar.get(Calendar.YEAR));
+        fourthDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
+        fourthDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
         fourthDateCalendar.add(Calendar.MONTH, 2);
         fourthDateCalendar.add(Calendar.DAY_OF_MONTH, 20);
-        nextLipidTestDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", fourthDateCalendar).toString());
+        nextLipidTestDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", fourthDateCalendar).toString());
     }
 
     @Override
@@ -854,9 +886,9 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
 
         if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
             observations.add(new String[]{"FOLLOW-UP MONTH", App.get(lipidMonthOfVisit)});
-            observations.add(new String[]{"DATE TEST ORDERED", App.getSqlDateTime(secondDateCalendar)});
+            //observations.add(new String[]{"DATE TEST ORDERED", App.getSqlDateTime(secondDateCalendar)});
         } else if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))) {
-            observations.add(new String[]{"TEST RESULT DATE", App.getSqlDateTime(thirdDateCalendar)});
+            //observations.add(new String[]{"TEST RESULT DATE", App.getSqlDateTime(thirdDateCalendar)});
             observations.add(new String[]{"TOTAL CHOLESTEROL", App.get(lipidTotalCholestrol)});
             observations.add(new String[]{"TRIGLYCERIDES", App.get(lipidTriglycerides)});
             observations.add(new String[]{"HIGH-DENSITY LIPOPROTEIN CHOLESTEROL", App.get(lipidHDL)});
@@ -1004,7 +1036,7 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
         String date = fo.getFormDate();
         ArrayList<String[][]> obsValue = fo.getObsValue();
         formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         for (int i = 0; i < obsValue.size(); i++) {
 
@@ -1026,12 +1058,12 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
                 } else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
                     lipidMonthOfVisit.getSpinner().selectValue(obs[0][1]);
                     lipidMonthOfVisit.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("DATE TEST ORDERED")) {
+                } /*else if (obs[0][0].equals("DATE TEST ORDERED")) {
                     String secondDate = obs[0][1];
                     secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
-                    lipidTestOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+                    lipidTestOrderDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
                     lipidTestOrderDate.setVisibility(View.VISIBLE);
-                }
+                }*/
                 submitButton.setEnabled(true);
             } else {
                 formType.getRadioGroup().getButtons().get(1).setChecked(true);
@@ -1041,11 +1073,11 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
                     checkTestId();
                     lipidTestID.getEditText().setEnabled(false);
                     testIdView.setEnabled(false);
-                } else if (obs[0][0].equals("TEST RESULT DATE")) {
+                } /*else if (obs[0][0].equals("TEST RESULT DATE")) {
                     String secondDate = obs[0][1];
                     thirdDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
-                    lipidTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
-                } else if (obs[0][0].equals("TOTAL CHOLESTEROL")) {
+                    lipidTestResultDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
+                }*/ else if (obs[0][0].equals("TOTAL CHOLESTEROL")) {
                     lipidTotalCholestrol.getEditText().setText(obs[0][1]);
                 } else if (obs[0][0].equals("TRIGLYCERIDES")) {
                     lipidTriglycerides.getEditText().setText(obs[0][1]);
@@ -1060,7 +1092,7 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
                 } else if (obs[0][0].equals("RETURN VISIT DATE")) {
                     String secondDate = obs[0][1];
                     fourthDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
-                    nextLipidTestDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", fourthDateCalendar).toString());
+                    nextLipidTestDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", fourthDateCalendar).toString());
                 }
             }
         }
@@ -1120,15 +1152,15 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
         formType.getRadioGroup().getButtons().get(1).setEnabled(true);
 
         thirdDateCalendar = Calendar.getInstance();
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        lipidTestOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-        lipidTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        lipidTestOrderDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+        lipidTestResultDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
         fourthDateCalendar.set(Calendar.YEAR, secondDateCalendar.get(Calendar.YEAR));
         fourthDateCalendar.set(Calendar.MONTH, secondDateCalendar.get(Calendar.MONTH));
         fourthDateCalendar.set(Calendar.DAY_OF_MONTH, secondDateCalendar.get(Calendar.DAY_OF_MONTH));
         fourthDateCalendar.add(Calendar.MONTH, 2);
         fourthDateCalendar.add(Calendar.DAY_OF_MONTH, 20);
-        nextLipidTestDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", fourthDateCalendar).toString());
+        nextLipidTestDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", fourthDateCalendar).toString());
 
         submitButton.setEnabled(false);
 
@@ -1175,6 +1207,7 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
     }
 
     void goneVisibility() {
+        formDate.setVisibility(View.GONE);
         testOrderLipid.setVisibility(View.GONE);
         lipidMonthOfVisit.setVisibility(View.GONE);
         lipidTestOrderDate.setVisibility(View.GONE);
@@ -1193,10 +1226,11 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
     }
 
     void showTestOrderOrTestResult() {
+        formDate.setVisibility(View.VISIBLE);
         if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
             testOrderLipid.setVisibility(View.VISIBLE);
             lipidMonthOfVisit.setVisibility(View.VISIBLE);
-            lipidTestOrderDate.setVisibility(View.VISIBLE);
+            //lipidTestOrderDate.setVisibility(View.VISIBLE);
 
             //second page views...
             testResultLipid.setVisibility(View.GONE);
@@ -1216,13 +1250,14 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
 
             //second page views...
             testResultLipid.setVisibility(View.VISIBLE);
-            lipidTestResultDate.setVisibility(View.VISIBLE);
+            //lipidTestResultDate.setVisibility(View.VISIBLE);
             lipidTotalCholestrol.setVisibility(View.VISIBLE);
             lipidTriglycerides.setVisibility(View.VISIBLE);
             lipidHDL.setVisibility(View.VISIBLE);
             lipidLDL.setVisibility(View.VISIBLE);
             lipidVLDL.setVisibility(View.VISIBLE);
             lipidNonHDLCholestrol.setVisibility(View.VISIBLE);
+            nextLipidTestDate.setVisibility(View.VISIBLE);
         }
     }
 

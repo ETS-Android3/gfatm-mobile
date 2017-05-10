@@ -156,7 +156,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
     public void initViews() {
 
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         formType = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_testorder_testresult_form_type), getResources().getStringArray(R.array.comorbidities_testorder_testresult_form_type_options), "", App.HORIZONTAL, App.VERTICAL);
         testOrderHba1C = new MyTextView(context, getResources().getString(R.string.comorbidities_hba1c_test_order));
@@ -164,7 +164,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
         hba1cTestType = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_hba1c_testtype), getResources().getStringArray(R.array.comorbidities_HbA1C_test_type), getResources().getString(R.string.comorbidities_HbA1C_test_type_baseline), App.HORIZONTAL, App.VERTICAL);
         hba1cFollowupMonth = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_mth_txcomorbidities_hba1c), getResources().getStringArray(R.array.comorbidities_followup_month), "0", App.HORIZONTAL);
         showFollowupField();
-        hba1cTestOrderDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1cdate_test_order), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
+        hba1cTestOrderDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1cdate_test_order), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         LinearLayout linearLayout = new LinearLayout(context);
         hba1cTestID = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hhba1c_testid), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
@@ -190,11 +190,11 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
         //second page views...
         testResultHba1c = new MyTextView(context, getResources().getString(R.string.comorbidities_hba1c_test_result));
         testResultHba1c.setTypeface(null, Typeface.BOLD);
-        hba1cTestResultDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1c_resultdate), DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
+        hba1cTestResultDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1c_resultdate), DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
         //microalbuminResult = new TitledEditText(context, null, getResources().getString(R.string.hba1c_result), "", "", 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         hba1cResult = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hba1c_result), "", getResources().getString(R.string.comorbidities_hba1c_result_range), 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         hba1cDiabetic = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_hba1c_diabetic), getResources().getStringArray(R.array.comorbidities_yes_no), "", App.VERTICAL, App.VERTICAL);
-        showHba1cDiabetic();
+        //showHba1cDiabetic();
         autopopulateHba1cDiabetic();
         goneVisibility();
 
@@ -204,7 +204,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, formType, linearLayout, testOrderHba1C, hba1cTestType, hba1cFollowupMonth, hba1cTestOrderDate,
+                {{formType, linearLayout, formDate, testOrderHba1C, hba1cTestType, hba1cFollowupMonth, hba1cTestOrderDate,
                         testResultHba1c, hba1cTestResultDate, hba1cResult, hba1cDiabetic}};
 
         formDate.getButton().setOnClickListener(this);
@@ -305,11 +305,43 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
     @Override
     public void updateDisplay() {
 
-        //formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        //formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         if (snackbar != null)
             snackbar.dismiss();
 
-        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
+        if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))){
+            Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "Comorbidities-HbA1C Test Order");
+            String format = "";
+            String formDa = formDate.getButton().getText().toString();
+
+            for(int i =0 ; i < testIds.length ; i++){
+                if(testIds[i][0].equals(hba1cTestID.getEditText().getText().toString())){
+                    String date = testIds[i][1].toString();
+                    if (date.contains("/")) {
+                        format = "dd/MM/yyyy";
+                    } else {
+                        format = "yyyy-MM-dd";
+                    }
+
+                    Date orderDate = App.stringToDate(date, format);
+
+                    if(formDateCalendar.before(App.getCalendar(orderDate))){
+                        formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                        snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
+                        snackbar.show();
+
+                        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        break;
+                    }
+                    else {
+                        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                    }
+                }
+            }
+        }
+
+        if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
@@ -317,29 +349,29 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
 
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 Log.d("ERROR", "HBA1C");
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
-            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
             } else
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         }
 
-        //hba1cTestOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-        if (!(hba1cTestOrderDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString()))) {
+        //hba1cTestOrderDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+        if (!(hba1cTestOrderDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
 
             String formDa = hba1cTestOrderDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
@@ -347,27 +379,27 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
             Date date = new Date();
             if (secondDateCalendar.after(App.getCalendar(date))) {
 
-                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-                hba1cTestOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+                hba1cTestOrderDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
-            } else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
-                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+            } else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
-                hba1cTestOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+                hba1cTestOrderDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
             } else
-                hba1cTestOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+                hba1cTestOrderDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
         }
 
-        //hba1cTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
-        if (!(hba1cTestResultDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString()))) {
+        //hba1cTestResultDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
+        if (!(hba1cTestResultDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString()))) {
 
             String formDa = hba1cTestResultDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
@@ -375,22 +407,22 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
             Date date = new Date();
             if (thirdDateCalendar.after(App.getCalendar(date))) {
 
-                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-                hba1cTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+                hba1cTestResultDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
 
-            } else if (thirdDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
-                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+            } else if (thirdDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
-                hba1cTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+                hba1cTestResultDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
             } else
-                hba1cTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+                hba1cTestResultDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
 
         }
     }
@@ -518,9 +550,9 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
             if (hba1cFollowupMonth.getVisibility() == View.VISIBLE) {
                 observations.add(new String[]{"FOLLOW-UP MONTH", App.get(hba1cFollowupMonth)});
             }
-            observations.add(new String[]{"DATE TEST ORDERED", App.getSqlDateTime(secondDateCalendar)});
+            //observations.add(new String[]{"DATE TEST ORDERED", App.getSqlDateTime(secondDateCalendar)});
         } else if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))) {
-            observations.add(new String[]{"TEST RESULT DATE", App.getSqlDateTime(thirdDateCalendar)});
+            //observations.add(new String[]{"TEST RESULT DATE", App.getSqlDateTime(thirdDateCalendar)});
             observations.add(new String[]{"HBA1C RESULT", App.get(hba1cResult)});
             if (hba1cDiabetic.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"DIABETES MELLITUS", App.get(hba1cDiabetic).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
@@ -663,7 +695,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
         String date = fo.getFormDate();
         ArrayList<String[][]> obsValue = fo.getObsValue();
         formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         for (int i = 0; i < obsValue.size(); i++) {
 
@@ -699,12 +731,12 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
                 } else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
                     hba1cFollowupMonth.getSpinner().selectValue(obs[0][1]);
                     hba1cFollowupMonth.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("DATE TEST ORDERED")) {
+                } /*else if (obs[0][0].equals("DATE TEST ORDERED")) {
                     String secondDate = obs[0][1];
                     secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
-                    hba1cTestOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+                    hba1cTestOrderDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
                     hba1cTestOrderDate.setVisibility(View.VISIBLE);
-                }
+                }*/
                 submitButton.setEnabled(true);
             } else {
                 formType.getRadioGroup().getButtons().get(1).setChecked(true);
@@ -714,11 +746,11 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
                     checkTestId();
                     hba1cTestID.getEditText().setEnabled(false);
                     testIdView.setEnabled(false);
-                } else if (obs[0][0].equals("TEST RESULT DATE")) {
+                } /*else if (obs[0][0].equals("TEST RESULT DATE")) {
                     String secondDate = obs[0][1];
                     thirdDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
-                    hba1cTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
-                } else if (obs[0][0].equals("HBA1C RESULT")) {
+                    hba1cTestResultDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
+                }*/ else if (obs[0][0].equals("HBA1C RESULT")) {
                     hba1cResult.getEditText().setText(obs[0][1]);
                 } else if (obs[0][0].equals("DIABETES MELLITUS")) {
                     for (RadioButton rb : hba1cDiabetic.getRadioGroup().getButtons()) {
@@ -793,9 +825,9 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
         formType.getRadioGroup().getButtons().get(1).setEnabled(true);
 
         thirdDateCalendar = Calendar.getInstance();
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-        hba1cTestOrderDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-        hba1cTestResultDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        hba1cTestOrderDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+        hba1cTestResultDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
 
         submitButton.setEnabled(false);
 
@@ -832,7 +864,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
         if (radioGroup == hba1cTestType.getRadioGroup()) {
             showFollowupField();
-            showHba1cDiabetic();
+            //showHba1cDiabetic();
             hba1cTestType.getQuestionView().setError(null);
         }
 
@@ -846,6 +878,15 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
             hba1cTestID.getEditText().setError(null);
             goneVisibility();
             submitButton.setEnabled(false);
+        }
+
+        if(radioGroup == hba1cDiabetic.getRadioGroup()) {
+            if(App.get(hba1cDiabetic).equalsIgnoreCase(getResources().getString(R.string.no))) {
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.comorbidities_hba1c_screener_instructions), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(3);
+                snackbar.show();
+            }
         }
     }
 
@@ -873,6 +914,11 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
                 hba1cDiabetic.getRadioGroup().check((hba1cDiabetic.getRadioGroup().getChildAt(0)).getId());
             } else {
                 hba1cDiabetic.getRadioGroup().check((hba1cDiabetic.getRadioGroup().getChildAt(1)).getId());
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.comorbidities_hba1c_screener_instructions), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(3);
+                snackbar.show();
             }
         } catch (NumberFormatException nfe) {
             //Exception: User might be entering " " (empty) value
@@ -880,6 +926,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
     }
 
     void goneVisibility() {
+        formDate.setVisibility(View.GONE);
         testOrderHba1C.setVisibility(View.GONE);
         hba1cTestType.setVisibility(View.GONE);
         hba1cFollowupMonth.setVisibility(View.GONE);
@@ -895,24 +942,72 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
 
     void showTestOrderOrTestResult() {
         if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
+            formDate.setVisibility(View.VISIBLE);
             testOrderHba1C.setVisibility(View.VISIBLE);
             hba1cTestType.setVisibility(View.VISIBLE);
             hba1cFollowupMonth.setVisibility(View.VISIBLE);
-            hba1cTestOrderDate.setVisibility(View.VISIBLE);
+            //hba1cTestOrderDate.setVisibility(View.VISIBLE);
             showFollowupField();
             testResultHba1c.setVisibility(View.GONE);
             hba1cTestResultDate.setVisibility(View.GONE);
             hba1cResult.setVisibility(View.GONE);
             hba1cDiabetic.setVisibility(View.GONE);
         } else {
+            formDate.setVisibility(View.VISIBLE);
             testOrderHba1C.setVisibility(View.GONE);
             hba1cTestType.setVisibility(View.GONE);
             hba1cFollowupMonth.setVisibility(View.GONE);
             hba1cTestOrderDate.setVisibility(View.GONE);
             testResultHba1c.setVisibility(View.VISIBLE);
-            hba1cTestResultDate.setVisibility(View.VISIBLE);
+            //hba1cTestResultDate.setVisibility(View.VISIBLE);
             hba1cResult.setVisibility(View.VISIBLE);
-            hba1cDiabetic.setVisibility(View.VISIBLE);
+            //hba1cDiabetic.setVisibility(View.GONE);
+
+            final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
+                @Override
+                protected HashMap<String, String> doInBackground(String... params) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            loading.setInverseBackgroundForced(true);
+                            loading.setIndeterminate(true);
+                            loading.setCancelable(false);
+                            loading.setMessage(getResources().getString(R.string.fetching_data));
+                            loading.show();
+                        }
+                    });
+
+                    HashMap<String, String> result = new HashMap<String, String>();
+                    String testStatus = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "HbA1C Test Order", "TEST CONTEXT STATUS");
+                    Log.e("TextStatus", testStatus+"");
+
+
+                    if (testStatus != null)
+                        if (!testStatus.equals(""))
+                            result.put("TEST CONTEXT STATUS", testStatus);
+
+                    return result;
+                }
+
+                @Override
+                protected void onProgressUpdate(String... values) {
+                }
+
+                @Override
+                protected void onPostExecute(HashMap<String, String> result) {
+                    super.onPostExecute(result);
+                    loading.dismiss();
+
+                    Log.e("TextStatus", result.get("TEST CONTEXT STATUS")+"");
+
+                    if (result.get("TEST CONTEXT STATUS").equalsIgnoreCase("BASELINE") || result.get("TEST CONTEXT STATUS").equalsIgnoreCase("BASELINE REPEAT")) {
+                        hba1cDiabetic.setVisibility(View.VISIBLE);
+                    } else {
+                        hba1cDiabetic.setVisibility(View.GONE);
+                    }
+                }
+            };
+            autopopulateFormTask.execute("");
         }
     }
 
