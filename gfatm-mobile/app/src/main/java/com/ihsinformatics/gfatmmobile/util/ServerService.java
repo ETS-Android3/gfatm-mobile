@@ -407,7 +407,7 @@ public class ServerService {
             return user;
         }
         if (App.getCommunicationMode().equals("REST")) {
-            JSONObject response = httpGet.getUserByName(App.getUsername());
+            JSONObject response = httpGet.getUserByName(username);
             if (response == null)
                 return user;
             JSONObject[] jsonObjects = JSONParser.getJSONArrayFromObject(response, "results");
