@@ -897,7 +897,17 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
                 monthArray = new String[1];
                 monthArray[0] = "1";
                 monthOfTreatment.getSpinner().setSpinnerData(monthArray);
-            } else {
+            }
+
+            else if(diffMonth > 24){
+                monthArray = new String[24];
+                for (int i = 0; i < 24; i++) {
+                    monthArray[i] = String.valueOf(i+1);
+                }
+                monthOfTreatment.getSpinner().setSpinnerData(monthArray);
+            }
+
+            else {
                 monthArray = new String[diffMonth];
                 for (int i = 0; i < diffMonth; i++) {
                     monthArray[i] = String.valueOf(i+1);
