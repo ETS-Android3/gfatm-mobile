@@ -67,7 +67,7 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
     TitledRadioGroup pointTestBeingDone;
     TitledSpinner monthTreatment;
     TitledRadioGroup specimenType;
-    TitledSpinner specimenComeFrom;
+    TitledRadioGroup specimenComeFrom;
     TitledEditText otherSpecimentComeFrom;
     TitledSpinner typeOfMediaDst;
     TitledRadioGroup isoniazidPoint2;
@@ -179,7 +179,7 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
         monthTreatment = new TitledSpinner(context, null, getResources().getString(R.string.ctb_month_treatment), getResources().getStringArray(R.array.ctb_0_to_24), null, App.HORIZONTAL);
         updateFollowUpMonth();
         specimenType = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_specimen_type), getResources().getStringArray(R.array.ctb_specimen_type_list), null, App.HORIZONTAL, App.VERTICAL);
-        specimenComeFrom = new TitledSpinner(context, null, getResources().getString(R.string.ctb_speciment_route), getResources().getStringArray(R.array.ctb_speciment_route_list), null, App.VERTICAL);
+        specimenComeFrom = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_speciment_route), getResources().getStringArray(R.array.ctb_speciment_route_list), null, App.HORIZONTAL, App.VERTICAL);
         otherSpecimentComeFrom = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
 
         typeOfMediaDst = new TitledSpinner(context, null, getResources().getString(R.string.ctb_type_of_media_dst), getResources().getStringArray(R.array.ctb_type_of_media_dst_list), null, App.VERTICAL);
@@ -230,7 +230,7 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
 
 
         views = new View[]{formDate.getButton(), formType.getRadioGroup(), dateSubmission.getButton(), pointTestBeingDone.getRadioGroup(),
-                specimenType.getRadioGroup(), specimenComeFrom.getSpinner(), typeOfMediaDst.getSpinner(),
+                specimenType.getRadioGroup(), specimenComeFrom.getRadioGroup(), typeOfMediaDst.getSpinner(),
                 isoniazidPoint2.getRadioGroup(), isoniazid1.getRadioGroup(), rifampicin.getRadioGroup(),
                 ethambuthol.getRadioGroup(), streptomycin.getRadioGroup(), pyrazinamide.getRadioGroup(),
                 ofloxacin.getRadioGroup(), levofloxacin.getRadioGroup(), moxifloxacinPoint5.getRadioGroup(),
@@ -256,7 +256,7 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
         dateSubmission.getButton().setOnClickListener(this);
         pointTestBeingDone.getRadioGroup().setOnCheckedChangeListener(this);
         specimenType.getRadioGroup().setOnCheckedChangeListener(this);
-        specimenComeFrom.getSpinner().setOnItemSelectedListener(this);
+        specimenComeFrom.getRadioGroup().setOnCheckedChangeListener(this);
         typeOfMediaDst.getSpinner().setOnItemSelectedListener(this);
         isoniazidPoint2.getRadioGroup().setOnCheckedChangeListener(this);
         isoniazid1.getRadioGroup().setOnCheckedChangeListener(this);
@@ -464,7 +464,14 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-            } else
+            } else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                dateSubmission.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+            }else
                 dateSubmission.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         }
         formDate.getButton().setEnabled(true);
@@ -879,15 +886,22 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
                     specimenType.setVisibility(View.VISIBLE);
                 }
                 else if (obs[0][0].equals("SPECIMEN SOURCE")) {
-                    String value = obs[0][1].equals("LYMPHOCYTES") ? getResources().getString(R.string.ctb_lymph) :
-                            (obs[0][1].equals("PLEURAL EFFUSION") ? getResources().getString(R.string.ctb_pleural_fluid) :
-                                    (obs[0][1].equals("PUS") ? getResources().getString(R.string.ctb_pus) :
-                                            getResources().getString(R.string.ctb_other_title)));
-                    if(value.equalsIgnoreCase(getResources().getString(R.string.ctb_other_title))){
-                        otherSpecimentComeFrom.setVisibility(View.VISIBLE);
+                    for (RadioButton rb : specimenComeFrom.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_lymph)) && obs[0][1].equals("LYMPHOCYTES")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_pleural_fluid)) && obs[0][1].equals("PLEURAL EFFUSION")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_pus)) && obs[0][1].equals("PUS")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_other_title)) && obs[0][1].equals("OTHER SPECIMEN SOURCE")) {
+                            rb.setChecked(true);
+                            otherSpecimentComeFrom.setVisibility(View.VISIBLE);
+                            break;
+                        }
                     }
-                    specimenComeFrom.getSpinner().selectValue(value);
-                    specimenComeFrom.setVisibility(View.VISIBLE);
                 } else if (obs[0][0].equals("OTHER SPECIMEN SOURCE")) {
                     otherSpecimentComeFrom.getEditText().setText(obs[0][1]);
                 }
@@ -1270,15 +1284,6 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        MySpinner spinner = (MySpinner) parent;
-        if (spinner == specimenComeFrom.getSpinner()) {
-            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_other_title))) {
-                otherSpecimentComeFrom.setVisibility(View.VISIBLE);
-            } else {
-                otherSpecimentComeFrom.setVisibility(View.GONE);
-            }
-        }
-
     }
 
     @Override
@@ -1445,7 +1450,7 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
                 specimenComeFrom.setVisibility(View.VISIBLE);
 
             } else {
-                specimenComeFrom.getSpinner().setSelection(0);
+                specimenComeFrom.getRadioGroup().clearCheck();
                 specimenComeFrom.setVisibility(View.GONE);
             }
         }
@@ -1455,6 +1460,13 @@ public class ChildhoodTbDSTCultureTest extends AbstractFormActivity implements R
 
             } else {
                 monthTreatment.setVisibility(View.GONE);
+            }
+        }if (group == specimenComeFrom.getRadioGroup()) {
+            if (specimenComeFrom.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_other_title))) {
+                otherSpecimentComeFrom.setVisibility(View.VISIBLE);
+
+            } else {
+                otherSpecimentComeFrom.setVisibility(View.GONE);
             }
         }
 

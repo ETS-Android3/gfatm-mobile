@@ -577,16 +577,16 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
 
     @Override
     public void updateDisplay() {
+        String formDa = formDate.getButton().getText().toString();
+        String personDOB = App.getPatient().getPerson().getBirthdate();
+        Calendar maxDateCalender = formDateCalendar.getInstance();
+        maxDateCalender.setTime(formDateCalendar.getTime());
+        maxDateCalender.add(Calendar.YEAR, 2);
 
         if (snackbar != null)
             snackbar.dismiss();
         Date date = new Date();
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
-
-            String formDa = formDate.getButton().getText().toString();
-
-            String personDOB = App.getPatient().getPerson().getBirthdate();
-
 
             if (formDateCalendar.after(App.getCalendar(date))) {
 
@@ -623,25 +623,34 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 regDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         }
         if (!iptStartDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString())) {
-            if (thirdDateCalendar.after(date)) {
+            if (thirdDateCalendar.after(App.getCalendar(date))) {
 
                 thirdDateCalendar = App.getCalendar(date);
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-            } else
+            } else if (thirdDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.ctb_form_date_less_than_patient_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                iptStartDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
+            }else
                 iptStartDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
         }
         if (!returnVisitDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", forthDateCalender).toString())) {
-            if (forthDateCalender.after(date)) {
+            if (forthDateCalender.after(maxDateCalender)) {
 
-                forthDateCalender = App.getCalendar(date);
+                forthDateCalender = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.ctb_return_visit_less_than_23_months), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-            } else
+                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", forthDateCalender).toString());
+
+            }else
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", forthDateCalender).toString());
         }
         formDate.getButton().setEnabled(true);
@@ -1751,8 +1760,8 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             returnVisitDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", FORTH_DATE_DIALOG_ID);
-            args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", false);
+            args.putBoolean("allowPastDate", false);
+            args.putBoolean("allowFutureDate", true);
             forthDateFragment.setArguments(args);
             forthDateFragment.show(getFragmentManager(), "DatePicker");
         }
@@ -2144,7 +2153,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                     eligibleForIpt.setVisibility(View.VISIBLE);
                     iptStartDate.setVisibility(View.VISIBLE);
                     if(!App.get(weightAtBaseline).isEmpty()){
-                        int weightInt = Integer.parseInt(App.get(weightAtBaseline));
+                        double weightInt = Double.parseDouble(App.get(weightAtBaseline));
                         if(weightInt<2.5){
                             iptDose.getRadioGroup().getButtons().get(0).setChecked(true);
                         }else if(weightInt>2.5 && weightInt<5){
@@ -2155,7 +2164,6 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                     }
                     iptDose.setVisibility(View.VISIBLE);
                     initiatingAdditionalTreatmentIpt.setVisibility(View.VISIBLE);
-
                 }
                 else{
                     bcgScar.setVisibility(View.GONE);

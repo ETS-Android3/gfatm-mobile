@@ -321,15 +321,16 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
 
     @Override
     public void updateDisplay() {
-
+        String formDa = formDate.getButton().getText().toString();
+        String personDOB = App.getPatient().getPerson().getBirthdate();
+        Calendar maxDateCalender = formDateCalendar.getInstance();
+        maxDateCalender.setTime(formDateCalendar.getTime());
+        maxDateCalender.add(Calendar.YEAR, 2);
         if (snackbar != null)
             snackbar.dismiss();
         Date date = new Date();
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
-            String formDa = formDate.getButton().getText().toString();
-
-            String personDOB = App.getPatient().getPerson().getBirthdate();
 
 
             if (formDateCalendar.after(App.getCalendar(date))) {
@@ -363,6 +364,15 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
+
+            }else if (secondDateCalendar.after(maxDateCalender)) {
+
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.ctb_return_visit_less_than_23_months), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                nextDateOfDrug.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
             } else {
                 nextDateOfDrug.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());

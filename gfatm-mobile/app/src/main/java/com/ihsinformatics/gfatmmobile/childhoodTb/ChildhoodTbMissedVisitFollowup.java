@@ -183,6 +183,11 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
 
         if (snackbar != null)
             snackbar.dismiss();
+        Calendar maxDateCalender = formDateCalendar.getInstance();
+        maxDateCalender.setTime(formDateCalendar.getTime());
+        maxDateCalender.add(Calendar.YEAR, 2);
+
+
 
         String formDa = formDate.getButton().getText().toString();
         String personDOB = App.getPatient().getPerson().getBirthdate();
@@ -251,6 +256,14 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
+                nextVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalender).toString());
+            }else if (thirdDateCalender.after(maxDateCalender)) {
+
+                thirdDateCalender = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.ctb_return_visit_less_than_23_months), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
                 nextVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalender).toString());
             }
             else{
@@ -605,7 +618,7 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
             nextVisitDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", THIRD_DIALOG_ID);
-            args.putBoolean("allowPastDate", true);
+            args.putBoolean("allowPastDate", false);
             args.putBoolean("allowFutureDate", true);
             thirdDateFragment.setArguments(args);
             thirdDateFragment.show(getFragmentManager(), "DatePicker");

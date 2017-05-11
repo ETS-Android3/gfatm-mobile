@@ -378,6 +378,11 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
 
         if (snackbar != null)
             snackbar.dismiss();
+
+        Calendar maxDateCalender = formDateCalendar.getInstance();
+        maxDateCalender.setTime(formDateCalendar.getTime());
+        maxDateCalender.add(Calendar.YEAR, 2);
+
         String formDa = formDate.getButton().getText().toString();
         String personDOB = App.getPatient().getPerson().getBirthdate();
 
@@ -442,6 +447,15 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 tv.setMaxLines(2);
                 snackbar.show();
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
+            }else if (thirdDateCalendar.after(maxDateCalender)) {
+
+                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.ctb_return_visit_less_than_23_months), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
+
             }else
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
         }

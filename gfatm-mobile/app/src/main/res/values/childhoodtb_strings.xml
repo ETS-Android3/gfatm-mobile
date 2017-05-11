@@ -525,31 +525,16 @@
     <string name="ctb_next_visit_less_than_form_date">Next visit date can not be less than Form Date</string>
     <string name="ctb_form_date_less_than_treatment_initiation">Form date cannot be before treatment initiation date</string>
     <string name="ctb_date_can_not_be_less_than_form_date">Date can not be less than Form Date</string>
+    <string name="ctb_return_visit_less_than_23_months">Next appointment date cannot be more than 24 months</string>
+    <string name="ctb_abnormal_diagnosis">If Abnormal, Detailed Diagnosis</string>
+    <string name="ctb_abnormal_suggestive_tb">Abnormal Suggestive of TB</string>
+    <string name="ctb_abnormal_not_suggestive_tb">Abnormal Not Suggestive of TB</string>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    <string-array name="ctb_abnormal_list">
+        <item>@string/ctb_normal</item>
+        <item>@string/ctb_abnormal_suggestive_tb</item>
+        <item>@string/ctb_abnormal_not_suggestive_tb</item>
+    </string-array>
 
     <string-array name="ctb_screening_location_list">
         <item>@string/ctb_hospital</item>
