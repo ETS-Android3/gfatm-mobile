@@ -52,6 +52,9 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
     TitledButton formDate;
     TitledEditText cartridgeId;
     TitledButton dateTestResult;
+    TitledRadioGroup sampleAccepted;
+    TitledSpinner reasonRejected;
+    TitledEditText otherReasonRejected;
     TitledSpinner gxpResult;
     TitledRadioGroup mtbBurden;
     TitledRadioGroup rifResult;
@@ -130,24 +133,29 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         cartridgeId = new TitledEditText(context, null, getResources().getString(R.string.fast_cartridge_id), "", "", 10, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         dateTestResult = new TitledButton(context, null, getResources().getString(R.string.fast_date_of_result_recieved), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.VERTICAL);
+        sampleAccepted = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_accepted_lab_technician), getResources().getStringArray(R.array.fast_accepted_rejected_list), getResources().getString(R.string.fast_accepted), App.VERTICAL, App.VERTICAL);
+        reasonRejected = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_why_was_the_sample_rejected), getResources().getStringArray(R.array.fast_sample_rejected_list), getResources().getString(R.string.fast_saliva), App.VERTICAL);
+        otherReasonRejected = new TitledEditText(context, null, getResources().getString(R.string.fast_other_reason_for_rejection), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         gxpResult = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_genexpert_mtb_result), getResources().getStringArray(R.array.fast_genexpert_mtb_result_list), getResources().getString(R.string.fast_mtb_not_detected), App.VERTICAL);
         mtbBurden = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_mtb_burden), getResources().getStringArray(R.array.fast_mtb_burden_list), getResources().getString(R.string.fast_very_low), App.VERTICAL, App.VERTICAL);
         rifResult = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_if_mtb_then_rif_result), getResources().getStringArray(R.array.fast_if_mtb_then_rif_list), getResources().getString(R.string.fast_not_detected), App.VERTICAL, App.VERTICAL);
         errorCode = new TitledEditText(context, null, getResources().getString(R.string.fast_error_code), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true);
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), cartridgeId.getEditText(), dateTestResult.getButton(), gxpResult.getSpinner(),
+        views = new View[]{formDate.getButton(), cartridgeId.getEditText(), dateTestResult.getButton(), sampleAccepted.getRadioGroup(), reasonRejected.getSpinner(), otherReasonRejected.getEditText(), gxpResult.getSpinner(),
                 mtbBurden.getRadioGroup(), rifResult.getRadioGroup(), errorCode.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, cartridgeId, dateTestResult, gxpResult, mtbBurden, rifResult, errorCode}};
+                {{formDate, sampleAccepted, reasonRejected, otherReasonRejected, cartridgeId, gxpResult, mtbBurden, rifResult, errorCode, dateTestResult}};
 
         formDate.getButton().setOnClickListener(this);
         dateTestResult.getButton().setOnClickListener(this);
         gxpResult.getSpinner().setOnItemSelectedListener(this);
         mtbBurden.getRadioGroup().setOnCheckedChangeListener(this);
         rifResult.getRadioGroup().setOnCheckedChangeListener(this);
+        sampleAccepted.getRadioGroup().setOnCheckedChangeListener(this);
+        reasonRejected.getSpinner().setOnItemSelectedListener(this);
 
         resetViews();
     }
@@ -161,7 +169,7 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
-            personDOB = personDOB.substring(0,10);
+            personDOB = personDOB.substring(0, 10);
 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
@@ -261,7 +269,7 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
             alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-           // DrawableCompat.setTint(clearIcon, color);
+            // DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_error));
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
@@ -295,7 +303,7 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
-            }else {
+            } else {
                 endTime = new Date();
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
@@ -310,6 +318,21 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
 
         observations.add(new String[]{"CARTRIDGE ID", App.get(cartridgeId)});
         observations.add(new String[]{"DATE OF  TEST RESULT RECEIVED", App.getSqlDateTime(secondDateCalendar)});
+
+        if (sampleAccepted.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"SPECIMEN ACCEPTED", App.get(sampleAccepted).equals(getResources().getString(R.string.fast_accepted)) ? "ACCEPTED" : "REJECTED"});
+
+
+        if (reasonRejected.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"SPECIMEN UNSATISFACTORY FOR DIAGNOSIS", App.get(reasonRejected).equals(getResources().getString(R.string.fast_saliva)) ? "SALIVA" :
+                    (App.get(reasonRejected).equals(getResources().getString(R.string.fast_blood)) ? "BLOOD IN SAMPLE" :
+                            (App.get(reasonRejected).equals(getResources().getString(R.string.fast_food_particles)) ? "FOOD PARTICALS" :
+                                    (App.get(reasonRejected).equals(getResources().getString(R.string.fast_older_than_3_days)) ? "SAMPLE OLDER THAN 3 DAYS" :
+                                            (App.get(reasonRejected).equals(getResources().getString(R.string.fast_Insufficient_quantity)) ? "INSUFFICIENT QUANTITY" : "OTHER REASON OF SAMPLE REJECTION"))))});
+
+        if (otherReasonRejected.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"OTHER REASON OF SAMPLE REJECTION", App.get(otherReasonRejected)});
+
 
         if (gxpResult.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"GENEXPERT MTB/RIF RESULT", App.get(gxpResult).equals(getResources().getString(R.string.fast_mtb_detected)) ? "MYCOBACTERIUM TUBERCULOSIS DETECTED WITH RIFAMPIN RESISTANCE" :
@@ -464,7 +487,7 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
             } else if (obs[0][0].equals("CARTRIDGE ID")) {
                 cartridgeId.getEditText().setText(obs[0][1]);
@@ -482,6 +505,31 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                 dateTestResult.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
                 dateTestResult.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("SPECIMEN ACCEPTED")) {
+
+                for (RadioButton rb : sampleAccepted.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_accepted)) && obs[0][1].equals("ACCEPTED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_rejected)) && obs[0][1].equals("REJECTED")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                sampleAccepted.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("SPECIMEN UNSATISFACTORY FOR DIAGNOSIS")) {
+                String value = obs[0][1].equals("SALIVA") ? getResources().getString(R.string.fast_saliva) :
+                        (obs[0][1].equals("BLOOD IN SAMPLE") ? getResources().getString(R.string.fast_blood) :
+                                (obs[0][1].equals("FOOD PARTICALS") ? getResources().getString(R.string.fast_food_particles) :
+                                        (obs[0][1].equals("SAMPLE OLDER THAN 3 DAYS") ? getResources().getString(R.string.fast_older_than_3_days) :
+                                                (obs[0][1].equals("INSUFFICIENT QUANTITY") ? getResources().getString(R.string.fast_Insufficient_quantity)
+                                                        : getResources().getString(R.string.fast_other_title)))));
+
+                reasonRejected.getSpinner().selectValue(value);
+                reasonRejected.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("OTHER REASON OF SAMPLE REJECTION")) {
+                otherReasonRejected.getEditText().setText(obs[0][1]);
+                otherReasonRejected.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("MTB BURDEN")) {
 
                 for (RadioButton rb : mtbBurden.getRadioGroup().getButtons()) {
@@ -566,6 +614,8 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         dateTestResult.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         mtbBurden.setVisibility(View.GONE);
+        reasonRejected.setVisibility(View.GONE);
+        otherReasonRejected.setVisibility(View.GONE);
         errorCode.setVisibility(View.GONE);
         rifResult.setVisibility(View.GONE);
 
@@ -606,10 +656,50 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
                 errorCode.setVisibility(View.GONE);
             }
         }
+
+        if (spinner == reasonRejected.getSpinner()) {
+            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title))) {
+                otherReasonRejected.setVisibility(View.VISIBLE);
+            } else {
+                otherReasonRejected.setVisibility(View.GONE);
+            }
+        }
+
     }
 
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
+        if (radioGroup == sampleAccepted.getRadioGroup()) {
+            if (sampleAccepted.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_rejected))) {
+                gxpResult.setVisibility(View.GONE);
+                mtbBurden.setVisibility(View.GONE);
+                rifResult.setVisibility(View.GONE);
+                errorCode.setVisibility(View.GONE);
+                reasonRejected.setVisibility(View.VISIBLE);
+                if (reasonRejected.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))) {
+                    otherReasonRejected.setVisibility(View.VISIBLE);
+                }
+            } else {
+                reasonRejected.setVisibility(View.GONE);
+                otherReasonRejected.setVisibility(View.GONE);
+                gxpResult.setVisibility(View.VISIBLE);
+
+                if (gxpResult.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_mtb_detected))) {
+                    mtbBurden.setVisibility(View.VISIBLE);
+                    rifResult.setVisibility(View.VISIBLE);
+                } else {
+                    mtbBurden.setVisibility(View.GONE);
+                    rifResult.setVisibility(View.GONE);
+                }
+
+                if (gxpResult.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_error))) {
+                    errorCode.setVisibility(View.VISIBLE);
+                } else {
+                    errorCode.setVisibility(View.GONE);
+                }
+
+            }
+        }
     }
 
     class MyAdapter extends PagerAdapter {
