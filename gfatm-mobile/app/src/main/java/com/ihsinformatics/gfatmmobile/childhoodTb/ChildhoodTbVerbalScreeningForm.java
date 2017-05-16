@@ -387,16 +387,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                 error = true;
                 view = null;
             }
-            if (App.get(motherName).isEmpty()) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                motherName.getEditText().setError(getString(R.string.empty_field));
-                motherName.getEditText().requestFocus();
-                view = null;
-                error = true;
-            }else if(App.get(motherName).trim().length() <= 0){
+            if(App.get(motherName).trim().length() <= 0){
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else

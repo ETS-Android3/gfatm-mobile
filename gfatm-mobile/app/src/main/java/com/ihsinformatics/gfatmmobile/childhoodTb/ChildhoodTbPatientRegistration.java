@@ -14,6 +14,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -219,6 +220,89 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         permissionSecondaryLandlineNumber = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_permission),getResources().getStringArray(R.array.yes_no_options),getResources().getString(R.string.no),App.HORIZONTAL,App.VERTICAL,true);
 
 
+        cnic1.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()==5){
+                    cnic2.getEditText().requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String cnic = cnic1.getEditText().getText().toString() + "-" + cnic2.getEditText().getText().toString() + "-" + cnic3.getEditText().getText().toString();
+                if (RegexUtil.isValidNIC(cnic)) {
+                    cnicOwner.setVisibility(View.VISIBLE);
+                }else{
+                    cnicOwner.setVisibility(View.GONE);
+                }
+            }
+        });
+
+
+        cnic2.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()==7){
+                    cnic3.getEditText().requestFocus();
+                }
+
+                if(s.length()==0){
+                    cnic1.getEditText().requestFocus();
+                    cnic1.getEditText().setSelection(cnic1.getEditText().getText().length());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String cnic = cnic1.getEditText().getText().toString() + "-" + cnic2.getEditText().getText().toString() + "-" + cnic3.getEditText().getText().toString();
+                if (RegexUtil.isValidNIC(cnic)) {
+                    cnicOwner.setVisibility(View.VISIBLE);
+                }
+                else{
+                    cnicOwner.setVisibility(View.GONE);
+                }
+
+
+            }
+        });
+
+        cnic3.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()==0){
+                    cnic2.getEditText().requestFocus();
+                    cnic2.getEditText().setSelection(cnic2.getEditText().getText().length());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                String cnic = cnic1.getEditText().getText().toString() + "-" + cnic2.getEditText().getText().toString() + "-" + cnic3.getEditText().getText().toString();
+                if (RegexUtil.isValidNIC(cnic)) {
+                    cnicOwner.setVisibility(View.VISIBLE);
+                }else{
+                    cnicOwner.setVisibility(View.GONE);
+                }
+            }
+        });
+
         mobileNumber2.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -237,6 +321,11 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                     mobileNumber2.getEditText().setError("Invalid Mobile Number");
                     mobileNumberContact.setVisibility(View.GONE);
                     permissionMobileNumberContact.setVisibility(View.GONE);
+                }
+
+                if(s.length()==0){
+                    mobileNumber1.getEditText().requestFocus();
+                    mobileNumber1.getEditText().setSelection(mobileNumber1.getEditText().getText().length());
                 }
 
 
@@ -271,11 +360,13 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                     mobileNumber2.getEditText().setError(null);
                 }
 
+                if(s.length()==4){
+                    mobileNumber2.getEditText().requestFocus();
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
 
@@ -301,7 +392,10 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                     secondaryMobileNumberContact.setVisibility(View.GONE);
                     permissionSecondaryMobileNumber.setVisibility(View.GONE);
                 }
-
+                if(s.length()==0){
+                    secondaryMobileNumber1.getEditText().requestFocus();
+                    secondaryMobileNumber1.getEditText().setSelection(secondaryMobileNumber1.getEditText().getText().length());
+                }
             }
 
             @Override
@@ -332,6 +426,10 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                 if(s.length()==0 && secondaryMobileNumber2.getEditText().getText().length()==0){
                     secondaryMobileNumber2.getEditText().setError(null);
                 }
+
+                if(s.length()==4){
+                    secondaryMobileNumber2.getEditText().requestFocus();
+                }
             }
 
             @Override
@@ -357,6 +455,11 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                     landlineNumber2.getEditText().setError("Invalid Landline number");
                     landlineNumberContact.setVisibility(View.GONE);
                     permissionLandlineNumber.setVisibility(View.GONE);
+                }
+
+                if(s.length()==0){
+                    landlineNumber1.getEditText().requestFocus();
+                    landlineNumber1.getEditText().setSelection(landlineNumber1.getEditText().getText().length());
                 }
 
             }
@@ -389,6 +492,11 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                 if(s.length()==0 && landlineNumber2.getEditText().getText().length()==0){
                     landlineNumber2.getEditText().setError(null);
                 }
+
+                if(s.length()==3){
+                    landlineNumber2.getEditText().requestFocus();
+                }
+
             }
 
             @Override
@@ -417,6 +525,11 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                     secondaryLandlineNumber2.getEditText().setError("Invalid Landline number");
                     secondaryLandlineContact.setVisibility(View.GONE);
                     permissionSecondaryLandlineNumber.setVisibility(View.GONE);
+                }
+
+                if(s.length()==0){
+                    secondaryLandlineNumber1.getEditText().requestFocus();
+                    secondaryLandlineNumber1.getEditText().setSelection(secondaryLandlineNumber1.getEditText().getText().length());
                 }
             }
 
@@ -450,6 +563,10 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
 
                 if(s.length()==0 && secondaryLandlineNumber2.getEditText().getText().length()==0){
                     secondaryLandlineNumber2.getEditText().setError(null);
+                }
+
+                if(s.length()==3){
+                    secondaryLandlineNumber2.getEditText().requestFocus();
                 }
             }
 
@@ -640,16 +757,8 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
             error = true;
             view = null;
         }
-        if(App.get(cnic1).isEmpty() && App.get(cnic2).isEmpty() && App.get(cnic3).isEmpty()){
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            cnic3.getEditText().setError(getString(R.string.empty_field));
-            error = true;
-            view = cnicLinearLayout;
-        }
-        else {
+
+        if(!App.get(cnic1).isEmpty() && !App.get(cnic2).isEmpty() && !App.get(cnic3).isEmpty())  {
             String cnic = cnic1.getEditText().getText().toString() + "-" + cnic2.getEditText().getText().toString() + "-" + cnic3.getEditText().getText().toString();
             if (!RegexUtil.isValidNIC(cnic)) {
                 cnic3.getEditText().setError(getResources().getString(R.string.ctb_invalid_cnic));
@@ -1259,6 +1368,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
             snackbar.dismiss();
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        cnicOwner.setVisibility(View.GONE);
         cnicOwnerOther.setVisibility(View.GONE);
         address1.setVisibility(View.GONE);
         address2.setVisibility(View.GONE);

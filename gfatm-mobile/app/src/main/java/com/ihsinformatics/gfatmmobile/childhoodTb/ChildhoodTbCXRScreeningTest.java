@@ -504,7 +504,7 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
                                                             "OTHER ABNORMAL DETAILED DIAGNOSIS"))))))});
 
             observations.add(new String[]{"RADIOLOGICAL DIAGNOSIS", App.get(radiologicalDiagnosis).equals(getResources().getString(R.string.ctb_normal)) ? "NORMAL" :
-                    (App.get(abnormalDiagnosis).equals(getResources().getString(R.string.ctb_abnormal_suggestive_tb)) ? "ABNORMAL SUGGESTIVE OF TB" :"ABNORMAL NOT SUGGESTIVE OF TB")});
+                    (App.get(radiologicalDiagnosis).equals(getResources().getString(R.string.ctb_abnormal_suggestive_tb)) ?  "ABNORMAL SUGGESTIVE OF TB" : "ABNORMAL NOT SUGGESTIVE OF TB")});
 
             if(otherRadiologicalDiagnosis.getVisibility()==View.VISIBLE) {
                 observations.add(new String[]{"OTHER ABNORMAL DETAILED DIAGNOSIS", App.get(otherRadiologicalDiagnosis)});
@@ -699,7 +699,8 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
                     checkTestId();
                 } else if (obs[0][0].equals("CHEST X-RAY SCORE")) {
                     chestXRayScore.getEditText().setText(obs[0][1]);
-                } else if (obs[0][0].equals("RADIOLOGICAL DIAGNOSIS")) {
+                }
+                else if (obs[0][0].equals("RADIOLOGICAL DIAGNOSIS")) {
                     for (RadioButton rb : radiologicalDiagnosis.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.ctb_normal)) && obs[0][1].equals("NORMAL")) {
                             rb.setChecked(true);
@@ -712,7 +713,8 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
                             break;
                         }
                     }
-                }else if (obs[0][0].equals("ABNORMAL DETAILED DIAGNOSIS")) {
+                }
+                else if (obs[0][0].equals("ABNORMAL DETAILED DIAGNOSIS")) {
                     String value = obs[0][1].equals("ADENOPATHY") ? getResources().getString(R.string.ctb_adenopathy) :
                             (obs[0][1].equals("INFILTRATE") ? getResources().getString(R.string.ctb_infiltration) :
                                     (obs[0][1].equals("CONSOLIDATION") ? getResources().getString(R.string.ctb_consolidation) :
@@ -725,7 +727,8 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
                         otherRadiologicalDiagnosis.setVisibility(View.VISIBLE);
                     }
                     abnormalDiagnosis.getSpinner().selectValue(value);
-                } else if (obs[0][0].equals("OTHER ABNORMAL DETAILED DIAGNOSIS")) {
+                }
+                else if (obs[0][0].equals("OTHER ABNORMAL DETAILED DIAGNOSIS")) {
                     otherRadiologicalDiagnosis.getEditText().setText(obs[0][1]);
                 }else if (obs[0][0].equals("EXTENT OF DISEASE")) {
                     for (RadioButton rb : diseaseExtent.getRadioGroup().getButtons()) {

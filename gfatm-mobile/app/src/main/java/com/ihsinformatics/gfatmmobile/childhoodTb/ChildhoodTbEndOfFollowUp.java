@@ -179,6 +179,44 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
         reasonTreatmentNotIntiated.getSpinner().setOnItemSelectedListener(this);
         drConfirmation.getRadioGroup().setOnCheckedChangeListener(this);
 
+        contactNumber1.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()==4){
+                    contactNumber2.getEditText().requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        contactNumber2.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()==0){
+                    contactNumber1.getEditText().requestFocus();
+                    contactNumber1.getEditText().setSelection(contactNumber1.getEditText().getText().length());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
 
         resetViews();
