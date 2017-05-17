@@ -387,24 +387,26 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                 error = true;
                 view = null;
             }
-            if(App.get(motherName).trim().length() <= 0){
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                motherName.getEditText().setError(getString(R.string.ctb_spaces_only));
-                motherName.getEditText().requestFocus();
-                error = true;
-                view = null;
-            }else if(App.get(motherName).length() < 3){
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                motherName.getEditText().setError(getString(R.string.ctb_length_less_than_3));
-                motherName.getEditText().requestFocus();
-                error = true;
-                view = null;
+            if(!App.get(motherName).isEmpty()) {
+                if (App.get(motherName).trim().length() <= 0) {
+                    if (App.isLanguageRTL())
+                        gotoPage(0);
+                    else
+                        gotoPage(0);
+                    motherName.getEditText().setError(getString(R.string.ctb_spaces_only));
+                    motherName.getEditText().requestFocus();
+                    error = true;
+                    view = null;
+                } else if (App.get(motherName).length() < 3) {
+                    if (App.isLanguageRTL())
+                        gotoPage(0);
+                    else
+                        gotoPage(0);
+                    motherName.getEditText().setError(getString(R.string.ctb_length_less_than_3));
+                    motherName.getEditText().requestFocus();
+                    error = true;
+                    view = null;
+                }
             }
             if (facility_section_other.getVisibility() == View.VISIBLE && App.get(facility_section_other).isEmpty()) {
                 if (App.isLanguageRTL())

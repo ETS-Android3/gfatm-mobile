@@ -1227,8 +1227,8 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
             nextDateOfDrug.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
-            args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", false);
+            args.putBoolean("allowPastDate", false);
+            args.putBoolean("allowFutureDate", true);
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
         }
