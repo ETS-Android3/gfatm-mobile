@@ -147,7 +147,7 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, sampleAccepted, reasonRejected, otherReasonRejected, cartridgeId, gxpResult, mtbBurden, rifResult, errorCode, dateTestResult}};
+                {{formDate, sampleAccepted, reasonRejected, otherReasonRejected, cartridgeId, dateTestResult, gxpResult, mtbBurden, rifResult, errorCode}};
 
         formDate.getButton().setOnClickListener(this);
         dateTestResult.getButton().setOnClickListener(this);

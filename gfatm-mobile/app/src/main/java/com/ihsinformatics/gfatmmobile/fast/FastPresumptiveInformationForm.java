@@ -153,7 +153,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         cnicLinearLayout = new LinearLayout(context);
         cnicLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
-        cnic1 = new TitledEditText(context, null, getResources().getString(R.string.fast_nic_number), "", "#####", 5, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        cnic1 = new TitledEditText(context, null, getResources().getString(R.string.fast_nic_number), "", "#####", 5, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         cnicLinearLayout.addView(cnic1);
         cnic2 = new TitledEditText(context, null, "-", "", "#######", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         cnicLinearLayout.addView(cnic2);
@@ -257,15 +257,6 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
     public boolean validate() {
         Boolean error = false;
 
-        if (cnic1.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            cnic1.getEditText().setError(getString(R.string.empty_field));
-            cnic1.getEditText().requestFocus();
-            error = true;
-        }
 
         if (addressHouse.getEditText().getText().toString().length() > 0 && addressHouse.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
@@ -297,6 +288,17 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             error = true;
         }
 
+      /*  if (cnic1.getEditText().getText().toString().trim().isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            cnic1.getEditText().setError(getString(R.string.empty_field));
+            cnic1.getEditText().requestFocus();
+            error = true;
+        }
+
+
         if (cnic2.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
@@ -315,9 +317,108 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             cnic3.getEditText().setError(getString(R.string.empty_field));
             cnic3.getEditText().requestFocus();
             error = true;
+        }*/
+
+
+        if (!cnic1.getEditText().getText().toString().trim().isEmpty() && cnic2.getEditText().getText().toString().trim().isEmpty() && cnic3.getEditText().getText().toString().trim().isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            cnic2.getEditText().setError(getString(R.string.empty_field));
+            cnic2.getEditText().requestFocus();
+
+            cnic3.getEditText().setError(getString(R.string.empty_field));
+            cnic3.getEditText().requestFocus();
+            error = true;
         }
 
-        if (App.get(cnic1).length() != 5) {
+        if (!cnic1.getEditText().getText().toString().trim().isEmpty() && cnic2.getEditText().getText().toString().trim().isEmpty() && !cnic3.getEditText().getText().toString().trim().isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            cnic2.getEditText().setError(getString(R.string.empty_field));
+            cnic2.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (!cnic1.getEditText().getText().toString().trim().isEmpty() && !cnic2.getEditText().getText().toString().trim().isEmpty() && cnic3.getEditText().getText().toString().trim().isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            cnic3.getEditText().setError(getString(R.string.empty_field));
+            cnic3.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (cnic1.getEditText().getText().toString().trim().isEmpty() && !cnic2.getEditText().getText().toString().trim().isEmpty() && cnic3.getEditText().getText().toString().trim().isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            cnic1.getEditText().setError(getString(R.string.empty_field));
+            cnic1.getEditText().requestFocus();
+
+            cnic3.getEditText().setError(getString(R.string.empty_field));
+            cnic3.getEditText().requestFocus();
+            error = true;
+        }
+        if (!cnic1.getEditText().getText().toString().trim().isEmpty() && !cnic2.getEditText().getText().toString().trim().isEmpty() && cnic3.getEditText().getText().toString().trim().isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            cnic3.getEditText().setError(getString(R.string.empty_field));
+            cnic3.getEditText().requestFocus();
+            error = true;
+        }
+        if (cnic1.getEditText().getText().toString().trim().isEmpty() && !cnic2.getEditText().getText().toString().trim().isEmpty() && !cnic3.getEditText().getText().toString().trim().isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            cnic1.getEditText().setError(getString(R.string.empty_field));
+            cnic1.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (cnic1.getEditText().getText().toString().trim().isEmpty() && cnic2.getEditText().getText().toString().trim().isEmpty() && !cnic3.getEditText().getText().toString().trim().isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            cnic1.getEditText().setError(getString(R.string.empty_field));
+            cnic1.getEditText().requestFocus();
+
+            cnic2.getEditText().setError(getString(R.string.empty_field));
+            cnic2.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (!cnic1.getEditText().getText().toString().trim().isEmpty() && cnic2.getEditText().getText().toString().trim().isEmpty() && !cnic3.getEditText().getText().toString().trim().isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            cnic2.getEditText().setError(getString(R.string.empty_field));
+            cnic2.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (cnic1.getEditText().getText().toString().trim().isEmpty() && !cnic2.getEditText().getText().toString().trim().isEmpty() && !cnic3.getEditText().getText().toString().trim().isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            cnic1.getEditText().setError(getString(R.string.empty_field));
+            cnic1.getEditText().requestFocus();
+            error = true;
+        }
+
+
+        if (cnic1.getEditText().getText().toString().length() > 0 && App.get(cnic1).length() != 5) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -327,7 +428,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             error = true;
         }
 
-        if (App.get(cnic2).length() != 7) {
+        if (cnic2.getEditText().getText().toString().length() > 0 && App.get(cnic2).length() != 7) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -337,7 +438,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             error = true;
         }
 
-        if (App.get(cnic3).length() != 1) {
+        if ( cnic3.getEditText().getText().toString().length() > 0  && App.get(cnic3).length() != 1) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
