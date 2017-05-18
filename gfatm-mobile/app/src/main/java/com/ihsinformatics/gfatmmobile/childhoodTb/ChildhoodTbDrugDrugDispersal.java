@@ -1579,18 +1579,14 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
         String additionalTreatmentString = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "ADDITIONAL TREATMENT TO TB PATIENT");
         if(additionalTreatmentString!=null){
             for (CheckBox cb : moAdditionalTreatment.getCheckedBoxes()) {
-                if (cb.getText().equals(getResources().getString(R.string.ctb_pediasure)) && additionalTreatmentString.equals("PEDIASURE")) {
+                if (cb.getText().equals(getResources().getString(R.string.ctb_pediasure)) && additionalTreatmentString.contains("PEDIASURE")) {
                     cb.setChecked(true);
-                    break;
-                } else if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && additionalTreatmentString.equals("IRON")) {
+                } else if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && additionalTreatmentString.contains("IRON")) {
                     cb.setChecked(true);
-                    break;
-                } else if (cb.getText().equals(getResources().getString(R.string.ctb_vitamin_B_complex)) && additionalTreatmentString.equals("VITAMIN B COMPLEX")) {
+                } else if (cb.getText().equals(getResources().getString(R.string.ctb_vitamin_B_complex)) && additionalTreatmentString.contains("VITAMIN B COMPLEX")) {
                     cb.setChecked(true);
-                    break;
-                } else if (cb.getText().equals(getResources().getString(R.string.ctb_anthelminthic)) && additionalTreatmentString.equals("ANTHELMINTHIC")) {
+                } else if (cb.getText().equals(getResources().getString(R.string.ctb_anthelminthic)) && additionalTreatmentString.contains("ANTHELMINTHIC")) {
                     cb.setChecked(true);
-                    break;
                 }
             }
 
@@ -1614,36 +1610,28 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
         String additionalTreatmentIpt = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "ADDITIONAL TREATMENT IPT PATIENT");
         if(additionalTreatmentIpt!=null) {
             for (CheckBox cb : moInitiateTreatmentIpt.getCheckedBoxes()) {
-                if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && additionalTreatmentIpt.equals("IRON")) {
+                if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && additionalTreatmentIpt.contains("IRON")) {
                     cb.setChecked(true);
-                    break;
-                } else if (cb.getText().equals(getResources().getString(R.string.ctb_multivitamins)) && additionalTreatmentIpt.equals("MULTIVITAMIN")) {
+                } else if (cb.getText().equals(getResources().getString(R.string.ctb_multivitamins)) && additionalTreatmentIpt.contains("MULTIVITAMIN")) {
                     cb.setChecked(true);
-                    break;
-                } else if (cb.getText().equals(getResources().getString(R.string.ctb_anthelmintic_albendazole)) && additionalTreatmentIpt.equals("ANTHELMINTHIC")) {
+                } else if (cb.getText().equals(getResources().getString(R.string.ctb_anthelmintic_albendazole)) && additionalTreatmentIpt.contains("ANTHELMINTHIC")) {
                     cb.setChecked(true);
-                    break;
                 }
             }
         }
         String additionalTreatmentAntibiotic = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "ADDITIONAL TREATMENT FOR INCONCLUSIVE PATIENT");
         if(additionalTreatmentAntibiotic!=null) {
             for (CheckBox cb : moInitiatingAdditionalTreatmentAntibiotic.getCheckedBoxes()) {
-                if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && additionalTreatmentAntibiotic.equals("IRON")) {
+                if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && additionalTreatmentAntibiotic.contains("IRON")) {
                     cb.setChecked(true);
-                    break;
-                } else if (cb.getText().equals(getResources().getString(R.string.ctb_multivitamins)) && additionalTreatmentAntibiotic.equals("MULTIVITAMIN")) {
+                } else if (cb.getText().equals(getResources().getString(R.string.ctb_multivitamins)) && additionalTreatmentAntibiotic.contains("MULTIVITAMIN")) {
                     cb.setChecked(true);
-                    break;
-                } else if (cb.getText().equals(getResources().getString(R.string.ctb_anthelminthic)) && additionalTreatmentAntibiotic.equals("ANTHELMINTHIC")) {
+                } else if (cb.getText().equals(getResources().getString(R.string.ctb_anthelminthic)) && additionalTreatmentAntibiotic.contains("ANTHELMINTHIC")) {
                     cb.setChecked(true);
-                    break;
-                } else if (cb.getText().equals(getResources().getString(R.string.ctb_other_title)) && additionalTreatmentAntibiotic.equals("OTHER")) {
+                } else if (cb.getText().equals(getResources().getString(R.string.ctb_other_title)) && additionalTreatmentAntibiotic.contains("OTHER")) {
                     cb.setChecked(true);
-                    break;
-                } else if (cb.getText().equals(getResources().getString(R.string.ctb_none)) && additionalTreatmentAntibiotic.equals("NONE")) {
+                } else if (cb.getText().equals(getResources().getString(R.string.ctb_none)) && additionalTreatmentAntibiotic.contains("NONE")) {
                     cb.setChecked(true);
-                    break;
                 }
             }
         }

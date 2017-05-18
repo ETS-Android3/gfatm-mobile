@@ -230,7 +230,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         reasonTreatmentNotIniated = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_reason_treatment_not_intiated), getResources().getStringArray(R.array.ctb_reason_treatment_not_intiated_list), getResources().getString(R.string.ctb_patient_refused_treatment), App.VERTICAL,true);
         initiatingAdditionalTreatment = new TitledCheckBoxes(context, null, getResources().getString(R.string.ctb_initiating_additional_treatment), getResources().getStringArray(R.array.ctb_pediasure_vitamin_iron_anthelminthic), null, App.VERTICAL, App.VERTICAL);
         patientCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_category), getResources().getStringArray(R.array.ctb_patient_category3_list), getResources().getString(R.string.ctb_categoryI), App.VERTICAL, App.VERTICAL,true);
-        weight = new TitledEditText(context, null, getResources().getString(R.string.ctb_patient_weight), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
+        weight = new TitledEditText(context, null, getResources().getString(R.string.ctb_patient_weight), "", "", 3, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
         regimen = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_regimen), getResources().getStringArray(R.array.ctb_regimen_list), getResources().getString(R.string.ctb_rhz), App.HORIZONTAL, App.VERTICAL);
         typeFixedDosePrescribed = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_type_of_fixed_dose), getResources().getStringArray(R.array.ctb_type_of_fixed_dose_list), null, App.VERTICAL);
         currentTabletsofRHZ = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_current_formulation_number_of_tablet_rhz), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL);
@@ -382,20 +382,22 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                if(s.length()==5){
+                    cnic2.getEditText().requestFocus();
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                String cnicString = s + "-" + App.get(cnic2) + "-" + App.get(cnic3);
-                if(RegexUtil.isValidNIC(cnicString) && cnicLinearLayout.getVisibility()==View.VISIBLE){
+                String cnic = cnic1.getEditText().getText().toString() + "-" + cnic2.getEditText().getText().toString() + "-" + cnic3.getEditText().getText().toString();
+                if (RegexUtil.isValidNIC(cnic)) {
                     cnicOwner.setVisibility(View.VISIBLE);
                 }else{
                     cnicOwner.setVisibility(View.GONE);
-                    cnicOwnerOther.setVisibility(View.GONE);
                 }
             }
         });
+
 
         cnic2.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
@@ -405,18 +407,27 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()==7){
+                    cnic3.getEditText().requestFocus();
+                }
 
+                if(s.length()==0){
+                    cnic1.getEditText().requestFocus();
+                    cnic1.getEditText().setSelection(cnic1.getEditText().getText().length());
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                String cnicString = App.get(cnic1) + "-" + s + "-" + App.get(cnic3);
-                if(RegexUtil.isValidNIC(cnicString) && cnicLinearLayout.getVisibility()==View.VISIBLE){
+                String cnic = cnic1.getEditText().getText().toString() + "-" + cnic2.getEditText().getText().toString() + "-" + cnic3.getEditText().getText().toString();
+                if (RegexUtil.isValidNIC(cnic)) {
                     cnicOwner.setVisibility(View.VISIBLE);
-                }else{
-                    cnicOwner.setVisibility(View.GONE);
-                    cnicOwnerOther.setVisibility(View.GONE);
                 }
+                else{
+                    cnicOwner.setVisibility(View.GONE);
+                }
+
+
             }
         });
 
@@ -428,21 +439,23 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                if(s.length()==0){
+                    cnic2.getEditText().requestFocus();
+                    cnic2.getEditText().setSelection(cnic2.getEditText().getText().length());
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                String cnicString = App.get(cnic1) + "-" + App.get(cnic2) + "-" + s;
-                if(RegexUtil.isValidNIC(cnicString) && cnicLinearLayout.getVisibility()==View.VISIBLE){
+
+                String cnic = cnic1.getEditText().getText().toString() + "-" + cnic2.getEditText().getText().toString() + "-" + cnic3.getEditText().getText().toString();
+                if (RegexUtil.isValidNIC(cnic)) {
                     cnicOwner.setVisibility(View.VISIBLE);
                 }else{
                     cnicOwner.setVisibility(View.GONE);
-                    cnicOwnerOther.setVisibility(View.GONE);
                 }
             }
         });
-
 
         weight.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
