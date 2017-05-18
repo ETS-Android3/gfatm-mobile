@@ -1372,6 +1372,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         cnicOwnerOther.setVisibility(View.GONE);
         address1.setVisibility(View.GONE);
         address2.setVisibility(View.GONE);
+        addressType.setVisibility(View.GONE);
         mobileNumberContact.setVisibility(View.GONE);
         permissionMobileNumberContact.setVisibility(View.GONE);
         secondaryMobileNumberContact.setVisibility(View.GONE);
@@ -1431,6 +1432,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
             if(addressProvided.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))){
                 address1.setVisibility(View.VISIBLE);
                 address2.setVisibility(View.VISIBLE);
+                addressType.setVisibility(View.VISIBLE);
                 district.setVisibility(View.VISIBLE);
                 city.setVisibility(View.VISIBLE);
             }
@@ -1438,6 +1440,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                 address1.setVisibility(View.GONE);
                 address2.setVisibility(View.GONE);
                 district.setVisibility(View.VISIBLE);
+                addressType.setVisibility(View.GONE);
                 city.setVisibility(View.VISIBLE);
             }
         }
