@@ -164,7 +164,7 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
         cxrOrderTitle = new MyTextView(context, getResources().getString(R.string.fast_cxr_order_title));
         cxrOrderTitle.setTypeface(null, Typeface.BOLD);
         screenXrayType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_what_type_of_xray_is_this), getResources().getStringArray(R.array.fast_type_of_xray_is_this_list), getResources().getString(R.string.fast_chest_xray_other), App.VERTICAL, App.VERTICAL);
-        monthOfTreatment = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_month_of_treatment), getResources().getStringArray(R.array.fast_number_list), getResources().getString(R.string.fast_zero), App.HORIZONTAL);
+        monthOfTreatment = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_month_of_treatment), getResources().getStringArray(R.array.fast_number_list), "", App.VERTICAL);
         updateFollowUpMonth();
         //   testDate = new TitledButton(context, null, getResources().getString(R.string.fast_test_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         cxrResultTitle = new MyTextView(context, getResources().getString(R.string.fast_cxr_result_title));
