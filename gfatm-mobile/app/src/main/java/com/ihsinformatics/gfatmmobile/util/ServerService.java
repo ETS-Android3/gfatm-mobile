@@ -149,6 +149,7 @@ public class ServerService {
                          }
                      } catch (Exception e) {
                          e.printStackTrace();
+                         return false;
                      }
                  }
 
@@ -158,7 +159,7 @@ public class ServerService {
                 return false;
             }
         }
-        return true;
+        return false;
     }
 
     public String getPatientSystemIdByUuidLocalDB(String uuid) {
@@ -320,6 +321,17 @@ public class ServerService {
         return locations;
     }
 
+    public Object[][] getAllTowns() {
+        Object[][] locations = dbUtil.getFormTableData("select * from " + Metadata.TOWN);
+        return locations;
+    }
+
+    public void addTown(String name) {
+        ContentValues values4 = new ContentValues();
+        values4.put("name", name);
+        dbUtil.insert(Metadata.TOWN, values4);
+    }
+
     /**
      * Gets username from App variable and checks to see if it exists in the
      * local database. The method doesn't exactly matches the user but attempts
@@ -378,8 +390,8 @@ public class ServerService {
             if (providerUUid == "")
                 return "PROVIDER_NOT_FOUND";
 
-            /*if (!isMobileAppCompatible())
-                return "VERSION_MISMATCH";*/
+            if (!isMobileAppCompatible())
+                return "VERSION_MISMATCH";
 
             App.setUserFullName(user.getFullName());
             App.setRoles(user.getRoles());
