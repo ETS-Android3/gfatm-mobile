@@ -197,7 +197,7 @@
                 android:paddingTop="@dimen/medium"
                 android:text="@string/fast" />
 
-           <RadioButton
+           <!--<RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/medium"
@@ -209,7 +209,7 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/medium"
                 android:paddingTop="@dimen/medium"
-                android:text="@string/pmdt" />
+                android:text="@string/pmdt" />-->
 
             <RadioButton
                 android:layout_width="match_parent"
@@ -218,13 +218,13 @@
                 android:paddingTop="@dimen/medium"
                 android:text="@string/pet" />
 
-            <RadioButton
+            <!--<RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/medium"
                 android:paddingTop="@dimen/medium"
                 android:text="@string/comorbidities" />
-
+-->
         </RadioGroup>
 
     </LinearLayout>
