@@ -2249,7 +2249,7 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SMALL INTESTINE
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LARGE INTESTINE',NULL,'N/A','1f6d5f40-ca38-4a17-9e4e-98e27ab96efa');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('BRAIN',NULL,'N/A','f5c23762-7579-4208-a47a-601ede8d5bb5');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('THROAT',NULL,'N/A','8617bf87-a3d5-4ccf-aba9-2e328deec9ad');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER SITE OF TB SURGERY','tb_surgery_site_other','N/A','84c43478-eed8-4b0c-a2ff-4ef874118902');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER SITE OF TB SURGERY','tb_surgery_site_other','Text','84c43478-eed8-4b0c-a2ff-4ef874118902');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LYMPH NODE',NULL,'N/A','aa3b4b17-9df3-4652-89bd-2b76df94b2c0');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('METHOD OF FAMILY PLANNING',NULL,'Coded','374AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CURRENTLY USING BIRTH CONTROL',NULL,'Boolean','965AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
@@ -2793,7 +2793,6 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REFERRED ULTRAS
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REFERRED CT SCAN','refer_ct_scan','Coded','d95c628d-307e-4763-ad48-c374111b799e');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REFERRED GENEXPERT','refer_genxpert_tb','Coded','fe580a7d-3f41-4e0d-9850-8f877793e648');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DIABETES EDUCATION','diabetes_education','Coded','f1dbdb8f-ad4d-42f1-96fc-6b8334c0a591');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER RADIOLOGICAL DIAGNOSIS REAULT','scnngcxr_diagnosis_other','Text','7cda03c9-af8b-4d01-8f88-01365c85cf7a');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DIABETES EDUCATION MATERIAL','diabetes_education_material','Coded','b60f27be-424a-416a-944c-8af0a66e5c55');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ULTRASOUND SITE OTHER','ultrasound_site_other','Text','bf7bd603-5106-4c9f-8cee-01961f75e3f9');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TB TREATMENT PAST','treatment_past','Coded','9e366263-8e06-4ce7-a94f-92ff68ce05d1');
@@ -4185,7 +4184,6 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('3=HYPERACTIVE',
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ADVERSE EVENT SEVERITY','adverse_event_severity','Numeric','4d021efb-be51-4f44-ba05-e4d95b7ea71f');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('HOSPITALIZATION REQUIRED/PROLONGED',NULL,'N/A','4e1a6735-8a3b-4392-8028-5a3bfd652967');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER INDICATION FOR SURGENCY','tb_surgery_indication_other','Text','8833d26c-9735-4518-ab54-df13588358f4');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RADIOLOGICAL DIAGNOSIS','scnngcxr_diagnosis','Coded','12AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('X-RAY, ABDOMEN',NULL,'Coded','101AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('X-RAY, ARM',NULL,'Coded','377AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('X-RAY, HAND',NULL,'Coded','382AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
@@ -4467,10 +4465,21 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CRYSTALS IN URI
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL PROPHYLAXIS','RHZE PROPHYLAXIS','N/A','1675AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NEVER',NULL,'N/A','1090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LOWENSTEIN-JENSEN MYCOBACTERIA CULTURE METHOD','L-J CULTURE METHOD','N/A','160011AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER ABNORMAL DETAILED DIAGNOSIS','other_abnormal_diagnosis','Text','7cda03c9-af8b-4d01-8f88-01365c85cf7a');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ABNORMAL DETAILED DIAGNOSIS','abnormal_detailed_diagnosis','Coded','12AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RADIOLOGICAL DIAGNOSIS','radiological_diagnosis','Coded','7b8a4bea-4217-4cfd-920b-f0c66ab23680');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ABNORMAL SUGGESTIVE OF TB','abnormal_suggestive_tb','N/A','d9bfc2f2-aae4-4015-9794-afc9c2b93e1f');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ABNORMAL NOT SUGGESTIVE OF TB','abnormal_not_suggestive_tb','N/A','7dc242c9-d0b2-4ceb-b808-88b124d75d03');
 
 ----------
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CT SCAN, CHEST',NULL,'N/A','161165AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('BONE SCAN',NULL,'N/A','161161AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DIAGNOSTIC TESTING',NULL,'N/A','161194AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ULTRASOUND, ABDOMEN',NULL,'Coded','845AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER REASON FOR REPEATING TEST','other_reason_repeating_test','Text','3a5a3058-bcc8-4313-b074-a7a6e3647278');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('X RAY IN PAST 6 MONTHS','past_xray','Coded','1a2dfae5-233e-40a6-b452-8fa2d11906e8');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PROVINCE','province','Text','f014be0b-e362-4ef0-9605-a31ae549d69e');
 
 -- Program
 INSERT OR IGNORE INTO program VALUES (1, "86ba1232-d576-416e-b102-5f335c6746ce", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
@@ -4633,6 +4642,7 @@ INSERT OR IGNORE INTO person_attribute_type VALUES ('National ID Owner','org.ope
 INSERT OR IGNORE INTO person_attribute_type VALUES ('Guardian Name','java.lang.String','30b27db4-4e92-4ef8-857a-58e8f65fcad5');
 INSERT OR IGNORE INTO person_attribute_type VALUES ('Tertiary Contact','java.lang.String','c1c2ba98-dc5f-4cf2-9e44-44cd57b2725a');
 INSERT OR IGNORE INTO person_attribute_type VALUES ('Quaternary Contact','java.lang.String','1b2ede79-bfee-4e9f-81be-86d6e1567556');
+INSERT OR IGNORE INTO person_attribute_type VALUES ('Treatment Supporter','java.lang.String','f083e422-b1e9-4951-8bc9-95c2992a6a72');
 
 -- Locations: select location_id, location_name, uuid, parent_uuid, fast_location, pet_location, childhood_tb_location, comorbidities_location, pmdt_location, aic_location, primary_contact, address1, address2, address3, city_village, state_province, county_district, description from location_view
 INSERT OR IGNORE INTO location VALUES (1,'Unknown Location','8d6c993e-c2cc-11de-8d13-0010c6dffd0f',NULL,'N','N','N','N','N','N',NULL,'','',NULL,'','','',NULL);
