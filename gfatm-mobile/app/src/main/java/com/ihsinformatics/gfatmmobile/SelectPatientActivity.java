@@ -25,6 +25,7 @@ import android.text.format.DateFormat;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -32,6 +33,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,7 +46,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class SelectPatientActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
+public class SelectPatientActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener, AdapterView.OnItemSelectedListener {
 
     protected static ProgressDialog loading;
 
@@ -69,6 +71,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
     RadioButton female;
     EditText dob;
     EditText age;
+    Spinner ageModifier;
     EditText createPatientId;
     Button createPatientScanButton;
     EditText externalId;
@@ -104,6 +107,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
         createPatientScanButton = (Button) findViewById(R.id.createBarcodeScan);
         externalId = (EditText) findViewById(R.id.externalId);
         dob = (EditText) findViewById(R.id.dob);
+        ageModifier = (Spinner) findViewById(R.id.age_modifier);
         dob.setKeyListener(null);
 
         dateOfBirthCalendar = Calendar.getInstance();
@@ -141,7 +145,13 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
 
                     if (!flag) {
                         Calendar cal = Calendar.getInstance();
-                        cal.add(Calendar.YEAR, -Integer.parseInt(s.toString()));
+
+                        if(ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.years)))
+                            cal.add(Calendar.YEAR, -Integer.parseInt(s.toString()));
+                        else if(ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.months)))
+                            cal.add(Calendar.MONTH, -Integer.parseInt(s.toString()));
+                        else if(ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.days)))
+                            cal.add(Calendar.DAY_OF_MONTH, -Integer.parseInt(s.toString()));
 
                         dateOfBirthCalendar.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
                         dob.setText(DateFormat.format("dd-MMM-yyyy", dateOfBirthCalendar).toString());
@@ -178,6 +188,8 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
         createPatientScanButton.setOnClickListener(this);
         selectPatientScanButton.setOnClickListener(this);
         searchPatient.setOnClickListener(this);
+        ageModifier.setOnItemSelectedListener(this);
+
 
         this.setFinishOnTouchOutside(false);
 
@@ -693,6 +705,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
             age.setText("");
             createPatientId.setText("");
             externalId.setText("");
+            ageModifier.setSelection(0);
 
             setTitle(getResources().getString(R.string.title_select_patient));
 
@@ -749,6 +762,47 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
         }
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+        String s = age.getText().toString();
+        if(!s.equals("")){
+
+            if(!s.equals("0")) {
+
+                Calendar cal = Calendar.getInstance();
+
+                if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.years)))
+                    cal.add(Calendar.YEAR, -Integer.parseInt(s.toString()));
+                else if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.months)))
+                    cal.add(Calendar.MONTH, -Integer.parseInt(s.toString()));
+                else if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.days)))
+                    cal.add(Calendar.DAY_OF_MONTH, -Integer.parseInt(s.toString()));
+
+                dateOfBirthCalendar.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+                dob.setText(DateFormat.format("dd-MMM-yyyy", dateOfBirthCalendar).toString());
+            } else{
+
+                Calendar cal = Calendar.getInstance();
+                cal.add(Calendar.YEAR, 0);
+                cal.add(Calendar.MONTH, 0);
+                cal.add(Calendar.DAY_OF_MONTH, 0);
+
+                dateOfBirthCalendar.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+                dob.setText("");
+                dob.setError(null);
+            }
+
+        }
+
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
     @SuppressLint("ValidFragment")
     public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
@@ -772,6 +826,8 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
             dob.setText(DateFormat.format("dd-MMM-yyyy", dateOfBirthCalendar).toString());
 
             Date date = new Date();
+
+            ageModifier.setSelection(0);
 
             if (dateOfBirthCalendar.after(App.getCalendar(date))) {
 
