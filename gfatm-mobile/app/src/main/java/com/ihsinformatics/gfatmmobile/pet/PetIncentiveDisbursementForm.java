@@ -167,7 +167,7 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
         contactNumberTreatmentSupporter.addView(phone1b);
         typeTreatmentSupporter = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_treatment_supporter_type), getResources().getStringArray(R.array.pet_treatment_supporter_type), getResources().getString(R.string.pet_family_treatment_supporter), App.VERTICAL, App.VERTICAL, true);
         relationshipTreatmentSuppoter = new TitledSpinner(context, "", getResources().getString(R.string.pet_treatment_supporter_relationship), getResources().getStringArray(R.array.pet_household_heads), getResources().getString(R.string.pet_mother), App.VERTICAL, true);
-        other = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        other = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         petRegimen = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_regimen), getResources().getStringArray(R.array.pet_regimens), "", App.VERTICAL, App.VERTICAL);
 
         MyLinearLayout linearLayout = new MyLinearLayout(context, getResources().getString(R.string.pet_incentive_details), App.VERTICAL);
@@ -214,6 +214,8 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
     public void updateDisplay() {
         if (snackbar != null)
             snackbar.dismiss();
+
+        formDate.getButton().setEnabled(true);
 
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
@@ -891,6 +893,7 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
+            formDate.getButton().setEnabled(false);
         }
 
     }

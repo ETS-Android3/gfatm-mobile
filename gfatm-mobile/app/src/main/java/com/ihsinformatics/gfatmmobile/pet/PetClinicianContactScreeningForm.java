@@ -235,27 +235,27 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
 
         MyLinearLayout linearLayout3 = new MyLinearLayout(context, getResources().getString(R.string.pet_physical_examination), App.VERTICAL);
         generalAppearence = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_general_appearance), getResources().getStringArray(R.array.pet_examination_note), getResources().getString(R.string.pet_unremarkable), App.HORIZONTAL, App.VERTICAL, true);
-        generalAppearenceExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        generalAppearenceExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         generalAppearenceExplanation.getEditText().setSingleLine(false);
         generalAppearenceExplanation.getEditText().setMinimumHeight(150);
         heent = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_heent), getResources().getStringArray(R.array.pet_examination_note), getResources().getString(R.string.pet_unremarkable), App.HORIZONTAL, App.VERTICAL, true);
-        heentExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        heentExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         heentExplanation.getEditText().setSingleLine(false);
         heentExplanation.getEditText().setMinimumHeight(150);
         lymphnode = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_lymphnode), getResources().getStringArray(R.array.pet_examination_note), getResources().getString(R.string.pet_unremarkable), App.HORIZONTAL, App.VERTICAL, true);
-        lymphnodeExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        lymphnodeExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         lymphnodeExplanation.getEditText().setSingleLine(false);
         lymphnodeExplanation.getEditText().setMinimumHeight(150);
         spine = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_spine), getResources().getStringArray(R.array.pet_examination_note), getResources().getString(R.string.pet_unremarkable), App.HORIZONTAL, App.VERTICAL, true);
-        spineExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        spineExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         spineExplanation.getEditText().setSingleLine(false);
         spineExplanation.getEditText().setMinimumHeight(150);
         joints = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_joints), getResources().getStringArray(R.array.pet_examination_note), getResources().getString(R.string.pet_unremarkable), App.HORIZONTAL, App.VERTICAL, true);
-        jointsExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        jointsExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         jointsExplanation.getEditText().setSingleLine(false);
         jointsExplanation.getEditText().setMinimumHeight(150);
         skin = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_skin), getResources().getStringArray(R.array.pet_examination_note), getResources().getString(R.string.pet_unremarkable), App.HORIZONTAL, App.VERTICAL, true);
-        skinExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        skinExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         skinExplanation.getEditText().setSingleLine(false);
         skinExplanation.getEditText().setMinimumHeight(150);
         chest = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_chest_examination), getResources().getStringArray(R.array.pet_examination_note), getResources().getString(R.string.pet_unremarkable), App.HORIZONTAL, App.VERTICAL, true);
@@ -263,7 +263,7 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
         chestExplanation.getEditText().setSingleLine(false);
         chestExplanation.getEditText().setMinimumHeight(150);
         abdominal = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_abdominal_examination), getResources().getStringArray(R.array.pet_examination_note), getResources().getString(R.string.pet_unremarkable), App.HORIZONTAL, App.VERTICAL, true);
-        abdominalExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        abdominalExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         abdominalExplanation.getEditText().setSingleLine(false);
         abdominalExplanation.getEditText().setMinimumHeight(150);
         others = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
@@ -273,7 +273,7 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
         comorbidCondition = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_comorbid_condition), getResources().getStringArray(R.array.pet_comorbid_conditions), null, App.VERTICAL, App.VERTICAL);
         otherCondition = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 15, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         referral = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_referral_needed), getResources().getStringArray(R.array.yes_no_unknown_options), getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
-        clincianNote = new TitledEditText(context, null, getResources().getString(R.string.pet_doctor_notes), "", "", 250, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        clincianNote = new TitledEditText(context, null, getResources().getString(R.string.pet_doctor_notes), "", "", 250, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         clincianNote.getEditText().setSingleLine(false);
         clincianNote.getEditText().setMinimumHeight(150);
 
@@ -489,6 +489,8 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
     public void updateDisplay() {
         if (snackbar != null)
             snackbar.dismiss();
+
+        formDate.getButton().setEnabled(true);
 
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
@@ -923,6 +925,8 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
+            formDate.getButton().setEnabled(false);
+
         }
 
     }

@@ -193,6 +193,9 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
         if (snackbar != null)
             snackbar.dismiss();
 
+        formDate.getButton().setEnabled(true);
+        treatmentEnrollmentDate.getButton().setEnabled(true);
+
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
@@ -511,6 +514,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                         encounterId = successArray[1];
                     }
 
+
                     if (App.hasKeyListener(ernsNumber)) {
                         result = serverService.saveIdentifier("ENRS", App.get(ernsNumber), encounterId);
                         if (!result.equals("SUCCESS"))
@@ -648,6 +652,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
+            formDate.getButton().setEnabled(true);
         } else if (view == treatmentEnrollmentDate.getButton()) {
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
@@ -655,6 +660,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
             args.putBoolean("allowPastDate", true);
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
+            treatmentEnrollmentDate.getButton().setEnabled(true);
         }
 
     }

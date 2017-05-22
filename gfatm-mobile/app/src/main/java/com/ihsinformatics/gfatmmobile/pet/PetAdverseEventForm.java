@@ -158,7 +158,7 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
         rash = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_rash), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         tendonPain = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_tendon_pain), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         eyeProblem = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_eye_problems), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
-        otherSideEffects = new TitledEditText(context, null, getResources().getString(R.string.pet_other_side_effects), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        otherSideEffects = new TitledEditText(context, null, getResources().getString(R.string.pet_other_side_effects), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         otherSideEffects.getEditText().setSingleLine(false);
         otherSideEffects.getEditText().setMinimumHeight(150);
         sideeffectsConsistent = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_side_effect_consistent), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
@@ -180,7 +180,7 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
         medicationDiscontinueReason.getEditText().setSingleLine(false);
         medicationDiscontinueReason.getEditText().setMinimumHeight(150);
         medicationDiscontinueDuration = new TitledEditText(context, null, getResources().getString(R.string.pet_discontinue_medication_duration), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        newMedication = new TitledEditText(context, null, getResources().getString(R.string.pet_new_medication_reason), "", "", 250, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        newMedication = new TitledEditText(context, null, getResources().getString(R.string.pet_new_medication_reason), "", "", 250, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         newMedication.getEditText().setSingleLine(false);
         newMedication.getEditText().setMinimumHeight(150);
         newMedicationDuration = new TitledEditText(context, null, getResources().getString(R.string.pet_new_medication_duration), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
@@ -192,7 +192,7 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
         ethionamideDose = new TitledEditText(context, null, getResources().getString(R.string.pet_ethionamide_dose), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
         ancillaryDrugs = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_ancillary_drugs), getResources().getStringArray(R.array.pet_ancillary_drugs), null, App.VERTICAL, App.VERTICAL, true);
         ancillaryDrugDuration = new TitledEditText(context, null, getResources().getString(R.string.pet_ancillary_drug_duration_days), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        newInstruction = new TitledEditText(context, null, getResources().getString(R.string.pet_new_instructions), "", "", 250, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        newInstruction = new TitledEditText(context, null, getResources().getString(R.string.pet_new_instructions), "", "", 250, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         newInstruction.getEditText().setSingleLine(false);
         newInstruction.getEditText().setMinimumHeight(150);
         returnVisitDate = new TitledButton(context, null, getResources().getString(R.string.pet_return_visit_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.VERTICAL);
@@ -405,6 +405,9 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
     public void updateDisplay() {
         if (snackbar != null)
             snackbar.dismiss();
+
+        returnVisitDate.getButton().setEnabled(true);
+        formDate.getButton().setEnabled(true);
 
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
@@ -1089,6 +1092,9 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
+
+            formDate.getButton().setEnabled(false);
+
         } else if (view == returnVisitDate.getButton()) {
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
@@ -1097,6 +1103,9 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
             args.putString("formDate", formDate.getButton().getText().toString());
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
+
+            returnVisitDate.getButton().setEnabled(false);
+
         }
 
     }

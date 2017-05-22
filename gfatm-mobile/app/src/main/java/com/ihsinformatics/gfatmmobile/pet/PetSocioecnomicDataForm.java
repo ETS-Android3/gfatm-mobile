@@ -221,6 +221,8 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
         if (snackbar != null)
             snackbar.dismiss();
 
+        formDate.getButton().setEnabled(true);
+
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
@@ -652,6 +654,8 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
+            formDate.getButton().setEnabled(false);
+            formDate.getButton().setEnabled(false);
         }
 
     }

@@ -204,6 +204,8 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
         if (snackbar != null)
             snackbar.dismiss();
 
+        formDate.getButton().setEnabled(true);
+
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
@@ -533,6 +535,7 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
+            formDate.getButton().setEnabled(false);
         }
 
     }

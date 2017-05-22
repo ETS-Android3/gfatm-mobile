@@ -662,6 +662,9 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         if (snackbar != null)
             snackbar.dismiss();
 
+        treatmentInitiationDate.getButton().setEnabled(true);
+        formDate.getButton().setEnabled(true);
+
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
@@ -1138,6 +1141,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
+            formDate.getButton().setEnabled(false);
         } else if (view == treatmentInitiationDate.getButton()) {
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
@@ -1145,6 +1149,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
             args.putBoolean("allowFutureDate", false);
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
+            treatmentInitiationDate.getButton().setEnabled(false);
         }
 
     }
