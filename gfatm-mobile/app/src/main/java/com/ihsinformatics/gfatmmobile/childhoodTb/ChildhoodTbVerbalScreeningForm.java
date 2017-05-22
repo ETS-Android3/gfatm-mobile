@@ -214,7 +214,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
         contactTbHistoryTwoYears = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_tb_history_2years), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.ctb_no), App.HORIZONTAL, App.VERTICAL, true);
         closeContactType = new TitledCheckBoxes(context, null, getResources().getString(R.string.ctb_close_contact_type), getResources().getStringArray(R.array.ctb_close_contact_type_list), new Boolean[] {true,false,false,false,false,false,false,false,false,false,false}, App.VERTICAL, App.VERTICAL);
         otherContactType = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_contact), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        presumptiveTb = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_presumptive_tb), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, true);
+        presumptiveTb = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_presumptive_tb), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true);
 
 
         views = new View[]{formDate.getButton(), screeningLocation.getRadioGroup(), hospital.getSpinner(), facility_section.getSpinner(), facility_section_other.getEditText(), opd_ward_section.getSpinner(), motherName.getEditText(), fatherName.getEditText(), patientAttendant.getRadioGroup(),
@@ -1090,6 +1090,8 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
         if (snackbar != null)
             snackbar.dismiss();
 
+        hospital.getSpinner().selectValue(App.getLocation());
+        hospital.getSpinner().setEnabled(false);
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         facility_section.getSpinner().selectValue(getResources().getString(R.string.ctb_opd_clinic));
         facility_section_other.setVisibility(View.GONE);
@@ -1097,6 +1099,11 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
         tbMedication.setVisibility(View.GONE);
         closeContactType.setVisibility(View.GONE);
         otherContactType.setVisibility(View.GONE);
+        presumptiveTb.getRadioGroup().setEnabled(false);
+        for (RadioButton rb : presumptiveTb.getRadioGroup().getButtons()) {
+            rb.setClickable(false);
+        }
+        setPresumptiveTb();
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");
@@ -1135,6 +1142,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                 facility_section_other.setVisibility(View.GONE);
             }
         } else if (group == cough.getRadioGroup()) {
+            setPresumptiveTb();
             if (cough.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
                 coughDuration.setVisibility(View.VISIBLE);
             } else {
@@ -1160,7 +1168,21 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                         rb.setChecked(false);
                 }
             }
-        } else if (group == tbHistory.getRadioGroup()) {
+        }
+        else if (group == fever.getRadioGroup()) {
+            setPresumptiveTb();
+        }
+        else if (group == nightSweats.getRadioGroup()) {
+            setPresumptiveTb();
+        }
+        else if (group == weightLoss.getRadioGroup()) {
+            setPresumptiveTb();
+        }
+        else if (group == appeptite.getRadioGroup()) {
+            setPresumptiveTb();
+        }
+        else if (group == tbHistory.getRadioGroup()) {
+            setPresumptiveTb();
             if (App.get(tbHistory).equals(getResources().getString(R.string.yes))) {
                 tbMedication.setVisibility(View.VISIBLE);
             } else {
@@ -1202,6 +1224,18 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
         public boolean isViewFromObject(View container, Object obj) {
             return container == obj;
         }
+    }
 
+    public void setPresumptiveTb(){
+        String presumptiveTbArray[] = {App.get(cough),App.get(fever),App.get(nightSweats),App.get(weightLoss),App.get(appeptite),App.get(tbHistory)};
+        int sum=0;
+        for(int i=0; i<presumptiveTbArray.length; i++){
+            if(presumptiveTbArray[i].equalsIgnoreCase(getResources().getString(R.string.yes))){
+                sum++;
+            }
+        }
+        if(sum>=2){
+            presumptiveTb.getRadioGroup().getButtons().get(0).setChecked(true);
+        }
     }
 }
