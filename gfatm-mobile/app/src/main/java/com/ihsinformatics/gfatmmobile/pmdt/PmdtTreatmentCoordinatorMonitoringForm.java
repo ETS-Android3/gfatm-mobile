@@ -354,7 +354,6 @@ public class PmdtTreatmentCoordinatorMonitoringForm extends AbstractFormActivity
     @Override
     public boolean submit() {
 
-
         final ArrayList<String[]> observations = new ArrayList<String[]>();
 
         Bundle bundle = this.getArguments();
@@ -376,8 +375,6 @@ public class PmdtTreatmentCoordinatorMonitoringForm extends AbstractFormActivity
 
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-
-        observations.add(new String[]{"VISIT DATE", App.getSqlDate(secondDateCalendar)});
 
         observations.add(new String[]{"PATIENT UNDERSTAND TB REGIMEN", App.get(patientUnderstandTbRegimen).equals(getResources().getString(R.string.yes)) ? "YES" :
                 (App.get(patientUnderstandTbRegimen).equals(getResources().getString(R.string.no)) ? "NO" : "UNKNOWN")});

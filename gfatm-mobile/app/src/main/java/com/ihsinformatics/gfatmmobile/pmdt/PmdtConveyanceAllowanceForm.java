@@ -1,16 +1,23 @@
 package com.ihsinformatics.gfatmmobile.pmdt;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
@@ -30,8 +37,12 @@ import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Tahira on 3/6/2017.
@@ -43,8 +54,8 @@ public class PmdtConveyanceAllowanceForm extends AbstractFormActivity implements
     TitledButton formDate;
     TitledEditText externalId;
     TitledSpinner typeAssessment;
-    TitledEditText otherAssessmentReason;
-    TitledEditText treatmentMonth;
+    TitledEditText otherAssessmentType;
+    TitledSpinner treatmentMonth;
 
     TitledSpinner treatmentFacility;
     TitledEditText otherTreatmentFacility;
@@ -148,8 +159,8 @@ public class PmdtConveyanceAllowanceForm extends AbstractFormActivity implements
         formDate = new TitledButton(context, null, getResources().getString(R.string.pmdt_visit_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         externalId = new TitledEditText(context, null, getResources().getString(R.string.pmdt_external_id), "", "", 11, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         typeAssessment = new TitledSpinner(context, null, getResources().getString(R.string.pmdt_assessment_type), getResources().getStringArray(R.array.pmdt_types_of_assessment), getResources().getString(R.string.pmdt_baseline_assessment), App.HORIZONTAL, true);
-        otherAssessmentReason = new TitledEditText(context, null, getResources().getString(R.string.pmdt_other_assessment_reason), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        treatmentMonth = new TitledEditText(context, null, getResources().getString(R.string.pmdt_treatment_month), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        otherAssessmentType = new TitledEditText(context, null, getResources().getString(R.string.pmdt_other_assessment_reason), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        treatmentMonth = new TitledSpinner(context, "", getResources().getString(R.string.pmdt_treatment_month), getResources().getStringArray(R.array.pmdt_treatment_month), getResources().getString(R.string.fast_zero), App.HORIZONTAL);
 
         // Fetching PMDT Locations
         String program = "";
@@ -226,7 +237,7 @@ public class PmdtConveyanceAllowanceForm extends AbstractFormActivity implements
         patientSubmitSputumSample = new TitledRadioGroup(context, getResources().getString(R.string.pmdt_title_sample_submission_information), getResources().getString(R.string.pmdt_sputum_sample_submitted), getResources().getStringArray(R.array.pmdt_yes_no_not_applicable), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, false);
         sputumSampleId = new TitledEditText(context, null, getResources().getString(R.string.pmdt_sputum_sample_id), "", "", 25, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         reasonNotSubmittedSample = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_reason_not_submitted_sputum), getResources().getStringArray(R.array.pmdt_reasons_sputums_not_submitted), getResources().getString(R.string.pmdt_could_not_produce_sputum), App.VERTICAL, App.VERTICAL);
-        otherReasonNotSubmittedSample = new TitledEditText(context, null, getResources().getString(R.string.pmdt_other_reason_not_submitted_sputum), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        otherReasonNotSubmittedSample = new TitledEditText(context, null, getResources().getString(R.string.pmdt_other_reason_not_submitted_sputum), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         visitedDoctor = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_patient_visited_doctor), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, false);
         conveyanceVoucherBookNumber = new TitledEditText(context, null, getResources().getString(R.string.pmdt_conveyance_voucher_book_number), "", "", 20, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true);
         conveyanceVoucherNumber = new TitledEditText(context, null, getResources().getString(R.string.pmdt_conveyance_voucher_number), "", "", 20, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true);
@@ -234,7 +245,7 @@ public class PmdtConveyanceAllowanceForm extends AbstractFormActivity implements
         amountTransferredInWords = new TitledEditText(context, null, getResources().getString(R.string.pmdt_amount_in_words), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), externalId.getEditText(), typeAssessment.getSpinner(), otherAssessmentReason.getEditText(), treatmentMonth.getEditText(), treatmentFacility.getSpinner(), otherTreatmentFacility.getEditText(),
+        views = new View[]{formDate.getButton(), externalId.getEditText(), typeAssessment.getSpinner(), otherAssessmentType.getEditText(), treatmentMonth.getSpinner(), treatmentFacility.getSpinner(), otherTreatmentFacility.getEditText(),
                 nationalDrTbRegistrationNumber.getEditText(), isRegistered.getRadioGroup(), registeredOutstationFacility.getSpinner(), patientCnic1.getEditText(), patientCnic2.getEditText(), patientCnic3.getEditText(), patientOwnCnic.getRadioGroup(), patientCnicOwner.getSpinner(),
                 otherPatientCnicOwner.getEditText(), namePatientCnicOwner.getEditText(), patientPrimaryPhone1a.getEditText(), patientPrimaryPhone1b.getEditText(), patientAlternatePhone1a.getEditText(), patientAlternatePhone1b.getEditText(), patientSubmitSputumSample.getRadioGroup(),
                 sputumSampleId.getEditText(), reasonNotSubmittedSample.getRadioGroup(), otherReasonNotSubmittedSample.getEditText(), visitedDoctor.getRadioGroup(), conveyanceVoucherBookNumber.getEditText(),
@@ -242,7 +253,7 @@ public class PmdtConveyanceAllowanceForm extends AbstractFormActivity implements
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, externalId, typeAssessment, otherAssessmentReason, treatmentMonth, treatmentFacility, otherTreatmentFacility,
+                {{formDate, externalId, typeAssessment, otherAssessmentType, treatmentMonth, treatmentFacility, otherTreatmentFacility,
                         nationalDrTbRegistrationNumber, isRegistered, registeredOutstationFacility},
                         {linearLayout1, patientOwnCnic, patientCnicOwner, otherPatientCnicOwner, namePatientCnicOwner, patientPrimaryPhoneLayout, patientAlternatePhoneLayout},
                         {patientSubmitSputumSample, sputumSampleId, reasonNotSubmittedSample, otherReasonNotSubmittedSample, visitedDoctor,
@@ -296,12 +307,200 @@ public class PmdtConveyanceAllowanceForm extends AbstractFormActivity implements
 
     @Override
     public boolean validate() {
-        return false;
+
+        Boolean error = false;
+
+        if (App.get(externalId).isEmpty()) {
+            otherReasonNotSubmittedSample.getEditText().setError(getResources().getString(R.string.mandatory_field));
+            otherReasonNotSubmittedSample.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (otherReasonNotSubmittedSample.getVisibility() == View.VISIBLE && App.get(otherReasonNotSubmittedSample).isEmpty()) {
+            otherReasonNotSubmittedSample.getEditText().setError(getResources().getString(R.string.mandatory_field));
+            otherReasonNotSubmittedSample.getEditText().requestFocus();
+            error = true;
+        }
+
+
+        if (error) {
+
+            // int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
+
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
+            alertDialog.setMessage(getString(R.string.form_error));
+            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+            // DrawableCompat.setTint(clearIcon, color);
+            alertDialog.setIcon(clearIcon);
+            alertDialog.setTitle(getResources().getString(R.string.title_error));
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            try {
+                                InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                            } catch (Exception e) {
+                                // TODO: handle exception
+                            }
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
+
+            return false;
+        }
+
+        return true;
     }
 
     @Override
     public boolean submit() {
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            String encounterId = bundle.getString("formId");
+            if (saveFlag) {
+                serverService.deleteOfflineForms(encounterId);
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
+            } else {
+                endTime = new Date();
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
+            }
+            bundle.putBoolean("save", false);
+        } else {
+            endTime = new Date();
+            observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
+        }
+
+        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
+        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
+
+        observations.add(new String[]{"TYPE OF ASSESSMENT", App.get(typeAssessment).equals(getResources().getString(R.string.pmdt_assessment_type)) ? "BASELINE ASSESSMENT" :
+                (App.get(typeAssessment).equals(getResources().getString(R.string.pmdt_two_week_assessment)) ? "2 WEEK ASSESSMENT" :
+                        (App.get(typeAssessment).equals(getResources().getString(R.string.pmdt_planened_monthly_assessment)) ? "PLANNED MONTHLY ASSESSMENT" :
+                                (App.get(typeAssessment).equals(getResources().getString(R.string.pmdt_treatment_initiation)) ? "TREATMENT INITIATION" :
+                                        (App.get(typeAssessment).equals(getResources().getString(R.string.pmdt_end_treatment_assessment)) ? "END OF TREATMENT ASSESSMENT" :
+                                                (App.get(typeAssessment).equals(getResources().getString(R.string.pmdt_post_treatment_assessment)) ? "POST-TREATMENT ASSESSMENT" :
+                                                        (App.get(typeAssessment).equals(getResources().getString(R.string.pmdt_adverse_event_assessment)) ? "ADVERSE EVENT ASSESSMENT" : "OTHER ASSESSMENT"))))))});
+
+
+        if (otherAssessmentType.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"OTHER ASSESSMENT", App.get(otherAssessmentType)});
+
+        observations.add(new String[]{"FOLLOW-UP MONTH", App.get(treatmentMonth)});
+
+        observations.add(new String[]{"TREATMENT FACILITY", App.get(treatmentFacility)});
+
+        if(otherTreatmentFacility.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"TREATMENT FACILITY OTHER", App.get(otherTreatmentFacility)});
+        }
+
+
+
+
+        AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.submitting_form));
+                        loading.show();
+                    }
+                });
+
+                String result = serverService.saveEncounterAndObservation(FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
+                if (!result.contains("SUCCESS"))
+                    return result;
+
+                return "SUCCESS";
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                if (result.equals("SUCCESS")) {
+                    resetViews();
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.form_submitted));
+                    Drawable submitIcon = getResources().getDrawable(R.drawable.ic_submit);
+                    alertDialog.setIcon(submitIcon);
+                    int color = App.getColor(context, R.attr.colorAccent);
+                    DrawableCompat.setTint(submitIcon, color);
+                    alertDialog.setTitle(getResources().getString(R.string.title_completed));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else if (result.equals("CONNECTION_ERROR")) {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
+                    alertDialog.setMessage(message);
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+
+
+            }
+        };
+        submissionFormTask.execute("");
+
         return false;
+
     }
 
     @Override
@@ -341,9 +540,9 @@ public class PmdtConveyanceAllowanceForm extends AbstractFormActivity implements
         if (spinner == typeAssessment.getSpinner()) {
 
             if (App.get(typeAssessment).equals(getResources().getString(R.string.pmdt_other)))
-                otherAssessmentReason.setVisibility(View.VISIBLE);
+                otherAssessmentType.setVisibility(View.VISIBLE);
             else
-                otherAssessmentReason.setVisibility(View.GONE);
+                otherAssessmentType.setVisibility(View.GONE);
 
             if (App.get(typeAssessment).equals(getResources().getString(R.string.pmdt_planened_monthly_assessment)))
                 treatmentMonth.setVisibility(View.VISIBLE);
@@ -411,6 +610,100 @@ public class PmdtConveyanceAllowanceForm extends AbstractFormActivity implements
     public void resetViews() {
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
+        autopopulateData();
+
+
+    }
+
+    public void autopopulateData(){
+
+        final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
+            @Override
+            protected HashMap<String, String> doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.fetching_data));
+                        loading.show();
+                    }
+                });
+
+                HashMap<String, String> result = new HashMap<String, String>();
+                String treatmentDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PMDT_TREATMENT_INITIATION, "TREATMENT START DATE");
+//                String nationalDrTbNumber = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PMDT_TREATMENT_INITIATION, "NATIONAL DR-TB TREATMENT REGISTRATION NUMBER");
+
+                if (treatmentDate != null && !treatmentDate.isEmpty())
+                    result.put("TREATMENT START DATE", treatmentDate);
+//                if (nationalDrTbNumber != null && !nationalDrTbNumber.isEmpty())
+//                    result.put("NATIONAL DR-TB NUMBER", nationalDrTbNumber);
+
+                return result;
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+
+            @Override
+            protected void onPostExecute(HashMap<String, String> result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                if (result.get("TREATMENT START DATE") == null || result.get("TREATMENT START DATE").isEmpty()) {
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.pmdt_treatment_initiation_missing));
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+
+                    return;
+                }
+
+                else if (result.get("TREATMENT START DATE") != null && !result.get("TREATMENT START DATE").isEmpty()) {
+
+                    String format = "";
+                    String treatmentStartDate = result.get("TREATMENT START DATE");
+
+                    if (treatmentStartDate.contains("/")) {
+                        format = "dd/MM/yyyy";
+                    } else {
+                        format = "yyyy-MM-dd";
+                    }
+                    Date convertedDate = App.stringToDate(treatmentStartDate, format);
+                    Calendar treatmentDateCalender = App.getCalendar(convertedDate);
+                    int diffYear = formDateCalendar.get(Calendar.YEAR) - treatmentDateCalender.get(Calendar.YEAR);
+                    int diffMonth = diffYear * 12 + formDateCalendar.get(Calendar.MONTH) - treatmentDateCalender.get(Calendar.MONTH);
+
+                    String [] monthArray = new String[diffMonth + 1];
+
+                    for(int i =0 ; i <= diffMonth ; i++){
+                        monthArray[i] = String.valueOf(i);
+                    }
+
+                    treatmentMonth.getSpinner().setSpinnerData(monthArray);
+                }
+            }
+        };
+        autopopulateFormTask.execute("");
     }
 
     class MyAdapter extends PagerAdapter {
