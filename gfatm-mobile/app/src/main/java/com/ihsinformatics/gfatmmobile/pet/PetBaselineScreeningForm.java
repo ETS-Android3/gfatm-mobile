@@ -581,10 +581,13 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
             observations.add(new String[]{"SECONDARY MOBILE NUMBER", App.get(phone2a) + "-" + App.get(phone2b)});
         if (address1.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"ADDRESS (TEXT)", App.get(address1)});
-        /*if (address2.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"EXTENDED ADDRESS (TEXT)", App.get(address2)});*/
+        if (town.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"TOWN", App.get(town)});
         if (district.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"DISTRICT", App.get(district)});
+        if (province.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"PROVINCE", App.get(province)});
+        if (district.getVisibility() == View.VISIBLE)
         if (city.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"VILLAGE", App.get(city)});
         if (landmark.getVisibility() == View.VISIBLE)
@@ -619,11 +622,11 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                         encounterId = successArray[1];
                     }
 
-                    /*if (!(App.get(address1).equals("") && App.get(address2).equals("") && App.get(district).equals("") && App.get(landmark).equals(""))) {
-                        result = serverService.savePersonAddress(App.get(address1), App.get(address2), App.get(city), App.get(district), App.getProvince(), App.getCountry(), App.getLongitude(), App.getLatitude(), App.get(landmark), encounterId);
+                    if (!(App.get(address1).equals("") && App.get(town).equals("") && App.get(district).equals("") && App.get(landmark).equals(""))) {
+                        result = serverService.savePersonAddress(App.get(address1), App.get(town), App.get(city), App.get(district), App.get(province), App.getCountry(), App.getLongitude(), App.getLatitude(), App.get(landmark), encounterId);
                     if (!result.equals("SUCCESS"))
                         return result;
-                    }*/
+                    }
 
                     result = serverService.savePersonAttributeType("Primary Contact", App.get(phone1a) + "-" + App.get(phone1b), encounterId);
                     if (!result.equals("SUCCESS"))
@@ -1305,9 +1308,11 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                 landmark.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("ADDRESS (TEXT)")) {
                 address1.getEditText().setText(obs[0][1]);
-            } /*else if (obs[0][0].equals("EXTENDED ADDRESS (TEXT)")) {
-                address2.getEditText().setText(obs[0][1]);
-            } */else if (obs[0][0].equals("DISTRICT")) {
+            } else if (obs[0][0].equals("TOWN")) {
+                town.setText(obs[0][1]);
+            } else if (obs[0][0].equals("PROVINCE")) {
+                province.getSpinner().selectValue(obs[0][1]);
+            } else if (obs[0][0].equals("DISTRICT")) {
                 district.getSpinner().selectValue(obs[0][1]);
             } else if (obs[0][0].equals("VILLAGE")) {
                 city.getSpinner().selectValue(obs[0][1]);
