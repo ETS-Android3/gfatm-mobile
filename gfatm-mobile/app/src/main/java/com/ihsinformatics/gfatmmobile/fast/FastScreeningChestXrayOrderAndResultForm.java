@@ -48,6 +48,7 @@ import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -60,16 +61,21 @@ import java.util.List;
 
 public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener, View.OnTouchListener {
     Context context;
-
+    boolean isResultForm = false;
+    boolean beforeResult = false;
+    boolean changeDate = false;
+    String finalDate = null;
 
     // Views...
     TitledButton formDate;
+    TitledRadioGroup pastXray;
+    TitledRadioGroup pregnancyHistory;
     MyTextView cxrResultTitle;
     MyTextView cxrOrderTitle;
     TitledRadioGroup screenXrayType;
     TitledRadioGroup formType;
     TitledSpinner monthOfTreatment;
-  //  TitledButton testDate;
+    //  TitledButton testDate;
     TitledEditText testId;
     TitledEditText cat4tbScore;
     TitledRadioGroup radiologicalDiagnosis;
@@ -78,6 +84,7 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
     TitledRadioGroup extentOfDisease;
     TitledEditText radiologistRemarks;
     ImageView testIdView;
+    LinearLayout linearLayout;
 
 
     /**
@@ -150,23 +157,25 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
 
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        pastXray = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_past_xray), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_no_title), App.VERTICAL, App.VERTICAL);
+        pregnancyHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_pregnancy_history), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_no_title), App.VERTICAL, App.VERTICAL);
         testId = new TitledEditText(context, null, getResources().getString(R.string.fast_test_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         formType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_select_form_type), getResources().getStringArray(R.array.fast_order_and_result_list), "", App.HORIZONTAL, App.HORIZONTAL);
         cxrOrderTitle = new MyTextView(context, getResources().getString(R.string.fast_cxr_order_title));
         cxrOrderTitle.setTypeface(null, Typeface.BOLD);
         screenXrayType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_what_type_of_xray_is_this), getResources().getStringArray(R.array.fast_type_of_xray_is_this_list), getResources().getString(R.string.fast_chest_xray_other), App.VERTICAL, App.VERTICAL);
-        monthOfTreatment = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_month_of_treatment), getResources().getStringArray(R.array.fast_number_list), getResources().getString(R.string.fast_zero), App.HORIZONTAL);
+        monthOfTreatment = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_month_of_treatment), getResources().getStringArray(R.array.fast_number_list), "", App.VERTICAL);
         updateFollowUpMonth();
         //   testDate = new TitledButton(context, null, getResources().getString(R.string.fast_test_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         cxrResultTitle = new MyTextView(context, getResources().getString(R.string.fast_cxr_result_title));
         cxrResultTitle.setTypeface(null, Typeface.BOLD);
         cat4tbScore = new TitledEditText(context, null, getResources().getString(R.string.fast_chest_xray_cad4tb_score), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
         radiologicalDiagnosis = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_radiologica_diagnosis), getResources().getStringArray(R.array.fast_radiological_diagonosis_list), getResources().getString(R.string.fast_normal), App.VERTICAL, App.VERTICAL);
-        abnormalDetailedDiagnosis = new TitledCheckBoxes(context, null, getResources().getString(R.string.fast_if_abnormal_detailed_diagnosis), getResources().getStringArray(R.array.fast_abnormal_detailed_diagnosis_list), new Boolean[]{true, false,false,false,false,false,false,false}, App.VERTICAL, App.VERTICAL, false);
+        abnormalDetailedDiagnosis = new TitledCheckBoxes(context, null, getResources().getString(R.string.fast_if_abnormal_detailed_diagnosis), getResources().getStringArray(R.array.fast_abnormal_detailed_diagnosis_list), new Boolean[]{true, false, false, false, false, false, false, false}, App.VERTICAL, App.VERTICAL, false);
         abnormalDetailedDiagnosisOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         extentOfDisease = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_extent_of_desease), getResources().getStringArray(R.array.fast_extent_of_disease_list), getResources().getString(R.string.fast_normal), App.VERTICAL, App.VERTICAL);
         radiologistRemarks = new TitledEditText(context, null, getResources().getString(R.string.fast_radiologist_remarks), "", "", 500, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        LinearLayout linearLayout = new LinearLayout(context);
+        linearLayout = new LinearLayout(context);
         LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -195,13 +204,15 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formType, linearLayout, cxrOrderTitle, formDate, screenXrayType, monthOfTreatment,  cxrResultTitle, cat4tbScore, radiologicalDiagnosis,
+                {{formType, formDate, pastXray, pregnancyHistory, linearLayout, cxrOrderTitle, screenXrayType, monthOfTreatment, cxrResultTitle, cat4tbScore, radiologicalDiagnosis,
                         abnormalDetailedDiagnosis, abnormalDetailedDiagnosisOther, extentOfDisease, radiologistRemarks}};
 
         formDate.getButton().setOnClickListener(this);
-       // testDate.getButton().setOnClickListener(this);
+        // testDate.getButton().setOnClickListener(this);
         formType.getRadioGroup().setOnCheckedChangeListener(this);
         radiologicalDiagnosis.getRadioGroup().setOnCheckedChangeListener(this);
+        pastXray.getRadioGroup().setOnCheckedChangeListener(this);
+        pregnancyHistory.getRadioGroup().setOnCheckedChangeListener(this);
         for (CheckBox cb : abnormalDetailedDiagnosis.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
 
@@ -219,6 +230,7 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
             @Override
             public void onTextChanged(CharSequence s, int start,
                                       int before, int count) {
+                isResultForm = false;
                 try {
                     if (testId.getEditText().getText().length() > 0) {
                         testIdView.setVisibility(View.VISIBLE);
@@ -248,63 +260,126 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
         if (snackbar != null)
             snackbar.dismiss();
 
-        if(formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result))){
-            Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "FAST-Screening CXR Test Order");
-            String format = "";
-            String formDa = formDate.getButton().getText().toString();
+        if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result))) {
+            if (beforeResult) {
+                Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "FAST-Screening CXR Test Order");
+                String format = "";
+                String formDa = formDate.getButton().getText().toString();
 
-            for(int i =0 ; i < testIds.length ; i++){
-                if(testIds[i][0].equals(testId.getEditText().getText().toString())){
-                    String date = testIds[i][1].toString();
-                    if (date.contains("/")) {
-                        format = "dd/MM/yyyy";
-                    } else {
-                        format = "yyyy-MM-dd";
+                for (int i = 0; i < testIds.length; i++) {
+                    if (testIds[i][0].equals(testId.getEditText().getText().toString())) {
+                        String date = testIds[i][1].toString();
+                        if (date.contains("/")) {
+                            format = "dd/MM/yyyy";
+                        } else {
+                            format = "yyyy-MM-dd";
+                        }
+
+                        Date orderDate = App.stringToDate(date, format);
+                        Date orderDateForValidation = App.stringToDate(date, format);
+
+                        Calendar dateCalendar = Calendar.getInstance();
+                        dateCalendar.setTime(orderDateForValidation);
+                       // dateCalendar.add(Calendar.DATE, 1);
+                        SimpleDateFormat newFormat = new SimpleDateFormat("EEEE, MMM dd,yyyy");
+                        finalDate = newFormat.format(dateCalendar.getTime());
+
+                        if (formDateCalendar.before(App.getCalendar(orderDate))) {
+                            //formDateCalendar = App.getCalendar(App.stringToDate(finalDate, "EEEE, MMM dd,yyyy"));
+                            changeDate = true;
+
+                            break;
+                        } else {
+                            changeDate = false;
+                            if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
+
+                                String personDOB = App.getPatient().getPerson().getBirthdate();
+
+                                Date date1 = new Date();
+                                if (formDateCalendar.after(App.getCalendar(date1))) {
+                                    changeDate = false;
+                                    formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                                    snackbar.show();
+
+                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                                    break;
+
+                                } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                                    changeDate = false;
+                                    formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                                    TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                                    tv.setMaxLines(2);
+                                    snackbar.show();
+                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                                    break;
+                                } else{
+                                    changeDate = false;
+                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                                }
+                            }
+                        }
                     }
+                }
+            } else if (isResultForm) {
+                changeDate = false;
+                Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "FAST-Screening CXR Test Order");
+                String format = "";
+                String formDa = formDate.getButton().getText().toString();
 
-                    Date orderDate = App.stringToDate(date, format);
+                for (int i = 0; i < testIds.length; i++) {
+                    if (testIds[i][0].equals(testId.getEditText().getText().toString())) {
+                        String date = testIds[i][1].toString();
+                        if (date.contains("/")) {
+                            format = "dd/MM/yyyy";
+                        } else {
+                            format = "yyyy-MM-dd";
+                        }
 
-                    if(formDateCalendar.before(App.getCalendar(orderDate))){
-                        formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                        Date orderDate = App.stringToDate(date, format);
 
-                        snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
-                        snackbar.show();
+                        if (formDateCalendar.before(App.getCalendar(orderDate))) {
+                            formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
-                        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                        break;
-                    }
-                    else {
-                        if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
+                            snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
+                            snackbar.show();
 
-                            String personDOB = App.getPatient().getPerson().getBirthdate();
+                            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                            break;
+                        } else {
+                            if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
-                            Date date1 = new Date();
-                            if (formDateCalendar.after(App.getCalendar(date1))) {
+                                String personDOB = App.getPatient().getPerson().getBirthdate();
 
-                                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                                Date date1 = new Date();
+                                if (formDateCalendar.after(App.getCalendar(date1))) {
 
-                                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
-                                snackbar.show();
+                                    formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
-                                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                                break;
+                                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                                    snackbar.show();
 
-                            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
-                                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-                                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-                                tv.setMaxLines(2);
-                                snackbar.show();
-                                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                                break;
-                            } else
-                                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                                    break;
+
+                                } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                                    formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                                    TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                                    tv.setMaxLines(2);
+                                    snackbar.show();
+                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                                    break;
+                                } else
+                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                            }
                         }
                     }
                 }
             }
         }
-
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
@@ -313,13 +388,13 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
 
             String treatmentDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
 
-           if(treatmentDate != null){
+            if (treatmentDate != null) {
                 treatDateCalender = App.getCalendar(App.stringToDate(treatmentDate, "yyyy-MM-dd"));
             }
 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
-
+                changeDate = false;
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
@@ -328,31 +403,32 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
             } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                changeDate = false;
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyyy", formDateCalendar).toString());
-            }
-
-           else if (treatDateCalender != null) {
-                if(formDateCalendar.before(treatDateCalender)) {
+            } else if (treatDateCalender != null) {
+                if (formDateCalendar.before(treatDateCalender)) {
+                    changeDate = false;
                     formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                     snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_date_cannot_be_before_treatment_initiation_form), Snackbar.LENGTH_INDEFINITE);
                     snackbar.show();
 
                     formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                }
-                else {
+                } else {
+                    changeDate = false;
                     formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
                 }
-            }
-
-            else
+            } else{
+                changeDate = false;
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+             }
         }
+
         /*if (!(testDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
 
             String formDa = testDate.getButton().getText().toString();
@@ -408,20 +484,16 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
                 monthArray = new String[1];
                 monthArray[0] = "1";
                 monthOfTreatment.getSpinner().setSpinnerData(monthArray);
-            }
-
-            else if(diffMonth > 24){
+            } else if (diffMonth > 24) {
                 monthArray = new String[24];
                 for (int i = 0; i < 24; i++) {
-                    monthArray[i] = String.valueOf(i+1);
+                    monthArray[i] = String.valueOf(i + 1);
                 }
                 monthOfTreatment.getSpinner().setSpinnerData(monthArray);
-            }
-
-            else {
+            } else {
                 monthArray = new String[diffMonth];
                 for (int i = 0; i < diffMonth; i++) {
-                    monthArray[i] = String.valueOf(i+1);
+                    monthArray[i] = String.valueOf(i + 1);
                 }
                 monthOfTreatment.getSpinner().setSpinnerData(monthArray);
             }
@@ -492,7 +564,7 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
                 alertDialog.setMessage(getString(R.string.form_error));
             }
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-          //  DrawableCompat.setTint(clearIcon, color);
+            //  DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_error));
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
@@ -542,6 +614,13 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
         observations.add(new String[]{"TEST ID", App.get(testId)});
 
         if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_order))) {
+            if (pastXray.getVisibility() == View.VISIBLE)
+                observations.add(new String[]{"X RAY IN PAST 6 MONTHS", App.get(pastXray).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
+
+            if (pregnancyHistory.getVisibility() == View.VISIBLE)
+                observations.add(new String[]{"PREGNANCY STATUS", App.get(pregnancyHistory).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
+
+
             if (screenXrayType.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"TYPE OF X RAY", App.get(screenXrayType).equals(getResources().getString(R.string.fast_chest_xray_cad4tb)) ? "RADIOLOGICAL DIAGNOSIS" : "X-RAY, OTHER"});
             if (monthOfTreatment.getVisibility() == View.VISIBLE)
@@ -562,22 +641,22 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
             if (abnormalDetailedDiagnosis.getVisibility() == View.VISIBLE) {
 
                 String abnormalDetailedDiagnosisString = "";
-                for(CheckBox cb : abnormalDetailedDiagnosis.getCheckedBoxes()){
-                    if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_adenopathy)))
+                for (CheckBox cb : abnormalDetailedDiagnosis.getCheckedBoxes()) {
+                    if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_adenopathy)))
                         abnormalDetailedDiagnosisString = abnormalDetailedDiagnosisString + "ADENOPATHY" + " ; ";
-                    else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_infiltration)))
+                    else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_infiltration)))
                         abnormalDetailedDiagnosisString = abnormalDetailedDiagnosisString + "INFILTRATE" + " ; ";
-                    else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_consolidation)))
+                    else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_consolidation)))
                         abnormalDetailedDiagnosisString = abnormalDetailedDiagnosisString + "CONSOLIDATION" + " ; ";
-                    else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_pleural_effusion)))
+                    else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_pleural_effusion)))
                         abnormalDetailedDiagnosisString = abnormalDetailedDiagnosisString + "PLEURAL EFFUSION" + " ; ";
-                    else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_normal)))
+                    else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_normal)))
                         abnormalDetailedDiagnosisString = abnormalDetailedDiagnosisString + "NORMAL" + " ; ";
-                    else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_cavitation)))
+                    else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_cavitation)))
                         abnormalDetailedDiagnosisString = abnormalDetailedDiagnosisString + "CAVIATION" + " ; ";
-                    else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_miliary_tb)))
+                    else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_miliary_tb)))
                         abnormalDetailedDiagnosisString = abnormalDetailedDiagnosisString + "MILIARY" + " ; ";
-                    else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_others)))
+                    else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_others)))
                         abnormalDetailedDiagnosisString = abnormalDetailedDiagnosisString + "OTHER ABNORMAL DETAILED DIAGNOSIS" + " ; ";
                 }
                 observations.add(new String[]{"ABNORMAL DETAILED DIAGNOSIS", abnormalDetailedDiagnosisString});
@@ -726,11 +805,20 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
         return true;
     }
 
+
+    public boolean validateResultDate() {
+        updateDisplay();
+        return changeDate;
+    }
+
+
     void showTestOrderOrTestResult() {
-        formDate.setVisibility(View.VISIBLE);
+        //formDate.setVisibility(View.VISIBLE);
         if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_order))) {
+            isResultForm = false;
+            beforeResult = false;
             cxrOrderTitle.setVisibility(View.VISIBLE);
-            formDate.getQuestionView().setText(getResources().getString(R.string.fast_test_date));
+           // formDate.getQuestionView().setText(getResources().getString(R.string.fast_test_date));
             screenXrayType.setVisibility(View.VISIBLE);
             monthOfTreatment.setVisibility(View.VISIBLE);
             //   testDate.setVisibility(View.VISIBLE);
@@ -744,8 +832,9 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
             radiologistRemarks.setVisibility(View.GONE);
         } else {
             cxrOrderTitle.setVisibility(View.GONE);
-            formDate.getQuestionView().setText(getResources().getString(R.string.fast_date_of_result_recieved));
-
+           // formDate.getQuestionView().setText(getResources().getString(R.string.fast_date_of_result_recieved));
+            isResultForm = true;
+            beforeResult = false;
          /*   String typeofXray = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Screening CXR Test Order", "TYPE OF X RAY");
 
             if(typeofXray == null){
@@ -760,13 +849,13 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
 
             screenXrayType.setVisibility(View.GONE);
             monthOfTreatment.setVisibility(View.GONE);
-          //  testDate.setVisibility(View.GONE);
+            //  testDate.setVisibility(View.GONE);
 
             cxrResultTitle.setVisibility(View.VISIBLE);
 
             radiologicalDiagnosis.setVisibility(View.VISIBLE);
 
-            if(radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_not_suggestive_of_tb))) {
+            if (radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_not_suggestive_of_tb))) {
                 abnormalDetailedDiagnosis.setVisibility(View.VISIBLE);
                 for (CheckBox cb : abnormalDetailedDiagnosis.getCheckedBoxes()) {
                     if (App.get(cb).equals(getResources().getString(R.string.fast_others))) {
@@ -824,7 +913,13 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
                     result = "";
                     for (int i = 0; i < testIds.length; i++) {
                         if (String.valueOf(testIds[i][0]).equals(App.get(testId))) {
-                            return "SUCCESS";
+                            if(!isResultForm)
+                                beforeResult = true;
+                            else
+                                beforeResult = false;
+                            if (!validateResultDate())
+                                return "SUCCESS";
+                            return "FAIL";
                         }
                     }
                 }
@@ -846,10 +941,24 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
                 if (result.equals("SUCCESS")) {
 
                     testIdView.setImageResource(R.drawable.ic_checked_green);
+                    testIdView.setTag(R.drawable.ic_checked_green);
                     showTestOrderOrTestResult();
                     submitButton.setEnabled(true);
 
-                } else {
+                }
+
+                else if(result.equals("FAIL")){
+                    if (snackbar != null)
+                        snackbar.dismiss();
+
+                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
+                    snackbar.show();
+                    formDateCalendar = App.getCalendar(App.stringToDate(finalDate, "EEEE, MMM dd,yyyy"));
+                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                }
+
+
+                else {
 
                     if (App.get(formType).equals(getResources().getString(R.string.fast_order))) {
                         testId.getEditText().setError("Test Id already used.");
@@ -898,7 +1007,39 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
                     testIdView.setEnabled(false);
                     testIdView.setImageResource(R.drawable.ic_checked_green);
                     testId.getEditText().setText(obs[0][1]);
-                } else if (obs[0][0].equals("TYPE OF X RAY")) {
+                }
+
+                else if (obs[0][0].equals("X RAY IN PAST 6 MONTHS")) {
+                    for (RadioButton rb : pastXray.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
+                            testId.getEditText().setEnabled(true);
+                            testIdView.setEnabled(true);
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    pastXray.setVisibility(View.VISIBLE);
+                }
+
+                else if (obs[0][0].equals("PREGNANCY STATUS")) {
+                    for (RadioButton rb : pregnancyHistory.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
+                            testId.getEditText().setEnabled(true);
+                            testIdView.setEnabled(true);
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    pregnancyHistory.setVisibility(View.VISIBLE);
+                }
+
+                else if (obs[0][0].equals("TYPE OF X RAY")) {
                     for (RadioButton rb : screenXrayType.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.fast_chest_xray_cad4tb)) && obs[0][1].equals("RADIOLOGICAL DIAGNOSIS")) {
                             rb.setChecked(true);
@@ -925,8 +1066,7 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
                     checkTestId();
                 } else if (obs[0][0].equals("CHEST X-RAY SCORE")) {
                     cat4tbScore.getEditText().setText(obs[0][1]);
-                }
-                else if (obs[0][0].equals("RADIOLOGICAL DIAGNOSIS")) {
+                } else if (obs[0][0].equals("RADIOLOGICAL DIAGNOSIS")) {
                     for (RadioButton rb : radiologicalDiagnosis.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.fast_normal)) && obs[0][1].equals("NORMAL")) {
                             rb.setChecked(true);
@@ -934,16 +1074,13 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
                         } else if (rb.getText().equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb)) && obs[0][1].equals("ABNORMAL SUGGESTIVE OF TB")) {
                             rb.setChecked(true);
                             break;
-                        }
-                        else if (rb.getText().equals(getResources().getString(R.string.fast_abnormal_not_suggestive_of_tb)) && obs[0][1].equals("ABNORMAL NOT SUGGESTIVE OF TB")) {
+                        } else if (rb.getText().equals(getResources().getString(R.string.fast_abnormal_not_suggestive_of_tb)) && obs[0][1].equals("ABNORMAL NOT SUGGESTIVE OF TB")) {
                             rb.setChecked(true);
                             break;
                         }
                     }
                     radiologicalDiagnosis.setVisibility(View.VISIBLE);
-                }
-
-                else if (obs[0][0].equals("ABNORMAL DETAILED DIAGNOSIS")) {
+                } else if (obs[0][0].equals("ABNORMAL DETAILED DIAGNOSIS")) {
                     for (CheckBox cb : abnormalDetailedDiagnosis.getCheckedBoxes()) {
                         if (cb.getText().equals(getResources().getString(R.string.fast_adenopathy)) && obs[0][1].equals("ADENOPATHY")) {
                             cb.setChecked(true);
@@ -975,8 +1112,7 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
                 } else if (obs[0][0].equals("OTHER ABNORMAL DETAILED DIAGNOSIS")) {
                     abnormalDetailedDiagnosisOther.getEditText().setText(obs[0][1]);
                     abnormalDetailedDiagnosisOther.setVisibility(View.VISIBLE);
-                }
-                else if (obs[0][0].equals("EXTENT OF DISEASE")) {
+                } else if (obs[0][0].equals("EXTENT OF DISEASE")) {
                     for (RadioButton rb : extentOfDisease.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.fast_normal)) && obs[0][1].equals("NORMAL")) {
                             rb.setChecked(true);
@@ -984,22 +1120,16 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
                         } else if (rb.getText().equals(getResources().getString(R.string.fast_unilateral_disease)) && obs[0][1].equals("UNILATERAL")) {
                             rb.setChecked(true);
                             break;
-                        }
-                        else if (rb.getText().equals(getResources().getString(R.string.fast_bilateral_disease)) && obs[0][1].equals("BILATERAL")) {
+                        } else if (rb.getText().equals(getResources().getString(R.string.fast_bilateral_disease)) && obs[0][1].equals("BILATERAL")) {
                             rb.setChecked(true);
                             break;
-                        }
-                        else if (rb.getText().equals(getResources().getString(R.string.fast_abnormal_but_extent_not_defined)) && obs[0][1].equals("ABNORMAL")) {
+                        } else if (rb.getText().equals(getResources().getString(R.string.fast_abnormal_but_extent_not_defined)) && obs[0][1].equals("ABNORMAL")) {
                             rb.setChecked(true);
                             break;
                         }
                     }
                     extentOfDisease.setVisibility(View.VISIBLE);
-                }
-
-
-
-                else if (obs[0][0].equals("CLINICIAN NOTES (TEXT)")) {
+                } else if (obs[0][0].equals("CLINICIAN NOTES (TEXT)")) {
                     radiologistRemarks.getEditText().setText(obs[0][1]);
                 }
             }
@@ -1050,10 +1180,14 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
             }
         }
     }
+
     @Override
     public void resetViews() {
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        formDate.setVisibility(View.GONE);
+        pastXray.setVisibility(View.GONE);
+        pregnancyHistory.setVisibility(View.GONE);
         //testDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
         testIdView.setVisibility(View.GONE);
@@ -1082,11 +1216,11 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
     }
 
     void goneVisibility() {
-        formDate.setVisibility(View.GONE);
+        // formDate.setVisibility(View.GONE);
         cxrOrderTitle.setVisibility(View.GONE);
         screenXrayType.setVisibility(View.GONE);
         monthOfTreatment.setVisibility(View.GONE);
-       // testDate.setVisibility(View.GONE);
+        // testDate.setVisibility(View.GONE);
         cxrResultTitle.setVisibility(View.GONE);
         cat4tbScore.setVisibility(View.GONE);
         radiologicalDiagnosis.setVisibility(View.GONE);
@@ -1131,16 +1265,65 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
         if (radioGroup == formType.getRadioGroup()) {
-            formDate.setVisibility(View.VISIBLE);
-            testId.setVisibility(View.VISIBLE);
-            testId.getEditText().setText("");
-            testId.getEditText().setError(null);
-            goneVisibility();
-            submitButton.setEnabled(false);
-        }
 
-        else if(radioGroup == radiologicalDiagnosis.getRadioGroup()){
-            if(radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_not_suggestive_of_tb))) {
+            if(formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_order))){
+                formDate.setVisibility(View.VISIBLE);
+                pastXray.setVisibility(View.VISIBLE);
+                pregnancyHistory.setVisibility(View.VISIBLE);
+
+                if(pastXray.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))
+                        && pregnancyHistory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))){
+
+                    formDate.setVisibility(View.VISIBLE);
+                    linearLayout.setVisibility(View.VISIBLE);
+                    testId.setVisibility(View.VISIBLE);
+                    testId.getEditText().setText("");
+                    testId.getEditText().setError(null);
+                    goneVisibility();
+                    submitButton.setEnabled(false);
+                }
+                else{
+                    linearLayout.setVisibility(View.GONE);
+                    testId.setVisibility(View.GONE);
+                    cxrOrderTitle.setVisibility(View.GONE);
+                    screenXrayType.setVisibility(View.GONE);
+                    monthOfTreatment.setVisibility(View.GONE);
+                    submitButton.setEnabled(true);
+                }
+
+                if(pregnancyHistory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))
+                        && pastXray.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))){
+                    formDate.setVisibility(View.VISIBLE);
+                    linearLayout.setVisibility(View.VISIBLE);
+                    testId.setVisibility(View.VISIBLE);
+                    testId.getEditText().setText("");
+                    testId.getEditText().setError(null);
+                    goneVisibility();
+                    submitButton.setEnabled(false);
+                }
+                else{
+                    linearLayout.setVisibility(View.GONE);
+                    testId.setVisibility(View.GONE);
+                    cxrOrderTitle.setVisibility(View.GONE);
+                    screenXrayType.setVisibility(View.GONE);
+                    monthOfTreatment.setVisibility(View.GONE);
+                    submitButton.setEnabled(true);
+                }
+
+            }
+
+            else {
+                formDate.setVisibility(View.VISIBLE);
+                pastXray.setVisibility(View.GONE);
+                pregnancyHistory.setVisibility(View.GONE);
+                testId.setVisibility(View.VISIBLE);
+                testId.getEditText().setText("");
+                testId.getEditText().setError(null);
+                goneVisibility();
+                submitButton.setEnabled(false);
+            }
+        } else if (radioGroup == radiologicalDiagnosis.getRadioGroup()) {
+            if (radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_not_suggestive_of_tb))) {
                 abnormalDetailedDiagnosis.setVisibility(View.VISIBLE);
                 for (CheckBox cb : abnormalDetailedDiagnosis.getCheckedBoxes()) {
                     if (App.get(cb).equals(getResources().getString(R.string.fast_others))) {
@@ -1151,11 +1334,85 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
                         }
                     }
                 }
-            }
-            else{
+            } else {
                 abnormalDetailedDiagnosis.setVisibility(View.GONE);
                 abnormalDetailedDiagnosisOther.setVisibility(View.GONE);
             }
+        }
+
+        else if(radioGroup == pastXray.getRadioGroup()){
+            if(pastXray.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))
+                    && pregnancyHistory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))){
+
+                formDate.setVisibility(View.VISIBLE);
+                linearLayout.setVisibility(View.VISIBLE);
+                testId.setVisibility(View.VISIBLE);
+                testId.getEditText().setText("");
+                testId.getEditText().setError(null);
+                goneVisibility();
+                submitButton.setEnabled(false);
+            }
+            else{
+                linearLayout.setVisibility(View.GONE);
+                testId.setVisibility(View.GONE);
+                cxrOrderTitle.setVisibility(View.GONE);
+                screenXrayType.setVisibility(View.GONE);
+                monthOfTreatment.setVisibility(View.GONE);
+                submitButton.setEnabled(true);
+            }
+              /*  linearLayout.setVisibility(View.VISIBLE);
+                submitButton.setEnabled(false);
+                Integer resource = (Integer)testIdView.getTag();
+                if(resource == R.drawable.ic_checked_green){
+                    cxrOrderTitle.setVisibility(View.VISIBLE);
+                    screenXrayType.setVisibility(View.VISIBLE);
+                    monthOfTreatment.setVisibility(View.VISIBLE);
+                    submitButton.setEnabled(true);
+                }
+                else{
+                    cxrOrderTitle.setVisibility(View.GONE);
+                    screenXrayType.setVisibility(View.GONE);
+                    monthOfTreatment.setVisibility(View.GONE);
+                    submitButton.setEnabled(false);
+                }
+            }*/
+        }
+
+        else if(radioGroup == pregnancyHistory.getRadioGroup()){
+            if(pregnancyHistory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))
+                    && pastXray.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))){
+                formDate.setVisibility(View.VISIBLE);
+                linearLayout.setVisibility(View.VISIBLE);
+                testId.setVisibility(View.VISIBLE);
+                testId.getEditText().setText("");
+                testId.getEditText().setError(null);
+                goneVisibility();
+                submitButton.setEnabled(false);
+            }
+            else{
+                linearLayout.setVisibility(View.GONE);
+                testId.setVisibility(View.GONE);
+                cxrOrderTitle.setVisibility(View.GONE);
+                screenXrayType.setVisibility(View.GONE);
+                monthOfTreatment.setVisibility(View.GONE);
+                submitButton.setEnabled(true);
+            }
+              /*  linearLayout.setVisibility(View.VISIBLE);
+                submitButton.setEnabled(false);
+                Integer resource = (Integer)testIdView.getTag();
+                if(resource == R.drawable.ic_checked_green){
+                    cxrOrderTitle.setVisibility(View.VISIBLE);
+                    screenXrayType.setVisibility(View.VISIBLE);
+                    monthOfTreatment.setVisibility(View.VISIBLE);
+                    submitButton.setEnabled(true);
+                }
+                else{
+                    cxrOrderTitle.setVisibility(View.GONE);
+                    screenXrayType.setVisibility(View.GONE);
+                    monthOfTreatment.setVisibility(View.GONE);
+                    submitButton.setEnabled(false);
+                }
+            }*/
         }
     }
 

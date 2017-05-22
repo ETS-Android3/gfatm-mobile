@@ -158,7 +158,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
         }
 
         hospital = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_if_hospital_specify), locationArray, "", App.VERTICAL);
-        hospitalSection = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_hospital_parts_title), getResources().getStringArray(R.array.fast_hospital_parts), getResources().getString(R.string.fast_opdclinicscreening_title), App.VERTICAL);
+        hospitalSection = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_hospital_parts_title), getResources().getStringArray(R.array.fast_hospital_parts_screening), getResources().getString(R.string.fast_opdclinicscreening_title), App.VERTICAL);
         hospitalSectionOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         opdWardSection = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_clinic_and_ward_title), getResources().getStringArray(R.array.fast_clinic_and_ward_list), getResources().getString(R.string.fast_generalmedicinefilterclinic_title), App.VERTICAL);
         patientAttendant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_or_attendant_title), getResources().getStringArray(R.array.fast_patient_or_attendant_list), getResources().getString(R.string.fast_patient_title), App.HORIZONTAL, App.HORIZONTAL);
@@ -292,9 +292,8 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
 
         if (hospitalSection.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"HOSPITAL_SECTION", App.get(hospitalSection).equals(getResources().getString(R.string.fast_opdclinicscreening_title)) ? "OPD CLINIC SCREENING" :
-                    (App.get(hospitalSection).equals(getResources().getString(R.string.fast_wardscreening_title)) ? "WARD SCREENING" :
                             (App.get(hospitalSection).equals(getResources().getString(R.string.fast_registrationdesk_title)) ? "REGISTRATION DESK" :
-                                    (App.get(hospitalSection).equals(getResources().getString(R.string.fast_nexttoxrayvan_title)) ? "X-RAY VAN" : "OTHER FACILITY SECTION")))});
+                                    (App.get(hospitalSection).equals(getResources().getString(R.string.fast_nexttoxrayvan_title)) ? "X-RAY VAN" : "OTHER FACILITY SECTION"))});
 
         if (hospitalSectionOther.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"HOSPITAL_SECTION_OTHER", App.get(hospitalSectionOther)});
@@ -489,10 +488,9 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
             }
             else if (obs[0][0].equals("HOSPITAL_SECTION")) {
                 String value = obs[0][1].equals("OPD CLINIC SCREENING") ? getResources().getString(R.string.fast_opdclinicscreening_title) :
-                        (obs[0][1].equals("WARD SCREENING") ? getResources().getString(R.string.fast_wardscreening_title) :
                                 (obs[0][1].equals("REGISTRATION DESK") ? getResources().getString(R.string.fast_registrationdesk_title) :
                                         (obs[0][1].equals("X-RAY VAN") ? getResources().getString(R.string.fast_nexttoxrayvan_title) :
-                                                getResources().getString(R.string.fast_other_title))));
+                                                getResources().getString(R.string.fast_other_title)));
 
                 hospitalSection.getSpinner().selectValue(value);
                 hospitalSection.setVisibility(View.VISIBLE);
@@ -644,8 +642,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title))) {
                 hospitalSectionOther.setVisibility(View.VISIBLE);
                 opdWardSection.setVisibility(View.GONE);
-            } else if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_opdclinicscreening_title)) ||
-                    parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_wardscreening_title))) {
+            } else if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_opdclinicscreening_title))) {
                 hospitalSectionOther.setVisibility(View.GONE);
                 opdWardSection.setVisibility(View.VISIBLE);
             } else if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_registrationdesk_title)) ||
@@ -693,9 +690,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
                 hospital.setVisibility(View.VISIBLE);
                 hospitalSection.setVisibility(View.VISIBLE);
                 if (hospitalSection.getSpinner().getSelectedItem().
-                        equals(getResources().getString(R.string.fast_opdclinicscreening_title))
-                        || hospitalSection.getSpinner().getSelectedItem().
-                        equals(getResources().getString(R.string.fast_wardscreening_title)))
+                        equals(getResources().getString(R.string.fast_opdclinicscreening_title)))
                     opdWardSection.setVisibility(View.VISIBLE);
                 if (hospitalSection.getSpinner()
                         .getSelectedItem().equals(getResources().getString(R.string.fast_other_title)))

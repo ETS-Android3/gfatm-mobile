@@ -49,6 +49,7 @@ import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -65,6 +66,12 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
     //  protected DialogFragment thirdDateFragment;
 
     Context context;
+
+    boolean isResultForm = false;
+    boolean beforeResult = false;
+    boolean changeDate = false;
+    String finalDate = null;
+
     // Views...
     TitledButton formDate;
     TitledEditText testId;
@@ -185,7 +192,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
 
         testContextStatus = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_at_what_point_test_being_done), getResources().getStringArray(R.array.fast_test_being_done_list), getResources().getString(R.string.fast_baseline_new), App.VERTICAL, App.VERTICAL);
 
-        monthOfTreatment = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_month_of_treatment), getResources().getStringArray(R.array.fast_number_list), getResources().getString(R.string.fast_zero), App.HORIZONTAL);
+        monthOfTreatment = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_month_of_treatment), getResources().getStringArray(R.array.fast_number_list), "", App.VERTICAL);
 
         updateFollowUpMonth();
 
@@ -280,7 +287,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formType, linearLayout, dstOrder, formDate, dateOfSubmission, testContextStatus, monthOfTreatment, specimenType,
+                {{formType,formDate, linearLayout, dstOrder, dateOfSubmission, testContextStatus, monthOfTreatment, specimenType,
                         specimenSource, specimenSourceOther, dstResult, dstMedium, inh02Resistant, inh1Resistant,
                         rifResistant, etbResistant, smResistant, pzaResistant, ofxResistant, levoResistant, moxi05Resistant, moxi2Resistant
                         , amkResistant, kmResistant, cmResistant, pasResistant, bdqResistant, dlmResistant, lzdResistant, cfzResistant,
@@ -329,6 +336,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
             @Override
             public void onTextChanged(CharSequence s, int start,
                                       int before, int count) {
+                isResultForm = false;
                 try {
                     if (testId.getEditText().getText().length() > 0) {
                         testIdView.setVisibility(View.VISIBLE);
@@ -404,57 +412,121 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
         if (snackbar != null)
             snackbar.dismiss();
 
-        if(formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result))){
-            Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "FAST-DST Culture Test Order");
-            String format = "";
-            String formDa = formDate.getButton().getText().toString();
+        if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result))) {
+            if (beforeResult) {
+                Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "FAST-DST Culture Test Order");
+                String format = "";
+                String formDa = formDate.getButton().getText().toString();
 
-            for(int i =0 ; i < testIds.length ; i++){
-                if(testIds[i][0].equals(testId.getEditText().getText().toString())){
-                    String date = testIds[i][1].toString();
-                    if (date.contains("/")) {
-                        format = "dd/MM/yyyy";
-                    } else {
-                        format = "yyyy-MM-dd";
+                for (int i = 0; i < testIds.length; i++) {
+                    if (testIds[i][0].equals(testId.getEditText().getText().toString())) {
+                        String date = testIds[i][1].toString();
+                        if (date.contains("/")) {
+                            format = "dd/MM/yyyy";
+                        } else {
+                            format = "yyyy-MM-dd";
+                        }
+
+                        Date orderDate = App.stringToDate(date, format);
+                        Date orderDateForValidation = App.stringToDate(date, format);
+
+                        Calendar dateCalendar = Calendar.getInstance();
+                        dateCalendar.setTime(orderDateForValidation);
+                        // dateCalendar.add(Calendar.DATE, 1);
+                        SimpleDateFormat newFormat = new SimpleDateFormat("EEEE, MMM dd,yyyy");
+                        finalDate = newFormat.format(dateCalendar.getTime());
+
+                        if (formDateCalendar.before(App.getCalendar(orderDate))) {
+                            //formDateCalendar = App.getCalendar(App.stringToDate(finalDate, "EEEE, MMM dd,yyyy"));
+                            changeDate = true;
+
+                            break;
+                        } else {
+                            changeDate = false;
+                            if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
+
+                                String personDOB = App.getPatient().getPerson().getBirthdate();
+
+                                Date date1 = new Date();
+                                if (formDateCalendar.after(App.getCalendar(date1))) {
+                                    changeDate = false;
+                                    formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                                    snackbar.show();
+
+                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                                    break;
+
+                                } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                                    changeDate = false;
+                                    formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                                    TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                                    tv.setMaxLines(2);
+                                    snackbar.show();
+                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                                    break;
+                                } else {
+                                    changeDate = false;
+                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                                }
+                            }
+                        }
                     }
+                }
+            } else if (isResultForm) {
+                changeDate = false;
+                Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "FAST-DST Culture Test Order");
+                String format = "";
+                String formDa = formDate.getButton().getText().toString();
 
-                    Date orderDate = App.stringToDate(date, format);
+                for (int i = 0; i < testIds.length; i++) {
+                    if (testIds[i][0].equals(testId.getEditText().getText().toString())) {
+                        String date = testIds[i][1].toString();
+                        if (date.contains("/")) {
+                            format = "dd/MM/yyyy";
+                        } else {
+                            format = "yyyy-MM-dd";
+                        }
 
-                    if(formDateCalendar.before(App.getCalendar(orderDate))){
-                        formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                        Date orderDate = App.stringToDate(date, format);
 
-                        snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
-                        snackbar.show();
+                        if (formDateCalendar.before(App.getCalendar(orderDate))) {
+                            formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
-                        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                        break;
-                    }
-                    else {
-                        if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
+                            snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
+                            snackbar.show();
 
-                            String personDOB = App.getPatient().getPerson().getBirthdate();
+                            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                            break;
+                        } else {
+                            if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
-                            Date date1 = new Date();
-                            if (formDateCalendar.after(App.getCalendar(date1))) {
+                                String personDOB = App.getPatient().getPerson().getBirthdate();
 
-                                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                                Date date1 = new Date();
+                                if (formDateCalendar.after(App.getCalendar(date1))) {
 
-                                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
-                                snackbar.show();
+                                    formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
-                                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                                break;
+                                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                                    snackbar.show();
 
-                            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
-                                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-                                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-                                tv.setMaxLines(2);
-                                snackbar.show();
-                                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                                break;
-                            } else
-                                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                                    break;
+
+                                } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                                    formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                                    TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                                    tv.setMaxLines(2);
+                                    snackbar.show();
+                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                                    break;
+                                } else
+                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                            }
                         }
                     }
                 }
@@ -477,6 +549,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
 
+                changeDate = false;
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
@@ -485,17 +558,10 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
             }
-            else if (dateOfSubmission.getVisibility() == View.VISIBLE && formDateCalendar.before(secondDateCalendar)) {
 
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
-                snackbar.show();
-
-                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-
-            }
             else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                changeDate = false;
+
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
@@ -506,6 +572,8 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
 
             else if (treatDateCalender != null) {
                 if(formDateCalendar.before(treatDateCalender)) {
+                    changeDate = false;
+
                     formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                     snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_date_cannot_be_before_treatment_initiation_form), Snackbar.LENGTH_INDEFINITE);
@@ -514,11 +582,13 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                     formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
                 }
                 else {
+                    changeDate = false;
                     formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
                 }
             }
 
             else {
+                changeDate = false;
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
                 // if(dateOfSubmission.getVisibility() == View.GONE){
                 // secondDateCalendar.setTime(formDateCalendar.getTime());
@@ -958,10 +1028,12 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
     }
 
     void showTestOrderOrTestResult() {
-        formDate.setVisibility(View.VISIBLE);
+        //formDate.setVisibility(View.VISIBLE);
         if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_order))) {
+            isResultForm = false;
+            beforeResult = false;
             dstOrder.setVisibility(View.VISIBLE);
-            formDate.getQuestionView().setText(getResources().getString(R.string.fast_test_date));
+           // formDate.getQuestionView().setText(getResources().getString(R.string.fast_test_date));
             dateOfSubmission.setVisibility(View.VISIBLE);
             testContextStatus.setVisibility(View.VISIBLE);
             if (testContextStatus.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_followup_test))) {
@@ -1007,7 +1079,9 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
             otherDrugName.setVisibility(View.GONE);
             otherDrugResult.setVisibility(View.GONE);
         } else {
-            formDate.getQuestionView().setText(getResources().getString(R.string.fast_date_of_result_recieved));
+            isResultForm = true;
+            beforeResult = false;
+           // formDate.getQuestionView().setText(getResources().getString(R.string.fast_date_of_result_recieved));
             dstResult.setVisibility(View.VISIBLE);
             //  dateTestResult.setVisibility(View.VISIBLE);
             dstMedium.setVisibility(View.VISIBLE);
@@ -1042,6 +1116,11 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
             specimenSource.setVisibility(View.GONE);
             specimenSourceOther.setVisibility(View.GONE);
         }
+    }
+
+    public boolean validateResultDate() {
+        updateDisplay();
+        return changeDate;
     }
 
     private void checkTestId() {
@@ -1084,7 +1163,13 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                     result = "";
                     for (int i = 0; i < testIds.length; i++) {
                         if (String.valueOf(testIds[i][0]).equals(App.get(testId))) {
-                            return "SUCCESS";
+                            if (!isResultForm)
+                                beforeResult = true;
+                            else
+                                beforeResult = false;
+                            if (!validateResultDate())
+                                return "SUCCESS";
+                            return "FAIL";
                         }
                     }
                 }
@@ -1109,7 +1194,20 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                     showTestOrderOrTestResult();
                     submitButton.setEnabled(true);
 
-                } else {
+                }
+
+                else if (result.equals("FAIL")) {
+                    if (snackbar != null)
+                        snackbar.dismiss();
+
+                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
+                    snackbar.show();
+                    formDateCalendar = App.getCalendar(App.stringToDate(finalDate, "EEEE, MMM dd,yyyy"));
+                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                }
+
+
+                else {
 
                     if (App.get(formType).equals(getResources().getString(R.string.ctb_order))) {
                         testId.getEditText().setError("Test Id already used.");
@@ -1582,6 +1680,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
     public void resetViews() {
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        formDate.setVisibility(View.GONE);
         dateOfSubmission.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         // dateTestResult.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
 
@@ -1610,7 +1709,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
     }
 
     void goneVisibility() {
-        formDate.setVisibility(View.GONE);
+        //formDate.setVisibility(View.GONE);
         dstOrder.setVisibility(View.GONE);
         dateOfSubmission.setVisibility(View.GONE);
         testContextStatus.setVisibility(View.GONE);

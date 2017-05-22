@@ -448,6 +448,9 @@
     <string name="fast_if_abnormal_detailed_diagnosis">If Abnormal, Detailed Diagnosis</string>
     <string name="fast_abnormal_suggestive_of_tb">Abnormal Suggestive of TB</string>
     <string name="fast_abnormal_not_suggestive_of_tb">Abnormal Not Suggestive of TB</string>
+    <string name="fast_gastric_aspirate">Gastric Aspirate</string>
+    <string name="fast_past_xray">Has the patient had an X-Ray in the past 6 months at an X-Ray Van?</string>
+    <string name="fast_pregnancy_history">Is the patient pregnant?</string>
 
     <string-array name="fast_locations">
         <item>@string/fast_community_title</item>
@@ -463,6 +466,13 @@
     <string-array name="fast_hospital_parts">
         <item>@string/fast_opdclinicscreening_title</item>
         <item>@string/fast_wardscreening_title</item>
+        <item>@string/fast_registrationdesk_title</item>
+        <item>@string/fast_nexttoxrayvan_title</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+
+    <string-array name="fast_hospital_parts_screening">
+        <item>@string/fast_opdclinicscreening_title</item>
         <item>@string/fast_registrationdesk_title</item>
         <item>@string/fast_nexttoxrayvan_title</item>
         <item>@string/fast_other_title</item>
@@ -622,6 +632,7 @@
         <item>@string/fast_rif_resistant</item>
         <item>@string/fast_indeterminate</item>
         <item>@string/fast_error_invalid_no_result</item>
+        <item>@string/fast_others</item>
     </string-array>
 
     <string-array name="fast_specimen_type_list">
@@ -631,6 +642,13 @@
 
     <string-array name="fast_specimen_come_from_list">
         <item>@string/fast_lymph</item>
+        <item>@string/fast_pleural_fluid</item>
+        <item>@string/fast_pus</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+
+    <string-array name="fast_specimen_come_from_list_updated">
+        <item>@string/fast_gastric_aspirate</item>
         <item>@string/fast_pleural_fluid</item>
         <item>@string/fast_pus</item>
         <item>@string/fast_other_title</item>
