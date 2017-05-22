@@ -447,6 +447,7 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
                             format = "yyyy-MM-dd";
                         }
 
+
                         Date orderDate = App.stringToDate(date, format);
                         Date orderDateForValidation = App.stringToDate(date, format);
 
