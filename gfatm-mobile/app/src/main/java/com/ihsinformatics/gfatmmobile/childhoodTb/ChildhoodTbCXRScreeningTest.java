@@ -498,10 +498,9 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
                     (App.get(abnormalDiagnosis).equals(getResources().getString(R.string.ctb_infiltration)) ? "INFILTRATE" :
                             (App.get(abnormalDiagnosis).equals(getResources().getString(R.string.ctb_consolidation)) ? "CONSOLIDATION" :
                                 (App.get(abnormalDiagnosis).equals(getResources().getString(R.string.ctb_effusion)) ? "PLEURAL EFFUSION" :
-                                    (App.get(abnormalDiagnosis).equals(getResources().getString(R.string.ctb_normal)) ? "NORMAL" :
                                             (App.get(abnormalDiagnosis).equals(getResources().getString(R.string.ctb_cavitation)) ? "CAVIATION" :
                                                     (App.get(abnormalDiagnosis).equals(getResources().getString(R.string.ctb_miliary_tb)) ? "MILIARY" :
-                                                            "OTHER ABNORMAL DETAILED DIAGNOSIS"))))))});
+                                                            "OTHER ABNORMAL DETAILED DIAGNOSIS")))))});
 
             observations.add(new String[]{"RADIOLOGICAL DIAGNOSIS", App.get(radiologicalDiagnosis).equals(getResources().getString(R.string.ctb_normal)) ? "NORMAL" :
                     (App.get(radiologicalDiagnosis).equals(getResources().getString(R.string.ctb_abnormal_suggestive_tb)) ?  "ABNORMAL SUGGESTIVE OF TB" : "ABNORMAL NOT SUGGESTIVE OF TB")});
@@ -719,10 +718,9 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
                             (obs[0][1].equals("INFILTRATE") ? getResources().getString(R.string.ctb_infiltration) :
                                     (obs[0][1].equals("CONSOLIDATION") ? getResources().getString(R.string.ctb_consolidation) :
                                             (obs[0][1].equals("PLEURAL EFFUSION") ? getResources().getString(R.string.ctb_effusion) :
-                                                    (obs[0][1].equals("NORMAL") ? getResources().getString(R.string.ctb_normal) :
                                                             (obs[0][1].equals("CAVIATION") ? getResources().getString(R.string.ctb_cavitation) :
                                                                     (obs[0][1].equals("MILIARY") ? getResources().getString(R.string.ctb_miliary_tb) :
-                                                                            getResources().getString(R.string.ctb_other_title)))))));
+                                                                            getResources().getString(R.string.ctb_other_title))))));
                     if(value.equalsIgnoreCase(getResources().getString(R.string.ctb_other_title))){
                         otherRadiologicalDiagnosis.setVisibility(View.VISIBLE);
                     }

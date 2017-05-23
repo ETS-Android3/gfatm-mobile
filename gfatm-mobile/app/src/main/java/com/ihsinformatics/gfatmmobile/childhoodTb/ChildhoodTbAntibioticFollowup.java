@@ -196,6 +196,16 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
             } else
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                Calendar requiredDate = formDateCalendar.getInstance();
+                requiredDate.setTime(formDateCalendar.getTime());
+                requiredDate.add(Calendar.DATE, 30);
+
+                if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                    secondDateCalendar.setTime(requiredDate.getTime());
+                } else {
+                    requiredDate.add(Calendar.DATE, 1);
+                    secondDateCalendar.setTime(requiredDate.getTime());
+                }
 
         }
 

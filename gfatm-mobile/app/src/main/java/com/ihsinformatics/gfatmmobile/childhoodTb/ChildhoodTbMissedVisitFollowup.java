@@ -160,7 +160,9 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
 
         nextVisitDate = new TitledButton(context, null,  getResources().getString(R.string.ctb_next_visit_date), DateFormat.format("dd-MMM-yyyy", thirdDateCalender).toString(), App.HORIZONTAL);
         nextVisitDate.setTag("nextVisitDate");
-        views = new View[]{formDate.getButton(), missedVisitDate.getButton(),  nextVisitDate.getButton(),ableToContact.getRadioGroup(),whyUnableToContact.getRadioGroup(),missedVisitReason.getSpinner(),otherUnableToContact.getEditText(),otherMissedVisitReason.getEditText()
+        views = new View[]{formDate.getButton(), missedVisitDate.getButton(),  nextVisitDate.getButton(),
+                ableToContact.getRadioGroup(),whyUnableToContact.getRadioGroup(),missedVisitReason.getSpinner(),
+                otherUnableToContact.getEditText(),otherMissedVisitReason.getEditText()
         };
 
         // Array used to display views accordingly...
@@ -215,6 +217,16 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
             }else
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                Calendar requiredDate = formDateCalendar.getInstance();
+                requiredDate.setTime(formDateCalendar.getTime());
+                requiredDate.add(Calendar.DATE, 30);
+
+                if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                    thirdDateCalender.setTime(requiredDate.getTime());
+                } else {
+                    requiredDate.add(Calendar.DATE, 1);
+                    thirdDateCalender.setTime(requiredDate.getTime());
+                }
 
         }
         if (!missedVisitDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString())) {
@@ -656,6 +668,11 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+        thirdDateCalender = Calendar.getInstance();
+        thirdDateCalender.set(Calendar.YEAR, formDateCalendar.get(Calendar.YEAR));
+        thirdDateCalender.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
+        thirdDateCalender.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
+        thirdDateCalender.add(Calendar.DAY_OF_MONTH, 30);
         nextVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalender).toString());
         whyUnableToContact.setVisibility(View.GONE);
         otherUnableToContact.setVisibility(View.GONE);

@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -39,7 +40,9 @@ import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.MyCheckBox;
+import com.ihsinformatics.gfatmmobile.custom.MyEditText;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
+import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
@@ -78,9 +81,9 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
     TitledRadioGroup patientHaveTb;
     TitledButton regDate;
     LinearLayout cnicLinearLayout;
-    TitledEditText cnic1;
-    TitledEditText cnic2;
-    TitledEditText cnic3;
+    MyEditText cnic1;
+    MyEditText cnic2;
+    MyEditText cnic3;
     TitledSpinner cnicOwner;
     TitledEditText cnicOwnerOther;
 
@@ -108,8 +111,8 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
     TitledRadioGroup radiologicalEvidence;
     TitledEditText nameOfSupporter;
     LinearLayout mobileLinearLayout;
-    TitledEditText mobileNumber1;
-    TitledEditText mobileNumber2;
+    MyEditText mobileNumber1;
+    MyEditText mobileNumber2;
     TitledSpinner closeContactTypeTreatmentSupport;
     TitledEditText otherCloseContactSupporterType;
 
@@ -212,13 +215,25 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         patientHaveTb = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_have_tb), getResources().getStringArray(R.array.ctb_patient_have_tb_list),null, App.HORIZONTAL, App.VERTICAL,true);
         regDate = new TitledButton(context, null, getResources().getString(R.string.ctb_registration_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         cnicLinearLayout = new LinearLayout(context);
-        cnicLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
-        cnic1 = new TitledEditText(context, null, getResources().getString(R.string.ctb_cnic_number), "", "#####", 5, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        cnicLinearLayout.addView(cnic1);
-        cnic2 = new TitledEditText(context, null, "-", "", "#######", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        cnicLinearLayout.addView(cnic2);
-        cnic3 = new TitledEditText(context, null, "-", "", "#", 1, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        cnicLinearLayout.addView(cnic3);
+        cnicLinearLayout.setOrientation(LinearLayout.VERTICAL);
+        MyTextView cnic = new MyTextView(context, getResources().getString(R.string.pet_cnic));
+        cnicLinearLayout.addView(cnic);
+        LinearLayout cnicPartLayout = new LinearLayout(context);
+        cnicPartLayout.setOrientation(LinearLayout.HORIZONTAL);
+        cnic1 = new MyEditText(context, "", 5, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE);
+        cnic1.setHint("XXXXX");
+        cnicPartLayout.addView(cnic1);
+        MyTextView cnicDash = new MyTextView(context, " - ");
+        cnicPartLayout.addView(cnicDash);
+        cnic2 = new MyEditText(context, "", 7, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE);
+        cnic2.setHint("XXXXXXX");
+        cnicPartLayout.addView(cnic2);
+        MyTextView cnicDash2 = new MyTextView(context, " - ");
+        cnicPartLayout.addView(cnicDash2);
+        cnic3 = new MyEditText(context, "", 1, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE);
+        cnic3.setHint("X");
+        cnicPartLayout.addView(cnic3);
+        cnicLinearLayout.addView(cnicPartLayout);
         cnicOwner = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_cnic_owner), getResources().getStringArray(R.array.ctb_close_contact_type_list), null, App.VERTICAL);
         cnicOwnerOther = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         tbRegisterationNumber = new TitledEditText(context, null, getResources().getString(R.string.ctb_tb_registration_no), "", "", 11, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
@@ -244,11 +259,28 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         radiologicalEvidence = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_radiological_evidence), getResources().getStringArray(R.array.yes_no_options), null, App.VERTICAL, App.VERTICAL);
         nameOfSupporter = new TitledEditText(context, null, getResources().getString(R.string.ctb_treatment_supporter), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL,true);
         mobileLinearLayout = new LinearLayout(context);
-        mobileLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
-        mobileNumber1 = new TitledEditText(context, null, getResources().getString(R.string.ctb_treatment_supporter_phone_number), "", "####", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        mobileLinearLayout.addView(mobileNumber1);
-        mobileNumber2 = new TitledEditText(context, null, "-", "", "#######", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        mobileLinearLayout.addView(mobileNumber2);
+        mobileLinearLayout.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout mobileQuestion = new LinearLayout(context);
+        mobileQuestion.setOrientation(LinearLayout.HORIZONTAL);
+        MyTextView mobileNumberLabel = new MyTextView(context, getResources().getString(R.string.ctb_mobile_number));
+        mobileQuestion.addView(mobileNumberLabel);
+        TextView mandatorySign = new TextView(context);
+        mandatorySign.setText("*");
+        mandatorySign.setTextColor(Color.parseColor("#ff0000"));
+        mobileQuestion.addView(mandatorySign);
+        mobileLinearLayout.addView(mobileQuestion);
+        LinearLayout mobileNumberPart = new LinearLayout(context);
+        mobileNumberPart.setOrientation(LinearLayout.HORIZONTAL);
+        mobileNumber1 = new MyEditText(context,"", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        mobileNumber1.setHint("03XX");
+        mobileNumberPart.addView(mobileNumber1);
+        MyTextView mobileNumberDash = new MyTextView(context, " - ");
+        mobileNumberPart.addView(mobileNumberDash);
+        mobileNumber2 = new MyEditText(context,"",  7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        mobileNumber2.setHint("XXXXXXX");
+        mobileNumberPart.addView(mobileNumber2);
+
+        mobileLinearLayout.addView(mobileNumberPart);
         closeContactTypeTreatmentSupport = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_close_contact_supporter_with_patient), getResources().getStringArray(R.array.ctb_close_contact_type_list), null, App.VERTICAL);
         otherCloseContactSupporterType = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL,false);
 
@@ -273,13 +305,13 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
 
         forthDateCalender.add(Calendar.DAY_OF_MONTH, 30);
 
-        views = new View[]{formDate.getButton(),weightAtBaseline.getEditText(),patientHaveTb.getRadioGroup(),regDate.getButton(),cnicLinearLayout,cnic1.getEditText(),cnic2.getEditText(),cnic3.getEditText(),
+        views = new View[]{formDate.getButton(),weightAtBaseline.getEditText(),patientHaveTb.getRadioGroup(),regDate.getButton(),cnicLinearLayout,cnic1,cnic2,cnic3,
                 cnicOwner.getSpinner(),cnicOwnerOther.getEditText(),tbRegisterationNumber.getEditText(),tbType.getRadioGroup(),
                 extraPulmonarySite.getSpinner(),extraPulmonarySiteOther.getEditText(),patientType.getSpinner(),treatmentInitiated.getRadioGroup(),
                 reasonTreatmentNotIniated.getSpinner(),initiatingAdditionalTreatment,patientCategory.getRadioGroup(),
                 weight.getEditText(),regimen.getRadioGroup(),typeFixedDosePrescribed.getSpinner(),currentTabletsofRHZ.getRadioGroup(),currentTabletsofE.getRadioGroup(),
                 newTabletsofRHZ.getRadioGroup(),newTabletsofE.getRadioGroup(),adultFormulationofHRZE.getRadioGroup(),typeOfDiagnosis,histopathologicalEvidence.getRadioGroup(),
-                radiologicalEvidence.getRadioGroup(),nameOfSupporter.getEditText(),mobileLinearLayout,mobileNumber1.getEditText(),mobileNumber2.getEditText(),
+                radiologicalEvidence.getRadioGroup(),nameOfSupporter.getEditText(),mobileLinearLayout,mobileNumber1,mobileNumber2,
                 closeContactTypeTreatmentSupport.getSpinner(),otherCloseContactSupporterType.getEditText(),bcgScar.getRadioGroup(),
                 tbHistoryIn2Years.getRadioGroup(),eligibleForIpt.getRadioGroup(),iptStartDate.getButton(),
                 iptDose.getRadioGroup(),initiatingAdditionalTreatmentIpt,precribingAntibioticTrial.getRadioGroup(),
@@ -374,7 +406,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             cb.setOnCheckedChangeListener(this);
         returnVisitDate.getButton().setOnClickListener(this);
 
-        cnic1.getEditText().addTextChangedListener(new TextWatcher() {
+        cnic1.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -383,15 +415,15 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s.length()==5){
-                    cnic2.getEditText().requestFocus();
+                    cnic2.requestFocus();
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                String cnic = cnic1.getEditText().getText().toString() + "-" + cnic2.getEditText().getText().toString() + "-" + cnic3.getEditText().getText().toString();
-                if (RegexUtil.isValidNIC(cnic)) {
-                    cnicOwner.setVisibility(View.VISIBLE);
+                String cnic = cnic1.getText().toString() + "-" + cnic2.getText().toString() + "-" + cnic3.getText().toString();
+                if (RegexUtil.isValidNIC(cnic) && App.get(patientHaveTb).equals(getResources().getString(R.string.yes))) {
+                        cnicOwner.setVisibility(View.VISIBLE);
                 }else{
                     cnicOwner.setVisibility(View.GONE);
                 }
@@ -399,7 +431,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         });
 
 
-        cnic2.getEditText().addTextChangedListener(new TextWatcher() {
+        cnic2.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -408,19 +440,19 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s.length()==7){
-                    cnic3.getEditText().requestFocus();
+                    cnic3.requestFocus();
                 }
 
                 if(s.length()==0){
-                    cnic1.getEditText().requestFocus();
-                    cnic1.getEditText().setSelection(cnic1.getEditText().getText().length());
+                    cnic1.requestFocus();
+                    cnic1.setSelection(cnic1.getText().length());
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                String cnic = cnic1.getEditText().getText().toString() + "-" + cnic2.getEditText().getText().toString() + "-" + cnic3.getEditText().getText().toString();
-                if (RegexUtil.isValidNIC(cnic)) {
+                String cnic = cnic1.getText().toString() + "-" + cnic2.getText().toString() + "-" + cnic3.getText().toString();
+                if (RegexUtil.isValidNIC(cnic) && App.get(patientHaveTb).equals(getResources().getString(R.string.yes))) {
                     cnicOwner.setVisibility(View.VISIBLE);
                 }
                 else{
@@ -431,7 +463,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             }
         });
 
-        cnic3.getEditText().addTextChangedListener(new TextWatcher() {
+        cnic3.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -440,16 +472,16 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s.length()==0){
-                    cnic2.getEditText().requestFocus();
-                    cnic2.getEditText().setSelection(cnic2.getEditText().getText().length());
+                    cnic2.requestFocus();
+                    cnic2.setSelection(cnic2.getText().length());
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
 
-                String cnic = cnic1.getEditText().getText().toString() + "-" + cnic2.getEditText().getText().toString() + "-" + cnic3.getEditText().getText().toString();
-                if (RegexUtil.isValidNIC(cnic)) {
+                String cnic = cnic1.getText().toString() + "-" + cnic2.getText().toString() + "-" + cnic3.getText().toString();
+                if (RegexUtil.isValidNIC(cnic) && App.get(patientHaveTb).equals(getResources().getString(R.string.yes))) {
                     cnicOwner.setVisibility(View.VISIBLE);
                 }else{
                     cnicOwner.setVisibility(View.GONE);
@@ -586,7 +618,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
 
         resetViews();
 
-        mobileNumber1.getEditText().addTextChangedListener(new TextWatcher() {
+        mobileNumber1.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -595,7 +627,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s.length()==4){
-                    mobileNumber2.getEditText().requestFocus();
+                    mobileNumber2.requestFocus();
                 }
             }
 
@@ -605,7 +637,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             }
         });
 
-        mobileNumber2.getEditText().addTextChangedListener(new TextWatcher() {
+        mobileNumber2.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -614,8 +646,8 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s.length()==0){
-                    mobileNumber1.getEditText().requestFocus();
-                    mobileNumber1.getEditText().setSelection(mobileNumber1.getEditText().getText().length());
+                    mobileNumber1.requestFocus();
+                    mobileNumber1.setSelection(mobileNumber1.getText().length());
                 }
             }
 
@@ -658,13 +690,23 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
             }else
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                Calendar requiredDate = formDateCalendar.getInstance();
+                requiredDate.setTime(formDateCalendar.getTime());
+                requiredDate.add(Calendar.DATE, 30);
+
+                if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                    forthDateCalender.setTime(requiredDate.getTime());
+                } else {
+                    requiredDate.add(Calendar.DATE, 1);
+                    forthDateCalender.setTime(requiredDate.getTime());
+                }
 
         } if (!regDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString())) {
 
             //
             // +Date date = App.stringToDate(sampleSubmitDate.getButton().getText().toString(), "dd-MMM-yyyy");
 
-            if (secondDateCalendar.after(date)) {
+            if (secondDateCalendar.after(App.getCalendar(date))) {
 
                 secondDateCalendar = App.getCalendar(date);
 
@@ -729,8 +771,8 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                     gotoPage(0);
                 else
                     gotoPage(0);
-                cnic1.getEditText().setError(getString(R.string.empty_field));
-                cnic1.getEditText().requestFocus();
+                cnic1.setError(getString(R.string.empty_field));
+                cnic1.requestFocus();
                 error = true;
             }
 
@@ -739,8 +781,8 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                     gotoPage(0);
                 else
                     gotoPage(0);
-                cnic2.getEditText().setError(getString(R.string.empty_field));
-                cnic2.getEditText().requestFocus();
+                cnic2.setError(getString(R.string.empty_field));
+                cnic2.requestFocus();
                 error = true;
             }
 
@@ -749,8 +791,8 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                     gotoPage(0);
                 else
                     gotoPage(0);
-                cnic3.getEditText().setError(getString(R.string.empty_field));
-                cnic3.getEditText().requestFocus();
+                cnic3.setError(getString(R.string.empty_field));
+                cnic3.requestFocus();
                 error = true;
             }
 
@@ -759,8 +801,8 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                     gotoPage(0);
                 else
                     gotoPage(0);
-                cnic1.getEditText().setError(getString(R.string.length_message));
-                cnic1.getEditText().requestFocus();
+                cnic1.setError(getString(R.string.length_message));
+                cnic1.requestFocus();
                 error = true;
             }
 
@@ -769,8 +811,8 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                     gotoPage(0);
                 else
                     gotoPage(0);
-                cnic2.getEditText().setError(getString(R.string.length_message));
-                cnic2.getEditText().requestFocus();
+                cnic2.setError(getString(R.string.length_message));
+                cnic2.requestFocus();
                 error = true;
             }
 
@@ -779,8 +821,8 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                     gotoPage(0);
                 else
                     gotoPage(0);
-                cnic3.getEditText().setError(getString(R.string.length_message));
-                cnic3.getEditText().requestFocus();
+                cnic3.setError(getString(R.string.length_message));
+                cnic3.requestFocus();
                 error = true;
             }
 
@@ -885,8 +927,8 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                     gotoPage(0);
                 else
                     gotoPage(0);
-                mobileNumber1.getEditText().setError(getString(R.string.empty_field));
-                mobileNumber1.getEditText().requestFocus();
+                mobileNumber1.setError(getString(R.string.empty_field));
+                mobileNumber1.requestFocus();
                 error = true;
             }
             if(App.get(mobileNumber2).isEmpty()){
@@ -894,8 +936,8 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                     gotoPage(0);
                 else
                     gotoPage(0);
-                mobileNumber2.getEditText().setError(getString(R.string.empty_field));
-                mobileNumber2.getEditText().requestFocus();
+                mobileNumber2.setError(getString(R.string.empty_field));
+                mobileNumber2.requestFocus();
                 error = true;
             }
             if(!App.get(mobileNumber1).isEmpty() && !App.get(mobileNumber2).isEmpty()){
@@ -905,8 +947,8 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                         gotoPage(0);
                     else
                         gotoPage(0);
-                    mobileNumber2.getEditText().setError(getString(R.string.ctb_invalid_number));
-                    mobileNumber2.getEditText().requestFocus();
+                    mobileNumber2.setError(getString(R.string.ctb_invalid_number));
+                    mobileNumber2.requestFocus();
                     error = true;
                 }
             }
@@ -1365,9 +1407,9 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 regDate.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("NATIONAL IDENTIFICATION NUMBER")) {
                 String cnicString[] = obs[0][1].split("-");
-                cnic1.getEditText().setText(cnicString[0]);
-                cnic2.getEditText().setText(cnicString[1]);
-                cnic3.getEditText().setText(cnicString[2]);
+                cnic1.setText(cnicString[0]);
+                cnic2.setText(cnicString[1]);
+                cnic3.setText(cnicString[2]);
             } else if (obs[0][0].equals("COMPUTERIZED NATIONAL IDENTIFICATION OWNER")) {
                 String value = (obs[0][1].equals("MOTHER") ? getResources().getString(R.string.ctb_mother) :
                                 (obs[0][1].equals("FATHER") ? getResources().getString(R.string.ctb_father) :
@@ -1625,8 +1667,8 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 nameOfSupporter.setVisibility(View.VISIBLE);
             }else if (obs[0][0].equals("TREATMENT SUPPORTER CONTACT NUMBER")) {
                 String mobileNumber[] = obs[0][1].split("-");
-                mobileNumber1.getEditText().setText(mobileNumber[0]);
-                mobileNumber2.getEditText().setText(mobileNumber[1]);
+                mobileNumber1.setText(mobileNumber[0]);
+                mobileNumber2.setText(mobileNumber[1]);
             } else if (obs[0][0].equals("TREATMENT SUPPORTER RELATIONSHIP TO PATIENT")) {
                 String value = obs[0][1].equals("SELF") ? getResources().getString(R.string.ctb_self) :
                         (obs[0][1].equals("MOTHER") ? getResources().getString(R.string.ctb_mother) :
@@ -1900,8 +1942,9 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             snackbar.dismiss();
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-        regDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         iptStartDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
+        formDateCalendar = Calendar.getInstance();
+        forthDateCalender.add(Calendar.DAY_OF_MONTH, 30);
         returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", forthDateCalender).toString());
         regDate.setVisibility(View.GONE);
         cnicLinearLayout.setVisibility(View.GONE);
@@ -1960,7 +2003,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 String cnic1 = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Patient Registration", "NATIONAL IDENTIFICATION NUMBER");
                 String cnicowner1 = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Patient Registration", "COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
                 String cnicownerother1 = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Patient Registration", "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
-                String regDate = serverService.getEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + "Patient Registration");
+                String regDate = serverService.getEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + "Presumptive Case Confirmation");
 
                 if (cnic1 != null)
                     result.put("NATIONAL IDENTIFICATION NUMBER", cnic1);
@@ -2001,12 +2044,12 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
 
                 if (result.get("NATIONAL IDENTIFICATION NUMBER") != null) {
                     String value = result.get("NATIONAL IDENTIFICATION NUMBER");
-                    cnic1.getEditText().setText(value.substring(0, 5));
-                    cnic1.getEditText().setKeyListener(null);
-                    cnic2.getEditText().setText(value.substring(6, 13));
-                    cnic2.getEditText().setKeyListener(null);
-                    cnic3.getEditText().setText(value.substring(14));
-                    cnic3.getEditText().setKeyListener(null);
+                    cnic1.setText(value.substring(0, 5));
+                    cnic1.setKeyListener(null);
+                    cnic2.setText(value.substring(6, 13));
+                    cnic2.setKeyListener(null);
+                    cnic3.setText(value.substring(14));
+                    cnic3.setKeyListener(null);
                 }
 
                 if (result.get("COMPUTERIZED NATIONAL IDENTIFICATION OWNER") != null) {
@@ -2029,7 +2072,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                         format = "yyyy-MM-dd";
                     }
                     secondDateCalendar.setTime(App.stringToDate(registerationDate, format));
-                    regDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+                    regDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
                 }
             }
         };
@@ -2131,9 +2174,11 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 cnicLinearLayout.setVisibility(View.VISIBLE);
                 String cnicString = App.get(cnic1) + "-" + App.get(cnic2) + "-" + App.get(cnic3);
                 if(RegexUtil.isValidNIC(cnicString)){
-                    cnicOwner.setVisibility(View.VISIBLE);
-                    if(App.get(cnicOwner).equalsIgnoreCase(getResources().getString(R.string.ctb_other_title))){
-                        cnicOwnerOther.setVisibility(View.VISIBLE);
+                    if(App.get(patientHaveTb).equals(getResources().getString(R.string.yes))) {
+                        cnicOwner.setVisibility(View.VISIBLE);
+                        if (App.get(cnicOwner).equalsIgnoreCase(getResources().getString(R.string.ctb_other_title))) {
+                            cnicOwnerOther.setVisibility(View.VISIBLE);
+                        }
                     }
                 }else{
                     cnicOwner.setVisibility(View.GONE);

@@ -232,7 +232,7 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
         }
         if (!iptStartDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString())) {
 
-            if (secondDateCalendar.after(date)) {
+            if (secondDateCalendar.after(App.getCalendar(date))) {
 
                 secondDateCalendar = App.getCalendar(date);
 
