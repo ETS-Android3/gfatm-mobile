@@ -216,6 +216,9 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
             } else
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         }
+
+        formDate.getButton().setEnabled(true);
+
     }
 
     @Override
