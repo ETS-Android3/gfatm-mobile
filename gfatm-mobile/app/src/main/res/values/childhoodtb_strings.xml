@@ -529,6 +529,7 @@
     <string name="ctb_abnormal_diagnosis">If Abnormal, Detailed Diagnosis</string>
     <string name="ctb_abnormal_suggestive_tb">Abnormal Suggestive of TB</string>
     <string name="ctb_abnormal_not_suggestive_tb">Abnormal Not Suggestive of TB</string>
+    <string name="ctb_mobile_number">Mobile number</string>
 
     <string-array name="ctb_abnormal_list">
         <item>@string/ctb_normal</item>
@@ -769,7 +770,6 @@
         <item>@string/ctb_infiltration</item>
         <item>@string/ctb_consolidation</item>
         <item>@string/ctb_effusion</item>
-        <item>@string/ctb_normal</item>
         <item>@string/ctb_cavitation</item>
         <item>@string/ctb_miliary_tb</item>
         <item>@string/ctb_other_title</item>
