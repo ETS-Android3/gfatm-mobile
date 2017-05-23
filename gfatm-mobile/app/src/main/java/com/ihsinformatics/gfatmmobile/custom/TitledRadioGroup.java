@@ -1,6 +1,7 @@
 package com.ihsinformatics.gfatmmobile.custom;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -55,16 +56,16 @@ public class TitledRadioGroup extends LinearLayout {
         LinearLayout hLayout = new LinearLayout(context);
         hLayout.setOrientation(HORIZONTAL);
 
+        questionView = new MyTextView(context, ques);
+        hLayout.addView(questionView);
+
         if (mandatory) {
-            int color = App.getColor(context, R.attr.colorAccent);
             TextView mandatorySign = new TextView(context);
-            mandatorySign.setText("*");
-            mandatorySign.setTextColor(color);
+            mandatorySign.setText(" *");
+            mandatorySign.setTextColor(Color.parseColor("#ff0000"));
             hLayout.addView(mandatorySign);
         }
 
-        questionView = new MyTextView(context, ques);
-        hLayout.addView(questionView);
         linearLayout.addView(hLayout);
 
         radioGroup = new MyRadioGroup(context, options, defaultValue, radioButtonsLayout);
