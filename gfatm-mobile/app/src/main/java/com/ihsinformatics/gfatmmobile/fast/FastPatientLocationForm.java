@@ -188,7 +188,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
         }
 
         contactExternalIdHospital = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_if_external_id_hospital_or_programs), locationArray, "", App.VERTICAL);
-        contactTbRegisternationNo = new TitledEditText(context, null, getResources().getString(R.string.fast_tb_registeration_no), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        contactTbRegisternationNo = new TitledEditText(context, null, getResources().getString(R.string.fast_tb_registeration_no), "", "", 11, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), screening.getRadioGroup(), facilitySection.getSpinner(), facilitySectionOther.getEditText(),
