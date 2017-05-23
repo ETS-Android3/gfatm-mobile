@@ -170,30 +170,30 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
 
         patientType = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_patient_type), getResources().getStringArray(R.array.ctb_patient_type_list), getResources().getString(R.string.ctb_new), App.VERTICAL,true);
         treatmentInitiationDate = new TitledButton(context, null, getResources().getString(R.string.ctb_treatment_initiated_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
-        monthTreatment = new TitledEditText(context, null, getResources().getString(R.string.ctb_month_treatment), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL,true                                                                                 );
+        monthTreatment = new TitledEditText(context, null, getResources().getString(R.string.ctb_month_treatment), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL,true);
 
-        patientCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_category), getResources().getStringArray(R.array.ctb_patient_category3_list), getResources().getString(R.string.ctb_categoryI), App.VERTICAL, App.VERTICAL);
+        patientCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_category), getResources().getStringArray(R.array.ctb_patient_category3_list), getResources().getString(R.string.ctb_categoryI), App.VERTICAL, App.VERTICAL,true);
         weight = new TitledEditText(context, null, getResources().getString(R.string.ctb_patient_weight), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
-        treatmentPlan = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_treatment_plan), getResources().getStringArray(R.array.ctb_treatment_plan_list), null, App.VERTICAL, App.VERTICAL);
+        treatmentPlan = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_treatment_plan), getResources().getStringArray(R.array.ctb_treatment_plan_list), null, App.VERTICAL, App.VERTICAL,true);
 
-        intensivePhaseRegimen = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_regimen), getResources().getStringArray(R.array.ctb_regimen_list), getResources().getString(R.string.ctb_rhz), App.HORIZONTAL, App.VERTICAL);
-        typeFixedDosePrescribedIntensive = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_type_of_fixed_dose), getResources().getStringArray(R.array.ctb_type_of_fixed_dose_list), null, App.VERTICAL);
-        currentTabletsofRHZ = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_current_formulation_number_of_tablet_rhz), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL);
-        currentTabletsofE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_current_formulation_number_of_tablet_e), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL);
-        newTabletsofRHZ = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_new_formulation_number_of_tablet_rhz), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL);
-        newTabletsofE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_new_formulation_number_of_tablet_e), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL);
-        adultFormulationofHRZE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_adult_formulation), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL);
-        continuationPhaseRegimen = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_continuation_phase_regimen), getResources().getStringArray(R.array.ctb_continuation_phase_regimen_list), null, App.HORIZONTAL, App.VERTICAL);
-        typeFixedDosePrescribedContinuation = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_type_of_fixed_dose), getResources().getStringArray(R.array.ctb_type_of_dose_continuation_list), null, App.VERTICAL);
-        currentTabletsOfContinuationRH = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_current_formulation_continuation_rh), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL);
-        currentTabletsOfContinuationE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_current_formulation_continuation_e), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL);
-        newTabletsOfContinuationRH = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_new_formulation_continuation_rh), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL);
-        newTabletsOfContinuationE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_new_formulation_continuation_e), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL);
-        adultFormulationOfContinuationRH = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_if_adult_formulation_continuation_rh), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL);
-        adultFormulationOfContinuationRHE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_if_adult_formulation_continuation_rhe), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL);
-        conclusionOfTreatment = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_conclusion_of_treatment), getResources().getStringArray(R.array.ctb_improve_no_improvement), null, App.HORIZONTAL, App.VERTICAL);
+        intensivePhaseRegimen = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_regimen), getResources().getStringArray(R.array.ctb_regimen_list), getResources().getString(R.string.ctb_rhz), App.HORIZONTAL, App.VERTICAL,true);
+        typeFixedDosePrescribedIntensive = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_type_of_fixed_dose), getResources().getStringArray(R.array.ctb_type_of_fixed_dose_list), null, App.VERTICAL,true);
+        currentTabletsofRHZ = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_current_formulation_number_of_tablet_rhz), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL,true);
+        currentTabletsofE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_current_formulation_number_of_tablet_e), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL,true);
+        newTabletsofRHZ = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_new_formulation_number_of_tablet_rhz), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL,true);
+        newTabletsofE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_new_formulation_number_of_tablet_e), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL,true);
+        adultFormulationofHRZE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_adult_formulation), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL,true);
+        continuationPhaseRegimen = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_continuation_phase_regimen), getResources().getStringArray(R.array.ctb_continuation_phase_regimen_list), null, App.HORIZONTAL, App.VERTICAL,true);
+        typeFixedDosePrescribedContinuation = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_type_of_fixed_dose), getResources().getStringArray(R.array.ctb_type_of_dose_continuation_list), null, App.VERTICAL,true);
+        currentTabletsOfContinuationRH = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_current_formulation_continuation_rh), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL,true);
+        currentTabletsOfContinuationE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_current_formulation_continuation_e), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL,true);
+        newTabletsOfContinuationRH = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_new_formulation_continuation_rh), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL,true);
+        newTabletsOfContinuationE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_new_formulation_continuation_e), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL,true);
+        adultFormulationOfContinuationRH = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_if_adult_formulation_continuation_rh), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL,true);
+        adultFormulationOfContinuationRHE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_if_adult_formulation_continuation_rhe), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL,true);
+        conclusionOfTreatment = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_conclusion_of_treatment), getResources().getStringArray(R.array.ctb_improve_no_improvement), null, App.HORIZONTAL, App.VERTICAL,true);
         returnVisitDate = new TitledButton(context, null, getResources().getString(R.string.ctb_next_appointment_date), DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
-        doctorNotes = new TitledEditText(context, null, getResources().getString(R.string.ctb_doctor_notes), "", "", 1000, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL,false);
+        doctorNotes = new TitledEditText(context, null, getResources().getString(R.string.ctb_doctor_notes), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL,false);
 
         thirdDateCalendar.set(Calendar.YEAR, secondDateCalendar.get(Calendar.YEAR));
         thirdDateCalendar.set(Calendar.DAY_OF_MONTH, secondDateCalendar.get(Calendar.DAY_OF_MONTH));
@@ -378,13 +378,18 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
 
         if (snackbar != null)
             snackbar.dismiss();
+
+        Calendar maxDateCalender = formDateCalendar.getInstance();
+        maxDateCalender.setTime(formDateCalendar.getTime());
+        maxDateCalender.add(Calendar.YEAR, 2);
+
+        String formDa = formDate.getButton().getText().toString();
+        String personDOB = App.getPatient().getPerson().getBirthdate();
+
+
         Date date = new Date();
+
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
-
-            String formDa = formDate.getButton().getText().toString();
-
-            String personDOB = App.getPatient().getPerson().getBirthdate();
-
 
             if (formDateCalendar.after(App.getCalendar(date))) {
 
@@ -404,13 +409,21 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
             }else
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                Calendar requiredDate = formDateCalendar.getInstance();
+                requiredDate.setTime(formDateCalendar.getTime());
+                requiredDate.add(Calendar.DATE, 30);
+
+                if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                    thirdDateCalendar.setTime(requiredDate.getTime());
+                } else {
+                    requiredDate.add(Calendar.DATE, 1);
+                    thirdDateCalendar.setTime(requiredDate.getTime());
+                }
 
         } if (!treatmentInitiationDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString())) {
 
-            //
-            // +Date date = App.stringToDate(sampleSubmitDate.getButton().getText().toString(), "dd-MMM-yyyy");
 
-            if (secondDateCalendar.after(date)) {
+            if (secondDateCalendar.after(App.getCalendar(date))) {
 
                 secondDateCalendar = App.getCalendar(date);
 
@@ -419,10 +432,6 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
 
             } else {
                 treatmentInitiationDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-                thirdDateCalendar.set(Calendar.YEAR, secondDateCalendar.get(Calendar.YEAR));
-                thirdDateCalendar.set(Calendar.DAY_OF_MONTH, secondDateCalendar.get(Calendar.DAY_OF_MONTH));
-                thirdDateCalendar.set(Calendar.MONTH, secondDateCalendar.get(Calendar.MONTH));
-                thirdDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
             }
         }
 
@@ -434,7 +443,30 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-            } else
+            } else if (thirdDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+            }else if (thirdDateCalendar.before(formDateCalendar)) {
+                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.ctb_date_can_not_be_less_than_form_date), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
+            }else if (thirdDateCalendar.after(maxDateCalender)) {
+
+                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.ctb_return_visit_less_than_23_months), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
+
+            }else
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
         }
 
@@ -491,6 +523,16 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
             conclusionOfTreatment.getRadioGroup().requestFocus();
             error = true;
         }
+        if((App.get(weight).isEmpty())){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            weight.getEditText().setError(getString(R.string.empty_field));
+            weight.getEditText().requestFocus();
+            error = true;
+        }
+
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
@@ -1188,7 +1230,6 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         treatmentInitiationDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-        returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
         intensivePhaseRegimen.setVisibility(View.GONE);
         typeFixedDosePrescribedIntensive.setVisibility(View.GONE);
         currentTabletsofRHZ.setVisibility(View.GONE);
@@ -1263,7 +1304,11 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 }
             }
         }
-
+        thirdDateCalendar.set(Calendar.YEAR, formDateCalendar.get(Calendar.YEAR));
+        thirdDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
+        thirdDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
+        thirdDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
+        returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
 
 
         Bundle bundle = this.getArguments();
@@ -1336,14 +1381,19 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         if (group == patientCategory.getRadioGroup()) {
+            patientCategory.getRadioGroup().getButtons().get(2).setError(null);
             if (patientCategory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_category_3))) {
                 intensivePhaseRegimen.getRadioGroup().getButtons().get(1).setChecked(true);
             }
         }else if(group == treatmentPlan.getRadioGroup()){
+            treatmentPlan.getRadioGroup().getButtons().get(2).setError(null);
             if (treatmentPlan.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_intensive_phase))) {
                 intensivePhaseRegimen.setVisibility(View.VISIBLE);
+                intensivePhaseRegimen.getRadioGroup().clearCheck();
                 typeFixedDosePrescribedIntensive.setVisibility(View.VISIBLE);
-
+                typeFixedDosePrescribedIntensive.getSpinner().selectValue(getResources().getString(R.string.ctb_current_formulation));
+                currentTabletsofE.setVisibility(View.VISIBLE);
+                currentTabletsofRHZ.setVisibility(View.VISIBLE);
 
                 continuationPhaseRegimen.setVisibility(View.GONE);
                 typeFixedDosePrescribedContinuation.setVisibility(View.GONE);
@@ -1355,7 +1405,9 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 adultFormulationOfContinuationRH.setVisibility(View.GONE);
             }else if(treatmentPlan.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_continuation_phase))){
                 continuationPhaseRegimen.setVisibility(View.VISIBLE);
+                continuationPhaseRegimen.getRadioGroup().clearCheck();
                 typeFixedDosePrescribedContinuation.setVisibility(View.VISIBLE);
+                typeFixedDosePrescribedContinuation.getSpinner().selectValue(getResources().getString(R.string.ctb_current_formulation_continuation));
                 currentTabletsOfContinuationRH.setVisibility(View.VISIBLE);
                 currentTabletsOfContinuationE.setVisibility(View.VISIBLE);
 
@@ -1417,6 +1469,9 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                     adultFormulationOfContinuationRHE.setVisibility(View.VISIBLE);
                 }
             }
+        }
+        else if (group == conclusionOfTreatment.getRadioGroup()) {
+            conclusionOfTreatment.getRadioGroup().getButtons().get(1).setError(null);
         }
     }
 

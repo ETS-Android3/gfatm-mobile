@@ -521,8 +521,22 @@
     <string name="ctb_23">23</string>
     <string name="ctb_24">24</string>
     <string name="ctb_other_dst_media">Other DST Media</string>
-    <string name="ctb_form_can_not_be_submitted">Form will not be submitted as treatment initiation form for this patient is not submitted previously</string>
     <string name="ctb_submission_can_not_be_less_than_form_date">Submission date can not be less than form date</string>
+    <string name="ctb_next_visit_less_than_form_date">Next visit date can not be less than Form Date</string>
+    <string name="ctb_form_date_less_than_treatment_initiation">Form date cannot be before treatment initiation date</string>
+    <string name="ctb_date_can_not_be_less_than_form_date">Date can not be less than Form Date</string>
+    <string name="ctb_return_visit_less_than_23_months">Next appointment date cannot be more than 24 months</string>
+    <string name="ctb_abnormal_diagnosis">If Abnormal, Detailed Diagnosis</string>
+    <string name="ctb_abnormal_suggestive_tb">Abnormal Suggestive of TB</string>
+    <string name="ctb_abnormal_not_suggestive_tb">Abnormal Not Suggestive of TB</string>
+    <string name="ctb_mobile_number">Mobile number</string>
+
+    <string-array name="ctb_abnormal_list">
+        <item>@string/ctb_normal</item>
+        <item>@string/ctb_abnormal_suggestive_tb</item>
+        <item>@string/ctb_abnormal_not_suggestive_tb</item>
+    </string-array>
+
     <string-array name="ctb_screening_location_list">
         <item>@string/ctb_hospital</item>
         <item>@string/ctb_community</item>
@@ -756,7 +770,6 @@
         <item>@string/ctb_infiltration</item>
         <item>@string/ctb_consolidation</item>
         <item>@string/ctb_effusion</item>
-        <item>@string/ctb_normal</item>
         <item>@string/ctb_cavitation</item>
         <item>@string/ctb_miliary_tb</item>
         <item>@string/ctb_other_title</item>
