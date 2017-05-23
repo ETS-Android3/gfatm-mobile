@@ -55,7 +55,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
     // Views...
     TitledButton formDate;
     TitledRadioGroup screeningLocation;
-    TitledSpinner hospital;
+    TitledEditText hospital;
     TitledSpinner hospitalSection;
     TitledEditText hospitalSectionOther;
     TitledSpinner opdWardSection;
@@ -134,12 +134,11 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
      * Initializes all views and ArrayList and Views Array
      */
     public void initViews() {
-
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         screeningLocation = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_location_of_screening), getResources().getStringArray(R.array.fast_locations), getResources().getString(R.string.fast_hospital_title), App.HORIZONTAL, App.HORIZONTAL);
 
-        String columnName = "";
+       /* String columnName = "";
         if (App.getProgram().equals(getResources().getString(R.string.pet)))
             columnName = "pet_location";
         else if (App.getProgram().equals(getResources().getString(R.string.fast)))
@@ -155,9 +154,12 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
         String[] locationArray = new String[locations.length];
         for (int i = 0; i < locations.length; i++) {
             locationArray[i] = String.valueOf(locations[i][1]);
-        }
+        }*/
 
-        hospital = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_if_hospital_specify), locationArray, "", App.VERTICAL);
+        hospital = new TitledEditText(context, null, getResources().getString(R.string.fast_if_hospital_specify), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        hospital.getEditText().setKeyListener(null);
+        hospital.getEditText().setFocusable(false);
+       // hospital = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_if_hospital_specify), locationArray, "", App.VERTICAL);
         hospitalSection = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_hospital_parts_title), getResources().getStringArray(R.array.fast_hospital_parts_screening), getResources().getString(R.string.fast_opdclinicscreening_title), App.VERTICAL);
         hospitalSectionOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         opdWardSection = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_clinic_and_ward_title), getResources().getStringArray(R.array.fast_clinic_and_ward_list), getResources().getString(R.string.fast_generalmedicinefilterclinic_title), App.VERTICAL);
@@ -172,7 +174,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
 
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), screeningLocation.getRadioGroup(), hospital.getSpinner(),
+        views = new View[]{formDate.getButton(), screeningLocation.getRadioGroup(), hospital.getEditText(),
                 hospitalSection.getSpinner(), hospitalSectionOther.getEditText(), opdWardSection.getSpinner(),
                 patientAttendant.getRadioGroup(), ageRange.getRadioGroup(), gender.getRadioGroup(), coughTwoWeeks.getRadioGroup(),
                 tbContact.getRadioGroup(), tbHistory.getRadioGroup()};
@@ -482,8 +484,8 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
                 screeningLocation.setVisibility(View.VISIBLE);
             }
 
-            else if (obs[0][0].equals("SPUTUM HOSPITAL_FACILITY_NAME")) {
-                hospital.getSpinner().selectValue(obs[0][1]);
+            else if (obs[0][0].equals("HOSPITAL_FACILITY_NAME")) {
+                hospital.getEditText().setText(obs[0][1]);
                 hospital.setVisibility(View.VISIBLE);
             }
             else if (obs[0][0].equals("HOSPITAL_SECTION")) {
@@ -664,6 +666,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         hospitalSectionOther.setVisibility(View.GONE);
+        hospital.getEditText().setText(App.getLocation().toString());
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {

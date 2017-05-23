@@ -157,7 +157,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
         treatmentNotInitiatedReferralSite = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_reason_treatment_not_initiated_at_referral_site), getResources().getStringArray(R.array.fast_reason_treatment_not_initiated_referral_site_list), getResources().getString(R.string.fast_patient_could_not_be_contacted), App.VERTICAL);
         treatmentNotInitiatedReferralSiteOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         drConfirmation = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_dr_confirmation), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_no_title), App.VERTICAL, App.VERTICAL);
-        enrsId = new TitledEditText(context, null, getResources().getString(R.string.fast_enrs_number), "", "", RegexUtil.idLength, RegexUtil.ERNS_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        enrsId = new TitledEditText(context, null, getResources().getString(R.string.fast_enrs_number), "", "####/##", RegexUtil.idLength, RegexUtil.ERNS_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         firstName = new TitledEditText(context, null, getResources().getString(R.string.fast_first_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         lastName = new TitledEditText(context, null, getResources().getString(R.string.fast_last_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         mobileLinearLayout = new LinearLayout(context);
@@ -275,7 +275,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
                 gotoPage(0);
             else
                 gotoPage(0);
-            firstName.getEditText().setError(getString(R.string.fast_invalid_name));
+            firstName.getEditText().setError(getString(R.string.fast_name_less_than_2_characters));
             firstName.getEditText().requestFocus();
             error = true;
         }
@@ -285,7 +285,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
                 gotoPage(0);
             else
                 gotoPage(0);
-            lastName.getEditText().setError(getString(R.string.fast_invalid_name));
+            lastName.getEditText().setError(getString(R.string.fast_name_less_than_2_characters));
             lastName.getEditText().requestFocus();
             error = true;
         }

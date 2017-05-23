@@ -441,6 +441,7 @@
     <string name="fast_father_name_cannot_be_less_than_2_characters">Father name cannot be less than 2 characters</string>
     <string name="fast_scan_qr_code">Scan QR code</string>
     <string name="fast_invalid_name">Invalid Name</string>
+    <string name="fast_name_less_than_2_characters">This name cannot be less than 2 characters</string>
     <string name="fast_test_id_error">Invalid test id</string>
     <string name="fast_invalid_father_name">Invalid father name</string>
     <string name="fast_invalid_husband_name">Invalid husband name</string>

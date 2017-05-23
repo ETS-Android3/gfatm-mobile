@@ -1188,7 +1188,6 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
         formDate.setVisibility(View.GONE);
         pastXray.setVisibility(View.GONE);
         pregnancyHistory.setVisibility(View.GONE);
-        //testDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
         testIdView.setVisibility(View.GONE);
         testId.setVisibility(View.GONE);
@@ -1269,8 +1268,9 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
             if(formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_order))){
                 formDate.setVisibility(View.VISIBLE);
                 pastXray.setVisibility(View.VISIBLE);
-                pregnancyHistory.setVisibility(View.VISIBLE);
-
+                if(App.getPatient().getPerson().getGender().equals("female") || App.getPatient().getPerson().getGender().equals("F")){
+                    pregnancyHistory.setVisibility(View.VISIBLE);
+                }
                 if(pastXray.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))
                         && pregnancyHistory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))){
 
@@ -1342,8 +1342,17 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
 
         else if(radioGroup == pastXray.getRadioGroup()){
             if(pastXray.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))
-                    && pregnancyHistory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))){
+                    && pregnancyHistory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title)) && pregnancyHistory.getVisibility() == View.VISIBLE){
+                formDate.setVisibility(View.VISIBLE);
+                linearLayout.setVisibility(View.VISIBLE);
+                testId.setVisibility(View.VISIBLE);
+                testId.getEditText().setText("");
+                testId.getEditText().setError(null);
+                goneVisibility();
+                submitButton.setEnabled(false);
+            }
 
+            else if(pastXray.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title)) && pregnancyHistory.getVisibility() == View.GONE){
                 formDate.setVisibility(View.VISIBLE);
                 linearLayout.setVisibility(View.VISIBLE);
                 testId.setVisibility(View.VISIBLE);
@@ -1380,7 +1389,16 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
 
         else if(radioGroup == pregnancyHistory.getRadioGroup()){
             if(pregnancyHistory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))
-                    && pastXray.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))){
+                    && pastXray.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title)) && pregnancyHistory.getVisibility() == View.VISIBLE){
+                formDate.setVisibility(View.VISIBLE);
+                linearLayout.setVisibility(View.VISIBLE);
+                testId.setVisibility(View.VISIBLE);
+                testId.getEditText().setText("");
+                testId.getEditText().setError(null);
+                goneVisibility();
+                submitButton.setEnabled(false);
+            }
+            else if(pastXray.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title)) && pregnancyHistory.getVisibility() == View.GONE){
                 formDate.setVisibility(View.VISIBLE);
                 linearLayout.setVisibility(View.VISIBLE);
                 testId.setVisibility(View.VISIBLE);

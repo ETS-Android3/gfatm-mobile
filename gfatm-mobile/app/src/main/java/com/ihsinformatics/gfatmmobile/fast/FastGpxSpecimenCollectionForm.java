@@ -143,7 +143,7 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
         sampleType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_specimen_type), getResources().getStringArray(R.array.fast_specimen_type_list), getResources().getString(R.string.fast_sputum), App.VERTICAL, App.VERTICAL);
         specimenSource = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_specimen_come_from), getResources().getStringArray(R.array.fast_specimen_come_from_list_updated), getResources().getString(R.string.fast_gastric_aspirate), App.VERTICAL, App.VERTICAL);
         specimenSourceOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-       cartridgeId = new TitledEditText(context, null, getResources().getString(R.string.fast_test_id), "", "", 20,RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+       cartridgeId = new TitledEditText(context, null, getResources().getString(R.string.fast_cartridge_id), "", "", 10,RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
 
 
         // Used for reset fields...
@@ -324,6 +324,16 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
             error = true;
         }
 
+        if (cartridgeId.getVisibility() == View.VISIBLE && App.get(cartridgeId).length() != 10) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            cartridgeId.getEditText().setError(getString(R.string.invalid_value));
+            cartridgeId.getEditText().requestFocus();
+            error = true;
+        }
+
       /*  if (cartridgeId.getVisibility() == View.VISIBLE && App.get(cartridgeId).length()!=10) {
             if (App.isLanguageRTL())
                 gotoPage(0);
@@ -422,7 +432,7 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
             observations.add(new String[]{"OTHER SPECIMEN SOURCE", App.get(specimenSourceOther)});
 
         if (cartridgeId.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TEST ID", App.get(cartridgeId)});
+            observations.add(new String[]{"CARTRIDGE ID", App.get(cartridgeId)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -653,7 +663,7 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
             } else if (obs[0][0].equals("OTHER SPECIMEN SOURCE")) {
                 specimenSourceOther.getEditText().setText(obs[0][1]);
                 specimenSourceOther.setVisibility(View.VISIBLE);
-            }else if (obs[0][0].equals("TEST ID")) {
+            }else if (obs[0][0].equals("CARTRIDGE ID")) {
                 cartridgeId.getEditText().setText(obs[0][1]);
                 cartridgeId.setVisibility(View.VISIBLE);
             }
