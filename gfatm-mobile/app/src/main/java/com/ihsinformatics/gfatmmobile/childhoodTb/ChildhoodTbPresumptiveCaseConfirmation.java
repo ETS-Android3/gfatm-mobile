@@ -10,7 +10,9 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +42,8 @@ import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -199,8 +203,8 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        weight = new TitledEditText(context, null, getResources().getString(R.string.ctb_weight), "", "", 3, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        height = new TitledEditText(context, null, getResources().getString(R.string.ctb_height), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        weight = new TitledEditText(context, null, getResources().getString(R.string.ctb_weight), "", "", 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        height = new TitledEditText(context, null, getResources().getString(R.string.ctb_height), "", "", 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         weightPercentile = new TitledSpinner(context, null, getResources().getString(R.string.ctb_weight_percentile), getResources().getStringArray(R.array.ctb_weight_percentile_list), null, App.VERTICAL);
         cough = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_cough), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true);
         coughDuration = new TitledSpinner(context, null, getResources().getString(R.string.ctb_cough_duration), getResources().getStringArray(R.array.ctb_cough_duration_list), null, App.VERTICAL);
@@ -319,7 +323,6 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
         for (CheckBox cb : closeContactType.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
         resetViews();
-
     }
 
     @Override
@@ -396,7 +399,16 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                 weight.getEditText().requestFocus();
                 error = true;
             }else{
-                if(!App.get(weight).matches("^[0-9]*\\.?[0-9]*$")) {
+                if(App.get(weight).length()==4 && StringUtils.countMatches(App.get(weight),".")==0){
+                    if (App.isLanguageRTL())
+                        gotoPage(0);
+                    else
+                        gotoPage(0);
+                    weight.getEditText().setError(getString(R.string.ctb_invalid_value_weight));
+                    weight.getEditText().requestFocus();
+                    error = true;
+                }
+                else if(StringUtils.countMatches(App.get(weight),".")>1) {
                         if (App.isLanguageRTL())
                             gotoPage(0);
                         else
@@ -415,6 +427,27 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                 height.getEditText().requestFocus();
                 error = true;
             }
+            else{
+                if(App.get(height).length()==4 && StringUtils.countMatches(App.get(height),".")==0){
+                    if (App.isLanguageRTL())
+                        gotoPage(0);
+                    else
+                        gotoPage(0);
+                    height.getEditText().setError(getString(R.string.ctb_invalid_value_weight));
+                    height.getEditText().requestFocus();
+                    error = true;
+                }
+                else if(StringUtils.countMatches(App.get(height),".")>1) {
+                    if (App.isLanguageRTL())
+                        gotoPage(0);
+                    else
+                        gotoPage(0);
+                    height.getEditText().setError(getString(R.string.ctb_invalid_value_weight));
+                    height.getEditText().requestFocus();
+                    error = true;
+                }
+            }
+
             if (generalAppearanceExplanation.getVisibility() == View.VISIBLE) {
                 if(App.get(generalAppearanceExplanation).isEmpty()) {
                     if (App.isLanguageRTL())

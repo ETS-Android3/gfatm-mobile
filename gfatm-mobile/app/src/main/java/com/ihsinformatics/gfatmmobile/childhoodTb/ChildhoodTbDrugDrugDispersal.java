@@ -193,6 +193,7 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
         adultFormulationOfContinuationRHE_E = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_continuation_adult_formulation_rhe_e_dispersed), getResources().getStringArray(R.array.ctb_yes_no_incomplete), null, App.HORIZONTAL, App.VERTICAL);
         adultFormulationOfContinuationRHE_RHE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_continuation_adult_formulation_rhe_rhe_dispersed), getResources().getStringArray(R.array.ctb_yes_no_incomplete), null, App.HORIZONTAL, App.VERTICAL);
         nextDateOfDrug = new TitledButton(context, null, getResources().getString(R.string.ctb_next_date_drug_dispersal), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
+        secondDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
         moAdditionalTreatment = new TitledCheckBoxes(context, null, getResources().getString(R.string.ctb_mo_initiate_additional_treatment), getResources().getStringArray(R.array.ctb_pediasure_vitamin_iron_anthelminthic), null, App.VERTICAL, App.VERTICAL);
         pediasureDispersed = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_pediasure_dispersed), getResources().getStringArray(R.array.ctb_yes_no_incomplete), null, App.HORIZONTAL, App.VERTICAL);
         vitaminBComplexDispersed = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_vitamin_b_complex_dispersed), getResources().getStringArray(R.array.ctb_yes_no_incomplete), null, App.HORIZONTAL, App.VERTICAL);
@@ -321,15 +322,16 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
 
     @Override
     public void updateDisplay() {
-
+        String formDa = formDate.getButton().getText().toString();
+        String personDOB = App.getPatient().getPerson().getBirthdate();
+        Calendar maxDateCalender = formDateCalendar.getInstance();
+        maxDateCalender.setTime(formDateCalendar.getTime());
+        maxDateCalender.add(Calendar.YEAR, 2);
         if (snackbar != null)
             snackbar.dismiss();
         Date date = new Date();
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
-            String formDa = formDate.getButton().getText().toString();
-
-            String personDOB = App.getPatient().getPerson().getBirthdate();
 
 
             if (formDateCalendar.after(App.getCalendar(date))) {
@@ -350,6 +352,16 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
             } else
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                Calendar requiredDate = formDateCalendar.getInstance();
+                requiredDate.setTime(formDateCalendar.getTime());
+                requiredDate.add(Calendar.DATE, 30);
+
+                if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                    secondDateCalendar.setTime(requiredDate.getTime());
+                } else {
+                    requiredDate.add(Calendar.DATE, 1);
+                    secondDateCalendar.setTime(requiredDate.getTime());
+                }
 
         }
         if (!nextDateOfDrug.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString())) {
@@ -363,6 +375,15 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
+
+            }else if (secondDateCalendar.after(maxDateCalender)) {
+
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.ctb_return_visit_less_than_23_months), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                nextDateOfDrug.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
             } else {
                 nextDateOfDrug.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
@@ -1217,8 +1238,8 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
             nextDateOfDrug.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
-            args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", false);
+            args.putBoolean("allowPastDate", false);
+            args.putBoolean("allowFutureDate", true);
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
         }
@@ -1403,6 +1424,8 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
             snackbar.dismiss();
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        secondDateCalendar = Calendar.getInstance();
+        secondDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
         nextDateOfDrug.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         treatmentPlan.setVisibility(View.GONE);
         intensivePhaseRegimen.setVisibility(View.GONE);
@@ -1426,17 +1449,30 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
         vitaminBComplexDispersed.setVisibility(View.GONE);
         ironDispersed.setVisibility(View.GONE);
         anthelminthicDispersed.setVisibility(View.GONE);
-        iptDose.setVisibility(View.GONE);
-        iptDrugDispersed.setVisibility(View.GONE);
-        moInitiateTreatmentIpt.setVisibility(View.GONE);
-        ironDispersedIpt.setVisibility(View.GONE);
-        multivitaminsDispersed.setVisibility(View.GONE);
-        anthelminticAlbendazoleDispersed.setVisibility(View.GONE);
-        antibioticTrialDispersed.setVisibility(View.GONE);
-        moInitiatingAdditionalTreatmentAntibiotic.setVisibility(View.GONE);
-        ironDispersedAntibiotic.setVisibility(View.GONE);
-        multivitaminsDispersedAntibiotic.setVisibility(View.GONE);
-        anthelminticAlbendazoleDispersedAntibiotic.setVisibility(View.GONE);
+        if(App.get(patientHaveTb).equals(getResources().getString(R.string.no))) {
+            iptDose.setVisibility(View.VISIBLE);
+            iptDrugDispersed.setVisibility(View.VISIBLE);
+            moInitiateTreatmentIpt.setVisibility(View.VISIBLE);
+        }else{
+            iptDose.setVisibility(View.GONE);
+            iptDrugDispersed.setVisibility(View.GONE);
+            moInitiateTreatmentIpt.setVisibility(View.GONE);
+            ironDispersedIpt.setVisibility(View.GONE);
+            multivitaminsDispersed.setVisibility(View.GONE);
+            anthelminticAlbendazoleDispersed.setVisibility(View.GONE);
+        }
+        if(App.get(patientHaveTb).equals(getResources().getString(R.string.ctb_inconclusive))){
+            antibioticTrialDispersed.setVisibility(View.VISIBLE);
+            moInitiatingAdditionalTreatmentAntibiotic.setVisibility(View.VISIBLE);
+        }
+        else{
+            antibioticTrialDispersed.setVisibility(View.GONE);
+            moInitiatingAdditionalTreatmentAntibiotic.setVisibility(View.GONE);
+            ironDispersedAntibiotic.setVisibility(View.GONE);
+            multivitaminsDispersedAntibiotic.setVisibility(View.GONE);
+            anthelminticAlbendazoleDispersedAntibiotic.setVisibility(View.GONE);
+        }
+
 
         String patientHaveTbString = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "PATIENT HAVE TB");
         if (patientHaveTbString != null) {
@@ -1569,18 +1605,14 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
         String additionalTreatmentString = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "ADDITIONAL TREATMENT TO TB PATIENT");
         if(additionalTreatmentString!=null){
             for (CheckBox cb : moAdditionalTreatment.getCheckedBoxes()) {
-                if (cb.getText().equals(getResources().getString(R.string.ctb_pediasure)) && additionalTreatmentString.equals("PEDIASURE")) {
+                if (cb.getText().equals(getResources().getString(R.string.ctb_pediasure)) && additionalTreatmentString.contains("PEDIASURE")) {
                     cb.setChecked(true);
-                    break;
-                } else if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && additionalTreatmentString.equals("IRON")) {
+                } else if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && additionalTreatmentString.contains("IRON")) {
                     cb.setChecked(true);
-                    break;
-                } else if (cb.getText().equals(getResources().getString(R.string.ctb_vitamin_B_complex)) && additionalTreatmentString.equals("VITAMIN B COMPLEX")) {
+                } else if (cb.getText().equals(getResources().getString(R.string.ctb_vitamin_B_complex)) && additionalTreatmentString.contains("VITAMIN B COMPLEX")) {
                     cb.setChecked(true);
-                    break;
-                } else if (cb.getText().equals(getResources().getString(R.string.ctb_anthelminthic)) && additionalTreatmentString.equals("ANTHELMINTHIC")) {
+                } else if (cb.getText().equals(getResources().getString(R.string.ctb_anthelminthic)) && additionalTreatmentString.contains("ANTHELMINTHIC")) {
                     cb.setChecked(true);
-                    break;
                 }
             }
 
@@ -1603,37 +1635,29 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
         }
         String additionalTreatmentIpt = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "ADDITIONAL TREATMENT IPT PATIENT");
         if(additionalTreatmentIpt!=null) {
-            for (CheckBox cb : moInitiatingAdditionalTreatmentAntibiotic.getCheckedBoxes()) {
-                if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && additionalTreatmentIpt.equals("IRON")) {
+            for (CheckBox cb : moInitiateTreatmentIpt.getCheckedBoxes()) {
+                if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && additionalTreatmentIpt.contains("IRON")) {
                     cb.setChecked(true);
-                    break;
-                } else if (cb.getText().equals(getResources().getString(R.string.ctb_multivitamins)) && additionalTreatmentIpt.equals("MULTIVITAMIN")) {
+                } else if (cb.getText().equals(getResources().getString(R.string.ctb_multivitamins)) && additionalTreatmentIpt.contains("MULTIVITAMIN")) {
                     cb.setChecked(true);
-                    break;
-                } else if (cb.getText().equals(getResources().getString(R.string.ctb_anthelmintic_albendazole)) && additionalTreatmentIpt.equals("ANTHELMINTHIC")) {
+                } else if (cb.getText().equals(getResources().getString(R.string.ctb_anthelmintic_albendazole)) && additionalTreatmentIpt.contains("ANTHELMINTHIC")) {
                     cb.setChecked(true);
-                    break;
                 }
             }
         }
         String additionalTreatmentAntibiotic = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "ADDITIONAL TREATMENT FOR INCONCLUSIVE PATIENT");
         if(additionalTreatmentAntibiotic!=null) {
             for (CheckBox cb : moInitiatingAdditionalTreatmentAntibiotic.getCheckedBoxes()) {
-                if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && additionalTreatmentAntibiotic.equals("IRON")) {
+                if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && additionalTreatmentAntibiotic.contains("IRON")) {
                     cb.setChecked(true);
-                    break;
-                } else if (cb.getText().equals(getResources().getString(R.string.ctb_multivitamins)) && additionalTreatmentAntibiotic.equals("MULTIVITAMIN")) {
+                } else if (cb.getText().equals(getResources().getString(R.string.ctb_multivitamins)) && additionalTreatmentAntibiotic.contains("MULTIVITAMIN")) {
                     cb.setChecked(true);
-                    break;
-                } else if (cb.getText().equals(getResources().getString(R.string.ctb_anthelminthic)) && additionalTreatmentAntibiotic.equals("ANTHELMINTHIC")) {
+                } else if (cb.getText().equals(getResources().getString(R.string.ctb_anthelminthic)) && additionalTreatmentAntibiotic.contains("ANTHELMINTHIC")) {
                     cb.setChecked(true);
-                    break;
-                } else if (cb.getText().equals(getResources().getString(R.string.ctb_other_title)) && additionalTreatmentAntibiotic.equals("OTHER")) {
+                } else if (cb.getText().equals(getResources().getString(R.string.ctb_other_title)) && additionalTreatmentAntibiotic.contains("OTHER")) {
                     cb.setChecked(true);
-                    break;
-                } else if (cb.getText().equals(getResources().getString(R.string.ctb_none)) && additionalTreatmentAntibiotic.equals("NONE")) {
+                } else if (cb.getText().equals(getResources().getString(R.string.ctb_none)) && additionalTreatmentAntibiotic.contains("NONE")) {
                     cb.setChecked(true);
-                    break;
                 }
             }
         }
@@ -1811,7 +1835,11 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
         } else if (group == treatmentPlan.getRadioGroup()) {
             if (treatmentPlan.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_intensive_phase))) {
                 intensivePhaseRegimen.setVisibility(View.VISIBLE);
+                intensivePhaseRegimen.getRadioGroup().getButtons().get(0).setChecked(true);
                 typeFixedDosePrescribedIntensive.setVisibility(View.VISIBLE);
+                typeFixedDosePrescribedIntensive.getSpinner().selectValue(getResources().getString(R.string.ctb_current_formulation));
+                currentTabletsofE.setVisibility(View.VISIBLE);
+                currentTabletsofRHZ.setVisibility(View.VISIBLE);
 
 
                 continuationPhaseRegimen.setVisibility(View.GONE);
@@ -1825,7 +1853,9 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
                 adultFormulationOfContinuationRHE_RHE.setVisibility(View.GONE);
             } else if (treatmentPlan.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_continuation_phase))) {
                 continuationPhaseRegimen.setVisibility(View.VISIBLE);
+                continuationPhaseRegimen.getRadioGroup().clearCheck();
                 typeFixedDosePrescribedContinuation.setVisibility(View.VISIBLE);
+                typeFixedDosePrescribedContinuation.getSpinner().selectValue(getResources().getString(R.string.ctb_current_formulation_continuation));
                 currentTabletsOfContinuationRH.setVisibility(View.VISIBLE);
                 currentTabletsOfContinuationE.setVisibility(View.VISIBLE);
 

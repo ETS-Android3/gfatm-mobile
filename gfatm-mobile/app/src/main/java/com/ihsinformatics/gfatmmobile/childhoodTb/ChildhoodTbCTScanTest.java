@@ -59,7 +59,6 @@ import java.util.HashMap;
 
 public class ChildhoodTbCTScanTest extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener, View.OnTouchListener {
 
-    Boolean canSubmit = true;
     Context context;
     TitledButton formDate;
     TitledRadioGroup formType;
@@ -198,7 +197,7 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate,formType, linearLayout,ctScanSite, monthTreatment,
+                {{formType, linearLayout,formDate,ctScanSite, monthTreatment,
                         ctChestTbSuggestive,
                         ctChestInterpretation,
                         ctAbdomenTbSuggestive,
@@ -256,41 +255,17 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
         resetViews();
     }
 
-    public void updateFollowUpMonth(){
+    public void updateFollowUpMonth() {
 
         String treatmentDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
         String format = "";
+        String[] monthArray;
 
         if (treatmentDate == null) {
-            canSubmit = false;
-            String[] monthArray = new String[1];
+            monthArray = new String[1];
             monthArray[0] = "0";
             monthTreatment.getSpinner().setSpinnerData(monthArray);
-
-            submitButton.setEnabled(false);
-            int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
-
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
-            alertDialog.setMessage(getString(R.string.ctb_form_can_not_be_submitted));
-            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-// DrawableCompat.setTint(clearIcon, color);
-            alertDialog.setIcon(clearIcon);
-            alertDialog.setTitle(getResources().getString(R.string.title_error));
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            try {
-                                InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
-                                imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
-                            } catch (Exception e) {
-// TODO: handle exception
-                            }
-                            dialog.dismiss();
-                        }
-                    });
-            alertDialog.show();
         } else {
-            canSubmit = true;
             if (treatmentDate.contains("/")) {
                 format = "dd/MM/yyyy";
             } else {
@@ -301,30 +276,69 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
             int diffYear = formDateCalendar.get(Calendar.YEAR) - treatmentDateCalender.get(Calendar.YEAR);
             int diffMonth = diffYear * 12 + formDateCalendar.get(Calendar.MONTH) - treatmentDateCalender.get(Calendar.MONTH);
 
-            String[] monthArray = new String[diffMonth + 1];
-
-            for (int i = 0; i <= diffMonth; i++) {
-                monthArray[i] = String.valueOf(i);
+            if (diffMonth == 0) {
+                monthArray = new String[1];
+                monthArray[0] = "1";
+                monthTreatment.getSpinner().setSpinnerData(monthArray);
+            } else {
+                monthArray = new String[diffMonth];
+                for (int i = 0; i < diffMonth; i++) {
+                    monthArray[i] = String.valueOf(i+1);
+                }
+                monthTreatment.getSpinner().setSpinnerData(monthArray);
             }
-
-            monthTreatment.getSpinner().setSpinnerData(monthArray);
         }
     }
 
 
     @Override
     public void updateDisplay() {
-
+        Calendar treatDateCalender = null;
         if (snackbar != null)
+
             snackbar.dismiss();
+        String formDa = formDate.getButton().getText().toString();
+        String personDOB = App.getPatient().getPerson().getBirthdate();
 
 
         Date date = new Date();
+        if(formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_result))){
+            Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "Childhood TB-CT Scan Test Order");
+            String format = "";
 
+            for(int i =0 ; i < testIds.length ; i++){
+                if(testIds[i][0].equals(testId.getEditText().getText().toString())){
+                    String orderdate = testIds[i][1].toString();
+                    if (orderdate.contains("/")) {
+                        format = "dd/MM/yyyy";
+                    } else {
+                        format = "yyyy-MM-dd";
+                    }
+
+                    Date orderDate = App.stringToDate(orderdate, format);
+
+                    if(formDateCalendar.before(App.getCalendar(orderDate))){
+                        formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                        snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
+                        snackbar.show();
+
+                        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        break;
+                    }
+                    else {
+                        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                    }
+                }
+            }
+        }
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
-            String formDa = formDate.getButton().getText().toString();
-            String personDOB = App.getPatient().getPerson().getBirthdate();
+            String treatmentDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+
+            if(treatmentDate != null){
+                treatDateCalender = App.getCalendar(App.stringToDate(treatmentDate, "yyyy-MM-dd"));
+            }
 
             if (formDateCalendar.after(App.getCalendar(date))) {
 
@@ -342,11 +356,24 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-            } else
+            }  else if (treatDateCalender != null) {
+                if(formDateCalendar.before(treatDateCalender)) {
+                    formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.ctb_form_date_less_than_treatment_initiation), Snackbar.LENGTH_INDEFINITE);
+                    snackbar.show();
+
+                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                }
+                else
+                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                }
+            else
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
         }
         updateFollowUpMonth();
-        formDate.getButton().setEnabled(false);
+        formDate.getButton().setEnabled(true);
       }
 
     @Override
@@ -829,6 +856,7 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
     }
 
     void goneVisibility(){
+        formDate.setVisibility(View.GONE);
         ctScanSite.setVisibility(View.GONE);
         monthTreatment.setVisibility(View.GONE);
         ctChestTbSuggestive.setVisibility(View.GONE);
@@ -915,11 +943,9 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
                 loading.dismiss();
 
                 if (result.equals("SUCCESS")) {
-
+                    submitButton.setEnabled(true);
                     testIdView.setImageResource(R.drawable.ic_checked_green);
                     showTestOrderOrTestResult();
-                    if(canSubmit)
-                        submitButton.setEnabled(true);
 
                 } else {
 
@@ -973,6 +999,8 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
 
     void showTestOrderOrTestResult() {
         if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.ctb_order))) {
+            formDate.setVisibility(View.VISIBLE);
+            formDate.getQuestionView().setText("Test Order Date:");
             ctScanSite.setVisibility(View.VISIBLE);
             monthTreatment.setVisibility(View.VISIBLE);
             ctChestTbSuggestive.setVisibility(View.GONE);
@@ -984,6 +1012,8 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
             ctBoneSTbSuggestive.setVisibility(View.GONE);
             ctSpineTbSuggestive.setVisibility(View.GONE);
         } else {
+            formDate.setVisibility(View.VISIBLE);
+            formDate.getQuestionView().setText("Test Result Date:");
             String ctScan = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "CT Scan Test Order", "CT SCAN SITE");
             if(ctScan!=null){
                 if(ctScan.equalsIgnoreCase("CT SCAN, CHEST")){
