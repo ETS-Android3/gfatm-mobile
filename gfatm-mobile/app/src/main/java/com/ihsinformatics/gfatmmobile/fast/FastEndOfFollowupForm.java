@@ -247,7 +247,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
         }
 
         if (enrsId.getVisibility() == View.VISIBLE && !RegexUtil.isValidErnsNumber(App.get(enrsId))) {
-            enrsId.getEditText().setError(getString(R.string.invalid_value));
+            enrsId.getEditText().setError(getString(R.string.fast_enrs_number_error));
             enrsId.getEditText().requestFocus();
             error = true;
         }

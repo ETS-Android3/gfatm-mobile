@@ -453,6 +453,9 @@
     <string name="fast_past_xray">Has the patient had an X-Ray in the past 6 months at an X-Ray Van?</string>
     <string name="fast_pregnancy_history">Is the patient pregnant?</string>
     <string name="fast_cartridge_id_error">Please enter 10 digits Cartridge ID</string>
+    <string name="fast_enrs_number_error">Invalid ENRS number</string>
+
+
 
     <string-array name="fast_locations">
         <item>@string/fast_community_title</item>
