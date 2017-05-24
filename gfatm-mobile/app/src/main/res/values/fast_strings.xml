@@ -452,6 +452,7 @@
     <string name="fast_gastric_aspirate">Gastric Aspirate</string>
     <string name="fast_past_xray">Has the patient had an X-Ray in the past 6 months at an X-Ray Van?</string>
     <string name="fast_pregnancy_history">Is the patient pregnant?</string>
+    <string name="fast_cartridge_id_error">Please enter 10 digits Cartridge ID</string>
 
     <string-array name="fast_locations">
         <item>@string/fast_community_title</item>
@@ -722,7 +723,6 @@
         <item>@string/fast_infiltration</item>
         <item>@string/fast_consolidation</item>
         <item>@string/fast_effusion</item>
-        <item>@string/fast_normal</item>
         <item>@string/fast_cavitation</item>
         <item>@string/fast_miliary_tb</item>
         <item>@string/fast_others</item>

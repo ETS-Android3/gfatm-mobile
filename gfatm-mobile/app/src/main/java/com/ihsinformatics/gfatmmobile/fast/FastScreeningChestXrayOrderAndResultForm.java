@@ -650,8 +650,6 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
                         abnormalDetailedDiagnosisString = abnormalDetailedDiagnosisString + "CONSOLIDATION" + " ; ";
                     else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_pleural_effusion)))
                         abnormalDetailedDiagnosisString = abnormalDetailedDiagnosisString + "PLEURAL EFFUSION" + " ; ";
-                    else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_normal)))
-                        abnormalDetailedDiagnosisString = abnormalDetailedDiagnosisString + "NORMAL" + " ; ";
                     else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_cavitation)))
                         abnormalDetailedDiagnosisString = abnormalDetailedDiagnosisString + "CAVIATION" + " ; ";
                     else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_miliary_tb)))
@@ -1092,9 +1090,6 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
                             cb.setChecked(true);
                             break;
                         } else if (cb.getText().equals(getResources().getString(R.string.fast_pleural_effusion)) && obs[0][1].equals("PLEURAL EFFUSION")) {
-                            cb.setChecked(true);
-                            break;
-                        } else if (cb.getText().equals(getResources().getString(R.string.fast_normal)) && obs[0][1].equals("NORMAL")) {
                             cb.setChecked(true);
                             break;
                         } else if (cb.getText().equals(getResources().getString(R.string.fast_cavitation)) && obs[0][1].equals("CAVIATION")) {

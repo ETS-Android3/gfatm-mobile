@@ -329,7 +329,7 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
                 gotoPage(0);
             else
                 gotoPage(0);
-            cartridgeId.getEditText().setError(getString(R.string.invalid_value));
+            cartridgeId.getEditText().setError(getString(R.string.fast_cartridge_id_error));
             cartridgeId.getEditText().requestFocus();
             error = true;
         }
