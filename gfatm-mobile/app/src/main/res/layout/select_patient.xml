@@ -230,7 +230,7 @@
                             android:layout_weight="1"
                             android:digits="1234567890"
                             android:inputType="number|textNoSuggestions"
-                            android:maxLength="3"
+                            android:maxLength="5"
                             android:maxLines="1" />
 
                     </TableRow>
