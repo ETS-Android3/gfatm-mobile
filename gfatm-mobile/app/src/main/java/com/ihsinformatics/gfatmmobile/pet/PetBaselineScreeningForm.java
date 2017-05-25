@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,8 +14,10 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -27,7 +30,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -39,6 +41,7 @@ import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.Barcode;
 import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
+import com.ihsinformatics.gfatmmobile.custom.MyEditText;
 import com.ihsinformatics.gfatmmobile.custom.MyLinearLayout;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
@@ -77,21 +80,22 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
     TitledSpinner relationship;
     TitledEditText otherRelation;
     LinearLayout cnicLayout;
-    TitledEditText cnic1;
-    TitledEditText cnic2;
-    TitledEditText cnic3;
+    MyTextView cnic;
+    MyEditText cnic1;
+    MyEditText cnic2;
+    MyEditText cnic3;
     TitledSpinner cnicOwner;
     TitledEditText otherCnicOwner;
     LinearLayout phone1Layout;
-    TitledEditText phone1a;
-    TitledEditText phone1b;
+    MyEditText phone1a;
+    MyEditText phone1b;
     LinearLayout phone2Layout;
-    TitledEditText phone2a;
-    TitledEditText phone2b;
+    MyEditText phone2a;
+    MyEditText phone2b;
     TitledEditText address1;
     MyLinearLayout addressLayout;
     MyTextView townTextView;
-    AutoCompleteTextView town;
+    AutoCompleteTextView address2;
     TitledSpinner province;
     TitledSpinner district;
     TitledSpinner city;
@@ -196,36 +200,80 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         relationship = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_relationship), getResources().getStringArray(R.array.pet_household_heads), "", App.VERTICAL);
         otherRelation = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 15, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         cnicLayout = new LinearLayout(context);
-        cnicLayout.setOrientation(LinearLayout.HORIZONTAL);
-        cnic1 = new TitledEditText(context, null, getResources().getString(R.string.pet_cnic), "", "XXXXX", 5, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        cnicLayout.addView(cnic1);
-        cnic2 = new TitledEditText(context, null, "-", "", "XXXXXXX", 7, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        cnicLayout.addView(cnic2);
-        cnic3 = new TitledEditText(context, null, "-", "", "X", 1, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        cnicLayout.addView(cnic3);
+        cnicLayout.setOrientation(LinearLayout.VERTICAL);
+        cnic = new MyTextView(context, getResources().getString(R.string.pet_cnic));
+        cnicLayout.addView(cnic);
+        LinearLayout cnicPartLayout = new LinearLayout(context);
+        cnicPartLayout.setOrientation(LinearLayout.HORIZONTAL);
+        cnic1 = new MyEditText(context, "", 5, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE);
+        cnic1.setHint("XXXXX");
+        cnicPartLayout.addView(cnic1);
+        MyTextView cnicDash = new MyTextView(context, " - ");
+        cnicPartLayout.addView(cnicDash);
+        cnic2 = new MyEditText(context, "", 7, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE);
+        cnic2.setHint("XXXXXXX");
+        cnicPartLayout.addView(cnic2);
+        MyTextView cnicDash2 = new MyTextView(context, " - ");
+        cnicPartLayout.addView(cnicDash2);
+        cnic3 = new MyEditText(context, "", 1, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE);
+        cnic3.setHint("X");
+        cnicPartLayout.addView(cnic3);
+        cnicLayout.addView(cnicPartLayout);
         cnicOwner = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_cnic_owner), getResources().getStringArray(R.array.pet_cnic_owners), "", App.VERTICAL);
         otherCnicOwner = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         phone1Layout = new LinearLayout(context);
-        phone1Layout.setOrientation(LinearLayout.HORIZONTAL);
-        phone1a = new TitledEditText(context, null, getResources().getString(R.string.pet_phone_1), "", "XXXX", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        phone1Layout.addView(phone1a);
-        phone1b = new TitledEditText(context, null, "-", "", "XXXXXXX", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        phone1Layout.addView(phone1b);
+        phone1Layout.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout phone1QuestionLayout = new LinearLayout(context);
+        phone1QuestionLayout.setOrientation(LinearLayout.HORIZONTAL);
+        MyTextView phone1Text = new MyTextView(context, getResources().getString(R.string.pet_phone_1));
+        phone1QuestionLayout.addView(phone1Text);
+        TextView mandatoryPhone1Sign = new TextView(context);
+        mandatoryPhone1Sign.setText(" *");
+        mandatoryPhone1Sign.setTextColor(Color.parseColor("#ff0000"));
+        phone1QuestionLayout.addView(mandatoryPhone1Sign);
+        phone1Layout.addView(phone1QuestionLayout);
+        LinearLayout phone1PartLayout = new LinearLayout(context);
+        phone1PartLayout.setOrientation(LinearLayout.HORIZONTAL);
+        phone1a = new MyEditText(context,"", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        phone1a.setHint("0XXX");
+        phone1PartLayout.addView(phone1a);
+        MyTextView phone1Dash = new MyTextView(context, " - ");
+        phone1PartLayout.addView(phone1Dash);
+        phone1b = new MyEditText(context,"",  7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        phone1b.setHint("XXXXXXX");
+        phone1PartLayout.addView(phone1b);
+        phone1Layout.addView(phone1PartLayout);
         phone2Layout = new LinearLayout(context);
-        phone2Layout.setOrientation(LinearLayout.HORIZONTAL);
-        phone2a = new TitledEditText(context, null, getResources().getString(R.string.pet_phone_2), "", "XXXX", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        phone2Layout.addView(phone2a);
-        phone2b = new TitledEditText(context, null, "-", "", "XXXXXXX", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        phone2Layout.addView(phone2b);
+        phone2Layout.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout phone2QuestionLayout = new LinearLayout(context);
+        phone2QuestionLayout.setOrientation(LinearLayout.HORIZONTAL);
+        MyTextView phone2Text = new MyTextView(context, getResources().getString(R.string.pet_phone_2));
+        phone2QuestionLayout.addView(phone2Text);
+        TextView mandatoryPhone2Sign = new TextView(context);
+        mandatoryPhone2Sign.setText(" *");
+        mandatoryPhone2Sign.setTextColor(Color.parseColor("#ff0000"));
+        phone2QuestionLayout.addView(mandatoryPhone2Sign);
+        phone2Layout.addView(phone2QuestionLayout);
+        LinearLayout phone2PartLayout = new LinearLayout(context);
+        phone2PartLayout.setOrientation(LinearLayout.HORIZONTAL);
+        phone2a = new MyEditText(context, "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        phone2a.setHint("0XXX");
+        phone2PartLayout.addView(phone2a);
+        MyTextView phone2Dash = new MyTextView(context, " - ");
+        phone2PartLayout.addView(phone2Dash);
+        phone2b = new MyEditText(context, "",7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        phone2b.setHint("XXXXXXX");
+        phone2PartLayout.addView(phone2b);
+        phone2Layout.addView(phone2PartLayout);
         address1 = new TitledEditText(context, null, getResources().getString(R.string.pet_address_1), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         addressLayout = new MyLinearLayout(context, null, App.VERTICAL);
-        townTextView = new MyTextView(context, getResources().getString(R.string.town));
-        town = new AutoCompleteTextView(context);
+        townTextView = new MyTextView(context, getResources().getString(R.string.pet_address_2));
+        address2 = new AutoCompleteTextView(context);
         InputFilter[] fArray = new InputFilter[1];
         fArray[0] = new InputFilter.LengthFilter(20);
-        town.setFilters(fArray);
+        address2.setFilters(fArray);
         addressLayout.addView(townTextView);
-        addressLayout.addView(town);
+        addressLayout.addView(address2);
         province = new TitledSpinner(context, "", getResources().getString(R.string.province), getResources().getStringArray(R.array.provinces), App.getProvince(), App.VERTICAL);
         district = new TitledSpinner(context, "", getResources().getString(R.string.pet_district), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
         city = new TitledSpinner(context, "", getResources().getString(R.string.pet_city), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
@@ -280,7 +328,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), indexPatientId.getEditText(), treatmentStatus.getRadioGroup(), contactRegistered.getRadioGroup(), tbHistory.getRadioGroup(), relationship.getSpinner(), otherRelation.getEditText(),
-                cnic1.getEditText(), cnic2.getEditText(), cnic3.getEditText(), cnicOwner.getSpinner(), otherCnicOwner.getEditText(), phone1a.getEditText(), phone1b.getEditText(), phone2a.getEditText(), phone2b.getEditText(), address1.getEditText(), province.getSpinner(), district.getSpinner(), city.getSpinner(),
+                cnic1, cnic2, cnic3, cnicOwner.getSpinner(), otherCnicOwner.getEditText(), phone1a, phone1b, phone2a, phone2b, address1.getEditText(), province.getSpinner(), district.getSpinner(), city.getSpinner(),
                 addressType.getRadioGroup(), landmark.getEditText(), entryLocation.getRadioGroup(),
                 cough.getRadioGroup(), coughDuration.getRadioGroup(), haemoptysis.getRadioGroup(), fever.getRadioGroup(), weightLoss.getRadioGroup(), reduceAppetite.getRadioGroup(), reduceActivity.getRadioGroup(),
                 nightSweats.getRadioGroup(), nightSweats.getRadioGroup(), swelling.getRadioGroup(), referral.getRadioGroup(), referredFacility.getSpinner(), treatmentInitiationDate.getButton()};
@@ -303,6 +351,150 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         referral.getRadioGroup().setOnCheckedChangeListener(this);
 
         resetViews();
+
+        cnic1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()==5){
+                    cnic2.requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
+        cnic2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()==7){
+                    cnic3.requestFocus();
+                }
+
+                if(s.length()==0){
+                    cnic1.requestFocus();
+                    cnic1.setSelection(cnic1.getText().length());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        cnic3.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()==0){
+                    cnic2.requestFocus();
+                    cnic2.setSelection(cnic2.getText().length());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        phone1a.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()==4){
+                    phone1b.requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        phone1b.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if(s.length()==0){
+                    phone1a.requestFocus();
+                    phone1a.setSelection(phone1a.getText().length());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        phone2a.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()==4){
+                    phone2b.requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        phone2b.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if(s.length()==0){
+                    phone2a.requestFocus();
+                    phone2a.setSelection(phone2a.getText().length());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
     }
 
@@ -351,29 +543,29 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         Boolean error = false;
 
         if (App.get(phone2a).isEmpty()) {
-            phone2a.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            phone2a.getEditText().requestFocus();
+            phone2a.setError(getResources().getString(R.string.mandatory_field));
+            phone2a.requestFocus();
             error = true;
         } else if (App.get(phone2b).isEmpty()) {
-            phone2b.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            phone2b.getEditText().requestFocus();
+            phone2b.setError(getResources().getString(R.string.mandatory_field));
+            phone2b.requestFocus();
             error = true;
         } else if (!RegexUtil.isContactNumber(App.get(phone2a) + App.get(phone2b))) {
-            phone2b.getEditText().setError(getResources().getString(R.string.invalid_value));
-            phone2b.getEditText().requestFocus();
+            phone2b.setError(getResources().getString(R.string.invalid_value));
+            phone2b.requestFocus();
             error = true;
         }
         if (App.get(phone1a).isEmpty()) {
-            phone1a.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            phone1a.getEditText().requestFocus();
+            phone1a.setError(getResources().getString(R.string.mandatory_field));
+            phone1a.requestFocus();
             error = true;
         } else if (App.get(phone1b).isEmpty()) {
-            phone1b.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            phone1b.getEditText().requestFocus();
+            phone1b.setError(getResources().getString(R.string.mandatory_field));
+            phone1b.requestFocus();
             error = true;
         } else if (!RegexUtil.isContactNumber(App.get(phone1a) + App.get(phone1b))) {
-            phone1b.getEditText().setError(getResources().getString(R.string.invalid_value));
-            phone1b.getEditText().requestFocus();
+            phone1b.setError(getResources().getString(R.string.invalid_value));
+            phone1b.requestFocus();
             error = true;
         }
         if (App.get(otherCnicOwner).isEmpty() && otherCnicOwner.getVisibility() == View.VISIBLE) {
@@ -382,33 +574,33 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
             error = true;
         }
         if (App.get(cnic1).isEmpty()) {
-            cnic1.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            cnic1.getEditText().requestFocus();
+            cnic1.setError(getResources().getString(R.string.mandatory_field));
+            cnic1.requestFocus();
             error = true;
         }
         if (App.get(cnic2).isEmpty()) {
-            cnic2.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            cnic2.getEditText().requestFocus();
+            cnic2.setError(getResources().getString(R.string.mandatory_field));
+            cnic2.requestFocus();
             error = true;
         }
         if (App.get(cnic3).isEmpty()) {
-            cnic3.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            cnic3.getEditText().requestFocus();
+            cnic3.setError(getResources().getString(R.string.mandatory_field));
+            cnic3.requestFocus();
             error = true;
         }
         if (App.get(cnic1).length() != 5) {
-            cnic1.getEditText().setError(getResources().getString(R.string.invalid_value));
-            cnic1.getEditText().requestFocus();
+            cnic1.setError(getResources().getString(R.string.invalid_value));
+            cnic1.requestFocus();
             error = true;
         }
         if (App.get(cnic2).length() != 7) {
-            cnic2.getEditText().setError(getResources().getString(R.string.invalid_value));
-            cnic2.getEditText().requestFocus();
+            cnic2.setError(getResources().getString(R.string.invalid_value));
+            cnic2.requestFocus();
             error = true;
         }
         if (App.get(cnic3).length() != 1) {
-            cnic3.getEditText().setError(getResources().getString(R.string.invalid_value));
-            cnic3.getEditText().requestFocus();
+            cnic3.setError(getResources().getString(R.string.invalid_value));
+            cnic3.requestFocus();
             error = true;
         }
 
@@ -581,8 +773,8 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
             observations.add(new String[]{"SECONDARY MOBILE NUMBER", App.get(phone2a) + "-" + App.get(phone2b)});
         if (address1.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"ADDRESS (TEXT)", App.get(address1)});
-        if (town.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TOWN", App.get(town)});
+        if (address2.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"EXTENDED PERMANENT ADDRESS (TEXT)", App.get(address2)});
         if (district.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"DISTRICT", App.get(district)});
         if (province.getVisibility() == View.VISIBLE)
@@ -622,8 +814,8 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                         encounterId = successArray[1];
                     }
 
-                    if (!(App.get(address1).equals("") && App.get(town).equals("") && App.get(district).equals("") && App.get(landmark).equals(""))) {
-                        result = serverService.savePersonAddress(App.get(address1), App.get(town), App.get(city), App.get(district), App.get(province), App.getCountry(), App.getLongitude(), App.getLatitude(), App.get(landmark), encounterId);
+                    if (!(App.get(address1).equals("") && App.get(address2).equals("") && App.get(district).equals("") && App.get(landmark).equals(""))) {
+                        result = serverService.savePersonAddress(App.get(address1), App.get(address2), App.get(city), App.get(district), App.get(province), App.getCountry(), App.getLongitude(), App.getLatitude(), App.get(landmark), encounterId);
                     if (!result.equals("SUCCESS"))
                         return result;
                     }
@@ -663,7 +855,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
 
                 if (result.equals("SUCCESS")) {
 
-                    serverService.addTown(town.getText().toString());
+                    serverService.addTown(address2.getText().toString());
 
                     MainActivity.backToMainMenu();
                     try {
@@ -895,7 +1087,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
 
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, townList);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        town.setAdapter(spinnerArrayAdapter);
+        address2.setAdapter(spinnerArrayAdapter);
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         coughDuration.setVisibility(View.GONE);
@@ -1100,9 +1292,9 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                 otherRelation.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("NATIONAL IDENTIFICATION NUMBER")) {
                 String[] cnicArray = obs[0][1].split("-");
-                cnic1.getEditText().setText(cnicArray[0]);
-                cnic2.getEditText().setText(cnicArray[1]);
-                cnic3.getEditText().setText(cnicArray[2]);
+                cnic1.setText(cnicArray[0]);
+                cnic2.setText(cnicArray[1]);
+                cnic3.setText(cnicArray[2]);
             } else if (obs[0][0].equals("COMPUTERIZED NATIONAL IDENTIFICATION OWNER")) {
                 String value = obs[0][1].equals("SELF") ? getResources().getString(R.string.pet_self) :
                         (obs[0][1].equals("MOTHER") ? getResources().getString(R.string.pet_mother) :
@@ -1298,18 +1490,18 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                 referredFacility.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("CONTACT PHONE NUMBER")) {
                 String[] phoneArray = obs[0][1].split("-");
-                phone1a.getEditText().setText(phoneArray[0]);
-                phone1b.getEditText().setText(phoneArray[1]);
+                phone1a.setText(phoneArray[0]);
+                phone1b.setText(phoneArray[1]);
             } else if (obs[0][0].equals("SECONDARY MOBILE NUMBER")) {
                 String[] phoneArray = obs[0][1].split("-");
-                phone2a.getEditText().setText(phoneArray[0]);
-                phone2b.getEditText().setText(phoneArray[1]);
+                phone2a.setText(phoneArray[0]);
+                phone2b.setText(phoneArray[1]);
             } else if (obs[0][0].equals("NEAREST LANDMARK")) {
                 landmark.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("ADDRESS (TEXT)")) {
                 address1.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("TOWN")) {
-                town.setText(obs[0][1]);
+            } else if (obs[0][0].equals("EXTENDED PERMANENT ADDRESS (TEXT)")) {
+                address2.setText(obs[0][1]);
             } else if (obs[0][0].equals("PROVINCE")) {
                 province.getSpinner().selectValue(obs[0][1]);
             } else if (obs[0][0].equals("DISTRICT")) {

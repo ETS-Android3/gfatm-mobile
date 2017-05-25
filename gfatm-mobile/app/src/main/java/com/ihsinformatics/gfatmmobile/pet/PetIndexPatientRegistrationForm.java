@@ -652,7 +652,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
-            formDate.getButton().setEnabled(true);
+            formDate.getButton().setEnabled(false);
         } else if (view == treatmentEnrollmentDate.getButton()) {
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
@@ -660,7 +660,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
             args.putBoolean("allowPastDate", true);
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
-            treatmentEnrollmentDate.getButton().setEnabled(true);
+            treatmentEnrollmentDate.getButton().setEnabled(false);
         }
 
     }

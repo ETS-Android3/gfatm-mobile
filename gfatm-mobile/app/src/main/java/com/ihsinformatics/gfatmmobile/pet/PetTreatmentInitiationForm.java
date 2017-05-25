@@ -2,6 +2,7 @@ package com.ihsinformatics.gfatmmobile.pet;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -32,7 +33,9 @@ import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
+import com.ihsinformatics.gfatmmobile.custom.MyEditText;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
+import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
@@ -77,8 +80,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
     TitledEditText nameTreatmentSupporter;
     LinearLayout contactNumberTreatmentSupporter;
-    TitledEditText phone1a;
-    TitledEditText phone1b;
+    MyEditText phone1a;
+    MyEditText phone1b;
     TitledRadioGroup typeTreatmentSupporter;
     TitledSpinner relationshipTreatmentSuppoter;
     TitledEditText other;
@@ -182,11 +185,27 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         // fourth page view
         nameTreatmentSupporter = new TitledEditText(context, null, getResources().getString(R.string.pet_treatment_supporter_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         contactNumberTreatmentSupporter = new LinearLayout(context);
-        contactNumberTreatmentSupporter.setOrientation(LinearLayout.HORIZONTAL);
-        phone1a = new TitledEditText(context, null, getResources().getString(R.string.pet_treatment_supporter_contact_number), "", "XXXX", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        contactNumberTreatmentSupporter.addView(phone1a);
-        phone1b = new TitledEditText(context, null, "-", "", "XXXXXXX", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        contactNumberTreatmentSupporter.addView(phone1b);
+        contactNumberTreatmentSupporter.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout phone1QuestionLayout = new LinearLayout(context);
+        phone1QuestionLayout.setOrientation(LinearLayout.HORIZONTAL);
+        MyTextView phone1Text = new MyTextView(context, getResources().getString(R.string.pet_treatment_supporter_contact_number));
+        phone1QuestionLayout.addView(phone1Text);
+        TextView mandatoryPhone1Sign = new TextView(context);
+        mandatoryPhone1Sign.setText(" *");
+        mandatoryPhone1Sign.setTextColor(Color.parseColor("#ff0000"));
+        phone1QuestionLayout.addView(mandatoryPhone1Sign);
+        contactNumberTreatmentSupporter.addView(phone1QuestionLayout);
+        LinearLayout phone1PartLayout = new LinearLayout(context);
+        phone1PartLayout.setOrientation(LinearLayout.HORIZONTAL);
+        phone1a = new MyEditText(context,"", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        phone1a.setHint("0XXX");
+        phone1PartLayout.addView(phone1a);
+        MyTextView phone1Dash = new MyTextView(context, " - ");
+        phone1PartLayout.addView(phone1Dash);
+        phone1b = new MyEditText(context,"",  7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        phone1b.setHint("XXXXXXX");
+        phone1PartLayout.addView(phone1b);
+        contactNumberTreatmentSupporter.addView(phone1PartLayout);
         typeTreatmentSupporter = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_treatment_supporter_type), getResources().getStringArray(R.array.pet_treatment_supporter_type), getResources().getString(R.string.pet_family_treatment_supporter), App.VERTICAL, App.VERTICAL);
         relationshipTreatmentSuppoter = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_treatment_supporter_relationship), getResources().getStringArray(R.array.pet_household_heads), "", App.VERTICAL);
         other = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
@@ -195,7 +214,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         views = new View[]{formDate.getButton(), weight.getEditText(), indexPatientId.getEditText(), tbType.getRadioGroup(), infectionType.getRadioGroup(), dstPattern, resistanceType.getRadioGroup(),
                 treatmentInitiationDate.getButton(), petRegimen.getRadioGroup(), isoniazidDose.getEditText(), rifapentineDose.getEditText(), levofloxacinDose.getEditText(), ethionamideDose.getEditText(),
                 ancillaryNeed.getRadioGroup(), ancillaryDrugs, ancillaryDrugDuration.getEditText(), ancillaryDrugDuration.getEditText(),
-                nameTreatmentSupporter.getEditText(), phone1a.getEditText(), phone1b.getEditText(), typeTreatmentSupporter.getRadioGroup(), relationshipTreatmentSuppoter.getSpinner(), other.getEditText(), rifapentineAvailable.getRadioGroup()};
+                nameTreatmentSupporter.getEditText(), phone1a, phone1b, typeTreatmentSupporter.getRadioGroup(), relationshipTreatmentSuppoter.getSpinner(), other.getEditText(), rifapentineAvailable.getRadioGroup()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
@@ -374,6 +393,46 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                     else
                         isoniazidDose.getEditText().setError(null);
                 }
+            }
+        });
+
+        phone1a.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()==4){
+                    phone1b.requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        phone1b.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if(s.length()==0){
+                    phone1a.requestFocus();
+                    phone1a.setSelection(phone1a.getText().length());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
 
@@ -759,18 +818,18 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
             }
         }
         if (App.get(phone1a).isEmpty()) {
-            phone1a.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            phone1a.getEditText().requestFocus();
+            phone1a.setError(getResources().getString(R.string.mandatory_field));
+            phone1a.requestFocus();
             error = true;
             gotoLastPage();
         } else if (App.get(phone1b).isEmpty()) {
-            phone1b.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            phone1b.getEditText().requestFocus();
+            phone1b.setError(getResources().getString(R.string.mandatory_field));
+            phone1b.requestFocus();
             error = true;
             gotoLastPage();
         } else if (!RegexUtil.isContactNumber(App.get(phone1a) + App.get(phone1b))) {
-            phone1b.getEditText().setError(getResources().getString(R.string.invalid_value));
-            phone1b.getEditText().requestFocus();
+            phone1b.setError(getResources().getString(R.string.invalid_value));
+            phone1b.requestFocus();
             error = true;
             gotoLastPage();
         }
@@ -1515,8 +1574,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 nameTreatmentSupporter.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("TREATMENT SUPPORTER CONTACT NUMBER")) {
                 String[] phoneArray = obs[0][1].split("-");
-                phone1a.getEditText().setText(phoneArray[0]);
-                phone1b.getEditText().setText(phoneArray[1]);
+                phone1a.setText(phoneArray[0]);
+                phone1b.setText(phoneArray[1]);
             } else if (obs[0][0].equals("TREATMENT SUPPORTER TYPE")) {
                 for (RadioButton rb : typeTreatmentSupporter.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.pet_family_treatment_supporter)) && obs[0][1].equals("FAMILY MEMBER")) {
