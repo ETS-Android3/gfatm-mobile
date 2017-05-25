@@ -60,6 +60,7 @@ import com.ihsinformatics.gfatmmobile.fast.FastScreeningChestXrayOrderAndResultF
 import com.ihsinformatics.gfatmmobile.fast.FastScreeningForm;
 import com.ihsinformatics.gfatmmobile.fast.FastTreatmentFollowupForm;
 import com.ihsinformatics.gfatmmobile.fast.FastTreatmentInitiationForm;
+import com.ihsinformatics.gfatmmobile.pet.PETAKUADForm;
 import com.ihsinformatics.gfatmmobile.pet.PetAdverseEventForm;
 import com.ihsinformatics.gfatmmobile.pet.PetBaselineCounsellingForm;
 import com.ihsinformatics.gfatmmobile.pet.PetBaselineScreeningForm;
@@ -115,16 +116,18 @@ public class Forms{
     public static final String PET_ADVERSE_EVENTS = "Adverse Events";
     public static final String PET_INCENTIVE_DISBURSEMENT = "Incentive Disbursement";
     public static final String PET_END_FOLLOWOUP = "End of Follow-up";
+    public static final String PET_AKUAD = "AKUADS";
 
-    public static final FormsObject pet_indexPatientRegistration = new FormsObject(PET_INDEX_PATIENT_REGISTRATION, PetIndexPatientRegistrationForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_FIELD_SUPERVISOR});
-    public static final FormsObject pet_contactRegistry = new FormsObject(PET_CONTACT_REGISTRY, PetContactRegistryForm.class, R.drawable.pet_contact, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_FIELD_SUPERVISOR});
+    public static final FormsObject pet_indexPatientRegistration = new FormsObject(PET_INDEX_PATIENT_REGISTRATION, PetIndexPatientRegistrationForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_FIELD_SUPERVISOR, Roles.PET_HEALTH_WORKER});
+    public static final FormsObject pet_contactRegistry = new FormsObject(PET_CONTACT_REGISTRY, PetContactRegistryForm.class, R.drawable.pet_contact, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_FIELD_SUPERVISOR, Roles.PET_HEALTH_WORKER});
     public static final FormsObject pet_baselineScreening = new FormsObject(PET_BASELINE_SCREENING, PetBaselineScreeningForm.class, R.drawable.pet_baseline_screening, FormTypeColor.TEST_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_HEALTH_WORKER});
     public static final FormsObject pet_socioEcnomicData = new FormsObject(PET_SOCIO_ECNOMICS_DATA, PetSocioecnomicDataForm.class, R.drawable.pet_socio_ecnomic_data, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_PSYCHOLOGIST});
     public static final FormsObject pet_clinicianContactScreening = new FormsObject(PET_CLINICIAN_CONTACT_SCREENING, PetClinicianContactScreeningForm.class, R.drawable.pet_clinician_contact_screening, FormTypeColor.TEST_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN});
     public static final FormsObject pet_infectionTreatmenEligibility = new FormsObject(PET_INFECTION_TREATMENT_ELIGIBILITY, PetInfectionTreatmentEligibilityForm.class, R.drawable.pet_infection_treatment_eligibility, FormTypeColor.TREATMENT_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN});
     public static final FormsObject pet_treatmentInitiation = new FormsObject(PET_TREATMENT_INITIATION, PetTreatmentInitiationForm.class, R.drawable.pet_treatment_initiation, FormTypeColor.TREATMENT_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN});
     public static final FormsObject pet_baselineCounselling = new FormsObject(PET_BASELINE_COUNSELLING, PetBaselineCounsellingForm.class, R.drawable.pet_baseline_counselling, FormTypeColor.TEST_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_PSYCHOLOGIST});
-    public static final FormsObject pet_treatmentAdherence = new FormsObject(PET_TREATMENT_ADHERENCE, PetTreatmentAdherenceForm.class, R.drawable.pet_treatment_adherence, FormTypeColor.TREATMENT_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_HEALTH_WORKER, Roles.PET_PSYCHOLOGIST});
+    public static final FormsObject pet_akuad = new FormsObject(PET_AKUAD, PETAKUADForm.class, R.drawable.pet_followup_end, FormTypeColor.FOLLOWUP_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_FIELD_SUPERVISOR, Roles.PET_CLINICIAN});
+    public static final FormsObject pet_treatmentAdherence = new FormsObject(PET_TREATMENT_ADHERENCE, PetTreatmentAdherenceForm.class, R.drawable.pet_treatment_adherence, FormTypeColor.TREATMENT_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_PSYCHOLOGIST});
     public static final FormsObject pet_monthlyHomeFollowup = new FormsObject(PET_MONTHLY_HOME_FOLLOWUP, PetMonthlyHomeFollowupForm.class, R.drawable.pet_monthly_followup, FormTypeColor.FOLLOWUP_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_HEALTH_WORKER});
     public static final FormsObject pet_clinicianFollowup = new FormsObject(PET_CLINICIAN_FOLLOWUP, PetClinicianFollowupForm.class, R.drawable.pet_clinician_followup, FormTypeColor.FOLLOWUP_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN});
     public static final FormsObject pet_counsellingFollowup = new FormsObject(PET_COUNSELLING_FOLLOWUP, PetCounsellingFollowupForm.class, R.drawable.pet_counselling_followup, FormTypeColor.FOLLOWUP_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_PSYCHOLOGIST});
@@ -319,6 +322,7 @@ public class Forms{
         petList.add(pet_adverseEvents);
         petList.add(pet_incentiveDisbursement);
         petList.add(pet_endOfFollowup);
+        petList.add(pet_akuad);
 
         return petList;
 
