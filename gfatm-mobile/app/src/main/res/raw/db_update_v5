@@ -8,3 +8,4 @@ INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('X RAY IN PAST 6 MONTHS','past_xray','Coded','1a2dfae5-233e-40a6-b452-8fa2d11906e8');
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('PROVINCE','province','Text','f014be0b-e362-4ef0-9605-a31ae549d69e');
 
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-AKUADS','Add PET Forms','View PET Forms','964cc088-3c77-4891-a7f0-f1224d92c3a5');
