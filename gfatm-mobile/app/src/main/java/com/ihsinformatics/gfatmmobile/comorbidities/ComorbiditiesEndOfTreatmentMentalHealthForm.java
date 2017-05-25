@@ -219,6 +219,24 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
 
         Boolean error = false;
 
+        if (remarks.getEditText().getText().toString().length() > 0 && remarks.getEditText().getText().toString().trim().isEmpty()) {
+            remarks.getEditText().setError(getString(R.string.comorbidities_patient_information_father_name_error));
+            remarks.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (reasonForReferral.getEditText().getText().toString().length() > 0 && reasonForReferral.getEditText().getText().toString().trim().isEmpty()) {
+            reasonForReferral.getEditText().setError(getString(R.string.comorbidities_patient_information_father_name_error));
+            reasonForReferral.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (App.get(referredTo).trim().isEmpty()) {
+            referredTo.getEditText().setError(getString(R.string.empty_field));
+            referredTo.getEditText().requestFocus();
+            error = true;
+        }
+
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
@@ -294,7 +312,7 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
 
         observations.add(new String[]{"REFERRING FACILITY NAME", App.get(referredTo)});
         observations.add(new String[]{"OTHER TRANSFER OR REFERRAL REASON", App.get(reasonForReferral)});
-        observations.add(new String[]{"FREE TEXT COMMENT", App.get(remarks)});
+        observations.add(new String[]{"FREE TEXT COMMENT", App.get(remarks).trim()});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override

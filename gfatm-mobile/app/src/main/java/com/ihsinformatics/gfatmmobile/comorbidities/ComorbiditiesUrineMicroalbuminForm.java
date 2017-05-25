@@ -159,7 +159,7 @@ public class ComorbiditiesUrineMicroalbuminForm extends AbstractFormActivity imp
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         formType = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_testorder_testresult_form_type), getResources().getStringArray(R.array.comorbidities_testorder_testresult_form_type_options), "", App.HORIZONTAL, App.VERTICAL);
-        testOrderMicroablbumin = new MyTextView(context, getResources().getString(R.string.comorbidities_creatinine_test_order));
+        testOrderMicroablbumin = new MyTextView(context, getResources().getString(R.string.comorbidities_microalbumin_test_order));
         testOrderMicroablbumin.setTypeface(null, Typeface.BOLD);
         microalbuminFollowupMonth = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_urinedr_month_of_treatment), getResources().getStringArray(R.array.comorbidities_followup_month), "0", App.HORIZONTAL);
         microalbuminTestOrderDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1cdate_test_order), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
@@ -186,7 +186,7 @@ public class ComorbiditiesUrineMicroalbuminForm extends AbstractFormActivity imp
         linearLayout.addView(testIdView);
 
         //second page views...
-        testResultMicroalbumin = new MyTextView(context, getResources().getString(R.string.comorbidities_creatinine_test_result));
+        testResultMicroalbumin = new MyTextView(context, getResources().getString(R.string.comorbidities_microalbumin_test_result));
         testResultMicroalbumin.setTypeface(null, Typeface.BOLD);
         microalbuminTestResultDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1c_resultdate), DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
         //microalbuminResult = new TitledEditText(context, null, getResources().getString(R.string.hba1c_result), "", "", 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
@@ -779,9 +779,9 @@ public class ComorbiditiesUrineMicroalbuminForm extends AbstractFormActivity imp
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         microalbuminTestOrderDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         microalbuminTestResultDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
-        fourthDateCalendar.set(Calendar.YEAR, secondDateCalendar.get(Calendar.YEAR));
-        fourthDateCalendar.set(Calendar.MONTH, secondDateCalendar.get(Calendar.MONTH));
-        fourthDateCalendar.set(Calendar.DAY_OF_MONTH, secondDateCalendar.get(Calendar.DAY_OF_MONTH));
+        fourthDateCalendar.set(Calendar.YEAR, formDateCalendar.get(Calendar.YEAR));
+        fourthDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
+        fourthDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
         fourthDateCalendar.add(Calendar.MONTH, 2);
         fourthDateCalendar.add(Calendar.DAY_OF_MONTH, 20);
         nextMicroalbuminTestDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", fourthDateCalendar).toString());
@@ -847,7 +847,7 @@ public class ComorbiditiesUrineMicroalbuminForm extends AbstractFormActivity imp
         if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
             testOrderMicroablbumin.setVisibility(View.VISIBLE);
             microalbuminFollowupMonth.setVisibility(View.VISIBLE);
-            microalbuminTestOrderDate.setVisibility(View.VISIBLE);
+            microalbuminTestOrderDate.setVisibility(View.GONE);
 
             testResultMicroalbumin.setVisibility(View.GONE);
             microalbuminTestResultDate.setVisibility(View.GONE);
@@ -860,7 +860,7 @@ public class ComorbiditiesUrineMicroalbuminForm extends AbstractFormActivity imp
             microalbuminTestOrderDate.setVisibility(View.GONE);
 
             testResultMicroalbumin.setVisibility(View.VISIBLE);
-            microalbuminTestResultDate.setVisibility(View.VISIBLE);
+            microalbuminTestResultDate.setVisibility(View.GONE);
             microalbuminResult.setVisibility(View.VISIBLE);
             nextMicroalbuminTestDate.setVisibility(View.VISIBLE);
         }

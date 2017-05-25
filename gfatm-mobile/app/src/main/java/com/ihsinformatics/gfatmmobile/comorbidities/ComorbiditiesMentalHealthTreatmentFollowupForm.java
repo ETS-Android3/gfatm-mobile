@@ -268,6 +268,12 @@ public class ComorbiditiesMentalHealthTreatmentFollowupForm extends AbstractForm
 
         Boolean error = false;
 
+        if (App.get(treatmentFollowupMHAdviceForClient).trim().isEmpty()) {
+            treatmentFollowupMHAdviceForClient.getEditText().setError(getResources().getString(R.string.empty_field));
+            treatmentFollowupMHAdviceForClient.getEditText().requestFocus();
+            error = true;
+        }
+
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
@@ -361,7 +367,7 @@ public class ComorbiditiesMentalHealthTreatmentFollowupForm extends AbstractForm
         observations.add(new String[]{"CONDITION AFTER SESSION", treatmentFollowupMHConditionAfterSessionString});
 
         observations.add(new String[]{"IMPROVED", App.get(treatmentFollowupMHImprovedStatus).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        observations.add(new String[]{"MEDICAL ADVICE GIVEN", App.get(treatmentFollowupMHAdviceForClient)});
+        observations.add(new String[]{"MEDICAL ADVICE GIVEN", App.get(treatmentFollowupMHAdviceForClient).trim()});
 
         final String treatmentFollowupMHContinuationStatusString = App.get(treatmentFollowupMHContinuationStatus).equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_continuation_status_options_continue)) ? "EXERCISE THERAPY" :
                 (App.get(treatmentFollowupMHContinuationStatus).equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_continuation_status_options_last)) ? "END OF THERAPY" :

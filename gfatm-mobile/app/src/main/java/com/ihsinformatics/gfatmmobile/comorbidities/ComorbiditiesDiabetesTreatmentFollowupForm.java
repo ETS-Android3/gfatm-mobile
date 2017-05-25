@@ -878,7 +878,7 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
             observations.add(new String[]{"DIABETES MEDICATIONS", diabetesTreatmentInitiationString});
         }
 
-        observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(diabetesFollowupNewPrescribedMedicationDetail)});
+        observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(diabetesFollowupNewPrescribedMedicationDetail).trim()});
         observations.add(new String[]{"METFORMIN DOSE", App.get(diabetesFollowupDosageStrengthofMetformin)});
         observations.add(new String[]{"INSULIN N DOSAGE", App.get(diabetesFollowupDosageInsulinN)});
         observations.add(new String[]{"INSULIN R DOSAGE", App.get(diabetesFollowupDosageInsulinR)});

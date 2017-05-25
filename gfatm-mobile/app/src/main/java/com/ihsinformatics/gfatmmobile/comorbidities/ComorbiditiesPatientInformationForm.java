@@ -365,6 +365,40 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
             error = true;
         }*/
 
+        if (landmark.getEditText().getText().toString().length() > 0 && landmark.getEditText().getText().toString().trim().isEmpty()) {
+            landmark.getEditText().setError(getString(R.string.comorbidities_patient_information_father_name_error));
+            landmark.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (address2.getVisibility() == View.VISIBLE && App.get(address2).trim().isEmpty()) {
+            address2.getEditText().setError(getString(R.string.empty_field));
+            address2.getEditText().requestFocus();
+            error = true;
+        }
+        else if (address2.getVisibility() == View.VISIBLE && address2.getEditText().getText().toString().length() > 0 && address2.getEditText().getText().toString().trim().isEmpty()) {
+            address2.getEditText().setError(getString(R.string.comorbidities_patient_information_father_name_error));
+            address2.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (address1.getVisibility() == View.VISIBLE && App.get(address2).trim().isEmpty()) {
+            address1.getEditText().setError(getString(R.string.empty_field));
+            address1.getEditText().requestFocus();
+            error = true;
+        }
+        if (address1.getVisibility() == View.VISIBLE && address1.getEditText().getText().toString().length() > 0 && address1.getEditText().getText().toString().trim().isEmpty()) {
+            address1.getEditText().setError(getString(R.string.comorbidities_patient_information_father_name_error));
+            address1.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (husbandName.getVisibility() == View.VISIBLE && husbandName.getEditText().getText().toString().length() > 0 && husbandName.getEditText().getText().toString().trim().isEmpty()) {
+            husbandName.getEditText().setError(getString(R.string.comorbidities_patient_information_father_name_error));
+            husbandName.getEditText().requestFocus();
+            error = true;
+        }
+
         if (otherNicOwner.getVisibility() == View.VISIBLE && App.get(otherNicOwner).trim().isEmpty()) {
             gotoPage(1);
             otherNicOwner.getEditText().setError(getString(R.string.empty_field));
@@ -378,6 +412,28 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
             specifyOther.getEditText().requestFocus();
             error = true;
         }*/
+
+        if (husbandName.getVisibility() == View.VISIBLE && husbandName.getEditText().getText().toString().length() > 0 && husbandName.getEditText().getText().toString().trim().isEmpty()) {
+            husbandName.getEditText().setError(getString(R.string.comorbidities_patient_information_father_name_error));
+            husbandName.getEditText().requestFocus();
+            error = true;
+        }
+        else if (husbandName.getVisibility() == View.VISIBLE && App.get(husbandName).length() == 1) {
+            husbandName.getEditText().setError(getString(R.string.fast_husband_name_cannot_be_less_than_2_characters));
+            husbandName.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (fatherName.getEditText().getText().toString().length() > 0 && fatherName.getEditText().getText().toString().trim().isEmpty()) {
+            fatherName.getEditText().setError(getString(R.string.comorbidities_patient_information_father_name_error));
+            fatherName.getEditText().requestFocus();
+            error = true;
+        }
+        else if (fatherName.getVisibility() == View.VISIBLE && App.get(fatherName).length() == 1) {
+            fatherName.getEditText().setError(getString(R.string.fast_father_name_cannot_be_less_than_2_characters));
+            fatherName.getEditText().requestFocus();
+            error = true;
+        }
 
         if (gpClinicCode.getVisibility() == View.VISIBLE && App.get(gpClinicCode).isEmpty()) {
             gotoPage(1);

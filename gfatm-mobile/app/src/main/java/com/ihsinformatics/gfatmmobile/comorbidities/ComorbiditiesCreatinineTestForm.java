@@ -800,9 +800,9 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         creatinineTestOrderDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         creatinineTestResultDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
-        fourthDateCalendar.set(Calendar.YEAR, secondDateCalendar.get(Calendar.YEAR));
-        fourthDateCalendar.set(Calendar.MONTH, secondDateCalendar.get(Calendar.MONTH));
-        fourthDateCalendar.set(Calendar.DAY_OF_MONTH, secondDateCalendar.get(Calendar.DAY_OF_MONTH));
+        fourthDateCalendar.set(Calendar.YEAR, formDateCalendar.get(Calendar.YEAR));
+        fourthDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
+        fourthDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
         fourthDateCalendar.add(Calendar.MONTH, 2);
         fourthDateCalendar.add(Calendar.DAY_OF_MONTH, 20);
         nextCreatinineTestDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", fourthDateCalendar).toString());
@@ -867,7 +867,7 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
         if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
             testOrderCreatinine.setVisibility(View.VISIBLE);
             creatinineFollowupMonth.setVisibility(View.VISIBLE);
-            creatinineTestOrderDate.setVisibility(View.VISIBLE);
+            creatinineTestOrderDate.setVisibility(View.GONE);
 
             testResultCreatinine.setVisibility(View.GONE);
             creatinineTestResultDate.setVisibility(View.GONE);
@@ -879,7 +879,7 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
             creatinineTestOrderDate.setVisibility(View.GONE);
 
             testResultCreatinine.setVisibility(View.VISIBLE);
-            creatinineTestResultDate.setVisibility(View.VISIBLE);
+            creatinineTestResultDate.setVisibility(View.GONE);
             creatinineResult.setVisibility(View.VISIBLE);
             nextCreatinineTestDate.setVisibility(View.VISIBLE);
         }

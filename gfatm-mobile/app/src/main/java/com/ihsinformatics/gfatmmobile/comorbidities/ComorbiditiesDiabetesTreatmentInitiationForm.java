@@ -406,7 +406,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
             error = true;
         }
 
-        if (App.get(diabetesTreatmentDetail).isEmpty()) {
+        if (App.get(diabetesTreatmentDetail).trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(1);
             else
@@ -687,7 +687,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
         }
         observations.add(new String[]{"DIABETES MEDICATIONS", diabetesTreatmentInitiationString});
 
-        observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(diabetesTreatmentDetail)});
+        observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(diabetesTreatmentDetail).trim()});
         observations.add(new String[]{"METFORMIN DOSE", App.get(diabetesTreatmentInitiationMetformin)});
         observations.add(new String[]{"INSULIN N DOSAGE", App.get(diabetesTreatmentInitiationInsulinN)});
         observations.add(new String[]{"INSULIN R DOSAGE", App.get(diabetesTreatmentInitiationInsulinR)});
