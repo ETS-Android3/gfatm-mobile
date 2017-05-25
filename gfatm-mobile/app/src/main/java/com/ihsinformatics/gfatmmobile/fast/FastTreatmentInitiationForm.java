@@ -170,7 +170,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         cnicLinearLayout.addView(cnic3);
         cnicOwner = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_cnic), getResources().getStringArray(R.array.fast_whose_nic_is_this_list), getResources().getString(R.string.fast_self), App.VERTICAL);
         cnicOwnerOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        tbRegisterationNumber = new TitledEditText(context, null, getResources().getString(R.string.fast_tb_registeration_no), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        tbRegisterationNumber = new TitledEditText(context, null, getResources().getString(R.string.fast_tb_registeration_no), "", "", 11, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         diagonosisType = new TitledCheckBoxes(context, null, getResources().getString(R.string.fast_type_of_diagnosis), getResources().getStringArray(R.array.fast_diagonosis_type_list), new Boolean[]{true, false}, App.VERTICAL, App.VERTICAL, false);
         tbType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_what_type_of_tb), getResources().getStringArray(R.array.fast_tb_type_list), getResources().getString(R.string.fast_pulmonary), App.VERTICAL, App.VERTICAL);
         extraPulmonarySite = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_site_of_extra_pulmonary), getResources().getStringArray(R.array.fast_extra_pulmonary_site_list), getResources().getString(R.string.fast_lymph_node), App.VERTICAL);

@@ -246,7 +246,7 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
                 gotoPage(0);
             else
                 gotoPage(0);
-            cartridgeId.getEditText().setError(getString(R.string.invalid_value));
+            cartridgeId.getEditText().setError(getString(R.string.fast_cartridge_id_error));
             cartridgeId.getEditText().requestFocus();
             error = true;
         }
@@ -335,8 +335,8 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
 
 
         if (gxpResult.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"GENEXPERT MTB/RIF RESULT", App.get(gxpResult).equals(getResources().getString(R.string.fast_mtb_detected)) ? "MYCOBACTERIUM TUBERCULOSIS DETECTED WITH RIFAMPIN RESISTANCE" :
-                    (App.get(gxpResult).equals(getResources().getString(R.string.fast_mtb_not_detected)) ? "MYCOBACTERIUM TUBERCULOSIS DETECTED WITHOUT RIFAMPIN RESISTANCE" :
+            observations.add(new String[]{"GENEXPERT MTB/RIF RESULT", App.get(gxpResult).equals(getResources().getString(R.string.fast_mtb_detected)) ? "DETECTED" :
+                    (App.get(gxpResult).equals(getResources().getString(R.string.fast_mtb_not_detected)) ? "NOT DETECTED" :
                             (App.get(gxpResult).equals(getResources().getString(R.string.fast_error)) ? "ERROR" :
                                     (App.get(gxpResult).equals(getResources().getString(R.string.fast_invalid)) ? "INVALID" : "NO RESULT")))});
 
@@ -493,8 +493,8 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
                 cartridgeId.getEditText().setText(obs[0][1]);
                 cartridgeId.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("GENEXPERT MTB/RIF RESULT")) {
-                String value = obs[0][1].equals("MYCOBACTERIUM TUBERCULOSIS DETECTED WITH RIFAMPIN RESISTANCE") ? getResources().getString(R.string.fast_mtb_detected) :
-                        (obs[0][1].equals("MYCOBACTERIUM TUBERCULOSIS DETECTED WITHOUT RIFAMPIN RESISTANCE") ? getResources().getString(R.string.fast_mtb_not_detected) :
+                String value = obs[0][1].equals("DETECTED") ? getResources().getString(R.string.fast_mtb_detected) :
+                        (obs[0][1].equals("NOT DETECTED") ? getResources().getString(R.string.fast_mtb_not_detected) :
                                 (obs[0][1].equals("NEGATIVE") ? getResources().getString(R.string.fast_error) :
                                         (obs[0][1].equals("INVALID") ? getResources().getString(R.string.fast_invalid) : getResources().getString(R.string.fast_no_result))));
 

@@ -124,7 +124,8 @@ public class FastContactRegistryForm extends AbstractFormActivity implements Rad
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         contacts = new TitledEditText(context, null, getResources().getString(R.string.fast_how_many_people_sleep_in_your_home), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
-        contacts.getEditText().setEnabled(false);
+        contacts.getEditText().setKeyListener(null);
+        contacts.getEditText().setFocusable(false);
         adultContacts = new TitledEditText(context, null, getResources().getString(R.string.fast_total_number_of_adult_contacts), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         childhoodContacts = new TitledEditText(context, null, getResources().getString(R.string.fast_total_number_of_childhood_contacts), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
 
@@ -256,7 +257,7 @@ public class FastContactRegistryForm extends AbstractFormActivity implements Rad
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
 
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
@@ -264,7 +265,7 @@ public class FastContactRegistryForm extends AbstractFormActivity implements Rad
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
             } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);

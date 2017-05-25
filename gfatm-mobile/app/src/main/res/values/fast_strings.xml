@@ -441,6 +441,7 @@
     <string name="fast_father_name_cannot_be_less_than_2_characters">Father name cannot be less than 2 characters</string>
     <string name="fast_scan_qr_code">Scan QR code</string>
     <string name="fast_invalid_name">Invalid Name</string>
+    <string name="fast_name_less_than_2_characters">This name cannot be less than 2 characters</string>
     <string name="fast_test_id_error">Invalid test id</string>
     <string name="fast_invalid_father_name">Invalid father name</string>
     <string name="fast_invalid_husband_name">Invalid husband name</string>
@@ -451,6 +452,10 @@
     <string name="fast_gastric_aspirate">Gastric Aspirate</string>
     <string name="fast_past_xray">Has the patient had an X-Ray in the past 6 months at an X-Ray Van?</string>
     <string name="fast_pregnancy_history">Is the patient pregnant?</string>
+    <string name="fast_cartridge_id_error">Please enter 10 digits Cartridge ID</string>
+    <string name="fast_enrs_number_error">Invalid ENRS number</string>
+
+
 
     <string-array name="fast_locations">
         <item>@string/fast_community_title</item>
@@ -721,7 +726,6 @@
         <item>@string/fast_infiltration</item>
         <item>@string/fast_consolidation</item>
         <item>@string/fast_effusion</item>
-        <item>@string/fast_normal</item>
         <item>@string/fast_cavitation</item>
         <item>@string/fast_miliary_tb</item>
         <item>@string/fast_others</item>
