@@ -10,14 +10,17 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.text.format.DateFormat;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -29,7 +32,9 @@ import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
+import com.ihsinformatics.gfatmmobile.custom.MyLinearLayout;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
+import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
@@ -70,8 +75,11 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
     TitledSpinner cnicOwner;
     TitledEditText otherCnicOwner;
     TitledRadioGroup addressProvided;
+    TitledSpinner province;
+    MyLinearLayout addressLayout;
+    MyTextView townTextView;
     TitledEditText addressHouse;
-    TitledEditText addressStreet;
+    AutoCompleteTextView addressStreet;
     TitledSpinner district;
     TitledSpinner city;
     TitledRadioGroup addressType;
@@ -162,9 +170,16 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         cnicOwner = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_whose_nic_is_this), getResources().getStringArray(R.array.fast_whose_nic_is_this_list), getResources().getString(R.string.fast_self), App.VERTICAL);
         otherCnicOwner = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         addressProvided = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_provided_their_address), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
-        addressHouse = new TitledEditText(context, null, getResources().getString(R.string.fast_address_1), "", "", 10, RegexUtil.ADDRESS_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        addressStreet = new TitledEditText(context, null, getResources().getString(R.string.fast_address_2), "", "", 50, RegexUtil.ADDRESS_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        district = new TitledSpinner(context, "", getResources().getString(R.string.pet_district), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
+        addressHouse = new TitledEditText(context, null, getResources().getString(R.string.fast_address_1), "", "", 50, RegexUtil.ADDRESS_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        addressLayout = new MyLinearLayout(context, null, App.VERTICAL);
+        townTextView = new MyTextView(context, getResources().getString(R.string.fast_address_2));
+        addressStreet = new AutoCompleteTextView(context);
+        InputFilter[] fArray = new InputFilter[1];
+        fArray[0] = new InputFilter.LengthFilter(20);
+        addressStreet.setFilters(fArray);
+        province = new TitledSpinner(context, "", getResources().getString(R.string.province), getResources().getStringArray(R.array.provinces), App.getProvince(), App.VERTICAL);
+        addressLayout.addView(townTextView);
+        addressLayout.addView(addressStreet);        district = new TitledSpinner(context, "", getResources().getString(R.string.pet_district), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
         city = new TitledSpinner(context, "", getResources().getString(R.string.pet_city), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
         addressType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_type_of_address_is_this), getResources().getStringArray(R.array.fast_type_of_address_list), getResources().getString(R.string.fast_perminant), App.VERTICAL, App.VERTICAL);
         nearestLandmark = new TitledEditText(context, null, getResources().getString(R.string.fast_nearest_landmark), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
@@ -197,20 +212,21 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), cnic1.getEditText(), cnic2.getEditText(), cnic3.getEditText(), cnicOwner.getSpinner(), otherCnicOwner.getEditText(),
-                addressProvided.getRadioGroup(), addressHouse.getEditText(), addressStreet.getEditText(), district.getSpinner(),
+                addressProvided.getRadioGroup(), addressHouse.getEditText(), district.getSpinner(),
                 city.getSpinner(), addressType.getRadioGroup(), nearestLandmark.getEditText(), contactPermission.getRadioGroup()
                 , mobile1.getEditText(), mobile2.getEditText(), secondaryMobile1.getEditText(), secondaryMobile2.getEditText(), landline1.getEditText(),
                 landline2.getEditText(), secondaryLandline1.getEditText(), secondaryLandline2.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, cnicLinearLayout, cnicOwner, otherCnicOwner, addressProvided, addressHouse, addressStreet, district,
+                {{formDate, cnicLinearLayout, cnicOwner, otherCnicOwner, addressProvided, addressHouse, addressLayout, province, district,
                         city, addressType, nearestLandmark, contactPermission, mobileLinearLayout, secondaryMobileLinearLayout,
                         landlineLinearLayout, secondaryLandlineLinearLayout}};
 
 
         formDate.getButton().setOnClickListener(this);
         cnicOwner.getSpinner().setOnItemSelectedListener(this);
+        province.getSpinner().setOnItemSelectedListener(this);
         addressProvided.getRadioGroup().setOnCheckedChangeListener(this);
         district.getSpinner().setOnItemSelectedListener(this);
 
@@ -268,7 +284,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             error = true;
         }
 
-        if (addressStreet.getEditText().getText().toString().length() > 0 && addressStreet.getEditText().getText().toString().trim().isEmpty()) {
+     /*   if (addressStreet.getEditText().getText().toString().length() > 0 && addressStreet.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -276,7 +292,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             addressStreet.getEditText().setError(getString(R.string.invalid_value));
             addressStreet.getEditText().requestFocus();
             error = true;
-        }
+        }*/
 
         if (nearestLandmark.getEditText().getText().toString().length() > 0 && nearestLandmark.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
@@ -793,8 +809,16 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         if (addressHouse.getVisibility() == View.VISIBLE && !App.get(addressHouse).isEmpty())
         observations.add(new String[]{"ADDRESS (TEXT)", App.get(addressHouse)});
 
-        if (addressStreet.getVisibility() == View.VISIBLE && !App.get(addressStreet).isEmpty())
-        observations.add(new String[]{"EXTENDED ADDRESS (TEXT)", App.get(addressStreet)});
+     /*   if (addressStreet.getVisibility() == View.VISIBLE && !App.get(addressStreet).isEmpty())
+        observations.add(new String[]{"EXTENDED ADDRESS (TEXT)", App.get(addressStreet)});*/
+
+        if(province.getVisibility()==View.VISIBLE){
+            observations.add(new String[]{"PROVINCE", App.get(province)});
+        }
+
+        if(addressStreet.getVisibility()==View.VISIBLE){
+            observations.add(new String[]{"EXTENDED ADDRESS (TEXT)", App.get(addressStreet)});
+        }
 
         if (district.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"DISTRICT",App.get(district)});
@@ -829,7 +853,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
                     }
 
                     if (!(App.get(addressHouse).equals("") && App.get(addressStreet).equals("") && App.get(district).equals("") && App.get(nearestLandmark).equals(""))) {
-                        result = serverService.savePersonAddress(App.get(addressHouse), App.get(addressStreet), App.get(city), App.get(district), App.getProvince(), App.getCountry(), App.getLongitude(), App.getLatitude(), App.get(nearestLandmark), encounterId);
+                        result = serverService.savePersonAddress(App.get(addressHouse), App.get(addressStreet), App.get(city), App.get(district), App.get(province), App.getCountry(), App.getLongitude(), App.getLatitude(), App.get(nearestLandmark), encounterId);
                         if (!result.equals("SUCCESS"))
                             return result;
                     }
@@ -872,6 +896,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
                 loading.dismiss();
 
                 if (result.equals("SUCCESS")) {
+                    serverService.addTown(addressStreet.getText().toString());
                     MainActivity.backToMainMenu();
                     try {
                         InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
@@ -1051,9 +1076,16 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
                 addressHouse.setVisibility(View.VISIBLE);
             }
 
-            else if (obs[0][0].equals("EXTENDED ADDRESS (TEXT)")) {
+         /*   else if (obs[0][0].equals("EXTENDED ADDRESS (TEXT)")) {
                 addressStreet.getEditText().setText(obs[0][1]);
                 addressStreet.setVisibility(View.VISIBLE);
+            }*/
+
+            else if (obs[0][0].equals("PROVINCE")) {
+                province.getSpinner().selectValue(obs[0][1]);
+            }
+            else if (obs[0][0].equals("EXTENDED ADDRESS (TEXT)")) {
+                addressStreet.setText(obs[0][1]);
             }
 
             else if (obs[0][0].equals("DISTRICT")) {
@@ -1132,9 +1164,22 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
 
     @Override
     public void resetViews() {
+        Object[][] towns = serverService.getAllTowns();
+        String[] townList = new String[towns.length];
+
+        for (int i = 0; i < towns.length; i++) {
+            townList[i] = String.valueOf(towns[i][1]);
+        }
+
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, townList);
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        addressStreet.setAdapter(spinnerArrayAdapter);
+
+
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         otherCnicOwner.setVisibility(View.GONE);
+       // townTextView.setVisibility(View.GONE);
 
         String[] districts = serverService.getDistrictList(App.getProvince());
         district.getSpinner().setSpinnerData(districts);
@@ -1173,7 +1218,38 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         } else if (spinner == district.getSpinner()) {
 
             String[] cities = serverService.getCityList(App.get(district));
-            city.getSpinner().setSpinnerData(cities);
+            city.getSpinner().setAdapter(null);
+
+            ArrayAdapter<String> spinnerArrayAdapter = null;
+            if (App.isLanguageRTL()) {
+                spinnerArrayAdapter = new ArrayAdapter<String>(context, R.layout.custom_rtl_spinner, cities);
+                city.getSpinner().setAdapter(spinnerArrayAdapter);
+                spinnerArrayAdapter.setDropDownViewResource(R.layout.custom_rtl_spinner);
+                city.getSpinner().setGravity(Gravity.RIGHT);
+            } else {
+                spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, cities);
+                city.getSpinner().setAdapter(spinnerArrayAdapter);
+                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                city.getSpinner().setGravity(Gravity.LEFT);
+            }
+        }else if (spinner == province.getSpinner()) {
+
+            String s = App.get(province);
+            String[] cities = serverService.getDistrictList(App.get(province));
+            district.getSpinner().setAdapter(null);
+
+            ArrayAdapter<String> spinnerArrayAdapter = null;
+            if (App.isLanguageRTL()) {
+                spinnerArrayAdapter = new ArrayAdapter<String>(context, R.layout.custom_rtl_spinner, cities);
+                district.getSpinner().setAdapter(spinnerArrayAdapter);
+                spinnerArrayAdapter.setDropDownViewResource(R.layout.custom_rtl_spinner);
+                district.getSpinner().setGravity(Gravity.RIGHT);
+            } else {
+                spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, cities);
+                district.getSpinner().setAdapter(spinnerArrayAdapter);
+                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                district.getSpinner().setGravity(Gravity.LEFT);
+            }
         }
     }
 
@@ -1184,9 +1260,11 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             if (addressProvided.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
                 addressHouse.setVisibility(View.VISIBLE);
                 addressStreet.setVisibility(View.VISIBLE);
+                townTextView.setVisibility(View.VISIBLE);
             } else {
                 addressHouse.setVisibility(View.GONE);
                 addressStreet.setVisibility(View.GONE);
+                townTextView.setVisibility(View.GONE);
             }
         }
     }
