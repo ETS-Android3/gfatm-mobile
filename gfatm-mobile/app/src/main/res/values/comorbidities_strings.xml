@@ -178,6 +178,10 @@
     <string name="comorbidities_vitals_whr_invalid">Invalid WHR. Something is wrong with Waist Circumference and Hip Circumference values combination. Please change Waist Circumference or Hip Circumference values.</string>
     <string name="comorbidities_vitals_bp_systolic_diastolic_range">Range 0&#8211;300</string>
     <string name="comorbidities_vitals_bp_systolic_diastolic_limit">The value should be in the range of 0&#8211;300</string>
+    <string name="comorbidities_vitals_bp_systolic_range1">Range 0&#8211;250</string>
+    <string name="comorbidities_vitals_bp_systolic_limit1">The value should be in the range of 0&#8211;250</string>
+    <string name="comorbidities_vitals_bp_diastolic_range1">Range 0&#8211;150</string>
+    <string name="comorbidities_vitals_bp_diastolic_limit1">The value should be in the range of 0&#8211;150</string>
 
     <string name="comorbidities_testorder_testresult_form_type">Form Type: </string>
     <string name="comorbidities_testorder_testresult_form_type_testorder">Test Order</string>
@@ -764,7 +768,7 @@
     <string name="comorbidities_eye_screening_diabetic_macular_edema">Diabetic Macular Edema (DME) present:</string>
     <string name="comorbidities_eye_screening_clinical_dme">Clinically Significant DME:</string>
     <string name="comorbidities_eye_screening_other">Other eye screenining details:</string>
-    <string name="comorbidities_eye_screening_visionloss">Other eye screenining details:</string>
+    <string name="comorbidities_eye_screening_visionloss">Any severe detriment to vision loss noted:</string>
     <string name="comorbidities_eye_screening_recommendations">Recommendations:</string>
 
     <string name="comorbidities_eye_screening_eye_status_options_right_eye">Right eye not examined due to deformity or prosthetic eye</string>
@@ -1053,6 +1057,7 @@
     <string name="comorbidities_patient_information_gp_clinic_code">Specify GP Clinic Code:</string>
     <string name="comorbidities_patient_information_location_other">Specify, if Other:</string>
     <string name="comorbidities_patient_information_father_name">Father\'s Name:</string>
+    <string name="comorbidities_patient_information_father_name_error">You have entered spaces only. Invalid value.</string>
     <string name="comorbidities_patient_information_husband_name">Husband\'s Name:</string>
     <string name="comorbidities_patient_information_nic">National ID card number?</string>
     <string name="comorbidities_patient_information_nic_format_hint">#####-#######-#</string>
