@@ -373,7 +373,9 @@
     <!-- Errors String -->
     <string name="user_not_found">No record of username found in local DB.</string>
     <string name="version_mismatch">Please update the app from playstore to continue.</string>
-    <string name="age_invalid">Age can\'t exceed 120</string>
+    <string name="age_invalid_year">Age can\'t exceed 119 Years</string>
+    <string name="age_invalid_month">Age can\'t exceed 1440 Months</string>
+    <string name="age_invalid_day">Age can\'t exceed 43435 Days</string>
     <string name="provider_not_found">No provider associated with the user. Please contact Admin to create your user provider.</string>
     <string name="patient_not_select">SELECT PATIENT TO CONTINUE.</string>
     <string name="location_not_select">SELECT LOCATION TO CONTINUE.</string>
