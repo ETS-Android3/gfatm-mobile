@@ -259,6 +259,12 @@ public class ComorbiditiesDiabetesEyeScreeningForm extends AbstractFormActivity 
             }
         }
 
+        if (diabetesEyeScreeningOther.getEditText().getText().toString().length() > 0 && diabetesEyeScreeningOther.getEditText().getText().toString().trim().isEmpty()) {
+            diabetesEyeScreeningOther.getEditText().setError(getString(R.string.comorbidities_patient_information_father_name_error));
+            diabetesEyeScreeningOther.getEditText().requestFocus();
+            error = true;
+        }
+
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
@@ -372,7 +378,7 @@ public class ComorbiditiesDiabetesEyeScreeningForm extends AbstractFormActivity 
             observations.add(new String[]{"VISION LOSS", App.get(diabetesEyeScreeningVisionloss).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         }
 
-        observations.add(new String[]{"OTHER FINDINGS", App.get(diabetesEyeScreeningOther)});
+        observations.add(new String[]{"OTHER FINDINGS", App.get(diabetesEyeScreeningOther).trim()});
         observations.add(new String[]{"DIABETES RECOMMENDATAION", App.get(diabetesEyeScreeningRecommendations).equals(getResources().getString(R.string.comorbidities_eye_screening_recommendations_options_referral)) ? "PATIENT REFERRED" : "DIABETES MANAGEMENT"});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {

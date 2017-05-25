@@ -144,8 +144,8 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
         vitalsHipCircumference = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_hip_circumference), "", getResources().getString(R.string.comorbidities_vitals_waist_hip_whr_range), 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         vitalsWaistHipRatio = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_whr), "", getResources().getString(R.string.comorbidities_vitals_waist_hip_whr_range), 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         vitalsWaistHipRatio.getEditText().setFocusable(false);
-        vitalsBloodPressureSystolic = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_bp_systolic), "", getResources().getString(R.string.comorbidities_vitals_bp_systolic_diastolic_range), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        vitalsBloodPressureDiastolic = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_bp_diastolic), "", getResources().getString(R.string.comorbidities_vitals_bp_systolic_diastolic_range), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        vitalsBloodPressureSystolic = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_bp_systolic), "", getResources().getString(R.string.comorbidities_vitals_bp_systolic_range1), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        vitalsBloodPressureDiastolic = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_bp_diastolic), "", getResources().getString(R.string.comorbidities_vitals_bp_diastolic_range1), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), vitalsMonthOfVisit.getEditText(), vitalsWeight.getEditText(), vitalsHeight.getEditText(), vitalsBodyMassIndex.getEditText(), vitalsWaistCircumference.getEditText(),
@@ -477,8 +477,8 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
                 try {
                     if (vitalsBloodPressureSystolic.getEditText().getText().length() > 0) {
                         int num = Integer.parseInt(vitalsBloodPressureSystolic.getEditText().getText().toString());
-                        if (num < 0 || num > 300) {
-                            vitalsBloodPressureSystolic.getEditText().setError(getString(R.string.comorbidities_vitals_bp_systolic_diastolic_limit));
+                        if (num < 0 || num > 250) {
+                            vitalsBloodPressureSystolic.getEditText().setError(getString(R.string.comorbidities_vitals_bp_systolic_limit1));
                         }
                     }
                 } catch (NumberFormatException nfe) {
@@ -504,8 +504,8 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
                 try {
                     if (vitalsBloodPressureDiastolic.getEditText().getText().length() > 0) {
                         int num = Integer.parseInt(vitalsBloodPressureDiastolic.getEditText().getText().toString());
-                        if (num < 0 || num > 300) {
-                            vitalsBloodPressureDiastolic.getEditText().setError(getString(R.string.comorbidities_vitals_bp_systolic_diastolic_limit));
+                        if (num < 0 || num > 150) {
+                            vitalsBloodPressureDiastolic.getEditText().setError(getString(R.string.comorbidities_vitals_bp_diastolic_limit1));
                         }
                     }
                 } catch (NumberFormatException nfe) {
@@ -562,9 +562,9 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
             vitalsBloodPressureDiastolic.getEditText().setError(getString(R.string.empty_field));
             vitalsBloodPressureDiastolic.getEditText().requestFocus();
             error = true;
-        } else if (!App.get(vitalsBloodPressureDiastolic).isEmpty() && Integer.parseInt(App.get(vitalsBloodPressureDiastolic)) > 300) {
+        } else if (!App.get(vitalsBloodPressureDiastolic).isEmpty() && Integer.parseInt(App.get(vitalsBloodPressureDiastolic)) > 150) {
             gotoFirstPage();
-            vitalsBloodPressureDiastolic.getEditText().setError(getString(R.string.comorbidities_vitals_bp_systolic_diastolic_limit));
+            vitalsBloodPressureDiastolic.getEditText().setError(getString(R.string.comorbidities_vitals_bp_diastolic_limit1));
             vitalsBloodPressureDiastolic.getEditText().requestFocus();
             error = true;
         }
@@ -574,9 +574,9 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
             vitalsBloodPressureSystolic.getEditText().setError(getString(R.string.empty_field));
             vitalsBloodPressureSystolic.getEditText().requestFocus();
             error = true;
-        } else if (!App.get(vitalsBloodPressureSystolic).isEmpty() && Integer.parseInt(App.get(vitalsBloodPressureSystolic)) > 300) {
+        } else if (!App.get(vitalsBloodPressureSystolic).isEmpty() && Integer.parseInt(App.get(vitalsBloodPressureSystolic)) > 250) {
             gotoFirstPage();
-            vitalsBloodPressureSystolic.getEditText().setError(getString(R.string.comorbidities_vitals_bp_systolic_diastolic_limit));
+            vitalsBloodPressureSystolic.getEditText().setError(getString(R.string.comorbidities_vitals_bp_systolic_limit1));
             vitalsBloodPressureSystolic.getEditText().requestFocus();
             error = true;
         }

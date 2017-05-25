@@ -292,6 +292,12 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
 
         Boolean error = false;
 
+        if (diabetesFootScreeningDetailedClinicalNotes.getEditText().getText().toString().length() > 0 && diabetesFootScreeningDetailedClinicalNotes.getEditText().getText().toString().trim().isEmpty()) {
+            diabetesFootScreeningDetailedClinicalNotes.getEditText().setError(getString(R.string.comorbidities_patient_information_father_name_error));
+            diabetesFootScreeningDetailedClinicalNotes.getEditText().requestFocus();
+            error = true;
+        }
+
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
@@ -438,7 +444,7 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
             observations.add(new String[]{"ULCER HISTORY", App.get(diabetesFootScreeningPreviousUlcer).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         }
 
-        observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(diabetesFootScreeningDetailedClinicalNotes)});
+        observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(diabetesFootScreeningDetailedClinicalNotes).trim()});
         observations.add(new String[]{"DIABETES RECOMMENDATAION", App.get(diabetesFootScreeningRecommendations).equals(getResources().getString(R.string.comorbidities_foot_screening_recommendations_options_referral)) ? "PATIENT REFERRED" : "DIABETES MANAGEMENT"});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
