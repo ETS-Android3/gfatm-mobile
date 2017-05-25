@@ -157,8 +157,14 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                         dob.setText(DateFormat.format("dd-MMM-yyyy", dateOfBirthCalendar).toString());
                     }
 
-                    if (Integer.parseInt(age.getText().toString()) >= 120) {
-                        age.setError(getResources().getString(R.string.age_invalid));
+                    if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.years)) && Integer.parseInt(age.getText().toString()) >= 120) {
+                        age.setError(getResources().getString(R.string.age_invalid_year));
+                        age.requestFocus();
+                    }else if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.months)) && Integer.parseInt(age.getText().toString()) >= 1440) {
+                        age.setError(getResources().getString(R.string.age_invalid_month));
+                        age.requestFocus();
+                    }else if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.days)) && Integer.parseInt(age.getText().toString()) >= 43435) {
+                        age.setError(getResources().getString(R.string.age_invalid_day));
                         age.requestFocus();
                     }
                     else
@@ -729,8 +735,16 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
             dob.setError(getString(R.string.empty_field));
             error = true;
         } else {
-            if (Integer.parseInt(age.getText().toString()) >= 120) {
-                age.setError(getResources().getString(R.string.age_invalid));
+            if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.years)) && Integer.parseInt(age.getText().toString()) >= 120) {
+                age.setError(getResources().getString(R.string.age_invalid_year));
+                age.requestFocus();
+                error = true;
+            }else if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.months)) && Integer.parseInt(age.getText().toString()) >= 1440) {
+                age.setError(getResources().getString(R.string.age_invalid_month));
+                age.requestFocus();
+                error = true;
+            }else if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.days)) && Integer.parseInt(age.getText().toString()) >= 43435) {
+                age.setError(getResources().getString(R.string.age_invalid_day));
                 age.requestFocus();
                 error = true;
             }
