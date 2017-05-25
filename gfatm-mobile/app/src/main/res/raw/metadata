@@ -4504,6 +4504,7 @@ INSERT OR IGNORE INTO encounter_type VALUES ('PET-Adverse Events','Add PET Forms
 INSERT OR IGNORE INTO encounter_type VALUES ('PET-Incentive Disbursement','Add PET Forms','View PET Forms','74b4901a-6548-41c7-aff5-94c900fe9151');
 INSERT OR IGNORE INTO encounter_type VALUES ('PET-End of Follow-up','Add PET Forms','View PET Forms','811f4928-c55c-4034-a978-16f25351ea26');
 INSERT OR IGNORE INTO encounter_type VALUES ('PET-Socioeconomic Data','Add PET Forms','View PET Forms','906883cd-c0cb-423f-93bb-e9437d5e595e');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-AKUADS','Add PET Forms','View PET Forms','964cc088-3c77-4891-a7f0-f1224d92c3a5');
 INSERT OR IGNORE INTO encounter_type VALUES ('FAST-Screening','Add FAST Forms','View FAST Forms','5e7c8124-0018-4e5d-9156-bf6d58c720e5');
 INSERT OR IGNORE INTO encounter_type VALUES ('FAST-Prompt','Add FAST Forms','View FAST Forms','1284afd6-0928-43ee-be41-a4c259604fc4');
 INSERT OR IGNORE INTO encounter_type VALUES ('FAST-Presumptive','Add FAST Forms','View FAST Forms','a3a60738-cb1f-4c8d-ac78-91204821e0f3');
