@@ -67,6 +67,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
     TitledButton formDate;
 
     TitledSpinner patientType;
+    TitledEditText tbRegisterationNumber;
     TitledButton treatmentInitiationDate;
     TitledEditText monthTreatment;
     TitledRadioGroup patientCategory;
@@ -169,6 +170,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         formDate.setTag("formDate");
 
         patientType = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_patient_type), getResources().getStringArray(R.array.ctb_patient_type_list), getResources().getString(R.string.ctb_new), App.VERTICAL,true);
+        tbRegisterationNumber = new TitledEditText(context, null, getResources().getString(R.string.ctb_tb_registration_no), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         treatmentInitiationDate = new TitledButton(context, null, getResources().getString(R.string.ctb_treatment_initiated_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         monthTreatment = new TitledEditText(context, null, getResources().getString(R.string.ctb_month_treatment), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL,true);
 
@@ -201,7 +203,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         thirdDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
 
         views = new View[]{
-                formDate.getButton(),patientType.getSpinner(),treatmentInitiationDate.getButton(),monthTreatment.getEditText(),patientCategory.getRadioGroup(),weight.getEditText(),
+                formDate.getButton(),patientType.getSpinner(),tbRegisterationNumber.getEditText(),treatmentInitiationDate.getButton(),monthTreatment.getEditText(),patientCategory.getRadioGroup(),weight.getEditText(),
                 treatmentPlan.getRadioGroup(), intensivePhaseRegimen.getRadioGroup(),typeFixedDosePrescribedIntensive.getSpinner(),currentTabletsofRHZ.getRadioGroup(),currentTabletsofE.getRadioGroup(),
                 newTabletsofRHZ.getRadioGroup(),newTabletsofE.getRadioGroup(),adultFormulationofHRZE.getRadioGroup(), continuationPhaseRegimen.getRadioGroup(),typeFixedDosePrescribedContinuation.getSpinner(),
                 currentTabletsOfContinuationRH.getRadioGroup(), currentTabletsOfContinuationE.getRadioGroup(), newTabletsOfContinuationRH.getRadioGroup(), newTabletsOfContinuationE.getRadioGroup(),
@@ -209,7 +211,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         viewGroups = new View[][]
                 {{
                         formDate,
-                        patientType,
+                        patientType,tbRegisterationNumber,
                         treatmentInitiationDate,
                         monthTreatment,
                         patientCategory,
@@ -479,6 +481,27 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
     @Override
     public boolean validate() {
         Boolean error = false;
+        if (tbRegisterationNumber.getVisibility() == View.VISIBLE) {
+            if(App.get(tbRegisterationNumber).isEmpty() ){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                tbRegisterationNumber.getEditText().setError(getString(R.string.empty_field));
+                tbRegisterationNumber.getEditText().requestFocus();
+                error = true;
+            }
+            else if(App.get(tbRegisterationNumber).trim().length() <= 0){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                tbRegisterationNumber.getEditText().setError(getString(R.string.ctb_spaces_only));
+                tbRegisterationNumber.getEditText().requestFocus();
+                error = true;
+            }
+        }
+
         if(App.get(monthTreatment).isEmpty()){
             if (App.isLanguageRTL())
                 gotoPage(0);
@@ -592,6 +615,9 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                                     (App.get(patientType).equals(getResources().getString(R.string.ctb_treatment_after_followup)) ? "LOST TO FOLLOW-UP" :
                                             (App.get(patientType).equals(getResources().getString(R.string.ctb_treatment_failure)) ? "TUBERCULOSIS TREATMENT FAILURE" : "OTHER PATIENT TYPE"))))});
 
+        if(App.hasKeyListener(tbRegisterationNumber)) {
+            observations.add(new String[]{"TB REGISTRATION NUMBER", App.get(tbRegisterationNumber)});
+        }
         observations.add(new String[]{"TREATMENT START DATE", App.getSqlDateTime(secondDateCalendar)});
         observations.add(new String[]{"FOLLOW-UP MONTH", App.get(monthTreatment)});
 
@@ -811,6 +837,9 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
 
                 patientType.getSpinner().selectValue(value);
                 patientType.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("TB REGISTRATION NUMBER")) {
+                tbRegisterationNumber.getEditText().setText(obs[0][1]);
+                tbRegisterationNumber.setVisibility(View.VISIBLE);
             }else if (obs[0][0].equals("TREATMENT START DATE")) {
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
@@ -1246,7 +1275,11 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         adultFormulationOfContinuationRH.setVisibility(View.GONE);
         adultFormulationOfContinuationRHE.setVisibility(View.GONE);
 
-
+        String tbRegistrationNumber = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "TB REGISTRATION NUMBER");
+        if(tbRegistrationNumber!=null){
+            tbRegisterationNumber.getEditText().setKeyListener(null);
+            tbRegisterationNumber.getEditText().setText(tbRegistrationNumber);
+        }
         String patientTypeString = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "TB PATIENT TYPE");
 
         if(patientTypeString!=null) {
