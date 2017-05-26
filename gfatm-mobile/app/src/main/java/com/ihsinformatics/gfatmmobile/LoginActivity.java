@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.util.ServerService;
@@ -60,7 +61,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         username.setText(App.getUsername());
 
-        loading = new ProgressDialog(this);
+        loading = new ProgressDialog(this, ProgressDialog.THEME_HOLO_LIGHT);
     }
 
 
@@ -107,7 +108,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            loading.setInverseBackgroundForced(true);
+                            /*loading.setInverseBackgroundForced(true);*/
                             loading.setIndeterminate(true);
                             loading.setCancelable(false);
                             loading.setMessage(getResources().getString(R.string.signing_in));
