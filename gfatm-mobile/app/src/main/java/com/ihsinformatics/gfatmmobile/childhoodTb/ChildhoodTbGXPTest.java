@@ -52,7 +52,11 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
 
     Context context;
     TitledButton formDate;
-    TitledEditText cartridgeId;
+    TitledRadioGroup sampleAccepted;
+    TitledSpinner whySampleRejected;
+    TitledEditText otherReasonForRejection;
+    TitledEditText testId;
+
     TitledButton resultRecieveDate;
     TitledSpinner geneXpertMTBResult;
     TitledRadioGroup mtbBurden;
@@ -134,7 +138,10 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        cartridgeId = new TitledEditText(context,null,getResources().getString(R.string.ctb_cartridge_id),"","",10,RegexUtil.CARTRIDGE_ID_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
+        sampleAccepted = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_sample_accepted_lab_techician),getResources().getStringArray(R.array.ctb_accepted_by_techician_list),getResources().getString(R.string.ctb_accepted),App.HORIZONTAL,App.VERTICAL,true);
+        whySampleRejected = new TitledSpinner(context,null,getResources().getString(R.string.ctb_why_sample_rejected),getResources().getStringArray(R.array.ctb_why_sample_rejected_list),getResources().getString(R.string.ctb_saliva),App.HORIZONTAL,true);
+        otherReasonForRejection = new TitledEditText(context,null,getResources().getString(R.string.ctb_other_specify),"","",50,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
+        testId = new TitledEditText(context,null,getResources().getString(R.string.ctb_test_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
         resultRecieveDate = new TitledButton(context, null, getResources().getString(R.string.ctb_date_result_recieve), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         resultRecieveDate.setTag("resultRecieveDate");
         geneXpertMTBResult = new TitledSpinner(context,null,getResources().getString(R.string.ctb_mtb_result),getResources().getStringArray(R.array.ctb_mtb_result_list),getResources().getString(R.string.ctb_mtb_not_detected),App.HORIZONTAL,true);
@@ -143,15 +150,18 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
         errorCode = new TitledEditText(context,null,getResources().getString(R.string.ctb_error_code),"","",4,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,true);
 
 
-        views = new View[]{formDate.getButton(),resultRecieveDate.getButton(),geneXpertMTBResult.getSpinner(),mtbBurden.getRadioGroup(),mtbRIFResult.getSpinner(),
+        views = new View[]{formDate.getButton(),sampleAccepted.getRadioGroup(),whySampleRejected.getSpinner(),otherReasonForRejection.getEditText(),
+                resultRecieveDate.getButton(),geneXpertMTBResult.getSpinner(),mtbBurden.getRadioGroup(),mtbRIFResult.getSpinner(),
                 errorCode.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate,cartridgeId,resultRecieveDate,geneXpertMTBResult,mtbBurden,mtbRIFResult,errorCode}};
+                {{formDate,sampleAccepted,whySampleRejected,otherReasonForRejection,testId,resultRecieveDate,geneXpertMTBResult,mtbBurden,mtbRIFResult,errorCode}};
 
         formDate.getButton().setOnClickListener(this);
         resultRecieveDate.getButton().setOnClickListener(this);
+        sampleAccepted.getRadioGroup().setOnCheckedChangeListener(this);
+        whySampleRejected.getSpinner().setOnItemSelectedListener(this);
         geneXpertMTBResult.getSpinner().setOnItemSelectedListener(this);
         mtbBurden.getRadioGroup().setOnCheckedChangeListener(this);
         mtbRIFResult.getSpinner().setOnItemSelectedListener(this);
@@ -202,7 +212,7 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
             //
             // +Date date = App.stringToDate(sampleSubmitDate.getButton().getText().toString(), "dd-MMM-yyyy");
 
-            if (secondDateCalendar.after(date)) {
+            if (secondDateCalendar.after(App.getCalendar(date))) {
 
                 secondDateCalendar = App.getCalendar(date);
 
@@ -231,16 +241,16 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
         else{
             errorCode.getEditText().setError(null);
         }
-        if(App.get(cartridgeId).length()<10){
+        if(App.get(testId).isEmpty()){
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            cartridgeId.getEditText().setError(getString(R.string.ctb_cartridge_id_length));
-            cartridgeId.getEditText().requestFocus();
+            testId.getEditText().setError(getString(R.string.empty_field));
+            testId.getEditText().requestFocus();
             error = true;
         }else{
-            cartridgeId.getEditText().setError(null);
+            testId.getEditText().setError(null);
         }
         if (error) {
 
@@ -294,7 +304,22 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
 
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-        observations.add(new String[]{"CARTRIDGE ID", App.get(cartridgeId)});
+        observations.add(new String[]{"TEST ID", App.get(testId)});
+
+        observations.add(new String[]{"SPECIMEN ACCEPTED", App.get(sampleAccepted).equals(getResources().getString(R.string.ctb_accepted)) ? "ACCEPTED" :
+                "REJECTED"});
+
+        if(whySampleRejected.getVisibility()==View.VISIBLE){
+        }
+        observations.add(new String[]{"SPECIMEN UNSATISFACTORY FOR DIAGNOSIS", App.get(whySampleRejected).equals(getResources().getString(R.string.ctb_saliva)) ? "SALIVA" :
+                (App.get(whySampleRejected).equals(getResources().getString(R.string.ctb_blood)) ? "BLOOD IN SAMPLE" :
+                        (App.get(whySampleRejected).equals(getResources().getString(R.string.ctb_food_particles)) ? "FOOD PARTICALS" :
+                                (App.get(whySampleRejected).equals(getResources().getString(R.string.ctb_older_than_3_days)) ? "SAMPLE OLDER THAN 3 DAYS" :
+                                        (App.get(whySampleRejected).equals(getResources().getString(R.string.ctb_insufficient_qunatity)) ? "INSUFFICIENT QUANTITY" : "OTHER REASON OF SAMPLE REJECTION"))))});
+
+        if(otherReasonForRejection.getVisibility()==View.VISIBLE){
+            observations.add(new String[]{"OTHER REASON OF SAMPLE REJECTION", App.get(otherReasonForRejection)});
+        }
         observations.add(new String[]{"DATE OF  TEST RESULT RECEIVED", App.getSqlDateTime(secondDateCalendar)});
 
         observations.add(new String[]{"GENEXPERT MTB/RIF RESULT", App.get(geneXpertMTBResult).equals(getResources().getString(R.string.ctb_mtb_detected)) ? "DETECTED" :
@@ -447,9 +472,35 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
             String[][] obs = obsValue.get(i);
             if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
                 timeTakeToFill = obs[0][1];
-            }else if (obs[0][0].equals("CARTRIDGE ID")) {
-                cartridgeId.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("DATE OF  TEST RESULT RECEIVED")) {
+            }else if (obs[0][0].equals("TEST ID")) {
+                testId.getEditText().setText(obs[0][1]);
+            }
+            else if (obs[0][0].equals("SPECIMEN ACCEPTED")) {
+                for (RadioButton rb : sampleAccepted.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_accepted)) && obs[0][1].equals("ACCEPTED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_rejected)) && obs[0][1].equals("REJECTED")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                sampleAccepted.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("SPECIMEN UNSATISFACTORY FOR DIAGNOSIS")) {
+                String value = obs[0][1].equals("SALIVA") ? getResources().getString(R.string.ctb_saliva) :
+                        (obs[0][1].equals("BLOOD IN SAMPLE") ? getResources().getString(R.string.ctb_blood) :
+                                (obs[0][1].equals("FOOD PARTICALS") ? getResources().getString(R.string.ctb_food_particles) :
+                                        (obs[0][1].equals("SAMPLE OLDER THAN 3 DAYS") ? getResources().getString(R.string.ctb_older_than_3_days) :
+                                                (obs[0][1].equals("INSUFFICIENT QUANTITY") ? getResources().getString(R.string.ctb_insufficient_qunatity) :
+                                                    getResources().getString(R.string.ctb_other_title)))));
+                whySampleRejected.getSpinner().selectValue(value);
+            }
+            else if (obs[0][0].equals("OTHER REASON OF SAMPLE REJECTION")) {
+                otherReasonForRejection.getEditText().setText(obs[0][1]);
+            }
+
+            else if (obs[0][0].equals("DATE OF  TEST RESULT RECEIVED")) {
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                 resultRecieveDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
@@ -534,6 +585,13 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
                 errorCode.setVisibility(View.GONE);
             }
         }
+        if (spinner == whySampleRejected.getSpinner()) {
+            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_other_title))) {
+                otherReasonForRejection.setVisibility(View.VISIBLE);
+            } else {
+                otherReasonForRejection.setVisibility(View.GONE);
+            }
+        }
 
     }
 
@@ -551,10 +609,12 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         resultRecieveDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+        whySampleRejected.setVisibility(View.GONE);
+        otherReasonForRejection.setVisibility(View.GONE);
         mtbBurden.setVisibility(View.GONE);
         mtbRIFResult.setVisibility(View.GONE);
         errorCode.setVisibility(View.GONE);
-        cartridgeId.getEditText().setText(null);
+        testId.getEditText().setText(null);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");
@@ -575,6 +635,20 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
+        if (group == sampleAccepted.getRadioGroup()) {
+            if (sampleAccepted.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_rejected))) {
+                whySampleRejected.setVisibility(View.VISIBLE);
+                if(App.get(whySampleRejected).equals(getResources().getString(R.string.ctb_other_title))){
+                    otherReasonForRejection.setVisibility(View.VISIBLE);
+                }
+                geneXpertMTBResult.setVisibility(View.GONE);
+            } else {
+                geneXpertMTBResult.setVisibility(View.VISIBLE);
+
+                whySampleRejected.setVisibility(View.GONE);
+                otherReasonForRejection.setVisibility(View.GONE);
+            }
+        }
 
     }
 
