@@ -458,6 +458,12 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
         if(akuadsAgree.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"THERAPY CONSENT", App.get(akuadsAgree).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         }
+        if(continuationStatus.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"CONTINUATION STATUS", App.get(continuationStatus).equals(getResources().getString(R.string.pet_continue_therapy)) ? "EXERCISE THERAPY" :
+                    (App.get(continuationStatus).equals(getResources().getString(R.string.pet_last_session)) ? "END OF THERAPY" :
+                            (App.get(continuationStatus).equals(getResources().getString(R.string.pet_referred)) ? "PATIENT REFERRED" : "OTHER CONTINUATION STATUS"))});
+        }
+        observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDate(secondDateCalendar)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -968,7 +974,7 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
                     }
                 }
             } else if (obs[0][0].equals("BODY PAIN (AKUADS)")) {
-                for (RadioButton rb : akuadsHeadaches.getRadioGroup().getButtons()) {
+                for (RadioButton rb : akuadsBodyPain.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.pet_never)) && obs[0][1].equals("NEVER")) {
                         rb.setChecked(true);
                         break;
@@ -984,7 +990,7 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
                     }
                 }
             } else if (obs[0][0].equals("FREQUENT URINATION (AKUADS)")) {
-                for (RadioButton rb : akuadsHeadaches.getRadioGroup().getButtons()) {
+                for (RadioButton rb : akuadsUrination.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.pet_never)) && obs[0][1].equals("NEVER")) {
                         rb.setChecked(true);
                         break;
@@ -1017,7 +1023,39 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
                         break;
                     }
                 }
-            } else if (obs[0][0].equals("THERAPY CONSENT")) {
+            } else if (obs[0][0].equals("CONTINUATION STATUS")) {
+                for (RadioButton rb : continuationStatus.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet_continue_therapy)) && obs[0][1].equals("EXERCISE THERAPY")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_last_session)) && obs[0][1].equals("END OF THERAPY")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_referred)) && obs[0][1].equals("PATIENT REFERRED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_other)) && obs[0][1].equals("OTHER CONTINUATION STATUS")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            }else if (obs[0][0].equals("LOSS OF APPETITE (AKUADS)")) {
+                for (RadioButton rb : akuadsLossOfAppetite.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet_severity_level_normal)) && obs[0][1].equals("NORMAL")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_severity_level_mild)) && obs[0][1].equals("MILD")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_severity_level_moderate)) && obs[0][1].equals("MODERATE")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_severity_level_severe)) && obs[0][1].equals("SEVERE")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            }else if (obs[0][0].equals("THERAPY CONSENT")) {
                 for (RadioButton rb : akuadsAgree.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);
@@ -1027,6 +1065,10 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
                         break;
                     }
                 }
+            }else if (obs[0][0].equals("RETURN VISIT DATE")) {
+                String secondDate = obs[0][1];
+                secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
+                nextAppointmentDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
             }
 
         }
