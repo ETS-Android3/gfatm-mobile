@@ -176,8 +176,8 @@
     <string name="fast_karachi">Karachi</string>
     <string name="fast_whose_nic_is_this">Whose NIC is this?</string>
     <string name="fast_patient_provided_their_address">Has the patient provided their address?</string>
-    <string name="fast_address_1">Address 1 (House Number, etc)</string>
-    <string name="fast_address_2">Address 2 (Block, Street, Gali, Colony, etc)</string>
+    <string name="fast_address_1">Address 1</string>
+    <string name="fast_address_2">Address 2</string>
     <string name="fast_town">Town</string>
     <string name="fast_city">City</string>
     <string name="fast_type_of_address_is_this">What type of Address is this?</string>
