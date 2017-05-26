@@ -64,10 +64,10 @@
     <string name="ctb_screening">Screening</string>
     <string name="ctb_reffered">Referred</string>
     <string name="ctb_patient_referral_source">If referred, and the patient came to you for investigation, what was the source of the patient\’s referral?</string>
-    <string name="ctb_doctor_healthworker_in_hospital">By a doctor or health worker within the hospital</string>   
-    <string name="ctb_doctor_healthworker_out_hospital">By a doctor or health worker outside of the hospital</string>
-    <string name="ctb_child_tested_for_tb">Care giver wants to get the child tested for TB (self-refferal)</string>
-    <string name="ctb_family_member_tb_patient">Child is a family member(contact) of a TB patient who wants to be investigated</string>
+    <string name="ctb_doctor_healthworker_in_hospital">Within the hospital</string>
+    <string name="ctb_doctor_healthworker_out_hospital">Outside the hospital</string>
+    <string name="ctb_child_tested_for_tb">Self-referral</string>
+    <string name="ctb_family_member_tb_patient">Through a TB contact</string>
     <string name="ctb_facility_department">Where within the hospital was the child referred from?</string>
     <string name="ctb_referral_inside">If OPD Clinic or Ward, please specify</string>
     <string name="ctb_referral_outside">Where outside the hospital was the child referred from?</string>
@@ -530,6 +530,12 @@
     <string name="ctb_abnormal_suggestive_tb">Abnormal Suggestive of TB</string>
     <string name="ctb_abnormal_not_suggestive_tb">Abnormal Not Suggestive of TB</string>
     <string name="ctb_mobile_number">Mobile number</string>
+    <string name="ctb_select_form_type">Please select form type</string>
+
+
+
+
+
 
     <string-array name="ctb_abnormal_list">
         <item>@string/ctb_normal</item>
@@ -709,6 +715,7 @@
         <item>@string/ctb_rr_positive</item>
         <item>@string/ctb_indeterminate</item>
         <item>@string/ctb_error_invalid_no_result</item>
+        <item>@string/ctb_other_title</item>
     </string-array>
     
     <string-array name="ctb_specimen_type_list">
