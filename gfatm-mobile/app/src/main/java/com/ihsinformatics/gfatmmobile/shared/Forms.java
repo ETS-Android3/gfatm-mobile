@@ -126,7 +126,7 @@ public class Forms{
     public static final FormsObject pet_infectionTreatmenEligibility = new FormsObject(PET_INFECTION_TREATMENT_ELIGIBILITY, PetInfectionTreatmentEligibilityForm.class, R.drawable.pet_infection_treatment_eligibility, FormTypeColor.TREATMENT_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN});
     public static final FormsObject pet_treatmentInitiation = new FormsObject(PET_TREATMENT_INITIATION, PetTreatmentInitiationForm.class, R.drawable.pet_treatment_initiation, FormTypeColor.TREATMENT_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN});
     public static final FormsObject pet_baselineCounselling = new FormsObject(PET_BASELINE_COUNSELLING, PetBaselineCounsellingForm.class, R.drawable.pet_baseline_counselling, FormTypeColor.TEST_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_PSYCHOLOGIST});
-    public static final FormsObject pet_akuad = new FormsObject(PET_AKUAD, PETAKUADForm.class, R.drawable.pet_followup_end, FormTypeColor.FOLLOWUP_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_FIELD_SUPERVISOR, Roles.PET_CLINICIAN});
+    public static final FormsObject pet_akuad = new FormsObject(PET_AKUAD, PETAKUADForm.class, R.drawable.comorbidities_mental_health, FormTypeColor.FOLLOWUP_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_FIELD_SUPERVISOR, Roles.PET_CLINICIAN});
     public static final FormsObject pet_treatmentAdherence = new FormsObject(PET_TREATMENT_ADHERENCE, PetTreatmentAdherenceForm.class, R.drawable.pet_treatment_adherence, FormTypeColor.TREATMENT_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_PSYCHOLOGIST});
     public static final FormsObject pet_monthlyHomeFollowup = new FormsObject(PET_MONTHLY_HOME_FOLLOWUP, PetMonthlyHomeFollowupForm.class, R.drawable.pet_monthly_followup, FormTypeColor.FOLLOWUP_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_HEALTH_WORKER});
     public static final FormsObject pet_clinicianFollowup = new FormsObject(PET_CLINICIAN_FOLLOWUP, PetClinicianFollowupForm.class, R.drawable.pet_clinician_followup, FormTypeColor.FOLLOWUP_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN});
@@ -138,13 +138,13 @@ public class Forms{
     /********************************
      * FAST
      ********************************/
-    public static final String FAST_SCREENING_FORM = "Screening Form";
-    public static final String FAST_PRESUMPTIVE_FORM = "Presumptive Form";
-    public static final String FAST_PROMPT_FORM = "Sputum Container and X-Ray Voucher Form";
+    public static final String FAST_SCREENING_FORM = "1. Screening Form";
+    public static final String FAST_PRESUMPTIVE_FORM = "2. Presumptive Form";
+    public static final String FAST_PROMPT_FORM = "4. Sputum Container and X-Ray Voucher Form";
     public static final String FAST_PATIENT_LOCATION_FORM = "Patient Location Form";
-    public static final String FAST_GXP_SPECIMEN_COLLECTION_FORM = "Specimen Collection Form";
-    public static final String FAST_PRESUMPTIVE_INFORMATION_FORM = "Presumptive Information Form";
-    public static final String FAST_GENEXPERT_RESULT_FORM = "GeneXpert Result Form";
+    public static final String FAST_GXP_SPECIMEN_COLLECTION_FORM = "5. Specimen Collection Form";
+    public static final String FAST_PRESUMPTIVE_INFORMATION_FORM = "3. Presumptive Information Form";
+    public static final String FAST_GENEXPERT_RESULT_FORM = "6. GeneXpert Result Form";
     public static final String FAST_SCREENING_CHEST_XRAY_ORDER_AND_RESULT_FORM = "Screening CXR(CAD4TB) Order and Result Form";
     public static final String FAST_AFB_SMEAR_MICROSCOPY_ORDER_AND_RESULT_FORM = "AFB Smear Microscopy Order and Result Form";
     public static final String FAST_DST_ORDER_AND_RESULT_FORM = "DST Order And Result Form";
@@ -315,6 +315,7 @@ public class Forms{
         petList.add(pet_infectionTreatmenEligibility);
         petList.add(pet_treatmentInitiation);
         petList.add(pet_baselineCounselling);
+        petList.add(pet_akuad);
         petList.add(pet_monthlyHomeFollowup);
         petList.add(pet_treatmentAdherence);
         petList.add(pet_clinicianFollowup);
@@ -322,7 +323,6 @@ public class Forms{
         petList.add(pet_adverseEvents);
         petList.add(pet_incentiveDisbursement);
         petList.add(pet_endOfFollowup);
-        petList.add(pet_akuad);
 
         return petList;
 
@@ -333,11 +333,11 @@ public class Forms{
         ArrayList<FormsObject> fastList = new ArrayList<>();
 
         fastList.add(fastScreeningForm);
-        fastList.add(fastPromptForm);
         fastList.add(fastPresumptiveForm);
         fastList.add(fastPatientLocationForm);
-        fastList.add(fastGpxSpecimenCollectionForm);
         fastList.add(fastPresumptiveInformationForm);
+        fastList.add(fastPromptForm);
+        fastList.add(fastGpxSpecimenCollectionForm);
         fastList.add(fastGeneXpertResultForm);
         fastList.add(fastScreeningChestXrayOrderAndResultForm);
         fastList.add(fastAfbSmearMicroscopyOrderAndResultForm);
