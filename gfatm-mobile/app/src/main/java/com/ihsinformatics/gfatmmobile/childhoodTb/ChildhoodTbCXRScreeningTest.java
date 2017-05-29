@@ -61,7 +61,11 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
     boolean changeDate = false;
     String finalDate = null;
 
+
     TitledButton formDate;
+
+    TitledRadioGroup pastXray;
+
     TitledRadioGroup formType;
     TitledRadioGroup typeOfXRay;
     TitledSpinner monthTreatment;
@@ -73,7 +77,7 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
     TitledRadioGroup diseaseExtent;
     TitledEditText radiologistRemarks;
     ImageView testIdView;
-
+    LinearLayout linearLayout;
     Snackbar snackbar;
     ScrollView scrollView;
 
@@ -150,6 +154,7 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
+        pastXray = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_xray_in_6_month), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.VERTICAL, App.VERTICAL);
         formType = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_type_of_form), getResources().getStringArray(R.array.ctb_type_of_form_list), null, App.HORIZONTAL, App.VERTICAL, true);
         typeOfXRay = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_type_of_xray),getResources().getStringArray(R.array.ctb_type_of_xray_list),getResources().getString(R.string.ctb_chest_xray_other),App.HORIZONTAL,App.VERTICAL,true);
         monthTreatment = new TitledSpinner(context,null,getResources().getString(R.string.ctb_month_treatment),getResources().getStringArray(R.array.ctb_0_to_24),getResources().getString(R.string.ctb_1),App.HORIZONTAL,true);
@@ -161,7 +166,7 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
         otherRadiologicalDiagnosis = new TitledEditText(context,null,getResources().getString(R.string.ctb_other_specify),"","",50,RegexUtil.ALPHA_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
         diseaseExtent = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_extent_disease),getResources().getStringArray(R.array.ctb_disease_extent_list),null,App.VERTICAL,App.VERTICAL);
         radiologistRemarks = new TitledEditText(context,null,getResources().getString(R.string.ctb_radiologist_remark),"","",500,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
-        LinearLayout linearLayout = new LinearLayout(context);
+        linearLayout = new LinearLayout(context);
         LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -188,7 +193,7 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formType, formDate, linearLayout,typeOfXRay,monthTreatment,chestXRayScore, radiologicalDiagnosis, abnormalDiagnosis,otherRadiologicalDiagnosis,diseaseExtent
+                {{formType, formDate, pastXray,  linearLayout,typeOfXRay,monthTreatment,chestXRayScore, radiologicalDiagnosis, abnormalDiagnosis,otherRadiologicalDiagnosis,diseaseExtent
                 ,radiologistRemarks}};
 
         formDate.getButton().setOnClickListener(this);
@@ -198,6 +203,8 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
         typeOfXRay.getRadioGroup().setOnCheckedChangeListener(this);
         diseaseExtent.getRadioGroup().setOnCheckedChangeListener(this);
         monthTreatment.getSpinner().setOnItemSelectedListener(this);
+        pastXray.getRadioGroup().setOnCheckedChangeListener(this);
+
 
         testId.getEditText().addTextChangedListener(new TextWatcher() {
 
@@ -912,6 +919,7 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
         formDate.setVisibility(View.GONE);
         testIdView.setVisibility(View.GONE);
         testId.setVisibility(View.GONE);
+        pastXray.setVisibility(View.GONE);
         testIdView.setImageResource(R.drawable.ic_checked);
         goneVisibility();
         submitButton.setEnabled(false);
@@ -936,12 +944,59 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         if (group == formType.getRadioGroup()) {
-            formDate.setVisibility(View.VISIBLE);
-            testId.setVisibility(View.VISIBLE);
-            testId.getEditText().setText("");
-            testId.getEditText().setError(null);
-            goneVisibility();
-            submitButton.setEnabled(false);
+
+            if(formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_order))){
+                formDate.setVisibility(View.VISIBLE);
+                pastXray.setVisibility(View.VISIBLE);
+
+                if(pastXray.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))){
+
+                    formDate.setVisibility(View.VISIBLE);
+                    linearLayout.setVisibility(View.VISIBLE);
+                    testId.setVisibility(View.VISIBLE);
+                    testId.getEditText().setText("");
+                    testId.getEditText().setError(null);
+                    goneVisibility();
+                    submitButton.setEnabled(false);
+                }
+                else{
+                    linearLayout.setVisibility(View.GONE);
+                    testId.setVisibility(View.GONE);
+                    monthTreatment.setVisibility(View.GONE);
+                    typeOfXRay.setVisibility(View.GONE);
+
+                    submitButton.setEnabled(true);
+                }
+            }
+
+            else {
+                formDate.setVisibility(View.VISIBLE);
+                pastXray.setVisibility(View.GONE);
+                linearLayout.setVisibility(View.VISIBLE);
+                testId.setVisibility(View.VISIBLE);
+                testId.getEditText().setText("");
+                testId.getEditText().setError(null);
+                goneVisibility();
+                submitButton.setEnabled(false);
+            }
+        }
+        else if(group == pastXray.getRadioGroup()) {
+            if (pastXray.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.no))) {
+
+                formDate.setVisibility(View.VISIBLE);
+                linearLayout.setVisibility(View.VISIBLE);
+                testId.setVisibility(View.VISIBLE);
+                testId.getEditText().setText("");
+                testId.getEditText().setError(null);
+                goneVisibility();
+                submitButton.setEnabled(false);
+            } else {
+                linearLayout.setVisibility(View.GONE);
+                testId.setVisibility(View.GONE);
+                typeOfXRay.setVisibility(View.GONE);
+                monthTreatment.setVisibility(View.GONE);
+                submitButton.setEnabled(true);
+            }
         }
 
     }
@@ -960,6 +1015,7 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
         if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.ctb_order))) {
             isResultForm = false;
             beforeResult = false;
+
             formDate.setVisibility(View.VISIBLE);
             monthTreatment.setVisibility(View.VISIBLE);
             typeOfXRay.setVisibility(View.VISIBLE);

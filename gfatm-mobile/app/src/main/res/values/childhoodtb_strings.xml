@@ -531,7 +531,7 @@
     <string name="ctb_abnormal_not_suggestive_tb">Abnormal Not Suggestive of TB</string>
     <string name="ctb_mobile_number">Mobile number</string>
     <string name="ctb_select_form_type">Please select form type</string>
-
+    <string name="ctb_xray_in_6_month">Has the patient had an X-Ray in the past 6 months at an X-Ray Van?</string>
 
 
 

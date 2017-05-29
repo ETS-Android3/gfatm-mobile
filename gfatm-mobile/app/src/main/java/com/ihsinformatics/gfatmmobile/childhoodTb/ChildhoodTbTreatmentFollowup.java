@@ -69,7 +69,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
     TitledSpinner patientType;
     TitledEditText tbRegisterationNumber;
     TitledButton treatmentInitiationDate;
-    TitledEditText monthTreatment;
+    TitledSpinner monthTreatment;
     TitledRadioGroup patientCategory;
     TitledEditText weight;
     TitledRadioGroup treatmentPlan;
@@ -172,8 +172,8 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         patientType = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_patient_type), getResources().getStringArray(R.array.ctb_patient_type_list), getResources().getString(R.string.ctb_new), App.VERTICAL,true);
         tbRegisterationNumber = new TitledEditText(context, null, getResources().getString(R.string.ctb_tb_registration_no), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         treatmentInitiationDate = new TitledButton(context, null, getResources().getString(R.string.ctb_treatment_initiated_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
-        monthTreatment = new TitledEditText(context, null, getResources().getString(R.string.ctb_month_treatment), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL,true);
-
+        monthTreatment = new TitledSpinner(context, null, getResources().getString(R.string.ctb_month_treatment), getResources().getStringArray(R.array.ctb_0_to_24), null, App.HORIZONTAL);
+        updateFollowUpMonth();
         patientCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_category), getResources().getStringArray(R.array.ctb_patient_category3_list), getResources().getString(R.string.ctb_categoryI), App.VERTICAL, App.VERTICAL,true);
         weight = new TitledEditText(context, null, getResources().getString(R.string.ctb_patient_weight), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
         treatmentPlan = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_treatment_plan), getResources().getStringArray(R.array.ctb_treatment_plan_list), null, App.VERTICAL, App.VERTICAL,true);
@@ -203,7 +203,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         thirdDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
 
         views = new View[]{
-                formDate.getButton(),patientType.getSpinner(),tbRegisterationNumber.getEditText(),treatmentInitiationDate.getButton(),monthTreatment.getEditText(),patientCategory.getRadioGroup(),weight.getEditText(),
+                formDate.getButton(),patientType.getSpinner(),tbRegisterationNumber.getEditText(),treatmentInitiationDate.getButton(),monthTreatment.getSpinner(),patientCategory.getRadioGroup(),weight.getEditText(),
                 treatmentPlan.getRadioGroup(), intensivePhaseRegimen.getRadioGroup(),typeFixedDosePrescribedIntensive.getSpinner(),currentTabletsofRHZ.getRadioGroup(),currentTabletsofE.getRadioGroup(),
                 newTabletsofRHZ.getRadioGroup(),newTabletsofE.getRadioGroup(),adultFormulationofHRZE.getRadioGroup(), continuationPhaseRegimen.getRadioGroup(),typeFixedDosePrescribedContinuation.getSpinner(),
                 currentTabletsOfContinuationRH.getRadioGroup(), currentTabletsOfContinuationE.getRadioGroup(), newTabletsOfContinuationRH.getRadioGroup(), newTabletsOfContinuationE.getRadioGroup(),
@@ -375,8 +375,45 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
 
     }
 
+    public void updateFollowUpMonth() {
+
+        String treatmentDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+        String format = "";
+        String[] monthArray;
+
+        if (treatmentDate == null) {
+            monthArray = new String[1];
+            monthArray[0] = "0";
+            monthTreatment.getSpinner().setSpinnerData(monthArray);
+        } else {
+            if (treatmentDate.contains("/")) {
+                format = "dd/MM/yyyy";
+            } else {
+                format = "yyyy-MM-dd";
+            }
+            Date convertedDate = App.stringToDate(treatmentDate, format);
+            Calendar treatmentDateCalender = App.getCalendar(convertedDate);
+            int diffYear = formDateCalendar.get(Calendar.YEAR) - treatmentDateCalender.get(Calendar.YEAR);
+            int diffMonth = diffYear * 12 + formDateCalendar.get(Calendar.MONTH) - treatmentDateCalender.get(Calendar.MONTH);
+
+            if (diffMonth == 0) {
+                monthArray = new String[1];
+                monthArray[0] = "1";
+                monthTreatment.getSpinner().setSpinnerData(monthArray);
+            } else {
+                monthArray = new String[diffMonth];
+                for (int i = 0; i < diffMonth; i++) {
+                    monthArray[i] = String.valueOf(i+1);
+                }
+                monthTreatment.getSpinner().setSpinnerData(monthArray);
+            }
+        }
+    }
+
+
     @Override
     public void updateDisplay() {
+        Calendar treatDateCalender = null;
 
         if (snackbar != null)
             snackbar.dismiss();
@@ -387,8 +424,10 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
 
         String formDa = formDate.getButton().getText().toString();
         String personDOB = App.getPatient().getPerson().getBirthdate();
-
-
+        String treatmentDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+        if(treatmentDate != null){
+            treatDateCalender = App.getCalendar(App.stringToDate(treatmentDate, "yyyy-MM-dd"));
+        }
         Date date = new Date();
 
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
@@ -409,7 +448,19 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-            }else
+            }else if (treatDateCalender != null) {
+                if(formDateCalendar.before(treatDateCalender)) {
+                    formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.ctb_form_date_less_than_treatment_initiation), Snackbar.LENGTH_INDEFINITE);
+                    snackbar.show();
+
+                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                }
+                else {
+                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                }
+            }else {
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
                 Calendar requiredDate = formDateCalendar.getInstance();
                 requiredDate.setTime(formDateCalendar.getTime());
@@ -421,6 +472,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                     requiredDate.add(Calendar.DATE, 1);
                     thirdDateCalendar.setTime(requiredDate.getTime());
                 }
+            }
 
         } if (!treatmentInitiationDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString())) {
 
@@ -475,6 +527,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         formDate.getButton().setEnabled(true);
         treatmentInitiationDate.getButton().setEnabled(true);
         returnVisitDate.getButton().setEnabled(true);
+        updateFollowUpMonth();
 
     }
 
@@ -501,23 +554,16 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 error = true;
             }
         }
-
-        if(App.get(monthTreatment).isEmpty()){
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            monthTreatment.getEditText().setError(getString(R.string.empty_field));
-            monthTreatment.getEditText().requestFocus();
-            error = true;
-        }else if(Integer.parseInt(App.get(monthTreatment))>12){
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            monthTreatment.getEditText().setError(getString(R.string.ctb_month_treatment_greater_than_12));
-            monthTreatment.getEditText().requestFocus();
-            error = true;
+        if(intensivePhaseRegimen.getVisibility()==View.VISIBLE) {
+            if ((App.get(intensivePhaseRegimen).isEmpty())) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                intensivePhaseRegimen.getRadioGroup().getButtons().get(1).setError(getString(R.string.empty_field));
+                intensivePhaseRegimen.getRadioGroup().requestFocus();
+                error = true;
+            }
         }
         if((App.get(patientCategory).isEmpty())){
             if (App.isLanguageRTL())
@@ -846,7 +892,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 treatmentInitiationDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
                 treatmentInitiationDate.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
-                monthTreatment.getEditText().setText(obs[0][1]);
+                monthTreatment.getSpinner().selectValue(obs[0][1]);
                 monthTreatment.setVisibility(View.VISIBLE);
             }
             else if (obs[0][0].equals("TB CATEGORY")) {
