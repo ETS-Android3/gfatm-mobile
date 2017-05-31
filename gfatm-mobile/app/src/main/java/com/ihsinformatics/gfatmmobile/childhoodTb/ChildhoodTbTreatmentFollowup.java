@@ -565,6 +565,138 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 error = true;
             }
         }
+        if(currentTabletsofRHZ.getVisibility()==View.VISIBLE) {
+            if ((App.get(currentTabletsofRHZ).isEmpty())) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                currentTabletsofRHZ.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+                currentTabletsofRHZ.getRadioGroup().requestFocus();
+                error = true;
+            }
+        }
+        if(currentTabletsofE.getVisibility()==View.VISIBLE) {
+            if ((App.get(currentTabletsofE).isEmpty())) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                currentTabletsofE.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+                currentTabletsofE.getRadioGroup().requestFocus();
+                error = true;
+            }
+        }
+        if(newTabletsofRHZ.getVisibility()==View.VISIBLE) {
+            if ((App.get(newTabletsofRHZ).isEmpty())) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                newTabletsofRHZ.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+                newTabletsofRHZ.getRadioGroup().requestFocus();
+                error = true;
+            }
+        }
+        if(newTabletsofE.getVisibility()==View.VISIBLE) {
+            if ((App.get(newTabletsofE).isEmpty())) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                newTabletsofE.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+                newTabletsofE.getRadioGroup().requestFocus();
+                error = true;
+            }
+        }
+        if(adultFormulationofHRZE.getVisibility()==View.VISIBLE) {
+            if ((App.get(adultFormulationofHRZE).isEmpty())) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                adultFormulationofHRZE.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+                adultFormulationofHRZE.getRadioGroup().requestFocus();
+                error = true;
+            }
+        }
+        if(continuationPhaseRegimen.getVisibility()==View.VISIBLE) {
+            if ((App.get(continuationPhaseRegimen).isEmpty())) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                continuationPhaseRegimen.getRadioGroup().getButtons().get(1).setError(getString(R.string.empty_field));
+                continuationPhaseRegimen.getRadioGroup().requestFocus();
+                error = true;
+            }
+        }
+        if(currentTabletsOfContinuationRH.getVisibility()==View.VISIBLE) {
+            if ((App.get(currentTabletsOfContinuationRH).isEmpty())) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                currentTabletsOfContinuationRH.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+                currentTabletsOfContinuationRH.getRadioGroup().requestFocus();
+                error = true;
+            }
+        }
+        if(currentTabletsOfContinuationE.getVisibility()==View.VISIBLE) {
+            if ((App.get(currentTabletsOfContinuationE).isEmpty())) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                currentTabletsOfContinuationE.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+                currentTabletsOfContinuationE.getRadioGroup().requestFocus();
+                error = true;
+            }
+        }
+        if(newTabletsOfContinuationRH.getVisibility()==View.VISIBLE) {
+            if ((App.get(newTabletsOfContinuationRH).isEmpty())) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                newTabletsOfContinuationRH.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+                newTabletsOfContinuationRH.getRadioGroup().requestFocus();
+                error = true;
+            }
+        }
+        if(newTabletsOfContinuationE.getVisibility()==View.VISIBLE) {
+            if ((App.get(newTabletsOfContinuationE).isEmpty())) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                newTabletsOfContinuationE.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+                newTabletsOfContinuationE.getRadioGroup().requestFocus();
+                error = true;
+            }
+        }
+        if(adultFormulationOfContinuationRHE.getVisibility()==View.VISIBLE) {
+            if ((App.get(adultFormulationOfContinuationRHE).isEmpty())) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                adultFormulationOfContinuationRHE.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+                adultFormulationOfContinuationRHE.getRadioGroup().requestFocus();
+                error = true;
+            }
+        }
+        if(adultFormulationOfContinuationRH.getVisibility()==View.VISIBLE) {
+            if ((App.get(adultFormulationOfContinuationRH).isEmpty())) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                adultFormulationOfContinuationRH.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+                adultFormulationOfContinuationRH.getRadioGroup().requestFocus();
+                error = true;
+            }
+        }
         if((App.get(patientCategory).isEmpty())){
             if (App.isLanguageRTL())
                 gotoPage(0);
@@ -1515,6 +1647,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 adultFormulationOfContinuationRH.setVisibility(View.GONE);
             }
         }else if (group == intensivePhaseRegimen.getRadioGroup()) {
+            intensivePhaseRegimen.getRadioGroup().getButtons().get(1).setError(null);
             if (intensivePhaseRegimen.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_rhz))) {
                 adultFormulationofHRZE.setVisibility(View.GONE);
                 currentTabletsofE.setVisibility(View.GONE);
@@ -1532,6 +1665,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 }
             }
         }else if (group == continuationPhaseRegimen.getRadioGroup()) {
+            continuationPhaseRegimen.getRadioGroup().getButtons().get(1).setError(null);
             if (continuationPhaseRegimen.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_rh))) {
                 currentTabletsOfContinuationE.setVisibility(View.GONE);
                 newTabletsOfContinuationE.setVisibility(View.GONE);
@@ -1551,6 +1685,40 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         }
         else if (group == conclusionOfTreatment.getRadioGroup()) {
             conclusionOfTreatment.getRadioGroup().getButtons().get(1).setError(null);
+        }
+        else if (group == currentTabletsofRHZ.getRadioGroup()) {
+            currentTabletsofRHZ.getRadioGroup().getButtons().get(3).setError(null);
+        }
+        else if (group == currentTabletsofE.getRadioGroup()) {
+            currentTabletsofE.getRadioGroup().getButtons().get(3).setError(null);
+        }
+        else if (group == newTabletsofRHZ.getRadioGroup()) {
+            newTabletsofRHZ.getRadioGroup().getButtons().get(3).setError(null);
+        }
+        else if (group == newTabletsofE.getRadioGroup()) {
+            newTabletsofE.getRadioGroup().getButtons().get(3).setError(null);
+        }
+        else if (group == adultFormulationofHRZE.getRadioGroup()) {
+            adultFormulationofHRZE.getRadioGroup().getButtons().get(3).setError(null);
+        }
+
+        else if (group == currentTabletsOfContinuationRH.getRadioGroup()) {
+            currentTabletsOfContinuationRH.getRadioGroup().getButtons().get(3).setError(null);
+        }
+        else if (group == currentTabletsOfContinuationE.getRadioGroup()) {
+            currentTabletsOfContinuationE.getRadioGroup().getButtons().get(3).setError(null);
+        }
+        else if (group == newTabletsOfContinuationRH.getRadioGroup()) {
+            newTabletsOfContinuationRH.getRadioGroup().getButtons().get(3).setError(null);
+        }
+        else if (group == newTabletsOfContinuationE.getRadioGroup()) {
+            newTabletsOfContinuationE.getRadioGroup().getButtons().get(3).setError(null);
+        }
+        else if (group == adultFormulationOfContinuationRHE.getRadioGroup()) {
+            adultFormulationOfContinuationRHE.getRadioGroup().getButtons().get(3).setError(null);
+        }
+        else if (group == adultFormulationOfContinuationRH.getRadioGroup()) {
+            adultFormulationOfContinuationRH.getRadioGroup().getButtons().get(3).setError(null);
         }
     }
 

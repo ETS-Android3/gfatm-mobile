@@ -121,6 +121,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
     TitledRadioGroup bcgScar;
     TitledRadioGroup tbHistoryIn2Years;
     TitledRadioGroup eligibleForIpt;
+    TitledRadioGroup acceptanceToIpt;
     TitledButton iptStartDate;
     TitledRadioGroup iptDose;
     TitledCheckBoxes initiatingAdditionalTreatmentIpt;
@@ -248,11 +249,11 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         weight = new TitledEditText(context, null, getResources().getString(R.string.ctb_patient_weight), "", "", 3, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
         regimen = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_regimen), getResources().getStringArray(R.array.ctb_regimen_list), getResources().getString(R.string.ctb_rhz), App.HORIZONTAL, App.VERTICAL);
         typeFixedDosePrescribed = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_type_of_fixed_dose), getResources().getStringArray(R.array.ctb_type_of_fixed_dose_list), null, App.VERTICAL);
-        currentTabletsofRHZ = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_current_formulation_number_of_tablet_rhz), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL);
+        currentTabletsofRHZ = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_current_formulation_number_of_tablet_rhz), getResources().getStringArray(R.array.ctb_1_to_5_list), null, App.HORIZONTAL, App.VERTICAL);
         currentTabletsofE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_current_formulation_number_of_tablet_e), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL);
         newTabletsofRHZ = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_new_formulation_number_of_tablet_rhz), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL);
         newTabletsofE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_new_formulation_number_of_tablet_e), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL);
-        adultFormulationofHRZE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_adult_formulation), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL);
+        adultFormulationofHRZE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_adult_formulation), getResources().getStringArray(R.array.ctb_1_to_5_list), null, App.HORIZONTAL, App.VERTICAL);
         typeOfDiagnosis = new TitledCheckBoxes(context, null, getResources().getString(R.string.ctb_type_of_diagnosis), getResources().getStringArray(R.array.ctb_type_of_diagnosis_list), null, App.VERTICAL, App.VERTICAL);
 
         histopathologicalEvidence = new TitledRadioGroup(context, "If clinically diagnosed, specify evidence", getResources().getString(R.string.ctb_histopathologiacal_evidence), getResources().getStringArray(R.array.yes_no_options), null, App.VERTICAL, App.VERTICAL);
@@ -289,6 +290,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         bcgScar = new TitledRadioGroup(context, "Section B: IPT Initiation", getResources().getString(R.string.ctb_bcg_scar), getResources().getStringArray(R.array.yes_no_unknown_refused_options), null, App.HORIZONTAL, App.VERTICAL,true);
         tbHistoryIn2Years = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_tb_history_2years), getResources().getStringArray(R.array.yes_no_unknown_refused_options), null, App.HORIZONTAL, App.VERTICAL);
         eligibleForIpt = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_eligible_for_ipt), getResources().getStringArray(R.array.yes_no_options), null, App.HORIZONTAL, App.VERTICAL,true);
+        acceptanceToIpt = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_acceptance_ipt), getResources().getStringArray(R.array.yes_no_options), null, App.HORIZONTAL, App.VERTICAL,true);
         iptStartDate = new TitledButton(context, null, getResources().getString(R.string.ctb_ipt_start_date), DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
         iptDose = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ipt_dose), getResources().getStringArray(R.array.ctb_dose_list), null, App.VERTICAL, App.VERTICAL);
         initiatingAdditionalTreatmentIpt = new TitledCheckBoxes(context, null, getResources().getString(R.string.ctb_initiating_additional_treatment), getResources().getStringArray(R.array.ctb_iron_multivitamins_anthelmintic), null, App.VERTICAL, App.VERTICAL);
@@ -313,7 +315,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 newTabletsofRHZ.getRadioGroup(),newTabletsofE.getRadioGroup(),adultFormulationofHRZE.getRadioGroup(),typeOfDiagnosis,histopathologicalEvidence.getRadioGroup(),
                 radiologicalEvidence.getRadioGroup(),nameOfSupporter.getEditText(),mobileLinearLayout,mobileNumber1,mobileNumber2,
                 closeContactTypeTreatmentSupport.getSpinner(),otherCloseContactSupporterType.getEditText(),bcgScar.getRadioGroup(),
-                tbHistoryIn2Years.getRadioGroup(),eligibleForIpt.getRadioGroup(),iptStartDate.getButton(),
+                tbHistoryIn2Years.getRadioGroup(),eligibleForIpt.getRadioGroup(),acceptanceToIpt.getRadioGroup(),iptStartDate.getButton(),
                 iptDose.getRadioGroup(),initiatingAdditionalTreatmentIpt,precribingAntibioticTrial.getRadioGroup(),
                 precribingFurthertest.getRadioGroup(),initiatingAdditionalTreatmentAntibiotic,returnVisitDate.getButton(),
                 doctorNotes.getEditText()};
@@ -353,6 +355,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                         bcgScar,
                         tbHistoryIn2Years,
                         eligibleForIpt,
+                        acceptanceToIpt,
                         iptStartDate,
                         iptDose,
                         initiatingAdditionalTreatmentIpt,
@@ -393,6 +396,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         bcgScar.getRadioGroup().setOnCheckedChangeListener(this);
         tbHistoryIn2Years.getRadioGroup().setOnCheckedChangeListener(this);
         eligibleForIpt.getRadioGroup().setOnCheckedChangeListener(this);
+        acceptanceToIpt.getRadioGroup().setOnCheckedChangeListener(this);
         iptStartDate.getButton().setOnClickListener(this);
         iptDose.getRadioGroup().setOnCheckedChangeListener(this);
         ArrayList<MyCheckBox> checkBoxList3 = initiatingAdditionalTreatmentIpt.getCheckedBoxes();
@@ -569,7 +573,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
 
                     }
                     else if(value>=20 && value<=24){
-                        //Value for 5 tablets
+                        currentTabletsofRHZ.getRadioGroup().getButtons().get(4).setChecked(true);
                     }
                     else if(value>=25){
                         typeFixedDosePrescribed.getSpinner().selectValue(getResources().getString(R.string.ctb_adult_formulation));
@@ -612,6 +616,15 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                     else if(value>=55 && value<=70){
                         adultFormulationofHRZE.getRadioGroup().getButtons().get(3).setChecked(true);
                     }
+                    else if(value>70){
+                        adultFormulationofHRZE.getRadioGroup().getButtons().get(4).setChecked(true);
+                    }
+                }else{
+                    currentTabletsofE.getRadioGroup().clearCheck();
+                    currentTabletsofRHZ.getRadioGroup().clearCheck();
+                    newTabletsofRHZ.getRadioGroup().clearCheck();
+                    newTabletsofE.getRadioGroup().clearCheck();
+                    adultFormulationofHRZE.getRadioGroup().clearCheck();
                 }
             }
         });
@@ -1192,6 +1205,9 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         if(eligibleForIpt.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"ELIGIBLE FOR IPT", App.get(eligibleForIpt).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         }
+        if(acceptanceToIpt.getVisibility()==View.VISIBLE){
+            observations.add(new String[]{"PATIENT ACCEPTANCE TO IPT", App.get(acceptanceToIpt).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        }
         if(iptStartDate.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"IPT START DATE", App.getSqlDateTime(thirdDateCalendar)});
         }
@@ -1551,6 +1567,10 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                         rb.setChecked(true);
                         break;
                     }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_5)) && obs[0][1].equals("5")) {
+                        rb.setChecked(true);
+                        break;
+                    }
                 }
                 currentTabletsofRHZ.setVisibility(View.VISIBLE);
             }else if (obs[0][0].equals("CURRENT FORMULATION OF TABLETS OF E")) {
@@ -1616,6 +1636,10 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                         rb.setChecked(true);
                         break;
                     }else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_5)) && obs[0][1].equals("5")) {
                         rb.setChecked(true);
                         break;
                     }
@@ -1724,7 +1748,20 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                     }
                 }
                 eligibleForIpt.setVisibility(View.VISIBLE);
-            }else if (obs[0][0].equals("IPT START DATE")) {
+            }
+            else if (obs[0][0].equals("PATIENT ACCEPTANCE TO IPT")) {
+                for (RadioButton rb : acceptanceToIpt.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                acceptanceToIpt.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("IPT START DATE")) {
                 String thirdDate = obs[0][1];
                 thirdDateCalendar.setTime(App.stringToDate(thirdDate, "yyyy-MM-dd"));
                 iptStartDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
@@ -1968,6 +2005,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         bcgScar.setVisibility(View.GONE);
         tbHistoryIn2Years.setVisibility(View.GONE);
         eligibleForIpt.setVisibility(View.GONE);
+        acceptanceToIpt.setVisibility(View.GONE);
         iptStartDate.setVisibility(View.GONE);
         iptDose.setVisibility(View.GONE);
         initiatingAdditionalTreatmentIpt.setVisibility(View.GONE);
@@ -2344,6 +2382,13 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 initiatingAdditionalTreatment.setVisibility(View.VISIBLE);
             }else{
                 initiatingAdditionalTreatment.setVisibility(View.GONE);
+            }
+        }
+        else if (group == eligibleForIpt.getRadioGroup()) {
+            if (eligibleForIpt.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
+                acceptanceToIpt.setVisibility(View.VISIBLE);
+            } else {
+                acceptanceToIpt.setVisibility(View.GONE);
             }
         }else if (group == patientCategory.getRadioGroup()) {
             if (patientCategory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_category_3))) {

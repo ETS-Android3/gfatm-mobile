@@ -532,7 +532,7 @@
     <string name="ctb_mobile_number">Mobile number</string>
     <string name="ctb_select_form_type">Please select form type</string>
     <string name="ctb_xray_in_6_month">Has the patient had an X-Ray in the past 6 months at an X-Ray Van?</string>
-
+    <string name="ctb_patient_acceptance_ipt">Patient acceptance to IPT</string>
 
 
 
@@ -1121,9 +1121,16 @@
         <item>@string/ctb_22</item>
         <item>@string/ctb_23</item>
         <item>@string/ctb_24</item>
-
-
-
     </string-array>
+
+    <string-array name="ctb_1_to_5_list">
+        <item>@string/ctb_1</item>
+        <item>@string/ctb_2</item>
+        <item>@string/ctb_3</item>
+        <item>@string/ctb_4</item>
+        <item>@string/ctb_5</item>
+    </string-array>
+
+
 
 </resources>
