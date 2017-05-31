@@ -918,7 +918,8 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
                 super.onPostExecute(result);
                 loading.dismiss();
 
-                diabetesFootScreeningMonthOfVisit.getSpinner().selectValue(result.get("FOLLOW-UP MONTH"));
+                if(result.get("FOLLOW-UP MONTH") != null)
+                    diabetesFootScreeningMonthOfVisit.getSpinner().selectValue(result.get("FOLLOW-UP MONTH"));
 
             }
         };

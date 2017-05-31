@@ -214,7 +214,7 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
                 try {
                     if (drugsDispersedDays.getEditText().getText().length() > 0) {
                         double num = Double.parseDouble(drugsDispersedDays.getEditText().getText().toString());
-                        if (num < 1 || num > 10) {
+                        if (num < 1 || num > 90) {
                             drugsDispersedDays.getEditText().setError(getString(R.string.comorbidities_drug_disbursement_days_worth_limit));
                         }
                     }
@@ -355,11 +355,12 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
             String personDOB = App.getPatient().getPerson().getBirthdate();
 
             Date date = new Date();
-            if (secondDateCalendar.before(App.getCalendar(date))) {
+            if (secondDateCalendar.before(formDateCalendar)/*secondDateCalendar.before(App.getCalendar(date))*/) {
 
                 secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.next_date_past), Snackbar.LENGTH_INDEFINITE);
+                //snackbar = Snackbar.make(mainContent, getResources().getString(R.string.next_date_past), Snackbar.LENGTH_INDEFINITE);
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.next_visit_date_cannot_before_form_date), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
                 drugDistributionDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
@@ -384,6 +385,8 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
                 drugDistributionDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
         }
+        formDate.getButton().setEnabled(true);
+        drugDistributionDate.getButton().setEnabled(true);
     }
 
     @Override
@@ -432,7 +435,7 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
             drugsDispersedDays.getEditText().setError(getString(R.string.empty_field));
             drugsDispersedDays.getEditText().requestFocus();
             error = true;
-        } else if (!App.get(drugsDispersedDays).isEmpty() && Integer.parseInt(App.get(drugsDispersedDays)) > 10) {
+        } else if (!App.get(drugsDispersedDays).isEmpty() && Integer.parseInt(App.get(drugsDispersedDays)) > 90) {
             gotoFirstPage();
             drugsDispersedDays.getEditText().setError(getString(R.string.comorbidities_drug_disbursement_days_worth_limit));
             drugsDispersedDays.getEditText().requestFocus();
@@ -707,6 +710,7 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
         super.onClick(view);
 
         if (view == formDate.getButton()) {
+            formDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
@@ -714,10 +718,12 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
         } else if (view == drugDistributionDate.getButton()) {
+            drugDistributionDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", false);
             args.putBoolean("allowFutureDate", true);
+            args.putString("formDate", formDate.getButtonText());
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
         }

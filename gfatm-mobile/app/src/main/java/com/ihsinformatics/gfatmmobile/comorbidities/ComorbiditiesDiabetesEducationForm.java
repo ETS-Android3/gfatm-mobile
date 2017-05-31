@@ -223,6 +223,7 @@ public class ComorbiditiesDiabetesEducationForm extends AbstractFormActivity {
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         }
+        formDate.getButton().setEnabled(true);
     }
 
     @Override
@@ -660,6 +661,7 @@ public class ComorbiditiesDiabetesEducationForm extends AbstractFormActivity {
         super.onClick(view);
 
         if (view == formDate.getButton()) {
+            formDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);

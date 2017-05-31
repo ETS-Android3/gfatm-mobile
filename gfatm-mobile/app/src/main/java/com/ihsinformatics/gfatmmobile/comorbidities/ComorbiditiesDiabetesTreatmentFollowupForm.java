@@ -77,6 +77,8 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
     TitledEditText diabetesFollowupDosageInsulinR;
     TitledButton diabetesFollowupNextScheduledVisit;
 
+    Boolean dateChoose = false;
+
     ScrollView scrollView;
 
     /**
@@ -195,7 +197,7 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
                                 diabetesFollowupDosageInsulinN, diabetesFollowupDosageInsulinR, diabetesFollowupNextScheduledVisit}};
 
         formDate.getButton().setOnClickListener(this);
-        //diabetesFollowupNextScheduledVisit.getButton().setOnClickListener(this);
+        diabetesFollowupNextScheduledVisit.getButton().setOnClickListener(this);
         diabetesFollowupHasPrescribedMedication.getRadioGroup().setOnCheckedChangeListener(this);
         diabetesFollowupChangeInRegimen.getRadioGroup().setOnCheckedChangeListener(this);
 
@@ -508,19 +510,21 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
         }
 
         //secondDateCalendar = formDateCalendar;
-        secondDateCalendar.set(Calendar.YEAR, formDateCalendar.get(Calendar.YEAR));
-        secondDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
-        secondDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
-        secondDateCalendar.add(Calendar.MONTH, 3);
-        diabetesFollowupNextScheduledVisit.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-        /*if (!(diabetesFollowupNextScheduledVisit.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
+        if (!dateChoose) {
+            secondDateCalendar.set(Calendar.YEAR, formDateCalendar.get(Calendar.YEAR));
+            secondDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
+            secondDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
+            secondDateCalendar.add(Calendar.MONTH, 3);
+            diabetesFollowupNextScheduledVisit.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+        }
+        if (!(diabetesFollowupNextScheduledVisit.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
 
             String formDa = diabetesFollowupNextScheduledVisit.getButton().getText().toString();
             String formDa1 = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
 
             //Date date = new Date();
-            if (secondDateCalendar.before(App.getCalendar(App.stringToDate(formDa1, "yyyy-MM-dd'T'HH:mm:ss")))) {
+            if (secondDateCalendar.before(formDateCalendar/*App.getCalendar(App.stringToDate(formDa1, "yyyy-MM-dd"))*/)) {
 
                 secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
@@ -529,7 +533,7 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
 
                 diabetesFollowupNextScheduledVisit.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
-            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
@@ -539,7 +543,10 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
             } else
                 diabetesFollowupNextScheduledVisit.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
-        }*/
+        }
+        dateChoose = false;
+        formDate.getButton().setEnabled(false);
+        diabetesFollowupNextScheduledVisit.getButton().setEnabled(false);
     }
 
     @Override
@@ -1153,6 +1160,7 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
         super.onClick(view);
 
         if (view == formDate.getButton()) {
+            formDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
@@ -1162,12 +1170,15 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
         }
 
         if (view == diabetesFollowupNextScheduledVisit.getButton()) {
+            diabetesFollowupNextScheduledVisit.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
-            args.putBoolean("allowPastDate", true);
+            args.putBoolean("allowPastDate", false);
             args.putBoolean("allowFutureDate", true);
+            args.putString("formDate", formDate.getButtonText());
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
+            dateChoose = true;
         }
     }
 
@@ -1195,11 +1206,15 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
     public void resetViews() {
         super.resetViews();
 
-        secondDateCalendar.set(Calendar.YEAR, formDateCalendar.get(Calendar.YEAR));
-        secondDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
-        secondDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
-        secondDateCalendar.add(Calendar.MONTH, 3);
-        diabetesFollowupNextScheduledVisit.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
+        if (!dateChoose) {
+            secondDateCalendar.set(Calendar.YEAR, formDateCalendar.get(Calendar.YEAR));
+            secondDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
+            secondDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
+            secondDateCalendar.add(Calendar.MONTH, 3);
+            diabetesFollowupNextScheduledVisit.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+        }
         displayReasonForNonCompliance();
         displayIfOther();
 
