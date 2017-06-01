@@ -63,7 +63,7 @@ import java.util.HashMap;
 public class ComorbiditiesUrineMicroalbuminForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener, View.OnTouchListener {
 
     public static final int THIRD_DATE_DIALOG_ID = 3;
-    public static final int FOURTH_DATE_DIALOG_ID = 3;
+    public static final int FOURTH_DATE_DIALOG_ID = 4;
     // Extra Views for date ...
     protected Calendar thirdDateCalendar;
     protected DialogFragment thirdDateFragment;
@@ -91,6 +91,7 @@ public class ComorbiditiesUrineMicroalbuminForm extends AbstractFormActivity imp
     String finalDate = null;
 
     Boolean dateChoose = false;
+    Boolean refillFlag = false;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -313,6 +314,12 @@ public class ComorbiditiesUrineMicroalbuminForm extends AbstractFormActivity imp
 
     @Override
     public void updateDisplay() {
+
+        if(refillFlag)
+        {
+            refillFlag = false;
+            return;
+        }
 
         //formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         if (snackbar != null)
@@ -833,6 +840,8 @@ public class ComorbiditiesUrineMicroalbuminForm extends AbstractFormActivity imp
 
     @Override
     public void refill(int encounterId) {
+
+        refillFlag = true;
 
         OfflineForm fo = serverService.getOfflineFormById(encounterId);
         String date = fo.getFormDate();

@@ -541,6 +541,8 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
     public void resetViews() {
         super.resetViews();
 
+        Boolean flag = true;
+
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         displayFeelingBetterReason();
 
@@ -556,57 +558,60 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
                 int formId = Integer.valueOf(id);
 
                 refill(formId);
+                flag = false;
 
             } else bundle.putBoolean("save", false);
 
         }
 
-        //HERE FOR AUTOPOPULATING OBS
-        final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
-            @Override
-            protected HashMap<String, String> doInBackground(String... params) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        loading.setInverseBackgroundForced(true);
-                        loading.setIndeterminate(true);
-                        loading.setCancelable(false);
-                        loading.setMessage(getResources().getString(R.string.fetching_data));
-                        loading.show();
+        if(flag) {
+            //HERE FOR AUTOPOPULATING OBS
+            final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
+                @Override
+                protected HashMap<String, String> doInBackground(String... params) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            loading.setInverseBackgroundForced(true);
+                            loading.setIndeterminate(true);
+                            loading.setCancelable(false);
+                            loading.setMessage(getResources().getString(R.string.fetching_data));
+                            loading.show();
+                        }
+                    });
+
+                    HashMap<String, String> result = new HashMap<String, String>();
+                    String akuadsScore = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_ASSESSMENT_FORM_MENTAL_HEALTH, "AKUADS SCORE");
+                    String sessionNumber = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_TREATMENT_FOLLOWUP_MENTAL_HEALTH_FORM, "SESSION NUMBER");
+
+                    if (akuadsScore != null)
+                        if (!akuadsScore.equals(""))
+                            result.put("AKUADS SCORE", akuadsScore);
+                    if (sessionNumber != null && !sessionNumber.equals("")) {
+                        sessionNumber = sessionNumber.replace(".0", "");
                     }
-                });
+                    if (sessionNumber != null)
+                        if (!sessionNumber.equals(""))
+                            result.put("SESSION NUMBER", sessionNumber);
 
-                HashMap<String, String> result = new HashMap<String, String>();
-                String akuadsScore = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_ASSESSMENT_FORM_MENTAL_HEALTH, "AKUADS SCORE");
-                String sessionNumber = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_TREATMENT_FOLLOWUP_MENTAL_HEALTH_FORM, "SESSION NUMBER");
-
-                if (akuadsScore != null)
-                    if (!akuadsScore.equals(""))
-                        result.put("AKUADS SCORE", akuadsScore);
-                if (sessionNumber != null && !sessionNumber.equals("")) {
-                    sessionNumber = sessionNumber.replace(".0", "");
+                    return result;
                 }
-                if (sessionNumber != null)
-                    if (!sessionNumber.equals(""))
-                        result.put("SESSION NUMBER", sessionNumber);
 
-                return result;
-            }
+                @Override
+                protected void onProgressUpdate(String... values) {
+                }
 
-            @Override
-            protected void onProgressUpdate(String... values) {
-            }
+                @Override
+                protected void onPostExecute(HashMap<String, String> result) {
+                    super.onPostExecute(result);
+                    loading.dismiss();
 
-            @Override
-            protected void onPostExecute(HashMap<String, String> result) {
-                super.onPostExecute(result);
-                loading.dismiss();
-
-                akuadsRescreeningScore.getEditText().setText(result.get("AKUADS SCORE"));
-                numberOfSessionsConducted.getEditText().setText(result.get("SESSION NUMBER"));
-            }
-        };
-        autopopulateFormTask.execute("");
+                    akuadsRescreeningScore.getEditText().setText(result.get("AKUADS SCORE"));
+                    numberOfSessionsConducted.getEditText().setText(result.get("SESSION NUMBER"));
+                }
+            };
+            autopopulateFormTask.execute("");
+        }
     }
 
     @Override

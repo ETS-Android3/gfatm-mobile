@@ -116,6 +116,7 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
     String finalDate = null;
 
     Boolean dateChoose = false;
+    Boolean refillFlag = false;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -567,6 +568,12 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
 
     @Override
     public void updateDisplay() {
+
+        if(refillFlag)
+        {
+            refillFlag = false;
+            return;
+        }
 
         //formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         if (snackbar != null)
@@ -1320,6 +1327,9 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
 
     @Override
     public void refill(int encounterId) {
+
+        refillFlag = true;
+
         OfflineForm fo = serverService.getOfflineFormById(encounterId);
         String date = fo.getFormDate();
         ArrayList<String[][]> obsValue = fo.getObsValue();

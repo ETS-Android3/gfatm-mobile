@@ -1358,9 +1358,11 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
     void showPreferredLocationOrNot() {
         if (akuadsAgree.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.yes))) {
             preferredTherapyLocationSpinner.setVisibility(View.VISIBLE);
+            nextAppointmentDate.setVisibility(View.VISIBLE);
         }
         else {
             preferredTherapyLocationSpinner.setVisibility(View.GONE);
+            nextAppointmentDate.setVisibility(View.GONE);
         }
     }
 

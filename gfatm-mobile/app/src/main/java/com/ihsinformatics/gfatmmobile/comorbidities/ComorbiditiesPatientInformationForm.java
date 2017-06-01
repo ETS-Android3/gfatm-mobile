@@ -1396,6 +1396,8 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
     public void resetViews() {
         super.resetViews();
 
+        Boolean flag = true;
+
         Object[][] towns = serverService.getAllTowns();
         String[] townList = new String[towns.length];
 
@@ -1433,6 +1435,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
                 int formId = Integer.valueOf(id);
 
                 refill(formId);
+                flag = false;
 
             } else bundle.putBoolean("save", false);
         }
@@ -1451,235 +1454,237 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
             }
         }
 
-        //HERE FOR AUTOPOPULATING OBS
-        final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
-            @Override
-            protected HashMap<String, String> doInBackground(String... params) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        loading.setInverseBackgroundForced(true);
-                        loading.setIndeterminate(true);
-                        loading.setCancelable(false);
-                        loading.setMessage(getResources().getString(R.string.fetching_data));
-                        loading.show();
-                    }
-                });
+        if(flag) {
+            //HERE FOR AUTOPOPULATING OBS
+            final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
+                @Override
+                protected HashMap<String, String> doInBackground(String... params) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            loading.setInverseBackgroundForced(true);
+                            loading.setIndeterminate(true);
+                            loading.setCancelable(false);
+                            loading.setMessage(getResources().getString(R.string.fetching_data));
+                            loading.show();
+                        }
+                    });
 
-                //Autopopulating all the data from FAST component.
-                HashMap<String, String> result = new HashMap<String, String>();
-                String husbandName = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive", "PARTNER FULL NAME");
-                String fatherName = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive", "FATHER NAME");
-                String cnic = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "NATIONAL IDENTIFICATION NUMBER");
-                String cnicOwner = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
-                String otherCnicOwner = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
-                String providedAddress = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "PATIENT PROVIDED ADDRESS");
-                String addressType = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "TYPE OF ADDRESS");
-                String address1 = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "ADDRESS (TEXT)");
-                String address2 = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "EXTENDED ADDRESS (TEXT)");
-                String province = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "PROVINCE");
-                String district = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "DISTRICT");
-                String village = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "VILLAGE");
-                String mobile1 = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "CONTACT PHONE NUMBER");
-                String mobile2 = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "SECONDARY MOBILE NUMBER");
-                String landline1 = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "TERTIARY CONTACT NUMBER");
-                String landline2 = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "QUATERNARY CONTACT NUMBER");
+                    //Autopopulating all the data from FAST component.
+                    HashMap<String, String> result = new HashMap<String, String>();
+                    String husbandName = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive", "PARTNER FULL NAME");
+                    String fatherName = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive", "FATHER NAME");
+                    String cnic = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "NATIONAL IDENTIFICATION NUMBER");
+                    String cnicOwner = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
+                    String otherCnicOwner = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
+                    String providedAddress = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "PATIENT PROVIDED ADDRESS");
+                    String addressType = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "TYPE OF ADDRESS");
+                    String address1 = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "ADDRESS (TEXT)");
+                    String address2 = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "EXTENDED ADDRESS (TEXT)");
+                    String province = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "PROVINCE");
+                    String district = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "DISTRICT");
+                    String village = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "VILLAGE");
+                    String mobile1 = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "CONTACT PHONE NUMBER");
+                    String mobile2 = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "SECONDARY MOBILE NUMBER");
+                    String landline1 = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "TERTIARY CONTACT NUMBER");
+                    String landline2 = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "QUATERNARY CONTACT NUMBER");
 
-                if (husbandName != null)
-                    if (!husbandName .equals(""))
-                        result.put("PARTNER FULL NAME", husbandName);
-                if (fatherName != null)
-                    if (!fatherName .equals(""))
-                        result.put("FATHER NAME", fatherName);
-                if (cnic != null)
-                    if (!cnic .equals(""))
-                        result.put("NATIONAL IDENTIFICATION NUMBER", cnic);
-                if (cnicOwner != null)
-                    if (!cnicOwner .equals(""))
-                        result.put("COMPUTERIZED NATIONAL IDENTIFICATION OWNER", cnicOwner);
-                if (otherCnicOwner != null)
-                    if (!otherCnicOwner.equals(""))
-                        result.put("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", otherCnicOwner);
-                if (providedAddress != null)
-                    if (!providedAddress .equals(""))
-                        result.put("PATIENT PROVIDED ADDRESS", providedAddress);
-                if (addressType != null)
-                    if (!addressType .equals(""))
-                        result.put("TYPE OF ADDRESS", addressType);
-                if (address1 != null)
-                    if (!address1 .equals(""))
-                        result.put("ADDRESS (TEXT)", address1);
-                if (address2 != null)
-                    if (!address2 .equals(""))
-                        result.put("EXTENDED ADDRESS (TEXT)", address2);
-                if (province != null)
-                    if (!province .equals(""))
-                        result.put("PROVINCE", province);
-                if (district != null)
-                    if (!district .equals(""))
-                        result.put("DISTRICT", district);
-                if (village != null)
-                    if (!village .equals(""))
-                        result.put("VILLAGE", village);
-                if (mobile1 != null)
-                    if (!mobile1 .equals(""))
-                        result.put("CONTACT PHONE NUMBER", mobile1);
-                if (mobile2 != null)
-                    if (!mobile2 .equals(""))
-                        result.put("SECONDARY MOBILE NUMBER", mobile2);
-                if (landline1 != null)
-                    if (!landline1 .equals(""))
-                        result.put("TERTIARY CONTACT NUMBER", landline1);
-                if (landline2 != null)
-                    if (!landline2 .equals(""))
-                        result.put("QUATERNARY CONTACT NUMBER", landline2);
+                    if (husbandName != null)
+                        if (!husbandName.equals(""))
+                            result.put("PARTNER FULL NAME", husbandName);
+                    if (fatherName != null)
+                        if (!fatherName.equals(""))
+                            result.put("FATHER NAME", fatherName);
+                    if (cnic != null)
+                        if (!cnic.equals(""))
+                            result.put("NATIONAL IDENTIFICATION NUMBER", cnic);
+                    if (cnicOwner != null)
+                        if (!cnicOwner.equals(""))
+                            result.put("COMPUTERIZED NATIONAL IDENTIFICATION OWNER", cnicOwner);
+                    if (otherCnicOwner != null)
+                        if (!otherCnicOwner.equals(""))
+                            result.put("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", otherCnicOwner);
+                    if (providedAddress != null)
+                        if (!providedAddress.equals(""))
+                            result.put("PATIENT PROVIDED ADDRESS", providedAddress);
+                    if (addressType != null)
+                        if (!addressType.equals(""))
+                            result.put("TYPE OF ADDRESS", addressType);
+                    if (address1 != null)
+                        if (!address1.equals(""))
+                            result.put("ADDRESS (TEXT)", address1);
+                    if (address2 != null)
+                        if (!address2.equals(""))
+                            result.put("EXTENDED ADDRESS (TEXT)", address2);
+                    if (province != null)
+                        if (!province.equals(""))
+                            result.put("PROVINCE", province);
+                    if (district != null)
+                        if (!district.equals(""))
+                            result.put("DISTRICT", district);
+                    if (village != null)
+                        if (!village.equals(""))
+                            result.put("VILLAGE", village);
+                    if (mobile1 != null)
+                        if (!mobile1.equals(""))
+                            result.put("CONTACT PHONE NUMBER", mobile1);
+                    if (mobile2 != null)
+                        if (!mobile2.equals(""))
+                            result.put("SECONDARY MOBILE NUMBER", mobile2);
+                    if (landline1 != null)
+                        if (!landline1.equals(""))
+                            result.put("TERTIARY CONTACT NUMBER", landline1);
+                    if (landline2 != null)
+                        if (!landline2.equals(""))
+                            result.put("QUATERNARY CONTACT NUMBER", landline2);
 
-                return result;
-            }
-
-            @Override
-            protected void onProgressUpdate(String... values) {
-            }
-
-            @Override
-            protected void onPostExecute(HashMap<String, String> result) {
-                super.onPostExecute(result);
-                loading.dismiss();
-
-                husbandName.getEditText().setText(result.get("PARTNER FULL NAME"));
-
-                fatherName.getEditText().setText(result.get("FATHER NAME"));
-
-                if(result.get("NATIONAL IDENTIFICATION NUMBER") != null) {
-                    if(!result.get("NATIONAL IDENTIFICATION NUMBER").equals("")) {
-                        String[] cnicArray = result.get("NATIONAL IDENTIFICATION NUMBER").split("-");
-                        cnic1.setText(cnicArray[0]);
-                        cnic2.setText(cnicArray[1]);
-                        cnic3.setText(cnicArray[2]);
-                    }
+                    return result;
                 }
 
-                String ownerCnic = result.get("COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
-                if(ownerCnic != null) {
-                    if (!ownerCnic.equals("")) {
-                        String value1 = ownerCnic.equals("SELF") ? getResources().getString(R.string.pet_self) :
-                                (ownerCnic.equals("MOTHER") ? getResources().getString(R.string.pet_mother) :
-                                        (ownerCnic.equals("FATHER") ? getResources().getString(R.string.pet_father) :
-                                                (ownerCnic.equals("MATERNAL GRANDMOTHER") ? getResources().getString(R.string.pet_maternal_grandmother) :
-                                                        (ownerCnic.equals("MATERNAL GRANDFATHER") ? getResources().getString(R.string.pet_maternal_grandfather) :
-                                                                (ownerCnic.equals("PATERNAL GRANDMOTHER") ? getResources().getString(R.string.pet_paternal_grandmother) :
-                                                                        (ownerCnic.equals("PATERNAL GRANDFATHER") ? getResources().getString(R.string.pet_paternal_grandfather) :
-                                                                                (ownerCnic.equals("BROTHER") ? getResources().getString(R.string.pet_brother) :
-                                                                                        (ownerCnic.equals("SISTER") ? getResources().getString(R.string.pet_sister) :
-                                                                                                (ownerCnic.equals("SON") ? getResources().getString(R.string.pet_son) :
-                                                                                                        (ownerCnic.equals("DAUGHTER") ? getResources().getString(R.string.pet_daughter) :
-                                                                                                                (ownerCnic.equals("SPOUSE") ? getResources().getString(R.string.pet_spouse) :
-                                                                                                                        (ownerCnic.equals("AUNT") ? getResources().getString(R.string.pet_aunt) :
-                                                                                                                                (ownerCnic.equals("UNCLE") ? getResources().getString(R.string.pet_uncle) : getResources().getString(R.string.pet_other))))))))))))));
-                        nicOwner.getSpinner().selectValue(value1);
+                @Override
+                protected void onProgressUpdate(String... values) {
+                }
+
+                @Override
+                protected void onPostExecute(HashMap<String, String> result) {
+                    super.onPostExecute(result);
+                    loading.dismiss();
+
+                    husbandName.getEditText().setText(result.get("PARTNER FULL NAME"));
+
+                    fatherName.getEditText().setText(result.get("FATHER NAME"));
+
+                    if (result.get("NATIONAL IDENTIFICATION NUMBER") != null) {
+                        if (!result.get("NATIONAL IDENTIFICATION NUMBER").equals("")) {
+                            String[] cnicArray = result.get("NATIONAL IDENTIFICATION NUMBER").split("-");
+                            cnic1.setText(cnicArray[0]);
+                            cnic2.setText(cnicArray[1]);
+                            cnic3.setText(cnicArray[2]);
+                        }
                     }
-                }
 
-                if(result.get("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER") != null) {
-                    if(!result.get("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER").equals(""))
-                    otherNicOwner.setVisibility(View.VISIBLE);
-                }
-                otherNicOwner.getEditText().setText(result.get("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER"));
+                    String ownerCnic = result.get("COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
+                    if (ownerCnic != null) {
+                        if (!ownerCnic.equals("")) {
+                            String value1 = ownerCnic.equals("SELF") ? getResources().getString(R.string.pet_self) :
+                                    (ownerCnic.equals("MOTHER") ? getResources().getString(R.string.pet_mother) :
+                                            (ownerCnic.equals("FATHER") ? getResources().getString(R.string.pet_father) :
+                                                    (ownerCnic.equals("MATERNAL GRANDMOTHER") ? getResources().getString(R.string.pet_maternal_grandmother) :
+                                                            (ownerCnic.equals("MATERNAL GRANDFATHER") ? getResources().getString(R.string.pet_maternal_grandfather) :
+                                                                    (ownerCnic.equals("PATERNAL GRANDMOTHER") ? getResources().getString(R.string.pet_paternal_grandmother) :
+                                                                            (ownerCnic.equals("PATERNAL GRANDFATHER") ? getResources().getString(R.string.pet_paternal_grandfather) :
+                                                                                    (ownerCnic.equals("BROTHER") ? getResources().getString(R.string.pet_brother) :
+                                                                                            (ownerCnic.equals("SISTER") ? getResources().getString(R.string.pet_sister) :
+                                                                                                    (ownerCnic.equals("SON") ? getResources().getString(R.string.pet_son) :
+                                                                                                            (ownerCnic.equals("DAUGHTER") ? getResources().getString(R.string.pet_daughter) :
+                                                                                                                    (ownerCnic.equals("SPOUSE") ? getResources().getString(R.string.pet_spouse) :
+                                                                                                                            (ownerCnic.equals("AUNT") ? getResources().getString(R.string.pet_aunt) :
+                                                                                                                                    (ownerCnic.equals("UNCLE") ? getResources().getString(R.string.pet_uncle) : getResources().getString(R.string.pet_other))))))))))))));
+                            nicOwner.getSpinner().selectValue(value1);
+                        }
+                    }
 
-                String addressProvided1 = result.get("PATIENT PROVIDED ADDRESS");
-                if(addressProvided1 != null) {
-                    if(!addressProvided1.equals("")) {
-                        for (RadioButton rb : addressProvided.getRadioGroup().getButtons()) {
-                            if (rb.getText().equals(getResources().getString(R.string.yes)) && addressProvided1.equals("YES")) {
-                                rb.setChecked(true);
-                                break;
-                            } else if (rb.getText().equals(getResources().getString(R.string.no)) && addressProvided1.equals("NO")) {
-                                rb.setChecked(true);
-                                break;
+                    if (result.get("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER") != null) {
+                        if (!result.get("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER").equals(""))
+                            otherNicOwner.setVisibility(View.VISIBLE);
+                    }
+                    otherNicOwner.getEditText().setText(result.get("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER"));
+
+                    String addressProvided1 = result.get("PATIENT PROVIDED ADDRESS");
+                    if (addressProvided1 != null) {
+                        if (!addressProvided1.equals("")) {
+                            for (RadioButton rb : addressProvided.getRadioGroup().getButtons()) {
+                                if (rb.getText().equals(getResources().getString(R.string.yes)) && addressProvided1.equals("YES")) {
+                                    rb.setChecked(true);
+                                    break;
+                                } else if (rb.getText().equals(getResources().getString(R.string.no)) && addressProvided1.equals("NO")) {
+                                    rb.setChecked(true);
+                                    break;
+                                }
                             }
                         }
                     }
-                }
 
-                String addressType1 = result.get("TYPE OF ADDRESS");
-                if(addressType1 != null) {
-                    if (!addressType1.equals("")) {
-                        for (RadioButton rb : addressType.getRadioGroup().getButtons()) {
-                            if (rb.getText().equals(getResources().getString(R.string.comorbidities_patient_information_address_type_permanent)) && addressType1.equals("PERMANENT ADDRESS")) {
-                                rb.setChecked(true);
-                                break;
-                            } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_patient_information_address_type_temporary)) && addressType1.equals("TEMPORARY ADDRESS")) {
-                                rb.setChecked(true);
-                                break;
+                    String addressType1 = result.get("TYPE OF ADDRESS");
+                    if (addressType1 != null) {
+                        if (!addressType1.equals("")) {
+                            for (RadioButton rb : addressType.getRadioGroup().getButtons()) {
+                                if (rb.getText().equals(getResources().getString(R.string.comorbidities_patient_information_address_type_permanent)) && addressType1.equals("PERMANENT ADDRESS")) {
+                                    rb.setChecked(true);
+                                    break;
+                                } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_patient_information_address_type_temporary)) && addressType1.equals("TEMPORARY ADDRESS")) {
+                                    rb.setChecked(true);
+                                    break;
+                                }
                             }
                         }
                     }
-                }
 
-                address1.getEditText().setText(result.get("ADDRESS (TEXT)"));
-                address2.setText(result.get("EXTENDED ADDRESS (TEXT)"));
+                    address1.getEditText().setText(result.get("ADDRESS (TEXT)"));
+                    address2.setText(result.get("EXTENDED ADDRESS (TEXT)"));
 
-                String province1 = result.get("PROVINCE");
-                if(province1 != null) {
-                    if(!province1.equals("")) {
-                        province.getSpinner().selectValue(province1);
+                    String province1 = result.get("PROVINCE");
+                    if (province1 != null) {
+                        if (!province1.equals("")) {
+                            province.getSpinner().selectValue(province1);
+                        }
+                    }
+
+                    String district1 = result.get("DISTRICT");
+                    if (district1 != null) {
+                        if (!district1.equals("")) {
+                            String[] districts = serverService.getDistrictList(App.get(province));
+                            district.getSpinner().setSpinnerData(districts);
+                            district.getSpinner().selectValue(district1);
+                            district.getSpinner().setTag("selected");
+                        }
+                    }
+
+                    String city1 = result.get("VILLAGE");
+                    if (city1 != null) {
+                        if (!city1.equals("")) {
+                            String[] cities = serverService.getCityList(App.get(district));
+                            city.getSpinner().setSpinnerData(cities);
+                            city.getSpinner().selectValue(city1);
+                            city.getSpinner().setTag("selected");
+                        }
+                    }
+
+                    if (result.get("CONTACT PHONE NUMBER") != null) {
+                        if (!result.get("CONTACT PHONE NUMBER").equals("")) {
+                            String[] mobile1Array = result.get("CONTACT PHONE NUMBER").split("-");
+                            mobileNumber1a.setText(mobile1Array[0]);
+                            mobileNumber1b.setText(mobile1Array[1]);
+                        }
+                    }
+
+                    if (result.get("SECONDARY MOBILE NUMBER") != null) {
+                        if (!result.get("SECONDARY MOBILE NUMBER").equals("")) {
+                            String[] mobile2Array = result.get("SECONDARY MOBILE NUMBER").split("-");
+                            mobileNumber2a.setText(mobile2Array[0]);
+                            mobileNumber2b.setText(mobile2Array[1]);
+                        }
+                    }
+
+                    if (result.get("TERTIARY CONTACT NUMBER") != null) {
+                        if (!result.get("TERTIARY CONTACT NUMBER").equals("")) {
+                            String[] landline1Array = result.get("TERTIARY CONTACT NUMBER").split("-");
+                            landline1a.setText(landline1Array[0]);
+                            landline1b.setText(landline1Array[1]);
+                        }
+                    }
+
+                    if (result.get("QUATERNARY CONTACT NUMBER") != null) {
+                        if (!result.get("QUATERNARY CONTACT NUMBER").equals("")) {
+                            String[] landline2Array = result.get("QUATERNARY CONTACT NUMBER").split("-");
+                            landline2a.setText(landline2Array[0]);
+                            landline2b.setText(landline2Array[1]);
+                        }
                     }
                 }
-
-                String district1 = result.get("DISTRICT");
-                if(district1 != null) {
-                    if(!district1.equals("")) {
-                        String[] districts = serverService.getDistrictList(App.get(province));
-                        district.getSpinner().setSpinnerData(districts);
-                        district.getSpinner().selectValue(district1);
-                        district.getSpinner().setTag("selected");
-                    }
-                }
-
-                String city1 = result.get("VILLAGE");
-                if(city1 != null) {
-                    if(!city1.equals("")) {
-                        String[] cities = serverService.getCityList(App.get(district));
-                        city.getSpinner().setSpinnerData(cities);
-                        city.getSpinner().selectValue(city1);
-                        city.getSpinner().setTag("selected");
-                    }
-                }
-
-                if(result.get("CONTACT PHONE NUMBER") != null) {
-                    if(!result.get("CONTACT PHONE NUMBER").equals("")) {
-                        String[] mobile1Array = result.get("CONTACT PHONE NUMBER").split("-");
-                        mobileNumber1a.setText(mobile1Array[0]);
-                        mobileNumber1b.setText(mobile1Array[1]);
-                    }
-                }
-
-                if(result.get("SECONDARY MOBILE NUMBER") != null) {
-                    if(!result.get("SECONDARY MOBILE NUMBER").equals("")) {
-                        String[] mobile2Array = result.get("SECONDARY MOBILE NUMBER").split("-");
-                        mobileNumber2a.setText(mobile2Array[0]);
-                        mobileNumber2b.setText(mobile2Array[1]);
-                    }
-                }
-
-                if(result.get("TERTIARY CONTACT NUMBER") != null) {
-                    if (!result.get("TERTIARY CONTACT NUMBER").equals("")) {
-                        String[] landline1Array = result.get("TERTIARY CONTACT NUMBER").split("-");
-                        landline1a.setText(landline1Array[0]);
-                        landline1b.setText(landline1Array[1]);
-                    }
-                }
-
-                if(result.get("QUATERNARY CONTACT NUMBER") != null) {
-                    if (!result.get("QUATERNARY CONTACT NUMBER").equals("")) {
-                        String[] landline2Array = result.get("QUATERNARY CONTACT NUMBER").split("-");
-                        landline2a.setText(landline2Array[0]);
-                        landline2b.setText(landline2Array[1]);
-                    }
-                }
-            }
-        };
-        autopopulateFormTask.execute("");
+            };
+            autopopulateFormTask.execute("");
+        }
     }
 
     @Override
