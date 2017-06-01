@@ -2,6 +2,7 @@ package com.ihsinformatics.gfatmmobile.fast;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,8 +11,10 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -32,6 +35,7 @@ import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
+import com.ihsinformatics.gfatmmobile.custom.MyEditText;
 import com.ihsinformatics.gfatmmobile.custom.MyLinearLayout;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
@@ -57,21 +61,21 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
     // Views...
     TitledButton formDate;
     LinearLayout cnicLinearLayout;
-    TitledEditText cnic1;
-    TitledEditText cnic2;
-    TitledEditText cnic3;
+    MyEditText cnic1;
+    MyEditText cnic2;
+    MyEditText cnic3;
     LinearLayout mobileLinearLayout;
-    TitledEditText mobile1;
-    TitledEditText mobile2;
+    MyEditText mobile1;
+    MyEditText mobile2;
     LinearLayout secondaryMobileLinearLayout;
-    TitledEditText secondaryMobile1;
-    TitledEditText secondaryMobile2;
+    MyEditText secondaryMobile1;
+    MyEditText secondaryMobile2;
     LinearLayout landlineLinearLayout;
-    TitledEditText landline1;
-    TitledEditText landline2;
+    MyEditText landline1;
+    MyEditText landline2;
     LinearLayout secondaryLandlineLinearLayout;
-    TitledEditText secondaryLandline1;
-    TitledEditText secondaryLandline2;
+    MyEditText secondaryLandline1;
+    MyEditText secondaryLandline2;
     TitledSpinner cnicOwner;
     TitledEditText otherCnicOwner;
     TitledRadioGroup addressProvided;
@@ -159,14 +163,28 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
 
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+
         cnicLinearLayout = new LinearLayout(context);
-        cnicLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
-        cnic1 = new TitledEditText(context, null, getResources().getString(R.string.fast_nic_number), "", "#####", 5, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        cnicLinearLayout.addView(cnic1);
-        cnic2 = new TitledEditText(context, null, "-", "", "#######", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        cnicLinearLayout.addView(cnic2);
-        cnic3 = new TitledEditText(context, null, "-", "", "#", 1, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        cnicLinearLayout.addView(cnic3);
+        cnicLinearLayout.setOrientation(LinearLayout.VERTICAL);
+        MyTextView cnic = new MyTextView(context, getResources().getString(R.string.fast_nic_number));
+        cnicLinearLayout.addView(cnic);
+        LinearLayout cnicPartLayout = new LinearLayout(context);
+        cnicPartLayout.setOrientation(LinearLayout.HORIZONTAL);
+        cnic1 = new MyEditText(context, "", 5, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE);
+        cnic1.setHint("XXXXX");
+        cnicPartLayout.addView(cnic1);
+        MyTextView cnicDash = new MyTextView(context, " - ");
+        cnicPartLayout.addView(cnicDash);
+        cnic2 = new MyEditText(context, "", 7, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE);
+        cnic2.setHint("XXXXXXX");
+        cnicPartLayout.addView(cnic2);
+        MyTextView cnicDash2 = new MyTextView(context, " - ");
+        cnicPartLayout.addView(cnicDash2);
+        cnic3 = new MyEditText(context, "", 1, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE);
+        cnic3.setHint("X");
+        cnicPartLayout.addView(cnic3);
+        cnicLinearLayout.addView(cnicPartLayout);
+
         cnicOwner = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_whose_nic_is_this), getResources().getStringArray(R.array.fast_whose_nic_is_this_list), getResources().getString(R.string.fast_self), App.VERTICAL);
         otherCnicOwner = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         addressProvided = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_provided_their_address), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
@@ -184,38 +202,121 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         addressType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_type_of_address_is_this), getResources().getStringArray(R.array.fast_type_of_address_list), getResources().getString(R.string.fast_perminant), App.VERTICAL, App.VERTICAL);
         nearestLandmark = new TitledEditText(context, null, getResources().getString(R.string.fast_nearest_landmark), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         contactPermission = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_can_we_call_you), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
-        mobileLinearLayout = new LinearLayout(context);
+     
+     
+      /*  mobileLinearLayout = new LinearLayout(context);
         mobileLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
         mobile1 = new TitledEditText(context, null, getResources().getString(R.string.fast_mobile_number), "", "####", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         mobileLinearLayout.addView(mobile1);
         mobile2 = new TitledEditText(context, null, "-", "", "#######", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        mobileLinearLayout.addView(mobile2);
-        secondaryMobileLinearLayout = new LinearLayout(context);
+        mobileLinearLayout.addView(mobile2);*/
+
+
+        mobileLinearLayout = new LinearLayout(context);
+        mobileLinearLayout.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout mobileQuestion = new LinearLayout(context);
+        mobileQuestion.setOrientation(LinearLayout.HORIZONTAL);
+        MyTextView mobileNumberLabel = new MyTextView(context, getResources().getString(R.string.fast_mobile_number));
+        mobileQuestion.addView(mobileNumberLabel);
+        TextView mandatorySign = new TextView(context);
+        mandatorySign.setText("*");
+        mandatorySign.setTextColor(Color.parseColor("#ff0000"));
+        mobileQuestion.addView(mandatorySign);
+        mobileLinearLayout.addView(mobileQuestion);
+        LinearLayout mobileNumberPart = new LinearLayout(context);
+        mobileNumberPart.setOrientation(LinearLayout.HORIZONTAL);
+        mobile1 = new MyEditText(context,"", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        mobile1.setHint("03XX");
+        mobileNumberPart.addView(mobile1);
+        MyTextView mobileNumberDash = new MyTextView(context, " - ");
+        mobileNumberPart.addView(mobileNumberDash);
+        mobile2 = new MyEditText(context,"",  7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        mobile2.setHint("XXXXXXX");
+        mobileNumberPart.addView(mobile2);
+        mobileLinearLayout.addView(mobileNumberPart);
+
+        
+    /*    secondaryMobileLinearLayout = new LinearLayout(context);
         secondaryMobileLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
         secondaryMobile1 = new TitledEditText(context, null, getResources().getString(R.string.fast_secondary_mobile), "", "####", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         secondaryMobileLinearLayout.addView(secondaryMobile1);
         secondaryMobile2 = new TitledEditText(context, null, "-", "", "#######", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        secondaryMobileLinearLayout.addView(secondaryMobile2);
+        secondaryMobileLinearLayout.addView(secondaryMobile2);*/
+
+
+        secondaryMobileLinearLayout = new LinearLayout(context);
+        secondaryMobileLinearLayout.setOrientation(LinearLayout.VERTICAL);
+        MyTextView secondaryMobileNumberLabel = new MyTextView(context, getResources().getString(R.string.fast_secondary_mobile));
+        secondaryMobileLinearLayout.addView(secondaryMobileNumberLabel);
+        LinearLayout secondaryMobileNumberPart = new LinearLayout(context);
+        secondaryMobileNumberPart.setOrientation(LinearLayout.HORIZONTAL);
+        secondaryMobile1 = new MyEditText(context,"", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        secondaryMobile1.setHint("03XX");
+        secondaryMobileNumberPart.addView(secondaryMobile1);
+        MyTextView secondarysecondaryMobileNumberDash = new MyTextView(context, " - ");
+        secondaryMobileNumberPart.addView(secondarysecondaryMobileNumberDash);
+        secondaryMobile2 = new MyEditText(context,"",  7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        secondaryMobile2.setHint("XXXXXXX");
+        secondaryMobileNumberPart.addView(secondaryMobile2);
+        secondaryMobileLinearLayout.addView(secondaryMobileNumberPart);
+
+
         landlineLinearLayout = new LinearLayout(context);
+        landlineLinearLayout.setOrientation(LinearLayout.VERTICAL);
+        MyTextView landlineLabel = new MyTextView(context, getResources().getString(R.string.fast_landline_number));
+        landlineLinearLayout.addView(landlineLabel);
+        LinearLayout landlineNumberPart = new LinearLayout(context);
+        landlineNumberPart.setOrientation(LinearLayout.HORIZONTAL);
+        landline1 = new MyEditText(context,"", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        landline1.setHint("0XXX");
+        landlineNumberPart.addView(landline1);
+        MyTextView landlineNumberDash = new MyTextView(context, " - ");
+        landlineNumberPart.addView(landlineNumberDash);
+        landline2 = new MyEditText(context,"",  7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        landline2.setHint("XXXXXXX");
+        landlineNumberPart.addView(landline2);
+        landlineLinearLayout.addView(landlineNumberPart);
+    
+    
+     /*   landlineLinearLayout = new LinearLayout(context);
         landlineLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
         landline1 = new TitledEditText(context, null, getResources().getString(R.string.fast_landline_number), "", "####", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         landlineLinearLayout.addView(landline1);
         landline2 = new TitledEditText(context, null, "-", "", "#######", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        landlineLinearLayout.addView(landline2);
-        secondaryLandlineLinearLayout = new LinearLayout(context);
+        landlineLinearLayout.addView(landline2);*/
+        
+      /*  secondaryLandlineLinearLayout = new LinearLayout(context);
         secondaryLandlineLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
         secondaryLandline1 = new TitledEditText(context, null, getResources().getString(R.string.fast_secondary_landline), "", "####", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         secondaryLandlineLinearLayout.addView(secondaryLandline1);
         secondaryLandline2 = new TitledEditText(context, null, "-", "", "#######", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        secondaryLandlineLinearLayout.addView(secondaryLandline2);
+        secondaryLandlineLinearLayout.addView(secondaryLandline2);*/
+
+        secondaryLandlineLinearLayout = new LinearLayout(context);
+        secondaryLandlineLinearLayout.setOrientation(LinearLayout.VERTICAL);
+        MyTextView secondaryLandlineLabel = new MyTextView(context, getResources().getString(R.string.fast_secondary_landline));
+        secondaryLandlineLinearLayout.addView(secondaryLandlineLabel);
+        LinearLayout secondaryLandlineLinearLayoutPart = new LinearLayout(context);
+        secondaryLandlineLinearLayoutPart.setOrientation(LinearLayout.HORIZONTAL);
+        secondaryLandline1 = new MyEditText(context,"", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        secondaryLandline1.setHint("0XXX");
+        secondaryLandlineLinearLayoutPart.addView(secondaryLandline1);
+        MyTextView secondaryLandlineLinearLayoutDash = new MyTextView(context, " - ");
+        secondaryLandlineLinearLayoutPart.addView(secondaryLandlineLinearLayoutDash);
+        secondaryLandline2 = new MyEditText(context,"",  7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        secondaryLandline2.setHint("XXXXXXX");
+        secondaryLandlineLinearLayoutPart.addView(secondaryLandline2);
+        secondaryLandlineLinearLayout.addView(secondaryLandlineLinearLayoutPart);
+
+
 
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), cnic1.getEditText(), cnic2.getEditText(), cnic3.getEditText(), cnicOwner.getSpinner(), otherCnicOwner.getEditText(),
+        views = new View[]{formDate.getButton(), cnic1, cnic2, cnic3, cnicOwner.getSpinner(), otherCnicOwner.getEditText(),
                 addressProvided.getRadioGroup(), addressHouse.getEditText(), district.getSpinner(),
                 city.getSpinner(), addressType.getRadioGroup(), nearestLandmark.getEditText(), contactPermission.getRadioGroup()
-                , mobile1.getEditText(), mobile2.getEditText(), secondaryMobile1.getEditText(), secondaryMobile2.getEditText(), landline1.getEditText(),
-                landline2.getEditText(), secondaryLandline1.getEditText(), secondaryLandline2.getEditText()};
+                , mobile1, mobile2, secondaryMobile1, secondaryMobile2, landline1,
+                landline2, secondaryLandline1, secondaryLandline2};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
@@ -231,6 +332,230 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         district.getSpinner().setOnItemSelectedListener(this);
 
         resetViews();
+
+        cnic1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()==5){
+                    cnic2.requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        cnic2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()==7){
+                    cnic3.requestFocus();
+                }
+
+                if(s.length()==0){
+                    cnic1.requestFocus();
+                    cnic1.setSelection(cnic1.getText().length());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        cnic3.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()==0){
+                    cnic2.requestFocus();
+                    cnic2.setSelection(cnic2.getText().length());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
+
+        mobile2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()==0){
+                    mobile1.requestFocus();
+                    mobile1.setSelection(mobile1.getText().length());
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
+        mobile1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()==4){
+                    mobile2.requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        secondaryMobile2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()==0){
+                    secondaryMobile1.requestFocus();
+                    secondaryMobile1.setSelection(secondaryMobile1.getText().length());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        secondaryMobile1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()==4){
+                    secondaryMobile2.requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        landline2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()==0){
+                    landline1.requestFocus();
+                    landline1.setSelection(landline1.getText().length());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        landline1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()==4){
+                    landline2.requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        secondaryLandline2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()==0){
+                    secondaryLandline1.requestFocus();
+                    secondaryLandline1.setSelection(secondaryLandline1.getText().length());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        secondaryLandline1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()==4){
+                    secondaryLandline2.requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
     }
 
     @Override
@@ -304,163 +629,163 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             error = true;
         }
 
-      /*  if (cnic1.getEditText().getText().toString().trim().isEmpty()) {
+      /*  if (cnic1.getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            cnic1.getEditText().setError(getString(R.string.empty_field));
-            cnic1.getEditText().requestFocus();
+            cnic1.setError(getString(R.string.empty_field));
+            cnic1.requestFocus();
             error = true;
         }
 
 
-        if (cnic2.getEditText().getText().toString().trim().isEmpty()) {
+        if (cnic2.getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            cnic2.getEditText().setError(getString(R.string.empty_field));
-            cnic2.getEditText().requestFocus();
+            cnic2.setError(getString(R.string.empty_field));
+            cnic2.requestFocus();
             error = true;
         }
 
-        if (cnic3.getEditText().getText().toString().trim().isEmpty()) {
+        if (cnic3.getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            cnic3.getEditText().setError(getString(R.string.empty_field));
-            cnic3.getEditText().requestFocus();
+            cnic3.setError(getString(R.string.empty_field));
+            cnic3.requestFocus();
             error = true;
         }*/
 
 
-        if (!cnic1.getEditText().getText().toString().trim().isEmpty() && cnic2.getEditText().getText().toString().trim().isEmpty() && cnic3.getEditText().getText().toString().trim().isEmpty()) {
+        if (!cnic1.getText().toString().trim().isEmpty() && cnic2.getText().toString().trim().isEmpty() && cnic3.getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            cnic2.getEditText().setError(getString(R.string.empty_field));
-            cnic2.getEditText().requestFocus();
+            cnic2.setError(getString(R.string.empty_field));
+            cnic2.requestFocus();
 
-            cnic3.getEditText().setError(getString(R.string.empty_field));
-            cnic3.getEditText().requestFocus();
+            cnic3.setError(getString(R.string.empty_field));
+            cnic3.requestFocus();
             error = true;
         }
 
-        if (!cnic1.getEditText().getText().toString().trim().isEmpty() && cnic2.getEditText().getText().toString().trim().isEmpty() && !cnic3.getEditText().getText().toString().trim().isEmpty()) {
+        if (!cnic1.getText().toString().trim().isEmpty() && cnic2.getText().toString().trim().isEmpty() && !cnic3.getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            cnic2.getEditText().setError(getString(R.string.empty_field));
-            cnic2.getEditText().requestFocus();
+            cnic2.setError(getString(R.string.empty_field));
+            cnic2.requestFocus();
             error = true;
         }
 
-        if (!cnic1.getEditText().getText().toString().trim().isEmpty() && !cnic2.getEditText().getText().toString().trim().isEmpty() && cnic3.getEditText().getText().toString().trim().isEmpty()) {
+        if (!cnic1.getText().toString().trim().isEmpty() && !cnic2.getText().toString().trim().isEmpty() && cnic3.getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            cnic3.getEditText().setError(getString(R.string.empty_field));
-            cnic3.getEditText().requestFocus();
+            cnic3.setError(getString(R.string.empty_field));
+            cnic3.requestFocus();
             error = true;
         }
 
-        if (cnic1.getEditText().getText().toString().trim().isEmpty() && !cnic2.getEditText().getText().toString().trim().isEmpty() && cnic3.getEditText().getText().toString().trim().isEmpty()) {
+        if (cnic1.getText().toString().trim().isEmpty() && !cnic2.getText().toString().trim().isEmpty() && cnic3.getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            cnic1.getEditText().setError(getString(R.string.empty_field));
-            cnic1.getEditText().requestFocus();
+            cnic1.setError(getString(R.string.empty_field));
+            cnic1.requestFocus();
 
-            cnic3.getEditText().setError(getString(R.string.empty_field));
-            cnic3.getEditText().requestFocus();
+            cnic3.setError(getString(R.string.empty_field));
+            cnic3.requestFocus();
             error = true;
         }
-        if (!cnic1.getEditText().getText().toString().trim().isEmpty() && !cnic2.getEditText().getText().toString().trim().isEmpty() && cnic3.getEditText().getText().toString().trim().isEmpty()) {
+        if (!cnic1.getText().toString().trim().isEmpty() && !cnic2.getText().toString().trim().isEmpty() && cnic3.getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            cnic3.getEditText().setError(getString(R.string.empty_field));
-            cnic3.getEditText().requestFocus();
+            cnic3.setError(getString(R.string.empty_field));
+            cnic3.requestFocus();
             error = true;
         }
-        if (cnic1.getEditText().getText().toString().trim().isEmpty() && !cnic2.getEditText().getText().toString().trim().isEmpty() && !cnic3.getEditText().getText().toString().trim().isEmpty()) {
+        if (cnic1.getText().toString().trim().isEmpty() && !cnic2.getText().toString().trim().isEmpty() && !cnic3.getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            cnic1.getEditText().setError(getString(R.string.empty_field));
-            cnic1.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (cnic1.getEditText().getText().toString().trim().isEmpty() && cnic2.getEditText().getText().toString().trim().isEmpty() && !cnic3.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            cnic1.getEditText().setError(getString(R.string.empty_field));
-            cnic1.getEditText().requestFocus();
-
-            cnic2.getEditText().setError(getString(R.string.empty_field));
-            cnic2.getEditText().requestFocus();
+            cnic1.setError(getString(R.string.empty_field));
+            cnic1.requestFocus();
             error = true;
         }
 
-        if (!cnic1.getEditText().getText().toString().trim().isEmpty() && cnic2.getEditText().getText().toString().trim().isEmpty() && !cnic3.getEditText().getText().toString().trim().isEmpty()) {
+        if (cnic1.getText().toString().trim().isEmpty() && cnic2.getText().toString().trim().isEmpty() && !cnic3.getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            cnic2.getEditText().setError(getString(R.string.empty_field));
-            cnic2.getEditText().requestFocus();
+            cnic1.setError(getString(R.string.empty_field));
+            cnic1.requestFocus();
+
+            cnic2.setError(getString(R.string.empty_field));
+            cnic2.requestFocus();
             error = true;
         }
 
-        if (cnic1.getEditText().getText().toString().trim().isEmpty() && !cnic2.getEditText().getText().toString().trim().isEmpty() && !cnic3.getEditText().getText().toString().trim().isEmpty()) {
+        if (!cnic1.getText().toString().trim().isEmpty() && cnic2.getText().toString().trim().isEmpty() && !cnic3.getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            cnic1.getEditText().setError(getString(R.string.empty_field));
-            cnic1.getEditText().requestFocus();
+            cnic2.setError(getString(R.string.empty_field));
+            cnic2.requestFocus();
+            error = true;
+        }
+
+        if (cnic1.getText().toString().trim().isEmpty() && !cnic2.getText().toString().trim().isEmpty() && !cnic3.getText().toString().trim().isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            cnic1.setError(getString(R.string.empty_field));
+            cnic1.requestFocus();
             error = true;
         }
 
 
-        if (cnic1.getEditText().getText().toString().length() > 0 && App.get(cnic1).length() != 5) {
+        if (cnic1.getText().toString().length() > 0 && App.get(cnic1).length() != 5) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            cnic1.getEditText().setError(getString(R.string.length_message));
-            cnic1.getEditText().requestFocus();
+            cnic1.setError(getString(R.string.length_message));
+            cnic1.requestFocus();
             error = true;
         }
 
-        if (cnic2.getEditText().getText().toString().length() > 0 && App.get(cnic2).length() != 7) {
+        if (cnic2.getText().toString().length() > 0 && App.get(cnic2).length() != 7) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            cnic2.getEditText().setError(getString(R.string.length_message));
-            cnic2.getEditText().requestFocus();
+            cnic2.setError(getString(R.string.length_message));
+            cnic2.requestFocus();
             error = true;
         }
 
-        if ( cnic3.getEditText().getText().toString().length() > 0  && App.get(cnic3).length() != 1) {
+        if ( cnic3.getText().toString().length() > 0  && App.get(cnic3).length() != 1) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            cnic3.getEditText().setError(getString(R.string.length_message));
-            cnic3.getEditText().requestFocus();
+            cnic3.setError(getString(R.string.length_message));
+            cnic3.requestFocus();
             error = true;
         }
 
@@ -474,96 +799,96 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             error = true;
         }
 
-        if (mobile1.getEditText().getText().toString().trim().isEmpty()) {
+        if (mobile1.getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            mobile1.getEditText().setError(getString(R.string.empty_field));
-            mobile1.getEditText().requestFocus();
+            mobile1.setError(getString(R.string.empty_field));
+            mobile1.requestFocus();
             error = true;
         }
 
-        if (mobile2.getEditText().getText().toString().trim().isEmpty()) {
+        if (mobile2.getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            mobile2.getEditText().setError(getString(R.string.empty_field));
-            mobile2.getEditText().requestFocus();
+            mobile2.setError(getString(R.string.empty_field));
+            mobile2.requestFocus();
             error = true;
         }
 
-        if (secondaryMobile1.getEditText().getText().toString().trim().isEmpty() && !secondaryMobile2.getEditText().getText().toString().trim().isEmpty()) {
+        if (secondaryMobile1.getText().toString().trim().isEmpty() && !secondaryMobile2.getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            secondaryMobile1.getEditText().setError(getString(R.string.empty_field));
-            secondaryMobile1.getEditText().requestFocus();
+            secondaryMobile1.setError(getString(R.string.empty_field));
+            secondaryMobile1.requestFocus();
             error = true;
         } else {
-            secondaryMobile1.getEditText().setError(null);
+            secondaryMobile1.setError(null);
         }
 
-        if (secondaryMobile2.getEditText().getText().toString().trim().isEmpty() && !secondaryMobile1.getEditText().getText().toString().trim().isEmpty()) {
+        if (secondaryMobile2.getText().toString().trim().isEmpty() && !secondaryMobile1.getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            secondaryMobile2.getEditText().setError(getString(R.string.empty_field));
-            secondaryMobile2.getEditText().requestFocus();
+            secondaryMobile2.setError(getString(R.string.empty_field));
+            secondaryMobile2.requestFocus();
             error = true;
         } else {
-            secondaryMobile2.getEditText().setError(null);
+            secondaryMobile2.setError(null);
         }
 
-        if (landline1.getEditText().getText().toString().trim().isEmpty() && !landline2.getEditText().getText().toString().trim().isEmpty()) {
+        if (landline1.getText().toString().trim().isEmpty() && !landline2.getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            landline1.getEditText().setError(getString(R.string.empty_field));
-            landline1.getEditText().requestFocus();
+            landline1.setError(getString(R.string.empty_field));
+            landline1.requestFocus();
             error = true;
         } else {
-            landline1.getEditText().setError(null);
+            landline1.setError(null);
         }
 
-        if (landline2.getEditText().getText().toString().trim().isEmpty() && !landline1.getEditText().getText().toString().trim().isEmpty()) {
+        if (landline2.getText().toString().trim().isEmpty() && !landline1.getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            landline2.getEditText().setError(getString(R.string.empty_field));
-            landline2.getEditText().requestFocus();
+            landline2.setError(getString(R.string.empty_field));
+            landline2.requestFocus();
             error = true;
         } else {
-            landline2.getEditText().setError(null);
+            landline2.setError(null);
         }
 
-        if (secondaryLandline1.getEditText().getText().toString().trim().isEmpty() && !secondaryLandline2.getEditText().getText().toString().trim().isEmpty()) {
+        if (secondaryLandline1.getText().toString().trim().isEmpty() && !secondaryLandline2.getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            secondaryLandline1.getEditText().setError(getString(R.string.empty_field));
-            secondaryLandline1.getEditText().requestFocus();
+            secondaryLandline1.setError(getString(R.string.empty_field));
+            secondaryLandline1.requestFocus();
             error = true;
         } else {
-            secondaryLandline1.getEditText().setError(null);
+            secondaryLandline1.setError(null);
         }
 
-        if (secondaryLandline2.getEditText().getText().toString().trim().isEmpty() && !secondaryLandline1.getEditText().getText().toString().trim().isEmpty()) {
+        if (secondaryLandline2.getText().toString().trim().isEmpty() && !secondaryLandline1.getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            secondaryLandline2.getEditText().setError(getString(R.string.empty_field));
-            secondaryLandline2.getEditText().requestFocus();
+            secondaryLandline2.setError(getString(R.string.empty_field));
+            secondaryLandline2.requestFocus();
             error = true;
         } else {
-            secondaryLandline2.getEditText().setError(null);
+            secondaryLandline2.setError(null);
         }
 
         if (App.get(mobile1).length() != 4) {
@@ -571,8 +896,8 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
                 gotoPage(0);
             else
                 gotoPage(0);
-            mobile1.getEditText().setError(getString(R.string.length_message));
-            mobile1.getEditText().requestFocus();
+            mobile1.setError(getString(R.string.length_message));
+            mobile1.requestFocus();
             error = true;
         }
 
@@ -581,86 +906,86 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
                 gotoPage(0);
             else
                 gotoPage(0);
-            mobile2.getEditText().setError(getString(R.string.length_message));
-            mobile2.getEditText().requestFocus();
+            mobile2.setError(getString(R.string.length_message));
+            mobile2.requestFocus();
             error = true;
         }
 
-        if (!(secondaryMobile1.getEditText().getText().toString().trim().isEmpty() && secondaryMobile2.getEditText().getText().toString().trim().isEmpty()) && App.get(secondaryMobile1).length() != 4) {
+        if (!(secondaryMobile1.getText().toString().trim().isEmpty() && secondaryMobile2.getText().toString().trim().isEmpty()) && App.get(secondaryMobile1).length() != 4) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            secondaryMobile1.getEditText().setError(getString(R.string.length_message));
-            secondaryMobile1.getEditText().requestFocus();
+            secondaryMobile1.setError(getString(R.string.length_message));
+            secondaryMobile1.requestFocus();
             error = true;
         }
 
-        if (!(secondaryMobile1.getEditText().getText().toString().trim().isEmpty() && secondaryMobile2.getEditText().getText().toString().trim().isEmpty()) && App.get(secondaryMobile2).length() != 7) {
+        if (!(secondaryMobile1.getText().toString().trim().isEmpty() && secondaryMobile2.getText().toString().trim().isEmpty()) && App.get(secondaryMobile2).length() != 7) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            secondaryMobile2.getEditText().setError(getString(R.string.length_message));
-            secondaryMobile2.getEditText().requestFocus();
+            secondaryMobile2.setError(getString(R.string.length_message));
+            secondaryMobile2.requestFocus();
             error = true;
         }
 
-        if (!(landline1.getEditText().getText().toString().trim().isEmpty() && landline2.getEditText().getText().toString().trim().isEmpty()) && !(App.get(landline1).length() == 3 || App.get(landline1).length() == 4)) {
+        if (!(landline1.getText().toString().trim().isEmpty() && landline2.getText().toString().trim().isEmpty()) && !(App.get(landline1).length() == 3 || App.get(landline1).length() == 4)) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            landline1.getEditText().setError(getString(R.string.length_message));
-            landline1.getEditText().requestFocus();
+            landline1.setError(getString(R.string.length_message));
+            landline1.requestFocus();
             error = true;
         }
 
-        if (!(landline1.getEditText().getText().toString().trim().isEmpty() && landline2.getEditText().getText().toString().trim().isEmpty()) && App.get(landline2).length() != 7) {
+        if (!(landline1.getText().toString().trim().isEmpty() && landline2.getText().toString().trim().isEmpty()) && App.get(landline2).length() != 7) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            landline2.getEditText().setError(getString(R.string.length_message));
-            landline2.getEditText().requestFocus();
+            landline2.setError(getString(R.string.length_message));
+            landline2.requestFocus();
             error = true;
         }
 
-        if (!(secondaryLandline1.getEditText().getText().toString().trim().isEmpty() && secondaryLandline2.getEditText().getText().toString().trim().isEmpty()) && !(App.get(secondaryLandline1).length() == 3 || App.get(secondaryLandline1).length() == 4)) {
+        if (!(secondaryLandline1.getText().toString().trim().isEmpty() && secondaryLandline2.getText().toString().trim().isEmpty()) && !(App.get(secondaryLandline1).length() == 3 || App.get(secondaryLandline1).length() == 4)) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            secondaryLandline1.getEditText().setError(getString(R.string.length_message));
-            secondaryLandline1.getEditText().requestFocus();
+            secondaryLandline1.setError(getString(R.string.length_message));
+            secondaryLandline1.requestFocus();
             error = true;
         }
 
-        if (!(secondaryLandline1.getEditText().getText().toString().trim().isEmpty() && secondaryLandline2.getEditText().getText().toString().trim().isEmpty()) && App.get(secondaryLandline2).length() != 7) {
+        if (!(secondaryLandline1.getText().toString().trim().isEmpty() && secondaryLandline2.getText().toString().trim().isEmpty()) && App.get(secondaryLandline2).length() != 7) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            secondaryLandline2.getEditText().setError(getString(R.string.length_message));
-            secondaryLandline2.getEditText().requestFocus();
+            secondaryLandline2.setError(getString(R.string.length_message));
+            secondaryLandline2.requestFocus();
             error = true;
         }
 
-        final String mobileNumber = mobile1.getEditText().getText().toString() + mobile2.getEditText().getText().toString();
-        final String secondaryMobileNumber = secondaryMobile1.getEditText().getText().toString() + secondaryMobile2.getEditText().getText().toString();
-        final String landlineNumber = landline1.getEditText().getText().toString() + landline2.getEditText().getText().toString();
-        final String secondaryLandlineNumber = secondaryLandline1.getEditText().getText().toString() + secondaryLandline2.getEditText().getText().toString();
+        final String mobileNumber = mobile1.getText().toString() + mobile2.getText().toString();
+        final String secondaryMobileNumber = secondaryMobile1.getText().toString() + secondaryMobile2.getText().toString();
+        final String landlineNumber = landline1.getText().toString() + landline2.getText().toString();
+        final String secondaryLandlineLinearLayout = secondaryLandline1.getText().toString() + secondaryLandline2.getText().toString();
 
         if (!RegexUtil.isMobileNumber(mobileNumber)) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            mobile2.getEditText().setError(getString(R.string.incorrect_contact_number));
-            mobile2.getEditText().requestFocus();
+            mobile2.setError(getString(R.string.incorrect_contact_number));
+            mobile2.requestFocus();
             error = true;
         } else {
-            mobile2.getEditText().setError(null);
+            mobile2.setError(null);
         }
 
         if (!App.get(secondaryMobile1).isEmpty() && !App.get(secondaryMobile2).isEmpty() && !RegexUtil.isMobileNumber(secondaryMobileNumber)) {
@@ -668,11 +993,11 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
                 gotoPage(0);
             else
                 gotoPage(0);
-            secondaryMobile2.getEditText().setError(getString(R.string.incorrect_contact_number));
-            secondaryMobile2.getEditText().requestFocus();
+            secondaryMobile2.setError(getString(R.string.incorrect_contact_number));
+            secondaryMobile2.requestFocus();
             error = true;
         } else {
-            secondaryMobile2.getEditText().setError(null);
+            secondaryMobile2.setError(null);
         }
 
         if (!App.get(landline1).isEmpty() && !App.get(landline2).isEmpty() && !RegexUtil.isLandlineNumber(landlineNumber)) {
@@ -680,24 +1005,24 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
                 gotoPage(0);
             else
                 gotoPage(0);
-            landline2.getEditText().setError(getString(R.string.incorrect_contact_number));
-            landline2.getEditText().requestFocus();
+            landline2.setError(getString(R.string.incorrect_contact_number));
+            landline2.requestFocus();
             error = true;
         } else {
-            landline2.getEditText().setError(null);
+            landline2.setError(null);
         }
 
 
-        if (!App.get(secondaryLandline1).isEmpty() && !App.get(secondaryLandline2).isEmpty() && !RegexUtil.isLandlineNumber(secondaryLandlineNumber)) {
+        if (!App.get(secondaryLandline1).isEmpty() && !App.get(secondaryLandline2).isEmpty() && !RegexUtil.isLandlineNumber(secondaryLandlineLinearLayout)) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            secondaryLandline2.getEditText().setError(getString(R.string.incorrect_contact_number));
-            secondaryLandline2.getEditText().requestFocus();
+            secondaryLandline2.setError(getString(R.string.incorrect_contact_number));
+            secondaryLandline2.requestFocus();
             error = true;
         } else {
-            secondaryLandline2.getEditText().setError(null);
+            secondaryLandline2.setError(null);
         }
 
         if (error) {
@@ -756,11 +1081,11 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
 
-        String cnicNumber = cnic1.getEditText().getText().toString() +"-"+ cnic2.getEditText().getText().toString() +"-"+ cnic3.getEditText().getText().toString();
-        final String mobileNumber = mobile1.getEditText().getText().toString() +"-"+ mobile2.getEditText().getText().toString();
-        final String secondaryMobileNumber = secondaryMobile1.getEditText().getText().toString() +"-"+ secondaryMobile2.getEditText().getText().toString();
-        final String landlineNumber = landline1.getEditText().getText().toString() +"-"+ landline2.getEditText().getText().toString();
-        final String secondaryLandlineNumber = secondaryLandline1.getEditText().getText().toString() +"-"+ secondaryLandline2.getEditText().getText().toString();
+        String cnicNumber = cnic1.getText().toString() +"-"+ cnic2.getText().toString() +"-"+ cnic3.getText().toString();
+        final String mobileNumber = mobile1.getText().toString() +"-"+ mobile2.getText().toString();
+        final String secondaryMobileNumber = secondaryMobile1.getText().toString() +"-"+ secondaryMobile2.getText().toString();
+        final String landlineNumber = landline1.getText().toString() +"-"+ landline2.getText().toString();
+        final String secondaryLandlineLinearLayout = secondaryLandline1.getText().toString() +"-"+ secondaryLandline2.getText().toString();
 
 
         observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnicNumber});
@@ -804,7 +1129,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         observations.add(new String[]{"TERTIARY CONTACT NUMBER", landlineNumber});
 
         if (!(App.get(secondaryLandline1).isEmpty() && App.get(secondaryLandline2).isEmpty()))
-        observations.add(new String[]{"QUATERNARY CONTACT NUMBER", secondaryLandlineNumber});
+        observations.add(new String[]{"QUATERNARY CONTACT NUMBER", secondaryLandlineLinearLayout});
 
         if (addressHouse.getVisibility() == View.VISIBLE && !App.get(addressHouse).isEmpty())
         observations.add(new String[]{"ADDRESS (TEXT)", App.get(addressHouse)});
@@ -875,7 +1200,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
                     }
 
                     if (!(App.get(secondaryLandline1).isEmpty() && App.get(secondaryLandline2).isEmpty())) {
-                        result = serverService.savePersonAttributeType("Quaternary Contact", secondaryLandlineNumber, encounterId);
+                        result = serverService.savePersonAttributeType("Quaternary Contact", secondaryLandlineLinearLayout, encounterId);
                         if (!result.equals("SUCCESS"))
                             return result;
                     }
@@ -1004,9 +1329,9 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
                 timeTakeToFill = obs[0][1];
             } else if (obs[0][0].equals("NATIONAL IDENTIFICATION NUMBER")) {
                 String data = obs[0][1];
-                cnic1.getEditText().setText(data.substring(0,5));
-                cnic2.getEditText().setText(data.substring(6,13));
-                cnic3.getEditText().setText(data.substring(14));
+                cnic1.setText(data.substring(0,5));
+                cnic2.setText(data.substring(6,13));
+                cnic3.setText(data.substring(14));
             } else if (obs[0][0].equals("COMPUTERIZED NATIONAL IDENTIFICATION OWNER")) {
                 String value = obs[0][1].equals("SELF") ? getResources().getString(R.string.fast_self) :
                         (obs[0][1].equals("MOTHER") ? getResources().getString(R.string.fast_mother) :
@@ -1100,34 +1425,34 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
 
             else if (obs[0][0].equals("CONTACT PHONE NUMBER")) {
                 String mobNum = obs[0][1];
-                mobile1.getEditText().setText(mobNum.substring(0,4));
-                mobile2.getEditText().setText(mobNum.substring(5,12));
+                mobile1.setText(mobNum.substring(0,4));
+                mobile2.setText(mobNum.substring(5,12));
             }
             else if (obs[0][0].equals("SECONDARY MOBILE NUMBER")) {
                 String mobNum2 = obs[0][1];
-                secondaryMobile1.getEditText().setText(mobNum2.substring(0,4));
-                secondaryMobile2.getEditText().setText(mobNum2.substring(5,12));
+                secondaryMobile1.setText(mobNum2.substring(0,4));
+                secondaryMobile2.setText(mobNum2.substring(5,12));
             }
             else if (obs[0][0].equals("TERTIARY CONTACT NUMBER")) {
                 String landNum = obs[0][1];
                 if(landNum.length() == 11) {
-                    landline1.getEditText().setText(landNum.substring(0, 4));
-                    landline2.getEditText().setText(landNum.substring(5, 12));
+                    landline1.setText(landNum.substring(0, 4));
+                    landline2.setText(landNum.substring(5, 12));
                 }
                 else{
-                    landline1.getEditText().setText(landNum.substring(0, 3));
-                    landline2.getEditText().setText(landNum.substring(4, 11));
+                    landline1.setText(landNum.substring(0, 3));
+                    landline2.setText(landNum.substring(4, 11));
                 }
             }
             else if (obs[0][0].equals("QUATERNARY CONTACT NUMBER")) {
                 String landNum1 = obs[0][1];
                 if(landNum1.length() == 11) {
-                    secondaryLandline1.getEditText().setText(landNum1.substring(0, 4));
-                    secondaryLandline2.getEditText().setText(landNum1.substring(5, 12));
+                    secondaryLandline1.setText(landNum1.substring(0, 4));
+                    secondaryLandline2.setText(landNum1.substring(5, 12));
                 }
                 else{
-                    secondaryLandline1.getEditText().setText(landNum1.substring(0, 3));
-                    secondaryLandline2.getEditText().setText(landNum1.substring(4, 11));
+                    secondaryLandline1.setText(landNum1.substring(0, 3));
+                    secondaryLandline2.setText(landNum1.substring(4, 11));
                 }
             }
 
