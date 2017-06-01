@@ -17,12 +17,15 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.design.widget.NavigationView;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v4.internal.view.SupportMenu;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -72,6 +75,10 @@ public class MainActivity extends AppCompatActivity
     TextView patientId;
     TextView id;
 
+//    TextView nav_default;
+
+    public static ActionBar actionBar;
+
     FragmentManager fm = getFragmentManager();
     private ServerService serverService;
 
@@ -80,7 +87,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        loading = new ProgressDialog(this);
+        loading = new ProgressDialog(this, ProgressDialog.THEME_HOLO_LIGHT);
         serverService = new ServerService(getApplicationContext());
 
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
@@ -96,6 +103,7 @@ public class MainActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        actionBar = getSupportActionBar();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -107,6 +115,10 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         View hView = navigationView.getHeaderView(0);
+        TextView nav_appName = (TextView) hView.findViewById(R.id.appName);
+        nav_appName.setText(getResources().getString(R.string.app_name) + " (" + App.getVersion() + ")");
+        //nav_default = (TextView) hView.findViewById(R.id.selectedDefault);
+        //nav_default.setText(getResources().getString(R.string.program) + App.getProgram() + "  |  " + getResources().getString(R.string.location) + App.getLocation());
         TextView nav_user = (TextView) hView.findViewById(R.id.menuUsername);
         nav_user.setText(App.getUserFullName());
         TextView nav_userRole = (TextView) hView.findViewById(R.id.menuUserRoles);
@@ -121,14 +133,12 @@ public class MainActivity extends AppCompatActivity
         DrawableCompat.setTint(update.getDrawable(), color);
         update.setOnTouchListener(this);
 
-        String title = toolbar.getTitle() + " (" + App.getVersion() + ")";
+        getSupportActionBar().setTitle(Html.fromHtml("<small>" + App.getProgram() + "  |  " + App.getLocation() + "</small>"));
         if (App.getMode().equalsIgnoreCase("OFFLINE")) {
-            if (!title.contains(" ----- Offline Mode"))
-                title = title + " ----- Offline Mode";
+            getSupportActionBar().setSubtitle("Offline Mode");
             update.setVisibility(View.GONE);
         } else {
-            if (!title.contains(" ----- Offline Mode"))
-                title.replace(" ----- Offline Mode", "");
+            getSupportActionBar().setSubtitle(null);
 
             if (App.getPatient() == null)
                 update.setVisibility(View.GONE);
@@ -136,9 +146,6 @@ public class MainActivity extends AppCompatActivity
                 update.setVisibility(View.VISIBLE);
 
         }
-        getSupportActionBar().setTitle(title);
-        String subtitle = getResources().getString(R.string.program) + " " + App.getProgram() + "  |  " + "Location:" + " " + App.getLocation();
-        getSupportActionBar().setSubtitle(subtitle);
 
         buttonLayout = (LinearLayout) findViewById(R.id.buttonLayout);
         programLayout = (LinearLayout) findViewById(R.id.programLayout);
@@ -159,8 +166,8 @@ public class MainActivity extends AppCompatActivity
                 programLayout.setVisibility(View.GONE);
                 headerLayout.setVisibility(View.VISIBLE);
 
-                String subtitle = getResources().getString(R.string.program) + " " + App.getProgram();
-                getSupportActionBar().setSubtitle(subtitle);
+                getSupportActionBar().setTitle(App.getProgram() + "  |  " + App.getLocation());
+                //nav_default.setText(getResources().getString(R.string.program) + App.getProgram() + "  |  " + getResources().getString(R.string.location) + App.getLocation());
                 fragmentForm.fillMainContent();
                 fragmentReport.fillReportFragment();
                 showFormFragment();
@@ -190,7 +197,16 @@ public class MainActivity extends AppCompatActivity
             if (!dob.equals("")) {
                 Date date = App.stringToDate(dob, "yyyy-MM-dd");
                 DateFormat df = new SimpleDateFormat("MMM dd, yyyy");
-                patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
+                if(App.getPatient().getPerson().getAge() == 0){
+                    Date birthDate = App.stringToDate(App.getPatient().getPerson().getBirthdate(), "yyyy-MM-dd");
+                    int age = App.getDiffMonths(birthDate, new Date());
+                    if(age == 0 ){
+                        long ageInLong = App.getDiffDays(birthDate, new Date());
+                        patientDob.setText(ageInLong + " days (" + df.format(date) + ")");
+                    }
+                    else patientDob.setText(age + " months (" + df.format(date) + ")");
+                }
+                else patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
             } else patientDob.setText(dob);
             if (!App.getPatient().getPatientId().equals(""))
                 id.setVisibility(View.VISIBLE);
@@ -224,34 +240,31 @@ public class MainActivity extends AppCompatActivity
         }
 
 
-        if (!getSupportActionBar().getSubtitle().toString().contains(App.getProgram())) {
-            String subtitle = getResources().getString(R.string.program) + " " + App.getProgram() + "  |  " + getResources().getString(R.string.location) + " " + App.getLocation();
-            getSupportActionBar().setSubtitle(subtitle);
-
+        if (!getSupportActionBar().getTitle().toString().contains(App.getProgram())) {
+            //nav_default.setText(getResources().getString(R.string.program) + App.getProgram() + "  |  " + getResources().getString(R.string.location) + App.getLocation());
+            getSupportActionBar().setTitle(App.getProgram() + "  |  " + App.getLocation());
             fragmentForm.fillMainContent();
             fragmentReport.fillReportFragment();
             showFormFragment();
         }
 
-        if (!getSupportActionBar().getSubtitle().toString().contains(App.getLocation())) {
-            String subtitle = getResources().getString(R.string.program) + " " + App.getProgram() + "  |  " + getResources().getString(R.string.location) + " " + App.getLocation();
-            getSupportActionBar().setSubtitle(subtitle);
+        if (!getSupportActionBar().getTitle().toString().contains(App.getLocation())) {
+            //nav_default.setText(getResources().getString(R.string.program) + App.getProgram() + "  |  " + getResources().getString(R.string.location) + App.getLocation());
+            getSupportActionBar().setTitle(App.getProgram() + "  |  " + App.getLocation());
         }
 
-        String title = getSupportActionBar().getTitle().toString();
         if (App.getMode().equalsIgnoreCase("OFFLINE")) {
-            if (!title.contains(" ----- Offline Mode"))
-                title = title + " ----- Offline Mode";
+            getSupportActionBar().setSubtitle("Offline Mode");
             update.setVisibility(View.GONE);
         } else {
-            if (!title.contains(" ----- Offline Mode"))
-                title.replace(" ----- Offline Mode", "");
+            getSupportActionBar().setSubtitle(null);
+
             if (App.getPatient() == null)
                 update.setVisibility(View.GONE);
             else
                 update.setVisibility(View.VISIBLE);
+
         }
-        getSupportActionBar().setTitle(title);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String lang = preferences.getString(Preferences.LANGUAGE, "");
@@ -297,6 +310,7 @@ public class MainActivity extends AppCompatActivity
 
                             fragmentForm.setMainContentVisible(true);
                             headerLayout.setVisibility(View.VISIBLE);
+                            getSupportActionBar().show();
                         }
                     });
             alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
@@ -637,7 +651,16 @@ public class MainActivity extends AppCompatActivity
                     if (!dob.equals("")) {
                         Date date = App.stringToDate(dob, "yyyy-MM-dd");
                         DateFormat df = new SimpleDateFormat("MMM dd, yyyy");
-                        patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
+                        if(App.getPatient().getPerson().getAge() == 0){
+                            Date birthDate = App.stringToDate(App.getPatient().getPerson().getBirthdate(), "yyyy-MM-dd");
+                            int age = App.getDiffMonths(birthDate, new Date());
+                            if(age == 0 ){
+                                long ageInLong = App.getDiffDays(birthDate, new Date());
+                                patientDob.setText(ageInLong + " days (" + df.format(date) + ")");
+                            }
+                            else patientDob.setText(age + " months (" + df.format(date) + ")");
+                        }
+                        else patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
                     } else patientDob.setText(dob);
                     if (!App.getPatient().getPatientId().equals(""))
                         id.setVisibility(View.VISIBLE);
@@ -720,7 +743,16 @@ public class MainActivity extends AppCompatActivity
                         if (!dob.equals("")) {
                             Date date = App.stringToDate(dob, "yyyy-MM-dd");
                             DateFormat df = new SimpleDateFormat("MMM dd, yyyy");
-                            patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
+                            if(App.getPatient().getPerson().getAge() == 0){
+                                Date birthDate = App.stringToDate(App.getPatient().getPerson().getBirthdate(), "yyyy-MM-dd");
+                                int age = App.getDiffMonths(birthDate, new Date());
+                                if(age == 0 ){
+                                    long ageInLong = App.getDiffDays(birthDate, new Date());
+                                    patientDob.setText(ageInLong + " days (" + df.format(date) + ")");
+                                }
+                                else patientDob.setText(age + " months (" + df.format(date) + ")");
+                            }
+                            else patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
                         } else patientDob.setText(dob);
                         if (!App.getPatient().getPatientId().equals(""))
                             id.setVisibility(View.VISIBLE);
@@ -741,7 +773,16 @@ public class MainActivity extends AppCompatActivity
                         if (!dob.equals("")) {
                             Date date = App.stringToDate(dob, "yyyy-MM-dd");
                             DateFormat df = new SimpleDateFormat("MMM dd, yyyy");
-                            patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
+                            if(App.getPatient().getPerson().getAge() == 0){
+                                Date birthDate = App.stringToDate(App.getPatient().getPerson().getBirthdate(), "yyyy-MM-dd");
+                                int age = App.getDiffMonths(birthDate, new Date());
+                                if(age == 0 ){
+                                    long ageInLong = App.getDiffDays(birthDate, new Date());
+                                    patientDob.setText(ageInLong + " days (" + df.format(date) + ")");
+                                }
+                                else patientDob.setText(age + " months (" + df.format(date) + ")");
+                            }
+                            else patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
                         } else patientDob.setText(dob);
                         if (!App.getPatient().getPatientId().equals(""))
                             id.setVisibility(View.VISIBLE);
@@ -795,8 +836,8 @@ public class MainActivity extends AppCompatActivity
                 editor.putString(Preferences.LOCATION, App.getLocation());
                 editor.apply();
 
-                String subtitle = getResources().getString(R.string.program) + " " + App.getProgram() + "  |  " + getResources().getString(R.string.location) + " " + App.getLocation();
-                getSupportActionBar().setSubtitle(subtitle);
+                //nav_default.setText(getResources().getString(R.string.program) + App.getProgram() + "  |  " + getResources().getString(R.string.location) + App.getLocation());
+                getSupportActionBar().setTitle(App.getProgram() + "  |  " + App.getLocation());
 
                 if(!(pid == null || pid.equals("null"))) {
                 String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
@@ -807,7 +848,16 @@ public class MainActivity extends AppCompatActivity
                     if (!dob.equals("")) {
                         Date date = App.stringToDate(dob, "yyyy-MM-dd");
                         DateFormat df = new SimpleDateFormat("MMM dd, yyyy");
-                        patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
+                        if(App.getPatient().getPerson().getAge() == 0){
+                            Date birthDate = App.stringToDate(App.getPatient().getPerson().getBirthdate(), "yyyy-MM-dd");
+                            int age = App.getDiffMonths(birthDate, new Date());
+                            if(age == 0 ){
+                                long ageInLong = App.getDiffDays(birthDate, new Date());
+                                patientDob.setText(ageInLong + " days (" + df.format(date) + ")");
+                            }
+                            else patientDob.setText(age + " months (" + df.format(date) + ")");
+                        }
+                        else patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
                     } else patientDob.setText(dob);
                     if (!App.getPatient().getPatientId().equals(""))
                         id.setVisibility(View.VISIBLE);

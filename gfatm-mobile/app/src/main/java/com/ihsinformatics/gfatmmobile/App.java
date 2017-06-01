@@ -42,6 +42,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import static java.util.Calendar.DATE;
 import static java.util.Calendar.MONTH;
@@ -454,6 +455,21 @@ public class App {
             diff--;
         }
         return diff;
+    }
+
+    public static int getDiffMonths(Date first, Date last) {
+
+            int m1 = first.getYear() * 12 + first.getMonth();
+            int m2 = last.getYear() * 12 + last.getMonth();
+            return m2 - m1;
+
+    }
+
+    public static long getDiffDays(Date first, Date last) {
+
+        long diff = last.getTime() - first.getTime();
+        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+
     }
 
     public static Calendar getCalendar(Date date) {

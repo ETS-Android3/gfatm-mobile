@@ -22,6 +22,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -84,7 +85,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.select_patient);
-        loading = new ProgressDialog(this);
+        loading = new ProgressDialog(this, ProgressDialog.THEME_HOLO_LIGHT);
 
         serverService = new ServerService(getApplicationContext());
 
@@ -160,10 +161,10 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                     if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.years)) && Integer.parseInt(age.getText().toString()) >= 120) {
                         age.setError(getResources().getString(R.string.age_invalid_year));
                         age.requestFocus();
-                    }else if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.months)) && Integer.parseInt(age.getText().toString()) >= 1440) {
+                    }else if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.months)) && Integer.parseInt(age.getText().toString()) >= 180) {
                         age.setError(getResources().getString(R.string.age_invalid_month));
                         age.requestFocus();
-                    }else if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.days)) && Integer.parseInt(age.getText().toString()) >= 43435) {
+                    }else if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.days)) && Integer.parseInt(age.getText().toString()) >= 5400) {
                         age.setError(getResources().getString(R.string.age_invalid_day));
                         age.requestFocus();
                     }
@@ -179,6 +180,66 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                     dob.setText("");
                     dob.setError(null);
                 }
+            }
+        });
+
+        selectPatientId.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if(start == 5 && s.length()==5){
+                    int i = selectPatientId.getSelectionStart();
+                    if (i == 5){
+                        selectPatientId.setText(selectPatientId.getText().toString().substring(0,4));
+                       selectPatientId.setSelection(4);
+                   }
+                }
+                else if(s.length()==5 && !s.toString().contains("-")){
+                    selectPatientId.setText(s + "-");
+                    selectPatientId.setSelection(6);
+                }
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        createPatientId.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if(start == 5 && s.length()==5){
+                    int i = createPatientId.getSelectionStart();
+                    if (i == 5){
+                        createPatientId.setText(createPatientId.getText().toString().substring(0,4));
+                        createPatientId.setSelection(4);
+                    }
+                }
+                else if(s.length()==5 && !s.toString().contains("-")){
+                    createPatientId.setText(s + "-");
+                    createPatientId.setSelection(6);
+                }
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
 
@@ -211,6 +272,9 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                 view.invalidate();
 
                 Boolean error = false;
+
+                /*String id = App.get(selectPatientId).toString().toUpperCase();
+                selectPatientId.setText(id);*/
 
                 if (App.get(selectPatientId).isEmpty()) {
                     selectPatientId.setError(getString(R.string.empty_field));
@@ -739,11 +803,11 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                 age.setError(getResources().getString(R.string.age_invalid_year));
                 age.requestFocus();
                 error = true;
-            }else if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.months)) && Integer.parseInt(age.getText().toString()) >= 1440) {
+            }else if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.months)) && Integer.parseInt(age.getText().toString()) >= 180) {
                 age.setError(getResources().getString(R.string.age_invalid_month));
                 age.requestFocus();
                 error = true;
-            }else if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.days)) && Integer.parseInt(age.getText().toString()) >= 43435) {
+            }else if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.days)) && Integer.parseInt(age.getText().toString()) >= 5400) {
                 age.setError(getResources().getString(R.string.age_invalid_day));
                 age.requestFocus();
                 error = true;
@@ -806,6 +870,19 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                 dob.setText("");
                 dob.setError(null);
             }
+
+            if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.years)) && Integer.parseInt(age.getText().toString()) >= 120) {
+                age.setError(getResources().getString(R.string.age_invalid_year));
+                age.requestFocus();
+            }else if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.months)) && Integer.parseInt(age.getText().toString()) >= 180) {
+                age.setError(getResources().getString(R.string.age_invalid_month));
+                age.requestFocus();
+            }else if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.days)) && Integer.parseInt(age.getText().toString()) >= 30) {
+                age.setError(getResources().getString(R.string.age_invalid_day));
+                age.requestFocus();
+            }
+            else
+                age.setError(null);
 
         }
 

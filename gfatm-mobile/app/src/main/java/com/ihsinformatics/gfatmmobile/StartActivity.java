@@ -112,6 +112,13 @@ public class StartActivity extends Activity {
         protected Void doInBackground(Void... arg0) {
             StartActivity.resetPreferences(context);      //loading preferences
 
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    setProgress(getResources().getString(R.string.loading_metadata));
+                }
+            });
+
             try {
 
                 dbUtil = new DatabaseUtil(context);
