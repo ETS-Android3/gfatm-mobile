@@ -1,5 +1,6 @@
 package com.ihsinformatics.gfatmmobile;
 
+import android.*;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -8,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
@@ -16,6 +18,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.internal.view.SupportMenu;
 import android.support.v4.view.GravityCompat;
@@ -228,14 +231,20 @@ public class MainActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();  // Always call the superclass method first
 
-        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            showLocationAlert();
-        } else {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
+            return;
+        }
+        else {
+            final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                showLocationAlert();
+            } else {
 
-            if (!LocationService.isInstanceCreated()) {
-                Intent intent = new Intent(MainActivity.this, LocationService.class);
-                startService(intent);
+                if (!LocationService.isInstanceCreated()) {
+                    Intent intent = new Intent(MainActivity.this, LocationService.class);
+                    startService(intent);
+                }
             }
         }
 
@@ -928,6 +937,21 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
         alertDialog.show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case 101:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //granted
+                } else {
+                    //not granted
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 
 }
