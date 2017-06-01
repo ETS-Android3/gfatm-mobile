@@ -671,7 +671,6 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
                     result.put("REGISTRATION DATE", regDate);
 
 
-
                 return result;
             }
 

@@ -51,6 +51,7 @@ import java.util.HashMap;
 public class FastScreeningForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
     Context context;
+    Boolean emptyError = false;
 
     // Views...
     TitledButton formDate;
@@ -160,17 +161,17 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
         hospital.getEditText().setKeyListener(null);
         hospital.getEditText().setFocusable(false);
         // hospital = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_if_hospital_specify), locationArray, "", App.VERTICAL);
-        hospitalSection = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_hospital_parts_title), getResources().getStringArray(R.array.fast_hospital_parts_screening), getResources().getString(R.string.fast_opdclinicscreening_title), App.VERTICAL);
+        hospitalSection = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_hospital_parts_title), getResources().getStringArray(R.array.fast_hospital_parts_screening), "", App.VERTICAL, true);
         hospitalSectionOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        opdWardSection = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_clinic_and_ward_title), getResources().getStringArray(R.array.fast_clinic_and_ward_screening_list), getResources().getString(R.string.fast_generalmedicinefilterclinic_title), App.VERTICAL);
+        opdWardSection = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_clinic_and_ward_title), getResources().getStringArray(R.array.fast_clinic_and_ward_screening_list), "", App.VERTICAL, true);
         patientAttendant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_or_attendant_title), getResources().getStringArray(R.array.fast_patient_or_attendant_list), getResources().getString(R.string.fast_patient_title), App.HORIZONTAL, App.HORIZONTAL);
         ageRange = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_age_range_title), getResources().getStringArray(R.array.fast_age_range_list), getResources().getString(R.string.fast_greater_title), App.HORIZONTAL, App.HORIZONTAL);
-        gender = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_gender_title), getResources().getStringArray(R.array.fast_gender_list), getResources().getString(R.string.fast_male_title), App.HORIZONTAL, App.HORIZONTAL);
+        gender = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_gender_title), getResources().getStringArray(R.array.fast_gender_list), "", App.HORIZONTAL, App.HORIZONTAL);
         tbSymptoms = new MyTextView(context, getResources().getString(R.string.fast_tb_symptoms));
         tbSymptoms.setTypeface(null, Typeface.BOLD);
-        coughTwoWeeks = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_cough_period_title), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL);
-        tbContact = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_close_with_someone_diagnosed), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL);
-        tbHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_tb_before), getResources().getStringArray(R.array.fast_choice_list),"", App.VERTICAL, App.VERTICAL);
+        coughTwoWeeks = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_cough_period_title), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
+        tbContact = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_close_with_someone_diagnosed), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
+        tbHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_tb_before), getResources().getStringArray(R.array.fast_choice_list),"", App.VERTICAL, App.VERTICAL, true);
 
 
         // Used for reset fields...
@@ -238,31 +239,65 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
 
         if (coughTwoWeeks.getVisibility() == View.VISIBLE && App.get(coughTwoWeeks).isEmpty()) {
             if (App.isLanguageRTL())
-                gotoPage(2);
+                gotoPage(1);
             else
                 gotoPage(0);
-            coughTwoWeeks.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
-            coughTwoWeeks.getRadioGroup().requestFocus();
+          //  coughTwoWeeks.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+          //  coughTwoWeeks.getRadioGroup().requestFocus();
             error = true;
+            emptyError = true;
         }
 
         if (tbContact.getVisibility() == View.VISIBLE && App.get(tbContact).isEmpty()) {
             if (App.isLanguageRTL())
-                gotoPage(2);
+                gotoPage(1);
             else
                 gotoPage(0);
-            tbContact.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
-            tbContact.getRadioGroup().requestFocus();
+         //   tbContact.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+         //   tbContact.getRadioGroup().requestFocus();
             error = true;
+            emptyError = true;
         }
 
         if (tbHistory.getVisibility() == View.VISIBLE && App.get(tbHistory).isEmpty()) {
             if (App.isLanguageRTL())
-                gotoPage(2);
+                gotoPage(1);
             else
                 gotoPage(0);
-            tbHistory.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
-            tbHistory.getRadioGroup().requestFocus();
+         //   tbHistory.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+         //   tbHistory.getRadioGroup().requestFocus();
+            error = true;
+            emptyError = true;
+        }
+
+        if (gender.getVisibility() == View.VISIBLE && App.get(gender).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            gender.getRadioGroup().getButtons().get(1).setError(getString(R.string.empty_field));
+            gender.getRadioGroup().requestFocus();
+            emptyError = true;
+            error = true;
+        }
+
+        if (hospitalSection.getVisibility() == View.VISIBLE && App.get(hospitalSection).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+
+            emptyError = true;
+            error = true;
+        }
+
+        if (opdWardSection.getVisibility() == View.VISIBLE && App.get(opdWardSection).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+
+            emptyError = true;
             error = true;
         }
 
@@ -271,7 +306,11 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
-            alertDialog.setMessage(getString(R.string.form_error));
+            if(!emptyError)
+                alertDialog.setMessage(getString(R.string.form_error));
+            else
+                alertDialog.setMessage(getString(R.string.fast_required_field_error));
+
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             //  DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);

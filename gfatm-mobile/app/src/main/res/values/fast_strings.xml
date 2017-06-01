@@ -456,6 +456,7 @@
     <string name="fast_enrs_number_error">Invalid ENRS number</string>
     <string name="fast_emergency_room">Emergency Room</string>
     <string name="fast_diabetic">Diabetic</string>
+    <string name="fast_required_field_error">Required fields cannot be empty</string>
 
 
 
@@ -479,6 +480,7 @@
     </string-array>
 
     <string-array name="fast_hospital_parts_screening">
+        <item></item>
         <item>@string/fast_opdclinicscreening_title</item>
         <item>@string/fast_wardscreening_title</item>
         <item>@string/fast_registrationdesk_title</item>
@@ -504,6 +506,7 @@
     </string-array>
 
     <string-array name="fast_clinic_and_ward_screening_list">
+        <item></item>
         <item>@string/fast_generalmedicinefilterclinic_title</item>
         <item>@string/fast_chesttbclinic_title</item>
         <item>@string/fast_gynaeobstetrics_title</item>
