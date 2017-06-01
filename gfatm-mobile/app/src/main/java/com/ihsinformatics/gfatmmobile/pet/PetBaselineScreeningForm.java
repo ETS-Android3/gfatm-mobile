@@ -82,7 +82,6 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
     TitledSpinner relationship;
     TitledEditText otherRelation;
     LinearLayout cnicLayout;
-    MyTextView cnic;
     MyEditText cnic1;
     MyEditText cnic2;
     MyEditText cnic3;

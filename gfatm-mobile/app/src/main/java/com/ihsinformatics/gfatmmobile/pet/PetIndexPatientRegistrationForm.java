@@ -722,7 +722,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
         if (App.get(ernsNumber).equals("")) {
             String enrsId = App.getPatient().getEnrs();
 
-            if (enrsId.equals("")) {
+            if (enrsId == null || enrsId.equals("")) {
                 ernsNumber.getEditText().setText("");
             } else {
                 ernsNumber.getEditText().setText(enrsId);
@@ -732,7 +732,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
 
         if (App.get(indexExternalPatientId).equals("")) {
             String externalId = App.getPatient().getExternalId();
-            if (externalId.equals("")) {
+            if (externalId ==  null || externalId.equals("")) {
                 indexExternalPatientId.getEditText().setText("");
             } else {
                 indexExternalPatientId.getEditText().setText(externalId);
@@ -742,7 +742,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
 
         if (App.get(husbandName).equals("")) {
             String husbandNameString = App.getPatient().getPerson().getGuardianName();
-            if (husbandNameString.equals("")) {
+            if (husbandNameString == null || husbandNameString.equals("")) {
                 husbandName.getEditText().setText("");
             } else {
                 husbandName.getEditText().setText(husbandNameString);
