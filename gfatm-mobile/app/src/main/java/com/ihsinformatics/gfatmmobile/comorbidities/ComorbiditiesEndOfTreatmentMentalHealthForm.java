@@ -150,12 +150,12 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
         displayFeelingBetterReason();
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), numberOfSessionsConducted.getEditText(), akuadsRescreeningScore.getEditText(), reasonForDiscontinuation.getSpinner(), feelingBetterReason.getRadioGroup(),
+        views = new View[]{formDate.getButton(), numberOfSessionsConducted.getEditText(), akuadsRescreeningScore.getEditText(), reasonForDiscontinuation.getSpinner(), /*feelingBetterReason.getRadioGroup(),*/
                 lossToFollowup.getRadioGroup(), referredTo.getEditText(), reasonForReferral.getEditText(), /*ifOther.getEditText(), otherSevereMentalIllness.getEditText(),*/ remarks.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, numberOfSessionsConducted, akuadsRescreeningScore, reasonForDiscontinuation, feelingBetterReason,
+                {{formDate, numberOfSessionsConducted, akuadsRescreeningScore, reasonForDiscontinuation, /*feelingBetterReason,*/
                         lossToFollowup, referredTo, reasonForReferral, /*ifOther, otherSevereMentalIllness,*/ remarks}};
 
         formDate.getButton().setOnClickListener(this);
@@ -212,6 +212,7 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         }
+        formDate.getButton().setEnabled(true);
     }
 
     @Override
@@ -299,12 +300,15 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
                                 (App.get(reasonForDiscontinuation).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_language_barrier)) ? "SPEECH AND LANGUAGE DEFICITS" :
                                         (App.get(reasonForDiscontinuation).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_think_no_depression)) ? "PATIENT THINKS HE HAS NO DEPRESSION" :
                                                 (App.get(reasonForDiscontinuation).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_lost_followup)) ? "LOST TO FOLLOW-UP" :
-                                                        (App.get(reasonForDiscontinuation).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_referred)) ? "PATIENT REFERRED" : "REASON FOR DISCONTINUING SERVICE (TEXT)"))))));
+                                                        (App.get(reasonForDiscontinuation).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_referred)) ? "PATIENT REFERRED" :
+                                                                (App.get(reasonForDiscontinuation).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_tb_completed)) ? "TB TREATMENT COMPLETED" :
+                                                                        (App.get(reasonForDiscontinuation).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_deceased)) ? "DECEASED" :
+                                                                                (App.get(reasonForDiscontinuation).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_transferred)) ? "TRANSFERRED OUT" : "REASON FOR DISCONTINUING SERVICE (TEXT)")))))))));
         observations.add(new String[]{"REASON FOR DISCONTINUATION OF PROGRAM", reasonForDiscontinuationString});
 
-        if (feelingBetterReason.getVisibility() == View.VISIBLE) {
+        /*if (feelingBetterReason.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"REASON FOR FEELING BETTER", App.get(feelingBetterReason).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_feeling_better_options_self_reported)) ? "1 to 3 sessions conducted and no Akuads filled (SELF REPORTED IMPROVEMENT)" : "4 or more sessions conducted and AKUADS filled (SUCCESFULLY COMPLETED THERAPY WITH IMPROVED OUTCOMES)"});
-        }
+        }*/
 
         observations.add(new String[]{"REASON FOR LOST TO FOLLOW UP", App.get(lossToFollowup).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_loss_to_followup_options_unreachable)) ? "PATIENT UNREACHABLE" :
                 (App.get(lossToFollowup).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_loss_to_followup_options_moved)) ? "PATIENT MOVED" : "OTHER REASON TO END FOLLOW UP")});
@@ -462,9 +466,12 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
                                         (obs[0][1].equals("SPEECH AND LANGUAGE DEFICITS") ? getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_language_barrier) :
                                                 (obs[0][1].equals("PATIENT THINKS HE HAS NO DEPRESSION") ? getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_think_no_depression) :
                                                         (obs[0][1].equals("LOST TO FOLLOW-UP") ? getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_lost_followup) :
-                                                                (obs[0][1].equals("PATIENT REFERRED") ? getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_referred) : getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_other)))))));
+                                                                (obs[0][1].equals("PATIENT REFERRED") ? getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_referred) :
+                                                                        (obs[0][1].equals("TB TREATMENT COMPLETED") ? getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_tb_completed) :
+                                                                                (obs[0][1].equals("DECEASED") ? getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_deceased) :
+                                                                                        (obs[0][1].equals("TRANSFERRED OUT") ? getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_transferred) : getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_other))))))))));
                 reasonForDiscontinuation.getSpinner().selectValue(value);
-            } else if (obs[0][0].equals("REASON FOR FEELING BETTER")) {
+            } /*else if (obs[0][0].equals("REASON FOR FEELING BETTER")) {
                 for (RadioButton rb : feelingBetterReason.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.comorbidities_end_treatment_MH_feeling_better_options_self_reported)) && obs[0][1].equals("1 to 3 sessions conducted and no Akuads filled (SELF REPORTED IMPROVEMENT)")) {
                         rb.setChecked(true);
@@ -475,7 +482,7 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
                     }
                 }
                 feelingBetterReason.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("REASON FOR LOST TO FOLLOW UP")) {
+            }*/ else if (obs[0][0].equals("REASON FOR LOST TO FOLLOW UP")) {
                 for (RadioButton rb : feelingBetterReason.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.comorbidities_end_treatment_MH_loss_to_followup_options_unreachable)) && obs[0][1].equals("PATIENT UNREACHABLE")) {
                         rb.setChecked(true);
@@ -505,6 +512,7 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
         super.onClick(view);
 
         if (view == formDate.getButton()) {
+            formDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);

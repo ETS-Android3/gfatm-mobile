@@ -87,6 +87,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
     TitledRadioGroup akuadsAgree;
     TitledSpinner preferredTherapyLocationSpinner;
     TitledEditText gpClinicCode;
+    TitledButton mentalHealthNextScheduledVisit;
     //TitledEditText otherPreferredLocation;
 
     /**
@@ -221,6 +222,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
         preferredTherapyLocationSpinner = new TitledSpinner(mainContent.getContext(), null, getResources().getString(R.string.comorbidities_preferredlocation_id), locationArray, "", App.VERTICAL, true);
         //reasonForDiscontinuation = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_preferredlocation_id), getResources().getStringArray(R.array.comorbidities_location), "Sehatmand Zindagi Center - Korangi", App.HORIZONTAL);
         gpClinicCode = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_preferredlocation_gpcliniccode), "", getResources().getString(R.string.comorbidities_preferredlocation_gpcliniccode_range), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        mentalHealthNextScheduledVisit = new TitledButton(context, null, getResources().getString(R.string.comorbidities_treatment_followup_MH_next_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         displayAkuadsAgreeOrNot();
         displayPreferredTherapyLocationOrNot();
         //otherPreferredLocation = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_preferredlocation_other_comorbidities), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
@@ -240,16 +242,17 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
                 akuadsNumbness.getRadioGroup(), akuadsTension.getRadioGroup(),
                 akuadsHeadaches.getRadioGroup(), akuadsBodyPain.getRadioGroup(),
                 akuadsUrination.getRadioGroup(), akuadsTotalScore.getEditText(), akuadsSeverity.getRadioGroup(),
-                akuadsAgree.getRadioGroup(), preferredTherapyLocationSpinner.getSpinner(), gpClinicCode.getEditText()/*, otherPreferredLocation.getEditText()*/};
+                akuadsAgree.getRadioGroup(), preferredTherapyLocationSpinner.getSpinner(), gpClinicCode.getEditText(), mentalHealthNextScheduledVisit.getButton()/*, otherPreferredLocation.getEditText()*/};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formDate, mentalHealthScreening, akuadsSleep, akuadsLackOfInterest, akuadsLostInterestHobbies, akuadsAnxious, akuadsImpendingDoom, akuadsDifficultyThinkingClearly,
                         akuadsAlone, akuadsUnhappy, akuadsHopeless, akuadsHelpless, akuadsWorried, akuadsCried, akuadsSuicide, akuadsLossOfAppetite, akuadsRetrosternalBurning,
                         akuadsIndigestion, akuadsNausea, akuadsConstipation, akuadsDifficultBreathing, akuadsTremulous, akuadsNumbness, akuadsTension, akuadsHeadaches, akuadsBodyPain,
-                        akuadsUrination, akuadsTotalScore, akuadsSeverity, akuadsAgree, preferredTherapyLocationSpinner, gpClinicCode, /*otherPreferredLocation*/}};
+                        akuadsUrination, akuadsTotalScore, akuadsSeverity, akuadsAgree, preferredTherapyLocationSpinner, gpClinicCode, mentalHealthNextScheduledVisit/*otherPreferredLocation*/}};
 
         formDate.getButton().setOnClickListener(this);
+        mentalHealthNextScheduledVisit.getButton().setOnClickListener(this);
         akuadsSleep.getRadioGroup().setOnCheckedChangeListener(this);
         akuadsLackOfInterest.getRadioGroup().setOnCheckedChangeListener(this);
         akuadsLostInterestHobbies.getRadioGroup().setOnCheckedChangeListener(this);
@@ -355,6 +358,37 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         }
+
+        if (!(mentalHealthNextScheduledVisit.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
+
+            String formDa = mentalHealthNextScheduledVisit.getButton().getText().toString();
+            String formDa1 = formDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
+
+            //Date date = new Date();
+            if (secondDateCalendar.before(formDateCalendar/*App.getCalendar(App.stringToDate(formDa1, "yyyy-MM-dd"))*/)) {
+
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.next_visit_date_cannot_before_form_date), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                mentalHealthNextScheduledVisit.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                mentalHealthNextScheduledVisit.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+            } else
+                mentalHealthNextScheduledVisit.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+
+        }
+
+        formDate.getButton().setEnabled(true);
+        mentalHealthNextScheduledVisit.setEnabled(true);
     }
 
     @Override
@@ -526,6 +560,9 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
         }
         if(preferredTherapyLocationSpinner.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"FACILITY REFERRED TO", App.get(preferredTherapyLocationSpinner)});
+        }
+        if(mentalHealthNextScheduledVisit.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDateTime(secondDateCalendar)});
         }
         observations.add(new String[]{"HEALTH CLINIC/POST", App.get(gpClinicCode)});
 
@@ -1101,6 +1138,10 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
                 preferredTherapyLocationSpinner.getSpinner().selectValue(obs[0][1]);
             } else if (obs[0][0].equals("HEALTH CLINIC/POST")) {
                 gpClinicCode.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("RETURN VISIT DATE")) {
+                String secondDate = obs[0][1];
+                secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
+                mentalHealthNextScheduledVisit.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
             }
 
         }
@@ -1112,12 +1153,23 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
         super.onClick(view);
 
         if (view == formDate.getButton()) {
+            formDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
+        }
+        else if (view == mentalHealthNextScheduledVisit.getButton()) {
+            //mentalHealthNextScheduledVisit.getButton().setEnabled(false);
+            Bundle args = new Bundle();
+            args.putInt("type", SECOND_DATE_DIALOG_ID);
+            args.putBoolean("allowPastDate", false);
+            args.putBoolean("allowFutureDate", true);
+            args.putString("formDate", formDate.getButtonText());
+            secondDateFragment.setArguments(args);
+            secondDateFragment.show(getFragmentManager(), "DatePicker");
         }
     }
 
@@ -1141,6 +1193,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
         super.resetViews();
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+       // mentalHealthNextScheduledVisit.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -1175,10 +1228,16 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
 
                 HashMap<String, String> result = new HashMap<String, String>();
                 String gpClinic = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_PATIENT_INFORMATION_FORM, "HEALTH CLINIC/POST");
+                String nextAppointDate = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Treatment Initiation", "RETURN VISIT DATE");
 
                 if (gpClinic != null)
                     if (!gpClinic .equals(""))
                         result.put("HEALTH CLINIC/POST", gpClinic);
+
+                //Fetching Next Appointment Date of FAST Treatment Initiation
+                if (nextAppointDate != null)
+                    if (!nextAppointDate .equals(""))
+                        result.put("RETURN VISIT DATE", nextAppointDate);
 
                 return result;
             }
@@ -1193,6 +1252,12 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
                 loading.dismiss();
 
                 gpClinicCode.getEditText().setText(result.get("HEALTH CLINIC/POST"));
+                String secondDate = result.get("RETURN VISIT DATE");
+                if(secondDate != null) {
+                    secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
+                    mentalHealthNextScheduledVisit.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+                }
+
                 preferredTherapyLocationSpinner.getSpinner().selectValue(App.getLocation());
             }
         };
@@ -1288,6 +1353,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
                 || akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_severe))) {
             akuadsAgree.setVisibility(View.VISIBLE);
             preferredTherapyLocationSpinner.setVisibility(View.VISIBLE);
+            mentalHealthNextScheduledVisit.setVisibility(View.VISIBLE);
             if(App.getLocation().equalsIgnoreCase("GP-CLINIC")) {
                 gpClinicCode.setVisibility(View.VISIBLE);
             }
@@ -1297,6 +1363,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
         } else if (akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_normal))) {
             akuadsAgree.setVisibility(View.GONE);
             preferredTherapyLocationSpinner.setVisibility(View.GONE);
+            mentalHealthNextScheduledVisit.setVisibility(View.GONE);
             gpClinicCode.setVisibility(View.GONE);
         }
     }
@@ -1304,6 +1371,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
     void displayPreferredTherapyLocationOrNot() {
         if (akuadsAgree.getVisibility() ==  View.VISIBLE && akuadsAgree.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.yes)) && !akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_normal))) {
             preferredTherapyLocationSpinner.setVisibility(View.VISIBLE);
+            mentalHealthNextScheduledVisit.setVisibility(View.VISIBLE);
             if(App.getLocation().equalsIgnoreCase("GP-CLINIC")) {
                 gpClinicCode.setVisibility(View.VISIBLE);
             }
@@ -1312,6 +1380,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
             }
         } else if (akuadsAgree.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.no))) {
             preferredTherapyLocationSpinner.setVisibility(View.GONE);
+            mentalHealthNextScheduledVisit.setVisibility(View.GONE);
             gpClinicCode.setVisibility(View.GONE);
         }
     }

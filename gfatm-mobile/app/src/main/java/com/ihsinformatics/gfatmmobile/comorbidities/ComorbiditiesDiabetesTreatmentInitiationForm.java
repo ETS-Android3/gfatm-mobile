@@ -82,6 +82,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
     TitledEditText diabetesTreatmentInitiationInsulinN;
     TitledEditText diabetesTreatmentInitiationInsulinR;
     TitledEditText diabetesTreatmentInitiationInsulinMix;
+    TitledButton diabetesNextScheduledVisit;
 
     ScrollView scrollView;
 
@@ -191,6 +192,8 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
         diabetesTreatmentInitiationInsulinN = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_insulinN), "", getResources().getString(R.string.comorbidities_vitals_waist_hip_whr_range), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         diabetesTreatmentInitiationInsulinR = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_insulinR), "", getResources().getString(R.string.comorbidities_vitals_waist_hip_whr_range), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         diabetesTreatmentInitiationInsulinMix = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_insulin_mix), "", getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_insulin_mix_range), 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        diabetesNextScheduledVisit = new TitledButton(context, null, getResources().getString(R.string.comorbidities_treatment_followup_MH_next_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
+
         // Used for reset fields...
         views = new View[]{formDate.getButton(), diabetesFamilyHistory.getRadioGroup(), diabetesFamilyHistorySpecify,
                 previousDiabetesTreatmentHistory.getRadioGroup(), selfReportedDiabetesTreatmentHistory, typeDiabetes.getRadioGroup(), statusDiabetes.getRadioGroup(),
@@ -198,7 +201,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
                 hxDiabeticInfections, hxDiabeticPvd.getRadioGroup(),
                 hxDiabeticCad.getRadioGroup(), hxDiabeticHypertension.getRadioGroup(), hxDiabeticGestationalDiabetes.getRadioGroup(), hxDiabeticBirth.getRadioGroup(),
                 treatmentInitiation, diabetesTreatmentInitiation, diabetesTreatmentDetail.getEditText(),
-                diabetesTreatmentInitiationMetformin.getRadioGroup(), diabetesTreatmentInitiationInsulinN.getEditText(), diabetesTreatmentInitiationInsulinR.getEditText(), diabetesTreatmentInitiationInsulinMix.getEditText()};
+                diabetesTreatmentInitiationMetformin.getRadioGroup(), diabetesTreatmentInitiationInsulinN.getEditText(), diabetesTreatmentInitiationInsulinR.getEditText(), diabetesTreatmentInitiationInsulinMix.getEditText(), diabetesNextScheduledVisit.getButton()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
@@ -208,7 +211,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
                         {hxDiabeticInfections, hxDiabeticPvd},
                         {hxDiabeticCad, hxDiabeticHypertension, hxDiabeticGestationalDiabetes, hxDiabeticBirth},
                         {treatmentInitiation, diabetesTreatmentInitiation, diabetesTreatmentDetail},
-                        {diabetesTreatmentInitiationMetformin, diabetesTreatmentInitiationInsulinN, diabetesTreatmentInitiationInsulinR, diabetesTreatmentInitiationInsulinMix}};
+                        {diabetesTreatmentInitiationMetformin, diabetesTreatmentInitiationInsulinN, diabetesTreatmentInitiationInsulinR, diabetesTreatmentInitiationInsulinMix, diabetesNextScheduledVisit}};
 
         diabetesTreatmentInitiationInsulinN.getEditText().addTextChangedListener(new TextWatcher() {
 
@@ -292,6 +295,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
         });
 
         formDate.getButton().setOnClickListener(this);
+        diabetesNextScheduledVisit.getButton().setOnClickListener(this);
         diabetesFamilyHistory.getRadioGroup().setOnCheckedChangeListener(this);
         previousDiabetesTreatmentHistory.getRadioGroup().setOnCheckedChangeListener(this);
         hxDiabeticGestationalDiabetes.getRadioGroup().setOnCheckedChangeListener(this);
@@ -344,6 +348,37 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         }
+
+        if (!(diabetesNextScheduledVisit.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
+
+            String formDa = diabetesNextScheduledVisit.getButton().getText().toString();
+            String formDa1 = formDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
+
+            //Date date = new Date();
+            if (secondDateCalendar.before(formDateCalendar/*App.getCalendar(App.stringToDate(formDa1, "yyyy-MM-dd"))*/)) {
+
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.next_visit_date_cannot_before_form_date), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                diabetesNextScheduledVisit.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                diabetesNextScheduledVisit.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+            } else
+                diabetesNextScheduledVisit.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+
+        }
+
+        formDate.getButton().setEnabled(true);
+        diabetesNextScheduledVisit.getButton().setEnabled(true);
     }
 
     @Override
@@ -692,6 +727,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
         observations.add(new String[]{"INSULIN N DOSAGE", App.get(diabetesTreatmentInitiationInsulinN)});
         observations.add(new String[]{"INSULIN R DOSAGE", App.get(diabetesTreatmentInitiationInsulinR)});
         observations.add(new String[]{"INSULIN 70/30 DOSAGE", App.get(diabetesTreatmentInitiationInsulinMix)});
+        observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDateTime(secondDateCalendar)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -1131,6 +1167,10 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
                 diabetesTreatmentInitiationInsulinR.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("INSULIN 70/30 DOSAGE")) {
                 diabetesTreatmentInitiationInsulinMix.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("RETURN VISIT DATE")) {
+                String secondDate = obs[0][1];
+                secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
+                diabetesNextScheduledVisit.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
             }
 
         }
@@ -1142,12 +1182,23 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
         super.onClick(view);
 
         if (view == formDate.getButton()) {
+            formDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
+        }
+        else if (view == diabetesNextScheduledVisit.getButton()) {
+            diabetesNextScheduledVisit.getButton().setEnabled(false);
+            Bundle args = new Bundle();
+            args.putInt("type", SECOND_DATE_DIALOG_ID);
+            args.putBoolean("allowPastDate", false);
+            args.putBoolean("allowFutureDate", true);
+            args.putString("formDate", formDate.getButtonText());
+            secondDateFragment.setArguments(args);
+            secondDateFragment.show(getFragmentManager(), "DatePicker");
         }
     }
 
@@ -1197,6 +1248,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
         super.resetViews();
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        diabetesNextScheduledVisit.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -1213,6 +1265,50 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
 
             } else bundle.putBoolean("save", false);
         }
+
+        //HERE FOR AUTOPOPULATING OBS
+        final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
+            @Override
+            protected HashMap<String, String> doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.fetching_data));
+                        loading.show();
+                    }
+                });
+
+                HashMap<String, String> result = new HashMap<String, String>();
+                String nextAppointDate = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Treatment Followup", "RETURN VISIT DATE");
+
+                //Fetching Next Appointment Date of FAST Treatment Followup
+                if (nextAppointDate != null)
+                    if (!nextAppointDate .equals(""))
+                        result.put("RETURN VISIT DATE", nextAppointDate);
+
+                return result;
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            @Override
+            protected void onPostExecute(HashMap<String, String> result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                String secondDate = result.get("RETURN VISIT DATE");
+                if(secondDate != null) {
+                    secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
+                    diabetesNextScheduledVisit.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+                }
+            }
+        };
+        autopopulateFormTask.execute("");
     }
 
     @Override

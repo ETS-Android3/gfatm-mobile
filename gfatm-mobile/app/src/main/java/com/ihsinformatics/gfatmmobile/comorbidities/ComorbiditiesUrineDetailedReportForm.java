@@ -49,6 +49,7 @@ import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -62,10 +63,12 @@ import java.util.HashMap;
 public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener, View.OnTouchListener {
 
     public static final int THIRD_DATE_DIALOG_ID = 3;
+    public static final int FOURTH_DATE_DIALOG_ID = 4;
     // Extra Views for date ...
     protected Calendar thirdDateCalendar;
     protected DialogFragment thirdDateFragment;
     protected Calendar fourthDateCalendar;
+    protected DialogFragment fourthDateFragment;
     Context context;
     // Views...
     TitledButton formDate;
@@ -107,6 +110,13 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
 
     ScrollView scrollView;
 
+    boolean isResultForm = false;
+    boolean beforeResult = false;
+    boolean changeDate = false;
+    String finalDate = null;
+
+    Boolean dateChoose = false;
+
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
      *
@@ -135,6 +145,7 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
         thirdDateFragment = new ComorbiditiesUrineDetailedReportForm.SelectDateFragment();
 
         fourthDateCalendar = Calendar.getInstance();
+        fourthDateFragment = new ComorbiditiesUrineDetailedReportForm.SelectNextDateFragment();
 
         initViews();
 
@@ -251,7 +262,7 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formType, linearLayout, formDate, testOrderUrineDR, urineDRMonthOfVisit, urineDRTestOrderDate, testResultUrineDR, urineDRTestResultDate, urineDRQuantity,
+                {{formType, formDate, linearLayout, testOrderUrineDR, urineDRMonthOfVisit, urineDRTestOrderDate, testResultUrineDR, urineDRTestResultDate, urineDRQuantity,
                         urineDRColor, urineDRSpecificGravity, urineDRPH, urineDRAlbumin, urineDRSugar, urineDRKetones, urineDRBilirubin, urineDRBlood, urineDRNitrite, urineDRUrobilinogen,
                         urineDRRedCells, urineDRPusCells, urineDREpithelialCells, urineDRHyalineCasts, urineDRCrystals, nextUrineDRTestDate}};
 
@@ -508,6 +519,7 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
             @Override
             public void onTextChanged(CharSequence s, int start,
                                       int before, int count) {
+                isResultForm = false;
                 try {
                     if (urineDRTestID.getEditText().getText().length() > 0) {
                         testIdView.setVisibility(View.VISIBLE);
@@ -560,8 +572,129 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
         if (snackbar != null)
             snackbar.dismiss();
 
+        if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))) {
+            if (beforeResult) {
+                Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "Comorbidities-Urine Detailed Report Order");
+                String format = "";
+                String formDa = formDate.getButton().getText().toString();
 
-        if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))){
+                for (int i = 0; i < testIds.length; i++) {
+                    if (testIds[i][0].equals(urineDRTestID.getEditText().getText().toString())) {
+                        String date = testIds[i][1].toString();
+                        if (date.contains("/")) {
+                            format = "dd/MM/yyyy";
+                        } else {
+                            format = "yyyy-MM-dd";
+                        }
+
+
+                        Date orderDate = App.stringToDate(date, format);
+                        Date orderDateForValidation = App.stringToDate(date, format);
+
+                        Calendar dateCalendar = Calendar.getInstance();
+                        dateCalendar.setTime(orderDateForValidation);
+                        // dateCalendar.add(Calendar.DATE, 1);
+                        SimpleDateFormat newFormat = new SimpleDateFormat("EEEE, MMM dd,yyyy");
+                        finalDate = newFormat.format(dateCalendar.getTime());
+
+                        if (formDateCalendar.before(App.getCalendar(orderDate))) {
+                            //formDateCalendar = App.getCalendar(App.stringToDate(finalDate, "EEEE, MMM dd,yyyy"));
+                            changeDate = true;
+
+                            break;
+                        } else {
+                            changeDate = false;
+                            if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
+
+                                String personDOB = App.getPatient().getPerson().getBirthdate();
+
+                                Date date1 = new Date();
+                                if (formDateCalendar.after(App.getCalendar(date1))) {
+                                    changeDate = false;
+                                    formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                                    snackbar.show();
+
+                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                                    break;
+
+                                } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                                    changeDate = false;
+                                    formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                                    TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                                    tv.setMaxLines(2);
+                                    snackbar.show();
+                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                                    break;
+                                } else {
+                                    changeDate = false;
+                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                                }
+                            }
+                        }
+                    }
+                }
+            } else if (isResultForm) {
+                changeDate = false;
+                Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "Comorbidities-Urine Detailed Report Order");
+                String format = "";
+                String formDa = formDate.getButton().getText().toString();
+
+                for (int i = 0; i < testIds.length; i++) {
+                    if (testIds[i][0].equals(urineDRTestID.getEditText().getText().toString())) {
+                        String date = testIds[i][1].toString();
+                        if (date.contains("/")) {
+                            format = "dd/MM/yyyy";
+                        } else {
+                            format = "yyyy-MM-dd";
+                        }
+
+                        Date orderDate = App.stringToDate(date, format);
+
+                        if (formDateCalendar.before(App.getCalendar(orderDate))) {
+                            formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                            snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
+                            snackbar.show();
+
+                            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                            break;
+                        } else {
+                            if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
+
+                                String personDOB = App.getPatient().getPerson().getBirthdate();
+
+                                Date date1 = new Date();
+                                if (formDateCalendar.after(App.getCalendar(date1))) {
+
+                                    formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                                    snackbar.show();
+
+                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                                    break;
+
+                                } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                                    formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                                    TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                                    tv.setMaxLines(2);
+                                    snackbar.show();
+                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                                    break;
+                                } else
+                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        /*if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))){
             Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "Comorbidities-Urine Detailed Report Order");
             String format = "";
             String formDa = formDate.getButton().getText().toString();
@@ -591,7 +724,7 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
                     }
                 }
             }
-        }
+        }*/
 
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
@@ -676,12 +809,45 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
         }
 
         //fourthDateCalendar = thirdDateCalendar;
-        fourthDateCalendar.set(Calendar.YEAR, formDateCalendar.get(Calendar.YEAR));
-        fourthDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
-        fourthDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
-        fourthDateCalendar.add(Calendar.MONTH, 2);
-        fourthDateCalendar.add(Calendar.DAY_OF_MONTH, 20);
-        nextUrineDRTestDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", fourthDateCalendar).toString());
+
+        if(!dateChoose) {
+            fourthDateCalendar.set(Calendar.YEAR, formDateCalendar.get(Calendar.YEAR));
+            fourthDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
+            fourthDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
+            fourthDateCalendar.add(Calendar.MONTH, 2);
+            fourthDateCalendar.add(Calendar.DAY_OF_MONTH, 20);
+            nextUrineDRTestDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", fourthDateCalendar).toString());
+        }
+        if (!(nextUrineDRTestDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", fourthDateCalendar).toString()))) {
+
+            String formDa = nextUrineDRTestDate.getButton().getText().toString();
+            String formDa1 = formDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
+
+            //Date date = new Date();
+            if (fourthDateCalendar.before(formDateCalendar/*App.getCalendar(App.stringToDate(formDa1, "yyyy-MM-dd"))*/)) {
+
+                fourthDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.next_visit_date_cannot_before_form_date), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                nextUrineDRTestDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", fourthDateCalendar).toString());
+
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                fourthDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                nextUrineDRTestDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", fourthDateCalendar).toString());
+            } else
+                nextUrineDRTestDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", fourthDateCalendar).toString());
+
+        }
+        dateChoose = false;
+        formDate.getButton().setEnabled(true);
+        nextUrineDRTestDate.getButton().setEnabled(true);
     }
 
     @Override
@@ -1331,6 +1497,7 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
         super.onClick(view);
 
         if (view == formDate.getButton()) {
+            formDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
@@ -1351,6 +1518,16 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
             args.putBoolean("allowFutureDate", false);
             thirdDateFragment.setArguments(args);
             thirdDateFragment.show(getFragmentManager(), "DatePicker");
+        } else if (view == nextUrineDRTestDate.getButton()) {
+            nextUrineDRTestDate.getButton().setEnabled(false);
+            Bundle args = new Bundle();
+            args.putInt("type", FOURTH_DATE_DIALOG_ID);
+            args.putBoolean("allowPastDate", false);
+            args.putBoolean("allowFutureDate", true);
+            args.putString("formDate", formDate.getButtonText());
+            fourthDateFragment.setArguments(args);
+            fourthDateFragment.show(getFragmentManager(), "DatePicker");
+            dateChoose = true;
         }
     }
 
@@ -1373,6 +1550,7 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
     public void resetViews() {
         super.resetViews();
 
+        formDate.setVisibility(View.GONE);
         urineDRTestID.getEditText().setEnabled(true);
         testIdView.setEnabled(true);
         formType.getRadioGroup().getButtons().get(0).setEnabled(true);
@@ -1382,12 +1560,15 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         urineDRTestOrderDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         urineDRTestResultDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
-        fourthDateCalendar.set(Calendar.YEAR, secondDateCalendar.get(Calendar.YEAR));
-        fourthDateCalendar.set(Calendar.MONTH, secondDateCalendar.get(Calendar.MONTH));
-        fourthDateCalendar.set(Calendar.DAY_OF_MONTH, secondDateCalendar.get(Calendar.DAY_OF_MONTH));
-        fourthDateCalendar.add(Calendar.MONTH, 2);
-        fourthDateCalendar.add(Calendar.DAY_OF_MONTH, 20);
-        nextUrineDRTestDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", fourthDateCalendar).toString());
+
+        if(!dateChoose) {
+            fourthDateCalendar.set(Calendar.YEAR, secondDateCalendar.get(Calendar.YEAR));
+            fourthDateCalendar.set(Calendar.MONTH, secondDateCalendar.get(Calendar.MONTH));
+            fourthDateCalendar.set(Calendar.DAY_OF_MONTH, secondDateCalendar.get(Calendar.DAY_OF_MONTH));
+            fourthDateCalendar.add(Calendar.MONTH, 2);
+            fourthDateCalendar.add(Calendar.DAY_OF_MONTH, 20);
+            nextUrineDRTestDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", fourthDateCalendar).toString());
+        }
 
         submitButton.setEnabled(false);
 
@@ -1436,7 +1617,7 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
     }
 
     void goneVisibility() {
-        formDate.setVisibility(View.GONE);
+        //formDate.setVisibility(View.GONE);
         testOrderUrineDR.setVisibility(View.GONE);
         urineDRMonthOfVisit.setVisibility(View.GONE);
         urineDRTestOrderDate.setVisibility(View.GONE);
@@ -1467,6 +1648,8 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
     void showTestOrderOrTestResult() {
         formDate.setVisibility(View.VISIBLE);
         if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
+            isResultForm = false;
+            beforeResult = false;
             testOrderUrineDR.setVisibility(View.VISIBLE);
             urineDRMonthOfVisit.setVisibility(View.VISIBLE);
             //urineDRTestOrderDate.setVisibility(View.VISIBLE);
@@ -1493,6 +1676,8 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
             nextUrineDRTestDate.setVisibility(View.GONE);
 
         } else {
+            isResultForm = true;
+            beforeResult = false;
             testOrderUrineDR.setVisibility(View.GONE);
             urineDRMonthOfVisit.setVisibility(View.GONE);
             urineDRTestOrderDate.setVisibility(View.GONE);
@@ -1547,8 +1732,13 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
         return true;
     }
 
+    public boolean validateResultDate() {
+        updateDisplay();
+        return changeDate;
+    }
+
     private void checkTestId() {
-        AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
+        /*AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
             protected String doInBackground(String... params) {
                 getActivity().runOnUiThread(new Runnable() {
@@ -1632,7 +1822,107 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
 
             }
         };
+        submissionFormTask.execute("");*/
+
+        AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.verifying_test_id));
+                        loading.show();
+                    }
+                });
+
+                String result = "";
+
+                Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "Comorbidities-Urine Detailed Report Order");
+
+                if (testIds == null || testIds.length < 1) {
+                    if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder)))
+                        return "SUCCESS";
+                    else
+                        return "";
+                }
+
+
+                if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
+                    result = "SUCCESS";
+                    for (int i = 0; i < testIds.length; i++) {
+                        if (String.valueOf(testIds[i][0]).equals(App.get(urineDRTestID))) {
+                            return "";
+                        }
+                    }
+                }
+
+                if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))) {
+                    result = "";
+                    for (int i = 0; i < testIds.length; i++) {
+                        if (String.valueOf(testIds[i][0]).equals(App.get(urineDRTestID))) {
+                            if (!isResultForm)
+                                beforeResult = true;
+                            else
+                                beforeResult = false;
+                            if (!validateResultDate())
+                                return "SUCCESS";
+                            return "FAIL";
+                        }
+                    }
+                }
+
+                return result;
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            ;
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                if (result.equals("SUCCESS")) {
+
+                    testIdView.setImageResource(R.drawable.ic_checked_green);
+                    showTestOrderOrTestResult();
+                    submitButton.setEnabled(true);
+
+                } else if (result.equals("FAIL")) {
+                    if (snackbar != null)
+                        snackbar.dismiss();
+
+                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
+                    snackbar.show();
+                    formDateCalendar = App.getCalendar(App.stringToDate(finalDate, "EEEE, MMM dd,yyyy"));
+                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                } else {
+
+                    if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
+                        urineDRTestID.getEditText().setError("Test Id already used.");
+                    } else {
+                        urineDRTestID.getEditText().setError("No order form found for the test id for patient");
+                    }
+
+                }
+
+                try {
+                    InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                } catch (Exception e) {
+                    // TODO: handle exception
+                }
+
+            }
+        };
         submissionFormTask.execute("");
+
 
     }
 
@@ -1697,6 +1987,58 @@ public class ComorbiditiesUrineDetailedReportForm extends AbstractFormActivity i
             else if (((int) view.getTag()) == THIRD_DATE_DIALOG_ID)
                 thirdDateCalendar.set(yy, mm, dd);
 
+            updateDisplay();
+        }
+    }
+
+    public class SelectNextDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final Calendar calendar;
+            if (getArguments().getInt("type") == DATE_DIALOG_ID)
+                calendar = formDateCalendar;
+            else if (getArguments().getInt("type") == SECOND_DATE_DIALOG_ID)
+                calendar = secondDateCalendar;
+            else if (getArguments().getInt("type") == THIRD_DATE_DIALOG_ID)
+                calendar = thirdDateCalendar;
+            else if (getArguments().getInt("type") == FOURTH_DATE_DIALOG_ID)
+                calendar = fourthDateCalendar;
+            else
+                return null;
+
+            int yy = calendar.get(Calendar.YEAR);
+            int mm = calendar.get(Calendar.MONTH);
+            int dd = calendar.get(Calendar.DAY_OF_MONTH);
+            DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, yy, mm, dd);
+            /*dialog.getDatePicker().setTag(getArguments().getInt("type"));
+            dialog.getDatePicker().setMaxDate(new Date().getTime());*/
+            dialog.getDatePicker().setTag(getArguments().getInt("type"));
+            if (!getArguments().getBoolean("allowFutureDate", true))
+                dialog.getDatePicker().setMaxDate(new Date().getTime());
+            if (!getArguments().getBoolean("allowPastDate", true))
+                dialog.getDatePicker().setMinDate(new Date().getTime());
+            return dialog;
+        }
+
+        @Override
+        public void onDateSet(DatePicker view, int yy, int mm, int dd) {
+
+            if (((int) view.getTag()) == DATE_DIALOG_ID)
+                formDateCalendar.set(yy, mm, dd);
+            else if (((int) view.getTag()) == SECOND_DATE_DIALOG_ID)
+                secondDateCalendar.set(yy, mm, dd);
+            else if (((int) view.getTag()) == THIRD_DATE_DIALOG_ID)
+                thirdDateCalendar.set(yy, mm, dd);
+            else if (((int) view.getTag()) == FOURTH_DATE_DIALOG_ID)
+                fourthDateCalendar.set(yy, mm, dd);
+
+            updateDisplay();
+        }
+
+        @Override
+        public void onCancel(DialogInterface dialog) {
+            super.onCancel(dialog);
             updateDisplay();
         }
     }

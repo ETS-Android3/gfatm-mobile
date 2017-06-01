@@ -13,6 +13,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -786,7 +787,6 @@ public class ComorbiditiesDiabetesEyeScreeningForm extends AbstractFormActivity 
                     if (!monthOfTreatment.equals(""))
                         result.put("FOLLOW-UP MONTH", monthOfTreatment);
 
-
                 return result;
             }
 
@@ -799,7 +799,8 @@ public class ComorbiditiesDiabetesEyeScreeningForm extends AbstractFormActivity 
                 super.onPostExecute(result);
                 loading.dismiss();
 
-                diabetesEyeScreeningMonthOfTreatment.getSpinner().selectValue(result.get("FOLLOW-UP MONTH"));
+                if(result.get("FOLLOW-UP MONTH") != null)
+                    diabetesEyeScreeningMonthOfTreatment.getSpinner().selectValue(result.get("FOLLOW-UP MONTH"));
 
             }
         };

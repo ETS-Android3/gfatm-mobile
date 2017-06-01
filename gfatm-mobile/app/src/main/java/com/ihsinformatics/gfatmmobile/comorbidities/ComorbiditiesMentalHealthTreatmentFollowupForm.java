@@ -241,11 +241,12 @@ public class ComorbiditiesMentalHealthTreatmentFollowupForm extends AbstractForm
             String personDOB = App.getPatient().getPerson().getBirthdate();
 
             Date date = new Date();
-            if (secondDateCalendar.before(App.getCalendar(date))) {
+            if (secondDateCalendar.before(formDateCalendar)/*secondDateCalendar.before(App.getCalendar(date))*/) {
 
                 secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.next_date_past), Snackbar.LENGTH_INDEFINITE);
+                //snackbar = Snackbar.make(mainContent, getResources().getString(R.string.next_date_past), Snackbar.LENGTH_INDEFINITE);
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.next_visit_date_cannot_before_form_date), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
                 treatmentFollowupMHNextAppointmentDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
@@ -261,6 +262,8 @@ public class ComorbiditiesMentalHealthTreatmentFollowupForm extends AbstractForm
                 treatmentFollowupMHNextAppointmentDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
         }
+        formDate.getButton().setEnabled(true);
+        treatmentFollowupMHNextAppointmentDate.getButton().setEnabled(true);
     }
 
     @Override
@@ -682,6 +685,7 @@ public class ComorbiditiesMentalHealthTreatmentFollowupForm extends AbstractForm
         super.onClick(view);
 
         if (view == formDate.getButton()) {
+            formDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
@@ -689,10 +693,12 @@ public class ComorbiditiesMentalHealthTreatmentFollowupForm extends AbstractForm
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
         } else if (view == treatmentFollowupMHNextAppointmentDate.getButton()) {
+            treatmentFollowupMHNextAppointmentDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", false);
             args.putBoolean("allowFutureDate", true);
+            args.putString("formDate", formDate.getButtonText());
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
         }

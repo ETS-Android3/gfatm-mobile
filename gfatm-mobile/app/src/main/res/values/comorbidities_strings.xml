@@ -970,6 +970,9 @@
     <string name="comorbidities_end_treatment_MH_reason_of_discontinuation_options_think_no_depression">Thinks that he/she does not have depression</string>
     <string name="comorbidities_end_treatment_MH_reason_of_discontinuation_options_lost_followup">Lost to Follow up</string>
     <string name="comorbidities_end_treatment_MH_reason_of_discontinuation_options_referred">Referred</string>
+    <string name="comorbidities_end_treatment_MH_reason_of_discontinuation_options_tb_completed">TB treatment completed</string>
+    <string name="comorbidities_end_treatment_MH_reason_of_discontinuation_options_deceased">Deceased</string>
+    <string name="comorbidities_end_treatment_MH_reason_of_discontinuation_options_transferred">Transferred Out</string>
     <string name="comorbidities_end_treatment_MH_reason_of_discontinuation_options_other">Other</string>
 
     <string-array name="comorbidities_end_treatment_MH_reason_of_discontinuation_options">
@@ -980,6 +983,9 @@
         <item>@string/comorbidities_end_treatment_MH_reason_of_discontinuation_options_think_no_depression</item>
         <item>@string/comorbidities_end_treatment_MH_reason_of_discontinuation_options_lost_followup</item>
         <item>@string/comorbidities_end_treatment_MH_reason_of_discontinuation_options_referred</item>
+        <item>@string/comorbidities_end_treatment_MH_reason_of_discontinuation_options_tb_completed</item>
+        <item>@string/comorbidities_end_treatment_MH_reason_of_discontinuation_options_deceased</item>
+        <item>@string/comorbidities_end_treatment_MH_reason_of_discontinuation_options_transferred</item>
         <item>@string/comorbidities_end_treatment_MH_reason_of_discontinuation_options_other</item>
     </string-array>
 
@@ -1029,8 +1035,8 @@
     <string name="comorbidities_drug_disbursement_drug_dist_date">Drug Distribution Date:</string>
     <string name="comorbidities_drug_disbursement_specify_other">Specify if Other:</string>
     <string name="comorbidities_drug_disbursement_days_worth">Days worth of drugs distributed:</string>
-    <string name="comorbidities_drug_disbursement_days_worth_range">Range 1&#8211;10</string>
-    <string name="comorbidities_drug_disbursement_days_worth_limit">The value should be in the range of 1&#8211;10</string>
+    <string name="comorbidities_drug_disbursement_days_worth_range">Range 1&#8211;90</string>
+    <string name="comorbidities_drug_disbursement_days_worth_limit">The value should be in the range of 1&#8211;90</string>
     <string name="comorbidities_drug_disbursement_number_of_metformin">Number of Metformin tablet leaves (500 mg) distributed:</string>
     <string name="comorbidities_drug_disbursement_number_of_metformin_range">Range 0&#8211;15</string>
     <string name="comorbidities_drug_disbursement_number_of_metformin_limit">The value should be in the range of 0&#8211;15</string>
@@ -1066,8 +1072,8 @@
     <string name="comorbidities_patient_information_cnic_owner">Whose NIC is this?</string>
     <string name="comorbidities_patient_information_other_cnic_owner">If other, specify:</string>
     <string name="comorbidities_patient_information_address_provided">Has the patient provided their address?</string>
-    <string name="comorbidities_patient_information_address1">Address 1 (House Number, etc.):</string>
-    <string name="comorbidities_patient_information_address2">Address 2 (Block, Street, Gali, Colony, etc.):</string>
+    <string name="comorbidities_patient_information_address1">Address 1:</string>
+    <string name="comorbidities_patient_information_address2">Address 2 (Town):</string>
     <string name="comorbidities_patient_information_town">Town:</string>
     <string name="comorbidities_patient_information_city">City / Village:</string>
     <string name="comorbidities_patient_information_address_type">What type of Address is this?</string>
@@ -1081,6 +1087,7 @@
     <string name="comorbidities_patient_information_landline_format_dasherror">The format should be 0##-########</string>
     <string name="comorbidities_patient_information_secondary_landline">Secondary Landline Number:</string>
     <string name="comorbidities_patient_information_tb_status">TB Status:</string>
+    <string name="comorbidities_patient_information_tb_type">What type of TB?</string>
     <string name="comorbidities_patient_information_tb_category">If TB +ve what is the category of treatment:</string>
     <string name="comorbidities_patient_information_marital_status">Marital Status:</string>
     <string name="comorbidities_patient_information_head_of_education">Head of Household Education:</string>
@@ -1134,6 +1141,14 @@
     <string-array name="comorbidities_patient_information_tb_status_options">
         <item>@string/comorbidities_patient_information_tb_status_positive</item>
         <item>@string/comorbidities_patient_information_tb_status_negative</item>
+    </string-array>
+
+    <string name="comorbidities_patient_information_tb_type_pulmonary">Pulmonary</string>
+    <string name="comorbidities_patient_information_tb_type_extra_pulmonary">Extra-Pulmonary</string>
+
+    <string-array name="comorbidities_patient_information_tb_type_options">
+        <item>@string/comorbidities_patient_information_tb_type_pulmonary</item>
+        <item>@string/comorbidities_patient_information_tb_type_extra_pulmonary</item>
     </string-array>
 
     <string name="comorbidities_patient_information_tb_category_cat1">Category 1 (SS-TB)</string>
