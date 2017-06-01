@@ -229,7 +229,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
 
         if (hospitalSectionOther.getVisibility() == View.VISIBLE && App.get(hospitalSectionOther).isEmpty()) {
             if (App.isLanguageRTL())
-                gotoPage(0);
+                gotoPage(1);
             else
                 gotoPage(0);
             hospitalSectionOther.getEditText().setError(getString(R.string.empty_field));
@@ -239,9 +239,9 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
 
         if (coughTwoWeeks.getVisibility() == View.VISIBLE && App.get(coughTwoWeeks).isEmpty()) {
             if (App.isLanguageRTL())
-                gotoPage(1);
-            else
                 gotoPage(0);
+            else
+                gotoPage(1);
           //  coughTwoWeeks.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
           //  coughTwoWeeks.getRadioGroup().requestFocus();
             error = true;
@@ -250,9 +250,9 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
 
         if (tbContact.getVisibility() == View.VISIBLE && App.get(tbContact).isEmpty()) {
             if (App.isLanguageRTL())
-                gotoPage(1);
-            else
                 gotoPage(0);
+            else
+                gotoPage(1);
          //   tbContact.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
          //   tbContact.getRadioGroup().requestFocus();
             error = true;
@@ -261,9 +261,9 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
 
         if (tbHistory.getVisibility() == View.VISIBLE && App.get(tbHistory).isEmpty()) {
             if (App.isLanguageRTL())
-                gotoPage(1);
-            else
                 gotoPage(0);
+            else
+                gotoPage(1);
          //   tbHistory.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
          //   tbHistory.getRadioGroup().requestFocus();
             error = true;
@@ -272,18 +272,18 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
 
         if (gender.getVisibility() == View.VISIBLE && App.get(gender).isEmpty()) {
             if (App.isLanguageRTL())
-                gotoPage(0);
+                gotoPage(1);
             else
                 gotoPage(0);
-            gender.getRadioGroup().getButtons().get(1).setError(getString(R.string.empty_field));
-            gender.getRadioGroup().requestFocus();
+            //gender.getRadioGroup().getButtons().get(1).setError(getString(R.string.empty_field));
+           // gender.getRadioGroup().requestFocus();
             emptyError = true;
             error = true;
         }
 
         if (hospitalSection.getVisibility() == View.VISIBLE && App.get(hospitalSection).isEmpty()) {
             if (App.isLanguageRTL())
-                gotoPage(0);
+                gotoPage(1);
             else
                 gotoPage(0);
 
@@ -293,7 +293,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
 
         if (opdWardSection.getVisibility() == View.VISIBLE && App.get(opdWardSection).isEmpty()) {
             if (App.isLanguageRTL())
-                gotoPage(0);
+                gotoPage(1);
             else
                 gotoPage(0);
 

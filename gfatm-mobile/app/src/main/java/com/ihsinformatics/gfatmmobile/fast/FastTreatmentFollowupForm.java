@@ -64,6 +64,7 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
     TitledRadioGroup treatmentPlan;
     TitledButton returnVisitDate;
 
+    boolean refillFlag = false;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -164,6 +165,12 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
 
     @Override
     public void updateDisplay() {
+
+        if(refillFlag){
+            refillFlag = false;
+            return;
+        }
+
         if (snackbar != null)
             snackbar.dismiss();
 
@@ -527,6 +534,8 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
     @Override
     public void refill(int formId) {
 
+        refillFlag = true;
+
         OfflineForm fo = serverService.getOfflineFormById(formId);
         String date = fo.getFormDate();
         ArrayList<String[][]> obsValue = fo.getObsValue();
@@ -644,69 +653,7 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
         returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
         updateDisplay();
 
-
-        final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
-            @Override
-            protected HashMap<String, String> doInBackground(String... params) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        loading.setInverseBackgroundForced(true);
-                        loading.setIndeterminate(true);
-                        loading.setCancelable(false);
-                        loading.setMessage(getResources().getString(R.string.fetching_data));
-                        loading.show();
-                    }
-                });
-
-                HashMap<String, String> result = new HashMap<String, String>();
-
-                String tbRegNum = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "TB REGISTRATION NUMBER");
-                String regDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
-
-                if (tbRegNum != null)
-                    result.put("TB REGISTRATION NUMBER", tbRegNum);
-
-                if (regDate != null)
-                    result.put("REGISTRATION DATE", regDate);
-
-
-                return result;
-            }
-
-            @Override
-            protected void onProgressUpdate(String... values) {
-            }
-
-
-            @Override
-            protected void onPostExecute(HashMap<String, String> result) {
-                super.onPostExecute(result);
-                loading.dismiss();
-
-                if (result.get("TB REGISTRATION NUMBER") != null) {
-                    tbRegisterationNumber.getEditText().setText(result.get("TB REGISTRATION NUMBER"));
-                    tbRegisterationNumber.getEditText().setKeyListener(null);
-                    tbRegisterationNumber.getEditText().setFocusable(false);
-                }
-
-                if (result.get("REGISTRATION DATE") != null) {
-                    String format = "";
-                    String registerationDate = result.get("REGISTRATION DATE");
-                    if (registerationDate.contains("/")) {
-                        format = "dd/MM/yyyy";
-                    } else {
-                        format = "yyyy-MM-dd";
-                    }
-                    secondDateCalendar.setTime(App.stringToDate(registerationDate, format));
-                    updateDisplay();
-                    treatmentStartDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-                }
-            }
-        };
-        autopopulateFormTask.execute("");
-
-
+        boolean flag = true;
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");
@@ -719,10 +666,75 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
                 int formId = Integer.valueOf(id);
 
                 refill(formId);
+                flag = false;
 
             } else bundle.putBoolean("save", false);
 
         }
+
+        if(flag) {
+            final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
+                @Override
+                protected HashMap<String, String> doInBackground(String... params) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            loading.setInverseBackgroundForced(true);
+                            loading.setIndeterminate(true);
+                            loading.setCancelable(false);
+                            loading.setMessage(getResources().getString(R.string.fetching_data));
+                            loading.show();
+                        }
+                    });
+
+                    HashMap<String, String> result = new HashMap<String, String>();
+
+                    String tbRegNum = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "TB REGISTRATION NUMBER");
+                    String regDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+
+                    if (tbRegNum != null)
+                        result.put("TB REGISTRATION NUMBER", tbRegNum);
+
+                    if (regDate != null)
+                        result.put("REGISTRATION DATE", regDate);
+
+
+                    return result;
+                }
+
+                @Override
+                protected void onProgressUpdate(String... values) {
+                }
+
+
+                @Override
+                protected void onPostExecute(HashMap<String, String> result) {
+                    super.onPostExecute(result);
+                    loading.dismiss();
+
+                    if (result.get("TB REGISTRATION NUMBER") != null) {
+                        tbRegisterationNumber.getEditText().setText(result.get("TB REGISTRATION NUMBER"));
+                        tbRegisterationNumber.getEditText().setKeyListener(null);
+                        tbRegisterationNumber.getEditText().setFocusable(false);
+                    }
+
+                    if (result.get("REGISTRATION DATE") != null) {
+                        String format = "";
+                        String registerationDate = result.get("REGISTRATION DATE");
+                        if (registerationDate.contains("/")) {
+                            format = "dd/MM/yyyy";
+                        } else {
+                            format = "yyyy-MM-dd";
+                        }
+                        secondDateCalendar.setTime(App.stringToDate(registerationDate, format));
+                        updateDisplay();
+                        treatmentStartDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+                    }
+                }
+            };
+            autopopulateFormTask.execute("");
+        }
+
     }
 
     @Override

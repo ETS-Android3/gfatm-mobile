@@ -62,6 +62,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
     protected Calendar thirdDateCalendar;
     protected DialogFragment thirdDateFragment;
     Boolean dateChoose = false;
+    boolean refillFlag = false;
     Context context;
 
     // Views...
@@ -300,6 +301,12 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
     @Override
     public void updateDisplay() {
+
+        if(refillFlag){
+            refillFlag = false;
+            return;
+        }
+
         if (snackbar != null)
             snackbar.dismiss();
 
@@ -830,6 +837,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
     @Override
     public void refill(int formId) {
+        refillFlag = true;
 
         OfflineForm fo = serverService.getOfflineFormById(formId);
         String date = fo.getFormDate();
@@ -1126,96 +1134,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         historyCategory.setVisibility(View.GONE);
         outcomePreviousCategory.setVisibility(View.GONE);
 
-        final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
-            @Override
-            protected HashMap<String, String> doInBackground(String... params) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        loading.setInverseBackgroundForced(true);
-                        loading.setIndeterminate(true);
-                        loading.setCancelable(false);
-                        loading.setMessage(getResources().getString(R.string.fetching_data));
-                        loading.show();
-                    }
-                });
-
-                HashMap<String, String> result = new HashMap<String, String>();
-                String cnic1 = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Information", "NATIONAL IDENTIFICATION NUMBER");
-                String cnicowner1 = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Information", "COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
-                String cnicownerother1 = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Information", "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
-                String regDate = serverService.getEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + "Presumptive Information");
-
-                if (cnic1 != null)
-                    result.put("NATIONAL IDENTIFICATION NUMBER", cnic1);
-                if (cnicowner1 != null) {
-                    result.put("COMPUTERIZED NATIONAL IDENTIFICATION OWNER", cnicowner1.equals("SELF") ? getResources().getString(R.string.fast_self) :
-                            (cnicowner1.equals("MOTHER") ? getResources().getString(R.string.fast_mother) :
-                                    (cnicowner1.equals("FATHER") ? getResources().getString(R.string.fast_father) :
-                                            (cnicowner1.equals("SISTER") ? getResources().getString(R.string.fast_sister) :
-                                                    (cnicowner1.equals("BROTHER") ? getResources().getString(R.string.fast_brother) :
-                                                            (cnicowner1.equals("SPOUSE") ? getResources().getString(R.string.fast_spouse) :
-                                                                    (cnicowner1.equals("PATERNAL GRANDFATHER") ? getResources().getString(R.string.fast_paternal_grandfather) :
-                                                                            (cnicowner1.equals("PATERNAL GRANDMOTHER") ? getResources().getString(R.string.fast_paternal_grandmother) :
-                                                                                    (cnicowner1.equals("MATERNAL GRANDFATHER") ? getResources().getString(R.string.fast_maternal_grandfather) :
-                                                                                            (cnicowner1.equals("MATERNAL GRANDMOTHER") ? getResources().getString(R.string.fast_maternal_grandmother) :
-                                                                                                    (cnicowner1.equals("UNCLE") ? getResources().getString(R.string.fast_uncle) :
-                                                                                                            (cnicowner1.equals("AUNT") ? getResources().getString(R.string.fast_aunt) :
-                                                                                                                    (cnicowner1.equals("SON") ? getResources().getString(R.string.fast_son) :
-                                                                                                                            (cnicowner1.equals("DAUGHTER") ? getResources().getString(R.string.fast_daughter) : getResources().getString(R.string.fast_other_title)))))))))))))));
-
-                }
-
-                if (cnicownerother1 != null)
-                    result.put("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", cnicownerother1);
-
-                if (regDate != null)
-                    result.put("FORM DATE", regDate);
-
-                return result;
-            }
-
-            @Override
-            protected void onProgressUpdate(String... values) {
-            }
-
-
-            @Override
-            protected void onPostExecute(HashMap<String, String> result) {
-                super.onPostExecute(result);
-                loading.dismiss();
-
-                if (result.get("NATIONAL IDENTIFICATION NUMBER") != null) {
-                    String value = result.get("NATIONAL IDENTIFICATION NUMBER");
-                    cnic1.setText(value.substring(0, 5));
-                    cnic2.setText(value.substring(6, 13));
-                    cnic3.setText(value.substring(14));
-                }
-
-                if (result.get("COMPUTERIZED NATIONAL IDENTIFICATION OWNER") != null) {
-                    cnicOwner.getSpinner().selectValue(result.get("COMPUTERIZED NATIONAL IDENTIFICATION OWNER"));
-                }
-
-                if (result.get("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER") != null) {
-                    cnicOwnerOther.getEditText().setText(result.get("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER"));
-                }
-
-                if (result.get("FORM DATE") != null) {
-                    String format = "";
-                    String registerationDate = result.get("FORM DATE");
-                    if (registerationDate.contains("/")) {
-                        format = "dd/MM/yyyy";
-                    } else {
-                        format = "yyyy-MM-dd";
-                    }
-                    secondDateCalendar.setTime(App.stringToDate(registerationDate, format));
-                    updateDisplay();
-                    regDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-                }
-            }
-        };
-        autopopulateFormTask.execute("");
-
+        boolean flag = true;
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");
@@ -1228,9 +1147,102 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                 int formId = Integer.valueOf(id);
 
                 refill(formId);
+                flag = false;
 
             } else bundle.putBoolean("save", false);
 
+        }
+
+        if(flag) {
+            final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
+                @Override
+                protected HashMap<String, String> doInBackground(String... params) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            loading.setInverseBackgroundForced(true);
+                            loading.setIndeterminate(true);
+                            loading.setCancelable(false);
+                            loading.setMessage(getResources().getString(R.string.fetching_data));
+                            loading.show();
+                        }
+                    });
+
+                    HashMap<String, String> result = new HashMap<String, String>();
+                    String cnic1 = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Information", "NATIONAL IDENTIFICATION NUMBER");
+                    String cnicowner1 = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Information", "COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
+                    String cnicownerother1 = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Information", "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
+                    String regDate = serverService.getEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + "Presumptive Information");
+
+                    if (cnic1 != null)
+                        result.put("NATIONAL IDENTIFICATION NUMBER", cnic1);
+                    if (cnicowner1 != null) {
+                        result.put("COMPUTERIZED NATIONAL IDENTIFICATION OWNER", cnicowner1.equals("SELF") ? getResources().getString(R.string.fast_self) :
+                                (cnicowner1.equals("MOTHER") ? getResources().getString(R.string.fast_mother) :
+                                        (cnicowner1.equals("FATHER") ? getResources().getString(R.string.fast_father) :
+                                                (cnicowner1.equals("SISTER") ? getResources().getString(R.string.fast_sister) :
+                                                        (cnicowner1.equals("BROTHER") ? getResources().getString(R.string.fast_brother) :
+                                                                (cnicowner1.equals("SPOUSE") ? getResources().getString(R.string.fast_spouse) :
+                                                                        (cnicowner1.equals("PATERNAL GRANDFATHER") ? getResources().getString(R.string.fast_paternal_grandfather) :
+                                                                                (cnicowner1.equals("PATERNAL GRANDMOTHER") ? getResources().getString(R.string.fast_paternal_grandmother) :
+                                                                                        (cnicowner1.equals("MATERNAL GRANDFATHER") ? getResources().getString(R.string.fast_maternal_grandfather) :
+                                                                                                (cnicowner1.equals("MATERNAL GRANDMOTHER") ? getResources().getString(R.string.fast_maternal_grandmother) :
+                                                                                                        (cnicowner1.equals("UNCLE") ? getResources().getString(R.string.fast_uncle) :
+                                                                                                                (cnicowner1.equals("AUNT") ? getResources().getString(R.string.fast_aunt) :
+                                                                                                                        (cnicowner1.equals("SON") ? getResources().getString(R.string.fast_son) :
+                                                                                                                                (cnicowner1.equals("DAUGHTER") ? getResources().getString(R.string.fast_daughter) : getResources().getString(R.string.fast_other_title)))))))))))))));
+
+                    }
+
+                    if (cnicownerother1 != null)
+                        result.put("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", cnicownerother1);
+
+                    if (regDate != null)
+                        result.put("FORM DATE", regDate);
+
+                    return result;
+                }
+
+                @Override
+                protected void onProgressUpdate(String... values) {
+                }
+
+
+                @Override
+                protected void onPostExecute(HashMap<String, String> result) {
+                    super.onPostExecute(result);
+                    loading.dismiss();
+
+                    if (result.get("NATIONAL IDENTIFICATION NUMBER") != null) {
+                        String value = result.get("NATIONAL IDENTIFICATION NUMBER");
+                        cnic1.setText(value.substring(0, 5));
+                        cnic2.setText(value.substring(6, 13));
+                        cnic3.setText(value.substring(14));
+                    }
+
+                    if (result.get("COMPUTERIZED NATIONAL IDENTIFICATION OWNER") != null) {
+                        cnicOwner.getSpinner().selectValue(result.get("COMPUTERIZED NATIONAL IDENTIFICATION OWNER"));
+                    }
+
+                    if (result.get("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER") != null) {
+                        cnicOwnerOther.getEditText().setText(result.get("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER"));
+                    }
+
+                    if (result.get("FORM DATE") != null) {
+                        String format = "";
+                        String registerationDate = result.get("FORM DATE");
+                        if (registerationDate.contains("/")) {
+                            format = "dd/MM/yyyy";
+                        } else {
+                            format = "yyyy-MM-dd";
+                        }
+                        secondDateCalendar.setTime(App.stringToDate(registerationDate, format));
+                        updateDisplay();
+                        regDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+                    }
+                }
+            };
+            autopopulateFormTask.execute("");
         }
 
     }
