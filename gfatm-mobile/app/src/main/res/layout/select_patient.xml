@@ -43,7 +43,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-"
-                            android:inputType="text|textNoSuggestions"
+                            android:inputType="textCapCharacters|textNoSuggestions"
                             android:maxLength="7"
                             android:maxLines="1" />
 
@@ -73,6 +73,7 @@
                         android:background="@drawable/template_button"
                         android:text="@string/title_search_patient"
                         android:textColor="@color/white"
+                        android:visibility="gone"
                         android:textSize="@dimen/large" />
 
                     <TextView
@@ -81,7 +82,7 @@
                         android:gravity="center"
                         android:padding="@dimen/medium"
                         android:text="@string/or"
-                        android:textColor="?colorAccent"
+                        android:textColor="?colorPrimary"
                         android:textSize="@dimen/large"
                         android:textStyle="bold" />
 
@@ -91,7 +92,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/create_new_patient"
-                        android:textColor="?colorPrimary"
+                        android:textColor="?colorAccent"
                         android:textSize="@dimen/xlarge"
                         android:textStyle="italic" />
 
