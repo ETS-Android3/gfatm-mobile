@@ -284,8 +284,8 @@ public class HttpPost {
             identifierObject.put("identifier", identifier.getIdentifier());
             identifierObject.put("identifierType", identifier.getIdentifierType().getUuid());
             identifierObject.put("location", identifier.getLocation().getUuid());
-            identifierObject.put("preferred", identifier.getPreferred());
-            identifierObject.put("voided", identifier.getVoided());
+            //identifierObject.put("preferred", identifier.getPreferred());
+            //identifierObject.put("voided", identifier.getVoided());
 
             if (App.getMode().equalsIgnoreCase("OFFLINE")) {
 

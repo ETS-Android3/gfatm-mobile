@@ -416,8 +416,9 @@ public class RegexUtil {
             char idCheckdigit = id.charAt(id.length() - 1);
             Boolean isDigit = (idCheckdigit >= '0' && idCheckdigit <= '9');
             if (!isDigit) return false;
-            String validChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVYWXZabcdefghijklmnopqrstuvwxyz_";
+            String validChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVYWXZ_";
             idWithoutCheckdigit = idWithoutCheckdigit.trim();
+            idWithoutCheckdigit = idWithoutCheckdigit.toUpperCase();
             int sum = 0;
             for (int i = 0; i < idWithoutCheckdigit.length(); i++) {
                 char ch = idWithoutCheckdigit.charAt(idWithoutCheckdigit

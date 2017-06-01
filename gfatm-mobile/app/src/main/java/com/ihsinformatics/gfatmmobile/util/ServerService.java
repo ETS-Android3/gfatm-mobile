@@ -920,12 +920,13 @@ public class ServerService {
                             App.setPatient(patient);
                         }
 
-                        Object[][] encounterTypes = getEncounterTypesFromLocalDBByProgramName(App.getProgram());
+                        Object[][] encounterTypes = getAllEncounterTypesFromLocalDB();
 
                         for (Object[] encType : encounterTypes) {
 
-                            if (!String.valueOf(encType[1]).startsWith(App.getProgram()))
-                                continue;
+                            // TODO: Only Fetch encounters of program patient enrolled
+                            /*if (!String.valueOf(encType[1]).startsWith(App.getProgram()))
+                                continue;*/
 
                             if (String.valueOf(encType[1]).contains("Test Order")) {
                                 JSONArray jsonArray = httpGet.getAllEncountersByPatientAndEncounterType(uuid, String.valueOf(encType[0]));
@@ -1366,12 +1367,14 @@ public class ServerService {
                         } else {
                             d = App.stringToDate(lastFormDate, "yyyy-MM-dd");
                         }
-                    }
 
-                    if(d != null){
-                        if(d.equals(encounterDateTime) || d.before(encounterDateTime.getTime()))
-                            flag = true;
+                        if(d != null){
+                            if(d.equals(encounterDateTime) || d.before(encounterDateTime.getTime()))
+                                flag = true;
+                        }
                     }
+                    else
+                        flag = true;
 
                     String encounterId = "";
                     if(flag) {
@@ -1602,53 +1605,47 @@ public class ServerService {
                 idType = idType.toLowerCase();
                 idType = idType.replace(" ", "_");
 
-                String[][] data = dbUtil.getTableData(Metadata.PATIENT, idType, "uuid = '" + App.getPatient().getUuid() + "'");
-                if (data[0][0] == null || data[0][0].equals("")) {
+                PatientIdentifier patientIdentifier = new PatientIdentifier();
+                patientIdentifier.setPreferred(false);
+                patientIdentifier.setIdentifier(identifier);
+                PatientIdentifierType patientIdentifierType = new PatientIdentifierType();
+                patientIdentifierType.setUuid(getPatientIdentifierTypeUuid(identifierType));
+                patientIdentifier.setIdentifierType(patientIdentifierType);
+                org.openmrs.Location ll = new org.openmrs.Location();
+                ll.setUuid(getLocationUuid(App.getLocation()));
+                patientIdentifier.setLocation(ll);
 
-                    PatientIdentifier patientIdentifier = new PatientIdentifier();
-                    patientIdentifier.setPreferred(false);
-                    patientIdentifier.setIdentifier(identifier);
-                    PatientIdentifierType patientIdentifierType = new PatientIdentifierType();
-                    patientIdentifierType.setUuid(getPatientIdentifierTypeUuid(identifierType));
-                    patientIdentifier.setIdentifierType(patientIdentifierType);
-                    org.openmrs.Location ll = new org.openmrs.Location();
-                    ll.setUuid(getLocationUuid(App.getLocation()));
-                    patientIdentifier.setLocation(ll);
+                String patientUuid = "";
+                if (App.getPatient().getUuid() == null || App.getPatient().getUuid().equals(""))
+                    patientUuid = "uuid-replacement-string";
+                else
+                    patientUuid = App.getPatient().getUuid();
 
-                    String patientUuid = "";
-                    if (App.getPatient().getUuid() == null || App.getPatient().getUuid().equals(""))
-                        patientUuid = "uuid-replacement-string";
-                    else
-                        patientUuid = App.getPatient().getUuid();
+                String uri = httpPost.savePatientIdentifierByEntity(patientIdentifier, patientUuid);
+                if (App.getMode().equalsIgnoreCase("OFFLINE")) {
+                    String[] uriArray = uri.split(" ;;;; ");
 
-                    String uri = httpPost.savePatientIdentifierByEntity(patientIdentifier, patientUuid);
-                    if (App.getMode().equalsIgnoreCase("OFFLINE")) {
-                        String[] uriArray = uri.split(" ;;;; ");
+                    ContentValues values4 = new ContentValues();
+                    values4.put("form_id", Integer.valueOf(encounterId));
+                    values4.put("uri", uriArray[0]);
+                    values4.put("content", uriArray[1]);
+                    values4.put("pid", App.getPatientId());
+                    values4.put("form", Metadata.PATIENT_IDENTIFIER);
+                    values4.put("username", App.getUsername());
+                    dbUtil.insert(Metadata.OFFLINE_FORM, values4);
 
-                        ContentValues values4 = new ContentValues();
-                        values4.put("form_id", Integer.valueOf(encounterId));
-                        values4.put("uri", uriArray[0]);
-                        values4.put("content", uriArray[1]);
-                        values4.put("pid", App.getPatientId());
-                        values4.put("form", Metadata.PATIENT_IDENTIFIER);
-                        values4.put("username", App.getUsername());
-                        dbUtil.insert(Metadata.OFFLINE_FORM, values4);
-
-                        ContentValues values6 = new ContentValues();
-                        values6.put("field_name", identifierType);
-                        values6.put("value", identifier);
-                        values6.put("form_id", encounterId);
-                        dbUtil.insert(Metadata.FORMS_VALUE, values6);
-                    }
-
-                    ContentValues contentValues = new ContentValues();
-                    contentValues.put(idType, identifier);
-
-                    dbUtil.update(Metadata.PATIENT, contentValues, "uuid=?", new String[]{App.getPatient().getUuid()});
-                    App.setPatient(getPatientBySystemIdFromLocalDB(App.getPatientId()));
-
+                    ContentValues values6 = new ContentValues();
+                    values6.put("field_name", identifierType);
+                    values6.put("value", identifier);
+                    values6.put("form_id", encounterId);
+                    dbUtil.insert(Metadata.FORMS_VALUE, values6);
                 }
 
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(idType, identifier);
+
+                dbUtil.update(Metadata.PATIENT, contentValues, "patient_Id=?", new String[]{App.getPatientId()});
+                App.setPatient(getPatientBySystemIdFromLocalDB(App.getPatientId()));
 
             } catch (Exception e) {
                 return "FAIL";
@@ -1776,6 +1773,13 @@ public class ServerService {
     public Object[][] getEncounterTypesFromLocalDBByProgramName(String programName) {
 
         Object[][] encounterTypes = dbUtil.getFormTableData("select uuid, encounter_type from " + Metadata.ENCOUNTER_TYPE + " where encounter_type like '" + programName + "%'");
+        return encounterTypes;
+
+    }
+
+    public Object[][] getAllEncounterTypesFromLocalDB() {
+
+        Object[][] encounterTypes = dbUtil.getFormTableData("select uuid, encounter_type from " + Metadata.ENCOUNTER_TYPE );
         return encounterTypes;
 
     }
@@ -2235,11 +2239,15 @@ public class ServerService {
                     App.setPatientId(getPatientSystemIdByUuidLocalDB(uuid));
                     App.setPatient(patient);
 
-                    Object[][] encounterTypes = getEncounterTypesFromLocalDBByProgramName(App.getProgram());
+                    Object[][] encounterTypes = getAllEncounterTypesFromLocalDB();
                     deletePatientEncounterByProgram(App.getPatientId(), App.getProgram());
                     deletePatientTestIdByProgram(App.getPatientId(), App.getProgram());
 
                     for (Object[] encType : encounterTypes) {
+
+                        // TODO: Only Fetch encounters of program patient enrolled
+                            /*if (!String.valueOf(encType[1]).startsWith(App.getProgram()))
+                                continue;*/
 
                         if (String.valueOf(encType[1]).contains("Test Order")) {
                             JSONArray jsonArray = httpGet.getAllEncountersByPatientAndEncounterType(App.getPatient().getUuid(), String.valueOf(encType[0]));
