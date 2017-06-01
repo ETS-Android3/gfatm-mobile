@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">GF - TB</string>
+    <string name="app_name" translatable="false">Aao TB Mitao</string>
     <string name="version">0.0.1</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -338,6 +338,7 @@
     <string name="title_create_new_patient">Create New Patient</string>
     <string name="title_update_database">Update Database</string>
     <string name="title_feedback">Feedback</string>
+    <string name="title_about_us">About us</string>
     <string name="title_advanced">Advanced</string>
     <string name="title_others">Others</string>
     <string name="title_location">Location Setup</string>
@@ -374,8 +375,8 @@
     <string name="user_not_found">No record of username found in local DB.</string>
     <string name="version_mismatch">Please update the app from playstore to continue.</string>
     <string name="age_invalid_year">Age can\'t exceed 119 Years</string>
-    <string name="age_invalid_month">Age can\'t exceed 1440 Months</string>
-    <string name="age_invalid_day">Age can\'t exceed 43435 Days</string>
+    <string name="age_invalid_month">Age can\'t exceed 180 Months</string>
+    <string name="age_invalid_day">Age can\'t exceed 5400 Days</string>
     <string name="provider_not_found">No provider associated with the user. Please contact Admin to create your user provider.</string>
     <string name="patient_not_select">SELECT PATIENT TO CONTINUE.</string>
     <string name="location_not_select">SELECT LOCATION TO CONTINUE.</string>
@@ -461,6 +462,7 @@
     <string name="goto_first">&lt;&lt;</string>
     <string name="goto_last">>></string>
     <string name="goto_next">Next</string>
+    <string name="goto_prev">Prev</string>
     <string name="mandatory_field_sign">&lt;br&gt; &lt;font color=##0D6986&gt; * &lt;/font&gt;  mg</string>
 
     <!-- Location Setup -->
@@ -477,7 +479,7 @@
     <string name="description">Description:</string>
     <string name="sync_with_openmrs">Sync with Openmrs</string>
     <string name="last_update_on">Last update on: </string>
-    <string name="location">Location:</string>
+    <string name="location">Location: </string>
     <string name="fetching_data">fetching data</string>
     <string name="search_location">Search...</string>
 
@@ -555,4 +557,7 @@
         <item>@string/months</item>
         <item>@string/days</item>
     </string-array>
+
+    <string name="loading_metadata">Loading Metadata ...</string>
+    <string name="aao_tb_mitao_app">Aao TB Mitao - Mobile App</string>
 </resources>

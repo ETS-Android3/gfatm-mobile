@@ -33,7 +33,7 @@
         <item name="colorScreening">@color/purple</item>
         <item name="colorTreatment">@color/harleyDavidsonOrange</item>
         <item name="colorFollowup">@color/ToryBlue</item>
-        <item name="colorOther">@color/limerick</item>
+        <item name="colorOther">@color/amber</item>
         <item name="colorButton">@color/bacon</item>
 
         <item name="windowActionBar">false</item>

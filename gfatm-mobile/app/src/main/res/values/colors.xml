@@ -10,13 +10,12 @@
     <color name="purple">#79006B</color>
     <color name="harleyDavidsonOrange">#DC3C14</color>
     <color name="ToryBlue">#35478C</color>
-    <color name="limerick">#853714</color>
+    <color name="amber">#CD950C</color>
     <color name="forestgreen">#228B22</color>
 
     <color name="white">#FFFFFF</color>
     <color name="light_grey">#D3D3D3</color>
     <color name="dark_grey">#909090</color>
-    <color name="black">#000000</color>
     <color name="bacon">#E6E6E6</color>
 
 </resources>
