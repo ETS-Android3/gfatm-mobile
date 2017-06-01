@@ -1,0 +1,5 @@
+-- insert queries
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT ACCEPTANCE TO IPT','IPT_acceptance','Coded','395d8bd6-a452-4d83-8181-d5113681e2af');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TB TREATMENT COMPLETED',NULL,'N/A','964780c0-7130-4e17-a8e1-e328cb524103');
+
+

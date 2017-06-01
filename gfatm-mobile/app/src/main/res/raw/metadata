@@ -3704,8 +3704,8 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MINER',NULL,'N/
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PILOT',NULL,'N/A','f097a79a-0ee7-4c22-a0cc-5bbd21f34e8e');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PLUMBER',NULL,'N/A','792ccb24-2561-421e-9f40-701a578c8a26');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SHEPHERD',NULL,'N/A','16bad004-ec19-40c2-bc43-627a3154ffc7');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT WITH AGE ≥ 15 YEARS',NULL,'N/A','1c4637a8-5178-4353-b0b9-a41d00ade7c9');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT WITH AGE ≤ 15 YEARS',NULL,'N/A','c1388a01-ed88-452a-a423-6c396f91f33a');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('15 YEARS OR ABOVE',NULL,'N/A','1c4637a8-5178-4353-b0b9-a41d00ade7c9');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LESS THAN 15 YEARS',NULL,'N/A','c1388a01-ed88-452a-a423-6c396f91f33a');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OPD CLINIC SCREENING',NULL,'N/A','452356d4-f60a-4355-9585-d76e0156dd01');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('WARD SCREENING',NULL,'N/A','14465f00-d0ed-4007-aced-f3f23a663323');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REGISTRATION DESK',NULL,'N/A','93d3791e-5f0d-4cf9-b497-58fe84c4a010');
@@ -4472,7 +4472,6 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RADIOLOGICAL DI
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ABNORMAL SUGGESTIVE OF TB','abnormal_suggestive_tb','N/A','d9bfc2f2-aae4-4015-9794-afc9c2b93e1f');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ABNORMAL NOT SUGGESTIVE OF TB','abnormal_not_suggestive_tb','N/A','7dc242c9-d0b2-4ceb-b808-88b124d75d03');
 
-----------
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CT SCAN, CHEST',NULL,'N/A','161165AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('BONE SCAN',NULL,'N/A','161161AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DIAGNOSTIC TESTING',NULL,'N/A','161194AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
@@ -4480,6 +4479,10 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ULTRASOUND, ABD
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER REASON FOR REPEATING TEST','other_reason_repeating_test','Text','3a5a3058-bcc8-4313-b074-a7a6e3647278');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('X RAY IN PAST 6 MONTHS','past_xray','Coded','1a2dfae5-233e-40a6-b452-8fa2d11906e8');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PROVINCE','province','Text','f014be0b-e362-4ef0-9605-a31ae549d69e');
+
+----------
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT ACCEPTANCE TO IPT','IPT_acceptance','Coded','395d8bd6-a452-4d83-8181-d5113681e2af');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TB TREATMENT COMPLETED',NULL,'N/A','964780c0-7130-4e17-a8e1-e328cb524103');
 
 -- Program
 INSERT OR IGNORE INTO program VALUES (1, "86ba1232-d576-416e-b102-5f335c6746ce", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
