@@ -1311,6 +1311,7 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
                 formDate.setVisibility(View.VISIBLE);
                 pastXray.setVisibility(View.GONE);
                 pregnancyHistory.setVisibility(View.GONE);
+                linearLayout.setVisibility(View.VISIBLE);
                 testId.setVisibility(View.VISIBLE);
                 testId.getEditText().setText("");
                 testId.getEditText().setError(null);

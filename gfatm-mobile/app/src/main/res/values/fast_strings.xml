@@ -45,8 +45,8 @@
     <string name="fast_result_date_cannot_be_before_order_date">Result date can\'t be before test order date.</string>
     <string name="fast_patient_title">Patient</string>
     <string name="fast_attendant_title">Attendant</string>
-    <string name="fast_greater_title">&gt;= 15 years old</string>
-    <string name="fast_less_title">&lt;15 years old</string>
+    <string name="fast_greater_title">15 years or above</string>
+    <string name="fast_less_title">Less than 15 years</string>
     <string name="fast_male_title">Male</string>
     <string name="fast_female_title">Female</string>
     <string name="fast_yes_title">Yes</string>
@@ -454,6 +454,9 @@
     <string name="fast_pregnancy_history">Is the patient pregnant?</string>
     <string name="fast_cartridge_id_error">Please enter 10 digits Cartridge ID</string>
     <string name="fast_enrs_number_error">Invalid ENRS number</string>
+    <string name="fast_emergency_room">Emergency Room</string>
+    <string name="fast_diabetic">Diabetic</string>
+    <string name="fast_required_field_error">Required fields cannot be empty</string>
 
 
 
@@ -477,9 +480,12 @@
     </string-array>
 
     <string-array name="fast_hospital_parts_screening">
+        <item></item>
         <item>@string/fast_opdclinicscreening_title</item>
+        <item>@string/fast_wardscreening_title</item>
         <item>@string/fast_registrationdesk_title</item>
         <item>@string/fast_nexttoxrayvan_title</item>
+        <item>@string/fast_emergency_room</item>
         <item>@string/fast_other_title</item>
     </string-array>
 
@@ -497,6 +503,15 @@
         <item>@string/fast_gynaeobstetrics_title</item>
         <item>@string/fast_surgery_title</item>
         <item>@string/fast_er_title</item>
+    </string-array>
+
+    <string-array name="fast_clinic_and_ward_screening_list">
+        <item></item>
+        <item>@string/fast_generalmedicinefilterclinic_title</item>
+        <item>@string/fast_chesttbclinic_title</item>
+        <item>@string/fast_gynaeobstetrics_title</item>
+        <item>@string/fast_surgery_title</item>
+        <item>@string/fast_diabetic</item>
     </string-array>
 
     <string-array name="fast_patient_or_attendant_list">
