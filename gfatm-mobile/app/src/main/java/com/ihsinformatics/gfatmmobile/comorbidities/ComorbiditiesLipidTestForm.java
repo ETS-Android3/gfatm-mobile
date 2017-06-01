@@ -95,6 +95,7 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
     String finalDate = null;
 
     Boolean dateChoose = false;
+    Boolean refillFlag = false;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -588,6 +589,11 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
 
     @Override
     public void updateDisplay() {
+
+        if(refillFlag) {
+            refillFlag = false;
+            return;
+        }
 
         //formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         if (snackbar != null)
@@ -1201,6 +1207,8 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
 
     @Override
     public void refill(int encounterId) {
+
+        refillFlag = true;
 
         OfflineForm fo = serverService.getOfflineFormById(encounterId);
         String date = fo.getFormDate();

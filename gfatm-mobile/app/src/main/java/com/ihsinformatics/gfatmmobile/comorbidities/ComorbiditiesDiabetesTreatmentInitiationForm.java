@@ -1266,49 +1266,51 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
             } else bundle.putBoolean("save", false);
         }
 
-        //HERE FOR AUTOPOPULATING OBS
-        final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
-            @Override
-            protected HashMap<String, String> doInBackground(String... params) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        loading.setInverseBackgroundForced(true);
-                        loading.setIndeterminate(true);
-                        loading.setCancelable(false);
-                        loading.setMessage(getResources().getString(R.string.fetching_data));
-                        loading.show();
-                    }
-                });
+        if(App.get(diabetesTreatmentInitiationInsulinN).equals("")) {
+            //HERE FOR AUTOPOPULATING OBS
+            final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
+                @Override
+                protected HashMap<String, String> doInBackground(String... params) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            loading.setInverseBackgroundForced(true);
+                            loading.setIndeterminate(true);
+                            loading.setCancelable(false);
+                            loading.setMessage(getResources().getString(R.string.fetching_data));
+                            loading.show();
+                        }
+                    });
 
-                HashMap<String, String> result = new HashMap<String, String>();
-                String nextAppointDate = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Treatment Followup", "RETURN VISIT DATE");
+                    HashMap<String, String> result = new HashMap<String, String>();
+                    String nextAppointDate = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Treatment Followup", "RETURN VISIT DATE");
 
-                //Fetching Next Appointment Date of FAST Treatment Followup
-                if (nextAppointDate != null)
-                    if (!nextAppointDate .equals(""))
-                        result.put("RETURN VISIT DATE", nextAppointDate);
+                    //Fetching Next Appointment Date of FAST Treatment Followup
+                    if (nextAppointDate != null)
+                        if (!nextAppointDate.equals(""))
+                            result.put("RETURN VISIT DATE", nextAppointDate);
 
-                return result;
-            }
-
-            @Override
-            protected void onProgressUpdate(String... values) {
-            }
-
-            @Override
-            protected void onPostExecute(HashMap<String, String> result) {
-                super.onPostExecute(result);
-                loading.dismiss();
-
-                String secondDate = result.get("RETURN VISIT DATE");
-                if(secondDate != null) {
-                    secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
-                    diabetesNextScheduledVisit.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+                    return result;
                 }
-            }
-        };
-        autopopulateFormTask.execute("");
+
+                @Override
+                protected void onProgressUpdate(String... values) {
+                }
+
+                @Override
+                protected void onPostExecute(HashMap<String, String> result) {
+                    super.onPostExecute(result);
+                    loading.dismiss();
+
+                    String secondDate = result.get("RETURN VISIT DATE");
+                    if (secondDate != null) {
+                        secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
+                        diabetesNextScheduledVisit.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+                    }
+                }
+            };
+            autopopulateFormTask.execute("");
+        }
     }
 
     @Override

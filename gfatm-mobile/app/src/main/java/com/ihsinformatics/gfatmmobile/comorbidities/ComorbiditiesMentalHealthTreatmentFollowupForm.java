@@ -728,6 +728,8 @@ public class ComorbiditiesMentalHealthTreatmentFollowupForm extends AbstractForm
         displayPreferredLocationAndNextAppointmentDate();
         displayGPClinicOrNot();
 
+        Boolean flag = true;
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");
@@ -740,65 +742,66 @@ public class ComorbiditiesMentalHealthTreatmentFollowupForm extends AbstractForm
                 int formId = Integer.valueOf(id);
 
                 refill(formId);
+                flag = false;
 
             } else bundle.putBoolean("save", false);
 
         }
 
-        //HERE FOR AUTOPOPULATING OBS
-        final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
-            @Override
-            protected HashMap<String, String> doInBackground(String... params) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        loading.setInverseBackgroundForced(true);
-                        loading.setIndeterminate(true);
-                        loading.setCancelable(false);
-                        loading.setMessage(getResources().getString(R.string.fetching_data));
-                        loading.show();
+        if(flag) {
+            //HERE FOR AUTOPOPULATING OBS
+            final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
+                @Override
+                protected HashMap<String, String> doInBackground(String... params) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            loading.setInverseBackgroundForced(true);
+                            loading.setIndeterminate(true);
+                            loading.setCancelable(false);
+                            loading.setMessage(getResources().getString(R.string.fetching_data));
+                            loading.show();
+                        }
+                    });
+
+                    HashMap<String, String> result = new HashMap<String, String>();
+                    String gpClinic = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_PATIENT_INFORMATION_FORM, "HEALTH CLINIC/POST");
+                    String sessionNumber = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_TREATMENT_FOLLOWUP_MENTAL_HEALTH_FORM, "SESSION NUMBER");
+
+                    if (gpClinic != null)
+                        if (!gpClinic.equals(""))
+                            result.put("HEALTH CLINIC/POST", gpClinic);
+                    if (sessionNumber != null && !sessionNumber.equals("")) {
+                        sessionNumber = sessionNumber.replace(".0", "");
+                        result.put("SESSION NUMBER", String.valueOf(Integer.parseInt(sessionNumber) + 1));
+                    } else if (sessionNumber != null && sessionNumber.equals("")) {
+                        result.put("SESSION NUMBER", "1");
+                    } else if (sessionNumber == null) {
+                        result.put("SESSION NUMBER", "1");
                     }
-                });
-
-                HashMap<String, String> result = new HashMap<String, String>();
-                String gpClinic = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_PATIENT_INFORMATION_FORM, "HEALTH CLINIC/POST");
-                String sessionNumber = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_TREATMENT_FOLLOWUP_MENTAL_HEALTH_FORM, "SESSION NUMBER");
-
-                if (gpClinic != null)
-                    if (!gpClinic .equals(""))
-                        result.put("HEALTH CLINIC/POST", gpClinic);
-                if (sessionNumber != null && !sessionNumber .equals("")) {
-                    sessionNumber = sessionNumber.replace(".0", "");
-                    result.put("SESSION NUMBER", String.valueOf(Integer.parseInt(sessionNumber) + 1));
-                }
-                else if (sessionNumber != null && sessionNumber .equals("")){
-                    result.put("SESSION NUMBER", "1");
-                }
-                else if(sessionNumber ==  null) {
-                    result.put("SESSION NUMBER", "1");
-                }
                 /*if (sessionNumber != null)
                     if (!sessionNumber .equals(""))
                         result.put("SESSION NUMBER", sessionNumber);*/
 
-                return result;
-            }
+                    return result;
+                }
 
-            @Override
-            protected void onProgressUpdate(String... values) {
-            }
+                @Override
+                protected void onProgressUpdate(String... values) {
+                }
 
-            @Override
-            protected void onPostExecute(HashMap<String, String> result) {
-                super.onPostExecute(result);
-                loading.dismiss();
+                @Override
+                protected void onPostExecute(HashMap<String, String> result) {
+                    super.onPostExecute(result);
+                    loading.dismiss();
 
-                gpClinicCode.getEditText().setText(result.get("HEALTH CLINIC/POST"));
-                treatmentFollowupMHSessionNumber.getEditText().setText(result.get("SESSION NUMBER"));
-                preferredTherapyLocationSpinner.getSpinner().selectValue(App.getLocation());
-            }
-        };
-        autopopulateFormTask.execute("");
+                    gpClinicCode.getEditText().setText(result.get("HEALTH CLINIC/POST"));
+                    treatmentFollowupMHSessionNumber.getEditText().setText(result.get("SESSION NUMBER"));
+                    preferredTherapyLocationSpinner.getSpinner().selectValue(App.getLocation());
+                }
+            };
+            autopopulateFormTask.execute("");
+        }
     }
 
     @Override

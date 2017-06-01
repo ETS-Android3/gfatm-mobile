@@ -78,6 +78,7 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
     TitledButton diabetesFollowupNextScheduledVisit;
 
     Boolean dateChoose = false;
+    Boolean refillFlag = false;
 
     ScrollView scrollView;
 
@@ -478,6 +479,12 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
     @Override
     public void updateDisplay() {
 
+        if(refillFlag)
+        {
+            refillFlag = false;
+            return;
+        }
+
         //formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         if (snackbar != null)
             snackbar.dismiss();
@@ -545,8 +552,8 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
 
         }
         dateChoose = false;
-        formDate.getButton().setEnabled(false);
-        diabetesFollowupNextScheduledVisit.getButton().setEnabled(false);
+        formDate.getButton().setEnabled(true);
+        diabetesFollowupNextScheduledVisit.getButton().setEnabled(true);
     }
 
     @Override
@@ -1016,6 +1023,8 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
     @Override
     public void refill(int formId) {
 
+        refillFlag = true;
+
         OfflineForm fo = serverService.getOfflineFormById(formId);
         String date = fo.getFormDate();
         ArrayList<String[][]> obsValue = fo.getObsValue();
@@ -1206,6 +1215,8 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
     public void resetViews() {
         super.resetViews();
 
+        Boolean flag = true;
+
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         if (!dateChoose) {
@@ -1230,84 +1241,87 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
                 int formId = Integer.valueOf(id);
 
                 refill(formId);
+                flag = false;
 
             } else bundle.putBoolean("save", false);
 
         }
 
-        //HERE FOR AUTOPOPULATING OBS
-        final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
-            @Override
-            protected HashMap<String, String> doInBackground(String... params) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        loading.setInverseBackgroundForced(true);
-                        loading.setIndeterminate(true);
-                        loading.setCancelable(false);
-                        loading.setMessage(getResources().getString(R.string.fetching_data));
-                        loading.show();
-                    }
-                });
+        if(flag) {
+            //HERE FOR AUTOPOPULATING OBS
+            final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
+                @Override
+                protected HashMap<String, String> doInBackground(String... params) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            loading.setInverseBackgroundForced(true);
+                            loading.setIndeterminate(true);
+                            loading.setCancelable(false);
+                            loading.setMessage(getResources().getString(R.string.fetching_data));
+                            loading.show();
+                        }
+                    });
 
-                HashMap<String, String> result = new HashMap<String, String>();
-                String monthOfTreatment = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "FOLLOW-UP MONTH");
-                String bmi = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "BODY MASS INDEX");
-                String whr = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "WAIST-HIP RATIO");
-                String systolicBP = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "SYSTOLIC BLOOD PRESSURE");
-                String diastolicBP = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "DIASTOLIC BLOOD PRESSURE");
-                String hba1cResult = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "HbA1C Test Result", "HBA1C RESULT");
-                String bloodSugarResult = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Blood Sugar Test Result" , "RANDOM BLOOD SUGAR");
+                    HashMap<String, String> result = new HashMap<String, String>();
+                    String monthOfTreatment = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "FOLLOW-UP MONTH");
+                    String bmi = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "BODY MASS INDEX");
+                    String whr = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "WAIST-HIP RATIO");
+                    String systolicBP = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "SYSTOLIC BLOOD PRESSURE");
+                    String diastolicBP = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "DIASTOLIC BLOOD PRESSURE");
+                    String hba1cResult = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "HbA1C Test Result", "HBA1C RESULT");
+                    String bloodSugarResult = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Blood Sugar Test Result", "RANDOM BLOOD SUGAR");
 
-                if (monthOfTreatment != null && !monthOfTreatment .equals(""))
-                    monthOfTreatment = monthOfTreatment.replace(".0", "");
+                    if (monthOfTreatment != null && !monthOfTreatment.equals(""))
+                        monthOfTreatment = monthOfTreatment.replace(".0", "");
 
-                if (monthOfTreatment != null)
-                    if (!monthOfTreatment .equals(""))
-                        result.put("FOLLOW-UP MONTH", monthOfTreatment);
-                if (bmi != null)
-                    if (!bmi .equals(""))
-                        result.put("BODY MASS INDEX", bmi);
-                if (whr != null)
-                    if (!whr .equals(""))
-                        result.put("WAIST-HIP RATIO", whr);
-                if (systolicBP != null)
-                    if (!systolicBP .equals(""))
-                        result.put("SYSTOLIC BLOOD PRESSURE", systolicBP);
-                if (diastolicBP != null)
-                    if (!diastolicBP .equals(""))
-                        result.put("DIASTOLIC BLOOD PRESSURE", diastolicBP);
-                if (hba1cResult != null)
-                    if (!hba1cResult .equals(""))
-                        result.put("HBA1C RESULT", hba1cResult);
-                if (bloodSugarResult != null && !bloodSugarResult .equals(""))
-                    bloodSugarResult = bloodSugarResult.replace(".0", "");
-                if (bloodSugarResult != null)
-                    if (!bloodSugarResult .equals(""))
-                        result.put("RANDOM BLOOD SUGAR", bloodSugarResult);
+                    if (monthOfTreatment != null)
+                        if (!monthOfTreatment.equals(""))
+                            result.put("FOLLOW-UP MONTH", monthOfTreatment);
+                    if (bmi != null)
+                        if (!bmi.equals(""))
+                            result.put("BODY MASS INDEX", bmi);
+                    if (whr != null)
+                        if (!whr.equals(""))
+                            result.put("WAIST-HIP RATIO", whr);
+                    if (systolicBP != null)
+                        if (!systolicBP.equals(""))
+                            result.put("SYSTOLIC BLOOD PRESSURE", systolicBP);
+                    if (diastolicBP != null)
+                        if (!diastolicBP.equals(""))
+                            result.put("DIASTOLIC BLOOD PRESSURE", diastolicBP);
+                    if (hba1cResult != null)
+                        if (!hba1cResult.equals(""))
+                            result.put("HBA1C RESULT", hba1cResult);
+                    if (bloodSugarResult != null && !bloodSugarResult.equals(""))
+                        bloodSugarResult = bloodSugarResult.replace(".0", "");
+                    if (bloodSugarResult != null)
+                        if (!bloodSugarResult.equals(""))
+                            result.put("RANDOM BLOOD SUGAR", bloodSugarResult);
 
-                return result;
-            }
+                    return result;
+                }
 
-            @Override
-            protected void onProgressUpdate(String... values) {
-            }
+                @Override
+                protected void onProgressUpdate(String... values) {
+                }
 
-            @Override
-            protected void onPostExecute(HashMap<String, String> result) {
-                super.onPostExecute(result);
-                loading.dismiss();
+                @Override
+                protected void onPostExecute(HashMap<String, String> result) {
+                    super.onPostExecute(result);
+                    loading.dismiss();
 
-                diabetesFollowupMonthOfVisit.getEditText().setText(result.get("FOLLOW-UP MONTH"));
-                diabetesFollowupBodyMassIndex.getEditText().setText(result.get("BODY MASS INDEX"));
-                diabetesFollowupWaistHipRatio.getEditText().setText(result.get("WAIST-HIP RATIO"));
-                diabetesFollowupBloodPressureSystolic.getEditText().setText(result.get("SYSTOLIC BLOOD PRESSURE"));
-                diabetesFollowupBloodPressureDiastolic.getEditText().setText(result.get("DIASTOLIC BLOOD PRESSURE"));
-                diabetesFollowupHba1cTestResult.getEditText().setText(result.get("HBA1C RESULT"));
-                diabetesFollowupRBSTestResult.getEditText().setText(result.get("RANDOM BLOOD SUGAR"));
-            }
-        };
-        autopopulateFormTask.execute("");
+                    diabetesFollowupMonthOfVisit.getEditText().setText(result.get("FOLLOW-UP MONTH"));
+                    diabetesFollowupBodyMassIndex.getEditText().setText(result.get("BODY MASS INDEX"));
+                    diabetesFollowupWaistHipRatio.getEditText().setText(result.get("WAIST-HIP RATIO"));
+                    diabetesFollowupBloodPressureSystolic.getEditText().setText(result.get("SYSTOLIC BLOOD PRESSURE"));
+                    diabetesFollowupBloodPressureDiastolic.getEditText().setText(result.get("DIASTOLIC BLOOD PRESSURE"));
+                    diabetesFollowupHba1cTestResult.getEditText().setText(result.get("HBA1C RESULT"));
+                    diabetesFollowupRBSTestResult.getEditText().setText(result.get("RANDOM BLOOD SUGAR"));
+                }
+            };
+            autopopulateFormTask.execute("");
+        }
     }
 
     @Override

@@ -241,6 +241,10 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
                         } else {
                             autopopulateHba1cDiabetic();
                         }
+                    } else if (hba1cResult.getEditText().getText().length() == 0) {
+                        hba1cDiabetic.getRadioGroup().clearCheck();
+                        if(snackbar != null)
+                            snackbar.dismiss();
                     }
                 } catch (NumberFormatException nfe) {
                     //Exception: User might be entering " " (empty) value

@@ -745,6 +745,8 @@ public class ComorbiditiesDiabetesEyeScreeningForm extends AbstractFormActivity 
         //displayIfOther();
         diabetesEyeScreeningEvidenceEyeOther.setVisibility(View.GONE);
 
+        Boolean flag = true;
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");
@@ -757,54 +759,57 @@ public class ComorbiditiesDiabetesEyeScreeningForm extends AbstractFormActivity 
                 int formId = Integer.valueOf(id);
 
                 refill(formId);
+                flag = false;
 
             } else bundle.putBoolean("save", false);
 
         }
 
-        //HERE FOR AUTOPOPULATING OBS
-        final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
-            @Override
-            protected HashMap<String, String> doInBackground(String... params) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        loading.setInverseBackgroundForced(true);
-                        loading.setIndeterminate(true);
-                        loading.setCancelable(false);
-                        loading.setMessage(getResources().getString(R.string.fetching_data));
-                        loading.show();
-                    }
-                });
+        if(flag) {
+            //HERE FOR AUTOPOPULATING OBS
+            final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
+                @Override
+                protected HashMap<String, String> doInBackground(String... params) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            loading.setInverseBackgroundForced(true);
+                            loading.setIndeterminate(true);
+                            loading.setCancelable(false);
+                            loading.setMessage(getResources().getString(R.string.fetching_data));
+                            loading.show();
+                        }
+                    });
 
-                HashMap<String, String> result = new HashMap<String, String>();
-                String monthOfTreatment = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "FOLLOW-UP MONTH");
+                    HashMap<String, String> result = new HashMap<String, String>();
+                    String monthOfTreatment = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "FOLLOW-UP MONTH");
 
-                if (monthOfTreatment != null && !monthOfTreatment.equals(""))
-                    monthOfTreatment = monthOfTreatment.replace(".0", "");
+                    if (monthOfTreatment != null && !monthOfTreatment.equals(""))
+                        monthOfTreatment = monthOfTreatment.replace(".0", "");
 
-                if (monthOfTreatment != null)
-                    if (!monthOfTreatment.equals(""))
-                        result.put("FOLLOW-UP MONTH", monthOfTreatment);
+                    if (monthOfTreatment != null)
+                        if (!monthOfTreatment.equals(""))
+                            result.put("FOLLOW-UP MONTH", monthOfTreatment);
 
-                return result;
-            }
+                    return result;
+                }
 
-            @Override
-            protected void onProgressUpdate(String... values) {
-            }
+                @Override
+                protected void onProgressUpdate(String... values) {
+                }
 
-            @Override
-            protected void onPostExecute(HashMap<String, String> result) {
-                super.onPostExecute(result);
-                loading.dismiss();
+                @Override
+                protected void onPostExecute(HashMap<String, String> result) {
+                    super.onPostExecute(result);
+                    loading.dismiss();
 
-                if(result.get("FOLLOW-UP MONTH") != null)
-                    diabetesEyeScreeningMonthOfTreatment.getSpinner().selectValue(result.get("FOLLOW-UP MONTH"));
+                    if (result.get("FOLLOW-UP MONTH") != null)
+                        diabetesEyeScreeningMonthOfTreatment.getSpinner().selectValue(result.get("FOLLOW-UP MONTH"));
 
-            }
-        };
-        autopopulateFormTask.execute("");
+                }
+            };
+            autopopulateFormTask.execute("");
+        }
     }
 
     @Override
