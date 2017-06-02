@@ -533,7 +533,7 @@
     <string name="ctb_select_form_type">Please select form type</string>
     <string name="ctb_xray_in_6_month">Has the patient had an X-Ray in the past 6 months at an X-Ray Van?</string>
     <string name="ctb_patient_acceptance_ipt">Patient acceptance to IPT</string>
-
+    <string name="ctb_empty"></string>
 
 
 
@@ -548,12 +548,8 @@
         <item>@string/ctb_community</item>
     </string-array>
 
-    <string-array name="ctb_hospital_list">
-        <item>@string/ctb_indus_hospital</item>
-        <item>@string/ctb_jinnah_hospital</item>
-    </string-array>
-
     <string-array name="ctb_facility_section_list">
+        <item>@string/ctb_empty</item>
         <item>@string/ctb_opd_clinic</item>
         <item>@string/ctb_ward</item>
         <item>@string/ctb_registration_desk</item>
@@ -562,6 +558,7 @@
     </string-array>
 
     <string-array name="ctb_opd_ward_section_list">
+        <item>@string/ctb_empty</item>
         <item>@string/ctb_paediatrics</item>
         <item>@string/ctb_general_medicine_filter_clinic</item>
         <item>@string/ctb_chest_tb_clinic_screening</item>
@@ -576,6 +573,7 @@
     </string-array>
 
     <string-array name="ctb_cough_duration_list">
+        <item>@string/ctb_empty</item>
         <item>@string/ctb_less_than_2_weeks</item>
         <item>@string/ctb_2_to_3_weeks</item>
         <item>@string/ctb_more_than_3_weeks</item>
@@ -611,6 +609,7 @@
     </string-array>
 
     <string-array name="ctb_patient_referral_source_list">
+        <item>@string/ctb_empty</item>
         <item>@string/ctb_doctor_healthworker_in_hospital</item>
         <item>@string/ctb_doctor_healthworker_out_hospital</item>
         <item>@string/ctb_child_tested_for_tb</item>
@@ -630,6 +629,7 @@
     </string-array>
 
     <string-array name="ctb_referral_outside_list">
+        <item>@string/ctb_empty</item>
         <item>@string/ctb_public_hospital</item>
         <item>@string/ctb_private_hospital</item>
         <item>@string/ctb_gp</item>
@@ -637,6 +637,7 @@
     </string-array>
 
     <string-array name="ctb_hear_about_us_list">
+        <item>@string/ctb_empty</item>
         <item>@string/ctb_radio</item>
         <item>@string/ctb_tv</item>
         <item>@string/ctb_newspaper</item>
@@ -663,6 +664,7 @@
     </string-array>
 
     <string-array name="ctb_weight_percentile_list">
+        <item>@string/ctb_empty</item>
         <item>@string/ctb_less_than_5</item>
         <item>@string/ctb_less_than_10</item>
         <item>@string/ctb_less_than_25</item>
