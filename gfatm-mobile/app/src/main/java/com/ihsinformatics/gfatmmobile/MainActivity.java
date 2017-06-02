@@ -267,7 +267,6 @@ public class MainActivity extends AppCompatActivity
             update.setVisibility(View.GONE);
         } else {
             getSupportActionBar().setSubtitle(null);
-
             if (App.getPatient() == null)
                 update.setVisibility(View.GONE);
             else
