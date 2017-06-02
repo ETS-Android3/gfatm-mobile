@@ -39,6 +39,7 @@ import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -52,14 +53,14 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
     TitledButton formDate;
     TitledButton sampleSubmitDate;
     TitledRadioGroup baselineRepeatFollowup;
+    TitledSpinner monthTreatment;
+
     TitledRadioGroup patientCategory;
     TitledRadioGroup reasonBaselineRepeat;
+    TitledEditText reasonBaselineRepeatOther;
     TitledRadioGroup specimenType;
     TitledRadioGroup specimenComeFrom;
     TitledEditText otherSpecimentComeFrom;
-    TitledRadioGroup sampleAcceptedByTechnician;
-    TitledSpinner whySampleRejcted;
-    TitledEditText reasonForRejection;
     TitledEditText testId;
 
     Snackbar snackbar;
@@ -141,25 +142,24 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
         sampleSubmitDate = new TitledButton(context, null, getResources().getString(R.string.ctb_sample_submitted), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         sampleSubmitDate.setTag("sampleSubmitDate");
         baselineRepeatFollowup = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_baseline_repeat_followup), getResources().getStringArray(R.array.ctb_ctb_baseline_repeat_followup_list), null, App.VERTICAL,App.VERTICAL,true);
+        monthTreatment = new TitledSpinner(context, null, getResources().getString(R.string.ctb_month_treatment), getResources().getStringArray(R.array.ctb_0_to_24), null, App.HORIZONTAL);
+        updateFollowUpMonth();
         patientCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_category), getResources().getStringArray(R.array.ctb_patient_category_list), null, App.HORIZONTAL, App.VERTICAL);
-        reasonBaselineRepeat = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_reason_for_repeating), getResources().getStringArray(R.array.ctb_reason_for_repeating_list), null, App.HORIZONTAL,App.VERTICAL,true);
+        reasonBaselineRepeat = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_reason_for_repeating), getResources().getStringArray(R.array.ctb_reason_for_repeating_list), null, App.VERTICAL,App.VERTICAL,true);
         specimenType = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_specimen_type), getResources().getStringArray(R.array.ctb_specimen_type_list), null, App.HORIZONTAL, App.VERTICAL,true);
         specimenComeFrom = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_speciment_route), getResources().getStringArray(R.array.ctb_speciment_route_list), null, App.HORIZONTAL,App.VERTICAL,true);
         otherSpecimentComeFrom = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
-        sampleAcceptedByTechnician = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_sample_accepted_lab_techician), getResources().getStringArray(R.array.ctb_accepted_by_techician_list), null, App.HORIZONTAL, App.VERTICAL,true);
-        whySampleRejcted = new TitledSpinner(context, null, getResources().getString(R.string.ctb_why_sample_rejected), getResources().getStringArray(R.array.ctb_why_sample_rejected_list), null, App.VERTICAL);
-        reasonForRejection = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_reason_rejection), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        reasonBaselineRepeatOther = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         testId = new TitledEditText(context, null, getResources().getString(R.string.ctb_test_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
 
 
         views = new View[]{formDate.getButton(), sampleSubmitDate.getButton(), baselineRepeatFollowup.getRadioGroup(), patientCategory.getRadioGroup(), reasonBaselineRepeat.getRadioGroup(),
-                specimenType.getRadioGroup(), specimenComeFrom.getRadioGroup(), sampleAcceptedByTechnician.getRadioGroup(), whySampleRejcted.getSpinner(),
-                otherSpecimentComeFrom.getEditText(), reasonForRejection.getEditText(), testId.getEditText()};
+                specimenType.getRadioGroup(),monthTreatment.getSpinner(), specimenComeFrom.getRadioGroup(),
+                otherSpecimentComeFrom.getEditText(), reasonBaselineRepeatOther.getEditText(), testId.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, sampleSubmitDate, baselineRepeatFollowup, patientCategory, reasonBaselineRepeat, specimenType, specimenComeFrom, otherSpecimentComeFrom, sampleAcceptedByTechnician
-                        , whySampleRejcted, reasonForRejection, testId}};
+                {{formDate, sampleSubmitDate, baselineRepeatFollowup,monthTreatment, patientCategory, reasonBaselineRepeat,reasonBaselineRepeatOther,specimenType, specimenComeFrom, otherSpecimentComeFrom, testId}};
 
         formDate.getButton().setOnClickListener(this);
         sampleSubmitDate.getButton().setOnClickListener(this);
@@ -168,13 +168,47 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
         reasonBaselineRepeat.getRadioGroup().setOnCheckedChangeListener(this);
         specimenType.getRadioGroup().setOnCheckedChangeListener(this);
         specimenComeFrom.getRadioGroup().setOnCheckedChangeListener(this);
-        sampleAcceptedByTechnician.getRadioGroup().setOnCheckedChangeListener(this);
-        whySampleRejcted.getSpinner().setOnItemSelectedListener(this);
-
+        monthTreatment.getSpinner().setOnItemSelectedListener(this);
 
         resetViews();
 
     }
+
+    public void updateFollowUpMonth() {
+
+        String treatmentDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+        String format = "";
+        String[] monthArray;
+
+        if (treatmentDate == null) {
+            monthArray = new String[1];
+            monthArray[0] = "0";
+            monthTreatment.getSpinner().setSpinnerData(monthArray);
+        } else {
+            if (treatmentDate.contains("/")) {
+                format = "dd/MM/yyyy";
+            } else {
+                format = "yyyy-MM-dd";
+            }
+            Date convertedDate = App.stringToDate(treatmentDate, format);
+            Calendar treatmentDateCalender = App.getCalendar(convertedDate);
+            int diffYear = formDateCalendar.get(Calendar.YEAR) - treatmentDateCalender.get(Calendar.YEAR);
+            int diffMonth = diffYear * 12 + formDateCalendar.get(Calendar.MONTH) - treatmentDateCalender.get(Calendar.MONTH);
+
+            if (diffMonth == 0) {
+                monthArray = new String[1];
+                monthArray[0] = "1";
+                monthTreatment.getSpinner().setSpinnerData(monthArray);
+            } else {
+                monthArray = new String[diffMonth];
+                for (int i = 0; i < diffMonth; i++) {
+                    monthArray[i] = String.valueOf(i+1);
+                }
+                monthTreatment.getSpinner().setSpinnerData(monthArray);
+            }
+        }
+    }
+
 
     @Override
     public void updateDisplay() {
@@ -235,6 +269,7 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
         }
         formDate.getButton().setEnabled(true);
         sampleSubmitDate.getButton().setEnabled(true);
+        updateFollowUpMonth();
     }
 
     @Override
@@ -249,26 +284,7 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
                 testId.getEditText().setError(getString(R.string.empty_field));
                 testId.getEditText().requestFocus();
                 error = true;
-            } else if (App.get(testId).length() < 10) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                testId.getEditText().setError(getString(R.string.ctb_cartridge_id_length));
-                testId.getEditText().requestFocus();
-                error = true;
             }
-        }
-        if(App.get(sampleAcceptedByTechnician).isEmpty()){
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            sampleAcceptedByTechnician.getRadioGroup().getButtons().get(1).setError(getString(R.string.empty_field));
-            sampleAcceptedByTechnician.getRadioGroup().requestFocus();
-            error = true;
-        } else {
-            sampleAcceptedByTechnician.getRadioGroup().getButtons().get(1).setError(null);
         }
         if (patientCategory.getVisibility() == View.VISIBLE && App.get(patientCategory).isEmpty()) {
             if (App.isLanguageRTL())
@@ -308,26 +324,6 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
                     gotoPage(0);
                 otherSpecimentComeFrom.getEditText().setError(getString(R.string.ctb_spaces_only));
                 otherSpecimentComeFrom.getEditText().requestFocus();
-                error = true;
-            }
-        }
-        if (reasonForRejection.getVisibility() == View.VISIBLE) {
-
-            if(App.get(reasonForRejection).isEmpty()) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                reasonForRejection.getEditText().setError(getString(R.string.empty_field));
-                reasonForRejection.getEditText().requestFocus();
-                error = true;
-            }else if(App.get(reasonForRejection).trim().length() <= 0){
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                reasonForRejection.getEditText().setError(getString(R.string.ctb_spaces_only));
-                reasonForRejection.getEditText().requestFocus();
                 error = true;
             }
         }
@@ -387,7 +383,9 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
         observations.add(new String[]{"TEST CONTEXT STATUS", App.get(baselineRepeatFollowup).equals(getResources().getString(R.string.ctb_baseline)) ? "BASELINE" :
                 (App.get(baselineRepeatFollowup).equals(getResources().getString(R.string.ctb_baseline_repeat)) ? "BASELINE REPEAT" :
                         "REGULAR FOLLOW UP")});
-
+        if(monthTreatment.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"FOLLOW-UP MONTH", App.get(monthTreatment)});
+        }
         if (patientCategory.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"TB CATEGORY", App.get(patientCategory).equals(getResources().getString(R.string.ctb_categoryI)) ? "CATEGORY I TUBERCULOSIS" :
                     "CATEGORY II TUBERCULOSIS"});
@@ -396,8 +394,14 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
         if (reasonBaselineRepeat.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"REASON FOR BASELINE REPEAT TEST", App.get(reasonBaselineRepeat).equals(getResources().getString(R.string.ctb_rr_positive)) ? "RIF RESISTANT POSITIVE" :
                     (App.get(reasonBaselineRepeat).equals(getResources().getString(R.string.ctb_error_invalid_no_result)) ? "INVALID" :
-                            "INDETERMINATE")});
+                            (App.get(reasonBaselineRepeat).equals(getResources().getString(R.string.ctb_indeterminate)) ? "INDETERMINATE" :
+                                "OTHER REASON FOR REPEATING TEST"))});
         }
+
+        if (reasonBaselineRepeatOther.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"OTHER REASON FOR REPEATING TEST", App.get(reasonBaselineRepeatOther)});
+        }
+
 
         observations.add(new String[]{"SPECIMEN TYPE", App.get(specimenType).equals(getResources().getString(R.string.ctb_sputum)) ? "SPUTUM" :
                 "EXTRA-PULMONARY TUBERCULOSIS"});
@@ -413,22 +417,9 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
             observations.add(new String[]{"OTHER SPECIMEN SOURCE", App.get(otherSpecimentComeFrom)});
         }
 
-        observations.add(new String[]{"SPECIMEN ACCEPTED", App.get(sampleAcceptedByTechnician).equals(getResources().getString(R.string.ctb_accepted)) ? "ACCEPTED" :
-                "REJECTED"});
-
-        observations.add(new String[]{"SPECIMEN UNSATISFACTORY FOR DIAGNOSIS", App.get(whySampleRejcted).equals(getResources().getString(R.string.ctb_saliva)) ? "SALIVA" :
-                (App.get(whySampleRejcted).equals(getResources().getString(R.string.ctb_blood)) ? "BLOOD IN SAMPLE" :
-                        (App.get(whySampleRejcted).equals(getResources().getString(R.string.ctb_older_than_3_days)) ? "SAMPLE OLDER THAN 3 DAYS" :
-                                (App.get(whySampleRejcted).equals(getResources().getString(R.string.ctb_insufficient_qunatity)) ? "INSUFFICIENT QUANTITY" :
-                                        (App.get(whySampleRejcted).equals(getResources().getString(R.string.ctb_food_particles)) ? "FOOD PARTICALS" :
-                                                "OTHER REASON OF SAMPLE REJECTION"))))});
-
-        if (reasonForRejection.getVisibility() == View.VISIBLE) {
-            observations.add(new String[]{"OTHER REASON OF SAMPLE REJECTION", App.get(reasonForRejection)});
-        }
 
         if (testId.getVisibility() == View.VISIBLE) {
-            observations.add(new String[]{"CARTRIDGE ID", App.get(testId)});
+            observations.add(new String[]{"TEST ID", App.get(testId)});
         }
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -603,8 +594,16 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
                         rb.setChecked(true);
                         break;
                     }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_other_title)) && obs[0][1].equals("OTHER REASON FOR REPEATING TEST")) {
+                        rb.setChecked(true);
+                        break;
+                    }
                 }
-            } else if (obs[0][0].equals("SPECIMEN TYPE")) {
+            }
+            else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
+                monthTreatment.getSpinner().selectValue(obs[0][1]);
+            }
+            else if (obs[0][0].equals("SPECIMEN TYPE")) {
                 for (RadioButton rb : specimenType.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.ctb_sputum)) && obs[0][1].equals("SPUTUM")) {
                         rb.setChecked(true);
@@ -632,27 +631,7 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
                 }
             } else if (obs[0][0].equals("OTHER SPECIMEN SOURCE")) {
                 otherSpecimentComeFrom.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("SPECIMEN ACCEPTED")) {
-                for (RadioButton rb : sampleAcceptedByTechnician.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_accepted)) && obs[0][1].equals("ACCEPTED")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_rejected)) && obs[0][1].equals("REJECTED")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("SPECIMEN UNSATISFACTORY FOR DIAGNOSIS")) {
-                String value = obs[0][1].equals("SALIVA") ? getResources().getString(R.string.ctb_saliva) :
-                        (obs[0][1].equals("BLOOD IN SAMPLE") ? getResources().getString(R.string.ctb_blood) :
-                                (obs[0][1].equals("SAMPLE OLDER THAN 3 DAYS") ? getResources().getString(R.string.ctb_older_than_3_days) :
-                                        (obs[0][1].equals("INSUFFICIENT QUANTITY") ? getResources().getString(R.string.ctb_insufficient_qunatity) :
-                                                (obs[0][1].equals("FOOD PARTICALS") ? getResources().getString(R.string.ctb_food_particles) :
-                                                        getResources().getString(R.string.ctb_other_title)))));
-                whySampleRejcted.getSpinner().selectValue(value);
-            } else if (obs[0][0].equals("OTHER REASON OF SAMPLE REJECTION")) {
-                reasonForRejection.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("CARTRIDGE ID")) {
+            } else if (obs[0][0].equals("TEST ID")) {
                 testId.getEditText().setText(obs[0][1]);
             }
         }
@@ -690,15 +669,6 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        MySpinner spinner = (MySpinner) parent;
-        if (spinner == whySampleRejcted.getSpinner()) {
-            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_other_title))) {
-                reasonForRejection.setVisibility(View.VISIBLE);
-            } else {
-                reasonForRejection.setVisibility(View.GONE);
-            }
-        }
-
 
     }
 
@@ -719,10 +689,8 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
         reasonBaselineRepeat.setVisibility(View.GONE);
         specimenComeFrom.setVisibility(View.GONE);
         otherSpecimentComeFrom.setVisibility(View.GONE);
-        whySampleRejcted.setVisibility(View.GONE);
-        reasonForRejection.setVisibility(View.GONE);
-        testId.setVisibility(View.GONE);
-        testId.getEditText().setText(null);
+        reasonBaselineRepeatOther.setVisibility(View.GONE);
+        monthTreatment.setVisibility(View.GONE);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");
@@ -752,34 +720,26 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
                 otherSpecimentComeFrom.setVisibility(View.GONE);
             }
         }
-        if (group == sampleAcceptedByTechnician.getRadioGroup()) {
-            if (sampleAcceptedByTechnician.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_rejected))) {
-                whySampleRejcted.setVisibility(View.VISIBLE);
-                if(App.get(whySampleRejcted).equalsIgnoreCase(getResources().getString(R.string.ctb_other_title))){
-                    reasonForRejection.setVisibility(View.VISIBLE);
-                }
-            } else {
-                whySampleRejcted.setVisibility(View.GONE);
-            }
-            if (sampleAcceptedByTechnician.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_accepted))) {
-                testId.setVisibility(View.VISIBLE);
-                reasonForRejection.setVisibility(View.GONE);
-
-
-            } else {
-                testId.setVisibility(View.GONE);
-            }
-        }
         if (group == baselineRepeatFollowup.getRadioGroup()) {
             if (baselineRepeatFollowup.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_baseline))) {
                 patientCategory.setVisibility(View.VISIBLE);
             }else{
                 patientCategory.setVisibility(View.GONE);
+                reasonBaselineRepeatOther.setVisibility(View.GONE);
             }
             if(baselineRepeatFollowup.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_baseline_repeat))){
                 reasonBaselineRepeat.setVisibility(View.VISIBLE);
+                if(App.get(reasonBaselineRepeat).equals(getResources().getString(R.string.ctb_other_title))){
+                    reasonBaselineRepeatOther.setVisibility(View.VISIBLE);
+                }
             }else{
                 reasonBaselineRepeat.setVisibility(View.GONE);
+                reasonBaselineRepeatOther.setVisibility(View.GONE);
+            }
+            if (baselineRepeatFollowup.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_follow_up_test))) {
+                monthTreatment.setVisibility(View.VISIBLE);
+            } else {
+                monthTreatment.setVisibility(View.GONE);
             }
         }
         if(group == specimenComeFrom.getRadioGroup()){
@@ -787,6 +747,13 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
                 otherSpecimentComeFrom.setVisibility(View.VISIBLE);
             }else{
                 otherSpecimentComeFrom.setVisibility(View.GONE);
+            }
+        }
+        if(group == reasonBaselineRepeat.getRadioGroup()){
+            if (reasonBaselineRepeat.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_other_title))) {
+                reasonBaselineRepeatOther.setVisibility(View.VISIBLE);
+            }else{
+                reasonBaselineRepeatOther.setVisibility(View.GONE);
             }
         }
 

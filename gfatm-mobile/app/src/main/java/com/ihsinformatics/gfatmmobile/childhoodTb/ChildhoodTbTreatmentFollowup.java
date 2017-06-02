@@ -67,8 +67,9 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
     TitledButton formDate;
 
     TitledSpinner patientType;
+    TitledEditText tbRegisterationNumber;
     TitledButton treatmentInitiationDate;
-    TitledEditText monthTreatment;
+    TitledSpinner monthTreatment;
     TitledRadioGroup patientCategory;
     TitledEditText weight;
     TitledRadioGroup treatmentPlan;
@@ -169,9 +170,10 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         formDate.setTag("formDate");
 
         patientType = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_patient_type), getResources().getStringArray(R.array.ctb_patient_type_list), getResources().getString(R.string.ctb_new), App.VERTICAL,true);
+        tbRegisterationNumber = new TitledEditText(context, null, getResources().getString(R.string.ctb_tb_registration_no), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         treatmentInitiationDate = new TitledButton(context, null, getResources().getString(R.string.ctb_treatment_initiated_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
-        monthTreatment = new TitledEditText(context, null, getResources().getString(R.string.ctb_month_treatment), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL,true);
-
+        monthTreatment = new TitledSpinner(context, null, getResources().getString(R.string.ctb_month_treatment), getResources().getStringArray(R.array.ctb_0_to_24), null, App.HORIZONTAL);
+        updateFollowUpMonth();
         patientCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_category), getResources().getStringArray(R.array.ctb_patient_category3_list), getResources().getString(R.string.ctb_categoryI), App.VERTICAL, App.VERTICAL,true);
         weight = new TitledEditText(context, null, getResources().getString(R.string.ctb_patient_weight), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
         treatmentPlan = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_treatment_plan), getResources().getStringArray(R.array.ctb_treatment_plan_list), null, App.VERTICAL, App.VERTICAL,true);
@@ -201,7 +203,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         thirdDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
 
         views = new View[]{
-                formDate.getButton(),patientType.getSpinner(),treatmentInitiationDate.getButton(),monthTreatment.getEditText(),patientCategory.getRadioGroup(),weight.getEditText(),
+                formDate.getButton(),patientType.getSpinner(),tbRegisterationNumber.getEditText(),treatmentInitiationDate.getButton(),monthTreatment.getSpinner(),patientCategory.getRadioGroup(),weight.getEditText(),
                 treatmentPlan.getRadioGroup(), intensivePhaseRegimen.getRadioGroup(),typeFixedDosePrescribedIntensive.getSpinner(),currentTabletsofRHZ.getRadioGroup(),currentTabletsofE.getRadioGroup(),
                 newTabletsofRHZ.getRadioGroup(),newTabletsofE.getRadioGroup(),adultFormulationofHRZE.getRadioGroup(), continuationPhaseRegimen.getRadioGroup(),typeFixedDosePrescribedContinuation.getSpinner(),
                 currentTabletsOfContinuationRH.getRadioGroup(), currentTabletsOfContinuationE.getRadioGroup(), newTabletsOfContinuationRH.getRadioGroup(), newTabletsOfContinuationE.getRadioGroup(),
@@ -209,7 +211,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         viewGroups = new View[][]
                 {{
                         formDate,
-                        patientType,
+                        patientType,tbRegisterationNumber,
                         treatmentInitiationDate,
                         monthTreatment,
                         patientCategory,
@@ -373,8 +375,45 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
 
     }
 
+    public void updateFollowUpMonth() {
+
+        String treatmentDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+        String format = "";
+        String[] monthArray;
+
+        if (treatmentDate == null) {
+            monthArray = new String[1];
+            monthArray[0] = "0";
+            monthTreatment.getSpinner().setSpinnerData(monthArray);
+        } else {
+            if (treatmentDate.contains("/")) {
+                format = "dd/MM/yyyy";
+            } else {
+                format = "yyyy-MM-dd";
+            }
+            Date convertedDate = App.stringToDate(treatmentDate, format);
+            Calendar treatmentDateCalender = App.getCalendar(convertedDate);
+            int diffYear = formDateCalendar.get(Calendar.YEAR) - treatmentDateCalender.get(Calendar.YEAR);
+            int diffMonth = diffYear * 12 + formDateCalendar.get(Calendar.MONTH) - treatmentDateCalender.get(Calendar.MONTH);
+
+            if (diffMonth == 0) {
+                monthArray = new String[1];
+                monthArray[0] = "1";
+                monthTreatment.getSpinner().setSpinnerData(monthArray);
+            } else {
+                monthArray = new String[diffMonth];
+                for (int i = 0; i < diffMonth; i++) {
+                    monthArray[i] = String.valueOf(i+1);
+                }
+                monthTreatment.getSpinner().setSpinnerData(monthArray);
+            }
+        }
+    }
+
+
     @Override
     public void updateDisplay() {
+        Calendar treatDateCalender = null;
 
         if (snackbar != null)
             snackbar.dismiss();
@@ -385,8 +424,10 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
 
         String formDa = formDate.getButton().getText().toString();
         String personDOB = App.getPatient().getPerson().getBirthdate();
-
-
+        String treatmentDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+        if(treatmentDate != null){
+            treatDateCalender = App.getCalendar(App.stringToDate(treatmentDate, "yyyy-MM-dd"));
+        }
         Date date = new Date();
 
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
@@ -407,7 +448,19 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-            }else
+            }else if (treatDateCalender != null) {
+                if(formDateCalendar.before(treatDateCalender)) {
+                    formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.ctb_form_date_less_than_treatment_initiation), Snackbar.LENGTH_INDEFINITE);
+                    snackbar.show();
+
+                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                }
+                else {
+                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                }
+            }else {
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
                 Calendar requiredDate = formDateCalendar.getInstance();
                 requiredDate.setTime(formDateCalendar.getTime());
@@ -419,6 +472,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                     requiredDate.add(Calendar.DATE, 1);
                     thirdDateCalendar.setTime(requiredDate.getTime());
                 }
+            }
 
         } if (!treatmentInitiationDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString())) {
 
@@ -473,28 +527,175 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         formDate.getButton().setEnabled(true);
         treatmentInitiationDate.getButton().setEnabled(true);
         returnVisitDate.getButton().setEnabled(true);
+        updateFollowUpMonth();
 
     }
 
     @Override
     public boolean validate() {
         Boolean error = false;
-        if(App.get(monthTreatment).isEmpty()){
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            monthTreatment.getEditText().setError(getString(R.string.empty_field));
-            monthTreatment.getEditText().requestFocus();
-            error = true;
-        }else if(Integer.parseInt(App.get(monthTreatment))>12){
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            monthTreatment.getEditText().setError(getString(R.string.ctb_month_treatment_greater_than_12));
-            monthTreatment.getEditText().requestFocus();
-            error = true;
+        if (tbRegisterationNumber.getVisibility() == View.VISIBLE) {
+            if(App.get(tbRegisterationNumber).isEmpty() ){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                tbRegisterationNumber.getEditText().setError(getString(R.string.empty_field));
+                tbRegisterationNumber.getEditText().requestFocus();
+                error = true;
+            }
+            else if(App.get(tbRegisterationNumber).trim().length() <= 0){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                tbRegisterationNumber.getEditText().setError(getString(R.string.ctb_spaces_only));
+                tbRegisterationNumber.getEditText().requestFocus();
+                error = true;
+            }
+        }
+        if(intensivePhaseRegimen.getVisibility()==View.VISIBLE) {
+            if ((App.get(intensivePhaseRegimen).isEmpty())) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                intensivePhaseRegimen.getRadioGroup().getButtons().get(1).setError(getString(R.string.empty_field));
+                intensivePhaseRegimen.getRadioGroup().requestFocus();
+                error = true;
+            }
+        }
+        if(currentTabletsofRHZ.getVisibility()==View.VISIBLE) {
+            if ((App.get(currentTabletsofRHZ).isEmpty())) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                currentTabletsofRHZ.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+                currentTabletsofRHZ.getRadioGroup().requestFocus();
+                error = true;
+            }
+        }
+        if(currentTabletsofE.getVisibility()==View.VISIBLE) {
+            if ((App.get(currentTabletsofE).isEmpty())) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                currentTabletsofE.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+                currentTabletsofE.getRadioGroup().requestFocus();
+                error = true;
+            }
+        }
+        if(newTabletsofRHZ.getVisibility()==View.VISIBLE) {
+            if ((App.get(newTabletsofRHZ).isEmpty())) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                newTabletsofRHZ.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+                newTabletsofRHZ.getRadioGroup().requestFocus();
+                error = true;
+            }
+        }
+        if(newTabletsofE.getVisibility()==View.VISIBLE) {
+            if ((App.get(newTabletsofE).isEmpty())) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                newTabletsofE.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+                newTabletsofE.getRadioGroup().requestFocus();
+                error = true;
+            }
+        }
+        if(adultFormulationofHRZE.getVisibility()==View.VISIBLE) {
+            if ((App.get(adultFormulationofHRZE).isEmpty())) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                adultFormulationofHRZE.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+                adultFormulationofHRZE.getRadioGroup().requestFocus();
+                error = true;
+            }
+        }
+        if(continuationPhaseRegimen.getVisibility()==View.VISIBLE) {
+            if ((App.get(continuationPhaseRegimen).isEmpty())) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                continuationPhaseRegimen.getRadioGroup().getButtons().get(1).setError(getString(R.string.empty_field));
+                continuationPhaseRegimen.getRadioGroup().requestFocus();
+                error = true;
+            }
+        }
+        if(currentTabletsOfContinuationRH.getVisibility()==View.VISIBLE) {
+            if ((App.get(currentTabletsOfContinuationRH).isEmpty())) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                currentTabletsOfContinuationRH.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+                currentTabletsOfContinuationRH.getRadioGroup().requestFocus();
+                error = true;
+            }
+        }
+        if(currentTabletsOfContinuationE.getVisibility()==View.VISIBLE) {
+            if ((App.get(currentTabletsOfContinuationE).isEmpty())) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                currentTabletsOfContinuationE.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+                currentTabletsOfContinuationE.getRadioGroup().requestFocus();
+                error = true;
+            }
+        }
+        if(newTabletsOfContinuationRH.getVisibility()==View.VISIBLE) {
+            if ((App.get(newTabletsOfContinuationRH).isEmpty())) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                newTabletsOfContinuationRH.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+                newTabletsOfContinuationRH.getRadioGroup().requestFocus();
+                error = true;
+            }
+        }
+        if(newTabletsOfContinuationE.getVisibility()==View.VISIBLE) {
+            if ((App.get(newTabletsOfContinuationE).isEmpty())) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                newTabletsOfContinuationE.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+                newTabletsOfContinuationE.getRadioGroup().requestFocus();
+                error = true;
+            }
+        }
+        if(adultFormulationOfContinuationRHE.getVisibility()==View.VISIBLE) {
+            if ((App.get(adultFormulationOfContinuationRHE).isEmpty())) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                adultFormulationOfContinuationRHE.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+                adultFormulationOfContinuationRHE.getRadioGroup().requestFocus();
+                error = true;
+            }
+        }
+        if(adultFormulationOfContinuationRH.getVisibility()==View.VISIBLE) {
+            if ((App.get(adultFormulationOfContinuationRH).isEmpty())) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                adultFormulationOfContinuationRH.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+                adultFormulationOfContinuationRH.getRadioGroup().requestFocus();
+                error = true;
+            }
         }
         if((App.get(patientCategory).isEmpty())){
             if (App.isLanguageRTL())
@@ -592,6 +793,9 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                                     (App.get(patientType).equals(getResources().getString(R.string.ctb_treatment_after_followup)) ? "LOST TO FOLLOW-UP" :
                                             (App.get(patientType).equals(getResources().getString(R.string.ctb_treatment_failure)) ? "TUBERCULOSIS TREATMENT FAILURE" : "OTHER PATIENT TYPE"))))});
 
+        if(App.hasKeyListener(tbRegisterationNumber)) {
+            observations.add(new String[]{"TB REGISTRATION NUMBER", App.get(tbRegisterationNumber)});
+        }
         observations.add(new String[]{"TREATMENT START DATE", App.getSqlDateTime(secondDateCalendar)});
         observations.add(new String[]{"FOLLOW-UP MONTH", App.get(monthTreatment)});
 
@@ -811,13 +1015,16 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
 
                 patientType.getSpinner().selectValue(value);
                 patientType.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("TB REGISTRATION NUMBER")) {
+                tbRegisterationNumber.getEditText().setText(obs[0][1]);
+                tbRegisterationNumber.setVisibility(View.VISIBLE);
             }else if (obs[0][0].equals("TREATMENT START DATE")) {
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                 treatmentInitiationDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
                 treatmentInitiationDate.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
-                monthTreatment.getEditText().setText(obs[0][1]);
+                monthTreatment.getSpinner().selectValue(obs[0][1]);
                 monthTreatment.setVisibility(View.VISIBLE);
             }
             else if (obs[0][0].equals("TB CATEGORY")) {
@@ -1246,7 +1453,11 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         adultFormulationOfContinuationRH.setVisibility(View.GONE);
         adultFormulationOfContinuationRHE.setVisibility(View.GONE);
 
-
+        String tbRegistrationNumber = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "TB REGISTRATION NUMBER");
+        if(tbRegistrationNumber!=null){
+            tbRegisterationNumber.getEditText().setKeyListener(null);
+            tbRegisterationNumber.getEditText().setText(tbRegistrationNumber);
+        }
         String patientTypeString = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "TB PATIENT TYPE");
 
         if(patientTypeString!=null) {
@@ -1436,6 +1647,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 adultFormulationOfContinuationRH.setVisibility(View.GONE);
             }
         }else if (group == intensivePhaseRegimen.getRadioGroup()) {
+            intensivePhaseRegimen.getRadioGroup().getButtons().get(1).setError(null);
             if (intensivePhaseRegimen.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_rhz))) {
                 adultFormulationofHRZE.setVisibility(View.GONE);
                 currentTabletsofE.setVisibility(View.GONE);
@@ -1453,6 +1665,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 }
             }
         }else if (group == continuationPhaseRegimen.getRadioGroup()) {
+            continuationPhaseRegimen.getRadioGroup().getButtons().get(1).setError(null);
             if (continuationPhaseRegimen.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_rh))) {
                 currentTabletsOfContinuationE.setVisibility(View.GONE);
                 newTabletsOfContinuationE.setVisibility(View.GONE);
@@ -1472,6 +1685,40 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         }
         else if (group == conclusionOfTreatment.getRadioGroup()) {
             conclusionOfTreatment.getRadioGroup().getButtons().get(1).setError(null);
+        }
+        else if (group == currentTabletsofRHZ.getRadioGroup()) {
+            currentTabletsofRHZ.getRadioGroup().getButtons().get(3).setError(null);
+        }
+        else if (group == currentTabletsofE.getRadioGroup()) {
+            currentTabletsofE.getRadioGroup().getButtons().get(3).setError(null);
+        }
+        else if (group == newTabletsofRHZ.getRadioGroup()) {
+            newTabletsofRHZ.getRadioGroup().getButtons().get(3).setError(null);
+        }
+        else if (group == newTabletsofE.getRadioGroup()) {
+            newTabletsofE.getRadioGroup().getButtons().get(3).setError(null);
+        }
+        else if (group == adultFormulationofHRZE.getRadioGroup()) {
+            adultFormulationofHRZE.getRadioGroup().getButtons().get(3).setError(null);
+        }
+
+        else if (group == currentTabletsOfContinuationRH.getRadioGroup()) {
+            currentTabletsOfContinuationRH.getRadioGroup().getButtons().get(3).setError(null);
+        }
+        else if (group == currentTabletsOfContinuationE.getRadioGroup()) {
+            currentTabletsOfContinuationE.getRadioGroup().getButtons().get(3).setError(null);
+        }
+        else if (group == newTabletsOfContinuationRH.getRadioGroup()) {
+            newTabletsOfContinuationRH.getRadioGroup().getButtons().get(3).setError(null);
+        }
+        else if (group == newTabletsOfContinuationE.getRadioGroup()) {
+            newTabletsOfContinuationE.getRadioGroup().getButtons().get(3).setError(null);
+        }
+        else if (group == adultFormulationOfContinuationRHE.getRadioGroup()) {
+            adultFormulationOfContinuationRHE.getRadioGroup().getButtons().get(3).setError(null);
+        }
+        else if (group == adultFormulationOfContinuationRH.getRadioGroup()) {
+            adultFormulationOfContinuationRH.getRadioGroup().getButtons().get(3).setError(null);
         }
     }
 

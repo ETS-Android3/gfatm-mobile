@@ -1268,13 +1268,19 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
             }
 
 
-            else if (obs[0][0].equals("DISTRICT")) {
+            else if (obs[0][0].equals("PROVINCE")) {
+                province.getSpinner().selectValue(obs[0][1]);
+            } else if (obs[0][0].equals("DISTRICT")) {
+                String[] districts = serverService.getDistrictList(App.get(province));
+                district.getSpinner().setSpinnerData(districts);
                 district.getSpinner().selectValue(obs[0][1]);
-                district.setVisibility(View.VISIBLE);
-            }else if (obs[0][0].equals("VILLAGE")) {
+                district.getSpinner().setTag("selected");
+            } else if (obs[0][0].equals("VILLAGE")) {
+                String[] cities = serverService.getCityList(App.get(district));
+                city.getSpinner().setSpinnerData(cities);
                 city.getSpinner().selectValue(obs[0][1]);
-                city.setVisibility(View.VISIBLE);
-            }else if (obs[0][0].equals("TYPE OF ADDRESS")) {
+                city.getSpinner().setTag("selected");
+            } else if (obs[0][0].equals("TYPE OF ADDRESS")) {
                 for (RadioButton rb : addressType.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.ctb_permanent)) && obs[0][1].equals("PERMANENT ADDRESS")) {
                         rb.setChecked(true);
@@ -1433,41 +1439,22 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                 cnicOwnerOther.setVisibility(View.GONE);
             }
         }
-        else if (spinner == district.getSpinner()) {
+        if (spinner == district.getSpinner()) {
 
-            String[] cities = serverService.getCityList(App.get(district));
-            city.getSpinner().setAdapter(null);
+            if(district.getSpinner().getTag() == null) {
 
-            ArrayAdapter<String> spinnerArrayAdapter = null;
-            if (App.isLanguageRTL()) {
-                spinnerArrayAdapter = new ArrayAdapter<String>(context, R.layout.custom_rtl_spinner, cities);
-                city.getSpinner().setAdapter(spinnerArrayAdapter);
-                spinnerArrayAdapter.setDropDownViewResource(R.layout.custom_rtl_spinner);
-                city.getSpinner().setGravity(Gravity.RIGHT);
-            } else {
-                spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, cities);
-                city.getSpinner().setAdapter(spinnerArrayAdapter);
-                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                city.getSpinner().setGravity(Gravity.LEFT);
+                String[] cities = serverService.getCityList(App.get(district));
+                city.getSpinner().setSpinnerData(cities);
             }
-        }else if (spinner == province.getSpinner()) {
+            else city.getSpinner().setTag(null);
 
-            String s = App.get(province);
-            String[] cities = serverService.getDistrictList(App.get(province));
-            district.getSpinner().setAdapter(null);
+        } else if (spinner == province.getSpinner()) {
 
-            ArrayAdapter<String> spinnerArrayAdapter = null;
-            if (App.isLanguageRTL()) {
-                spinnerArrayAdapter = new ArrayAdapter<String>(context, R.layout.custom_rtl_spinner, cities);
-                district.getSpinner().setAdapter(spinnerArrayAdapter);
-                spinnerArrayAdapter.setDropDownViewResource(R.layout.custom_rtl_spinner);
-                district.getSpinner().setGravity(Gravity.RIGHT);
-            } else {
-                spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, cities);
-                district.getSpinner().setAdapter(spinnerArrayAdapter);
-                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                district.getSpinner().setGravity(Gravity.LEFT);
+            if(province.getSpinner().getTag() == null) {
+                String[] districts = serverService.getDistrictList(App.get(province));
+                district.getSpinner().setSpinnerData(districts);
             }
+            else province.getSpinner().setTag(null);
         }
 
     }

@@ -195,24 +195,24 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
             locationArray[i] = objLoc.toString();
         }
         hospital = new TitledSpinner(context, null, getResources().getString(R.string.ctb_hospital_specify), locationArray, null, App.VERTICAL);
-        facility_section = new TitledSpinner(context, null, getResources().getString(R.string.ctb_facility_section), getResources().getStringArray(R.array.ctb_facility_section_list), null, App.VERTICAL);
+        facility_section = new TitledSpinner(context, null, getResources().getString(R.string.ctb_facility_section), getResources().getStringArray(R.array.ctb_facility_section_list), getResources().getString(R.string.ctb_empty), App.VERTICAL);
         facility_section_other = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        opd_ward_section = new TitledSpinner(context, null, getResources().getString(R.string.ctb_opd_clinic_or_ward), getResources().getStringArray(R.array.ctb_opd_ward_section_list), null, App.VERTICAL);
+        opd_ward_section = new TitledSpinner(context, null, getResources().getString(R.string.ctb_opd_clinic_or_ward), getResources().getStringArray(R.array.ctb_opd_ward_section_list), getResources().getString(R.string.ctb_empty), App.VERTICAL);
         motherName = new TitledEditText(context, null, getResources().getString(R.string.ctb_mother_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         fatherName = new TitledEditText(context, null, getResources().getString(R.string.ctb_father_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        patientAttendant = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_attendant), getResources().getStringArray(R.array.ctb_patient_attendant_list), getResources().getString(R.string.ctb_patient), App.HORIZONTAL, App.VERTICAL, true);
-        cough = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_cough), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true);
-        coughDuration = new TitledSpinner(context, null, getResources().getString(R.string.ctb_cough_duration), getResources().getStringArray(R.array.ctb_cough_duration_list), getResources().getString(R.string.ctb_less_than_2_weeks), App.VERTICAL, true);
-        fever = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_fever_more_than_2_weeks), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true);
-        nightSweats = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_night_sweats), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.ctb_no), App.HORIZONTAL, App.VERTICAL, true);
-        weightLoss = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_weight_loss), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.ctb_no), App.HORIZONTAL, App.VERTICAL, true);
-        appeptite = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_child_appetite), getResources().getStringArray(R.array.ctb_appetite_list), getResources().getString(R.string.ctb_ok), App.HORIZONTAL, App.VERTICAL, true);
-        lymphnodeSwelling = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_lymph_node_swelling), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.ctb_no), App.HORIZONTAL, App.VERTICAL, true);
-        jointSwellingTwoWeeks = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_joint_spine_swelling), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.ctb_no), App.HORIZONTAL, App.VERTICAL, true);
-        tbHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_tb_before), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.ctb_no), App.HORIZONTAL, App.VERTICAL, true);
-        tbMedication = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_tb_medication), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.ctb_no), App.HORIZONTAL, App.VERTICAL, true);
-        contactTbHistoryTwoYears = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_tb_history_2years), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.ctb_no), App.HORIZONTAL, App.VERTICAL, true);
-        closeContactType = new TitledCheckBoxes(context, null, getResources().getString(R.string.ctb_close_contact_type), getResources().getStringArray(R.array.ctb_close_contact_type_list), new Boolean[] {true,false,false,false,false,false,false,false,false,false,false}, App.VERTICAL, App.VERTICAL);
+        patientAttendant = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_attendant), getResources().getStringArray(R.array.ctb_patient_attendant_list), null, App.HORIZONTAL, App.VERTICAL, true);
+        cough = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_cough), getResources().getStringArray(R.array.yes_no_unknown_refused_options), null, App.HORIZONTAL, App.VERTICAL, true);
+        coughDuration = new TitledSpinner(context, null, getResources().getString(R.string.ctb_cough_duration), getResources().getStringArray(R.array.ctb_cough_duration_list), null, App.VERTICAL, true);
+        fever = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_fever_more_than_2_weeks), getResources().getStringArray(R.array.yes_no_unknown_refused_options), null, App.HORIZONTAL, App.VERTICAL, true);
+        nightSweats = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_night_sweats), getResources().getStringArray(R.array.yes_no_unknown_refused_options), null, App.HORIZONTAL, App.VERTICAL, true);
+        weightLoss = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_weight_loss), getResources().getStringArray(R.array.yes_no_unknown_refused_options),null, App.HORIZONTAL, App.VERTICAL, true);
+        appeptite = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_child_appetite), getResources().getStringArray(R.array.ctb_appetite_list), null, App.HORIZONTAL, App.VERTICAL, true);
+        lymphnodeSwelling = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_lymph_node_swelling), getResources().getStringArray(R.array.yes_no_unknown_refused_options), null, App.HORIZONTAL, App.VERTICAL, true);
+        jointSwellingTwoWeeks = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_joint_spine_swelling), getResources().getStringArray(R.array.yes_no_unknown_refused_options), null, App.HORIZONTAL, App.VERTICAL, true);
+        tbHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_tb_before), getResources().getStringArray(R.array.yes_no_unknown_refused_options), null, App.HORIZONTAL, App.VERTICAL, true);
+        tbMedication = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_tb_medication), getResources().getStringArray(R.array.yes_no_unknown_refused_options), null, App.HORIZONTAL, App.VERTICAL, true);
+        contactTbHistoryTwoYears = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_tb_history_2years), getResources().getStringArray(R.array.yes_no_unknown_refused_options), null, App.HORIZONTAL, App.VERTICAL, true);
+        closeContactType = new TitledCheckBoxes(context, null, getResources().getString(R.string.ctb_close_contact_type), getResources().getStringArray(R.array.ctb_close_contact_type_list), null, App.VERTICAL, App.VERTICAL);
         otherContactType = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_contact), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         presumptiveTb = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_presumptive_tb), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true);
 
@@ -359,6 +359,137 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                 error = true;
             }
             flag = false;
+            if(App.get(patientAttendant).isEmpty()){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                patientAttendant.getQuestionView().setError(getString(R.string.empty_field));
+                patientAttendant.getRadioGroup().requestFocus();
+                error = true;
+                view = patientAttendant;
+            }
+            if(App.get(cough).isEmpty()){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                cough.getQuestionView().setError(getString(R.string.empty_field));
+                cough.getRadioGroup().requestFocus();
+                error = true;
+                view = cough;
+            }
+            if(coughDuration.getVisibility()==View.VISIBLE && App.get(coughDuration).equals(getResources().getString(R.string.ctb_empty))){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                coughDuration.getQuestionView().setError(getString(R.string.empty_field));
+                coughDuration.getSpinner().requestFocus();
+                error = true;
+                view = coughDuration;
+            }
+            if(App.get(fever).isEmpty()){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                fever.getQuestionView().setError(getString(R.string.empty_field));
+                fever.getRadioGroup().requestFocus();
+                error = true;
+                view = coughDuration;
+            }
+            if(App.get(nightSweats).isEmpty()){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                nightSweats.getQuestionView().setError(getString(R.string.empty_field));
+                nightSweats.getRadioGroup().requestFocus();
+                error = true;
+                view = nightSweats;
+            }
+            if(App.get(weightLoss).isEmpty()){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                weightLoss.getQuestionView().setError(getString(R.string.empty_field));
+                weightLoss.getRadioGroup().requestFocus();
+                error = true;
+                view = weightLoss;
+            }
+            if(App.get(appeptite).isEmpty()){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                appeptite.getQuestionView().setError(getString(R.string.empty_field));
+                appeptite.getRadioGroup().requestFocus();
+                error = true;
+                view = weightLoss;
+            }
+            if(App.get(lymphnodeSwelling).isEmpty()){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                lymphnodeSwelling.getQuestionView().setError(getString(R.string.empty_field));
+                lymphnodeSwelling.getRadioGroup().requestFocus();
+                error = true;
+                view = lymphnodeSwelling;
+            }
+            if(App.get(jointSwellingTwoWeeks).isEmpty()){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                jointSwellingTwoWeeks.getQuestionView().setError(getString(R.string.empty_field));
+                jointSwellingTwoWeeks.getRadioGroup().requestFocus();
+                error = true;
+                view = jointSwellingTwoWeeks;
+            }
+            if(App.get(tbHistory).isEmpty()){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                tbHistory.getQuestionView().setError(getString(R.string.empty_field));
+                tbHistory.getRadioGroup().requestFocus();
+                error = true;
+                view = tbHistory;
+            }
+            if(tbMedication.getVisibility()==View.VISIBLE && App.get(tbMedication).isEmpty()){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                tbMedication.getQuestionView().setError(getString(R.string.empty_field));
+                tbMedication.getRadioGroup().requestFocus();
+                error = true;
+                view = tbMedication;
+            }
+            if(App.get(contactTbHistoryTwoYears).isEmpty()){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                contactTbHistoryTwoYears.getQuestionView().setError(getString(R.string.empty_field));
+                contactTbHistoryTwoYears.getRadioGroup().requestFocus();
+                error = true;
+                view = contactTbHistoryTwoYears;
+            }
+            if(App.get(presumptiveTb).isEmpty()){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                presumptiveTb.getQuestionView().setError(getString(R.string.empty_field));
+                presumptiveTb.getRadioGroup().requestFocus();
+                error = true;
+                view = presumptiveTb;
+            }
+
             if (App.get(fatherName).isEmpty()) {
                 if (App.isLanguageRTL())
                     gotoPage(0);
@@ -427,6 +558,26 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                 facility_section_other.getEditText().requestFocus();
                 error = true;
             }
+            if(App.get(facility_section).equals(getResources().getString(R.string.ctb_empty))){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                facility_section.getQuestionView().setError(getString(R.string.empty_field));
+                facility_section.getSpinner().requestFocus();
+                error = true;
+            }
+            if(opd_ward_section.getVisibility()==View.VISIBLE && App.get(opd_ward_section).equals(getResources().getString(R.string.ctb_empty))){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                opd_ward_section.getQuestionView().setError(getString(R.string.empty_field));
+                opd_ward_section.getSpinner().requestFocus();
+                error = true;
+            }
+
+
                 if (error) {
 
                 int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
@@ -499,7 +650,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
         if(hospital.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"HOSPITAL", App.get(hospital)});
         }
-        if (facility_section.getVisibility() == View.VISIBLE){
+        if (facility_section.getVisibility() == View.VISIBLE && !App.get(facility_section).equals(getResources().getString(R.string.ctb_empty))){
             observations.add(new String[]{"HOSPITAL SECTION", App.get(facility_section).equals(getResources().getString(R.string.ctb_opd_clinic)) ? "OPD CLINIC SCREENING" :
                     (App.get(facility_section).equals(getResources().getString(R.string.ctb_ward)) ? "WARD SCREENING" :
                             (App.get(facility_section).equals(getResources().getString(R.string.ctb_registration_desk)) ? "REGISTRATION DESK" :
@@ -509,7 +660,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
         if (facility_section_other.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER FACILITY SECTION", App.get(facility_section_other)});
 
-        if (opd_ward_section.getVisibility() == View.VISIBLE)
+        if (opd_ward_section.getVisibility() == View.VISIBLE && !App.get(opd_ward_section).equals(getResources().getString(R.string.ctb_empty)))
             observations.add(new String[]{"OUTPATIENT DEPARTMENT", App.get(opd_ward_section).equals(getResources().getString(R.string.ctb_general_medicine_filter_clinic)) ? "GENERAL MEDICINE DEPARTMENT" :
                     (App.get(opd_ward_section).equals(getResources().getString(R.string.ctb_chest_tb_clinic_screening)) ? "CHEST MEDICINE DEPARTMENT" :
                             (App.get(opd_ward_section).equals(getResources().getString(R.string.ctb_paediatrics)) ? "PEDIATRIC SURGERY DEPARTMENT" :
@@ -524,7 +675,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
         observations.add(new String[]{"COUGH", App.get(cough).equals(getResources().getString(R.string.yes)) ? "YES" :
                 (App.get(cough).equals(getResources().getString(R.string.no)) ? "NO" :
                         (App.get(cough).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
-        if (coughDuration.getVisibility() == View.VISIBLE)
+        if (coughDuration.getVisibility() == View.VISIBLE && !App.get(coughDuration).equals(getResources().getString(R.string.ctb_empty)))
             observations.add(new String[]{"COUGH DURATION", App.get(coughDuration).equals(getResources().getString(R.string.ctb_less_than_2_weeks)) ? "COUGH LASTING LESS THAN 2 WEEKS" :
                     (App.get(coughDuration).equals(getResources().getString(R.string.ctb_2_to_3_weeks)) ? "COUGH LASTING MORE THAN 2 WEEKS" :
                             (App.get(coughDuration).equals(getResources().getString(R.string.ctb_more_than_3_weeks)) ? "COUGH LASTING MORE THAN 3 WEEKS" :
@@ -1043,6 +1194,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         MySpinner spinner = (MySpinner) parent;
         if (spinner == facility_section.getSpinner()) {
+            facility_section.getQuestionView().setError(null);
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_other_title))) {
                 facility_section_other.setVisibility(View.VISIBLE);
             } else {
@@ -1054,6 +1206,12 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
             } else {
                 opd_ward_section.setVisibility(View.GONE);
             }
+        }
+        if (spinner == opd_ward_section.getSpinner()) {
+            opd_ward_section.getQuestionView().setError(null);
+        }
+        if (spinner == coughDuration.getSpinner()) {
+            coughDuration.getQuestionView().setError(null);
         }
 
     }
@@ -1093,7 +1251,6 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
         hospital.getSpinner().selectValue(App.getLocation());
         hospital.getSpinner().setEnabled(false);
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-        facility_section.getSpinner().selectValue(getResources().getString(R.string.ctb_opd_clinic));
         facility_section_other.setVisibility(View.GONE);
         coughDuration.setVisibility(View.GONE);
         tbMedication.setVisibility(View.GONE);
@@ -1126,6 +1283,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         if (group == screeningLocation.getRadioGroup()) {
+            screeningLocation.getQuestionView().setError(null);
             if (screeningLocation.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_hospital))) {
                 hospital.setVisibility(View.VISIBLE);
                 facility_section.setVisibility(View.VISIBLE);
@@ -1142,6 +1300,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                 facility_section_other.setVisibility(View.GONE);
             }
         } else if (group == cough.getRadioGroup()) {
+            cough.getQuestionView().setError(null);
             setPresumptiveTb();
             if (cough.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
                 coughDuration.setVisibility(View.VISIBLE);
@@ -1149,6 +1308,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                 coughDuration.setVisibility(View.GONE);
             }
         } else if (group == lymphnodeSwelling.getRadioGroup()) {
+            lymphnodeSwelling.getQuestionView().setError(null);
             if (App.get(lymphnodeSwelling).equals(getResources().getString(R.string.yes))) {
                 for (RadioButton rb : presumptiveTb.getRadioGroup().getButtons()) {
                     String str = rb.getText().toString();
@@ -1159,6 +1319,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                 }
             }
         } else if (group == jointSwellingTwoWeeks.getRadioGroup()) {
+            jointSwellingTwoWeeks.getQuestionView().setError(null);
             if (App.get(jointSwellingTwoWeeks).equals(getResources().getString(R.string.yes))) {
                 for (RadioButton rb : presumptiveTb.getRadioGroup().getButtons()) {
                     String str = rb.getText().toString();
@@ -1170,18 +1331,23 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
             }
         }
         else if (group == fever.getRadioGroup()) {
+            fever.getQuestionView().setError(null);
             setPresumptiveTb();
         }
         else if (group == nightSweats.getRadioGroup()) {
+            nightSweats.getQuestionView().setError(null);
             setPresumptiveTb();
         }
         else if (group == weightLoss.getRadioGroup()) {
+            weightLoss.getQuestionView().setError(null);
             setPresumptiveTb();
         }
         else if (group == appeptite.getRadioGroup()) {
+            appeptite.getQuestionView().setError(null);
             setPresumptiveTb();
         }
         else if (group == tbHistory.getRadioGroup()) {
+            tbHistory.getQuestionView().setError(null);
             setPresumptiveTb();
             if (App.get(tbHistory).equals(getResources().getString(R.string.yes))) {
                 tbMedication.setVisibility(View.VISIBLE);
@@ -1189,12 +1355,16 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                 tbMedication.setVisibility(View.GONE);
             }
         } else if (group == contactTbHistoryTwoYears.getRadioGroup()) {
+            contactTbHistoryTwoYears.getQuestionView().setError(null);
             if (App.get(contactTbHistoryTwoYears).equals(getResources().getString(R.string.yes))) {
                 closeContactType.setVisibility(View.VISIBLE);
             } else {
                 closeContactType.setVisibility(View.GONE);
                 otherContactType.setVisibility(View.GONE);
             }
+        }
+        else if (group == patientAttendant.getRadioGroup()) {
+            patientAttendant.getQuestionView().setError(null);
         }
 
     }
