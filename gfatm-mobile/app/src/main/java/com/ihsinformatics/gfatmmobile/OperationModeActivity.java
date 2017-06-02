@@ -223,6 +223,12 @@ public class OperationModeActivity extends AbstractSettingActivity implements Ra
                                 editor.putString(Preferences.MODE, App.getMode());
                                 editor.apply();
 
+                                View view = getCurrentFocus();
+                                if (view != null) {
+                                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                                }
+
                                 onBackPressed();
 
                             } else if (result.equals("AUTHENTICATION_ERROR")) {
