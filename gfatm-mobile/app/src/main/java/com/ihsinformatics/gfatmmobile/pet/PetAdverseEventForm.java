@@ -87,6 +87,8 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
 
     ScrollView scrollView;
 
+    Boolean refillFlag = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -404,6 +406,12 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
 
     @Override
     public void updateDisplay() {
+
+        if(refillFlag){
+            refillFlag = true;
+            return;
+        }
+
         if (snackbar != null)
             snackbar.dismiss();
 
@@ -1371,6 +1379,8 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
 
     @Override
     public void refill(int encounterId) {
+
+        refillFlag = true;
 
         OfflineForm fo = serverService.getOfflineFormById(encounterId);
         String date = fo.getFormDate();

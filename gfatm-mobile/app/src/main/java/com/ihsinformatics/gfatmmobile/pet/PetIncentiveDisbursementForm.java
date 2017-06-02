@@ -80,6 +80,7 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
     TitledSpinner recieverRelationWithContact;
     TitledEditText otherRelation;
 
+    Boolean refillFlag = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -212,6 +213,12 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
 
     @Override
     public void updateDisplay() {
+
+        if(refillFlag){
+            refillFlag = false;
+            return;
+        }
+
         if (snackbar != null)
             snackbar.dismiss();
 
@@ -960,6 +967,9 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
 
     @Override
     public void refill(int encounterId) {
+
+        refillFlag = true;
+
         OfflineForm fo = serverService.getOfflineFormById(encounterId);
         String date = fo.getFormDate();
         ArrayList<String[][]> obsValue = fo.getObsValue();

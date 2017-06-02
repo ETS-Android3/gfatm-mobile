@@ -74,6 +74,7 @@ public class PetMonthlyHomeFollowupForm extends AbstractFormActivity implements 
 
     ScrollView scrollView;
 
+    Boolean refillFlag = false;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -244,6 +245,11 @@ public class PetMonthlyHomeFollowupForm extends AbstractFormActivity implements 
 
     @Override
     public void updateDisplay() {
+
+        if(refillFlag){
+            refillFlag = true;
+            return;
+        }
 
         if (snackbar != null)
             snackbar.dismiss();
@@ -654,6 +660,8 @@ public class PetMonthlyHomeFollowupForm extends AbstractFormActivity implements 
 
     @Override
     public void refill(int encounterId) {
+
+        Boolean refillFlag = false;
 
         OfflineForm fo = serverService.getOfflineFormById(encounterId);
         String date = fo.getFormDate();

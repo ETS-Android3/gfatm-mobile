@@ -104,6 +104,7 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
 
     ScrollView scrollView;
 
+    Boolean refillFlag = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -715,6 +716,12 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
 
     @Override
     public void updateDisplay() {
+
+        if(refillFlag){
+            refillFlag = false;
+            return;
+        }
+
         if (snackbar != null)
             snackbar.dismiss();
 
@@ -1472,6 +1479,8 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
 
     @Override
     public void refill(int encounterId) {
+
+        refillFlag = true;
 
         OfflineForm fo = serverService.getOfflineFormById(encounterId);
         String date = fo.getFormDate();

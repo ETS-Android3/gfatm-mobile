@@ -86,6 +86,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
     TitledSpinner relationshipTreatmentSuppoter;
     TitledEditText other;
 
+    Boolean refillFlag = false;
+
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
      *
@@ -1411,6 +1413,13 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
     @Override
     public void refill(int encounterId) {
+
+        if(refillFlag){
+            refillFlag = true;
+            return;
+        }
+
+        Boolean refillFlag = false;
 
         OfflineForm fo = serverService.getOfflineFormById(encounterId);
         String date = fo.getFormDate();

@@ -98,6 +98,9 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
 
     ScrollView scrollView;
 
+    Boolean refillFlag = false;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -338,6 +341,12 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
 
     @Override
     public void updateDisplay() {
+
+        if(refillFlag){
+            refillFlag = true;
+            return;
+        }
+
         if (snackbar != null)
             snackbar.dismiss();
 
@@ -917,6 +926,8 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
 
     @Override
     public void refill(int encounterId) {
+
+        refillFlag = true;
 
         OfflineForm fo = serverService.getOfflineFormById(encounterId);
         String date = fo.getFormDate();

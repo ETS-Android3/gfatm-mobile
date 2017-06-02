@@ -111,6 +111,8 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
     TitledRadioGroup referral;
     TitledEditText clincianNote;
 
+    Boolean refillFlag = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -487,6 +489,12 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
 
     @Override
     public void updateDisplay() {
+
+        if(refillFlag){
+            refillFlag = true;
+            return;
+        }
+
         if (snackbar != null)
             snackbar.dismiss();
 
@@ -1054,6 +1062,7 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
     @Override
     public void refill(int encounterId) {
 
+        refillFlag = true;
 
         OfflineForm fo = serverService.getOfflineFormById(encounterId);
         String date = fo.getFormDate();

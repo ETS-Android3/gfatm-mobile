@@ -89,6 +89,8 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
     TitledRadioGroup akuadsAgree;
     TitledButton nextAppointmentDate;
 
+    Boolean refillFlag = false;
+
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
      *
@@ -257,6 +259,11 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
 
     @Override
     public void updateDisplay() {
+
+        if(refillFlag){
+            refillFlag = true;
+            return;
+        }
 
         formDate.getButton().setEnabled(true);
         nextAppointmentDate.getButton().setEnabled(true);
@@ -591,6 +598,8 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
 
     @Override
     public void refill(int formId) {
+
+        refillFlag = true;
 
         OfflineForm fo = serverService.getOfflineFormById(formId);
         String date = fo.getFormDate();

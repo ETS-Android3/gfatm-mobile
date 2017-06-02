@@ -48,6 +48,8 @@ public class PetContactRegistryForm extends AbstractFormActivity {
     TitledEditText totalAdultContacts;
     TitledEditText totalChildrenContacts;
 
+    Boolean refillFlag = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -126,6 +128,12 @@ public class PetContactRegistryForm extends AbstractFormActivity {
 
     @Override
     public void updateDisplay() {
+
+        if(refillFlag){
+            refillFlag = false;
+            return;
+        }
+
         if (snackbar != null)
             snackbar.dismiss();
 
@@ -407,6 +415,8 @@ public class PetContactRegistryForm extends AbstractFormActivity {
 
     @Override
     public void refill(int formId) {
+
+        refillFlag = true;
 
         OfflineForm fo = serverService.getOfflineFormById(formId);
         String date = fo.getFormDate();

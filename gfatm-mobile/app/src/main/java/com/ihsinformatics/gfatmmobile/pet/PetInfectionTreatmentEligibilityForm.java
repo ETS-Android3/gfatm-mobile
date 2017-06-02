@@ -68,6 +68,7 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
 
     ScrollView scrollView;
 
+    Boolean refillFlag = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -201,6 +202,12 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
 
     @Override
     public void updateDisplay() {
+
+        if(refillFlag){
+            refillFlag = true;
+            return;
+        }
+
         if (snackbar != null)
             snackbar.dismiss();
 
@@ -632,6 +639,8 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
 
     @Override
     public void refill(int encounterId) {
+
+        Boolean refillFlag = false;
 
         OfflineForm fo = serverService.getOfflineFormById(encounterId);
         String date = fo.getFormDate();

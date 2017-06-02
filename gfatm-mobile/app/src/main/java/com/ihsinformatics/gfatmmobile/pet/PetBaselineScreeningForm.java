@@ -118,7 +118,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
 
     MyLinearLayout linearLayout;
 
-    Boolean flag = true;
+    Boolean refillFlag = false;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -508,6 +508,11 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
 
     @Override
     public void updateDisplay() {
+
+        if(refillFlag){
+            refillFlag = true;
+            return;
+        }
 
         if (snackbar != null)
             snackbar.dismiss();
@@ -1063,8 +1068,6 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
     public void resetViews() {
         super.resetViews();
 
-        flag = true;
-
         Object[][]  towns = serverService.getAllTowns();
         String[] townList = new String[towns.length];
 
@@ -1206,6 +1209,8 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
 
     @Override
     public void refill(int formId) {
+
+        refillFlag = true;
 
         OfflineForm fo = serverService.getOfflineFormById(formId);
         String date = fo.getFormDate();

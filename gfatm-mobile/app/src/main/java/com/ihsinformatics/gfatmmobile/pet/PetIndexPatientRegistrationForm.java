@@ -69,6 +69,9 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
 
     ScrollView scrollView;
 
+    Boolean refillFlag = false;
+
+
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
      *
@@ -189,6 +192,11 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
 
     @Override
     public void updateDisplay() {
+
+        if(refillFlag){
+            refillFlag = false;
+            return;
+        }
 
         if (snackbar != null)
             snackbar.dismiss();
@@ -863,6 +871,8 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
 
     @Override
     public void refill(int formId) {
+
+        refillFlag = true;
 
         OfflineForm fo = serverService.getOfflineFormById(formId);
         String date = fo.getFormDate();

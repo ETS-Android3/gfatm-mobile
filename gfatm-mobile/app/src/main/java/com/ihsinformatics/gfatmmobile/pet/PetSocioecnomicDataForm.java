@@ -62,6 +62,8 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
     TitledSpinner motherTongue;
     TitledEditText otherMotherTongue;
 
+    Boolean refillFlag = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -218,6 +220,12 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
 
     @Override
     public void updateDisplay() {
+
+        if(refillFlag){
+            refillFlag = true;
+            return;
+        }
+
         if (snackbar != null)
             snackbar.dismiss();
 
@@ -693,6 +701,8 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
 
     @Override
     public void refill(int formId) {
+
+        Boolean refillFlag = false;
 
         OfflineForm fo = serverService.getOfflineFormById(formId);
         String date = fo.getFormDate();

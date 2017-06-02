@@ -65,6 +65,7 @@ public class PetTreatmentAdherenceForm extends AbstractFormActivity implements R
     TitledRadioGroup clinicianInformed;
     ScrollView scrollView;
 
+    Boolean refillFlag = false;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -177,6 +178,11 @@ public class PetTreatmentAdherenceForm extends AbstractFormActivity implements R
 
     @Override
     public void updateDisplay() {
+
+        if(refillFlag){
+            refillFlag = true;
+            return;
+        }
 
         if (snackbar != null)
             snackbar.dismiss();
@@ -587,6 +593,8 @@ public class PetTreatmentAdherenceForm extends AbstractFormActivity implements R
 
     @Override
     public void refill(int encounterId) {
+
+        Boolean refillFlag = false;
 
         OfflineForm fo = serverService.getOfflineFormById(encounterId);
         String date = fo.getFormDate();
