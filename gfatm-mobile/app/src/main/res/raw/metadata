@@ -4479,10 +4479,12 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ULTRASOUND, ABD
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER REASON FOR REPEATING TEST','other_reason_repeating_test','Text','3a5a3058-bcc8-4313-b074-a7a6e3647278');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('X RAY IN PAST 6 MONTHS','past_xray','Coded','1a2dfae5-233e-40a6-b452-8fa2d11906e8');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PROVINCE','province','Text','f014be0b-e362-4ef0-9605-a31ae549d69e');
-
-----------
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT ACCEPTANCE TO IPT','IPT_acceptance','Coded','395d8bd6-a452-4d83-8181-d5113681e2af');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TB TREATMENT COMPLETED',NULL,'N/A','964780c0-7130-4e17-a8e1-e328cb524103');
+
+------
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('5',NULL,'N/A','2fd6470d-3faa-453f-8e1e-e96d805b819e');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ORDER ID',NULL,'Text','45c46189-a0c1-4d75-87d3-234a6ec38433');
 
 -- Program
 INSERT OR IGNORE INTO program VALUES (1, "86ba1232-d576-416e-b102-5f335c6746ce", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
