@@ -294,6 +294,43 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
                 }
             }
 
+        } else{
+            String formDa = formDate.getButton().getText().toString();
+
+            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
+            if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.ctb_result))) {
+
+                if (!App.get(orderIds).equals("")) {
+                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), App.getProgram() + "-" + "Histopathology Test Order", "ORDER ID", App.get(orderIds));
+
+                    String format = "";
+                    if (encounterDateTime.contains("/")) {
+                        format = "dd/MM/yyyy";
+                    } else {
+                        format = "yyyy-MM-dd";
+                    }
+
+                    Date orderDate = App.stringToDate(encounterDateTime, format);
+
+                    if (formDateCalendar.before(App.getCalendar(orderDate))) {
+
+                        Date dDate = App.stringToDate(formDa, "EEEE, MMM dd,yyyy");
+                        if (dDate.before(orderDate)) {
+                            formDateCalendar = Calendar.getInstance();
+                            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        } else {
+                            formDateCalendar = App.getCalendar(dDate);
+                            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        }
+
+                        snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
+                        snackbar.show();
+
+                    }
+
+                }
+            }
         }
 
         formDate.getButton().setEnabled(true);
@@ -332,9 +369,10 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
         }
         if(orderIds.getVisibility()==View.VISIBLE){
             String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Histopathology Test Result", "ORDER ID");
-            for(String id : resultTestIds){
+            if(resultTestIds != null){
+            for(String id : resultTestIds) {
 
-                if(id.equals(App.get(orderIds))){
+                if (id.equals(App.get(orderIds))) {
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.ctb_order_result_found_error) + App.get(orderIds));
                     Drawable clearIcon = getResources().getDrawable(R.drawable.error);
@@ -356,7 +394,7 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
 
                     return false;
                 }
-
+              }
             }
         }
 
@@ -681,7 +719,7 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         MySpinner spinner = (MySpinner) parent;
 
-        if(spinner == orderIds.getSpinner()){
+        if (spinner == orderIds.getSpinner()) {
             updateDisplay();
         }
 
@@ -740,6 +778,7 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
         histopathologySite.setVisibility(View.GONE);
         histopathologyResult.setVisibility(View.GONE);
         orderIds.setVisibility(View.GONE);
+        orderId.setVisibility(View.GONE);
         testId.setVisibility(View.GONE);
     }
 
