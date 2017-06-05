@@ -560,4 +560,7 @@
 
     <string name="loading_metadata">Loading Metadata ...</string>
     <string name="aao_tb_mitao_app">Aao TB Mitao - Mobile App</string>
+
+    <string name="order_id">Order ID</string>
+
 </resources>

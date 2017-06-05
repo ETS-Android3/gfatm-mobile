@@ -171,10 +171,11 @@
                 encounter_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 uuid VARCHAR,
                 encounterType VARCHAR,
-                encounterDatetime VARCHAR,
+                encounterDatetime datetime,
                 encounterLocation VARCHAR,
                 patientId INT NOT NULL COLLATE NOCASE,
                 form_date VARCHAR,
+                dateCreated datetime default current_timestamp,
                 FOREIGN KEY (patientId) REFERENCES PATIENT(patient_id)
             );
         </item>

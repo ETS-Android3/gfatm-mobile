@@ -1133,6 +1133,8 @@
         <item>@string/ctb_5</item>
     </string-array>
 
-
+    <string name="ctb_no_histopathology_order_found">No Histopatology Order found for the patient.</string>
+    <string name="ctb_order_result_found_error">Test Result already exsists for Order ID:"</string>
+    <string name="ctb_test_result_found_error">Test Result already exsists for Test ID:"</string>
 
 </resources>
