@@ -253,7 +253,7 @@ public class Forms{
     public static final String CHILDHOODTB_VERBAL_SCREENING = "Verbal Screening";
     public static final FormsObject childhoodTb_verbalScreeningForm = new FormsObject(CHILDHOODTB_VERBAL_SCREENING, ChildhoodTbVerbalScreeningForm.class, R.drawable.ctb_screening, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_NURSE});
     public static final String CHILDHOOD_SCREENING_LOCATION = "Childhood Screening Location";
-    public static final FormsObject childhoodTb_screeningLocation = new FormsObject(CHILDHOOD_SCREENING_LOCATION, ChildhoodTbScreeningLocation.class, R.drawable.fast_patient_location, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_NURSE});
+    public static final FormsObject childhoodTb_screeningLocation = new FormsObject(CHILDHOOD_SCREENING_LOCATION, ChildhoodTbScreeningLocation.class, R.drawable.fast_patient_location, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_NURSE,Roles.CHILDHOODTB_MEDICAL_OFFICER});
     public static final String CHILDHOODTB_PATIENT_REGISTRATION = "Patient Registration";
     public static final FormsObject childhoodTb_patientRegistration = new FormsObject(CHILDHOODTB_PATIENT_REGISTRATION, ChildhoodTbPatientRegistration.class, R.drawable.ctb_registration, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_NURSE});
     public static final String CHILDHOODTB_PRESUMPTIVE_CASE_CONFIRMATION = "Presumptive Case Confirmation";
@@ -264,9 +264,9 @@ public class Forms{
     public static final FormsObject childhoodTb_ppa_score = new FormsObject(CHILDHOODTB_PPA_SCORE, ChildhoodTbPPAScore.class, R.drawable.ctb_score, FormTypeColor.OTHER_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_MEDICAL_OFFICER});
     public static final String CHILDHOODTB_TEST_INDICATION_FORM = "Test Indication Form";
     public static final FormsObject childhoodTb_test_indication_form = new FormsObject(CHILDHOODTB_TEST_INDICATION_FORM, ChildhoodTbTestIndicationForm.class, R.drawable.ctb_test_indication_form, FormTypeColor.TEST_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_MEDICAL_OFFICER});
-    public static final String CHILDHOODTB_SPECIMEN_COLLECTION_FORM = "GXP Specimen Collection Form";
+    public static final String CHILDHOODTB_SPECIMEN_COLLECTION_FORM = "GeneXpert Specimen Collection Form";
     public static final FormsObject childhoodTb_gxp_specimen_form = new FormsObject(CHILDHOODTB_SPECIMEN_COLLECTION_FORM, ChildhoodTbSpecimenCollection.class, R.drawable.pet_treatment_adherence, FormTypeColor.TEST_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER, Roles.CHILDHOODTB_LAB_TECHNICIAN});
-    public static final String CHILDHOODTB_GXP_TEST = "GXP Test";
+    public static final String CHILDHOODTB_GXP_TEST = "GeneXpert Result";
     public static final FormsObject childhoodTb_gxp_test = new FormsObject(CHILDHOODTB_GXP_TEST, ChildhoodTbGXPTest.class, R.drawable.fast_result_form, FormTypeColor.TEST_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER, Roles.CHILDHOODTB_LAB_TECHNICIAN});
     public static final String CHILDHOODTB_CXR_SCREENING_TEST = "CXR Screening Test";
     public static final FormsObject childhoodTb_cxr_screening_test = new FormsObject(CHILDHOODTB_CXR_SCREENING_TEST, ChildhoodTbCXRScreeningTest.class, R.drawable.ctb_xray, FormTypeColor.TEST_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_MEDICAL_OFFICER});
@@ -294,7 +294,7 @@ public class Forms{
     public static final String CHILDHOODTB_MISSED_VISIT_FOLLOWUP = "Missed Visit Followup";
     public static final FormsObject childhoodTb_missed_visit_followup = new FormsObject(CHILDHOODTB_MISSED_VISIT_FOLLOWUP, ChildhoodTbMissedVisitFollowup.class, R.drawable.ctb_missed_followup, FormTypeColor.FOLLOWUP_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_NURSE});
     public static final String CHILDHOODTB_REFERRAL = "Referral and Transfer Form";
-    public static final FormsObject childhoodTb_referral_and_transfer_form = new FormsObject(CHILDHOODTB_REFERRAL, ChildhoodTbReferral.class, R.drawable.ctb_reffered_transfer, FormTypeColor.OTHER_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER});
+    public static final FormsObject childhoodTb_referral_and_transfer_form = new FormsObject(CHILDHOODTB_REFERRAL, ChildhoodTbReferral.class, R.drawable.ctb_reffered_transfer, FormTypeColor.OTHER_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_MEDICAL_OFFICER});
     public static final String CHILDHOODTB_ANTIBIOTIC_FOLLOWUP = "Antibiotic Followup Form";
     public static final FormsObject childhoodTb_antibiotic_followup_form = new FormsObject(CHILDHOODTB_ANTIBIOTIC_FOLLOWUP, ChildhoodTbAntibioticFollowup.class, R.drawable.ctb_antibiotic, FormTypeColor.FOLLOWUP_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_MEDICAL_OFFICER});
     public static final String CHILDHOODTB_END_OF_FOLLOWUP = "End Of Followup";
