@@ -335,7 +335,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                 super.onPostExecute(result);
                 loading.dismiss();
 
-                if (result.equals("CONNECTION_ERROR")) {
+                if (result == null || result.equals("CONNECTION_ERROR")) {
                     final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.data_connection_error) );
                     Drawable clearIcon = getResources().getDrawable(R.drawable.error);
