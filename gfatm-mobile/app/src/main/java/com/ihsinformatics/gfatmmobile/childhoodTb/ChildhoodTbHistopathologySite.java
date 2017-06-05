@@ -828,6 +828,9 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
             pointTestBeingDone.setVisibility(View.GONE);
             histopathologySite.setVisibility(View.GONE);
             monthTreatment.setVisibility(View.GONE);
+
+           /*String value =  serverService.getObsValueByObs(App.getPatientId(), App.getProgram() + "-" + "Histopathology Test Order", "ORDER ID", App.get(orderIds),"TEST CONTEXT STATUS");*/
+
         }
     }
 
