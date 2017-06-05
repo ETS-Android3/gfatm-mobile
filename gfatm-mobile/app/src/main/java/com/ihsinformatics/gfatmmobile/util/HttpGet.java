@@ -395,6 +395,10 @@ public class HttpGet {
         return getJsonObjectByName(USER_RESOURCE, content);
     }
 
+    public JSONObject getEncountersByPatientId(String content) {
+        return getJsonObjectByName(ENCOUNTER_RESOURCE, content);
+    }
+
     public JSONObject getPatientByName(String content) {
         return getJsonObjectByName(PATIENT_RESOURCE, content);
     }
@@ -609,6 +613,26 @@ public class HttpGet {
             e.printStackTrace();
         }
         return json;
+
+    }
+
+    public JSONArray getPatientsEncounters(String patientId){
+
+        JSONArray array = null;
+
+        String http = "";
+        if (App.getSsl().equalsIgnoreCase("Enabled"))
+            http = "https://";
+        else
+            http = "http://";
+
+        try {
+            JSONObject jsonObject = getJsonObjectByName(ENCOUNTER_RESOURCE,patientId);
+            array = jsonObject.getJSONArray("results");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return array;
 
     }
 

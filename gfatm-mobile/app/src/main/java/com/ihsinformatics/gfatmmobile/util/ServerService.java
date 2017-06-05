@@ -32,6 +32,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.R;
@@ -915,115 +916,46 @@ public class ServerService {
                         values.put("country", country);
                         dbUtil.insert(Metadata.PATIENT, values);
 
-                        if (select) {
-                            App.setPatientId(getPatientSystemIdByUuidLocalDB(uuid));
-                            App.setPatient(patient);
+                        JSONArray jsonArray = httpGet.getPatientsEncounters(patientId);
+                        String pid = getPatientSystemIdByUuidLocalDB(uuid);
+                        for(int i=0; i <jsonArray.length(); i++){
+                            JSONObject newObj = jsonArray.getJSONObject(i);
+                            com.ihsinformatics.gfatmmobile.model.Encounter encounter = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(newObj, context);
+                            encounter.setPatientId(pid);
+
+                            ContentValues values1 = new ContentValues();
+                            values1.put("uuid", encounter.getUuid());
+                            values1.put("encounterType", encounter.getEncounterType());
+
+                            Date d = null;
+                            if (encounter.getEncounterDatetime().contains("/")) {
+                                d = App.stringToDate(encounter.getEncounterDatetime(), "dd/MM/yyyy");
+                            } else {
+                                d = App.stringToDate(encounter.getEncounterDatetime(), "yyyy-MM-dd");
+                            }
+
+                            values1.put("encounterDatetime", App.getSqlDate(d));
+                            values1.put("encounterLocation", encounter.getEncounterLocation());
+                            values1.put("patientId", encounter.getPatientId());
+                            values1.put("dateCreated", encounter.getDateCreated());
+                            dbUtil.insert(Metadata.ENCOUNTER, values1);
+
+                            String id = dbUtil.getObject(Metadata.ENCOUNTER, "encounter_id", "uuid='" + encounter.getUuid() + "'");
+
+                            for (com.ihsinformatics.gfatmmobile.model.Obs obs : encounter.getObsGroup()) {
+                                ContentValues values2 = new ContentValues();
+                                values2.put("uuid", obs.getUuid());
+                                values2.put("conceptName", obs.getConceptName());
+                                values2.put("value", obs.getValue());
+                                values2.put("encounter_id", id);
+                                dbUtil.insert(Metadata.OBS, values2);
+                            }
+
                         }
 
-                        Object[][] encounterTypes = getAllEncounterTypesFromLocalDB();
-
-                        for (Object[] encType : encounterTypes) {
-
-                            // TODO: Only Fetch encounters of program patient enrolled
-                            /*if (!String.valueOf(encType[1]).startsWith(App.getProgram()))
-                                continue;*/
-
-                            if (String.valueOf(encType[1]).contains("Test Order")) {
-                                JSONArray jsonArray = httpGet.getAllEncountersByPatientAndEncounterType(uuid, String.valueOf(encType[0]));
-                                if (jsonArray == null || jsonArray.length() < 1)
-                                    continue;
-
-                                List<String> newArr = new ArrayList<String>();
-
-                                for (int i = 0; i < jsonArray.length(); i++) {
-                                    JSONObject newObj = jsonArray.getJSONObject(i);
-                                    String date = newObj.getJSONObject("auditInfo").getString("dateCreated");
-                                    String uuid1 = newObj.getString("uuid");
-                                    date = date.replace("T", " ");
-                                    String[] arr = date.split("\\+");
-                                    newArr.add(arr[0] + "," + i);
-
-                                    com.ihsinformatics.gfatmmobile.model.Encounter encounter = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(newObj, context);
-                                    encounter.setPatientId(App.getPatientId());
-
-                                    for (com.ihsinformatics.gfatmmobile.model.Obs obs : encounter.getObsGroup()) {
-
-                                        if (obs.getConceptName().equals("TEST ID")) {
-                                            ContentValues values2 = new ContentValues();
-                                            values2.put("pid", encounter.getPatientId());
-                                            values2.put("form", encounter.getEncounterType());
-                                            values2.put("test_id", obs.getValue());
-                                            values2.put("encounterDateTime", encounter.getEncounterDatetime());
-                                            dbUtil.insert(Metadata.TEST_ID, values2);
-                                        }
-                                    }
-
-                                }
-                                Collections.sort(newArr, new Comparator<String>() {
-                                    DateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-
-                                    @Override
-                                    public int compare(String o1, String o2) {
-                                        try {
-                                            String[] b1 = o1.split(",");
-                                            String[] b2 = o2.split(",");
-                                            return f.parse(b1[0]).compareTo(f.parse(b2[0]));
-                                        } catch (Exception e) {
-                                            throw new IllegalArgumentException(e);
-                                        }
-                                    }
-                                });
-                                String[] splitter = newArr.get(newArr.size() - 1).split(",");
-                                JSONObject newObj = jsonArray.getJSONObject(Integer.valueOf(splitter[1]));
-
-                                com.ihsinformatics.gfatmmobile.model.Encounter encounter = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(newObj, context);
-                                encounter.setPatientId(App.getPatientId());
-
-                                ContentValues values1 = new ContentValues();
-                                values1.put("uuid", encounter.getUuid());
-                                values1.put("encounterType", encounter.getEncounterType());
-                                values1.put("encounterDatetime", encounter.getEncounterDatetime());
-                                values1.put("encounterLocation", encounter.getEncounterLocation());
-                                values1.put("patientId", encounter.getPatientId());
-                                dbUtil.insert(Metadata.ENCOUNTER, values1);
-
-                                String id = dbUtil.getObject(Metadata.ENCOUNTER, "encounter_id", "uuid='" + encounter.getUuid() + "'");
-
-                                for (com.ihsinformatics.gfatmmobile.model.Obs obs : encounter.getObsGroup()) {
-                                    ContentValues values2 = new ContentValues();
-                                    values2.put("uuid", obs.getUuid());
-                                    values2.put("conceptName", obs.getConceptName());
-                                    values2.put("value", obs.getValue());
-                                    values2.put("encounter_id", id);
-                                    dbUtil.insert(Metadata.OBS, values2);
-                                }
-
-                            } else {
-                                JSONObject jsonObject = httpGet.getLatestEncounter(uuid, String.valueOf(encType[0]));
-                                if (jsonObject == null)
-                                    continue;
-                                com.ihsinformatics.gfatmmobile.model.Encounter encounter = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(jsonObject, context);
-                                encounter.setPatientId(getPatientSystemIdByUuidLocalDB(uuid));
-
-                                ContentValues values1 = new ContentValues();
-                                values1.put("uuid", encounter.getUuid());
-                                values1.put("encounterType", encounter.getEncounterType());
-                                values1.put("encounterDatetime", encounter.getEncounterDatetime());
-                                values1.put("encounterLocation", encounter.getEncounterLocation());
-                                values1.put("patientId", encounter.getPatientId());
-                                dbUtil.insert(Metadata.ENCOUNTER, values1);
-
-                                String id = dbUtil.getObject(Metadata.ENCOUNTER, "encounter_id", "uuid='" + encounter.getUuid() + "'");
-
-                                for (com.ihsinformatics.gfatmmobile.model.Obs obs : encounter.getObsGroup()) {
-                                    ContentValues values2 = new ContentValues();
-                                    values2.put("uuid", obs.getUuid());
-                                    values2.put("conceptName", obs.getConceptName());
-                                    values2.put("value", obs.getValue());
-                                    values2.put("encounter_id", id);
-                                    dbUtil.insert(Metadata.OBS, values2);
-                                }
-                            }
+                        if (select) {
+                            App.setPatientId(pid);
+                            App.setPatient(patient);
                         }
                     }
                 } else {
@@ -1358,37 +1290,16 @@ public class ServerService {
                     String uri = httpPost.saveEncounterWithObservationByEntity(encounter);
                     String[] uriArray = uri.split(" ;;;; ");
 
-                    Boolean flag = false;
-                    Date d = null;
-                    String lastFormDate = getEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + formName);
-                    if(!(lastFormDate == null || lastFormDate.equals(""))){
-                        if (lastFormDate.contains("/")) {
-                            d = App.stringToDate(lastFormDate, "dd/MM/yyyy");
-                        } else {
-                            d = App.stringToDate(lastFormDate, "yyyy-MM-dd");
-                        }
+                    Date now = new Date();
+                    ContentValues values2 = new ContentValues();
+                    values2.put("encounterType", App.getProgram() + "-" + formName);
+                    values2.put("encounterDatetime", App.getSqlDate(encounterDateTime));
+                    values2.put("encounterLocation", App.getLocation());
+                    values2.put("patientId", App.getPatientId());
+                    values2.put("dateCreated", App.getSqlDateTime(now));
+                    dbUtil.insert(Metadata.ENCOUNTER, values2);
 
-                        if(d != null){
-                            if(d.equals(encounterDateTime) || d.before(encounterDateTime.getTime()))
-                                flag = true;
-                        }
-                    }
-                    else
-                        flag = true;
-
-                    String encounterId = "";
-                    if(flag) {
-                        deleteEncounter(App.getPatientId(), App.getProgram() + "-" + formName);
-
-                        ContentValues values2 = new ContentValues();
-                        values2.put("encounterType", App.getProgram() + "-" + formName);
-                        values2.put("encounterDatetime", App.getSqlDate(encounterDateTime));
-                        values2.put("encounterLocation", App.getLocation());
-                        values2.put("patientId", App.getPatientId());
-                        dbUtil.insert(Metadata.ENCOUNTER, values2);
-
-                        encounterId = dbUtil.getObject(Metadata.ENCOUNTER, "encounter_id", "encounterType='" + App.getProgram() + "-" + formName + "' and patientId=" + App.getPatientId());
-                    }
+                    String encounterId  = dbUtil.getObject(Metadata.ENCOUNTER, "encounter_id", "dateCreated = '" + App.getSqlDateTime(now) +"' and encounterType='" + App.getProgram() + "-" + formName + "' and patientId=" + App.getPatientId());
 
                     ContentValues values5 = new ContentValues();
                     values5.put("program", App.getProgram());
@@ -1424,13 +1335,11 @@ public class ServerService {
                             String[] valueArray = obss[i][1].split(" ; ");
                             for (int j = 0; j < valueArray.length; j++) {
 
-                                if(flag) {
-                                    ContentValues values3 = new ContentValues();
-                                    values3.put("conceptName", obss[i][0]);
-                                    values3.put("value", valueArray[j]);
-                                    values3.put("encounter_id", encounterId);
-                                    dbUtil.insert(Metadata.OBS, values3);
-                                }
+                                ContentValues values3 = new ContentValues();
+                                values3.put("conceptName", obss[i][0]);
+                                values3.put("value", valueArray[j]);
+                                values3.put("encounter_id", encounterId);
+                                dbUtil.insert(Metadata.OBS, values3);
 
                                 ContentValues values6 = new ContentValues();
                                 values6.put("field_name", obss[i][0]);
@@ -1441,13 +1350,12 @@ public class ServerService {
                             }
 
                         } else {
-                            if(flag) {
-                                ContentValues values3 = new ContentValues();
-                                values3.put("conceptName", obss[i][0]);
-                                values3.put("value", obss[i][1]);
-                                values3.put("encounter_id", encounterId);
-                                dbUtil.insert(Metadata.OBS, values3);
-                            }
+
+                            ContentValues values3 = new ContentValues();
+                            values3.put("conceptName", obss[i][0]);
+                            values3.put("value", obss[i][1]);
+                            values3.put("encounter_id", encounterId);
+                            dbUtil.insert(Metadata.OBS, values3);
 
                             ContentValues values6 = new ContentValues();
                             values6.put("field_name", obss[i][0]);
@@ -1466,15 +1374,6 @@ public class ServerService {
                     values4.put("username", App.getUsername());
                     dbUtil.insert(Metadata.OFFLINE_FORM, values4);
 
-                    if (!testId.equals("")) {
-                        ContentValues values = new ContentValues();
-                        values.put("pid", App.getPatientId());
-                        values.put("form", App.getProgram() + "-" + formName);
-                        values.put("test_id", testId);
-                        values.put("encounterDateTime", App.getSqlDate(encounterDateTime));
-                        dbUtil.insert(Metadata.TEST_ID, values);
-                    }
-
                     return "SUCCESS_" + formId;
 
                 } else {
@@ -1484,53 +1383,34 @@ public class ServerService {
                     com.ihsinformatics.gfatmmobile.model.Encounter encounter1 = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(jsonObject, context);
                     encounter1.setPatientId(App.getPatientId());
 
-                    Boolean flag = true;
-                    Date d = null;
-                    String lastFormDate = getEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + formName);
-                    if(!(lastFormDate == null || lastFormDate.equals(""))){
-                        if (lastFormDate.contains("/")) {
-                            d = App.stringToDate(lastFormDate, "dd/MM/yyyy");
-                        } else {
-                            d = App.stringToDate(lastFormDate, "yyyy-MM-dd");
-                        }
-                    }
-
-                    if(d != null){
-                        if(!(d.equals(encounterDateTime) || d.before(encounterDateTime.getTime())))
-                            flag = false;
-                    }
-
-                    if(flag) {
-                        deleteEncounter(App.getPatientId(), encounter1.getEncounterType());
-
-                        ContentValues values2 = new ContentValues();
-                        values2.put("uuid", encounter1.getUuid());
-                        values2.put("encounterType", encounter1.getEncounterType());
-                        values2.put("encounterDatetime", encounter1.getEncounterDatetime());
-                        values2.put("encounterLocation", encounter1.getEncounterLocation());
-                        values2.put("patientId", encounter1.getPatientId());
-                        dbUtil.insert(Metadata.ENCOUNTER, values2);
-
-                        String id = dbUtil.getObject(Metadata.ENCOUNTER, "encounter_id", "uuid='" + encounter1.getUuid() + "'");
-
-                        for (com.ihsinformatics.gfatmmobile.model.Obs obs : encounter1.getObsGroup()) {
-                            ContentValues values3 = new ContentValues();
-                            values3.put("uuid", obs.getUuid());
-                            values3.put("conceptName", obs.getConceptName());
-                            values3.put("value", obs.getValue());
-                            values3.put("encounter_id", id);
-                            dbUtil.insert(Metadata.OBS, values3);
-                        }
-                    }
-                }
-
-                if (!testId.equals("")) {
                     ContentValues values2 = new ContentValues();
-                    values2.put("pid", App.getPatientId());
-                    values2.put("form", App.getProgram() + "-" + formName);
-                    values2.put("test_id", testId);
-                    values2.put("encounterDateTime", App.getSqlDate(encounterDateTime));
-                    dbUtil.insert(Metadata.TEST_ID, values2);
+                    values2.put("uuid", encounter1.getUuid());
+                    values2.put("encounterType", encounter1.getEncounterType());
+
+                    Date d = null;
+                    if (encounter1.getEncounterDatetime().contains("/")) {
+                        d = App.stringToDate(encounter1.getEncounterDatetime(), "dd/MM/yyyy");
+                    } else {
+                        d = App.stringToDate(encounter1.getEncounterDatetime(), "yyyy-MM-dd");
+                    }
+
+                    values2.put("encounterDatetime", App.getSqlDate(d));
+                    values2.put("encounterLocation", encounter1.getEncounterLocation());
+                    values2.put("patientId", encounter1.getPatientId());
+                    values2.put("dateCreated", encounter1.getDateCreated());
+
+                    dbUtil.insert(Metadata.ENCOUNTER, values2);
+
+                    String id = dbUtil.getObject(Metadata.ENCOUNTER, "encounter_id", "uuid='" + encounter1.getUuid() + "'");
+
+                    for (com.ihsinformatics.gfatmmobile.model.Obs obs : encounter1.getObsGroup()) {
+                        ContentValues values3 = new ContentValues();
+                        values3.put("uuid", obs.getUuid());
+                        values3.put("conceptName", obs.getConceptName());
+                        values3.put("value", obs.getValue());
+                        values3.put("encounter_id", id);
+                        dbUtil.insert(Metadata.OBS, values3);
+                    }
                 }
 
             } catch (Exception e) {
@@ -1810,7 +1690,7 @@ public class ServerService {
 
         if (App.getPatient() == null)
             return null;
-        Object[][] encounter = dbUtil.getFormTableData("select encounterType, encounter_id, patientId, encounterDatetime, encounterLocation from " + Metadata.ENCOUNTER + " where patientId='" + App.getPatientId() + "' and encounterType like '" + programName + "%'");
+        Object[][] encounter = dbUtil.getFormTableData("select encounterType, encounter_id, patientId, encounterDatetime, encounterLocation, dateCreated from " + Metadata.ENCOUNTER + " where patientId='" + App.getPatientId() + "' and encounterType like '" + programName + "%' order by encounterDatetime DESC, dateCreated DESC");
         return encounter;
 
     }
@@ -1832,7 +1712,7 @@ public class ServerService {
     }
 
     public String getObsValue(String patientId, String encounterType, String conceptName) {
-        Object[][] encounter = dbUtil.getFormTableData("select encounter_id from " + Metadata.ENCOUNTER + " where patientId=" + patientId + " and encounterType = '" + encounterType + "'");
+        Object[][] encounter = dbUtil.getFormTableData("select encounter_id from " + Metadata.ENCOUNTER + " where patientId=" + patientId + " and encounterType = '" + encounterType + "' order by encounterDatetime DESC, dateCreated DESC");
         if (encounter.length < 1)
             return null;
         Object[][] obs = dbUtil.getFormTableData("select value from " + Metadata.OBS + " where encounter_id=" + String.valueOf(encounter[0][0]) + " and conceptName = '" + conceptName + "'");
@@ -1853,6 +1733,22 @@ public class ServerService {
 
     }
 
+    public String[] getObsValues(String patientId, String encounterType, String conceptName) {
+
+        Object[][] obs = dbUtil.getFormTableData("select value from " + Metadata.OBS + ", " + Metadata.ENCOUNTER + " where encounterType = '" + encounterType + "' and patientId=" + patientId + " and " + Metadata.ENCOUNTER + ".encounter_id=" + Metadata.OBS + ".encounter_id and conceptName = '" + conceptName + "' order by encounterDatetime DESC, dateCreated DESC");
+        if (obs.length < 1)
+            return null;
+
+        String[] obsResults = new String[obs.length];
+        for(int i = 0; i<obs.length; i++){
+
+            obsResults[i]=String.valueOf(obs[i][0]);
+
+        }
+
+        return obsResults;
+    }
+
     public boolean deleteEncounter(String patientId, String encounterType) {
         Object[][] encounter = dbUtil.getFormTableData("select encounter_id from " + Metadata.ENCOUNTER + " where patientId='" + patientId + "' and encounterType = '" + encounterType + "'");
         if (encounter.length < 1)
@@ -1864,6 +1760,18 @@ public class ServerService {
 
     public boolean deletePatientEncounterByProgram(String patientId, String programName) {
         Object[][] encounter = dbUtil.getFormTableData("select encounter_id from " + Metadata.ENCOUNTER + " where patientId='" + patientId + "' and encounterType like '" + programName + "%'");
+        if (encounter.length < 1)
+            return false;
+        for (int i = 0; i < encounter.length; i++) {
+            Boolean flag = dbUtil.delete(Metadata.ENCOUNTER, "encounter_id=?", new String[]{String.valueOf(encounter[i][0])});
+            if (!flag) return flag;
+            dbUtil.delete(Metadata.OBS, "encounter_id=?", new String[]{String.valueOf(encounter[i][0])});
+        }
+        return true;
+    }
+
+    public boolean deletePatientEncounters(String patientId) {
+        Object[][] encounter = dbUtil.getFormTableData("select encounter_id from " + Metadata.ENCOUNTER + " where patientId='" + patientId + "'");
         if (encounter.length < 1)
             return false;
         for (int i = 0; i < encounter.length; i++) {
@@ -1929,7 +1837,6 @@ public class ServerService {
 
                                 ContentValues values = new ContentValues();
                                 values.put("content", content);
-
                                 dbUtil.update(Metadata.OFFLINE_FORM, values, "id=?", new String[]{String.valueOf(encounterForm[0])});
                             }
 
@@ -1971,27 +1878,13 @@ public class ServerService {
                         JSONObject jsonObject = JSONParser.getJSONObject("{" + returnString.toString() + "}");
                         com.ihsinformatics.gfatmmobile.model.Encounter encounter1 = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(jsonObject, context);
 
-                        deleteEncounter(App.getPatientId(), encounter1.getEncounterType());
+                        String fId = String.valueOf(form[5]);
 
-                        ContentValues values2 = new ContentValues();
-                        values2.put("uuid", encounter1.getUuid());
-                        values2.put("encounterType", encounter1.getEncounterType());
-                        values2.put("encounterDatetime", encounter1.getEncounterDatetime());
-                        values2.put("encounterLocation", encounter1.getEncounterLocation());
-                        values2.put("patientId", String.valueOf(form[2]));
-                        dbUtil.insert(Metadata.ENCOUNTER, values2);
+                        String encounterId = dbUtil.getObject(Metadata.FORMS, "encounter_id", "id='" + fId + "'");
 
-                        String id = dbUtil.getObject(Metadata.ENCOUNTER, "encounter_id", "uuid='" + encounter1.getUuid() + "'");
-
-                        for (com.ihsinformatics.gfatmmobile.model.Obs obs : encounter1.getObsGroup()) {
-                            ContentValues values3 = new ContentValues();
-                            values3.put("uuid", obs.getUuid());
-                            values3.put("conceptName", obs.getConceptName());
-                            values3.put("value", obs.getValue());
-                            values3.put("encounter_id", id);
-                            dbUtil.insert(Metadata.OBS, values3);
-                        }
-
+                        ContentValues values = new ContentValues();
+                        values.put("uuid", encounter1.getUuid());
+                        dbUtil.update(Metadata.ENCOUNTER, values, "encounter_id=?", new String[]{encounterId});
 
                     } catch (Exception e) {
                         return "PARSER_ERROR";
@@ -2059,39 +1952,6 @@ public class ServerService {
         return formsData.toString();
     }
 
-    public com.ihsinformatics.gfatmmobile.model.Encounter getEncounterAndObservationFromLocalDb(int encounterId) {
-
-        Object[][] encounterObject = dbUtil.getFormTableData("select encounter_id, uuid, encounterType, encounterDatetime, encounterLocation, patientId from " + Metadata.ENCOUNTER + " where encounter_id=" + encounterId + "");
-
-        if (encounterObject.length < 1)
-            return null;
-
-        String uuid = String.valueOf(encounterObject[0][1]);
-        String encounterType = String.valueOf(encounterObject[0][2]);
-        String encounterDatetime = String.valueOf(encounterObject[0][3]);
-        String encounterLocation = String.valueOf(encounterObject[0][4]);
-        String patientId = String.valueOf(encounterObject[0][5]);
-
-        Object[][] obsObject = dbUtil.getFormTableData("select obs_id, uuid, encounter_id, conceptName, value from " + Metadata.OBS + " where encounter_id=" + encounterId + "");
-
-        ArrayList<com.ihsinformatics.gfatmmobile.model.Obs> obsGroup = new ArrayList<>();
-
-        for (int i = 0; i < obsObject.length; i++) {
-
-            String obsUuid = String.valueOf(obsObject[i][1]);
-            String conceptName = String.valueOf(obsObject[i][3]);
-            String value = String.valueOf(obsObject[i][4]);
-            com.ihsinformatics.gfatmmobile.model.Obs obs = new com.ihsinformatics.gfatmmobile.model.Obs(obsUuid, conceptName, value);
-
-            obsGroup.add(obs);
-        }
-
-        com.ihsinformatics.gfatmmobile.model.Encounter encounter = new com.ihsinformatics.gfatmmobile.model.Encounter(uuid, encounterType, encounterDatetime, obsGroup, encounterLocation);
-        encounter.setPatientId(patientId);
-
-        return encounter;
-    }
-
     public Object[][] getEncounterIdByEncounterType(String encounterType) {
 
         Object[][] encounterObject = dbUtil.getFormTableData("select encounterType, encounter_id, patientId, encounterDatetime, encounterLocation from " + Metadata.ENCOUNTER + " where encounterType='" + encounterType + "' and patientId=" + App.getPatientId() + "");
@@ -2101,7 +1961,7 @@ public class ServerService {
 
     public String getEncounterDateTime(String patientId, String encounterType) {
 
-        Object[][] encounter = dbUtil.getFormTableData("select encounterDatetime from " + Metadata.ENCOUNTER + " where patientId='" + patientId + "' and encounterType = '" + encounterType + "'");
+        Object[][] encounter = dbUtil.getFormTableData("select encounterDatetime from " + Metadata.ENCOUNTER + " where patientId=" + patientId + " and encounterType = '" + encounterType + "' order by encounterDatetime DESC, dateCreated DESC");
         if (encounter.length < 1)
             return null;
 
@@ -2109,9 +1969,18 @@ public class ServerService {
 
     }
 
+    public String getEncounterDateTimeByObs(String patientId, String encounterType, String conceptName, String conceptValue) {
+
+        Object[][] obs = dbUtil.getFormTableData("select encounterDatetime from " + Metadata.OBS + ", " + Metadata.ENCOUNTER + " where encounterType = '" + encounterType + "' and patientId=" + patientId + " and " + Metadata.ENCOUNTER + ".encounter_id=" + Metadata.OBS + ".encounter_id and conceptName = '" + conceptName + "' and " + Metadata.OBS + ".value = '" + conceptValue  + "' order by encounterDatetime DESC, dateCreated DESC");
+        if (obs.length < 1)
+            return null;
+
+        return String.valueOf(obs[0][0]);
+    }
+
     public String getEncounterLocation(String patientId, String encounterType) {
 
-        Object[][] encounter = dbUtil.getFormTableData("select encounterLocation from " + Metadata.ENCOUNTER + " where patientId='" + patientId + "' and encounterType = '" + encounterType + "'");
+        Object[][] encounter = dbUtil.getFormTableData("select encounterLocation from " + Metadata.ENCOUNTER + " where patientId=" + patientId + " and encounterType = '" + encounterType + "' order by encounterDatetime DESC, dateCreated DESC");
         if (encounter.length < 1)
             return null;
 
@@ -2239,111 +2108,43 @@ public class ServerService {
                     App.setPatientId(getPatientSystemIdByUuidLocalDB(uuid));
                     App.setPatient(patient);
 
-                    Object[][] encounterTypes = getAllEncounterTypesFromLocalDB();
-                    deletePatientEncounterByProgram(App.getPatientId(), App.getProgram());
-                    deletePatientTestIdByProgram(App.getPatientId(), App.getProgram());
+                    deletePatientEncounters(App.getPatientId());
 
-                    for (Object[] encType : encounterTypes) {
+                    JSONArray jsonArray = httpGet.getPatientsEncounters(patientId);
 
-                        // TODO: Only Fetch encounters of program patient enrolled
-                            /*if (!String.valueOf(encType[1]).startsWith(App.getProgram()))
-                                continue;*/
+                    for(int i=0; i <jsonArray.length(); i++){
+                        JSONObject newObj = jsonArray.getJSONObject(i);
+                        com.ihsinformatics.gfatmmobile.model.Encounter encounter = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(newObj, context);
+                        encounter.setPatientId(App.getPatientId());
 
-                        if (String.valueOf(encType[1]).contains("Test Order")) {
-                            JSONArray jsonArray = httpGet.getAllEncountersByPatientAndEncounterType(App.getPatient().getUuid(), String.valueOf(encType[0]));
-                            if (jsonArray == null || jsonArray.length() < 1)
-                                continue;
+                        ContentValues values1 = new ContentValues();
+                        values1.put("uuid", encounter.getUuid());
+                        values1.put("encounterType", encounter.getEncounterType());
 
-                            List<String> newArr = new ArrayList<String>();
-
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject newObj = jsonArray.getJSONObject(i);
-                                String date = newObj.getJSONObject("auditInfo").getString("dateCreated");
-                                String uuid1 = newObj.getString("uuid");
-                                date = date.replace("T", " ");
-                                String[] arr = date.split("\\+");
-                                newArr.add(arr[0] + "," + i);
-
-                                com.ihsinformatics.gfatmmobile.model.Encounter encounter = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(newObj, context);
-                                encounter.setPatientId(App.getPatientId());
-
-                                for (com.ihsinformatics.gfatmmobile.model.Obs obs : encounter.getObsGroup()) {
-
-                                    if (obs.getConceptName().equals("TEST ID")) {
-                                        ContentValues values2 = new ContentValues();
-                                        values2.put("pid", encounter.getPatientId());
-                                        values2.put("form", encounter.getEncounterType());
-                                        values2.put("test_id", obs.getValue());
-                                        dbUtil.insert(Metadata.TEST_ID, values2);
-                                    }
-                                }
-
-                            }
-                            Collections.sort(newArr, new Comparator<String>() {
-                                DateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-
-                                @Override
-                                public int compare(String o1, String o2) {
-                                    try {
-                                        String[] b1 = o1.split(",");
-                                        String[] b2 = o2.split(",");
-                                        return f.parse(b1[0]).compareTo(f.parse(b2[0]));
-                                    } catch (Exception e) {
-                                        throw new IllegalArgumentException(e);
-                                    }
-                                }
-                            });
-                            String[] splitter = newArr.get(newArr.size() - 1).split(",");
-                            JSONObject newObj = jsonArray.getJSONObject(Integer.valueOf(splitter[1]));
-
-                            com.ihsinformatics.gfatmmobile.model.Encounter encounter = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(newObj, context);
-                            encounter.setPatientId(App.getPatientId());
-
-                            ContentValues values1 = new ContentValues();
-                            values1.put("uuid", encounter.getUuid());
-                            values1.put("encounterType", encounter.getEncounterType());
-                            values1.put("encounterDatetime", encounter.getEncounterDatetime());
-                            values1.put("encounterLocation", encounter.getEncounterLocation());
-                            values1.put("patientId", encounter.getPatientId());
-                            dbUtil.insert(Metadata.ENCOUNTER, values1);
-
-                            String id = dbUtil.getObject(Metadata.ENCOUNTER, "encounter_id", "uuid='" + encounter.getUuid() + "'");
-
-                            for (com.ihsinformatics.gfatmmobile.model.Obs obs : encounter.getObsGroup()) {
-                                ContentValues values2 = new ContentValues();
-                                values2.put("uuid", obs.getUuid());
-                                values2.put("conceptName", obs.getConceptName());
-                                values2.put("value", obs.getValue());
-                                values2.put("encounter_id", id);
-                                dbUtil.insert(Metadata.OBS, values2);
-                            }
-
+                        Date d = null;
+                        if (encounter.getEncounterDatetime().contains("/")) {
+                            d = App.stringToDate(encounter.getEncounterDatetime(), "dd/MM/yyyy");
                         } else {
-                            JSONObject jsonObject = httpGet.getLatestEncounter(App.getPatient().getUuid(), String.valueOf(encType[0]));
-                            if (jsonObject == null)
-                                continue;
-                            com.ihsinformatics.gfatmmobile.model.Encounter encounter = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(jsonObject, context);
-                            encounter.setPatientId(App.getPatientId());
-
-                            ContentValues values1 = new ContentValues();
-                            values1.put("uuid", encounter.getUuid());
-                            values1.put("encounterType", encounter.getEncounterType());
-                            values1.put("encounterDatetime", encounter.getEncounterDatetime());
-                            values1.put("encounterLocation", encounter.getEncounterLocation());
-                            values1.put("patientId", encounter.getPatientId());
-                            dbUtil.insert(Metadata.ENCOUNTER, values1);
-
-                            String id = dbUtil.getObject(Metadata.ENCOUNTER, "encounter_id", "uuid='" + encounter.getUuid() + "'");
-
-                            for (com.ihsinformatics.gfatmmobile.model.Obs obs : encounter.getObsGroup()) {
-                                ContentValues values2 = new ContentValues();
-                                values2.put("uuid", obs.getUuid());
-                                values2.put("conceptName", obs.getConceptName());
-                                values2.put("value", obs.getValue());
-                                values2.put("encounter_id", id);
-                                dbUtil.insert(Metadata.OBS, values2);
-                            }
+                            d = App.stringToDate(encounter.getEncounterDatetime(), "yyyy-MM-dd");
                         }
+
+                        values1.put("encounterDatetime", App.getSqlDate(d));
+                        values1.put("encounterLocation", encounter.getEncounterLocation());
+                        values1.put("patientId", encounter.getPatientId());
+                        values1.put("dateCreated", encounter.getDateCreated());
+                        dbUtil.insert(Metadata.ENCOUNTER, values1);
+
+                        String id = dbUtil.getObject(Metadata.ENCOUNTER, "encounter_id", "uuid='" + encounter.getUuid() + "'");
+
+                        for (com.ihsinformatics.gfatmmobile.model.Obs obs : encounter.getObsGroup()) {
+                            ContentValues values2 = new ContentValues();
+                            values2.put("uuid", obs.getUuid());
+                            values2.put("conceptName", obs.getConceptName());
+                            values2.put("value", obs.getValue());
+                            values2.put("encounter_id", id);
+                            dbUtil.insert(Metadata.OBS, values2);
+                        }
+
                     }
                 }
 
