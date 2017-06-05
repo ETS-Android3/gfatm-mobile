@@ -267,7 +267,7 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
 
     public void updateFollowUpMonth() {
 
-        String treatmentDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+        String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
         String format = "";
         String[] monthArray;
 
@@ -435,7 +435,7 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
-            String treatmentDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+            String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
             Date date = new Date();
             if(treatmentDate != null){
                 treatDateCalender = App.getCalendar(App.stringToDate(treatmentDate, "yyyy-MM-dd"));
@@ -1154,7 +1154,7 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
             beforeResult = false;
             formDate.setVisibility(View.VISIBLE);
             formDate.getQuestionView().setText("Test Result Date:");
-            String ctScan = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "CT Scan Test Order", "CT SCAN SITE");
+            String ctScan = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "CT Scan Test Order", "CT SCAN SITE");
             if(ctScan!=null){
                 if(ctScan.equalsIgnoreCase("CT SCAN, CHEST")){
                     ctChestTbSuggestive.setVisibility(View.VISIBLE);

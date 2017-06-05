@@ -10,7 +10,6 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.service.voice.VoiceInteractionService;
 import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
@@ -51,8 +50,6 @@ import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
-
-import org.openmrs.api.impl.VisitServiceImpl;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -2029,10 +2026,10 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 });
 
                 HashMap<String, String> result = new HashMap<String, String>();
-                String cnic1 = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Patient Registration", "NATIONAL IDENTIFICATION NUMBER");
-                String cnicowner1 = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Patient Registration", "COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
-                String cnicownerother1 = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Patient Registration", "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
-                String regDate = serverService.getEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + "Presumptive Case Confirmation");
+                String cnic1 = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Patient Registration", "NATIONAL IDENTIFICATION NUMBER");
+                String cnicowner1 = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Patient Registration", "COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
+                String cnicownerother1 = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Patient Registration", "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
+                String regDate = serverService.getLatestEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + "Presumptive Case Confirmation");
 
                 if (cnic1 != null)
                     result.put("NATIONAL IDENTIFICATION NUMBER", cnic1);
@@ -2106,7 +2103,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             }
         };
         autopopulateFormTask.execute("");
-        String referralTransferLocation = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Case Confirmation", "WEIGHT (KG)");
+        String referralTransferLocation = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Case Confirmation", "WEIGHT (KG)");
         if(referralTransferLocation!=null){
             weightAtBaseline.getEditText().setText(referralTransferLocation);
             double weightValue = Double.parseDouble(referralTransferLocation);
@@ -2238,7 +2235,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 initiatingAdditionalTreatmentAntibiotic.setVisibility(View.GONE);
             }else if(patientHaveTb.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.no))){
                 if(patientAge <=5){
-                    String bcgScarValue = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Case Confirmation", "BACILLUS CALMETTE–GUÉRIN VACCINE");
+                    String bcgScarValue = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Case Confirmation", "BACILLUS CALMETTE–GUÉRIN VACCINE");
                     if(bcgScarValue!=null) {
                         for (RadioButton rb : bcgScar.getRadioGroup().getButtons()) {
                             if (rb.getText().equals(getResources().getString(R.string.yes)) && bcgScarValue.equalsIgnoreCase("YES")) {
@@ -2257,7 +2254,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                         }
                     }
                     bcgScar.setVisibility(View.VISIBLE);
-                    String contactHistory2Year = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Case Confirmation", "PATIENT IS CONTACT OF KNOWN OR SUSPECTED SUSPICIOUS CASE IN PAST 2 YEARS");
+                    String contactHistory2Year = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Case Confirmation", "PATIENT IS CONTACT OF KNOWN OR SUSPECTED SUSPICIOUS CASE IN PAST 2 YEARS");
                     if(contactHistory2Year!=null) {
                         for (RadioButton rb : tbHistoryIn2Years.getRadioGroup().getButtons()) {
                             if (rb.getText().equals(getResources().getString(R.string.yes)) && contactHistory2Year.equalsIgnoreCase("YES")) {

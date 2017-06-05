@@ -51,7 +51,6 @@ import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -1124,7 +1123,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
                     });
 
                     HashMap<String, String> result = new HashMap<String, String>();
-                    String testStatus = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "HbA1C Test Order", "TEST CONTEXT STATUS");
+                    String testStatus = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "HbA1C Test Order", "TEST CONTEXT STATUS");
                     Log.e("TextStatus", testStatus+"");
 
 

@@ -1231,8 +1231,8 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
                     });
 
                     HashMap<String, String> result = new HashMap<String, String>();
-                    String gpClinic = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_PATIENT_INFORMATION_FORM, "HEALTH CLINIC/POST");
-                    String nextAppointDate = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Treatment Initiation", "RETURN VISIT DATE");
+                    String gpClinic = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_PATIENT_INFORMATION_FORM, "HEALTH CLINIC/POST");
+                    String nextAppointDate = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Treatment Initiation", "RETURN VISIT DATE");
 
                     if (gpClinic != null)
                         if (!gpClinic.equals(""))

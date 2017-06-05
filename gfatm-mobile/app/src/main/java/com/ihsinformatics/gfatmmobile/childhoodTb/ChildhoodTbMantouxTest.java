@@ -242,7 +242,7 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
 
     public void updateFollowUpMonth() {
 
-        String treatmentDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+        String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
         String format = "";
         String[] monthArray;
 
@@ -406,7 +406,7 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
             }
         }
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
-            String treatmentDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+            String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
             Date date = new Date();
@@ -835,7 +835,7 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
 
         }
 
-        String weightPercentileString = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Case Confirmation", "WEIGHT PERCENTILE GROUP");
+        String weightPercentileString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Case Confirmation", "WEIGHT PERCENTILE GROUP");
         if(weightPercentileString!=null){
             weightPercentile.getSpinner().selectValue(weightPercentileString);
         }
@@ -874,7 +874,7 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
         }
 
         if(group == tuberculinSkinTest.getRadioGroup()){
-            String weightPercentileString = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Mantoux Test Order", "WEIGHT PERCENTILE GROUP");
+            String weightPercentileString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Mantoux Test Order", "WEIGHT PERCENTILE GROUP");
             if (tuberculinSkinTest.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_greater_than_10mm))) {
                 interpretationMantouxTest.getRadioGroup().getButtons().get(0).setChecked(true);
             }

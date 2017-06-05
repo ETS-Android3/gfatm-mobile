@@ -631,9 +631,9 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
                                                                 (obs[0][1].equals("LOST TO FOLLOW-UP") ? getResources().getString(R.string.ctb_lost_to_followup) :
                                                                     getResources().getString(R.string.ctb_other_title)))))));
                 if(value.equals(getResources().getString(R.string.ctb_transfer_out)) || value.equals(getResources().getString(R.string.ctb_referral))){
-                    String referralTransferLocation = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Referral", "REFERRING FACILITY NAME");
+                    String referralTransferLocation = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Referral", "REFERRING FACILITY NAME");
                     if(referralTransferLocation.equalsIgnoreCase(getResources().getString(R.string.ctb_other_title))){
-                        String otherReferralTransferLocation = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Referral", "LOCATION OF REFERRAL OR TRANSFER OTHER");
+                        String otherReferralTransferLocation = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Referral", "LOCATION OF REFERRAL OR TRANSFER OTHER");
                         locationOfTransferOutReferral.setVisibility(View.VISIBLE);
                         locationOfTransferOutReferral.getEditText().setText(otherReferralTransferLocation);
                     }
@@ -731,13 +731,13 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
                 otherReasonRemarks.setVisibility(View.GONE);
             }
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_referral)) || parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_transfer_out))) {
-                String referralTransferLocation = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Referral", "REFERRING FACILITY NAME");
+                String referralTransferLocation = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Referral", "REFERRING FACILITY NAME");
                 locationOfTransferOutReferral.setVisibility(View.VISIBLE);
                 locationOfTransferOutReferral.getEditText().setKeyListener(null);
                 if(referralTransferLocation!=null) {
                     treatmentIntiatedAtReferralTransfer.setVisibility(View.VISIBLE);
                     if (referralTransferLocation.equalsIgnoreCase(getResources().getString(R.string.ctb_other_title))) {
-                        String otherReferralTransferLocation = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Referral", "LOCATION OF REFERRAL OR TRANSFER OTHER");
+                        String otherReferralTransferLocation = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Referral", "LOCATION OF REFERRAL OR TRANSFER OTHER");
                         locationOfTransferOutReferral.getEditText().setText(otherReferralTransferLocation);
                     } else {
                         locationOfTransferOutReferral.getEditText().setText(referralTransferLocation);

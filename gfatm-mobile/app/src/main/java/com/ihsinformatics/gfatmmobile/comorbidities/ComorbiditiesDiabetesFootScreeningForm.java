@@ -19,7 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -901,7 +900,7 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
                     });
 
                     HashMap<String, String> result = new HashMap<String, String>();
-                    String monthOfTreatment = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "FOLLOW-UP MONTH");
+                    String monthOfTreatment = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "FOLLOW-UP MONTH");
 
                     if (monthOfTreatment != null && !monthOfTreatment.equals(""))
                         monthOfTreatment = monthOfTreatment.replace(".0", "");

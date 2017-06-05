@@ -1283,7 +1283,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
                     });
 
                     HashMap<String, String> result = new HashMap<String, String>();
-                    String nextAppointDate = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Treatment Followup", "RETURN VISIT DATE");
+                    String nextAppointDate = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Treatment Followup", "RETURN VISIT DATE");
 
                     //Fetching Next Appointment Date of FAST Treatment Followup
                     if (nextAppointDate != null)

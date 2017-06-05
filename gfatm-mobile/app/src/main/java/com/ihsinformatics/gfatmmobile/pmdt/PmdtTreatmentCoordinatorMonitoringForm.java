@@ -1,8 +1,5 @@
 package com.ihsinformatics.gfatmmobile.pmdt;
 
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
@@ -22,7 +19,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -42,12 +38,9 @@ import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Tahira on 3/1/2017.
@@ -1076,9 +1069,9 @@ public class PmdtTreatmentCoordinatorMonitoringForm extends AbstractFormActivity
                     });
 
                     HashMap<String, String> result = new HashMap<String, String>();
-                    String treatmentSupporterId = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PMDT_PATIENT_ASSIGNMENT, "TREATMENT SUPPORTER ID");
-                    String treatmentSupporterFirstName = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PMDT_PATIENT_ASSIGNMENT, "TREATMENT SUPPORTER FIRST NAME");
-                    String treatmentSupporterLastName = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PMDT_PATIENT_ASSIGNMENT, "TREATMENT SUPPORTER LAST NAME");
+                    String treatmentSupporterId = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PMDT_PATIENT_ASSIGNMENT, "TREATMENT SUPPORTER ID");
+                    String treatmentSupporterFirstName = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PMDT_PATIENT_ASSIGNMENT, "TREATMENT SUPPORTER FIRST NAME");
+                    String treatmentSupporterLastName = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PMDT_PATIENT_ASSIGNMENT, "TREATMENT SUPPORTER LAST NAME");
 
 
                     if (treatmentSupporterId != null && !treatmentSupporterId.isEmpty())

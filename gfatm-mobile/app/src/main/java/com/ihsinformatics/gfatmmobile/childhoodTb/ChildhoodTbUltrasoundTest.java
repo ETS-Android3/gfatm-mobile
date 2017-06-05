@@ -245,7 +245,7 @@ public class ChildhoodTbUltrasoundTest extends AbstractFormActivity implements R
 
     public void updateFollowUpMonth() {
 
-        String treatmentDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+        String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
         String format = "";
         String[] monthArray;
 
@@ -409,7 +409,7 @@ public class ChildhoodTbUltrasoundTest extends AbstractFormActivity implements R
             }
         }
          if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
-             String treatmentDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+             String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
              String formDa = formDate.getButton().getText().toString();
              String personDOB = App.getPatient().getPerson().getBirthdate();
              Date date = new Date();

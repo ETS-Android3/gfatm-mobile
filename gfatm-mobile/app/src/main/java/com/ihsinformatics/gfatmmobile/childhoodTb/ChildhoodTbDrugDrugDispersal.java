@@ -43,8 +43,6 @@ import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 
-import org.openmrs.api.impl.VisitServiceImpl;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -1474,7 +1472,7 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
         }
 
 
-        String patientHaveTbString = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "PATIENT HAVE TB");
+        String patientHaveTbString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "PATIENT HAVE TB");
         if (patientHaveTbString != null) {
             for (RadioButton rb : patientHaveTb.getRadioGroup().getButtons()) {
                 if (rb.getText().equals(getResources().getString(R.string.yes)) && patientHaveTbString.equals("YES")) {
@@ -1489,7 +1487,7 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
                 }
             }
         }
-        String treatmentPlanString = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "TB Treatment Followup", "TREATMENT PLAN");
+        String treatmentPlanString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "TB Treatment Followup", "TREATMENT PLAN");
         if (treatmentPlanString != null) {
             for (RadioButton rb : treatmentPlan.getRadioGroup().getButtons()) {
                 if (rb.getText().equals(getResources().getString(R.string.ctb_intensive_phase)) && treatmentPlanString.equals("INTENSIVE PHASE")) {
@@ -1503,15 +1501,15 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
         }
         String date1 = "";
         String date2 = "";
-        String ctbRegimen1 = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.CHILDHOODTB_TREATMENT_INITIATION, "REGIMEN");
-        String ctbTypeOfDose1 = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.CHILDHOODTB_TREATMENT_INITIATION, "PAEDIATRIC DOSE COMBINATION");
+        String ctbRegimen1 = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.CHILDHOODTB_TREATMENT_INITIATION, "REGIMEN");
+        String ctbTypeOfDose1 = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.CHILDHOODTB_TREATMENT_INITIATION, "PAEDIATRIC DOSE COMBINATION");
         if (!(ctbRegimen1 == null || ctbRegimen1.equals("")))
-            date1 = serverService.getEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + Forms.CHILDHOODTB_TREATMENT_INITIATION);
-        String ctbRegimen2 = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.CHILDHOODTB_TB_TREATMENT_FOLLOWUP, "REGIMEN");
-        String ctbTypeOfDose2 = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.CHILDHOODTB_TB_TREATMENT_FOLLOWUP, "PAEDIATRIC DOSE COMBINATION");
+            date1 = serverService.getLatestEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + Forms.CHILDHOODTB_TREATMENT_INITIATION);
+        String ctbRegimen2 = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.CHILDHOODTB_TB_TREATMENT_FOLLOWUP, "REGIMEN");
+        String ctbTypeOfDose2 = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.CHILDHOODTB_TB_TREATMENT_FOLLOWUP, "PAEDIATRIC DOSE COMBINATION");
 
         if (!(ctbRegimen2 == null || ctbRegimen2.equals("")))
-            date2 = serverService.getEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + Forms.CHILDHOODTB_TB_TREATMENT_FOLLOWUP);
+            date2 = serverService.getLatestEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + Forms.CHILDHOODTB_TB_TREATMENT_FOLLOWUP);
         if(!date1.equals("") && date2.equals("")) {
             for (RadioButton rb : intensivePhaseRegimen.getRadioGroup().getButtons()) {
                 if (rb.getText().equals(getResources().getString(R.string.ctb_rhze)) && ctbRegimen1.equals("RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL PROPHYLAXIS")) {
@@ -1578,7 +1576,7 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
                 }
             }
         }
-        String continuationRegimenString = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "TB Treatment Followup", "REGIMEN");
+        String continuationRegimenString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "TB Treatment Followup", "REGIMEN");
         if(continuationRegimenString!=null){
                     for (RadioButton rb : continuationPhaseRegimen.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.ctb_rh)) && continuationRegimenString.equals("RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL PROPHYLAXIS")) {
@@ -1593,7 +1591,7 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
                     continuationPhaseRegimen.setVisibility(View.VISIBLE);
                 }
         }
-        String typeOfDoseContinuationString = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "TB Treatment Followup", "PAEDIATRIC FIXED DOSE COMBINATION FOR CONTINUATION PHASE");
+        String typeOfDoseContinuationString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "TB Treatment Followup", "PAEDIATRIC FIXED DOSE COMBINATION FOR CONTINUATION PHASE");
         if(typeOfDoseContinuationString!=null){
             String value = typeOfDoseContinuationString.equals("CURRENT FORMULATION OF TABLETS OF RHE FOR CONTINUATION PHASE") ? getResources().getString(R.string.ctb_current_formulation_continuation) :
                     (typeOfDoseContinuationString.equals("NEW FORMULATION OF TABLETS OF RHE FOR CONTINUATION PHASE") ? getResources().getString(R.string.ctb_new_formulation_continuation) :
@@ -1602,7 +1600,7 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
 
             typeFixedDosePrescribedContinuation.getSpinner().selectValue(value);
         }
-        String additionalTreatmentString = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "ADDITIONAL TREATMENT TO TB PATIENT");
+        String additionalTreatmentString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "ADDITIONAL TREATMENT TO TB PATIENT");
         if(additionalTreatmentString!=null){
             for (CheckBox cb : moAdditionalTreatment.getCheckedBoxes()) {
                 if (cb.getText().equals(getResources().getString(R.string.ctb_pediasure)) && additionalTreatmentString.contains("PEDIASURE")) {
@@ -1618,7 +1616,7 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
 
 
         }
-        String iptDoseString = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "IPT DOSE");
+        String iptDoseString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "IPT DOSE");
         if(iptDoseString!=null){
             for (RadioButton rb : iptDose.getRadioGroup().getButtons()) {
                 if (rb.getText().equals(getResources().getString(R.string.ctb_quater_per_day)) && iptDoseString.equals("1/4 TAB ONCE ADAY")) {
@@ -1633,7 +1631,7 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
                 }
             }
         }
-        String additionalTreatmentIpt = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "ADDITIONAL TREATMENT IPT PATIENT");
+        String additionalTreatmentIpt = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "ADDITIONAL TREATMENT IPT PATIENT");
         if(additionalTreatmentIpt!=null) {
             for (CheckBox cb : moInitiateTreatmentIpt.getCheckedBoxes()) {
                 if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && additionalTreatmentIpt.contains("IRON")) {
@@ -1645,7 +1643,7 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
                 }
             }
         }
-        String additionalTreatmentAntibiotic = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "ADDITIONAL TREATMENT FOR INCONCLUSIVE PATIENT");
+        String additionalTreatmentAntibiotic = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "ADDITIONAL TREATMENT FOR INCONCLUSIVE PATIENT");
         if(additionalTreatmentAntibiotic!=null) {
             for (CheckBox cb : moInitiatingAdditionalTreatmentAntibiotic.getCheckedBoxes()) {
                 if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && additionalTreatmentAntibiotic.contains("IRON")) {

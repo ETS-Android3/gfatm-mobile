@@ -1711,7 +1711,7 @@ public class ServerService {
 
     }
 
-    public String getObsValue(String patientId, String encounterType, String conceptName) {
+    public String getLatestObsValue(String patientId, String encounterType, String conceptName) {
         Object[][] encounter = dbUtil.getFormTableData("select encounter_id from " + Metadata.ENCOUNTER + " where patientId=" + patientId + " and encounterType = '" + encounterType + "' order by encounterDatetime DESC, dateCreated DESC");
         if (encounter.length < 1)
             return null;
@@ -1733,7 +1733,7 @@ public class ServerService {
 
     }
 
-    public String[] getObsValues(String patientId, String encounterType, String conceptName) {
+    public String[] getAllObsValues(String patientId, String encounterType, String conceptName) {
 
         Object[][] obs = dbUtil.getFormTableData("select value from " + Metadata.OBS + ", " + Metadata.ENCOUNTER + " where encounterType = '" + encounterType + "' and patientId=" + patientId + " and " + Metadata.ENCOUNTER + ".encounter_id=" + Metadata.OBS + ".encounter_id and conceptName = '" + conceptName + "' order by encounterDatetime DESC, dateCreated DESC");
         if (obs.length < 1)
@@ -1747,27 +1747,6 @@ public class ServerService {
         }
 
         return obsResults;
-    }
-
-    public boolean deleteEncounter(String patientId, String encounterType) {
-        Object[][] encounter = dbUtil.getFormTableData("select encounter_id from " + Metadata.ENCOUNTER + " where patientId='" + patientId + "' and encounterType = '" + encounterType + "'");
-        if (encounter.length < 1)
-            return false;
-        Boolean flag = dbUtil.delete(Metadata.ENCOUNTER, "encounter_id=?", new String[]{String.valueOf(encounter[0][0])});
-        if (!flag) return flag;
-        return dbUtil.delete(Metadata.OBS, "encounter_id=?", new String[]{String.valueOf(encounter[0][0])});
-    }
-
-    public boolean deletePatientEncounterByProgram(String patientId, String programName) {
-        Object[][] encounter = dbUtil.getFormTableData("select encounter_id from " + Metadata.ENCOUNTER + " where patientId='" + patientId + "' and encounterType like '" + programName + "%'");
-        if (encounter.length < 1)
-            return false;
-        for (int i = 0; i < encounter.length; i++) {
-            Boolean flag = dbUtil.delete(Metadata.ENCOUNTER, "encounter_id=?", new String[]{String.valueOf(encounter[i][0])});
-            if (!flag) return flag;
-            dbUtil.delete(Metadata.OBS, "encounter_id=?", new String[]{String.valueOf(encounter[i][0])});
-        }
-        return true;
     }
 
     public boolean deletePatientEncounters(String patientId) {
@@ -1959,7 +1938,7 @@ public class ServerService {
     }
 
 
-    public String getEncounterDateTime(String patientId, String encounterType) {
+    public String getLatestEncounterDateTime(String patientId, String encounterType) {
 
         Object[][] encounter = dbUtil.getFormTableData("select encounterDatetime from " + Metadata.ENCOUNTER + " where patientId=" + patientId + " and encounterType = '" + encounterType + "' order by encounterDatetime DESC, dateCreated DESC");
         if (encounter.length < 1)

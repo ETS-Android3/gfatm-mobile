@@ -1,9 +1,5 @@
 package com.ihsinformatics.gfatmmobile.childhoodTb;
 
-import android.annotation.SuppressLint;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
@@ -23,7 +19,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
-import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -43,7 +38,6 @@ import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -639,7 +633,7 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
             fathersName.getEditText().setText(husbandNameString);
         }
         fathersName.getEditText().setKeyListener(null);
-        String referralTransferLocation = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Case Confirmation", "WEIGHT (KG)");
+        String referralTransferLocation = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Case Confirmation", "WEIGHT (KG)");
         if(referralTransferLocation!=null){
             weightAtBaseline.getEditText().setText(referralTransferLocation);
             double weightValue = Double.parseDouble(referralTransferLocation);
@@ -653,7 +647,7 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
         }
 
         weightAtBaseline.getEditText().setKeyListener(null);
-        String iptStartDateString = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "IPT START DATE");
+        String iptStartDateString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "IPT START DATE");
         if(iptStartDateString != null){
             secondDateCalendar = App.getCalendar(App.stringToDate(iptStartDateString, "yyyy-MM-dd"));
         }

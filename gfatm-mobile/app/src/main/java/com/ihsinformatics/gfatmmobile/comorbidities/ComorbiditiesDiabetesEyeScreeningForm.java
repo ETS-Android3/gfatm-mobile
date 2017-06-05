@@ -13,7 +13,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -782,7 +781,7 @@ public class ComorbiditiesDiabetesEyeScreeningForm extends AbstractFormActivity 
                     });
 
                     HashMap<String, String> result = new HashMap<String, String>();
-                    String monthOfTreatment = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "FOLLOW-UP MONTH");
+                    String monthOfTreatment = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "FOLLOW-UP MONTH");
 
                     if (monthOfTreatment != null && !monthOfTreatment.equals(""))
                         monthOfTreatment = monthOfTreatment.replace(".0", "");

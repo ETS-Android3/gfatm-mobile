@@ -247,7 +247,7 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
 
     public void updateFollowUpMonth() {
 
-        String treatmentDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+        String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
         String format = "";
         String[] monthArray;
 
@@ -413,7 +413,7 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
-            String treatmentDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+            String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
             Date date = new Date();
             if(treatmentDate != null){
                 treatDateCalender = App.getCalendar(App.stringToDate(treatmentDate, "yyyy-MM-dd"));
@@ -1030,7 +1030,7 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
         } else {
             isResultForm = true;
             beforeResult = false;
-            String typeofXray = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "CXR Screening Test Order", "TYPE OF X RAY");
+            String typeofXray = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "CXR Screening Test Order", "TYPE OF X RAY");
             if(typeofXray.equalsIgnoreCase("RADIOLOGICAL DIAGNOSIS")){
                 chestXRayScore.setVisibility(View.VISIBLE);
             }

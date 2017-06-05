@@ -19,7 +19,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -781,7 +780,7 @@ public class PmdtPatientAssignmentForm extends AbstractFormActivity implements R
                 });
 
                 HashMap<String, String> result = new HashMap<String, String>();
-                String treatmentSupporterUsername = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PMDT_PATIENT_ASSIGNMENT, "TREATMENT SUPPORTER ID");
+                String treatmentSupporterUsername = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PMDT_PATIENT_ASSIGNMENT, "TREATMENT SUPPORTER ID");
 
                 if (treatmentSupporterUsername != null && !treatmentSupporterUsername.isEmpty())
                     result.put("TREATMENT SUPPORTER USERNAME", treatmentSupporterUsername);

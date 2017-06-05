@@ -15,7 +15,6 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -1264,13 +1263,13 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
                     });
 
                     HashMap<String, String> result = new HashMap<String, String>();
-                    String monthOfTreatment = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "FOLLOW-UP MONTH");
-                    String bmi = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "BODY MASS INDEX");
-                    String whr = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "WAIST-HIP RATIO");
-                    String systolicBP = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "SYSTOLIC BLOOD PRESSURE");
-                    String diastolicBP = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "DIASTOLIC BLOOD PRESSURE");
-                    String hba1cResult = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "HbA1C Test Result", "HBA1C RESULT");
-                    String bloodSugarResult = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Blood Sugar Test Result", "RANDOM BLOOD SUGAR");
+                    String monthOfTreatment = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "FOLLOW-UP MONTH");
+                    String bmi = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "BODY MASS INDEX");
+                    String whr = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "WAIST-HIP RATIO");
+                    String systolicBP = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "SYSTOLIC BLOOD PRESSURE");
+                    String diastolicBP = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "DIASTOLIC BLOOD PRESSURE");
+                    String hba1cResult = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "HbA1C Test Result", "HBA1C RESULT");
+                    String bloodSugarResult = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Blood Sugar Test Result", "RANDOM BLOOD SUGAR");
 
                     if (monthOfTreatment != null && !monthOfTreatment.equals(""))
                         monthOfTreatment = monthOfTreatment.replace(".0", "");

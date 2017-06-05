@@ -37,7 +37,6 @@ import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -475,7 +474,7 @@ public class PmdtDailyTreatmentMonitoringForm extends AbstractFormActivity imple
                 });
 
                 HashMap<String, String> result = new HashMap<String, String>();
-                String treatmentInitiationDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PMDT_TREATMENT_INITIATION, "TREATMENT START DATE");
+                String treatmentInitiationDate = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PMDT_TREATMENT_INITIATION, "TREATMENT START DATE");
 
                 if (treatmentInitiationDate != null && !treatmentInitiationDate.isEmpty())
                     result.put("TREATMENT START DATE", treatmentInitiationDate);

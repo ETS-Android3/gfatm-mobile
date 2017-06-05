@@ -689,8 +689,8 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
 
                     HashMap<String, String> result = new HashMap<String, String>();
 
-                    String tbRegNum = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "TB REGISTRATION NUMBER");
-                    String regDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+                    String tbRegNum = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "TB REGISTRATION NUMBER");
+                    String regDate = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
 
                     if (tbRegNum != null)
                         result.put("TB REGISTRATION NUMBER", tbRegNum);

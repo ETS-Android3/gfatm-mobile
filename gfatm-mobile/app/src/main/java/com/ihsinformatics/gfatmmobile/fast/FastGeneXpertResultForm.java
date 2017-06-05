@@ -194,7 +194,7 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
       /*  if (!(dateTestResult.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
 
             String formDa = dateTestResult.getButton().getText().toString();
-            String sampleSubmissionDateString = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "GXP Specimen Collection", "SPECIMEN SUBMISSION DATE");
+            String sampleSubmissionDateString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "GXP Specimen Collection", "SPECIMEN SUBMISSION DATE");
             Date sampleSubmissionDate = (sampleSubmissionDateString != null) ? App.stringToDate(sampleSubmissionDateString, "dd MMM yyyy HH:mm:ss") : null;
             Date date = new Date();
             if (secondDateCalendar.after(App.getCalendar(date))) {

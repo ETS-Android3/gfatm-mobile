@@ -17,8 +17,6 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -1472,22 +1470,22 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
 
                     //Autopopulating all the data from FAST component.
                     HashMap<String, String> result = new HashMap<String, String>();
-                    String husbandName = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive", "PARTNER FULL NAME");
-                    String fatherName = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive", "FATHER NAME");
-                    String cnic = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "NATIONAL IDENTIFICATION NUMBER");
-                    String cnicOwner = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
-                    String otherCnicOwner = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
-                    String providedAddress = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "PATIENT PROVIDED ADDRESS");
-                    String addressType = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "TYPE OF ADDRESS");
-                    String address1 = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "ADDRESS (TEXT)");
-                    String address2 = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "EXTENDED ADDRESS (TEXT)");
-                    String province = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "PROVINCE");
-                    String district = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "DISTRICT");
-                    String village = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "VILLAGE");
-                    String mobile1 = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "CONTACT PHONE NUMBER");
-                    String mobile2 = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "SECONDARY MOBILE NUMBER");
-                    String landline1 = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "TERTIARY CONTACT NUMBER");
-                    String landline2 = serverService.getObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "QUATERNARY CONTACT NUMBER");
+                    String husbandName = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive", "PARTNER FULL NAME");
+                    String fatherName = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive", "FATHER NAME");
+                    String cnic = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "NATIONAL IDENTIFICATION NUMBER");
+                    String cnicOwner = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
+                    String otherCnicOwner = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
+                    String providedAddress = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "PATIENT PROVIDED ADDRESS");
+                    String addressType = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "TYPE OF ADDRESS");
+                    String address1 = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "ADDRESS (TEXT)");
+                    String address2 = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "EXTENDED ADDRESS (TEXT)");
+                    String province = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "PROVINCE");
+                    String district = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "DISTRICT");
+                    String village = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "VILLAGE");
+                    String mobile1 = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "CONTACT PHONE NUMBER");
+                    String mobile2 = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "SECONDARY MOBILE NUMBER");
+                    String landline1 = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "TERTIARY CONTACT NUMBER");
+                    String landline2 = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "QUATERNARY CONTACT NUMBER");
 
                     if (husbandName != null)
                         if (!husbandName.equals(""))

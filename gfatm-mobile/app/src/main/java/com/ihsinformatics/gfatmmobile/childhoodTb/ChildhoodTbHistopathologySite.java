@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,7 +17,6 @@ import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -27,7 +25,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -47,7 +44,6 @@ import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -181,7 +177,7 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
 
     public void updateFollowUpMonth() {
 
-        String treatmentDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+        String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
         String format = "";
         String[] monthArray;
 
@@ -279,7 +275,7 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
 
                     }
                 } else if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.ctb_order))) {
-                    String treatmentDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+                    String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
                     if(treatmentDate != null){
                         treatDateCalender = App.getCalendar(App.stringToDate(treatmentDate, "yyyy-MM-dd"));
                         if(formDateCalendar.before(treatDateCalender)) {
@@ -335,7 +331,7 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
             }
         }
         if(orderIds.getVisibility()==View.VISIBLE){
-            String[] resultTestIds = serverService.getObsValues(App.getPatientId(), App.getProgram() + "-" + "Histopathology Test Result", "ORDER ID");
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Histopathology Test Result", "ORDER ID");
             for(String id : resultTestIds){
 
                 if(id.equals(App.get(orderIds))){
@@ -365,7 +361,7 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
         }
 
         if(testId.getVisibility() == View.VISIBLE){
-            String[] resultTestIds = serverService.getObsValues(App.getPatientId(), App.getProgram() + "-" + "Histopathology Test Result", "TEST ID");
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Histopathology Test Result", "TEST ID");
             if(resultTestIds != null) {
                 for (String id : resultTestIds) {
                     if (id.equals(App.get(testId))) {
@@ -713,7 +709,7 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
         goneVisibility();
         submitButton.setEnabled(false);
 
-        String[] testIds = serverService.getObsValues(App.getPatientId(), App.getProgram() + "-" + "Histopathology Test Order", "ORDER ID");
+        String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Histopathology Test Order", "ORDER ID");
         if(testIds != null) {
             ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, testIds);
             spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -792,7 +788,7 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
             histopathologyResult.setVisibility(View.VISIBLE);
             histopathologyResult.getRadioGroup().selectDefaultValue();
             orderIds.setVisibility(View.VISIBLE);
-            String[] testIds = serverService.getObsValues(App.getPatientId(), App.getProgram() + "-" + "Histopathology Test Order", "ORDER ID");
+            String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Histopathology Test Order", "ORDER ID");
 
             if(testIds == null || testIds.length == 0){
                 final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
