@@ -145,11 +145,11 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
         monthTreatment = new TitledSpinner(context, null, getResources().getString(R.string.ctb_month_treatment), getResources().getStringArray(R.array.ctb_0_to_24), null, App.HORIZONTAL);
         updateFollowUpMonth();
         patientCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_category), getResources().getStringArray(R.array.ctb_patient_category_list), null, App.HORIZONTAL, App.VERTICAL);
-        reasonBaselineRepeat = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_reason_for_repeating), getResources().getStringArray(R.array.ctb_reason_for_repeating_list), null, App.VERTICAL,App.VERTICAL,true);
+        reasonBaselineRepeat = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_reason_for_repeating), getResources().getStringArray(R.array.ctb_reason_for_repeating_list), null, App.VERTICAL,App.VERTICAL,false);
         specimenType = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_specimen_type), getResources().getStringArray(R.array.ctb_specimen_type_list), null, App.HORIZONTAL, App.VERTICAL,true);
         specimenComeFrom = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_speciment_route), getResources().getStringArray(R.array.ctb_speciment_route_list), null, App.HORIZONTAL,App.VERTICAL,true);
         otherSpecimentComeFrom = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
-        reasonBaselineRepeatOther = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        reasonBaselineRepeatOther = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         testId = new TitledEditText(context, null, getResources().getString(R.string.ctb_test_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
 
 
@@ -291,39 +291,59 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
                 gotoPage(0);
             else
                 gotoPage(0);
-            patientCategory.getRadioGroup().getButtons().get(1).setError(getString(R.string.empty_field));
-            patientCategory.getRadioGroup().requestFocus();
+            patientCategory.getQuestionView().setError(getString(R.string.empty_field));
+            patientCategory.requestFocus();
             error = true;
-        } else {
-            patientCategory.getRadioGroup().getButtons().get(1).setError(null);
         }
         if (specimenType.getVisibility() == View.VISIBLE && App.get(specimenType).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            specimenType.getRadioGroup().getButtons().get(1).setError(getString(R.string.empty_field));
-            specimenType.getRadioGroup().requestFocus();
+            specimenType.getQuestionView().setError(getString(R.string.empty_field));
+            specimenType.requestFocus();
             error = true;
         } else {
             specimenType.getRadioGroup().getButtons().get(1).setError(null);
         }
         if (otherSpecimentComeFrom.getVisibility() == View.VISIBLE ) {
-            if (App.get(otherSpecimentComeFrom).isEmpty()) {
+            if(!App.get(otherSpecimentComeFrom).isEmpty()) {
+                if (App.get(otherSpecimentComeFrom).trim().length() <= 0) {
+                    if (App.isLanguageRTL())
+                        gotoPage(0);
+                    else
+                        gotoPage(0);
+                    otherSpecimentComeFrom.getEditText().setError(getString(R.string.ctb_spaces_only));
+                    otherSpecimentComeFrom.getEditText().requestFocus();
+                    error = true;
+                }
+            }
+        }
+        if(App.get(baselineRepeatFollowup).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            baselineRepeatFollowup.getQuestionView().setError(getString(R.string.empty_field));
+            baselineRepeatFollowup.getQuestionView().requestFocus();
+            error = true;
+        }
+        if(reasonBaselineRepeatOther.getVisibility()==View.VISIBLE){
+            if (App.get(reasonBaselineRepeatOther).isEmpty()) {
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
                     gotoPage(0);
-                otherSpecimentComeFrom.getEditText().setError(getString(R.string.empty_field));
-                otherSpecimentComeFrom.getEditText().requestFocus();
+                reasonBaselineRepeatOther.getEditText().setError(getString(R.string.empty_field));
+                reasonBaselineRepeatOther.getEditText().requestFocus();
                 error = true;
-            } else if (App.get(otherSpecimentComeFrom).trim().length() <= 0) {
+            } else if (App.get(reasonBaselineRepeatOther).trim().length() <= 0) {
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
                     gotoPage(0);
-                otherSpecimentComeFrom.getEditText().setError(getString(R.string.ctb_spaces_only));
-                otherSpecimentComeFrom.getEditText().requestFocus();
+                reasonBaselineRepeatOther.getEditText().setError(getString(R.string.ctb_spaces_only));
+                reasonBaselineRepeatOther.getEditText().requestFocus();
                 error = true;
             }
         }
@@ -712,6 +732,7 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         if (group == specimenType.getRadioGroup()) {
+            specimenType.getQuestionView().setError(null);
             if (specimenType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_extra_pulmonary))) {
                 specimenComeFrom.setVisibility(View.VISIBLE);
 
@@ -721,6 +742,7 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
             }
         }
         if (group == baselineRepeatFollowup.getRadioGroup()) {
+            baselineRepeatFollowup.getQuestionView().setError(null);
             if (baselineRepeatFollowup.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_baseline))) {
                 patientCategory.setVisibility(View.VISIBLE);
             }else{
@@ -755,6 +777,9 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
             }else{
                 reasonBaselineRepeatOther.setVisibility(View.GONE);
             }
+        }
+        if(group == patientCategory.getRadioGroup()){
+           patientCategory.getQuestionView().setError(null);
         }
 
     }

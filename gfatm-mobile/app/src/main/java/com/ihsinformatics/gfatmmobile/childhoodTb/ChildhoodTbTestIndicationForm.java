@@ -138,16 +138,16 @@ public class ChildhoodTbTestIndicationForm extends AbstractFormActivity implemen
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        chestXray = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_chest_xray),getResources().getStringArray(R.array.yes_no_options),getResources().getString(R.string.no),App.HORIZONTAL,App.VERTICAL,true);
-        ultraSound = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_ultrasound),getResources().getStringArray(R.array.yes_no_options),getResources().getString(R.string.no),App.HORIZONTAL,App.VERTICAL,true);
-        ctScan = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_ct_scan),getResources().getStringArray(R.array.yes_no_options),getResources().getString(R.string.no),App.HORIZONTAL,App.VERTICAL,true);
-        geneXpert = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_gene_xpert),getResources().getStringArray(R.array.yes_no_options),getResources().getString(R.string.no),App.HORIZONTAL,App.VERTICAL,true);
-        mantouxTest = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_mantoux),getResources().getStringArray(R.array.yes_no_options),getResources().getString(R.string.no),App.HORIZONTAL,App.VERTICAL,true);
-        smearMicroscopy = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_smear_microscopy),getResources().getStringArray(R.array.yes_no_options),getResources().getString(R.string.no),App.HORIZONTAL,App.VERTICAL,true);
-        histopathology = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_histopathology),getResources().getStringArray(R.array.yes_no_options),getResources().getString(R.string.no),App.HORIZONTAL,App.VERTICAL,true);
-        cbc = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_cbc),getResources().getStringArray(R.array.yes_no_options),getResources().getString(R.string.no),App.HORIZONTAL,App.VERTICAL,true);
-        esr = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_esr),getResources().getStringArray(R.array.yes_no_options),getResources().getString(R.string.no),App.HORIZONTAL,App.VERTICAL,true);
-        drugSensitivityTest = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_drug_sensitivity),getResources().getStringArray(R.array.yes_no_options),getResources().getString(R.string.no),App.HORIZONTAL,App.VERTICAL,true);
+        chestXray = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_chest_xray),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL,true);
+        ultraSound = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_ultrasound),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL,true);
+        ctScan = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_ct_scan),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL,true);
+        geneXpert = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_gene_xpert),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL,true);
+        mantouxTest = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_mantoux),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL,true);
+        smearMicroscopy = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_smear_microscopy),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL,true);
+        histopathology = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_histopathology),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL,true);
+        cbc = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_cbc),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL,true);
+        esr = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_esr),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL,true);
+        drugSensitivityTest = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_drug_sensitivity),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL,true);
         doctorNotes = new TitledEditText(context,null,getResources().getString(R.string.ctb_doctor_notes),"","",1000,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.VERTICAL,false);
         views = new View[]{formDate.getButton(),chestXray.getRadioGroup(),ultraSound.getRadioGroup(),ctScan.getRadioGroup(),geneXpert.getRadioGroup(),mantouxTest.getRadioGroup(),smearMicroscopy.getRadioGroup(),
                 histopathology.getRadioGroup(),cbc.getRadioGroup(),esr.getRadioGroup(),drugSensitivityTest.getRadioGroup(),doctorNotes.getEditText()};
@@ -222,6 +222,97 @@ public class ChildhoodTbTestIndicationForm extends AbstractFormActivity implemen
             doctorNotes.getEditText().requestFocus();
             error = true;
         }
+        if(App.get(chestXray).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            chestXray.getQuestionView().setError(getString(R.string.empty_field));
+            chestXray.getQuestionView().requestFocus();
+            error = true;
+        }
+        if(App.get(ultraSound).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            ultraSound.getQuestionView().setError(getString(R.string.empty_field));
+            ultraSound.getQuestionView().requestFocus();
+            error = true;
+        }
+        if(App.get(ctScan).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            ctScan.getQuestionView().setError(getString(R.string.empty_field));
+            ctScan.getQuestionView().requestFocus();
+            error = true;
+        }
+        if(App.get(geneXpert).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            geneXpert.getQuestionView().setError(getString(R.string.empty_field));
+            geneXpert.getQuestionView().requestFocus();
+            error = true;
+        }
+        if(App.get(mantouxTest).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            mantouxTest.getQuestionView().setError(getString(R.string.empty_field));
+            mantouxTest.getQuestionView().requestFocus();
+            error = true;
+        }
+        if(App.get(smearMicroscopy).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            smearMicroscopy.getQuestionView().setError(getString(R.string.empty_field));
+            smearMicroscopy.getQuestionView().requestFocus();
+            error = true;
+        }
+        if(App.get(histopathology).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            histopathology.getQuestionView().setError(getString(R.string.empty_field));
+            histopathology.getQuestionView().requestFocus();
+            error = true;
+        }
+        if(App.get(cbc).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            cbc.getQuestionView().setError(getString(R.string.empty_field));
+            cbc.getQuestionView().requestFocus();
+            error = true;
+        }
+        if(App.get(esr).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            esr.getQuestionView().setError(getString(R.string.empty_field));
+            esr.getQuestionView().requestFocus();
+            error = true;
+        }
+        if(App.get(drugSensitivityTest).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            drugSensitivityTest.getQuestionView().setError(getString(R.string.empty_field));
+            drugSensitivityTest.getQuestionView().requestFocus();
+            error = true;
+        }
+
         if (error) {
 
         int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
@@ -591,7 +682,37 @@ public class ChildhoodTbTestIndicationForm extends AbstractFormActivity implemen
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
+        if(group == drugSensitivityTest.getRadioGroup()){
+            drugSensitivityTest.getQuestionView().setError(null);
+        }
+        if(group == esr.getRadioGroup()){
+            esr.getQuestionView().setError(null);
+        }
+        if(group == cbc.getRadioGroup()){
+            cbc.getQuestionView().setError(null);
+        }
+        if(group == histopathology.getRadioGroup()){
+            histopathology.getQuestionView().setError(null);
+        }
+        if(group == smearMicroscopy.getRadioGroup()){
+            smearMicroscopy.getQuestionView().setError(null);
+        }
+        if(group == mantouxTest.getRadioGroup()){
+            mantouxTest.getQuestionView().setError(null);
+        }
+        if(group == geneXpert.getRadioGroup()){
+            geneXpert.getQuestionView().setError(null);
+        }
 
+        if(group == ctScan.getRadioGroup()){
+            ctScan.getQuestionView().setError(null);
+        }
+        if(group == ultraSound.getRadioGroup()){
+            ultraSound.getQuestionView().setError(null);
+        }
+        if(group == chestXray.getRadioGroup()){
+            chestXray.getQuestionView().setError(null);
+        }
     }
 
     class MyAdapter extends PagerAdapter {

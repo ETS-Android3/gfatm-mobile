@@ -886,8 +886,40 @@ public class ChildhoodTbScreeningLocation extends AbstractFormActivity implement
                 contactTbRegistrationNo.setVisibility(View.GONE);
                 scanQRCode.setVisibility(View.GONE);
             } else if(parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_family_member_tb_patient))) {
-                patientEnrolledTb.getRadioGroup().clearCheck();
                 patientEnrolledTb.setVisibility(View.VISIBLE);
+                if(App.get(patientEnrolledTb).equals(getResources().getString(R.string.yes))) {
+                    contactIdType.setVisibility(View.VISIBLE);
+                    for (CheckBox cb : contactIdType.getCheckedBoxes()) {
+                        if (App.get(cb).equals(getResources().getString(R.string.ctb_patient_id))) {
+                            if (cb.isChecked()) {
+                                contactPatientId.setVisibility(View.VISIBLE);
+                                scanQRCode.setVisibility(View.VISIBLE);
+                            } else {
+                                contactPatientId.setVisibility(View.GONE);
+                                scanQRCode.setVisibility(View.GONE);
+                            }
+                        }
+                        if (App.get(cb).equals(getResources().getString(R.string.ctb_external_id))) {
+                            if (cb.isChecked()) {
+                                contactExternalId.setVisibility(View.VISIBLE);
+                                contactExternalIdHospital.setVisibility(View.VISIBLE);
+                            } else {
+                                contactExternalId.setVisibility(View.GONE);
+                                contactExternalIdHospital.setVisibility(View.GONE);
+                            }
+                        }
+                        if (App.get(cb).equals(getResources().getString(R.string.ctb_tb_registration_no))) {
+                            if (cb.isChecked()) {
+                                contactTbRegistrationNo.setVisibility(View.VISIBLE);
+                            } else {
+                                contactTbRegistrationNo.setVisibility(View.GONE);
+                            }
+                        }
+                    }
+                }
+                else{
+                    contactIdType.setVisibility(View.GONE);
+                }
 
                 facilityDepartment.setVisibility(View.GONE);
                 otherFacilityDeparment.setVisibility(View.GONE);
@@ -896,11 +928,6 @@ public class ChildhoodTbScreeningLocation extends AbstractFormActivity implement
                 referralOutsideOther.setVisibility(View.GONE);
                 hearAboutUs.setVisibility(View.GONE);
                 hearAboutUsOther.setVisibility(View.GONE);
-                contactIdType.setVisibility(View.GONE);
-                contactPatientId.setVisibility(View.GONE);
-                contactExternalId.setVisibility(View.GONE);
-                contactExternalIdHospital.setVisibility(View.GONE);
-                contactTbRegistrationNo.setVisibility(View.GONE);
             }else{
                 facilityDepartment.setVisibility(View.GONE);
                 otherFacilityDeparment.setVisibility(View.GONE);
