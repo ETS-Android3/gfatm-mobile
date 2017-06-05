@@ -1218,6 +1218,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        closeContactType.getQuestionView().setError(null);
         for (CheckBox cb : closeContactType.getCheckedBoxes()) {
             if (App.get(cb).equals(getResources().getString(R.string.ctb_mother))) {
                 if (cb.isChecked()) {

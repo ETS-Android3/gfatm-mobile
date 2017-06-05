@@ -67,6 +67,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
     TitledEditText cnicOwnerOther;
     TitledRadioGroup addressProvided;
     MyLinearLayout addressLayout;
+    LinearLayout addressQuestion;
     MyTextView townTextView;
     AutoCompleteTextView address2;
     TitledSpinner province;
@@ -208,7 +209,15 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         InputFilter[] fArray = new InputFilter[1];
         fArray[0] = new InputFilter.LengthFilter(20);
         address2.setFilters(fArray);
-        addressLayout.addView(townTextView);
+
+        addressQuestion = new LinearLayout(context);
+        addressQuestion.setOrientation(LinearLayout.HORIZONTAL);
+        addressQuestion.addView(townTextView);
+        TextView mandatorySign2 = new TextView(context);
+        mandatorySign2.setText("*");
+        mandatorySign2.setTextColor(Color.parseColor("#ff0000"));
+        addressQuestion.addView(mandatorySign2);
+        addressLayout.addView(addressQuestion);
         addressLayout.addView(address2);
         province = new TitledSpinner(context, "", getResources().getString(R.string.province), getResources().getStringArray(R.array.provinces), App.getProvince(), App.VERTICAL);
 
@@ -799,6 +808,28 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                     gotoPage(0);
                 address1.getEditText().setError(getString(R.string.ctb_spaces_only));
                 address1.getEditText().requestFocus();
+                error = true;
+                view = null;
+            }
+        }
+        if(address2.getVisibility()==View.VISIBLE){
+            if(App.get(address2).isEmpty()){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                address2.setError(getString(R.string.empty_field));
+                address2.requestFocus();
+                error = true;
+                view = null;
+            }
+            else if(App.get(address1).trim().length() <= 0){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                address2.setError(getString(R.string.ctb_spaces_only));
+                address2.requestFocus();
                 error = true;
                 view = null;
             }
@@ -1488,7 +1519,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         cnicOwner.setVisibility(View.GONE);
         cnicOwnerOther.setVisibility(View.GONE);
         address1.setVisibility(View.GONE);
-        address2.setVisibility(View.GONE);
+        addressLayout.setVisibility(View.GONE);
         townTextView.setVisibility(View.GONE);
         addressType.setVisibility(View.GONE);
         mobileNumberContact.setVisibility(View.GONE);
@@ -1502,6 +1533,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         cnic1.getText().clear();
         cnic2.getText().clear();
         cnic3.getText().clear();
+
         mobileNumber1.getText().clear();
         mobileNumber2.getText().clear();
         landlineNumber1.getText().clear();
@@ -1549,7 +1581,9 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         if (group == addressProvided.getRadioGroup()) {
             if(addressProvided.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))){
                 address1.setVisibility(View.VISIBLE);
-                address2.setVisibility(View.VISIBLE);
+                addressLayout.setVisibility(View.VISIBLE);
+                addressQuestion.setVisibility(View.VISIBLE);
+                    address2.setVisibility(View.VISIBLE);
                 townTextView.setVisibility(View.VISIBLE);
                 addressType.setVisibility(View.VISIBLE);
                 district.setVisibility(View.VISIBLE);
@@ -1557,6 +1591,8 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
             }
             else if(addressProvided.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.no))){
                 address1.setVisibility(View.GONE);
+                address2.setVisibility(View.GONE);
+                addressQuestion.setVisibility(View.GONE);
                 address2.setVisibility(View.GONE);
                 townTextView.setVisibility(View.GONE);
                 district.setVisibility(View.VISIBLE);
