@@ -1968,6 +1968,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         iptStartDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
+        iptStartDate.setVisibility(View.GONE);
         formDateCalendar = Calendar.getInstance();
         forthDateCalender.add(Calendar.DAY_OF_MONTH, 30);
         returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", forthDateCalender).toString());
@@ -2274,7 +2275,6 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                     }
                     tbHistoryIn2Years.setVisibility(View.VISIBLE);
                     eligibleForIpt.setVisibility(View.VISIBLE);
-                    iptStartDate.setVisibility(View.VISIBLE);
                     if(!App.get(weightAtBaseline).isEmpty()){
                         double weightInt = Double.parseDouble(App.get(weightAtBaseline));
                         if(weightInt<2.5){
@@ -2384,10 +2384,23 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         else if (group == eligibleForIpt.getRadioGroup()) {
             if (eligibleForIpt.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
                 acceptanceToIpt.setVisibility(View.VISIBLE);
+                if(App.get(acceptanceToIpt).equals(getResources().getString(R.string.yes))){
+                    iptStartDate.setVisibility(View.VISIBLE);
+                }
             } else {
                 acceptanceToIpt.setVisibility(View.GONE);
+                iptStartDate.setVisibility(View.GONE);
             }
-        }else if (group == patientCategory.getRadioGroup()) {
+        }
+        else if (group == acceptanceToIpt.getRadioGroup()) {
+            if (acceptanceToIpt.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
+                iptStartDate.setVisibility(View.VISIBLE);
+            } else {
+                iptStartDate.setVisibility(View.GONE);
+            }
+        }
+
+        else if (group == patientCategory.getRadioGroup()) {
             if (patientCategory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_category_3))) {
                 regimen.getRadioGroup().getButtons().get(1).setChecked(true);
             }
