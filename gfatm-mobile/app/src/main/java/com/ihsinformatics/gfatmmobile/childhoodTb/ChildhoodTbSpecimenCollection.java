@@ -53,14 +53,13 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
     TitledButton sampleSubmitDate;
     TitledRadioGroup baselineRepeatFollowup;
     TitledSpinner monthTreatment;
-
+    TitledEditText orderId;
     TitledRadioGroup patientCategory;
     TitledRadioGroup reasonBaselineRepeat;
     TitledEditText reasonBaselineRepeatOther;
     TitledRadioGroup specimenType;
     TitledRadioGroup specimenComeFrom;
     TitledEditText otherSpecimentComeFrom;
-    TitledEditText testId;
 
     Snackbar snackbar;
     ScrollView scrollView;
@@ -138,6 +137,7 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
+        orderId = new TitledEditText(context,null,getResources().getString(R.string.order_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,true);
         sampleSubmitDate = new TitledButton(context, null, getResources().getString(R.string.ctb_sample_submitted), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         sampleSubmitDate.setTag("sampleSubmitDate");
         baselineRepeatFollowup = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_baseline_repeat_followup), getResources().getStringArray(R.array.ctb_ctb_baseline_repeat_followup_list), null, App.VERTICAL,App.VERTICAL,true);
@@ -149,16 +149,15 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
         specimenComeFrom = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_speciment_route), getResources().getStringArray(R.array.ctb_speciment_route_list), null, App.HORIZONTAL,App.VERTICAL,true);
         otherSpecimentComeFrom = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         reasonBaselineRepeatOther = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        testId = new TitledEditText(context, null, getResources().getString(R.string.ctb_test_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
 
 
         views = new View[]{formDate.getButton(), sampleSubmitDate.getButton(), baselineRepeatFollowup.getRadioGroup(), patientCategory.getRadioGroup(), reasonBaselineRepeat.getRadioGroup(),
                 specimenType.getRadioGroup(),monthTreatment.getSpinner(), specimenComeFrom.getRadioGroup(),
-                otherSpecimentComeFrom.getEditText(), reasonBaselineRepeatOther.getEditText(), testId.getEditText()};
+                otherSpecimentComeFrom.getEditText(), reasonBaselineRepeatOther.getEditText(), orderId.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, sampleSubmitDate, baselineRepeatFollowup,monthTreatment, patientCategory, reasonBaselineRepeat,reasonBaselineRepeatOther,specimenType, specimenComeFrom, otherSpecimentComeFrom, testId}};
+                {{formDate,orderId, sampleSubmitDate, baselineRepeatFollowup,monthTreatment, patientCategory, reasonBaselineRepeat,reasonBaselineRepeatOther,specimenType, specimenComeFrom, otherSpecimentComeFrom}};
 
         formDate.getButton().setOnClickListener(this);
         sampleSubmitDate.getButton().setOnClickListener(this);
@@ -211,18 +210,18 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
 
     @Override
     public void updateDisplay() {
+        Calendar treatDateCalender = null;
 
         if (snackbar != null)
             snackbar.dismiss();
-        String formDa = formDate.getButton().getText().toString();
-        String personDOB = App.getPatient().getPerson().getBirthdate();
-
-        Date date = new Date();
 
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
+            String formDa = formDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
+            personDOB = personDOB.substring(0,10);
 
-
+            Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
 
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
@@ -234,37 +233,36 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
 
             } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-            }  else
+            } else {
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                 String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+                    if(treatmentDate != null){
+                        treatDateCalender = App.getCalendar(App.stringToDate(treatmentDate, "yyyy-MM-dd"));
+                        if(formDateCalendar.before(treatDateCalender)) {
+                            formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
-        }
-        if (!sampleSubmitDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString())) {
+                            snackbar = Snackbar.make(mainContent, getResources().getString(R.string.ctb_form_date_less_than_treatment_initiation), Snackbar.LENGTH_INDEFINITE);
+                            snackbar.show();
 
-            //
-            // +Date date = App.stringToDate(sampleSubmitDate.getButton().getText().toString(), "dd-MMM-yyyy");
+                            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        }
+                        else {
+                            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        }
+                    }
 
-            if (secondDateCalendar.after(App.getCalendar(date))) {
+                }
 
-                secondDateCalendar = App.getCalendar(date);
+        } else{
+            String formDa = formDate.getButton().getText().toString();
 
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
-                snackbar.show();
+            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
-            }else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
-                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-                tv.setMaxLines(2);
-                snackbar.show();
-                sampleSubmitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-            }
-            else
-                sampleSubmitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         }
         formDate.getButton().setEnabled(true);
         sampleSubmitDate.getButton().setEnabled(true);
@@ -274,17 +272,6 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
     @Override
     public boolean validate() {
         boolean error = false;
-        if(testId.getVisibility()==View.VISIBLE) {
-            if (App.get(testId).isEmpty()) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                testId.getEditText().setError(getString(R.string.empty_field));
-                testId.getEditText().requestFocus();
-                error = true;
-            }
-        }
         if (patientCategory.getVisibility() == View.VISIBLE && App.get(patientCategory).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
@@ -398,6 +385,7 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
 
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
+        observations.add(new String[]{"ORDER ID", App.get(orderId)});
         observations.add(new String[]{"SPECIMEN SUBMISSION DATE", App.getSqlDateTime(secondDateCalendar)});
         observations.add(new String[]{"TEST CONTEXT STATUS", App.get(baselineRepeatFollowup).equals(getResources().getString(R.string.ctb_baseline)) ? "BASELINE" :
                 (App.get(baselineRepeatFollowup).equals(getResources().getString(R.string.ctb_baseline_repeat)) ? "BASELINE REPEAT" :
@@ -437,9 +425,6 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
         }
 
 
-        if (testId.getVisibility() == View.VISIBLE) {
-            observations.add(new String[]{"TEST ID", App.get(testId)});
-        }
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
             protected String doInBackground(String... params) {
@@ -574,6 +559,10 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
             String[][] obs = obsValue.get(i);
             if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
                 timeTakeToFill = obs[0][1];
+            }
+            else if (obs[0][0].equals("ORDER ID")) {
+                orderId.getEditText().setKeyListener(null);
+                orderId.getEditText().setText(obs[0][1]);
             }else if (obs[0][0].equals("SPECIMEN SUBMISSION DATE")) {
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
@@ -650,8 +639,6 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
                 }
             } else if (obs[0][0].equals("OTHER SPECIMEN SOURCE")) {
                 otherSpecimentComeFrom.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("TEST ID")) {
-                testId.getEditText().setText(obs[0][1]);
             }
         }
     }
@@ -702,7 +689,7 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
 
         if (snackbar != null)
             snackbar.dismiss();
-
+        formDate.setEnabled(true);
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         sampleSubmitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         reasonBaselineRepeat.setVisibility(View.GONE);
@@ -710,6 +697,11 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
         otherSpecimentComeFrom.setVisibility(View.GONE);
         reasonBaselineRepeatOther.setVisibility(View.GONE);
         monthTreatment.setVisibility(View.GONE);
+        orderId.getEditText().setKeyListener(null);
+        Date nowDate = new Date();
+        orderId.getEditText().setText(App.getSqlDateTime(nowDate));
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");

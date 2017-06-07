@@ -525,8 +525,9 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
 
         } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
             observations.add(new String[]{"ORDER ID", App.get(orderIds)});
-            observations.add(new String[]{"TEST ID", App.get(testId)});
-
+            if(!App.get(testId).isEmpty()) {
+                observations.add(new String[]{"TEST ID", App.get(testId)});
+            }
             if(ctChestTbSuggestive.getVisibility()==View.VISIBLE) {
                 observations.add(new String[]{"CT CHEST SUGGESTIVE OF TB", App.get(ctChestTbSuggestive).equals(getResources().getString(R.string.ctb_consolidation)) ? "CONSOLIDATION" :
                         (App.get(ctChestTbSuggestive).equals(getResources().getString(R.string.ctb_adenopathy)) ? "ADENOPATHY" :
@@ -715,6 +716,10 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
             if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
                 timeTakeToFill = obs[0][1];
             }else if(fo.getFormName().contains("Order")) {
+                if (obs[0][0].equals("ORDER ID")) {
+                    orderId.getEditText().setKeyListener(null);
+                    orderId.getEditText().setText(obs[0][1]);
+                }
                 formType.getRadioGroup().getButtons().get(0).setChecked(true);
                 formType.getRadioGroup().getButtons().get(1).setEnabled(false);
                 if (obs[0][0].equals("CT SCAN SITE")) {
@@ -733,9 +738,12 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
             }else{
                 formType.getRadioGroup().getButtons().get(1).setChecked(true);
                 formType.getRadioGroup().getButtons().get(0).setEnabled(false);
-                if (obs[0][0].equals("TEST ID")) {
+                if (obs[0][0].equals("ORDER ID")) {
+                    orderIds.getSpinner().selectValue(obs[0][1]);
+                    orderIds.getSpinner().setClickable(false);
+                }
+                else if (obs[0][0].equals("TEST ID")) {
                     testId.getEditText().setText(obs[0][1]);
-                    testId.getEditText().setEnabled(false);
                 }else if (obs[0][0].equals("CT CHEST SUGGESTIVE OF TB")) {
                     for (RadioButton rb : ctChestTbSuggestive.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.ctb_consolidation)) && obs[0][1].equals("CONSOLIDATION")) {
@@ -865,6 +873,9 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         MySpinner spinner = (MySpinner) parent;
+        if (spinner == orderIds.getSpinner()) {
+            updateDisplay();
+        }
 
     }
 
@@ -970,7 +981,7 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
             testId.setVisibility(View.VISIBLE);
             formDate.setVisibility(View.VISIBLE);
             orderIds.setVisibility(View.VISIBLE);
-            String ctScan = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "CT Scan Test Order", "CT SCAN SITE");
+            String ctScan =  serverService.getObsValueByObs(App.getPatientId(), App.getProgram() + "-" + "CT Scan Test Order", "ORDER ID", App.get(orderIds),"CT SCAN SITE");
             if(ctScan!=null){
                 if(ctScan.equalsIgnoreCase("CT SCAN, CHEST")){
                     ctChestTbSuggestive.setVisibility(View.VISIBLE);

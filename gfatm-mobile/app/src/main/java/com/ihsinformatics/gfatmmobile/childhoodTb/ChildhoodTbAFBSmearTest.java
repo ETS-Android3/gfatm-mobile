@@ -584,7 +584,9 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
             }
         } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
             observations.add(new String[]{"ORDER ID", App.get(orderIds)});
-            observations.add(new String[]{"TEST ID", App.get(testId)});
+            if(!App.get(testId).isEmpty()) {
+                observations.add(new String[]{"TEST ID", App.get(testId)});
+            }
             observations.add(new String[]{"SPUTUM FOR ACID FAST BACILLI", App.get(smearResult).equals(getResources().getString(R.string.ctb_negative)) ? "NEGATIVE" :
                     (App.get(smearResult).equals(getResources().getString(R.string.ctb_scanty_3_24)) ? "SCANTY 3 - 24" :
                             (App.get(smearResult).equals(getResources().getString(R.string.ctb_1_positive)) ? "ONE PLUS" :
@@ -744,9 +746,9 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
             }else if(fo.getFormName().contains("Order")) {
                 formType.getRadioGroup().getButtons().get(0).setChecked(true);
                 formType.getRadioGroup().getButtons().get(1).setEnabled(false);
-                if (obs[0][0].equals("TEST ID")) {
-                    testId.getEditText().setEnabled(false);
-                    testId.getEditText().setText(obs[0][1]);
+                if (obs[0][0].equals("ORDER ID")) {
+                    orderId.getEditText().setKeyListener(null);
+                    orderId.getEditText().setText(obs[0][1]);
                 } else if (obs[0][0].equals("SPECIMEN SUBMISSION DATE")) {
                     String secondDate = obs[0][1];
                     secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
@@ -797,10 +799,14 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
             }else{
                 formType.getRadioGroup().getButtons().get(1).setChecked(true);
                 formType.getRadioGroup().getButtons().get(0).setEnabled(false);
-                if (obs[0][0].equals("TEST ID")) {
+                if (obs[0][0].equals("ORDER ID")) {
+                    orderIds.getSpinner().selectValue(obs[0][1]);
+                    orderIds.getSpinner().setClickable(false);
+                }
+                else if (obs[0][0].equals("TEST ID")) {
                     testId.getEditText().setText(obs[0][1]);
-                    testId.getEditText().setEnabled(false);
-                } else if (obs[0][0].equals("SPUTUM FOR ACID FAST BACILLI")) {
+                }
+                else if (obs[0][0].equals("SPUTUM FOR ACID FAST BACILLI")) {
                     String value = obs[0][1].equals("NEGATIVE") ? getResources().getString(R.string.ctb_negative) :
                             (obs[0][1].equals("SCANTY 3 - 24") ? getResources().getString(R.string.ctb_scanty_3_24) :
                                     (obs[0][1].equals("ONE PLUS") ? getResources().getString(R.string.ctb_1_positive) :
@@ -865,6 +871,9 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
             } else {
                 afbSeenOneField.setVisibility(View.GONE);
             }
+        }
+        if (spinner == orderIds.getSpinner()) {
+            updateDisplay();
         }
     }
 

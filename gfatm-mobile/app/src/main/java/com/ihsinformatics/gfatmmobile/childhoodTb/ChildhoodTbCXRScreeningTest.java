@@ -155,7 +155,7 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        pastXray = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_xray_in_6_month), getResources().getStringArray(R.array.yes_no_options), null, App.VERTICAL, App.VERTICAL,true);
+        pastXray = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_xray_in_6_month), getResources().getStringArray(R.array.yes_no_options),getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true);
         formType = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_type_of_form), getResources().getStringArray(R.array.ctb_type_of_form_list), null, App.HORIZONTAL, App.VERTICAL, true);
         orderId = new TitledEditText(context,null,getResources().getString(R.string.order_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,true);
         typeOfXRay = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_type_of_xray),getResources().getStringArray(R.array.ctb_type_of_xray_list),getResources().getString(R.string.ctb_chest_xray_other),App.HORIZONTAL,App.VERTICAL,true);
@@ -726,6 +726,10 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
             if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
                 timeTakeToFill = obs[0][1];
             }else if(fo.getFormName().contains("Order")) {
+                if (obs[0][0].equals("ORDER ID")) {
+                    orderId.getEditText().setKeyListener(null);
+                    orderId.getEditText().setText(obs[0][1]);
+                }
                 formType.getRadioGroup().getButtons().get(0).setChecked(true);
                 formType.getRadioGroup().getButtons().get(1).setEnabled(false);
                  if (obs[0][0].equals("TYPE OF X RAY")) {
@@ -837,6 +841,9 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
                 otherRadiologicalDiagnosis.setVisibility(View.GONE);
             }
         }
+        if (spinner == orderIds.getSpinner()) {
+            updateDisplay();
+        }
 
     }
 
@@ -899,9 +906,17 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
                     typeOfXRay.setVisibility(View.GONE);
                     monthTreatment.setVisibility(View.GONE);
                     orderId.setVisibility(View.GONE);
+                    chestXRayScore.setVisibility(View.GONE);
+                    radiologicalDiagnosis.setVisibility(View.GONE);
+                    abnormalDiagnosis.setVisibility(View.GONE);
+                    otherRadiologicalDiagnosis.setVisibility(View.GONE);
+                    diseaseExtent.setVisibility(View.GONE);
+                    radiologistRemarks.setVisibility(View.GONE);
+                    testId.setVisibility(View.GONE);
+                    orderIds.setVisibility(View.GONE);
                     submitButton.setEnabled(true);
                 }
-                else if(pastXray.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.no))){
+                else{
                     formDate.setVisibility(View.VISIBLE);
                     submitButton.setEnabled(true);
                     showTestOrderOrTestResult();
@@ -964,8 +979,7 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
                 orderIds.setVisibility(View.GONE);
 
             } else if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_result))) {
-
-                String typeofXray = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "CXR Screening Test Order", "TYPE OF X RAY");
+                String typeofXray =  serverService.getObsValueByObs(App.getPatientId(), App.getProgram() + "-" + "CXR Screening Test Order", "ORDER ID", App.get(orderIds),"TYPE OF X RAY");
                 if(typeofXray!=null) {
                     if (typeofXray.equalsIgnoreCase("RADIOLOGICAL DIAGNOSIS")) {
                         chestXRayScore.setVisibility(View.VISIBLE);
