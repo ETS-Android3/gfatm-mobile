@@ -457,6 +457,8 @@
     <string name="fast_emergency_room">Emergency Room</string>
     <string name="fast_diabetic">Diabetic</string>
     <string name="fast_required_field_error">Required fields cannot be empty</string>
+    <string name="fast_no_order_found_for_the_patient">No order found for the patient.</string>
+
 
 
 
