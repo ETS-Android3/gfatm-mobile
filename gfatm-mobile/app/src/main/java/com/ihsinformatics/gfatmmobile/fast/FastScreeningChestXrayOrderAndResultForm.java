@@ -875,10 +875,8 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
                 return;
             }
 
-            if (testIds != null) {
-                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, testIds);
-                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                orderIds.getSpinner().setAdapter(spinnerArrayAdapter);
+            if(testIds != null) {
+                orderIds.getSpinner().setSpinnerData(testIds);
             }
         }
     }
@@ -1094,6 +1092,11 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
      //   testIdView.setImageResource(R.drawable.ic_checked);
         goneVisibility();
         submitButton.setEnabled(false);
+
+        String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Screening CXR Test Order", "ORDER ID");
+        if(testIds != null) {
+            orderIds.getSpinner().setSpinnerData(testIds);
+        }
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {

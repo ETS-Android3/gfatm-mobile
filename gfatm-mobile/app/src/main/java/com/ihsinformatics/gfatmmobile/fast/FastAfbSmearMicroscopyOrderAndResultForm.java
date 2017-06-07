@@ -311,10 +311,8 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
                 return;
             }
 
-            if (testIds != null) {
-                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, testIds);
-                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                orderIds.getSpinner().setAdapter(spinnerArrayAdapter);
+            if(testIds != null) {
+                orderIds.getSpinner().setSpinnerData(testIds);
             }
         }
     }
@@ -1260,6 +1258,12 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
         testId.setVisibility(View.GONE);
         goneVisibility();
         submitButton.setEnabled(false);
+
+        String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "AFB Smear Test Order", "ORDER ID");
+        if(testIds != null) {
+            orderIds.getSpinner().setSpinnerData(testIds);
+        }
+
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
