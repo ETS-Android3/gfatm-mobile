@@ -215,7 +215,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
 
         final Object[][] locations = serverService.getAllLocations(columnName);
         String[] locationArray = new String[locations.length];
-        for(int i=0; i <locations.length; i++){
+        for (int i = 0; i < locations.length; i++) {
             locationArray[i] = String.valueOf(locations[i][1]);
         }
 
@@ -401,8 +401,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
             gpClinicCode.getEditText().setError(getString(R.string.empty_field));
             gpClinicCode.getEditText().requestFocus();
             error = true;
-        }
-        else if (gpClinicCode.getVisibility() == View.VISIBLE && !App.get(gpClinicCode).isEmpty() && (Double.parseDouble(App.get(gpClinicCode)) < 1 || Double.parseDouble(App.get(gpClinicCode)) > 50)) {
+        } else if (gpClinicCode.getVisibility() == View.VISIBLE && !App.get(gpClinicCode).isEmpty() && (Double.parseDouble(App.get(gpClinicCode)) < 1 || Double.parseDouble(App.get(gpClinicCode)) > 50)) {
             gotoPage(1);
             gpClinicCode.getEditText().setError(getString(R.string.comorbidities_preferredlocation_gpcliniccode_limit));
             gpClinicCode.getEditText().requestFocus();
@@ -449,10 +448,28 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
     @Override
     public boolean submit() {
 
-        if(App.get(akuadsSeverity).equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_normal))) {
-            snackbar = Snackbar.make(mainContent, getResources().getString(R.string.comorbidities_akuads_screener_instructions), Snackbar.LENGTH_INDEFINITE);
-            TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-            tv.setMaxLines(3);
+        if (App.get(akuadsSeverity).equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_normal))) {
+
+            snackbar = Snackbar.make(mainContent, getResources().getString(R.string.comorbidities_akuads_screener_instructions), Snackbar.LENGTH_INDEFINITE)
+                    .setAction("CLOSE", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            snackbar.dismiss();
+                        }
+                    });
+
+            // Changing message text color
+            //snackbar.setActionTextColor(Color.RED);
+
+            //Changing Typeface of Snackbar Action text
+            TextView snackbarActionTextView = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_action);
+            snackbarActionTextView.setTextSize(20);
+            snackbarActionTextView.setTypeface(snackbarActionTextView.getTypeface(), Typeface.BOLD);
+
+            // Setting Maximum lines for the textview in snackbar
+            View sbView = snackbar.getView();
+            TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+            textView.setMaxLines(4);
             snackbar.show();
         }
 
@@ -465,7 +482,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
-            }else {
+            } else {
                 endTime = new Date();
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
@@ -555,13 +572,13 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
         observations.add(new String[]{"AKUADS SEVERITY", App.get(akuadsSeverity).equals(getResources().getString(R.string.comorbidities_MH_severity_level_normal)) ? "NORMAL" :
                 (App.get(akuadsSeverity).equals(getResources().getString(R.string.comorbidities_MH_severity_level_mild)) ? "MILD" :
                         (App.get(akuadsSeverity).equals(getResources().getString(R.string.comorbidities_MH_severity_level_moderate)) ? "MODERATE" : "SEVERE"))});
-        if(akuadsAgree.getVisibility() == View.VISIBLE) {
+        if (akuadsAgree.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"THERAPY CONSENT", App.get(akuadsAgree).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         }
-        if(preferredTherapyLocationSpinner.getVisibility() == View.VISIBLE) {
+        if (preferredTherapyLocationSpinner.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"FACILITY REFERRED TO", App.get(preferredTherapyLocationSpinner)});
         }
-        if(mentalHealthNextScheduledVisit.getVisibility() == View.VISIBLE) {
+        if (mentalHealthNextScheduledVisit.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDateTime(secondDateCalendar)});
         }
         observations.add(new String[]{"HEALTH CLINIC/POST", App.get(gpClinicCode)});
@@ -702,7 +719,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
         for (int i = 0; i < obsValue.size(); i++) {
             String[][] obs = obsValue.get(i);
 
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
             }
 
@@ -1160,8 +1177,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
-        }
-        else if (view == mentalHealthNextScheduledVisit.getButton()) {
+        } else if (view == mentalHealthNextScheduledVisit.getButton()) {
             //mentalHealthNextScheduledVisit.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
@@ -1193,7 +1209,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
         super.resetViews();
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-       // mentalHealthNextScheduledVisit.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+        // mentalHealthNextScheduledVisit.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
         Boolean flag = true;
 
@@ -1214,7 +1230,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
             } else bundle.putBoolean("save", false);
         }
 
-        if(flag) {
+        if (flag) {
             //HERE FOR AUTOPOPULATING OBS
             final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
                 @Override
@@ -1347,8 +1363,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
             akuadsSeverity.getRadioGroup().check((akuadsSeverity.getRadioGroup().getChildAt(2)).getId());
         } else if (score >= 61 && score <= 75) {
             akuadsSeverity.getRadioGroup().check((akuadsSeverity.getRadioGroup().getChildAt(3)).getId());
-        }
-        else {
+        } else {
             akuadsSeverity.getRadioGroup().check((akuadsSeverity.getRadioGroup().getChildAt(0)).getId());
         }
     }
@@ -1359,10 +1374,9 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
             akuadsAgree.setVisibility(View.VISIBLE);
             preferredTherapyLocationSpinner.setVisibility(View.VISIBLE);
             mentalHealthNextScheduledVisit.setVisibility(View.VISIBLE);
-            if(App.getLocation().equalsIgnoreCase("GP-CLINIC")) {
+            if (App.getLocation().equalsIgnoreCase("GP-CLINIC")) {
                 gpClinicCode.setVisibility(View.VISIBLE);
-            }
-            else {
+            } else {
                 gpClinicCode.setVisibility(View.GONE);
             }
         } else if (akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_normal))) {
@@ -1374,16 +1388,41 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
     }
 
     void displayPreferredTherapyLocationOrNot() {
-        if (akuadsAgree.getVisibility() ==  View.VISIBLE && akuadsAgree.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.yes)) && !akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_normal))) {
+        if (akuadsAgree.getVisibility() == View.VISIBLE && akuadsAgree.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.yes)) && !akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_normal))) {
+            if(snackbar!=null)
+                snackbar.dismiss();
+
             preferredTherapyLocationSpinner.setVisibility(View.VISIBLE);
             mentalHealthNextScheduledVisit.setVisibility(View.VISIBLE);
-            if(App.getLocation().equalsIgnoreCase("GP-CLINIC")) {
+            if (App.getLocation().equalsIgnoreCase("GP-CLINIC")) {
                 gpClinicCode.setVisibility(View.VISIBLE);
-            }
-            else {
+            } else {
                 gpClinicCode.setVisibility(View.GONE);
             }
         } else if (akuadsAgree.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.no))) {
+
+            snackbar = Snackbar.make(mainContent, getResources().getString(R.string.comorbidities_akuads_screener_instructions), Snackbar.LENGTH_INDEFINITE)
+                    .setAction("CLOSE", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            snackbar.dismiss();
+                        }
+                    });
+
+            // Changing message text color
+            //snackbar.setActionTextColor(Color.RED);
+
+            //Changing Typeface of Snackbar Action text
+            TextView snackbarActionTextView = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_action);
+            snackbarActionTextView.setTextSize(20);
+            snackbarActionTextView.setTypeface(snackbarActionTextView.getTypeface(), Typeface.BOLD);
+
+            // Setting Maximum lines for the textview in snackbar
+            View sbView = snackbar.getView();
+            TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+            textView.setMaxLines(4);
+            snackbar.show();
+
             preferredTherapyLocationSpinner.setVisibility(View.GONE);
             mentalHealthNextScheduledVisit.setVisibility(View.GONE);
             gpClinicCode.setVisibility(View.GONE);

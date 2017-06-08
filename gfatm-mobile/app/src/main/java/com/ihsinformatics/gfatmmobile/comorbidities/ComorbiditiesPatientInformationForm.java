@@ -1555,9 +1555,12 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
                     if (result.get("NATIONAL IDENTIFICATION NUMBER") != null) {
                         if (!result.get("NATIONAL IDENTIFICATION NUMBER").equals("")) {
                             String[] cnicArray = result.get("NATIONAL IDENTIFICATION NUMBER").split("-");
-                            cnic1.setText(cnicArray[0]);
-                            cnic2.setText(cnicArray[1]);
-                            cnic3.setText(cnicArray[2]);
+
+                            if(cnicArray.length > 3) {
+                                cnic1.setText(cnicArray[0]);
+                                cnic2.setText(cnicArray[1]);
+                                cnic3.setText(cnicArray[2]);
+                            }
                         }
                     }
 
@@ -1651,32 +1654,44 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
                     if (result.get("CONTACT PHONE NUMBER") != null) {
                         if (!result.get("CONTACT PHONE NUMBER").equals("")) {
                             String[] mobile1Array = result.get("CONTACT PHONE NUMBER").split("-");
-                            mobileNumber1a.setText(mobile1Array[0]);
-                            mobileNumber1b.setText(mobile1Array[1]);
+
+                            if(mobile1Array.length > 2) {
+                                mobileNumber1a.setText(mobile1Array[0]);
+                                mobileNumber1b.setText(mobile1Array[1]);
+                            }
                         }
                     }
 
                     if (result.get("SECONDARY MOBILE NUMBER") != null) {
                         if (!result.get("SECONDARY MOBILE NUMBER").equals("")) {
                             String[] mobile2Array = result.get("SECONDARY MOBILE NUMBER").split("-");
-                            mobileNumber2a.setText(mobile2Array[0]);
-                            mobileNumber2b.setText(mobile2Array[1]);
+
+                            if(mobile2Array.length > 2) {
+                                mobileNumber2a.setText(mobile2Array[0]);
+                                mobileNumber2b.setText(mobile2Array[1]);
+                            }
                         }
                     }
 
                     if (result.get("TERTIARY CONTACT NUMBER") != null) {
                         if (!result.get("TERTIARY CONTACT NUMBER").equals("")) {
                             String[] landline1Array = result.get("TERTIARY CONTACT NUMBER").split("-");
-                            landline1a.setText(landline1Array[0]);
-                            landline1b.setText(landline1Array[1]);
+
+                            if(landline1Array.length > 2) {
+                                landline1a.setText(landline1Array[0]);
+                                landline1b.setText(landline1Array[1]);
+                            }
                         }
                     }
 
                     if (result.get("QUATERNARY CONTACT NUMBER") != null) {
                         if (!result.get("QUATERNARY CONTACT NUMBER").equals("")) {
                             String[] landline2Array = result.get("QUATERNARY CONTACT NUMBER").split("-");
-                            landline2a.setText(landline2Array[0]);
-                            landline2b.setText(landline2Array[1]);
+
+                            if(landline2Array.length > 2) {
+                                landline2a.setText(landline2Array[0]);
+                                landline2b.setText(landline2Array[1]);
+                            }
                         }
                     }
                 }

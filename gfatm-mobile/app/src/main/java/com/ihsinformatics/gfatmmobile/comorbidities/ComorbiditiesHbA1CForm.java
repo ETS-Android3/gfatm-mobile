@@ -6,6 +6,7 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -17,6 +18,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
+import android.text.Html;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
@@ -27,6 +29,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -40,6 +43,7 @@ import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
+import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
@@ -59,7 +63,7 @@ import java.util.HashMap;
  * Created by Fawad Jawaid on 21-Dec-16.
  */
 
-public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener, View.OnTouchListener {
+public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
     public static final int THIRD_DATE_DIALOG_ID = 3;
     // Extra Views for date ...
@@ -74,8 +78,6 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
     TitledRadioGroup hba1cTestType;
     TitledSpinner hba1cFollowupMonth;
     TitledButton hba1cTestOrderDate;
-    TitledEditText hba1cTestID;
-    ImageView testIdView;
     //Views for Test Result HbA1C
     MyTextView testResultHba1c;
     TitledButton hba1cTestResultDate;
@@ -84,10 +86,11 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
 
     ScrollView scrollView;
 
-    boolean isResultForm = false;
-    boolean beforeResult = false;
-    boolean changeDate = false;
     String finalDate = null;
+
+    TitledSpinner orderIds;
+    TitledEditText testId;
+    TitledEditText orderId;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -170,27 +173,10 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
         hba1cFollowupMonth = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_mth_txcomorbidities_hba1c), getResources().getStringArray(R.array.comorbidities_followup_month), "0", App.HORIZONTAL);
         showFollowupField();
         hba1cTestOrderDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1cdate_test_order), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
-        LinearLayout linearLayout = new LinearLayout(context);
-        hba1cTestID = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hhba1c_testid), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                0.9f
-        );
-        hba1cTestID.setLayoutParams(param);
-        linearLayout.addView(hba1cTestID);
-        testIdView = new ImageView(context);
-        testIdView.setImageResource(R.drawable.ic_checked);
-        LinearLayout.LayoutParams param1 = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                0.1f
-        );
-        testIdView.setLayoutParams(param1);
-        testIdView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        testIdView.setPadding(0, 5, 0, 0);
 
-        linearLayout.addView(testIdView);
+        orderId = new TitledEditText(context, null, getResources().getString(R.string.order_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        orderIds = new TitledSpinner(context, "", getResources().getString(R.string.order_id), getResources().getStringArray(R.array.pet_empty_array), "", App.HORIZONTAL);
+        testId = new TitledEditText(context, null, getResources().getString(R.string.ctb_test_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
 
         //second page views...
         testResultHba1c = new MyTextView(context, getResources().getString(R.string.comorbidities_hba1c_test_result));
@@ -199,24 +185,26 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
         //microalbuminResult = new TitledEditText(context, null, getResources().getString(R.string.hba1c_result), "", "", 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         hba1cResult = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hba1c_result), "", getResources().getString(R.string.comorbidities_hba1c_result_range), 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         hba1cDiabetic = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_hba1c_diabetic), getResources().getStringArray(R.array.comorbidities_yes_no), "", App.VERTICAL, App.VERTICAL);
+
         //showHba1cDiabetic();
         autopopulateHba1cDiabetic();
         goneVisibility();
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), hba1cTestID.getEditText(), formType.getRadioGroup(), hba1cTestType.getRadioGroup(), hba1cFollowupMonth.getSpinner(),
+        views = new View[]{formDate.getButton(), testId.getEditText(), formType.getRadioGroup(), hba1cTestType.getRadioGroup(), hba1cFollowupMonth.getSpinner(),
                 hba1cTestOrderDate.getButton(), hba1cTestResultDate.getButton(), hba1cResult.getEditText(), hba1cDiabetic.getRadioGroup()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formType, formDate, linearLayout, testOrderHba1C, hba1cTestType, hba1cFollowupMonth, hba1cTestOrderDate,
-                        testResultHba1c, hba1cTestResultDate, hba1cResult, hba1cDiabetic}};
+                {{formType, formDate, orderId, testOrderHba1C, hba1cTestType, hba1cFollowupMonth, hba1cTestOrderDate,
+                        testResultHba1c, orderIds, testId, hba1cTestResultDate, hba1cResult, hba1cDiabetic}};
 
         formDate.getButton().setOnClickListener(this);
         formType.getRadioGroup().setOnCheckedChangeListener(this);
         hba1cTestType.getRadioGroup().setOnCheckedChangeListener(this);
         hba1cTestOrderDate.getButton().setOnClickListener(this);
         hba1cTestResultDate.getButton().setOnClickListener(this);
+        orderIds.getSpinner().setOnItemSelectedListener(this);
 
         hba1cResult.getEditText().addTextChangedListener(new TextWatcher() {
 
@@ -242,7 +230,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
                         }
                     } else if (hba1cResult.getEditText().getText().length() == 0) {
                         hba1cDiabetic.getRadioGroup().clearCheck();
-                        if(snackbar != null)
+                        if (snackbar != null)
                             snackbar.dismiss();
                     }
                 } catch (NumberFormatException nfe) {
@@ -250,38 +238,6 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
                 }
             }
         });
-
-        hba1cTestID.getEditText().addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start,
-                                          int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start,
-                                      int before, int count) {
-                isResultForm = false;
-                try {
-                    if (hba1cTestID.getEditText().getText().length() > 0) {
-                        testIdView.setVisibility(View.VISIBLE);
-                        testIdView.setImageResource(R.drawable.ic_checked);
-                    } else {
-                        testIdView.setVisibility(View.INVISIBLE);
-                    }
-                    goneVisibility();
-                    submitButton.setEnabled(false);
-
-                } catch (NumberFormatException nfe) {
-                    //Exception: User might be entering " " (empty) value
-                }
-            }
-        });
-        testIdView.setOnTouchListener(this);
 
         resetViews();
 
@@ -319,127 +275,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
         if (snackbar != null)
             snackbar.dismiss();
 
-        if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))) {
-            if (beforeResult) {
-                Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "Comorbidities-HbA1C Test Order");
-                String format = "";
-                String formDa = formDate.getButton().getText().toString();
 
-                for (int i = 0; i < testIds.length; i++) {
-                    if (testIds[i][0].equals(hba1cTestID.getEditText().getText().toString())) {
-                        String date = testIds[i][1].toString();
-                        if (date.contains("/")) {
-                            format = "dd/MM/yyyy";
-                        } else {
-                            format = "yyyy-MM-dd";
-                        }
-
-
-                        Date orderDate = App.stringToDate(date, format);
-                        Date orderDateForValidation = App.stringToDate(date, format);
-
-                        Calendar dateCalendar = Calendar.getInstance();
-                        dateCalendar.setTime(orderDateForValidation);
-                        // dateCalendar.add(Calendar.DATE, 1);
-                        SimpleDateFormat newFormat = new SimpleDateFormat("EEEE, MMM dd,yyyy");
-                        finalDate = newFormat.format(dateCalendar.getTime());
-
-                        if (formDateCalendar.before(App.getCalendar(orderDate))) {
-                            //formDateCalendar = App.getCalendar(App.stringToDate(finalDate, "EEEE, MMM dd,yyyy"));
-                            changeDate = true;
-
-                            break;
-                        } else {
-                            changeDate = false;
-                            if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
-
-                                String personDOB = App.getPatient().getPerson().getBirthdate();
-
-                                Date date1 = new Date();
-                                if (formDateCalendar.after(App.getCalendar(date1))) {
-                                    changeDate = false;
-                                    formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-
-                                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
-                                    snackbar.show();
-
-                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                                    break;
-
-                                } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
-                                    changeDate = false;
-                                    formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-                                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                                    TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-                                    tv.setMaxLines(2);
-                                    snackbar.show();
-                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                                    break;
-                                } else {
-                                    changeDate = false;
-                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                                }
-                            }
-                        }
-                    }
-                }
-            } else if (isResultForm) {
-                changeDate = false;
-                Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "Comorbidities-HbA1C Test Order");
-                String format = "";
-                String formDa = formDate.getButton().getText().toString();
-
-                for (int i = 0; i < testIds.length; i++) {
-                    if (testIds[i][0].equals(hba1cTestID.getEditText().getText().toString())) {
-                        String date = testIds[i][1].toString();
-                        if (date.contains("/")) {
-                            format = "dd/MM/yyyy";
-                        } else {
-                            format = "yyyy-MM-dd";
-                        }
-
-                        Date orderDate = App.stringToDate(date, format);
-
-                        if (formDateCalendar.before(App.getCalendar(orderDate))) {
-                            formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-
-                            snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
-                            snackbar.show();
-
-                            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                            break;
-                        } else {
-                            if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
-
-                                String personDOB = App.getPatient().getPerson().getBirthdate();
-
-                                Date date1 = new Date();
-                                if (formDateCalendar.after(App.getCalendar(date1))) {
-
-                                    formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-
-                                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
-                                    snackbar.show();
-
-                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                                    break;
-
-                                } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
-                                    formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-                                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                                    TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-                                    tv.setMaxLines(2);
-                                    snackbar.show();
-                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                                    break;
-                                } else
-                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                            }
-                        }
-                    }
-                }
-            }
-        }
 
         /*if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))){
             Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "Comorbidities-HbA1C Test Order");
@@ -477,13 +313,12 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
+            personDOB = personDOB.substring(0, 10);
 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
-                changeDate = false;
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
-                Log.d("ERROR", "HBA1C");
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
@@ -491,16 +326,89 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
             } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
-                changeDate = false;
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-            } else
+            } else {
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
+                if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))) {
+
+                    if (!App.get(orderIds).equals("")) {
+                        String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), App.getProgram() + "-" + "HbA1C Test Order", "ORDER ID", App.get(orderIds));
+
+                        String format = "";
+                        if (encounterDateTime.contains("/")) {
+                            format = "dd/MM/yyyy";
+                        } else {
+                            format = "yyyy-MM-dd";
+                        }
+
+                        Date orderDate = App.stringToDate(encounterDateTime, format);
+
+                        if (formDateCalendar.before(App.getCalendar(orderDate))) {
+
+                            Date dDate = App.stringToDate(formDa, "EEEE, MMM dd,yyyy");
+                            if (dDate.before(orderDate)) {
+                                formDateCalendar = Calendar.getInstance();
+                                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                            } else {
+                                formDateCalendar = App.getCalendar(dDate);
+                                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                            }
+
+                            snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
+                            snackbar.show();
+
+                        }
+
+                    }
+                } else {
+                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                }
+
+            }
+
+        } else {
+            String formDa = formDate.getButton().getText().toString();
+
+            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
+            if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))) {
+
+                if (!App.get(orderIds).equals("")) {
+                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), App.getProgram() + "-" + "HbA1C Test Order", "ORDER ID", App.get(orderIds));
+
+                    String format = "";
+                    if (encounterDateTime.contains("/")) {
+                        format = "dd/MM/yyyy";
+                    } else {
+                        format = "yyyy-MM-dd";
+                    }
+
+                    Date orderDate = App.stringToDate(encounterDateTime, format);
+
+                    if (formDateCalendar.before(App.getCalendar(orderDate))) {
+
+                        Date dDate = App.stringToDate(formDa, "EEEE, MMM dd,yyyy");
+                        if (dDate.before(orderDate)) {
+                            formDateCalendar = Calendar.getInstance();
+                            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        } else {
+                            formDateCalendar = App.getCalendar(dDate);
+                            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        }
+
+                        snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
+                        snackbar.show();
+
+                    }
+
+                }
+            }
         }
 
         //hba1cTestOrderDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
@@ -595,12 +503,6 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
             error = true;
         }
 
-        if (App.get(hba1cTestID).isEmpty()) {
-            gotoFirstPage();
-            hba1cTestID.getEditText().setError(getString(R.string.empty_field));
-            hba1cTestID.getEditText().requestFocus();
-            error = true;
-        }
         /*else if (!App.get(hba1cTestID).isEmpty() && App.get(hba1cTestID).length() < 9) {
             gotoFirstPage();
             hba1cTestID.getEditText().setError(getString(R.string.comorbidities_hhba1c_testid_format_error1));
@@ -612,6 +514,80 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
             hba1cTestID.getEditText().requestFocus();
             error = true;
         }*/
+
+        Boolean flag1 = true;
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            if (saveFlag) {
+                flag1 = false;
+            } else {
+                flag1 = true;
+            }
+        }
+
+        if (orderIds.getVisibility() == View.VISIBLE && flag1) {
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "HbA1C Test Result", "ORDER ID");
+            if (resultTestIds != null) {
+                for (String id : resultTestIds) {
+
+                    if (id.equals(App.get(orderIds))) {
+                        final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                        alertDialog.setMessage(getResources().getString(R.string.ctb_order_result_found_error) + App.get(orderIds));
+                        Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                        alertDialog.setIcon(clearIcon);
+                        alertDialog.setTitle(getResources().getString(R.string.title_error));
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        try {
+                                            InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                            imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                        } catch (Exception e) {
+                                            // TODO: handle exception
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                });
+                        alertDialog.show();
+
+                        return false;
+                    }
+                }
+            }
+        }
+
+        if (testId.getVisibility() == View.VISIBLE && flag1) {
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "HbA1C Test Result", "TEST ID");
+            if (resultTestIds != null) {
+                for (String id : resultTestIds) {
+                    if (id.equals(App.get(testId))) {
+                        final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                        alertDialog.setMessage(getResources().getString(R.string.ctb_test_result_found_error) + App.get(testId));
+                        Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                        alertDialog.setIcon(clearIcon);
+                        alertDialog.setTitle(getResources().getString(R.string.title_error));
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        try {
+                                            InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                            imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                        } catch (Exception e) {
+                                            // TODO: handle exception
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                });
+                        alertDialog.show();
+
+                        return false;
+                    }
+
+                }
+            }
+
+        }
 
         if (error) {
 
@@ -631,7 +607,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
                                 public void run() {
                                     if (finalView != null) {
                                         scrollView.scrollTo(0, finalView.getTop());
-                                        hba1cTestID.clearFocus();
+                                        testId.clearFocus();
                                         hba1cResult.clearFocus();
                                     }
                                 }
@@ -665,7 +641,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
-            }else {
+            } else {
                 endTime = new Date();
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
@@ -676,9 +652,9 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
         }
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-        observations.add(new String[]{"TEST ID", App.get(hba1cTestID)});
 
         if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
+            observations.add(new String[]{"ORDER ID", App.get(orderId)});
             observations.add(new String[]{"TEST CONTEXT STATUS", App.get(hba1cTestType).equals(getResources().getString(R.string.comorbidities_HbA1C_test_type_baseline)) ? "BASELINE" :
                     (App.get(hba1cTestType).equals(getResources().getString(R.string.comorbidities_HbA1C_test_type_baseline_repeat)) ? "BASELINE REPEAT" : "REGULAR FOLLOW UP")});
             if (hba1cFollowupMonth.getVisibility() == View.VISIBLE) {
@@ -686,6 +662,8 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
             }
             //observations.add(new String[]{"DATE TEST ORDERED", App.getSqlDateTime(secondDateCalendar)});
         } else if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))) {
+            observations.add(new String[]{"ORDER ID", App.get(orderIds)});
+            observations.add(new String[]{"TEST ID", App.get(testId)});
             //observations.add(new String[]{"TEST RESULT DATE", App.getSqlDateTime(thirdDateCalendar)});
             observations.add(new String[]{"HBA1C RESULT", App.get(hba1cResult)});
             if (hba1cDiabetic.getVisibility() == View.VISIBLE)
@@ -835,19 +813,16 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
 
             String[][] obs = obsValue.get(i);
 
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
             }
 
             if (fo.getFormName().contains("Order")) {
                 formType.getRadioGroup().getButtons().get(0).setChecked(true);
                 formType.getRadioGroup().getButtons().get(1).setEnabled(false);
-                if (obs[0][0].equals("TEST ID")) {
-                    hba1cTestID.getEditText().setText(obs[0][1]);
-                    hba1cTestID.getEditText().setEnabled(false);
-                    testIdView.setEnabled(false);
-                    testIdView.setImageResource(R.drawable.ic_checked_green);
-                    //checkTestId();
+                if (obs[0][0].equals("ORDER ID")) {
+                    orderId.getEditText().setText(obs[0][1]);
+                    orderId.setOnKeyListener(null);
                 } else if (obs[0][0].equals("TEST CONTEXT STATUS")) {
                     for (RadioButton rb : hba1cTestType.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.comorbidities_HbA1C_test_type_baseline)) && obs[0][1].equals("BASELINE")) {
@@ -875,11 +850,12 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
             } else {
                 formType.getRadioGroup().getButtons().get(1).setChecked(true);
                 formType.getRadioGroup().getButtons().get(0).setEnabled(false);
-                if (obs[0][0].equals("TEST ID")) {
-                    hba1cTestID.getEditText().setText(obs[0][1]);
-                    checkTestId();
-                    hba1cTestID.getEditText().setEnabled(false);
-                    testIdView.setEnabled(false);
+
+                if (obs[0][0].equals("ORDER ID")) {
+                    orderIds.getSpinner().selectValue(obs[0][1]);
+                    orderIds.getSpinner().setEnabled(false);
+                } else if (obs[0][0].equals("TEST ID")) {
+                    testId.getEditText().setText(obs[0][1]);
                 } /*else if (obs[0][0].equals("TEST RESULT DATE")) {
                     String secondDate = obs[0][1];
                     thirdDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
@@ -943,6 +919,62 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+        MySpinner spinner = (MySpinner) parent;
+
+        if (spinner == orderIds.getSpinner()) {
+            updateDisplay();
+
+            final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
+                @Override
+                protected HashMap<String, String> doInBackground(String... params) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            loading.setInverseBackgroundForced(true);
+                            loading.setIndeterminate(true);
+                            loading.setCancelable(false);
+                            loading.setMessage(getResources().getString(R.string.fetching_data));
+                            loading.show();
+                        }
+                    });
+
+                    HashMap<String, String> result = new HashMap<String, String>();
+                    //String testStatus = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "HbA1C Test Order", "TEST CONTEXT STATUS");
+                    String testStatus = serverService.getObsValueByObs(App.getPatientId(), App.getProgram() + "-" + "HbA1C Test Order", "ORDER ID", App.get(orderIds), "TEST CONTEXT STATUS");
+                    Log.e("TextStatus", testStatus + "");
+
+
+                    if (testStatus != null)
+                        if (!testStatus.equals(""))
+                            result.put("TEST CONTEXT STATUS", testStatus);
+
+                    return result;
+                }
+
+                @Override
+                protected void onProgressUpdate(String... values) {
+                }
+
+                @Override
+                protected void onPostExecute(HashMap<String, String> result) {
+                    super.onPostExecute(result);
+                    loading.dismiss();
+
+                    //Log.e("TextStatus", result.get("TEST CONTEXT STATUS")+"");
+
+                    if (result.get("TEST CONTEXT STATUS") != null) {
+                        if (!result.get("TEST CONTEXT STATUS").equals("")) {
+                            if (result.get("TEST CONTEXT STATUS").equalsIgnoreCase("BASELINE") || result.get("TEST CONTEXT STATUS").equalsIgnoreCase("BASELINE REPEAT")) {
+                                hba1cDiabetic.setVisibility(View.VISIBLE);
+                            } else {
+                                hba1cDiabetic.setVisibility(View.GONE);
+                            }
+                        }
+                    }
+                }
+            };
+            autopopulateFormTask.execute("");
+        }
     }
 
     @Override
@@ -956,8 +988,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
 
         formDate.setVisibility(View.GONE);
 
-        hba1cTestID.getEditText().setEnabled(true);
-        testIdView.setEnabled(true);
+        testId.getEditText().setEnabled(true);
         formType.getRadioGroup().getButtons().get(0).setEnabled(true);
         formType.getRadioGroup().getButtons().get(1).setEnabled(true);
 
@@ -968,11 +999,14 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
 
         submitButton.setEnabled(false);
 
-        testIdView.setVisibility(View.GONE);
-        hba1cTestID.setVisibility(View.GONE);
-        testIdView.setImageResource(R.drawable.ic_checked);
+        testId.setVisibility(View.GONE);
 
         goneVisibility();
+
+        String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "HbA1C Test Order", "ORDER ID");
+        if (testIds != null) {
+            orderIds.getSpinner().setSpinnerData(testIds);
+        }
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -1008,20 +1042,35 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
         if (radioGroup == formType.getRadioGroup()) {
             //showTestOrderOrTestResult();
             //formType.getQuestionView().setError(null);
-
+            submitButton.setEnabled(true);
             formDate.setVisibility(View.VISIBLE);
-            hba1cTestID.setVisibility(View.VISIBLE);
-            hba1cTestID.getEditText().setText("");
-            hba1cTestID.getEditText().setError(null);
-            goneVisibility();
-            submitButton.setEnabled(false);
+            showTestOrderOrTestResult();
+
         }
 
-        if(radioGroup == hba1cDiabetic.getRadioGroup()) {
-            if(App.get(hba1cDiabetic).equalsIgnoreCase(getResources().getString(R.string.no))) {
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.comorbidities_hba1c_screener_instructions), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-                tv.setMaxLines(3);
+        if (radioGroup == hba1cDiabetic.getRadioGroup()) {
+            if (App.get(hba1cDiabetic).equalsIgnoreCase(getResources().getString(R.string.no))) {
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.comorbidities_hba1c_screener_instructions), Snackbar.LENGTH_INDEFINITE)
+                        .setAction("CLOSE", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                snackbar.dismiss();
+                            }
+                        });
+
+                // Changing message text color
+                //snackbar.setActionTextColor(Color.RED);
+
+                //Changing Typeface of Snackbar Action text
+                TextView snackbarActionTextView = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_action);
+                snackbarActionTextView.setTextSize(20);
+                snackbarActionTextView.setTypeface(snackbarActionTextView.getTypeface(), Typeface.BOLD);
+
+                // Setting Maximum lines for the textview in snackbar
+                View sbView = snackbar.getView();
+                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                textView.setMaxLines(4);
                 snackbar.show();
             }
         }
@@ -1052,10 +1101,33 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
             } else {
                 hba1cDiabetic.getRadioGroup().check((hba1cDiabetic.getRadioGroup().getChildAt(1)).getId());
 
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.comorbidities_hba1c_screener_instructions), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-                tv.setMaxLines(3);
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.comorbidities_hba1c_screener_instructions), Snackbar.LENGTH_INDEFINITE)
+                        .setAction("CLOSE", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                snackbar.dismiss();
+                            }
+                        });
+
+                // Changing message text color
+                //snackbar.setActionTextColor(Color.RED);
+
+                //Changing Typeface of Snackbar Action text
+                TextView snackbarActionTextView = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_action);
+                snackbarActionTextView.setTextSize(20);
+                snackbarActionTextView.setTypeface(snackbarActionTextView.getTypeface(), Typeface.BOLD);
+
+                // Setting Maximum lines for the textview in snackbar
+                View sbView = snackbar.getView();
+                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                textView.setMaxLines(4);
                 snackbar.show();
+
+                /*snackbar = Snackbar.make(mainContent, getResources().getString(R.string.comorbidities_hba1c_screener_instructions), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.error, 0, 0, 0);
+                tv.setCompoundDrawablePadding(getResources().getDimensionPixelOffset(R.dimen.small));
+                tv.setMaxLines(3);*/
             }
         } catch (NumberFormatException nfe) {
             //Exception: User might be entering " " (empty) value
@@ -1079,305 +1151,89 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
         hba1cResult.setVisibility(View.GONE);
         hba1cDiabetic.setVisibility(View.GONE);
 
+        orderId.setVisibility(View.GONE);
+        orderIds.setVisibility(View.GONE);
+        testId.setVisibility(View.GONE);
     }
 
     void showTestOrderOrTestResult() {
         if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
-            isResultForm = false;
-            beforeResult = false;
             formDate.setVisibility(View.VISIBLE);
+            formDate.setDefaultValue();
             testOrderHba1C.setVisibility(View.VISIBLE);
             hba1cTestType.setVisibility(View.VISIBLE);
             hba1cFollowupMonth.setVisibility(View.VISIBLE);
             //hba1cTestOrderDate.setVisibility(View.VISIBLE);
+            orderId.setVisibility(View.VISIBLE);
+
             showFollowupField();
             testResultHba1c.setVisibility(View.GONE);
             hba1cTestResultDate.setVisibility(View.GONE);
             hba1cResult.setVisibility(View.GONE);
             hba1cDiabetic.setVisibility(View.GONE);
-        } else {
-            isResultForm = true;
-            beforeResult = false;
+            orderIds.setVisibility(View.GONE);
+            testId.setVisibility(View.GONE);
+
+            Date nowDate = new Date();
+            orderId.getEditText().setText(App.getSqlDateTime(nowDate));
+        } else if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))) {
             formDate.setVisibility(View.VISIBLE);
+            formDate.setDefaultValue();
             testOrderHba1C.setVisibility(View.GONE);
             hba1cTestType.setVisibility(View.GONE);
             hba1cFollowupMonth.setVisibility(View.GONE);
             hba1cTestOrderDate.setVisibility(View.GONE);
+            orderId.setVisibility(View.GONE);
+
             testResultHba1c.setVisibility(View.VISIBLE);
             //hba1cTestResultDate.setVisibility(View.VISIBLE);
             hba1cResult.setVisibility(View.VISIBLE);
             //hba1cDiabetic.setVisibility(View.GONE);
+            orderIds.setVisibility(View.VISIBLE);
+            testId.setVisibility(View.VISIBLE);
 
-            final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
-                @Override
-                protected HashMap<String, String> doInBackground(String... params) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            loading.setInverseBackgroundForced(true);
-                            loading.setIndeterminate(true);
-                            loading.setCancelable(false);
-                            loading.setMessage(getResources().getString(R.string.fetching_data));
-                            loading.show();
-                        }
-                    });
+            String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "HbA1C Test Order", "ORDER ID");
 
-                    HashMap<String, String> result = new HashMap<String, String>();
-                    String testStatus = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "HbA1C Test Order", "TEST CONTEXT STATUS");
-                    Log.e("TextStatus", testStatus+"");
-
-
-                    if (testStatus != null)
-                        if (!testStatus.equals(""))
-                            result.put("TEST CONTEXT STATUS", testStatus);
-
-                    return result;
-                }
-
-                @Override
-                protected void onProgressUpdate(String... values) {
-                }
-
-                @Override
-                protected void onPostExecute(HashMap<String, String> result) {
-                    super.onPostExecute(result);
-                    loading.dismiss();
-
-                    //Log.e("TextStatus", result.get("TEST CONTEXT STATUS")+"");
-
-                    if(result.get("TEST CONTEXT STATUS") != null) {
-                        if(!result.get("TEST CONTEXT STATUS").equals("")) {
-                            if (result.get("TEST CONTEXT STATUS").equalsIgnoreCase("BASELINE") || result.get("TEST CONTEXT STATUS").equalsIgnoreCase("BASELINE REPEAT")) {
-                                hba1cDiabetic.setVisibility(View.VISIBLE);
-                            } else {
-                                hba1cDiabetic.setVisibility(View.GONE);
+            if (testIds == null || testIds.length == 0) {
+                final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                alertDialog.setMessage(getResources().getString(R.string.comorbidities_hba1c_no_order_found));
+                Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                alertDialog.setIcon(clearIcon);
+                alertDialog.setTitle(getResources().getString(R.string.title_error));
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                try {
+                                    InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                    imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                } catch (Exception e) {
+                                    // TODO: handle exception
+                                }
+                                dialog.dismiss();
                             }
-                        }
-                    }
-                }
-            };
-            autopopulateFormTask.execute("");
-        }
-    }
-
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN: {
-                ImageView view = (ImageView) v;
-                //overlay is black with transparency of 0x77 (119)
-                view.getDrawable().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
-                view.invalidate();
-
-                Boolean error = false;
-
-                checkTestId();
-
-                break;
-            }
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL: {
-                ImageView view = (ImageView) v;
-                //clear the overlay
-                view.getDrawable().clearColorFilter();
-                view.invalidate();
-                break;
-            }
-        }
-        return true;
-    }
-
-    public boolean validateResultDate() {
-        updateDisplay();
-        return changeDate;
-    }
-
-    private void checkTestId() {
-        /*AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
-            @Override
-            protected String doInBackground(String... params) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        loading.setInverseBackgroundForced(true);
-                        loading.setIndeterminate(true);
-                        loading.setCancelable(false);
-                        loading.setMessage(getResources().getString(R.string.verifying_test_id));
-                        loading.show();
-                    }
-                });
-
-                String result = "";
-
-                Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "Comorbidities-HbA1C Test Order");
-
-                Log.d("TEST_IDS_H", Arrays.deepToString(testIds));
-
-                if (testIds == null || testIds.length < 1) {
-                    if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder)))
-                        return "SUCCESS";
-                    else
-                        return "";
-                }
-
-                if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
-                    result = "SUCCESS";
-                    for (int i = 0; i < testIds.length; i++) {
-                        if (String.valueOf(testIds[i][0]).equals(App.get(hba1cTestID))) {
-                            return "";
-                        }
-                    }
-                }
-
-                if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))) {
-                    result = "";
-                    for (int i = 0; i < testIds.length; i++) {
-                        if (String.valueOf(testIds[i][0]).equals(App.get(hba1cTestID))) {
-                            return "SUCCESS";
-                        }
-                    }
-                }
-
-                return result;
+                        });
+                alertDialog.show();
+                submitButton.setEnabled(false);
+                return;
             }
 
-            @Override
-            protected void onProgressUpdate(String... values) {
+            if (testIds != null) {
+                orderIds.getSpinner().setSpinnerData(testIds);
             }
 
-            ;
+            if (orderIds.getSpinner().getCount() > 0) {
+                //String testStatus = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "HbA1C Test Order", "TEST CONTEXT STATUS");
+                String testStatus = serverService.getObsValueByObs(App.getPatientId(), App.getProgram() + "-" + "HbA1C Test Order", "ORDER ID", App.get(orderIds), "TEST CONTEXT STATUS");
+                Log.e("TextStatus", testStatus + "");
 
-            @Override
-            protected void onPostExecute(String result) {
-                super.onPostExecute(result);
-                loading.dismiss();
-
-                if (result.equals("SUCCESS")) {
-
-                    testIdView.setImageResource(R.drawable.ic_checked_green);
-                    showTestOrderOrTestResult();
-                    submitButton.setEnabled(true);
-
+                if (testStatus.equalsIgnoreCase("BASELINE") || testStatus.equalsIgnoreCase("BASELINE REPEAT")) {
+                    hba1cDiabetic.setVisibility(View.VISIBLE);
                 } else {
-
-                    if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
-                        hba1cTestID.getEditText().setError("Test Id already used.");
-                    } else {
-                        hba1cTestID.getEditText().setError("No order form found for the test id for patient");
-                    }
-
+                    hba1cDiabetic.setVisibility(View.GONE);
                 }
-
-                try {
-                    InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
-                } catch (Exception e) {
-                    // TODO: handle exception
-                }
-
-            }
-        };
-        submissionFormTask.execute("");*/
-
-        AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
-            @Override
-            protected String doInBackground(String... params) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        loading.setInverseBackgroundForced(true);
-                        loading.setIndeterminate(true);
-                        loading.setCancelable(false);
-                        loading.setMessage(getResources().getString(R.string.verifying_test_id));
-                        loading.show();
-                    }
-                });
-
-                String result = "";
-
-                Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "Comorbidities-HbA1C Test Order");
-
-                if (testIds == null || testIds.length < 1) {
-                    if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder)))
-                        return "SUCCESS";
-                    else
-                        return "";
-                }
-
-
-                if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
-                    result = "SUCCESS";
-                    for (int i = 0; i < testIds.length; i++) {
-                        if (String.valueOf(testIds[i][0]).equals(App.get(hba1cTestID))) {
-                            return "";
-                        }
-                    }
-                }
-
-                if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))) {
-                    result = "";
-                    for (int i = 0; i < testIds.length; i++) {
-                        if (String.valueOf(testIds[i][0]).equals(App.get(hba1cTestID))) {
-                            if (!isResultForm)
-                                beforeResult = true;
-                            else
-                                beforeResult = false;
-                            if (!validateResultDate())
-                                return "SUCCESS";
-                            return "FAIL";
-                        }
-                    }
-                }
-
-                return result;
             }
 
-            @Override
-            protected void onProgressUpdate(String... values) {
-            }
-
-            ;
-
-            @Override
-            protected void onPostExecute(String result) {
-                super.onPostExecute(result);
-                loading.dismiss();
-
-                if (result.equals("SUCCESS")) {
-
-                    testIdView.setImageResource(R.drawable.ic_checked_green);
-                    showTestOrderOrTestResult();
-                    submitButton.setEnabled(true);
-
-                } else if (result.equals("FAIL")) {
-                    if (snackbar != null)
-                        snackbar.dismiss();
-
-                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
-                    snackbar.show();
-                    formDateCalendar = App.getCalendar(App.stringToDate(finalDate, "EEEE, MMM dd,yyyy"));
-                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                } else {
-
-                    if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
-                        hba1cTestID.getEditText().setError("Test Id already used.");
-                    } else {
-                        hba1cTestID.getEditText().setError("No order form found for the test id for patient");
-                    }
-
-                }
-
-                try {
-                    InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
-                } catch (Exception e) {
-                    // TODO: handle exception
-                }
-
-            }
-        };
-        submissionFormTask.execute("");
-
+        }
     }
 
     class MyAdapter extends PagerAdapter {

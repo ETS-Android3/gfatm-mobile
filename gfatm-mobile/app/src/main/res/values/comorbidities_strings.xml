@@ -32,7 +32,7 @@
     <string name="comorbidities_akuads_totalscore">AKUADS score:</string>
     <string name="comorbidities_akuads_severity">Severity level:</string>
     <string name="comorbidities_agree_AKUADS">Does the client agree to therapy?</string>
-    <string name="comorbidities_akuads_screener_instructions">Screener Instructions: Kindly give the comorbidities conditions brochure to the patient.</string>
+    <string name="comorbidities_akuads_screener_instructions">Screener Instructions: \nKindly give the comorbidities conditions brochure to the patient.</string>
     <string name="comorbidities_preferredlocation_id">Preferred location for Therapy:</string>
     <string name="comorbidities_preferredlocation_gpcliniccode">GP Clinic Code:</string>
     <string name="comorbidities_preferredlocation_gpcliniccode_range">Range 1&#8211;50</string>
@@ -40,7 +40,7 @@
     <string name="comorbidities_preferredlocation_other_comorbidities">Other preferred location:</string>
     <string name="comorbidities_dm_screening">DIABETES MELLITUS SCREENING</string>
     <string name="comorbidities_dmscrnng_food">Have you had something to eat within the last two hours?</string>
-    <string name="comorbidities_dmscrnng_screener_instructions">Screener Instructions: Kindly ensure that the patient waits two hours before getting the RBS.</string>
+    <string name="comorbidities_dmscrnng_screener_instructions">Screener Instructions: \nKindly ensure that the patient waits two hours before getting the RBS.</string>
     <string name="comorbidities_scrnng_rbs">Random Blood Sugar (RBS):</string>
     <string name="comorbidities_scrnng_rbs_range">Range 1&#8211;500</string>
     <string name="comorbidities_scrnng_rbs_limit">The value should be in the range of 1&#8211;500</string>
@@ -62,7 +62,8 @@
     <string name="comorbidities_hba1c_result_range">Range 0&#8211;20 (Including decimal)</string>
     <string name="comorbidities_hba1c_diabetic">Is the patient Diabetic?</string>
     <string name="comorbidities_form_type_error">Please select Form Type!</string>
-    <string name="comorbidities_hba1c_screener_instructions">Screener Instructions: If the patient is present at the time of handing over the result then kindly give the Zero TB Pamphlet to the patient.</string>
+    <string name="comorbidities_hba1c_screener_instructions">Screener Instructions:\nIf the patient is present at the time of handing over the result then kindly give the Zero TB Pamphlet to the patient.</string>
+    <string name="comorbidities_hba1c_no_order_found">No HbA1C Order found for the patient.</string>
 
     <string name="comorbidities_location_other">Other</string>
 
@@ -151,8 +152,11 @@
     <string name="comorbidities_blood_sugar_test_order">Test Order Blood Sugar</string>
     <string name="comorbidities_blood_sugar_test_result">Test Results Blood Sugar</string>
     <string name="comorbidities_rbs_result_limit">The value should be in the range of 0&#8211;300</string>
+    <string name="comorbidities_rbs_result_limit1">The value should be in the range of 0&#8211;500</string>
     <string name="comorbidities_rbs_result_range">Range 0&#8211;300</string>
+    <string name="comorbidities_rbs_result_range1">Range 0&#8211;500</string>
     <string name="comorbidities_rbs_result">RBS Test Result (mg/dl):</string>
+    <string name="comorbidities_blood_sugar_no_order_found">No Blood Sugar Order found for the patient.</string>
 
     <string name="comorbidities_vitals_month_of_visit">Month of visit:</string>
     <string name="comorbidities_vitals_weight">Weight (kg):</string>
@@ -387,6 +391,7 @@
     <string name="comorbidities_urinedr_hyaline_casts">Hyaline Casts:</string>
     <string name="comorbidities_urinedr_crystals">Crystals:</string>
     <string name="comorbidities_urinedr_nexttestdate">Next Urine DR Test Date:</string>
+    <string name="comorbidities_urinedr_no_order_found">No Urine Detailed Report Order found for the patient.</string>
 
     <string name="comorbidities_urinedr_quantity_range">Range 0&#8211;50</string>
     <string name="comorbidities_urinedr_quantity_limit">The value should be in the range of 0&#8211;50</string>
@@ -435,6 +440,7 @@
     <string name="comorbidities_creatinine_result_range">Range 0.0&#8211;99.9</string>
     <string name="comorbidities_creatinine_result">Creatinine Result (mg/dl):</string>
     <string name="comorbidities_creatinine_nexttestdate">Next Creatinine Test Date:</string>
+    <string name="comorbidities_creatinine_no_order_found">No Creatinine Order found for the patient.</string>
 
     <!-- Strings for ComorbiditiesLipidTestForm -->
     <string name="comorbidities_lipid_test_order">Test Order Lipid</string>
@@ -458,6 +464,7 @@
     <string name="comorbidities_lipid_test_non_hdl_limit">The value should be in the range of 1&#8211;300</string>
     <string name="comorbidities_lipid_test_non_hdl_range">Range 1&#8211;300</string>
     <string name="comorbidities_lipid_nexttestdate">Next Lipid Test Date:</string>
+    <string name="comorbidities_lipid_no_order_found">No Lipid Order found for the patient.</string>
 
     <!-- Strings for MicroalbuminTestForm -->
     <string name="comorbidities_microalbumin_test_order">Test Order Microalbumin</string>
@@ -465,6 +472,7 @@
     <string name="comorbidities_microalbumin_result">Urine Microalbumin (mg/l):</string>
     <string name="comorbidities_upto_two_decimal_places_error">The value is not valid. It must be up to two decimal places</string>
     <string name="comorbidities_microalbumin_nexttestdate">Next Microalbumin Test Date:</string>
+    <string name="comorbidities_microalbumin_no_order_found">No Urine Microalbumin Order found for the patient.</string>
 
     <!-- Strings for ComorbiditiesDiabetesEducationForm-->
     <string name="comorbidities_education_form_educational_plan">Educational Plan</string>

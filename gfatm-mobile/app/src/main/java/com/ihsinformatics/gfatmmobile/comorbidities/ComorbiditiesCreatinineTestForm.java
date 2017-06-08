@@ -20,18 +20,17 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -40,6 +39,7 @@ import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
+import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
@@ -51,7 +51,6 @@ import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -60,7 +59,7 @@ import java.util.HashMap;
  * Created by Fawad Jawaid on 17-Jan-17.
  */
 
-public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener, View.OnTouchListener {
+public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
     public static final int THIRD_DATE_DIALOG_ID = 3;
     public static final int FOURTH_DATE_DIALOG_ID = 4;
@@ -73,25 +72,24 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
     // Views...
     TitledButton formDate;
     TitledRadioGroup formType;
-    TitledEditText creatinineTestID;
+    TitledEditText testId;
     //Views for Test Order Blood Sugar
     MyTextView testOrderCreatinine;
     TitledSpinner creatinineFollowupMonth;
     TitledButton creatinineTestOrderDate;
-    ImageView testIdView;
     //Views for Test Result Blood Sugar
     MyTextView testResultCreatinine;
     TitledButton creatinineTestResultDate;
     TitledEditText creatinineResult;
     TitledButton nextCreatinineTestDate;
 
-    boolean isResultForm = false;
-    boolean beforeResult = false;
-    boolean changeDate = false;
     String finalDate = null;
 
     Boolean dateChoose = false;
     Boolean refillFlag = false;
+
+    TitledSpinner orderIds;
+    TitledEditText orderId;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -175,28 +173,8 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
         testOrderCreatinine.setTypeface(null, Typeface.BOLD);
         creatinineFollowupMonth = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_mth_txcomorbidities_hba1c), getResources().getStringArray(R.array.comorbidities_followup_month), "0", App.HORIZONTAL);
         creatinineTestOrderDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1cdate_test_order), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
-        LinearLayout linearLayout = new LinearLayout(context);
-        //creatinineTestID = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hhba1c_testid), "", "", 11, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        creatinineTestID  = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hhba1c_testid), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                0.9f
-        );
-        creatinineTestID.setLayoutParams(param);
-        linearLayout.addView(creatinineTestID);
-        testIdView = new ImageView(context);
-        testIdView.setImageResource(R.drawable.ic_checked);
-        LinearLayout.LayoutParams param1 = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                0.1f
-        );
-        testIdView.setLayoutParams(param1);
-        testIdView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        testIdView.setPadding(0, 5, 0, 0);
+        //testId = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hhba1c_testid), "", "", 11, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
 
-        linearLayout.addView(testIdView);
 
         //second page views...
         testResultCreatinine = new MyTextView(context, getResources().getString(R.string.comorbidities_creatinine_test_result));
@@ -207,20 +185,26 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
         nextCreatinineTestDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_creatinine_nexttestdate), DateFormat.format("EEEE, MMM dd,yyyy", fourthDateCalendar).toString(), App.HORIZONTAL);
         //nextCreatinineTestDate.setVisibility(View.GONE);
 
+        orderId = new TitledEditText(context,null,getResources().getString(R.string.order_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,true);
+        orderIds = new TitledSpinner(context, "", getResources().getString(R.string.order_id), getResources().getStringArray(R.array.pet_empty_array), "", App.HORIZONTAL);
+        testId = new TitledEditText(context,null,getResources().getString(R.string.ctb_test_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
+
+
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), creatinineTestID.getEditText(), formType.getRadioGroup(), creatinineFollowupMonth.getSpinner(),
+        views = new View[]{formDate.getButton(), testId.getEditText(), formType.getRadioGroup(), creatinineFollowupMonth.getSpinner(), orderId.getEditText(), orderIds.getSpinner(),
                 creatinineTestOrderDate.getButton(), creatinineTestResultDate.getButton(), creatinineResult.getEditText(), nextCreatinineTestDate.getButton()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formType, formDate, linearLayout, testOrderCreatinine, creatinineFollowupMonth, creatinineTestOrderDate,
-                        testResultCreatinine, creatinineTestResultDate, creatinineResult, nextCreatinineTestDate}};
+                {{formType, formDate, orderId, testOrderCreatinine, creatinineFollowupMonth, creatinineTestOrderDate,
+                        testResultCreatinine, orderIds, testId, creatinineTestResultDate, creatinineResult, nextCreatinineTestDate}};
 
         formDate.getButton().setOnClickListener(this);
         formType.getRadioGroup().setOnCheckedChangeListener(this);
         creatinineTestOrderDate.getButton().setOnClickListener(this);
         creatinineTestResultDate.getButton().setOnClickListener(this);
         nextCreatinineTestDate.getButton().setOnClickListener(this);
+        orderIds.getSpinner().setOnItemSelectedListener(this);
 
         creatinineResult.getEditText().addTextChangedListener(new TextWatcher() {
 
@@ -252,44 +236,6 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
             }
         });
 
-        creatinineTestID.getEditText().addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start,
-                                          int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start,
-                                      int before, int count) {
-                isResultForm = false;
-                try {
-                    if (creatinineTestID.getEditText().getText().length() > 0) {
-                        /*if (creatinineTestID.getEditText().getText().length() < 11) {
-                            creatinineTestID.getEditText().setError(getString(R.string.comorbidities_blood_sugar_testid_format_error));
-                            testIdView.setVisibility(View.INVISIBLE);
-                        } else {*/
-                            testIdView.setVisibility(View.VISIBLE);
-                            testIdView.setImageResource(R.drawable.ic_checked);
-                        //}
-                    } else {
-                        testIdView.setVisibility(View.INVISIBLE);
-                    }
-                    goneVisibility();
-                    submitButton.setEnabled(false);
-
-
-                } catch (NumberFormatException nfe) {
-                    //Exception: User might be entering " " (empty) value
-                }
-            }
-        });
-        testIdView.setOnTouchListener(this);
-
         resetViews();
     }
 
@@ -301,172 +247,20 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
             return;
         }
 
-        //formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        Calendar treatDateCalender = null;
+
         if (snackbar != null)
             snackbar.dismiss();
-
-        if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))) {
-            if (beforeResult) {
-                Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "Comorbidities-Creatinine Test Order");
-                String format = "";
-                String formDa = formDate.getButton().getText().toString();
-
-                for (int i = 0; i < testIds.length; i++) {
-                    if (testIds[i][0].equals(creatinineTestID.getEditText().getText().toString())) {
-                        String date = testIds[i][1].toString();
-                        if (date.contains("/")) {
-                            format = "dd/MM/yyyy";
-                        } else {
-                            format = "yyyy-MM-dd";
-                        }
-
-
-                        Date orderDate = App.stringToDate(date, format);
-                        Date orderDateForValidation = App.stringToDate(date, format);
-
-                        Calendar dateCalendar = Calendar.getInstance();
-                        dateCalendar.setTime(orderDateForValidation);
-                        // dateCalendar.add(Calendar.DATE, 1);
-                        SimpleDateFormat newFormat = new SimpleDateFormat("EEEE, MMM dd,yyyy");
-                        finalDate = newFormat.format(dateCalendar.getTime());
-
-                        if (formDateCalendar.before(App.getCalendar(orderDate))) {
-                            //formDateCalendar = App.getCalendar(App.stringToDate(finalDate, "EEEE, MMM dd,yyyy"));
-                            changeDate = true;
-
-                            break;
-                        } else {
-                            changeDate = false;
-                            if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
-
-                                String personDOB = App.getPatient().getPerson().getBirthdate();
-
-                                Date date1 = new Date();
-                                if (formDateCalendar.after(App.getCalendar(date1))) {
-                                    changeDate = false;
-                                    formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-
-                                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
-                                    snackbar.show();
-
-                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                                    break;
-
-                                } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
-                                    changeDate = false;
-                                    formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-                                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                                    TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-                                    tv.setMaxLines(2);
-                                    snackbar.show();
-                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                                    break;
-                                } else {
-                                    changeDate = false;
-                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                                }
-                            }
-                        }
-                    }
-                }
-            } else if (isResultForm) {
-                changeDate = false;
-                Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "Comorbidities-Creatinine Test Order");
-                String format = "";
-                String formDa = formDate.getButton().getText().toString();
-
-                for (int i = 0; i < testIds.length; i++) {
-                    if (testIds[i][0].equals(creatinineTestID.getEditText().getText().toString())) {
-                        String date = testIds[i][1].toString();
-                        if (date.contains("/")) {
-                            format = "dd/MM/yyyy";
-                        } else {
-                            format = "yyyy-MM-dd";
-                        }
-
-                        Date orderDate = App.stringToDate(date, format);
-
-                        if (formDateCalendar.before(App.getCalendar(orderDate))) {
-                            formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-
-                            snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
-                            snackbar.show();
-
-                            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                            break;
-                        } else {
-                            if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
-
-                                String personDOB = App.getPatient().getPerson().getBirthdate();
-
-                                Date date1 = new Date();
-                                if (formDateCalendar.after(App.getCalendar(date1))) {
-
-                                    formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-
-                                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
-                                    snackbar.show();
-
-                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                                    break;
-
-                                } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
-                                    formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-                                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                                    TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-                                    tv.setMaxLines(2);
-                                    snackbar.show();
-                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                                    break;
-                                } else
-                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        /*if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))){
-            Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "Comorbidities-Creatinine Test Order");
-            String format = "";
-            String formDa = formDate.getButton().getText().toString();
-
-            for(int i =0 ; i < testIds.length ; i++){
-                if(testIds[i][0].equals(creatinineTestID.getEditText().getText().toString())){
-                    String date = testIds[i][1].toString();
-                    if (date.contains("/")) {
-                        format = "dd/MM/yyyy";
-                    } else {
-                        format = "yyyy-MM-dd";
-                    }
-
-                    Date orderDate = App.stringToDate(date, format);
-
-                    if(formDateCalendar.before(App.getCalendar(orderDate))){
-                        formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-
-                        snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
-                        snackbar.show();
-
-                        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                        break;
-                    }
-                    else {
-                        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                    }
-                }
-            }
-        }*/
 
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
+            personDOB = personDOB.substring(0,10);
 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
-                changeDate = false;
+
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
@@ -475,17 +269,91 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
             } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
-                changeDate = false;
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-            } else
+            } else {
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
+                if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))) {
+
+                    if (!App.get(orderIds).equals("")) {
+                        String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), App.getProgram() + "-" + "Creatinine Test Order", "ORDER ID", App.get(orderIds));
+
+                        String format = "";
+                        if (encounterDateTime.contains("/")) {
+                            format = "dd/MM/yyyy";
+                        } else {
+                            format = "yyyy-MM-dd";
+                        }
+
+                        Date orderDate = App.stringToDate(encounterDateTime, format);
+
+                        if (formDateCalendar.before(App.getCalendar(orderDate))) {
+
+                            Date dDate = App.stringToDate(formDa, "EEEE, MMM dd,yyyy");
+                            if (dDate.before(orderDate)) {
+                                formDateCalendar = Calendar.getInstance();
+                                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                            } else {
+                                formDateCalendar = App.getCalendar(dDate);
+                                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                            }
+
+                            snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
+                            snackbar.show();
+
+                        }
+
+                    }
+                } else {
+                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                }
+
+            }
+
+        } else{
+            String formDa = formDate.getButton().getText().toString();
+
+            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
+            if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))) {
+
+                if (!App.get(orderIds).equals("")) {
+                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), App.getProgram() + "-" + "Creatinine Test Order", "ORDER ID", App.get(orderIds));
+
+                    String format = "";
+                    if (encounterDateTime.contains("/")) {
+                        format = "dd/MM/yyyy";
+                    } else {
+                        format = "yyyy-MM-dd";
+                    }
+
+                    Date orderDate = App.stringToDate(encounterDateTime, format);
+
+                    if (formDateCalendar.before(App.getCalendar(orderDate))) {
+
+                        Date dDate = App.stringToDate(formDa, "EEEE, MMM dd,yyyy");
+                        if (dDate.before(orderDate)) {
+                            formDateCalendar = Calendar.getInstance();
+                            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        } else {
+                            formDateCalendar = App.getCalendar(dDate);
+                            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        }
+
+                        snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
+                        snackbar.show();
+
+                    }
+
+                }
+            }
         }
+
 
         //creatinineTestOrderDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         if (!(creatinineTestOrderDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
@@ -608,17 +476,79 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
             error = true;
         }
 
-        if (App.get(creatinineTestID).isEmpty()) {
-            gotoFirstPage();
-            creatinineTestID.getEditText().setError(getString(R.string.empty_field));
-            creatinineTestID.getEditText().requestFocus();
-            error = true;
-        } /*else if (!App.get(creatinineTestID).isEmpty() && App.get(creatinineTestID).length() < 11) {
-            gotoFirstPage();
-            creatinineTestID.getEditText().setError(getString(R.string.comorbidities_blood_sugar_testid_format_error));
-            creatinineTestID.getEditText().requestFocus();
-            error = true;
-        }*/
+        Boolean flag1 = true;
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            if (saveFlag) {
+                flag1 = false;
+            }else {
+                flag1 = true;
+            }
+        }
+
+        if(orderIds.getVisibility()==View.VISIBLE && flag1){
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Creatinine Test Result", "ORDER ID");
+            if(resultTestIds != null){
+                for(String id : resultTestIds) {
+
+                    if (id.equals(App.get(orderIds))) {
+                        final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                        alertDialog.setMessage(getResources().getString(R.string.ctb_order_result_found_error) + App.get(orderIds));
+                        Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                        alertDialog.setIcon(clearIcon);
+                        alertDialog.setTitle(getResources().getString(R.string.title_error));
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        try {
+                                            InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                            imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                        } catch (Exception e) {
+                                            // TODO: handle exception
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                });
+                        alertDialog.show();
+
+                        return false;
+                    }
+                }
+            }
+        }
+
+        if(testId.getVisibility() == View.VISIBLE && flag1){
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Creatinine Test Result", "TEST ID");
+            if(resultTestIds != null) {
+                for (String id : resultTestIds) {
+                    if (id.equals(App.get(testId))) {
+                        final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                        alertDialog.setMessage(getResources().getString(R.string.ctb_test_result_found_error) + App.get(testId));
+                        Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                        alertDialog.setIcon(clearIcon);
+                        alertDialog.setTitle(getResources().getString(R.string.title_error));
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        try {
+                                            InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                            imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                        } catch (Exception e) {
+                                            // TODO: handle exception
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                });
+                        alertDialog.show();
+
+                        return false;
+                    }
+
+                }
+            }
+
+        }
 
         if (error) {
 
@@ -674,12 +604,14 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
 
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-        observations.add(new String[]{"TEST ID", App.get(creatinineTestID)});
 
         if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
+            observations.add(new String[]{"ORDER ID", App.get(orderId)});
             observations.add(new String[]{"FOLLOW-UP MONTH", App.get(creatinineFollowupMonth)});
             //observations.add(new String[]{"DATE TEST ORDERED", App.getSqlDateTime(secondDateCalendar)});
         } else if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))) {
+            observations.add(new String[]{"ORDER ID", App.get(orderIds)});
+            observations.add(new String[]{"TEST ID", App.get(testId)});
             //observations.add(new String[]{"TEST RESULT DATE", App.getSqlDateTime(thirdDateCalendar)});
             observations.add(new String[]{"CREATININE RESULT VALUE", App.get(creatinineResult)});
             observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDateTime(fourthDateCalendar)});
@@ -843,8 +775,8 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
             /*if (obs[0][0].equals("FORM START TIME")) {
                 startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
             } else if (obs[0][0].equals("TEST ID")) {
-                creatinineTestID.getEditText().setText(obs[0][1]);
-                creatinineTestID.setVisibility(View.VISIBLE);
+                testId.getEditText().setText(obs[0][1]);
+                testId.setVisibility(View.VISIBLE);
 
                 checkTestId();
 
@@ -879,12 +811,9 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
             if (fo.getFormName().contains("Order")) {
                 formType.getRadioGroup().getButtons().get(0).setChecked(true);
                 formType.getRadioGroup().getButtons().get(1).setEnabled(false);
-                if (obs[0][0].equals("TEST ID")) {
-                    creatinineTestID.getEditText().setText(obs[0][1]);
-                    creatinineTestID.getEditText().setEnabled(false);
-                    testIdView.setEnabled(false);
-                    testIdView.setImageResource(R.drawable.ic_checked_green);
-                    //checkTestId();
+                if (obs[0][0].equals("ORDER ID")) {
+                    orderId.getEditText().setText(obs[0][1]);
+                    orderId.setOnKeyListener(null);
                 } else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
                     creatinineFollowupMonth.getSpinner().selectValue(obs[0][1]);
                     creatinineFollowupMonth.setVisibility(View.VISIBLE);
@@ -898,11 +827,12 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
             } else {
                 formType.getRadioGroup().getButtons().get(1).setChecked(true);
                 formType.getRadioGroup().getButtons().get(0).setEnabled(false);
-                if (obs[0][0].equals("TEST ID")) {
-                    creatinineTestID.getEditText().setText(obs[0][1]);
-                    checkTestId();
-                    creatinineTestID.getEditText().setEnabled(false);
-                    testIdView.setEnabled(false);
+                if (obs[0][0].equals("ORDER ID")) {
+                    orderIds.getSpinner().selectValue(obs[0][1]);
+                    orderIds.getSpinner().setEnabled(false);
+                }
+                else if (obs[0][0].equals("TEST ID")) {
+                    testId.getEditText().setText(obs[0][1]);
                 } /*else if (obs[0][0].equals("TEST RESULT DATE")) {
                     String secondDate = obs[0][1];
                     thirdDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
@@ -966,6 +896,11 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        MySpinner spinner = (MySpinner) parent;
+
+        if (spinner == orderIds.getSpinner()) {
+            updateDisplay();
+        }
 
     }
 
@@ -980,8 +915,7 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
 
         formDate.setVisibility(View.GONE);
 
-        creatinineTestID.getEditText().setEnabled(true);
-        testIdView.setEnabled(true);
+        testId.getEditText().setEnabled(true);
         formType.getRadioGroup().getButtons().get(0).setEnabled(true);
         formType.getRadioGroup().getButtons().get(1).setEnabled(true);
 
@@ -1002,11 +936,14 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
 
         submitButton.setEnabled(false);
 
-        testIdView.setVisibility(View.GONE);
-        creatinineTestID.setVisibility(View.GONE);
-        testIdView.setImageResource(R.drawable.ic_checked);
+        testId.setVisibility(View.GONE);
 
         goneVisibility();
+
+        String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Creatinine Test Order", "ORDER ID");
+        if(testIds != null) {
+            orderIds.getSpinner().setSpinnerData(testIds);
+        }
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -1034,12 +971,9 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
         if (radioGroup == formType.getRadioGroup()) {
+            submitButton.setEnabled(true);
             formDate.setVisibility(View.VISIBLE);
-            creatinineTestID.setVisibility(View.VISIBLE);
-            creatinineTestID.getEditText().setText("");
-            creatinineTestID.getEditText().setError(null);
-            goneVisibility();
-            submitButton.setEnabled(false);
+            showTestOrderOrTestResult();
         }
     }
 
@@ -1053,253 +987,76 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
         creatinineTestResultDate.setVisibility(View.GONE);
         creatinineResult.setVisibility(View.GONE);
         nextCreatinineTestDate.setVisibility(View.GONE);
+
+        orderId.setVisibility(View.GONE);
+        orderIds.setVisibility(View.GONE);
+        testId.setVisibility(View.GONE);
     }
 
     void showTestOrderOrTestResult() {
         formDate.setVisibility(View.VISIBLE);
         if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
-            isResultForm = false;
-            beforeResult = false;
+
+            formDate.setDefaultValue();
             testOrderCreatinine.setVisibility(View.VISIBLE);
             creatinineFollowupMonth.setVisibility(View.VISIBLE);
             creatinineTestOrderDate.setVisibility(View.GONE);
+            orderId.setVisibility(View.VISIBLE);
 
             testResultCreatinine.setVisibility(View.GONE);
             creatinineTestResultDate.setVisibility(View.GONE);
             creatinineResult.setVisibility(View.GONE);
             nextCreatinineTestDate.setVisibility(View.GONE);
-        } else {
-            isResultForm = true;
-            beforeResult = false;
+            orderIds.setVisibility(View.GONE);
+            testId.setVisibility(View.GONE);
+
+            Date nowDate = new Date();
+            orderId.getEditText().setText(App.getSqlDateTime(nowDate));
+
+        } else if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))) {
+
+            formDate.setDefaultValue();
             testOrderCreatinine.setVisibility(View.GONE);
             creatinineFollowupMonth.setVisibility(View.GONE);
             creatinineTestOrderDate.setVisibility(View.GONE);
+            orderId.setVisibility(View.GONE);
 
             testResultCreatinine.setVisibility(View.VISIBLE);
             creatinineTestResultDate.setVisibility(View.GONE);
             creatinineResult.setVisibility(View.VISIBLE);
             nextCreatinineTestDate.setVisibility(View.VISIBLE);
+            orderIds.setVisibility(View.VISIBLE);
+            testId.setVisibility(View.VISIBLE);
+
+            String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Creatinine Test Order", "ORDER ID");
+
+            if(testIds == null || testIds.length == 0){
+                final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                alertDialog.setMessage(getResources().getString(R.string.ctb_no_histopathology_order_found));
+                Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                alertDialog.setIcon(clearIcon);
+                alertDialog.setTitle(getResources().getString(R.string.title_error));
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                try {
+                                    InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                    imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                } catch (Exception e) {
+                                    // TODO: handle exception
+                                }
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();
+                submitButton.setEnabled(false);
+                return;
+            }
+
+            if(testIds != null) {
+                orderIds.getSpinner().setSpinnerData(testIds);
+            }
         }
-    }
-
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN: {
-                ImageView view = (ImageView) v;
-                //overlay is black with transparency of 0x77 (119)
-                view.getDrawable().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
-                view.invalidate();
-
-                Boolean error = false;
-
-                checkTestId();
-
-                break;
-            }
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL: {
-                ImageView view = (ImageView) v;
-                //clear the overlay
-                view.getDrawable().clearColorFilter();
-                view.invalidate();
-                break;
-            }
-        }
-        return true;
-    }
-
-    public boolean validateResultDate() {
-        updateDisplay();
-        return changeDate;
-    }
-
-    private void checkTestId() {
-        /*AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
-            @Override
-            protected String doInBackground(String... params) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        loading.setInverseBackgroundForced(true);
-                        loading.setIndeterminate(true);
-                        loading.setCancelable(false);
-                        loading.setMessage(getResources().getString(R.string.verifying_test_id));
-                        loading.show();
-                    }
-                });
-
-                String result = "";
-
-                Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "Comorbidities-Creatinine Test Order");
-
-                Log.d("TEST_IDS_C", Arrays.deepToString(testIds));
-
-                if (testIds == null || testIds.length < 1) {
-                    if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder)))
-                        return "SUCCESS";
-                    else
-                        return "";
-                }
-
-                if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
-                    result = "SUCCESS";
-                    for (int i = 0; i < testIds.length; i++) {
-                        if (String.valueOf(testIds[i][0]).equals(App.get(creatinineTestID))) {
-                            return "";
-                        }
-                    }
-                }
-
-                if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))) {
-                    result = "";
-                    for (int i = 0; i < testIds.length; i++) {
-                        if (String.valueOf(testIds[i][0]).equals(App.get(creatinineTestID))) {
-                            return "SUCCESS";
-                        }
-                    }
-                }
-
-                return result;
-            }
-
-            @Override
-            protected void onProgressUpdate(String... values) {
-            }
-
-            ;
-
-            @Override
-            protected void onPostExecute(String result) {
-                super.onPostExecute(result);
-                loading.dismiss();
-
-                if (result.equals("SUCCESS")) {
-
-                    testIdView.setImageResource(R.drawable.ic_checked_green);
-                    showTestOrderOrTestResult();
-                    submitButton.setEnabled(true);
-
-                } else {
-
-                    if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
-                        creatinineTestID.getEditText().setError("Test Id already used.");
-                    } else {
-                        creatinineTestID.getEditText().setError("No order form found for the test id for patient");
-                    }
-
-                }
-
-                try {
-                    InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
-                } catch (Exception e) {
-                    // TODO: handle exception
-                }
-
-            }
-        };
-        submissionFormTask.execute("");*/
-
-        AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
-            @Override
-            protected String doInBackground(String... params) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        loading.setInverseBackgroundForced(true);
-                        loading.setIndeterminate(true);
-                        loading.setCancelable(false);
-                        loading.setMessage(getResources().getString(R.string.verifying_test_id));
-                        loading.show();
-                    }
-                });
-
-                String result = "";
-
-                Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "Comorbidities-Creatinine Test Order");
-
-                if (testIds == null || testIds.length < 1) {
-                    if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder)))
-                        return "SUCCESS";
-                    else
-                        return "";
-                }
-
-
-                if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
-                    result = "SUCCESS";
-                    for (int i = 0; i < testIds.length; i++) {
-                        if (String.valueOf(testIds[i][0]).equals(App.get(creatinineTestID))) {
-                            return "";
-                        }
-                    }
-                }
-
-                if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))) {
-                    result = "";
-                    for (int i = 0; i < testIds.length; i++) {
-                        if (String.valueOf(testIds[i][0]).equals(App.get(creatinineTestID))) {
-                            if (!isResultForm)
-                                beforeResult = true;
-                            else
-                                beforeResult = false;
-                            if (!validateResultDate())
-                                return "SUCCESS";
-                            return "FAIL";
-                        }
-                    }
-                }
-
-                return result;
-            }
-
-            @Override
-            protected void onProgressUpdate(String... values) {
-            }
-
-            ;
-
-            @Override
-            protected void onPostExecute(String result) {
-                super.onPostExecute(result);
-                loading.dismiss();
-
-                if (result.equals("SUCCESS")) {
-
-                    testIdView.setImageResource(R.drawable.ic_checked_green);
-                    showTestOrderOrTestResult();
-                    submitButton.setEnabled(true);
-
-                } else if (result.equals("FAIL")) {
-                    if (snackbar != null)
-                        snackbar.dismiss();
-
-                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
-                    snackbar.show();
-                    formDateCalendar = App.getCalendar(App.stringToDate(finalDate, "EEEE, MMM dd,yyyy"));
-                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                } else {
-
-                    if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
-                        creatinineTestID.getEditText().setError("Test Id already used.");
-                    } else {
-                        creatinineTestID.getEditText().setError("No order form found for the test id for patient");
-                    }
-
-                }
-
-                try {
-                    InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
-                } catch (Exception e) {
-                    // TODO: handle exception
-                }
-
-            }
-        };
-        submissionFormTask.execute("");
-
     }
 
     class MyAdapter extends PagerAdapter {
