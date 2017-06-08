@@ -320,7 +320,7 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
 
     @Override
     public void updateDisplay() {
-        String formDa = formDate.getButton().getText().toString();
+
         String personDOB = App.getPatient().getPerson().getBirthdate();
         Calendar maxDateCalender = formDateCalendar.getInstance();
         maxDateCalender.setTime(formDateCalendar.getTime());
@@ -329,9 +329,7 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
             snackbar.dismiss();
         Date date = new Date();
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
-
-
-
+            String formDa = formDate.getButton().getText().toString();
             if (formDateCalendar.after(App.getCalendar(date))) {
 
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
@@ -362,30 +360,59 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
                 }
 
         }
-        if (!nextDateOfDrug.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString())) {
 
-            //
-            // +Date date = App.stringToDate(sampleSubmitDate.getButton().getText().toString(), "dd-MMM-yyyy");
+        String nextAppointmentDateString = App.getSqlDate(secondDateCalendar);
+        Date nextAppointmentDate = App.stringToDate(nextAppointmentDateString, "yyyy-MM-dd");
 
-            if (secondDateCalendar.after(date)) {
+        String formDateString = App.getSqlDate(formDateCalendar);
+        Date formStDate = App.stringToDate(formDateString, "yyyy-MM-dd");
 
-                secondDateCalendar = App.getCalendar(date);
 
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
-                snackbar.show();
+        if (!(nextDateOfDrug.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
+            Calendar dateToday = Calendar.getInstance();
+            dateToday.add(Calendar.MONTH, 24);
 
-            }else if (secondDateCalendar.after(maxDateCalender)) {
+            String formDa = nextDateOfDrug.getButton().getText().toString();
+
+            if (secondDateCalendar.before(formDateCalendar)) {
 
                 secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.ctb_return_visit_less_than_23_months), Snackbar.LENGTH_INDEFINITE);
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_date_past), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
                 nextDateOfDrug.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
-            } else {
+            }
+            else if(secondDateCalendar.after(dateToday)){
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_date_cant_be_greater_than_24_months), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
                 nextDateOfDrug.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
             }
+
+            else if(secondDateCalendar.before(secondDateCalendar)){
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_date_of_next_visit_cant_be_before_missed_visit_date), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                nextDateOfDrug.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+            }
+
+            else if(nextAppointmentDate.compareTo(formStDate) == 0){
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_start_date_and_next_visit_date_cant_be_same), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                nextDateOfDrug.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+            }
+            else
+                nextDateOfDrug.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+
         }
         formDate.getButton().setEnabled(true);
         nextDateOfDrug.getButton().setEnabled(true);

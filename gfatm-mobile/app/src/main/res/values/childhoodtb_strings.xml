@@ -1141,6 +1141,7 @@
     <string name="ctb_no_ct_scan_order_found">No CT Scan Order for the patient.</string>
     <string name="ctb_no_mantoux_order_found">No Mantoux Order for the patient.</string>
     <string name="ctb_order_result_found_error">Test Result already exsists for Order ID:"</string>
+    <string name="ctb_gxp_result_exist_for_order_id">GXP Result already exists for Order ID:"</string>
     <string name="ctb_test_result_found_error">Test Result already exsists for Test ID:"</string>
     <string name="ctb_no_gxp_speciman_error">No GXP Specimen Collection for the patient </string>
 

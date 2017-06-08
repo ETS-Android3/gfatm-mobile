@@ -424,7 +424,20 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
                 error = true;
             }
         }
-        if(orderIds.getVisibility()==View.VISIBLE){
+
+        Boolean flag = true;
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            if (saveFlag) {
+                flag = false;
+            }else {
+                flag = true;
+            }
+        }
+
+
+        if(orderIds.getVisibility()==View.VISIBLE  && flag){
             String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "CXR Screening Test Result", "ORDER ID");
             if(resultTestIds != null){
                 for(String id : resultTestIds) {
@@ -455,7 +468,7 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
             }
         }
 
-        if(testId.getVisibility() == View.VISIBLE){
+        if(testId.getVisibility() == View.VISIBLE  && flag){
             String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "CXR Screening Test Result", "TEST ID");
             if(resultTestIds != null) {
                 for (String id : resultTestIds) {
@@ -873,9 +886,7 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
 
         String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "CXR Screening Test Order", "ORDER ID");
         if(testIds != null) {
-            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, testIds);
-            spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            orderIds.getSpinner().setAdapter(spinnerArrayAdapter);
+            orderIds.getSpinner().setSpinnerData(testIds);
         }
 
         Bundle bundle = this.getArguments();
@@ -1027,9 +1038,7 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
                 }
 
                 if (testIds != null) {
-                    ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, testIds);
-                    spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    orderIds.getSpinner().setAdapter(spinnerArrayAdapter);
+                    orderIds.getSpinner().setSpinnerData(testIds);
                 }
 
             }

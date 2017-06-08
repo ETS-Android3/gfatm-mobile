@@ -365,7 +365,20 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
                 }
             }
         }
-        if(orderIds.getVisibility()==View.VISIBLE){
+
+        Boolean flag = true;
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            if (saveFlag) {
+                flag = false;
+            }else {
+                flag = true;
+            }
+        }
+
+
+        if(orderIds.getVisibility()==View.VISIBLE && flag){
             String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Histopathology Test Result", "ORDER ID");
             if(resultTestIds != null){
             for(String id : resultTestIds) {
@@ -396,7 +409,7 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
             }
         }
 
-        if(testId.getVisibility() == View.VISIBLE){
+        if(testId.getVisibility() == View.VISIBLE && flag){
             String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Histopathology Test Result", "TEST ID");
             if(resultTestIds != null) {
                 for (String id : resultTestIds) {
@@ -752,9 +765,7 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
 
         String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Histopathology Test Order", "ORDER ID");
         if(testIds != null) {
-            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, testIds);
-            spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            orderIds.getSpinner().setAdapter(spinnerArrayAdapter);
+            orderIds.getSpinner().setSpinnerData(testIds);
         }
 
         Bundle bundle = this.getArguments();
@@ -861,9 +872,7 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
             }
 
             if(testIds != null) {
-                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, testIds);
-                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                orderIds.getSpinner().setAdapter(spinnerArrayAdapter);
+                orderIds.getSpinner().setSpinnerData(testIds);
             }
 
 

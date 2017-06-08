@@ -439,7 +439,18 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
                 error = true;
             }
         }
-        if(orderIds.getVisibility()==View.VISIBLE){
+
+        Boolean flag = true;
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            if (saveFlag) {
+                flag = false;
+            }else {
+                flag = true;
+            }
+        }
+        if(orderIds.getVisibility()==View.VISIBLE && flag){
             String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "AFB Smear Test Result", "ORDER ID");
             if(resultTestIds != null){
                 for(String id : resultTestIds) {
@@ -470,7 +481,7 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
             }
         }
 
-        if(testId.getVisibility() == View.VISIBLE){
+        if(testId.getVisibility() == View.VISIBLE && flag){
             String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "AFB Smear Test Result", "TEST ID");
             if(resultTestIds != null) {
                 for (String id : resultTestIds) {
@@ -903,9 +914,7 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
 
         String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "AFB Smear Test Order", "ORDER ID");
         if(testIds != null) {
-            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, testIds);
-            spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            orderIds.getSpinner().setAdapter(spinnerArrayAdapter);
+            orderIds.getSpinner().setSpinnerData(testIds);
         }
 
 
@@ -1042,9 +1051,7 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
             }
 
             if(testIds != null) {
-                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, testIds);
-                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                orderIds.getSpinner().setAdapter(spinnerArrayAdapter);
+                orderIds.getSpinner().setSpinnerData(testIds);
             }
 
 

@@ -768,9 +768,7 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
 
         String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Mantoux Test Order", "ORDER ID");
         if(testIds != null) {
-            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, testIds);
-            spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            orderIds.getSpinner().setAdapter(spinnerArrayAdapter);
+            orderIds.getSpinner().setSpinnerData(testIds);
         }
 
         Bundle bundle = this.getArguments();
@@ -905,9 +903,7 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
             }
 
             if(testIds != null) {
-                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, testIds);
-                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                orderIds.getSpinner().setAdapter(spinnerArrayAdapter);
+                orderIds.getSpinner().setSpinnerData(testIds);
             }
         }
     }
