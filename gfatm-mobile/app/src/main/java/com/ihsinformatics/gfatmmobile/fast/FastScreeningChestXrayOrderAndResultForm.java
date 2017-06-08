@@ -188,7 +188,7 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formType, formDate, cxrOrderTitle,  pastXray, pregnancyHistory, orderId,  screenXrayType, monthOfTreatment, orderIds, testId, cxrResultTitle, cat4tbScore, radiologicalDiagnosis,
+                {{formType, formDate, cxrOrderTitle,  pastXray, pregnancyHistory, orderId,  screenXrayType, monthOfTreatment, cxrResultTitle, orderIds, testId, cat4tbScore, radiologicalDiagnosis,
                         abnormalDetailedDiagnosis, abnormalDetailedDiagnosisOther, extentOfDisease, radiologistRemarks}};
 
         formDate.getButton().setOnClickListener(this);
@@ -602,6 +602,10 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
                 observations.add(new String[]{"DATE TEST ORDERED", App.getSqlDateTime(formDateCalendar)});
         } else {
             observations.add(new String[]{"ORDER ID", App.get(orderIds)});
+
+            if (testId.getVisibility() == View.VISIBLE && !App.get(testId).isEmpty())
+                observations.add(new String[]{"TEST ID", App.get(testId)});
+
             observations.add(new String[]{"DATE OF  TEST RESULT RECEIVED", App.getSqlDateTime(formDateCalendar)});
             if (cat4tbScore.getVisibility() == View.VISIBLE) {
                 observations.add(new String[]{"CHEST X-RAY SCORE", App.get(cat4tbScore)});
@@ -959,13 +963,22 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
             } else {
                 formType.getRadioGroup().getButtons().get(1).setChecked(true);
                 formType.getRadioGroup().getButtons().get(0).setEnabled(false);
+
+                if (obs[0][0].equals("ORDER ID")) {
+                    orderIds.getSpinner().selectValue(obs[0][1]);
+                    orderIds.getSpinner().setEnabled(false);
+                }
+
+
                 if (obs[0][0].equals("TEST ID")) {
                     testId.getEditText().setText(obs[0][1]);
                     testId.getEditText().setEnabled(false);
                 //    testIdView.setEnabled(false);
                 //    testIdView.setImageResource(R.drawable.ic_checked);
                 //    checkTestId();
-                } else if (obs[0][0].equals("CHEST X-RAY SCORE")) {
+                }
+
+                else if (obs[0][0].equals("CHEST X-RAY SCORE")) {
                     cat4tbScore.getEditText().setText(obs[0][1]);
                 } else if (obs[0][0].equals("RADIOLOGICAL DIAGNOSIS")) {
                     for (RadioButton rb : radiologicalDiagnosis.getRadioGroup().getButtons()) {

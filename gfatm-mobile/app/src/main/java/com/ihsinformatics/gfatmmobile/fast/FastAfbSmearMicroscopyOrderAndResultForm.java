@@ -196,7 +196,7 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formType, formDate, orderId, afbSmearOrder, dateOfSubmission, testContextStatus, monthOfTreatment, specimenType,
-                        specimenSource, specimenSourceOther, orderIds, testId, afbSmearResult, smearResult, noAfb}};
+                        specimenSource, specimenSourceOther, afbSmearResult, orderIds, testId, smearResult, noAfb}};
 
         formDate.getButton().setOnClickListener(this);
         dateOfSubmission.getButton().setOnClickListener(this);
@@ -735,8 +735,19 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
             error = true;
         }
 
+        Boolean flag = true;
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            if (saveFlag) {
+                flag = false;
+            }else {
+                flag = true;
+            }
+        }
 
-        if (orderIds.getVisibility() == View.VISIBLE) {
+
+        if (orderIds.getVisibility() == View.VISIBLE && flag) {
             String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "AFB Smear Test Result", "ORDER ID");
             if (resultTestIds != null) {
                 for (String id : resultTestIds) {
@@ -767,7 +778,7 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
             }
         }
 
-        if (testId.getVisibility() == View.VISIBLE) {
+        if (testId.getVisibility() == View.VISIBLE && flag) {
             String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "AFB Smear Test Result", "TEST ID");
             if (resultTestIds != null) {
                 for (String id : resultTestIds) {
@@ -881,6 +892,8 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
         } else {
 
             observations.add(new String[]{"ORDER ID", App.get(orderIds)});
+
+            if (testId.getVisibility() == View.VISIBLE && !App.get(testId).isEmpty())
             observations.add(new String[]{"TEST ID", App.get(testId)});
 
             if (formDate.getVisibility() == View.VISIBLE)
@@ -1172,7 +1185,7 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
 
                 if (obs[0][0].equals("ORDER ID")) {
                     orderIds.getSpinner().selectValue(obs[0][1]);
-                    orderIds.getSpinner().setClickable(false);
+                    orderIds.getSpinner().setEnabled(false);
                 }
 
                 else if (obs[0][0].equals("TEST ID")) {
