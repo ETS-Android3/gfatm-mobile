@@ -38,6 +38,7 @@ import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -59,6 +60,8 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
     TitledRadioGroup mtbBurden;
     TitledRadioGroup rifResult;
     TitledEditText errorCode;
+    TitledSpinner orderIds;
+
 
 
     /**
@@ -139,14 +142,15 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
         mtbBurden = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_mtb_burden), getResources().getStringArray(R.array.fast_mtb_burden_list), getResources().getString(R.string.fast_very_low), App.VERTICAL, App.VERTICAL);
         rifResult = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_if_mtb_then_rif_result), getResources().getStringArray(R.array.fast_if_mtb_then_rif_list), getResources().getString(R.string.fast_not_detected), App.VERTICAL, App.VERTICAL);
         errorCode = new TitledEditText(context, null, getResources().getString(R.string.fast_error_code), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true);
+        orderIds = new TitledSpinner(context, "", getResources().getString(R.string.order_id), getResources().getStringArray(R.array.pet_empty_array), "", App.HORIZONTAL);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), cartridgeId.getEditText(), sampleAccepted.getRadioGroup(), reasonRejected.getSpinner(), otherReasonRejected.getEditText(), gxpResult.getSpinner(),
-                mtbBurden.getRadioGroup(), rifResult.getRadioGroup(), errorCode.getEditText()};
+                mtbBurden.getRadioGroup(), rifResult.getRadioGroup(), errorCode.getEditText(), orderIds.getSpinner()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, sampleAccepted, reasonRejected, otherReasonRejected, cartridgeId, gxpResult, mtbBurden, rifResult, errorCode}};
+                {{formDate, orderIds, sampleAccepted, reasonRejected, otherReasonRejected, cartridgeId, gxpResult, mtbBurden, rifResult, errorCode}};
 
         formDate.getButton().setOnClickListener(this);
         gxpResult.getSpinner().setOnItemSelectedListener(this);
@@ -154,6 +158,7 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
         rifResult.getRadioGroup().setOnCheckedChangeListener(this);
         sampleAccepted.getRadioGroup().setOnCheckedChangeListener(this);
         reasonRejected.getSpinner().setOnItemSelectedListener(this);
+        orderIds.getSpinner().setOnItemSelectedListener(this);
 
         resetViews();
     }
@@ -186,8 +191,38 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-            } else
+            } else {
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                if (!App.get(orderIds).equals("")) {
+                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), App.getProgram() + "-" + "GXP Specimen Collection", "ORDER ID", App.get(orderIds));
+
+                    String format = "";
+                    if (encounterDateTime.contains("/")) {
+                        format = "dd/MM/yyyy";
+                    } else {
+                        format = "yyyy-MM-dd";
+                    }
+
+                    Date orderDate = App.stringToDate(encounterDateTime, format);
+
+                    if (formDateCalendar.before(App.getCalendar(orderDate))) {
+
+                        Date dDate = App.stringToDate(formDa, "EEEE, MMM dd,yyyy");
+                        if (dDate.before(orderDate)) {
+                            formDateCalendar = Calendar.getInstance();
+                            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        } else {
+                            formDateCalendar = App.getCalendar(dDate);
+                            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        }
+
+                        snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
+                        snackbar.show();
+
+                    }
+
+                }
+            }
 
         }
 
@@ -259,6 +294,81 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
             error = true;
         }
 
+        Boolean flag = true;
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            if (saveFlag) {
+                flag = false;
+            }else {
+                flag = true;
+            }
+        }
+
+
+        if (orderIds.getVisibility() == View.VISIBLE && flag) {
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "GXP Test", "ORDER ID");
+            if (resultTestIds != null) {
+                for (String id : resultTestIds) {
+
+                    if (id.equals(App.get(orderIds))) {
+                        final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                        alertDialog.setMessage(getResources().getString(R.string.ctb_order_result_found_error) + App.get(orderIds));
+                        Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                        alertDialog.setIcon(clearIcon);
+                        alertDialog.setTitle(getResources().getString(R.string.title_error));
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        try {
+                                            InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                            imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                        } catch (Exception e) {
+                                            // TODO: handle exception
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                });
+                        alertDialog.show();
+
+                        return false;
+                    }
+                }
+            }
+        }
+
+        if (cartridgeId.getVisibility() == View.VISIBLE && flag) {
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "GXP Test", "CARTRIDGE ID");
+            if (resultTestIds != null) {
+                for (String id : resultTestIds) {
+                    if (id.equals(App.get(cartridgeId))) {
+                        final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                        alertDialog.setMessage(getResources().getString(R.string.ctb_test_result_found_error) + App.get(cartridgeId));
+                        Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                        alertDialog.setIcon(clearIcon);
+                        alertDialog.setTitle(getResources().getString(R.string.title_error));
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        try {
+                                            InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                            imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                        } catch (Exception e) {
+                                            // TODO: handle exception
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                });
+                        alertDialog.show();
+
+                        return false;
+                    }
+
+                }
+            }
+
+        }
+
 
         if (error) {
 
@@ -313,6 +423,8 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
 
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
+
+        observations.add(new String[]{"ORDER ID", App.get(orderIds)});
 
         if (cartridgeId.getVisibility() == View.VISIBLE)
         observations.add(new String[]{"CARTRIDGE ID", App.get(cartridgeId)});
@@ -489,10 +601,19 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
             String[][] obs = obsValue.get(i);
             if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
-            } else if (obs[0][0].equals("CARTRIDGE ID")) {
+            }
+
+            else if (obs[0][0].equals("ORDER ID")) {
+                orderIds.getSpinner().selectValue(obs[0][1]);
+                orderIds.getSpinner().setEnabled(false);
+            }
+            else if (obs[0][0].equals("CARTRIDGE ID")) {
                 cartridgeId.getEditText().setText(obs[0][1]);
                 cartridgeId.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("GENEXPERT MTB/RIF RESULT")) {
+                cartridgeId.getEditText().setEnabled(false);
+            }
+
+            else if (obs[0][0].equals("GENEXPERT MTB/RIF RESULT")) {
                 String value = obs[0][1].equals("DETECTED") ? getResources().getString(R.string.fast_mtb_detected) :
                         (obs[0][1].equals("NOT DETECTED") ? getResources().getString(R.string.fast_mtb_not_detected) :
                                 (obs[0][1].equals("NEGATIVE") ? getResources().getString(R.string.fast_error) :
@@ -619,6 +740,36 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
         errorCode.setVisibility(View.GONE);
         rifResult.setVisibility(View.GONE);
 
+
+        String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "GXP Specimen Collection", "ORDER ID");
+
+        if (testIds == null || testIds.length == 0) {
+            final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+            alertDialog.setMessage(getResources().getString(R.string.fast_no_order_found_for_the_patient));
+            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+            alertDialog.setIcon(clearIcon);
+            alertDialog.setTitle(getResources().getString(R.string.title_error));
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            try {
+                                InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                            } catch (Exception e) {
+                                // TODO: handle exception
+                            }
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
+            submitButton.setEnabled(false);
+            return;
+        }
+
+        if(testIds != null) {
+            orderIds.getSpinner().setSpinnerData(testIds);
+        }
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");
@@ -663,6 +814,10 @@ public class FastGeneXpertResultForm extends AbstractFormActivity implements Rad
             } else {
                 otherReasonRejected.setVisibility(View.GONE);
             }
+        }
+
+        if (spinner == orderIds.getSpinner()) {
+            updateDisplay();
         }
 
     }

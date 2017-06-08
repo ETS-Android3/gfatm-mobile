@@ -1133,10 +1133,13 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
             if (fo.getFormName().contains("Order")) {
                 formType.getRadioGroup().getButtons().get(0).setChecked(true);
                 formType.getRadioGroup().getButtons().get(1).setEnabled(false);
-                if (obs[0][0].equals("TEST ID")) {
-                    testId.getEditText().setEnabled(false);
-                    testId.getEditText().setText(obs[0][1]);
-                } else if (obs[0][0].equals("SPECIMEN SUBMISSION DATE")) {
+
+                if(obs[0][0].equals("ORDER ID")){
+                    orderId.getEditText().setText(obs[0][1]);
+                    orderId.getEditText().setOnKeyListener(null);
+                    orderId.getEditText().setFocusable(false);
+                }
+                else if (obs[0][0].equals("SPECIMEN SUBMISSION DATE")) {
                     String secondDate = obs[0][1];
                     secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                     dateOfSubmission.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
