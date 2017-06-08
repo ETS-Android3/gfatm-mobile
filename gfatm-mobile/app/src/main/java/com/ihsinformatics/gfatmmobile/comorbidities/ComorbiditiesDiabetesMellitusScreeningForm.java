@@ -44,6 +44,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
+import static android.support.design.widget.Snackbar.*;
+
 /**
  * Created by Fawad Jawaid on 09-Jan-17.
  */
@@ -146,7 +148,7 @@ public class ComorbiditiesDiabetesMellitusScreeningForm extends AbstractFormActi
 
         formDate.getButton().setOnClickListener(this);
 
-
+        screeningFood.getRadioGroup().setOnCheckedChangeListener(this);
         screeningRBS.getEditText().setSingleLine(true);
         screeningRBS.getEditText().addTextChangedListener(new TextWatcher() {
 
@@ -197,14 +199,14 @@ public class ComorbiditiesDiabetesMellitusScreeningForm extends AbstractFormActi
 
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                snackbar = make(mainContent, getResources().getString(R.string.form_date_future), LENGTH_INDEFINITE);
                 snackbar.show();
 
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
             } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                snackbar = make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
@@ -524,14 +526,42 @@ public class ComorbiditiesDiabetesMellitusScreeningForm extends AbstractFormActi
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        snackbar = Snackbar.make(mainContent, getResources().getString(R.string.comorbidities_dmscrnng_screener_instructions), Snackbar.LENGTH_INDEFINITE);
-        TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-        tv.setMaxLines(3);
+        snackbar = Snackbar.make(mainContent, getResources().getString(R.string.comorbidities_dmscrnng_screener_instructions), Snackbar.LENGTH_INDEFINITE)
+                .setAction("CLOSE", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        snackbar.dismiss();
+                    }
+                });
+
+        // Changing message text color
+        //snackbar.setActionTextColor(Color.RED);
+
+        //Changing Typeface of Snackbar Action text
+        TextView snackbarActionTextView = (TextView) snackbar.getView().findViewById( android.support.design.R.id.snackbar_action );
+        snackbarActionTextView.setTextSize(20);
+        snackbarActionTextView.setTypeface(snackbarActionTextView.getTypeface(), Typeface.BOLD);
+
+        // Setting Maximum lines for the textview in snackbar
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setMaxLines(3);
         snackbar.show();
     }
 
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
+
+        if(radioGroup == screeningFood.getRadioGroup()) {
+            if(App.get(screeningFood).equalsIgnoreCase(getResources().getString(R.string.yes))) {
+                if(snackbar != null)
+                    snackbar.show();
+            }
+            else if(App.get(screeningFood).equalsIgnoreCase(getResources().getString(R.string.no))) {
+                if(snackbar != null)
+                    snackbar.dismiss();
+            }
+        }
 
     }
 
