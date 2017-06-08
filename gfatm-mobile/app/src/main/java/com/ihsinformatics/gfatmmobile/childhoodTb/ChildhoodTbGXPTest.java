@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
@@ -41,6 +42,7 @@ import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -52,10 +54,11 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
 
     Context context;
     TitledButton formDate;
+    TitledSpinner orderIds;
+    TitledEditText cartidgeID;
     TitledRadioGroup sampleAccepted;
     TitledSpinner whySampleRejected;
     TitledEditText otherReasonForRejection;
-    TitledEditText testId;
 
     TitledButton resultRecieveDate;
     TitledSpinner geneXpertMTBResult;
@@ -141,7 +144,8 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
         sampleAccepted = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_sample_accepted_lab_techician),getResources().getStringArray(R.array.ctb_accepted_by_techician_list),getResources().getString(R.string.ctb_accepted),App.HORIZONTAL,App.VERTICAL,true);
         whySampleRejected = new TitledSpinner(context,null,getResources().getString(R.string.ctb_why_sample_rejected),getResources().getStringArray(R.array.ctb_why_sample_rejected_list),getResources().getString(R.string.ctb_saliva),App.HORIZONTAL,true);
         otherReasonForRejection = new TitledEditText(context,null,getResources().getString(R.string.ctb_other_specify),"","",50,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
-        testId = new TitledEditText(context,null,getResources().getString(R.string.ctb_test_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
+        orderIds = new TitledSpinner(context, "", getResources().getString(R.string.order_id), getResources().getStringArray(R.array.pet_empty_array), "", App.HORIZONTAL);
+        cartidgeID = new TitledEditText(context,null,getResources().getString(R.string.ctb_cartridge_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
         resultRecieveDate = new TitledButton(context, null, getResources().getString(R.string.ctb_date_result_recieve), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         resultRecieveDate.setTag("resultRecieveDate");
         geneXpertMTBResult = new TitledSpinner(context,null,getResources().getString(R.string.ctb_mtb_result),getResources().getStringArray(R.array.ctb_mtb_result_list),getResources().getString(R.string.ctb_mtb_not_detected),App.HORIZONTAL,true);
@@ -152,11 +156,11 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
 
         views = new View[]{formDate.getButton(),sampleAccepted.getRadioGroup(),whySampleRejected.getSpinner(),otherReasonForRejection.getEditText(),
                 resultRecieveDate.getButton(),geneXpertMTBResult.getSpinner(),mtbBurden.getRadioGroup(),mtbRIFResult.getSpinner(),
-                errorCode.getEditText()};
+                errorCode.getEditText(),orderIds.getQuestionView(),cartidgeID.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate,sampleAccepted,whySampleRejected,otherReasonForRejection,testId,resultRecieveDate,geneXpertMTBResult,mtbBurden,mtbRIFResult,errorCode}};
+                {{formDate,orderIds,cartidgeID,sampleAccepted,whySampleRejected,otherReasonForRejection,resultRecieveDate,geneXpertMTBResult,mtbBurden,mtbRIFResult,errorCode}};
 
         formDate.getButton().setOnClickListener(this);
         resultRecieveDate.getButton().setOnClickListener(this);
@@ -165,7 +169,7 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
         geneXpertMTBResult.getSpinner().setOnItemSelectedListener(this);
         mtbBurden.getRadioGroup().setOnCheckedChangeListener(this);
         mtbRIFResult.getSpinner().setOnItemSelectedListener(this);
-
+        orderIds.getSpinner().setOnItemSelectedListener(this);
 
         resetViews();
 
@@ -177,16 +181,13 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
         if (snackbar != null)
             snackbar.dismiss();
 
-
-            Date date = new Date();
-
-
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
+            personDOB = personDOB.substring(0, 10);
 
-
+            Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
 
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
@@ -198,28 +199,105 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
 
             } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-            }  else
+            } else {
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                if (!App.get(orderIds).equals("")) {
+                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), App.getProgram() + "-" + "GXP Specimen Collection", "ORDER ID", App.get(orderIds));
+
+                    String format = "";
+                    if (encounterDateTime.contains("/")) {
+                        format = "dd/MM/yyyy";
+                    } else {
+                        format = "yyyy-MM-dd";
+                    }
+
+                    Date orderDate = App.stringToDate(encounterDateTime, format);
+
+                    if (formDateCalendar.before(App.getCalendar(orderDate))) {
+
+                        Date dDate = App.stringToDate(formDa, "EEEE, MMM dd,yyyy");
+                        if (dDate.before(orderDate)) {
+                            formDateCalendar = Calendar.getInstance();
+                            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        } else {
+                            formDateCalendar = App.getCalendar(dDate);
+                            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        }
+
+                        snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
+                        snackbar.show();
+
+                    }
+
+                }
+            }
+
+        } else{
+            String formDa = formDate.getButton().getText().toString();
+
+            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
+             if (!App.get(orderIds).equals("")) {
+                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), App.getProgram() + "-" + "GXP Specimen Collection", "ORDER ID", App.get(orderIds));
+
+                    String format = "";
+                    if (encounterDateTime.contains("/")) {
+                        format = "dd/MM/yyyy";
+                    } else {
+                        format = "yyyy-MM-dd";
+                    }
+
+                    Date orderDate = App.stringToDate(encounterDateTime, format);
+
+                    if (formDateCalendar.before(App.getCalendar(orderDate))) {
+
+                        Date dDate = App.stringToDate(formDa, "EEEE, MMM dd,yyyy");
+                        if (dDate.before(orderDate)) {
+                            formDateCalendar = Calendar.getInstance();
+                            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        } else {
+                            formDateCalendar = App.getCalendar(dDate);
+                            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        }
+
+                        snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
+                        snackbar.show();
+
+                    }
+
+                }
 
         }
-        if (!resultRecieveDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString())) {
+        if (!(resultRecieveDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
 
-            //
-            // +Date date = App.stringToDate(sampleSubmitDate.getButton().getText().toString(), "dd-MMM-yyyy");
+            String formDa = resultRecieveDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
 
+            Date date = new Date();
             if (secondDateCalendar.after(App.getCalendar(date))) {
 
-                secondDateCalendar = App.getCalendar(date);
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-            } else
+                resultRecieveDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+
+            } else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                resultRecieveDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+            }
+
+            else
                 resultRecieveDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         }
         formDate.getButton().setEnabled(true);
@@ -241,17 +319,91 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
         else{
             errorCode.getEditText().setError(null);
         }
-        if(App.get(testId).isEmpty()){
+        if(App.get(cartidgeID).isEmpty()){
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            testId.getEditText().setError(getString(R.string.empty_field));
-            testId.getEditText().requestFocus();
+            cartidgeID.getEditText().setError(getString(R.string.empty_field));
+            cartidgeID.getEditText().requestFocus();
             error = true;
-        }else{
-            testId.getEditText().setError(null);
         }
+
+        Boolean flag = true;
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            if (saveFlag) {
+                flag = false;
+            }else {
+                flag = true;
+            }
+        }
+
+
+        if(orderIds.getVisibility()==View.VISIBLE  && flag){
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "GXP Test", "ORDER ID");
+            if(resultTestIds != null){
+                for(String id : resultTestIds) {
+
+                    if (id.equals(App.get(orderIds))) {
+                        final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                        alertDialog.setMessage(getResources().getString(R.string.ctb_gxp_result_exist_for_order_id) + App.get(orderIds));
+                        Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                        alertDialog.setIcon(clearIcon);
+                        alertDialog.setTitle(getResources().getString(R.string.title_error));
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        try {
+                                            InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                            imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                        } catch (Exception e) {
+                                            // TODO: handle exception
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                });
+                        alertDialog.show();
+
+                        return false;
+                    }
+                }
+            }
+        }
+
+        if(cartidgeID.getVisibility() == View.VISIBLE  && flag){
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "GXP Test", "CARTRIDGE ID");
+            if(resultTestIds != null) {
+                for (String id : resultTestIds) {
+                    if (id.equals(App.get(cartidgeID))) {
+                        final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                        alertDialog.setMessage(getResources().getString(R.string.ctb_test_result_found_error) + App.get(cartidgeID));
+                        Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                        alertDialog.setIcon(clearIcon);
+                        alertDialog.setTitle(getResources().getString(R.string.title_error));
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        try {
+                                            InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                            imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                        } catch (Exception e) {
+                                            // TODO: handle exception
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                });
+                        alertDialog.show();
+
+                        return false;
+                    }
+
+                }
+            }
+
+        }
+
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
@@ -304,7 +456,8 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
 
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-        observations.add(new String[]{"TEST ID", App.get(testId)});
+        observations.add(new String[]{"ORDER ID", App.get(orderIds)});
+        observations.add(new String[]{"CARTRIDGE ID", App.get(cartidgeID)});
 
         observations.add(new String[]{"SPECIMEN ACCEPTED", App.get(sampleAccepted).equals(getResources().getString(R.string.ctb_accepted)) ? "ACCEPTED" :
                 "REJECTED"});
@@ -472,9 +625,13 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
             String[][] obs = obsValue.get(i);
             if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
                 timeTakeToFill = obs[0][1];
-            }else if (obs[0][0].equals("TEST ID")) {
-                testId.getEditText().setText(obs[0][1]);
+            }else if (obs[0][0].equals("CARTRIDGE ID")) {
+                cartidgeID.getEditText().setText(obs[0][1]);
             }
+            else if (obs[0][0].equals("ORDER ID")) {
+                orderIds.getSpinner().selectValue(obs[0][1]);
+            }
+
             else if (obs[0][0].equals("SPECIMEN ACCEPTED")) {
                 for (RadioButton rb : sampleAccepted.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.ctb_accepted)) && obs[0][1].equals("ACCEPTED")) {
@@ -592,6 +749,9 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
                 otherReasonForRejection.setVisibility(View.GONE);
             }
         }
+        if (spinner == orderIds.getSpinner()) {
+            updateDisplay();
+        }
 
     }
 
@@ -614,7 +774,35 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
         mtbBurden.setVisibility(View.GONE);
         mtbRIFResult.setVisibility(View.GONE);
         errorCode.setVisibility(View.GONE);
-        testId.getEditText().setText(null);
+
+        String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "GXP Specimen Collection", "ORDER ID");
+        if(testIds == null || testIds.length == 0){
+            final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+            alertDialog.setMessage(getResources().getString(R.string.ctb_no_gxp_speciman_error));
+            submitButton.setEnabled(false);
+            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+            alertDialog.setIcon(clearIcon);
+            alertDialog.setTitle(getResources().getString(R.string.title_error));
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            try {
+                                InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                            } catch (Exception e) {
+                                // TODO: handle exception
+                            }
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
+            return;
+        }
+
+        if(testIds != null) {
+            orderIds.getSpinner().setSpinnerData(testIds);
+        }
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");

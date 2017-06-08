@@ -853,12 +853,12 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                 view = cnicLayout;
             }
         }
-        if(App.get(addressType).isEmpty()){
+        if(addressType.getVisibility()==View.VISIBLE && App.get(addressType).isEmpty()){
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            addressType.getRadioGroup().getButtons().get(1).setError(getString(R.string.empty_field));
+            addressType.getQuestionView().setError(getString(R.string.empty_field));
             error = true;
             view = addressType;
         }
