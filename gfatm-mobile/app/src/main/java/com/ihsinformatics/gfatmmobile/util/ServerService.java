@@ -1761,6 +1761,15 @@ public class ServerService {
         return true;
     }
 
+    public boolean deleteEncounterById(String encounterId) {
+
+        Boolean flag = dbUtil.delete(Metadata.OBS, "encounter_id=?", new String[]{String.valueOf(encounterId)});
+        if (!flag) return flag;
+        dbUtil.delete(Metadata.ENCOUNTER, "encounter_id=?", new String[]{String.valueOf(encounterId)});
+
+        return true;
+    }
+
     public boolean deletePatientTestIdByProgram(String patientId, String programName) {
 
         Object[][] encounter = dbUtil.getFormTableData("select id from " + Metadata.TEST_ID + " where pid='" + patientId + "' and form like '" + programName + "%'");
@@ -1989,6 +1998,9 @@ public class ServerService {
     }
 
     public boolean deleteOfflineForms(String fromId) {
+
+        Object[][] encounterId = dbUtil.getFormTableData("select encounter_id from " + Metadata.FORMS + " where id='" + fromId + "'");
+        deleteEncounterById(String.valueOf(encounterId[0][0]));
 
         dbUtil.delete(Metadata.FORMS, "id=?", new String[]{fromId});
         dbUtil.delete(Metadata.FORMS_VALUE, "form_id=?", new String[]{fromId});
