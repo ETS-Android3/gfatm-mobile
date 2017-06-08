@@ -671,7 +671,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
 
     @Override
     public void updateDisplay() {
-        String formDa = formDate.getButton().getText().toString();
+
         String personDOB = App.getPatient().getPerson().getBirthdate();
         Calendar maxDateCalender = formDateCalendar.getInstance();
         maxDateCalender.setTime(formDateCalendar.getTime());
@@ -682,6 +682,8 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         Date date = new Date();
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
+            String formDa = formDate.getButton().getText().toString();
+
             if (formDateCalendar.after(App.getCalendar(date))) {
 
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
@@ -691,25 +693,25 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
 
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
-            }  else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.ctb_form_date_less_than_patient_dob), Snackbar.LENGTH_INDEFINITE);
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
             }else
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                Calendar requiredDate = formDateCalendar.getInstance();
-                requiredDate.setTime(formDateCalendar.getTime());
-                requiredDate.add(Calendar.DATE, 30);
+            Calendar requiredDate = formDateCalendar.getInstance();
+            requiredDate.setTime(formDateCalendar.getTime());
+            requiredDate.add(Calendar.DATE, 30);
 
-                if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
-                    forthDateCalender.setTime(requiredDate.getTime());
-                } else {
-                    requiredDate.add(Calendar.DATE, 1);
-                    forthDateCalender.setTime(requiredDate.getTime());
-                }
+            if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                forthDateCalender.setTime(requiredDate.getTime());
+            } else {
+                requiredDate.add(Calendar.DATE, 1);
+                forthDateCalender.setTime(requiredDate.getTime());
+            }
 
         } if (!regDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString())) {
 
@@ -727,6 +729,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 regDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         }
         if (!iptStartDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString())) {
+            String formDa = formDate.getButton().getText().toString();
             if (thirdDateCalendar.after(App.getCalendar(date))) {
 
                 thirdDateCalendar = App.getCalendar(date);
@@ -735,6 +738,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 snackbar.show();
 
             } else if (thirdDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+
                 thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.ctb_form_date_less_than_patient_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
@@ -744,18 +748,49 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             }else
                 iptStartDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
         }
-        if (!returnVisitDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", forthDateCalender).toString())) {
-            if (forthDateCalender.after(maxDateCalender)) {
+        String nextAppointmentDateString = App.getSqlDate(forthDateCalender);
+        Date nextAppointmentDate = App.stringToDate(nextAppointmentDateString, "yyyy-MM-dd");
+
+        String formDateString = App.getSqlDate(formDateCalendar);
+        Date formStDate = App.stringToDate(formDateString, "yyyy-MM-dd");
+
+
+        if (!(returnVisitDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", forthDateCalender).toString()))) {
+            Calendar dateToday = Calendar.getInstance();
+            dateToday.add(Calendar.MONTH, 24);
+
+            String formDa = returnVisitDate.getButton().getText().toString();
+
+            if (forthDateCalender.before(formDateCalendar)) {
 
                 forthDateCalender = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.ctb_return_visit_less_than_23_months), Snackbar.LENGTH_INDEFINITE);
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_date_past), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", forthDateCalender).toString());
 
-            }else
+            }
+            else if(forthDateCalender.after(dateToday)){
+                forthDateCalender = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_date_cant_be_greater_than_24_months), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", forthDateCalender).toString());
+            }
+
+            else if(nextAppointmentDate.compareTo(formStDate) == 0){
+                forthDateCalender = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_start_date_and_next_visit_date_cant_be_same), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", forthDateCalender).toString());
+            }
+            else
+                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", forthDateCalender).toString());
+
         }
         formDate.getButton().setEnabled(true);
         regDate.getButton().setEnabled(true);
@@ -1968,8 +2003,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         iptStartDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
-        formDateCalendar = Calendar.getInstance();
-        forthDateCalender.add(Calendar.DAY_OF_MONTH, 30);
+        iptStartDate.setVisibility(View.GONE);
         returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", forthDateCalender).toString());
         regDate.setVisibility(View.GONE);
         cnicLinearLayout.setVisibility(View.GONE);
@@ -2274,7 +2308,6 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                     }
                     tbHistoryIn2Years.setVisibility(View.VISIBLE);
                     eligibleForIpt.setVisibility(View.VISIBLE);
-                    iptStartDate.setVisibility(View.VISIBLE);
                     if(!App.get(weightAtBaseline).isEmpty()){
                         double weightInt = Double.parseDouble(App.get(weightAtBaseline));
                         if(weightInt<2.5){
@@ -2384,10 +2417,23 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         else if (group == eligibleForIpt.getRadioGroup()) {
             if (eligibleForIpt.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
                 acceptanceToIpt.setVisibility(View.VISIBLE);
+                if(App.get(acceptanceToIpt).equals(getResources().getString(R.string.yes))){
+                    iptStartDate.setVisibility(View.VISIBLE);
+                }
             } else {
                 acceptanceToIpt.setVisibility(View.GONE);
+                iptStartDate.setVisibility(View.GONE);
             }
-        }else if (group == patientCategory.getRadioGroup()) {
+        }
+        else if (group == acceptanceToIpt.getRadioGroup()) {
+            if (acceptanceToIpt.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
+                iptStartDate.setVisibility(View.VISIBLE);
+            } else {
+                iptStartDate.setVisibility(View.GONE);
+            }
+        }
+
+        else if (group == patientCategory.getRadioGroup()) {
             if (patientCategory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_category_3))) {
                 regimen.getRadioGroup().getButtons().get(1).setChecked(true);
             }

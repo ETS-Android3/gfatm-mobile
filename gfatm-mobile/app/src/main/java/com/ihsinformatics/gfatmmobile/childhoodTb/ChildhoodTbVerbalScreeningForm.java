@@ -198,7 +198,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
         facility_section = new TitledSpinner(context, null, getResources().getString(R.string.ctb_facility_section), getResources().getStringArray(R.array.ctb_facility_section_list), getResources().getString(R.string.ctb_empty), App.VERTICAL);
         facility_section_other = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         opd_ward_section = new TitledSpinner(context, null, getResources().getString(R.string.ctb_opd_clinic_or_ward), getResources().getStringArray(R.array.ctb_opd_ward_section_list), getResources().getString(R.string.ctb_empty), App.VERTICAL);
-        motherName = new TitledEditText(context, null, getResources().getString(R.string.ctb_mother_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        motherName = new TitledEditText(context, null, getResources().getString(R.string.ctb_mother_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         fatherName = new TitledEditText(context, null, getResources().getString(R.string.ctb_father_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         patientAttendant = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_attendant), getResources().getStringArray(R.array.ctb_patient_attendant_list), null, App.HORIZONTAL, App.VERTICAL, true);
         cough = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_cough), getResources().getStringArray(R.array.yes_no_unknown_refused_options), null, App.HORIZONTAL, App.VERTICAL, true);
@@ -1401,12 +1401,14 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
         String presumptiveTbArray[] = {App.get(cough),App.get(fever),App.get(nightSweats),App.get(weightLoss),App.get(appeptite),App.get(tbHistory)};
         int sum=0;
         for(int i=0; i<presumptiveTbArray.length; i++){
-            if(presumptiveTbArray[i].equalsIgnoreCase(getResources().getString(R.string.yes))){
+            if(presumptiveTbArray[i].equalsIgnoreCase(getResources().getString(R.string.yes)) || presumptiveTbArray[i].equalsIgnoreCase(getResources().getString(R.string.ctb_poor))){
                 sum++;
             }
         }
         if(sum>=2){
             presumptiveTb.getRadioGroup().getButtons().get(0).setChecked(true);
+        }else{
+            presumptiveTb.getRadioGroup().getButtons().get(1).setChecked(true);
         }
     }
 }

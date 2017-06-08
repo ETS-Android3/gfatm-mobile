@@ -57,9 +57,6 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
 
     Context context;
 
-    boolean changeDate = false;
-    String finalDate = null;
-
     TitledButton formDate;
     TitledRadioGroup formType;
     TitledEditText orderId;
@@ -69,6 +66,7 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
     TitledSpinner orderIds;
     TitledEditText testId;
     TitledRadioGroup histopathologyResult;
+
 
     Snackbar snackbar;
     ScrollView scrollView;
@@ -152,13 +150,13 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
         pointTestBeingDone = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_point_test_being_done),getResources().getStringArray(R.array.ctb_ultrasound_test_point_list),getResources().getString(R.string.ctb_diagnostic),App.VERTICAL,App.VERTICAL,true);
         monthTreatment= new TitledSpinner(context,null,getResources().getString(R.string.ctb_month_treatment),getResources().getStringArray(R.array.ctb_0_to_24),null,App.HORIZONTAL,true);
         updateFollowUpMonth();
-        histopathologySite = new TitledEditText(context,null,getResources().getString(R.string.ctb_histopathology_site),"","",50,RegexUtil.ALPHA_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,true);
+        histopathologySite = new TitledEditText(context,null,getResources().getString(R.string.ctb_histopathology_site),"","",50,RegexUtil.ALPHA_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
         histopathologyResult = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_histopathology_result),getResources().getStringArray(R.array.ctb_suggestive_tb_normal),getResources().getString(R.string.ctb_suggestive_tb),App.VERTICAL,App.VERTICAL,true);
         orderIds = new TitledSpinner(context, "", getResources().getString(R.string.order_id), getResources().getStringArray(R.array.pet_empty_array), "", App.HORIZONTAL);
         testId = new TitledEditText(context,null,getResources().getString(R.string.ctb_test_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
 
         views = new View[]{formDate.getButton(),formType.getRadioGroup(), orderId.getEditText(),pointTestBeingDone.getRadioGroup()
-                ,histopathologyResult.getRadioGroup(),orderIds.getSpinner(),testId};
+                ,histopathologyResult.getRadioGroup(),orderIds.getSpinner(),testId.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
@@ -332,8 +330,8 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
                 }
             }
         }
-
         formDate.getButton().setEnabled(true);
+        updateFollowUpMonth();
 
     }
 
@@ -367,7 +365,20 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
                 }
             }
         }
-        if(orderIds.getVisibility()==View.VISIBLE){
+
+        Boolean flag = true;
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            if (saveFlag) {
+                flag = false;
+            }else {
+                flag = true;
+            }
+        }
+
+
+        if(orderIds.getVisibility()==View.VISIBLE && flag){
             String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Histopathology Test Result", "ORDER ID");
             if(resultTestIds != null){
             for(String id : resultTestIds) {
@@ -398,7 +409,7 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
             }
         }
 
-        if(testId.getVisibility() == View.VISIBLE){
+        if(testId.getVisibility() == View.VISIBLE && flag){
             String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Histopathology Test Result", "TEST ID");
             if(resultTestIds != null) {
                 for (String id : resultTestIds) {
@@ -500,7 +511,9 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
 
         } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
             observations.add(new String[]{"ORDER ID", App.get(orderIds)});
-            observations.add(new String[]{"TEST ID", App.get(testId)});
+            if(!App.get(testId).isEmpty()) {
+                observations.add(new String[]{"TEST ID", App.get(testId)});
+            }
             observations.add(new String[]{"HISTOPATHOLOGY RESULT", App.get(histopathologyResult).equals(getResources().getString(R.string.ctb_suggestive_tb)) ? "SUGGESTIVE OF TB" : "NORMAL"});
         }
 
@@ -641,7 +654,7 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
             ArrayList<String[][]> obsValue = fo.getObsValue();
 
             formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-            formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
 
             for (int i = 0; i < obsValue.size(); i++) {
@@ -651,8 +664,8 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
                 }else if(fo.getFormName().contains("Order")) {
                     formType.getRadioGroup().getButtons().get(0).setChecked(true);
                     formType.getRadioGroup().getButtons().get(1).setEnabled(false);
-                    if (obs[0][0].equals("TEST ID")) {
-                        orderId.getEditText().setEnabled(false);
+                    if (obs[0][0].equals("ORDER ID")) {
+                        orderId.getEditText().setKeyListener(null);
                         orderId.getEditText().setText(obs[0][1]);
                     }else if (obs[0][0].equals("TEST CONTEXT STATUS")) {
                         for (RadioButton rb : pointTestBeingDone.getRadioGroup().getButtons()) {
@@ -674,10 +687,13 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
                 }else{
                     formType.getRadioGroup().getButtons().get(1).setChecked(true);
                     formType.getRadioGroup().getButtons().get(0).setEnabled(false);
-                    if (obs[0][0].equals("TEST ID")) {
-                        orderId.getEditText().setText(obs[0][1]);
-                        orderId.getEditText().setEnabled(false);
-                    } else if (obs[0][0].equals("HISTOPATHOLOGY RESULT")) {
+                    if (obs[0][0].equals("ORDER ID")) {
+                        orderIds.getSpinner().selectValue(obs[0][1]);
+                    }
+                    else if (obs[0][0].equals("TEST ID")) {
+                        testId.getEditText().setText(obs[0][1]);
+                    }
+                    else if (obs[0][0].equals("HISTOPATHOLOGY RESULT")) {
                         for (RadioButton rb : histopathologyResult.getRadioGroup().getButtons()) {
                             if (rb.getText().equals(getResources().getString(R.string.ctb_suggestive_tb)) && obs[0][1].equals("SUGGESTIVE OF TB")) {
                                 rb.setChecked(true);
@@ -749,9 +765,7 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
 
         String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Histopathology Test Order", "ORDER ID");
         if(testIds != null) {
-            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, testIds);
-            spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            orderIds.getSpinner().setAdapter(spinnerArrayAdapter);
+            orderIds.getSpinner().setSpinnerData(testIds);
         }
 
         Bundle bundle = this.getArguments();
@@ -785,11 +799,9 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         if (group == formType.getRadioGroup()) {
-            if (group == formType.getRadioGroup()) {
-                formDate.setVisibility(View.VISIBLE);
-                showTestOrderOrTestResult();
-                submitButton.setEnabled(true);
-            }
+            formDate.setVisibility(View.VISIBLE);
+            submitButton.setEnabled(true);
+            showTestOrderOrTestResult();
         }
         if (group == pointTestBeingDone.getRadioGroup()) {
             if (pointTestBeingDone.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_followup))) {
@@ -805,7 +817,6 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
     void showTestOrderOrTestResult() {
         if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.ctb_order))) {
             formDate.setVisibility(View.VISIBLE);
-            formDate.setDefaultValue();
             pointTestBeingDone.setVisibility(View.VISIBLE);
             pointTestBeingDone.getRadioGroup().selectDefaultValue();
             if(App.get(pointTestBeingDone).equals(getResources().getString(R.string.ctb_followup))){
@@ -822,16 +833,25 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
             orderIds.setVisibility(View.GONE);
             histopathologyResult.setVisibility(View.GONE);
         } else if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.ctb_result))) {
+
+            orderId.setVisibility(View.GONE);
+            pointTestBeingDone.setVisibility(View.GONE);
+            histopathologySite.setVisibility(View.GONE);
+            monthTreatment.setVisibility(View.GONE);
+
             formDate.setVisibility(View.VISIBLE);
             formDate.setDefaultValue();
             histopathologyResult.setVisibility(View.VISIBLE);
             histopathologyResult.getRadioGroup().selectDefaultValue();
-            orderIds.setVisibility(View.VISIBLE);
-            String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Histopathology Test Order", "ORDER ID");
 
+            orderIds.setVisibility(View.VISIBLE);
+            testId.setVisibility(View.VISIBLE);
+            testId.getEditText().setDefaultValue();
+            String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Histopathology Test Order", "ORDER ID");
             if(testIds == null || testIds.length == 0){
                 final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                 alertDialog.setMessage(getResources().getString(R.string.ctb_no_histopathology_order_found));
+                submitButton.setEnabled(false);
                 Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                 alertDialog.setIcon(clearIcon);
                 alertDialog.setTitle(getResources().getString(R.string.title_error));
@@ -852,17 +872,11 @@ public class ChildhoodTbHistopathologySite extends AbstractFormActivity implemen
             }
 
             if(testIds != null) {
-                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, testIds);
-                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                orderIds.getSpinner().setAdapter(spinnerArrayAdapter);
+                orderIds.getSpinner().setSpinnerData(testIds);
             }
-            testId.setVisibility(View.VISIBLE);
-            testId.getEditText().setDefaultValue();
 
-            orderId.setVisibility(View.GONE);
-            pointTestBeingDone.setVisibility(View.GONE);
-            histopathologySite.setVisibility(View.GONE);
-            monthTreatment.setVisibility(View.GONE);
+
+
 
            /*String value =  serverService.getObsValueByObs(App.getPatientId(), App.getProgram() + "-" + "Histopathology Test Order", "ORDER ID", App.get(orderIds),"TEST CONTEXT STATUS");*/
 
