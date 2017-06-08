@@ -67,15 +67,15 @@ public class TitledCheckBoxes extends LinearLayout {
         LinearLayout hLayout = new LinearLayout(context);
         hLayout.setOrientation(HORIZONTAL);
 
-        questionView = new MyTextView(context, ques);
-        hLayout.addView(questionView);
-
         if (mandatory) {
             TextView mandatorySign = new TextView(context);
             mandatorySign.setText(" *");
             mandatorySign.setTextColor(Color.parseColor("#ff0000"));
             hLayout.addView(mandatorySign);
         }
+
+        questionView = new MyTextView(context, ques);
+        hLayout.addView(questionView);
 
         linearLayout.addView(hLayout);
 
