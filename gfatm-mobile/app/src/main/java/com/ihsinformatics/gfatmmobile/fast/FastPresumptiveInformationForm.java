@@ -57,6 +57,7 @@ import java.util.HashMap;
 
 public class FastPresumptiveInformationForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
     Context context;
+    boolean emptyError = false;
 
     // Views...
     TitledButton formDate;
@@ -199,7 +200,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         addressLayout.addView(townTextView);
         addressLayout.addView(addressStreet);        district = new TitledSpinner(context, "", getResources().getString(R.string.pet_district), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
         city = new TitledSpinner(context, "", getResources().getString(R.string.pet_city), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
-        addressType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_type_of_address_is_this), getResources().getStringArray(R.array.fast_type_of_address_list), getResources().getString(R.string.fast_perminant), App.VERTICAL, App.VERTICAL);
+        addressType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_type_of_address_is_this), getResources().getStringArray(R.array.fast_type_of_address_list), "", App.VERTICAL, App.VERTICAL, true);
         nearestLandmark = new TitledEditText(context, null, getResources().getString(R.string.fast_nearest_landmark), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         contactPermission = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_can_we_call_you), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
      
@@ -661,6 +662,15 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         }*/
 
 
+        if (addressType.getVisibility() == View.VISIBLE && App.get(addressType).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            emptyError = true;
+            error = true;
+        }
+
         if (!cnic1.getText().toString().trim().isEmpty() && cnic2.getText().toString().trim().isEmpty() && cnic3.getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
@@ -1030,7 +1040,10 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
-            alertDialog.setMessage(getString(R.string.form_error));
+            if(!emptyError)
+                alertDialog.setMessage(getString(R.string.form_error));
+            else
+                alertDialog.setMessage(getString(R.string.fast_required_field_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
          //   DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
@@ -1088,7 +1101,8 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         final String secondaryLandlineLinearLayout = secondaryLandline1.getText().toString() +"-"+ secondaryLandline2.getText().toString();
 
 
-        observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnicNumber});
+        if(cnicNumber.length() == 15)
+            observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnicNumber});
 
         if (cnicOwner.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(cnicOwner).equals(getResources().getString(R.string.fast_self)) ? "SELF" :

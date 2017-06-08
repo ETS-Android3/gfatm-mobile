@@ -1215,9 +1215,11 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
                     if (result.get("NATIONAL IDENTIFICATION NUMBER") != null) {
                         String value = result.get("NATIONAL IDENTIFICATION NUMBER");
-                        cnic1.setText(value.substring(0, 5));
-                        cnic2.setText(value.substring(6, 13));
-                        cnic3.setText(value.substring(14));
+                        if(value.length() == 15) {
+                            cnic1.setText(value.substring(0, 5));
+                            cnic2.setText(value.substring(6, 13));
+                            cnic3.setText(value.substring(14));
+                        }
                     }
 
                     if (result.get("COMPUTERIZED NATIONAL IDENTIFICATION OWNER") != null) {
