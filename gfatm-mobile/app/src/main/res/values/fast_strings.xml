@@ -291,7 +291,7 @@
     <string name="fast_date_of_submission">Date of submission</string>
     <string name="fast_at_what_point_test_being_done">At what point is the test being done?</string>
     <string name="fast_where_did_the_specimen_come_from">Where did the specimen come from?</string>
-    <string name="fast_afb_smear_result">AFB Smear Results</string>
+    <string name="fast_afb_smear_result">AFB Smear Result</string>
     <string name="fast_number_of_afb_seen_in_one_field">Number of AFB seen in one field</string>
     <string name="fast_smear_result">Smear Result</string>
     <string name="fast_negative">Negative</string>
@@ -457,6 +457,8 @@
     <string name="fast_emergency_room">Emergency Room</string>
     <string name="fast_diabetic">Diabetic</string>
     <string name="fast_required_field_error">Required fields cannot be empty</string>
+    <string name="fast_no_order_found_for_the_patient">No order found for the patient.</string>
+
 
 
 
