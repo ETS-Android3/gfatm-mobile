@@ -273,6 +273,33 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
                 }
 
         }
+        if (!(resultRecieveDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
+
+            String formDa = resultRecieveDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
+
+            Date date = new Date();
+            if (secondDateCalendar.after(App.getCalendar(date))) {
+
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                resultRecieveDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+
+            } else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                resultRecieveDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+            }
+
+            else
+                resultRecieveDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+        }
         formDate.getButton().setEnabled(true);
         resultRecieveDate.getButton().setEnabled(true);
     }
@@ -315,7 +342,7 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
 
 
         if(orderIds.getVisibility()==View.VISIBLE  && flag){
-            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "DST Culture Test Result", "ORDER ID");
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "GXP Test", "ORDER ID");
             if(resultTestIds != null){
                 for(String id : resultTestIds) {
 
@@ -346,7 +373,7 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
         }
 
         if(cartidgeID.getVisibility() == View.VISIBLE  && flag){
-            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "DST Culture Test Result", "CARTRIDGE ID");
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "GXP Test", "CARTRIDGE ID");
             if(resultTestIds != null) {
                 for (String id : resultTestIds) {
                     if (id.equals(App.get(cartidgeID))) {

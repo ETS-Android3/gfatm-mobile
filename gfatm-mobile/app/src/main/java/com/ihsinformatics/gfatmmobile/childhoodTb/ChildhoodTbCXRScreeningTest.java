@@ -990,7 +990,10 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
                 orderIds.setVisibility(View.GONE);
 
             } else if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_result))) {
-                String typeofXray =  serverService.getObsValueByObs(App.getPatientId(), App.getProgram() + "-" + "CXR Screening Test Order", "ORDER ID", App.get(orderIds),"TYPE OF X RAY");
+                String typeofXray = null;
+                if(orderIds.getSpinner().getCount()>0) {
+                    typeofXray = serverService.getObsValueByObs(App.getPatientId(), App.getProgram() + "-" + "CXR Screening Test Order", "ORDER ID", App.get(orderIds), "TYPE OF X RAY");
+                }
                 if(typeofXray!=null) {
                     if (typeofXray.equalsIgnoreCase("RADIOLOGICAL DIAGNOSIS")) {
                         chestXRayScore.setVisibility(View.VISIBLE);

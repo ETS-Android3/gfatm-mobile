@@ -991,7 +991,10 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
             testId.setVisibility(View.VISIBLE);
             formDate.setVisibility(View.VISIBLE);
             orderIds.setVisibility(View.VISIBLE);
-            String ctScan =  serverService.getObsValueByObs(App.getPatientId(), App.getProgram() + "-" + "CT Scan Test Order", "ORDER ID", App.get(orderIds),"CT SCAN SITE");
+            String ctScan = null;
+            if(orderIds.getSpinner().getCount()>0) {
+                ctScan = serverService.getObsValueByObs(App.getPatientId(), App.getProgram() + "-" + "CT Scan Test Order", "ORDER ID", App.get(orderIds), "CT SCAN SITE");
+            }
             if(ctScan!=null){
                 if(ctScan.equalsIgnoreCase("CT SCAN, CHEST")){
                     ctChestTbSuggestive.setVisibility(View.VISIBLE);
