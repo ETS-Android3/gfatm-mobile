@@ -454,7 +454,20 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
             error = true;
         }
 
-        if (orderIds.getVisibility() == View.VISIBLE) {
+
+        Boolean flag = true;
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            if (saveFlag) {
+                flag = false;
+            }else {
+                flag = true;
+            }
+        }
+
+
+        if (orderIds.getVisibility() == View.VISIBLE && flag) {
             String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Screening CXR Test Result", "ORDER ID");
             if (resultTestIds != null) {
                 for (String id : resultTestIds) {
@@ -485,7 +498,7 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
             }
         }
 
-        if (testId.getVisibility() == View.VISIBLE) {
+        if (testId.getVisibility() == View.VISIBLE && flag) {
             String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Screening CXR Test Result", "TEST ID");
             if (resultTestIds != null) {
                 for (String id : resultTestIds) {
@@ -907,11 +920,11 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
                 formType.getRadioGroup().getButtons().get(0).setChecked(true);
                 formType.getRadioGroup().getButtons().get(1).setEnabled(false);
               //  testIdView.setImageResource(R.drawable.ic_checked_green);
-                if (obs[0][0].equals("TEST ID")) {
-                    testId.getEditText().setEnabled(false);
-                  //  testIdView.setEnabled(false);
-                 //   testIdView.setImageResource(R.drawable.ic_checked_green);
-                    testId.getEditText().setText(obs[0][1]);
+
+                if(obs[0][0].equals("ORDER ID")){
+                    orderId.getEditText().setText(obs[0][1]);
+                    orderId.getEditText().setOnKeyListener(null);
+                    orderId.getEditText().setFocusable(false);
                 }
 
                 else if (obs[0][0].equals("X RAY IN PAST 6 MONTHS")) {
