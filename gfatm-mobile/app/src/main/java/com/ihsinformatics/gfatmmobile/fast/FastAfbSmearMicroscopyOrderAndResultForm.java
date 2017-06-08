@@ -152,9 +152,6 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
         return mainContent;
     }
 
-    public void updatefollowUpMonth() {
-
-    }
 
     /**
      * Initializes all views and ArrayList and Views Array
@@ -1119,7 +1116,6 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
                 formType.getRadioGroup().getButtons().get(0).setChecked(true);
                 formType.getRadioGroup().getButtons().get(1).setEnabled(false);
 
-
                 if(obs[0][0].equals("ORDER ID")){
                     orderId.getEditText().setText(obs[0][1]);
                     orderId.getEditText().setOnKeyListener(null);
@@ -1187,11 +1183,11 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
                     orderIds.getSpinner().selectValue(obs[0][1]);
                     orderIds.getSpinner().setEnabled(false);
                 }
-
                 else if (obs[0][0].equals("TEST ID")) {
                     testId.getEditText().setText(obs[0][1]);
                     testId.getEditText().setEnabled(false);
-                } else if (obs[0][0].equals("SPUTUM FOR ACID FAST BACILLI")) {
+                }
+                else if (obs[0][0].equals("SPUTUM FOR ACID FAST BACILLI")) {
                     String value = obs[0][1].equals("NEGATIVE") ? getResources().getString(R.string.fast_negative) :
                             (obs[0][1].equals("SCANTY 3 - 24") ? getResources().getString(R.string.fast_scanty_3_to_24) :
                                     (obs[0][1].equals("ONE PLUS") ? getResources().getString(R.string.fast_1_plus) :
