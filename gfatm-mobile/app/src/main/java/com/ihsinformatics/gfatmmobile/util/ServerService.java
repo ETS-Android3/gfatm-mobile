@@ -28,6 +28,9 @@ import com.ihsinformatics.gfatmmobile.App;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.util.Base64;
 import android.util.Log;
 
 import com.ihsinformatics.gfatmmobile.App;
@@ -43,6 +46,12 @@ import com.ihsinformatics.gfatmmobile.model.User;
 import com.ihsinformatics.gfatmmobile.shared.FormsObject;
 import com.ihsinformatics.gfatmmobile.shared.Metadata;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -61,6 +70,9 @@ import org.openmrs.Provider;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.Format;
@@ -88,6 +100,7 @@ public class ServerService {
     private static HttpPost httpPost;
     private static Context context;
     private static String fastGfatmUri;
+    private static String searchGfatmUri;
     private HttpGwtRequest httpGwtClient;
 
     public ServerService(Context context) {
@@ -98,42 +111,59 @@ public class ServerService {
         dbUtil = new DatabaseUtil(this.context);
 
         // GWT Connections
-        fastGfatmUri = "199.172.1.44:8888" + "/fastweb.jsp";
+//        fastGfatmUri = App.getIp()+":"+App.getPort() + "/gfatmweb/fastweb.jsp";
+        fastGfatmUri = "199.172.1.45:8888" + "/fastweb.jsp";
+        searchGfatmUri = "199.172.1.45:8888" + "/gfatmtasks.jsp";
+        searchGfatmUri = "199.172.1.45:8888" + "/gfatmtasks.jsp";
         httpGwtClient = new HttpGwtRequest(this.context);
     }
+
     /**
      * Checks to see if the client is connected to any network (GPRS/Wi-Fi)
      *
      * @return status
      */
     static public boolean isURLReachable() {
-//        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-//        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-//        if (netInfo != null && netInfo.isConnected()) {
-//            try {
-//                if(App.getSsl().equalsIgnoreCase("Enabled")) {
-//                    HttpsClient httpsClient = new HttpsClient(context);
-//                    httpsClient.
-//                }
-//                else {
-//                    URL url = new URL("http://" + App.getIp() + ":" + App.getPort());
-//                    HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
-//                    urlc.setConnectTimeout(10 * 1000);
-//                    urlc.connect();
-//                    if (urlc.getResponseCode() == 200) {
-//                        return true;
-//                    } else {
-//                        return false;
-//                    }
-//                }
-//
-//            } catch (MalformedURLException e1) {
-//                return false;
-//            } catch (IOException e) {
-//                return false;
-//            }
-//        }
-        return true;
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnected()) {
+            try {
+
+                if (!App.getSsl().equalsIgnoreCase("Enabled")) {
+                    URL url = new URL("http://" + App.getIp() + ":" + App.getPort());
+                    HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
+                    urlc.setConnectTimeout(10 * 1000);
+                    urlc.connect();
+                    if (urlc.getResponseCode() == 200) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    try {
+                        HttpUriRequest request = new org.apache.http.client.methods.HttpGet("https://" + App.getIp() + ":" + App.getPort());
+                        HttpsClient client = new HttpsClient(context);
+                        HttpResponse response = client.execute(request);
+                        StatusLine statusLine = response.getStatusLine();
+                        Log.d(TAG, "Http response code: " + statusLine.getStatusCode());
+                        if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                }
+
+            } catch (MalformedURLException e1) {
+                return false;
+            } catch (IOException e) {
+                return false;
+            }
+        }
+        return false;
     }
 
     public String getPatientSystemIdByUuidLocalDB(String uuid) {
@@ -242,7 +272,7 @@ public class ServerService {
 
         String encounterId = dbUtil.getObject(Metadata.FORMS, "encounter_id", "id='" + id + "'");
 
-        if(!(encounterId == "" || encounterId == null)) {
+        if (!(encounterId == "" || encounterId == null)) {
             dbUtil.delete(Metadata.ENCOUNTER, "encounter_id=?", new String[]{encounterId});
             dbUtil.delete(Metadata.OBS, "encounter_id=?", new String[]{encounterId});
         }
@@ -295,6 +325,17 @@ public class ServerService {
         return locations;
     }
 
+    public Object[][] getAllTowns() {
+        Object[][] locations = dbUtil.getFormTableData("select * from " + Metadata.TOWN);
+        return locations;
+    }
+
+    public void addTown(String name) {
+        ContentValues values4 = new ContentValues();
+        values4.put("name", name);
+        dbUtil.insert(Metadata.TOWN, values4);
+    }
+
     /**
      * Gets username from App variable and checks to see if it exists in the
      * local database. The method doesn't exactly matches the user but attempts
@@ -308,7 +349,7 @@ public class ServerService {
             Object[][] user = getUserFromLoccalDB(App.getUsername());
             if (user.length < 1) {
                 return "USER_NOT_FOUND";
-        }
+            }
             if (!App.getPassword().equals(String.valueOf(user[0][4]))) {
                 return "AUTHENTICATION_ERROR";
             }
@@ -353,6 +394,9 @@ public class ServerService {
             if (providerUUid == "")
                 return "PROVIDER_NOT_FOUND";
 
+//            if (!isMobileAppCompatible())
+//                return "VERSION_MISMATCH";
+
             App.setUserFullName(user.getFullName());
             App.setRoles(user.getRoles());
             App.setProviderUUid(providerUUid);
@@ -379,7 +423,7 @@ public class ServerService {
             return user;
         }
         if (App.getCommunicationMode().equals("REST")) {
-            JSONObject response = httpGet.getUserByName(App.getUsername());
+            JSONObject response = httpGet.getUserByName(username);
             if (response == null)
                 return user;
             JSONObject[] jsonObjects = JSONParser.getJSONArrayFromObject(response, "results");
@@ -397,7 +441,32 @@ public class ServerService {
         return user;
     }
 
+    public boolean isMobileAppCompatible() {
 
+        try {
+
+            JSONObject j = httpGet.getSystemSetting("gfatm-mobile-version");
+            String version = j.getString("value");
+            String appVersion = App.getVersion();
+
+            if (version.equals(appVersion))
+                return true;
+            else {
+                String[] systemVersions = version.split("\\.");
+                String[] appVersions = appVersion.split("\\.");
+
+                if (appVersions[0].equals(systemVersions[0]) && systemVersions[1].equals(appVersions[1]))
+                    return true;
+                else
+                    return false;
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
 
     public String getLocations() {
 
@@ -410,18 +479,6 @@ public class ServerService {
             JSONArray response = httpGet.getAllLocations();
             if (response == null)
                 return "AUTHENTICATION_ERROR";
-
-            /*String columnName = "";
-            if (App.getProgram().equals(context.getResources().getString(R.string.pet)))
-                columnName = "pet_location";
-            else if (App.getProgram().equals(context.getResources().getString(R.string.fast)))
-                columnName = "fast_location";
-            else if (App.getProgram().equals(context.getResources().getString(R.string.comorbidities)))
-                columnName = "comorbidities_location";
-            else if (App.getProgram().equals(context.getResources().getString(R.string.pmdt)))
-                columnName = "pmdt_location";
-            else if (App.getProgram().equals(context.getResources().getString(R.string.childhood_tb)))
-                columnName = "childhood_tb_location";*/
 
             deleteAllLocations();
             try {
@@ -1120,17 +1177,17 @@ public class ServerService {
                 "mothername, primarycontact, primarycontactOwner, secondarycontact, secondarycontactOwner, tertiarycontact, quaternarycontact, ethnicity, " + // 10 - 17
                 "educationlevel, employmentstatus, occupation, incomeclass, mothertongue, nationalid, nationalidowner, guardianname, " + // 18 - 25
                 "identifier, external_id, enrs, endtb_emr_id, " +  // 26 - 29
-                "address1, address2, address3, stateProvince, countyDistrict, cityVillage, country, patient_id ", "patient_id = '" + id + "'"); //30 - 37
+                "address1, address2, address3, stateProvince, countyDistrict, cityVillage, country, treatmentsupporter, patient_id ", "patient_id = '" + id + "'"); //30 - 37
 
         Date date = App.stringToDate(result[0][3], "yyyy-MM-dd");
         int age = App.getDiffYears(date, new Date());
         com.ihsinformatics.gfatmmobile.model.Person person1 = new com.ihsinformatics.gfatmmobile.model.Person(result[0][0], result[0][1], result[0][2], age, result[0][3], result[0][4],
                 result[0][5], result[0][6], result[0][7], result[0][8], result[0][9], result[0][10], result[0][11], result[0][12], result[0][13], result[0][14],
                 result[0][15], result[0][16], result[0][17], result[0][18], result[0][19], result[0][20], result[0][21], result[0][22], result[0][23], result[0][24], result[0][25],
-                result[0][30], result[0][31], result[0][32], result[0][33], result[0][34], result[0][35], result[0][36]);
+                result[0][30], result[0][31], result[0][32], result[0][33], result[0][34], result[0][35], result[0][36], result[0][37]);
 
         patient = new com.ihsinformatics.gfatmmobile.model.Patient(result[0][0], result[0][26], result[0][27], result[0][28], result[0][29], person1);
-        patient.setPid(Integer.valueOf(result[0][37]));
+        patient.setPid(Integer.valueOf(result[0][38]));
 
         return patient;
 
@@ -1148,7 +1205,7 @@ public class ServerService {
                 "mothername, primarycontact, primarycontactOwner, secondarycontact, secondarycontactOwner, tertiarycontact, quaternarycontact, ethnicity, " + // 10 - 17
                 "educationlevel, employmentstatus, occupation, incomeclass, mothertongue, nationalid, nationalidowner, guardianname, " + // 18 - 25
                 "identifier, external_id, enrs, endtb_emr_id, " +  // 26 - 29
-                "address1, address2, address3, stateProvince, countyDistrict, cityVillage, country, patient_id ", "identifier = '" + patientId + "'"); //30 - 37
+                "address1, address2, address3, stateProvince, countyDistrict, cityVillage, country, treatmentsupporter, patient_id ", "identifier = '" + patientId + "'"); //30 - 37
 
         if (result.length < 1)
             return null;
@@ -1158,10 +1215,10 @@ public class ServerService {
         com.ihsinformatics.gfatmmobile.model.Person person1 = new com.ihsinformatics.gfatmmobile.model.Person(result[0][0], result[0][1], result[0][2], age, result[0][3], result[0][4],
                 result[0][5], result[0][6], result[0][7], result[0][8], result[0][9], result[0][10], result[0][11], result[0][12], result[0][13], result[0][14],
                 result[0][15], result[0][16], result[0][17], result[0][18], result[0][19], result[0][20], result[0][21], result[0][22], result[0][23], result[0][24], result[0][25],
-                result[0][30], result[0][31], result[0][32], result[0][33], result[0][34], result[0][35], result[0][36]);
+                result[0][30], result[0][31], result[0][32], result[0][33], result[0][34], result[0][35], result[0][36], result[0][37]);
 
         com.ihsinformatics.gfatmmobile.model.Patient patient1 = new com.ihsinformatics.gfatmmobile.model.Patient(result[0][0], result[0][26], result[0][27], result[0][28], result[0][29], person1);
-        patient1.setPid(Integer.valueOf(result[0][37]));
+        patient1.setPid(Integer.valueOf(result[0][38]));
 
         return patient1;
     }
@@ -1307,7 +1364,7 @@ public class ServerService {
                     Boolean flag = false;
                     Date d = null;
                     String lastFormDate = getEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + formName);
-                    if(!(lastFormDate == null || lastFormDate.equals(""))){
+                    if (!(lastFormDate == null || lastFormDate.equals(""))) {
                         if (lastFormDate.contains("/")) {
                             d = App.stringToDate(lastFormDate, "dd/MM/yyyy");
                         } else {
@@ -1315,13 +1372,13 @@ public class ServerService {
                         }
                     }
 
-                    if(d != null){
-                        if(d.equals(encounterDateTime) || d.before(encounterDateTime.getTime()))
+                    if (d != null) {
+                        if (d.equals(encounterDateTime) || d.before(encounterDateTime.getTime()))
                             flag = true;
                     }
 
                     String encounterId = "";
-                    if(flag) {
+                    if (flag) {
                         deleteEncounter(App.getPatientId(), App.getProgram() + "-" + formName);
 
                         ContentValues values2 = new ContentValues();
@@ -1368,7 +1425,7 @@ public class ServerService {
                             String[] valueArray = obss[i][1].split(" ; ");
                             for (int j = 0; j < valueArray.length; j++) {
 
-                                if(flag) {
+                                if (flag) {
                                     ContentValues values3 = new ContentValues();
                                     values3.put("conceptName", obss[i][0]);
                                     values3.put("value", valueArray[j]);
@@ -1385,7 +1442,7 @@ public class ServerService {
                             }
 
                         } else {
-                            if(flag) {
+                            if (flag) {
                                 ContentValues values3 = new ContentValues();
                                 values3.put("conceptName", obss[i][0]);
                                 values3.put("value", obss[i][1]);
@@ -1422,6 +1479,7 @@ public class ServerService {
                     return "SUCCESS_" + formId;
 
                 } else {
+
                     String returnString = httpPost.saveEncounterWithObservationByEntity(encounter);
                     JSONObject jsonObject = JSONParser.getJSONObject("{" + returnString.toString() + "}");
                     com.ihsinformatics.gfatmmobile.model.Encounter encounter1 = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(jsonObject, context);
@@ -1430,7 +1488,7 @@ public class ServerService {
                     Boolean flag = true;
                     Date d = null;
                     String lastFormDate = getEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + formName);
-                    if(!(lastFormDate == null || lastFormDate.equals(""))){
+                    if (!(lastFormDate == null || lastFormDate.equals(""))) {
                         if (lastFormDate.contains("/")) {
                             d = App.stringToDate(lastFormDate, "dd/MM/yyyy");
                         } else {
@@ -1438,12 +1496,12 @@ public class ServerService {
                         }
                     }
 
-                    if(d != null){
-                        if(!(d.equals(encounterDateTime) || d.before(encounterDateTime.getTime())))
+                    if (d != null) {
+                        if (!(d.equals(encounterDateTime) || d.before(encounterDateTime.getTime())))
                             flag = false;
                     }
 
-                    if(flag) {
+                    if (flag) {
                         deleteEncounter(App.getPatientId(), encounter1.getEncounterType());
 
                         ContentValues values2 = new ContentValues();
@@ -1959,7 +2017,7 @@ public class ServerService {
             }
         }
 
-        StringBuilder formsData = new StringBuilder ();
+        StringBuilder formsData = new StringBuilder();
         if (App.getCommunicationMode().equals("REST")) {
             Object[][] forms = dbUtil.getFormTableData("select id, form, pid, uri, content, form_id from " + Metadata.OFFLINE_FORM + " where form_id='" + formId + "'");
 
@@ -1969,33 +2027,33 @@ public class ServerService {
                 Object[] form = forms[i];
 
                 formsData.append(String.valueOf(form[1]));
-                formsData.append ("\n");
-                formsData.append ("uri:\n");
+                formsData.append("\n");
+                formsData.append("uri:\n");
                 formsData.append(String.valueOf(form[3]));
-                formsData.append ("\n");
-                formsData.append ("content:\n");
+                formsData.append("\n");
+                formsData.append("content:\n");
                 formsData.append(String.valueOf(form[4]));
 
-                formsData.append ("\n\n\n");
+                formsData.append("\n\n\n");
 
                 if (String.valueOf(form[1]).contains("CREATE")) {
                     i++;
                     form = forms[i];
                     formsData.append(String.valueOf(form[1]));
-                    formsData.append ("\n");
-                    formsData.append ("uri:\n");
+                    formsData.append("\n");
+                    formsData.append("uri:\n");
                     formsData.append(String.valueOf(form[3]));
-                    formsData.append ("\n");
-                    formsData.append ("content:\n");
+                    formsData.append("\n");
+                    formsData.append("content:\n");
                     formsData.append(String.valueOf(form[4]));
 
-                    formsData.append ("\n\n\n");
+                    formsData.append("\n\n\n");
                 }
 
             }
 
-            formsData.append ("---------------------------------------------------------------");
-            formsData.append ("\n\n\n");
+            formsData.append("---------------------------------------------------------------");
+            formsData.append("\n\n\n");
         }
 
         return formsData.toString();
@@ -2137,6 +2195,7 @@ public class ServerService {
                     String stateProvince = patient.getPerson().getStateProvince();
                     String cityVillage = patient.getPerson().getCityVillage();
                     String country = patient.getPerson().getCountry();
+                    String treatmentSupporter = patient.getPerson().getTreatmentSupporter();
 
                     ContentValues values = new ContentValues();
                     values.put("uuid", puuid);
@@ -2174,6 +2233,7 @@ public class ServerService {
                     values.put("stateProvince", stateProvince);
                     values.put("cityVillage", cityVillage);
                     values.put("country", country);
+                    values.put("treatmentsupporter", treatmentSupporter);
                     dbUtil.update(Metadata.PATIENT, values, "uuid=?", new String[]{App.getPatient().getUuid()});
 
                     App.setPatientId(getPatientSystemIdByUuidLocalDB(uuid));
@@ -2357,7 +2417,7 @@ public class ServerService {
 
     }
 
-    public TreatmentUser[] getUsersByRole(String role){
+    public TreatmentUser[] getUsersByRole(String role) {
         if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
             if (!isURLReachable()) {
                 return null;
@@ -2366,7 +2426,7 @@ public class ServerService {
 
         if (App.getCommunicationMode().equals("REST")) {
 
-            role = role.replace(" ","+");
+            role = role.replace(" ", "+");
             JSONArray response = httpGet.getUsersByRole(role);
             if (response == null)
                 return null;
@@ -2381,7 +2441,7 @@ public class ServerService {
 
                 }
                 return treatmentUsers;
-            } catch (Exception e){
+            } catch (Exception e) {
                 return null;
             }
 
@@ -2389,7 +2449,7 @@ public class ServerService {
         return null;
     }
 
-    public Address getPreferredAddressByPersonUuid(String personUuid){
+    public Address getPreferredAddressByPersonUuid(String personUuid) {
         if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
             if (!isURLReachable()) {
                 return null;
@@ -2398,14 +2458,14 @@ public class ServerService {
 
         if (App.getCommunicationMode().equals("REST")) {
 
-            JSONObject json  = httpGet.getPersonAddressByPersonUuid(personUuid);
+            JSONObject json = httpGet.getPersonAddressByPersonUuid(personUuid);
             if (json == null)
                 return null;
 
             try {
                 Address address = Address.parseJSONObject(json);
                 return address;
-            } catch (Exception e){
+            } catch (Exception e) {
                 return null;
             }
         }
@@ -2537,6 +2597,190 @@ public class ServerService {
             response = "POST_ERROR";
         }
         return response;
+    }
+
+    public JSONObject searchPatients(String encounterType, ContentValues values, String[][] params) {
+
+        JSONObject jsonResponse = null;
+        String response = "";
+        String responseDetails = "";
+
+        try {
+
+            if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
+                if (!isURLReachable()) {
+                    return null;
+                }
+
+                JSONObject json = new JSONObject();
+                json.put("app_ver", App.getVersion());
+                json.put("type", encounterType);
+                json.put("username", App.getUsername());
+                json.put("password", App.getPassword());
+                json.put("location", "IHS");
+                json.put("age_range", values.get("age_range"));
+                json.put("gender", values.get("gender"));
+
+                JSONArray obs = new JSONArray();
+                for (int i = 0; i < params.length; i++) {
+                    if ("".equals(params[i][0])
+                            || "".equals(params[i][1]))
+                        continue;
+                    JSONObject obsJson = new JSONObject();
+                    obsJson.put("name", params[i][0]);
+                    obsJson.put("value", params[i][1]);
+
+                    obs.put(obsJson);
+                }
+                json.put("results", obs);
+
+                String val = json.toString();
+
+                response = httpGwtClient.clientPost(searchGfatmUri, val);
+                jsonResponse = JSONParser.getJSONObject(response);
+
+//            if (jsonResponse == null) {
+//                return response;
+//            }
+//            if (jsonResponse.has("response")) {
+//                String result = jsonResponse.getString("response");
+//                if (jsonResponse.getString("response").equals("ERROR"))
+//                    result = result + " <br> "
+//                            + jsonResponse.getString("details");
+//                return result;
+//            }
+//            return response;
+
+            } else {
+
+                String lowerAge = values.get("age_range").toString().split("-")[0].trim();
+                String upperAge = values.get("age_range").toString().split("-")[1].trim();
+                String gender = values.get("gender").toString();
+
+                Object[][] patientOnAgeAndGender = dbUtil.getFormTableData("select patient_id from " + Metadata.PATIENT + " where (strftime('%Y', 'now') - strftime('%Y', datetime(substr(birthdate, 1, 10)))) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(substr(birthdate, 1, 10)))) >=" + lowerAge + " AND (strftime('%Y', 'now') - strftime('%Y', datetime(substr(birthdate, 1, 10)))) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(substr(birthdate, 1, 10)))) <=" + upperAge + " AND gender ='" + gender + "'");
+
+//                Object[][] patientOnAgeAndGender = dbUtil.getFormTableData("select patient_id from " + Metadata.PATIENT + " where gender ='" + gender + "'");
+
+
+                if (patientOnAgeAndGender.length > 0) {
+
+                    StringBuilder patientIdBuilder = new StringBuilder();
+
+                    for (int i = 0; i < patientOnAgeAndGender.length; i++) {
+                        Object[] obj = patientOnAgeAndGender[i];
+
+                        if (i != 0)
+                            patientIdBuilder.append(",");
+                        patientIdBuilder.append(obj[0].toString());
+
+                    }
+
+                    for (int i = 0; i < params.length; i++) {
+                        if ("".equals(params[i][0])
+                                || "".equals(params[i][1]))
+                            continue;
+
+                        StringBuilder whereClause = new StringBuilder();
+
+                        if (params[i][0].equals("PATIENT_IDENTIFIER")) {
+                            whereClause.append(" AND identifier = '");
+                            whereClause.append(params[i][1]);
+                            whereClause.append("' ");
+
+                        } else if (params[i][0].equals("CNIC")) {
+                            whereClause.append(" AND nationalid = '");
+                            whereClause.append(params[i][1]);
+                            whereClause.append("' ");
+
+                        } else if (params[i][0].equals("CONTACT_NUMBER")) {
+                            whereClause.append(" AND primarycontact = '");
+                            whereClause.append(params[i][1]);
+                            whereClause.append("' ");
+
+                        } else if (params[i][0].equals("GUARDIAN_NAME")) {
+
+                            whereClause.append(" AND guardianname LIKE '%");
+                            whereClause.append(params[i][1]);
+                            whereClause.append("%' ");
+
+                        } else if (params[i][0].equals("MOTHER_NAME")) {
+                            whereClause.append(" AND mothername LIKE '%");
+                            whereClause.append(params[i][1]);
+                            whereClause.append("%' ");
+
+                        } else if (params[i][0].equals("PERSON_NAME")) {
+
+                            whereClause.append("AND (first_name  || ' ' || last_name) LIKE '%");
+                            whereClause.append(params[i][1]);
+                            whereClause.append("%' ");
+
+                        } else if (params[i][0].equals("PROGRAM")) {
+
+                            if (params[i][1].equals("PMDT"))
+                                whereClause.append(" AND in_pmdt = 'Y' ");
+                            else if (params[i][1].equals("PET"))
+                                whereClause.append(" AND in_pet = 'Y' ");
+                            else if (params[i][1].equals("ChildhoodTB"))
+                                whereClause.append(" AND in_childhood_tb = 'Y' ");
+                            else if (params[i][1].equals("Comorbidities"))
+                                whereClause.append(" AND in_comorbidities = 'Y' ");
+                            else if (params[i][1].equals("FAST"))
+                                whereClause.append(" AND in_fast = 'Y' ");
+
+                        }
+
+                        Object[][] patients = dbUtil.getFormTableData("select uuid, identifier, (first_name  || ' ' || last_name) as full_name, gender, datetime(substr(birthdate, 1, 10)), (strftime('%Y', 'now') - strftime('%Y', datetime(substr(birthdate, 1, 10)))) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(substr(birthdate, 1, 10)))) as age from " + Metadata.PATIENT + " where 1=1 " + whereClause.toString() + " AND patient_id IN (" + patientIdBuilder.toString() + ")");
+
+                        JSONArray personDetails = new JSONArray();
+                        JSONObject person;
+
+
+                        for (int j = 0; j < patients.length; j++) {
+                            Object[] obj = patients[j];
+
+                            person = new JSONObject();
+                            person.put("uuid", obj[0].toString());
+                            person.put("identifier", obj[1].toString());
+                            person.put("fullName", obj[2].toString());
+                            person.put("gender", obj[3].toString());
+                            person.put("dob", obj[4].toString());
+                            person.put("age", obj[5].toString());
+
+                            personDetails.put(person);
+
+                        }
+
+                        jsonResponse = new JSONObject();
+                        if (personDetails != null && personDetails.length() > 0) {
+
+                            response = "SUCCESS";
+                            responseDetails = "Detail :  Data found";
+
+                            jsonResponse.put("response", response);
+                            jsonResponse.put("details", responseDetails);
+                            jsonResponse.put("personArray", personDetails);
+
+                        } else {
+                            response = "ERROR";
+                            responseDetails = "Detail : No data found for matching criteria";
+                            jsonResponse.put("response", response);
+                            jsonResponse.put("details", responseDetails);
+                        }
+                    }
+                } else {
+                    jsonResponse = new JSONObject();
+                    response = "ERROR";
+                    responseDetails = "Detail : No data found for matching criteria";
+                    jsonResponse.put("response", response);
+                    jsonResponse.put("details", responseDetails);
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return jsonResponse;
     }
 
 }

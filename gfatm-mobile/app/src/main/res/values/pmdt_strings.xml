@@ -8,10 +8,21 @@
     <string name="pmdt_index_patient_registration">Index Patient Registration</string>
     <string name="pmdt_first_name">First Name</string>
     <string name="pmdt_last_name">Last Name</string>
-    <string name="pmdt_age">pmdt_age</string>
-    <string name="pmdt_gender">Gender</string>
-    <string name="pmdt_dob">Date of birth</string>
-    <string name="pmdt_cnic">National ID card no.</string>
+    <string name="pmdt_full_name">Full Name:</string>
+    <string name="pmdt_patient_id">Patient ID:</string>
+
+    <!-- Seach related (copy and remove)-->
+    <string name="pmdt_search_error">Error while trying to search in openmrs.</string>
+    <string name="pmdt_searching">Searching...</string>
+    <string name="pmdt_program_name">Program:</string>
+    <string name="childhood_tb_db">ChildhoodTB</string> <!-- name in db -->
+    <string name="pmdt_provide_search_criteria">Please select any of the search criteria.</string>
+
+    <string name="pmdt_age">Age:</string>
+    <string name="pmdt_gender">Gender:</string>
+    <string name="guardian_name">Guardian Name</string>
+    <string name="pmdt_dob">Birthdate:</string>
+    <string name="pmdt_cnic">National ID Card No.</string>
     <string name="pmdt_cnic_hint">00000-0000000-0</string>
     <string name="pmdt_external_id">External ID</string>
     <string name="pmdt_external_patient_id_hint">Enter External Patient ID</string>
