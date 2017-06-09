@@ -904,7 +904,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Co
         } else if (buttonView == guardianCheckBox) {
             guardianName.setEnabled(isChecked);
 
-        } else if (buttonView == programCheckBox) {
+        } else if (buttonView == programCheckBox ) {
             program.setEnabled(isChecked);
 
         }
