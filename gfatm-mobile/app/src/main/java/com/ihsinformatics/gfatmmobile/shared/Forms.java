@@ -142,7 +142,7 @@ public class Forms{
     public static final String FAST_PRESUMPTIVE_FORM = "2. Presumptive Form";
     public static final String FAST_PROMPT_FORM = "4. Sputum Container and X-Ray Voucher Form";
     public static final String FAST_PATIENT_LOCATION_FORM = "Patient Location Form";
-    public static final String FAST_GXP_SPECIMEN_COLLECTION_FORM = "5. Specimen Collection Form";
+    public static final String FAST_GXP_SPECIMEN_COLLECTION_FORM = "5. GXP Specimen Collection Form";
     public static final String FAST_PRESUMPTIVE_INFORMATION_FORM = "3. Presumptive Information Form";
     public static final String FAST_GENEXPERT_RESULT_FORM = "6. GeneXpert Result Form";
     public static final String FAST_SCREENING_CHEST_XRAY_ORDER_AND_RESULT_FORM = "Screening CXR(CAD4TB) Order and Result Form";
