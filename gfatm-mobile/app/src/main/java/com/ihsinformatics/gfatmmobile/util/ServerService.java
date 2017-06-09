@@ -1969,7 +1969,7 @@ public class ServerService {
     public String getObsValueByObs(String patientId, String encounterType, String filterConceptName, String filterConceptValue, String conceptName) {
 
         Object[][] obs = dbUtil.getFormTableData("select "+ Metadata.ENCOUNTER +".encounter_id from " + Metadata.OBS + ", " + Metadata.ENCOUNTER + " where encounterType = '" + encounterType + "' and patientId=" + patientId + " and " + Metadata.ENCOUNTER + ".encounter_id=" + Metadata.OBS + ".encounter_id and conceptName = '" + filterConceptName + "' and " + Metadata.OBS + ".value = '" + filterConceptValue  + "' order by encounterDatetime DESC, dateCreated DESC");
-        if (obs.length < 1)
+        if (obs == null || obs.length < 1)
             return null;
 
         Object[][] encounter = dbUtil.getFormTableData("select value from " + Metadata.OBS + " where encounter_id = '" + String.valueOf(obs[0][0]) + "' and conceptName = '" + conceptName + "'");
