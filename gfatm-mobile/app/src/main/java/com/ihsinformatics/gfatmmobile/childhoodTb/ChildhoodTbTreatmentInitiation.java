@@ -571,6 +571,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                     }
                     else if(value>=20 && value<=24){
                         currentTabletsofRHZ.getRadioGroup().getButtons().get(4).setChecked(true);
+                        currentTabletsofE.getRadioGroup().getButtons().get(3).setChecked(true);
                     }
                     else if(value>=25){
                         typeFixedDosePrescribed.getSpinner().selectValue(getResources().getString(R.string.ctb_adult_formulation));
