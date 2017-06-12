@@ -1144,5 +1144,7 @@
     <string name="ctb_gxp_result_exist_for_order_id">GXP Result already exists for Order ID:"</string>
     <string name="ctb_test_result_found_error">Test Result already exists for Test ID:"</string>
     <string name="ctb_no_gxp_speciman_error">No GXP Specimen Collection for the patient </string>
-
+    <string name="ctb_missed_visit_less_than_formdate">Missed visit date can not be greater than Form date</string>
+    
+    
 </resources>
