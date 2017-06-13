@@ -1025,12 +1025,12 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             doctorNotes.getEditText().requestFocus();
             error = true;
         }
-        if(App.get(testConfirmingDiagnosis).isEmpty()){
+        if(testConfirmingDiagnosis.getVisibility()==View.VISIBLE && App.get(testConfirmingDiagnosis).isEmpty()){
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            testConfirmingDiagnosis.getQuestionView().setError(getString(R.string.ctb_spaces_only));
+            testConfirmingDiagnosis.getQuestionView().setError(getString(R.string.empty_field));
             testConfirmingDiagnosis.getQuestionView().requestFocus();
             error = true;
         }
