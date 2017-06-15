@@ -813,7 +813,7 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
                 formType.getRadioGroup().getButtons().get(1).setEnabled(false);
                 if (obs[0][0].equals("ORDER ID")) {
                     orderId.getEditText().setText(obs[0][1]);
-                    orderId.setOnKeyListener(null);
+                    orderId.getEditText().setKeyListener(null);
                 } else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
                     creatinineFollowupMonth.getSpinner().selectValue(obs[0][1]);
                     creatinineFollowupMonth.setVisibility(View.VISIBLE);
@@ -916,6 +916,7 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
         formDate.setVisibility(View.GONE);
 
         testId.getEditText().setEnabled(true);
+        orderId.getEditText().setKeyListener(null);
         formType.getRadioGroup().getButtons().get(0).setEnabled(true);
         formType.getRadioGroup().getButtons().get(1).setEnabled(true);
 
