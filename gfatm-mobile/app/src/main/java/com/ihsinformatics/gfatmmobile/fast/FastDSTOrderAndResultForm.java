@@ -1006,7 +1006,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
             orderId.getEditText().setText(App.getSqlDateTime(nowDate));
             orderIds.setVisibility(View.GONE);
             testId.setVisibility(View.GONE);
-            orderId.setOnKeyListener(null);
+            orderId.getEditText().setKeyListener(null);
             orderId.getEditText().setFocusable(false);
 
             testContextStatus.getRadioGroup().selectDefaultValue();
@@ -1136,7 +1136,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
 
                 if(obs[0][0].equals("ORDER ID")){
                     orderId.getEditText().setText(obs[0][1]);
-                    orderId.getEditText().setOnKeyListener(null);
+                    orderId.getEditText().setKeyListener(null);
                     orderId.getEditText().setFocusable(false);
                 }
                 else if (obs[0][0].equals("SPECIMEN SUBMISSION DATE")) {
