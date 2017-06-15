@@ -149,7 +149,7 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
     public void initViews() {
 
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        weight = new TitledEditText(context, null, getResources().getString(R.string.pet_weight), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_NUMBER_FLAG_DECIMAL, App.HORIZONTAL, true);
+        weight = new TitledEditText(context, null, getResources().getString(R.string.pet_weight), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_NUMBER_FLAG_DECIMAL, App.HORIZONTAL, false);
 
 
         MyLinearLayout linearLayout1 = new MyLinearLayout(context, getResources().getString(R.string.pet_adverse_events_followup_details), App.VERTICAL);
@@ -660,7 +660,7 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
                     loading.dismiss();
 
                     if (result.get("POST-EXPOSURE TREATMENT REGIMEN") == null || result.get("POST-EXPOSURE TREATMENT REGIMEN").equals("")) {
-                        final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                        /*final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                         alertDialog.setMessage(getResources().getString(R.string.treatment_initiation_missing));
                         Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                         alertDialog.setIcon(clearIcon);
@@ -678,7 +678,7 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
                                     }
                                 });
                         alertDialog.show();
-                        submitButton.setEnabled(false);
+                        submitButton.setEnabled(false);*/
                         return;
                     } else submitButton.setEnabled(true);
 
@@ -862,13 +862,13 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
             error = true;
         }
 
-        if (App.get(weight).isEmpty()) {
+        /*if (App.get(weight).isEmpty()) {
             weight.getEditText().setError(getString(R.string.empty_field));
             weight.getEditText().requestFocus();
             gotoFirstPage();
             view = null;
             error = true;
-        }
+        }*/
 
         if (error) {
 

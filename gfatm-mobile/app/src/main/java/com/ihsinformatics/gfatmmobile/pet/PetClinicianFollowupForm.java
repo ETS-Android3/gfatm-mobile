@@ -658,7 +658,7 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
                     loading.dismiss();
 
                     if (result.get("POST-EXPOSURE TREATMENT REGIMEN") == null || result.get("POST-EXPOSURE TREATMENT REGIMEN").equals("")) {
-                        final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                       /* final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                         alertDialog.setMessage(getResources().getString(R.string.treatment_initiation_missing));
                         Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                         alertDialog.setIcon(clearIcon);
@@ -676,7 +676,7 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
                                     }
                                 });
                         alertDialog.show();
-                        submitButton.setEnabled(false);
+                        submitButton.setEnabled(false);*/
                         return;
                     } else submitButton.setEnabled(true);
 

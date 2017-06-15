@@ -41,7 +41,9 @@ import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 /**
@@ -73,6 +75,7 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
     TitledEditText other;
     TitledRadioGroup petRegimen;
 
+    TitledButton incentiveDate;
     TitledEditText incentiveAmount;
     TitledEditText followupMonth;
     TitledRadioGroup incentiveDisbursalLocation;
@@ -141,7 +144,7 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
     @Override
     public void initViews() {
 
-        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_payment_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         indexPatientId = new TitledEditText(context, null, getResources().getString(R.string.pet_index_patient_id), "", "", RegexUtil.idLength, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         scanQRCode = new Button(context);
         scanQRCode.setText("Scan QR Code");
@@ -172,6 +175,7 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
         petRegimen = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_regimen), getResources().getStringArray(R.array.pet_regimens), "", App.VERTICAL, App.VERTICAL);
 
         MyLinearLayout linearLayout = new MyLinearLayout(context, getResources().getString(R.string.pet_incentive_details), App.VERTICAL);
+        incentiveDate = new TitledButton(context, null, getResources().getString(R.string.pet_incentive_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         incentiveAmount = new TitledEditText(context, null, getResources().getString(R.string.pet_incentive_amount), "500", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         followupMonth = new TitledEditText(context, null, getResources().getString(R.string.pet_followup_month), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         incentiveDisbursalLocation = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_incentive_disbursal_location), getResources().getStringArray(R.array.pet_locations_of_entry), getResources().getString(R.string.pet_contact_home), App.HORIZONTAL, App.VERTICAL);
@@ -179,7 +183,7 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
         recieverRelationWithContact = new TitledSpinner(context, "", getResources().getString(R.string.pet_receiver_relation_with_contact), getResources().getStringArray(R.array.pet_cnic_owners), getResources().getString(R.string.pet_self), App.VERTICAL);
         otherRelation = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
 
-
+        linearLayout.addView(incentiveDate);
         linearLayout.addView(incentiveAmount);
         linearLayout.addView(followupMonth);
         linearLayout.addView(incentiveDisbursalLocation);
@@ -187,7 +191,7 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
         linearLayout.addView(recieverRelationWithContact);
         linearLayout.addView(otherRelation);
 
-        views = new View[]{formDate.getButton(), indexPatientId.getEditText(), scanQRCode, indexExternalPatientId.getEditText(), cnic1.getEditText(), cnic2.getEditText(), cnic3.getEditText(), cnicOwner.getSpinner(), otherCnicOwner.getEditText(), incentiveOccasion.getRadioGroup(), incentiveFor.getRadioGroup(),
+        views = new View[]{formDate.getButton(), incentiveDate.getButton(), indexPatientId.getEditText(), scanQRCode, indexExternalPatientId.getEditText(), cnic1.getEditText(), cnic2.getEditText(), cnic3.getEditText(), cnicOwner.getSpinner(), otherCnicOwner.getEditText(), incentiveOccasion.getRadioGroup(), incentiveFor.getRadioGroup(),
                 nameTreatmentSupporter.getEditText(), phone1a.getEditText(), phone1b.getEditText(), typeTreatmentSupporter.getRadioGroup(), relationshipTreatmentSuppoter.getSpinner(), other.getEditText(), petRegimen.getRadioGroup(), incentiveAmount.getEditText(),
                 followupMonth.getEditText(), incentiveDisbursalLocation.getRadioGroup(), recieverName.getEditText(), recieverRelationWithContact.getSpinner(), otherRelation.getEditText()
         };
@@ -196,7 +200,7 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
                 nameTreatmentSupporter, contactNumberTreatmentSupporter, typeTreatmentSupporter, relationshipTreatmentSuppoter, other, petRegimen},
                 {linearLayout}};
 
-        View listenerViewer[] = new View[]{formDate, cnicOwner, incentiveOccasion, relationshipTreatmentSuppoter, recieverRelationWithContact, typeTreatmentSupporter};
+        View listenerViewer[] = new View[]{formDate, incentiveDate, cnicOwner, incentiveOccasion, relationshipTreatmentSuppoter, recieverRelationWithContact, typeTreatmentSupporter};
         for (View v : listenerViewer) {
 
             if (v instanceof TitledButton)
@@ -223,6 +227,7 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
             snackbar.dismiss();
 
         formDate.getButton().setEnabled(true);
+        incentiveDate.getButton().setEnabled(true);
 
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
@@ -251,6 +256,14 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         }
+        incentiveDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+        Calendar calendar = new GregorianCalendar(2017,4,1);
+        if (secondDateCalendar.before(calendar))
+            incentiveAmount.getEditText().setText("500");
+        else
+            incentiveAmount.getEditText().setText("600");
+
+
     }
 
 
@@ -460,6 +473,7 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
             observations.add(new String[]{"OTHER FAMILY MEMBER", App.get(other)});
         observations.add(new String[]{"POST-EXPOSURE TREATMENT REGIMEN", App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy)) ? "ISONIAZID PROPHYLAXIS" :
                 (App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_rifapentine)) ? "ISONIAZID AND RIFAPENTINE" : "LEVOFLOXACIN AND ETHIONAMIDE")});
+        observations.add(new String[]{"INCENTIVE DATE", App.getSqlDate(secondDateCalendar)});
         observations.add(new String[]{"INCENTIVE AMOUNT", App.get(incentiveAmount)});
         observations.add(new String[]{"MONTH OF INCENTIVE", App.get(followupMonth)});
         observations.add(new String[]{"LOCATION OF EVENT", App.get(incentiveDisbursalLocation).equals(getResources().getString(R.string.pet_contact_home)) ? "HOME" : "HEALTH FACILITY"});
@@ -630,6 +644,13 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
         relationshipTreatmentSuppoter.setVisibility(View.GONE);
         other.setVisibility(View.GONE);
         otherRelation.setVisibility(View.GONE);
+
+        Calendar calendar = new GregorianCalendar(2017,4,1);
+        if (secondDateCalendar.before(calendar))
+            incentiveAmount.getEditText().setText("500");
+        else
+            incentiveAmount.getEditText().setText("600");
+
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -901,6 +922,14 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
             formDate.getButton().setEnabled(false);
+        }else if (view == incentiveDate.getButton()) {
+            Bundle args = new Bundle();
+            args.putInt("type", SECOND_DATE_DIALOG_ID);
+            args.putBoolean("allowPastDate", true);
+            args.putBoolean("allowFutureDate", false);
+            secondDateFragment.setArguments(args);
+            secondDateFragment.show(getFragmentManager(), "DatePicker");
+            incentiveDate.getButton().setEnabled(false);
         }
 
     }
@@ -1087,6 +1116,10 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
             } else if (obs[0][0].equals("INCENTIVE AMOUNT")) {
                 String amount = obs[0][1].replace(".0", "");
                 incentiveAmount.getEditText().setText(amount);
+            } else if (obs[0][0].equals("TREATMENT START DATE")) {
+                String secondDate = obs[0][1];
+                secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
+                incentiveDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
             } else if (obs[0][0].equals("MONTH OF INCENTIVE")) {
                 String amount = obs[0][1].replace(".0", "");
                 followupMonth.getEditText().setText(amount);

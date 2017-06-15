@@ -169,6 +169,7 @@ public class PetTreatmentAdherenceForm extends AbstractFormActivity implements R
 
         formDate.getButton().setOnClickListener(this);
         adverseEventReport.getRadioGroup().setOnCheckedChangeListener(this);
+        adverseEventReport.getRadioGroup().setOnCheckedChangeListener(this);
         for (CheckBox cb : adverseEffects2.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
 
@@ -544,6 +545,7 @@ public class PetTreatmentAdherenceForm extends AbstractFormActivity implements R
 
         adverseEffectsLayout.setVisibility(View.GONE);
         otherEffects.setVisibility(View.GONE);
+        clinicianInformed.setVisibility(View.GONE);
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -574,8 +576,10 @@ public class PetTreatmentAdherenceForm extends AbstractFormActivity implements R
             if (App.get(adverseEventReport).equals(getResources().getString(R.string.no))) {
                 adverseEffectsLayout.setVisibility(View.GONE);
                 otherEffects.setVisibility(View.GONE);
+                clinicianInformed.setVisibility(View.GONE);
             } else {
                 adverseEffectsLayout.setVisibility(View.VISIBLE);
+                clinicianInformed.setVisibility(View.VISIBLE);
                 boolean flag = false;
                 for (CheckBox cb : adverseEffects2.getCheckedBoxes()) {
                     if (cb.getText().equals(getString(R.string.pet_other)) && cb.isChecked()) {

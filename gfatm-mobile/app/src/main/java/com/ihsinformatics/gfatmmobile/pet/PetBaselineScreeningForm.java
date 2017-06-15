@@ -204,12 +204,12 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         cnicLayout.setOrientation(LinearLayout.VERTICAL);
         LinearLayout cnicQuestionLayout = new LinearLayout(context);
         cnicQuestionLayout.setOrientation(LinearLayout.HORIZONTAL);
-        MyTextView cnic = new MyTextView(context, getResources().getString(R.string.pet_cnic));
-        cnicQuestionLayout.addView(cnic);
         TextView mandatorycnicSign = new TextView(context);
         mandatorycnicSign.setText(" *");
         mandatorycnicSign.setTextColor(Color.parseColor("#ff0000"));
         cnicQuestionLayout.addView(mandatorycnicSign);
+        MyTextView cnic = new MyTextView(context, getResources().getString(R.string.pet_cnic));
+        cnicQuestionLayout.addView(cnic);
         cnicLayout.addView(cnicQuestionLayout);
         LinearLayout cnicPartLayout = new LinearLayout(context);
         cnicPartLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -233,12 +233,12 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         phone1Layout.setOrientation(LinearLayout.VERTICAL);
         LinearLayout phone1QuestionLayout = new LinearLayout(context);
         phone1QuestionLayout.setOrientation(LinearLayout.HORIZONTAL);
-        MyTextView phone1Text = new MyTextView(context, getResources().getString(R.string.pet_phone_1));
-        phone1QuestionLayout.addView(phone1Text);
         TextView mandatoryPhone1Sign = new TextView(context);
         mandatoryPhone1Sign.setText(" *");
         mandatoryPhone1Sign.setTextColor(Color.parseColor("#ff0000"));
         phone1QuestionLayout.addView(mandatoryPhone1Sign);
+        MyTextView phone1Text = new MyTextView(context, getResources().getString(R.string.pet_phone_1));
+        phone1QuestionLayout.addView(phone1Text);
         phone1Layout.addView(phone1QuestionLayout);
         LinearLayout phone1PartLayout = new LinearLayout(context);
         phone1PartLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -257,10 +257,6 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         phone2QuestionLayout.setOrientation(LinearLayout.HORIZONTAL);
         MyTextView phone2Text = new MyTextView(context, getResources().getString(R.string.pet_phone_2));
         phone2QuestionLayout.addView(phone2Text);
-        TextView mandatoryPhone2Sign = new TextView(context);
-        mandatoryPhone2Sign.setText(" *");
-        mandatoryPhone2Sign.setTextColor(Color.parseColor("#ff0000"));
-        phone2QuestionLayout.addView(mandatoryPhone2Sign);
         phone2Layout.addView(phone2QuestionLayout);
         LinearLayout phone2PartLayout = new LinearLayout(context);
         phone2PartLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -555,18 +551,12 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
 
         Boolean error = false;
 
-        if (App.get(phone2a).isEmpty()) {
-            phone2a.setError(getResources().getString(R.string.mandatory_field));
-            phone2a.requestFocus();
-            error = true;
-        } else if (App.get(phone2b).isEmpty()) {
-            phone2b.setError(getResources().getString(R.string.mandatory_field));
-            phone2b.requestFocus();
-            error = true;
-        } else if (!RegexUtil.isContactNumber(App.get(phone2a) + App.get(phone2b))) {
-            phone2b.setError(getResources().getString(R.string.invalid_value));
-            phone2b.requestFocus();
-            error = true;
+        if(!(App.get(phone2a).equals("") && App.get(phone2b).equals(""))){
+            if (!RegexUtil.isContactNumber(App.get(phone2a) + App.get(phone2b))) {
+                phone2b.setError(getResources().getString(R.string.invalid_value));
+                phone2b.requestFocus();
+                error = true;
+            }
         }
         if (App.get(phone1a).isEmpty()) {
             phone1a.setError(getResources().getString(R.string.mandatory_field));
@@ -782,7 +772,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
 
         if (phone1Layout.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"CONTACT PHONE NUMBER", App.get(phone1a) + "-" + App.get(phone1b)});
-        if (phone2Layout.getVisibility() == View.VISIBLE)
+        if (phone2Layout.getVisibility() == View.VISIBLE && !App.get(phone2a).equals(""))
             observations.add(new String[]{"SECONDARY MOBILE NUMBER", App.get(phone2a) + "-" + App.get(phone2b)});
         if (address1.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"ADDRESS (TEXT)", App.get(address1)});
@@ -836,9 +826,11 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                     if (!result.equals("SUCCESS"))
                         return result;
 
-                    result = serverService.savePersonAttributeType("Secondary Contact", App.get(phone2a) + "-" + App.get(phone2b), encounterId);
-                    if (!result.equals("SUCCESS"))
-                        return result;
+                    if (!App.get(phone2a).equals("")) {
+                        result = serverService.savePersonAttributeType("Secondary Contact", App.get(phone2a) + "-" + App.get(phone2b), encounterId);
+                        if (!result.equals("SUCCESS"))
+                            return result;
+                    }
 
                     result = serverService.savePersonAttributeType("National ID", cnic, encounterId);
                     if (!result.equals("SUCCESS"))
@@ -1075,6 +1067,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
             townList[i] = String.valueOf(towns[i][1]);
         }
 
+        address2.setText("");
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, townList);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         address2.setAdapter(spinnerArrayAdapter);
