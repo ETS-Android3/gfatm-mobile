@@ -44,7 +44,7 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        loading = new ProgressDialog(getApplicationContext(), ProgressDialog.THEME_HOLO_LIGHT);
+        loading = new ProgressDialog(LocationSetupActivity.this, ProgressDialog.THEME_HOLO_LIGHT);
         serverService = new ServerService(getApplicationContext());
 
         super.onCreate(savedInstanceState);
