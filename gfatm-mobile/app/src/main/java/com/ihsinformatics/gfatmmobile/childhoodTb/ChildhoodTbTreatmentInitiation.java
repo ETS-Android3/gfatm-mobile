@@ -88,9 +88,13 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
     //TB TREATMENT INITATION
     TitledEditText tbRegisterationNumber;
     TitledRadioGroup tbType;
+    TitledCheckBoxes typeOfDiagnosis;
+    TitledRadioGroup histopathologicalEvidence;
+    TitledRadioGroup radiologicalEvidence;
     TitledSpinner extraPulmonarySite;
     TitledEditText extraPulmonarySiteOther;
     TitledSpinner patientType;
+    TitledCheckBoxes testConfirmingDiagnosis;
     TitledRadioGroup treatmentInitiated;
     TitledSpinner reasonTreatmentNotIniated;
     TitledCheckBoxes initiatingAdditionalTreatment;
@@ -103,9 +107,6 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
     TitledRadioGroup newTabletsofRHZ;
     TitledRadioGroup newTabletsofE;
     TitledRadioGroup adultFormulationofHRZE;
-    TitledCheckBoxes typeOfDiagnosis;
-    TitledRadioGroup histopathologicalEvidence;
-    TitledRadioGroup radiologicalEvidence;
     TitledEditText nameOfSupporter;
     LinearLayout mobileLinearLayout;
     MyEditText mobileNumber1;
@@ -120,6 +121,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
     TitledRadioGroup eligibleForIpt;
     TitledRadioGroup acceptanceToIpt;
     TitledButton iptStartDate;
+    TitledEditText iptRegNo;
     TitledRadioGroup iptDose;
     TitledCheckBoxes initiatingAdditionalTreatmentIpt;
 
@@ -239,6 +241,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         extraPulmonarySite = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_site_of_extra_pulmonary), getResources().getStringArray(R.array.ctb_extra_pulmonary_tb_site), getResources().getString(R.string.ctb_lymph_node), App.VERTICAL,true);
         extraPulmonarySiteOther = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_extra_pulmonary_site), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         patientType = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_patient_type), getResources().getStringArray(R.array.ctb_patient_type_list), getResources().getString(R.string.ctb_new), App.VERTICAL,true);
+        testConfirmingDiagnosis = new TitledCheckBoxes(mainContent.getContext(), "", getResources().getString(R.string.ctb_test_confirming_diagnosis), getResources().getStringArray(R.array.ctb_confirming_diagnosis_list), null, App.VERTICAL,App.VERTICAL,true);
         treatmentInitiated = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_are_you_intiating_treatment), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL,true);
         reasonTreatmentNotIniated = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_reason_treatment_not_intiated), getResources().getStringArray(R.array.ctb_reason_treatment_not_intiated_list), getResources().getString(R.string.ctb_patient_refused_treatment), App.VERTICAL,true);
         initiatingAdditionalTreatment = new TitledCheckBoxes(context, null, getResources().getString(R.string.ctb_initiating_additional_treatment), getResources().getStringArray(R.array.ctb_pediasure_vitamin_iron_anthelminthic), null, App.VERTICAL, App.VERTICAL);
@@ -289,6 +292,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         eligibleForIpt = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_eligible_for_ipt), getResources().getStringArray(R.array.yes_no_options), null, App.HORIZONTAL, App.VERTICAL,true);
         acceptanceToIpt = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_acceptance_ipt), getResources().getStringArray(R.array.yes_no_options), null, App.HORIZONTAL, App.VERTICAL,true);
         iptStartDate = new TitledButton(context, null, getResources().getString(R.string.ctb_ipt_start_date), DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
+        iptRegNo = new TitledEditText(context, null, getResources().getString(R.string.ctb_ipt_reg_no), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL,false);
         iptDose = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ipt_dose), getResources().getStringArray(R.array.ctb_dose_list), null, App.VERTICAL, App.VERTICAL);
         initiatingAdditionalTreatmentIpt = new TitledCheckBoxes(context, null, getResources().getString(R.string.ctb_initiating_additional_treatment), getResources().getStringArray(R.array.ctb_iron_multivitamins_anthelmintic), null, App.VERTICAL, App.VERTICAL);
 
@@ -315,12 +319,15 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 tbHistoryIn2Years.getRadioGroup(),eligibleForIpt.getRadioGroup(),acceptanceToIpt.getRadioGroup(),iptStartDate.getButton(),
                 iptDose.getRadioGroup(),initiatingAdditionalTreatmentIpt,precribingAntibioticTrial.getRadioGroup(),
                 precribingFurthertest.getRadioGroup(),initiatingAdditionalTreatmentAntibiotic,returnVisitDate.getButton(),
-                doctorNotes.getEditText()};
+                doctorNotes.getEditText(),testConfirmingDiagnosis,iptRegNo.getEditText()};
         viewGroups = new View[][]
                 {{
                         formDate,
                         weightAtBaseline,
                         patientHaveTb,
+                        typeOfDiagnosis,
+                        histopathologicalEvidence,
+                        radiologicalEvidence,
                         regDate,
                         cnicLinearLayout,
                         cnicOwner,
@@ -330,6 +337,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                         extraPulmonarySite,
                         extraPulmonarySiteOther,
                         patientType,
+                        testConfirmingDiagnosis,
                         treatmentInitiated,
                         reasonTreatmentNotIniated,
                         initiatingAdditionalTreatment,
@@ -342,9 +350,6 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                         newTabletsofRHZ,
                         newTabletsofE,
                         adultFormulationofHRZE,
-                        typeOfDiagnosis,
-                        histopathologicalEvidence,
-                        radiologicalEvidence,
                         nameOfSupporter,
                         mobileLinearLayout,
                         closeContactTypeTreatmentSupport,
@@ -354,6 +359,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                         eligibleForIpt,
                         acceptanceToIpt,
                         iptStartDate,
+                        iptRegNo,
                         iptDose,
                         initiatingAdditionalTreatmentIpt,
                         precribingAntibioticTrial,
@@ -371,6 +377,8 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         patientType.getSpinner().setOnItemSelectedListener(this);
         treatmentInitiated.getRadioGroup().setOnCheckedChangeListener(this);
         reasonTreatmentNotIniated.getSpinner().setOnItemSelectedListener(this);
+        for (CheckBox cb : testConfirmingDiagnosis.getCheckedBoxes())
+            cb.setOnCheckedChangeListener(this);
         ArrayList<MyCheckBox> checkBoxList = initiatingAdditionalTreatment.getCheckedBoxes();
         for (CheckBox cb : initiatingAdditionalTreatment.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
@@ -1017,7 +1025,15 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             doctorNotes.getEditText().requestFocus();
             error = true;
         }
-
+        if(testConfirmingDiagnosis.getVisibility()==View.VISIBLE && App.get(testConfirmingDiagnosis).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            testConfirmingDiagnosis.getQuestionView().setError(getString(R.string.empty_field));
+            testConfirmingDiagnosis.getQuestionView().requestFocus();
+            error = true;
+        }
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
@@ -1120,6 +1136,35 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                             (App.get(patientType).equals(getResources().getString(R.string.ctb_referred_transferred)) ? "PATIENT REFERRED" :
                                     (App.get(patientType).equals(getResources().getString(R.string.ctb_treatment_after_followup)) ? "LOST TO FOLLOW-UP" :
                                             (App.get(patientType).equals(getResources().getString(R.string.ctb_treatment_failure)) ? "TUBERCULOSIS TREATMENT FAILURE" : "OTHER PATIENT TYPE"))))});
+
+
+        if(testConfirmingDiagnosis.getVisibility()==View.VISIBLE){
+            String testConfirmingString = "";
+            for (CheckBox cb : testConfirmingDiagnosis.getCheckedBoxes()) {
+                if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_chest_xray)))
+                    testConfirmingString = testConfirmingString + "REFERRED CHEST X RAY" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_ultrasound)))
+                    testConfirmingString = testConfirmingString + "REFERRED ULTRASOUND" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_ct_scan)))
+                    testConfirmingString = testConfirmingString + "REFERRED CT SCAN" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_gene_xpert)))
+                    testConfirmingString = testConfirmingString + "REFERRED GENEXPERT" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_mantoux)))
+                    testConfirmingString = testConfirmingString + "REFERRED MANTOUX TEST" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_smear_microscopy)))
+                    testConfirmingString = testConfirmingString + "REFERRED SMEAR MICROSCOPY" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_histopathology)))
+                    testConfirmingString = testConfirmingString + "REFERRED HISTOPATHOLOGY OR FNAC" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_cbc)))
+                    testConfirmingString = testConfirmingString + "REFERRED CBC" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_esr)))
+                    testConfirmingString = testConfirmingString + "REFERRED ESR TEST" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_drug_sensitivity)))
+                    testConfirmingString = testConfirmingString + "REFERRED DRUG SENSITIVITY TEST" + " ; ";
+
+            }
+            observations.add(new String[]{"CONFIRMED DIAGNOSIS", testConfirmingString});
+        }
 
         if (treatmentInitiated.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TREATMENT INITIATED", App.get(treatmentInitiated).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
@@ -1248,6 +1293,10 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             observations.add(new String[]{"IPT DOSE", App.get(iptDose).equals(getResources().getString(R.string.ctb_quater_per_day)) ? "1/4 TAB ONCE ADAY" :
                     (App.get(iptDose).equals(getResources().getString(R.string.ctb_half_per_day)) ? "1/2 TAB ONCE A DAY" :
                             "1 TAB ONCE A DAY")});
+        }
+
+        if(iptRegNo.getVisibility()==View.VISIBLE){
+            observations.add(new String[]{"IPT REGISTRATION NUMBER", App.get(iptRegNo)});
         }
 
         if(initiatingAdditionalTreatmentIpt.getVisibility()==View.VISIBLE){
@@ -1511,7 +1560,45 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
 
                 patientType.getSpinner().selectValue(value);
                 patientType.setVisibility(View.VISIBLE);
-            }else if (obs[0][0].equals("TREATMENT INITIATED")) {
+            }
+            else if(obs[0][0].equals("CONFIRMED DIAGNOSIS")) {
+                for (CheckBox cb : testConfirmingDiagnosis.getCheckedBoxes()) {
+                    if (cb.getText().equals(getResources().getString(R.string.ctb_chest_xray)) && obs[0][1].equals("REFERRED CHEST X RAY")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.ctb_ultrasound)) && obs[0][1].equals("REFERRED ULTRASOUND")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.ctb_ct_scan)) && obs[0][1].equals("REFERRED CT SCAN")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.ctb_gene_xpert)) && obs[0][1].equals("REFERRED GENEXPERT")) {
+                        cb.setChecked(true);
+                        break;
+                    }else if (cb.getText().equals(getResources().getString(R.string.ctb_mantoux)) && obs[0][1].equals("REFERRED MANTOUX TEST")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.ctb_smear_microscopy)) && obs[0][1].equals("REFERRED SMEAR MICROSCOPY")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.ctb_histopathology)) && obs[0][1].equals("REFERRED HISTOPATHOLOGY OR FNAC")) {
+                        cb.setChecked(true);
+                        break;
+                    }else if (cb.getText().equals(getResources().getString(R.string.ctb_cbc)) && obs[0][1].equals("REFERRED CBC")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.ctb_esr)) && obs[0][1].equals("REFERRED ESR TEST")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.ctb_drug_sensitivity)) && obs[0][1].equals("REFERRED DRUG SENSITIVITY TEST")) {
+                        cb.setChecked(true);
+                        break;
+                    }
+                }
+                testConfirmingDiagnosis.setVisibility(View.VISIBLE);
+            }
+
+            else if (obs[0][0].equals("TREATMENT INITIATED")) {
 
                 for (RadioButton rb : treatmentInitiated.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
@@ -1812,7 +1899,12 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                         break;
                     }
                 }
-            }else if(obs[0][0].equals("ADDITIONAL TREATMENT IPT PATIENT")) {
+            }
+            else if (obs[0][0].equals("IPT REGISTRATION NUMBER")) {
+                iptRegNo.getEditText().setText(obs[0][1]);
+                iptRegNo.setVisibility(View.VISIBLE);
+            }
+            else if(obs[0][0].equals("ADDITIONAL TREATMENT IPT PATIENT")) {
                 for (CheckBox cb : initiatingAdditionalTreatmentIpt.getCheckedBoxes()) {
                     if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && obs[0][1].equals("IRON")) {
                         cb.setChecked(true);
@@ -1977,6 +2069,49 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 otherCloseContactSupporterType.setVisibility(View.GONE);
             }
         }
+        else if (spinner == patientType.getSpinner()) {
+            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_referred_transferred))) {
+                testConfirmingDiagnosis.setVisibility(View.VISIBLE);
+                treatmentInitiated.setVisibility(View.GONE);
+                initiatingAdditionalTreatment.setVisibility(View.GONE);
+                reasonTreatmentNotIniated.setVisibility(View.GONE);
+                patientCategory.setVisibility(View.GONE);
+                weight.setVisibility(View.GONE);
+                regimen.setVisibility(View.GONE);
+                typeFixedDosePrescribed.setVisibility(View.GONE);
+                currentTabletsofE.setVisibility(View.GONE);
+                currentTabletsofRHZ.setVisibility(View.GONE);
+                newTabletsofE.setVisibility(View.GONE);
+                newTabletsofRHZ.setVisibility(View.GONE);
+                adultFormulationofHRZE.setVisibility(View.GONE);
+                nameOfSupporter.setVisibility(View.GONE);
+                mobileLinearLayout.setVisibility(View.GONE);
+                closeContactTypeTreatmentSupport.setVisibility(View.GONE);
+                otherCloseContactSupporterType.setVisibility(View.GONE);
+            } else {
+                testConfirmingDiagnosis.setVisibility(View.GONE);
+                treatmentInitiated.setVisibility(View.VISIBLE);
+                initiatingAdditionalTreatment.setVisibility(View.VISIBLE);
+                reasonTreatmentNotIniated.setVisibility(View.VISIBLE);
+                patientCategory.setVisibility(View.VISIBLE);
+                weight.setVisibility(View.VISIBLE);
+                regimen.setVisibility(View.VISIBLE);
+                typeFixedDosePrescribed.setVisibility(View.VISIBLE);
+                currentTabletsofE.setVisibility(View.VISIBLE);
+                currentTabletsofRHZ.setVisibility(View.VISIBLE);
+                newTabletsofE.setVisibility(View.VISIBLE);
+                newTabletsofRHZ.setVisibility(View.VISIBLE);
+                adultFormulationofHRZE.setVisibility(View.VISIBLE);
+                nameOfSupporter.setVisibility(View.VISIBLE);
+                if(!App.get(nameOfSupporter).isEmpty()) {
+                    mobileLinearLayout.setVisibility(View.VISIBLE);
+                }
+                closeContactTypeTreatmentSupport.setVisibility(View.VISIBLE);
+                if(App.get(closeContactTypeTreatmentSupport).equals(getResources().getString(R.string.ctb_other_title))){
+                    otherCloseContactSupporterType.setVisibility(View.VISIBLE);
+                }
+            }
+        }
 
     }
 
@@ -2006,6 +2141,8 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         iptStartDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
         iptStartDate.setVisibility(View.GONE);
         returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", forthDateCalender).toString());
+        radiologicalEvidence.setVisibility(View.GONE);
+        histopathologicalEvidence.setVisibility(View.GONE);
         regDate.setVisibility(View.GONE);
         cnicLinearLayout.setVisibility(View.GONE);
         cnicOwner.setVisibility(View.GONE);
@@ -2015,6 +2152,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         extraPulmonarySite.setVisibility(View.GONE);
         extraPulmonarySiteOther.setVisibility(View.GONE);
         patientType.setVisibility(View.GONE);
+        testConfirmingDiagnosis.setVisibility(View.GONE);
         treatmentInitiated.setVisibility(View.GONE);
         reasonTreatmentNotIniated.setVisibility(View.GONE);
         patientCategory.setVisibility(View.GONE);
@@ -2027,9 +2165,6 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         newTabletsofRHZ.setVisibility(View.GONE);
         newTabletsofE.setVisibility(View.GONE);
         adultFormulationofHRZE.setVisibility(View.GONE);
-        typeOfDiagnosis.setVisibility(View.GONE);
-        histopathologicalEvidence.setVisibility(View.GONE);
-        radiologicalEvidence.setVisibility(View.GONE);
         nameOfSupporter.setVisibility(View.GONE);
         mobileLinearLayout.setVisibility(View.GONE);
         closeContactTypeTreatmentSupport.setVisibility(View.GONE);
@@ -2248,6 +2383,9 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 tbRegisterationNumber.setVisibility(View.VISIBLE);
                 tbType.setVisibility(View.VISIBLE);
                 patientType.setVisibility(View.VISIBLE);
+                if(App.get(patientType).equals(getResources().getString(R.string.ctb_referred_transferred))) {
+                    testConfirmingDiagnosis.setVisibility(View.VISIBLE);
+                }
                 treatmentInitiated.setVisibility(View.VISIBLE);
                 patientCategory.setVisibility(View.VISIBLE);
                 weight.setVisibility(View.VISIBLE);
@@ -2255,7 +2393,6 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 typeFixedDosePrescribed.setVisibility(View.VISIBLE);
                 currentTabletsofRHZ.setVisibility(View.VISIBLE);
                 initiatingAdditionalTreatment.setVisibility(View.VISIBLE);
-                typeOfDiagnosis.setVisibility(View.VISIBLE);
                 nameOfSupporter.setVisibility(View.VISIBLE);
                 closeContactTypeTreatmentSupport.setVisibility(View.VISIBLE);
 
@@ -2263,6 +2400,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 tbHistoryIn2Years.setVisibility(View.GONE);
                 eligibleForIpt.setVisibility(View.GONE);
                 iptStartDate.setVisibility(View.GONE);
+                iptRegNo.setVisibility(View.GONE);
                 iptDose.setVisibility(View.GONE);
                 initiatingAdditionalTreatmentIpt.setVisibility(View.GONE);
                 precribingAntibioticTrial.setVisibility(View.GONE);
@@ -2309,6 +2447,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                     }
                     tbHistoryIn2Years.setVisibility(View.VISIBLE);
                     eligibleForIpt.setVisibility(View.VISIBLE);
+                    iptRegNo.setVisibility(View.VISIBLE);
                     if(!App.get(weightAtBaseline).isEmpty()){
                         double weightInt = Double.parseDouble(App.get(weightAtBaseline));
                         if(weightInt<2.5){
@@ -2328,6 +2467,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                     eligibleForIpt.setVisibility(View.GONE);
                     iptStartDate.setVisibility(View.GONE);
                     iptDose.setVisibility(View.GONE);
+                    iptRegNo.setVisibility(View.GONE);
                     initiatingAdditionalTreatmentIpt.setVisibility(View.GONE);
                 }
                 regDate.setVisibility(View.GONE);
@@ -2340,6 +2480,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 extraPulmonarySite.setVisibility(View.GONE);
                 extraPulmonarySiteOther.setVisibility(View.GONE);
                 patientType.setVisibility(View.GONE);
+                testConfirmingDiagnosis.setVisibility(View.GONE);
                 treatmentInitiated.setVisibility(View.GONE);
                 initiatingAdditionalTreatment.setVisibility(View.GONE);
                 reasonTreatmentNotIniated.setVisibility(View.GONE);
@@ -2347,14 +2488,11 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 weight.setVisibility(View.GONE);
                 regimen.setVisibility(View.GONE);
                 typeFixedDosePrescribed.setVisibility(View.GONE);
-                typeOfDiagnosis.setVisibility(View.GONE);
                 currentTabletsofE.setVisibility(View.GONE);
                 currentTabletsofRHZ.setVisibility(View.GONE);
                 newTabletsofE.setVisibility(View.GONE);
                 newTabletsofRHZ.setVisibility(View.GONE);
                 adultFormulationofHRZE.setVisibility(View.GONE);
-                histopathologicalEvidence.setVisibility(View.GONE);
-                radiologicalEvidence.setVisibility(View.GONE);
                 closeContactTypeTreatmentSupport.setVisibility(View.GONE);
                 precribingAntibioticTrial.setVisibility(View.GONE);
                 precribingFurthertest.setVisibility(View.GONE);
@@ -2375,13 +2513,13 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 extraPulmonarySite.setVisibility(View.GONE);
                 extraPulmonarySiteOther.setVisibility(View.GONE);
                 patientType.setVisibility(View.GONE);
+                testConfirmingDiagnosis.setVisibility(View.GONE);
                 treatmentInitiated.setVisibility(View.GONE);
                 reasonTreatmentNotIniated.setVisibility(View.GONE);
                 patientCategory.setVisibility(View.GONE);
                 weight.setVisibility(View.GONE);
                 regimen.setVisibility(View.GONE);
                 typeFixedDosePrescribed.setVisibility(View.GONE);
-                typeOfDiagnosis.setVisibility(View.GONE);
                 nameOfSupporter.setVisibility(View.GONE);
                 closeContactTypeTreatmentSupport.setVisibility(View.GONE);
                 bcgScar.setVisibility(View.GONE);
@@ -2389,6 +2527,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 eligibleForIpt.setVisibility(View.GONE);
                 iptStartDate.setVisibility(View.GONE);
                 iptDose.setVisibility(View.GONE);
+                iptRegNo.setVisibility(View.GONE);
                 initiatingAdditionalTreatmentIpt.setVisibility(View.GONE);
             }
         } else if (group == tbType.getRadioGroup()) {
