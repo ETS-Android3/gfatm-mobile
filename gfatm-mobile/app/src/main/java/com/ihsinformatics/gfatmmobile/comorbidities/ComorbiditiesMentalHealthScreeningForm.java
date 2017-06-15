@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -32,8 +33,10 @@ import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
+import com.ihsinformatics.gfatmmobile.custom.MyCheckBox;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
+import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
@@ -85,6 +88,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
     TitledEditText akuadsTotalScore;
     TitledRadioGroup akuadsSeverity;
     TitledRadioGroup akuadsAgree;
+    TitledCheckBoxes preferredModeOfTherapy;
     TitledSpinner preferredTherapyLocationSpinner;
     TitledEditText gpClinicCode;
     TitledButton mentalHealthNextScheduledVisit;
@@ -219,6 +223,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
             locationArray[i] = String.valueOf(locations[i][1]);
         }
 
+        preferredModeOfTherapy = new TitledCheckBoxes(context, null, getResources().getString(R.string.comorbidities_preferredmode_id), getResources().getStringArray(R.array.comorbidities_preferred_modeoptions), new Boolean[]{false, false, false}, App.VERTICAL, App.VERTICAL);
         preferredTherapyLocationSpinner = new TitledSpinner(mainContent.getContext(), null, getResources().getString(R.string.comorbidities_preferredlocation_id), locationArray, "", App.VERTICAL, true);
         //reasonForDiscontinuation = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_preferredlocation_id), getResources().getStringArray(R.array.comorbidities_location), "Sehatmand Zindagi Center - Korangi", App.HORIZONTAL);
         gpClinicCode = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_preferredlocation_gpcliniccode), "", getResources().getString(R.string.comorbidities_preferredlocation_gpcliniccode_range), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
@@ -242,14 +247,14 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
                 akuadsNumbness.getRadioGroup(), akuadsTension.getRadioGroup(),
                 akuadsHeadaches.getRadioGroup(), akuadsBodyPain.getRadioGroup(),
                 akuadsUrination.getRadioGroup(), akuadsTotalScore.getEditText(), akuadsSeverity.getRadioGroup(),
-                akuadsAgree.getRadioGroup(), preferredTherapyLocationSpinner.getSpinner(), gpClinicCode.getEditText(), mentalHealthNextScheduledVisit.getButton()/*, otherPreferredLocation.getEditText()*/};
+                akuadsAgree.getRadioGroup(), preferredModeOfTherapy, preferredTherapyLocationSpinner.getSpinner(), gpClinicCode.getEditText(), mentalHealthNextScheduledVisit.getButton()/*, otherPreferredLocation.getEditText()*/};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formDate, mentalHealthScreening, akuadsSleep, akuadsLackOfInterest, akuadsLostInterestHobbies, akuadsAnxious, akuadsImpendingDoom, akuadsDifficultyThinkingClearly,
                         akuadsAlone, akuadsUnhappy, akuadsHopeless, akuadsHelpless, akuadsWorried, akuadsCried, akuadsSuicide, akuadsLossOfAppetite, akuadsRetrosternalBurning,
                         akuadsIndigestion, akuadsNausea, akuadsConstipation, akuadsDifficultBreathing, akuadsTremulous, akuadsNumbness, akuadsTension, akuadsHeadaches, akuadsBodyPain,
-                        akuadsUrination, akuadsTotalScore, akuadsSeverity, akuadsAgree, preferredTherapyLocationSpinner, gpClinicCode, mentalHealthNextScheduledVisit/*otherPreferredLocation*/}};
+                        akuadsUrination, akuadsTotalScore, akuadsSeverity, akuadsAgree, preferredModeOfTherapy, preferredTherapyLocationSpinner, gpClinicCode, mentalHealthNextScheduledVisit/*otherPreferredLocation*/}};
 
         formDate.getButton().setOnClickListener(this);
         mentalHealthNextScheduledVisit.getButton().setOnClickListener(this);
@@ -574,6 +579,18 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
                         (App.get(akuadsSeverity).equals(getResources().getString(R.string.comorbidities_MH_severity_level_moderate)) ? "MODERATE" : "SEVERE"))});
         if (akuadsAgree.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"THERAPY CONSENT", App.get(akuadsAgree).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        }
+        if(preferredModeOfTherapy.getVisibility() == View.VISIBLE) {
+            String diabetesTreatmentInitiationString = "";
+            for (CheckBox cb : preferredModeOfTherapy.getCheckedBoxes()) {
+                if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_facility)))
+                    diabetesTreatmentInitiationString = diabetesTreatmentInitiationString + "HEALTH FACILITY" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_call_centre)))
+                    diabetesTreatmentInitiationString = diabetesTreatmentInitiationString + "CALL CENTER" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_home)))
+                    diabetesTreatmentInitiationString = diabetesTreatmentInitiationString + "HOME" + " ; ";
+            }
+            observations.add(new String[]{"PREFERRED MODE OF THERAPY", diabetesTreatmentInitiationString});
         }
         if (preferredTherapyLocationSpinner.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"FACILITY REFERRED TO", App.get(preferredTherapyLocationSpinner)});
@@ -1151,6 +1168,19 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
                         break;
                     }
                 }
+            }else if (obs[0][0].equals("PREFERRED MODE OF THERAPY")) {
+                for (CheckBox cb : preferredModeOfTherapy.getCheckedBoxes()) {
+                    if (cb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_facility)) && obs[0][1].equals("HEALTH FACILITY")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_call_centre)) && obs[0][1].equals("CALL CENTER")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_home)) && obs[0][1].equals("HOME")) {
+                        cb.setChecked(true);
+                        break;
+                    }
+                }
             } else if (obs[0][0].equals("FACILITY REFERRED TO")) {
                 preferredTherapyLocationSpinner.getSpinner().selectValue(obs[0][1]);
             } else if (obs[0][0].equals("HEALTH CLINIC/POST")) {
@@ -1372,6 +1402,43 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
         if (akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_mild)) || akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_moderate))
                 || akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_severe))) {
             akuadsAgree.setVisibility(View.VISIBLE);
+
+            preferredModeOfTherapy.setVisibility(View.VISIBLE);
+            String tbCategory = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_PATIENT_INFORMATION_FORM, "TB CATEGORY");
+
+            if(tbCategory.equalsIgnoreCase("MULTI-DRUG RESISTANT TUBERCULOSIS INFECTION")) {
+                ArrayList<MyCheckBox> rbs = preferredModeOfTherapy.getCheckedBoxes();
+
+                for (MyCheckBox rb : rbs) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_facility)))
+                        rb.setVisibility(View.GONE);
+                    else if (rb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_call_centre)))
+                        rb.setVisibility(View.GONE);
+                    else {
+                        rb.setVisibility(View.VISIBLE);
+
+                        /*if (rb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_home)))
+                            rb.setChecked(true);*/
+                    }
+                }
+            }
+            else {
+                ArrayList<MyCheckBox> rbs1 = preferredModeOfTherapy.getCheckedBoxes();
+
+                for (MyCheckBox rb : rbs1) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_facility)))
+                        rb.setVisibility(View.VISIBLE);
+                    else if (rb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_call_centre)))
+                        rb.setVisibility(View.VISIBLE);
+                    else {
+                        rb.setVisibility(View.GONE);
+
+                        /*if (rb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_home)))
+                            rb.setChecked(true);*/
+                    }
+                }
+            }
+
             preferredTherapyLocationSpinner.setVisibility(View.VISIBLE);
             mentalHealthNextScheduledVisit.setVisibility(View.VISIBLE);
             if (App.getLocation().equalsIgnoreCase("GP-CLINIC")) {
@@ -1381,6 +1448,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
             }
         } else if (akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_normal))) {
             akuadsAgree.setVisibility(View.GONE);
+            preferredModeOfTherapy.setVisibility(View.GONE);
             preferredTherapyLocationSpinner.setVisibility(View.GONE);
             mentalHealthNextScheduledVisit.setVisibility(View.GONE);
             gpClinicCode.setVisibility(View.GONE);
@@ -1391,6 +1459,42 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
         if (akuadsAgree.getVisibility() == View.VISIBLE && akuadsAgree.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.yes)) && !akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_normal))) {
             if(snackbar!=null)
                 snackbar.dismiss();
+
+            preferredModeOfTherapy.setVisibility(View.VISIBLE);
+            String tbCategory = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_PATIENT_INFORMATION_FORM, "TB CATEGORY");
+
+            if(tbCategory.equalsIgnoreCase("MULTI-DRUG RESISTANT TUBERCULOSIS INFECTION")) {
+                ArrayList<MyCheckBox> rbs = preferredModeOfTherapy.getCheckedBoxes();
+
+                for (MyCheckBox rb : rbs) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_facility)))
+                        rb.setVisibility(View.GONE);
+                    else if (rb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_call_centre)))
+                        rb.setVisibility(View.GONE);
+                    else {
+                        rb.setVisibility(View.VISIBLE);
+
+                        /*if (rb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_home)))
+                            rb.setChecked(true);*/
+                    }
+                }
+            }
+            else {
+                ArrayList<MyCheckBox> rbs1 = preferredModeOfTherapy.getCheckedBoxes();
+
+                for (MyCheckBox rb : rbs1) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_facility)))
+                        rb.setVisibility(View.VISIBLE);
+                    else if (rb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_call_centre)))
+                        rb.setVisibility(View.VISIBLE);
+                    else {
+                        rb.setVisibility(View.GONE);
+
+                        /*if (rb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_home)))
+                            rb.setChecked(true);*/
+                    }
+                }
+            }
 
             preferredTherapyLocationSpinner.setVisibility(View.VISIBLE);
             mentalHealthNextScheduledVisit.setVisibility(View.VISIBLE);
@@ -1423,6 +1527,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
             textView.setMaxLines(4);
             snackbar.show();
 
+            preferredModeOfTherapy.setVisibility(View.GONE);
             preferredTherapyLocationSpinner.setVisibility(View.GONE);
             mentalHealthNextScheduledVisit.setVisibility(View.GONE);
             gpClinicCode.setVisibility(View.GONE);

@@ -33,6 +33,7 @@
     <string name="comorbidities_akuads_severity">Severity level:</string>
     <string name="comorbidities_agree_AKUADS">Does the client agree to therapy?</string>
     <string name="comorbidities_akuads_screener_instructions">Screener Instructions: \nKindly give the comorbidities conditions brochure to the patient.</string>
+    <string name="comorbidities_preferredmode_id">Preferred Mode of Therapy:</string>
     <string name="comorbidities_preferredlocation_id">Preferred location for Therapy:</string>
     <string name="comorbidities_preferredlocation_gpcliniccode">GP Clinic Code:</string>
     <string name="comorbidities_preferredlocation_gpcliniccode_range">Range 1&#8211;50</string>
@@ -45,6 +46,16 @@
     <string name="comorbidities_scrnng_rbs_range">Range 1&#8211;500</string>
     <string name="comorbidities_scrnng_rbs_limit">The value should be in the range of 1&#8211;500</string>
     <string name="comorbidities_hba1c_testvoucher">HbA1C test voucher given?</string>
+
+    <string name="comorbidities_preferred_mode_facility">Facility</string>
+    <string name="comorbidities_preferred_mode_call_centre">Call Center</string>
+    <string name="comorbidities_preferred_mode_home">Home</string>
+
+    <string-array name="comorbidities_preferred_modeoptions">
+        <item>@string/comorbidities_preferred_mode_facility</item>
+        <item>@string/comorbidities_preferred_mode_call_centre</item>
+        <item>@string/comorbidities_preferred_mode_home</item>
+    </string-array>
 
     <string name="comorbidities_hba1c_test_order">Test Order HbA1C</string>
     <string name="comorbidities_hba1c_testtype">Test Type:</string>
@@ -1068,6 +1079,8 @@
     <!-- Strings for ComorbiditiesPatientInformationForm -->
     <string name="comorbidities_patient_information_external_patient_id">External Patient Registration/ID:</string>
     <string name="comorbidities_patient_information_screening_facility_location">Screening Facility Location:</string>
+    <string name="comorbidities_patient_information_tb_reg_num">TB Registration No.</string>
+    <string name="comorbidities_patient_information_reg_date">Registration Date</string>
     <string name="comorbidities_patient_information_gp_clinic_code">Specify GP Clinic Code:</string>
     <string name="comorbidities_patient_information_location_other">Specify, if Other:</string>
     <string name="comorbidities_patient_information_father_name">Father\'s Name:</string>

@@ -822,7 +822,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
                 formType.getRadioGroup().getButtons().get(1).setEnabled(false);
                 if (obs[0][0].equals("ORDER ID")) {
                     orderId.getEditText().setText(obs[0][1]);
-                    orderId.setOnKeyListener(null);
+                    orderId.getEditText().setKeyListener(null);
                 } else if (obs[0][0].equals("TEST CONTEXT STATUS")) {
                     for (RadioButton rb : hba1cTestType.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.comorbidities_HbA1C_test_type_baseline)) && obs[0][1].equals("BASELINE")) {
@@ -989,6 +989,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
         formDate.setVisibility(View.GONE);
 
         testId.getEditText().setEnabled(true);
+        orderId.getEditText().setKeyListener(null);
         formType.getRadioGroup().getButtons().get(0).setEnabled(true);
         formType.getRadioGroup().getButtons().get(1).setEnabled(true);
 
