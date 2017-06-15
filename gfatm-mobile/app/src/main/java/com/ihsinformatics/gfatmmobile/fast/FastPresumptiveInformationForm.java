@@ -193,6 +193,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         addressLayout = new MyLinearLayout(context, null, App.VERTICAL);
         townTextView = new MyTextView(context, getResources().getString(R.string.fast_address_2));
         addressStreet = new AutoCompleteTextView(context);
+        addressStreet.setInputType(InputType.TYPE_CLASS_TEXT);
         InputFilter[] fArray = new InputFilter[1];
         fArray[0] = new InputFilter.LengthFilter(20);
         addressStreet.setFilters(fArray);
@@ -349,6 +350,16 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
 
             @Override
             public void afterTextChanged(Editable s) {
+                String cnic = cnic1.getText().toString() + "-" + cnic2.getText().toString() + "-" + cnic3.getText().toString();
+                if (RegexUtil.isValidNIC(cnic)) {
+                    cnicOwner.setVisibility(View.VISIBLE);
+                    if(cnicOwner.getSpinner().getSelectedItem().equals(getResources().getString(R.string.other))){
+                        otherCnicOwner.setVisibility(View.VISIBLE);
+                    }
+                }else{
+                    cnicOwner.setVisibility(View.GONE);
+                    otherCnicOwner.setVisibility(View.GONE);
+                }
 
             }
         });
@@ -373,8 +384,19 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
 
             @Override
             public void afterTextChanged(Editable s) {
+                String cnic = cnic1.getText().toString() + "-" + cnic2.getText().toString() + "-" + cnic3.getText().toString();
+                if (RegexUtil.isValidNIC(cnic)) {
+                    cnicOwner.setVisibility(View.VISIBLE);
+                    if(cnicOwner.getSpinner().getSelectedItem().equals(getResources().getString(R.string.other))){
+                        otherCnicOwner.setVisibility(View.VISIBLE);
+                    }
+                }else{
+                    cnicOwner.setVisibility(View.GONE);
+                    otherCnicOwner.setVisibility(View.GONE);
+                }
 
             }
+
         });
 
         cnic3.addTextChangedListener(new TextWatcher() {
@@ -393,6 +415,16 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
 
             @Override
             public void afterTextChanged(Editable s) {
+                String cnic = cnic1.getText().toString() + "-" + cnic2.getText().toString() + "-" + cnic3.getText().toString();
+                if (RegexUtil.isValidNIC(cnic)) {
+                    cnicOwner.setVisibility(View.VISIBLE);
+                    if(cnicOwner.getSpinner().getSelectedItem().equals(getResources().getString(R.string.other))){
+                        otherCnicOwner.setVisibility(View.VISIBLE);
+                    }
+                }else{
+                    cnicOwner.setVisibility(View.GONE);
+                    otherCnicOwner.setVisibility(View.GONE);
+                }
 
             }
         });
@@ -1516,6 +1548,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
 
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        cnicOwner.setVisibility(View.GONE);
         otherCnicOwner.setVisibility(View.GONE);
        // townTextView.setVisibility(View.GONE);
 
@@ -1548,7 +1581,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         MySpinner spinner = (MySpinner) parent;
 
         if (spinner == cnicOwner.getSpinner()) {
-            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title))) {
+            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title)) && cnicOwner.getVisibility() == View.VISIBLE) {
                 otherCnicOwner.setVisibility(View.VISIBLE);
             } else {
                 otherCnicOwner.setVisibility(View.GONE);

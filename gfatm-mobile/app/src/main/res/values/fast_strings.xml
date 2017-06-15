@@ -41,6 +41,8 @@
     <string name="fast_next_visit_date">Next visit date can\'t be before form date.</string>
     <string name="fast_date_cant_be_greater_than_24_months">Date can\'t be greater than 24 months.</string>
     <string name="fast_order_date_cannot_be_before_form_date">Order date cannot be before form date</string>
+    <string name="fast_sample_date_cannot_be_before_form_date">Sample submission date cannot be before form date</string>
+    <string name="fast_sample_date_cannot_be_after_form_date">Sample submission date cannot be after form date</string>
     <string name="fast_form_date_cannot_be_before_order_date">Form date cannot be before order date</string>
     <string name="fast_result_date_cannot_be_before_order_date">Result date can\'t be before test order date.</string>
     <string name="fast_patient_title">Patient</string>
@@ -458,6 +460,7 @@
     <string name="fast_diabetic">Diabetic</string>
     <string name="fast_required_field_error">Required fields cannot be empty</string>
     <string name="fast_no_order_found_for_the_patient">No order found for the patient.</string>
+    <string name="fast_emergency_department">Emergency Department</string>
 
 
 
@@ -588,6 +591,7 @@
     </string-array>
 
     <string-array name="fast_source_of_patient_referral_list">
+        <item></item>
         <item>@string/fast_doctor_or_health_worker_within_the_hospital</item>
         <item>@string/fast_doctor_or_health_worker_outside_the_hospital</item>
         <item>@string/fast_self_referral</item>
@@ -597,21 +601,24 @@
     </string-array>
 
     <string-array name="fast_patient_reffered_from_list">
+        <item></item>
         <item>@string/fast_ward_title</item>
         <item>@string/fast_opd_clinic</item>
         <item>@string/fast_other_title</item>
+        <item>@string/fast_emergency_department</item>
     </string-array>
 
     <string-array name="fast_opd_clinic_or_ward_patient_reffered_from_list">
+        <item></item>
         <item>@string/fast_generalmedicinefilterclinic_title</item>
         <item>@string/fast_chesttbclinic_title</item>
         <item>@string/fast_gynaeobstetrics_title</item>
         <item>@string/fast_surgery_title</item>
-        <item>@string/fast_er_title</item>
         <item>@string/fast_other_title</item>
     </string-array>
 
     <string-array name="fast_outside_hospital_patient_reffered_from">
+        <item></item>
         <item>@string/fast_public_hospital</item>
         <item>@string/fast_private_hospital</item>
         <item>@string/fast_GP</item>

@@ -170,7 +170,7 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
         //   testDate = new TitledButton(context, null, getResources().getString(R.string.fast_test_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         cxrResultTitle = new MyTextView(context, getResources().getString(R.string.fast_cxr_result_title));
         cxrResultTitle.setTypeface(null, Typeface.BOLD);
-        cat4tbScore = new TitledEditText(context, null, getResources().getString(R.string.fast_chest_xray_cad4tb_score), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
+        cat4tbScore = new TitledEditText(context, null, getResources().getString(R.string.fast_chest_xray_cad4tb_score), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
         radiologicalDiagnosis = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_radiologica_diagnosis), getResources().getStringArray(R.array.fast_radiological_diagonosis_list), "", App.VERTICAL, App.VERTICAL, true);
         abnormalDetailedDiagnosis = new TitledCheckBoxes(context, null, getResources().getString(R.string.fast_if_abnormal_detailed_diagnosis), getResources().getStringArray(R.array.fast_abnormal_detailed_diagnosis_list), new Boolean[]{true, false, false, false, false, false, false}, App.VERTICAL, App.VERTICAL, true);
         abnormalDetailedDiagnosisOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
@@ -384,6 +384,16 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
             error = true;
         }
 
+        if (cat4tbScore.getVisibility() == View.VISIBLE && cat4tbScore.getEditText().getText().toString().trim().isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            cat4tbScore.getEditText().setError(getString(R.string.empty_field));
+            cat4tbScore.getEditText().requestFocus();
+            error = true;
+        }
+
         if (radiologistRemarks.getVisibility() == View.VISIBLE && App.get(radiologistRemarks).length() > 0 && radiologistRemarks.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
@@ -566,7 +576,7 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
     public void setOrderId(){
         Date nowDate = new Date();
         orderId.getEditText().setText(App.getSqlDateTime(nowDate));
-        orderId.setOnKeyListener(null);
+        orderId.getEditText().setKeyListener(null);
         orderId.getEditText().setFocusable(false);
     }
 
@@ -852,7 +862,11 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
                     }
                 }
             }
-            cat4tbScore.setVisibility(View.VISIBLE);
+
+            String value = serverService.getObsValueByObs(App.getPatientId(), App.getProgram() + "-" + "Screening CXR Test Order", "ORDER ID", App.get(orderIds),"TYPE OF X RAY");
+            if(value != null && formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result))&& value.equals("RADIOLOGICAL DIAGNOSIS")){
+                cat4tbScore.setVisibility(View.VISIBLE);
+            }
             extentOfDisease.setVisibility(View.VISIBLE);
             radiologistRemarks.setVisibility(View.VISIBLE);
 
@@ -923,7 +937,7 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
 
                 if(obs[0][0].equals("ORDER ID")){
                     orderId.getEditText().setText(obs[0][1]);
-                    orderId.getEditText().setOnKeyListener(null);
+                    orderId.getEditText().setKeyListener(null);
                     orderId.getEditText().setFocusable(false);
                 }
 
@@ -1112,6 +1126,7 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
         formDate.setVisibility(View.GONE);
         pastXray.setVisibility(View.GONE);
         pregnancyHistory.setVisibility(View.GONE);
+        cat4tbScore.setVisibility(View.GONE);
 
       //  testIdView.setVisibility(View.GONE);
         testId.setVisibility(View.GONE);
@@ -1122,6 +1137,11 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
         String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Screening CXR Test Order", "ORDER ID");
         if(testIds != null) {
             orderIds.getSpinner().setSpinnerData(testIds);
+        }
+
+        String value = serverService.getObsValueByObs(App.getPatientId(), App.getProgram() + "-" + "Screening CXR Test Order", "ORDER ID", App.get(orderIds),"TYPE OF X RAY");
+        if(value != null && formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result))&& value.equals("RADIOLOGICAL DIAGNOSIS")){
+            cat4tbScore.setVisibility(View.VISIBLE);
         }
 
         Bundle bundle = this.getArguments();

@@ -245,7 +245,7 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
             orderId.getEditText().setText(App.getSqlDateTime(nowDate));
             orderIds.setVisibility(View.GONE);
             testId.setVisibility(View.GONE);
-            orderId.setOnKeyListener(null);
+            orderId.getEditText().setKeyListener(null);
             orderId.getEditText().setFocusable(false);
             // orderId.getEditText().setDefaultValue();
 
@@ -1118,7 +1118,7 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
 
                 if(obs[0][0].equals("ORDER ID")){
                     orderId.getEditText().setText(obs[0][1]);
-                    orderId.getEditText().setOnKeyListener(null);
+                    orderId.getEditText().setKeyListener(null);
                     orderId.getEditText().setFocusable(false);
                 }
 
