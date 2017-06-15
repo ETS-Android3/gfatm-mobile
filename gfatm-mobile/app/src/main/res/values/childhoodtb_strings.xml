@@ -308,6 +308,7 @@
     <string name="ctb_ct_brain_interpretation">CT brain interpretation</string>
     <string name="ctb_ct_bone_suggestive_tb">CT bone suggestive of TB</string>
     <string name="ctb_ct_spine_suggestive_tb">CT spine suggestive of TB</string>
+    <string name="ctb_ct_scan_outcome">CT Scan Outcome</string>
     <string name="ctb_meningeal_enhancement">Meningeal enhancement</string>
     <string name="ctb_tuberculomas">Tuberculomas</string>
     <string name="ctb_tuberculin_skin_test">Tuberculin Skin Test Result</string>
@@ -399,6 +400,7 @@
     <string name="ctb_genitourinary">Genitourinary</string>
     <string name="ctb_other_extra_pulmonary_site">Other Extra-Pulmonary TB Site</string>
     <string name="ctb_patient_type">Patient Type</string>
+    <string name="ctb_test_confirming_diagnosis">Test Confirming Diagnosis</string>
     <string name="ctb_new">New</string>
     <string name="ctb_relapse">Relapse</string>
     <string name="ctb_referred_transferred">Referred/Transferred in</string>
@@ -534,7 +536,7 @@
     <string name="ctb_xray_in_6_month">Has the patient had an X-Ray in the past 6 months at an X-Ray Van?</string>
     <string name="ctb_patient_acceptance_ipt">Patient acceptance to IPT</string>
     <string name="ctb_empty"></string>
-
+    <string name="ctb_ipt_reg_no">IPT Registration No.</string>
 
 
     <string-array name="ctb_abnormal_list">
@@ -700,6 +702,19 @@
     <string-array name="ctb_conclusion_list">
         <item>@string/ctb_tb_presumptive_confirmed</item>
         <item>@string/ctb_not_tb_presumptive</item>
+    </string-array>
+
+    <string-array name="ctb_confirming_diagnosis_list">
+        <item>@string/ctb_chest_xray</item>
+        <item>@string/ctb_ultrasound</item>
+        <item>@string/ctb_ct_scan</item>
+        <item>@string/ctb_gene_xpert</item>
+        <item>@string/ctb_mantoux</item>
+        <item>@string/ctb_smear_microscopy</item>
+        <item>@string/ctb_histopathology</item>
+        <item>@string/ctb_cbc</item>
+        <item>@string/ctb_esr</item>
+        <item>@string/ctb_drug_sensitivity</item>
     </string-array>
 
     <string-array name="ctb_ctb_baseline_repeat_followup_list">

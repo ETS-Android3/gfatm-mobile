@@ -60,7 +60,6 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
     TitledSpinner whySampleRejected;
     TitledEditText otherReasonForRejection;
 
-    TitledButton resultRecieveDate;
     TitledSpinner geneXpertMTBResult;
     TitledRadioGroup mtbBurden;
     TitledSpinner mtbRIFResult;
@@ -145,25 +144,22 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
         whySampleRejected = new TitledSpinner(context,null,getResources().getString(R.string.ctb_why_sample_rejected),getResources().getStringArray(R.array.ctb_why_sample_rejected_list),getResources().getString(R.string.ctb_saliva),App.HORIZONTAL,true);
         otherReasonForRejection = new TitledEditText(context,null,getResources().getString(R.string.ctb_other_specify),"","",50,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
         orderIds = new TitledSpinner(context, "", getResources().getString(R.string.order_id), getResources().getStringArray(R.array.pet_empty_array), "", App.HORIZONTAL);
-        cartidgeID = new TitledEditText(context,null,getResources().getString(R.string.ctb_cartridge_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
-        resultRecieveDate = new TitledButton(context, null, getResources().getString(R.string.ctb_date_result_recieve), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
-        resultRecieveDate.setTag("resultRecieveDate");
+        cartidgeID = new TitledEditText(context,null,getResources().getString(R.string.ctb_cartridge_id),"","",10,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,true);
         geneXpertMTBResult = new TitledSpinner(context,null,getResources().getString(R.string.ctb_mtb_result),getResources().getStringArray(R.array.ctb_mtb_result_list),getResources().getString(R.string.ctb_mtb_not_detected),App.HORIZONTAL,true);
         mtbBurden = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_mtb_burden),getResources().getStringArray(R.array.ctb_mtb_burden_list),getResources().getString(R.string.ctb_very_low),App.HORIZONTAL,App.VERTICAL,true);
         mtbRIFResult = new TitledSpinner(context,null,getResources().getString(R.string.ctb_mtb_rif_result),getResources().getStringArray(R.array.ctb_mtb_rif_result_list),getResources().getString(R.string.ctb_not_detected),App.HORIZONTAL,true);
         errorCode = new TitledEditText(context,null,getResources().getString(R.string.ctb_error_code),"","",4,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,true);
 
 
-        views = new View[]{formDate.getButton(),sampleAccepted.getRadioGroup(),whySampleRejected.getSpinner(),otherReasonForRejection.getEditText(),
-                resultRecieveDate.getButton(),geneXpertMTBResult.getSpinner(),mtbBurden.getRadioGroup(),mtbRIFResult.getSpinner(),
+        views = new View[]{formDate.getButton(),sampleAccepted.getRadioGroup(),whySampleRejected.getSpinner(),otherReasonForRejection.getEditText(),geneXpertMTBResult.getSpinner(),mtbBurden.getRadioGroup(),mtbRIFResult.getSpinner(),
                 errorCode.getEditText(),orderIds.getQuestionView(),cartidgeID.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate,orderIds,cartidgeID,sampleAccepted,whySampleRejected,otherReasonForRejection,resultRecieveDate,geneXpertMTBResult,mtbBurden,mtbRIFResult,errorCode}};
+                {{formDate,orderIds,sampleAccepted,whySampleRejected,otherReasonForRejection,cartidgeID
+                        ,geneXpertMTBResult,mtbBurden,mtbRIFResult,errorCode}};
 
         formDate.getButton().setOnClickListener(this);
-        resultRecieveDate.getButton().setOnClickListener(this);
         sampleAccepted.getRadioGroup().setOnCheckedChangeListener(this);
         whySampleRejected.getSpinner().setOnItemSelectedListener(this);
         geneXpertMTBResult.getSpinner().setOnItemSelectedListener(this);
@@ -273,35 +269,7 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
                 }
 
         }
-        if (!(resultRecieveDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
-
-            String formDa = resultRecieveDate.getButton().getText().toString();
-            String personDOB = App.getPatient().getPerson().getBirthdate();
-
-            Date date = new Date();
-            if (secondDateCalendar.after(App.getCalendar(date))) {
-
-                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
-                snackbar.show();
-
-                resultRecieveDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-
-            } else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
-                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-                tv.setMaxLines(2);
-                snackbar.show();
-                resultRecieveDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-            }
-
-            else
-                resultRecieveDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-        }
         formDate.getButton().setEnabled(true);
-        resultRecieveDate.getButton().setEnabled(true);
     }
 
     @Override
@@ -319,15 +287,37 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
         else{
             errorCode.getEditText().setError(null);
         }
-        if(App.get(cartidgeID).isEmpty()){
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            cartidgeID.getEditText().setError(getString(R.string.empty_field));
-            cartidgeID.getEditText().requestFocus();
-            error = true;
+
+        if(cartidgeID.getVisibility()==View.VISIBLE){
+            if(App.get(cartidgeID).isEmpty()){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                cartidgeID.getEditText().setError(getString(R.string.empty_field));
+                cartidgeID.getEditText().requestFocus();
+                error = true;
+            }
+            else if(App.get(cartidgeID).length()<10){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                cartidgeID.getEditText().setError(getString(R.string.ctb_cartridge_id_length));
+                cartidgeID.getEditText().requestFocus();
+                error = true;
+            }
+            else if (App.get(cartidgeID).trim().length() <= 0) {
+                    if (App.isLanguageRTL())
+                        gotoPage(0);
+                    else
+                        gotoPage(0);
+                    cartidgeID.getEditText().setError(getString(R.string.ctb_spaces_only));
+                    cartidgeID.getEditText().requestFocus();
+                    error = true;
+                }
         }
+
 
         Boolean flag = true;
         Bundle bundle = this.getArguments();
@@ -660,7 +650,6 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
             else if (obs[0][0].equals("DATE OF  TEST RESULT RECEIVED")) {
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
-                resultRecieveDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
             } else if (obs[0][0].equals("GENEXPERT MTB/RIF RESULT")) {
                 String value = obs[0][1].equals("DETECTED") ? getResources().getString(R.string.ctb_mtb_detected) :
                         (obs[0][1].equals("NOT DETECTED") ? getResources().getString(R.string.ctb_mtb_not_detected) :
@@ -708,15 +697,6 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
-        }
-        if (view == resultRecieveDate.getButton()) {
-            resultRecieveDate.getButton().setEnabled(false);
-            Bundle args = new Bundle();
-            args.putInt("type", SECOND_DATE_DIALOG_ID);
-            args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", false);
-            secondDateFragment.setArguments(args);
-            secondDateFragment.show(getFragmentManager(), "DatePicker");
         }
     }
 
@@ -768,7 +748,6 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
             snackbar.dismiss();
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-        resultRecieveDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         whySampleRejected.setVisibility(View.GONE);
         otherReasonForRejection.setVisibility(View.GONE);
         mtbBurden.setVisibility(View.GONE);
@@ -830,8 +809,21 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
                     otherReasonForRejection.setVisibility(View.VISIBLE);
                 }
                 geneXpertMTBResult.setVisibility(View.GONE);
+                mtbBurden.setVisibility(View.GONE);
+                mtbRIFResult.setVisibility(View.GONE);
+                errorCode.setVisibility(View.GONE);
+
+                cartidgeID.setVisibility(View.GONE);
             } else {
                 geneXpertMTBResult.setVisibility(View.VISIBLE);
+                if(App.get(geneXpertMTBResult).equals(getResources().getString(R.string.ctb_mtb_detected))){
+                    mtbBurden.setVisibility(View.VISIBLE);
+                    mtbRIFResult.setVisibility(View.VISIBLE);
+                }
+                else if (App.get(geneXpertMTBResult).equals(getResources().getString(R.string.ctb_error))){
+                    errorCode.setVisibility(View.VISIBLE);
+                }
+                cartidgeID.setVisibility(View.VISIBLE);
 
                 whySampleRejected.setVisibility(View.GONE);
                 otherReasonForRejection.setVisibility(View.GONE);

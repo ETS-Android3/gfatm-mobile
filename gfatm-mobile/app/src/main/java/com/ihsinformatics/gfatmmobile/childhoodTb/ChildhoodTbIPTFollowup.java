@@ -53,6 +53,7 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
     TitledEditText fathersName;
     TitledEditText weightAtBaseline;
     TitledButton iptStartDate;
+    TitledEditText iptRegNo;
     TitledEditText dose;
     TitledEditText weightVisit;
     TitledEditText complaints;
@@ -166,6 +167,7 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
 
         iptStartDate = new TitledButton(context, null,  getResources().getString(R.string.ctb_ipt_start_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         iptStartDate.setTag("iptStartDate");
+        iptRegNo = new TitledEditText(context, null, getResources().getString(R.string.ctb_ipt_reg_no), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         dose = new TitledEditText(context, null, getResources().getString(R.string.ctb_dose_at_intiation_point), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         weightVisit = new TitledEditText(context, null, getResources().getString(R.string.ctb_weight_visit), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         complaints = new TitledEditText(context, null, getResources().getString(R.string.ctb_complaints), "", "", 500, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
@@ -174,12 +176,12 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
         iptOutcome = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ipt_outcome), getResources().getStringArray(R.array.ctb_ipt_outcome_list),getResources().getString(R.string.ctb_complete), App.VERTICAL, App.VERTICAL, true);
 
         views = new View[]{formDate.getButton(), fathersName.getEditText(),weightAtBaseline.getEditText(),iptStartDate.getButton(), iptDose.getRadioGroup(),iptCompliance.getRadioGroup(),iptOutcome.getRadioGroup(),
-                dose.getEditText(),weightVisit.getEditText(),complaints.getEditText(),
+                dose.getEditText(),weightVisit.getEditText(),complaints.getEditText(),iptRegNo.getEditText()
         };
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, fathersName,weightAtBaseline,iptStartDate,dose,weightVisit,complaints,iptDose,iptCompliance,iptOutcome
+                {{formDate, fathersName,weightAtBaseline,iptStartDate,iptRegNo,dose,weightVisit,complaints,iptDose,iptCompliance,iptOutcome
         }};
 
         formDate.getButton().setOnClickListener(this);
@@ -360,7 +362,7 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         observations.add(new String[]{"IPT START DATE", App.getSqlDateTime(secondDateCalendar)});
-
+        observations.add(new String[]{"IPT REGISTRATION NUMBER", App.get(iptRegNo)});
         observations.add(new String[]{"DOSE AT TREATMENT INITIATION POINT", App.get(dose)});
         observations.add(new String[]{"WEIGHT (KG)", App.get(weightVisit)});
         observations.add(new String[]{"COMPLAINTS", App.get(complaints)});
@@ -511,7 +513,13 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                 iptStartDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-            } else if (obs[0][0].equals("DOSE AT TREATMENT INITIATION POINT")) {
+            }
+            else if (obs[0][0].equals("IPT REGISTRATION NUMBER")) {
+                iptRegNo.getEditText().setText(obs[0][1]);
+            }
+            else if (obs[0][0].equals("DOSE AT TREATMENT INITIATION POINT")) {
+                dose.getEditText().setText(obs[0][1]);
+            }else if (obs[0][0].equals("DOSE AT TREATMENT INITIATION POINT")) {
                 dose.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("WEIGHT (KG)")) {
                 weightVisit.getEditText().setText(obs[0][1]);
@@ -652,6 +660,11 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
             secondDateCalendar = App.getCalendar(App.stringToDate(iptStartDateString, "yyyy-MM-dd"));
         }
         iptStartDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+
+        String iptRegNoString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "IPT REGISTRATION NUMBER");
+        if(iptRegNoString != null){
+            iptRegNo.getEditText().setText(iptRegNoString);
+        }
     }
 
     @Override
