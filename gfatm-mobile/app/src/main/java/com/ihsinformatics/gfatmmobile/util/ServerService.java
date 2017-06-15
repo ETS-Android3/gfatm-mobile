@@ -1953,7 +1953,7 @@ public class ServerService {
         if (encounter.length < 1)
             return null;
 
-        return String.valueOf(encounter[0][0]);
+        return String.valueOf(encounter[0][0]).substring(0,10);
 
     }
 
@@ -1963,7 +1963,7 @@ public class ServerService {
         if (obs.length < 1)
             return null;
 
-        return String.valueOf(obs[0][0]);
+        return String.valueOf(obs[0][0]).substring(0,10);
     }
 
     public String getObsValueByObs(String patientId, String encounterType, String filterConceptName, String filterConceptValue, String conceptName) {
