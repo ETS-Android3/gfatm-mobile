@@ -292,6 +292,15 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
                 sampleSubmissionDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
             }
 
+            else if (secondDateCalendar.before(formDateCalendar)) {
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_sample_date_cannot_be_before_form_date), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                sampleSubmissionDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+            }
+
             else
                 sampleSubmissionDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         }
@@ -556,7 +565,7 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
             }
             else if(obs[0][0].equals("ORDER ID")){
                 orderId.getEditText().setText(obs[0][1]);
-                orderId.getEditText().setOnKeyListener(null);
+                orderId.getEditText().setKeyListener(null);
                 orderId.getEditText().setFocusable(false);
             }
 
@@ -706,7 +715,7 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
 
         Date nowDate = new Date();
         orderId.getEditText().setText(App.getSqlDateTime(nowDate));
-        orderId.setOnKeyListener(null);
+        orderId.getEditText().setKeyListener(null);
         orderId.getEditText().setFocusable(false);
 
 
