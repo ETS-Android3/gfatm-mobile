@@ -93,7 +93,10 @@ public class TitledSpinner extends LinearLayout {
     }
 
     public String getSpinnerValue() {
-        return spinner.getValue();
+        if(spinner.getCount() > 0)
+            return spinner.getValue();
+        else
+            return "";
     }
 
     public Boolean getMandatory() {
