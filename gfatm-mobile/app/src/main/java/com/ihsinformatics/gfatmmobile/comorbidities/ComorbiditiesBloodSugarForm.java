@@ -986,7 +986,7 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
                 formType.getRadioGroup().getButtons().get(1).setEnabled(false);
                 if (obs[0][0].equals("ORDER ID")) {
                     orderId.getEditText().setText(obs[0][1]);
-                    orderId.setOnKeyListener(null);
+                    orderId.getEditText().setKeyListener(null);
                 }
                 else if (obs[0][0].equals("TEST CONTEXT STATUS")) {
                     for (RadioButton rb : bloodSugarTestType.getRadioGroup().getButtons()) {

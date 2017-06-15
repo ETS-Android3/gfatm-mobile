@@ -17,6 +17,7 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,8 +61,10 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
 
     // Views...
     TitledButton formDate;
+    TitledButton registrationDate;
 
     TitledEditText indexExternalPatientId;
+    TitledEditText tbRegistrationNumber;
     TitledEditText gpClinicCode;
     //TitledEditText specifyOther;
     TitledEditText fatherName;
@@ -180,6 +183,9 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         indexExternalPatientId = new TitledEditText(context, null, getResources().getString(R.string.pet_index_patient_external_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        tbRegistrationNumber = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_tb_reg_num), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        registrationDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_patient_information_reg_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         gpClinicCode = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_gp_clinic_code), "", getResources().getString(R.string.comorbidities_preferredlocation_gpcliniccode_range), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         //specifyOther = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_location_other), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         husbandName = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_patient_information_husband_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
@@ -350,17 +356,18 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
         patientEducationalLevel = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_patient_information_eduaction_level), getResources().getStringArray(R.array.comorbidities_patient_information_education_options), getString(R.string.comorbidities_patient_information_education_options_ele), App.VERTICAL);
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), indexExternalPatientId.getEditText(), gpClinicCode.getEditText(), /*specifyOther.getEditText(),*/ husbandName.getEditText(), fatherName.getEditText(), cnic1, cnic2, cnic3,/*nic.getEditText(),*/ nicOwner.getSpinner(), otherNicOwner.getEditText(), addressProvided.getRadioGroup(),
+        views = new View[]{formDate.getButton(), indexExternalPatientId.getEditText(), tbRegistrationNumber.getEditText(), registrationDate.getButton(), gpClinicCode.getEditText(), /*specifyOther.getEditText(),*/ husbandName.getEditText(), fatherName.getEditText(), cnic1, cnic2, cnic3,/*nic.getEditText(),*/ nicOwner.getSpinner(), otherNicOwner.getEditText(), addressProvided.getRadioGroup(),
                 address1.getEditText(), address2, province.getSpinner(), district.getSpinner(), city.getSpinner(), addressType.getRadioGroup(), landmark.getEditText(), mobileNumber1a, mobileNumber1b, mobileNumber2a, mobileNumber2b, landline1a, landline1b, landline2a, landline2b,/*mobileNumber1.getEditText(), mobileNumber2.getEditText(), landline1.getEditText(), landline2.getEditText(),*/
                 tbStatus.getRadioGroup(), tbType.getRadioGroup(), tbCategory.getRadioGroup(), maritalStatus.getSpinner(), householdHeadEducationLevel.getSpinner(), patientEducationalLevel.getSpinner()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, indexExternalPatientId, gpClinicCode, /*specifyOther,*/ husbandName, fatherName, cnicLayout,/*nic,*/ nicOwner, otherNicOwner, addressProvided,
-                        address1, addressLayout, province, district, city, addressType, landmark, mobileNumber1Layout, mobileNumber2Layout, landline1Layout, landline2Layout, /*mobileNumber1, mobileNumber2, landline1, landline2,*/ tbStatus, tbType, tbCategory,
+                {{formDate, indexExternalPatientId, tbRegistrationNumber, registrationDate, tbStatus, tbType, tbCategory, gpClinicCode, /*specifyOther,*/ husbandName, fatherName, cnicLayout,/*nic,*/ nicOwner, otherNicOwner, addressProvided,
+                        address1, addressLayout, province, district, city, addressType, landmark, mobileNumber1Layout, mobileNumber2Layout, landline1Layout, landline2Layout, /*mobileNumber1, mobileNumber2, landline1, landline2,*/
                         maritalStatus, householdHeadEducationLevel, patientEducationalLevel}};
 
         formDate.getButton().setOnClickListener(this);
+        registrationDate.getButton().setOnClickListener(this);
         nicOwner.getSpinner().setOnItemSelectedListener(this);
         addressProvided.getRadioGroup().setOnCheckedChangeListener(this);
         addressType.getRadioGroup().setOnCheckedChangeListener(this);
@@ -660,6 +667,33 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
             } else
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         }
+
+        if (!(registrationDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
+
+            String formDa = registrationDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
+
+            Date date = new Date();
+            if (secondDateCalendar.after(App.getCalendar(date))) {
+
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                registrationDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+
+            } else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                registrationDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+            } else
+                registrationDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+        }
+        registrationDate.getButton().setEnabled(true);
         formDate.getButton().setEnabled(true);
     }
 
@@ -718,18 +752,18 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
             error = true;
         }
 
-        if (address2.getVisibility() == View.VISIBLE && App.get(address2).trim().isEmpty()) {
+        if (addressLayout.getVisibility() == View.VISIBLE && App.get(address2).trim().isEmpty()) {
             address2.setError(getString(R.string.empty_field));
             address2.requestFocus();
             error = true;
         }
-        else if (address2.getVisibility() == View.VISIBLE && address2.getText().toString().length() > 0 && address2.getText().toString().trim().isEmpty()) {
+        else if (addressLayout.getVisibility() == View.VISIBLE && address2.getText().toString().length() > 0 && address2.getText().toString().trim().isEmpty()) {
             address2.setError(getString(R.string.comorbidities_patient_information_father_name_error));
             address2.requestFocus();
             error = true;
         }
 
-        if (address1.getVisibility() == View.VISIBLE && App.get(address2).trim().isEmpty()) {
+        if (address1.getVisibility() == View.VISIBLE && App.get(address1).trim().isEmpty()) {
             address1.getEditText().setError(getString(R.string.empty_field));
             address1.getEditText().requestFocus();
             error = true;
@@ -847,6 +881,8 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
         }
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
+        observations.add(new String[]{"TB REGISTRATION NUMBER", App.get(tbRegistrationNumber).trim()});
+        observations.add(new String[]{"REGISTRATION DATE", App.getSqlDateTime(secondDateCalendar)});
         if (gpClinicCode.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"HEALTH CLINIC/POST", App.get(gpClinicCode)});
         observations.add(new String[]{"FATHER NAME", App.get(fatherName).trim()});
@@ -1163,7 +1199,15 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
                 timeTakeToFill = obs[0][1];
             }
 
-            if (obs[0][0].equals("HEALTH CLINIC/POST")) {
+            if (obs[0][0].equals("TB REGISTRATION NUMBER")) {
+                tbRegistrationNumber.getEditText().setText(obs[0][1]);
+                tbRegistrationNumber.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("REGISTRATION DATE")) {
+                String secondDate = obs[0][1];
+                secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
+                registrationDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+                registrationDate.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("HEALTH CLINIC/POST")) {
                 gpClinicCode.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("FATHER NAME")) {
                 fatherName.getEditText().setText(obs[0][1]);
@@ -1342,6 +1386,16 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
             formDateFragment.show(getFragmentManager(), "DatePicker");
         }
 
+        if (view == registrationDate.getButton()) {
+            registrationDate.getButton().setEnabled(false);
+            Bundle args = new Bundle();
+            args.putInt("type", SECOND_DATE_DIALOG_ID);
+            args.putBoolean("allowPastDate", true);
+            args.putBoolean("allowFutureDate", false);
+            secondDateFragment.setArguments(args);
+            secondDateFragment.show(getFragmentManager(), "DatePicker");
+        }
+
 
     }
 
@@ -1470,6 +1524,8 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
 
                     //Autopopulating all the data from FAST component.
                     HashMap<String, String> result = new HashMap<String, String>();
+                    String regNo = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Treatment Initiation", "TB REGISTRATION NUMBER");
+                    String regDate = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Treatment Initiation", "REGISTRATION DATE");
                     String husbandName = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive", "PARTNER FULL NAME");
                     String fatherName = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive", "FATHER NAME");
                     String cnic = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "NATIONAL IDENTIFICATION NUMBER");
@@ -1487,6 +1543,12 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
                     String landline1 = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "TERTIARY CONTACT NUMBER");
                     String landline2 = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "QUATERNARY CONTACT NUMBER");
 
+                    if (regNo != null)
+                        if (!regNo.equals(""))
+                            result.put("TB REGISTRATION NUMBER", regNo);
+                    if (regDate != null)
+                        if (!regDate.equals(""))
+                            result.put("REGISTRATION DATE", regDate);
                     if (husbandName != null)
                         if (!husbandName.equals(""))
                             result.put("PARTNER FULL NAME", husbandName);
@@ -1546,23 +1608,116 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
                 @Override
                 protected void onPostExecute(HashMap<String, String> result) {
                     super.onPostExecute(result);
-                    loading.dismiss();
 
-                    husbandName.getEditText().setText(result.get("PARTNER FULL NAME"));
+                    if (result.get("QUATERNARY CONTACT NUMBER") != null) {
+                        if (!result.get("QUATERNARY CONTACT NUMBER").equals("")) {
+                            String[] landline2Array = result.get("QUATERNARY CONTACT NUMBER").split("-");
 
-                    fatherName.getEditText().setText(result.get("FATHER NAME"));
-
-                    if (result.get("NATIONAL IDENTIFICATION NUMBER") != null) {
-                        if (!result.get("NATIONAL IDENTIFICATION NUMBER").equals("")) {
-                            String[] cnicArray = result.get("NATIONAL IDENTIFICATION NUMBER").split("-");
-
-                            if(cnicArray.length > 3) {
-                                cnic1.setText(cnicArray[0]);
-                                cnic2.setText(cnicArray[1]);
-                                cnic3.setText(cnicArray[2]);
+                            if(landline2Array.length > 1) {
+                                landline2a.setText(landline2Array[0]);
+                                landline2b.setText(landline2Array[1]);
                             }
                         }
                     }
+
+                    if (result.get("TERTIARY CONTACT NUMBER") != null) {
+                        if (!result.get("TERTIARY CONTACT NUMBER").equals("")) {
+                            String[] landline1Array = result.get("TERTIARY CONTACT NUMBER").split("-");
+
+                            if(landline1Array.length > 1) {
+                                landline1a.setText(landline1Array[0]);
+                                landline1b.setText(landline1Array[1]);
+                            }
+                        }
+                    }
+
+                    if (result.get("SECONDARY MOBILE NUMBER") != null) {
+                        if (!result.get("SECONDARY MOBILE NUMBER").equals("")) {
+                            String[] mobile2Array = result.get("SECONDARY MOBILE NUMBER").split("-");
+
+                            if(mobile2Array.length > 1) {
+                                mobileNumber2a.setText(mobile2Array[0]);
+                                mobileNumber2b.setText(mobile2Array[1]);
+                            }
+                        }
+                    }
+
+                    if (result.get("CONTACT PHONE NUMBER") != null) {
+                        if (!result.get("CONTACT PHONE NUMBER").equals("")) {
+                            String[] mobile1Array = result.get("CONTACT PHONE NUMBER").split("-");
+
+                            if(mobile1Array.length > 1) {
+                                mobileNumber1a.setText(mobile1Array[0]);
+                                mobileNumber1b.setText(mobile1Array[1]);
+                            }
+                        }
+                    }
+
+                    String addressType1 = result.get("TYPE OF ADDRESS");
+                    if (addressType1 != null) {
+                        if (!addressType1.equals("")) {
+                            for (RadioButton rb : addressType.getRadioGroup().getButtons()) {
+                                if (rb.getText().equals(getResources().getString(R.string.comorbidities_patient_information_address_type_permanent)) && addressType1.equals("PERMANENT ADDRESS")) {
+                                    rb.setChecked(true);
+                                    break;
+                                } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_patient_information_address_type_temporary)) && addressType1.equals("TEMPORARY ADDRESS")) {
+                                    rb.setChecked(true);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    String city1 = result.get("VILLAGE");
+                    if (city1 != null) {
+                        if (!city1.equals("")) {
+                            String[] cities = serverService.getCityList(App.get(district));
+                            city.getSpinner().setSpinnerData(cities);
+                            city.getSpinner().selectValue(city1);
+                            city.getSpinner().setTag("selected");
+                        }
+                    }
+
+                    String district1 = result.get("DISTRICT");
+                    if (district1 != null) {
+                        if (!district1.equals("")) {
+                            String[] districts = serverService.getDistrictList(App.get(province));
+                            district.getSpinner().setSpinnerData(districts);
+                            district.getSpinner().selectValue(district1);
+                            district.getSpinner().setTag("selected");
+                        }
+                    }
+
+                    String province1 = result.get("PROVINCE");
+                    if (province1 != null) {
+                        if (!province1.equals("")) {
+                            province.getSpinner().selectValue(province1);
+                        }
+                    }
+
+                    address2.setText(result.get("EXTENDED ADDRESS (TEXT)"));
+                    address1.getEditText().setText(result.get("ADDRESS (TEXT)"));
+
+                    String addressProvided1 = result.get("PATIENT PROVIDED ADDRESS");
+                    if (addressProvided1 != null) {
+                        if (!addressProvided1.equals("")) {
+                            for (RadioButton rb : addressProvided.getRadioGroup().getButtons()) {
+                                if (rb.getText().equals(getResources().getString(R.string.yes)) && addressProvided1.equals("YES")) {
+                                    rb.setChecked(true);
+                                    break;
+                                } else if (rb.getText().equals(getResources().getString(R.string.no)) && addressProvided1.equals("NO")) {
+                                    rb.setChecked(true);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if (result.get("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER") != null) {
+                        if (!result.get("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER").equals(""))
+                            otherNicOwner.setVisibility(View.VISIBLE);
+                    }
+                    otherNicOwner.getEditText().setText(result.get("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER"));
 
                     String ownerCnic = result.get("COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
                     if (ownerCnic != null) {
@@ -1585,115 +1740,26 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
                         }
                     }
 
-                    if (result.get("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER") != null) {
-                        if (!result.get("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER").equals(""))
-                            otherNicOwner.setVisibility(View.VISIBLE);
-                    }
-                    otherNicOwner.getEditText().setText(result.get("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER"));
+                    if (result.get("NATIONAL IDENTIFICATION NUMBER") != null) {
+                        if (!result.get("NATIONAL IDENTIFICATION NUMBER").equals("")) {
+                            String[] cnicArray = result.get("NATIONAL IDENTIFICATION NUMBER").split("-");
 
-                    String addressProvided1 = result.get("PATIENT PROVIDED ADDRESS");
-                    if (addressProvided1 != null) {
-                        if (!addressProvided1.equals("")) {
-                            for (RadioButton rb : addressProvided.getRadioGroup().getButtons()) {
-                                if (rb.getText().equals(getResources().getString(R.string.yes)) && addressProvided1.equals("YES")) {
-                                    rb.setChecked(true);
-                                    break;
-                                } else if (rb.getText().equals(getResources().getString(R.string.no)) && addressProvided1.equals("NO")) {
-                                    rb.setChecked(true);
-                                    break;
-                                }
+                            if(cnicArray.length > 2) {
+                                cnic1.setText(cnicArray[0]);
+                                cnic2.setText(cnicArray[1]);
+                                cnic3.setText(cnicArray[2]);
                             }
                         }
                     }
 
-                    String addressType1 = result.get("TYPE OF ADDRESS");
-                    if (addressType1 != null) {
-                        if (!addressType1.equals("")) {
-                            for (RadioButton rb : addressType.getRadioGroup().getButtons()) {
-                                if (rb.getText().equals(getResources().getString(R.string.comorbidities_patient_information_address_type_permanent)) && addressType1.equals("PERMANENT ADDRESS")) {
-                                    rb.setChecked(true);
-                                    break;
-                                } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_patient_information_address_type_temporary)) && addressType1.equals("TEMPORARY ADDRESS")) {
-                                    rb.setChecked(true);
-                                    break;
-                                }
-                            }
-                        }
-                    }
+                    husbandName.getEditText().setText(result.get("PARTNER FULL NAME"));
+                    fatherName.getEditText().setText(result.get("FATHER NAME"));
 
-                    address1.getEditText().setText(result.get("ADDRESS (TEXT)"));
-                    address2.setText(result.get("EXTENDED ADDRESS (TEXT)"));
+                    secondDateCalendar.setTime(App.stringToDate(result.get("REGISTRATION DATE"), "yyyy-MM-dd"));
+                    registrationDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
-                    String province1 = result.get("PROVINCE");
-                    if (province1 != null) {
-                        if (!province1.equals("")) {
-                            province.getSpinner().selectValue(province1);
-                        }
-                    }
-
-                    String district1 = result.get("DISTRICT");
-                    if (district1 != null) {
-                        if (!district1.equals("")) {
-                            String[] districts = serverService.getDistrictList(App.get(province));
-                            district.getSpinner().setSpinnerData(districts);
-                            district.getSpinner().selectValue(district1);
-                            district.getSpinner().setTag("selected");
-                        }
-                    }
-
-                    String city1 = result.get("VILLAGE");
-                    if (city1 != null) {
-                        if (!city1.equals("")) {
-                            String[] cities = serverService.getCityList(App.get(district));
-                            city.getSpinner().setSpinnerData(cities);
-                            city.getSpinner().selectValue(city1);
-                            city.getSpinner().setTag("selected");
-                        }
-                    }
-
-                    if (result.get("CONTACT PHONE NUMBER") != null) {
-                        if (!result.get("CONTACT PHONE NUMBER").equals("")) {
-                            String[] mobile1Array = result.get("CONTACT PHONE NUMBER").split("-");
-
-                            if(mobile1Array.length > 2) {
-                                mobileNumber1a.setText(mobile1Array[0]);
-                                mobileNumber1b.setText(mobile1Array[1]);
-                            }
-                        }
-                    }
-
-                    if (result.get("SECONDARY MOBILE NUMBER") != null) {
-                        if (!result.get("SECONDARY MOBILE NUMBER").equals("")) {
-                            String[] mobile2Array = result.get("SECONDARY MOBILE NUMBER").split("-");
-
-                            if(mobile2Array.length > 2) {
-                                mobileNumber2a.setText(mobile2Array[0]);
-                                mobileNumber2b.setText(mobile2Array[1]);
-                            }
-                        }
-                    }
-
-                    if (result.get("TERTIARY CONTACT NUMBER") != null) {
-                        if (!result.get("TERTIARY CONTACT NUMBER").equals("")) {
-                            String[] landline1Array = result.get("TERTIARY CONTACT NUMBER").split("-");
-
-                            if(landline1Array.length > 2) {
-                                landline1a.setText(landline1Array[0]);
-                                landline1b.setText(landline1Array[1]);
-                            }
-                        }
-                    }
-
-                    if (result.get("QUATERNARY CONTACT NUMBER") != null) {
-                        if (!result.get("QUATERNARY CONTACT NUMBER").equals("")) {
-                            String[] landline2Array = result.get("QUATERNARY CONTACT NUMBER").split("-");
-
-                            if(landline2Array.length > 2) {
-                                landline2a.setText(landline2Array[0]);
-                                landline2b.setText(landline2Array[1]);
-                            }
-                        }
-                    }
+                    tbRegistrationNumber.getEditText().setText(result.get("TB REGISTRATION NUMBER"));
+                    loading.dismiss();
                 }
             };
             autopopulateFormTask.execute("");
