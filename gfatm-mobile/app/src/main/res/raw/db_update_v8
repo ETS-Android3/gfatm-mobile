@@ -1,0 +1,4 @@
+-- insert queries
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CT SCAN OUTCOME','ct_scan_outcome','Coded','7f1f7f8f-302d-4c21-8677-624b4bc502af');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TUBERCULOMA BRAIN, UNSPEC',NULL,'N/A','111896AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LEPTOMENINGEAL GLIONEURONAL HETEROTOPIA',NULL,'N/A','160424AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
