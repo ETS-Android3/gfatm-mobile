@@ -4482,11 +4482,16 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PROVINCE','prov
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT ACCEPTANCE TO IPT','IPT_acceptance','Coded','395d8bd6-a452-4d83-8181-d5113681e2af');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TB TREATMENT COMPLETED',NULL,'N/A','964780c0-7130-4e17-a8e1-e328cb524103');
 
-------
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('5',NULL,'N/A','2fd6470d-3faa-453f-8e1e-e96d805b819e');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ORDER ID',NULL,'Text','45c46189-a0c1-4d75-87d3-234a6ec38433');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER HIGHEST EDUCATION LEVEL OF HEAD OF HOUSEHOLD','other_household_head_education_level','Text','1fc1e480-75c0-422e-984d-38bb96b78e90');
 
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CT SCAN OUTCOME','ct_scan_outcome','Coded','7f1f7f8f-302d-4c21-8677-624b4bc502af');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TUBERCULOMA BRAIN, UNSPEC',NULL,'N/A','111896AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LEPTOMENINGEAL GLIONEURONAL HETEROTOPIA',NULL,'N/A','160424AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+
+----
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INCENTIVE DATE','incentive_date','Date','4391773d-3246-48c4-8b6e-7c2c4829ee24');
 
 -- Program
 INSERT OR IGNORE INTO program VALUES (1, "86ba1232-d576-416e-b102-5f335c6746ce", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
