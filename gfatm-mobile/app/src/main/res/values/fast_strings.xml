@@ -601,7 +601,6 @@
     </string-array>
 
     <string-array name="fast_patient_reffered_from_list">
-        <item></item>
         <item>@string/fast_ward_title</item>
         <item>@string/fast_opd_clinic</item>
         <item>@string/fast_other_title</item>
