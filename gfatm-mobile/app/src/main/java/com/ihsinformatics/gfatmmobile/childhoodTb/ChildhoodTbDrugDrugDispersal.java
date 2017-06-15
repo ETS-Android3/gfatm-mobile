@@ -1007,16 +1007,12 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
                 for (CheckBox cb : moAdditionalTreatment.getCheckedBoxes()) {
                     if (cb.getText().equals(getResources().getString(R.string.ctb_pediasure)) && obs[0][1].equals("PEDIASURE")) {
                         cb.setChecked(true);
-                        break;
                     } else if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && obs[0][1].equals("IRON")) {
                         cb.setChecked(true);
-                        break;
                     } else if (cb.getText().equals(getResources().getString(R.string.ctb_vitamin_B_complex)) && obs[0][1].equals("VITAMIN B COMPLEX")) {
                         cb.setChecked(true);
-                        break;
                     } else if (cb.getText().equals(getResources().getString(R.string.ctb_anthelminthic)) && obs[0][1].equals("ANTHELMINTHIC")) {
                         cb.setChecked(true);
-                        break;
                     }
                 }
                 moAdditionalTreatment.setVisibility(View.VISIBLE);
@@ -1108,13 +1104,10 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
                 for (CheckBox cb : moInitiateTreatmentIpt.getCheckedBoxes()) {
                     if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && obs[0][1].equals("IRON")) {
                         cb.setChecked(true);
-                        break;
                     } else if (cb.getText().equals(getResources().getString(R.string.ctb_multivitamins)) && obs[0][1].equals("MULTIVITAMIN")) {
                         cb.setChecked(true);
-                        break;
                     } else if (cb.getText().equals(getResources().getString(R.string.ctb_anthelmintic_albendazole)) && obs[0][1].equals("ANTHELMINTHIC")) {
                         cb.setChecked(true);
-                        break;
                     }
                 }
                 moInitiateTreatmentIpt.setVisibility(View.VISIBLE);
@@ -1178,19 +1171,14 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
                 for (CheckBox cb : moInitiatingAdditionalTreatmentAntibiotic.getCheckedBoxes()) {
                     if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && obs[0][1].equals("IRON")) {
                         cb.setChecked(true);
-                        break;
                     } else if (cb.getText().equals(getResources().getString(R.string.ctb_multivitamins)) && obs[0][1].equals("MULTIVITAMIN")) {
                         cb.setChecked(true);
-                        break;
                     } else if (cb.getText().equals(getResources().getString(R.string.ctb_anthelminthic)) && obs[0][1].equals("ANTHELMINTHIC")) {
                         cb.setChecked(true);
-                        break;
                     } else if (cb.getText().equals(getResources().getString(R.string.ctb_other_title)) && obs[0][1].equals("OTHER")) {
                         cb.setChecked(true);
-                        break;
                     } else if (cb.getText().equals(getResources().getString(R.string.ctb_none)) && obs[0][1].equals("NONE")) {
                         cb.setChecked(true);
-                        break;
                     }
                 }
                 moInitiatingAdditionalTreatmentAntibiotic.setVisibility(View.VISIBLE);

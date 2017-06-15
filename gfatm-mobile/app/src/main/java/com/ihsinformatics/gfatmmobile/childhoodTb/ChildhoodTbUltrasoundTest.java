@@ -411,6 +411,28 @@ public class ChildhoodTbUltrasoundTest extends AbstractFormActivity implements R
                 error = true;
             }
         }
+        if(ultrasoundSite.getVisibility()==View.VISIBLE){
+            if(App.get(ultrasoundSite).isEmpty()){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                ultrasoundSite.getQuestionView().setError(getString(R.string.empty_field));
+                ultrasoundSite.getQuestionView().requestFocus();
+                error = true;
+            }
+        }
+        if(ultrasoundInterpretation.getVisibility()==View.VISIBLE){
+            if(App.get(ultrasoundInterpretation).isEmpty()){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                ultrasoundInterpretation.getQuestionView().setError(getString(R.string.empty_field));
+                ultrasoundInterpretation.getQuestionView().requestFocus();
+                error = true;
+            }
+        }
         if(orderIds.getVisibility()==View.VISIBLE){
             String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Ultrasound Test Result", "ORDER ID");
             if(resultTestIds != null){
@@ -903,12 +925,16 @@ public class ChildhoodTbUltrasoundTest extends AbstractFormActivity implements R
             }
         }
         if (group == ultrasoundSite.getRadioGroup()) {
+            ultrasoundSite.getQuestionView().setError(null);
             if (ultrasoundSite.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_other_title))) {
                 otherUltrasoundSite.setVisibility(View.VISIBLE);
 
             } else {
                 otherUltrasoundSite.setVisibility(View.GONE);
             }
+        }
+        if (group == ultrasoundInterpretation.getRadioGroup()) {
+            ultrasoundInterpretation.getQuestionView().setError(null);
         }
 
 

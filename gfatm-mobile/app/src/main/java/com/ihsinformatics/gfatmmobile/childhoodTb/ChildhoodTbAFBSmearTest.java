@@ -949,10 +949,12 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
         if (group == specimenType.getRadioGroup()) {
             if (specimenType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_extra_pulmonary))) {
                 specimenComeFrom.setVisibility(View.VISIBLE);
-
+                if(App.get(specimenComeFrom).equals(getResources().getString(R.string.ctb_other_title))){
+                    otherSpecimentComeFrom.setVisibility(View.VISIBLE);
+                }
             } else {
-                specimenComeFrom.getSpinner().setSelection(0);
                 specimenComeFrom.setVisibility(View.GONE);
+                otherSpecimentComeFrom.setVisibility(View.GONE);
             }
         }
         if (group == pointTestBeingDone.getRadioGroup()) {

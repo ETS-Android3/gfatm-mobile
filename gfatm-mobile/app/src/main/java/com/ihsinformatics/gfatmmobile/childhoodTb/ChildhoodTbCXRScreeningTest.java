@@ -23,6 +23,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,8 +36,10 @@ import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
+import com.ihsinformatics.gfatmmobile.custom.MyCheckBox;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
+import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
@@ -73,7 +76,7 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
     TitledEditText testId;
     TitledEditText chestXRayScore;
     TitledRadioGroup radiologicalDiagnosis;
-    TitledSpinner abnormalDiagnosis;
+    TitledCheckBoxes abnormalDiagnosis;
     TitledEditText otherRadiologicalDiagnosis;
     TitledRadioGroup diseaseExtent;
     TitledEditText radiologistRemarks;
@@ -166,13 +169,13 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
         testId = new TitledEditText(context,null,getResources().getString(R.string.ctb_test_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
         chestXRayScore = new TitledEditText(context,null,getResources().getString(R.string.ctb_chest_xray_cad4tb_score),"","",3,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,true);
         radiologicalDiagnosis = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_radiological_diagnosis),getResources().getStringArray(R.array.ctb_abnormal_list),null,App.VERTICAL,App.VERTICAL,false);
-        abnormalDiagnosis = new TitledSpinner(context,null,getResources().getString(R.string.ctb_abnormal_diagnosis),getResources().getStringArray(R.array.ctb_radiological_diagnosis_list),null,App.VERTICAL,true);
+        abnormalDiagnosis = new TitledCheckBoxes(context,null,getResources().getString(R.string.ctb_abnormal_diagnosis),getResources().getStringArray(R.array.ctb_radiological_diagnosis_list),null,App.VERTICAL,App.VERTICAL,true);
         otherRadiologicalDiagnosis = new TitledEditText(context,null,getResources().getString(R.string.ctb_other_specify),"","",50,RegexUtil.ALPHA_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
         diseaseExtent = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_extent_disease),getResources().getStringArray(R.array.ctb_disease_extent_list),null,App.VERTICAL,App.VERTICAL);
         radiologistRemarks = new TitledEditText(context,null,getResources().getString(R.string.ctb_radiologist_remark),"","",500,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
 
 
-        views = new View[]{formDate.getButton(),formType.getRadioGroup(),typeOfXRay.getRadioGroup(), abnormalDiagnosis.getSpinner(),diseaseExtent.getRadioGroup(),
+        views = new View[]{formDate.getButton(),formType.getRadioGroup(),typeOfXRay.getRadioGroup(), abnormalDiagnosis,diseaseExtent.getRadioGroup(),
                 monthTreatment.getSpinner(),testId.getEditText(),chestXRayScore.getEditText(),radiologicalDiagnosis.getRadioGroup(),otherRadiologicalDiagnosis.getEditText(),radiologistRemarks.getEditText(),
                 orderId.getEditText(),orderIds.getSpinner()
                 };
@@ -184,7 +187,10 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
 
         formDate.getButton().setOnClickListener(this);
         formType.getRadioGroup().setOnCheckedChangeListener(this);
-        abnormalDiagnosis.getSpinner().setOnItemSelectedListener(this);
+        ArrayList<MyCheckBox> checkBoxList = abnormalDiagnosis.getCheckedBoxes();
+        for (CheckBox cb : abnormalDiagnosis.getCheckedBoxes())
+            cb.setOnCheckedChangeListener(this);
+
         radiologicalDiagnosis.getRadioGroup().setOnCheckedChangeListener(this);
         typeOfXRay.getRadioGroup().setOnCheckedChangeListener(this);
         diseaseExtent.getRadioGroup().setOnCheckedChangeListener(this);
@@ -381,7 +387,6 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
         }else {
             chestXRayScore.getEditText().setError(null);
         }
-
         if(otherRadiologicalDiagnosis.getVisibility()==View.VISIBLE){
             if(App.get(otherRadiologicalDiagnosis).isEmpty()) {
                 if (App.isLanguageRTL())
@@ -405,26 +410,18 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
             otherRadiologicalDiagnosis.getEditText().setError(null);
         }
         if(radiologistRemarks.getVisibility()==View.VISIBLE){
-            if(App.get(radiologistRemarks).isEmpty()) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                radiologistRemarks.getEditText().setError(getString(R.string.empty_field));
-                radiologistRemarks.getEditText().requestFocus();
-                error = true;
-            }
-            else if(App.get(radiologistRemarks).trim().length() <= 0){
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                radiologistRemarks.getEditText().setError(getString(R.string.ctb_spaces_only));
-                radiologistRemarks.getEditText().requestFocus();
-                error = true;
+            if(!App.get(radiologistRemarks).isEmpty()) {
+                if (App.get(radiologistRemarks).trim().length() <= 0) {
+                    if (App.isLanguageRTL())
+                        gotoPage(0);
+                    else
+                        gotoPage(0);
+                    radiologistRemarks.getEditText().setError(getString(R.string.ctb_spaces_only));
+                    radiologistRemarks.getEditText().requestFocus();
+                    error = true;
+                }
             }
         }
-
         Boolean flag = true;
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -570,13 +567,27 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
             if(!App.get(chestXRayScore).isEmpty()) {
                 observations.add(new String[]{"CHEST X-RAY SCORE", App.get(chestXRayScore)});
             }
-            observations.add(new String[]{"ABNORMAL DETAILED DIAGNOSIS", App.get(abnormalDiagnosis).equals(getResources().getString(R.string.ctb_adenopathy)) ? "ADENOPATHY" :
-                    (App.get(abnormalDiagnosis).equals(getResources().getString(R.string.ctb_infiltration)) ? "INFILTRATE" :
-                            (App.get(abnormalDiagnosis).equals(getResources().getString(R.string.ctb_consolidation)) ? "CONSOLIDATION" :
-                                (App.get(abnormalDiagnosis).equals(getResources().getString(R.string.ctb_effusion)) ? "PLEURAL EFFUSION" :
-                                            (App.get(abnormalDiagnosis).equals(getResources().getString(R.string.ctb_cavitation)) ? "CAVIATION" :
-                                                    (App.get(abnormalDiagnosis).equals(getResources().getString(R.string.ctb_miliary_tb)) ? "MILIARY" :
-                                                            "OTHER ABNORMAL DETAILED DIAGNOSIS")))))});
+
+            if(abnormalDiagnosis.getVisibility()==View.VISIBLE){
+                String abnormalDiagnosisString = "";
+                for (CheckBox cb : abnormalDiagnosis.getCheckedBoxes()) {
+                    if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_adenopathy)))
+                        abnormalDiagnosisString = abnormalDiagnosisString + "ADENOPATHY" + " ; ";
+                    else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_infiltration)))
+                        abnormalDiagnosisString = abnormalDiagnosisString + "INFILTRATE" + " ; ";
+                    else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_consolidation)))
+                        abnormalDiagnosisString = abnormalDiagnosisString + "CONSOLIDATION" + " ; ";
+                    else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_effusion)))
+                        abnormalDiagnosisString = abnormalDiagnosisString + "PLEURAL EFFUSION" + " ; ";
+                    else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_cavitation)))
+                        abnormalDiagnosisString = abnormalDiagnosisString + "CAVIATION" + " ; ";
+                    else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_miliary_tb)))
+                        abnormalDiagnosisString = abnormalDiagnosisString + "MILIARY" + " ; ";
+                    else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_other_title)))
+                        abnormalDiagnosisString = abnormalDiagnosisString + "OTHER ABNORMAL DETAILED DIAGNOSIS" + " ; ";
+                }
+                observations.add(new String[]{"ABNORMAL DETAILED DIAGNOSIS", abnormalDiagnosisString});
+            }
 
             observations.add(new String[]{"RADIOLOGICAL DIAGNOSIS", App.get(radiologicalDiagnosis).equals(getResources().getString(R.string.ctb_normal)) ? "NORMAL" :
                     (App.get(radiologicalDiagnosis).equals(getResources().getString(R.string.ctb_abnormal_suggestive_tb)) ?  "ABNORMAL SUGGESTIVE OF TB" : "ABNORMAL NOT SUGGESTIVE OF TB")});
@@ -784,18 +795,27 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
                         }
                     }
                 }
+
                 else if (obs[0][0].equals("ABNORMAL DETAILED DIAGNOSIS")) {
-                    String value = obs[0][1].equals("ADENOPATHY") ? getResources().getString(R.string.ctb_adenopathy) :
-                            (obs[0][1].equals("INFILTRATE") ? getResources().getString(R.string.ctb_infiltration) :
-                                    (obs[0][1].equals("CONSOLIDATION") ? getResources().getString(R.string.ctb_consolidation) :
-                                            (obs[0][1].equals("PLEURAL EFFUSION") ? getResources().getString(R.string.ctb_effusion) :
-                                                            (obs[0][1].equals("CAVIATION") ? getResources().getString(R.string.ctb_cavitation) :
-                                                                    (obs[0][1].equals("MILIARY") ? getResources().getString(R.string.ctb_miliary_tb) :
-                                                                            getResources().getString(R.string.ctb_other_title))))));
-                    if(value.equalsIgnoreCase(getResources().getString(R.string.ctb_other_title))){
-                        otherRadiologicalDiagnosis.setVisibility(View.VISIBLE);
+                    for (CheckBox cb : abnormalDiagnosis.getCheckedBoxes()) {
+                        if (cb.getText().equals(getResources().getString(R.string.ctb_adenopathy)) && obs[0][1].equals("ADENOPATHY")) {
+                            cb.setChecked(true);
+                        } else if (cb.getText().equals(getResources().getString(R.string.ctb_infiltration)) && obs[0][1].equals("INFILTRATE")) {
+                            cb.setChecked(true);
+                        } else if (cb.getText().equals(getResources().getString(R.string.ctb_consolidation)) && obs[0][1].equals("CONSOLIDATION")) {
+                            cb.setChecked(true);
+                        } else if (cb.getText().equals(getResources().getString(R.string.ctb_effusion)) && obs[0][1].equals("PLEURAL EFFUSION")) {
+                            cb.setChecked(true);
+                        } else if (cb.getText().equals(getResources().getString(R.string.ctb_cavitation)) && obs[0][1].equals("CAVIATION")) {
+                            cb.setChecked(true);
+                        }else if (cb.getText().equals(getResources().getString(R.string.ctb_miliary_tb)) && obs[0][1].equals("MILIARY")) {
+                            cb.setChecked(true);
+                        } else if (cb.getText().equals(getResources().getString(R.string.ctb_other_title)) && obs[0][1].equals("OTHER ABNORMAL DETAILED DIAGNOSIS")) {
+                            cb.setChecked(true);
+                            otherRadiologicalDiagnosis.setVisibility(View.VISIBLE);
+                        }
                     }
-                    abnormalDiagnosis.getSpinner().selectValue(value);
+                    abnormalDiagnosis.setVisibility(View.VISIBLE);
                 }
                 else if (obs[0][0].equals("OTHER ABNORMAL DETAILED DIAGNOSIS")) {
                     otherRadiologicalDiagnosis.getEditText().setText(obs[0][1]);
@@ -847,14 +867,18 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         MySpinner spinner = (MySpinner) parent;
-        if (spinner == abnormalDiagnosis.getSpinner()) {
-            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_other_title))) {
-                otherRadiologicalDiagnosis.setVisibility(View.VISIBLE);
-            } else {
-                otherRadiologicalDiagnosis.setVisibility(View.GONE);
-            }
-        }
         if (spinner == orderIds.getSpinner()) {
+            String typeofXray = null;
+            if(orderIds.getSpinner().getCount()>0) {
+                typeofXray = serverService.getObsValueByObs(App.getPatientId(), App.getProgram() + "-" + "CXR Screening Test Order", "ORDER ID", App.get(orderIds), "TYPE OF X RAY");
+            }
+            if(typeofXray!=null) {
+                if (typeofXray.equalsIgnoreCase("RADIOLOGICAL DIAGNOSIS")) {
+                    chestXRayScore.setVisibility(View.VISIBLE);
+                }else{
+                    chestXRayScore.setVisibility(View.GONE);
+                }
+            }
             updateDisplay();
         }
 
@@ -862,7 +886,16 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        for (CheckBox cb : abnormalDiagnosis.getCheckedBoxes()) {
+            if (App.get(cb).equals(getResources().getString(R.string.ctb_other_title))) {
+                if (cb.isChecked()) {
+                    otherRadiologicalDiagnosis.setVisibility(View.VISIBLE);
 
+                } else {
+                    otherRadiologicalDiagnosis.setVisibility(View.GONE);
+                }
+            }
+        }
     }
 
     @Override
@@ -951,6 +984,13 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
                 showTestOrderOrTestResult();
             }
         }
+        else if(group == radiologicalDiagnosis.getRadioGroup()) {
+            if (radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_abnormal_suggestive_tb)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_abnormal_not_suggestive_tb))) {
+                abnormalDiagnosis.setVisibility(View.VISIBLE);
+            } else {
+                abnormalDiagnosis.setVisibility(View.GONE);
+            }
+        }
 
     }
     void goneVisibility() {
@@ -1003,9 +1043,18 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
                 formDate.setVisibility(View.VISIBLE);
                 orderIds.setVisibility(View.VISIBLE);
                 radiologicalDiagnosis.setVisibility(View.VISIBLE);
-                abnormalDiagnosis.setVisibility(View.VISIBLE);
-                if (App.get(abnormalDiagnosis).equals(getResources().getString(R.string.ctb_other_title))) {
-                    otherRadiologicalDiagnosis.setVisibility(View.VISIBLE);
+                if(App.get(radiologicalDiagnosis).equals(getResources().getString(R.string.ctb_abnormal_suggestive_tb)) || App.get(radiologicalDiagnosis).equals(getResources().getString(R.string.ctb_abnormal_not_suggestive_tb))) {
+                    abnormalDiagnosis.setVisibility(View.VISIBLE);
+                    for (CheckBox cb : abnormalDiagnosis.getCheckedBoxes()) {
+                        if (App.get(cb).equals(getResources().getString(R.string.ctb_other_title))) {
+                            if (cb.isChecked()) {
+                                otherRadiologicalDiagnosis.setVisibility(View.VISIBLE);
+
+                            } else {
+                                otherRadiologicalDiagnosis.setVisibility(View.GONE);
+                            }
+                        }
+                    }
                 }
                 diseaseExtent.setVisibility(View.VISIBLE);
                 radiologistRemarks.setVisibility(View.VISIBLE);
