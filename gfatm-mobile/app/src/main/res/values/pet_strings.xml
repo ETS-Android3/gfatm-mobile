@@ -991,4 +991,7 @@
         <item>@string/pet_severity_level_normal</item>
     </string-array>
 
+    <string name="pet_payment_date">Payment Date</string>
+    <string name="pet_incentive_date">Incentive Date</string>
+
 </resources>
