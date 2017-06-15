@@ -4492,6 +4492,8 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LEPTOMENINGEAL 
 
 ----
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INCENTIVE DATE','incentive_date','Date','4391773d-3246-48c4-8b6e-7c2c4829ee24');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CONFIRMED DIAGNOSIS','confirmed_diagnosis','Coded','159392AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('IPT REGISTRATION NUMBER','IPT_regestration_no','Text','cf32cfd3-f694-4c42-93de-648037763457');
 
 -- Program
 INSERT OR IGNORE INTO program VALUES (1, "86ba1232-d576-416e-b102-5f335c6746ce", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
