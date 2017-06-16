@@ -2165,6 +2165,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         newTabletsofRHZ.setVisibility(View.GONE);
         newTabletsofE.setVisibility(View.GONE);
         adultFormulationofHRZE.setVisibility(View.GONE);
+        iptRegNo.setVisibility(View.GONE);
         nameOfSupporter.setVisibility(View.GONE);
         mobileLinearLayout.setVisibility(View.GONE);
         closeContactTypeTreatmentSupport.setVisibility(View.GONE);
@@ -2520,6 +2521,12 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 weight.setVisibility(View.GONE);
                 regimen.setVisibility(View.GONE);
                 typeFixedDosePrescribed.setVisibility(View.GONE);
+                currentTabletsofE.setVisibility(View.GONE);
+                currentTabletsofRHZ.setVisibility(View.GONE);
+                newTabletsofE.setVisibility(View.GONE);
+                newTabletsofRHZ.setVisibility(View.GONE);
+                adultFormulationofHRZE.setVisibility(View.GONE);
+                initiatingAdditionalTreatment.setVisibility(View.GONE);
                 nameOfSupporter.setVisibility(View.GONE);
                 closeContactTypeTreatmentSupport.setVisibility(View.GONE);
                 bcgScar.setVisibility(View.GONE);
