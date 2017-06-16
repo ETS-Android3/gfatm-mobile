@@ -452,10 +452,20 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
             public void afterTextChanged(Editable s) {
                 if (!App.get(isoniazidDose).equals("")) {
                     int dose = Integer.parseInt(App.get(isoniazidDose));
-                    if (dose > 300)
-                        isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded));
-                    else
-                        isoniazidDose.getEditText().setError(null);
+                    if(App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy))){
+                        if (dose > 300)
+                            isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded_300));
+                        else
+                            isoniazidDose.getEditText().setError(null);
+                    }
+                    else{
+
+                        if (dose > 2000)
+                            isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded_2000));
+                        else
+                            isoniazidDose.getEditText().setError(null);
+
+                    }
                 }
             }
         });
@@ -829,11 +839,21 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
                 error = true;
             } else {
                 int dose = Integer.parseInt(App.get(isoniazidDose));
-                if (dose > 300) {
-                    isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded));
-                    isoniazidDose.getQuestionView().requestFocus();
-                    view = null;
-                    error = true;
+                if(App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy))) {
+                    if (dose > 300) {
+                        isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded_300));
+                        isoniazidDose.getQuestionView().requestFocus();
+                        view = null;
+                        error = true;
+                    }
+                }
+                else{
+                    if (dose > 2000) {
+                        isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded_2000));
+                        isoniazidDose.getQuestionView().requestFocus();
+                        view = null;
+                        error = true;
+                    }
                 }
             }
         }

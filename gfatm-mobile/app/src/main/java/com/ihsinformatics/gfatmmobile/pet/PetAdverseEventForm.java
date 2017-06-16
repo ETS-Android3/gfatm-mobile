@@ -393,7 +393,7 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
                 if (!App.get(isoniazidDose).equals("")) {
                     int dose = Integer.parseInt(App.get(isoniazidDose));
                     if (dose > 300)
-                        isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded));
+                        isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded_300));
                     else
                         isoniazidDose.getEditText().setError(null);
                 }
@@ -781,7 +781,7 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
             } else {
                 int dose = Integer.parseInt(App.get(isoniazidDose));
                 if (dose > 300) {
-                    isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded));
+                    isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded_300));
                     isoniazidDose.getQuestionView().requestFocus();
                     view = null;
                     error = true;
