@@ -71,7 +71,9 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                onBackPressed();
+                if(App.getLocation().equals("")) {
+                    onBackPressed();
+                }
                 return true;
         }
 
