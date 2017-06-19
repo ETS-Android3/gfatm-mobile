@@ -558,14 +558,16 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                 facility_section_other.getEditText().requestFocus();
                 error = true;
             }
-            if(App.get(facility_section).equals(getResources().getString(R.string.ctb_empty))){
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                facility_section.getQuestionView().setError(getString(R.string.empty_field));
-                facility_section.getSpinner().requestFocus();
-                error = true;
+            if(facility_section.getVisibility()==View.VISIBLE) {
+                if (App.get(facility_section).equals(getResources().getString(R.string.ctb_empty))) {
+                    if (App.isLanguageRTL())
+                        gotoPage(0);
+                    else
+                        gotoPage(0);
+                    facility_section.getQuestionView().setError(getString(R.string.empty_field));
+                    facility_section.getSpinner().requestFocus();
+                    error = true;
+                }
             }
             if(opd_ward_section.getVisibility()==View.VISIBLE && App.get(opd_ward_section).equals(getResources().getString(R.string.ctb_empty))){
                 if (App.isLanguageRTL())
@@ -663,7 +665,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
         if (opd_ward_section.getVisibility() == View.VISIBLE && !App.get(opd_ward_section).equals(getResources().getString(R.string.ctb_empty)))
             observations.add(new String[]{"OUTPATIENT DEPARTMENT", App.get(opd_ward_section).equals(getResources().getString(R.string.ctb_general_medicine_filter_clinic)) ? "GENERAL MEDICINE DEPARTMENT" :
                     (App.get(opd_ward_section).equals(getResources().getString(R.string.ctb_chest_tb_clinic_screening)) ? "CHEST MEDICINE DEPARTMENT" :
-                            (App.get(opd_ward_section).equals(getResources().getString(R.string.ctb_paediatrics)) ? "PEDIATRIC SURGERY DEPARTMENT" :
+                            (App.get(opd_ward_section).equals(getResources().getString(R.string.ctb_paediatrics)) ? "PAEDIATRICS DEPARTMENT" :
                                     (App.get(opd_ward_section).equals(getResources().getString(R.string.ctb_gynae_obstetrics)) ? "OBSTETRICS AND GYNECOLOGY DEPARTMENT" :
                                             (App.get(opd_ward_section).equals(getResources().getString(R.string.ctb_er)) ? "EMERGENCY DEPARTMENT": "SURGICAL PROCEDURE"))))});
         final String fatherNameString = App.get(fatherName);
@@ -939,7 +941,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
             } else if (obs[0][0].equals("OUTPATIENT DEPARTMENT")) {
                 String value = obs[0][1].equals("GENERAL MEDICINE DEPARTMENT") ? getResources().getString(R.string.ctb_general_medicine_filter_clinic) :
                         (obs[0][1].equals("CHEST MEDICINE DEPARTMENT") ? getResources().getString(R.string.ctb_chest_tb_clinic_screening) :
-                                (obs[0][1].equals("PEDIATRIC SURGERY DEPARTMENT") ? getResources().getString(R.string.ctb_paediatrics) :
+                                (obs[0][1].equals("PAEDIATRICS DEPARTMENT") ? getResources().getString(R.string.ctb_paediatrics) :
                                         (obs[0][1].equals("OBSTETRICS AND GYNECOLOGY DEPARTMENT") ? getResources().getString(R.string.ctb_gynae_obstetrics) :
                                                 (obs[0][1].equals("EMERGENCY DEPARTMENT") ? getResources().getString(R.string.ctb_er) :
                                                         getResources().getString(R.string.ctb_surgery)))));
