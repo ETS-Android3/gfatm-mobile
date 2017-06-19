@@ -1093,7 +1093,9 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         }
         if(cnicLinearLayout.getVisibility()==View.VISIBLE){
             String cnicNumber = App.get(cnic1) +"-"+ App.get(cnic2) +"-"+ App.get(cnic3);
-            observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnicNumber});
+            if(RegexUtil.isValidNIC(cnicNumber)) {
+                observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnicNumber});
+            }
         }
         if (cnicOwner.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_mother)) ? "MOTHER" :
@@ -2092,7 +2094,9 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 testConfirmingDiagnosis.setVisibility(View.GONE);
                 treatmentInitiated.setVisibility(View.VISIBLE);
                 initiatingAdditionalTreatment.setVisibility(View.VISIBLE);
-                reasonTreatmentNotIniated.setVisibility(View.VISIBLE);
+                if(App.get(treatmentInitiated).equals(getResources().getString(R.string.no))) {
+                    reasonTreatmentNotIniated.setVisibility(View.VISIBLE);
+                }
                 patientCategory.setVisibility(View.VISIBLE);
                 weight.setVisibility(View.VISIBLE);
                 regimen.setVisibility(View.VISIBLE);
@@ -2165,6 +2169,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         newTabletsofRHZ.setVisibility(View.GONE);
         newTabletsofE.setVisibility(View.GONE);
         adultFormulationofHRZE.setVisibility(View.GONE);
+        iptRegNo.setVisibility(View.GONE);
         nameOfSupporter.setVisibility(View.GONE);
         mobileLinearLayout.setVisibility(View.GONE);
         closeContactTypeTreatmentSupport.setVisibility(View.GONE);
@@ -2238,7 +2243,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 super.onPostExecute(result);
                 loading.dismiss();
 
-                if (result.get("NATIONAL IDENTIFICATION NUMBER") != null) {
+                if (result.get("NATIONAL IDENTIFICATION NUMBER") != null && RegexUtil.isValidNIC(result.get("NATIONAL IDENTIFICATION NUMBER"))) {
                     String value = result.get("NATIONAL IDENTIFICATION NUMBER");
                     cnic1.setText(value.substring(0, 5));
                     cnic1.setKeyListener(null);
@@ -2387,6 +2392,9 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                     testConfirmingDiagnosis.setVisibility(View.VISIBLE);
                 }
                 treatmentInitiated.setVisibility(View.VISIBLE);
+                if(App.get(treatmentInitiated).equals(getResources().getString(R.string.no))){
+                    reasonTreatmentNotIniated.setVisibility(View.VISIBLE);
+                }
                 patientCategory.setVisibility(View.VISIBLE);
                 weight.setVisibility(View.VISIBLE);
                 regimen.setVisibility(View.VISIBLE);
@@ -2520,6 +2528,12 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 weight.setVisibility(View.GONE);
                 regimen.setVisibility(View.GONE);
                 typeFixedDosePrescribed.setVisibility(View.GONE);
+                currentTabletsofE.setVisibility(View.GONE);
+                currentTabletsofRHZ.setVisibility(View.GONE);
+                newTabletsofE.setVisibility(View.GONE);
+                newTabletsofRHZ.setVisibility(View.GONE);
+                adultFormulationofHRZE.setVisibility(View.GONE);
+                initiatingAdditionalTreatment.setVisibility(View.GONE);
                 nameOfSupporter.setVisibility(View.GONE);
                 closeContactTypeTreatmentSupport.setVisibility(View.GONE);
                 bcgScar.setVisibility(View.GONE);

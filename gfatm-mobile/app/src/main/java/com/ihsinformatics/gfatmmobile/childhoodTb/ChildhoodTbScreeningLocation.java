@@ -455,7 +455,7 @@ public class ChildhoodTbScreeningLocation extends AbstractFormActivity implement
         if (referralWithinOpd.getVisibility() == View.VISIBLE && !App.get(referralWithinOpd).equals(getResources().getString(R.string.ctb_empty)))
             observations.add(new String[]{"OUTPATIENT DEPARTMENT", App.get(referralWithinOpd).equals(getResources().getString(R.string.ctb_general_medicine_filter_clinic)) ? "GENERAL MEDICINE DEPARTMENT" :
                     (App.get(referralWithinOpd).equals(getResources().getString(R.string.ctb_chest_tb_clinic_screening)) ? "CHEST MEDICINE DEPARTMENT" :
-                            (App.get(referralWithinOpd).equals(getResources().getString(R.string.ctb_paediatrics)) ? "PEDIATRIC SURGERY DEPARTMENT" :
+                            (App.get(referralWithinOpd).equals(getResources().getString(R.string.ctb_paediatrics)) ? "PAEDIATRICS DEPARTMENT" :
                                     (App.get(referralWithinOpd).equals(getResources().getString(R.string.ctb_gynae_obstetrics)) ? "OBSTETRICS AND GYNECOLOGY DEPARTMENT" :
                                           (App.get(referralWithinOpd).equals(getResources().getString(R.string.ctb_er)) ? "EMERGENCY DEPARTMENT": "SURGICAL PROCEDURE"))))});
 
@@ -688,7 +688,7 @@ public class ChildhoodTbScreeningLocation extends AbstractFormActivity implement
             } else if (obs[0][0].equals("OUTPATIENT DEPARTMENT")) {
                 String value = obs[0][1].equals("GENERAL MEDICINE DEPARTMENT") ? getResources().getString(R.string.ctb_general_medicine_filter_clinic) :
                         (obs[0][1].equals("CHEST MEDICINE DEPARTMENT") ? getResources().getString(R.string.ctb_chest_tb_clinic_screening) :
-                                (obs[0][1].equals("PEDIATRIC SURGERY DEPARTMENT") ? getResources().getString(R.string.ctb_paediatrics) :
+                                (obs[0][1].equals("PAEDIATRICS DEPARTMENT") ? getResources().getString(R.string.ctb_paediatrics) :
                                         (obs[0][1].equals("OBSTETRICS AND GYNECOLOGY DEPARTMENT") ? getResources().getString(R.string.ctb_gynae_obstetrics) :
                                                 (obs[0][1].equals("EMERGENCY DEPARTMENT") ? getResources().getString(R.string.ctb_er) :
                                                         getResources().getString(R.string.ctb_surgery)))));
