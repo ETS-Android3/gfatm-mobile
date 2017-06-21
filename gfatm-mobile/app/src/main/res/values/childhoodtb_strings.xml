@@ -537,6 +537,19 @@
     <string name="ctb_patient_acceptance_ipt">Patient acceptance to IPT</string>
     <string name="ctb_empty"></string>
     <string name="ctb_ipt_reg_no">IPT Registration No.</string>
+    <string name="ctb_1_and_half">1.5</string>
+    <string name="ctb_no_histopathology_order_found">No Histopatology Order found for the patient.</string>
+    <string name="ctb_no_afb_order_found">No AFB Smear Order found for the patient.</string>
+    <string name="ctb_no_dst_order_found">No DST Order found for the patient.</string>
+    <string name="ctb_no_cxr_order_found">No CXR Order found for the patient.</string>
+    <string name="ctb_no_ultrasound_found">No Ultrasound found for the patient.</string>
+    <string name="ctb_no_ct_scan_order_found">No CT Scan Order for the patient.</string>
+    <string name="ctb_no_mantoux_order_found">No Mantoux Order for the patient.</string>
+    <string name="ctb_order_result_found_error">Test Result already existls for Order ID:"</string>
+    <string name="ctb_gxp_result_exist_for_order_id">GXP Result already exists for Order ID:"</string>
+    <string name="ctb_test_result_found_error">Test Result already exists for Test ID:"</string>
+    <string name="ctb_no_gxp_speciman_error">No GXP Specimen Collection for the patient </string>
+    <string name="ctb_missed_visit_less_than_formdate">Missed visit date can not be greater than Form date</string>
 
 
     <string-array name="ctb_abnormal_list">
@@ -1148,18 +1161,23 @@
         <item>@string/ctb_5</item>
     </string-array>
 
-    <string name="ctb_no_histopathology_order_found">No Histopatology Order found for the patient.</string>
-    <string name="ctb_no_afb_order_found">No AFB Smear Order found for the patient.</string>
-    <string name="ctb_no_dst_order_found">No DST Order found for the patient.</string>
-    <string name="ctb_no_cxr_order_found">No CXR Order found for the patient.</string>
-    <string name="ctb_no_ultrasound_found">No Ultrasound found for the patient.</string>
-    <string name="ctb_no_ct_scan_order_found">No CT Scan Order for the patient.</string>
-    <string name="ctb_no_mantoux_order_found">No Mantoux Order for the patient.</string>
-    <string name="ctb_order_result_found_error">Test Result already existls for Order ID:"</string>
-    <string name="ctb_gxp_result_exist_for_order_id">GXP Result already exists for Order ID:"</string>
-    <string name="ctb_test_result_found_error">Test Result already exists for Test ID:"</string>
-    <string name="ctb_no_gxp_speciman_error">No GXP Specimen Collection for the patient </string>
-    <string name="ctb_missed_visit_less_than_formdate">Missed visit date can not be greater than Form date</string>
-    
+    <string-array name="ctb_2_to_5_list">
+        <item>@string/ctb_2</item>
+        <item>@string/ctb_3</item>
+        <item>@string/ctb_4</item>
+        <item>@string/ctb_5</item>
+    </string-array>
+
+    <string-array name="ctb_2_to_4">
+        <item>@string/ctb_2</item>
+        <item>@string/ctb_3</item>
+        <item>@string/ctb_4</item>
+    </string-array>
+
+    <string-array name="ctb_1_to_2">
+        <item>@string/ctb_1</item>
+        <item>@string/ctb_1_and_half</item>
+        <item>@string/ctb_2</item>
+    </string-array>
     
 </resources>

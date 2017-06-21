@@ -67,8 +67,6 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
     TitledRadioGroup formType;
     TitledEditText orderId;
     TitledSpinner weightPercentile;
-    TitledRadioGroup pointTestBeingDone;
-    TitledSpinner monthTreatment;
 
     TitledSpinner orderIds;
     TitledEditText testId;
@@ -155,9 +153,6 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
         orderId = new TitledEditText(context,null,getResources().getString(R.string.order_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,true);
         formType = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_type_of_form),getResources().getStringArray(R.array.ctb_type_of_form_list),null,App.HORIZONTAL,App.VERTICAL,true);
         weightPercentile = new TitledSpinner(context,null,getResources().getString(R.string.ctb_weight_percentile),getResources().getStringArray(R.array.ctb_weight_percentile_list),null,App.VERTICAL,true);
-        pointTestBeingDone = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_point_test_being_done),getResources().getStringArray(R.array.ctb_ultrasound_test_point_list),getResources().getString(R.string.ctb_diagnostic),App.VERTICAL,App.VERTICAL,true);
-        monthTreatment= new TitledSpinner(context,null,getResources().getString(R.string.ctb_month_treatment),getResources().getStringArray(R.array.ctb_0_to_24),null,App.HORIZONTAL,true);
-        updateFollowUpMonth();
 
         orderIds = new TitledSpinner(context, "", getResources().getString(R.string.order_id), getResources().getStringArray(R.array.pet_empty_array), "", App.HORIZONTAL);
         testId = new TitledEditText(context,null,getResources().getString(R.string.ctb_test_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
@@ -165,61 +160,23 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
         interpretationMantouxTest = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_interpretation_mantoux),getResources().getStringArray(R.array.ctb_positive_negative),null,App.VERTICAL,App.VERTICAL);
 
 
-        views = new View[]{formDate.getButton(),formType.getRadioGroup(),orderId.getEditText(),weightPercentile.getSpinner(),pointTestBeingDone.getRadioGroup()
+        views = new View[]{formDate.getButton(),formType.getRadioGroup(),orderId.getEditText(),weightPercentile.getSpinner()
                 ,tuberculinSkinTest.getRadioGroup(),interpretationMantouxTest.getRadioGroup(),
-                testId.getEditText(),orderIds.getSpinner(),monthTreatment.getSpinner()};
+                testId.getEditText(),orderIds.getSpinner()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formType,formDate,orderId,weightPercentile,pointTestBeingDone,monthTreatment,orderIds,testId,tuberculinSkinTest
+                {{formType,formDate,orderId,weightPercentile,orderIds,testId,tuberculinSkinTest
                 ,interpretationMantouxTest}};
 
         formDate.getButton().setOnClickListener(this);
         formType.getRadioGroup().setOnCheckedChangeListener(this);
-        pointTestBeingDone.getRadioGroup().setOnCheckedChangeListener(this);
         tuberculinSkinTest.getRadioGroup().setOnCheckedChangeListener(this);
         interpretationMantouxTest.getRadioGroup().setOnCheckedChangeListener(this);
-        monthTreatment.getSpinner().setOnItemSelectedListener(this);
         orderIds.getSpinner().setOnItemSelectedListener(this);
 
         resetViews();
 
-    }
-
-
-    public void updateFollowUpMonth() {
-
-        String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
-        String format = "";
-        String[] monthArray;
-
-        if (treatmentDate == null) {
-            monthArray = new String[1];
-            monthArray[0] = "0";
-            monthTreatment.getSpinner().setSpinnerData(monthArray);
-        } else {
-            if (treatmentDate.contains("/")) {
-                format = "dd/MM/yyyy";
-            } else {
-                format = "yyyy-MM-dd";
-            }
-            Date convertedDate = App.stringToDate(treatmentDate, format);
-            Calendar treatmentDateCalender = App.getCalendar(convertedDate);
-            int diffYear = formDateCalendar.get(Calendar.YEAR) - treatmentDateCalender.get(Calendar.YEAR);
-            int diffMonth = diffYear * 12 + formDateCalendar.get(Calendar.MONTH) - treatmentDateCalender.get(Calendar.MONTH);
-
-            if (diffMonth == 0) {
-                monthArray = new String[1];
-                monthArray[0] = "1";
-                monthTreatment.getSpinner().setSpinnerData(monthArray);
-            } else {
-                monthArray = new String[diffMonth];
-                for (int i = 0; i < diffMonth; i++) {
-                    monthArray[i] = String.valueOf(i+1);
-                }
-                monthTreatment.getSpinner().setSpinnerData(monthArray);
-            }
-        }
     }
 
     @Override
@@ -343,7 +300,6 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
                 }
             }
         }
-        updateFollowUpMonth();
         formDate.getButton().setEnabled(true);
     }
 
@@ -489,11 +445,6 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
         if (App.get(formType).equals(getResources().getString(R.string.ctb_order))) {
             observations.add(new String[]{"ORDER ID", App.get(orderId)});
             observations.add(new String[]{"WEIGHT PERCENTILE GROUP", App.get(weightPercentile)});
-            observations.add(new String[]{"TEST CONTEXT STATUS", App.get(pointTestBeingDone).equals(getResources().getString(R.string.ctb_diagnostic)) ? "DIAGNOSTIC TESTING" :
-                    "REGULAR FOLLOW UP"});
-            if(monthTreatment.getVisibility()==View.VISIBLE){
-                observations.add(new String[]{"FOLLOW-UP MONTH", App.get(monthTreatment)});
-            }
 
         } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
             observations.add(new String[]{"ORDER ID", App.get(orderIds)});
@@ -660,19 +611,6 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
                 formType.getRadioGroup().getButtons().get(1).setEnabled(false);
                 if (obs[0][0].equals("WEIGHT PERCENTILE GROUP")) {
                     weightPercentile.getSpinner().selectValue(obs[0][1]);
-                }else if (obs[0][0].equals("TEST CONTEXT STATUS")) {
-                    for (RadioButton rb : pointTestBeingDone.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.ctb_diagnostic)) && obs[0][1].equals("DIAGNOSTIC TESTING")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_followup)) && obs[0][1].equals("REGULAR FOLLOW UP")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                    pointTestBeingDone.setVisibility(View.VISIBLE);
-                }else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
-                    monthTreatment.getSpinner().selectValue(obs[0][1]);
                 }
                 submitButton.setEnabled(true);
             }else{
@@ -798,8 +736,6 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
         }
 
     void goneVisibility(){
-        pointTestBeingDone.setVisibility(View.GONE);
-        monthTreatment.setVisibility(View.GONE);
         weightPercentile.setVisibility(View.GONE);
         tuberculinSkinTest.setVisibility(View.GONE);
         interpretationMantouxTest.setVisibility(View.GONE);
@@ -816,14 +752,6 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
             formDate.setVisibility(View.VISIBLE);
             submitButton.setEnabled(true);
             showTestOrderOrTestResult();
-        }
-        if (group == pointTestBeingDone.getRadioGroup()) {
-            if (pointTestBeingDone.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_followup))) {
-                monthTreatment.setVisibility(View.VISIBLE);
-
-            } else {
-                monthTreatment.setVisibility(View.GONE);
-            }
         }
 
         if(group == tuberculinSkinTest.getRadioGroup()){
@@ -851,10 +779,6 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
 
             formDate.setVisibility(View.VISIBLE);
             weightPercentile.setVisibility(View.VISIBLE);
-            pointTestBeingDone.setVisibility(View.VISIBLE);
-            if(App.get(pointTestBeingDone).equals(getResources().getString(R.string.ctb_followup))){
-                monthTreatment.setVisibility(View.VISIBLE);
-            }
             orderId.setVisibility(View.VISIBLE);
             Date nowDate = new Date();
             orderId.getEditText().setText(App.getSqlDateTime(nowDate));
@@ -875,8 +799,6 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
 
             orderId.setVisibility(View.GONE);
             weightPercentile.setVisibility(View.GONE);
-            pointTestBeingDone.setVisibility(View.GONE);
-            monthTreatment.setVisibility(View.GONE);
 
             String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Mantoux Test Order", "ORDER ID");
             if(testIds == null || testIds.length == 0){

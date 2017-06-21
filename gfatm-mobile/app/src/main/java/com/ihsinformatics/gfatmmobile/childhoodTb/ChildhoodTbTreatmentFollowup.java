@@ -183,15 +183,15 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         currentTabletsofE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_current_formulation_number_of_tablet_e), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL,true);
         newTabletsofRHZ = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_new_formulation_number_of_tablet_rhz), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL,true);
         newTabletsofE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_new_formulation_number_of_tablet_e), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL,true);
-        adultFormulationofHRZE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_adult_formulation), getResources().getStringArray(R.array.ctb_1_to_5_list), null, App.HORIZONTAL, App.VERTICAL,true);
+        adultFormulationofHRZE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_adult_formulation), getResources().getStringArray(R.array.ctb_2_to_5_list), null, App.HORIZONTAL, App.VERTICAL,true);
         continuationPhaseRegimen = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_continuation_phase_regimen), getResources().getStringArray(R.array.ctb_continuation_phase_regimen_list), null, App.HORIZONTAL, App.VERTICAL,true);
         typeFixedDosePrescribedContinuation = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_type_of_fixed_dose), getResources().getStringArray(R.array.ctb_type_of_dose_continuation_list), null, App.VERTICAL,true);
-        currentTabletsOfContinuationRH = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_current_formulation_continuation_rh), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL,true);
+        currentTabletsOfContinuationRH = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_current_formulation_continuation_rh), getResources().getStringArray(R.array.ctb_1_to_5_list), null, App.HORIZONTAL, App.VERTICAL,true);
         currentTabletsOfContinuationE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_current_formulation_continuation_e), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL,true);
         newTabletsOfContinuationRH = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_new_formulation_continuation_rh), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL,true);
         newTabletsOfContinuationE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_new_formulation_continuation_e), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL,true);
-        adultFormulationOfContinuationRH = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_if_adult_formulation_continuation_rh), getResources().getStringArray(R.array.ctb_1_to_5_list), null, App.HORIZONTAL, App.VERTICAL,true);
-        adultFormulationOfContinuationRHE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_if_adult_formulation_continuation_rhe), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL,true);
+        adultFormulationOfContinuationRH = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_if_adult_formulation_continuation_rh), getResources().getStringArray(R.array.ctb_1_to_2), null, App.HORIZONTAL, App.VERTICAL,true);
+        adultFormulationOfContinuationRHE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_if_adult_formulation_continuation_rhe), getResources().getStringArray(R.array.ctb_2_to_4), null, App.HORIZONTAL, App.VERTICAL,true);
         conclusionOfTreatment = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_conclusion_of_treatment), getResources().getStringArray(R.array.ctb_improve_no_improvement), null, App.HORIZONTAL, App.VERTICAL,true);
         returnVisitDate = new TitledButton(context, null, getResources().getString(R.string.ctb_next_appointment_date), DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
         doctorNotes = new TitledEditText(context, null, getResources().getString(R.string.ctb_doctor_notes), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL,false);
@@ -305,7 +305,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
 
                     }
                     else if(value>=20 && value<=24){
-                        currentTabletsOfContinuationRH.getRadioGroup().getButtons().get(3).setChecked(true);
+                        currentTabletsOfContinuationRH.getRadioGroup().getButtons().get(4).setChecked(true);
                         currentTabletsOfContinuationE.getRadioGroup().getButtons().get(3).setChecked(true);
                         currentTabletsofRHZ.getRadioGroup().getButtons().get(4).setChecked(true);
                         currentTabletsofE.getRadioGroup().getButtons().get(3).setChecked(true);
@@ -350,28 +350,26 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
 
                     //ADULT FORMULATION
                     if(value>=26 && value<=29){
-                        adultFormulationOfContinuationRHE.getRadioGroup().getButtons().get(1).setChecked(true);
-                        adultFormulationOfContinuationRH.getRadioGroup().getButtons().get(1).setChecked(true);
                         adultFormulationofHRZE.getRadioGroup().getButtons().get(1).setChecked(true);
                     }
                     else if(value>=30 && value<=39){
-                        adultFormulationOfContinuationRHE.getRadioGroup().getButtons().get(1).setChecked(true);
-                        adultFormulationOfContinuationRH.getRadioGroup().getButtons().get(1).setChecked(true);
+                        adultFormulationOfContinuationRHE.getRadioGroup().getButtons().get(0).setChecked(true);
+                        adultFormulationOfContinuationRH.getRadioGroup().getButtons().get(0).setChecked(true);
                         adultFormulationofHRZE.getRadioGroup().getButtons().get(1).setChecked(true);
                     }
                     else if(value>=40 && value<=54){
-                        adultFormulationOfContinuationRHE.getRadioGroup().getButtons().get(2).setChecked(true);
-                        adultFormulationOfContinuationRH.getRadioGroup().getButtons().get(2).setChecked(true);
+                        adultFormulationOfContinuationRHE.getRadioGroup().getButtons().get(1).setChecked(true);
+                        adultFormulationOfContinuationRH.getRadioGroup().getButtons().get(1).setChecked(true);
                         adultFormulationofHRZE.getRadioGroup().getButtons().get(2).setChecked(true);
                     }
                     else if(value>=55 && value<=70){
-                        adultFormulationOfContinuationRHE.getRadioGroup().getButtons().get(3).setChecked(true);
-                        adultFormulationOfContinuationRH.getRadioGroup().getButtons().get(3).setChecked(true);
+                        adultFormulationOfContinuationRHE.getRadioGroup().getButtons().get(2).setChecked(true);
+                        adultFormulationOfContinuationRH.getRadioGroup().getButtons().get(2).setChecked(true);
                         adultFormulationofHRZE.getRadioGroup().getButtons().get(3).setChecked(true);
                     }
                     else if(value>70){
-                        adultFormulationOfContinuationRHE.getRadioGroup().getButtons().get(3).setChecked(true);
-                        adultFormulationOfContinuationRH.getRadioGroup().getButtons().get(4).setChecked(true);
+                        adultFormulationOfContinuationRHE.getRadioGroup().getButtons().get(2).setChecked(true);
+                        adultFormulationOfContinuationRH.getRadioGroup().getButtons().get(2).setChecked(true);
                         adultFormulationofHRZE.getRadioGroup().getButtons().get(4).setChecked(true);
                     }
                 }
@@ -574,7 +572,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                     gotoPage(0);
                 else
                     gotoPage(0);
-                currentTabletsofRHZ.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+                currentTabletsofRHZ.getQuestionView().setError(getString(R.string.empty_field));
                 currentTabletsofRHZ.getRadioGroup().requestFocus();
                 error = true;
             }
@@ -585,7 +583,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                     gotoPage(0);
                 else
                     gotoPage(0);
-                currentTabletsofE.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+                currentTabletsofE.getQuestionView().setError(getString(R.string.empty_field));
                 currentTabletsofE.getRadioGroup().requestFocus();
                 error = true;
             }
@@ -596,7 +594,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                     gotoPage(0);
                 else
                     gotoPage(0);
-                newTabletsofRHZ.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+                newTabletsofRHZ.getQuestionView().setError(getString(R.string.empty_field));
                 newTabletsofRHZ.getRadioGroup().requestFocus();
                 error = true;
             }
@@ -607,7 +605,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                     gotoPage(0);
                 else
                     gotoPage(0);
-                newTabletsofE.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+                newTabletsofE.getQuestionView().setError(getString(R.string.empty_field));
                 newTabletsofE.getRadioGroup().requestFocus();
                 error = true;
             }
@@ -618,7 +616,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                     gotoPage(0);
                 else
                     gotoPage(0);
-                adultFormulationofHRZE.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+                adultFormulationofHRZE.getQuestionView().setError(getString(R.string.empty_field));
                 adultFormulationofHRZE.getRadioGroup().requestFocus();
                 error = true;
             }
@@ -629,7 +627,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                     gotoPage(0);
                 else
                     gotoPage(0);
-                continuationPhaseRegimen.getRadioGroup().getButtons().get(1).setError(getString(R.string.empty_field));
+                continuationPhaseRegimen.getQuestionView().setError(getString(R.string.empty_field));
                 continuationPhaseRegimen.getRadioGroup().requestFocus();
                 error = true;
             }
@@ -640,7 +638,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                     gotoPage(0);
                 else
                     gotoPage(0);
-                currentTabletsOfContinuationRH.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+                currentTabletsOfContinuationRH.getQuestionView().setError(getString(R.string.empty_field));
                 currentTabletsOfContinuationRH.getRadioGroup().requestFocus();
                 error = true;
             }
@@ -651,7 +649,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                     gotoPage(0);
                 else
                     gotoPage(0);
-                currentTabletsOfContinuationE.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+                currentTabletsOfContinuationE.getQuestionView().setError(getString(R.string.empty_field));
                 currentTabletsOfContinuationE.getRadioGroup().requestFocus();
                 error = true;
             }
@@ -662,7 +660,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                     gotoPage(0);
                 else
                     gotoPage(0);
-                newTabletsOfContinuationRH.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+                newTabletsOfContinuationRH.getQuestionView().setError(getString(R.string.empty_field));
                 newTabletsOfContinuationRH.getRadioGroup().requestFocus();
                 error = true;
             }
@@ -673,7 +671,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                     gotoPage(0);
                 else
                     gotoPage(0);
-                newTabletsOfContinuationE.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+                newTabletsOfContinuationE.getQuestionView().setError(getString(R.string.empty_field));
                 newTabletsOfContinuationE.getRadioGroup().requestFocus();
                 error = true;
             }
@@ -684,7 +682,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                     gotoPage(0);
                 else
                     gotoPage(0);
-                adultFormulationOfContinuationRHE.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+                adultFormulationOfContinuationRHE.getQuestionView().setError(getString(R.string.empty_field));
                 adultFormulationOfContinuationRHE.getRadioGroup().requestFocus();
                 error = true;
             }
@@ -695,7 +693,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                     gotoPage(0);
                 else
                     gotoPage(0);
-                adultFormulationOfContinuationRH.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
+                adultFormulationOfContinuationRH.getQuestionView().setError(getString(R.string.empty_field));
                 adultFormulationOfContinuationRH.getRadioGroup().requestFocus();
                 error = true;
             }
@@ -705,7 +703,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 gotoPage(0);
             else
                 gotoPage(0);
-            patientCategory.getRadioGroup().getButtons().get(2).setError(getString(R.string.empty_field));
+            patientCategory.getQuestionView().setError(getString(R.string.empty_field));
             patientCategory.getRadioGroup().requestFocus();
             error = true;
         }
@@ -714,7 +712,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 gotoPage(0);
             else
                 gotoPage(0);
-            treatmentPlan.getRadioGroup().getButtons().get(2).setError(getString(R.string.empty_field));
+            treatmentPlan.getQuestionView().setError(getString(R.string.empty_field));
             treatmentPlan.getRadioGroup().requestFocus();
             error = true;
         }
@@ -723,7 +721,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 gotoPage(0);
             else
                 gotoPage(0);
-            conclusionOfTreatment.getRadioGroup().getButtons().get(1).setError(getString(R.string.empty_field));
+            conclusionOfTreatment.getQuestionView().setError(getString(R.string.empty_field));
             conclusionOfTreatment.getRadioGroup().requestFocus();
             error = true;
         }
@@ -1156,10 +1154,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 newTabletsofRHZ.setVisibility(View.VISIBLE);
             }else if (obs[0][0].equals("ADULT FORMULATION OF TABLETS OF RHZE")) {
                 for (RadioButton rb : adultFormulationofHRZE.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_2)) && obs[0][1].equals("2")) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_2)) && obs[0][1].equals("2")) {
                         rb.setChecked(true);
                         break;
                     }else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
@@ -1208,6 +1203,10 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                         rb.setChecked(true);
                         break;
                     }else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_5)) && obs[0][1].equals("5")) {
                         rb.setChecked(true);
                         break;
                     }
@@ -1269,13 +1268,10 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                     if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
                         rb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_2)) && obs[0][1].equals("2")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_1_and_half)) && obs[0][1].equals("1.5")) {
                         rb.setChecked(true);
                         break;
-                    }else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
-                        rb.setChecked(true);
-                        break;
-                    }else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
+                    }else if (rb.getText().equals(getResources().getString(R.string.ctb_2)) && obs[0][1].equals("2")) {
                         rb.setChecked(true);
                         break;
                     }
@@ -1283,10 +1279,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 adultFormulationOfContinuationRH.setVisibility(View.VISIBLE);
             }else if (obs[0][0].equals("ADULT FORMULATION OF TABLETS OF RHE FOR CONTINUATION PHASE")) {
                 for (RadioButton rb : adultFormulationOfContinuationRHE.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_2)) && obs[0][1].equals("2")) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_2)) && obs[0][1].equals("2")) {
                         rb.setChecked(true);
                         break;
                     }else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
@@ -1695,41 +1688,41 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
             }
         }
         else if (group == conclusionOfTreatment.getRadioGroup()) {
-            conclusionOfTreatment.getRadioGroup().getButtons().get(1).setError(null);
+            conclusionOfTreatment.getQuestionView().setError(null);
         }
         else if (group == currentTabletsofRHZ.getRadioGroup()) {
-            currentTabletsofRHZ.getRadioGroup().getButtons().get(3).setError(null);
+            currentTabletsofRHZ.getQuestionView().setError(null);
         }
         else if (group == currentTabletsofE.getRadioGroup()) {
-            currentTabletsofE.getRadioGroup().getButtons().get(3).setError(null);
+            currentTabletsofE.getQuestionView().setError(null);
         }
         else if (group == newTabletsofRHZ.getRadioGroup()) {
-            newTabletsofRHZ.getRadioGroup().getButtons().get(3).setError(null);
+            newTabletsofRHZ.getQuestionView().setError(null);
         }
         else if (group == newTabletsofE.getRadioGroup()) {
-            newTabletsofE.getRadioGroup().getButtons().get(3).setError(null);
+            newTabletsofE.getQuestionView().setError(null);
         }
         else if (group == adultFormulationofHRZE.getRadioGroup()) {
-            adultFormulationofHRZE.getRadioGroup().getButtons().get(3).setError(null);
+            adultFormulationofHRZE.getQuestionView().setError(null);
         }
 
         else if (group == currentTabletsOfContinuationRH.getRadioGroup()) {
-            currentTabletsOfContinuationRH.getRadioGroup().getButtons().get(3).setError(null);
+            currentTabletsOfContinuationRH.getQuestionView().setError(null);
         }
         else if (group == currentTabletsOfContinuationE.getRadioGroup()) {
-            currentTabletsOfContinuationE.getRadioGroup().getButtons().get(3).setError(null);
+            currentTabletsOfContinuationE.getQuestionView().setError(null);
         }
         else if (group == newTabletsOfContinuationRH.getRadioGroup()) {
-            newTabletsOfContinuationRH.getRadioGroup().getButtons().get(3).setError(null);
+            newTabletsOfContinuationRH.getQuestionView().setError(null);
         }
         else if (group == newTabletsOfContinuationE.getRadioGroup()) {
-            newTabletsOfContinuationE.getRadioGroup().getButtons().get(3).setError(null);
+            newTabletsOfContinuationE.getQuestionView().setError(null);
         }
         else if (group == adultFormulationOfContinuationRHE.getRadioGroup()) {
-            adultFormulationOfContinuationRHE.getRadioGroup().getButtons().get(3).setError(null);
+            adultFormulationOfContinuationRHE.getQuestionView().setError(null);
         }
         else if (group == adultFormulationOfContinuationRH.getRadioGroup()) {
-            adultFormulationOfContinuationRH.getRadioGroup().getButtons().get(3).setError(null);
+            adultFormulationOfContinuationRH.getQuestionView().setError(null);
         }
     }
 

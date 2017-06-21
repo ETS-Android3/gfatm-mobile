@@ -253,7 +253,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         currentTabletsofE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_current_formulation_number_of_tablet_e), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL);
         newTabletsofRHZ = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_new_formulation_number_of_tablet_rhz), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL);
         newTabletsofE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_new_formulation_number_of_tablet_e), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL);
-        adultFormulationofHRZE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_adult_formulation), getResources().getStringArray(R.array.ctb_1_to_5_list), null, App.HORIZONTAL, App.VERTICAL);
+        adultFormulationofHRZE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_adult_formulation), getResources().getStringArray(R.array.ctb_2_to_5_list), null, App.HORIZONTAL, App.VERTICAL);
         typeOfDiagnosis = new TitledCheckBoxes(context, null, getResources().getString(R.string.ctb_type_of_diagnosis), getResources().getStringArray(R.array.ctb_type_of_diagnosis_list), null, App.VERTICAL, App.VERTICAL);
 
         histopathologicalEvidence = new TitledRadioGroup(context, "If clinically diagnosed, specify evidence", getResources().getString(R.string.ctb_histopathologiacal_evidence), getResources().getStringArray(R.array.yes_no_options), null, App.VERTICAL, App.VERTICAL);
@@ -611,19 +611,19 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
 
                     //ADULT FORMULATION
                     if(value>=26 && value<=29){
-                        adultFormulationofHRZE.getRadioGroup().getButtons().get(1).setChecked(true);
+                        adultFormulationofHRZE.getRadioGroup().getButtons().get(0).setChecked(true);
                     }
                     else if(value>=30 && value<=39){
-                        adultFormulationofHRZE.getRadioGroup().getButtons().get(1).setChecked(true);
+                        adultFormulationofHRZE.getRadioGroup().getButtons().get(0).setChecked(true);
                     }
                     else if(value>=40 && value<=54){
-                        adultFormulationofHRZE.getRadioGroup().getButtons().get(2).setChecked(true);
+                        adultFormulationofHRZE.getRadioGroup().getButtons().get(1).setChecked(true);
                     }
                     else if(value>=55 && value<=70){
-                        adultFormulationofHRZE.getRadioGroup().getButtons().get(3).setChecked(true);
+                        adultFormulationofHRZE.getRadioGroup().getButtons().get(2).setChecked(true);
                     }
                     else if(value>70){
-                        adultFormulationofHRZE.getRadioGroup().getButtons().get(4).setChecked(true);
+                        adultFormulationofHRZE.getRadioGroup().getButtons().get(3).setChecked(true);
                     }
                 }else{
                     currentTabletsofE.getRadioGroup().clearCheck();
@@ -1748,10 +1748,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 newTabletsofRHZ.setVisibility(View.VISIBLE);
             }else if (obs[0][0].equals("ADULT FORMULATION OF TABLETS OF RHZE")) {
                 for (RadioButton rb : adultFormulationofHRZE.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_2)) && obs[0][1].equals("2")) {
+                   if (rb.getText().equals(getResources().getString(R.string.ctb_2)) && obs[0][1].equals("2")) {
                         rb.setChecked(true);
                         break;
                     }else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
