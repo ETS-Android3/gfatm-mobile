@@ -421,8 +421,7 @@ public class RegexUtil {
             idWithoutCheckdigit = idWithoutCheckdigit.toUpperCase();
             int sum = 0;
             for (int i = 0; i < idWithoutCheckdigit.length(); i++) {
-                char ch = idWithoutCheckdigit.charAt(idWithoutCheckdigit
-                        .length() - i - 1);
+                char ch = idWithoutCheckdigit.charAt(idWithoutCheckdigit.length() - i - 1);
                 if (validChars.indexOf(ch) == -1)
                     isValid = false;
                 int digit = (int) ch - 48;
