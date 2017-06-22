@@ -1755,8 +1755,10 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
                     husbandName.getEditText().setText(result.get("PARTNER FULL NAME"));
                     fatherName.getEditText().setText(result.get("FATHER NAME"));
 
-                    secondDateCalendar.setTime(App.stringToDate(result.get("REGISTRATION DATE"), "yyyy-MM-dd"));
-                    registrationDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+                    if(result.get("REGISTRATION DATE") != null && !result.get("REGISTRATION DATE").equalsIgnoreCase("")) {
+                        secondDateCalendar.setTime(App.stringToDate(result.get("REGISTRATION DATE"), "yyyy-MM-dd"));
+                        registrationDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+                    }
 
                     tbRegistrationNumber.getEditText().setText(result.get("TB REGISTRATION NUMBER"));
                     loading.dismiss();

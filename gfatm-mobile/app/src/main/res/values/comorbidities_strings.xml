@@ -847,6 +847,7 @@
     <string name="comorbidities_treatment_followup_MH_session_number">Session Number:</string>
     <string name="comorbidities_treatment_followup_MH_condition_before_session">How did the client feel before the session?</string>
     <string name="comorbidities_treatment_followup_MH_client_complaint">What is the client\'s main complaint?</string>
+    <string name="comorbidities_treatment_followup_MH_client_other_complaint">Other Complaint:</string>
     <string name="comorbidities_treatment_followup_MH_cooperation">Client\'s co-operation:</string>
     <string name="comorbidities_treatment_followup_MH_defensiveness">Client\'s defensiveness:</string>
     <string name="comorbidities_treatment_followup_MH_distress">Client\'s level of distress:</string>
@@ -875,7 +876,7 @@
     <string name="comorbidities_treatment_followup_MH_client_complaint_options_physical_illness">Phsycial Illness</string>
     <string name="comorbidities_treatment_followup_MH_client_complaint_options_daily_life">Daily life struggle</string>
     <string name="comorbidities_treatment_followup_MH_client_complaint_options_subtance">Subtance abuse</string>
-    <string name="comorbidities_treatment_followup_MH_client_complaint_options_financial">Financial problems</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options_financial">Economic problem</string>
     <string name="comorbidities_treatment_followup_MH_client_complaint_options_physical_abuse">Physical Abuse</string>
     <string name="comorbidities_treatment_followup_MH_client_complaint_options_sexual_problems">Sexual problems</string>
     <string name="comorbidities_treatment_followup_MH_client_complaint_options_other">Other</string>
