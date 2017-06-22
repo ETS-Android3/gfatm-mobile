@@ -617,7 +617,6 @@
     </string-array>
 
     <string-array name="fast_outside_hospital_patient_reffered_from">
-        <item></item>
         <item>@string/fast_public_hospital</item>
         <item>@string/fast_private_hospital</item>
         <item>@string/fast_GP</item>

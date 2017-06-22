@@ -754,6 +754,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
         if (radioGroup == screeningLocation.getRadioGroup()) {
             if (screeningLocation.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_hospital_title))) {
                 hospital.setVisibility(View.VISIBLE);
+                patientAttendant.setVisibility(View.VISIBLE);
                 hospitalSection.setVisibility(View.VISIBLE);
                 if (hospitalSection.getSpinner().getSelectedItem().
                         equals(getResources().getString(R.string.fast_opdclinicscreening_title)) || hospitalSection.getSpinner().getSelectedItem().
@@ -767,6 +768,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
                 hospitalSection.setVisibility(View.GONE);
                 opdWardSection.setVisibility(View.GONE);
                 hospitalSectionOther.setVisibility(View.GONE);
+                patientAttendant.setVisibility(View.GONE);
             }
         }
 
