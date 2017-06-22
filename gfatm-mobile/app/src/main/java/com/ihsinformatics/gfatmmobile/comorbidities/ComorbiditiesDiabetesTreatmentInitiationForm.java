@@ -185,7 +185,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
         treatmentInitiation = new MyTextView(context, getResources().getString(R.string.comorbidities_treatment_initiation));
         treatmentInitiation.setTypeface(null, Typeface.BOLD);
         diabetesTreatmentInitiation = new TitledCheckBoxes(context, null, getResources().getString(R.string.comorbidities_diabetes_treatment_initiation), getResources().getStringArray(R.array.comorbidities_diabetes_treatment_initiation_options), new Boolean[]{true, false, false, false, false, false, false, false}, App.VERTICAL, App.VERTICAL);
-        diabetesTreatmentDetail = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_treatment_detail), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        diabetesTreatmentDetail = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_treatment_detail), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         diabetesTreatmentDetail.getEditText().setSingleLine(false);
         diabetesTreatmentDetail.getEditText().setMinimumHeight(100);
         diabetesTreatmentInitiationMetformin = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_metformin), getResources().getStringArray(R.array.comorbidities_diabetes_treatment_initiation_metformin_options), getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_metformin_500), App.HORIZONTAL, App.VERTICAL);
