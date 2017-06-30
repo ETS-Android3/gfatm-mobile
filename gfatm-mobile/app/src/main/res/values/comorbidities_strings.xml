@@ -960,14 +960,19 @@
     <string name="next_date_past">Date can\'t be in past.</string>
 
     <string name="comorbidities_assessment_form_MH_rescreening_options_6th_session">6th session</string>
-    <string name="comorbidities_assessment_form_MH_rescreening_options_end">End of treatment</string>
     <string name="comorbidities_assessment_form_MH_rescreening_options_rescreening">Rescreening</string>
+    <string name="comorbidities_assessment_form_MH_rescreening_options_end">End of treatment</string>
+    <string name="comorbidities_assessment_form_MH_rescreening_options_relapse">Relapse</string>
+    <string name="comorbidities_assessment_form_MH_rescreening_options_change_in_TB">Change in TB</string>
     <string name="comorbidities_assessment_form_MH_rescreening_options_other">Other</string>
+    <string name="comorbidities_assessment_form_MH_other_assesment_reason">Other assesment reason:</string>
 
     <string-array name="comorbidities_assessment_form_MH_rescreening_options">
         <item>@string/comorbidities_assessment_form_MH_rescreening_options_6th_session</item>
         <item>@string/comorbidities_assessment_form_MH_rescreening_options_rescreening</item>
         <item>@string/comorbidities_assessment_form_MH_rescreening_options_end</item>
+        <item>@string/comorbidities_assessment_form_MH_rescreening_options_relapse</item>
+        <item>@string/comorbidities_assessment_form_MH_rescreening_options_change_in_TB</item>
         <item>@string/comorbidities_assessment_form_MH_rescreening_options_other</item>
     </string-array>
 
