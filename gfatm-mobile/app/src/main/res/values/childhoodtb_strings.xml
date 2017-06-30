@@ -336,9 +336,9 @@
     <string name="ctb_able_to_contact_patient">Have you been able to contact the patient?</string>
     <string name="ctb_why_unable_to_contact">If no, why were you unable to contact the patient?</string>
     <string name="ctb_phone_switched_off">Phone switched off</string>
-    <string name="ctb_patient_did_not_recieve_call">Patient did not receive call</string>
+    <string name="ctb_patient_did_not_recieve_call">Patient not responding</string>
     <string name="ctb_reason_why_missed">Reason why missed visit?</string>
-    <string name="ctb_pateint_moved">Patient moved</string>
+    <string name="ctb_pateint_moved">Patient relocated</string>
     <string name="ctb_pateint_continue_another_location">Patient continuing treatment at another location</string>
     <string name="ctb_patient_unable_to_visit_due_to_reason">Patient unable to visit hospital due to personal reasons</string>
     <string name="ctb_patient_died">Patient died</string>
@@ -384,7 +384,7 @@
     <string name="ctb_name_of_person_provided_details">Provide name and contact number of person at referral / transfer site who provided details about the patient		</string>
     <string name="ctb_other_reason_remarks">Other Reason/Remarks</string>
     <string name="ctb_age_greater_than_15">Child age can not be greater than 15</string>
-    <string name="ctb_incorrect_contact_number">Incorrect contact number</string>
+    <string name="ctb_incorrect_contact_number">Invalid / incorrect contact number</string>
     <string name="ctb_son_daughter_of">S/O D/O</string>
     <string name="ctb_weight_at_baseline">Weight at baseline (kg)</string>
     <string name="ctb_spaces_only">Can not contains space only</string>
@@ -550,6 +550,25 @@
     <string name="ctb_test_result_found_error">Test Result already exists for Test ID:"</string>
     <string name="ctb_no_gxp_speciman_error">No GXP Specimen Collection for the patient </string>
     <string name="ctb_missed_visit_less_than_formdate">Missed visit date can not be greater than Form date</string>
+    <string name="ctb_patient_referred_transfered">Has this patient being referred out or transferred out?</string>
+    <string name="ctb_not_applicable">Not applicable</string>
+    <string name="ctb_patient_service_complain">Patient has a service complaint</string>
+    <string name="ctb_lack_fund_travel">Patient lacks funds to travel to the facility</string>
+    <string name="ctb_unable_to_locate_referral">Unable to locate referral site</string>
+    <string name="ctb_treatment_at_parent_side">Want treatment at parent site</string>
+    <string name="ctb_new_location">New location</string>
+    <string name="ctb_new_facility_name">New treatment facility name</string>
+    <string name="ctb_reason_changing_facility">Reason for changing to new facility</string>
+    <string name="ctb_relocated">Relocated</string>
+    <string name="ctb_old_facility_far">Old facility too far</string>
+    <string name="ctb_service_complain">Service complain</string>
+    
+    <string-array name="ctb_reason_changing_facility_list">
+        <item>@string/ctb_relocated</item>
+        <item>@string/ctb_old_facility_far</item>
+        <item>@string/ctb_service_complain</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
 
 
     <string-array name="ctb_abnormal_list">
@@ -951,6 +970,10 @@
         <item>@string/ctb_patient_unable_to_visit_due_to_reason</item>
         <item>@string/ctb_patient_died</item>
         <item>@string/ctb_patient_refused_treatment</item>
+        <item>@string/ctb_patient_service_complain</item>
+        <item>@string/ctb_lack_fund_travel</item>
+        <item>@string/ctb_unable_to_locate_referral</item>
+        <item>@string/ctb_treatment_at_parent_side</item>
         <item>@string/ctb_other_title</item>
     </string-array>
 
@@ -1179,5 +1202,11 @@
         <item>@string/ctb_1_and_half</item>
         <item>@string/ctb_2</item>
     </string-array>
-    
+
+
+    <string-array name="ctb_patient_referred_transfered_list">
+        <item>@string/ctb_referral_before_starting_treatment</item>
+        <item>@string/ctb_transfer_after_starting_treatment</item>
+        <item>@string/ctb_not_applicable</item>
+    </string-array>
 </resources>
