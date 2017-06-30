@@ -57,7 +57,9 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
 
     // Views...
     TitledButton formDate;
-    TitledRadioGroup typeOfRescreening;
+    //TitledRadioGroup typeOfRescreening;
+    TitledSpinner typeOfRescreening;
+    TitledEditText otherAssestmentReason;
     TitledEditText gpClinicCode;
     MyTextView mentalHealthScreening;
     TitledRadioGroup akuadsSleep;
@@ -164,7 +166,9 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        typeOfRescreening = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_assessment_form_MH_rescreening), getResources().getStringArray(R.array.comorbidities_assessment_form_MH_rescreening_options), getResources().getString(R.string.comorbidities_assessment_form_MH_rescreening_options_6th_session), App.VERTICAL, App.VERTICAL);
+        //typeOfRescreening = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_assessment_form_MH_rescreening), getResources().getStringArray(R.array.comorbidities_assessment_form_MH_rescreening_options), getResources().getString(R.string.comorbidities_assessment_form_MH_rescreening_options_6th_session), App.VERTICAL, App.VERTICAL);
+        typeOfRescreening = new TitledSpinner(mainContent.getContext(), null, getResources().getString(R.string.comorbidities_assessment_form_MH_rescreening), getResources().getStringArray(R.array.comorbidities_assessment_form_MH_rescreening_options), getResources().getString(R.string.comorbidities_assessment_form_MH_rescreening_options_6th_session), App.VERTICAL, true);
+        otherAssestmentReason = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_assessment_form_MH_other_assesment_reason), "", "", 200, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         mentalHealthScreening = new MyTextView(context, getResources().getString(R.string.comorbidities_akuads_Mental_Health_Screening));
         mentalHealthScreening.setTypeface(null, Typeface.BOLD);
         akuadsSleep = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_sleep), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL);
@@ -235,7 +239,7 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
         //otherPreferredLocation.setVisibility(View.GONE);
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(),  typeOfRescreening.getRadioGroup(), gpClinicCode.getEditText(), akuadsSleep.getRadioGroup(), akuadsLackOfInterest.getRadioGroup(),
+        views = new View[]{formDate.getButton(),  typeOfRescreening.getSpinner(), otherAssestmentReason.getEditText(), gpClinicCode.getEditText(), akuadsSleep.getRadioGroup(), akuadsLackOfInterest.getRadioGroup(),
                 akuadsLostInterestHobbies.getRadioGroup(), akuadsAnxious.getRadioGroup(),
                 akuadsImpendingDoom.getRadioGroup(), akuadsDifficultyThinkingClearly.getRadioGroup(),
                 akuadsAlone.getRadioGroup(), akuadsUnhappy.getRadioGroup(),
@@ -252,7 +256,7 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, typeOfRescreening, gpClinicCode, mentalHealthScreening, akuadsSleep, akuadsLackOfInterest, akuadsLostInterestHobbies, akuadsAnxious, akuadsImpendingDoom, akuadsDifficultyThinkingClearly,
+                {{formDate, typeOfRescreening, otherAssestmentReason, gpClinicCode, mentalHealthScreening, akuadsSleep, akuadsLackOfInterest, akuadsLostInterestHobbies, akuadsAnxious, akuadsImpendingDoom, akuadsDifficultyThinkingClearly,
                         akuadsAlone, akuadsUnhappy, akuadsHopeless, akuadsHelpless, akuadsWorried, akuadsCried, akuadsSuicide, akuadsLossOfAppetite, akuadsRetrosternalBurning,
                         akuadsIndigestion, akuadsNausea, akuadsConstipation, akuadsDifficultBreathing, akuadsTremulous, akuadsNumbness, akuadsTension, akuadsHeadaches, akuadsBodyPain,
                         akuadsUrination, akuadsTotalScore, akuadsSeverity, continuationStatus, akuadsAgree, preferredTherapyLocationSpinner, nextAppointmentDate /*otherPreferredLocation*/}};
@@ -326,6 +330,18 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
                     //Exception: User might be entering " " (empty) value
                 }
             }
+        });
+
+        typeOfRescreening.getSpinner().setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                displayOtherAssesmentOrNot();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+            }
+
         });
 
         resetViews();
@@ -492,8 +508,13 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         observations.add(new String[]{"FOLLOW-UP VISIT TYPE", App.get(typeOfRescreening).equals(getResources().getString(R.string.comorbidities_assessment_form_MH_rescreening_options_6th_session)) ? "SIXTH SESSION" :
                 (App.get(typeOfRescreening).equals(getResources().getString(R.string.comorbidities_assessment_form_MH_rescreening_options_rescreening)) ? "REPEATED SCREENING" :
-                        (App.get(typeOfRescreening).equals(getResources().getString(R.string.comorbidities_assessment_form_MH_rescreening_options_end)) ? "END OF TREATMENT ASSESSMENT" : "OTHER ASSESSMENT REASON"))});
+                        (App.get(typeOfRescreening).equals(getResources().getString(R.string.comorbidities_assessment_form_MH_rescreening_options_end)) ? "END OF TREATMENT ASSESSMENT" :
+                                (App.get(typeOfRescreening).equals(getResources().getString(R.string.comorbidities_assessment_form_MH_rescreening_options_relapse)) ? "RELAPSE" :
+                                        (App.get(typeOfRescreening).equals(getResources().getString(R.string.comorbidities_assessment_form_MH_rescreening_options_change_in_TB)) ? "CHANGE IN TB CATEGORY" : "OTHER ASSESSMENT REASON"))))});
 
+        if(otherAssestmentReason.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"OTHER ASSESSMENT REASON", App.get(otherAssestmentReason)});
+        }
         if(gpClinicCode.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"HEALTH CLINIC/POST", App.get(gpClinicCode)});
         }
@@ -729,7 +750,7 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
             }
 
             if (obs[0][0].equals("FOLLOW-UP VISIT TYPE")) {
-                for (RadioButton rb : typeOfRescreening.getRadioGroup().getButtons()) {
+                /*for (RadioButton rb : typeOfRescreening.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.comorbidities_assessment_form_MH_rescreening_options_6th_session)) && obs[0][1].equals("SIXTH SESSION")) {
                         rb.setChecked(true);
                         break;
@@ -743,7 +764,15 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
                         rb.setChecked(true);
                         break;
                     }
-                }
+                }*/
+                String value = obs[0][1].equals("SIXTH SESSION") ? getResources().getString(R.string.comorbidities_assessment_form_MH_rescreening_options_6th_session) :
+                        (obs[0][1].equals("REPEATED SCREENING") ? getResources().getString(R.string.comorbidities_assessment_form_MH_rescreening_options_rescreening) :
+                                (obs[0][1].equals("END OF TREATMENT ASSESSMENT") ? getResources().getString(R.string.comorbidities_assessment_form_MH_rescreening_options_end) :
+                                        (obs[0][1].equals("RELAPSE") ? getResources().getString(R.string.comorbidities_assessment_form_MH_rescreening_options_relapse) :
+                                                (obs[0][1].equals("CHANGE IN TB CATEGORY") ? getResources().getString(R.string.comorbidities_assessment_form_MH_rescreening_options_change_in_TB) : getResources().getString(R.string.comorbidities_assessment_form_MH_rescreening_options_other)))));
+                typeOfRescreening.getSpinner().selectValue(value);
+            } else if (obs[0][0].equals("OTHER ASSESSMENT REASON")) {
+                otherAssestmentReason.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("HEALTH CLINIC/POST")) {
                 gpClinicCode.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("SLEEPING LESS (AKUADS)")) {
@@ -1250,6 +1279,7 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
         nextAppointmentDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         showPreferredLocationOrNot();
         displayGPClinicOrNot();
+        displayOtherAssesmentOrNot();
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -1372,6 +1402,15 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
         }
         else {
             gpClinicCode.setVisibility(View.GONE);
+        }
+    }
+
+    void displayOtherAssesmentOrNot() {
+        if(App.get(typeOfRescreening).equalsIgnoreCase(getResources().getString(R.string.comorbidities_assessment_form_MH_rescreening_options_other))) {
+            otherAssestmentReason.setVisibility(View.VISIBLE);
+        }
+        else {
+            otherAssestmentReason.setVisibility(View.GONE);
         }
     }
 
