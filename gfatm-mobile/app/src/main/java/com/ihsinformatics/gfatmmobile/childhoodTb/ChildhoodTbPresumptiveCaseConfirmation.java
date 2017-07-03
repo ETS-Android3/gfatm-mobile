@@ -112,7 +112,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
      *
      * @param inflater
      * @param container
-     * @param liveInSameHoushold
+     * @param
      * @return
      */
     @Override
@@ -1828,9 +1828,6 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
         }
         else if(group == bcgScar.getRadioGroup()){
             bcgScar.getQuestionView().setError(null);
-        }
-        else if(group == tbBefore.getRadioGroup()){
-            tbBefore.getQuestionView().setError(null);
         }
         else if(group == tbMedication.getRadioGroup()){
             tbMedication.getQuestionView().setError(null);
