@@ -87,7 +87,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
 
     //TB TREATMENT INITATION
     TitledEditText tbRegisterationNumber;
-    TitledRadioGroup tbType;
+    TitledCheckBoxes tbType;
     TitledCheckBoxes typeOfDiagnosis;
     TitledRadioGroup histopathologicalEvidence;
     TitledRadioGroup radiologicalEvidence;
@@ -237,7 +237,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         cnicOwner = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_cnic_owner), getResources().getStringArray(R.array.ctb_close_contact_type_list), null, App.VERTICAL);
         cnicOwnerOther = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         tbRegisterationNumber = new TitledEditText(context, null, getResources().getString(R.string.ctb_tb_registration_no), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        tbType = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_type_of_tb_name), getResources().getStringArray(R.array.ctb_extra_pulomonary_and_pulmonary), getResources().getString(R.string.ctb_pulmonary), App.HORIZONTAL, App.VERTICAL,true);
+        tbType = new TitledCheckBoxes(context, null, getResources().getString(R.string.ctb_type_of_tb_name), getResources().getStringArray(R.array.ctb_extra_pulomonary_and_pulmonary), null, App.VERTICAL,App.VERTICAL,true);
         extraPulmonarySite = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_site_of_extra_pulmonary), getResources().getStringArray(R.array.ctb_extra_pulmonary_tb_site), getResources().getString(R.string.ctb_lymph_node), App.VERTICAL,true);
         extraPulmonarySiteOther = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_extra_pulmonary_site), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         patientType = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_patient_type), getResources().getStringArray(R.array.ctb_patient_type_list), getResources().getString(R.string.ctb_new), App.VERTICAL,true);
@@ -309,7 +309,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         forthDateCalender.add(Calendar.DAY_OF_MONTH, 30);
 
         views = new View[]{formDate.getButton(),weightAtBaseline.getEditText(),patientHaveTb.getRadioGroup(),regDate.getButton(),cnicLinearLayout,cnic1,cnic2,cnic3,
-                cnicOwner.getSpinner(),cnicOwnerOther.getEditText(),tbRegisterationNumber.getEditText(),tbType.getRadioGroup(),
+                cnicOwner.getSpinner(),cnicOwnerOther.getEditText(),tbRegisterationNumber.getEditText(),tbType,
                 extraPulmonarySite.getSpinner(),extraPulmonarySiteOther.getEditText(),patientType.getSpinner(),treatmentInitiated.getRadioGroup(),
                 reasonTreatmentNotIniated.getSpinner(),initiatingAdditionalTreatment,patientCategory.getRadioGroup(),
                 weight.getEditText(),regimen.getRadioGroup(),typeFixedDosePrescribed.getSpinner(),currentTabletsofRHZ.getRadioGroup(),currentTabletsofE.getRadioGroup(),
@@ -372,7 +372,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         patientHaveTb.getRadioGroup().setOnCheckedChangeListener(this);
         regDate.getButton().setOnClickListener(this);
         cnicOwner.getSpinner().setOnItemSelectedListener(this);
-        tbType.getRadioGroup().setOnCheckedChangeListener(this);
+
         extraPulmonarySite.getSpinner().setOnItemSelectedListener(this);
         patientType.getSpinner().setOnItemSelectedListener(this);
         treatmentInitiated.getRadioGroup().setOnCheckedChangeListener(this);
@@ -381,6 +381,9 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             cb.setOnCheckedChangeListener(this);
         ArrayList<MyCheckBox> checkBoxList = initiatingAdditionalTreatment.getCheckedBoxes();
         for (CheckBox cb : initiatingAdditionalTreatment.getCheckedBoxes())
+            cb.setOnCheckedChangeListener(this);
+
+        for (CheckBox cb : tbType.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
 
         patientCategory.getRadioGroup().setOnCheckedChangeListener(this);
@@ -1115,9 +1118,16 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
 
         if(tbRegisterationNumber.getVisibility()==View.VISIBLE)
             observations.add(new String[]{"TB REGISTRATION NUMBER", App.get(tbRegisterationNumber)});
-        if(tbType.getVisibility()==View.VISIBLE)
-            observations.add(new String[]{"SITE OF TUBERCULOSIS DISEASE", App.get(tbType).equals(getResources().getString(R.string.ctb_extra_pulmonary)) ? "EXTRA-PULMONARY TUBERCULOSIS" :
-                            "PULMONARY TUBERCULOSIS"});
+        if(tbType.getVisibility()==View.VISIBLE){
+            String testConfirmingString = "";
+            for (CheckBox cb : tbType.getCheckedBoxes()) {
+                if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_extra_pulmonary)))
+                    testConfirmingString = testConfirmingString + "EXTRA-PULMONARY TUBERCULOSIS" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_pulmonary)))
+                    testConfirmingString = testConfirmingString + "PULMONARY TUBERCULOSIS" + " ; ";
+            }
+            observations.add(new String[]{"SITE OF TUBERCULOSIS DISEASE", testConfirmingString});
+        }
         if (extraPulmonarySite.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"EXTRA PULMONARY SITE", App.get(extraPulmonarySite).equals(getResources().getString(R.string.ctb_lymph_node)) ? "LYMPH NODE SARCOIDOSIS" :
                     (App.get(extraPulmonarySite).equals(getResources().getString(R.string.ctb_abdomen)) ? "ABDOMEN" :
@@ -1169,7 +1179,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         }
 
         if (treatmentInitiated.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TREATMENT INITIATED", App.get(treatmentInitiated).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+            observations.add(new String[]{"CONFIRMED DIAGNOSIS", App.get(treatmentInitiated).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         if (reasonTreatmentNotIniated.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TREATMENT NOT STARTED", App.get(reasonTreatmentNotIniated).equals(getResources().getString(R.string.ctb_patient_refused_treatment)) ? "REFUSAL OF TREATMENT BY PATIENT" :
                     (App.get(reasonTreatmentNotIniated).equals(getResources().getString(R.string.ctb_patient_loss_to_followup)) ? "LOST TO FOLLOW-UP" :
@@ -1526,13 +1536,12 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 tbRegisterationNumber.getEditText().setText(obs[0][1]);
                 tbRegisterationNumber.setVisibility(View.VISIBLE);
             }else if (obs[0][0].equals("SITE OF TUBERCULOSIS DISEASE")) {
-
-                for (RadioButton rb : tbType.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_pulmonary)) && obs[0][1].equals("PULMONARY TUBERCULOSIS")) {
-                        rb.setChecked(true);
+                for (CheckBox cb : tbType.getCheckedBoxes()) {
+                    if (cb.getText().equals(getResources().getString(R.string.ctb_pulmonary)) && obs[0][1].equals("PULMONARY TUBERCULOSIS")) {
+                        cb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_extra_pulmonary)) && obs[0][1].equals("EXTRA-PULMONARY TUBERCULOSIS")) {
-                        rb.setChecked(true);
+                    } else if (cb.getText().equals(getResources().getString(R.string.ctb_extra_pulmonary)) && obs[0][1].equals("EXTRA-PULMONARY TUBERCULOSIS")) {
+                        cb.setChecked(true);
                         break;
                     }
                 }
@@ -2129,6 +2138,23 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 }
             }
         }
+
+        for (CheckBox cb : tbType.getCheckedBoxes()) {
+            if (App.get(cb).equals(getResources().getString(R.string.ctb_extra_pulmonary))) {
+                if (cb.isChecked()) {
+                    extraPulmonarySite.setVisibility(View.VISIBLE);
+                    if (extraPulmonarySite.getSpinner().getSelectedItem().equals(getResources().getString(R.string.ctb_other_title))) {
+                        extraPulmonarySiteOther.setVisibility(View.VISIBLE);
+                    } else {
+                        extraPulmonarySiteOther.setVisibility(View.GONE);
+                    }
+                } else {
+                    extraPulmonarySite.setVisibility(View.GONE);
+                    extraPulmonarySiteOther.setVisibility(View.GONE);
+                }
+            }
+        }
+
     }
 
     @Override
@@ -2541,19 +2567,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 iptRegNo.setVisibility(View.GONE);
                 initiatingAdditionalTreatmentIpt.setVisibility(View.GONE);
             }
-        } else if (group == tbType.getRadioGroup()) {
-            if (tbType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_extra_pulmonary))) {
-                extraPulmonarySite.setVisibility(View.VISIBLE);
-                if (extraPulmonarySite.getSpinner().getSelectedItem().equals(getResources().getString(R.string.ctb_other_title))) {
-                    extraPulmonarySiteOther.setVisibility(View.VISIBLE);
-                } else {
-                    extraPulmonarySiteOther.setVisibility(View.GONE);
-                }
-            } else {
-                extraPulmonarySite.setVisibility(View.GONE);
-                extraPulmonarySiteOther.setVisibility(View.GONE);
-            }
-        }else if (group == treatmentInitiated.getRadioGroup()) {
+        } else if (group == treatmentInitiated.getRadioGroup()) {
             if (treatmentInitiated.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.no))) {
                 reasonTreatmentNotIniated.setVisibility(View.VISIBLE);
             } else {
