@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -67,8 +68,13 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
     TitledRadioGroup patientContacted;
     TitledRadioGroup reasonPatientNotContacted;
     TitledEditText reasonPatientNotContactedOther;
+    TitledRadioGroup referralTransfer;
+    TitledEditText referralTransferSite;
     TitledSpinner reasonMissedVisit;
+    TitledEditText newLocation;
+    TitledEditText facilityTreatment;
     TitledEditText reasonMissedVisitOther;
+    TitledRadioGroup reasonForChangingFacility;
     TitledButton returnVisitDate;
 
 
@@ -149,20 +155,27 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
         patientContacted = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_have_you_been_able_to_contact_the_patient), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
         reasonPatientNotContacted = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_why_were_you_unable_to_contact_the_patient), getResources().getStringArray(R.array.fast_reason_patient_not_contacted_list), getResources().getString(R.string.fast_phone_switched_off), App.VERTICAL, App.VERTICAL);
         reasonPatientNotContactedOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 250, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        referralTransfer = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_has_this_patient_referred_or_transferred_out), getResources().getStringArray(R.array.fast_referral_transfer_array), getResources().getString(R.string.fast_referral), App.VERTICAL, App.VERTICAL);
+        referralTransferSite = new TitledEditText(context, null, getResources().getString(R.string.fast_location_for_referral_transfer), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         reasonMissedVisit = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_why_missed_visit), getResources().getStringArray(R.array.fast_reason_missed_visit_list), getResources().getString(R.string.fast_patient_moved), App.VERTICAL);
         reasonMissedVisitOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 250, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        newLocation = new TitledEditText(context, null, getResources().getString(R.string.fast_new_location), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        facilityTreatment = new TitledEditText(context, null, getResources().getString(R.string.fast_new_treatment_facility_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        reasonForChangingFacility = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_reason_for_changing_to_new_facility), getResources().getStringArray(R.array.fast_reason_for_changing_facility_array), getResources().getString(R.string.fast_relocated), App.VERTICAL, App.VERTICAL);
         returnVisitDate = new TitledButton(context, null, getResources().getString(R.string.fast_date_of_next_visit), DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), missedVisitDate.getButton(), patientContacted.getRadioGroup(), reasonPatientNotContacted.getRadioGroup(),
-                reasonPatientNotContactedOther.getEditText(), reasonMissedVisit.getSpinner(), reasonMissedVisitOther.getEditText(), returnVisitDate.getButton()};
+                reasonPatientNotContactedOther.getEditText(), referralTransfer.getRadioGroup(), referralTransferSite.getEditText(), reasonMissedVisit.getSpinner(), reasonMissedVisitOther.getEditText(),
+                newLocation.getEditText(), facilityTreatment.getEditText(), reasonForChangingFacility.getRadioGroup(),returnVisitDate.getButton()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, missedVisitDate, patientContacted, reasonPatientNotContacted, reasonPatientNotContactedOther, reasonMissedVisit,
-                        reasonMissedVisitOther, returnVisitDate}};
+                {{formDate, missedVisitDate, patientContacted, reasonPatientNotContacted, reasonPatientNotContactedOther, referralTransfer, referralTransferSite, reasonMissedVisit,
+                        reasonMissedVisitOther, newLocation, facilityTreatment, reasonForChangingFacility, returnVisitDate}};
 
         formDate.getButton().setOnClickListener(this);
+        referralTransfer.getRadioGroup().setOnCheckedChangeListener(this);
         missedVisitDate.getButton().setOnClickListener(this);
         returnVisitDate.getButton().setOnClickListener(this);
         patientContacted.getRadioGroup().setOnCheckedChangeListener(this);
@@ -351,6 +364,36 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
             error = true;
         }
 
+        if (referralTransferSite.getVisibility() == View.VISIBLE && referralTransferSite.getEditText().getText().toString().trim().isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            referralTransferSite.getEditText().setError(getString(R.string.empty_field));
+            referralTransferSite.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (newLocation.getVisibility() == View.VISIBLE && newLocation.getEditText().getText().toString().trim().isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            newLocation.getEditText().setError(getString(R.string.empty_field));
+            newLocation.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (facilityTreatment.getVisibility() == View.VISIBLE && facilityTreatment.getEditText().getText().toString().trim().isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            facilityTreatment.getEditText().setError(getString(R.string.empty_field));
+            facilityTreatment.getEditText().requestFocus();
+            error = true;
+        }
+
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
@@ -411,11 +454,20 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
 
         if (reasonPatientNotContacted.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"UNABLE TO CONTACT THE PATIENT", App.get(reasonPatientNotContacted).equals(getResources().getString(R.string.fast_phone_switched_off)) ? "PHONE SWITCHED OFF" :
-                    (App.get(reasonPatientNotContacted).equals(getResources().getString(R.string.fast_patient_did_not_recieve_call)) ? "PATIENT DID NOT RECEIVE CALL" :
+                    (App.get(reasonPatientNotContacted).equals(getResources().getString(R.string.fast_patient_not_responding)) ? "PATIENT DID NOT RECEIVE CALL" :
                             (App.get(reasonPatientNotContacted).equals(getResources().getString(R.string.fast_incorrect_contact_number)) ? "INCORRECT CONTACT NUMBER" : "OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT"))});
 
         if (reasonPatientNotContactedOther.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT", App.get(reasonPatientNotContactedOther)});
+
+        if (referralTransferSite.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"LOCATION OF REFERRAL OR TRANSFER", App.get(referralTransferSite)});
+
+
+        if (referralTransfer.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"PATIENT BEING REFEREED OUT OR TRANSFERRED OUT", App.get(referralTransfer).equals(getResources().getString(R.string.fast_referral)) ? "PATIENT REFERRED" :
+                    (App.get(referralTransfer).equals(getResources().getString(R.string.fast_transfer)) ? "PATIENT TRANSFERRED OUT" : "NOT APPLICABLE")});
+
 
         if (reasonMissedVisit.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"REASON FOR MISSED VISIT", App.get(reasonMissedVisit).equals(getResources().getString(R.string.fast_patient_moved)) ? "PATIENT MOVED" :
@@ -423,11 +475,26 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
                             (App.get(reasonMissedVisit).equals(getResources().getString(R.string.fast_patient_unable_to_visit_hospital)) ? "PATIENT UNABLE TO VISIT HOSPITAL DUE TO PERSONAL REASON" :
                                     (App.get(reasonMissedVisit).equals(getResources().getString(R.string.fast_patient_died)) ? "DIED" :
                                             (App.get(reasonMissedVisit).equals(getResources().getString(R.string.fast_patient_refused_treatment)) ? "REFUSAL OF TREATMENT BY PATIENT" :
-                                                    (App.get(reasonMissedVisit).equals(getResources().getString(R.string.fast_patient_unwell)) ? "PATIENT UNWELL" : "OTHER REASON TO MISSED VISIT")))))});
+                                                    (App.get(reasonMissedVisit).equals(getResources().getString(R.string.fast_patient_unwell)) ? "PATIENT UNWELL" :
+                                                            (App.get(reasonMissedVisit).equals(getResources().getString(R.string.fast_service_complaint)) ? "SERVICE COMPLAINT" :
+                                                                    (App.get(reasonMissedVisit).equals(getResources().getString(R.string.fast_lack_of_funds_to_travel)) ? "PATIENT UNWELL" :
+                                                                            (App.get(reasonMissedVisit).equals(getResources().getString(R.string.fast_unable_to_relocate)) ? "UNABLE TO RELOCATE REFERRAL SITE" :
+                                                                                    (App.get(reasonMissedVisit).equals(getResources().getString(R.string.fast_want_treatment_at_parent_site)) ? "WANT TREATMENT AT PARENT SITE" :"OTHER REASON TO MISSED VISIT")))))))))});
 
 
         if (reasonMissedVisitOther.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER REASON TO MISSED VISIT", App.get(reasonMissedVisitOther)});
+
+        if (newLocation.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"NEW LOCATION", App.get(newLocation)});
+
+        if (facilityTreatment.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"TREATMENT FACILITY", App.get(facilityTreatment)});
+
+        if (reasonForChangingFacility.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"REASON FOR CHANGING FACILITY", App.get(reasonForChangingFacility).equals(getResources().getString(R.string.fast_relocated)) ? "RELOCATED PATIENT" :
+                    (App.get(reasonForChangingFacility).equals(getResources().getString(R.string.fast_old_facility_too_far)) ? "OLD FACILITY TOO FAR" :
+                            (App.get(reasonForChangingFacility).equals(getResources().getString(R.string.fast_service_complaint)) ? "SERVICE COMPLAINT" : "OTHER REASON FOR CHANGING FACILITY"))});
 
         if (returnVisitDate.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDateTime(thirdDateCalendar)});
@@ -591,7 +658,7 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
                     if (rb.getText().equals(getResources().getString(R.string.fast_phone_switched_off)) && obs[0][1].equals("PHONE SWITCHED OFF")) {
                         rb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_patient_did_not_recieve_call)) && obs[0][1].equals("PATIENT DID NOT RECEIVE CALL")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_patient_not_responding)) && obs[0][1].equals("PATIENT DID NOT RECEIVE CALL")) {
                         rb.setChecked(true);
                         break;
                     } else if (rb.getText().equals(getResources().getString(R.string.fast_incorrect_contact_number)) && obs[0][1].equals("INCORRECT CONTACT NUMBER")) {
@@ -606,21 +673,79 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
             } else if (obs[0][0].equals("OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT")) {
                 reasonPatientNotContactedOther.getEditText().setText(obs[0][1]);
                 reasonPatientNotContactedOther.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("REASON FOR MISSED VISIT")) {
+            }
+
+            else if (obs[0][0].equals("PATIENT BEING REFEREED OUT OR TRANSFERRED OUT")) {
+                for (RadioButton rb : referralTransfer.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_referral)) && obs[0][1].equals("PATIENT REFERRED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_transfer)) && obs[0][1].equals("PATIENT TRANSFERRED OUT")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_not_applicable)) && obs[0][1].equals("NOT APPLICABLE")) {
+                        rb.setChecked(true);
+                        break;
+
+                    }
+                    referralTransfer.setVisibility(View.VISIBLE);
+                }
+            }
+
+            else if (obs[0][0].equals("LOCATION OF REFERRAL OR TRANSFER")) {
+                referralTransferSite.getEditText().setText(obs[0][1]);
+                referralTransferSite.setVisibility(View.VISIBLE);
+            }
+
+            else if (obs[0][0].equals("REASON FOR MISSED VISIT")) {
                 String value = obs[0][1].equals("PATIENT MOVED") ? getResources().getString(R.string.fast_patient_moved) :
                         (obs[0][1].equals("PATIENT CHOOSE ANOTHER FACILITY") ? getResources().getString(R.string.fast_patient_continuing_treatment_at_another_location) :
                                 (obs[0][1].equals("PATIENT UNABLE TO VISIT HOSPITAL DUE TO PERSONAL REASON") ? getResources().getString(R.string.fast_patient_unable_to_visit_hospital) :
                                         (obs[0][1].equals("DIED") ? getResources().getString(R.string.fast_patient_died) :
                                                 (obs[0][1].equals("REFUSAL OF TREATMENT BY PATIENT") ? getResources().getString(R.string.fast_patient_refused_treatment) :
                                                         (obs[0][1].equals("PATIENT UNWELL") ? getResources().getString(R.string.fast_patient_unwell) :
-                                                                getResources().getString(R.string.fast_other_title))))));
+                                                                (obs[0][1].equals("SERVICE COMPLAINT") ? getResources().getString(R.string.fast_service_complaint) :
+                                                                        (obs[0][1].equals("LACK OF FUNDS TO TRAVEL TO THE FACILITY") ? getResources().getString(R.string.fast_lack_of_funds_to_travel) :
+                                                                                (obs[0][1].equals("UNABLE TO RELOCATE REFERRAL SITE") ? getResources().getString(R.string.fast_unable_to_relocate) :
+                                                                                        (obs[0][1].equals("WANT TREATMENT AT PARENT SITE") ? getResources().getString(R.string.fast_want_treatment_at_parent_site) :
+                                                                                                getResources().getString(R.string.fast_other_title))))))))));
 
                 reasonMissedVisit.getSpinner().selectValue(value);
                 reasonMissedVisit.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("OTHER REASON TO MISSED VISIT")) {
                 reasonMissedVisitOther.getEditText().setText(obs[0][1]);
                 reasonMissedVisitOther.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("RETURN VISIT DATE")) {
+            }
+            else if (obs[0][0].equals("NEW LOCATION")) {
+                newLocation.getEditText().setText(obs[0][1]);
+                newLocation.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("TREATMENT FACILITY")) {
+                facilityTreatment.getEditText().setText(obs[0][1]);
+                facilityTreatment.setVisibility(View.VISIBLE);
+            }
+
+
+            else if (obs[0][0].equals("REASON FOR CHANGING FACILITY")) {
+                for (RadioButton rb : reasonForChangingFacility.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_relocated)) && obs[0][1].equals("RELOCATED PATIENT")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_old_facility_too_far)) && obs[0][1].equals("OLD FACILITY TOO FAR")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_service_complaint_title)) && obs[0][1].equals("SERVICE COMPLAINT")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_other_title)) && obs[0][1].equals("OTHER REASON FOR CHANGING FACILITY")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                reasonForChangingFacility.setVisibility(View.VISIBLE);
+            }
+
+            else if (obs[0][0].equals("RETURN VISIT DATE")) {
                 String secondDate = obs[0][1];
                 thirdDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
@@ -680,6 +805,21 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
             } else {
                 reasonMissedVisitOther.setVisibility(View.GONE);
             }
+
+            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_patient_moved)) ||
+                parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_patient_continuing_treatment_at_another_location))){
+                newLocation.setVisibility(View.VISIBLE);
+                facilityTreatment.setVisibility(View.VISIBLE);
+            } else {
+                newLocation.setVisibility(View.GONE);
+                facilityTreatment.setVisibility(View.GONE);
+            }
+
+            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_patient_continuing_treatment_at_another_location))){
+                reasonForChangingFacility.setVisibility(View.VISIBLE);
+            } else {
+                reasonForChangingFacility.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -705,6 +845,13 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
             } else {
                 reasonPatientNotContactedOther.setVisibility(View.GONE);
             }
+        } else if(radioGroup == referralTransfer.getRadioGroup()){
+            if(referralTransfer.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_not_applicable))){
+                referralTransferSite.setVisibility(View.VISIBLE);
+            }
+            else{
+                referralTransferSite.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -722,6 +869,8 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
         reasonPatientNotContacted.setVisibility(View.GONE);
         reasonPatientNotContactedOther.setVisibility(View.GONE);
         reasonMissedVisitOther.setVisibility(View.GONE);
+        referralTransferSite.setVisibility(View.GONE);
+        reasonForChangingFacility.setVisibility(View.GONE);
         updateDisplay();
 
         Bundle bundle = this.getArguments();

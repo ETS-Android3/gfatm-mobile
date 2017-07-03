@@ -401,9 +401,9 @@
     <string name="fast_why_missed_visit">Reason why missed visit?</string>
     <string name="fast_date_of_next_visit">Date of next visit?</string>
     <string name="fast_phone_switched_off">Phone switched off</string>
-    <string name="fast_patient_did_not_recieve_call">Patient did not receive call</string>
-    <string name="fast_incorrect_contact_number">Incorrect contact number</string>
-    <string name="fast_patient_moved">Patient Moved</string>
+    <string name="fast_patient_not_responding">Patient not responding</string>
+    <string name="fast_incorrect_contact_number">Invalid/Incorrect contact number</string>
+    <string name="fast_patient_moved">Patient Relocated</string>
     <string name="fast_patient_continuing_treatment_at_another_location">Patient continuing treatment at another location</string>
     <string name="fast_patient_unable_to_visit_hospital">Patient unable to visit hospital due to personal reasons</string>
     <string name="fast_patient_unwell">Patient unwell</string>
@@ -461,9 +461,32 @@
     <string name="fast_required_field_error">Required fields cannot be empty</string>
     <string name="fast_no_order_found_for_the_patient">No order found for the patient.</string>
     <string name="fast_emergency_department">Emergency Department</string>
+    <string name="fast_has_this_patient_referred_or_transferred_out">Has this patient being referred out or transferred out?</string>
+    <string name="fast_not_applicable">Not applicable</string>
+    <string name="fast_service_complaint">Patient has a service complaint</string>
+    <string name="fast_lack_of_funds_to_travel">Patient lacks funds to travel to the facility</string>
+    <string name="fast_unable_to_relocate">Unable to locate referral site</string>
+    <string name="fast_want_treatment_at_parent_site">Want treatment at parent site</string>
+    <string name="fast_new_location">New Location</string>
+    <string name="fast_new_treatment_facility_name">New treatment facility name</string>
+    <string name="fast_reason_for_changing_to_new_facility">Reason for changing to new facility</string>
+    <string name="fast_relocated">Relocated</string>
+    <string name="fast_old_facility_too_far">Old facility too far</string>
+    <string name="fast_service_complaint_title">Service complaint</string>
 
 
+    <string-array name="fast_reason_for_changing_facility_array">
+        <item>@string/fast_relocated</item>
+        <item>@string/fast_old_facility_too_far</item>
+        <item>@string/fast_service_complaint_title</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
 
+    <string-array name="fast_referral_transfer_array">
+    <item>@string/fast_referral</item>
+    <item>@string/fast_transfer</item>
+    <item>@string/fast_not_applicable</item>
+</string-array>
 
     <string-array name="fast_locations">
         <item>@string/fast_community_title</item>
@@ -982,7 +1005,7 @@
 
     <string-array name="fast_reason_patient_not_contacted_list">
         <item>@string/fast_phone_switched_off</item>
-        <item>@string/fast_patient_did_not_recieve_call</item>
+        <item>@string/fast_patient_not_responding</item>
         <item>@string/fast_incorrect_contact_number</item>
         <item>@string/fast_other_title</item>
     </string-array>
@@ -994,6 +1017,10 @@
         <item>@string/fast_patient_died</item>
         <item>@string/fast_patient_refused_treatment</item>
         <item>@string/fast_patient_unwell</item>
+        <item>@string/fast_service_complaint</item>
+        <item>@string/fast_lack_of_funds_to_travel</item>
+        <item>@string/fast_unable_to_relocate</item>
+        <item>@string/fast_want_treatment_at_parent_site</item>
         <item>@string/fast_other_title</item>
     </string-array>
 
