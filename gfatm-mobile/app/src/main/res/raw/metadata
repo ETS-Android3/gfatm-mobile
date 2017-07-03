@@ -4479,10 +4479,10 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ULTRASOUND, ABD
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER REASON FOR REPEATING TEST','other_reason_repeating_test','Text','3a5a3058-bcc8-4313-b074-a7a6e3647278');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('X RAY IN PAST 6 MONTHS','past_xray','Coded','1a2dfae5-233e-40a6-b452-8fa2d11906e8');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PROVINCE','province','Text','f014be0b-e362-4ef0-9605-a31ae549d69e');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT ACCEPTANCE TO IPT','IPT_acceptance','Coded','395d8bd6-a452-4d83-8181-d5113681e2af');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT ACCEPTANCE TO IPT','IPT_acceptance','Coded','591d17e7-b158-4b8f-864b-b401020486e2');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TB TREATMENT COMPLETED',NULL,'N/A','964780c0-7130-4e17-a8e1-e328cb524103');
 
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('5',NULL,'N/A','2fd6470d-3faa-453f-8e1e-e96d805b819e');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('5',NULL,'N/A','eb532c58-48a6-4770-9c5e-bef293c6bfe2');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ORDER ID',NULL,'Text','45c46189-a0c1-4d75-87d3-234a6ec38433');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER HIGHEST EDUCATION LEVEL OF HEAD OF HOUSEHOLD','other_household_head_education_level','Text','1fc1e480-75c0-422e-984d-38bb96b78e90');
 
@@ -4490,10 +4490,19 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CT SCAN OUTCOME
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TUBERCULOMA BRAIN, UNSPEC',NULL,'N/A','111896AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LEPTOMENINGEAL GLIONEURONAL HETEROTOPIA',NULL,'N/A','160424AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 
-----
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INCENTIVE DATE','incentive_date','Date','4391773d-3246-48c4-8b6e-7c2c4829ee24');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CONFIRMED DIAGNOSIS','confirmed_diagnosis','Coded','159392AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('IPT REGISTRATION NUMBER','IPT_regestration_no','Text','cf32cfd3-f694-4c42-93de-648037763457');
+
+----
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LACK OF FUNDS TO TRAVEL TO THE FACILITY','lack_of_funds','N/A','f2a9c97c-aa08-45a1-b21a-4bd650d9c943');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SERVICE COMPLAINT','service_complaint','N/A','6bd18153-62b7-41e5-9798-671a0c112492');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('UNABLE TO RELOCATE REFERRAL SITE','unable_to_relocate_referral_site','N/A','ef383c22-ca12-4001-91c3-2a32a3f0ffe2');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('WANT TREATMENT AT PARENT SITE','treatment_at_parent_site','N/A','e76e99d6-0444-4b2b-830c-d591bacc541c');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NEW LOCATION','new_location','Text','55f2a76b-6344-4ffe-a9b1-f0f1d437bd17');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REASON FOR CHANGING FACILITY','reason_for_changing_facility','Coded','06250314-6e50-4fac-b6ff-409e0c99d194');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OLD FACILITY TOO FAR',NULL,'N/A','efe9652e-4969-4002-8b5f-1711dbe09a49');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER REASON FOR CHANGING FACILITY','other_reason_for_changing_facility','N/A','9699aa28-9049-443a-938c-2088a0b1eebc');
 
 -- Program
 INSERT OR IGNORE INTO program VALUES (1, "86ba1232-d576-416e-b102-5f335c6746ce", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
@@ -4519,6 +4528,24 @@ INSERT OR IGNORE INTO encounter_type VALUES ('PET-Incentive Disbursement','Add P
 INSERT OR IGNORE INTO encounter_type VALUES ('PET-End of Follow-up','Add PET Forms','View PET Forms','811f4928-c55c-4034-a978-16f25351ea26');
 INSERT OR IGNORE INTO encounter_type VALUES ('PET-Socioeconomic Data','Add PET Forms','View PET Forms','906883cd-c0cb-423f-93bb-e9437d5e595e');
 INSERT OR IGNORE INTO encounter_type VALUES ('PET-AKUADS','Add PET Forms','View PET Forms','964cc088-3c77-4891-a7f0-f1224d92c3a5');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-Test Indication','Add PET Forms','View PET Forms','8f664c19-3d89-4ffc-a53a-9be0871ada3c');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-GXP Specimen Collection','Add PET Forms','View PET Forms','796993f5-8e8d-4cb0-b7df-878f68061e05');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-GXP Test','Add PET Forms','View PET Forms','fda07a14-56a6-4471-8131-5c71a683ab2b');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-CXR Screening Test Order','Add PET Forms','View PET Forms','89c15023-4e66-4801-8ca5-937c05bd98f5');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-CXR Screening Test Result','Add PET Forms','View PET Forms','d30c347e-041c-4370-acbb-3397aa91f8be');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-AFB Smear Test Order','Add PET Forms','View PET Forms','05395d2b-83e2-4432-a8f9-18f0527955c6');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-AFB Smear Test Result','Add PET Forms','View PET Forms','a6af30bf-e491-4bd6-bb9f-09f45b337eae');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-DST Culture Test Order','Add PET Forms','View PET Forms','f1a4bbb9-b38d-4c2a-b544-9aac632b09cc');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-DST Culture Test Result','Add PET Forms','View PET Forms','23c59fed-fb47-466b-a3b7-75db30dfdddb');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-Ultrasound Test Order','Add PET Forms','View PET Forms','d8d424dd-374e-4eef-a160-65e1e78a190e');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-Ultrasound Test Result','Add PET Forms','View PET Forms','ac8a6dba-e8f0-4f2f-9299-9f2af20fcc1c');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-CT Scan Test Order','Add PET Forms','View PET Forms','0ff63179-6f4b-436b-9e8b-16366f5c71d2');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-CT Scan Test Result','Add PET Forms','View PET Forms','192ed48a-e906-4eb6-bc29-871f703ef5d3');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-Mantoux Test Order','Add PET Forms','View PET Forms','be578ef2-deeb-47cc-9b5e-23488c0fb3eb');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-Mantoux Test Result','Add PET Forms','View PET Forms','891e513e-b8e3-49fc-8f98-82a0c34635ae');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-Histopathology Test Order','Add PET Forms','View PET Forms','dbfa1aef-f565-4142-bca4-41bcdde087fe');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-Histopathology Test Result','Add PET Forms','View PET Forms','73e8a6ab-db28-4319-9c63-3dd42a328862');
+
 INSERT OR IGNORE INTO encounter_type VALUES ('FAST-Screening','Add FAST Forms','View FAST Forms','5e7c8124-0018-4e5d-9156-bf6d58c720e5');
 INSERT OR IGNORE INTO encounter_type VALUES ('FAST-Prompt','Add FAST Forms','View FAST Forms','1284afd6-0928-43ee-be41-a4c259604fc4');
 INSERT OR IGNORE INTO encounter_type VALUES ('FAST-Presumptive','Add FAST Forms','View FAST Forms','a3a60738-cb1f-4c8d-ac78-91204821e0f3');

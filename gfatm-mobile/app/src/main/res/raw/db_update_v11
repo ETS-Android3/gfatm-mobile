@@ -1,0 +1,32 @@
+-- update queries
+update OR IGNORE concept set uuid='eb532c58-48a6-4770-9c5e-bef293c6bfe2' where uuid = '2fd6470d-3faa-453f-8e1e-e96d805b819e';
+
+-- insert queries
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CHANGE IN TB CATEGORY','change_tb_category','N/A','1258167f-cf44-42cf-96b0-2d2448f24e97');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LACK OF FUNDS TO TRAVEL TO THE FACILITY','lack_of_funds','N/A','f2a9c97c-aa08-45a1-b21a-4bd650d9c943');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SERVICE COMPLAINT','service_complaint','N/A','6bd18153-62b7-41e5-9798-671a0c112492');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('UNABLE TO RELOCATE REFERRAL SITE','unable_to_relocate_referral_site','N/A','ef383c22-ca12-4001-91c3-2a32a3f0ffe2');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('WANT TREATMENT AT PARENT SITE','treatment_at_parent_site','N/A','e76e99d6-0444-4b2b-830c-d591bacc541c');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NEW LOCATION','new_location','Text','55f2a76b-6344-4ffe-a9b1-f0f1d437bd17');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REASON FOR CHANGING FACILITY','reason_for_changing_facility','Coded','06250314-6e50-4fac-b6ff-409e0c99d194');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OLD FACILITY TOO FAR',NULL,'N/A','efe9652e-4969-4002-8b5f-1711dbe09a49');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER REASON FOR CHANGING FACILITY','other_reason_for_changing_facility','N/A','9699aa28-9049-443a-938c-2088a0b1eebc');
+
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-Test Indication','Add PET Forms','View PET Forms','8f664c19-3d89-4ffc-a53a-9be0871ada3c');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-GXP Specimen Collection','Add PET Forms','View PET Forms','796993f5-8e8d-4cb0-b7df-878f68061e05');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-GXP Test','Add PET Forms','View PET Forms','fda07a14-56a6-4471-8131-5c71a683ab2b');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-CXR Screening Test Order','Add PET Forms','View PET Forms','89c15023-4e66-4801-8ca5-937c05bd98f5');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-CXR Screening Test Result','Add PET Forms','View PET Forms','d30c347e-041c-4370-acbb-3397aa91f8be');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-AFB Smear Test Order','Add PET Forms','View PET Forms','05395d2b-83e2-4432-a8f9-18f0527955c6');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-AFB Smear Test Result','Add PET Forms','View PET Forms','a6af30bf-e491-4bd6-bb9f-09f45b337eae');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-DST Culture Test Order','Add PET Forms','View PET Forms','f1a4bbb9-b38d-4c2a-b544-9aac632b09cc');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-DST Culture Test Result','Add PET Forms','View PET Forms','23c59fed-fb47-466b-a3b7-75db30dfdddb');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-Ultrasound Test Order','Add PET Forms','View PET Forms','d8d424dd-374e-4eef-a160-65e1e78a190e');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-Ultrasound Test Result','Add PET Forms','View PET Forms','ac8a6dba-e8f0-4f2f-9299-9f2af20fcc1c');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-CT Scan Test Order','Add PET Forms','View PET Forms','0ff63179-6f4b-436b-9e8b-16366f5c71d2');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-CT Scan Test Result','Add PET Forms','View PET Forms','192ed48a-e906-4eb6-bc29-871f703ef5d3');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-Mantoux Test Order','Add PET Forms','View PET Forms','be578ef2-deeb-47cc-9b5e-23488c0fb3eb');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-Mantoux Test Result','Add PET Forms','View PET Forms','891e513e-b8e3-49fc-8f98-82a0c34635ae');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-Histopathology Test Order','Add PET Forms','View PET Forms','dbfa1aef-f565-4142-bca4-41bcdde087fe');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-Histopathology Test Result','Add PET Forms','View PET Forms','73e8a6ab-db28-4319-9c63-3dd42a328862');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-Missed Visit Followup','Add PET Forms','View PET Forms','bccf5acb-18d4-44ce-8562-1ab9e6fa069f');
