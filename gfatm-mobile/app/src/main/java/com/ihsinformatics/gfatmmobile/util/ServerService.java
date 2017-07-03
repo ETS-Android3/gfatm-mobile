@@ -318,7 +318,7 @@ public class ServerService {
     }
 
     public Object[][] getAllLocations(String programColumn) {
-        Object[][] locations = dbUtil.getFormTableData("select location_id, location_name, uuid, parent_uuid, fast_location, pet_location, childhood_tb_location, comorbidities_location, pmdt_location, aic_location, primary_contact, address1, address2, city_village, state_province, county_district, description from " + Metadata.LOCATION + " where " + programColumn + " = 'Y' and state_province = '" + App.getProvince() + "'");
+        Object[][] locations = dbUtil.getFormTableData("select location_id, location_name, uuid, parent_uuid, fast_location, pet_location, childhood_tb_location, comorbidities_location, pmdt_location, aic_location, primary_contact, address1, address2, city_village, state_province, county_district, description from " + Metadata.LOCATION + " where " + programColumn + " = 'Y' and (state_province = '" + App.getProvince() + "' OR state_province = '')" );
         return locations;
     }
 
@@ -391,8 +391,8 @@ public class ServerService {
             if (providerUUid == "")
                 return "PROVIDER_NOT_FOUND";
 
-//            if (!isMobileAppCompatible())
-//                return "VERSION_MISMATCH";
+            /*if (!isMobileAppCompatible())
+                return "VERSION_MISMATCH";*/
 
             App.setUserFullName(user.getFullName());
             App.setRoles(user.getRoles());
