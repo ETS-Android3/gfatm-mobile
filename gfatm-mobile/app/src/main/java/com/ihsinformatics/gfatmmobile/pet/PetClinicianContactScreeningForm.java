@@ -54,6 +54,7 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
     Context context;
 
     TitledButton formDate;
+    TitledEditText externalPatientId;
     TitledEditText weight;
     TitledEditText height;
     TitledEditText bmi;
@@ -173,10 +174,12 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
     public void initViews() {
 
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        externalPatientId = new TitledEditText(context, null, getResources().getString(R.string.external_id), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+
         weight = new TitledEditText(context, null, getResources().getString(R.string.pet_weight), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         height = new TitledEditText(context, null, getResources().getString(R.string.pet_height), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         bmi = new TitledEditText(context, null, getResources().getString(R.string.pet_bmi), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
-        muac = new TitledEditText(context, null, getResources().getString(R.string.pet_muac), "", "", 3, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        muac = new TitledEditText(context, null, getResources().getString(R.string.pet_muac), "", "", 3, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         weightPercentile = new TitledSpinner(context, null, getResources().getString(R.string.pet_weight_percentile), getResources().getStringArray(R.array.pet_weight_percentiles), getResources().getString(R.string.pet_less_third_percentile), App.VERTICAL);
         MyLinearLayout linearLayout1 = new MyLinearLayout(context, getResources().getString(R.string.pet_contact_symptom_screen), App.VERTICAL);
         cough = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_cough), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
@@ -302,7 +305,7 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
         linearLayout3.addView(referral);
         linearLayout3.addView(clincianNote);
 
-        views = new View[]{formDate.getButton(), weight.getEditText(), height.getEditText(), bmi.getEditText(), muac.getEditText(), weightPercentile.getSpinner(),
+        views = new View[]{formDate.getButton(), externalPatientId.getEditText(), weight.getEditText(), height.getEditText(), bmi.getEditText(), muac.getEditText(), weightPercentile.getSpinner(),
                 cough.getRadioGroup(), coughDuration.getRadioGroup(), haemoptysis.getRadioGroup(), difficultyBreathing.getRadioGroup(), fever.getRadioGroup(), feverDuration.getRadioGroup(),
                 weightLoss.getRadioGroup(), nightSweats.getRadioGroup(), lethargy.getRadioGroup(), swollenJoints.getRadioGroup(), backPain.getRadioGroup(), adenopathy.getRadioGroup(),
                 vomiting.getRadioGroup(), giSymptoms.getRadioGroup(), lossInterestInActivity.getRadioGroup(), exposurePoint1.getRadioGroup(), exposurePoint2.getRadioGroup(), exposurePoint3.getRadioGroup(),
@@ -313,7 +316,7 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
                 chest.getRadioGroup(), chestExplanation.getEditText(), abdominal.getRadioGroup(), abdominal.getRadioGroup(), examOutcome.getRadioGroup(), comorbidCondition,
                 otherCondition.getEditText(), referral.getRadioGroup(), clincianNote.getEditText()};
 
-        viewGroups = new View[][]{{formDate, weight, height, bmi, muac, weightPercentile},
+        viewGroups = new View[][]{{formDate, externalPatientId, weight, height, bmi, muac, weightPercentile},
                 {linearLayout1},
                 {linearLayout2},
                 {linearLayout3}};
@@ -469,6 +472,7 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
         else
             weightPercentile.setVisibility(View.GONE);
 
+        Boolean flag = false;
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");
@@ -482,7 +486,16 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
 
                 refill(formId);
 
+                flag = true;
+
             } else bundle.putBoolean("save", false);
+        }
+
+        if(!flag)
+            externalPatientId.getEditText().setText(App.getPatient().getExternalId());
+
+        if(!App.get(externalPatientId).equals("")){
+            externalPatientId.getEditText().setKeyListener(null);
         }
 
     }
@@ -585,12 +598,12 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
             error = true;
         }
 
-        if (App.get(muac).isEmpty() && muac.getVisibility() == View.VISIBLE) {
-            gotoFirstPage();
-            muac.getEditText().setError(getString(R.string.empty_field));
-            muac.getEditText().requestFocus();
-            error = true;
-        }
+//        if (App.get(muac).isEmpty() && muac.getVisibility() == View.VISIBLE) {
+//            gotoFirstPage();
+//            muac.getEditText().setError(getString(R.string.empty_field));
+//            muac.getEditText().requestFocus();
+//            error = true;
+//        }
 
         if (App.get(height).isEmpty()) {
             gotoFirstPage();

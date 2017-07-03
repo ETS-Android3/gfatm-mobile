@@ -65,6 +65,7 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
     TitledRadioGroup tbRuledOut;
     TitledEditText petEligiable;
     TitledRadioGroup petConsent;
+    TitledEditText clincianNote;
 
     ScrollView scrollView;
 
@@ -164,6 +165,10 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
         petEligiable.getEditText().setKeyListener(null);
         petConsent = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_consent), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, false);
 
+        clincianNote = new TitledEditText(context, null, getResources().getString(R.string.pet_doctor_notes), "", "", 250, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        clincianNote.getEditText().setSingleLine(false);
+        clincianNote.getEditText().setMinimumHeight(150);
+
         linearLayout1.addView(pregnancyHistory);
         linearLayout1.addView(pregnancyTestResult);
         linearLayout1.addView(evaluationType);
@@ -175,9 +180,11 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
         linearLayout1.addView(tbRuledOut);
         linearLayout1.addView(petEligiable);
         linearLayout1.addView(petConsent);
+        linearLayout1.addView(clincianNote);
 
         views = new View[]{formDate.getButton(), pregnancyHistory.getRadioGroup(), pregnancyTestResult.getRadioGroup(), evaluationType, tbDiagnosis.getRadioGroup(),
-                infectionType.getRadioGroup(), tbReferral.getRadioGroup(), referralSite.getSpinner(), othersSite.getEditText(), tbRuledOut.getRadioGroup(), petEligiable.getEditText(), petConsent.getRadioGroup()};
+                infectionType.getRadioGroup(), tbReferral.getRadioGroup(), referralSite.getSpinner(), othersSite.getEditText(), tbRuledOut.getRadioGroup(),
+                petEligiable.getEditText(), petConsent.getRadioGroup(), clincianNote.getEditText()};
 
         viewGroups = new View[][]{{formDate, linearLayout1}};
 
@@ -397,6 +404,8 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
             observations.add(new String[]{"PET ELIGIBLE", App.get(petEligiable).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         if (petConsent.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"PET CONSENT", App.get(petConsent).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+
+        observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(clincianNote)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -761,6 +770,8 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
                     }
                 }
                 petConsent.setVisibility(View.VISIBLE);
+            }  else if (obs[0][0].equals("CLINICIAN NOTES (TEXT)")) {
+                clincianNote.getEditText().setText(obs[0][1]);
             }
 
         }

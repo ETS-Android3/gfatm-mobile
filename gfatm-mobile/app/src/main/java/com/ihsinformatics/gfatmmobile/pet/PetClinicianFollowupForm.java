@@ -102,6 +102,8 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
     TitledEditText newInstruction;
     TitledButton returnVisitDate;
 
+    TitledEditText clincianNote;
+
     ScrollView scrollView;
 
     Boolean refillFlag = false;
@@ -249,6 +251,9 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
         newInstruction.getEditText().setSingleLine(false);
         newInstruction.getEditText().setMinimumHeight(150);
         returnVisitDate = new TitledButton(context, null, getResources().getString(R.string.pet_return_visit_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.VERTICAL);
+        clincianNote = new TitledEditText(context, null, getResources().getString(R.string.pet_doctor_notes), "", "", 250, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        clincianNote.getEditText().setSingleLine(false);
+        clincianNote.getEditText().setMinimumHeight(150);
 
         linearLayout3.addView(missedDosage);
         linearLayout3.addView(actionPlan);
@@ -266,6 +271,7 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
         linearLayout3.addView(ancillaryDrugDuration);
         linearLayout3.addView(newInstruction);
         linearLayout3.addView(returnVisitDate);
+        linearLayout3.addView(clincianNote);
 
         views = new View[]{formDate.getButton(), weight.getEditText(), cough.getRadioGroup(), coughDuration.getRadioGroup(), haemoptysis.getRadioGroup(), difficultyBreathing.getRadioGroup(), fever.getRadioGroup(), feverDuration.getRadioGroup(),
                 weightLoss.getRadioGroup(), nightSweats.getRadioGroup(), lethargy.getRadioGroup(), swollenJoints.getRadioGroup(), backPain.getRadioGroup(), adenopathy.getRadioGroup(),
@@ -274,7 +280,7 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
                 tendonPain.getRadioGroup(), eyeProblem.getRadioGroup(), otherSideEffects.getEditText(), sideeffectsConsistent.getRadioGroup(),
                 missedDosage.getEditText(), actionPlan, medicationDiscontinueReason.getEditText(), medicationDiscontinueDuration.getEditText(), newMedication.getEditText(), newMedicationDuration.getEditText(),
                 petRegimen.getRadioGroup(), isoniazidDose.getEditText(), rifapentineDose.getEditText(), levofloxacinDose.getEditText(), ethionamideDose.getEditText(), ancillaryDrugs, ancillaryDrugDuration,
-                newInstruction.getEditText(), returnVisitDate.getButton(), rifapentineAvailable.getRadioGroup()
+                newInstruction.getEditText(), returnVisitDate.getButton(), rifapentineAvailable.getRadioGroup(), clincianNote.getEditText()
         };
 
         viewGroups = new View[][]{{formDate, weight, linearLayout1},
@@ -1107,6 +1113,7 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
             observations.add(new String[]{"MEDICATION DURATION", App.get(ancillaryDrugDuration)});
         observations.add(new String[]{"INSTRUCTIONS TO PATIENT AND/OR FAMILY", App.get(newInstruction)});
         observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDate(secondDateCalendar)});
+        observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(clincianNote)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -1879,6 +1886,8 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+            } else if (obs[0][0].equals("CLINICIAN NOTES (TEXT)")) {
+                clincianNote.getEditText().setText(obs[0][1]);
             }
 
         }

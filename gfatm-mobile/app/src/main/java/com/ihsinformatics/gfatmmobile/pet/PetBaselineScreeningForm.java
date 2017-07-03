@@ -115,8 +115,10 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
     TitledRadioGroup swelling;
     TitledRadioGroup referral;
     TitledSpinner referredFacility;
+    TitledEditText clincianNote;
 
     MyLinearLayout linearLayout;
+
 
     Boolean refillFlag = false;
 
@@ -317,6 +319,10 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
             locationArray[i] = objLoc.toString();
         }
 
+        clincianNote = new TitledEditText(context, null, getResources().getString(R.string.pet_doctor_notes), "", "", 250, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        clincianNote.getEditText().setSingleLine(false);
+        clincianNote.getEditText().setMinimumHeight(150);
+
         referredFacility = new TitledSpinner(mainContent.getContext(), null, getResources().getString(R.string.pet_facility_referred), locationArray, "", App.VERTICAL);
         linearLayout.addView(cough);
         linearLayout.addView(coughDuration);
@@ -329,13 +335,14 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         linearLayout.addView(swelling);
         linearLayout.addView(referral);
         linearLayout.addView(referredFacility);
+        linearLayout.addView(clincianNote);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), indexPatientId.getEditText(), treatmentStatus.getRadioGroup(), contactRegistered.getRadioGroup(), tbHistory.getRadioGroup(), relationship.getSpinner(), otherRelation.getEditText(),
                 cnic1, cnic2, cnic3, cnicOwner.getSpinner(), otherCnicOwner.getEditText(), phone1a, phone1b, phone2a, phone2b, address1.getEditText(), province.getSpinner(), district.getSpinner(), city.getSpinner(),
                 addressType.getRadioGroup(), landmark.getEditText(), entryLocation.getRadioGroup(),
                 cough.getRadioGroup(), coughDuration.getRadioGroup(), haemoptysis.getRadioGroup(), fever.getRadioGroup(), weightLoss.getRadioGroup(), reduceAppetite.getRadioGroup(), reduceActivity.getRadioGroup(),
-                nightSweats.getRadioGroup(), nightSweats.getRadioGroup(), swelling.getRadioGroup(), referral.getRadioGroup(), referredFacility.getSpinner(), treatmentInitiationDate.getButton()};
+                nightSweats.getRadioGroup(), nightSweats.getRadioGroup(), swelling.getRadioGroup(), referral.getRadioGroup(), referredFacility.getSpinner(), treatmentInitiationDate.getButton(), clincianNote.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
@@ -789,6 +796,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         if (addressType.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TYPE OF ADDRESS", App.get(addressType).equals(getResources().getString(R.string.pet_permanent)) ? "PERMANENT ADDRESS" : "TEMPORARY ADDRESS"});
 
+        observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(clincianNote)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -1511,6 +1519,8 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                         break;
                     }
                 }
+            } else if (obs[0][0].equals("CLINICIAN NOTES (TEXT)")) {
+                clincianNote.getEditText().setText(obs[0][1]);
             }
 
         }
