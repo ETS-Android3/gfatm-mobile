@@ -79,6 +79,8 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
     TitledCheckBoxes diabetesTreatmentInitiation;
     TitledEditText diabetesTreatmentDetail;
     TitledRadioGroup diabetesTreatmentInitiationMetformin;
+    TitledEditText diabetesTreatmentInitiationTabletsPerDay;
+    TitledEditText diabetesTreatmentInitiationMetforminPrescribed;
     TitledEditText diabetesTreatmentInitiationInsulinN;
     TitledEditText diabetesTreatmentInitiationInsulinR;
     TitledEditText diabetesTreatmentInitiationInsulinMix;
@@ -189,6 +191,8 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
         diabetesTreatmentDetail.getEditText().setSingleLine(false);
         diabetesTreatmentDetail.getEditText().setMinimumHeight(100);
         diabetesTreatmentInitiationMetformin = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_metformin), getResources().getStringArray(R.array.comorbidities_diabetes_treatment_initiation_metformin_options), getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_metformin_500), App.HORIZONTAL, App.VERTICAL);
+        diabetesTreatmentInitiationTabletsPerDay = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_metformin_per_day), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        diabetesTreatmentInitiationMetforminPrescribed = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_metformin_prescribed), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         diabetesTreatmentInitiationInsulinN = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_insulinN), "", getResources().getString(R.string.comorbidities_vitals_waist_hip_whr_range), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         diabetesTreatmentInitiationInsulinR = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_insulinR), "", getResources().getString(R.string.comorbidities_vitals_waist_hip_whr_range), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         diabetesTreatmentInitiationInsulinMix = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_insulin_mix), "", getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_insulin_mix_range), 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
@@ -200,7 +204,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
                 hxHypoglycemia.getRadioGroup(), hxDiabeticRetinopathy.getRadioGroup(), hxDiabeticNeuropathy.getRadioGroup(), hxDiabeticNephropathy.getRadioGroup(),
                 hxDiabeticInfections, hxDiabeticPvd.getRadioGroup(),
                 hxDiabeticCad.getRadioGroup(), hxDiabeticHypertension.getRadioGroup(), hxDiabeticGestationalDiabetes.getRadioGroup(), hxDiabeticBirth.getRadioGroup(),
-                treatmentInitiation, diabetesTreatmentInitiation, diabetesTreatmentDetail.getEditText(),
+                treatmentInitiation, diabetesTreatmentInitiation, diabetesTreatmentInitiationTabletsPerDay.getEditText(), diabetesTreatmentInitiationMetforminPrescribed.getEditText(), diabetesTreatmentDetail.getEditText(),
                 diabetesTreatmentInitiationMetformin.getRadioGroup(), diabetesTreatmentInitiationInsulinN.getEditText(), diabetesTreatmentInitiationInsulinR.getEditText(), diabetesTreatmentInitiationInsulinMix.getEditText(), diabetesNextScheduledVisit.getButton()};
 
         // Array used to display views accordingly...
@@ -210,8 +214,10 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
                         {hxHypoglycemia, hxDiabeticRetinopathy, hxDiabeticNeuropathy, hxDiabeticNephropathy},
                         {hxDiabeticInfections, hxDiabeticPvd},
                         {hxDiabeticCad, hxDiabeticHypertension, hxDiabeticGestationalDiabetes, hxDiabeticBirth},
-                        {treatmentInitiation, diabetesTreatmentInitiation, diabetesTreatmentDetail},
-                        {diabetesTreatmentInitiationMetformin, diabetesTreatmentInitiationInsulinN, diabetesTreatmentInitiationInsulinR, diabetesTreatmentInitiationInsulinMix, diabetesNextScheduledVisit}};
+                        {treatmentInitiation, diabetesTreatmentInitiation, diabetesTreatmentInitiationTabletsPerDay, diabetesTreatmentInitiationMetforminPrescribed},
+                        {diabetesTreatmentDetail, diabetesTreatmentInitiationMetformin, diabetesTreatmentInitiationInsulinN, diabetesTreatmentInitiationInsulinR, diabetesTreatmentInitiationInsulinMix, diabetesNextScheduledVisit}};
+
+        diabetesTreatmentInitiationMetformin.setVisibility(View.GONE);
 
         diabetesTreatmentInitiationInsulinN.getEditText().addTextChangedListener(new TextWatcher() {
 
@@ -387,7 +393,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
         Boolean error = false;
         View view = null;
 
-        if (App.get(diabetesTreatmentInitiationInsulinMix).isEmpty()) {
+        if (diabetesTreatmentInitiationInsulinMix.getVisibility() == View.VISIBLE && App.get(diabetesTreatmentInitiationInsulinMix).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -395,7 +401,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
             diabetesTreatmentInitiationInsulinMix.getEditText().setError(getString(R.string.empty_field));
             diabetesTreatmentInitiationInsulinMix.getEditText().requestFocus();
             error = true;
-        }else if (!App.get(diabetesTreatmentInitiationInsulinMix).isEmpty() && Integer.parseInt(App.get(diabetesTreatmentInitiationInsulinMix)) > 1000) {
+        }else if (diabetesTreatmentInitiationInsulinMix.getVisibility() == View.VISIBLE && !App.get(diabetesTreatmentInitiationInsulinMix).isEmpty() && Integer.parseInt(App.get(diabetesTreatmentInitiationInsulinMix)) > 1000) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -405,7 +411,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
             error = true;
         }
 
-        if (App.get(diabetesTreatmentInitiationInsulinR).isEmpty()) {
+        if (diabetesTreatmentInitiationInsulinR.getVisibility() == View.VISIBLE && App.get(diabetesTreatmentInitiationInsulinR).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -413,7 +419,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
             diabetesTreatmentInitiationInsulinR.getEditText().setError(getString(R.string.empty_field));
             diabetesTreatmentInitiationInsulinR.getEditText().requestFocus();
             error = true;
-        } else if (!App.get(diabetesTreatmentInitiationInsulinR).isEmpty() && Integer.parseInt(App.get(diabetesTreatmentInitiationInsulinR)) > 100) {
+        } else if (diabetesTreatmentInitiationInsulinR.getVisibility() == View.VISIBLE && !App.get(diabetesTreatmentInitiationInsulinR).isEmpty() && Integer.parseInt(App.get(diabetesTreatmentInitiationInsulinR)) > 100) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -423,7 +429,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
             error = true;
         }
 
-        if (App.get(diabetesTreatmentInitiationInsulinN).isEmpty()) {
+        if (diabetesTreatmentInitiationInsulinN.getVisibility() == View.VISIBLE && App.get(diabetesTreatmentInitiationInsulinN).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -431,7 +437,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
             diabetesTreatmentInitiationInsulinN.getEditText().setError(getString(R.string.empty_field));
             diabetesTreatmentInitiationInsulinN.getEditText().requestFocus();
             error = true;
-        }else if (!App.get(diabetesTreatmentInitiationInsulinN).isEmpty() && Integer.parseInt(App.get(diabetesTreatmentInitiationInsulinN)) > 100) {
+        }else if (diabetesTreatmentInitiationInsulinN.getVisibility() == View.VISIBLE && !App.get(diabetesTreatmentInitiationInsulinN).isEmpty() && Integer.parseInt(App.get(diabetesTreatmentInitiationInsulinN)) > 100) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -441,7 +447,27 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
             error = true;
         }
 
-        if (App.get(diabetesTreatmentDetail).trim().isEmpty()) {
+        if (diabetesTreatmentInitiationMetforminPrescribed.getVisibility() == View.VISIBLE && App.get(diabetesTreatmentInitiationMetforminPrescribed).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(1);
+            else
+                gotoPage(5);
+            diabetesTreatmentInitiationMetforminPrescribed.getEditText().setError(getString(R.string.empty_field));
+            diabetesTreatmentInitiationMetforminPrescribed.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (diabetesTreatmentInitiationTabletsPerDay.getVisibility() == View.VISIBLE && App.get(diabetesTreatmentInitiationTabletsPerDay).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(1);
+            else
+                gotoPage(5);
+            diabetesTreatmentInitiationTabletsPerDay.getEditText().setError(getString(R.string.empty_field));
+            diabetesTreatmentInitiationTabletsPerDay.getEditText().requestFocus();
+            error = true;
+        }
+
+        /*if (App.get(diabetesTreatmentDetail).trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(1);
             else
@@ -449,7 +475,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
             diabetesTreatmentDetail.getEditText().setError(getString(R.string.empty_field));
             diabetesTreatmentDetail.getEditText().requestFocus();
             error = true;
-        }
+        }*/
 
         Boolean flag = false;
         if (diabetesTreatmentInitiation.getVisibility() == View.VISIBLE) {
@@ -471,7 +497,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
             }
         }
 
-        flag = false;
+        /*flag = false;
         if (hxDiabeticInfections.getVisibility() == View.VISIBLE) {
             for (CheckBox cb : hxDiabeticInfections.getCheckedBoxes()) {
                 if (cb.isChecked()) {
@@ -489,7 +515,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
                 view = hxDiabeticInfections;
                 error = true;
             }
-        }
+        }*/
 
         flag = false;
         if (selfReportedDiabetesTreatmentHistory.getVisibility() == View.VISIBLE) {
@@ -723,7 +749,9 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
         observations.add(new String[]{"DIABETES MEDICATIONS", diabetesTreatmentInitiationString});
 
         observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(diabetesTreatmentDetail).trim()});
-        observations.add(new String[]{"METFORMIN DOSE", App.get(diabetesTreatmentInitiationMetformin)});
+        //observations.add(new String[]{"METFORMIN DOSE", App.get(diabetesTreatmentInitiationMetformin)});
+        observations.add(new String[]{"METFORMIN TABLET PER DAY", App.get(diabetesTreatmentInitiationTabletsPerDay)});
+        observations.add(new String[]{"METFORMIN PRESCRIBED (FOR DAYS)", App.get(diabetesTreatmentInitiationMetforminPrescribed)});
         observations.add(new String[]{"INSULIN N DOSAGE", App.get(diabetesTreatmentInitiationInsulinN)});
         observations.add(new String[]{"INSULIN R DOSAGE", App.get(diabetesTreatmentInitiationInsulinR)});
         observations.add(new String[]{"INSULIN 70/30 DOSAGE", App.get(diabetesTreatmentInitiationInsulinMix)});
@@ -1142,7 +1170,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
                 }
             } else if (obs[0][0].equals("CLINICIAN NOTES (TEXT)")) {
                 diabetesTreatmentDetail.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("METFORMIN DOSE")) {
+            } /*else if (obs[0][0].equals("METFORMIN DOSE")) {
                 for (RadioButton rb : diabetesTreatmentInitiationMetformin.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_metformin_500)) && obs[0][1].equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_metformin_500))) {
                         rb.setChecked(true);
@@ -1161,6 +1189,11 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
                         break;
                     }
                 }
+            } */
+            else if (obs[0][0].equals("METFORMIN TABLET PER DAY")) {
+                diabetesTreatmentInitiationTabletsPerDay.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("METFORMIN PRESCRIBED (FOR DAYS)")) {
+                diabetesTreatmentInitiationMetforminPrescribed.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("INSULIN N DOSAGE")) {
                 diabetesTreatmentInitiationInsulinN.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("INSULIN R DOSAGE")) {
@@ -1214,6 +1247,12 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+        showMetforminPerDayAndPrescribed();
+        showInsulinN();
+        showInsulinR();
+        showInsulinMix();
+
         for (CheckBox cb : diabetesFamilyHistorySpecify.getCheckedBoxes()) {
             if (cb.isChecked()) {
                 diabetesFamilyHistorySpecify.getQuestionView().setError(null);
@@ -1246,6 +1285,11 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
     @Override
     public void resetViews() {
         super.resetViews();
+
+        showMetforminPerDayAndPrescribed();
+        showInsulinN();
+        showInsulinR();
+        showInsulinMix();
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         diabetesNextScheduledVisit.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
@@ -1373,6 +1417,76 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
             hxDiabeticBirth.setVisibility(View.VISIBLE);
         } else {
             hxDiabeticBirth.setVisibility(View.GONE);
+        }
+    }
+
+    void showMetforminPerDayAndPrescribed() {
+
+        Boolean flag = false;
+        for (CheckBox cb : diabetesTreatmentInitiation.getCheckedBoxes()) {
+            if (cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_metformin_option)) && cb.isChecked()) {
+                flag = true;
+                break;
+            }
+        }
+        if (flag) {
+            diabetesTreatmentInitiationTabletsPerDay.setVisibility(View.VISIBLE);
+            diabetesTreatmentInitiationMetforminPrescribed.setVisibility(View.VISIBLE);
+        }
+        else {
+            diabetesTreatmentInitiationTabletsPerDay.setVisibility(View.GONE);
+            diabetesTreatmentInitiationMetforminPrescribed.setVisibility(View.GONE);
+        }
+    }
+
+    void showInsulinN() {
+
+        Boolean flag = false;
+        for (CheckBox cb : diabetesTreatmentInitiation.getCheckedBoxes()) {
+            if (cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_insulinN_option)) && cb.isChecked()) {
+                flag = true;
+                break;
+            }
+        }
+        if (flag) {
+            diabetesTreatmentInitiationInsulinN.setVisibility(View.VISIBLE);
+        }
+        else {
+            diabetesTreatmentInitiationInsulinN.setVisibility(View.GONE);
+        }
+    }
+
+    void showInsulinR() {
+
+        Boolean flag = false;
+        for (CheckBox cb : diabetesTreatmentInitiation.getCheckedBoxes()) {
+            if (cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_insulinR_option)) && cb.isChecked()) {
+                flag = true;
+                break;
+            }
+        }
+        if (flag) {
+            diabetesTreatmentInitiationInsulinR.setVisibility(View.VISIBLE);
+        }
+        else {
+            diabetesTreatmentInitiationInsulinR.setVisibility(View.GONE);
+        }
+    }
+
+    void showInsulinMix() {
+
+        Boolean flag = false;
+        for (CheckBox cb : diabetesTreatmentInitiation.getCheckedBoxes()) {
+            if (cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_insulin_mix_option)) && cb.isChecked()) {
+                flag = true;
+                break;
+            }
+        }
+        if (flag) {
+            diabetesTreatmentInitiationInsulinMix.setVisibility(View.VISIBLE);
+        }
+        else {
+            diabetesTreatmentInitiationInsulinMix.setVisibility(View.GONE);
         }
     }
 

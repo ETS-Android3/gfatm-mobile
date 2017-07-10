@@ -147,7 +147,7 @@ public class ComorbiditiesMentalHealthTreatmentFollowupForm extends AbstractForm
         //treatmentFollowupMHConditionBeforeSession = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_treatment_followup_MH_condition_before_session), getResources().getStringArray(R.array.comorbidities_treatment_followup_MH_condition_before_session_options), getResources().getString(R.string.comorbidities_treatment_followup_MH_condition_before_session_options_very_bad), App.VERTICAL, App.VERTICAL);
         treatmentFollowupMHConditionBeforeSession = new TitledSpinner(context, "", getResources().getString(R.string.comorbidities_treatment_followup_MH_condition_before_session), getResources().getStringArray(R.array.comorbidities_treatment_followup_MH_condition_before_session_options), getResources().getString(R.string.comorbidities_treatment_followup_MH_condition_before_session_options_very_bad), App.HORIZONTAL);
         //treatmentFollowupMHClientsComplaint = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint), getResources().getStringArray(R.array.comorbidities_treatment_followup_MH_client_complaint_options), getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options_financial), App.HORIZONTAL);
-        treatmentFollowupMHClientsComplaint = new TitledCheckBoxes(context, null, getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint), getResources().getStringArray(R.array.comorbidities_treatment_followup_MH_client_complaint_options), new Boolean[]{false, false, false, false, true, false, false, false}, App.VERTICAL, App.VERTICAL);
+        treatmentFollowupMHClientsComplaint = new TitledCheckBoxes(context, null, getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint), getResources().getStringArray(R.array.comorbidities_treatment_followup_MH_client_complaint_options1), new Boolean[]{false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false}, App.VERTICAL, App.VERTICAL);
         otherComplaint = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_treatment_followup_MH_client_other_complaint), "", "", 200, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         treatmentFollowupMHCooperation = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_treatment_followup_MH_cooperation), getResources().getStringArray(R.array.comorbidities_treatment_followup_MH_cooperation_options), getResources().getString(R.string.comorbidities_treatment_followup_MH_cooperation_options_complaint), App.VERTICAL, App.VERTICAL);
         treatmentFollowupMHDefensiveness = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_treatment_followup_MH_defensiveness), getResources().getStringArray(R.array.comorbidities_treatment_followup_MH_defensiveness_options), getResources().getString(R.string.comorbidities_treatment_followup_MH_defensiveness_options_reserved), App.VERTICAL, App.VERTICAL);
@@ -402,21 +402,37 @@ public class ComorbiditiesMentalHealthTreatmentFollowupForm extends AbstractForm
 
         String treatmentFollowupMHClientsComplaintString = "";
         for (CheckBox cb : treatmentFollowupMHClientsComplaint.getCheckedBoxes()) {
-            if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options_relationship_problems)))
+            if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options1_suicidal)))
+                treatmentFollowupMHClientsComplaintString = treatmentFollowupMHClientsComplaintString + "SUICIDAL IDEATION" + " ; ";
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options1_homicidal)))
+                treatmentFollowupMHClientsComplaintString = treatmentFollowupMHClientsComplaintString + "HOMICIDAL IDEATION" + " ; ";
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options1_psychotic)))
+                treatmentFollowupMHClientsComplaintString = treatmentFollowupMHClientsComplaintString + "MANIA WITH PSYCHOTIC SYMPTOMS" + " ; ";
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options1_panic)))
+                treatmentFollowupMHClientsComplaintString = treatmentFollowupMHClientsComplaintString + "ANXIETY ATTACK" + " ; ";
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options1_medical)))
+                treatmentFollowupMHClientsComplaintString = treatmentFollowupMHClientsComplaintString + "MEDICAL ADHERENCE" + " ; ";
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options1_depression)))
+                treatmentFollowupMHClientsComplaintString = treatmentFollowupMHClientsComplaintString + "DEPRESSION" + " ; ";
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options1_verbal)))
+                treatmentFollowupMHClientsComplaintString = treatmentFollowupMHClientsComplaintString + "VERBAL ABUSE" + " ; ";
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options1_relationship)))
                 treatmentFollowupMHClientsComplaintString = treatmentFollowupMHClientsComplaintString + "RELATIONSHIP PROBLEMS" + " ; ";
-            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options_physical_illness)))
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options1_illness)))
                 treatmentFollowupMHClientsComplaintString = treatmentFollowupMHClientsComplaintString + "ILLNESS" + " ; ";
-            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options_daily_life)))
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options1_daily)))
                 treatmentFollowupMHClientsComplaintString = treatmentFollowupMHClientsComplaintString + "DAILY ACTIVITY" + " ; ";
-            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options_subtance)))
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options1_substance)))
                 treatmentFollowupMHClientsComplaintString = treatmentFollowupMHClientsComplaintString + "SUBSTANCE ABUSE" + " ; ";
-            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options_financial)))
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options1_economic)))
                 treatmentFollowupMHClientsComplaintString = treatmentFollowupMHClientsComplaintString + "ECONOMIC PROBLEM" + " ; ";
-            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options_physical_abuse)))
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options1_physical)))
                 treatmentFollowupMHClientsComplaintString = treatmentFollowupMHClientsComplaintString + "PHYSICAL ABUSE" + " ; ";
-            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options_sexual_problems)))
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options1_sexual_problem)))
                 treatmentFollowupMHClientsComplaintString = treatmentFollowupMHClientsComplaintString + "SEXUAL PROBLEM" + " ; ";
-            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options_other)))
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options1_sexual_abuse)))
+                treatmentFollowupMHClientsComplaintString = treatmentFollowupMHClientsComplaintString + "SEXUAL ABUSE" + " ; ";
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options1_other_complaint)))
                 treatmentFollowupMHClientsComplaintString = treatmentFollowupMHClientsComplaintString + "OTHER COMPLAINT" + " ; ";
         }
         observations.add(new String[]{"CHIEF COMPLAINT", treatmentFollowupMHClientsComplaintString});
@@ -631,30 +647,54 @@ public class ComorbiditiesMentalHealthTreatmentFollowupForm extends AbstractForm
                                                         (obs[0][1].equals("PHYSICAL ABUSE") ? getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options_physical_abuse) :
                                                                 (obs[0][1].equals("SEXUAL PROBLEM") ? getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options_sexual_problems) : getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options_other)))))));
                 treatmentFollowupMHClientsComplaint.getSpinner().selectValue(value);
-            } */else if (obs[0][0].equals("CHIEF COMPLAINT")) {
+            } */ else if (obs[0][0].equals("CHIEF COMPLAINT")) {
                 for (CheckBox cb : treatmentFollowupMHClientsComplaint.getCheckedBoxes()) {
-                    if (cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options_relationship_problems)) && obs[0][1].equals("RELATIONSHIP PROBLEMS")) {
+                    if (cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options1_suicidal)) && obs[0][1].equals("SUICIDAL IDEATION")) {
                         cb.setChecked(true);
                         break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options_physical_illness)) && obs[0][1].equals("ILLNESS")) {
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options1_homicidal)) && obs[0][1].equals("HOMICIDAL IDEATION")) {
                         cb.setChecked(true);
                         break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options_daily_life)) && obs[0][1].equals("DAILY ACTIVITY")) {
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options1_psychotic)) && obs[0][1].equals("MANIA WITH PSYCHOTIC SYMPTOMS")) {
                         cb.setChecked(true);
                         break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options_subtance)) && obs[0][1].equals("SUBSTANCE ABUSE")) {
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options1_panic)) && obs[0][1].equals("ANXIETY ATTACK")) {
                         cb.setChecked(true);
                         break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options_financial)) && obs[0][1].equals("ECONOMIC PROBLEM")) {
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options1_medical)) && obs[0][1].equals("MEDICAL ADHERENCE")) {
                         cb.setChecked(true);
                         break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options_physical_abuse)) && obs[0][1].equals("PHYSICAL ABUSE")) {
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options1_depression)) && obs[0][1].equals("DEPRESSION")) {
                         cb.setChecked(true);
                         break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options_sexual_problems)) && obs[0][1].equals("SEXUAL PROBLEM")) {
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options1_verbal)) && obs[0][1].equals("VERBAL ABUSE")) {
                         cb.setChecked(true);
                         break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options_other)) && obs[0][1].equals("OTHER COMPLAINT")) {
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options1_relationship)) && obs[0][1].equals("RELATIONSHIP PROBLEMS")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options1_illness)) && obs[0][1].equals("ILLNESS")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options1_daily)) && obs[0][1].equals("DAILY ACTIVITY")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options1_substance)) && obs[0][1].equals("SUBSTANCE ABUSE")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options1_economic)) && obs[0][1].equals("ECONOMIC PROBLEM")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options1_physical)) && obs[0][1].equals("PHYSICAL ABUSE")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options1_sexual_problem)) && obs[0][1].equals("SEXUAL PROBLEM")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options1_sexual_abuse)) && obs[0][1].equals("SEXUAL ABUSE")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options1_other_complaint)) && obs[0][1].equals("OTHER COMPLAINT")) {
                         cb.setChecked(true);
                         break;
                     }
