@@ -108,27 +108,19 @@ public class HttpGwtRequest {
         postUri = http + postUri;
 
         try {
+
+            HttpPost httpPost = new HttpPost(postUri);
+            httpPost.setHeader("Accept", "application/json");
+            httpPost.setHeader("Content-Type", "application/json");
+            StringEntity stringEntity = new StringEntity(content);
+            httpPost.setEntity(stringEntity);
+            request = httpPost;
+
             if (App.getSsl().equalsIgnoreCase("Enabled")) {
                 HttpsClient client = new HttpsClient(context);
-
-                HttpPost httpPost = new HttpPost(postUri);
-                httpPost.setHeader("Accept", "application/json");
-                httpPost.setHeader("Content-Type", "application/json");
-                StringEntity stringEntity = new StringEntity(content);
-                httpPost.setEntity(stringEntity);
-                request = httpPost;
-
                 response = client.execute(request);
             } else {
                 HttpClient client = new DefaultHttpClient();
-
-                HttpPost httpPost = new HttpPost(postUri);
-                httpPost.setHeader("Accept", "application/json");
-                httpPost.setHeader("Content-Type", "application/json");
-                StringEntity stringEntity = new StringEntity(content);
-                httpPost.setEntity(stringEntity);
-                request = httpPost;
-
                 response = client.execute(request);
             }
         } catch (IOException e) {

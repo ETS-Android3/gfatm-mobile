@@ -102,6 +102,7 @@ public class ServerService {
     private static Context context;
     private static String fastGfatmUri;
     private HttpGwtRequest httpGwtClient;
+    private static String searchGfatmUri;
 
     public ServerService(Context context) {
         this.context = context;
@@ -112,7 +113,9 @@ public class ServerService {
 
         // GWT Connections
         fastGfatmUri = App.getIp()+":"+App.getPort() + "/gfatmweb/fastweb.jsp";
+        searchGfatmUri = App.getIp()+":"+App.getPort() + "/gfatmweb/gfatmtasks.jsp";
         httpGwtClient = new HttpGwtRequest(this.context);
+
     }
     /**
      * Checks to see if the client is connected to any network (GPRS/Wi-Fi)
@@ -391,8 +394,8 @@ public class ServerService {
             if (providerUUid == "")
                 return "PROVIDER_NOT_FOUND";
 
-            /*if (!isMobileAppCompatible())
-                return "VERSION_MISMATCH";*/
+            if (!isMobileAppCompatible())
+                return "VERSION_MISMATCH";
 
             App.setUserFullName(user.getFullName());
             App.setRoles(user.getRoles());
@@ -2407,6 +2410,191 @@ public class ServerService {
             response = "POST_ERROR";
         }
         return response;
+    }
+
+
+    public JSONObject searchPatients(String encounterType, ContentValues values, String[][] params) {
+
+        JSONObject jsonResponse = null;
+        String response = "";
+        String responseDetails = "";
+
+        try {
+
+            if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
+                if (!isURLReachable()) {
+                    return null;
+                }
+
+                JSONObject json = new JSONObject();
+                json.put("app_ver", App.getVersion());
+                json.put("type", encounterType);
+                json.put("username", App.getUsername());
+                json.put("password", App.getPassword());
+                json.put("location", "IHS");
+                json.put("age_range", values.get("age_range"));
+                json.put("gender", values.get("gender"));
+
+                JSONArray obs = new JSONArray();
+                for (int i = 0; i < params.length; i++) {
+                    if ("".equals(params[i][0])
+                            || "".equals(params[i][1]))
+                        continue;
+                    JSONObject obsJson = new JSONObject();
+                    obsJson.put("name", params[i][0]);
+                    obsJson.put("value", params[i][1]);
+
+                    obs.put(obsJson);
+                }
+                json.put("results", obs);
+
+                String val = json.toString();
+
+                response = httpGwtClient.clientPost(searchGfatmUri, val);
+                jsonResponse = JSONParser.getJSONObject(response);
+
+//            if (jsonResponse == null) {
+//                return response;
+//            }
+//            if (jsonResponse.has("response")) {
+//                String result = jsonResponse.getString("response");
+//                if (jsonResponse.getString("response").equals("ERROR"))
+//                    result = result + " <br> "
+//                            + jsonResponse.getString("details");
+//                return result;
+//            }
+//            return response;
+
+            } else {
+
+                String lowerAge = values.get("age_range").toString().split("-")[0].trim();
+                String upperAge = values.get("age_range").toString().split("-")[1].trim();
+                String gender = values.get("gender").toString();
+
+                Object[][] patientOnAgeAndGender = dbUtil.getFormTableData("select patient_id from " + Metadata.PATIENT + " where (strftime('%Y', 'now') - strftime('%Y', datetime(substr(birthdate, 1, 10)))) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(substr(birthdate, 1, 10)))) >=" + lowerAge + " AND (strftime('%Y', 'now') - strftime('%Y', datetime(substr(birthdate, 1, 10)))) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(substr(birthdate, 1, 10)))) <=" + upperAge + " AND gender ='" + gender + "'");
+
+//                Object[][] patientOnAgeAndGender = dbUtil.getFormTableData("select patient_id from " + Metadata.PATIENT + " where gender ='" + gender + "'");
+
+
+                if (patientOnAgeAndGender.length > 0) {
+
+                    StringBuilder patientIdBuilder = new StringBuilder();
+
+                    for (int i = 0; i < patientOnAgeAndGender.length; i++) {
+                        Object[] obj = patientOnAgeAndGender[i];
+
+                        if (i != 0)
+                            patientIdBuilder.append(",");
+                        patientIdBuilder.append(obj[0].toString());
+
+                    }
+
+                    for (int i = 0; i < params.length; i++) {
+                        if ("".equals(params[i][0])
+                                || "".equals(params[i][1]))
+                            continue;
+
+                        StringBuilder whereClause = new StringBuilder();
+
+                        if (params[i][0].equals("PATIENT_IDENTIFIER")) {
+                            whereClause.append(" AND identifier = '");
+                            whereClause.append(params[i][1]);
+                            whereClause.append("' ");
+
+                        } else if (params[i][0].equals("CNIC")) {
+                            whereClause.append(" AND nationalid = '");
+                            whereClause.append(params[i][1]);
+                            whereClause.append("' ");
+
+                        } else if (params[i][0].equals("CONTACT_NUMBER")) {
+                            whereClause.append(" AND primarycontact = '");
+                            whereClause.append(params[i][1]);
+                            whereClause.append("' ");
+
+                        } else if (params[i][0].equals("GUARDIAN_NAME")) {
+
+                            whereClause.append(" AND guardianname LIKE '%");
+                            whereClause.append(params[i][1]);
+                            whereClause.append("%' ");
+
+                        } else if (params[i][0].equals("MOTHER_NAME")) {
+                            whereClause.append(" AND mothername LIKE '%");
+                            whereClause.append(params[i][1]);
+                            whereClause.append("%' ");
+
+                        } else if (params[i][0].equals("PERSON_NAME")) {
+
+                            whereClause.append("AND (first_name  || ' ' || last_name) LIKE '%");
+                            whereClause.append(params[i][1]);
+                            whereClause.append("%' ");
+
+                        } else if (params[i][0].equals("PROGRAM")) {
+
+                            if (params[i][1].equals("PMDT"))
+                                whereClause.append(" AND in_pmdt = 'Y' ");
+                            else if (params[i][1].equals("PET"))
+                                whereClause.append(" AND in_pet = 'Y' ");
+                            else if (params[i][1].equals("ChildhoodTB"))
+                                whereClause.append(" AND in_childhood_tb = 'Y' ");
+                            else if (params[i][1].equals("Comorbidities"))
+                                whereClause.append(" AND in_comorbidities = 'Y' ");
+                            else if (params[i][1].equals("FAST"))
+                                whereClause.append(" AND in_fast = 'Y' ");
+
+                        }
+
+                        Object[][] patients = dbUtil.getFormTableData("select uuid, identifier, (first_name  || ' ' || last_name) as full_name, gender, datetime(substr(birthdate, 1, 10)), (strftime('%Y', 'now') - strftime('%Y', datetime(substr(birthdate, 1, 10)))) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(substr(birthdate, 1, 10)))) as age from " + Metadata.PATIENT + " where 1=1 " + whereClause.toString() + " AND patient_id IN (" + patientIdBuilder.toString() + ")");
+
+                        JSONArray personDetails = new JSONArray();
+                        JSONObject person;
+
+
+                        for (int j = 0; j < patients.length; j++) {
+                            Object[] obj = patients[j];
+
+                            person = new JSONObject();
+                            person.put("uuid", obj[0].toString());
+                            person.put("identifier", obj[1].toString());
+                            person.put("fullName", obj[2].toString());
+                            person.put("gender", obj[3].toString());
+                            person.put("dob", obj[4].toString());
+                            person.put("age", obj[5].toString());
+
+                            personDetails.put(person);
+
+                        }
+
+                        jsonResponse = new JSONObject();
+                        if (personDetails != null && personDetails.length() > 0) {
+
+                            response = "SUCCESS";
+                            responseDetails = "Detail :  Data found";
+
+                            jsonResponse.put("response", response);
+                            jsonResponse.put("details", responseDetails);
+                            jsonResponse.put("personArray", personDetails);
+
+                        } else {
+                            response = "ERROR";
+                            responseDetails = "Detail : No data found for matching criteria";
+                            jsonResponse.put("response", response);
+                            jsonResponse.put("details", responseDetails);
+                        }
+                    }
+                } else {
+                    jsonResponse = new JSONObject();
+                    response = "ERROR";
+                    responseDetails = "Detail : No data found for matching criteria";
+                    jsonResponse.put("response", response);
+                    jsonResponse.put("details", responseDetails);
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return jsonResponse;
     }
 
 }

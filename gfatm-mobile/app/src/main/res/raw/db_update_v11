@@ -11,6 +11,7 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NEW LOCATION','
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REASON FOR CHANGING FACILITY','reason_for_changing_facility','Coded','06250314-6e50-4fac-b6ff-409e0c99d194');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OLD FACILITY TOO FAR',NULL,'N/A','efe9652e-4969-4002-8b5f-1711dbe09a49');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER REASON FOR CHANGING FACILITY','other_reason_for_changing_facility','N/A','9699aa28-9049-443a-938c-2088a0b1eebc');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LOCATION OF REFERRAL OR TRANSFER','referral_transfer_site','Text','d82bc26e-9a17-4a6d-8aea-5ad557d9fe87');
 
 INSERT OR IGNORE INTO encounter_type VALUES ('PET-Test Indication','Add PET Forms','View PET Forms','8f664c19-3d89-4ffc-a53a-9be0871ada3c');
 INSERT OR IGNORE INTO encounter_type VALUES ('PET-GXP Specimen Collection','Add PET Forms','View PET Forms','796993f5-8e8d-4cb0-b7df-878f68061e05');

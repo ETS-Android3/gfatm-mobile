@@ -348,10 +348,10 @@
     <string name="city_default" translatable="false">Karachi</string>
     <string name="province_default" translatable="false">Sindh</string>
     <string name="country_default" translatable="false">Pakistan</string>
-    <!--<string name="ip_default" translatable="false">mrs.ghd.ihn.org.pk</string>
-    <string name="port_default" translatable="false">443</string>-->
-    <string name="ip_default" translatable="false">202.141.249.106</string>
-    <string name="port_default" translatable="false">9902</string>
+    <string name="ip_default" translatable="false">mrs.ghd.ihn.org.pk</string>
+    <string name="port_default" translatable="false">443</string>
+    <!--<string name="ip_default" translatable="false">202.141.249.106</string>
+    <string name="port_default" translatable="false">9902</string>-->
 
     <string name="support_contact">Support Contact</string>
     <string name="support_email">Support Email</string>
@@ -562,5 +562,14 @@
     <string name="aao_tb_mitao_app">Aao TB Mitao - Mobile App</string>
 
     <string name="order_id">Order ID</string>
+
+    <string name="pmdt_search_error">Error while trying to search in openmrs.</string>
+    <string name="pmdt_searching">Searching...</string>
+    <string name="pmdt_program_name">Program:</string>
+    <string name="childhood_tb_db">ChildhoodTB</string> <!-- name in db -->
+    <string name="pmdt_provide_search_criteria">Please select any of the search criteria.</string>
+    <string name="guardian_name">Guardian Name</string>
+
+    <string name="pid_copied">Patient ID copied.</string>
 
 </resources>

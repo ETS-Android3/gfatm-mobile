@@ -100,6 +100,8 @@ import com.ihsinformatics.gfatmmobile.pmdt.PmdtProviderRegistration;
 import com.ihsinformatics.gfatmmobile.pmdt.PmdtSocialSupportFoodBasketForm;
 import com.ihsinformatics.gfatmmobile.pmdt.PmdtTreatmentCoordinatorMonitoringForm;
 
+import org.openmrs.Role;
+
 import java.util.ArrayList;
 
 /**
@@ -155,17 +157,17 @@ public class Forms{
     public static final FormsObject pet_adverseEvents = new FormsObject(PET_ADVERSE_EVENTS, PetAdverseEventForm.class, R.drawable.pet_adverse_events, FormTypeColor.OTHER_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN});
     public static final FormsObject pet_incentiveDisbursement = new FormsObject(PET_INCENTIVE_DISBURSEMENT, PetIncentiveDisbursementForm.class, R.drawable.pet_incentive_disbursement, FormTypeColor.OTHER_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_FIELD_SUPERVISOR, Roles.PET_HEALTH_WORKER});
     public static final FormsObject pet_endOfFollowup = new FormsObject(PET_END_FOLLOWOUP, PetEndOfFollowupForm.class, R.drawable.pet_followup_end, FormTypeColor.FOLLOWUP_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_FIELD_SUPERVISOR, Roles.PET_CLINICIAN});
-    public static final FormsObject pet_test_indication_form = new FormsObject(PET_TEST_INDICATION_FORM, PetTestIndicationForm.class, R.drawable.ctb_test_indication_form, FormTypeColor.TEST_FORM, new String[]{Roles.PET_PROGRAM_MANAGER});
-    public static final FormsObject pet_gxp_specimen_form = new FormsObject(PET_SPECIMEN_COLLECTION_FORM, PetSpecimenCollectionForm.class, R.drawable.pet_treatment_adherence, FormTypeColor.TEST_FORM, new String[]{Roles.PET_PROGRAM_MANAGER});
-    public static final FormsObject pet_gxp_test = new FormsObject(PET_GXP_TEST, PetGXPTestForm.class, R.drawable.fast_result_form, FormTypeColor.TEST_FORM, new String[]{Roles.PET_PROGRAM_MANAGER});
-    public static final FormsObject pet_cxr_screening_test = new FormsObject(PET_CXR_SCREENING_TEST, PetCXRScreeningTestForm.class, R.drawable.ctb_xray, FormTypeColor.TEST_FORM, new String[]{Roles.PET_PROGRAM_MANAGER});
-    public static final FormsObject pet_afb_smear_order_and_result = new FormsObject(PET_AFB_SMEAR_ORDER_AND_RESULT, PetAFBSmearTestForm.class, R.drawable.ctb_afb_smear, FormTypeColor.TEST_FORM, new String[]{Roles.PET_PROGRAM_MANAGER});
-    public static final FormsObject pet_dst_order_and_result = new FormsObject(PET_DST_CULTURE_TEST, PetDSTCultureTestForm.class, R.drawable.ctb_dst_culture, FormTypeColor.TEST_FORM, new String[]{Roles.PET_PROGRAM_MANAGER});
-    public static final FormsObject pet_ultrasound_order_and_result = new FormsObject(PET_ULTRASOUND_TEST, PetUltrasoundTestForm.class, R.drawable.ctb_ultrasound, FormTypeColor.TEST_FORM, new String[]{Roles.PET_PROGRAM_MANAGER});
-    public static final FormsObject pet_ct_scan_order_and_result = new FormsObject(PET_CT_SCAN_TEST, PetCTScanTestForm.class, R.drawable.ctb_ct_scan, FormTypeColor.TEST_FORM, new String[]{Roles.PET_PROGRAM_MANAGER});
-    public static final FormsObject pet_mantoux_order_and_result = new FormsObject(PET_MANTOUX_TEST, PetMantouxTestForm.class, R.drawable.ctb_mantoux, FormTypeColor.TEST_FORM, new String[]{Roles.PET_PROGRAM_MANAGER});
-    public static final FormsObject pet_histopathology_order_and_result = new FormsObject(PET_HISTOPATHOLOGY_TEST, ChildhoodTbHistopathologySite.class, R.drawable.ctb_histopathology, FormTypeColor.TEST_FORM, new String[]{Roles.PET_PROGRAM_MANAGER});
-    public static final FormsObject pet_missed_visit_followup = new FormsObject(PET_MISSED_VISIT_FOLLOWUP, PetMissedVisitFollowup.class, R.drawable.ctb_missed_followup, FormTypeColor.FOLLOWUP_FORM, new String[]{Roles.PET_PROGRAM_MANAGER});
+    public static final FormsObject pet_test_indication_form = new FormsObject(PET_TEST_INDICATION_FORM, PetTestIndicationForm.class, R.drawable.ctb_test_indication_form, FormTypeColor.TEST_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN});
+    public static final FormsObject pet_gxp_specimen_form = new FormsObject(PET_SPECIMEN_COLLECTION_FORM, PetSpecimenCollectionForm.class, R.drawable.pet_treatment_adherence, FormTypeColor.TEST_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_FIELD_SUPERVISOR, Roles.PET_HEALTH_WORKER});
+    public static final FormsObject pet_gxp_test = new FormsObject(PET_GXP_TEST, PetGXPTestForm.class, R.drawable.fast_result_form, FormTypeColor.TEST_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN});
+    public static final FormsObject pet_cxr_screening_test = new FormsObject(PET_CXR_SCREENING_TEST, PetCXRScreeningTestForm.class, R.drawable.ctb_xray, FormTypeColor.TEST_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN});
+    public static final FormsObject pet_afb_smear_order_and_result = new FormsObject(PET_AFB_SMEAR_ORDER_AND_RESULT, PetAFBSmearTestForm.class, R.drawable.ctb_afb_smear, FormTypeColor.TEST_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN});
+    public static final FormsObject pet_dst_order_and_result = new FormsObject(PET_DST_CULTURE_TEST, PetDSTCultureTestForm.class, R.drawable.ctb_dst_culture, FormTypeColor.TEST_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN});
+    public static final FormsObject pet_ultrasound_order_and_result = new FormsObject(PET_ULTRASOUND_TEST, PetUltrasoundTestForm.class, R.drawable.ctb_ultrasound, FormTypeColor.TEST_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN});
+    public static final FormsObject pet_ct_scan_order_and_result = new FormsObject(PET_CT_SCAN_TEST, PetCTScanTestForm.class, R.drawable.ctb_ct_scan, FormTypeColor.TEST_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN});
+    public static final FormsObject pet_mantoux_order_and_result = new FormsObject(PET_MANTOUX_TEST, PetMantouxTestForm.class, R.drawable.ctb_mantoux, FormTypeColor.TEST_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN});
+    public static final FormsObject pet_histopathology_order_and_result = new FormsObject(PET_HISTOPATHOLOGY_TEST, ChildhoodTbHistopathologySite.class, R.drawable.ctb_histopathology, FormTypeColor.TEST_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN});
+    public static final FormsObject pet_missed_visit_followup = new FormsObject(PET_MISSED_VISIT_FOLLOWUP, PetMissedVisitFollowup.class, R.drawable.ctb_missed_followup, FormTypeColor.FOLLOWUP_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_HEALTH_WORKER, Roles.PET_FIELD_SUPERVISOR});
 
     /********************************
      * FAST
