@@ -4511,7 +4511,7 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('HBA1C REPORT','
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RBS REPORT','rbs_report','N/A','1149f103-6a2d-44f6-a8fe-ebec454b822d');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('FBS REPORT',NULL,'N/A','029c690e-60f0-4513-90ce-c5af42441cd7');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OGTT REPORT','OGTT_report','N/A','acef024b-5bf2-42e9-a941-7c9da284378b');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT DOESN'T HAVE PROOF OF REPORT','doesn't_have_report','N/A','f7ed3272-b377-4882-9734-23a60a9e0395');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT DOESN''T HAVE PROOF OF REPORT','doesn''t_have_report','N/A','f7ed3272-b377-4882-9734-23a60a9e0395');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('AVAILABILITY OF HBA1C AT SITE','hba1c_availability_at_site','Coded','cdef23ad-c3b6-4564-9c5c-e7b9f808d21d');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('HOMICIDAL IDEATION','HomicidaL_ideation','N/A','d1e91c3f-68c1-49f3-8e63-d8525b2d110e');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MANIA WITH PSYCHOTIC SYMPTOMS',NULL,'N/A','162313AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
@@ -4520,7 +4520,6 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MEDICAL ADHEREN
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('VERBAL ABUSE','verbal_abuse','N/A','0539c9e5-da1c-4e4f-b579-77794659c980');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('METFORMIN PRESCRIBED (FOR DAYS)','metformin_prescribed','Numeric','8908ddc9-cb6b-43a1-9f3c-e8c6e4ade857');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('METFORMIN TABLET PER DAY','metformin_per_day','Numeric','375d0299-7166-44d4-a776-6623fe0a213a');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CHANGE IN TB CATEGORY','change_tb_category','N/A','1258167f-cf44-42cf-96b0-2d2448f24e97');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CHANGE IN TB CATEGORY','change_tb_category','N/A','1258167f-cf44-42cf-96b0-2d2448f24e97');
 
 -- Program
