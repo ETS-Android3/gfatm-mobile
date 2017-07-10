@@ -174,7 +174,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         monthTreatment = new TitledSpinner(context, null, getResources().getString(R.string.ctb_month_treatment), getResources().getStringArray(R.array.ctb_0_to_24), null, App.HORIZONTAL);
         updateFollowUpMonth();
         patientCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_category), getResources().getStringArray(R.array.ctb_patient_category3_list), getResources().getString(R.string.ctb_categoryI), App.VERTICAL, App.VERTICAL,true);
-        weight = new TitledEditText(context, null, getResources().getString(R.string.ctb_patient_weight), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
+        weight = new TitledEditText(context, null, getResources().getString(R.string.ctb_patient_weight), "", "", 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true);
         treatmentPlan = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_treatment_plan), getResources().getStringArray(R.array.ctb_treatment_plan_list), null, App.VERTICAL, App.VERTICAL,true);
 
         intensivePhaseRegimen = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_regimen), getResources().getStringArray(R.array.ctb_regimen_list), getResources().getString(R.string.ctb_rhz), App.HORIZONTAL, App.VERTICAL,true);
@@ -274,7 +274,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
             @Override
             public void afterTextChanged(Editable s) {
                 if(s.length()>0){
-                    int value = Integer.parseInt(s.toString());
+                    float value = Float.parseFloat(s.toString());
 
                     //CURRENT FORMULATION
                     if(value>=4 && value<=6){
@@ -1440,7 +1440,6 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
             snackbar.dismiss();
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-        treatmentInitiationDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         intensivePhaseRegimen.setVisibility(View.GONE);
         typeFixedDosePrescribedIntensive.setVisibility(View.GONE);
         currentTabletsofRHZ.setVisibility(View.GONE);
@@ -1479,7 +1478,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 patientType.getSpinner().selectValue(getResources().getString(R.string.ctb_other_title));
             }
         }
-        String startDate = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "IPT START DATE");
+        String startDate = serverService.getLatestEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation");
         String format = "";
         if(startDate!=null) {
             if (startDate.contains("/")) {
@@ -1488,9 +1487,9 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 format = "yyyy-MM-dd";
             }
             secondDateCalendar.setTime(App.stringToDate(startDate, format));
-            thirdDateCalendar.set(Calendar.YEAR, secondDateCalendar.get(Calendar.YEAR));
-            thirdDateCalendar.set(Calendar.DAY_OF_MONTH, secondDateCalendar.get(Calendar.DAY_OF_MONTH));
-            thirdDateCalendar.set(Calendar.MONTH, secondDateCalendar.get(Calendar.MONTH));
+            thirdDateCalendar.set(Calendar.YEAR, formDateCalendar.get(Calendar.YEAR));
+            thirdDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
+            thirdDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
             thirdDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
             treatmentInitiationDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
             returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
@@ -1498,9 +1497,9 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
 
         }else{
             treatmentInitiationDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-            thirdDateCalendar.set(Calendar.YEAR, secondDateCalendar.get(Calendar.YEAR));
-            thirdDateCalendar.set(Calendar.DAY_OF_MONTH, secondDateCalendar.get(Calendar.DAY_OF_MONTH));
-            thirdDateCalendar.set(Calendar.MONTH, secondDateCalendar.get(Calendar.MONTH));
+            thirdDateCalendar.set(Calendar.YEAR, formDateCalendar.get(Calendar.YEAR));
+            thirdDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
+            thirdDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
             thirdDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
             returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
         }
