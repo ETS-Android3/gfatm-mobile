@@ -1410,16 +1410,16 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
                 ArrayList<MyCheckBox> rbs = preferredModeOfTherapy.getCheckedBoxes();
 
                 for (MyCheckBox rb : rbs) {
-                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_facility)))
+                    /*if (rb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_facility)))
                         rb.setVisibility(View.GONE);
                     else if (rb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_call_centre)))
                         rb.setVisibility(View.GONE);
-                    else {
+                    else {*/
                         rb.setVisibility(View.VISIBLE);
 
                         /*if (rb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_home)))
                             rb.setChecked(true);*/
-                    }
+                    //}
                 }
             }
             else {

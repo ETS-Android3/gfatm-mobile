@@ -16,11 +16,13 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -34,6 +36,7 @@ import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
+import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
@@ -55,11 +58,18 @@ public class ComorbiditiesDiabetesMellitusScreeningForm extends AbstractFormActi
     Context context;
 
     // Views...
+    Boolean emptyError = false;
     TitledButton formDate;
-    MyTextView dMScreening;
+    //MyTextView dMScreening;
+    MyTextView dMScreeningDiabetesDiagnosed;
+    TitledRadioGroup diagnosedWithDiabetes;
+    TitledCheckBoxes diabetesDiagnosedThrough;
+    TitledRadioGroup hba1cSiteAvailability;
     TitledRadioGroup screeningFood;
     TitledEditText screeningRBS;
     TitledRadioGroup hba1cTestVoucher;
+
+    ScrollView scrollView;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -112,7 +122,7 @@ public class ComorbiditiesDiabetesMellitusScreeningForm extends AbstractFormActi
                     View v = viewGroups[i][j];
                     layout.addView(v);
                 }
-                ScrollView scrollView = new ScrollView(mainContent.getContext());
+                scrollView = new ScrollView(mainContent.getContext());
                 scrollView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 scrollView.addView(layout);
                 groups.add(scrollView);
@@ -132,22 +142,32 @@ public class ComorbiditiesDiabetesMellitusScreeningForm extends AbstractFormActi
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        dMScreening = new MyTextView(context, getResources().getString(R.string.comorbidities_dm_screening));
-        dMScreening.setTypeface(null, Typeface.BOLD);
-        screeningFood = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_dmscrnng_food), getResources().getStringArray(R.array.comorbidities_yes_no), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL);
+        //dMScreening = new MyTextView(context, getResources().getString(R.string.comorbidities_dm_screening));
+        //dMScreening.setTypeface(null, Typeface.BOLD);
+        dMScreeningDiabetesDiagnosed = new MyTextView(context, getResources().getString(R.string.comorbidities_dm_screening_diabetes_diagnosed));
+        dMScreeningDiabetesDiagnosed.setTypeface(null, Typeface.BOLD);
+        diagnosedWithDiabetes = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_dmscrnng_diagnosed_with_diabetes), getResources().getStringArray(R.array.comorbidities_yes_no), "", App.VERTICAL, App.VERTICAL, true);
+        diabetesDiagnosedThrough = new TitledCheckBoxes(context, null, getResources().getString(R.string.comorbidities_dmscrnng_diagnosed_through), getResources().getStringArray(R.array.comorbidities_dmscrnng_diagnosed_through_options), new Boolean[]{false, false, false, false, false, false}, App.VERTICAL, App.VERTICAL);
+        hba1cSiteAvailability = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_dmscrnng_hba1c_availability), getResources().getStringArray(R.array.comorbidities_yes_no), "", App.VERTICAL, App.VERTICAL, true);
+        screeningFood = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_dmscrnng_food), getResources().getStringArray(R.array.comorbidities_yes_no), "", App.VERTICAL, App.VERTICAL, true);
         screeningRBS = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_scrnng_rbs), "", getResources().getString(R.string.comorbidities_scrnng_rbs_range), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         hba1cTestVoucher = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_hba1c_testvoucher), getResources().getStringArray(R.array.comorbidities_yes_no), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL);
         displayHba1cTestVoucherOrNot();
+        diabetesDiagnosedThrough.setVisibility(View.GONE);
+        screeningFood.setVisibility(View.GONE);
+
+        Log.v("SCREENING FOOD", App.get(screeningFood)+"");
 
         // Used for reset fields...
-        views = new View[]{screeningFood.getRadioGroup(), screeningRBS.getEditText(), hba1cTestVoucher.getRadioGroup()};
+        views = new View[]{diagnosedWithDiabetes.getRadioGroup(), diabetesDiagnosedThrough, hba1cSiteAvailability.getRadioGroup(), screeningFood.getRadioGroup(), screeningRBS.getEditText(), hba1cTestVoucher.getRadioGroup()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, dMScreening, screeningFood, screeningRBS, hba1cTestVoucher}};
+                {{formDate, dMScreeningDiabetesDiagnosed/*dMScreening*/,diagnosedWithDiabetes, diabetesDiagnosedThrough, hba1cSiteAvailability, screeningFood, screeningRBS, hba1cTestVoucher}};
 
         formDate.getButton().setOnClickListener(this);
-
+        diagnosedWithDiabetes.getRadioGroup().setOnCheckedChangeListener(this);
+        hba1cSiteAvailability.getRadioGroup().setOnCheckedChangeListener(this);
         screeningFood.getRadioGroup().setOnCheckedChangeListener(this);
         screeningRBS.getEditText().setSingleLine(true);
         screeningRBS.getEditText().addTextChangedListener(new TextWatcher() {
@@ -222,7 +242,9 @@ public class ComorbiditiesDiabetesMellitusScreeningForm extends AbstractFormActi
     public boolean validate() {
 
         Boolean error = false;
+        View view = null;
 
+        Boolean flag = false;
         if (App.get(screeningRBS).isEmpty()) {
             gotoLastPage();
             screeningRBS.getEditText().setError(getString(R.string.empty_field));
@@ -236,20 +258,63 @@ public class ComorbiditiesDiabetesMellitusScreeningForm extends AbstractFormActi
             error = true;
         }
 
+        if (screeningFood.getVisibility() == View.VISIBLE && App.get(screeningFood).isEmpty()) {
+            emptyError = true;
+            error = true;
+        }
+
+        if (hba1cSiteAvailability.getVisibility() == View.VISIBLE && App.get(hba1cSiteAvailability).isEmpty()) {
+            emptyError = true;
+            error = true;
+        }
+
+        flag = false;
+        if (diabetesDiagnosedThrough.getVisibility() == View.VISIBLE) {
+            for (CheckBox cb : diabetesDiagnosedThrough.getCheckedBoxes()) {
+                if (cb.isChecked()) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) {
+                diabetesDiagnosedThrough.getQuestionView().setError(getString(R.string.empty_field));
+                diabetesDiagnosedThrough.getQuestionView().requestFocus();
+                view = diabetesDiagnosedThrough;
+                error = true;
+            }
+        }
+
+        if (diagnosedWithDiabetes.getVisibility() == View.VISIBLE && App.get(diagnosedWithDiabetes).isEmpty()) {
+            emptyError = true;
+            error = true;
+        }
 
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
-            alertDialog.setMessage(getString(R.string.form_error));
+            if(!emptyError)
+                alertDialog.setMessage(getString(R.string.form_error));
+            else
+                alertDialog.setMessage(getString(R.string.comorbidities_required_field_error));
+
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_error));
+            final View finalView = view;
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
+                            scrollView.post(new Runnable() {
+                                public void run() {
+                                    if (finalView != null) {
+                                        scrollView.scrollTo(0, finalView.getTop());
+                                        screeningRBS.clearFocus();
+                                    }
+                                }
+                            });
                             try {
                                 InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
@@ -290,6 +355,27 @@ public class ComorbiditiesDiabetesMellitusScreeningForm extends AbstractFormActi
         }
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
+        observations.add(new String[]{"DIABETES DIAGNOSED", App.get(diagnosedWithDiabetes).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+
+        if(diabetesDiagnosedThrough.getVisibility() == View.VISIBLE) {
+            String diabetesEducationFormDiabetesEducationString = "";
+            for (CheckBox cb : diabetesDiagnosedThrough.getCheckedBoxes()) {
+                if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_dmscrnng_diagnosed_through_hba1c)))
+                    diabetesEducationFormDiabetesEducationString = diabetesEducationFormDiabetesEducationString + "HBA1C REPORT" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_dmscrnng_diagnosed_through_doctors_prescription)))
+                    diabetesEducationFormDiabetesEducationString = diabetesEducationFormDiabetesEducationString + "DOCTORS PRESCRIPTION" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_dmscrnng_diagnosed_through_rbs)))
+                    diabetesEducationFormDiabetesEducationString = diabetesEducationFormDiabetesEducationString + "RBS REPORT" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_dmscrnng_diagnosed_through_fbs)))
+                    diabetesEducationFormDiabetesEducationString = diabetesEducationFormDiabetesEducationString + "FBS REPORT" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_dmscrnng_diagnosed_through_ogtt)))
+                    diabetesEducationFormDiabetesEducationString = diabetesEducationFormDiabetesEducationString + "OGTT REPORT" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_dmscrnng_diagnosed_through_no_proof)))
+                    diabetesEducationFormDiabetesEducationString = diabetesEducationFormDiabetesEducationString + "PATIENT DOESN'T HAVE PROOF OF REPORT" + " ; ";
+            }
+            observations.add(new String[]{"DIABETES DIAGNOSED THROUGH", diabetesEducationFormDiabetesEducationString});
+        }
+        observations.add(new String[]{"AVAILABILITY OF HBA1C AT SITE", App.get(hba1cSiteAvailability).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         observations.add(new String[]{"FOOD CONSUMPTION IN PAST 2 HOURS", App.get(screeningFood).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         observations.add(new String[]{"RANDOM BLOOD SUGAR", App.get(screeningRBS)});
         if(hba1cTestVoucher.getVisibility() == View.VISIBLE) {
@@ -436,7 +522,52 @@ public class ComorbiditiesDiabetesMellitusScreeningForm extends AbstractFormActi
                 timeTakeToFill = obs[0][1];
             }
 
-            if (obs[0][0].equals("FOOD CONSUMPTION IN PAST 2 HOURS")) {
+            if (obs[0][0].equals("DIABETES DIAGNOSED")) {
+                for (RadioButton rb : diagnosedWithDiabetes.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            }
+            else if (obs[0][0].equals("DIABETES DIAGNOSED THROUGH")) {
+                for (CheckBox cb : diabetesDiagnosedThrough.getCheckedBoxes()) {
+                    if (cb.getText().equals(getResources().getString(R.string.comorbidities_dmscrnng_diagnosed_through_hba1c)) && obs[0][1].equals("HBA1C REPORT")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_dmscrnng_diagnosed_through_doctors_prescription)) && obs[0][1].equals("DOCTORS PRESCRIPTION")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_dmscrnng_diagnosed_through_rbs)) && obs[0][1].equals("RBS REPORT")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_dmscrnng_diagnosed_through_fbs)) && obs[0][1].equals("FBS REPORT")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_dmscrnng_diagnosed_through_ogtt)) && obs[0][1].equals("OGTT REPORT")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_dmscrnng_diagnosed_through_no_proof)) && obs[0][1].equals("PATIENT DOESN'T HAVE PROOF OF REPORT")) {
+                        cb.setChecked(true);
+                        break;
+                    }
+                }
+            }
+            else if (obs[0][0].equals("AVAILABILITY OF HBA1C AT SITE")) {
+                for (RadioButton rb : hba1cSiteAvailability.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            }
+            else if (obs[0][0].equals("FOOD CONSUMPTION IN PAST 2 HOURS")) {
                 for (RadioButton rb : screeningFood.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);
@@ -523,7 +654,7 @@ public class ComorbiditiesDiabetesMellitusScreeningForm extends AbstractFormActi
 
     }
 
-    @Override
+    /*@Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         snackbar = Snackbar.make(mainContent, getResources().getString(R.string.comorbidities_dmscrnng_screener_instructions), Snackbar.LENGTH_INDEFINITE)
@@ -547,12 +678,34 @@ public class ComorbiditiesDiabetesMellitusScreeningForm extends AbstractFormActi
         TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
         textView.setMaxLines(3);
         snackbar.show();
-    }
+    }*/
 
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
 
         if(radioGroup == screeningFood.getRadioGroup()) {
+
+            snackbar = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.comorbidities_dmscrnng_screener_instructions), Snackbar.LENGTH_INDEFINITE)
+                    .setAction("CLOSE", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            snackbar.dismiss();
+                        }
+                    });
+
+            // Changing message text color
+            //snackbar.setActionTextColor(Color.RED);
+
+            //Changing Typeface of Snackbar Action text
+            TextView snackbarActionTextView = (TextView) snackbar.getView().findViewById( android.support.design.R.id.snackbar_action );
+            snackbarActionTextView.setTextSize(20);
+            snackbarActionTextView.setTypeface(snackbarActionTextView.getTypeface(), Typeface.BOLD);
+
+            // Setting Maximum lines for the textview in snackbar
+            View sbView = snackbar.getView();
+            TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+            textView.setMaxLines(3);
+
             if(App.get(screeningFood).equalsIgnoreCase(getResources().getString(R.string.yes))) {
                 if(snackbar != null)
                     snackbar.show();
@@ -561,6 +714,12 @@ public class ComorbiditiesDiabetesMellitusScreeningForm extends AbstractFormActi
                 if(snackbar != null)
                     snackbar.dismiss();
             }
+        }
+        else if(radioGroup == diagnosedWithDiabetes.getRadioGroup()) {
+            displayDiagnosedThrough();
+        }
+        else if(radioGroup == hba1cSiteAvailability.getRadioGroup()) {
+            displayScreeningFoodOrNot();
         }
 
     }
@@ -581,6 +740,50 @@ public class ComorbiditiesDiabetesMellitusScreeningForm extends AbstractFormActi
         catch (NumberFormatException nfe) {
             //Exception: User might be entering " " (empty) value
             hba1cTestVoucher.setVisibility(View.GONE);
+        }
+    }
+
+    void displayDiagnosedThrough() {
+
+        snackbar = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.comorbidities_dmscrnng_screener_instructions_proof_of_Diabetes), Snackbar.LENGTH_INDEFINITE)
+                .setAction("CLOSE", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        snackbar.dismiss();
+                    }
+                });
+
+        // Changing message text color
+        //snackbar.setActionTextColor(Color.RED);
+
+        //Changing Typeface of Snackbar Action text
+        TextView snackbarActionTextView = (TextView) snackbar.getView().findViewById( android.support.design.R.id.snackbar_action );
+        snackbarActionTextView.setTextSize(20);
+        snackbarActionTextView.setTypeface(snackbarActionTextView.getTypeface(), Typeface.BOLD);
+
+        // Setting Maximum lines for the textview in snackbar
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setMaxLines(3);
+
+            if(App.get(diagnosedWithDiabetes).equalsIgnoreCase(getResources().getString(R.string.yes))) {
+                if(snackbar != null)
+                    snackbar.show();
+                diabetesDiagnosedThrough.setVisibility(View.VISIBLE);
+            }
+            else if(App.get(diagnosedWithDiabetes).equalsIgnoreCase(getResources().getString(R.string.no))) {
+                if(snackbar != null)
+                    snackbar.dismiss();
+                diabetesDiagnosedThrough.setVisibility(View.GONE);
+            }
+    }
+
+    void displayScreeningFoodOrNot() {
+        if(App.get(hba1cSiteAvailability).equalsIgnoreCase(getResources().getString(R.string.yes))) {
+            screeningFood.setVisibility(View.GONE);
+        }
+        else if(App.get(hba1cSiteAvailability).equalsIgnoreCase(getResources().getString(R.string.no))) {
+            screeningFood.setVisibility(View.VISIBLE);
         }
     }
 
