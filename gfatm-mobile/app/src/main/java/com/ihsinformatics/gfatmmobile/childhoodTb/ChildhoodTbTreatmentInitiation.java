@@ -236,7 +236,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         cnicLinearLayout.addView(cnicPartLayout);
         cnicOwner = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_cnic_owner), getResources().getStringArray(R.array.ctb_close_contact_type_list), null, App.VERTICAL);
         cnicOwnerOther = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        tbRegisterationNumber = new TitledEditText(context, null, getResources().getString(R.string.ctb_tb_registration_no), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        tbRegisterationNumber = new TitledEditText(context, null, getResources().getString(R.string.ctb_tb_registration_no), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         tbType = new TitledCheckBoxes(context, null, getResources().getString(R.string.ctb_type_of_tb_name), getResources().getStringArray(R.array.ctb_extra_pulomonary_and_pulmonary), null, App.VERTICAL,App.VERTICAL,true);
         extraPulmonarySite = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_site_of_extra_pulmonary), getResources().getStringArray(R.array.ctb_extra_pulmonary_tb_site), getResources().getString(R.string.ctb_lymph_node), App.VERTICAL,true);
         extraPulmonarySiteOther = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_extra_pulmonary_site), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
@@ -2165,6 +2165,8 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             snackbar.dismiss();
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        regDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+
         iptStartDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
         iptStartDate.setVisibility(View.GONE);
         returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", forthDateCalender).toString());
@@ -2227,7 +2229,6 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 String cnic1 = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Patient Registration", "NATIONAL IDENTIFICATION NUMBER");
                 String cnicowner1 = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Patient Registration", "COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
                 String cnicownerother1 = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Patient Registration", "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
-                String regDate = serverService.getLatestEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + "Presumptive Case Confirmation");
 
                 if (cnic1 != null)
                     result.put("NATIONAL IDENTIFICATION NUMBER", cnic1);
@@ -2249,10 +2250,6 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
 
                 if (cnicownerother1 != null)
                     result.put("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", cnicownerother1);
-
-                if (regDate != null)
-                    result.put("FORM DATE", regDate);
-
                 return result;
             }
 
@@ -2284,19 +2281,6 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 if (result.get("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER") != null) {
                     cnicOwnerOther.getEditText().setText(result.get("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER"));
                     cnicOwnerOther.getEditText().setKeyListener(null);
-                }
-
-                if (result.get("FORM DATE") != null) {
-                    String format = "";
-                    String registerationDate = result.get("FORM DATE");
-                    if(registerationDate.contains("/")){
-                        format = "dd/MM/yyyy";
-                    }
-                    else{
-                        format = "yyyy-MM-dd";
-                    }
-                    secondDateCalendar.setTime(App.stringToDate(registerationDate, format));
-                    regDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
                 }
             }
         };
