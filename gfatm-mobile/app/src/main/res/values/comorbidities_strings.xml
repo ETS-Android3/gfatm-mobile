@@ -40,12 +40,34 @@
     <string name="comorbidities_preferredlocation_gpcliniccode_limit">The value should be in the range of 1&#8211;50</string>
     <string name="comorbidities_preferredlocation_other_comorbidities">Other preferred location:</string>
     <string name="comorbidities_dm_screening">DIABETES MELLITUS SCREENING</string>
+    <string name="comorbidities_dm_screening_diabetes_diagnosed">Diabetes Diagnosed through?</string>
     <string name="comorbidities_dmscrnng_food">Have you had something to eat within the last two hours?</string>
+    <string name="comorbidities_dmscrnng_diagnosed_with_diabetes">Have you been diagnosed with Diabetes?</string>
+    <string name="comorbidities_dmscrnng_diagnosed_through">Diabetes Diagnosed through?</string>
+    <string name="comorbidities_dmscrnng_hba1c_availability">Availability of HbA1c at site?</string>
     <string name="comorbidities_dmscrnng_screener_instructions">Screener Instructions: \nKindly ensure that the patient waits two hours before getting the RBS.</string>
+    <string name="comorbidities_dmscrnng_screener_instructions_proof_of_Diabetes">Screener Instructions: \nKindly notify patient to bring proof of Diabetes on next visit.</string>
     <string name="comorbidities_scrnng_rbs">Random Blood Sugar (RBS):</string>
     <string name="comorbidities_scrnng_rbs_range">Range 1&#8211;500</string>
     <string name="comorbidities_scrnng_rbs_limit">The value should be in the range of 1&#8211;500</string>
     <string name="comorbidities_hba1c_testvoucher">HbA1C test voucher given?</string>
+    <string name="comorbidities_required_field_error">Required (*) fields cannot be empty.</string>
+
+    <string name="comorbidities_dmscrnng_diagnosed_through_hba1c">HbA1C Report</string>
+    <string name="comorbidities_dmscrnng_diagnosed_through_doctors_prescription">Doctors Prescription</string>
+    <string name="comorbidities_dmscrnng_diagnosed_through_rbs">RBS Report</string>
+    <string name="comorbidities_dmscrnng_diagnosed_through_fbs">FBS Report</string>
+    <string name="comorbidities_dmscrnng_diagnosed_through_ogtt">OGTT Report</string>
+    <string name="comorbidities_dmscrnng_diagnosed_through_no_proof">Patient does not have proof of report</string>
+
+    <string-array name="comorbidities_dmscrnng_diagnosed_through_options">
+        <item>@string/comorbidities_dmscrnng_diagnosed_through_hba1c</item>
+        <item>@string/comorbidities_dmscrnng_diagnosed_through_doctors_prescription</item>
+        <item>@string/comorbidities_dmscrnng_diagnosed_through_rbs</item>
+        <item>@string/comorbidities_dmscrnng_diagnosed_through_fbs</item>
+        <item>@string/comorbidities_dmscrnng_diagnosed_through_ogtt</item>
+        <item>@string/comorbidities_dmscrnng_diagnosed_through_no_proof</item>
+    </string-array>
 
     <string name="comorbidities_preferred_mode_facility">Facility</string>
     <string name="comorbidities_preferred_mode_call_centre">Call Center</string>
@@ -229,6 +251,8 @@
     <string name="comorbidities_diabetes_treatment_initiation">Prescribed Diabetes Medication?</string>
     <string name="comorbidities_diabetes_treatment_detail">Prescription details:</string>
     <string name="comorbidities_diabetes_treatment_initiation_metformin">Dosage Strength of Metformin/Day</string>
+    <string name="comorbidities_diabetes_treatment_initiation_metformin_per_day">How many tablets per day?</string>
+    <string name="comorbidities_diabetes_treatment_initiation_metformin_prescribed">Prescribed for how many days?</string>
     <string name="comorbidities_diabetes_treatment_initiation_insulinN">Dosage of Insulin N (Units/Day):</string>
     <string name="comorbidities_diabetes_treatment_initiation_insulinR">Dosage of Insulin R (Units/Day):</string>
     <string name="comorbidities_diabetes_treatment_initiation_insulin_mix">Dosage of Mixed Insulin (Units/Day):</string>
@@ -890,6 +914,42 @@
         <item>@string/comorbidities_treatment_followup_MH_client_complaint_options_physical_abuse</item>
         <item>@string/comorbidities_treatment_followup_MH_client_complaint_options_sexual_problems</item>
         <item>@string/comorbidities_treatment_followup_MH_client_complaint_options_other</item>
+    </string-array>
+
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options1_suicidal">Suicidal ideation</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options1_homicidal">Homicidal ideation</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options1_psychotic">Psychotic / manic</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options1_panic">Panic attack / anxiety attack</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options1_medical">Medical adherence</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options1_depression">Depression</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options1_verbal">Verbal abuse</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options1_relationship">Relationship Problems</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options1_illness">Illness</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options1_daily">Daily Activity</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options1_substance">Substance Abuse</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options1_economic">Economic Problem</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options1_physical">Physical Abuse</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options1_sexual_problem">Sexual Problem</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options1_sexual_abuse">Sexual Abuse</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options1_other_complaint">Other Complaint</string>
+
+    <string-array name="comorbidities_treatment_followup_MH_client_complaint_options1">
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options1_suicidal</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options1_homicidal</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options1_psychotic</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options1_panic</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options1_medical</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options1_depression</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options1_verbal</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options1_relationship</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options1_illness</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options1_daily</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options1_substance</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options1_economic</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options1_physical</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options1_sexual_problem</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options1_sexual_abuse</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options1_other_complaint</item>
     </string-array>
 
     <string name="comorbidities_treatment_followup_MH_cooperation_options_complaint">Compliant</string>
