@@ -4,10 +4,15 @@ import android.*;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
@@ -19,6 +24,8 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.internal.view.SupportMenu;
 import android.support.v4.view.GravityCompat;
@@ -44,6 +51,7 @@ import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.shared.FormsObject;
 import com.ihsinformatics.gfatmmobile.util.LocationService;
+import com.ihsinformatics.gfatmmobile.util.OfflineFormSyncService;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 import java.io.ByteArrayInputStream;
@@ -63,7 +71,7 @@ public class MainActivity extends AppCompatActivity
     LinearLayout buttonLayout;
     LinearLayout programLayout;
     public static LinearLayout headerLayout;
-    Button formButton;
+    public static  Button formButton;
     Button reportButton;
     Button searchButton;
     RadioGroup radioGroup;
@@ -73,10 +81,36 @@ public class MainActivity extends AppCompatActivity
     ImageView change;
     ImageView update;
 
-    TextView patientName;
-    TextView patientDob;
-    TextView patientId;
-    TextView id;
+    public static TextView patientName;
+    public static TextView patientDob;
+    public static TextView patientId;
+    public static TextView id;
+
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Get extra data included in the Intent
+            String message = intent.getStringExtra("message");
+            if(message.equals("completed")) {
+                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
+                mBuilder.setSmallIcon(R.drawable.ic_checked);
+                mBuilder.setContentTitle("Notification Alert, Click Me!");
+                mBuilder.setContentText("Hi, This is Android Notification Detail!");
+                mBuilder.setPriority(Notification.PRIORITY_HIGH);
+
+                Intent notificationIntent = new Intent(context, MainActivity.class);
+                PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+                mBuilder.setContentIntent(contentIntent);
+                mBuilder.setDefaults(Notification.DEFAULT_ALL);
+
+                // Add as notification
+                NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                manager.notify(0, mBuilder.build());
+
+            }
+        }
+    };
 
 //    TextView nav_default;
 
@@ -225,6 +259,36 @@ public class MainActivity extends AppCompatActivity
         else
             showProgramSelection();
 
+        /*int count = serverService.getSavedFormsCount(App.getUsername(), App.getProgram());
+        if(count > 0){
+
+            final int color1 = App.getColor(this, R.attr.colorAccent);
+
+            final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+            alertDialog.setMessage(count + " " + getString(R.string.offline_form_alert));
+            Drawable clearIcon = getResources().getDrawable(R.drawable.ic_submit);
+            DrawableCompat.setTint(clearIcon, color1);
+            alertDialog.setIcon(clearIcon);
+            alertDialog.setTitle(getResources().getString(R.string.title_offline_form_found));
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
+                                    new IntentFilter("background-offline-sync"));
+                            startSync();
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
+            alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
+
+        }*/
     }
 
     @Override
@@ -951,6 +1015,17 @@ public class MainActivity extends AppCompatActivity
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+    }
+
+    private void startSync(){
+        startService(new Intent(this, OfflineFormSyncService.class));
+    }
+
+    @Override
+    protected void onDestroy() {
+        // Unregister since the activity is about to be closed.
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+        super.onDestroy();
     }
 
 }

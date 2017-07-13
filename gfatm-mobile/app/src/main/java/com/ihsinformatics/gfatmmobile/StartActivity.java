@@ -115,7 +115,7 @@ public class StartActivity extends Activity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    setProgress(getResources().getString(R.string.loading_metadata));
+                    setProgress(getResources().getString(R.string.saving_trees));
                 }
             });
 

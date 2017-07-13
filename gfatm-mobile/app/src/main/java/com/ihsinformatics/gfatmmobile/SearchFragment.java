@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -27,6 +29,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -294,7 +297,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Co
             } else {
 
                 final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
-                alertDialog.setMessage(getString(R.string.pmdt_provide_search_criteria));
+                alertDialog.setMessage(getString(R.string.provide_search_criteria));
                 Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                 // DrawableCompat.setTint(clearIcon, color);
                 alertDialog.setIcon(clearIcon);
@@ -561,7 +564,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Co
                         loading.setInverseBackgroundForced(true);
                         loading.setIndeterminate(true);
                         loading.setCancelable(false);
-                        loading.setMessage(getResources().getString(R.string.pmdt_searching));
+                        loading.setMessage(getResources().getString(R.string.searching));
                         loading.show();
                     }
                 });
@@ -630,7 +633,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Co
                             } else if (result.get("response").equals("ERROR")) {
                                 resultLayout.removeAllViews();
                                 final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
-                                alertDialog.setMessage(getResources().getString(R.string.pmdt_search_error) + "\n\n (" + result.get("details") + ")");
+                                alertDialog.setMessage(getResources().getString(R.string.search_error) + "\n\n (" + result.get("details") + ")");
                                 Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                                 alertDialog.setIcon(clearIcon);
                                 alertDialog.setTitle(getResources().getString(R.string.title_error));
@@ -697,8 +700,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Co
             linearLayout.setOrientation(LinearLayout.HORIZONTAL);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
             linearLayout.setLayoutParams(params);
-            linearLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
-            linearLayout.setDividerDrawable(getResources().getDrawable(R.drawable.divider));
+//            linearLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
+//            linearLayout.setDividerDrawable(getResources().getDrawable(R.drawable.divider));
 
             final LinearLayout moreLayout = new LinearLayout(mainContent.getContext());
             moreLayout.setOrientation(LinearLayout.VERTICAL);
@@ -727,11 +730,17 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Co
 //
 //            });
 
+            ImageView selectImage = new ImageView(mainContent.getContext());
+            selectImage.setImageResource(R.drawable.ic_checked);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(40, 40);
+            selectImage.setLayoutParams(layoutParams);
+            linearLayout.addView(selectImage);
 
             TextView tv = new TextView(mainContent.getContext());
             tv.setText(patient.getFullName() + " ");
-            tv.setTextSize(getResources().getDimension(R.dimen.small));
-            tv.setTextColor(color1);
+            tv.setTextSize(getResources().getDimension(R.dimen.medium));
+            tv.setTextColor(color);
+            tv.setPadding(10, 0, 0, 0);
             linearLayout.addView(tv);
 
             final TextView text = new TextView(mainContent.getContext());
@@ -744,13 +753,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Co
             text.setPadding(10, 0, 0, 0);
             DrawableCompat.setTint(text.getCompoundDrawables()[2], color);
             linearLayout.addView(text);
-
-            /*TextView selectTv = new TextView(mainContent.getContext());
-            selectTv.setText("select");
-            selectTv.setTextSize(getResources().getDimension(R.dimen.tiny));
-            selectTv.setTextColor(color);
-            linearLayout.addView(selectTv);*/
-
 
             tv.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
@@ -772,6 +774,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Co
 
 
             verticalLayout.addView(linearLayout);
+            moreLayout.setPadding(50, 0, 0, 0);
             moreLayout.setVisibility(View.GONE);
 
 
@@ -819,18 +822,72 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Co
 
             }
 
+            if (!serverService.isPatientAvailableLocally(text.getTag().toString()))
+                selectImage.setImageResource(R.drawable.ic_download);
+
+
+            selectImage.setTag(text.getTag());
+            selectImage.setOnTouchListener(new View.OnTouchListener() {
+
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+
+                    if (serverService.isPatientAvailableLocally(text.getTag().toString())) {
+                        getPatient(text.getTag().toString());
+                    }
+                    else{
+                        int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
+
+                        final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
+                        alertDialog.setMessage(getString(R.string.warning_before_get_Patient));
+                        Drawable clearIcon = getResources().getDrawable(R.drawable.ic_download);
+                        DrawableCompat.setTint(clearIcon, color);
+                        alertDialog.setIcon(clearIcon);
+                        alertDialog.setTitle(getResources().getString(R.string.title_select_patient));
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        getPatient(text.getTag().toString());
+                                    }
+                                });
+                        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                        alertDialog.show();
+                        alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
+                    }
+                    return false;
+
+                }
+            });
+
             if (!(patient.getAge() == null || patient.getAge().equals(""))) {
                 LinearLayout ll4 = new LinearLayout(mainContent.getContext());
                 ll4.setOrientation(LinearLayout.HORIZONTAL);
 
                 TextView tv6 = new TextView(mainContent.getContext());
-                tv6.setText(getResources().getString(R.string.pmdt_age) + " ");
+                tv6.setText(getResources().getString(R.string.age) + " ");
                 tv6.setTextSize(getResources().getDimension(R.dimen.small));
                 tv6.setTextColor(color1);
                 ll4.addView(tv6);
 
+                String age = patient.getAge();
+                if(age.equals("0")) {
+                    Date birthDate = App.stringToDate(patient.getDob(), "yyyy-MM-dd");
+                    int ageInMonth = App.getDiffMonths(birthDate, new Date());
+                    if (ageInMonth == 0) {
+                        long ageInLong = App.getDiffDays(birthDate, new Date());
+                        age = ageInLong + " days";
+                    } else
+                        age = ageInMonth + " months";
+                }
+                else age = age + " years";
+
                 TextView tv7 = new TextView(mainContent.getContext());
-                tv7.setText(patient.getAge());
+                tv7.setText(age);
                 tv7.setTextSize(getResources().getDimension(R.dimen.small));
                 ll4.addView(tv7);
 
@@ -1020,6 +1077,46 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Co
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putString(Preferences.PATIENT_ID, App.getPatientId());
                     editor.apply();
+
+                    if (App.getPatient() != null) {
+                        String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
+                        String lname = App.getPatient().getPerson().getFamilyName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getFamilyName().substring(1);
+
+                        MainActivity.patientName.setText(fname + " " + lname + " (" + App.getPatient().getPerson().getGender() + ")");
+                        String dob = App.getPatient().getPerson().getBirthdate().substring(0, 10);
+                        if (!dob.equals("")) {
+                            Date date = App.stringToDate(dob, "yyyy-MM-dd");
+                            DateFormat df = new SimpleDateFormat("MMM dd, yyyy");
+                            if(App.getPatient().getPerson().getAge() == 0){
+                                Date birthDate = App.stringToDate(App.getPatient().getPerson().getBirthdate(), "yyyy-MM-dd");
+                                int age = App.getDiffMonths(birthDate, new Date());
+                                if(age == 0 ){
+                                    long ageInLong = App.getDiffDays(birthDate, new Date());
+                                    MainActivity.patientDob.setText(ageInLong + " days (" + df.format(date) + ")");
+                                }
+                                else MainActivity.patientDob.setText(age + " months (" + df.format(date) + ")");
+                            }
+                            else MainActivity.patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
+                        } else MainActivity.patientDob.setText(dob);
+                        if (!App.getPatient().getPatientId().equals(""))
+                            MainActivity.id.setVisibility(View.VISIBLE);
+                        MainActivity.patientId.setText(App.getPatient().getPatientId());
+
+                        MainActivity.fragmentReport.fillReportFragment();
+                        MainActivity.fragmentForm.fillMainContent();
+                        MainActivity.formButton.callOnClick();
+
+                        for(int i =0; i < resultLayout.getChildCount(); i++) {
+                            View v = resultLayout.getChildAt(i);
+                            View linearLayout = ((LinearLayout)v).getChildAt(0);
+                            View img = ((LinearLayout)linearLayout).getChildAt(0);
+                            String id = img.getTag().toString();
+                            if(id.equals(pid)){
+                                ((ImageView)img).setImageResource(R.drawable.ic_checked);
+                            }
+                        }
+                    }
+
 
                 }
 
