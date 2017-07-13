@@ -367,7 +367,7 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
         observations.add(new String[]{"WEIGHT (KG)", App.get(weightVisit)});
         observations.add(new String[]{"COMPLAINTS", App.get(complaints)});
 
-        observations.add(new String[]{"IPT DOSE", App.get(iptDose).equals(getResources().getString(R.string.ctb_quater_per_day)) ? "1/4 TAB ONCE ADAY" :
+        observations.add(new String[]{"IPT DOSE", App.get(iptDose).equals(getResources().getString(R.string.ctb_quater_per_day)) ? "1/4 TAB ONCE A DAY" :
                 (App.get(iptDose).equals(getResources().getString(R.string.ctb_half_per_day)) ? "1/2 TAB ONCE A DAY" :
                         "1 TAB ONCE A DAY")});
 
@@ -528,7 +528,7 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
             }
             else if (obs[0][0].equals("IPT DOSE")) {
                 for (RadioButton rb : iptDose.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_quater_per_day)) && obs[0][1].equals("1/4 TAB ONCE ADAY")) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_quater_per_day)) && obs[0][1].equals("1/4 TAB ONCE A DAY")) {
                         rb.setChecked(true);
                         break;
                     } else if (rb.getText().equals(getResources().getString(R.string.ctb_half_per_day)) && obs[0][1].equals("1/2 TAB ONCE A DAY")) {

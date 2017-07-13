@@ -1216,7 +1216,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         }
 
         if(typeFixedDosePrescribed.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"PAEDIATRIC DOSE COMBINATION", App.get(typeFixedDosePrescribed).equals(getResources().getString(R.string.ctb_current_formulation)) ? "CURRENT FORULATION" :
+            observations.add(new String[]{"PAEDIATRIC DOSE COMBINATION", App.get(typeFixedDosePrescribed).equals(getResources().getString(R.string.ctb_current_formulation)) ? "CURRENT FORMULATION" :
                     App.get(typeFixedDosePrescribed).equals(getResources().getString(R.string.ctb_new_formulation)) ? "NEW FORMULATION"
                             : "ADULT FORMULATION"});
         }
@@ -1302,7 +1302,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             observations.add(new String[]{"IPT START DATE", App.getSqlDateTime(thirdDateCalendar)});
         }
         if(iptDose.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"IPT DOSE", App.get(iptDose).equals(getResources().getString(R.string.ctb_quater_per_day)) ? "1/4 TAB ONCE ADAY" :
+            observations.add(new String[]{"IPT DOSE", App.get(iptDose).equals(getResources().getString(R.string.ctb_quater_per_day)) ? "1/4 TAB ONCE A DAY" :
                     (App.get(iptDose).equals(getResources().getString(R.string.ctb_half_per_day)) ? "1/2 TAB ONCE A DAY" :
                             "1 TAB ONCE A DAY")});
         }
@@ -1677,7 +1677,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 }
                 regimen.setVisibility(View.VISIBLE);
             }else if (obs[0][0].equals("PAEDIATRIC DOSE COMBINATION")) {
-                String value = obs[0][1].equals("CURRENT FORULATION") ? getResources().getString(R.string.ctb_current_formulation) :
+                String value = obs[0][1].equals("CURRENT FORMULATION") ? getResources().getString(R.string.ctb_current_formulation) :
                         (obs[0][1].equals("NEW FORMULATION") ? getResources().getString(R.string.ctb_new_formulation) :
                                 getResources().getString(R.string.ctb_adult_formulation));
 
@@ -1896,7 +1896,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 iptStartDate.setVisibility(View.VISIBLE);
             }  else if (obs[0][0].equals("IPT DOSE")) {
                 for (RadioButton rb : iptDose.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_quater_per_day)) && obs[0][1].equals("1/4 TAB ONCE ADAY")) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_quater_per_day)) && obs[0][1].equals("1/4 TAB ONCE A DAY")) {
                         rb.setChecked(true);
                         break;
                     } else if (rb.getText().equals(getResources().getString(R.string.ctb_half_per_day)) && obs[0][1].equals("1/2 TAB ONCE A DAY")) {
