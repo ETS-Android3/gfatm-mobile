@@ -572,7 +572,7 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
             observations.add(new String[]{"ANTHELMINTIC DISPERSED", App.get(anthelminthicDispersed).toUpperCase()});
         }
         if(iptDose.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"IPT DOSE", App.get(iptDose).equals(getResources().getString(R.string.ctb_quater_per_day)) ? "1/4 TAB ONCE ADAY" :
+            observations.add(new String[]{"IPT DOSE", App.get(iptDose).equals(getResources().getString(R.string.ctb_quater_per_day)) ? "1/4 TAB ONCE A DAY" :
                     (App.get(iptDose).equals(getResources().getString(R.string.ctb_half_per_day)) ? "1/2 TAB ONCE A DAY" :
                             "1 TAB ONCE A DAY")});
         }
@@ -1075,7 +1075,7 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
                     anthelminthicDispersed.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("IPT DOSE")) {
                 for (RadioButton rb : iptDose.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_quater_per_day)) && obs[0][1].equals("1/4 TAB ONCE ADAY")) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_quater_per_day)) && obs[0][1].equals("1/4 TAB ONCE A DAY")) {
                         rb.setChecked(true);
                         break;
                     } else if (rb.getText().equals(getResources().getString(R.string.ctb_half_per_day)) && obs[0][1].equals("1/2 TAB ONCE A DAY")) {
@@ -1634,7 +1634,7 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
         String iptDoseString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "IPT DOSE");
         if(iptDoseString!=null){
             for (RadioButton rb : iptDose.getRadioGroup().getButtons()) {
-                if (rb.getText().equals(getResources().getString(R.string.ctb_quater_per_day)) && iptDoseString.equals("1/4 TAB ONCE ADAY")) {
+                if (rb.getText().equals(getResources().getString(R.string.ctb_quater_per_day)) && iptDoseString.equals("1/4 TAB ONCE A DAY")) {
                     rb.setChecked(true);
                     break;
                 } else if (rb.getText().equals(getResources().getString(R.string.ctb_half_per_day)) && iptDoseString.equals("1/2 TAB ONCE A DAY")) {

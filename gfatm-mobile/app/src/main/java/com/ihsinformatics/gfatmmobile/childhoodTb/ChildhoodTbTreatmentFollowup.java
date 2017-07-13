@@ -820,7 +820,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         }
 
         if(typeFixedDosePrescribedIntensive.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"PAEDIATRIC DOSE COMBINATION", App.get(typeFixedDosePrescribedIntensive).equals(getResources().getString(R.string.ctb_current_formulation)) ? "CURRENT FORULATION" :
+            observations.add(new String[]{"PAEDIATRIC DOSE COMBINATION", App.get(typeFixedDosePrescribedIntensive).equals(getResources().getString(R.string.ctb_current_formulation)) ? "CURRENT FORMULATION" :
                     App.get(typeFixedDosePrescribedIntensive).equals(getResources().getString(R.string.ctb_new_formulation)) ? "NEW FORMULATION"
                             : "ADULT FORMULATION"});
         }
@@ -1074,7 +1074,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                     intensivePhaseRegimen.setVisibility(View.VISIBLE);
                 }
             }else if (obs[0][0].equals("PAEDIATRIC DOSE COMBINATION")) {
-                String value = obs[0][1].equals("CURRENT FORULATION") ? getResources().getString(R.string.ctb_current_formulation) :
+                String value = obs[0][1].equals("CURRENT FORMULATION") ? getResources().getString(R.string.ctb_current_formulation) :
                         (obs[0][1].equals("NEW FORMULATION") ? getResources().getString(R.string.ctb_new_formulation) :
                                 getResources().getString(R.string.ctb_adult_formulation));
 
