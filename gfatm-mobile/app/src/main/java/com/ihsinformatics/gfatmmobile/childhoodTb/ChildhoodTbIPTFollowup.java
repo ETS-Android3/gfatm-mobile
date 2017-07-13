@@ -168,7 +168,7 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
         iptStartDate = new TitledButton(context, null,  getResources().getString(R.string.ctb_ipt_start_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         iptStartDate.setTag("iptStartDate");
         iptRegNo = new TitledEditText(context, null, getResources().getString(R.string.ctb_ipt_reg_no), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
-        dose = new TitledEditText(context, null, getResources().getString(R.string.ctb_dose_at_intiation_point), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        dose = new TitledEditText(context, null, getResources().getString(R.string.ctb_dose_at_intiation_point), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         weightVisit = new TitledEditText(context, null, getResources().getString(R.string.ctb_weight_visit), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         complaints = new TitledEditText(context, null, getResources().getString(R.string.ctb_complaints), "", "", 500, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         iptDose = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_dose), getResources().getStringArray(R.array.ctb_dose_list),getResources().getString(R.string.ctb_quater_per_day), App.VERTICAL, App.VERTICAL, true);
@@ -361,9 +361,9 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
 
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-        observations.add(new String[]{"IPT START DATE", App.getSqlDateTime(secondDateCalendar)});
-        observations.add(new String[]{"IPT REGISTRATION NUMBER", App.get(iptRegNo)});
-        observations.add(new String[]{"DOSE AT TREATMENT INITIATION POINT", App.get(dose)});
+        if(iptRegNo.getEditText().isEnabled()) {
+            observations.add(new String[]{"IPT REGISTRATION NUMBER", App.get(iptRegNo)});
+        }
         observations.add(new String[]{"WEIGHT (KG)", App.get(weightVisit)});
         observations.add(new String[]{"COMPLAINTS", App.get(complaints)});
 
@@ -660,11 +660,18 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
             secondDateCalendar = App.getCalendar(App.stringToDate(iptStartDateString, "yyyy-MM-dd"));
         }
         iptStartDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-
+        iptStartDate.setEnabled(false);
         String iptRegNoString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "IPT REGISTRATION NUMBER");
         if(iptRegNoString != null){
             iptRegNo.getEditText().setText(iptRegNoString);
+            iptRegNo.getEditText().setEnabled(false);
         }
+
+        String doseString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "IPT DOSE");
+        if(doseString != null){
+            dose.getEditText().setText(doseString);
+        }
+        dose.getEditText().setEnabled(false);
     }
 
     @Override
