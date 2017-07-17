@@ -415,7 +415,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/pmdt_program_name" />
+                        android:text="@string/program_name" />
 
                     <Spinner
                         android:id="@+id/program"
