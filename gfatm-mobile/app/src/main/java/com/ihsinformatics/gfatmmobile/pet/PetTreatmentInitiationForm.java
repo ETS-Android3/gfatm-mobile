@@ -189,17 +189,13 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         ancillaryDrugDuration = new TitledEditText(context, null, getResources().getString(R.string.pet_ancillary_drug_duration_days), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
 
         // fourth page view
-        nameTreatmentSupporter = new TitledEditText(context, null, getResources().getString(R.string.pet_treatment_supporter_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        nameTreatmentSupporter = new TitledEditText(context, null, getResources().getString(R.string.pet_treatment_supporter_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         contactNumberTreatmentSupporter = new LinearLayout(context);
         contactNumberTreatmentSupporter.setOrientation(LinearLayout.VERTICAL);
         LinearLayout phone1QuestionLayout = new LinearLayout(context);
         phone1QuestionLayout.setOrientation(LinearLayout.HORIZONTAL);
         MyTextView phone1Text = new MyTextView(context, getResources().getString(R.string.pet_treatment_supporter_contact_number));
         phone1QuestionLayout.addView(phone1Text);
-        TextView mandatoryPhone1Sign = new TextView(context);
-        mandatoryPhone1Sign.setText(" *");
-        mandatoryPhone1Sign.setTextColor(Color.parseColor("#ff0000"));
-        phone1QuestionLayout.addView(mandatoryPhone1Sign);
         contactNumberTreatmentSupporter.addView(phone1QuestionLayout);
         LinearLayout phone1PartLayout = new LinearLayout(context);
         phone1PartLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -212,7 +208,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         phone1b.setHint("XXXXXXX");
         phone1PartLayout.addView(phone1b);
         contactNumberTreatmentSupporter.addView(phone1PartLayout);
-        typeTreatmentSupporter = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_treatment_supporter_type), getResources().getStringArray(R.array.pet_treatment_supporter_type), getResources().getString(R.string.pet_family_treatment_supporter), App.VERTICAL, App.VERTICAL);
+        typeTreatmentSupporter = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_treatment_supporter_type), getResources().getStringArray(R.array.pet_treatment_supporter_type), "", App.VERTICAL, App.VERTICAL);
         relationshipTreatmentSuppoter = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_treatment_supporter_relationship), getResources().getStringArray(R.array.pet_household_heads), "", App.VERTICAL);
         other = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
 
@@ -849,7 +845,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 gotoLastPage();
             }
         }
-        if (App.get(phone1a).isEmpty()) {
+        /*if (App.get(phone1a).isEmpty()) {
             phone1a.setError(getResources().getString(R.string.mandatory_field));
             phone1a.requestFocus();
             error = true;
@@ -859,19 +855,21 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
             phone1b.requestFocus();
             error = true;
             gotoLastPage();
-        } else if (!RegexUtil.isContactNumber(App.get(phone1a) + App.get(phone1b))) {
+        } else */
+        if(!App.get(phone1a).equals("") || !App.get(phone1b).equals(""))
+        if (!RegexUtil.isContactNumber(App.get(phone1a) + App.get(phone1b))) {
             phone1b.setError(getResources().getString(R.string.invalid_value));
             phone1b.requestFocus();
             error = true;
             gotoLastPage();
         }
-        if (App.get(nameTreatmentSupporter).isEmpty()) {
+       /* if (App.get(nameTreatmentSupporter).isEmpty()) {
             nameTreatmentSupporter.getQuestionView().setError(getString(R.string.empty_field));
             nameTreatmentSupporter.getQuestionView().requestFocus();
             view = null;
             error = true;
             gotoLastPage();
-        }
+        }*/
         if (ancillaryDrugDuration.getVisibility() == View.VISIBLE) {
             if (App.get(ancillaryDrugDuration).isEmpty()) {
                 ancillaryDrugDuration.getQuestionView().setError(getString(R.string.empty_field));
