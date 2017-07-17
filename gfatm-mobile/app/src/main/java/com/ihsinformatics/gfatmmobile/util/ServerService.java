@@ -261,6 +261,11 @@ public class ServerService {
         return forms;
     }
 
+    public int getSavedFormsCount(String username, String programName) {
+        Object[][] forms = dbUtil.getFormTableData("select count(*) from " + Metadata.FORMS + " where username='" + username + "' and program = '" + programName + "'");
+        return Integer.parseInt(String.valueOf(forms[0][0]));
+    }
+
     public Object[][] getSavedForms(int id) {
         Object[][] forms = dbUtil.getFormTableData("select id, program, form_name, p_id, form_date, timestamp, form_object, location, encounter_id, username from " + Metadata.FORMS + " where id = " + id + "");
         return forms;
@@ -815,6 +820,16 @@ public class ServerService {
             return uuid;
         }
         return uuid;
+    }
+
+    public boolean isPatientAvailableLocally(String pid){
+
+        String[][] result = dbUtil.getTableData(Metadata.PATIENT, "uuid", "identifier = '" + pid + "'"); //30 - 37
+
+        if (result.length < 1)
+            return false;
+        else return true;
+
     }
 
     public String getPatient(String patientId, Boolean select) {
