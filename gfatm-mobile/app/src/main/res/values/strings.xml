@@ -334,6 +334,7 @@
     <string name="title_saved_forms">Saved Forms</string>
     <string name="title_offline_forms">Offline Forms</string>
     <string name="title_select_patient">Select Patient</string>
+    <string name="title_offline_form_found">Offline form(s) found</string>
     <string name="title_search_patient">Search Patient</string>
     <string name="title_create_new_patient">Create New Patient</string>
     <string name="title_update_database">Update Database</string>
@@ -510,7 +511,7 @@
         <item>31 - 45</item>
         <item>46 - 60</item>
         <item>61 - 75</item>
-        <item>76 - above</item>
+        <item>76 - 119</item>
     </string-array>
 
     <string-array name="yes_no_options">
@@ -558,18 +559,19 @@
         <item>@string/days</item>
     </string-array>
 
-    <string name="loading_metadata">Loading Metadata ...</string>
+    <string name="saving_trees">Saving Trees ...</string>
     <string name="aao_tb_mitao_app">Aao TB Mitao - Mobile App</string>
 
     <string name="order_id">Order ID</string>
 
-    <string name="pmdt_search_error">Error while trying to search in openmrs.</string>
-    <string name="pmdt_searching">Searching...</string>
-    <string name="pmdt_program_name">Program:</string>
+    <string name="search_error">Error while trying to search in openmrs.</string>
+    <string name="searching">Searching...</string>
+    <string name="program_name">Program:</string>
     <string name="childhood_tb_db">ChildhoodTB</string> <!-- name in db -->
-    <string name="pmdt_provide_search_criteria">Please select any of the search criteria.</string>
+    <string name="provide_search_criteria">Please select any of the search criteria.</string>
     <string name="guardian_name">Guardian Name</string>
 
+    <string name="offline_form_alert">offline form found. Press yes, to start upload in background.</string>
     <string name="pid_copied">Patient ID copied.</string>
-
+    <string name="warning_before_get_Patient">Are you sure you want to select this patient? If yes, app will fetch this patient from openmrs.</string>
 </resources>
