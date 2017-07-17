@@ -97,9 +97,7 @@ public class StartActivity extends Activity {
         progressTextView.setText(progressLabel);
     }
 
-    /**
-     * Async Task to make http call
-     */
+
     private class PrefetchData extends AsyncTask<Void, Void, Void> {
 
         @Override
