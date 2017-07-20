@@ -2,6 +2,7 @@ package com.ihsinformatics.gfatmmobile.fast;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,7 +11,9 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +31,9 @@ import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
+import com.ihsinformatics.gfatmmobile.custom.MyEditText;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
+import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
@@ -61,8 +66,8 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
     TitledEditText firstName;
     TitledEditText lastName;
     LinearLayout mobileLinearLayout;
-    TitledEditText mobile1;
-    TitledEditText mobile2;
+    MyEditText mobile1;
+    MyEditText mobile2;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -157,20 +162,38 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
         treatmentNotInitiatedReferralSite = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_reason_treatment_not_initiated_at_referral_site), getResources().getStringArray(R.array.fast_reason_treatment_not_initiated_referral_site_list), getResources().getString(R.string.fast_patient_could_not_be_contacted), App.VERTICAL);
         treatmentNotInitiatedReferralSiteOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         drConfirmation = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_dr_confirmation), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_no_title), App.VERTICAL, App.VERTICAL);
-        enrsId = new TitledEditText(context, null, getResources().getString(R.string.fast_enrs_number), "", "", RegexUtil.idLength, RegexUtil.ERNS_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        enrsId = new TitledEditText(context, null, getResources().getString(R.string.fast_enrs_number), "", "####/##", RegexUtil.idLength, RegexUtil.ERNS_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         firstName = new TitledEditText(context, null, getResources().getString(R.string.fast_first_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         lastName = new TitledEditText(context, null, getResources().getString(R.string.fast_last_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+
+
         mobileLinearLayout = new LinearLayout(context);
-        mobileLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
-        mobile1 = new TitledEditText(context, null, getResources().getString(R.string.fast_contact_number), "", "####", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        mobileLinearLayout.addView(mobile1);
-        mobile2 = new TitledEditText(context, null, "-", "", "#######", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        mobileLinearLayout.addView(mobile2);
+        mobileLinearLayout.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout mobileQuestion = new LinearLayout(context);
+        mobileQuestion.setOrientation(LinearLayout.HORIZONTAL);
+        MyTextView mobileNumberLabel = new MyTextView(context, getResources().getString(R.string.fast_mobile_number));
+        mobileQuestion.addView(mobileNumberLabel);
+        TextView mandatorySign = new TextView(context);
+        mandatorySign.setText("*");
+        mandatorySign.setTextColor(Color.parseColor("#ff0000"));
+        mobileQuestion.addView(mandatorySign);
+        mobileLinearLayout.addView(mobileQuestion);
+        LinearLayout mobileNumberPart = new LinearLayout(context);
+        mobileNumberPart.setOrientation(LinearLayout.HORIZONTAL);
+        mobile1 = new MyEditText(context,"", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        mobile1.setHint("03XX");
+        mobileNumberPart.addView(mobile1);
+        MyTextView mobileNumberDash = new MyTextView(context, " - ");
+        mobileNumberPart.addView(mobileNumberDash);
+        mobile2 = new MyEditText(context,"",  7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        mobile2.setHint("XXXXXXX");
+        mobileNumberPart.addView(mobile2);
+        mobileLinearLayout.addView(mobileNumberPart);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), treatmentOutcome.getSpinner(), transferOutLocations.getSpinner(), remarks.getEditText()
                 , treatmentInitiatedReferralSite.getRadioGroup(), treatmentNotInitiatedReferralSite.getSpinner(), treatmentNotInitiatedReferralSiteOther.getEditText(),
-                drConfirmation.getRadioGroup(), enrsId.getEditText(), firstName.getEditText(), lastName.getEditText(), mobile1.getEditText(), mobile2.getEditText()};
+                drConfirmation.getRadioGroup(), enrsId.getEditText(), firstName.getEditText(), lastName.getEditText(), mobile1, mobile2};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
@@ -184,6 +207,47 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
         drConfirmation.getRadioGroup().setOnCheckedChangeListener(this);
 
         resetViews();
+
+        mobile2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()==0){
+                    mobile1.requestFocus();
+                    mobile1.setSelection(mobile1.getText().length());
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
+        mobile1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()==4){
+                    mobile2.requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     @Override
@@ -216,6 +280,9 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
             } else
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         }
+
+        formDate.getButton().setEnabled(true);
+
     }
 
     @Override
@@ -243,8 +310,8 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
             error = true;
         }
 
-        if (!RegexUtil.isValidErnsNumber(App.get(enrsId))) {
-            enrsId.getEditText().setError(getString(R.string.invalid_value));
+        if (enrsId.getVisibility() == View.VISIBLE && !RegexUtil.isValidErnsNumber(App.get(enrsId))) {
+            enrsId.getEditText().setError(getString(R.string.fast_enrs_number_error));
             enrsId.getEditText().requestFocus();
             error = true;
         }
@@ -275,7 +342,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
                 gotoPage(0);
             else
                 gotoPage(0);
-            firstName.getEditText().setError(getString(R.string.fast_invalid_name));
+            firstName.getEditText().setError(getString(R.string.fast_name_less_than_2_characters));
             firstName.getEditText().requestFocus();
             error = true;
         }
@@ -285,28 +352,28 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
                 gotoPage(0);
             else
                 gotoPage(0);
-            lastName.getEditText().setError(getString(R.string.fast_invalid_name));
+            lastName.getEditText().setError(getString(R.string.fast_name_less_than_2_characters));
             lastName.getEditText().requestFocus();
             error = true;
         }
 
-        if (mobile1.getEditText().getText().toString().trim().isEmpty()) {
+        if (mobile1.getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            mobile1.getEditText().setError(getString(R.string.empty_field));
-            mobile1.getEditText().requestFocus();
+            mobile1.setError(getString(R.string.empty_field));
+            mobile1.requestFocus();
             error = true;
         }
 
-        if (mobile2.getEditText().getText().toString().trim().isEmpty()) {
+        if (mobile2.getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            mobile2.getEditText().setError(getString(R.string.empty_field));
-            mobile2.getEditText().requestFocus();
+            mobile2.setError(getString(R.string.empty_field));
+            mobile2.requestFocus();
             error = true;
         }
 
@@ -315,8 +382,8 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
                 gotoPage(0);
             else
                 gotoPage(0);
-            mobile1.getEditText().setError(getString(R.string.length_message));
-            mobile1.getEditText().requestFocus();
+            mobile1.setError(getString(R.string.length_message));
+            mobile1.requestFocus();
             error = true;
         }
 
@@ -325,23 +392,23 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
                 gotoPage(0);
             else
                 gotoPage(0);
-            mobile2.getEditText().setError(getString(R.string.length_message));
-            mobile2.getEditText().requestFocus();
+            mobile2.setError(getString(R.string.length_message));
+            mobile2.requestFocus();
             error = true;
         }
 
-        final String mobileNumber = mobile1.getEditText().getText().toString() + mobile2.getEditText().getText().toString();
+        final String mobileNumber = mobile1.getText().toString() + mobile2.getText().toString();
 
         if (!RegexUtil.isMobileNumber(mobileNumber)) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            mobile2.getEditText().setError(getString(R.string.incorrect_contact_number));
-            mobile2.getEditText().requestFocus();
+            mobile2.setError(getString(R.string.incorrect_contact_number));
+            mobile2.requestFocus();
             error = true;
         } else {
-            mobile2.getEditText().setError(null);
+            mobile2.setError(null);
         }
 
         if (error) {
@@ -398,7 +465,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
 
-        final String mobileNumber = mobile1.getEditText().getText().toString() + "-" + mobile2.getEditText().getText().toString();
+        final String mobileNumber = mobile1.getText().toString() + "-" + mobile2.getText().toString();
 
 
         if (treatmentOutcome.getVisibility() == View.VISIBLE)
@@ -661,8 +728,8 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
                 lastName.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("REFERRAL CONTACT NUMBER")) {
                 String mobileNumArr[] = obs[0][1].split("-");
-                mobile1.getEditText().setText(mobileNumArr[0]);
-                mobile2.getEditText().setText(mobileNumArr[1]);
+                mobile1.setText(mobileNumArr[0]);
+                mobile2.setText(mobileNumArr[1]);
                 mobile1.setVisibility(View.VISIBLE);
                 mobile2.setVisibility(View.VISIBLE);
                 mobileLinearLayout.setVisibility(View.VISIBLE);
@@ -676,6 +743,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
         super.onClick(view);
 
         if (view == formDate.getButton()) {
+            formDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             formDateFragment.setArguments(args);

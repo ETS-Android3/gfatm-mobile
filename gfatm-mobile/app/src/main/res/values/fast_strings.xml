@@ -31,16 +31,24 @@
     <string name="fast_surgery_title">Surgery</string>
     <string name="fast_er_title">Emergency (ER)</string>
     <string name="fast_form_date_past">Date can\'t be in past.</string>
+    <string name="fast_treatment_start_date_and_next_visit_date_cant_be_same">Treatment start date and return visit date can\'t be same.</string>
+    <string name="fast_form_start_date_and_next_visit_date_cant_be_same">Form start date and return visit date can\'t be same.</string>
+    <string name="fast_missed_visit_date_and_next_visit_date_cant_be_same">Missed visit date and return visit date can\'t be same.</string>
+    <string name="fast_next_appointment_date_cant_be_before_registeration_date">Next appointment date can\'t be before registeration date.</string>
+    <string name="fast_registeration_date_and_next_visit_date_cant_be_same">Registeration date and return visit date can\'t be same.</string>
+    <string name="fast_form_date_past_treatment">Next appointment date can\'t be before treatment start date.</string>
     <string name="fast_return_date_future">Next appointment date cannot be more than 24 months.</string>
     <string name="fast_next_visit_date">Next visit date can\'t be before form date.</string>
     <string name="fast_date_cant_be_greater_than_24_months">Date can\'t be greater than 24 months.</string>
     <string name="fast_order_date_cannot_be_before_form_date">Order date cannot be before form date</string>
+    <string name="fast_sample_date_cannot_be_before_form_date">Sample submission date cannot be before form date</string>
+    <string name="fast_sample_date_cannot_be_after_form_date">Sample submission date cannot be after form date</string>
     <string name="fast_form_date_cannot_be_before_order_date">Form date cannot be before order date</string>
     <string name="fast_result_date_cannot_be_before_order_date">Result date can\'t be before test order date.</string>
     <string name="fast_patient_title">Patient</string>
     <string name="fast_attendant_title">Attendant</string>
-    <string name="fast_greater_title">&gt;= 15 years old</string>
-    <string name="fast_less_title">&lt;15 years old</string>
+    <string name="fast_greater_title">15 years or above</string>
+    <string name="fast_less_title">Less than 15 years</string>
     <string name="fast_male_title">Male</string>
     <string name="fast_female_title">Female</string>
     <string name="fast_yes_title">Yes</string>
@@ -91,11 +99,11 @@
     <string name="fast_presumptive_refused">Presumptive refused</string>
     <string name="fast_identified_patient_through_screening">Have you identified this patient through screening?</string>
     <string name="fast_source_of_patient_referral">What was the source of the patient\'s referral?</string>
-    <string name="fast_doctor_or_health_worker_within_the_hospital">By a doctor or health worker within the hospital</string>
-    <string name="fast_doctor_or_health_worker_outside_the_hospital">By a doctor or health worker outside of the hospital</string>
+    <string name="fast_doctor_or_health_worker_within_the_hospital">Within the hospital</string>
+    <string name="fast_doctor_or_health_worker_outside_the_hospital">Outside of the hospital</string>
     <string name="fast_self_referral">Self referral</string>
-    <string name="fast_contact_of_tb_patient">Patient is a contact of a TB patient</string>
-    <string name="fast_referred_after_xray_cad4tb">Patient referred after xray/high CAD4TB score</string>
+    <string name="fast_contact_of_tb_patient">Contact of a TB patient</string>
+    <string name="fast_referred_after_xray_cad4tb">Xray/high CAD4TB score</string>
     <string name="fast_ward_title">Ward</string>
     <string name="fast_opd_clinic">OPD Clinic</string>
     <string name="fast_outside_hospital_was_patient_referred">Where outside the hospital was the patient referred from?</string>
@@ -170,8 +178,8 @@
     <string name="fast_karachi">Karachi</string>
     <string name="fast_whose_nic_is_this">Whose NIC is this?</string>
     <string name="fast_patient_provided_their_address">Has the patient provided their address?</string>
-    <string name="fast_address_1">Address 1 (House Number, etc)</string>
-    <string name="fast_address_2">Address 2 (Block, Street, Gali, Colony, etc)</string>
+    <string name="fast_address_1">Address 1</string>
+    <string name="fast_address_2">Address 2</string>
     <string name="fast_town">Town</string>
     <string name="fast_city">City</string>
     <string name="fast_type_of_address_is_this">What type of Address is this?</string>
@@ -285,7 +293,7 @@
     <string name="fast_date_of_submission">Date of submission</string>
     <string name="fast_at_what_point_test_being_done">At what point is the test being done?</string>
     <string name="fast_where_did_the_specimen_come_from">Where did the specimen come from?</string>
-    <string name="fast_afb_smear_result">AFB Smear Results</string>
+    <string name="fast_afb_smear_result">AFB Smear Result</string>
     <string name="fast_number_of_afb_seen_in_one_field">Number of AFB seen in one field</string>
     <string name="fast_smear_result">Smear Result</string>
     <string name="fast_negative">Negative</string>
@@ -393,9 +401,9 @@
     <string name="fast_why_missed_visit">Reason why missed visit?</string>
     <string name="fast_date_of_next_visit">Date of next visit?</string>
     <string name="fast_phone_switched_off">Phone switched off</string>
-    <string name="fast_patient_did_not_recieve_call">Patient did not receive call</string>
-    <string name="fast_incorrect_contact_number">Incorrect contact number</string>
-    <string name="fast_patient_moved">Patient Moved</string>
+    <string name="fast_patient_not_responding">Patient not responding</string>
+    <string name="fast_incorrect_contact_number">Invalid/Incorrect contact number</string>
+    <string name="fast_patient_moved">Patient Relocated</string>
     <string name="fast_patient_continuing_treatment_at_another_location">Patient continuing treatment at another location</string>
     <string name="fast_patient_unable_to_visit_hospital">Patient unable to visit hospital due to personal reasons</string>
     <string name="fast_patient_unwell">Patient unwell</string>
@@ -417,27 +425,78 @@
     <string name="fast_treatment_after_loss_to_follow_up_without_default">Treatment after loss to follow up</string>
     <string name="fast_please_select_form_type">Please select form type!</string>
     <string name="fast_patient_age_less_than_15">Form will not be submitted as patient age is less than 15</string>
-    <string name="fast_patient_age_less_than_15_cant_submit">Form cannot not be submitted as patient age is less than 16</string>
+    <string name="fast_form_cannot_be_submitted_without_submitting_treatment_initiation_form">Form will not be submitted as treatment initiation form for this patient is not submitted previously</string>
+    <string name="fast_patient_age_less_than_15_cant_submit">Form cannot not be submitted as patient age is less than 15</string>
     <string name="fast_husband_name">Husband\'s Name</string>
     <string name="fast_father_name">Father\'s Name</string>
     <string name="fast_accepted">Accepted</string>
     <string name="fast_rejected">Rejected</string>
     <string name="fast_date_of_result_recieved_cannot_be_less_than_submission_date">Date of result received cannot be before sample submission date</string>
     <string name="fast_form_cannot_be_before_person_dob">This date cannot be before person date of birth</string>
+    <string name="fast_form_date_cannot_be_before_treatment_initiation_form">Form date cannot be before treatment initiation date</string>
     <string name="fast_test_cannot_be_before_form_date">Test date cannot be before form date</string>
+    <string name="fast_missed_visit_date_cannot_be_before_form_date">Missed visit date can\'t be before form date</string>
+    <string name="fast_date_of_next_visit_cant_be_before_missed_visit_date">Next visit date cannot be before missed visit date</string>
     <string name="fast_please_select_atleast_one_checkbox_for_identification_ids">Please select atleast one checkbox for identifcation IDs</string>
     <string name="fast_contact_patient_id_cannot_be_same_as_patient_id">Contact patient id cannot be same as patient id</string>
     <string name="fast_husband_name_cannot_be_less_than_2_characters">Husband name cannot be less than 2 characters</string>
     <string name="fast_father_name_cannot_be_less_than_2_characters">Father name cannot be less than 2 characters</string>
     <string name="fast_scan_qr_code">Scan QR code</string>
     <string name="fast_invalid_name">Invalid Name</string>
+    <string name="fast_name_less_than_2_characters">This name cannot be less than 2 characters</string>
     <string name="fast_test_id_error">Invalid test id</string>
     <string name="fast_invalid_father_name">Invalid father name</string>
     <string name="fast_invalid_husband_name">Invalid husband name</string>
+    <string name="fast_tb_symptoms">TB SYMPTOMS</string>
+    <string name="fast_if_abnormal_detailed_diagnosis">If Abnormal, Detailed Diagnosis</string>
+    <string name="fast_abnormal_suggestive_of_tb">Abnormal Suggestive of TB</string>
+    <string name="fast_abnormal_not_suggestive_of_tb">Abnormal Not Suggestive of TB</string>
+    <string name="fast_gastric_aspirate">Gastric Aspirate</string>
+    <string name="fast_past_xray">Has the patient had an X-Ray in the past 6 months at an X-Ray Van?</string>
+    <string name="fast_pregnancy_history">Is the patient pregnant?</string>
+    <string name="fast_cartridge_id_error">Please enter 10 digits Cartridge ID</string>
+    <string name="fast_enrs_number_error">Invalid ENRS number</string>
+    <string name="fast_emergency_room">Emergency Room</string>
+    <string name="fast_diabetic">Diabetic</string>
+    <string name="fast_required_field_error">Required fields cannot be empty</string>
+    <string name="fast_no_order_found_for_the_patient">No order found for the patient.</string>
+    <string name="fast_emergency_department">Emergency Department</string>
+    <string name="fast_has_this_patient_referred_or_transferred_out">Has this patient being referred out or transferred out?</string>
+    <string name="fast_not_applicable">Not applicable</string>
+    <string name="fast_service_complaint">Patient has a service complaint</string>
+    <string name="fast_lack_of_funds_to_travel">Patient lacks funds to travel to the facility</string>
+    <string name="fast_unable_to_relocate">Unable to locate referral site</string>
+    <string name="fast_want_treatment_at_parent_site">Want treatment at parent site</string>
+    <string name="fast_new_location">New Location</string>
+    <string name="fast_new_treatment_facility_name">New treatment facility name</string>
+    <string name="fast_reason_for_changing_to_new_facility">Reason for changing to new facility</string>
+    <string name="fast_relocated">Relocated</string>
+    <string name="fast_old_facility_too_far">Old facility too far</string>
+    <string name="fast_service_complaint_title">Service complaint</string>
+
+
+    <string-array name="fast_reason_for_changing_facility_array">
+        <item>@string/fast_relocated</item>
+        <item>@string/fast_old_facility_too_far</item>
+        <item>@string/fast_service_complaint_title</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+
+    <string-array name="fast_referral_transfer_array">
+        <item>@string/fast_referral</item>
+        <item>@string/fast_transfer</item>
+        <item>@string/fast_not_applicable</item>
+    </string-array>
 
     <string-array name="fast_locations">
         <item>@string/fast_community_title</item>
         <item>@string/fast_hospital_title</item>
+    </string-array>
+
+    <string-array name="fast_radiological_diagonosis_list">
+        <item>@string/fast_normal</item>
+        <item>@string/fast_abnormal_suggestive_of_tb</item>
+        <item>@string/fast_abnormal_not_suggestive_of_tb</item>
     </string-array>
 
     <string-array name="fast_hospital_parts">
@@ -445,6 +504,16 @@
         <item>@string/fast_wardscreening_title</item>
         <item>@string/fast_registrationdesk_title</item>
         <item>@string/fast_nexttoxrayvan_title</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+
+    <string-array name="fast_hospital_parts_screening">
+        <item></item>
+        <item>@string/fast_opdclinicscreening_title</item>
+        <item>@string/fast_wardscreening_title</item>
+        <item>@string/fast_registrationdesk_title</item>
+        <item>@string/fast_nexttoxrayvan_title</item>
+        <item>@string/fast_emergency_room</item>
         <item>@string/fast_other_title</item>
     </string-array>
 
@@ -462,6 +531,15 @@
         <item>@string/fast_gynaeobstetrics_title</item>
         <item>@string/fast_surgery_title</item>
         <item>@string/fast_er_title</item>
+    </string-array>
+
+    <string-array name="fast_clinic_and_ward_screening_list">
+        <item></item>
+        <item>@string/fast_generalmedicinefilterclinic_title</item>
+        <item>@string/fast_chesttbclinic_title</item>
+        <item>@string/fast_gynaeobstetrics_title</item>
+        <item>@string/fast_surgery_title</item>
+        <item>@string/fast_diabetic</item>
     </string-array>
 
     <string-array name="fast_patient_or_attendant_list">
@@ -536,6 +614,7 @@
     </string-array>
 
     <string-array name="fast_source_of_patient_referral_list">
+        <item></item>
         <item>@string/fast_doctor_or_health_worker_within_the_hospital</item>
         <item>@string/fast_doctor_or_health_worker_outside_the_hospital</item>
         <item>@string/fast_self_referral</item>
@@ -548,14 +627,15 @@
         <item>@string/fast_ward_title</item>
         <item>@string/fast_opd_clinic</item>
         <item>@string/fast_other_title</item>
+        <item>@string/fast_emergency_department</item>
     </string-array>
 
     <string-array name="fast_opd_clinic_or_ward_patient_reffered_from_list">
+        <item></item>
         <item>@string/fast_generalmedicinefilterclinic_title</item>
         <item>@string/fast_chesttbclinic_title</item>
         <item>@string/fast_gynaeobstetrics_title</item>
         <item>@string/fast_surgery_title</item>
-        <item>@string/fast_er_title</item>
         <item>@string/fast_other_title</item>
     </string-array>
 
@@ -602,6 +682,7 @@
         <item>@string/fast_rif_resistant</item>
         <item>@string/fast_indeterminate</item>
         <item>@string/fast_error_invalid_no_result</item>
+        <item>@string/fast_others</item>
     </string-array>
 
     <string-array name="fast_specimen_type_list">
@@ -611,6 +692,13 @@
 
     <string-array name="fast_specimen_come_from_list">
         <item>@string/fast_lymph</item>
+        <item>@string/fast_pleural_fluid</item>
+        <item>@string/fast_pus</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+
+    <string-array name="fast_specimen_come_from_list_updated">
+        <item>@string/fast_gastric_aspirate</item>
         <item>@string/fast_pleural_fluid</item>
         <item>@string/fast_pus</item>
         <item>@string/fast_other_title</item>
@@ -678,12 +766,11 @@
         <item>@string/fast_chest_xray_other</item>
     </string-array>
 
-    <string-array name="fast_radiologists_diagnosis_list">
+    <string-array name="fast_abnormal_detailed_diagnosis_list">
         <item>@string/fast_adenopathy</item>
         <item>@string/fast_infiltration</item>
         <item>@string/fast_consolidation</item>
         <item>@string/fast_effusion</item>
-        <item>@string/fast_normal</item>
         <item>@string/fast_cavitation</item>
         <item>@string/fast_miliary_tb</item>
         <item>@string/fast_others</item>
@@ -918,7 +1005,7 @@
 
     <string-array name="fast_reason_patient_not_contacted_list">
         <item>@string/fast_phone_switched_off</item>
-        <item>@string/fast_patient_did_not_recieve_call</item>
+        <item>@string/fast_patient_not_responding</item>
         <item>@string/fast_incorrect_contact_number</item>
         <item>@string/fast_other_title</item>
     </string-array>
@@ -930,6 +1017,10 @@
         <item>@string/fast_patient_died</item>
         <item>@string/fast_patient_refused_treatment</item>
         <item>@string/fast_patient_unwell</item>
+        <item>@string/fast_service_complaint</item>
+        <item>@string/fast_lack_of_funds_to_travel</item>
+        <item>@string/fast_unable_to_relocate</item>
+        <item>@string/fast_want_treatment_at_parent_site</item>
         <item>@string/fast_other_title</item>
     </string-array>
 

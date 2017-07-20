@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">GF - TB</string>
+    <string name="app_name" translatable="false">Aao TB Mitao</string>
     <string name="version">0.0.1</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -28,7 +28,7 @@
 
     <!-- Settings Values -->
     <string-array name="programs">
-        <item>@string/pmdt</item>
+        <!--<item>@string/pmdt</item>-->
         <item>@string/pet</item>
         <item>@string/fast</item>
         <item>@string/comorbidities</item>
@@ -65,6 +65,8 @@
 
     <string name="enabled">Enabled</string>
     <string name="disabled">Disabled</string>
+
+    <string name="rest">REST</string>
 
     <string-array name="ssl_encryption">
         <item>Enabled</item>
@@ -314,16 +316,12 @@
 
     <string-array name="provinces">
         <item>Balochistan</item>
-        <item>Khyber-Pakhtunkhwa</item>
+        <item>Khyber Pakhtunkhwa</item>
         <item>Sindh</item>
         <item>Punjab</item>
     </string-array>
 
     <string-array name="districts">
-        <item>Balochistan</item>
-        <item>Khyber-Pakhtunkhwa</item>
-        <item>Sindh</item>
-        <item>Punjab</item>
     </string-array>
 
     <string name="title_program">Program</string>
@@ -336,10 +334,12 @@
     <string name="title_saved_forms">Saved Forms</string>
     <string name="title_offline_forms">Offline Forms</string>
     <string name="title_select_patient">Select Patient</string>
+    <string name="title_offline_form_found">Offline form(s) found</string>
     <string name="title_search_patient">Search Patient</string>
     <string name="title_create_new_patient">Create New Patient</string>
     <string name="title_update_database">Update Database</string>
     <string name="title_feedback">Feedback</string>
+    <string name="title_about_us">About us</string>
     <string name="title_advanced">Advanced</string>
     <string name="title_others">Others</string>
     <string name="title_location">Location Setup</string>
@@ -374,7 +374,10 @@
 
     <!-- Errors String -->
     <string name="user_not_found">No record of username found in local DB.</string>
-    <string name="age_invalid">Age can\'t exceed 130</string>
+    <string name="version_mismatch">Please update the app from playstore to continue.</string>
+    <string name="age_invalid_year">Age can\'t exceed 119 Years</string>
+    <string name="age_invalid_month">Age can\'t exceed 180 Months</string>
+    <string name="age_invalid_day">Age can\'t exceed 5400 Days</string>
     <string name="provider_not_found">No provider associated with the user. Please contact Admin to create your user provider.</string>
     <string name="patient_not_select">SELECT PATIENT TO CONTINUE.</string>
     <string name="location_not_select">SELECT LOCATION TO CONTINUE.</string>
@@ -446,6 +449,7 @@
     <string name="female">Female</string>
     <string name="dob">Date of Birth: </string>
     <string name="age">Age: </string>
+    <string name="age_modifier">Age Modifier: </string>
     <string name="external_id">External ID: \n (Optional) </string>
 
     <!-- Forms -->
@@ -459,6 +463,7 @@
     <string name="goto_first">&lt;&lt;</string>
     <string name="goto_last">>></string>
     <string name="goto_next">Next</string>
+    <string name="goto_prev">Prev</string>
     <string name="mandatory_field_sign">&lt;br&gt; &lt;font color=##0D6986&gt; * &lt;/font&gt;  mg</string>
 
     <!-- Location Setup -->
@@ -475,7 +480,7 @@
     <string name="description">Description:</string>
     <string name="sync_with_openmrs">Sync with Openmrs</string>
     <string name="last_update_on">Last update on: </string>
-    <string name="location">Location:</string>
+    <string name="location">Location: </string>
     <string name="fetching_data">fetching data</string>
     <string name="search_location">Search...</string>
 
@@ -506,7 +511,7 @@
         <item>31 - 45</item>
         <item>46 - 60</item>
         <item>61 - 75</item>
-        <item>76 - above</item>
+        <item>76 - 119</item>
     </string-array>
 
     <string-array name="yes_no_options">
@@ -543,4 +548,30 @@
         <item>@string/suggestion</item>
         <item>@string/other</item>
     </string-array>
+
+    <string name="town">Town</string>
+    <string name="years">Years</string>
+    <string name="months">Months</string>
+    <string name="days">Days</string>
+    <string-array name="age_modifiers">
+        <item>@string/years</item>
+        <item>@string/months</item>
+        <item>@string/days</item>
+    </string-array>
+
+    <string name="saving_trees">Saving Trees ...</string>
+    <string name="aao_tb_mitao_app">Aao TB Mitao - Mobile App</string>
+
+    <string name="order_id">Order ID</string>
+
+    <string name="search_error">Error while trying to search in openmrs.</string>
+    <string name="searching">Searching...</string>
+    <string name="program_name">Program:</string>
+    <string name="childhood_tb_db">ChildhoodTB</string> <!-- name in db -->
+    <string name="provide_search_criteria">Please select any of the search criteria.</string>
+    <string name="guardian_name">Guardian Name</string>
+
+    <string name="offline_form_alert">offline form found. Press yes, to start upload in background.</string>
+    <string name="pid_copied">Patient ID copied.</string>
+    <string name="warning_before_get_Patient">Are you sure you want to select this patient? If yes, app will fetch this patient from openmrs.</string>
 </resources>

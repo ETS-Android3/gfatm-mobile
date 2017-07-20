@@ -54,7 +54,7 @@ public class PmdtDailyTreatmentMonitoringForm extends AbstractFormActivity imple
     TitledRadioGroup patientAdverseEvent;
     // Extra Views for date (to fetch treatment start date)...
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-    String treatmentStartDateString;
+    String treatmentStartDate;
 
     ScrollView scrollView;
 
@@ -345,7 +345,9 @@ public class PmdtDailyTreatmentMonitoringForm extends AbstractFormActivity imple
                             });
                     alertDialog.show();
                 }
+
             }
+
         };
         submissionFormTask.execute("");
         return false;
@@ -516,23 +518,27 @@ public class PmdtDailyTreatmentMonitoringForm extends AbstractFormActivity imple
 
                 if (result.get("TREATMENT START DATE") != null && !result.get("TREATMENT START DATE").isEmpty()) {
                     String format = "";
-                    treatmentStartDateString = result.get("TREATMENT START DATE");
-                    if (treatmentStartDateString.contains("/")) {
+                    treatmentStartDate = result.get("TREATMENT START DATE");
+                    if (treatmentStartDate.contains("/")) {
                         format = "dd/MM/yyyy";
                     } else {
                         format = "yyyy-MM-dd";
                     }
-                    secondDateCalendar.setTime(App.stringToDate(treatmentStartDateString, format));
+                    secondDateCalendar.setTime(App.stringToDate(treatmentStartDate, format));
 
                     // Auto-calculate day of treatment - date difference between reporting date and treatment start date
                     int daysDifference = 0;
 
-                    Date treatmentStartDate = App.stringToDate(treatmentStartDateString, format);
-                    Date reportingDate = App.stringToDate(DateFormat.format("yyyy-MM-dd", formDateCalendar).toString(), format);
-                    long diff = treatmentStartDate.getTime() - reportingDate.getTime();
-                    daysDifference = (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-                    treatmentDay.getEditText().setText(String.valueOf(Math.abs(daysDifference)));
+                    try {
+                        Date treatmentStartDate = formatter.parse(DateFormat.format("yyyy-MM-dd", secondDateCalendar).toString());
+                        Date reportingDate = formatter.parse(DateFormat.format("yyyy-MM-dd", formDateCalendar).toString());
+                        long diff = treatmentStartDate.getTime() - reportingDate.getTime();
+                        daysDifference = (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+                        treatmentDay.getEditText().setText(String.valueOf(Math.abs(daysDifference)));
 
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         };

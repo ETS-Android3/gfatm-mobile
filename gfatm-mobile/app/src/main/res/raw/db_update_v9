@@ -1,0 +1,4 @@
+-- insert queries
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INCENTIVE DATE','incentive_date','Date','4391773d-3246-48c4-8b6e-7c2c4829ee24');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CONFIRMED DIAGNOSIS','confirmed_diagnosis','Coded','159392AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('IPT REGISTRATION NUMBER','IPT_regestration_no','Text','cf32cfd3-f694-4c42-93de-648037763457');

@@ -36,6 +36,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
+import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -55,6 +56,8 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
     TitledEditText other;
 
     ScrollView scrollView;
+
+    Boolean refillFlag = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -119,11 +122,11 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
 
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         reasonForFollowupEnd = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_reason_for_end_of_followup), getResources().getStringArray(R.array.pet_reasons_for_end_of_followup), "", App.VERTICAL, true);
-        explanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 250, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        explanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 250, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         explanation.getEditText().setSingleLine(false);
         explanation.getEditText().setMinimumHeight(150);
         reasonForExclusion = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_reason_for_exclusion), getResources().getStringArray(R.array.pet_reason_for_exclusions), getResources().getString(R.string.pet_xdr), App.VERTICAL, App.VERTICAL);
-        other = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 250, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        other = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 250, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         other.getEditText().setSingleLine(false);
         other.getEditText().setMinimumHeight(150);
 
@@ -175,8 +178,16 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
 
     @Override
     public void updateDisplay() {
+
+        if(refillFlag){
+            refillFlag = false;
+            return;
+        }
+
         if (snackbar != null)
             snackbar.dismiss();
+
+        formDate.getButton().setEnabled(true);
 
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
@@ -440,6 +451,8 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
+            formDate.getButton().setEnabled(false);
+
         }
 
     }
@@ -492,6 +505,8 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
 
     @Override
     public void refill(int formId) {
+
+        refillFlag = true;
 
         OfflineForm fo = serverService.getOfflineFormById(formId);
         String date = fo.getFormDate();

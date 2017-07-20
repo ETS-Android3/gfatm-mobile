@@ -44,7 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/small"
-                android:src="@drawable/ic_update_patient" />
+                app:srcCompat="@drawable/ic_update_patient" />
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -60,7 +60,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/small"
-                        android:src="@drawable/ic_create_patient" />
+                        app:srcCompat="@drawable/ic_create_patient" />
 
                 </LinearLayout>
 
@@ -197,19 +197,19 @@
                 android:paddingTop="@dimen/medium"
                 android:text="@string/fast" />
 
-            <RadioButton
+           <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/medium"
                 android:paddingTop="@dimen/medium"
                 android:text="@string/childhood_tb" />
 
-            <RadioButton
+            <!--<RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/medium"
                 android:paddingTop="@dimen/medium"
-                android:text="@string/pmdt" />
+                android:text="@string/pmdt" />-->
 
             <RadioButton
                 android:layout_width="match_parent"
@@ -218,7 +218,7 @@
                 android:paddingTop="@dimen/medium"
                 android:text="@string/pet" />
 
-            <RadioButton
+           <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/medium"
@@ -229,5 +229,16 @@
 
     </LinearLayout>
 
+    <!--<android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:clickable="true"
+        app:fabSize="auto"
+        android:src="@drawable/ic_create_patient"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="bottom|right"/>-->
 
 </RelativeLayout>

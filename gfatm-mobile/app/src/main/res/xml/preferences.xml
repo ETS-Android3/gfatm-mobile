@@ -62,7 +62,7 @@
         android:title="SSL Encryption" />
 
     <EditTextPreference
-        android:defaultValue="REST"
+        android:defaultValue="@string/rest"
         android:key="communication_mode"
         android:title="Communication Mode" />
 

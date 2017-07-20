@@ -35,7 +35,7 @@ import java.util.ArrayList;
 public class DatabaseUtil extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseUtil";
     private static final String DB_NAME = "globalfund.db";
-    private static final int DB_VERSION = 3;
+    private static final int DB_VERSION = 13;
     private Context context;
 
     public DatabaseUtil(Context context) {
@@ -58,8 +58,41 @@ public class DatabaseUtil extends SQLiteOpenHelper {
         switch (oldVersion) {
             case 0: // Script to upgrade from version 0 to 1
                 break;
-            case 2: // Script to upgrade from version 1 to 2
+            case 1: // Script to upgrade from version 1 to 2
                 insertsStream = context.getResources().openRawResource(R.raw.db_update_v2);
+                break;
+            case 2: // Script to upgrade from version 2 to 3
+                insertsStream = context.getResources().openRawResource(R.raw.db_update_v3);
+                break;
+            case 3: // Script to upgrade from version 3 to 4
+                insertsStream = context.getResources().openRawResource(R.raw.db_update_v4);
+                break;
+            case 4: // Script to upgrade from version 4 to 5
+                insertsStream = context.getResources().openRawResource(R.raw.db_update_v5);
+                break;
+            case 5: // Script to upgrade from version 5 to 6
+                insertsStream = context.getResources().openRawResource(R.raw.db_update_v6);
+                break;
+            case 6: // Script to upgrade from version 6 to 7
+                insertsStream = context.getResources().openRawResource(R.raw.db_update_v7);
+                break;
+            case 7: // Script to upgrade from version 7 to 8
+                insertsStream = context.getResources().openRawResource(R.raw.db_update_v8);
+                break;
+            case 8: // Script to upgrade from version 8 to 9
+                insertsStream = context.getResources().openRawResource(R.raw.db_update_v9);
+                break;
+            case 9: // Script to upgrade from version 9 to 10
+                insertsStream = context.getResources().openRawResource(R.raw.db_update_v10);
+                break;
+            case 10: // Script to upgrade from version 10 to 11
+                insertsStream = context.getResources().openRawResource(R.raw.db_update_v11);
+                break;
+            case 11: // Script to upgrade from version 11 to 12
+                insertsStream = context.getResources().openRawResource(R.raw.db_update_v12);
+                break;
+            case 12: // Script to upgrade from version 12 to 13
+                insertsStream = context.getResources().openRawResource(R.raw.db_update_v13);
                 break;
         }
 

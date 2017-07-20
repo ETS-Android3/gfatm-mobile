@@ -1,0 +1,29 @@
+
+---- Insert Queries
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('BONE SCAN',NULL,'N/A','161161AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CT SCAN, CHEST',NULL,'N/A','161165AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('RADIOLOGICAL DIAGNOSIS','radiological_diagnosis','Coded','7b8a4bea-4217-4cfd-920b-f0c66ab23680');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('ABNORMAL SUGGESTIVE OF TB','abnormal_suggestive_tb','N/A','d9bfc2f2-aae4-4015-9794-afc9c2b93e1f');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('ABNORMAL NOT SUGGESTIVE OF TB','abnormal_not_suggestive_tb','N/A','7dc242c9-d0b2-4ceb-b808-88b124d75d03');
+
+--- Add Treatment supporter column in patient table
+CREATE TABLE patient2(patient_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,uuid VARCHAR,identifier VARCHAR UNIQUE NOT NULL,external_id VARCHAR,enrs VARCHAR,endtb_emr_id VARCHAR,openmrs_identifier VARCHAR,in_fast CHAR DEFAULT 'Y' NOT NULL, in_pet CHAR DEFAULT 'Y' NOT NULL,in_childhood_tb CHAR DEFAULT 'Y' NOT NULL,in_comorbidities CHAR DEFAULT 'Y' NOT NULL,in_pmdt CHAR DEFAULT 'Y' NOT NULL,first_name VARCHAR NOT NULL,last_name VARCHAR NOT NULL,gender CHAR DEFAULT 'M' NOT NULL, birthdate DATETIME NOT NULL,cityVillage VARCHAR, countyDistrict VARCHAR,stateProvince VARCHAR,country VARCHAR,latitude DOUBLE,longitude DOUBLE,address_uuid VARCHAR,birthplace VARCHAR,citizenship VARCHAR,maritalstatus VARCHAR,healthcenter VARCHAR,healthdistrict VARCHAR, mothername VARCHAR,primarycontact VARCHAR,primarycontactowner VARCHAR,secondarycontact VARCHAR,secondarycontactOwner VARCHAR,ethnicity VARCHAR,educationlevel VARCHAR,employmentstatus VARCHAR,occupation VARCHAR,incomeClass VARCHAR,mothertongue VARCHAR, nationalid VARCHAR, nationalidowner VARCHAR,guardianname VARCHAR,address1 VARCHAR,address2 VARCHAR,address3 VARCHAR,description VARCHAR,tertiarycontact VARCHAR,quaternarycontact VARCHAR,treatmentsupporter VARCHAR);
+INSERT INTO patient2 (patient_id, uuid, identifier, external_id, enrs, endtb_emr_id, openmrs_identifier, in_fast, in_pet, in_childhood_tb,  in_comorbidities, in_pmdt, first_name, last_name, gender, birthdate,cityVillage, countyDistrict,stateProvince,country ,latitude,longitude,address_uuid,birthplace,citizenship,maritalstatus,healthcenter,healthdistrict, mothername,primarycontact,primarycontactowner,secondarycontact,secondarycontactOwner,ethnicity,educationlevel,employmentstatus,occupation,incomeClass,mothertongue, nationalid , nationalidowner,guardianname,address1,address2,address3,description,tertiarycontact ,quaternarycontact) SELECT * FROM patient;
+DROP TABLE patient;
+ALTER TABLE patient2 RENAME TO patient;
+
+-- Person Attribute Type
+INSERT OR IGNORE INTO person_attribute_type VALUES ('Treatment Supporter','java.lang.String','f083e422-b1e9-4951-8bc9-95c2992a6a72');
+
+---- delete Quries
+delete from concept where full_name = 'REASON FOR TREATMENT INTERRUPTION';
+delete from concept where full_name = 'OTHER REASON FOR TREATMENT INTERRUPTION';
+
+---- Update Queries
+update OR IGNORE encounter_type set uuid='2f23e428-417e-4fbd-a6d7-1e0dcf05578d' where encounter_type = 'Comorbidities-Blood Sugar Test Result';
+update OR IGNORE concept set full_name='EAR, NOSE AND THROAT DEPARTMENT' where uuid = '160455AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
+update OR IGNORE concept set data_type ='Text' where full_name = 'OTHER TEST UNIT';
+update OR IGNORE concept set full_name='Text' where full_name = 'OTHER SITE OF TB SURGERY';
+update OR IGNORE concept set full_name='EAR, NOSE AND THROAT DEPARTMENT' where uuid = '160455AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
+update OR IGNORE concept set full_name='OTHER ABNORMAL DETAILED DIAGNOSIS' and var_name='other_abnormal_diagnosis' where uuid = '7cda03c9-af8b-4d01-8f88-01365c85cf7a';
+update OR IGNORE concept set full_name='ABNORMAL DETAILED DIAGNOSIS' and var_name='abnormal_detailed_diagnosis' where uuid = '12AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';

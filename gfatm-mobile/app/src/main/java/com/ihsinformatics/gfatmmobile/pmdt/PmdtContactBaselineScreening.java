@@ -137,10 +137,10 @@ public class PmdtContactBaselineScreening extends AbstractFormActivity implement
         formDate = new TitledButton(context, null, getResources().getString(R.string.pmdt_baseline_screening_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         scanQRCode = new Button(context);
         scanQRCode.setText("Scan QR Code");
-
         indexPatientId = new TitledEditText(context, null, getResources().getString(R.string.pmdt_index_patient_id), "", "", RegexUtil.idLength, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
 
         LinearLayout linearLayout = new LinearLayout(context);
+        indexPatientId = new TitledEditText(context, null, getResources().getString(R.string.pmdt_index_patient_id), "", "", RegexUtil.idLength, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT,

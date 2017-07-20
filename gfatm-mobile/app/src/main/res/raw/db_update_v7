@@ -1,0 +1,11 @@
+-- insert queries
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('5',NULL,'N/A','2fd6470d-3faa-453f-8e1e-e96d805b819e');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ORDER ID',NULL,'Text','45c46189-a0c1-4d75-87d3-234a6ec38433');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER HIGHEST EDUCATION LEVEL OF HEAD OF HOUSEHOLD','other_household_head_education_level','Text','1fc1e480-75c0-422e-984d-38bb96b78e90');
+
+-- create encounter table
+CREATE TABLE IF NOT EXISTS encounter_temp(encounter_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, uuid VARCHAR, encounterType VARCHAR, encounterDatetime datetime, encounterLocation VARCHAR, patientId INT NOT NULL COLLATE NOCASE, form_date VARCHAR, dateCreated datetime default current_timestamp, FOREIGN KEY (patientId) REFERENCES PATIENT(patient_id));
+INSERT INTO encounter_temp (encounter_id, uuid, encounterType, encounterDatetime, encounterLocation, patientId, form_date, dateCreated) SELECT encounter_id, uuid, encounterType, datetime(substr(encounterDatetime, 7, 4) || '-' || substr(encounterDatetime, 4, 2) || '-' || substr(encounterDatetime, 1, 2)), encounterLocation, patientId, form_date, datetime('now') FROM encounter where encounterDatetime like '%/%/%';
+INSERT INTO encounter_temp (encounter_id, uuid, encounterType, encounterDatetime, encounterLocation, patientId, form_date, dateCreated) SELECT encounter_id, uuid, encounterType, datetime(encounterDatetime), encounterLocation, patientId, form_date, datetime('now') FROM encounter where encounterDatetime like '%-%-%';
+DROP TABLE encounter;
+ALTER TABLE encounter_temp RENAME TO encounter;

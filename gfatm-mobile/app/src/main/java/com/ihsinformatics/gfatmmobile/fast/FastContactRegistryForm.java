@@ -124,6 +124,8 @@ public class FastContactRegistryForm extends AbstractFormActivity implements Rad
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         contacts = new TitledEditText(context, null, getResources().getString(R.string.fast_how_many_people_sleep_in_your_home), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
+        contacts.getEditText().setKeyListener(null);
+        contacts.getEditText().setFocusable(false);
         adultContacts = new TitledEditText(context, null, getResources().getString(R.string.fast_total_number_of_adult_contacts), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         childhoodContacts = new TitledEditText(context, null, getResources().getString(R.string.fast_total_number_of_childhood_contacts), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
 
@@ -255,7 +257,7 @@ public class FastContactRegistryForm extends AbstractFormActivity implements Rad
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
 
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
@@ -263,7 +265,7 @@ public class FastContactRegistryForm extends AbstractFormActivity implements Rad
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
             } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
@@ -272,6 +274,8 @@ public class FastContactRegistryForm extends AbstractFormActivity implements Rad
             } else
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         }
+
+        formDate.getButton().setEnabled(true);
     }
 
     @Override
@@ -288,6 +292,16 @@ public class FastContactRegistryForm extends AbstractFormActivity implements Rad
             error = true;
         }
 
+        else if (contacts.getVisibility() == View.VISIBLE  && Integer.parseInt(contacts.getEditText().getText().toString()) > 50) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            contacts.getEditText().setError(getString(R.string.fast_enter_value_between_0_50));
+            contacts.getEditText().requestFocus();
+            error = true;
+        }
+
         if (adultContacts.getVisibility() == View.VISIBLE && adultContacts.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
@@ -297,6 +311,18 @@ public class FastContactRegistryForm extends AbstractFormActivity implements Rad
             adultContacts.getEditText().requestFocus();
             error = true;
         }
+
+
+        else if (adultContacts.getVisibility() == View.VISIBLE  && Integer.parseInt(adultContacts.getEditText().getText().toString()) > 25) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            adultContacts.getEditText().setError(getString(R.string.fast_enter_value_between_0_25));
+            adultContacts.getEditText().requestFocus();
+            error = true;
+        }
+
 
         if (childhoodContacts.getVisibility() == View.VISIBLE && childhoodContacts.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
@@ -308,27 +334,8 @@ public class FastContactRegistryForm extends AbstractFormActivity implements Rad
             error = true;
         }
 
-        if (contacts.getVisibility() == View.VISIBLE && Integer.parseInt(contacts.getEditText().getText().toString()) > 50) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            contacts.getEditText().setError(getString(R.string.fast_enter_value_between_0_50));
-            contacts.getEditText().requestFocus();
-            error = true;
-        }
 
-        if (adultContacts.getVisibility() == View.VISIBLE && Integer.parseInt(adultContacts.getEditText().getText().toString()) > 25) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            adultContacts.getEditText().setError(getString(R.string.fast_enter_value_between_0_25));
-            adultContacts.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (childhoodContacts.getVisibility() == View.VISIBLE && Integer.parseInt(childhoodContacts.getEditText().getText().toString()) > 25){
+        else if (childhoodContacts.getVisibility() == View.VISIBLE && Integer.parseInt(childhoodContacts.getEditText().getText().toString()) > 25){
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -548,6 +555,7 @@ public class FastContactRegistryForm extends AbstractFormActivity implements Rad
             super.onClick(view);
 
             if (view == formDate.getButton()) {
+                formDate.getButton().setEnabled(false);
                 Bundle args = new Bundle();
                 args.putInt("type", DATE_DIALOG_ID);
                 formDateFragment.setArguments(args);

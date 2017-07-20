@@ -1,6 +1,7 @@
 package com.ihsinformatics.gfatmmobile.custom;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.InputFilter;
 import android.view.Gravity;
 import android.widget.LinearLayout;
@@ -22,7 +23,9 @@ public class TitledEditText extends LinearLayout {
 
     public TitledEditText(Context context, String title, String ques, String defaultValue, String hint, int length, InputFilter filter, int inputType, int layoutOrientation, Boolean mandatory) {
         super(context);
-
+        if(!App.isTabletDevice(context)){
+            layoutOrientation = App.VERTICAL;
+        }
         MyLinearLayout linearLayout = new MyLinearLayout(context, title, layoutOrientation);
         this.mandatory = mandatory;
 
@@ -30,15 +33,15 @@ public class TitledEditText extends LinearLayout {
         hLayout.setOrientation(HORIZONTAL);
 
         if (mandatory) {
-            int color = App.getColor(context, R.attr.colorAccent);
             TextView mandatorySign = new TextView(context);
-            mandatorySign.setText("*");
-            mandatorySign.setTextColor(color);
+            mandatorySign.setText(" *");
+            mandatorySign.setTextColor(Color.parseColor("#ff0000"));
             hLayout.addView(mandatorySign);
         }
 
         questionView = new MyTextView(context, ques);
         hLayout.addView(questionView);
+
         linearLayout.addView(hLayout);
 
         editText = new MyEditText(context, defaultValue, length, filter, inputType);

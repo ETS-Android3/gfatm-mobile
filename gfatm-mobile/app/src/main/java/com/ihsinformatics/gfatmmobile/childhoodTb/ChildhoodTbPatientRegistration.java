@@ -2,6 +2,7 @@ package com.ihsinformatics.gfatmmobile.childhoodTb;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,9 +12,11 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +24,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
+import android.widget.AutoCompleteTextView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -31,8 +34,12 @@ import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
+import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
+import com.ihsinformatics.gfatmmobile.custom.MyEditText;
+import com.ihsinformatics.gfatmmobile.custom.MyLinearLayout;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
+import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
@@ -53,14 +60,18 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
 
     Context context;
     TitledButton formDate;
-    TitledEditText cnic1;
-    TitledEditText cnic2;
-    TitledEditText cnic3;
+    MyEditText cnic1;
+    MyEditText cnic2;
+    MyEditText cnic3;
     TitledSpinner cnicOwner;
     TitledEditText cnicOwnerOther;
     TitledRadioGroup addressProvided;
+    MyLinearLayout addressLayout;
+    LinearLayout addressQuestion;
+    MyTextView townTextView;
+    AutoCompleteTextView address2;
+    TitledSpinner province;
     TitledEditText address1;
-    TitledEditText address2;
     TitledSpinner city;
     TitledSpinner district;
     TitledRadioGroup addressType;
@@ -73,19 +84,19 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
     TitledRadioGroup permissionLandlineNumber;
     TitledSpinner secondaryLandlineContact;
     TitledRadioGroup permissionSecondaryLandlineNumber;
-    LinearLayout cnicLinearLayout;
+    LinearLayout cnicLayout;
     LinearLayout mobileLinearLayout;
-    TitledEditText mobileNumber1;
-    TitledEditText mobileNumber2;
+    MyEditText mobileNumber1;
+    MyEditText mobileNumber2;
     LinearLayout secondaryMobileLinearLayout;
-    TitledEditText secondaryMobileNumber1;
-    TitledEditText secondaryMobileNumber2;
+    MyEditText secondaryMobileNumber1;
+    MyEditText secondaryMobileNumber2;
     LinearLayout landlineLayout;
-    TitledEditText landlineNumber1;
-    TitledEditText landlineNumber2;
+    MyEditText landlineNumber1;
+    MyEditText landlineNumber2;
     LinearLayout secondaryLandlineNumber;
-    TitledEditText secondaryLandlineNumber1;
-    TitledEditText secondaryLandlineNumber2;
+    MyEditText secondaryLandlineNumber1;
+    MyEditText secondaryLandlineNumber2;
 
 
 
@@ -165,60 +176,138 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        cnicLinearLayout = new LinearLayout(context);
-        cnicLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
-        cnic1 = new TitledEditText(context, null, getResources().getString(R.string.fast_nic_number), "", "#####", 5, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        cnicLinearLayout.addView(cnic1);
-        cnic2 = new TitledEditText(context, null, "-", "", "#######", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        cnicLinearLayout.addView(cnic2);
-        cnic3 = new TitledEditText(context, null, "-", "", "#", 1, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        cnicLinearLayout.addView(cnic3);
+        cnicLayout = new LinearLayout(context);
+        cnicLayout.setOrientation(LinearLayout.VERTICAL);
+        MyTextView cnic = new MyTextView(context, getResources().getString(R.string.pet_cnic));
+        cnicLayout.addView(cnic);
+        LinearLayout cnicPartLayout = new LinearLayout(context);
+        cnicPartLayout.setOrientation(LinearLayout.HORIZONTAL);
+        cnic1 = new MyEditText(context, "", 5, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE);
+        cnic1.setHint("XXXXX");
+        cnicPartLayout.addView(cnic1);
+        MyTextView cnicDash = new MyTextView(context, " - ");
+        cnicPartLayout.addView(cnicDash);
+        cnic2 = new MyEditText(context, "", 7, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE);
+        cnic2.setHint("XXXXXXX");
+        cnicPartLayout.addView(cnic2);
+        MyTextView cnicDash2 = new MyTextView(context, " - ");
+        cnicPartLayout.addView(cnicDash2);
+        cnic3 = new MyEditText(context, "", 1, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE);
+        cnic3.setHint("X");
+        cnicPartLayout.addView(cnic3);
+        cnicLayout.addView(cnicPartLayout);
         cnicOwner = new TitledSpinner(context,null,getResources().getString(R.string.ctb_cnic_owner),getResources().getStringArray(R.array.ctb_close_contact_type_list),getResources().getString(R.string.ctb_mother),App.VERTICAL);
         cnicOwnerOther = new TitledEditText(context,null,getResources().getString(R.string.ctb_other_specify),"","",20,RegexUtil.ALPHA_FILTER,InputType.TYPE_CLASS_TEXT,App.VERTICAL,false);
 
         addressProvided = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_address_provided),getResources().getStringArray(R.array.yes_no_options),getResources().getString(R.string.no),App.HORIZONTAL,App.VERTICAL,true);
-        address1 = new TitledEditText(context,null,getResources().getString(R.string.ctb_address1),"","",10,RegexUtil.ADDRESS_FILTER,InputType.TYPE_CLASS_TEXT,App.VERTICAL,true);
 
-        address2 = new TitledEditText(context,null,getResources().getString(R.string.ctb_address2),"","",50,RegexUtil.ADDRESS_FILTER,InputType.TYPE_CLASS_TEXT,App.VERTICAL,true);
+        address1 = new TitledEditText(context,null,getResources().getString(R.string.ctb_address1),"","",50,RegexUtil.ADDRESS_FILTER,InputType.TYPE_CLASS_TEXT,App.VERTICAL,true);
+
+        addressLayout = new MyLinearLayout(context, null, App.VERTICAL);
+        townTextView = new MyTextView(context, getResources().getString(R.string.ctb_address2));
+        address2 = new AutoCompleteTextView(context);
+        InputFilter[] fArray = new InputFilter[1];
+        fArray[0] = new InputFilter.LengthFilter(20);
+        address2.setFilters(fArray);
+
+        addressQuestion = new LinearLayout(context);
+        addressQuestion.setOrientation(LinearLayout.HORIZONTAL);
+        addressQuestion.addView(townTextView);
+        TextView mandatorySign2 = new TextView(context);
+        mandatorySign2.setText("*");
+        mandatorySign2.setTextColor(Color.parseColor("#ff0000"));
+        addressQuestion.addView(mandatorySign2);
+        addressLayout.addView(addressQuestion);
+        addressLayout.addView(address2);
+        province = new TitledSpinner(context, "", getResources().getString(R.string.province), getResources().getStringArray(R.array.provinces), App.getProvince(), App.VERTICAL);
+
         city = new TitledSpinner(context, "", getResources().getString(R.string.pet_city), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL,true);
         district = new TitledSpinner(context, "", getResources().getString(R.string.pet_district), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
         addressType = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_address_type),getResources().getStringArray(R.array.ctb_address_type_list),null,App.HORIZONTAL,App.VERTICAL,true);
         nearestLandmark = new TitledEditText(context,null,getResources().getString(R.string.ctb_nearest_landmark),"","",50,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.VERTICAL,false);
         mobileLinearLayout = new LinearLayout(context);
-        mobileLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
-        mobileNumber1 = new TitledEditText(context, null, getResources().getString(R.string.mobile_number), "", "####", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        mobileLinearLayout.addView(mobileNumber1);
-        mobileNumber2 = new TitledEditText(context, null, "-", "", "#######", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        mobileLinearLayout.addView(mobileNumber2);
+        mobileLinearLayout.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout mobileQuestion = new LinearLayout(context);
+        mobileQuestion.setOrientation(LinearLayout.HORIZONTAL);
+        MyTextView mobileNumberLabel = new MyTextView(context, getResources().getString(R.string.ctb_mobile_number));
+        mobileQuestion.addView(mobileNumberLabel);
+        TextView mandatorySign = new TextView(context);
+        mandatorySign.setText("*");
+        mandatorySign.setTextColor(Color.parseColor("#ff0000"));
+        mobileQuestion.addView(mandatorySign);
+        mobileLinearLayout.addView(mobileQuestion);
+        LinearLayout mobileNumberPart = new LinearLayout(context);
+        mobileNumberPart.setOrientation(LinearLayout.HORIZONTAL);
+        mobileNumber1 = new MyEditText(context,"", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        mobileNumber1.setHint("03XX");
+        mobileNumberPart.addView(mobileNumber1);
+        MyTextView mobileNumberDash = new MyTextView(context, " - ");
+        mobileNumberPart.addView(mobileNumberDash);
+        mobileNumber2 = new MyEditText(context,"",  7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        mobileNumber2.setHint("XXXXXXX");
+        mobileNumberPart.addView(mobileNumber2);
+
+        mobileLinearLayout.addView(mobileNumberPart);
+
         mobileNumberContact = new TitledSpinner(context,null,getResources().getString(R.string.ctb_whose_contact),getResources().getStringArray(R.array.ctb_close_contact_type_list),null,App.VERTICAL);
         permissionMobileNumberContact = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_permission),getResources().getStringArray(R.array.yes_no_options),getResources().getString(R.string.no),App.HORIZONTAL,App.VERTICAL,true);
-        secondaryMobileLinearLayout= new LinearLayout(context);
-        secondaryMobileLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
-        secondaryMobileNumber1 = new TitledEditText(context, null, getResources().getString(R.string.ctb_secondary_mobile_number), "", "####", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        secondaryMobileLinearLayout.addView(secondaryMobileNumber1);
-        secondaryMobileNumber2 = new TitledEditText(context, null, "-", "", "#######", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        secondaryMobileLinearLayout.addView(secondaryMobileNumber2);
+        secondaryMobileLinearLayout = new LinearLayout(context);
+        secondaryMobileLinearLayout.setOrientation(LinearLayout.VERTICAL);
+        MyTextView secondaryMobileNumberLabel = new MyTextView(context, getResources().getString(R.string.ctb_secondary_mobile_number));
+        secondaryMobileLinearLayout.addView(secondaryMobileNumberLabel);
+        LinearLayout secondaryMobileNumberPart = new LinearLayout(context);
+        secondaryMobileNumberPart.setOrientation(LinearLayout.HORIZONTAL);
+        secondaryMobileNumber1 = new MyEditText(context,"", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        secondaryMobileNumber1.setHint("03XX");
+        secondaryMobileNumberPart.addView(secondaryMobileNumber1);
+        MyTextView secondarysecondaryMobileNumberDash = new MyTextView(context, " - ");
+        secondaryMobileNumberPart.addView(secondarysecondaryMobileNumberDash);
+        secondaryMobileNumber2 = new MyEditText(context,"",  7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        secondaryMobileNumber2.setHint("XXXXXXX");
+        secondaryMobileNumberPart.addView(secondaryMobileNumber2);
+
+        secondaryMobileLinearLayout.addView(secondaryMobileNumberPart);
         secondaryMobileNumberContact = new TitledSpinner(context,null,getResources().getString(R.string.ctb_whose_contact),getResources().getStringArray(R.array.ctb_close_contact_type_list),null,App.VERTICAL);
         permissionSecondaryMobileNumber = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_permission),getResources().getStringArray(R.array.yes_no_options),getResources().getString(R.string.no),App.HORIZONTAL,App.VERTICAL,true);
         landlineLayout = new LinearLayout(context);
-        landlineLayout.setOrientation(LinearLayout.HORIZONTAL);
-        landlineNumber1 = new TitledEditText(context, null, getResources().getString(R.string.ctb_landline_number), "", "###", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        landlineLayout.addView(landlineNumber1);
-        landlineNumber2 = new TitledEditText(context, null, "-", "", "########", 8, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        landlineLayout.addView(landlineNumber2);
+        landlineLayout.setOrientation(LinearLayout.VERTICAL);
+        MyTextView landlineLabel = new MyTextView(context, getResources().getString(R.string.ctb_landline_number));
+        landlineLayout.addView(landlineLabel);
+        LinearLayout landlineNumberPart = new LinearLayout(context);
+        landlineNumberPart.setOrientation(LinearLayout.HORIZONTAL);
+        landlineNumber1 = new MyEditText(context,"", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        landlineNumber1.setHint("0XX");
+        landlineNumberPart.addView(landlineNumber1);
+        MyTextView landlineNumberDash = new MyTextView(context, " - ");
+        landlineNumberPart.addView(landlineNumberDash);
+        landlineNumber2 = new MyEditText(context,"",  8, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        landlineNumber2.setHint("XXXXXXX");
+        landlineNumberPart.addView(landlineNumber2);
+
+        landlineLayout.addView(landlineNumberPart);
         landlineNumberContact = new TitledSpinner(context,null,getResources().getString(R.string.ctb_whose_contact),getResources().getStringArray(R.array.ctb_close_contact_type_list),null,App.VERTICAL);
         permissionLandlineNumber = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_permission),getResources().getStringArray(R.array.yes_no_options),getResources().getString(R.string.no),App.HORIZONTAL,App.VERTICAL,true);
         secondaryLandlineNumber = new LinearLayout(context);
-        secondaryLandlineNumber.setOrientation(LinearLayout.HORIZONTAL);
-        secondaryLandlineNumber1 = new TitledEditText(context, null, getResources().getString(R.string.ctb_secondary_landline_number), "", "###", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        secondaryLandlineNumber.addView(secondaryLandlineNumber1);
-        secondaryLandlineNumber2 = new TitledEditText(context, null, "-", "", "########", 8, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        secondaryLandlineNumber.addView(secondaryLandlineNumber2);
+        secondaryLandlineNumber.setOrientation(LinearLayout.VERTICAL);
+        MyTextView secondaryLandlineLabel = new MyTextView(context, getResources().getString(R.string.ctb_secondary_landline_number));
+        secondaryLandlineNumber.addView(secondaryLandlineLabel);
+        LinearLayout secondaryLandlineNumberPart = new LinearLayout(context);
+        secondaryLandlineNumberPart.setOrientation(LinearLayout.HORIZONTAL);
+        secondaryLandlineNumber1 = new MyEditText(context,"", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        secondaryLandlineNumber1.setHint("0XX");
+        secondaryLandlineNumberPart.addView(secondaryLandlineNumber1);
+        MyTextView secondaryLandlineNumberDash = new MyTextView(context, " - ");
+        secondaryLandlineNumberPart.addView(secondaryLandlineNumberDash);
+        secondaryLandlineNumber2 = new MyEditText(context,"",  8, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        secondaryLandlineNumber2.setHint("XXXXXXX");
+        secondaryLandlineNumberPart.addView(secondaryLandlineNumber2);
+
+        secondaryLandlineNumber.addView(secondaryLandlineNumberPart);
         secondaryLandlineContact = new TitledSpinner(context,null,getResources().getString(R.string.ctb_whose_contact),getResources().getStringArray(R.array.ctb_close_contact_type_list),null,App.VERTICAL);
         permissionSecondaryLandlineNumber = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_permission),getResources().getStringArray(R.array.yes_no_options),getResources().getString(R.string.no),App.HORIZONTAL,App.VERTICAL,true);
 
 
-        mobileNumber2.getEditText().addTextChangedListener(new TextWatcher() {
+        cnic1.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -226,16 +315,104 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String mobileNumber = mobileNumber1.getEditText().getText() + s.toString();
+                if(s.length()==5){
+                    cnic2.requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String cnic = cnic1.getText().toString() + "-" + cnic2.getText().toString() + "-" + cnic3.getText().toString();
+                if (RegexUtil.isValidNIC(cnic)) {
+                    cnicOwner.setVisibility(View.VISIBLE);
+                }else{
+                    cnicOwner.setVisibility(View.GONE);
+                }
+            }
+        });
+
+
+        cnic2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()==7){
+                    cnic3.requestFocus();
+                }
+
+                if(s.length()==0){
+                    cnic1.requestFocus();
+                    cnic1.setSelection(cnic1.getText().length());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String cnic = cnic1.getText().toString() + "-" + cnic2.getText().toString() + "-" + cnic3.getText().toString();
+                if (RegexUtil.isValidNIC(cnic)) {
+                    cnicOwner.setVisibility(View.VISIBLE);
+                }
+                else{
+                    cnicOwner.setVisibility(View.GONE);
+                }
+
+
+            }
+        });
+
+        cnic3.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()==0){
+                    cnic2.requestFocus();
+                    cnic2.setSelection(cnic2.getText().length());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                String cnic = cnic1.getText().toString() + "-" + cnic2.getText().toString() + "-" + cnic3.getText().toString();
+                if (RegexUtil.isValidNIC(cnic)) {
+                    cnicOwner.setVisibility(View.VISIBLE);
+                }else{
+                    cnicOwner.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        mobileNumber2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String mobileNumber = mobileNumber1.getText() + s.toString();
                 if(RegexUtil.isMobileNumber(mobileNumber)){
-                    mobileNumber2.getEditText().setError(null);
+                    mobileNumber2.setError(null);
                     mobileNumberContact.setVisibility(View.VISIBLE);
                     permissionMobileNumberContact.setVisibility(View.VISIBLE);
                 }
                 else{
-                    mobileNumber2.getEditText().setError("Invalid Mobile Number");
+                    mobileNumber2.setError("Invalid Mobile Number");
                     mobileNumberContact.setVisibility(View.GONE);
                     permissionMobileNumberContact.setVisibility(View.GONE);
+                }
+
+                if(s.length()==0){
+                    mobileNumber1.requestFocus();
+                    mobileNumber1.setSelection(mobileNumber1.getText().length());
                 }
 
 
@@ -247,7 +424,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
             }
         });
 
-        mobileNumber1.getEditText().addTextChangedListener(new TextWatcher() {
+        mobileNumber1.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -255,32 +432,34 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String mobileNumber = s.toString() + mobileNumber2.getEditText().getText().toString();
+                String mobileNumber = s.toString() + mobileNumber2.getText().toString();
                 if(RegexUtil.isMobileNumber(mobileNumber)){
-                        mobileNumber2.getEditText().setError(null);
+                        mobileNumber2.setError(null);
                         mobileNumberContact.setVisibility(View.VISIBLE);
                         permissionMobileNumberContact.setVisibility(View.VISIBLE);
                 }
                 else{
-                    mobileNumber2.getEditText().setError("Invalid Mobile Number");
+                    mobileNumber2.setError("Invalid Mobile Number");
                     mobileNumberContact.setVisibility(View.GONE);
                     permissionMobileNumberContact.setVisibility(View.GONE);
                 }
-                if(s.length()==0 && mobileNumber2.getEditText().getText().length()==0){
-                    mobileNumber2.getEditText().setError(null);
+                if(s.length()==0 && mobileNumber2.getText().length()==0){
+                    mobileNumber2.setError(null);
                 }
 
+                if(s.length()==4){
+                    mobileNumber2.requestFocus();
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
 
 
 
-        secondaryMobileNumber2.getEditText().addTextChangedListener(new TextWatcher() {
+        secondaryMobileNumber2.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -288,19 +467,22 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String mobileNumber = secondaryMobileNumber1.getEditText().getText() + s.toString();
+                String mobileNumber = secondaryMobileNumber1.getText() + s.toString();
                 if(RegexUtil.isMobileNumber(mobileNumber)){
-                    secondaryMobileNumber2.getEditText().setError(null);
+                    secondaryMobileNumber2.setError(null);
                     secondaryMobileNumberContact.setVisibility(View.VISIBLE);
                     permissionSecondaryMobileNumber.setVisibility(View.VISIBLE);
 
                 }
                 else{
-                    secondaryMobileNumber2.getEditText().setError("Invalid Phone number");
+                    secondaryMobileNumber2.setError("Invalid Phone number");
                     secondaryMobileNumberContact.setVisibility(View.GONE);
                     permissionSecondaryMobileNumber.setVisibility(View.GONE);
                 }
-
+                if(s.length()==0){
+                    secondaryMobileNumber1.requestFocus();
+                    secondaryMobileNumber1.setSelection(secondaryMobileNumber1.getText().length());
+                }
             }
 
             @Override
@@ -308,7 +490,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
 
             }
         });
-        secondaryMobileNumber1.getEditText().addTextChangedListener(new TextWatcher() {
+        secondaryMobileNumber1.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -317,19 +499,23 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                String secondaryMobileNumber = s.toString() + secondaryMobileNumber2.getEditText().getText().toString();
+                String secondaryMobileNumber = s.toString() + secondaryMobileNumber2.getText().toString();
                 if(RegexUtil.isMobileNumber(secondaryMobileNumber)){
                     secondaryMobileNumberContact.setVisibility(View.VISIBLE);
                     permissionSecondaryMobileNumber.setVisibility(View.VISIBLE);
-                    secondaryMobileNumber2.getEditText().setError(null);
+                    secondaryMobileNumber2.setError(null);
                 }
                 else{
-                    secondaryMobileNumber2.getEditText().setError("Invalid Phone number");
+                    secondaryMobileNumber2.setError("Invalid Phone number");
                     secondaryMobileNumberContact.setVisibility(View.GONE);
                     permissionSecondaryMobileNumber.setVisibility(View.GONE);
                 }
-                if(s.length()==0 && secondaryMobileNumber2.getEditText().getText().length()==0){
-                    secondaryMobileNumber2.getEditText().setError(null);
+                if(s.length()==0 && secondaryMobileNumber2.getText().length()==0){
+                    secondaryMobileNumber2.setError(null);
+                }
+
+                if(s.length()==4){
+                    secondaryMobileNumber2.requestFocus();
                 }
             }
 
@@ -338,7 +524,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
 
             }
         });
-        landlineNumber2.getEditText().addTextChangedListener(new TextWatcher() {
+        landlineNumber2.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -346,18 +532,23 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String landlineNumber = landlineNumber1.getEditText().getText() + s.toString();
+                String landlineNumber = landlineNumber1.getText() + s.toString();
                 if(RegexUtil.isContactNumber(landlineNumber)){
                     landlineNumberContact.setVisibility(View.VISIBLE);
                     permissionLandlineNumber.setVisibility(View.VISIBLE);
-                    landlineNumber2.getEditText().setError(null);
+                    landlineNumber2.setError(null);
                 }
                 else{
-                    landlineNumber2.getEditText().setError("Invalid Landline number");
+                    landlineNumber2.setError("Invalid Landline number");
                     landlineNumberContact.setVisibility(View.GONE);
                     permissionLandlineNumber.setVisibility(View.GONE);
                 }
 
+                if(s.length()==0){
+                    landlineNumber1.requestFocus();
+                    landlineNumber1.setSelection(landlineNumber1.getText().length());
+                }
+
             }
 
             @Override
@@ -366,7 +557,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
             }
         });
 
-        landlineNumber1.getEditText().addTextChangedListener(new TextWatcher() {
+        landlineNumber1.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -374,20 +565,25 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String landlineNumber = s.toString() + landlineNumber2.getEditText().getText().toString();
+                String landlineNumber = s.toString() + landlineNumber2.getText().toString();
                 if(RegexUtil.isContactNumber(landlineNumber)){
                     landlineNumberContact.setVisibility(View.VISIBLE);
                     permissionLandlineNumber.setVisibility(View.VISIBLE);
-                    landlineNumber2.getEditText().setError(null);
+                    landlineNumber2.setError(null);
                 }
                 else{
-                    landlineNumber2.getEditText().setError("Invalid Landline number");
+                    landlineNumber2.setError("Invalid Landline number");
                     landlineNumberContact.setVisibility(View.GONE);
                     permissionLandlineNumber.setVisibility(View.GONE);
                 }
-                if(s.length()==0 && landlineNumber2.getEditText().getText().length()==0){
-                    landlineNumber2.getEditText().setError(null);
+                if(s.length()==0 && landlineNumber2.getText().length()==0){
+                    landlineNumber2.setError(null);
                 }
+
+                if(s.length()==3){
+                    landlineNumber2.requestFocus();
+                }
+
             }
 
             @Override
@@ -397,7 +593,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         });
 
 
-        secondaryLandlineNumber2.getEditText().addTextChangedListener(new TextWatcher() {
+        secondaryLandlineNumber2.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -405,17 +601,22 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String landlineNumber = secondaryLandlineNumber1.getEditText().getText() + s.toString();
+                String landlineNumber = secondaryLandlineNumber1.getText() + s.toString();
                 if(RegexUtil.isContactNumber(landlineNumber)){
-                    secondaryLandlineNumber2.getEditText().setError(null);
+                    secondaryLandlineNumber2.setError(null);
                     secondaryLandlineContact.setVisibility(View.VISIBLE);
                     permissionSecondaryLandlineNumber.setVisibility(View.VISIBLE);
 
                 }
                 else{
-                    secondaryLandlineNumber2.getEditText().setError("Invalid Landline number");
+                    secondaryLandlineNumber2.setError("Invalid Landline number");
                     secondaryLandlineContact.setVisibility(View.GONE);
                     permissionSecondaryLandlineNumber.setVisibility(View.GONE);
+                }
+
+                if(s.length()==0){
+                    secondaryLandlineNumber1.requestFocus();
+                    secondaryLandlineNumber1.setSelection(secondaryLandlineNumber1.getText().length());
                 }
             }
 
@@ -425,7 +626,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
             }
         });
 
-        secondaryLandlineNumber1.getEditText().addTextChangedListener(new TextWatcher() {
+        secondaryLandlineNumber1.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -433,22 +634,26 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String landlineNumber = secondaryLandlineNumber2.getEditText().getText() + s.toString();
+                String landlineNumber = secondaryLandlineNumber2.getText() + s.toString();
                 if(RegexUtil.isContactNumber(landlineNumber)){
-                    secondaryLandlineNumber2.getEditText().setError(null);
+                    secondaryLandlineNumber2.setError(null);
                     secondaryLandlineContact.setVisibility(View.VISIBLE);
                     permissionSecondaryLandlineNumber.setVisibility(View.VISIBLE);
 
 
                 }
                 else{
-                    secondaryLandlineNumber2.getEditText().setError("Invalid Landline number");
+                    secondaryLandlineNumber2.setError("Invalid Landline number");
                     secondaryLandlineContact.setVisibility(View.GONE);
                     permissionSecondaryLandlineNumber.setVisibility(View.GONE);
                 }
 
-                if(s.length()==0 && secondaryLandlineNumber2.getEditText().getText().length()==0){
-                    secondaryLandlineNumber2.getEditText().setError(null);
+                if(s.length()==0 && secondaryLandlineNumber2.getText().length()==0){
+                    secondaryLandlineNumber2.setError(null);
+                }
+
+                if(s.length()==3){
+                    secondaryLandlineNumber2.requestFocus();
                 }
             }
 
@@ -458,16 +663,17 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
             }
         });
 
-        views = new View[]{formDate.getButton(),cnicLinearLayout,cnicOwner.getSpinner(),cnicOwnerOther.getEditText(),addressProvided.getRadioGroup(),address1.getEditText(),address2.getEditText(),city.getSpinner(),district.getSpinner(),addressType.getRadioGroup(),nearestLandmark.getEditText(),mobileLinearLayout,mobileNumberContact.getSpinner(),permissionMobileNumberContact.getRadioGroup(),secondaryMobileLinearLayout,secondaryMobileNumberContact.getSpinner(),permissionSecondaryMobileNumber.getRadioGroup(),landlineLayout,landlineNumberContact.getSpinner(),permissionLandlineNumber.getRadioGroup(),secondaryLandlineNumber,secondaryLandlineContact.getSpinner(),permissionSecondaryLandlineNumber.getRadioGroup()};
+        views = new View[]{formDate.getButton(),cnicLayout,cnicOwner.getSpinner(),cnicOwnerOther.getEditText(),addressProvided.getRadioGroup(), address1.getEditText(), province.getSpinner(),city.getSpinner(),district.getSpinner(),addressType.getRadioGroup(),nearestLandmark.getEditText(),mobileLinearLayout,mobileNumberContact.getSpinner(),permissionMobileNumberContact.getRadioGroup(),secondaryMobileLinearLayout,secondaryMobileNumberContact.getSpinner(),permissionSecondaryMobileNumber.getRadioGroup(),landlineLayout,landlineNumberContact.getSpinner(),permissionLandlineNumber.getRadioGroup(),secondaryLandlineNumber,secondaryLandlineContact.getSpinner(),permissionSecondaryLandlineNumber.getRadioGroup()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate,cnicLinearLayout,cnicOwner,cnicOwnerOther,addressProvided,address1,address2,city,district,addressType,nearestLandmark,mobileLinearLayout,mobileNumberContact,permissionMobileNumberContact,secondaryMobileLinearLayout,secondaryMobileNumberContact,permissionSecondaryMobileNumber,landlineLayout,landlineNumberContact,permissionLandlineNumber,secondaryLandlineNumber,secondaryLandlineContact,permissionSecondaryLandlineNumber}};
+                {{formDate,cnicLayout,cnicOwner,cnicOwnerOther,addressProvided,address1, addressLayout, province,district,city,addressType,nearestLandmark,mobileLinearLayout,mobileNumberContact,permissionMobileNumberContact,secondaryMobileLinearLayout,secondaryMobileNumberContact,permissionSecondaryMobileNumber,landlineLayout,landlineNumberContact,permissionLandlineNumber,secondaryLandlineNumber,secondaryLandlineContact,permissionSecondaryLandlineNumber}};
 
         formDate.getButton().setOnClickListener(this);
         cnicOwner.getSpinner().setOnItemSelectedListener(this);
         addressProvided.getRadioGroup().setOnCheckedChangeListener(this);
         city.getSpinner().setOnItemSelectedListener(this);
+        province.getSpinner().setOnItemSelectedListener(this);
         addressType.getRadioGroup().setOnCheckedChangeListener(this);
         mobileNumberContact.getSpinner().setOnItemSelectedListener(this);
         permissionMobileNumberContact.getRadioGroup().setOnCheckedChangeListener(this);
@@ -488,7 +694,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         if (snackbar != null)
             snackbar.dismiss();
 
-        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
+        if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
@@ -496,26 +702,25 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
 
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
-            }  else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+            }  else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
             }else
-                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         }
-
-
+        formDate.getButton().setEnabled(true);
     }
 
     @Override
@@ -546,35 +751,25 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
             }
         }
         if(!App.get(secondaryLandlineNumber1).isEmpty() || !App.get(secondaryLandlineNumber2).isEmpty()){
-            String secondaryLandline = secondaryLandlineNumber1.getEditText().getText().toString() + secondaryLandlineNumber2.getEditText().getText().toString();
+            String secondaryLandline = secondaryLandlineNumber1.getText().toString() + secondaryLandlineNumber2.getText().toString();
             if (!RegexUtil.isContactNumber(secondaryLandline)) {
-                secondaryLandlineNumber2.getEditText().setError(getResources().getString(R.string.ctb_invalid_number));
+                secondaryLandlineNumber2.setError(getResources().getString(R.string.ctb_invalid_number));
                 error = true;
                 view = secondaryLandlineNumber;
             }
         }
-        if (App.get(landlineNumber1).isEmpty() && App.get(landlineNumber2).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            landlineNumber2.getEditText().setError(getString(R.string.empty_field));
-            error = true;
-            view = landlineLayout;
-        }
-        else{
-            String landline = landlineNumber1.getEditText().getText().toString() + landlineNumber2.getEditText().getText().toString();
-            if (!RegexUtil.isContactNumber(landline)) {
-                landlineNumber2.getEditText().setError(getResources().getString(R.string.ctb_invalid_number));
+        if(!App.get(landlineNumber1).isEmpty() || !App.get(landlineNumber2).isEmpty()){
+            String landlineNumber = landlineNumber1.getText().toString() + landlineNumber2.getText().toString();
+            if (!RegexUtil.isContactNumber(landlineNumber)) {
+                landlineNumber2.setError(getResources().getString(R.string.ctb_invalid_number));
                 error = true;
                 view = landlineLayout;
             }
         }
-
         if(!App.get(secondaryMobileNumber2).isEmpty() || !App.get(secondaryMobileNumber1).isEmpty()){
-            String secondaryMobileNumber = secondaryMobileNumber1.getEditText().getText().toString() + secondaryMobileNumber2.getEditText().getText().toString();
+            String secondaryMobileNumber = secondaryMobileNumber1.getText().toString() + secondaryMobileNumber2.getText().toString();
             if (!RegexUtil.isMobileNumber(secondaryMobileNumber)) {
-                secondaryMobileNumber2.getEditText().setError(getResources().getString(R.string.ctb_invalid_number));
+                secondaryMobileNumber2.setError(getResources().getString(R.string.ctb_invalid_number));
                 error = true;
                 view = secondaryMobileLinearLayout;
             }
@@ -584,14 +779,14 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                 gotoPage(0);
             else
                 gotoPage(0);
-            mobileNumber2.getEditText().setError(getString(R.string.empty_field));
+            mobileNumber2.setError(getString(R.string.empty_field));
             error = true;
             view = mobileLinearLayout;
         }
         else{
-            String mobileNumber = mobileNumber1.getEditText().getText().toString() + mobileNumber2.getEditText().getText().toString();
+            String mobileNumber = mobileNumber1.getText().toString() + mobileNumber2.getText().toString();
             if (!RegexUtil.isMobileNumber(mobileNumber)) {
-                mobileNumber2.getEditText().setError(getResources().getString(R.string.ctb_invalid_number));
+                mobileNumber2.setError(getResources().getString(R.string.ctb_invalid_number));
                 error = true;
                 view = mobileLinearLayout;
             }
@@ -617,25 +812,24 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                 view = null;
             }
         }
-
         if(address2.getVisibility()==View.VISIBLE){
-            if(App.get(address2).isEmpty()) {
+            if(App.get(address2).isEmpty()){
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
                     gotoPage(0);
-                address2.getEditText().setError(getString(R.string.empty_field));
-                address2.getEditText().requestFocus();
+                address2.setError(getString(R.string.empty_field));
+                address2.requestFocus();
                 error = true;
                 view = null;
             }
-            else if (App.get(address2).trim().length() <= 0){
+            else if(App.get(address1).trim().length() <= 0){
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
                     gotoPage(0);
-                address2.getEditText().setError(getString(R.string.ctb_spaces_only));
-                address2.getEditText().requestFocus();
+                address2.setError(getString(R.string.ctb_spaces_only));
+                address2.requestFocus();
                 error = true;
                 view = null;
             }
@@ -650,24 +844,24 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
             error = true;
             view = null;
         }
-        if(App.get(cnic1).isEmpty() && App.get(cnic2).isEmpty() && App.get(cnic3).isEmpty()){
+
+        if(!App.get(cnic1).isEmpty() && !App.get(cnic2).isEmpty() && !App.get(cnic3).isEmpty())  {
+            String cnic = cnic1.getText().toString() + "-" + cnic2.getText().toString() + "-" + cnic3.getText().toString();
+            if (!RegexUtil.isValidNIC(cnic)) {
+                cnic3.setError(getResources().getString(R.string.ctb_invalid_cnic));
+                error = true;
+                view = cnicLayout;
+            }
+        }
+        if(addressType.getVisibility()==View.VISIBLE && App.get(addressType).isEmpty()){
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            cnic3.getEditText().setError(getString(R.string.empty_field));
+            addressType.getQuestionView().setError(getString(R.string.empty_field));
             error = true;
-            view = cnicLinearLayout;
+            view = addressType;
         }
-        else {
-            String cnic = cnic1.getEditText().getText().toString() + "-" + cnic2.getEditText().getText().toString() + "-" + cnic3.getEditText().getText().toString();
-            if (!RegexUtil.isValidNIC(cnic)) {
-                cnic3.getEditText().setError(getResources().getString(R.string.ctb_invalid_cnic));
-                error = true;
-                view = cnicLinearLayout;
-            }
-        }
-
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
@@ -689,7 +883,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                                         cnicOwnerOther.clearFocus();
                                         mobileLinearLayout.clearFocus();
                                         landlineLayout.clearFocus();
-                                        cnicLinearLayout.clearFocus();
+                                        cnicLayout.clearFocus();
                                     }
                                 }
                             });
@@ -732,19 +926,25 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
 
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-        String cnic = cnic1.getEditText().getText().toString() + "-" + cnic2.getEditText().getText().toString() + "-" + cnic3.getEditText().getText().toString();
-        observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnic});
-        observations.add(new String[]{"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(cnicOwner).equals(getResources().getString(R.string.ctb_mother)) ? "MOTHER" :
-                (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_father)) ? "FATHER" :
-                        (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_brother)) ? "BROTHER" :
-                                (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_sister)) ? "SISTER" :
-                                        (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_paternal_grandfather)) ? "PATERNAL GRANDFATHER":
-                                                (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_paternal_grandmother)) ? "PATERNAL GRANDMOTHER" :
-                                                        (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_maternal_grandfather)) ? "MATERNAL GRANDFATHER" :
-                                                                (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_maternal_grandmother)) ? "MATERNAL GRANDMOTHER" :
-                                                                        (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_uncle)) ? "UNCLE":
-                                                                                (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_aunt)) ? "AUNT" : "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER")))))))))});
+        if(cnicLayout.getVisibility()==View.VISIBLE) {
+            String cnicNumber = App.get(cnic1) + "-" + App.get(cnic2) + "-" + App.get(cnic3);
+            if (RegexUtil.isValidNIC(cnicNumber)) {
+                observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnicNumber});
+            }
+        }
 
+        if (cnicOwner.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(cnicOwner).equals(getResources().getString(R.string.ctb_mother)) ? "MOTHER" :
+                    (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_father)) ? "FATHER" :
+                            (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_brother)) ? "BROTHER" :
+                                    (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_sister)) ? "SISTER" :
+                                            (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_paternal_grandfather)) ? "PATERNAL GRANDFATHER" :
+                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_paternal_grandmother)) ? "PATERNAL GRANDMOTHER" :
+                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_maternal_grandfather)) ? "MATERNAL GRANDFATHER" :
+                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_maternal_grandmother)) ? "MATERNAL GRANDMOTHER" :
+                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_uncle)) ? "UNCLE" :
+                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_aunt)) ? "AUNT" : "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER")))))))))});
+        }
         if(cnicOwnerOther.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(cnicOwnerOther)});
         }
@@ -752,27 +952,34 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         if(address1.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"ADDRESS (TEXT)", App.get(address1)});
         }
+
+        if(province.getVisibility()==View.VISIBLE){
+            observations.add(new String[]{"PROVINCE", App.get(province)});
+        }
+
         if(address2.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"EXTENDED ADDRESS (TEXT)", App.get(address2)});
         }
+
         if(city.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"VILLAGE", App.get(city)});
         }
         if(district.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"DISTRICT", App.get(district)});
         }
-
-        if(App.get(addressType).equals(getResources().getString(R.string.ctb_permanent))){
-            observations.add(new String[]{"TYPE OF ADDRESS", "PERMANENT ADDRESS"});
-        }
-        if(App.get(addressType).equals(getResources().getString(R.string.ctb_temporary))){
-            observations.add(new String[]{"TYPE OF ADDRESS", "TEMPORARY ADDRESS"});
+        if(addressType.getVisibility()==View.VISIBLE) {
+            if (App.get(addressType).equals(getResources().getString(R.string.ctb_permanent))) {
+                observations.add(new String[]{"TYPE OF ADDRESS", "PERMANENT ADDRESS"});
+            }
+            if (App.get(addressType).equals(getResources().getString(R.string.ctb_temporary))) {
+                observations.add(new String[]{"TYPE OF ADDRESS", "TEMPORARY ADDRESS"});
+            }
         }
 
         if(!App.get(nearestLandmark).isEmpty()){
             observations.add(new String[]{"NEAREST LANDMARK", App.get(nearestLandmark)});
         }
-        String primaryMobile = mobileNumber1.getEditText().getText().toString() + "-" + mobileNumber2.getEditText().getText().toString();
+        String primaryMobile = mobileNumber1.getText().toString() + "-" + mobileNumber2.getText().toString();
         observations.add(new String[]{"CONTACT PHONE NUMBER", primaryMobile});
 
         if(mobileNumberContact.getVisibility()==View.VISIBLE){
@@ -792,8 +999,11 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
             observations.add(new String[]{"PERMISSION TO USE CONTACT NUMBER", App.get(permissionMobileNumberContact).toUpperCase()});
         }
 
-        String landlineNumber = landlineNumber1.getEditText().getText().toString() + "-" + landlineNumber2.getEditText().getText().toString();
-        observations.add(new String[]{"TERTIARY CONTACT NUMBER", landlineNumber});
+
+        if(!App.get(landlineNumber1).isEmpty() && !App.get(landlineNumber2).isEmpty() ) {
+            String landlineNumber = landlineNumber1.getText().toString() + "-" + landlineNumber2.getText().toString();
+            observations.add(new String[]{"TERTIARY CONTACT NUMBER", landlineNumber});
+        }
 
         if(landlineNumberContact.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"TERTIARY CONTACT OWNER", App.get(landlineNumberContact).equals(getResources().getString(R.string.ctb_mother)) ? "MOTHER" :
@@ -813,7 +1023,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         }
 
         if(!App.get(secondaryMobileNumber1).isEmpty() && !App.get(secondaryMobileNumber2).isEmpty() ){
-            String secondaryMobileNumber = secondaryMobileNumber1.getEditText().getText().toString() + "-" + secondaryMobileNumber2.getEditText().getText().toString();
+            String secondaryMobileNumber = secondaryMobileNumber1.getText().toString() + "-" + secondaryMobileNumber2.getText().toString();
             observations.add(new String[]{"SECONDARY MOBILE NUMBER", secondaryMobileNumber});
 
         }
@@ -836,7 +1046,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         }
 
         if(!App.get(secondaryLandlineNumber1).isEmpty() && !App.get(secondaryLandlineNumber2).isEmpty() ){
-            String secondaryLandlineNumber = secondaryLandlineNumber1.getEditText().getText().toString() + "-" + secondaryLandlineNumber2.getEditText().getText().toString();
+            String secondaryLandlineNumber = secondaryLandlineNumber1.getText().toString() + "-" + secondaryLandlineNumber2.getText().toString();
             observations.add(new String[]{"QUATERNARY CONTACT NUMBER", secondaryLandlineNumber});
 
         }
@@ -889,8 +1099,8 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                     if (!result.equals("SUCCESS"))
                         return result;
 
-                    if (!(App.get(address1).equals("") && App.get(address2).equals("") && App.get(district).equals("") && App.get(nearestLandmark).equals(""))) {
-                        result = serverService.savePersonAddress(App.get(address1), App.get(address2), App.get(city), App.get(district), App.getProvince(), App.getCountry(), App.getLongitude(), App.getLatitude(), App.get(nearestLandmark), encounterId);
+                    if (!(App.get(address1).equals("") && App.get(district).equals("") && App.get(nearestLandmark).equals(""))) {
+                        result = serverService.savePersonAddress(App.get(address1),App.get(address2),App.get(city), App.get(district), App.get(province), App.getCountry(), App.getLongitude(), App.getLatitude(), App.get(nearestLandmark), encounterId);
                         if (!result.equals("SUCCESS"))
                             return result;
                     }
@@ -943,7 +1153,16 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                 loading.dismiss();
 
                 if (result.equals("SUCCESS")) {
-                    resetViews();
+
+                    serverService.addTown(address2.getText().toString());
+
+                    MainActivity.backToMainMenu();
+                    try {
+                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                    } catch (Exception e) {
+                        // TODO: handle exception
+                    }
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.form_submitted));
@@ -1040,10 +1259,12 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
             if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
                 timeTakeToFill = obs[0][1];
             }else if (obs[0][0].equals("NATIONAL IDENTIFICATION NUMBER")) {
-                String[] cnicParts = obs[0][1].split("-");
-                cnic1.getEditText().setText(cnicParts[0]);
-                cnic2.getEditText().setText(cnicParts[1]);
-                cnic3.getEditText().setText(cnicParts[2]);
+                if(!obs[0][1].equals("--")) {
+                    String[] cnicParts = obs[0][1].toString().split("-");
+                    cnic1.setText(cnicParts[0]);
+                    cnic2.setText(cnicParts[1]);
+                    cnic3.setText(cnicParts[2]);
+                }
             } else if (obs[0][0].equals("COMPUTERIZED NATIONAL IDENTIFICATION OWNER")) {
                 String value = obs[0][1].equals("MOTHER") ? getResources().getString(R.string.ctb_mother) :
                         (obs[0][1].equals("FATHER") ? getResources().getString(R.string.ctb_father) :
@@ -1067,7 +1288,6 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                     if (rb.getText().equals(getResources().getString(R.string.ctb_yes)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);
                         address1.setVisibility(View.VISIBLE);
-                        address2.setVisibility(View.VISIBLE);
                         break;
                     } else if (rb.getText().equals(getResources().getString(R.string.ctb_no)) && obs[0][1].equals("NO")) {
                         rb.setChecked(true);
@@ -1076,15 +1296,28 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                 }
             } else if (obs[0][0].equals("ADDRESS (TEXT)")) {
                 address1.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("EXTENDED ADDRESS (TEXT)")) {
-                address2.getEditText().setText(obs[0][1]);
-            }  else if (obs[0][0].equals("DISTRICT")) {
+            }
+            else if (obs[0][0].equals("PROVINCE")) {
+                province.getSpinner().selectValue(obs[0][1]);
+            }
+            else if (obs[0][0].equals("EXTENDED ADDRESS (TEXT)")) {
+                address2.setText(obs[0][1]);
+            }
+
+
+            else if (obs[0][0].equals("PROVINCE")) {
+                province.getSpinner().selectValue(obs[0][1]);
+            } else if (obs[0][0].equals("DISTRICT")) {
+                String[] districts = serverService.getDistrictList(App.get(province));
+                district.getSpinner().setSpinnerData(districts);
                 district.getSpinner().selectValue(obs[0][1]);
-                district.setVisibility(View.VISIBLE);
-            }else if (obs[0][0].equals("VILLAGE")) {
+                district.getSpinner().setTag("selected");
+            } else if (obs[0][0].equals("VILLAGE")) {
+                String[] cities = serverService.getCityList(App.get(district));
+                city.getSpinner().setSpinnerData(cities);
                 city.getSpinner().selectValue(obs[0][1]);
-                city.setVisibility(View.VISIBLE);
-            }else if (obs[0][0].equals("TYPE OF ADDRESS")) {
+                city.getSpinner().setTag("selected");
+            } else if (obs[0][0].equals("TYPE OF ADDRESS")) {
                 for (RadioButton rb : addressType.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.ctb_permanent)) && obs[0][1].equals("PERMANENT ADDRESS")) {
                         rb.setChecked(true);
@@ -1097,9 +1330,9 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
             }else if (obs[0][0].equals("NEAREST LANDMARK")) {
                 nearestLandmark.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("CONTACT PHONE NUMBER")) {
-                String[] phoneNumberParts = obs[0][1].split("-");
-                mobileNumber1.getEditText().setText(phoneNumberParts[0]);
-                mobileNumber2.getEditText().setText(phoneNumberParts[1]);
+                    String[] phoneNumberParts = obs[0][1].split("-");
+                    mobileNumber1.setText(phoneNumberParts[0]);
+                    mobileNumber2.setText(phoneNumberParts[1]);
             } else if (obs[0][0].equals("CONTACT OWNER")) {
                 String value = obs[0][1].equals("MOTHER") ? getResources().getString(R.string.ctb_mother) :
                         (obs[0][1].equals("FATHER") ? getResources().getString(R.string.ctb_father) :
@@ -1124,9 +1357,11 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                     }
                 }
             }else if (obs[0][0].equals("TERTIARY CONTACT NUMBER")) {
-                String[] phoneNumberParts = obs[0][1].split("-");
-                landlineNumber1.getEditText().setText(phoneNumberParts[0]);
-                landlineNumber2.getEditText().setText(phoneNumberParts[1]);
+                if(!obs[0][1].equals("-")) {
+                    String[] phoneNumberParts = obs[0][1].split("-");
+                    landlineNumber1.setText(phoneNumberParts[0]);
+                    landlineNumber2.setText(phoneNumberParts[1]);
+                }
             } else if (obs[0][0].equals("TERTIARY CONTACT OWNER")) {
                 String value = obs[0][1].equals("MOTHER") ? getResources().getString(R.string.ctb_mother) :
                         (obs[0][1].equals("FATHER") ? getResources().getString(R.string.ctb_father) :
@@ -1152,8 +1387,8 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                 }
             }else if (obs[0][0].equals("SECONDARY MOBILE NUMBER")) {
                 String[] phoneNumberParts = obs[0][1].split("-");
-                secondaryMobileNumber1.getEditText().setText(phoneNumberParts[0]);
-                secondaryMobileNumber2.getEditText().setText(phoneNumberParts[1]);
+                secondaryMobileNumber1.setText(phoneNumberParts[0]);
+                secondaryMobileNumber2.setText(phoneNumberParts[1]);
             } else if (obs[0][0].equals("SECONDARY CONTACT OWNER")) {
                 String value = obs[0][1].equals("MOTHER") ? getResources().getString(R.string.ctb_mother) :
                         (obs[0][1].equals("FATHER") ? getResources().getString(R.string.ctb_father) :
@@ -1180,8 +1415,8 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
             }
             else if (obs[0][0].equals("QUATERNARY CONTACT NUMBER")) {
                 String[] phoneNumberParts = obs[0][1].split("-");
-                secondaryLandlineNumber1.getEditText().setText(phoneNumberParts[0]);
-                secondaryLandlineNumber2.getEditText().setText(phoneNumberParts[1]);
+                secondaryLandlineNumber1.setText(phoneNumberParts[0]);
+                secondaryLandlineNumber2.setText(phoneNumberParts[1]);
             } else if (obs[0][0].equals("QUATERNARY CONTACT OWNER")) {
                 String value = obs[0][1].equals("MOTHER") ? getResources().getString(R.string.ctb_mother) :
                         (obs[0][1].equals("FATHER") ? getResources().getString(R.string.ctb_father) :
@@ -1215,6 +1450,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         super.onClick(view);
 
         if (view == formDate.getButton()) {
+            formDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
@@ -1240,10 +1476,22 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                 cnicOwnerOther.setVisibility(View.GONE);
             }
         }
-        else if (spinner == district.getSpinner()) {
+        if (spinner == district.getSpinner()) {
 
-            String[] cities = serverService.getCityList(App.get(district));
-            city.getSpinner().setSpinnerData(cities);
+            if(district.getSpinner().getTag() == null) {
+
+                String[] cities = serverService.getCityList(App.get(district));
+                city.getSpinner().setSpinnerData(cities);
+            }
+            else city.getSpinner().setTag(null);
+
+        } else if (spinner == province.getSpinner()) {
+
+            if(province.getSpinner().getTag() == null) {
+                String[] districts = serverService.getDistrictList(App.get(province));
+                district.getSpinner().setSpinnerData(districts);
+            }
+            else province.getSpinner().setTag(null);
         }
 
     }
@@ -1256,15 +1504,30 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
 
     @Override
     public void resetViews() {
+
+        Object[][]  towns = serverService.getAllTowns();
+        String[] townList = new String[towns.length];
+
+        for (int i = 0; i < towns.length; i++) {
+            townList[i] = String.valueOf(towns[i][1]);
+        }
+
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, townList);
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        address2.setAdapter(spinnerArrayAdapter);
+
         super.resetViews();
 
         if (snackbar != null)
             snackbar.dismiss();
 
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        cnicOwner.setVisibility(View.GONE);
         cnicOwnerOther.setVisibility(View.GONE);
         address1.setVisibility(View.GONE);
-        address2.setVisibility(View.GONE);
+        addressLayout.setVisibility(View.GONE);
+        townTextView.setVisibility(View.GONE);
+        addressType.setVisibility(View.GONE);
         mobileNumberContact.setVisibility(View.GONE);
         permissionMobileNumberContact.setVisibility(View.GONE);
         secondaryMobileNumberContact.setVisibility(View.GONE);
@@ -1273,22 +1536,23 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         permissionLandlineNumber.setVisibility(View.GONE);
         secondaryLandlineContact.setVisibility(View.GONE);
         permissionSecondaryLandlineNumber.setVisibility(View.GONE);
-        cnic1.getEditText().getText().clear();
-        cnic2.getEditText().getText().clear();
-        cnic3.getEditText().getText().clear();
-        mobileNumber1.getEditText().getText().clear();
-        mobileNumber2.getEditText().getText().clear();
-        landlineNumber1.getEditText().getText().clear();
-        landlineNumber2.getEditText().getText().clear();
-        secondaryMobileNumber1.getEditText().getText().clear();
-        secondaryMobileNumber2.getEditText().getText().clear();
-        secondaryLandlineNumber1.getEditText().getText().clear();
-        secondaryLandlineNumber2.getEditText().getText().clear();
-        cnic3.getEditText().setError(null);
-        mobileNumber2.getEditText().setError(null);
-        landlineNumber2.getEditText().setError(null);
-        secondaryMobileNumber2.getEditText().setError(null);
-        secondaryLandlineNumber2.getEditText().setError(null);
+        cnic1.getText().clear();
+        cnic2.getText().clear();
+        cnic3.getText().clear();
+
+        mobileNumber1.getText().clear();
+        mobileNumber2.getText().clear();
+        landlineNumber1.getText().clear();
+        landlineNumber2.getText().clear();
+        secondaryMobileNumber1.getText().clear();
+        secondaryMobileNumber2.getText().clear();
+        secondaryLandlineNumber1.getText().clear();
+        secondaryLandlineNumber2.getText().clear();
+        cnic3.setError(null);
+        mobileNumber2.setError(null);
+        landlineNumber2.setError(null);
+        secondaryMobileNumber2.setError(null);
+        secondaryLandlineNumber2.setError(null);
 
         String[] districts = serverService.getDistrictList(App.getProvince());
         district.getSpinner().setSpinnerData(districts);
@@ -1323,16 +1587,27 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         if (group == addressProvided.getRadioGroup()) {
             if(addressProvided.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))){
                 address1.setVisibility(View.VISIBLE);
-                address2.setVisibility(View.VISIBLE);
+                addressLayout.setVisibility(View.VISIBLE);
+                addressQuestion.setVisibility(View.VISIBLE);
+                    address2.setVisibility(View.VISIBLE);
+                townTextView.setVisibility(View.VISIBLE);
+                addressType.setVisibility(View.VISIBLE);
                 district.setVisibility(View.VISIBLE);
                 city.setVisibility(View.VISIBLE);
             }
             else if(addressProvided.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.no))){
                 address1.setVisibility(View.GONE);
                 address2.setVisibility(View.GONE);
+                addressQuestion.setVisibility(View.GONE);
+                address2.setVisibility(View.GONE);
+                townTextView.setVisibility(View.GONE);
                 district.setVisibility(View.VISIBLE);
+                addressType.setVisibility(View.GONE);
                 city.setVisibility(View.VISIBLE);
             }
+        }
+        if (group == addressType.getRadioGroup()) {
+            addressType.getRadioGroup().getButtons().get(1).setError(null);
         }
     }
 
