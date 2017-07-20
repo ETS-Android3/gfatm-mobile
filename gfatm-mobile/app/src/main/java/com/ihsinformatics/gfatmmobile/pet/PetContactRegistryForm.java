@@ -48,6 +48,8 @@ public class PetContactRegistryForm extends AbstractFormActivity {
     TitledEditText totalAdultContacts;
     TitledEditText totalChildrenContacts;
 
+    Boolean refillFlag = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -126,8 +128,16 @@ public class PetContactRegistryForm extends AbstractFormActivity {
 
     @Override
     public void updateDisplay() {
+
+        if(refillFlag){
+            refillFlag = false;
+            return;
+        }
+
         if (snackbar != null)
             snackbar.dismiss();
+
+        formDate.getButton().setEnabled(true);
 
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
@@ -406,6 +416,8 @@ public class PetContactRegistryForm extends AbstractFormActivity {
     @Override
     public void refill(int formId) {
 
+        refillFlag = true;
+
         OfflineForm fo = serverService.getOfflineFormById(formId);
         String date = fo.getFormDate();
         ArrayList<String[][]> obsValue = fo.getObsValue();
@@ -454,6 +466,7 @@ public class PetContactRegistryForm extends AbstractFormActivity {
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
+            formDate.getButton().setEnabled(false);
         }
 
     }

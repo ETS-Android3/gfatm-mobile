@@ -66,6 +66,7 @@ public abstract class AbstractFormActivity extends Fragment
 
     public static final int DATE_DIALOG_ID = 1;
     public static final int SECOND_DATE_DIALOG_ID = 2;
+    public static final String DATE_DISPLAY_FORMAT = "EEEE, MMM dd,yyyy";
     protected static ProgressDialog loading;
     // main Layout
     protected View mainContent;
@@ -92,6 +93,7 @@ public abstract class AbstractFormActivity extends Fragment
     protected Button firstButton;
     protected Button lastButton;
     protected Button nextButton;
+    protected Button prevButton;
     protected Button submitButton;
     protected Button saveButton;
     protected Button clearButton;
@@ -115,7 +117,7 @@ public abstract class AbstractFormActivity extends Fragment
 
         // initializing all views an classes
         serverService = new ServerService(mainContent.getContext());
-        loading = new ProgressDialog(mainContent.getContext());
+        loading = new ProgressDialog(mainContent.getContext(), ProgressDialog.THEME_HOLO_LIGHT);
 
         formDateCalendar = Calendar.getInstance();
         formDateFragment = new SelectDateFragment();
@@ -130,12 +132,13 @@ public abstract class AbstractFormActivity extends Fragment
         firstButton = (Button) mainContent.findViewById(R.id.first_button);
         lastButton = (Button) mainContent.findViewById(R.id.last_button);
         nextButton = (Button) mainContent.findViewById(R.id.next_button);
+        prevButton = (Button) mainContent.findViewById(R.id.prev_button);
         clearButton = (Button) mainContent.findViewById(R.id.clearButton);
         submitButton = (Button) mainContent.findViewById(R.id.submitButton);
         saveButton = (Button) mainContent.findViewById(R.id.saveButton);
 
         // Setting up listeners
-        View[] setListener = new View[]{firstButton, lastButton, clearButton, submitButton, nextButton, saveButton};
+        View[] setListener = new View[]{firstButton, lastButton, clearButton, submitButton, nextButton,prevButton, saveButton};
 
         for (View v : setListener) {
             if (v instanceof Spinner) {
@@ -162,6 +165,7 @@ public abstract class AbstractFormActivity extends Fragment
             firstButton.setVisibility(View.GONE);
             lastButton.setVisibility(View.GONE);
             nextButton.setVisibility(View.GONE);
+            prevButton.setVisibility(View.GONE);
             navigationSeekbar.setVisibility(View.GONE);
         }
 
@@ -183,7 +187,7 @@ public abstract class AbstractFormActivity extends Fragment
     public abstract void updateDisplay();
 
     /**
-     * Goto first view in the pager
+     * Goto Next view in the pager
      */
     public void gotoNextPage() {
 
@@ -195,6 +199,22 @@ public abstract class AbstractFormActivity extends Fragment
         } else {
             if (pager.getCurrentItem() + 1 != PAGE_COUNT)
                 gotoPage(pager.getCurrentItem() + 1);
+        }
+    }
+
+    /**
+     * Goto Next view in the pager
+     */
+    public void gotoPreviousPage() {
+
+        int cp = pager.getCurrentItem();
+
+        if (App.isLanguageRTL()) {
+            if (pager.getCurrentItem() + 1 != PAGE_COUNT)
+                gotoPage(pager.getCurrentItem() + 1);
+        } else {
+            if (pager.getCurrentItem() - 1 >= 0)
+                gotoPage(pager.getCurrentItem() - 1);
         }
     }
 
@@ -343,6 +363,8 @@ public abstract class AbstractFormActivity extends Fragment
             gotoLastPage();
         } else if (view == nextButton) {
             gotoNextPage();
+        } else if (view == prevButton) {
+            gotoPreviousPage();
         } else if (view == clearButton) {
 
             if (snackbar != null)
@@ -520,6 +542,12 @@ public abstract class AbstractFormActivity extends Fragment
                 secondDateCalendar.set(yy, mm, dd);
             updateDisplay();
 
+        }
+
+        @Override
+        public void onCancel(DialogInterface dialog) {
+            super.onCancel(dialog);
+            updateDisplay();
         }
     }
 

@@ -1,6 +1,7 @@
 package com.ihsinformatics.gfatmmobile.custom;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -22,7 +23,10 @@ public class TitledCheckBoxes extends LinearLayout {
 
     public TitledCheckBoxes(Context context, String title, String ques, String[] options, Boolean[] defaultValues, int radioButtonsLayout, int layoutOrientation) {
         super(context);
-
+        if(!App.isTabletDevice(context)){
+            layoutOrientation = App.VERTICAL;
+            radioButtonsLayout = App.VERTICAL;
+        }
         MyLinearLayout linearLayout = new MyLinearLayout(context, title, layoutOrientation);
         this.defaultValues = defaultValues;
 
@@ -52,7 +56,10 @@ public class TitledCheckBoxes extends LinearLayout {
 
     public TitledCheckBoxes(Context context, String title, String ques, String[] options, Boolean[] defaultValues, int radioButtonsLayout, int layoutOrientation, Boolean mandatory) {
         super(context);
-
+        if(!App.isTabletDevice(context)){
+            layoutOrientation = App.VERTICAL;
+            radioButtonsLayout = App.VERTICAL;
+        }
         MyLinearLayout linearLayout = new MyLinearLayout(context, title, layoutOrientation);
         this.defaultValues = defaultValues;
         this.mandatory = mandatory;
@@ -61,15 +68,15 @@ public class TitledCheckBoxes extends LinearLayout {
         hLayout.setOrientation(HORIZONTAL);
 
         if (mandatory) {
-            int color = App.getColor(context, R.attr.colorAccent);
             TextView mandatorySign = new TextView(context);
-            mandatorySign.setText("*");
-            mandatorySign.setTextColor(color);
+            mandatorySign.setText(" *");
+            mandatorySign.setTextColor(Color.parseColor("#ff0000"));
             hLayout.addView(mandatorySign);
         }
 
         questionView = new MyTextView(context, ques);
         hLayout.addView(questionView);
+
         linearLayout.addView(hLayout);
 
         LinearLayout ll = new LinearLayout(context);

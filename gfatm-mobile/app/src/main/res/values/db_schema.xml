@@ -10,7 +10,7 @@
                 program TEXT NOT NULL COLLATE NOCASE,
                 username TEXT NOT NULL COLLATE NOCASE,
                 form_name TEXT NOT NULL COLLATE NOCASE,
-                p_id TEXT NOT NULL COLLATE NOCASE,
+                p_id TEXT COLLATE NOCASE,
                 form_date DATETIME,
                 timestamp DATETIME NOT NULL,
                 location TEXT NOT NULL COLLATE NOCASE,
@@ -149,7 +149,8 @@
                 address3 VARCHAR,
                 description VARCHAR,
                 tertiarycontact VARCHAR,
-                quaternarycontact VARCHAR
+                quaternarycontact VARCHAR,
+                treatmentsupporter VARCHAR
             );
         </item>
 
@@ -170,10 +171,11 @@
                 encounter_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 uuid VARCHAR,
                 encounterType VARCHAR,
-                encounterDatetime VARCHAR,
+                encounterDatetime datetime,
                 encounterLocation VARCHAR,
                 patientId INT NOT NULL COLLATE NOCASE,
                 form_date VARCHAR,
+                dateCreated datetime default current_timestamp,
                 FOREIGN KEY (patientId) REFERENCES PATIENT(patient_id)
             );
         </item>
@@ -269,6 +271,14 @@
                 FOREIGN KEY (province_id) REFERENCES province(id),
                 FOREIGN KEY (district_id) REFERENCES district(id),
                 FOREIGN KEY (city_id) REFERENCES city(id)
+            );
+		</item>
+
+        <item>
+            CREATE TABLE IF NOT EXISTS town
+            (
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                name VARCHAR UNIQUE NOT NULL
             );
 		</item>
 

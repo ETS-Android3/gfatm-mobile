@@ -14,13 +14,16 @@ Interactive Health Solutions, hereby disclaims all copyright interest in this pr
 
 package com.ihsinformatics.gfatmmobile;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.StrictMode;
 import android.text.format.DateFormat;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.EditText;
@@ -39,6 +42,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import static java.util.Calendar.DATE;
 import static java.util.Calendar.MONTH;
@@ -266,7 +270,20 @@ public class App {
     public static void setLocationLastUpdate(String locationLastUpdate) {
         App.locationLastUpdate = locationLastUpdate;
     }
+    public static boolean isTabletDevice(Context activityContext) {
 
+        boolean device_large = ((activityContext.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE);
+        DisplayMetrics metrics = new DisplayMetrics();
+        Activity activity = (Activity) activityContext;
+        activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        if (device_large) {
+            //Tablet
+            return true;
+        }else{
+            return false;
+        }
+
+    }
     public static String getPatientId() {
         return patientId;
     }
@@ -438,6 +455,21 @@ public class App {
             diff--;
         }
         return diff;
+    }
+
+    public static int getDiffMonths(Date first, Date last) {
+
+            int m1 = first.getYear() * 12 + first.getMonth();
+            int m2 = last.getYear() * 12 + last.getMonth();
+            return m2 - m1;
+
+    }
+
+    public static long getDiffDays(Date first, Date last) {
+
+        long diff = last.getTime() - first.getTime();
+        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+
     }
 
     public static Calendar getCalendar(Date date) {

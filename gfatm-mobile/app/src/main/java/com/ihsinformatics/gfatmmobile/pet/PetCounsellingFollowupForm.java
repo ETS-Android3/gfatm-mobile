@@ -85,6 +85,7 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
 
     ScrollView scrollView;
 
+    Boolean refillFlag = false;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -158,12 +159,12 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         followupMonth = new TitledEditText(context, null, getResources().getString(R.string.pet_followup_month), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        referralComplain = new TitledEditText(context, null, getResources().getString(R.string.pet_referral_complain), "", "", 250, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        referralComplain = new TitledEditText(context, null, getResources().getString(R.string.pet_referral_complain), "", "", 250, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         referralComplain.getEditText().setSingleLine(false);
         referralComplain.getEditText().setMinimumHeight(150);
         missedDosage = new TitledEditText(context, null, getResources().getString(R.string.pet_missed_dosed), "0", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
         adherentToPet = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_adherent), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.HORIZONTAL);
-        reasonForNonAdherent = new TitledEditText(context, null, getResources().getString(R.string.pet_reason_for_non_adherent), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        reasonForNonAdherent = new TitledEditText(context, null, getResources().getString(R.string.pet_reason_for_non_adherent), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
 
         adverseEventReport = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_adverse_event_report), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         adverseEffectsLayout = new LinearLayout(context);
@@ -262,8 +263,15 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
     @Override
     public void updateDisplay() {
 
+        if(refillFlag){
+            refillFlag = false;
+            return;
+        }
+
         if (snackbar != null)
             snackbar.dismiss();
+
+        formDate.getButton().setEnabled(true);
 
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
@@ -671,6 +679,8 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
+            formDate.getButton().setEnabled(false);
+
         }
 
     }
@@ -782,6 +792,8 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
 
     @Override
     public void refill(int encounterId) {
+
+        refillFlag = true;
 
         OfflineForm fo = serverService.getOfflineFormById(encounterId);
         String date = fo.getFormDate();

@@ -32,17 +32,52 @@
     <string name="comorbidities_akuads_totalscore">AKUADS score:</string>
     <string name="comorbidities_akuads_severity">Severity level:</string>
     <string name="comorbidities_agree_AKUADS">Does the client agree to therapy?</string>
+    <string name="comorbidities_akuads_screener_instructions">Screener Instructions: \nKindly give the comorbidities conditions brochure to the patient.</string>
+    <string name="comorbidities_preferredmode_id">Preferred Mode of Therapy:</string>
     <string name="comorbidities_preferredlocation_id">Preferred location for Therapy:</string>
     <string name="comorbidities_preferredlocation_gpcliniccode">GP Clinic Code:</string>
     <string name="comorbidities_preferredlocation_gpcliniccode_range">Range 1&#8211;50</string>
     <string name="comorbidities_preferredlocation_gpcliniccode_limit">The value should be in the range of 1&#8211;50</string>
     <string name="comorbidities_preferredlocation_other_comorbidities">Other preferred location:</string>
     <string name="comorbidities_dm_screening">DIABETES MELLITUS SCREENING</string>
+    <string name="comorbidities_dm_screening_diabetes_diagnosed">Diabetes Diagnosed through?</string>
     <string name="comorbidities_dmscrnng_food">Have you had something to eat within the last two hours?</string>
+    <string name="comorbidities_dmscrnng_diagnosed_with_diabetes">Have you been diagnosed with Diabetes?</string>
+    <string name="comorbidities_dmscrnng_diagnosed_through">Diabetes Diagnosed through?</string>
+    <string name="comorbidities_dmscrnng_hba1c_availability">Availability of HbA1c at site?</string>
+    <string name="comorbidities_dmscrnng_screener_instructions">Screener Instructions: \nKindly ensure that the patient waits two hours before getting the RBS.</string>
+    <string name="comorbidities_dmscrnng_screener_instructions_proof_of_Diabetes">Screener Instructions: \nKindly notify patient to bring proof of Diabetes on next visit.</string>
     <string name="comorbidities_scrnng_rbs">Random Blood Sugar (RBS):</string>
     <string name="comorbidities_scrnng_rbs_range">Range 1&#8211;500</string>
     <string name="comorbidities_scrnng_rbs_limit">The value should be in the range of 1&#8211;500</string>
     <string name="comorbidities_hba1c_testvoucher">HbA1C test voucher given?</string>
+    <string name="comorbidities_required_field_error">Required (*) fields cannot be empty.</string>
+
+    <string name="comorbidities_dmscrnng_diagnosed_through_hba1c">HbA1C Report</string>
+    <string name="comorbidities_dmscrnng_diagnosed_through_doctors_prescription">Doctors Prescription</string>
+    <string name="comorbidities_dmscrnng_diagnosed_through_rbs">RBS Report</string>
+    <string name="comorbidities_dmscrnng_diagnosed_through_fbs">FBS Report</string>
+    <string name="comorbidities_dmscrnng_diagnosed_through_ogtt">OGTT Report</string>
+    <string name="comorbidities_dmscrnng_diagnosed_through_no_proof">Patient does not have proof of report</string>
+
+    <string-array name="comorbidities_dmscrnng_diagnosed_through_options">
+        <item>@string/comorbidities_dmscrnng_diagnosed_through_hba1c</item>
+        <item>@string/comorbidities_dmscrnng_diagnosed_through_doctors_prescription</item>
+        <item>@string/comorbidities_dmscrnng_diagnosed_through_rbs</item>
+        <item>@string/comorbidities_dmscrnng_diagnosed_through_fbs</item>
+        <item>@string/comorbidities_dmscrnng_diagnosed_through_ogtt</item>
+        <item>@string/comorbidities_dmscrnng_diagnosed_through_no_proof</item>
+    </string-array>
+
+    <string name="comorbidities_preferred_mode_facility">Facility</string>
+    <string name="comorbidities_preferred_mode_call_centre">Call Center</string>
+    <string name="comorbidities_preferred_mode_home">Home</string>
+
+    <string-array name="comorbidities_preferred_modeoptions">
+        <item>@string/comorbidities_preferred_mode_facility</item>
+        <item>@string/comorbidities_preferred_mode_call_centre</item>
+        <item>@string/comorbidities_preferred_mode_home</item>
+    </string-array>
 
     <string name="comorbidities_hba1c_test_order">Test Order HbA1C</string>
     <string name="comorbidities_hba1c_testtype">Test Type:</string>
@@ -60,6 +95,8 @@
     <string name="comorbidities_hba1c_result_range">Range 0&#8211;20 (Including decimal)</string>
     <string name="comorbidities_hba1c_diabetic">Is the patient Diabetic?</string>
     <string name="comorbidities_form_type_error">Please select Form Type!</string>
+    <string name="comorbidities_hba1c_screener_instructions">Screener Instructions:\nIf the patient is present at the time of handing over the result then kindly give the Zero TB Pamphlet to the patient.</string>
+    <string name="comorbidities_hba1c_no_order_found">No HbA1C Order found for the patient.</string>
 
     <string name="comorbidities_location_other">Other</string>
 
@@ -94,10 +131,10 @@
     <string name="comorbidities_MH_severity_level_normal">Normal</string>
 
     <string-array name="comorbidities_MH_severity_level">
+        <item>@string/comorbidities_MH_severity_level_normal</item>
         <item>@string/comorbidities_MH_severity_level_mild</item>
         <item>@string/comorbidities_MH_severity_level_moderate</item>
         <item>@string/comorbidities_MH_severity_level_severe</item>
-        <item>@string/comorbidities_MH_severity_level_normal</item>
     </string-array>
 
     <string name="comorbidities_HbA1C_test_type_baseline">Baseline</string>
@@ -148,8 +185,11 @@
     <string name="comorbidities_blood_sugar_test_order">Test Order Blood Sugar</string>
     <string name="comorbidities_blood_sugar_test_result">Test Results Blood Sugar</string>
     <string name="comorbidities_rbs_result_limit">The value should be in the range of 0&#8211;300</string>
+    <string name="comorbidities_rbs_result_limit1">The value should be in the range of 0&#8211;500</string>
     <string name="comorbidities_rbs_result_range">Range 0&#8211;300</string>
+    <string name="comorbidities_rbs_result_range1">Range 0&#8211;500</string>
     <string name="comorbidities_rbs_result">RBS Test Result (mg/dl):</string>
+    <string name="comorbidities_blood_sugar_no_order_found">No Blood Sugar Order found for the patient.</string>
 
     <string name="comorbidities_vitals_month_of_visit">Month of visit:</string>
     <string name="comorbidities_vitals_weight">Weight (kg):</string>
@@ -169,10 +209,16 @@
     <string name="comorbidities_vitals_height_limit">The value should be in the range of 30&#8211;260</string>
     <string name="comorbidities_vitals_bmi_range">Range 0&#8211;200</string>
     <string name="comorbidities_vitals_bmi_limit">The value should be in the range of 0&#8211;200</string>
+    <string name="comorbidities_vitals_bmi_invalid">Invalid BMI. Something is wrong with Weight and Height values combination. Please change Height or Weight values.</string>
     <string name="comorbidities_vitals_waist_hip_whr_range">Range 0&#8211;100</string>
     <string name="comorbidities_vitals_waist_hip_whr_limit">The value should be in the range of 0&#8211;100</string>
+    <string name="comorbidities_vitals_whr_invalid">Invalid WHR. Something is wrong with Waist Circumference and Hip Circumference values combination. Please change Waist Circumference or Hip Circumference values.</string>
     <string name="comorbidities_vitals_bp_systolic_diastolic_range">Range 0&#8211;300</string>
     <string name="comorbidities_vitals_bp_systolic_diastolic_limit">The value should be in the range of 0&#8211;300</string>
+    <string name="comorbidities_vitals_bp_systolic_range1">Range 0&#8211;250</string>
+    <string name="comorbidities_vitals_bp_systolic_limit1">The value should be in the range of 0&#8211;250</string>
+    <string name="comorbidities_vitals_bp_diastolic_range1">Range 0&#8211;150</string>
+    <string name="comorbidities_vitals_bp_diastolic_limit1">The value should be in the range of 0&#8211;150</string>
 
     <string name="comorbidities_testorder_testresult_form_type">Form Type: </string>
     <string name="comorbidities_testorder_testresult_form_type_testorder">Test Order</string>
@@ -205,6 +251,8 @@
     <string name="comorbidities_diabetes_treatment_initiation">Prescribed Diabetes Medication?</string>
     <string name="comorbidities_diabetes_treatment_detail">Prescription details:</string>
     <string name="comorbidities_diabetes_treatment_initiation_metformin">Dosage Strength of Metformin/Day</string>
+    <string name="comorbidities_diabetes_treatment_initiation_metformin_per_day">How many tablets per day?</string>
+    <string name="comorbidities_diabetes_treatment_initiation_metformin_prescribed">Prescribed for how many days?</string>
     <string name="comorbidities_diabetes_treatment_initiation_insulinN">Dosage of Insulin N (Units/Day):</string>
     <string name="comorbidities_diabetes_treatment_initiation_insulinR">Dosage of Insulin R (Units/Day):</string>
     <string name="comorbidities_diabetes_treatment_initiation_insulin_mix">Dosage of Mixed Insulin (Units/Day):</string>
@@ -378,7 +426,10 @@
     <string name="comorbidities_urinedr_hyaline_casts">Hyaline Casts:</string>
     <string name="comorbidities_urinedr_crystals">Crystals:</string>
     <string name="comorbidities_urinedr_nexttestdate">Next Urine DR Test Date:</string>
+    <string name="comorbidities_urinedr_no_order_found">No Urine Detailed Report Order found for the patient.</string>
 
+    <string name="comorbidities_urinedr_quantity_range">Range 0&#8211;50</string>
+    <string name="comorbidities_urinedr_quantity_limit">The value should be in the range of 0&#8211;50</string>
     <string name="comorbidities_urinedr_spgravity_ph_range">Range 0&#8211;10</string>
     <string name="comorbidities_urinedr_spgravity_ph_limit">The value should be in the range of 0&#8211;10</string>
     <string name="comorbidities_urinedr_sugar_ketones_uro_range">Range 0&#8211;400</string>
@@ -423,6 +474,8 @@
     <string name="comorbidities_creatinine_result_limit">The value should be in the range of 0.0&#8211;99.9</string>
     <string name="comorbidities_creatinine_result_range">Range 0.0&#8211;99.9</string>
     <string name="comorbidities_creatinine_result">Creatinine Result (mg/dl):</string>
+    <string name="comorbidities_creatinine_nexttestdate">Next Creatinine Test Date:</string>
+    <string name="comorbidities_creatinine_no_order_found">No Creatinine Order found for the patient.</string>
 
     <!-- Strings for ComorbiditiesLipidTestForm -->
     <string name="comorbidities_lipid_test_order">Test Order Lipid</string>
@@ -445,12 +498,16 @@
     <string name="comorbidities_lipid_test_vldl_range">Range 30&#8211;400</string>
     <string name="comorbidities_lipid_test_non_hdl_limit">The value should be in the range of 1&#8211;300</string>
     <string name="comorbidities_lipid_test_non_hdl_range">Range 1&#8211;300</string>
+    <string name="comorbidities_lipid_nexttestdate">Next Lipid Test Date:</string>
+    <string name="comorbidities_lipid_no_order_found">No Lipid Order found for the patient.</string>
 
     <!-- Strings for MicroalbuminTestForm -->
     <string name="comorbidities_microalbumin_test_order">Test Order Microalbumin</string>
     <string name="comorbidities_microalbumin_test_result">Test Result Microalbumin</string>
     <string name="comorbidities_microalbumin_result">Urine Microalbumin (mg/l):</string>
     <string name="comorbidities_upto_two_decimal_places_error">The value is not valid. It must be up to two decimal places</string>
+    <string name="comorbidities_microalbumin_nexttestdate">Next Microalbumin Test Date:</string>
+    <string name="comorbidities_microalbumin_no_order_found">No Urine Microalbumin Order found for the patient.</string>
 
     <!-- Strings for ComorbiditiesDiabetesEducationForm-->
     <string name="comorbidities_education_form_educational_plan">Educational Plan</string>
@@ -548,6 +605,7 @@
     <string name="comorbidities_diabetes_followup_isulinN">Dosage of Insulin N (Units/Day):</string>
     <string name="comorbidities_diabetes_followup_isulinR">Dosage of Insulin R (Units/Day:</string>
     <string name="comorbidities_diabetes_followup_next_scheduled_visit">Next Scheduled Visit:</string>
+    <string name="next_visit_date_cannot_before_form_date">This Date can\'t be before FormDate.</string>
 
     <string name="comorbidities_diabetes_followup_non_compliance_options_side_effects">Side Effects</string>
     <string name="comorbidities_diabetes_followup_non_compliance_options_misunderstandings">Misunderstanding of Prescriptions</string>
@@ -753,7 +811,7 @@
     <string name="comorbidities_eye_screening_diabetic_macular_edema">Diabetic Macular Edema (DME) present:</string>
     <string name="comorbidities_eye_screening_clinical_dme">Clinically Significant DME:</string>
     <string name="comorbidities_eye_screening_other">Other eye screenining details:</string>
-    <string name="comorbidities_eye_screening_visionloss">Other eye screenining details:</string>
+    <string name="comorbidities_eye_screening_visionloss">Any severe detriment to vision loss noted:</string>
     <string name="comorbidities_eye_screening_recommendations">Recommendations:</string>
 
     <string name="comorbidities_eye_screening_eye_status_options_right_eye">Right eye not examined due to deformity or prosthetic eye</string>
@@ -813,6 +871,7 @@
     <string name="comorbidities_treatment_followup_MH_session_number">Session Number:</string>
     <string name="comorbidities_treatment_followup_MH_condition_before_session">How did the client feel before the session?</string>
     <string name="comorbidities_treatment_followup_MH_client_complaint">What is the client\'s main complaint?</string>
+    <string name="comorbidities_treatment_followup_MH_client_other_complaint">Other Complaint:</string>
     <string name="comorbidities_treatment_followup_MH_cooperation">Client\'s co-operation:</string>
     <string name="comorbidities_treatment_followup_MH_defensiveness">Client\'s defensiveness:</string>
     <string name="comorbidities_treatment_followup_MH_distress">Client\'s level of distress:</string>
@@ -841,7 +900,7 @@
     <string name="comorbidities_treatment_followup_MH_client_complaint_options_physical_illness">Phsycial Illness</string>
     <string name="comorbidities_treatment_followup_MH_client_complaint_options_daily_life">Daily life struggle</string>
     <string name="comorbidities_treatment_followup_MH_client_complaint_options_subtance">Subtance abuse</string>
-    <string name="comorbidities_treatment_followup_MH_client_complaint_options_financial">Financial problems</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options_financial">Economic problem</string>
     <string name="comorbidities_treatment_followup_MH_client_complaint_options_physical_abuse">Physical Abuse</string>
     <string name="comorbidities_treatment_followup_MH_client_complaint_options_sexual_problems">Sexual problems</string>
     <string name="comorbidities_treatment_followup_MH_client_complaint_options_other">Other</string>
@@ -855,6 +914,42 @@
         <item>@string/comorbidities_treatment_followup_MH_client_complaint_options_physical_abuse</item>
         <item>@string/comorbidities_treatment_followup_MH_client_complaint_options_sexual_problems</item>
         <item>@string/comorbidities_treatment_followup_MH_client_complaint_options_other</item>
+    </string-array>
+
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options1_suicidal">Suicidal ideation</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options1_homicidal">Homicidal ideation</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options1_psychotic">Psychotic / manic</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options1_panic">Panic attack / anxiety attack</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options1_medical">Medical adherence</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options1_depression">Depression</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options1_verbal">Verbal abuse</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options1_relationship">Relationship Problems</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options1_illness">Illness</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options1_daily">Daily Activity</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options1_substance">Substance Abuse</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options1_economic">Economic Problem</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options1_physical">Physical Abuse</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options1_sexual_problem">Sexual Problem</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options1_sexual_abuse">Sexual Abuse</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options1_other_complaint">Other Complaint</string>
+
+    <string-array name="comorbidities_treatment_followup_MH_client_complaint_options1">
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options1_suicidal</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options1_homicidal</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options1_psychotic</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options1_panic</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options1_medical</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options1_depression</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options1_verbal</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options1_relationship</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options1_illness</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options1_daily</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options1_substance</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options1_economic</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options1_physical</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options1_sexual_problem</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options1_sexual_abuse</item>
+        <item>@string/comorbidities_treatment_followup_MH_client_complaint_options1_other_complaint</item>
     </string-array>
 
     <string name="comorbidities_treatment_followup_MH_cooperation_options_complaint">Compliant</string>
@@ -921,16 +1016,23 @@
 
     <!-- Strings for ComorbiditiesAssessmentFormMentalHealth -->
     <string name="comorbidities_assessment_form_MH_rescreening">Type of rescreening:</string>
+    <string name="comorbidities_assessment_form_MH_appointment_date">Next Appointment Date:</string>
+    <string name="next_date_past">Date can\'t be in past.</string>
 
     <string name="comorbidities_assessment_form_MH_rescreening_options_6th_session">6th session</string>
-    <string name="comorbidities_assessment_form_MH_rescreening_options_end">End of treatment</string>
     <string name="comorbidities_assessment_form_MH_rescreening_options_rescreening">Rescreening</string>
+    <string name="comorbidities_assessment_form_MH_rescreening_options_end">End of treatment</string>
+    <string name="comorbidities_assessment_form_MH_rescreening_options_relapse">Relapse</string>
+    <string name="comorbidities_assessment_form_MH_rescreening_options_change_in_TB">Change in TB</string>
     <string name="comorbidities_assessment_form_MH_rescreening_options_other">Other</string>
+    <string name="comorbidities_assessment_form_MH_other_assesment_reason">Other assesment reason:</string>
 
     <string-array name="comorbidities_assessment_form_MH_rescreening_options">
         <item>@string/comorbidities_assessment_form_MH_rescreening_options_6th_session</item>
         <item>@string/comorbidities_assessment_form_MH_rescreening_options_rescreening</item>
         <item>@string/comorbidities_assessment_form_MH_rescreening_options_end</item>
+        <item>@string/comorbidities_assessment_form_MH_rescreening_options_relapse</item>
+        <item>@string/comorbidities_assessment_form_MH_rescreening_options_change_in_TB</item>
         <item>@string/comorbidities_assessment_form_MH_rescreening_options_other</item>
     </string-array>
 
@@ -953,6 +1055,9 @@
     <string name="comorbidities_end_treatment_MH_reason_of_discontinuation_options_think_no_depression">Thinks that he/she does not have depression</string>
     <string name="comorbidities_end_treatment_MH_reason_of_discontinuation_options_lost_followup">Lost to Follow up</string>
     <string name="comorbidities_end_treatment_MH_reason_of_discontinuation_options_referred">Referred</string>
+    <string name="comorbidities_end_treatment_MH_reason_of_discontinuation_options_tb_completed">TB treatment completed</string>
+    <string name="comorbidities_end_treatment_MH_reason_of_discontinuation_options_deceased">Deceased</string>
+    <string name="comorbidities_end_treatment_MH_reason_of_discontinuation_options_transferred">Transferred Out</string>
     <string name="comorbidities_end_treatment_MH_reason_of_discontinuation_options_other">Other</string>
 
     <string-array name="comorbidities_end_treatment_MH_reason_of_discontinuation_options">
@@ -963,6 +1068,9 @@
         <item>@string/comorbidities_end_treatment_MH_reason_of_discontinuation_options_think_no_depression</item>
         <item>@string/comorbidities_end_treatment_MH_reason_of_discontinuation_options_lost_followup</item>
         <item>@string/comorbidities_end_treatment_MH_reason_of_discontinuation_options_referred</item>
+        <item>@string/comorbidities_end_treatment_MH_reason_of_discontinuation_options_tb_completed</item>
+        <item>@string/comorbidities_end_treatment_MH_reason_of_discontinuation_options_deceased</item>
+        <item>@string/comorbidities_end_treatment_MH_reason_of_discontinuation_options_transferred</item>
         <item>@string/comorbidities_end_treatment_MH_reason_of_discontinuation_options_other</item>
     </string-array>
 
@@ -1002,7 +1110,7 @@
 
     <!-- Strings for ComorbiditiesDrugDisbursement -->
     <string name="comorbidities_drug_disbursement_adherence_text">ADHERENCE</string>
-    <string name="comorbidities_drug_disbursement_adherence">Adherence:</string>
+    <string name="comorbidities_drug_disbursement_adherence">No. of doses missed in the past month?</string>
     <string name="comorbidities_drug_disbursement_drug_distribution">DRUG DISTRIBUTION RECORD</string>
     <string name="comorbidities_drug_disbursement_drug_distribution_number">Drug Distribution Number:</string>
     <string name="comorbidities_drug_disbursement_drug_distribution_number_range">Range 0&#8211;999</string>
@@ -1012,8 +1120,8 @@
     <string name="comorbidities_drug_disbursement_drug_dist_date">Drug Distribution Date:</string>
     <string name="comorbidities_drug_disbursement_specify_other">Specify if Other:</string>
     <string name="comorbidities_drug_disbursement_days_worth">Days worth of drugs distributed:</string>
-    <string name="comorbidities_drug_disbursement_days_worth_range">Range 1&#8211;10</string>
-    <string name="comorbidities_drug_disbursement_days_worth_limit">The value should be in the range of 1&#8211;10</string>
+    <string name="comorbidities_drug_disbursement_days_worth_range">Range 1&#8211;90</string>
+    <string name="comorbidities_drug_disbursement_days_worth_limit">The value should be in the range of 1&#8211;90</string>
     <string name="comorbidities_drug_disbursement_number_of_metformin">Number of Metformin tablet leaves (500 mg) distributed:</string>
     <string name="comorbidities_drug_disbursement_number_of_metformin_range">Range 0&#8211;15</string>
     <string name="comorbidities_drug_disbursement_number_of_metformin_limit">The value should be in the range of 0&#8211;15</string>
@@ -1037,9 +1145,12 @@
     <!-- Strings for ComorbiditiesPatientInformationForm -->
     <string name="comorbidities_patient_information_external_patient_id">External Patient Registration/ID:</string>
     <string name="comorbidities_patient_information_screening_facility_location">Screening Facility Location:</string>
+    <string name="comorbidities_patient_information_tb_reg_num">TB Registration No.</string>
+    <string name="comorbidities_patient_information_reg_date">Registration Date</string>
     <string name="comorbidities_patient_information_gp_clinic_code">Specify GP Clinic Code:</string>
     <string name="comorbidities_patient_information_location_other">Specify, if Other:</string>
     <string name="comorbidities_patient_information_father_name">Father\'s Name:</string>
+    <string name="comorbidities_patient_information_father_name_error">You have entered spaces only. Invalid value.</string>
     <string name="comorbidities_patient_information_husband_name">Husband\'s Name:</string>
     <string name="comorbidities_patient_information_nic">National ID card number?</string>
     <string name="comorbidities_patient_information_nic_format_hint">#####-#######-#</string>
@@ -1048,21 +1159,22 @@
     <string name="comorbidities_patient_information_cnic_owner">Whose NIC is this?</string>
     <string name="comorbidities_patient_information_other_cnic_owner">If other, specify:</string>
     <string name="comorbidities_patient_information_address_provided">Has the patient provided their address?</string>
-    <string name="comorbidities_patient_information_address1">Address 1 (House Number, etc.):</string>
-    <string name="comorbidities_patient_information_address2">Address 2 (Block, Street, Gali, Colony, etc.):</string>
+    <string name="comorbidities_patient_information_address1">Address 1:</string>
+    <string name="comorbidities_patient_information_address2">Address 2 (Town):</string>
     <string name="comorbidities_patient_information_town">Town:</string>
-    <string name="comorbidities_patient_information_city">City:</string>
+    <string name="comorbidities_patient_information_city">City / Village:</string>
     <string name="comorbidities_patient_information_address_type">What type of Address is this?</string>
     <string name="comorbidities_patient_information_nearest_landmark">Nearest Landmark:</string>
     <string name="comorbidities_patient_information_mobile_number">Mobile Number:</string>
-    <string name="comorbidities_patient_information_mobile_number_format_hint">####-#######</string>
-    <string name="comorbidities_patient_information_mobile_number_format_dasherror">The format should be ####-#######</string>
+    <string name="comorbidities_patient_information_mobile_number_format_hint">03##-#######</string>
+    <string name="comorbidities_patient_information_mobile_number_format_dasherror">The format should be 03##-#######</string>
     <string name="comorbidities_patient_information_secondary_mobile">Secondary Mobile Number:</string>
     <string name="comorbidities_patient_information_landline">Landline Number:</string>
-    <string name="comorbidities_patient_information_landline_format_hint">###-########</string>
-    <string name="comorbidities_patient_information_landline_format_dasherror">The format should be ###-########</string>
+    <string name="comorbidities_patient_information_landline_format_hint">0##-########</string>
+    <string name="comorbidities_patient_information_landline_format_dasherror">The format should be 0##-########</string>
     <string name="comorbidities_patient_information_secondary_landline">Secondary Landline Number:</string>
     <string name="comorbidities_patient_information_tb_status">TB Status:</string>
+    <string name="comorbidities_patient_information_tb_type">What type of TB?</string>
     <string name="comorbidities_patient_information_tb_category">If TB +ve what is the category of treatment:</string>
     <string name="comorbidities_patient_information_marital_status">Marital Status:</string>
     <string name="comorbidities_patient_information_head_of_education">Head of Household Education:</string>
@@ -1116,6 +1228,14 @@
     <string-array name="comorbidities_patient_information_tb_status_options">
         <item>@string/comorbidities_patient_information_tb_status_positive</item>
         <item>@string/comorbidities_patient_information_tb_status_negative</item>
+    </string-array>
+
+    <string name="comorbidities_patient_information_tb_type_pulmonary">Pulmonary</string>
+    <string name="comorbidities_patient_information_tb_type_extra_pulmonary">Extra-Pulmonary</string>
+
+    <string-array name="comorbidities_patient_information_tb_type_options">
+        <item>@string/comorbidities_patient_information_tb_type_pulmonary</item>
+        <item>@string/comorbidities_patient_information_tb_type_extra_pulmonary</item>
     </string-array>
 
     <string name="comorbidities_patient_information_tb_category_cat1">Category 1 (SS-TB)</string>

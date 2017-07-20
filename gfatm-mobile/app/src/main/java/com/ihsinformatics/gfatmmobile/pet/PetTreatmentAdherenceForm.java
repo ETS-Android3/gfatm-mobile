@@ -65,6 +65,7 @@ public class PetTreatmentAdherenceForm extends AbstractFormActivity implements R
     TitledRadioGroup clinicianInformed;
     ScrollView scrollView;
 
+    Boolean refillFlag = false;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -147,10 +148,10 @@ public class PetTreatmentAdherenceForm extends AbstractFormActivity implements R
         adverseEffects2 = new TitledCheckBoxes(context, null, "", getResources().getStringArray(R.array.pet_adverse_effects_2), null, App.VERTICAL, App.VERTICAL);
         adverseEffectsLayout.addView(adverseEffects2);
         otherEffects = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        caretakerComments = new TitledEditText(context, null, getResources().getString(R.string.pet_caretaker_comments), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        caretakerComments = new TitledEditText(context, null, getResources().getString(R.string.pet_caretaker_comments), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         caretakerComments.getEditText().setSingleLine(false);
         caretakerComments.getEditText().setMinimumHeight(150);
-        clincianNote = new TitledEditText(context, null, getResources().getString(R.string.pet_psychologist_comment), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        clincianNote = new TitledEditText(context, null, getResources().getString(R.string.pet_psychologist_comment), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         clincianNote.getEditText().setSingleLine(false);
         clincianNote.getEditText().setMinimumHeight(150);
         plan = new TitledEditText(context, null, getResources().getString(R.string.pet_treatment_plan), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
@@ -168,6 +169,7 @@ public class PetTreatmentAdherenceForm extends AbstractFormActivity implements R
 
         formDate.getButton().setOnClickListener(this);
         adverseEventReport.getRadioGroup().setOnCheckedChangeListener(this);
+        adverseEventReport.getRadioGroup().setOnCheckedChangeListener(this);
         for (CheckBox cb : adverseEffects2.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
 
@@ -178,8 +180,15 @@ public class PetTreatmentAdherenceForm extends AbstractFormActivity implements R
     @Override
     public void updateDisplay() {
 
+        if(refillFlag){
+            refillFlag = true;
+            return;
+        }
+
         if (snackbar != null)
             snackbar.dismiss();
+
+        formDate.getButton().setEnabled(true);
 
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
@@ -498,6 +507,7 @@ public class PetTreatmentAdherenceForm extends AbstractFormActivity implements R
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
+            formDate.getButton().setEnabled(false);
         }
 
     }
@@ -535,6 +545,7 @@ public class PetTreatmentAdherenceForm extends AbstractFormActivity implements R
 
         adverseEffectsLayout.setVisibility(View.GONE);
         otherEffects.setVisibility(View.GONE);
+        clinicianInformed.setVisibility(View.GONE);
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -565,8 +576,10 @@ public class PetTreatmentAdherenceForm extends AbstractFormActivity implements R
             if (App.get(adverseEventReport).equals(getResources().getString(R.string.no))) {
                 adverseEffectsLayout.setVisibility(View.GONE);
                 otherEffects.setVisibility(View.GONE);
+                clinicianInformed.setVisibility(View.GONE);
             } else {
                 adverseEffectsLayout.setVisibility(View.VISIBLE);
+                clinicianInformed.setVisibility(View.VISIBLE);
                 boolean flag = false;
                 for (CheckBox cb : adverseEffects2.getCheckedBoxes()) {
                     if (cb.getText().equals(getString(R.string.pet_other)) && cb.isChecked()) {
@@ -584,6 +597,8 @@ public class PetTreatmentAdherenceForm extends AbstractFormActivity implements R
 
     @Override
     public void refill(int encounterId) {
+
+        Boolean refillFlag = false;
 
         OfflineForm fo = serverService.getOfflineFormById(encounterId);
         String date = fo.getFormDate();

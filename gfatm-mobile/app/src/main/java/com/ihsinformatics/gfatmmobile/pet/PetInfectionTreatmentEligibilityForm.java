@@ -65,9 +65,11 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
     TitledRadioGroup tbRuledOut;
     TitledEditText petEligiable;
     TitledRadioGroup petConsent;
+    TitledEditText clincianNote;
 
     ScrollView scrollView;
 
+    Boolean refillFlag = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -150,18 +152,22 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
         locationArray[locations.length] = "OTHER";
 
         MyLinearLayout linearLayout1 = new MyLinearLayout(context, getResources().getString(R.string.pet_contact_symptom_screen), App.VERTICAL);
-        pregnancyHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_pregnancy_history), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true);
-        pregnancyTestResult = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_pregnancy_test_result), getResources().getStringArray(R.array.pet_pregnancy_test_results), getResources().getString(R.string.pet_positive), App.VERTICAL, App.VERTICAL, true);
+        pregnancyHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_pregnancy_history), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
+        pregnancyTestResult = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_pregnancy_test_result), getResources().getStringArray(R.array.pet_pregnancy_test_results), getResources().getString(R.string.pet_positive), App.VERTICAL, App.VERTICAL);
         evaluationType = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_evaluation_type), getResources().getStringArray(R.array.pet_evaluation_types), null, App.VERTICAL, App.VERTICAL, true);
-        tbDiagnosis = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_tb_diagnosed), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true);
-        infectionType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_type_of_tb), getResources().getStringArray(R.array.pet_infection_types), getResources().getString(R.string.pet_dstb), App.HORIZONTAL, App.VERTICAL, true);
-        tbReferral = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_patient_referred_fot_tb_treatment), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, true);
-        referralSite = new TitledSpinner(context, null, getResources().getString(R.string.pet_referral_site), locationArray, "", App.VERTICAL, true);
+        tbDiagnosis = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_tb_diagnosed), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
+        infectionType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_type_of_tb), getResources().getStringArray(R.array.pet_infection_types), getResources().getString(R.string.pet_dstb), App.HORIZONTAL, App.VERTICAL);
+        tbReferral = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_patient_referred_fot_tb_treatment), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL);
+        referralSite = new TitledSpinner(context, null, getResources().getString(R.string.pet_referral_site), locationArray, "", App.VERTICAL);
         othersSite = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        tbRuledOut = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_ruled_out), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, true);
-        petEligiable = new TitledEditText(context, null, getResources().getString(R.string.pet_eligible), getResources().getString(R.string.yes), "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        tbRuledOut = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_ruled_out), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL);
+        petEligiable = new TitledEditText(context, null, getResources().getString(R.string.pet_eligible), getResources().getString(R.string.yes), "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         petEligiable.getEditText().setKeyListener(null);
-        petConsent = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_consent), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, true);
+        petConsent = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_consent), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, false);
+
+        clincianNote = new TitledEditText(context, null, getResources().getString(R.string.pet_doctor_notes), "", "", 250, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        clincianNote.getEditText().setSingleLine(false);
+        clincianNote.getEditText().setMinimumHeight(150);
 
         linearLayout1.addView(pregnancyHistory);
         linearLayout1.addView(pregnancyTestResult);
@@ -174,9 +180,11 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
         linearLayout1.addView(tbRuledOut);
         linearLayout1.addView(petEligiable);
         linearLayout1.addView(petConsent);
+        linearLayout1.addView(clincianNote);
 
         views = new View[]{formDate.getButton(), pregnancyHistory.getRadioGroup(), pregnancyTestResult.getRadioGroup(), evaluationType, tbDiagnosis.getRadioGroup(),
-                infectionType.getRadioGroup(), tbReferral.getRadioGroup(), referralSite.getSpinner(), othersSite.getEditText(), tbRuledOut.getRadioGroup(), petEligiable.getEditText(), petConsent.getRadioGroup()};
+                infectionType.getRadioGroup(), tbReferral.getRadioGroup(), referralSite.getSpinner(), othersSite.getEditText(), tbRuledOut.getRadioGroup(),
+                petEligiable.getEditText(), petConsent.getRadioGroup(), clincianNote.getEditText()};
 
         viewGroups = new View[][]{{formDate, linearLayout1}};
 
@@ -201,8 +209,16 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
 
     @Override
     public void updateDisplay() {
+
+        if(refillFlag){
+            refillFlag = true;
+            return;
+        }
+
         if (snackbar != null)
             snackbar.dismiss();
+
+        formDate.getButton().setEnabled(true);
 
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
@@ -389,6 +405,8 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
         if (petConsent.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"PET CONSENT", App.get(petConsent).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
 
+        observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(clincianNote)});
+
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
             protected String doInBackground(String... params) {
@@ -533,6 +551,7 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
+            formDate.getButton().setEnabled(false);
         }
 
     }
@@ -577,16 +596,20 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
                 pregnancyTestResult.setVisibility(View.GONE);
         }
         if (group == tbRuledOut.getRadioGroup()) {
-            if (App.get(tbRuledOut).equals(getResources().getString(R.string.yes)))
+            if (App.get(tbRuledOut).equals(getResources().getString(R.string.yes))) {
                 petEligiable.getEditText().setText(getResources().getString(R.string.yes));
-            else
+                petConsent.setVisibility(View.VISIBLE);
+            }
+            else {
                 petEligiable.getEditText().setText(getResources().getString(R.string.no));
+                petConsent.setVisibility(View.GONE);
+            }
         }
         if (group == tbDiagnosis.getRadioGroup()) {
             if (App.get(tbDiagnosis).equals(getResources().getString(R.string.yes))) {
                 infectionType.setVisibility(View.VISIBLE);
                 tbReferral.setVisibility(View.VISIBLE);
-                if (App.get(referralSite).equals(getResources().getString(R.string.yes)))
+                if (App.get(tbReferral).equals(getResources().getString(R.string.yes)))
                     referralSite.setVisibility(View.VISIBLE);
                 else
                     referralSite.setVisibility(View.GONE);
@@ -608,15 +631,18 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
                 else
                     petEligiable.getEditText().setText(getResources().getString(R.string.no));
             }
-        } else if (group == tbRuledOut.getRadioGroup()) {
-            if (App.get(tbRuledOut).equals(getResources().getString(R.string.yes)))
-                petEligiable.getEditText().setText(getResources().getString(R.string.yes));
-            else
-                petEligiable.getEditText().setText(getResources().getString(R.string.no));
+
+            if (App.get(petEligiable).equals(getResources().getString(R.string.yes))) {
+                petConsent.setVisibility(View.VISIBLE);
+            }
+            else {
+                petConsent.setVisibility(View.GONE);
+            }
+
         } else if (group == tbReferral.getRadioGroup()) {
             if (App.get(tbReferral).equals(getResources().getString(R.string.yes))) {
-                referralSite.setVisibility(View.GONE);
-                if (App.get(referralSite).equals(getResources().getString(R.string.pet_other)))
+                referralSite.setVisibility(View.VISIBLE);
+                if (App.get(referralSite).equalsIgnoreCase(getResources().getString(R.string.pet_other)))
                     othersSite.setVisibility(View.VISIBLE);
                 else
                     othersSite.setVisibility(View.GONE);
@@ -629,6 +655,8 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
 
     @Override
     public void refill(int encounterId) {
+
+        Boolean refillFlag = false;
 
         OfflineForm fo = serverService.getOfflineFormById(encounterId);
         String date = fo.getFormDate();
@@ -742,6 +770,8 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
                     }
                 }
                 petConsent.setVisibility(View.VISIBLE);
+            }  else if (obs[0][0].equals("CLINICIAN NOTES (TEXT)")) {
+                clincianNote.getEditText().setText(obs[0][1]);
             }
 
         }

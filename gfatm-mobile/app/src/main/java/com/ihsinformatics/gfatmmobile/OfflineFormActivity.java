@@ -50,7 +50,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
         setContentView(R.layout.saved_form);
 
         serverService = new ServerService(getApplicationContext());
-        loading = new ProgressDialog(this);
+        loading = new ProgressDialog(this, ProgressDialog.THEME_HOLO_LIGHT);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

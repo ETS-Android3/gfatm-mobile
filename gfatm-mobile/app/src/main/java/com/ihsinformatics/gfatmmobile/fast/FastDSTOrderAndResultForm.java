@@ -1,9 +1,5 @@
 package com.ihsinformatics.gfatmmobile.fast;
 
-import android.annotation.SuppressLint;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.PorterDuff;
@@ -27,7 +23,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
-import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -49,6 +44,7 @@ import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -58,13 +54,14 @@ import java.util.HashMap;
  * Created by Haris on 2/8/2017.
  */
 
-public class FastDSTOrderAndResultForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener, View.OnTouchListener {
+public class FastDSTOrderAndResultForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
     //  public static final int THIRD_DATE_DIALOG_ID = 3;
 
     // protected Calendar thirdDateCalendar;
     //  protected DialogFragment thirdDateFragment;
 
     Context context;
+
     // Views...
     TitledButton formDate;
     TitledEditText testId;
@@ -101,7 +98,9 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
     TitledRadioGroup cfzResistant;
     TitledRadioGroup otherDrugResult;
     TitledEditText otherDrugName;
-    ImageView testIdView;
+  //  ImageView testIdView;
+    TitledSpinner orderIds;
+    TitledEditText orderId;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -185,7 +184,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
 
         testContextStatus = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_at_what_point_test_being_done), getResources().getStringArray(R.array.fast_test_being_done_list), getResources().getString(R.string.fast_baseline_new), App.VERTICAL, App.VERTICAL);
 
-        monthOfTreatment = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_month_of_treatment), getResources().getStringArray(R.array.fast_number_list), getResources().getString(R.string.fast_zero), App.HORIZONTAL);
+        monthOfTreatment = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_month_of_treatment), getResources().getStringArray(R.array.fast_number_list), "", App.VERTICAL);
 
         updateFollowUpMonth();
 
@@ -246,26 +245,9 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
 
         otherDrugResult = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_other_drug_result), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
 
-        LinearLayout linearLayout = new LinearLayout(context);
-        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                0.9f
-        );
-        testId.setLayoutParams(param);
-        linearLayout.addView(testId);
-        testIdView = new ImageView(context);
-        testIdView.setImageResource(R.drawable.ic_checked);
-        LinearLayout.LayoutParams param1 = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                0.1f
-        );
-        testIdView.setLayoutParams(param1);
-        testIdView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        testIdView.setPadding(0, 5, 0, 0);
-
-        linearLayout.addView(testIdView);
+        orderId = new TitledEditText(context, null, getResources().getString(R.string.order_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+      //  orderId.setLongClickable(false);
+        orderIds = new TitledSpinner(context, "", getResources().getString(R.string.order_id), getResources().getStringArray(R.array.pet_empty_array), "", App.HORIZONTAL);
 
 
         // Used for reset fields...
@@ -276,23 +258,25 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                 smResistant.getRadioGroup(), pzaResistant.getRadioGroup(), ofxResistant.getRadioGroup(), levoResistant.getRadioGroup(),
                 moxi05Resistant.getRadioGroup(), moxi2Resistant.getRadioGroup(), amkResistant.getRadioGroup(), kmResistant.getRadioGroup(),
                 cmResistant.getRadioGroup(), pasResistant.getRadioGroup(), bdqResistant.getRadioGroup(), dlmResistant.getRadioGroup(),
-                lzdResistant.getRadioGroup(), cfzResistant.getRadioGroup(), otherDrugName.getEditText(), otherDrugResult.getRadioGroup()};
+                lzdResistant.getRadioGroup(), cfzResistant.getRadioGroup(), otherDrugName.getEditText(), otherDrugResult.getRadioGroup(),
+                orderId.getEditText(), orderIds.getSpinner()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formType, linearLayout, dstOrder, formDate, dateOfSubmission, testContextStatus, monthOfTreatment, specimenType,
-                        specimenSource, specimenSourceOther, dstResult, dstMedium, inh02Resistant, inh1Resistant,
+                {{formType,formDate, orderId, dstOrder, dateOfSubmission, testContextStatus, monthOfTreatment, specimenType,
+                        specimenSource, specimenSourceOther, dstResult, orderIds, testId, dstMedium, inh02Resistant, inh1Resistant,
                         rifResistant, etbResistant, smResistant, pzaResistant, ofxResistant, levoResistant, moxi05Resistant, moxi2Resistant
                         , amkResistant, kmResistant, cmResistant, pasResistant, bdqResistant, dlmResistant, lzdResistant, cfzResistant,
                         otherDrugName, otherDrugResult}};
 
         formDate.getButton().setOnClickListener(this);
-        // dateOfSubmission.getButton().setOnClickListener(this);
+         dateOfSubmission.getButton().setOnClickListener(this);
         //dateTestResult.getButton().setOnClickListener(this);
         formType.getRadioGroup().setOnCheckedChangeListener(this);
         specimenSource.getRadioGroup().setOnCheckedChangeListener(this);
         testContextStatus.getRadioGroup().setOnCheckedChangeListener(this);
         specimenType.getRadioGroup().setOnCheckedChangeListener(this);
+        orderIds.getSpinner().setOnItemSelectedListener(this);
 
         otherDrugName.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
@@ -315,110 +299,67 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
             }
         });
 
-        testId.getEditText().addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start,
-                                          int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start,
-                                      int before, int count) {
-                try {
-                    if (testId.getEditText().getText().length() > 0) {
-                        testIdView.setVisibility(View.VISIBLE);
-                        testIdView.setImageResource(R.drawable.ic_checked);
-                    } else {
-                        testId.getEditText().setError(getString(R.string.fast_test_id_error));
-                        testIdView.setVisibility(View.INVISIBLE);
-                    }
-                    goneVisibility();
-                    submitButton.setEnabled(false);
-
-
-                } catch (NumberFormatException nfe) {
-                    //Exception: User might be entering " " (empty) value
-                }
-            }
-        });
-        testIdView.setOnTouchListener(this);
-
-
         resetViews();
 
     }
 
-    public void updateFollowUpMonth(){
-        String treatmentDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+    public void updateFollowUpMonth() {
+
+        String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
         String format = "";
+        String[] monthArray;
 
-
-        if (treatmentDate.contains("/")) {
-            format = "dd/MM/yyyy";
+        if (treatmentDate == null) {
+            monthArray = new String[1];
+            monthArray[0] = "0";
+            monthOfTreatment.getSpinner().setSpinnerData(monthArray);
         } else {
-            format = "yyyy-MM-dd";
+            if (treatmentDate.contains("/")) {
+                format = "dd/MM/yyyy";
+            } else {
+                format = "yyyy-MM-dd";
+            }
+            Date convertedDate = App.stringToDate(treatmentDate, format);
+            Calendar treatmentDateCalender = App.getCalendar(convertedDate);
+            int diffYear = formDateCalendar.get(Calendar.YEAR) - treatmentDateCalender.get(Calendar.YEAR);
+            int diffMonth = diffYear * 12 + formDateCalendar.get(Calendar.MONTH) - treatmentDateCalender.get(Calendar.MONTH);
+
+            if (diffMonth == 0) {
+                monthArray = new String[1];
+                monthArray[0] = "1";
+                monthOfTreatment.getSpinner().setSpinnerData(monthArray);
+            }
+
+            else if(diffMonth > 24){
+                monthArray = new String[24];
+                for (int i = 0; i < 24; i++) {
+                    monthArray[i] = String.valueOf(i+1);
+                }
+                monthOfTreatment.getSpinner().setSpinnerData(monthArray);
+            }
+
+            else {
+                monthArray = new String[diffMonth];
+                for (int i = 0; i < diffMonth; i++) {
+                    monthArray[i] = String.valueOf(i+1);
+                }
+                monthOfTreatment.getSpinner().setSpinnerData(monthArray);
+            }
         }
-        Date convertedDate = App.stringToDate(treatmentDate, format);
-        Calendar treatmentDateCalender = App.getCalendar(convertedDate);
-        int diffYear = formDateCalendar.get(Calendar.YEAR) - treatmentDateCalender.get(Calendar.YEAR);
-        int diffMonth = diffYear * 12 + formDateCalendar.get(Calendar.MONTH) - treatmentDateCalender.get(Calendar.MONTH);
-
-        String [] monthArray = new String[diffMonth + 1];
-
-        for(int i =0 ; i <= diffMonth ; i++){
-            monthArray[i] = String.valueOf(i);
-        }
-
-        monthOfTreatment.getSpinner().setSpinnerData(monthArray);
     }
 
     @Override
     public void updateDisplay() {
+        Calendar treatDateCalender = null;
         if (snackbar != null)
             snackbar.dismiss();
 
-        if(formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result))){
-            Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "FAST-DST Culture Test Order");
-            String format = "";
-            String formDa = formDate.getButton().getText().toString();
 
-            for(int i =0 ; i < testIds.length ; i++){
-                if(testIds[i][0].equals(testId.getEditText().getText().toString())){
-                    String date = testIds[i][1].toString();
-                    if (date.contains("/")) {
-                        format = "dd/MM/yyyy";
-                    } else {
-                        format = "yyyy-MM-dd";
-                    }
-
-                    Date orderDate = App.stringToDate(date, format);
-
-                    if(formDateCalendar.before(App.getCalendar(orderDate))){
-                        formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-
-                        snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
-                        snackbar.show();
-
-                        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                        break;
-                    }
-                    else {
-                        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                    }
-                }
-            }
-        }
-
-        else if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
+        if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
-
+            personDOB = personDOB.substring(0, 10);
 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
@@ -430,31 +371,102 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
 
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
-            }
-         /*   else if (dateOfSubmission.getVisibility() == View.VISIBLE && formDateCalendar.before(secondDateCalendar)) {
-
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
-                snackbar.show();
-
-                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-
-            }*/
-            else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
             } else {
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                // if(dateOfSubmission.getVisibility() == View.GONE){
-                // secondDateCalendar.setTime(formDateCalendar.getTime());
-                //dateOfSubmission.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
-                //}
+                if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.fast_result))) {
+
+                    if (!App.get(orderIds).equals("")) {
+                        String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), App.getProgram() + "-" + "DST Culture Test Order", "ORDER ID", App.get(orderIds));
+
+                        String format = "";
+                        if (encounterDateTime.contains("/")) {
+                            format = "dd/MM/yyyy";
+                        } else {
+                            format = "yyyy-MM-dd";
+                        }
+
+                        Date orderDate = App.stringToDate(encounterDateTime, format);
+
+                        if (formDateCalendar.before(App.getCalendar(orderDate))) {
+
+                            Date dDate = App.stringToDate(formDa, "EEEE, MMM dd,yyyy");
+                            if (dDate.before(orderDate)) {
+                                formDateCalendar = Calendar.getInstance();
+                                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                            } else {
+                                formDateCalendar = App.getCalendar(dDate);
+                                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                            }
+
+                            snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
+                            snackbar.show();
+
+                        }
+
+                    }
+                } else if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.fast_order))) {
+                    String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+                    if (treatmentDate != null) {
+                        treatDateCalender = App.getCalendar(App.stringToDate(treatmentDate, "yyyy-MM-dd"));
+                        if (formDateCalendar.before(treatDateCalender)) {
+                            formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                            snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_date_cannot_be_before_treatment_initiation_form), Snackbar.LENGTH_INDEFINITE);
+                            snackbar.show();
+
+                            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        } else {
+                            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        }
+                    }
+
+                }
+            }
+
+        } else {
+            String formDa = formDate.getButton().getText().toString();
+
+            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
+            if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.fast_result))) {
+
+                if (!App.get(orderIds).equals("")) {
+                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), App.getProgram() + "-" + "DST Culture Test Order", "ORDER ID", App.get(orderIds));
+
+                    String format = "";
+                    if (encounterDateTime.contains("/")) {
+                        format = "dd/MM/yyyy";
+                    } else {
+                        format = "yyyy-MM-dd";
+                    }
+
+                    Date orderDate = App.stringToDate(encounterDateTime, format);
+
+                    if (formDateCalendar.before(App.getCalendar(orderDate))) {
+
+                        Date dDate = App.stringToDate(formDa, "EEEE, MMM dd,yyyy");
+                        if (dDate.before(orderDate)) {
+                            formDateCalendar = Calendar.getInstance();
+                            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        } else {
+                            formDateCalendar = App.getCalendar(dDate);
+                            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        }
+
+                        snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
+                        snackbar.show();
+
+                    }
+
+                }
             }
         }
         if (!(dateOfSubmission.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
@@ -524,6 +536,8 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
         }*/
 
         updateFollowUpMonth();
+        formDate.getButton().setEnabled(true);
+        dateOfSubmission.getButton().setEnabled(true);
     }
 
     @Override
@@ -538,7 +552,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
             error = true;
         }
 
-        if (testId.getVisibility() == View.VISIBLE && App.get(testId).isEmpty()) {
+        if (testId.getVisibility() == View.VISIBLE && testId.getEditText().getText().toString().length() > 0 && testId.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -566,6 +580,81 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
             otherDrugName.getEditText().setError(getString(R.string.empty_field));
             otherDrugName.getEditText().requestFocus();
             error = true;
+        }
+
+        Boolean flag = true;
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean saveFlag = bundle.getBoolean("save", false);
+            if (saveFlag) {
+                flag = false;
+            }else {
+                flag = true;
+            }
+        }
+
+
+        if (orderIds.getVisibility() == View.VISIBLE && flag) {
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "DST Culture Test Result", "ORDER ID");
+            if (resultTestIds != null) {
+                for (String id : resultTestIds) {
+
+                    if (id.equals(App.get(orderIds))) {
+                        final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                        alertDialog.setMessage(getResources().getString(R.string.ctb_order_result_found_error) + App.get(orderIds));
+                        Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                        alertDialog.setIcon(clearIcon);
+                        alertDialog.setTitle(getResources().getString(R.string.title_error));
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        try {
+                                            InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                            imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                        } catch (Exception e) {
+                                            // TODO: handle exception
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                });
+                        alertDialog.show();
+
+                        return false;
+                    }
+                }
+            }
+        }
+
+        if (testId.getVisibility() == View.VISIBLE && flag) {
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "DST Culture Test Result", "TEST ID");
+            if (resultTestIds != null) {
+                for (String id : resultTestIds) {
+                    if (id.equals(App.get(testId))) {
+                        final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                        alertDialog.setMessage(getResources().getString(R.string.ctb_test_result_found_error) + App.get(testId));
+                        Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                        alertDialog.setIcon(clearIcon);
+                        alertDialog.setTitle(getResources().getString(R.string.title_error));
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        try {
+                                            InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                            imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                        } catch (Exception e) {
+                                            // TODO: handle exception
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                });
+                        alertDialog.show();
+
+                        return false;
+                    }
+
+                }
+            }
+
         }
 
 
@@ -626,9 +715,9 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
 
-        observations.add(new String[]{"TEST ID", App.get(testId)});
-
         if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_order))) {
+
+            observations.add(new String[]{"ORDER ID", App.get(orderId)});
 
             if (formDate.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"DATE TEST ORDERED", App.getSqlDateTime(formDateCalendar)});
@@ -636,7 +725,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                 observations.add(new String[]{"SPECIMEN SUBMISSION DATE", App.getSqlDateTime(secondDateCalendar)});
             if (testContextStatus.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"TEST CONTEXT STATUS", App.get(testContextStatus).equals(getResources().getString(R.string.fast_baseline_new)) ? "BASELINE" :
-                        (App.get(testContextStatus).equals(getResources().getString(R.string.fast_baseline_repeat)) ? "BASELINE REPEAT" : "CONFIRMATION")});
+                        (App.get(testContextStatus).equals(getResources().getString(R.string.fast_baseline_repeat)) ? "BASELINE REPEAT" : "REGULAR FOLLOW UP")});
             if (monthOfTreatment.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"FOLLOW-UP MONTH", monthOfTreatment.getSpinner().getSelectedItem().toString()});
 
@@ -651,6 +740,12 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
             if (specimenSourceOther.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"OTHER SPECIMEN SOURCE", App.get(specimenSourceOther)});
         } else {
+
+            observations.add(new String[]{"ORDER ID", App.get(orderIds)});
+
+            if (testId.getVisibility() == View.VISIBLE && !App.get(testId).isEmpty())
+                observations.add(new String[]{"TEST ID", App.get(testId)});
+
             observations.add(new String[]{"DATE OF  TEST RESULT RECEIVED", App.getSqlDateTime(formDateCalendar)});
             observations.add(new String[]{"CULTURE MEDIUM TYPE", App.get(dstMedium).equals(getResources().getString(R.string.fast_lowenstein_jensen)) ? "LOWENSTEIN-JENSEN MYCOBACTERIA CULTURE METHOD" :
                     (App.get(dstMedium).equals(getResources().getString(R.string.fast_mycobacteria_growth_indicator_tube)) ? "MYCOBACTERIA GROWTH INDICATOR TUBE" :
@@ -856,44 +951,16 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
         return true;
     }
 
-
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN: {
-                ImageView view = (ImageView) v;
-                //overlay is black with transparency of 0x77 (119)
-                view.getDrawable().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
-                view.invalidate();
-
-                Boolean error = false;
-
-                checkTestId();
-
-
-                break;
-            }
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL: {
-                ImageView view = (ImageView) v;
-                //clear the overlay
-                view.getDrawable().clearColorFilter();
-                view.invalidate();
-                break;
-            }
-        }
-        return true;
-    }
-
     void showTestOrderOrTestResult() {
-        formDate.setVisibility(View.VISIBLE);
+        //formDate.setVisibility(View.VISIBLE);
         if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_order))) {
             dstOrder.setVisibility(View.VISIBLE);
-            formDate.getQuestionView().setText(getResources().getString(R.string.fast_test_date));
+           // formDate.getQuestionView().setText(getResources().getString(R.string.fast_test_date));
             dateOfSubmission.setVisibility(View.VISIBLE);
             testContextStatus.setVisibility(View.VISIBLE);
             if (testContextStatus.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_followup_test))) {
                 monthOfTreatment.setVisibility(View.VISIBLE);
+                updateFollowUpMonth();
             }
             specimenType.setVisibility(View.VISIBLE);
             if (specimenType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_extra_pulmonary))) {
@@ -934,8 +1001,24 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
             cfzResistant.setVisibility(View.GONE);
             otherDrugName.setVisibility(View.GONE);
             otherDrugResult.setVisibility(View.GONE);
-        } else {
-            formDate.getQuestionView().setText(getResources().getString(R.string.fast_date_of_result_recieved));
+
+            orderId.setVisibility(View.VISIBLE);
+            Date nowDate = new Date();
+            orderId.getEditText().setText(App.getSqlDateTime(nowDate));
+            orderIds.setVisibility(View.GONE);
+            testId.setVisibility(View.GONE);
+            orderId.getEditText().setKeyListener(null);
+            orderId.getEditText().setFocusable(false);
+
+            testContextStatus.getRadioGroup().selectDefaultValue();
+            monthOfTreatment.getSpinner().selectDefaultValue();
+            specimenType.getRadioGroup().selectDefaultValue();
+            specimenSource.getRadioGroup().selectDefaultValue();
+            specimenSourceOther.getEditText().setDefaultValue();
+
+        }
+        else if(formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result))) {
+           // formDate.getQuestionView().setText(getResources().getString(R.string.fast_date_of_result_recieved));
             dstResult.setVisibility(View.VISIBLE);
             //  dateTestResult.setVisibility(View.VISIBLE);
             dstMedium.setVisibility(View.VISIBLE);
@@ -969,95 +1052,66 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
             specimenType.setVisibility(View.GONE);
             specimenSource.setVisibility(View.GONE);
             specimenSourceOther.setVisibility(View.GONE);
+
+            orderId.setVisibility(View.GONE);
+            orderIds.setVisibility(View.VISIBLE);
+            testId.setVisibility(View.VISIBLE);
+
+            testId.getEditText().setDefaultValue();
+            dstMedium.getSpinner().selectDefaultValue();
+            inh02Resistant.getRadioGroup().selectDefaultValue();
+            inh1Resistant.getRadioGroup().selectDefaultValue();
+            rifResistant.getRadioGroup().selectDefaultValue();
+            etbResistant.getRadioGroup().selectDefaultValue();
+            smResistant.getRadioGroup().selectDefaultValue();
+            pzaResistant.getRadioGroup().selectDefaultValue();
+            ofxResistant.getRadioGroup().selectDefaultValue();
+            levoResistant.getRadioGroup().selectDefaultValue();
+            moxi05Resistant.getRadioGroup().selectDefaultValue();
+            moxi2Resistant.getRadioGroup().selectDefaultValue();
+            amkResistant.getRadioGroup().selectDefaultValue();
+            kmResistant.getRadioGroup().selectDefaultValue();
+            cmResistant.getRadioGroup().selectDefaultValue();
+            ethioResistant.getRadioGroup().selectDefaultValue();
+            csResistant.getRadioGroup().selectDefaultValue();
+            pasResistant.getRadioGroup().selectDefaultValue();
+            bdqResistant.getRadioGroup().selectDefaultValue();
+            dlmResistant.getRadioGroup().selectDefaultValue();
+            lzdResistant.getRadioGroup().selectDefaultValue();
+            cfzResistant.getRadioGroup().selectDefaultValue();
+            otherDrugName.getEditText().setDefaultValue();
+
+
+            String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "DST Culture Test Order", "ORDER ID");
+
+            if (testIds == null || testIds.length == 0) {
+                final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                alertDialog.setMessage(getResources().getString(R.string.fast_no_order_found_for_the_patient));
+                Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                alertDialog.setIcon(clearIcon);
+                alertDialog.setTitle(getResources().getString(R.string.title_error));
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                try {
+                                    InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                    imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                } catch (Exception e) {
+                                    // TODO: handle exception
+                                }
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();
+                submitButton.setEnabled(false);
+                return;
+            }
+
+            if(testIds != null) {
+                orderIds.getSpinner().setSpinnerData(testIds);
+            }
+
         }
-    }
-
-    private void checkTestId() {
-        AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
-            @Override
-            protected String doInBackground(String... params) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        loading.setInverseBackgroundForced(true);
-                        loading.setIndeterminate(true);
-                        loading.setCancelable(false);
-                        loading.setMessage(getResources().getString(R.string.verifying_test_id));
-                        loading.show();
-                    }
-                });
-
-                String result = "";
-
-                Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "FAST-DST Culture Test Order");
-
-                if (testIds == null || testIds.length < 1) {
-                    if (App.get(formType).equals(getResources().getString(R.string.fast_order)))
-                        return "SUCCESS";
-                    else
-                        return "";
-                }
-
-
-                if (App.get(formType).equals(getResources().getString(R.string.fast_order))) {
-                    result = "SUCCESS";
-                    for (int i = 0; i < testIds.length; i++) {
-                        if (String.valueOf(testIds[i][0]).equals(App.get(testId))) {
-                            return "";
-                        }
-                    }
-                }
-
-                if (App.get(formType).equals(getResources().getString(R.string.fast_result))) {
-                    result = "";
-                    for (int i = 0; i < testIds.length; i++) {
-                        if (String.valueOf(testIds[i][0]).equals(App.get(testId))) {
-                            return "SUCCESS";
-                        }
-                    }
-                }
-
-                return result;
-            }
-
-            @Override
-            protected void onProgressUpdate(String... values) {
-            }
-
-            ;
-
-            @Override
-            protected void onPostExecute(String result) {
-                super.onPostExecute(result);
-                loading.dismiss();
-
-                if (result.equals("SUCCESS")) {
-
-                    testIdView.setImageResource(R.drawable.ic_checked_green);
-                    showTestOrderOrTestResult();
-                    submitButton.setEnabled(true);
-
-                } else {
-
-                    if (App.get(formType).equals(getResources().getString(R.string.ctb_order))) {
-                        testId.getEditText().setError("Test Id already used.");
-                    } else {
-                        testId.getEditText().setError("No order form found for the test id for patient");
-                    }
-
-                }
-
-                try {
-                    InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
-                } catch (Exception e) {
-                    // TODO: handle exception
-                }
-
-            }
-        };
-        submissionFormTask.execute("");
-
     }
 
 
@@ -1080,13 +1134,13 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
             if (fo.getFormName().contains("Order")) {
                 formType.getRadioGroup().getButtons().get(0).setChecked(true);
                 formType.getRadioGroup().getButtons().get(1).setEnabled(false);
-                testIdView.setImageResource(R.drawable.ic_checked_green);
-                if (obs[0][0].equals("TEST ID")) {
-                    testId.getEditText().setEnabled(false);
-                    testIdView.setEnabled(false);
-                    testIdView.setImageResource(R.drawable.ic_checked_green);
-                    testId.getEditText().setText(obs[0][1]);
-                } else if (obs[0][0].equals("SPECIMEN SUBMISSION DATE")) {
+
+                if(obs[0][0].equals("ORDER ID")){
+                    orderId.getEditText().setText(obs[0][1]);
+                    orderId.getEditText().setKeyListener(null);
+                    orderId.getEditText().setFocusable(false);
+                }
+                else if (obs[0][0].equals("SPECIMEN SUBMISSION DATE")) {
                     String secondDate = obs[0][1];
                     secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                     dateOfSubmission.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
@@ -1143,13 +1197,19 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
             } else {
                 formType.getRadioGroup().getButtons().get(1).setChecked(true);
                 formType.getRadioGroup().getButtons().get(0).setEnabled(false);
-                if (obs[0][0].equals("TEST ID")) {
+
+                if (obs[0][0].equals("ORDER ID")) {
+                    orderIds.getSpinner().selectValue(obs[0][1]);
+                    orderIds.getSpinner().setEnabled(false);
+                }
+
+                else if (obs[0][0].equals("TEST ID")) {
                     testId.getEditText().setText(obs[0][1]);
                     testId.getEditText().setEnabled(false);
-                    testIdView.setEnabled(false);
-                    testIdView.setImageResource(R.drawable.ic_checked);
-                    checkTestId();
-                } else if (obs[0][0].equals("CULTURE MEDIUM TYPE")) {
+                }
+
+
+                else if (obs[0][0].equals("CULTURE MEDIUM TYPE")) {
                     String value = obs[0][1].equals("LOWENSTEIN-JENSEN MYCOBACTERIA CULTURE METHOD") ? getResources().getString(R.string.fast_lowenstein_jensen) :
                             (obs[0][1].equals("MYCOBACTERIA GROWTH INDICATOR TUBE") ? getResources().getString(R.string.fast_mycobacteria_growth_indicator_tube) :
                                     (obs[0][1].equals("MIDDLEBROOK 7H11S") ? getResources().getString(R.string.fast_middlebrook_7h11s) :
@@ -1464,6 +1524,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
         super.onClick(view);
 
         if (view == formDate.getButton()) {
+            formDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             formDateFragment.setArguments(args);
@@ -1473,6 +1534,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
         }
 
         if (view == dateOfSubmission.getButton()) {
+            dateOfSubmission.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             secondDateFragment.setArguments(args);
@@ -1508,14 +1570,18 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
     public void resetViews() {
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        formDate.setVisibility(View.GONE);
         dateOfSubmission.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         // dateTestResult.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
 
-        testIdView.setVisibility(View.GONE);
         testId.setVisibility(View.GONE);
-        testIdView.setImageResource(R.drawable.ic_checked);
         goneVisibility();
         submitButton.setEnabled(false);
+
+        String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "DST Culture Test Order", "ORDER ID");
+        if(testIds != null) {
+            orderIds.getSpinner().setSpinnerData(testIds);
+        }
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -1536,7 +1602,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
     }
 
     void goneVisibility() {
-        formDate.setVisibility(View.GONE);
+        //formDate.setVisibility(View.GONE);
         dstOrder.setVisibility(View.GONE);
         dateOfSubmission.setVisibility(View.GONE);
         testContextStatus.setVisibility(View.GONE);
@@ -1569,30 +1635,28 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
         cfzResistant.setVisibility(View.GONE);
         otherDrugName.setVisibility(View.GONE);
         otherDrugResult.setVisibility(View.GONE);
+
+        orderIds.setVisibility(View.GONE);
+        orderId.setVisibility(View.GONE);
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         MySpinner spinner = (MySpinner) parent;
 
-      /*  if (spinner == specimenSource.getSpinner()) {
-            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title))) {
-                specimenSourceOther.setVisibility(View.VISIBLE);
-            } else {
-                specimenSourceOther.setVisibility(View.GONE);
-            }
-        }*/
+        if (spinner == orderIds.getSpinner()) {
+            updateDisplay();
+        }
     }
 
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
         if (radioGroup == formType.getRadioGroup()) {
-            formDate.setVisibility(View.VISIBLE);
-            testId.setVisibility(View.VISIBLE);
-            testId.getEditText().setText("");
-            testId.getEditText().setError(null);
-            goneVisibility();
-            submitButton.setEnabled(false);
+            if (radioGroup == formType.getRadioGroup()) {
+                submitButton.setEnabled(true);
+                formDate.setVisibility(View.VISIBLE);
+                showTestOrderOrTestResult();
+            }
         }
 
         if (radioGroup == testContextStatus.getRadioGroup()) {
@@ -1653,42 +1717,5 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
         }
     }
 
-    @SuppressLint("ValidFragment")
-    public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final Calendar calendar;
-            if (getArguments().getInt("type") == DATE_DIALOG_ID)
-                calendar = formDateCalendar;
-            else if (getArguments().getInt("type") == SECOND_DATE_DIALOG_ID)
-                calendar = secondDateCalendar;
-           /* else if (getArguments().getInt("type") == THIRD_DATE_DIALOG_ID)
-                calendar = thirdDateCalendar;*/
-            else
-                return null;
-
-            int yy = calendar.get(Calendar.YEAR);
-            int mm = calendar.get(Calendar.MONTH);
-            int dd = calendar.get(Calendar.DAY_OF_MONTH);
-            DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, yy, mm, dd);
-            dialog.getDatePicker().setTag(getArguments().getInt("type"));
-            dialog.getDatePicker().setMaxDate(new Date().getTime());
-            return dialog;
-        }
-
-        @Override
-        public void onDateSet(DatePicker view, int yy, int mm, int dd) {
-
-            if (((int) view.getTag()) == DATE_DIALOG_ID)
-                formDateCalendar.set(yy, mm, dd);
-            else if (((int) view.getTag()) == SECOND_DATE_DIALOG_ID)
-                secondDateCalendar.set(yy, mm, dd);
-            //  else if (((int) view.getTag()) == THIRD_DATE_DIALOG_ID)
-            //   thirdDateCalendar.set(yy, mm, dd);
-
-            updateDisplay();
-        }
-    }
 
 }
