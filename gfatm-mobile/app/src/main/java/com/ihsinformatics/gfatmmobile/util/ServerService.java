@@ -1724,8 +1724,9 @@ public class ServerService {
 
     public Object[][] getUserFromLoccalDB(String username) {
 
-        Object[][] user = dbUtil.getFormTableData("select provider_uuid, username, fullName, role, password from " + Metadata.USERS + " where username='" + username + "'");
-        return user;
+
+        Object[][] user1 = dbUtil.getFormTableData("select provider_uuid, username, fullName, role, password from " + Metadata.USERS + " where username='" + username + "'");
+        return user1;
 
     }
 
