@@ -1,9 +1,7 @@
 package com.ihsinformatics.gfatmmobile.pmdt;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,19 +10,16 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
-import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -35,16 +30,15 @@ import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
+import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.model.Address;
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
-import com.ihsinformatics.gfatmmobile.model.User;
+import com.ihsinformatics.gfatmmobile.model.TreatmentUser;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
-import com.ihsinformatics.gfatmmobile.shared.Metadata;
-import com.ihsinformatics.gfatmmobile.util.DatabaseUtil;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
@@ -55,14 +49,18 @@ import java.util.HashMap;
  * Created by Tahira on 2/28/2017.
  */
 
-public class PmdtPatientAssignmentForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener, AutoCompleteTextView.OnClickListener, View.OnTouchListener {
+public class PmdtPatientAssignmentForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener, AutoCompleteTextView.OnClickListener {
 
     Context context;
     TitledButton formDate;
+    TreatmentUser[] treatmentSupporters = null;
+    String[] userNames = null;
+    LinearLayout userMainLinearLayout;
+    ArrayAdapter<String> autoCompleteUserAdapter = null;
     String personUuid = "";
-
+    TextView treatmentSupporterText;
+    AutoCompleteTextView treatmentSupporterList;
     TitledEditText treatmentSupporterId;
-    ImageView validateTreatmentSupporterIdView;
     TitledEditText treatmentSupporterFirstName;
     TitledEditText treatmentSupporterLastName;
 
@@ -143,29 +141,27 @@ public class PmdtPatientAssignmentForm extends AbstractFormActivity implements R
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
 
-        treatmentSupporterId = new TitledEditText(context, null, getResources().getString(R.string.pmdt_treatment_supporter_id), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        treatmentSupporterText = new TextView(context);
+        treatmentSupporterText.setText(getResources().getString(R.string.pmdt_select_treatment_supporter));
+        LinearLayout usersFacilityLayout = new LinearLayout(context);
+        MyTextView userQuestionRequired = new MyTextView(context, "*");
+        treatmentSupporterList = new AutoCompleteTextView(context);
+        MyTextView referredFacilityQuestionRequired = new MyTextView(context, "*");
+        int color1 = App.getColor(context, R.attr.colorAccent);
+        referredFacilityQuestionRequired.setTextColor(color1);
+        usersFacilityLayout.setOrientation(LinearLayout.HORIZONTAL);
+        usersFacilityLayout.addView(referredFacilityQuestionRequired);
+        usersFacilityLayout.addView(treatmentSupporterText);
+        treatmentSupporterList = new AutoCompleteTextView(context);
 
-        LinearLayout linearLayout = new LinearLayout(context);
-        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                0.9f
-        );
-        treatmentSupporterId.setLayoutParams(param);
-        linearLayout.addView(treatmentSupporterId);
-        validateTreatmentSupporterIdView = new ImageView(context);
-        validateTreatmentSupporterIdView.setImageResource(R.drawable.ic_search);
-        LinearLayout.LayoutParams param1 = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                0.1f
-        );
-        validateTreatmentSupporterIdView.setLayoutParams(param1);
-        validateTreatmentSupporterIdView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        validateTreatmentSupporterIdView.setPadding(0, 5, 0, 0);
+        treatmentSupporterList.setHint(getResources().getString(R.string.pmdt_treatment_supporter_hint));
+        userMainLinearLayout = new LinearLayout(context);
+        userMainLinearLayout.setOrientation(LinearLayout.VERTICAL);
+        userMainLinearLayout.addView(usersFacilityLayout);
+        userMainLinearLayout.addView(treatmentSupporterList);
 
-        linearLayout.addView(validateTreatmentSupporterIdView);
 
+        treatmentSupporterId = new TitledEditText(context, "", getResources().getString(R.string.pmdt_treatment_supporter_id), "", "", 10, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         treatmentSupporterFirstName = new TitledEditText(context, "", getResources().getString(R.string.pmdt_treatment_supporter_first_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         treatmentSupporterFirstName.setFocusableInTouchMode(true);
         treatmentSupporterLastName = new TitledEditText(context, "", getResources().getString(R.string.pmdt_treatment_supporter_last_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
@@ -177,9 +173,9 @@ public class PmdtPatientAssignmentForm extends AbstractFormActivity implements R
         addressLandmark = new TitledEditText(context, "", getResources().getString(R.string.pmdt_address_landmark), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         isHouseholdMember = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_treatment_supporter_household_member), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         relationshipWithPatient = new TitledSpinner(context, "", getResources().getString(R.string.pmdt_treatment_supporter_patient_relationship), getResources().getStringArray(R.array.pmdt_treatment_supporter_patient_relation), getResources().getString(R.string.pmdt_father), App.VERTICAL);
-        otherRelationship = new TitledEditText(context, "", getResources().getString(R.string.pmdt_other_relationship), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        otherRelationship = new TitledEditText(context, "", getResources().getString(R.string.pmdt_other_relationship), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         reasonHouseholdMember = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_reason_having_treatment_supporter), getResources().getStringArray(R.array.pmdt_reasons_for_having_treatment_supporter), getResources().getString(R.string.pmdt_family_refused_treatment_supporter), App.VERTICAL, App.VERTICAL);
-        otherReasonHouseholdMember = new TitledEditText(context, "", getResources().getString(R.string.pmdt_other_reason_having_treatment_supporter), "", "", 255, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        otherReasonHouseholdMember = new TitledEditText(context, "", getResources().getString(R.string.pmdt_other_reason_having_treatment_supporter), "", "", 255, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
 
         views = new View[]{formDate.getButton(), treatmentSupporterId.getEditText(), treatmentSupporterFirstName.getEditText(), treatmentSupporterLastName.getEditText(),
                 address1.getEditText(), address2.getEditText(), addressCityVillage.getEditText(), /* Taluka, if required*/ addressLandmark.getEditText(),
@@ -188,7 +184,7 @@ public class PmdtPatientAssignmentForm extends AbstractFormActivity implements R
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, linearLayout, treatmentSupporterFirstName, treatmentSupporterLastName, address1, address2,
+                {{formDate, userMainLinearLayout, treatmentSupporterId, treatmentSupporterFirstName, treatmentSupporterLastName, address1, address2,
                         addressCityVillage, addressLandmark, isHouseholdMember, relationshipWithPatient,
                         otherRelationship, reasonHouseholdMember, otherReasonHouseholdMember}};
 
@@ -196,7 +192,9 @@ public class PmdtPatientAssignmentForm extends AbstractFormActivity implements R
 
         isHouseholdMember.getRadioGroup().setOnCheckedChangeListener(this);
         reasonHouseholdMember.getRadioGroup().setOnCheckedChangeListener(this);
+        treatmentSupporterList.setOnItemClickListener(autoItemSelectedListner);
 
+        treatmentSupporterId.getEditText().setKeyListener(null);
         treatmentSupporterFirstName.getEditText().setKeyListener(null);
         treatmentSupporterLastName.getEditText().setKeyListener(null);
         address1.getEditText().setKeyListener(null);
@@ -204,53 +202,123 @@ public class PmdtPatientAssignmentForm extends AbstractFormActivity implements R
         addressCityVillage.getEditText().setKeyListener(null);
         addressDistrict.getEditText().setKeyListener(null);
         addressLandmark.getEditText().setKeyListener(null);
-        validateTreatmentSupporterIdView.setOnTouchListener(this);
-        relationshipWithPatient.getSpinner().setOnItemSelectedListener(this);
-        reasonHouseholdMember.getRadioGroup().setOnCheckedChangeListener(this);
 
         resetViews();
-
-        treatmentSupporterId.getEditText().addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                try {
-//                    if (treatmentSupporterId.getEditText().getText().length() == 7) {
-//                        if (!RegexUtil.isValidTreatmentSupporterId(App.get(treatmentSupporterId))) {
-//                            treatmentSupporterId.getEditText().setError("id incorrect");
-//                            validateTreatmentSupporterIdView.setVisibility(View.INVISIBLE);
-//                        } else {
-//                            validateTreatmentSupporterIdView.setVisibility(View.VISIBLE);
-//                            validateTreatmentSupporterIdView.setImageResource(R.drawable.ic_search);
-//                        }
-//                    } else {
-//                        validateTreatmentSupporterIdView.setVisibility(View.INVISIBLE);
-//                    }
-
-
-                } catch (NumberFormatException nfe) {
-                }
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-
     }
 
     private AdapterView.OnItemClickListener autoItemSelectedListner = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 
+            //extract selected username
+            String selectedUsername = autoCompleteUserAdapter.getItem(arg2);
 
+            // converting back to full username for searching the selected object in TreatmentUser array
+            selectedUsername = selectedUsername.replace(" ", ".");
+
+
+            for (int i = 0; i < treatmentSupporters.length; i++) {
+                if (treatmentSupporters[i].getUsername().equals(selectedUsername)) {
+
+                    treatmentSupporterId.getEditText().setText(treatmentSupporters[i].getUsername());
+                    treatmentSupporterFirstName.getEditText().setText(treatmentSupporters[i].getFullName().split(" ")[0]);
+                    treatmentSupporterLastName.getEditText().setText(treatmentSupporters[i].getFullName().split(" ")[1]);
+                    personUuid = treatmentSupporters[i].getPersonUuid();
+
+                    break;
+                }
+
+            }
+
+            if (!personUuid.isEmpty()) {
+
+                final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
+                    @Override
+                    protected HashMap<String, String> doInBackground(String... params) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                loading.setInverseBackgroundForced(true);
+                                loading.setIndeterminate(true);
+                                loading.setCancelable(false);
+                                loading.setMessage(getResources().getString(R.string.fetching_data));
+                                loading.show();
+                            }
+                        });
+
+
+                        HashMap<String, String> result = new HashMap<String, String>();
+                        Address preferredAddress = serverService.getPreferredAddressByPersonUuid(personUuid);
+
+                        if (preferredAddress != null) {
+
+                            result.put("ADDRESS1", preferredAddress.getAddress1());
+                            result.put("ADDRESS2", preferredAddress.getAddress2());
+                            result.put("CITY_VILLAGE", preferredAddress.getCityVillage());
+                            result.put("DISTRICT", preferredAddress.getCountyDistrict());
+                            result.put("LANDMARK", preferredAddress.getAddress3());
+
+                        }
+
+
+                        return result;
+                    }
+
+                    @Override
+                    protected void onProgressUpdate(String... values) {
+                    }
+
+
+                    @Override
+                    protected void onPostExecute(HashMap<String, String> result) {
+                        super.onPostExecute(result);
+                        loading.dismiss();
+
+//                        if (result.get("ADDRESS1") == null || result.get("ADDRESS1").isEmpty()) {
+//                            final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+//                            alertDialog.setMessage(getResources().getString(R.string.pmdt_user_address_not_assigned));
+//                            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+//                            alertDialog.setIcon(clearIcon);
+//                            alertDialog.setTitle(getResources().getString(R.string.title_error));
+//                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+//                                    new DialogInterface.OnClickListener() {
+//                                        public void onClick(DialogInterface dialog, int which) {
+//                                            try {
+//                                                InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+//                                                imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+//                                            } catch (Exception e) {
+//                                                // TODO: handle exception
+//                                            }
+//                                            dialog.dismiss();
+//                                        }
+//                                    });
+//                            alertDialog.show();
+//
+//                            submitButton.setEnabled(false);
+//
+//                            return;
+//                        } else
+//                            submitButton.setEnabled(true);
+
+                        if (result.get("ADDRESS1") != null || !result.get("ADDRESS1").isEmpty())
+                            address1.getEditText().setText(result.get("ADDRESS1"));
+
+                        if (result.get("ADDRESS2") != null || !result.get("ADDRESS2").isEmpty())
+                            address2.getEditText().setText(result.get("ADDRESS2"));
+
+                        if (result.get("DISTRICT") != null || !result.get("DISTRICT").isEmpty())
+                            addressDistrict.getEditText().setText(result.get("DISTRICT"));
+
+                        if (result.get("CITY_VILLAGE") != null || !result.get("CITY_VILLAGE").isEmpty())
+                            addressCityVillage.getEditText().setText(result.get("CITY_VILLAGE"));
+
+                        if (result.get("LANDMARK") != null || !result.get("LANDMARK").isEmpty())
+                            addressLandmark.getEditText().setText(result.get("LANDMARK"));
+
+                    }
+                };
+                autopopulateFormTask.execute("");
+            }
         }
     };
 
@@ -263,7 +331,7 @@ public class PmdtPatientAssignmentForm extends AbstractFormActivity implements R
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
-            personDOB = personDOB.substring(0, 10);
+            personDOB = personDOB.substring(0,10);
 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
@@ -321,7 +389,6 @@ public class PmdtPatientAssignmentForm extends AbstractFormActivity implements R
             otherReasonHouseholdMember.getEditText().setError(getResources().getString(R.string.mandatory_field));
             otherReasonHouseholdMember.getEditText().requestFocus();
             error = true;
-
         }
 
         if (error) {
@@ -341,7 +408,7 @@ public class PmdtPatientAssignmentForm extends AbstractFormActivity implements R
                                 InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
                             } catch (Exception e) {
-
+                                // TODO: handle exception
                             }
                             dialog.dismiss();
                         }
@@ -442,24 +509,8 @@ public class PmdtPatientAssignmentForm extends AbstractFormActivity implements R
                 });
 
                 String result = serverService.saveEncounterAndObservation(FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
-
                 if (!result.contains("SUCCESS"))
                     return result;
-                else {
-
-                    String encounterId = "";
-
-                    if (result.contains("_")) {
-                        String[] successArray = result.split("_");
-                        encounterId = successArray[1];
-                    }
-
-                    String treatmentSupporterName = App.get(treatmentSupporterFirstName) + " " + App.get(treatmentSupporterLastName);
-
-                    result = serverService.savePersonAttributeType("Treatment Supporter", treatmentSupporterName, encounterId);
-                    if (!result.equals("SUCCESS"))
-                        return result;
-                }
 
                 return "SUCCESS";
             }
@@ -490,7 +541,7 @@ public class PmdtPatientAssignmentForm extends AbstractFormActivity implements R
                                         InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
                                         imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
                                     } catch (Exception e) {
-
+                                        // TODO: handle exception
                                     }
                                     dialog.dismiss();
                                 }
@@ -509,7 +560,7 @@ public class PmdtPatientAssignmentForm extends AbstractFormActivity implements R
                                         InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
                                         imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
                                     } catch (Exception e) {
-
+                                        // TODO: handle exception
                                     }
                                     dialog.dismiss();
                                 }
@@ -529,18 +580,22 @@ public class PmdtPatientAssignmentForm extends AbstractFormActivity implements R
                                         InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
                                         imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
                                     } catch (Exception e) {
-
+                                        // TODO: handle exception
                                     }
                                     dialog.dismiss();
                                 }
                             });
                     alertDialog.show();
                 }
+
+
             }
         };
         submissionFormTask.execute("");
 
         return false;
+
+
     }
 
     @Override
@@ -671,7 +726,7 @@ public class PmdtPatientAssignmentForm extends AbstractFormActivity implements R
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
-        if (group == isHouseholdMember.getRadioGroup()) {
+        if(group == isHouseholdMember.getRadioGroup()) {
             if (App.get(isHouseholdMember).equals(getResources().getString(R.string.yes))) {
                 relationshipWithPatient.setVisibility(View.VISIBLE);
 
@@ -695,11 +750,11 @@ public class PmdtPatientAssignmentForm extends AbstractFormActivity implements R
                 otherReasonHouseholdMember.setVisibility(View.GONE);
 
             }
-        } else if (group == reasonHouseholdMember.getRadioGroup()) {
-            if (App.get(reasonHouseholdMember).equals(getResources().getString(R.string.pmdt_other)))
-                otherReasonHouseholdMember.setVisibility(View.VISIBLE);
+        } else if(group == reasonHouseholdMember.getRadioGroup()) {
+            if (App.get(relationshipWithPatient).equals(getResources().getString(R.string.pmdt_other)))
+                otherRelationship.setVisibility(View.VISIBLE);
             else
-                otherReasonHouseholdMember.setVisibility(View.GONE);
+                otherRelationship.setVisibility(View.GONE);
 
         }
 
@@ -708,185 +763,144 @@ public class PmdtPatientAssignmentForm extends AbstractFormActivity implements R
     @Override
     public void resetViews() {
         super.resetViews();
-
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
-        submitButton.setEnabled(false);
+        final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
+            @Override
+            protected HashMap<String, String> doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.fetching_data));
+                        loading.show();
+                    }
+                });
 
-        String assignedTreatmentSupporter = App.getPatient().getPerson().getTreatmentSupporter();
+                HashMap<String, String> result = new HashMap<String, String>();
+                String treatmentSupporterUsername = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PMDT_PATIENT_ASSIGNMENT, "TREATMENT SUPPORTER ID");
 
-        if (!assignedTreatmentSupporter.isEmpty()) {
-            final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
-            alertDialog.setMessage(getResources().getString(R.string.pmdt_treatment_supporter_already_assigned));
-            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-            alertDialog.setIcon(clearIcon);
-            alertDialog.setTitle(getResources().getString(R.string.title_error));
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            try {
-                                InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
-                                imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
-                            } catch (Exception e) {
+                if (treatmentSupporterUsername != null && !treatmentSupporterUsername.isEmpty())
+                    result.put("TREATMENT SUPPORTER USERNAME", treatmentSupporterUsername);
 
-                            }
-                            dialog.dismiss();
-                        }
-                    });
-            alertDialog.show();
+                return result;
+            }
 
-            submitButton.setEnabled(false);
-            return;
-        }
-
-    }
-
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN: {
-                ImageView view = (ImageView) v;
-                //overlay is black with transparency of 0x77 (119)
-                view.getDrawable().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
-                view.invalidate();
-
-                Boolean error = false;
-
-                if (App.get(treatmentSupporterId).isEmpty()) {
-                    treatmentSupporterId.getEditText().setError(getString(R.string.empty_field));
-                    treatmentSupporterId.requestFocus();
-                    error = true;
-                }
-//                else if (!RegexUtil.isValidTreatmentSupporterId(App.get(treatmentSupporterId))) {
-//                    treatmentSupporterId.getEditText().setError(getString(R.string.invalid_id));
-//                    treatmentSupporterId.requestFocus();
-//                    error = true;
-//                }
-
-                if (!error) {
-                    final String username = App.get(treatmentSupporterId).trim();
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
 
 
-                    final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
-                        @Override
-                        protected HashMap<String, String> doInBackground(String... params) {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    loading.setInverseBackgroundForced(true);
-                                    loading.setIndeterminate(true);
-                                    loading.setCancelable(false);
-                                    loading.setMessage(getResources().getString(R.string.fetching_data));
-                                    loading.show();
-                                }
-                            });
+            @Override
+            protected void onPostExecute(HashMap<String, String> result) {
+                super.onPostExecute(result);
+                loading.dismiss();
 
+                if (result.get("TREATMENT SUPPORTER USERNAME") == null || result.get("TREATMENT SUPPORTER USERNAME").isEmpty()) {
 
-                            HashMap<String, String> result = new HashMap<String, String>();
-                            User treatmentUser = serverService.getUser(username);
+                    if (autoCompleteUserAdapter == null) {
+                        final AsyncTask<String, String, String[]> autopopulateFormTask = new AsyncTask<String, String, String[]>() {
+                            @Override
+                            protected String[] doInBackground(String... params) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        loading.setInverseBackgroundForced(true);
+                                        loading.setIndeterminate(true);
+                                        loading.setCancelable(false);
+                                        loading.setMessage(getResources().getString(R.string.fetching_data));
+                                        loading.show();
+                                    }
+                                });
 
-                            if (treatmentUser != null && !treatmentUser.getRoles().isEmpty()) {
+                                treatmentSupporters = serverService.getUsersByRole(getResources().getString(R.string.treatment_supporter_role));
+                                userNames = new String[treatmentSupporters.length];
 
-                                String roles = treatmentUser.getRoles();
-                                if (roles.contains("PMDT Treatment Supporter")) {
-
-                                    result.put("TREATMENT SUPPORTER FIRST NAME", treatmentUser.getFullName().split(" ")[0]);
-                                    result.put("TREATMENT SUPPORTER LAST NAME", treatmentUser.getFullName().split(" ")[1]);
-
-                                    if (!treatmentUser.getPersonUuid().isEmpty()) {
-                                        Address preferredAddress = serverService.getPreferredAddressByPersonUuid(treatmentUser.getPersonUuid());
-
-                                        if (preferredAddress != null) {
-
-                                            result.put("ADDRESS1", preferredAddress.getAddress1());
-                                            result.put("ADDRESS2", preferredAddress.getAddress2());
-                                            result.put("CITY_VILLAGE", preferredAddress.getCityVillage());
-                                            result.put("DISTRICT", preferredAddress.getCountyDistrict());
-                                            result.put("LANDMARK", preferredAddress.getAddress3());
-                                        }
+                                if (treatmentSupporters != null && treatmentSupporters.length > 0) {
+                                    for (int i = 0; i < treatmentSupporters.length; i++) {
+                                        String[] array = treatmentSupporters[i].getUsername().split("\\.");
+                                        userNames[i] = array[0] + " " + array[1];
                                     }
                                 }
+
+                                return userNames;
                             }
 
-                            return result;
-                        }
-
-                        @Override
-                        protected void onProgressUpdate(String... values) {
-                        }
+                            @Override
+                            protected void onProgressUpdate(String... values) {
+                            }
 
 
-                        @Override
-                        protected void onPostExecute(HashMap<String, String> result) {
-                            super.onPostExecute(result);
-                            loading.dismiss();
+                            @Override
+                            protected void onPostExecute(String[] result) {
+                                super.onPostExecute(result);
+                                loading.dismiss();
 
-                            if (result.get("TREATMENT SUPPORTER FIRST NAME") == null || result.get("TREATMENT SUPPORTER FIRST NAME").isEmpty()) {
+                                if (result == null || result.length == 0) {
 
-                                final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
-                                alertDialog.setMessage(getResources().getString(R.string.pmdt_treatment_supporter_missing));
-                                Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-                                alertDialog.setIcon(clearIcon);
-                                alertDialog.setTitle(getResources().getString(R.string.title_error));
-                                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
-                                        new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                try {
-                                                    InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
-                                                    imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
-                                                } catch (Exception e) {
-
+                                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                                    alertDialog.setMessage(getResources().getString(R.string.pmdt_treatment_supporters_not_found));
+                                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                                    alertDialog.setIcon(clearIcon);
+                                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    try {
+                                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                                    } catch (Exception e) {
+                                                        // TODO: handle exception
+                                                    }
+                                                    dialog.dismiss();
                                                 }
-                                                dialog.dismiss();
-                                            }
-                                        });
-                                alertDialog.show();
+                                            });
+                                    alertDialog.show();
 
-                                submitButton.setEnabled(false);
-                                return;
+                                    submitButton.setEnabled(false);
+
+                                    return;
+                                } else
+                                    submitButton.setEnabled(true);
+
+                                autoCompleteUserAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, result);
+                                treatmentSupporterList.setAdapter(autoCompleteUserAdapter);
+
                             }
+                        };
+                        autopopulateFormTask.execute("");
+                    }
 
+                } else {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.pmdt_treatment_supporter_already_assigned));
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
 
-                            if (result.get("TREATMENT SUPPORTER FIRST NAME") != null || !result.get("TREATMENT SUPPORTER FIRST NAME").isEmpty()) {
-                                submitButton.setEnabled(true);
-                                treatmentSupporterFirstName.getEditText().setText(result.get("TREATMENT SUPPORTER FIRST NAME"));
-                            }
+                    submitButton.setEnabled(false);
 
-                            if (result.get("TREATMENT SUPPORTER LAST NAME") != null || !result.get("TREATMENT SUPPORTER LAST NAME").isEmpty())
-                                treatmentSupporterLastName.getEditText().setText(result.get("TREATMENT SUPPORTER LAST NAME"));
-
-                            if (result.get("ADDRESS1") != null && !result.get("ADDRESS1").isEmpty())
-                                address1.getEditText().setText(result.get("ADDRESS1"));
-
-                            if (result.get("ADDRESS2") != null && !result.get("ADDRESS2").isEmpty())
-                                address2.getEditText().setText(result.get("ADDRESS2"));
-
-                            if (result.get("DISTRICT") != null && !result.get("DISTRICT").isEmpty())
-                                addressDistrict.getEditText().setText(result.get("DISTRICT"));
-
-                            if (result.get("CITY_VILLAGE") != null && !result.get("CITY_VILLAGE").isEmpty())
-                                addressCityVillage.getEditText().setText(result.get("CITY_VILLAGE"));
-
-                            if (result.get("LANDMARK") != null && !result.get("LANDMARK").isEmpty())
-                                addressLandmark.getEditText().setText(result.get("LANDMARK"));
-
-                        }
-                    };
-                    autopopulateFormTask.execute("");
+                    return;
                 }
+            }
+        };
+        autopopulateFormTask.execute("");
 
-                break;
-            }
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL: {
-                ImageView view = (ImageView) v;
-                //clear the overlay
-                view.getDrawable().clearColorFilter();
-                view.invalidate();
-                break;
-            }
-        }
-        return true;
     }
 
     class MyAdapter extends PagerAdapter {
