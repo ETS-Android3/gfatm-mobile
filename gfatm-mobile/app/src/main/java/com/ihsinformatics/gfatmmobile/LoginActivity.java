@@ -16,7 +16,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.util.ServerService;
@@ -61,7 +60,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         username.setText(App.getUsername());
 
-        loading = new ProgressDialog(this, ProgressDialog.THEME_HOLO_LIGHT);
+        loading = new ProgressDialog(this);
     }
 
 
@@ -108,7 +107,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            /*loading.setInverseBackgroundForced(true);*/
+                            loading.setInverseBackgroundForced(true);
                             loading.setIndeterminate(true);
                             loading.setCancelable(false);
                             loading.setMessage(getResources().getString(R.string.signing_in));
@@ -189,13 +188,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         App.setPassword(passwordTemp);
                         password.setText("");
                         Toast toast = Toast.makeText(LoginActivity.this, getResources().getString(R.string.user_not_found), Toast.LENGTH_LONG);
-                        toast.setGravity(Gravity.BOTTOM, 0, 0);
-                        toast.show();
-                    } else if (result.equals("VERSION_MISMATCH")){
-                        App.setUsername(usernameTemp);
-                        App.setPassword(passwordTemp);
-                        password.setText("");
-                        Toast toast = Toast.makeText(LoginActivity.this, getResources().getString(R.string.version_mismatch), Toast.LENGTH_LONG);
                         toast.setGravity(Gravity.BOTTOM, 0, 0);
                         toast.show();
                     }

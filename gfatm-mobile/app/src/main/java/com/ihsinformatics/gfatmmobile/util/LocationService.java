@@ -19,7 +19,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.App;
-import com.ihsinformatics.gfatmmobile.MainActivity;
 
 public class LocationService extends IntentService implements LocationListener {
 
@@ -49,8 +48,14 @@ public class LocationService extends IntentService implements LocationListener {
             instance = null;
         } else {
             instance = this;
-
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
                 return;
             }
             Location location = null;
@@ -78,9 +83,6 @@ public class LocationService extends IntentService implements LocationListener {
 
         App.setLongitude(location.getLongitude());
         App.setLatitude(location.getLatitude());
-
-        String msg = "New Latitude: " + location.getLatitude()
-                + "New Longitude: " + location.getLongitude();
 
     }
 

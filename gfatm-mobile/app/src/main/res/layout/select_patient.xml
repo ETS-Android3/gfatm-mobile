@@ -42,8 +42,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-"
-                            android:inputType="textCapCharacters|textNoSuggestions"
+                            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-"
+                            android:inputType="text|textNoSuggestions"
                             android:maxLength="7"
                             android:maxLines="1" />
 
@@ -73,7 +73,6 @@
                         android:background="@drawable/template_button"
                         android:text="@string/title_search_patient"
                         android:textColor="@color/white"
-                        android:visibility="gone"
                         android:textSize="@dimen/large" />
 
                     <TextView
@@ -82,7 +81,7 @@
                         android:gravity="center"
                         android:padding="@dimen/medium"
                         android:text="@string/or"
-                        android:textColor="?colorPrimary"
+                        android:textColor="?colorAccent"
                         android:textSize="@dimen/large"
                         android:textStyle="bold" />
 
@@ -92,7 +91,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/create_new_patient"
-                        android:textColor="?colorAccent"
+                        android:textColor="?colorPrimary"
                         android:textSize="@dimen/xlarge"
                         android:textStyle="italic" />
 
@@ -129,9 +128,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
+                            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                            android:inputType="text"
                             android:maxLength="20"
-                            android:inputType="textCapSentences"
                             android:maxLines="1" />
 
                     </TableRow>
@@ -152,9 +151,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
+                            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                            android:inputType="text"
                             android:maxLength="20"
-                            android:inputType="textCapSentences"
                             android:maxLines="1" />
 
                     </TableRow>
@@ -202,37 +201,14 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/age_modifier"
-                            android:textSize="@dimen/large" />
-
-                        <Spinner
-                            android:id="@+id/age_modifier"
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:entries="@array/age_modifiers"/>
-
-                    </TableRow>
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/age"
+                            android:text="@string/dob"
                             android:textSize="@dimen/large" />
 
                         <EditText
-                            android:id="@+id/age"
+                            android:id="@+id/dob"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:digits="1234567890"
-                            android:inputType="number|textNoSuggestions"
-                            android:maxLength="5"
-                            android:maxLines="1" />
+                            android:layout_weight="1" />
 
                     </TableRow>
 
@@ -265,14 +241,18 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/dob"
+                            android:text="@string/age"
                             android:textSize="@dimen/large" />
 
                         <EditText
-                            android:id="@+id/dob"
+                            android:id="@+id/age"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1" />
+                            android:layout_weight="1"
+                            android:digits="1234567890"
+                            android:inputType="number|textNoSuggestions"
+                            android:maxLength="3"
+                            android:maxLines="1" />
 
                     </TableRow>
 
@@ -292,8 +272,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-"
-                            android:inputType="textCapCharacters|textNoSuggestions"
+                            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-"
+                            android:inputType="text|textNoSuggestions"
                             android:maxLength="7"
                             android:maxLines="1" />
 

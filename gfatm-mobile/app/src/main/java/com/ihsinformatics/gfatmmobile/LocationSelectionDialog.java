@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -31,8 +30,6 @@ public class LocationSelectionDialog extends AbstractSettingActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
-        okButton.setVisibility(View.GONE);
 
         final int color = App.getColor(this, R.attr.colorPrimaryDark);
         final int color1 = App.getColor(this, R.attr.colorAccent);
@@ -153,10 +150,7 @@ public class LocationSelectionDialog extends AbstractSettingActivity {
                 final TextView text = new TextView(this);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
                 text.setLayoutParams(params);
-                if(String.valueOf(locations[i][16]).equals("") || String.valueOf(locations[i][16]).equals("null"))
-                    text.setText(String.valueOf(locations[i][1]));
-                else
-                    text.setText(String.valueOf(locations[i][16]));
+                text.setText(String.valueOf(locations[i][1]));
                 text.setTextSize(getResources().getDimension(R.dimen.small));
                 text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
                 text.setPadding(10, 0, 0, 0);
@@ -165,28 +159,6 @@ public class LocationSelectionDialog extends AbstractSettingActivity {
 
                 verticalLayout.addView(linearLayout);
                 moreLayout.setVisibility(View.GONE);
-
-                if (!(locations[i][1] == null || locations[i][1].equals("") || locations[i][1].equals("null"))) {
-
-                    LinearLayout ll5 = new LinearLayout(this);
-                    ll5.setOrientation(LinearLayout.HORIZONTAL);
-
-                    TextView tv8 = new TextView(this);
-                    tv8.setText(getResources().getString(R.string.name) + " ");
-                    tv8.setTextSize(getResources().getDimension(R.dimen.small));
-                    tv8.setTextColor(color1);
-                    ll5.addView(tv8);
-
-                    TextView tv9 = new TextView(this);
-                    tv9.setText(String.valueOf(locations[i][1]));
-                    tv9.setTextSize(getResources().getDimension(R.dimen.small));
-                    ll5.addView(tv9);
-
-                    moreLayout.addView(ll5);
-
-                    moreLayout.setVisibility(View.VISIBLE);
-
-                }
 
                 if (!(locations[i][10] == null || locations[i][10].equals("") || locations[i][10].equals("null"))) {
                     LinearLayout ll1 = new LinearLayout(this);
@@ -307,6 +279,28 @@ public class LocationSelectionDialog extends AbstractSettingActivity {
                     moreLayout.setVisibility(View.VISIBLE);
                 }
 
+                if (!(locations[i][16] == null || locations[i][16].equals("") || locations[i][16].equals("null"))) {
+
+                    LinearLayout ll5 = new LinearLayout(this);
+                    ll5.setOrientation(LinearLayout.HORIZONTAL);
+
+                    TextView tv8 = new TextView(this);
+                    tv8.setText(getResources().getString(R.string.description) + " ");
+                    tv8.setTextSize(getResources().getDimension(R.dimen.small));
+                    tv8.setTextColor(color1);
+                    ll5.addView(tv8);
+
+                    TextView tv9 = new TextView(this);
+                    tv9.setText(String.valueOf(locations[i][16]));
+                    tv9.setTextSize(getResources().getDimension(R.dimen.small));
+                    ll5.addView(tv9);
+
+                    moreLayout.addView(ll5);
+
+                    moreLayout.setVisibility(View.VISIBLE);
+
+                }
+
                 verticalLayout.addView(moreLayout);
 
 
@@ -348,9 +342,21 @@ public class LocationSelectionDialog extends AbstractSettingActivity {
     @Override
     public void onBackPressed() {
 
-        for(RadioButton rb : radioButtons){
-            if(rb.isChecked())
+        Boolean flag = false;
+
+        for (RadioButton rb : radioButtons) {
+            if (rb.isChecked()) {
+                flag = true;
                 super.onBackPressed();
+            }
         }
+
+        if (!flag) {
+            Toast toast = Toast.makeText(LocationSelectionDialog.this, getResources().getString(R.string.no_location_select), Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+        }
+
     }
+
 }

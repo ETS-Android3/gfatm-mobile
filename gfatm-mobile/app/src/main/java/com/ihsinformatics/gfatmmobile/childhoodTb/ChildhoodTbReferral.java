@@ -32,7 +32,6 @@ import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
-import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
@@ -184,7 +183,7 @@ public class ChildhoodTbReferral extends AbstractFormActivity implements RadioGr
         if (snackbar != null)
             snackbar.dismiss();
 
-        if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
+        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
@@ -192,26 +191,24 @@ public class ChildhoodTbReferral extends AbstractFormActivity implements RadioGr
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
 
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
-            }else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+            }else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
-                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
             } else
-                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
         }
-        formDate.getButton().setEnabled(true);
-
       }
 
     @Override
@@ -360,13 +357,7 @@ public class ChildhoodTbReferral extends AbstractFormActivity implements RadioGr
                 loading.dismiss();
 
                 if (result.equals("SUCCESS")) {
-                    MainActivity.backToMainMenu();
-                    try {
-                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
-                    } catch (Exception e) {
-                        // TODO: handle exception
-                    }
+                    resetViews();
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.form_submitted));
@@ -496,7 +487,6 @@ public class ChildhoodTbReferral extends AbstractFormActivity implements RadioGr
         super.onClick(view);
 
         if (view == formDate.getButton()) {
-            formDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
@@ -543,7 +533,7 @@ public class ChildhoodTbReferral extends AbstractFormActivity implements RadioGr
         if (snackbar != null)
             snackbar.dismiss();
 
-        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         otherReferralTransferReason.setVisibility(View.GONE);
         otherReferralTransferLocation.setVisibility(View.GONE);
         Bundle bundle = this.getArguments();

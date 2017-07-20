@@ -51,21 +51,16 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
     TitledSpinner ethinicity;
     TitledEditText otherEthinicity;
     TitledSpinner contactEducationLevel;
-    TitledEditText otherContactEducationLevel;
     TitledSpinner maritalStatus;
     TitledSpinner emloyementStatus;
     TitledSpinner occupation;
-    TitledEditText otherOccupation;
     TitledEditText contactIncome;
     TitledEditText contactIncomeGroup;
     TitledSpinner householdHead;
     TitledEditText otherHouseholdHead;
     TitledSpinner householdHeadEducationLevel;
-    TitledEditText otherHouseholdHeadEducationLevel;
     TitledSpinner motherTongue;
     TitledEditText otherMotherTongue;
-
-    Boolean refillFlag = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -127,27 +122,24 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
     public void initViews() {
 
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        ethinicity = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_ethnicity), getResources().getStringArray(R.array.pet_ethnicities), "", App.VERTICAL);
+        ethinicity = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_ethnicity), getResources().getStringArray(R.array.pet_ethnicities), "", App.VERTICAL, true);
         otherEthinicity = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        contactEducationLevel = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_contact_education_level), getResources().getStringArray(R.array.pet_contact_education_levels), getResources().getString(R.string.pet_intermediate), App.VERTICAL);
-        otherContactEducationLevel = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        maritalStatus = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_martial_status), getResources().getStringArray(R.array.pet_martial_statuses), getResources().getString(R.string.pet_single), App.VERTICAL);
-        emloyementStatus = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_employement_status), getResources().getStringArray(R.array.pet_employement_statuses), getResources().getString(R.string.pet_employed), App.VERTICAL);
-        occupation = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_occupation), getResources().getStringArray(R.array.pet_occupations), getString(R.string.pet_artist), App.VERTICAL);
-        otherOccupation = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        contactEducationLevel = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_contact_education_level), getResources().getStringArray(R.array.pet_contact_education_levels), getResources().getString(R.string.pet_intermediate), App.VERTICAL, true);
+        maritalStatus = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_martial_status), getResources().getStringArray(R.array.pet_martial_statuses), getResources().getString(R.string.pet_single), App.VERTICAL, true);
+        emloyementStatus = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_employement_status), getResources().getStringArray(R.array.pet_employement_statuses), getResources().getString(R.string.pet_employed), App.VERTICAL, true);
+        occupation = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_occupation), getResources().getStringArray(R.array.pet_occupations), getString(R.string.pet_artist), App.VERTICAL, true);
         contactIncome = new TitledEditText(context, null, getResources().getString(R.string.pet_contact_income), "0", "", 10, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         contactIncomeGroup = new TitledEditText(context, null, getResources().getString(R.string.pet_contact_income_group), getResources().getString(R.string.pet_none), "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
-        householdHead = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_household_head), getResources().getStringArray(R.array.pet_cnic_owners), getString(R.string.pet_self), App.VERTICAL);
+        householdHead = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_household_head), getResources().getStringArray(R.array.pet_household_heads), getString(R.string.pet_mother), App.VERTICAL, true);
         otherHouseholdHead = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         householdHeadEducationLevel = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_household_education), getResources().getStringArray(R.array.pet_contact_education_levels), getString(R.string.pet_intermediate), App.VERTICAL);
-        otherHouseholdHeadEducationLevel = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         motherTongue = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_mother_tongue), getResources().getStringArray(R.array.pet_mother_tongues), getString(R.string.urdu), App.VERTICAL);
         otherMotherTongue = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
 
         views = new View[]{formDate.getButton(), ethinicity.getSpinner(), otherEthinicity.getEditText(), contactEducationLevel.getSpinner(), maritalStatus.getSpinner(), emloyementStatus.getSpinner(), occupation.getSpinner(), contactIncome.getEditText(), contactIncomeGroup.getEditText(),
-                householdHead.getSpinner(), otherHouseholdHead.getEditText(), householdHeadEducationLevel.getSpinner(), motherTongue.getSpinner(), otherMotherTongue.getEditText(), otherOccupation.getEditText(), otherContactEducationLevel.getEditText(), otherHouseholdHeadEducationLevel.getEditText()};
+                householdHead.getSpinner(), otherHouseholdHead.getEditText(), householdHeadEducationLevel.getSpinner(), motherTongue.getSpinner(), otherMotherTongue.getEditText()};
 
-        viewGroups = new View[][]{{formDate, ethinicity, otherEthinicity, contactEducationLevel, otherContactEducationLevel, maritalStatus, emloyementStatus, occupation, otherOccupation, contactIncome, contactIncomeGroup, householdHead, otherHouseholdHead, householdHeadEducationLevel, otherHouseholdHeadEducationLevel, motherTongue, otherMotherTongue}};
+        viewGroups = new View[][]{{formDate, ethinicity, otherEthinicity, contactEducationLevel, maritalStatus, emloyementStatus, occupation, contactIncome, contactIncomeGroup, householdHead, otherHouseholdHead, householdHeadEducationLevel, motherTongue, otherMotherTongue}};
 
         contactIncome.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
@@ -192,9 +184,6 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
         ethinicity.getSpinner().setOnItemSelectedListener(this);
         householdHead.getSpinner().setOnItemSelectedListener(this);
         motherTongue.getSpinner().setOnItemSelectedListener(this);
-        occupation.getSpinner().setOnItemSelectedListener(this);
-        contactEducationLevel.getSpinner().setOnItemSelectedListener(this);
-        householdHeadEducationLevel.getSpinner().setOnItemSelectedListener(this);
 
         resetViews();
 
@@ -229,16 +218,8 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
 
     @Override
     public void updateDisplay() {
-
-        if(refillFlag){
-            refillFlag = true;
-            return;
-        }
-
         if (snackbar != null)
             snackbar.dismiss();
-
-        formDate.getButton().setEnabled(true);
 
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
@@ -380,9 +361,6 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
                                                                                                         (App.get(contactEducationLevel).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSED"))))))))))));
         observations.add(new String[]{"HIGHEST EDUCATION LEVEL", contactEducationLevelString});
 
-        if (otherContactEducationLevel.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER EDUCATION LEVEL", App.get(otherContactEducationLevel)});
-
         final String maritalStatusString = App.get(maritalStatus).equals(getResources().getString(R.string.pet_single)) ? "SINGLE" :
                 (App.get(maritalStatus).equals(getResources().getString(R.string.pet_engaged)) ? "ENGAGED" :
                         (App.get(maritalStatus).equals(getResources().getString(R.string.pet_married)) ? "MARRIED" :
@@ -434,9 +412,6 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
                                                                                                                                                                                                                                                         (App.get(occupation).equals(getResources().getString(R.string.pet_waiter)) ? "WAITER" :
                                                                                                                                                                                                                                                                 (App.get(occupation).equals(getResources().getString(R.string.pet_other)) ? "OTHER" : "UNKNOWN"))))))))))))))))))))))))))))));
         observations.add(new String[]{"OCCUPATION", occupationString});
-        if (otherOccupation.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER OCCUPATION", App.get(otherOccupation)});
-
         observations.add(new String[]{"MONTHLY INCOME", App.get(contactIncome)});
 
         final String incomeClassString = App.get(contactIncomeGroup).equals(getResources().getString(R.string.pet_none)) ? "NONE" :
@@ -448,7 +423,6 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
         observations.add(new String[]{"INCOME CLASS", incomeClassString});
 
         final String householdHeadtring = App.get(householdHead).equals(getResources().getString(R.string.pet_mother)) ? "MOTHER" :
-                (App.get(householdHead).equals(getResources().getString(R.string.pet_self)) ? "SELF" :
                 (App.get(householdHead).equals(getResources().getString(R.string.pet_father)) ? "FATHER" :
                         (App.get(householdHead).equals(getResources().getString(R.string.pet_maternal_grandmother)) ? "MATERNAL GRANDMOTHER" :
                                 (App.get(householdHead).equals(getResources().getString(R.string.pet_maternal_grandfather)) ? "MATERNAL GRANDFATHER" :
@@ -459,7 +433,7 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
                                                                         (App.get(householdHead).equals(getResources().getString(R.string.pet_son)) ? "SON" :
                                                                                 (App.get(householdHead).equals(getResources().getString(R.string.pet_daughter)) ? "SPOUSE" :
                                                                                         (App.get(householdHead).equals(getResources().getString(R.string.pet_aunt)) ? "AUNT" :
-                                                                                                (App.get(householdHead).equals(getResources().getString(R.string.pet_uncle)) ? "UNCLE" : "OTHER FAMILY MEMBER"))))))))))));
+                                                                                                (App.get(householdHead).equals(getResources().getString(R.string.pet_uncle)) ? "UNCLE" : "OTHER FAMILY MEMBER")))))))))));
 
         observations.add(new String[]{"RELATIONSHIP TO HEAD OF HOUSEHOLD", householdHeadtring});
 
@@ -480,9 +454,6 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
                                                                                                 (App.get(householdHeadEducationLevel).equals(getResources().getString(R.string.pet_other)) ? "OTHER" :
                                                                                                         (App.get(householdHeadEducationLevel).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSED"))))))))))));
         observations.add(new String[]{"CURRENT EDUCATION LEVEL OF HEAD OF HOUSEHOLD", houseHoldEducationLevelString});
-
-        if (otherHouseholdHeadEducationLevel.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER HIGHEST EDUCATION LEVEL OF HEAD OF HOUSEHOLD", App.get(otherHouseholdHeadEducationLevel)});
 
         final String motherTongueString = App.get(motherTongue).equals(getResources().getString(R.string.pet_urdu)) ? "URDU LANGUAGE" :
                 (App.get(motherTongue).equals(getResources().getString(R.string.pet_punjabi)) ? "PUNJABI LANGUAGE" :
@@ -681,8 +652,6 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
-            formDate.getButton().setEnabled(false);
-            formDate.getButton().setEnabled(false);
         }
 
     }
@@ -710,21 +679,6 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
                 otherMotherTongue.setVisibility(View.VISIBLE);
             else
                 otherMotherTongue.setVisibility(View.GONE);
-        } else if (spinner == occupation.getSpinner()) {
-            if (App.get(occupation).equals(getResources().getString(R.string.pet_other)))
-                otherOccupation.setVisibility(View.VISIBLE);
-            else
-                otherOccupation.setVisibility(View.GONE);
-        } else if (spinner == contactEducationLevel.getSpinner()) {
-            if (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_other)))
-                otherContactEducationLevel.setVisibility(View.VISIBLE);
-            else
-                otherContactEducationLevel.setVisibility(View.GONE);
-        } else if (spinner == householdHeadEducationLevel.getSpinner()) {
-            if (App.get(householdHeadEducationLevel).equals(getResources().getString(R.string.pet_other)))
-                otherHouseholdHeadEducationLevel.setVisibility(View.VISIBLE);
-            else
-                otherHouseholdHeadEducationLevel.setVisibility(View.GONE);
         }
     }
 
@@ -735,8 +689,6 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
 
     @Override
     public void refill(int formId) {
-
-        Boolean refillFlag = false;
 
         OfflineForm fo = serverService.getOfflineFormById(formId);
         String date = fo.getFormDate();
@@ -788,10 +740,7 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
                                                                                                         (obs[0][1].equals("OTHER") ? getResources().getString(R.string.pet_other) :
                                                                                                                 (obs[0][1].equals("UNKNOWN") ? getResources().getString(R.string.unknown) : getResources().getString(R.string.refused)))))))))))));
                 contactEducationLevel.getSpinner().selectValue(value);
-            }else if (obs[0][0].equals("OTHER EDUCATION LEVEL")) {
-                otherContactEducationLevel.getEditText().setText(obs[0][1]);
-                otherContactEducationLevel.setVisibility(View.VISIBLE);
-            }  else if (obs[0][0].equals("MARITAL STATUS")) {
+            } else if (obs[0][0].equals("MARITAL STATUS")) {
                 String value = obs[0][1].equals("SINGLE") ? getResources().getString(R.string.pet_single) :
                         (obs[0][1].equals("ENGAGED") ? getResources().getString(R.string.pet_engaged) :
                                 (obs[0][1].equals("MARRIED") ? getResources().getString(R.string.pet_married) :
@@ -843,9 +792,6 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
                                                                                                                                                                                                                                                         (obs[0][1].equals("WAITER") ? getResources().getString(R.string.pet_waiter) :
                                                                                                                                                                                                                                                                 (obs[0][1].equals("OTHER") ? getResources().getString(R.string.pet_other) : getResources().getString(R.string.unknown)))))))))))))))))))))))))))))));
                 occupation.getSpinner().selectValue(value);
-            } else if (obs[0][0].equals("OTHER OCCUPATION")) {
-                otherOccupation.getEditText().setText(obs[0][1]);
-                otherOccupation.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("MONTHLY INCOME")) {
                 contactIncome.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("INCOME CLASS")) {
@@ -858,7 +804,6 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
                 contactIncomeGroup.getEditText().setText(value);
             } else if (obs[0][0].equals("RELATIONSHIP TO HEAD OF HOUSEHOLD")) {
                 String value = obs[0][1].equals("MOTHER") ? getResources().getString(R.string.pet_mother) :
-                        (obs[0][1].equals("SELF") ? getResources().getString(R.string.pet_self) :
                         (obs[0][1].equals("FATHER") ? getResources().getString(R.string.pet_father) :
                                 (obs[0][1].equals("MATERNAL GRANDMOTHER") ? getResources().getString(R.string.pet_maternal_grandmother) :
                                         (obs[0][1].equals("MATERNAL GRANDFATHER") ? getResources().getString(R.string.pet_maternal_grandfather) :
@@ -870,7 +815,7 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
                                                                                         obs[0][1].equals("DAUGHTER") ? getResources().getString(R.string.pet_daughter) :
                                                                                                 obs[0][1].equals("SPOUSE") ? getResources().getString(R.string.pet_spouse) :
                                                                                                         obs[0][1].equals("AUNT") ? getResources().getString(R.string.pet_aunt) :
-                                                                                                                obs[0][1].equals("UNCLE") ? getResources().getString(R.string.pet_uncle) : getResources().getString(R.string.pet_other))))))))));
+                                                                                                                obs[0][1].equals("UNCLE") ? getResources().getString(R.string.pet_uncle) : getResources().getString(R.string.pet_other)))))))));
                 householdHead.getSpinner().selectValue(value);
             } else if (obs[0][0].equals("OTHER FAMILY MEMBER")) {
                 otherHouseholdHead.getEditText().setText(obs[0][1]);
@@ -890,10 +835,7 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
                                                                                                         (obs[0][1].equals("OTHER") ? getResources().getString(R.string.pet_other) :
                                                                                                                 (obs[0][1].equals("UNKNOWN") ? getResources().getString(R.string.unknown) : getResources().getString(R.string.refused)))))))))))));
                 householdHeadEducationLevel.getSpinner().selectValue(value);
-            } else if (obs[0][0].equals("OTHER HIGHEST EDUCATION LEVEL OF HEAD OF HOUSEHOLD\n")) {
-                otherHouseholdHeadEducationLevel.getEditText().setText(obs[0][1]);
-                otherHouseholdHeadEducationLevel.setVisibility(View.VISIBLE);
-            }else if (obs[0][0].equals("MOTHER TONGUE")) {
+            } else if (obs[0][0].equals("MOTHER TONGUE")) {
                 String value = obs[0][1].equals("URDU LANGUAGE") ? getResources().getString(R.string.pet_urdu) :
                         (obs[0][1].equals("PUNJABI LANGUAGE") ? getResources().getString(R.string.pet_punjabi) :
                                 (obs[0][1].equals("SINDHI LANGUAGE") ? getResources().getString(R.string.pet_sindhi) :

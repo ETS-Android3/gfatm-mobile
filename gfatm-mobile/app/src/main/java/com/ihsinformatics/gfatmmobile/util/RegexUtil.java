@@ -44,8 +44,6 @@ public class RegexUtil {
     public static final String addressPattern ="^[-A-Za-z0-9.#&():;,'\" \\/]+";
     public static final String otherPattern ="^[-A-Za-z0-9.#&():;,'\"+%*=!| \\/]+";
     public static final String cartridgeIdPattern = "^[-A-Za-z0-9]+";
-    public static final String treatmentSupporterIdPattern = "^[0-9]{7,7}";
-    public static final String otherPatternWithNewline = "^[-A-Za-z0-9.#&():;,'\"+%*=!| \r\n\\/]+";
 
     public static final int idLength = 7;
     public static final int mobileNumberLength = 11;
@@ -66,23 +64,6 @@ public class RegexUtil {
 
         }
     };
-
-    public static final InputFilter TREATMENT_SUPPORTER_ID_FILTER = new InputFilter() {
-
-        @Override
-        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-
-            if (source.equals("")) { // for backspace
-                return source;
-            }
-            if (source.toString().matches(treatmentSupporterIdPattern)) {
-                return source;
-            }
-            return "";
-
-        }
-    };
-
 
     public static final InputFilter CARTRIDGE_ID_FILTER = new InputFilter() {
 
@@ -416,12 +397,12 @@ public class RegexUtil {
             char idCheckdigit = id.charAt(id.length() - 1);
             Boolean isDigit = (idCheckdigit >= '0' && idCheckdigit <= '9');
             if (!isDigit) return false;
-            String validChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVYWXZ_";
+            String validChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVYWXZabcdefghijklmnopqrstuvwxyz_";
             idWithoutCheckdigit = idWithoutCheckdigit.trim();
-            idWithoutCheckdigit = idWithoutCheckdigit.toUpperCase();
             int sum = 0;
             for (int i = 0; i < idWithoutCheckdigit.length(); i++) {
-                char ch = idWithoutCheckdigit.charAt(idWithoutCheckdigit.length() - i - 1);
+                char ch = idWithoutCheckdigit.charAt(idWithoutCheckdigit
+                        .length() - i - 1);
                 if (validChars.indexOf(ch) == -1)
                     isValid = false;
                 int digit = (int) ch - 48;
@@ -548,20 +529,4 @@ public class RegexUtil {
             return false;
         }
     }
-
-    public static final InputFilter OTHER_WITH_NEWLINE_FILTER = new InputFilter() {
-
-        @Override
-        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-
-            if (source.equals("")) { // for backspace
-                return source;
-            }
-            if (source.toString().matches(otherPatternWithNewline)) {
-                return source;
-            }
-            return "";
-
-        }
-    };
 }

@@ -2,7 +2,6 @@ package com.ihsinformatics.gfatmmobile.pet;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -33,9 +32,7 @@ import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
-import com.ihsinformatics.gfatmmobile.custom.MyEditText;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
-import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
@@ -80,17 +77,11 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
     TitledEditText nameTreatmentSupporter;
     LinearLayout contactNumberTreatmentSupporter;
-    MyEditText phone1a;
-    MyEditText phone1b;
+    TitledEditText phone1a;
+    TitledEditText phone1b;
     TitledRadioGroup typeTreatmentSupporter;
     TitledSpinner relationshipTreatmentSuppoter;
     TitledEditText other;
-
-    TitledEditText clincianNote;
-
-    Boolean refillFlag = false;
-
-    ScrollView scrollView;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -129,7 +120,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                     View v = viewGroups[i][j];
                     layout.addView(v);
                 }
-                scrollView = new ScrollView(mainContent.getContext());
+                ScrollView scrollView = new ScrollView(mainContent.getContext());
                 scrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
                 scrollView.addView(layout);
                 groups.add(scrollView);
@@ -143,7 +134,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                     View v = viewGroups[i][j];
                     layout.addView(v);
                 }
-                scrollView = new ScrollView(mainContent.getContext());
+                ScrollView scrollView = new ScrollView(mainContent.getContext());
                 scrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
                 scrollView.addView(layout);
                 groups.add(scrollView);
@@ -162,8 +153,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        weight = new TitledEditText(context, null, getResources().getString(R.string.pet_weight), "", "", 5, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        indexPatientId = new TitledEditText(context, null, getResources().getString(R.string.pet_index_patient_id), "", "", RegexUtil.idLength, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        weight = new TitledEditText(context, null, getResources().getString(R.string.pet_weight), "", "", 5, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        indexPatientId = new TitledEditText(context, null, getResources().getString(R.string.pet_index_patient_id), "", "", RegexUtil.idLength, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         indexPatientId.getEditText().setKeyListener(null);
         tbType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_tb_type), getResources().getStringArray(R.array.pet_tb_types), "", App.HORIZONTAL, App.VERTICAL);
         tbType.setRadioGroupEnabled(false);
@@ -189,43 +180,27 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         ancillaryDrugDuration = new TitledEditText(context, null, getResources().getString(R.string.pet_ancillary_drug_duration_days), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
 
         // fourth page view
-        nameTreatmentSupporter = new TitledEditText(context, null, getResources().getString(R.string.pet_treatment_supporter_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        nameTreatmentSupporter = new TitledEditText(context, null, getResources().getString(R.string.pet_treatment_supporter_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         contactNumberTreatmentSupporter = new LinearLayout(context);
-        contactNumberTreatmentSupporter.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout phone1QuestionLayout = new LinearLayout(context);
-        phone1QuestionLayout.setOrientation(LinearLayout.HORIZONTAL);
-        MyTextView phone1Text = new MyTextView(context, getResources().getString(R.string.pet_treatment_supporter_contact_number));
-        phone1QuestionLayout.addView(phone1Text);
-        contactNumberTreatmentSupporter.addView(phone1QuestionLayout);
-        LinearLayout phone1PartLayout = new LinearLayout(context);
-        phone1PartLayout.setOrientation(LinearLayout.HORIZONTAL);
-        phone1a = new MyEditText(context,"", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
-        phone1a.setHint("0XXX");
-        phone1PartLayout.addView(phone1a);
-        MyTextView phone1Dash = new MyTextView(context, " - ");
-        phone1PartLayout.addView(phone1Dash);
-        phone1b = new MyEditText(context,"",  7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
-        phone1b.setHint("XXXXXXX");
-        phone1PartLayout.addView(phone1b);
-        contactNumberTreatmentSupporter.addView(phone1PartLayout);
-        typeTreatmentSupporter = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_treatment_supporter_type), getResources().getStringArray(R.array.pet_treatment_supporter_type), "", App.VERTICAL, App.VERTICAL);
+        contactNumberTreatmentSupporter.setOrientation(LinearLayout.HORIZONTAL);
+        phone1a = new TitledEditText(context, null, getResources().getString(R.string.pet_treatment_supporter_contact_number), "", "XXXX", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        contactNumberTreatmentSupporter.addView(phone1a);
+        phone1b = new TitledEditText(context, null, "-", "", "XXXXXXX", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        contactNumberTreatmentSupporter.addView(phone1b);
+        typeTreatmentSupporter = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_treatment_supporter_type), getResources().getStringArray(R.array.pet_treatment_supporter_type), getResources().getString(R.string.pet_family_treatment_supporter), App.VERTICAL, App.VERTICAL);
         relationshipTreatmentSuppoter = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_treatment_supporter_relationship), getResources().getStringArray(R.array.pet_household_heads), "", App.VERTICAL);
         other = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-
-        clincianNote = new TitledEditText(context, null, getResources().getString(R.string.pet_doctor_notes), "", "", 250, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        clincianNote.getEditText().setSingleLine(false);
-        clincianNote.getEditText().setMinimumHeight(150);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), weight.getEditText(), indexPatientId.getEditText(), tbType.getRadioGroup(), infectionType.getRadioGroup(), dstPattern, resistanceType.getRadioGroup(),
                 treatmentInitiationDate.getButton(), petRegimen.getRadioGroup(), isoniazidDose.getEditText(), rifapentineDose.getEditText(), levofloxacinDose.getEditText(), ethionamideDose.getEditText(),
-                ancillaryNeed.getRadioGroup(), ancillaryDrugs, ancillaryDrugDuration.getEditText(), ancillaryDrugDuration.getEditText(), clincianNote.getEditText(),
-                nameTreatmentSupporter.getEditText(), phone1a, phone1b, typeTreatmentSupporter.getRadioGroup(), relationshipTreatmentSuppoter.getSpinner(), other.getEditText(), rifapentineAvailable.getRadioGroup()};
+                ancillaryNeed.getRadioGroup(), ancillaryDrugs, ancillaryDrugDuration.getEditText(), ancillaryDrugDuration.getEditText(),
+                nameTreatmentSupporter.getEditText(), phone1a.getEditText(), phone1b.getEditText(), typeTreatmentSupporter.getRadioGroup(), relationshipTreatmentSuppoter.getSpinner(), other.getEditText(), rifapentineAvailable.getRadioGroup()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formDate, weight, indexPatientId, tbType, infectionType, resistanceType, dstPattern},
-                        {treatmentInitiationDate, petRegimen, rifapentineAvailable, isoniazidDose, rifapentineDose, levofloxacinDose, ethionamideDose, ancillaryNeed, ancillaryDrugs, ancillaryDrugDuration, nameTreatmentSupporter, contactNumberTreatmentSupporter, typeTreatmentSupporter, relationshipTreatmentSuppoter, other, clincianNote},
+                        {treatmentInitiationDate, petRegimen, rifapentineAvailable, isoniazidDose, rifapentineDose, levofloxacinDose, ethionamideDose, ancillaryNeed, ancillaryDrugs, ancillaryDrugDuration, nameTreatmentSupporter, contactNumberTreatmentSupporter, typeTreatmentSupporter, relationshipTreatmentSuppoter, other},
                 };
 
         formDate.getButton().setOnClickListener(this);
@@ -394,67 +369,11 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
             public void afterTextChanged(Editable s) {
                 if (!App.get(isoniazidDose).equals("")) {
                     int dose = Integer.parseInt(App.get(isoniazidDose));
-
-                    if(App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy))){
-                        if (dose > 300) {
-                            isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded_300));
-                            isoniazidDose.getEditText().requestFocus();
-                        }
-                        else
-                            isoniazidDose.getEditText().setError(null);
-                    }
-                    else{
-
-                        if (dose > 2000) {
-                            isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded_2000));
-                            isoniazidDose.getEditText().requestFocus();
-                        }
-                        else
-                            isoniazidDose.getEditText().setError(null);
-
-                    }
-
+                    if (dose > 300)
+                        isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded));
+                    else
+                        isoniazidDose.getEditText().setError(null);
                 }
-            }
-        });
-
-        phone1a.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()==4){
-                    phone1b.requestFocus();
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        phone1b.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                if(s.length()==0){
-                    phone1a.requestFocus();
-                    phone1a.setSelection(phone1a.getText().length());
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
             }
         });
 
@@ -478,12 +397,6 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         rifapentineAvailable.setVisibility(View.GONE);
         other.setVisibility(View.GONE);
         relationshipTreatmentSuppoter.setVisibility(View.VISIBLE);
-
-        indexPatientId.setEnabled(false);
-        tbType.setEnabled(false);
-        infectionType.setEnabled(false);
-        resistanceType.setEnabled(false);
-        dstPattern.setEnabled(false);
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -518,8 +431,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                     });
 
                     HashMap<String, String> result = new HashMap<String, String>();
-                    String weight = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_CONTACT_SCREENING, "WEIGHT (KG)");
-                    String indexId = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "PATIENT ID OF INDEX CASE");
+                    String weight = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_CONTACT_SCREENING, "WEIGHT (KG)");
+                    String indexId = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "PATIENT ID OF INDEX CASE");
 
                     String tbType = "";
                     String infectionType = "";
@@ -530,10 +443,10 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
                     if (!(indexId == null || indexId.equals(""))) {
                         String id = serverService.getPatientSystemIdByIdentifierLocalDB(indexId);
-                        tbType = serverService.getLatestObsValue(id, App.getProgram() + "-" + Forms.PET_INDEX_PATIENT_REGISTRATION, "SITE OF TUBERCULOSIS DISEASE");
-                        infectionType = serverService.getLatestObsValue(id, App.getProgram() + "-" + Forms.PET_INDEX_PATIENT_REGISTRATION, "TUBERCULOSIS INFECTION TYPE");
-                        resistanceType = serverService.getLatestObsValue(id, App.getProgram() + "-" + Forms.PET_INDEX_PATIENT_REGISTRATION, "TUBERCULOSIS DRUG RESISTANCE TYPE");
-                        dstbType = serverService.getLatestObsValue(id, App.getProgram() + "-" + Forms.PET_INDEX_PATIENT_REGISTRATION, "RESISTANT TO ANTI-TUBERCULOSIS DRUGS");
+                        tbType = serverService.getObsValue(id, App.getProgram() + "-" + Forms.PET_INDEX_PATIENT_REGISTRATION, "SITE OF TUBERCULOSIS DISEASE");
+                        infectionType = serverService.getObsValue(id, App.getProgram() + "-" + Forms.PET_INDEX_PATIENT_REGISTRATION, "TUBERCULOSIS INFECTION TYPE");
+                        resistanceType = serverService.getObsValue(id, App.getProgram() + "-" + Forms.PET_INDEX_PATIENT_REGISTRATION, "TUBERCULOSIS DRUG RESISTANCE TYPE");
+                        dstbType = serverService.getObsValue(id, App.getProgram() + "-" + Forms.PET_INDEX_PATIENT_REGISTRATION, "RESISTANT TO ANTI-TUBERCULOSIS DRUGS");
                     }
 
                     if (weight != null)
@@ -578,7 +491,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
                     if (result.get("PATIENT ID OF INDEX CASE") == null || result.get("PATIENT ID OF INDEX CASE").equals("")) {
 
-                        /*final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                        final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                         alertDialog.setMessage(getResources().getString(R.string.baseline_screening_missing));
                         Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                         alertDialog.setIcon(clearIcon);
@@ -595,12 +508,12 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                                         dialog.dismiss();
                                     }
                                 });
-                        alertDialog.show();*/
+                        alertDialog.show();
 
                         return;
                     } else if (result.get("TUBERCULOSIS INFECTION TYPE") == null || result.get("TUBERCULOSIS INFECTION TYPE").equals("")) {
 
-                        /*final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                        final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                         String indexPatientMissing = getResources().getString(R.string.index_patient_info_missing).replace("()", "(" + result.get("PATIENT ID OF INDEX CASE") + ")");
                         alertDialog.setMessage(indexPatientMissing);
                         Drawable clearIcon = getResources().getDrawable(R.drawable.error);
@@ -618,7 +531,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                                         dialog.dismiss();
                                     }
                                 });
-                        alertDialog.show();*/
+                        alertDialog.show();
                         return;
                     }
 
@@ -749,9 +662,6 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         if (snackbar != null)
             snackbar.dismiss();
 
-        treatmentInitiationDate.getButton().setEnabled(true);
-        formDate.getButton().setEnabled(true);
-
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
@@ -786,7 +696,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
     @Override
     public boolean validate() {
 
-        /*if (App.get(indexPatientId).equals("")) {
+        if (App.get(indexPatientId).equals("")) {
 
             final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
             alertDialog.setMessage(getResources().getString(R.string.baseline_screening_missing));
@@ -831,7 +741,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
             alertDialog.show();
             gotoFirstPage();
             return false;
-        }*/
+        }
 
         Boolean error = false;
         View view = null;
@@ -845,31 +755,29 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 gotoLastPage();
             }
         }
-        /*if (App.get(phone1a).isEmpty()) {
-            phone1a.setError(getResources().getString(R.string.mandatory_field));
-            phone1a.requestFocus();
+        if (App.get(phone1a).isEmpty()) {
+            phone1a.getEditText().setError(getResources().getString(R.string.mandatory_field));
+            phone1a.getEditText().requestFocus();
             error = true;
             gotoLastPage();
         } else if (App.get(phone1b).isEmpty()) {
-            phone1b.setError(getResources().getString(R.string.mandatory_field));
-            phone1b.requestFocus();
+            phone1b.getEditText().setError(getResources().getString(R.string.mandatory_field));
+            phone1b.getEditText().requestFocus();
             error = true;
             gotoLastPage();
-        } else */
-        if(!App.get(phone1a).equals("") || !App.get(phone1b).equals(""))
-        if (!RegexUtil.isContactNumber(App.get(phone1a) + App.get(phone1b))) {
-            phone1b.setError(getResources().getString(R.string.invalid_value));
-            phone1b.requestFocus();
+        } else if (!RegexUtil.isContactNumber(App.get(phone1a) + App.get(phone1b))) {
+            phone1b.getEditText().setError(getResources().getString(R.string.invalid_value));
+            phone1b.getEditText().requestFocus();
             error = true;
             gotoLastPage();
         }
-       /* if (App.get(nameTreatmentSupporter).isEmpty()) {
+        if (App.get(nameTreatmentSupporter).isEmpty()) {
             nameTreatmentSupporter.getQuestionView().setError(getString(R.string.empty_field));
             nameTreatmentSupporter.getQuestionView().requestFocus();
             view = null;
             error = true;
             gotoLastPage();
-        }*/
+        }
         if (ancillaryDrugDuration.getVisibility() == View.VISIBLE) {
             if (App.get(ancillaryDrugDuration).isEmpty()) {
                 ancillaryDrugDuration.getQuestionView().setError(getString(R.string.empty_field));
@@ -897,8 +805,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         }
         if (ethionamideDose.getVisibility() == View.VISIBLE) {
             if (App.get(ethionamideDose).isEmpty()) {
-                ethionamideDose.getEditText().setError(getString(R.string.empty_field));
-                ethionamideDose.getEditText().requestFocus();
+                ethionamideDose.getQuestionView().setError(getString(R.string.empty_field));
+                ethionamideDose.getQuestionView().requestFocus();
                 view = null;
                 error = true;
                 gotoLastPage();
@@ -906,8 +814,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         }
         if (levofloxacinDose.getVisibility() == View.VISIBLE) {
             if (App.get(levofloxacinDose).isEmpty()) {
-                levofloxacinDose.getEditText().setError(getString(R.string.empty_field));
-                levofloxacinDose.getEditText().requestFocus();
+                levofloxacinDose.getQuestionView().setError(getString(R.string.empty_field));
+                levofloxacinDose.getQuestionView().requestFocus();
                 view = null;
                 error = true;
                 gotoLastPage();
@@ -915,8 +823,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         }
         if (rifapentineDose.getVisibility() == View.VISIBLE) {
             if (App.get(rifapentineDose).isEmpty()) {
-                rifapentineDose.getEditText().setError(getString(R.string.empty_field));
-                rifapentineDose.getEditText().requestFocus();
+                rifapentineDose.getQuestionView().setError(getString(R.string.empty_field));
+                rifapentineDose.getQuestionView().requestFocus();
                 view = null;
                 error = true;
                 gotoLastPage();
@@ -927,7 +835,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 if (hint.equals("300 - 450 mg")) {
                     if (dose < 300 || dose > 450) {
                         rifapentineDose.getEditText().setError(getResources().getString(R.string.pet_rifapentine_out_of_range_1));
-                        rifapentineDose.getEditText().requestFocus();
+                        rifapentineDose.getQuestionView().requestFocus();
                         view = null;
                         error = true;
                         gotoLastPage();
@@ -935,7 +843,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 } else if (hint.equals("450 - 900 mg")) {
                     if (dose < 450 || dose > 900) {
                         rifapentineDose.getEditText().setError(getResources().getString(R.string.pet_rifapentine_out_of_range_2));
-                        rifapentineDose.getEditText().requestFocus();
+                        rifapentineDose.getQuestionView().requestFocus();
                         view = null;
                         error = true;
                         gotoLastPage();
@@ -945,28 +853,19 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         }
         if (isoniazidDose.getVisibility() == View.VISIBLE) {
             if (App.get(isoniazidDose).isEmpty()) {
-                isoniazidDose.getEditText().setError(getString(R.string.empty_field));
-                isoniazidDose.getEditText().requestFocus();
+                isoniazidDose.getQuestionView().setError(getString(R.string.empty_field));
+                isoniazidDose.getQuestionView().requestFocus();
                 view = null;
                 error = true;
                 gotoLastPage();
             } else {
                 int dose = Integer.parseInt(App.get(isoniazidDose));
-                if(App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy))) {
-                    if (dose > 300) {
-                        isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded_300));
-                        isoniazidDose.getEditText().requestFocus();
-                        view = null;
-                        error = true;
-                    }
-                }
-                else{
-                    if (dose > 2000) {
-                        isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded_2000));
-                        isoniazidDose.getEditText().requestFocus();
-                        view = null;
-                        error = true;
-                    }
+                if (dose > 300) {
+                    isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded));
+                    isoniazidDose.getQuestionView().requestFocus();
+                    view = null;
+                    error = true;
+                    gotoLastPage();
                 }
             }
         }
@@ -981,17 +880,9 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
             // DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_error));
-            final View finalView = view;
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            scrollView.post(new Runnable() {
-                                public void run() {
-                                    if (finalView != null) {
-                                        scrollView.scrollTo(0, finalView.getTop());
-                                    }
-                                }
-                            });
                             try {
                                 InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
@@ -1113,7 +1004,6 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                                                                                                     (App.get(relationshipTreatmentSuppoter).equals(getResources().getString(R.string.pet_uncle)) ? "UNCLE" : "OTHER FAMILY MEMBER"))))))))))))});
         if (other.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER FAMILY MEMBER", App.get(other)});
-        observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(clincianNote)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -1248,7 +1138,6 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
-            formDate.getButton().setEnabled(false);
         } else if (view == treatmentInitiationDate.getButton()) {
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
@@ -1256,7 +1145,6 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
             args.putBoolean("allowFutureDate", false);
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
-            treatmentInitiationDate.getButton().setEnabled(false);
         }
 
     }
@@ -1460,13 +1348,6 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
     @Override
     public void refill(int encounterId) {
 
-        if(refillFlag){
-            refillFlag = true;
-            return;
-        }
-
-        Boolean refillFlag = false;
-
         OfflineForm fo = serverService.getOfflineFormById(encounterId);
         String date = fo.getFormDate();
         ArrayList<String[][]> obsValue = fo.getObsValue();
@@ -1629,8 +1510,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 nameTreatmentSupporter.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("TREATMENT SUPPORTER CONTACT NUMBER")) {
                 String[] phoneArray = obs[0][1].split("-");
-                phone1a.setText(phoneArray[0]);
-                phone1b.setText(phoneArray[1]);
+                phone1a.getEditText().setText(phoneArray[0]);
+                phone1b.getEditText().setText(phoneArray[1]);
             } else if (obs[0][0].equals("TREATMENT SUPPORTER TYPE")) {
                 for (RadioButton rb : typeTreatmentSupporter.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.pet_family_treatment_supporter)) && obs[0][1].equals("FAMILY MEMBER")) {
@@ -1660,8 +1541,6 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
             } else if (obs[0][0].equals("OTHER FAMILY MEMBER")) {
                 other.getEditText().setText(obs[0][1]);
                 other.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("CLINICIAN NOTES (TEXT)")) {
-                clincianNote.getEditText().setText(obs[0][1]);
             }
         }
     }

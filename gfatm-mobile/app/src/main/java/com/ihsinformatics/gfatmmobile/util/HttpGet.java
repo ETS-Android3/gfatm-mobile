@@ -395,10 +395,6 @@ public class HttpGet {
         return getJsonObjectByName(USER_RESOURCE, content);
     }
 
-    public JSONObject getEncountersByPatientId(String content) {
-        return getJsonObjectByName(ENCOUNTER_RESOURCE, content);
-    }
-
     public JSONObject getPatientByName(String content) {
         return getJsonObjectByName(PATIENT_RESOURCE, content);
     }
@@ -593,47 +589,6 @@ public class HttpGet {
 
     public JSONObject getAllPersonAttributesByPersonUuid(String personUuid) {
         return getJsonObject(PERSON_RESOURCE, personUuid, ATTRIBUTE);
-    }
-
-    public JSONObject getSystemSetting(String setting){
-
-        JSONObject json = null;
-
-        String http = "";
-        if (App.getSsl().equalsIgnoreCase("Enabled"))
-            http = "https://";
-        else
-            http = "http://";
-
-        try {
-            JSONObject jsonObject = getJsonObjectByName("systemsetting",setting);
-            JSONArray jsonArray = jsonObject.getJSONArray("results");
-            json = jsonArray.getJSONObject(0);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return json;
-
-    }
-
-    public JSONArray getPatientsEncounters(String patientId){
-
-        JSONArray array = null;
-
-        String http = "";
-        if (App.getSsl().equalsIgnoreCase("Enabled"))
-            http = "https://";
-        else
-            http = "http://";
-
-        try {
-            JSONObject jsonObject = getJsonObjectByName(ENCOUNTER_RESOURCE,patientId);
-            array = jsonObject.getJSONArray("results");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return array;
-
     }
 
     public JSONObject getPersonAddressByPersonUuid(String personUuid) {

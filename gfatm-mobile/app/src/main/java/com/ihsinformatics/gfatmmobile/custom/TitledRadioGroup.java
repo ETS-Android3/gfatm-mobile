@@ -1,7 +1,6 @@
 package com.ihsinformatics.gfatmmobile.custom;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -22,10 +21,7 @@ public class TitledRadioGroup extends LinearLayout {
 
     public TitledRadioGroup(Context context, String title, String ques, String[] options, String defaultValue, int radioButtonsLayout, int layoutOrientation) {
         super(context);
-        if(!App.isTabletDevice(context)){
-            layoutOrientation = App.VERTICAL;
-            radioButtonsLayout = App.VERTICAL;
-        }
+
         MyLinearLayout linearLayout = new MyLinearLayout(context, title, layoutOrientation);
 
         questionView = new MyTextView(context, ques);
@@ -46,10 +42,7 @@ public class TitledRadioGroup extends LinearLayout {
 
     public TitledRadioGroup(Context context, String title, String ques, String[] options, String defaultValue, int radioButtonsLayout, int layoutOrientation, boolean mandatory) {
         super(context);
-        if(!App.isTabletDevice(context)){
-            layoutOrientation = App.VERTICAL;
-            radioButtonsLayout = App.VERTICAL;
-        }
+
         MyLinearLayout linearLayout = new MyLinearLayout(context, title, layoutOrientation);
         this.mandatory = mandatory;
 
@@ -57,15 +50,15 @@ public class TitledRadioGroup extends LinearLayout {
         hLayout.setOrientation(HORIZONTAL);
 
         if (mandatory) {
+            int color = App.getColor(context, R.attr.colorAccent);
             TextView mandatorySign = new TextView(context);
-            mandatorySign.setText(" *");
-            mandatorySign.setTextColor(Color.parseColor("#ff0000"));
+            mandatorySign.setText("*");
+            mandatorySign.setTextColor(color);
             hLayout.addView(mandatorySign);
         }
 
         questionView = new MyTextView(context, ques);
         hLayout.addView(questionView);
-
         linearLayout.addView(hLayout);
 
         radioGroup = new MyRadioGroup(context, options, defaultValue, radioButtonsLayout);

@@ -42,7 +42,6 @@ import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -85,11 +84,7 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
     TitledEditText newInstruction;
     TitledButton returnVisitDate;
 
-    TitledEditText clincianNote;
-
     ScrollView scrollView;
-
-    Boolean refillFlag = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -151,7 +146,7 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
     public void initViews() {
 
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        weight = new TitledEditText(context, null, getResources().getString(R.string.pet_weight), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_NUMBER_FLAG_DECIMAL, App.HORIZONTAL, false);
+        weight = new TitledEditText(context, null, getResources().getString(R.string.pet_weight), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_NUMBER_FLAG_DECIMAL, App.HORIZONTAL, true);
 
 
         MyLinearLayout linearLayout1 = new MyLinearLayout(context, getResources().getString(R.string.pet_adverse_events_followup_details), App.VERTICAL);
@@ -163,7 +158,7 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
         rash = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_rash), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         tendonPain = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_tendon_pain), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         eyeProblem = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_eye_problems), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
-        otherSideEffects = new TitledEditText(context, null, getResources().getString(R.string.pet_other_side_effects), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        otherSideEffects = new TitledEditText(context, null, getResources().getString(R.string.pet_other_side_effects), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         otherSideEffects.getEditText().setSingleLine(false);
         otherSideEffects.getEditText().setMinimumHeight(150);
         sideeffectsConsistent = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_side_effect_consistent), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
@@ -185,7 +180,7 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
         medicationDiscontinueReason.getEditText().setSingleLine(false);
         medicationDiscontinueReason.getEditText().setMinimumHeight(150);
         medicationDiscontinueDuration = new TitledEditText(context, null, getResources().getString(R.string.pet_discontinue_medication_duration), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        newMedication = new TitledEditText(context, null, getResources().getString(R.string.pet_new_medication_reason), "", "", 250, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        newMedication = new TitledEditText(context, null, getResources().getString(R.string.pet_new_medication_reason), "", "", 250, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         newMedication.getEditText().setSingleLine(false);
         newMedication.getEditText().setMinimumHeight(150);
         newMedicationDuration = new TitledEditText(context, null, getResources().getString(R.string.pet_new_medication_duration), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
@@ -197,13 +192,10 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
         ethionamideDose = new TitledEditText(context, null, getResources().getString(R.string.pet_ethionamide_dose), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
         ancillaryDrugs = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_ancillary_drugs), getResources().getStringArray(R.array.pet_ancillary_drugs), null, App.VERTICAL, App.VERTICAL, true);
         ancillaryDrugDuration = new TitledEditText(context, null, getResources().getString(R.string.pet_ancillary_drug_duration_days), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        newInstruction = new TitledEditText(context, null, getResources().getString(R.string.pet_new_instructions), "", "", 250, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        newInstruction = new TitledEditText(context, null, getResources().getString(R.string.pet_new_instructions), "", "", 250, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         newInstruction.getEditText().setSingleLine(false);
         newInstruction.getEditText().setMinimumHeight(150);
         returnVisitDate = new TitledButton(context, null, getResources().getString(R.string.pet_return_visit_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.VERTICAL);
-        clincianNote = new TitledEditText(context, null, getResources().getString(R.string.pet_doctor_notes), "", "", 250, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        clincianNote.getEditText().setSingleLine(false);
-        clincianNote.getEditText().setMinimumHeight(150);
 
         linearLayout2.addView(actionPlan);
         linearLayout2.addView(medicationDiscontinueReason);
@@ -220,13 +212,12 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
         linearLayout2.addView(ancillaryDrugDuration);
         linearLayout2.addView(newInstruction);
         linearLayout2.addView(returnVisitDate);
-        linearLayout2.addView(clincianNote);
 
         views = new View[]{formDate.getButton(), weight.getEditText(), dizziness.getRadioGroup(), nausea.getRadioGroup(), abdominalPain.getRadioGroup(), lossOfAppetite.getRadioGroup(), jaundice.getRadioGroup(), jaundice.getRadioGroup(), rash.getRadioGroup(),
                 tendonPain.getRadioGroup(), eyeProblem.getRadioGroup(), otherSideEffects.getEditText(), sideeffectsConsistent.getRadioGroup(),
                 actionPlan, medicationDiscontinueReason.getEditText(), medicationDiscontinueDuration.getEditText(), newMedication.getEditText(), newMedicationDuration.getEditText(),
                 petRegimen.getRadioGroup(), isoniazidDose.getEditText(), rifapentineDose.getEditText(), levofloxacinDose.getEditText(), ethionamideDose.getEditText(), ancillaryDrugs, ancillaryDrugDuration,
-                newInstruction.getEditText(), returnVisitDate.getButton(), rifapentineAvailable.getRadioGroup(), clincianNote.getEditText()
+                newInstruction.getEditText(), returnVisitDate.getButton(), rifapentineAvailable.getRadioGroup()
         };
 
         viewGroups = new View[][]{{formDate, weight, linearLayout1},
@@ -399,7 +390,7 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
                 if (!App.get(isoniazidDose).equals("")) {
                     int dose = Integer.parseInt(App.get(isoniazidDose));
                     if (dose > 300)
-                        isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded_300));
+                        isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded));
                     else
                         isoniazidDose.getEditText().setError(null);
                 }
@@ -412,17 +403,8 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
 
     @Override
     public void updateDisplay() {
-
-        if(refillFlag){
-            refillFlag = true;
-            return;
-        }
-
         if (snackbar != null)
             snackbar.dismiss();
-
-        returnVisitDate.getButton().setEnabled(true);
-        formDate.getButton().setEnabled(true);
 
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
@@ -450,31 +432,6 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
             } else
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
-            if(formDateCalendar.after(secondDateCalendar)){
-
-                secondDateCalendar.set(formDateCalendar.get(Calendar.YEAR), formDateCalendar.get(Calendar.MONTH), formDateCalendar.get(Calendar.DAY_OF_MONTH));
-                secondDateCalendar.add(Calendar.DAY_OF_MONTH, 1);
-                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-            }
-
-        }
-
-        if (!(returnVisitDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
-
-            String formDa = returnVisitDate.getButton().getText().toString();
-            String personDOB = App.getPatient().getPerson().getBirthdate();
-
-            if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
-                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-                tv.setMaxLines(2);
-                snackbar.show();
-                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-            }
-
-            else
-                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         }
 
     }
@@ -483,10 +440,6 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
     @Override
     public void resetViews() {
         super.resetViews();
-
-        if(App.getLocation().equals("IBEX-KHI")){
-            weight.setVisibility(View.GONE);
-        }
 
         if (snackbar != null)
             snackbar.dismiss();
@@ -539,19 +492,19 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
                     });
 
                     HashMap<String, String> result = new HashMap<String, String>();
-                    String weight = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "WEIGHT (KG)");
+                    String weight = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "WEIGHT (KG)");
                     String date1 = "";
                     String date2 = "";
                     String date3 = "";
-                    String petRegimen1 = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_ADVERSE_EVENTS, "POST-EXPOSURE TREATMENT REGIMEN");
+                    String petRegimen1 = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_ADVERSE_EVENTS, "POST-EXPOSURE TREATMENT REGIMEN");
                     if (!(petRegimen1 == null || petRegimen1.equals("")))
-                        date1 = serverService.getLatestEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + Forms.PET_ADVERSE_EVENTS);
-                    String petRegimen2 = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "POST-EXPOSURE TREATMENT REGIMEN");
+                        date1 = serverService.getEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + Forms.PET_ADVERSE_EVENTS);
+                    String petRegimen2 = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "POST-EXPOSURE TREATMENT REGIMEN");
                     if (!(petRegimen2 == null || petRegimen2.equals("")))
-                        date2 = serverService.getLatestEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP);
-                    String petRegimen3 = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "POST-EXPOSURE TREATMENT REGIMEN");
+                        date2 = serverService.getEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP);
+                    String petRegimen3 = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "POST-EXPOSURE TREATMENT REGIMEN");
                     if (!(petRegimen3 == null || petRegimen3.equals("")))
-                        date3 = serverService.getLatestEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION);
+                        date3 = serverService.getEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION);
 
 
                     String isonoazidDose = "";
@@ -563,27 +516,27 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
                         if (petRegimen1 == null)
                             petRegimen1 = "";
                         result.put("POST-EXPOSURE TREATMENT REGIMEN", petRegimen1);
-                        isonoazidDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_ADVERSE_EVENTS, "ISONIAZID DOSE");
-                        rifapentineDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_ADVERSE_EVENTS, "RIFAPENTINE DOSE");
-                        levofloxacinDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_ADVERSE_EVENTS, "LEVOFLOXACIN DOSE");
-                        ethionamideDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_ADVERSE_EVENTS, "ETHIONAMIDE DOSE");
+                        isonoazidDose = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_ADVERSE_EVENTS, "ISONIAZID DOSE");
+                        rifapentineDose = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_ADVERSE_EVENTS, "RIFAPENTINE DOSE");
+                        levofloxacinDose = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_ADVERSE_EVENTS, "LEVOFLOXACIN DOSE");
+                        ethionamideDose = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_ADVERSE_EVENTS, "ETHIONAMIDE DOSE");
                     } else {
                         if (date2 == null || date2.equals("")) {
                             if (petRegimen3 == null)
                                 petRegimen3 = "";
                             result.put("POST-EXPOSURE TREATMENT REGIMEN", petRegimen3);
-                            isonoazidDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "ISONIAZID DOSE");
-                            rifapentineDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "RIFAPENTINE DOSE");
-                            levofloxacinDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "LEVOFLOXACIN DOSE");
-                            ethionamideDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "ETHIONAMIDE DOSE");
+                            isonoazidDose = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "ISONIAZID DOSE");
+                            rifapentineDose = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "RIFAPENTINE DOSE");
+                            levofloxacinDose = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "LEVOFLOXACIN DOSE");
+                            ethionamideDose = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "ETHIONAMIDE DOSE");
                         } else if (date3 == null || date3.equals("")) {
                             if (petRegimen2 == null)
                                 petRegimen2 = "";
                             result.put("POST-EXPOSURE TREATMENT REGIMEN", petRegimen2);
-                            isonoazidDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "ISONIAZID DOSE");
-                            rifapentineDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "RIFAPENTINE DOSE");
-                            levofloxacinDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "LEVOFLOXACIN DOSE");
-                            ethionamideDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "ETHIONAMIDE DOSE");
+                            isonoazidDose = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "ISONIAZID DOSE");
+                            rifapentineDose = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "RIFAPENTINE DOSE");
+                            levofloxacinDose = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "LEVOFLOXACIN DOSE");
+                            ethionamideDose = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "ETHIONAMIDE DOSE");
                         } else {
 
                             Date d2 = null;
@@ -604,25 +557,25 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
                                 if (petRegimen3 == null)
                                     petRegimen3 = "";
                                 result.put("POST-EXPOSURE TREATMENT REGIMEN", petRegimen3);
-                                isonoazidDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "ISONIAZID DOSE");
-                                rifapentineDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "RIFAPENTINE DOSE");
-                                levofloxacinDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "LEVOFLOXACIN DOSE");
-                                ethionamideDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "ETHIONAMIDE DOSE");
+                                isonoazidDose = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "ISONIAZID DOSE");
+                                rifapentineDose = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "RIFAPENTINE DOSE");
+                                levofloxacinDose = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "LEVOFLOXACIN DOSE");
+                                ethionamideDose = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "ETHIONAMIDE DOSE");
                             } else if (d2.after(d3)) {
                                 if (petRegimen2 == null)
                                     petRegimen2 = "";
                                 result.put("POST-EXPOSURE TREATMENT REGIMEN", petRegimen2);
-                                isonoazidDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "ISONIAZID DOSE");
-                                rifapentineDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "RIFAPENTINE DOSE");
-                                levofloxacinDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "LEVOFLOXACIN DOSE");
-                                ethionamideDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "ETHIONAMIDE DOSE");
+                                isonoazidDose = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "ISONIAZID DOSE");
+                                rifapentineDose = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "RIFAPENTINE DOSE");
+                                levofloxacinDose = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "LEVOFLOXACIN DOSE");
+                                ethionamideDose = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "ETHIONAMIDE DOSE");
                             } else {
                                 petRegimen3 = "";
                                 result.put("POST-EXPOSURE TREATMENT REGIMEN", petRegimen3);
-                                isonoazidDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_ADVERSE_EVENTS, "ISONIAZID DOSE");
-                                rifapentineDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_ADVERSE_EVENTS, "RIFAPENTINE DOSE");
-                                levofloxacinDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_ADVERSE_EVENTS, "LEVOFLOXACIN DOSE");
-                                ethionamideDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_ADVERSE_EVENTS, "ETHIONAMIDE DOSE");
+                                isonoazidDose = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_ADVERSE_EVENTS, "ISONIAZID DOSE");
+                                rifapentineDose = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_ADVERSE_EVENTS, "RIFAPENTINE DOSE");
+                                levofloxacinDose = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_ADVERSE_EVENTS, "LEVOFLOXACIN DOSE");
+                                ethionamideDose = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_ADVERSE_EVENTS, "ETHIONAMIDE DOSE");
                             }
 
                         }
@@ -670,7 +623,7 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
                     loading.dismiss();
 
                     if (result.get("POST-EXPOSURE TREATMENT REGIMEN") == null || result.get("POST-EXPOSURE TREATMENT REGIMEN").equals("")) {
-                        /*final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                        final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                         alertDialog.setMessage(getResources().getString(R.string.treatment_initiation_missing));
                         Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                         alertDialog.setIcon(clearIcon);
@@ -688,7 +641,7 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
                                     }
                                 });
                         alertDialog.show();
-                        submitButton.setEnabled(false);*/
+                        submitButton.setEnabled(false);
                         return;
                     } else submitButton.setEnabled(true);
 
@@ -791,7 +744,7 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
             } else {
                 int dose = Integer.parseInt(App.get(isoniazidDose));
                 if (dose > 300) {
-                    isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded_300));
+                    isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded));
                     isoniazidDose.getQuestionView().requestFocus();
                     view = null;
                     error = true;
@@ -872,13 +825,13 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
             error = true;
         }
 
-        /*if (App.get(weight).isEmpty()) {
+        if (App.get(weight).isEmpty()) {
             weight.getEditText().setError(getString(R.string.empty_field));
             weight.getEditText().requestFocus();
             gotoFirstPage();
             view = null;
             error = true;
-        }*/
+        }
 
         if (error) {
 
@@ -1007,7 +960,6 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
             observations.add(new String[]{"MEDICATION DURATION", App.get(ancillaryDrugDuration)});
         observations.add(new String[]{"INSTRUCTIONS TO PATIENT AND/OR FAMILY", App.get(newInstruction)});
         observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDate(secondDateCalendar)});
-        observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(clincianNote)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -1137,9 +1089,6 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
-
-            formDate.getButton().setEnabled(false);
-
         } else if (view == returnVisitDate.getButton()) {
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
@@ -1148,9 +1097,6 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
             args.putString("formDate", formDate.getButton().getText().toString());
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
-
-            returnVisitDate.getButton().setEnabled(false);
-
         }
 
     }
@@ -1223,7 +1169,6 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
                     rifapentineDose.setVisibility(View.GONE);
                     levofloxacinDose.setVisibility(View.GONE);
                     ethionamideDose.setVisibility(View.GONE);
-                    rifapentineAvailable.setVisibility(View.GONE);
                 }
             }
         }
@@ -1390,8 +1335,6 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
 
     @Override
     public void refill(int encounterId) {
-
-        refillFlag = true;
 
         OfflineForm fo = serverService.getOfflineFormById(encounterId);
         String date = fo.getFormDate();
@@ -1595,8 +1538,6 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-            } else if (obs[0][0].equals("CLINICIAN NOTES (TEXT)")) {
-                clincianNote.getEditText().setText(obs[0][1]);
             }
         }
 

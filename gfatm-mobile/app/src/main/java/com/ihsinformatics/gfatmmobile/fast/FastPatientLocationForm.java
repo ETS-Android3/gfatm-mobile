@@ -61,7 +61,6 @@ import static android.app.Activity.RESULT_OK;
 
 public class FastPatientLocationForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
-    Boolean emptyError = false;
     Context context;
     TitledButton formDate;
     TitledRadioGroup screening;
@@ -150,20 +149,20 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
 
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        screening = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_identified_patient_through_screening), getResources().getStringArray(R.array.fast_yes_no_list), "", App.VERTICAL, App.VERTICAL, true);
-        facilitySection = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_hospital_parts_title), getResources().getStringArray(R.array.fast_hospital_parts_screening), "", App.VERTICAL, true);
+        screening = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_identified_patient_through_screening), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL, true);
+        facilitySection = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_hospital_parts_title), getResources().getStringArray(R.array.fast_hospital_parts), getResources().getString(R.string.fast_opdclinicscreening_title), App.VERTICAL);
         facilitySectionOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        opdWardSection = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_clinic_and_ward_title), getResources().getStringArray(R.array.fast_clinic_and_ward_screening_list), "", App.VERTICAL, true);
-        patientReferralSource = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_source_of_patient_referral), getResources().getStringArray(R.array.fast_source_of_patient_referral_list), "", App.VERTICAL, true);
+        opdWardSection = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_clinic_and_ward_title), getResources().getStringArray(R.array.fast_clinic_and_ward_list), getResources().getString(R.string.fast_generalmedicinefilterclinic_title), App.VERTICAL);
+        patientReferralSource = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_source_of_patient_referral), getResources().getStringArray(R.array.fast_source_of_patient_referral_list), getResources().getString(R.string.fast_self_referral), App.VERTICAL);
         otherReferral = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        facilityDepartment = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_within_hospital_was_patient_referred), getResources().getStringArray(R.array.fast_patient_reffered_from_list), "", App.VERTICAL, App.VERTICAL, true);
+        facilityDepartment = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_within_hospital_was_patient_referred), getResources().getStringArray(R.array.fast_patient_reffered_from_list), getResources().getString(R.string.fast_ward_title), App.VERTICAL, App.VERTICAL);
         facilityDepartmentOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        referralWithinOpd = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_which_opd_clinic_or_ward_has_patient_referred_from), getResources().getStringArray(R.array.fast_opd_clinic_or_ward_patient_reffered_from_list), "", App.VERTICAL, true);
+        referralWithinOpd = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_which_opd_clinic_or_ward_has_patient_referred_from), getResources().getStringArray(R.array.fast_opd_clinic_or_ward_patient_reffered_from_list), getResources().getString(R.string.fast_generalmedicinefilterclinic_title), App.VERTICAL);
         referralWithinOpdOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        facilityType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_outside_hospital_was_patient_referred), getResources().getStringArray(R.array.fast_outside_hospital_patient_reffered_from), "", App.VERTICAL, App.VERTICAL, true);
-        hearAboutUs = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_where_did_you_hear_about_us), getResources().getStringArray(R.array.fast_hear_about_us_from_list), getResources().getString(R.string.fast_radio), App.VERTICAL, true);
+        facilityType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_outside_hospital_was_patient_referred), getResources().getStringArray(R.array.fast_outside_hospital_patient_reffered_from), getResources().getString(R.string.fast_private_hospital), App.VERTICAL, App.VERTICAL);
+        hearAboutUs = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_where_did_you_hear_about_us), getResources().getStringArray(R.array.fast_hear_about_us_from_list), getResources().getString(R.string.fast_radio), App.VERTICAL);
         hearAboutUsOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        contactReferral = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_enrolled_in_any_tb_program), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL, true);
+        contactReferral = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_enrolled_in_any_tb_program), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_no_title), App.VERTICAL, App.VERTICAL);
         contactIdType = new TitledCheckBoxes(context, null, getResources().getString(R.string.fast_tb_contact_any_identifications_id), getResources().getStringArray(R.array.fast_tb_contact_identification_list), null, App.VERTICAL, App.VERTICAL);
         contactPatientId = new TitledEditText(context, null, getResources().getString(R.string.fast_patient_id), "", "#####-#", 7, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         scanQRCode = new Button(context);
@@ -279,80 +278,11 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         }
-
-        formDate.getButton().setEnabled(true);
     }
 
     @Override
     public boolean validate() {
         Boolean error = false;
-
-        if (screening.getVisibility() == View.VISIBLE && App.get(screening).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(1);
-            else
-                gotoPage(0);
-            emptyError = true;
-            error = true;
-        }
-
-        if (facilitySection.getVisibility() == View.VISIBLE && App.get(facilitySection).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(1);
-            else
-                gotoPage(0);
-            emptyError = true;
-            error = true;
-        }
-
-        if (opdWardSection.getVisibility() == View.VISIBLE && App.get(opdWardSection).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(1);
-            else
-                gotoPage(0);
-            emptyError = true;
-            error = true;
-        }
-
-        if (patientReferralSource.getVisibility() == View.VISIBLE && App.get(patientReferralSource).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(1);
-            else
-                gotoPage(0);
-            emptyError = true;
-            error = true;
-        }
-
-        if (facilityDepartment.getVisibility() == View.VISIBLE && App.get(facilityDepartment).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(1);
-            else
-                gotoPage(0);
-            emptyError = true;
-            error = true;
-        }
-
-        if (referralWithinOpd.getVisibility() == View.VISIBLE && App.get(referralWithinOpd).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(1);
-            else
-                gotoPage(0);
-            emptyError = true;
-            error = true;
-        }
-
-        if (facilityType.getVisibility() == View.VISIBLE && App.get(facilityType).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(1);
-            else
-                gotoPage(0);
-            emptyError = true;
-            error = true;
-        }
-
-
-
-
 
         if (facilitySectionOther.getVisibility() == View.VISIBLE && facilitySectionOther.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
@@ -470,11 +400,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
-            if(!emptyError)
-                alertDialog.setMessage(getString(R.string.form_error));
-            else
-                alertDialog.setMessage(getString(R.string.fast_required_field_error));
-
+            alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
            // DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
@@ -927,7 +853,6 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
         super.onClick(view);
 
         if (view == formDate.getButton()) {
-            formDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             formDateFragment.setArguments(args);
@@ -1158,9 +1083,8 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
                 contactTbRegisternationNo.setVisibility(View.GONE);
             }
         } else if (spinner == referralWithinOpd.getSpinner()) {
-            String a = parent.getItemAtPosition(position).toString();
-            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title)) && (facilityDepartment.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_ward_title))
-                    || facilityDepartment.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_opd_clinic)))&&
+            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title)) && facilityDepartment.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_ward_title))
+                    || facilityDepartment.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_opd_clinic)) &&
                     patientReferralSource.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_doctor_or_health_worker_within_the_hospital))
                     && screening.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))) {
                 referralWithinOpdOther.setVisibility(View.VISIBLE);

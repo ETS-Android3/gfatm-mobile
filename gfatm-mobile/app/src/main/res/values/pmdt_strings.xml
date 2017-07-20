@@ -67,6 +67,8 @@
     <string name="pmdt_number_patients_enrolled">Number of patients enrolled in PMDT</string>
 
     <!-- Patient Assignment Form -->
+    <string name="pmdt_user_not_found">User not found.</string>
+    <string name="pmdt_treatment_supporter_missing">Treatment Supporter not found.</string>
     <string name="pmdt_treatment_supporter_already_assigned">Treatment Supporter is already assigned to this patient.</string>
     <string name="pmdt_user_address_not_assigned">Treatment Supporter is registered without address. Please complete demographic information for Treatment Supporter first.</string>
     <string name="pmdt_treatment_supporter_hint">Enter Treatment Supporter name</string>
@@ -155,6 +157,7 @@
 
 
     <!-- Patient Dissociation -->
+    <string name="pmdt_treatment_supporter_not_assigned">Treatment Supporter is not assigned to this patient. Please fill Patient Assignment form first.</string>
     <string name="pmdt_reason_dissociation">Reason for dissociation</string>
     <string name="pmdt_patient_not_satisfied">Patient is not satisfied with the Treatment Supporter</string>
     <string name="pmdt_supervisor_not_satisfied">Supervisor is not satisfied with Treatment Supporter\'s performance</string>
@@ -452,6 +455,33 @@
     <string name="pmdt_validity_voucher_date">Validity of voucher</string>
 
     <!-- Conveyance Allowance -->
+    <string-array name="pmdt_treatment_month">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+    </string-array>
     <string name="pmdt_patient_registered_outstation">Is the patient registered in another facility?</string>
     <string name="pmdt_registered_outstation_facility">If yes, then from where?</string>
     <string name="pmdt_conveyance_voucher_book_number">Conveyance Voucher Book number</string>

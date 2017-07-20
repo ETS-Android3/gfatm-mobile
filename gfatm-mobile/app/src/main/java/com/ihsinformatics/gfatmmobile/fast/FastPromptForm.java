@@ -48,8 +48,6 @@ import java.util.HashMap;
 
 public class FastPromptForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
     Context context;
-    Boolean emptyError = false;
-
 
     // Views...
     TitledButton formDate;
@@ -133,9 +131,9 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         testingOfPresumptivePatientsTitle = new MyTextView(context, getResources().getString(R.string.fast_testing_of_presumptive_patients));
         testingOfPresumptivePatientsTitle.setTypeface(null, Typeface.BOLD);
-        sputumContainerGiven = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_a_sputum_container), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL, true);
-        sputum_sample = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_produced_a_sputum_sample), getResources().getStringArray(R.array.fast_yes_no_list), "", App.VERTICAL, App.VERTICAL, true);
-        reasonNoSputumSample = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_if_no_why_not), getResources().getStringArray(R.array.fast_if_no_why_not_list), getResources().getString(R.string.fast_patient_unable_to_expectorate), App.VERTICAL, App.VERTICAL, true);
+        sputumContainerGiven = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_a_sputum_container), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
+        sputum_sample = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_produced_a_sputum_sample), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
+        reasonNoSputumSample = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_if_no_why_not), getResources().getStringArray(R.array.fast_if_no_why_not_list), getResources().getString(R.string.fast_patient_unable_to_expectorate), App.VERTICAL, App.VERTICAL);
         secondDateCalendar.set(Calendar.YEAR, formDateCalendar.get(Calendar.YEAR));
         secondDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
         secondDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
@@ -143,8 +141,8 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
         dueDateSample = new TitledEditText(context, null, getResources().getString(R.string.fast_date_sputum_sample), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         dueDateSample.getEditText().setKeyListener(null);
         dueDateSample.getEditText().setFocusable(false);
-        freeXrayVoucher = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_given_free_chest_xray), getResources().getStringArray(R.array.fast_yes_no_list),"", App.VERTICAL, App.VERTICAL, true);
-        noXrayVoucher = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_not_given_free_chest_xray), getResources().getStringArray(R.array.fast_not_given_free_list), getResources().getString(R.string.fast_presumptive_refused), App.VERTICAL, App.VERTICAL, true);
+        freeXrayVoucher = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_given_free_chest_xray), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
+        noXrayVoucher = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_not_given_free_chest_xray), getResources().getStringArray(R.array.fast_not_given_free_list), getResources().getString(R.string.fast_presumptive_refused), App.VERTICAL, App.VERTICAL);
 
 
         // Used for reset fields...
@@ -207,41 +205,18 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
 
         Log.d("formdate", DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         Log.d("formdate", formDate.getButton().getText().toString());
-
-        formDate.getButton().setEnabled(true);
     }
 
     @Override
     public boolean validate() {
         Boolean error = false;
 
-        if (sputum_sample.getVisibility() == View.VISIBLE && App.get(sputum_sample).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            error = true;
-            emptyError = true;
-        }
-
-        if (freeXrayVoucher.getVisibility() == View.VISIBLE && App.get(freeXrayVoucher).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            error = true;
-            emptyError = true;
-        }
-
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
-            if(!emptyError)
-                alertDialog.setMessage(getString(R.string.form_error));
-            else
-                alertDialog.setMessage(getString(R.string.fast_required_field_error));
+            alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
           //  DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
@@ -515,7 +490,6 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
         super.onClick(view);
 
         if (view == formDate.getButton()) {
-            formDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             formDateFragment.setArguments(args);
@@ -545,8 +519,6 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         reasonNoSputumSample.setVisibility(View.GONE);
-        dueDateSample.setVisibility(View.GONE);
-        noXrayVoucher.setVisibility(View.GONE);
         noXrayVoucher.setVisibility(View.GONE);
         updateDisplay();
 
@@ -580,15 +552,12 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
             } else {
                 sputum_sample.setVisibility(View.GONE);
                 reasonNoSputumSample.setVisibility(View.GONE);
-                dueDateSample.setVisibility(View.GONE);
             }
         } else if (radioGroup == sputum_sample.getRadioGroup()) {
             if (sputum_sample.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title)) && sputumContainerGiven.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
                 reasonNoSputumSample.setVisibility(View.GONE);
-                dueDateSample.setVisibility(View.VISIBLE);
             } else {
                 reasonNoSputumSample.setVisibility(View.VISIBLE);
-                dueDateSample.setVisibility(View.GONE);
             }
         } else if (radioGroup == freeXrayVoucher.getRadioGroup()) {
             if (freeXrayVoucher.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {

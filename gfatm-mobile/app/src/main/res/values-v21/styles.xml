@@ -33,7 +33,7 @@
         <item name="colorScreening">@color/purple</item>
         <item name="colorTreatment">@color/harleyDavidsonOrange</item>
         <item name="colorFollowup">@color/ToryBlue</item>
-        <item name="colorOther">@color/amber</item>
+        <item name="colorOther">@color/limerick</item>
         <item name="colorButton">@color/bacon</item>
 
         <item name="windowActionBar">false</item>
@@ -48,9 +48,9 @@
         <item name="android:textViewStyle">@style/text</item>
         <item name="android:datePickerStyle">@style/datePicker</item>
         <item name="android:datePickerDialogTheme">@style/datePickerDialog</item>
-
-               <!-- <item name="android:progressBarStyle">@style/progressBar</item>-->
-
+        <!--
+                <item name="android:progressBarStyle">@style/progressBar</item>
+        -->
         <item name="progressBarStyle">@style/progressBar</item>
 
     </style>
@@ -68,6 +68,7 @@
         <item name="colorPrimary">@color/metallicSeaweed</item>
         <item name="colorPrimaryDark">@color/midnightGreen</item>
         <item name="colorAccent">@color/metallicSeaweed</item>
+        <item name="android:indeterminateTint">@color/charlestonGreen</item>
     </style>
 
 </resources>

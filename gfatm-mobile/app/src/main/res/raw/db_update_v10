@@ -1,2 +1,0 @@
--- update queries
-update OR IGNORE concept set uuid='395d8bd6-a452-4d83-8181-d5113681e2af' where uuid = '591d17e7-b158-4b8f-864b-b401020486e';

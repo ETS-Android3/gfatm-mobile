@@ -3,12 +3,12 @@
 
     <!-- Index Patient Registration Form -->
     <string name="pet_enrollment_date_future">Enrollment date can\'t be in future.</string>
-    <string name="pet_date">Form Date</string>
-    <string name="pet_father_husband_name">Father\'s/Husband\'s name</string>
-    <string name="pet_index_patient_external_id">Index Patient External ID</string>
+    <string name="pet_date">Form Date:</string>
+    <string name="pet_father_husband_name">Father\'s/Husband\'s name:</string>
+    <string name="pet_index_patient_external_id">Index Patient External ID:</string>
     <string name="pet_erns_number">Index ENRS/District TB number</string>
     <string name="pet_tb_type">Index Type of TB</string>
-    <string name="pet_infection_type">Index type of Tb according to drug sensitivity</string>
+    <string name="pet_infection_type">Index type of Tb according to drug sensitivity:</string>
     <string name="pet_dst_available">Is the index patient DST result available?</string>
     <string name="pet_resistance_Type">Index Type of DR-TB resistance</string>
     <string name="pet_patient_Type">Index Patient type</string>
@@ -145,7 +145,7 @@
     <string name="pet_count_mismatch">Total count doesn\'t match.</string>
 
     <!-- Baseline Screening -->
-    <string name="pet_index_patient_id">Index Patient ID</string>
+    <string name="pet_index_patient_id">Index Patient ID:</string>
     <string name="pet_tb_treatment_status">Is the contact currently taking TB treatment?</string>
     <string name="pet_contact_registered">Is contact registered in Zero TB program?</string>
     <string name="pet_tb_history">Has the contact taken TB treatment in past?</string>
@@ -186,8 +186,8 @@
     </string-array>
     <string name="pet_phone_1">Phone Number 1</string>
     <string name="pet_phone_2">Phone Number 2</string>
-    <string name="pet_address_1">Address 1</string>
-    <string name="pet_address_2">Address 2</string>
+    <string name="pet_address_1">Address 1 (House Number, etc.)</string>
+    <string name="pet_address_2">Address 2 (Block, Street, Sector, Colony, etc.)</string>
     <string name="pet_district">District</string>
     <string name="pet_city">City</string>
     <string name="pet_address_type">What type of Address is this?</string>
@@ -302,7 +302,7 @@
         <item>@string/refused</item>
         <item>@string/unknown</item>
     </string-array>
-    <string name="pet_martial_status">Marital status</string>
+    <string name="pet_martial_status">Marital status:</string>
     <string name="pet_single">Single</string>
     <string name="pet_engaged">Engaged</string>
     <string name="pet_married">Married</string>
@@ -320,7 +320,7 @@
         <item>@string/refused</item>
         <item>@string/unknown</item>
     </string-array>
-    <string name="pet_employement_status">Current employment status</string>
+    <string name="pet_employement_status">Current employment status:</string>
     <string name="pet_employed">Employed</string>
     <string name="pet_unable_to_work">Unable to work</string>
     <string name="pet_student">Student</string>
@@ -337,7 +337,7 @@
         <item>@string/refused</item>
         <item>@string/unknown</item>
     </string-array>
-    <string name="pet_occupation">Patient\'s Occupation</string>
+    <string name="pet_occupation">Patient\'s Occupation:</string>
     <string name="pet_artist">Artist</string>
     <string name="pet_beggar">Beggar</string>
     <string name="pet_carpenter">Carpenter</string>
@@ -624,9 +624,7 @@
     <string name="treatment_initiation_missing">Treatment initiation form is missing. If form is already submitted to openmrs, try updating patient.</string>
     <string name="index_patient_info_missing">Index Patient () information is missing.</string>
 
-    <string name="pet_isoniazid_dose_exceeded_300">Isoniazid dose shouldn\'t exceed 300mg</string>
-    <string name="pet_isoniazid_dose_exceeded_2000">Isoniazid dose shouldn\'t exceed 2000mg</string>
-
+    <string name="pet_isoniazid_dose_exceeded">Isoniazid dose shouldn\'t exceed 300mg</string>
     <string name="pet_rifapentine_out_of_range_1">Rifapentine dose should be in 300 - 450 mg</string>
     <string name="pet_rifapentine_out_of_range_2">Rifapentine dose should be in 450 - 900 mg</string>
     <string name="pet_tb_category">Index DSTB type</string>
@@ -872,7 +870,7 @@
 
     <!-- Adverse Events -->
     <string name="pet_adverse_events_followup_details">Adverse Events Follow-up Details</string>
-    <string name="pet_symptoms_require">Do symptoms require</string>
+    <string name="pet_symptoms_require">Do symptoms require:</string>
     <string name="pet_incentive_occasion">Incentive occasion</string>
     <string name="pet_baseline_visit">Baseline visit</string>
     <string-array name="pet_incentive_occasions">
@@ -927,73 +925,4 @@
 
     <string-array name="pet_empty_array">
     </string-array>
-
-    <string name="pet_continuatioon_status">Continuation Status</string>
-    <string name="pet_continue_therapy">Continue therapy</string>
-    <string name="pet_last_session">Last session</string>
-    <string name="pet_referred">Referred</string>
-    <string-array name="pet_continuatioon_statuses">
-        <item>@string/pet_continue_therapy</item>
-        <item>@string/pet_last_session</item>
-        <item>@string/pet_referred</item>
-        <item>@string/pet_other</item>
-    </string-array>
-    <string name="pet_next_appointment_date">Next Appointment Date</string>
-
-    <string name="pet_akuads_Mental_Health_Screening">MENTAL HEALTH SCREENING - AKUADS</string>
-    <string name="pet_akuads_sleep">Have you been sleeping less?</string>
-    <string name="pet_akuads_lackofinterest">Have you had lack of interest in your daily activities?</string>
-    <string name="pet_akuads_lostinteresthobbies">Have you lost interest in your hobbies?</string>
-    <string name="pet_akuads_anxious">Have you been anxious?</string>
-    <string name="pet_akuads_impendingdoom">Have you had a sensation of impending doom?</string>
-    <string name="pet_akuads_difficultythinkingclearly">Have you had difficulty in thinking clearly?</string>
-    <string name="pet_akuads_alone">Have you preferred to be alone?</string>
-    <string name="pet_akuads_unhappy">Have you felt unhappy?</string>
-    <string name="pet_akuads_hopeless">Have you felt hopeless?</string>
-    <string name="pet_akuads_helpless">Have you felt helpless?</string>
-    <string name="pet_akuads_worried">Have you been worried?</string>
-    <string name="pet_akuads_cried">Have you cried?</string>
-    <string name="pet_akuads_suicide">Have you thought of taking your life?</string>
-    <string name="pet_akuads_lossofappetite">Have you had loss of appetite?</string>
-    <string name="pet_akuads_retrosternalburning">Have you had retrosternal burning? </string>
-    <string name="pet_akuads_indigestion">Have you had indigestion?</string>
-    <string name="pet_akuads_nausea">Have you had nausea?</string>
-    <string name="pet_akuads_constipation">Have you had constipation?</string>
-    <string name="pet_akuads_difficultybreathing">Have you felt difficulty in breathing?</string>
-    <string name="pet_akuads_tremulous">Have you felt tremulous?</string>
-    <string name="pet_akuads_numbness">Have you felt numbness of hands and feet?</string>
-    <string name="pet_akuads_tension">Have you felt a sensation of tension in your neck and shoulders? </string>
-    <string name="pet_akuads_headaches">Have you had headaches?</string>
-    <string name="pet_akuads_bodypain">Have you felt pain all over your body?</string>
-    <string name="pet_akuads_urination">Have you passed urine more frequently?</string>
-    <string name="pet_akuads_totalscore">AKUADS score:</string>
-    <string name="pet_akuads_severity">Severity level:</string>
-    <string name="pet_agree_AKUADS">Does the client agree to therapy?</string>
-
-    <string name="pet_never">Never</string>
-    <string name="pet_sometimes">Sometimes</string>
-    <string name="pet_mostly">Mostly</string>
-    <string name="pet_always">Always</string>
-    <string-array name="pet_MH_screening_options">
-        <item>@string/pet_never</item>
-        <item>@string/pet_sometimes</item>
-        <item>@string/pet_mostly</item>
-        <item>@string/pet_always</item>
-    </string-array>
-
-    <string name="pet_severity_level_mild">Mild</string>
-    <string name="pet_severity_level_moderate">Moderate</string>
-    <string name="pet_severity_level_severe">Severe</string>
-    <string name="pet_severity_level_normal">Normal</string>
-
-    <string-array name="pet_severity_levels">
-        <item>@string/pet_severity_level_mild</item>
-        <item>@string/pet_severity_level_moderate</item>
-        <item>@string/pet_severity_level_severe</item>
-        <item>@string/pet_severity_level_normal</item>
-    </string-array>
-
-    <string name="pet_payment_date">Payment Date</string>
-    <string name="pet_incentive_date">Incentive Date</string>
-
 </resources>

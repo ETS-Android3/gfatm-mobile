@@ -57,14 +57,6 @@
                 android:background="@drawable/template_button"
                 android:text="@string/goto_first" />
 
-            <Button
-                android:id="@+id/prev_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.06"
-                android:background="@drawable/template_button"
-                android:text="@string/goto_prev" />
-
             <SeekBar
                 android:id="@+id/navigationSeekbar"
                 android:layout_width="wrap_content"

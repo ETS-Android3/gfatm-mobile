@@ -17,7 +17,6 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.openmrs.Concept;
 import org.openmrs.Encounter;
 import org.openmrs.EncounterProvider;
 import org.openmrs.Obs;
@@ -30,7 +29,6 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Set;
 
 /**
@@ -69,7 +67,7 @@ public class HttpPost {
             org.apache.http.client.methods.HttpPost httpPost = new org.apache.http.client.methods.HttpPost(postUri);
             httpPost.setHeader("Accept", "application/json");
             httpPost.setHeader("Content-Type", "application/json");
-            StringEntity stringEntity = new StringEntity(content);
+            StringEntity stringEntity = new StringEntity(content.toString());
             httpPost.setEntity(stringEntity);
             request = httpPost;
             auth = Base64.encodeToString(
@@ -133,35 +131,7 @@ public class HttpPost {
         return post(requestURI, content);
     }
 
-    public String savePatientDied(Calendar deathDate, String patientUuid){
-
-        JSONObject personObj = new JSONObject();
-        try {
-            personObj.put("dead", true);
-            personObj.put("deathDate", App.getSqlDate(deathDate));
-            personObj.put("causeOfDeath", "5622AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-
-            if (App.getMode().equalsIgnoreCase("OFFLINE")) {
-
-                String requestURI = "serverAddress/openmrs/ws/rest/v1/" + PERSON_RESOURCE + "/" + patientUuid;
-                String content = personObj.toString();
-
-                return requestURI + " ;;;; " + content;
-
-            }
-
-            return postEntityByJSON(PATIENT_RESOURCE + "/" + patientUuid , personObj);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
-
-    }
-
     public String savePatientByEntitiy(Patient patient) {
-
         JSONObject personObj = new JSONObject();
         JSONArray names = new JSONArray();
         JSONArray identifiers = new JSONArray();
@@ -314,8 +284,8 @@ public class HttpPost {
             identifierObject.put("identifier", identifier.getIdentifier());
             identifierObject.put("identifierType", identifier.getIdentifierType().getUuid());
             identifierObject.put("location", identifier.getLocation().getUuid());
-            //identifierObject.put("preferred", identifier.getPreferred());
-            //identifierObject.put("voided", identifier.getVoided());
+            identifierObject.put("preferred", identifier.getPreferred());
+            identifierObject.put("voided", identifier.getVoided());
 
             if (App.getMode().equalsIgnoreCase("OFFLINE")) {
 

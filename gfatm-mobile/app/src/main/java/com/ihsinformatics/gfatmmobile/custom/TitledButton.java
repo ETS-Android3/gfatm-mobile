@@ -20,9 +20,7 @@ public class TitledButton extends LinearLayout {
     public TitledButton(Context context, String title, String ques, String defaultValue, int layoutOrientation) {
         super(context);
         this.defaultValue = defaultValue;
-        if(!App.isTabletDevice(context)){
-            layoutOrientation = App.VERTICAL;
-        }
+
         MyLinearLayout linearLayout = new MyLinearLayout(context, title, layoutOrientation);
 
         questionView = new MyTextView(context, ques);

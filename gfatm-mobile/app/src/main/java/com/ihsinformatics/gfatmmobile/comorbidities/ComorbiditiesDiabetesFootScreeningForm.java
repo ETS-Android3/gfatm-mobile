@@ -7,7 +7,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -19,16 +18,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
-import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
-import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
@@ -152,7 +150,7 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
     public void initViews() {
 
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         diabetesFootScreeningMonthOfVisit = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_urinedr_month_of_treatment), getResources().getStringArray(R.array.comorbidities_followup_month), "0", App.HORIZONTAL);
         diabetesFootScreeningRightFootExamined = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_foot_screening_right_foot), getResources().getStringArray(R.array.comorbidities_foot_screening_foot_options), getResources().getString(R.string.comorbidities_foot_screening_foot_options_yes), App.VERTICAL, App.VERTICAL);
@@ -186,7 +184,7 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
         diabetesFootScreeningFootHygiene = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_foot_screening_foot_hygiene), getResources().getStringArray(R.array.comorbidities_foot_screening_foot_hygiene_options), getResources().getString(R.string.comorbidities_foot_screening_foot_hygiene_options_average), App.VERTICAL, App.VERTICAL);
         diabetesFootScreeningFootwearAppropriate = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_foot_screening_footwear_appropriate), getResources().getStringArray(R.array.comorbidities_yes_no), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL);
         diabetesFootScreeningPreviousUlcer = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_foot_screening_previous_ulcer), getResources().getStringArray(R.array.comorbidities_yes_no), getResources().getString(R.string.no), App.VERTICAL, App.VERTICAL);
-        diabetesFootScreeningDetailedClinicalNotes = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_foot_screening_clinical_notes), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        diabetesFootScreeningDetailedClinicalNotes = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_foot_screening_clinical_notes), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         diabetesFootScreeningRecommendations = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_foot_screening_recommendations), getResources().getStringArray(R.array.comorbidities_foot_screening_recommendations_options), getResources().getString(R.string.comorbidities_foot_screening_recommendations_options_management), App.VERTICAL, App.VERTICAL);
 
         // Used for reset fields...
@@ -254,48 +252,13 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
     @Override
     public void updateDisplay() {
 
-        //formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-        if (snackbar != null)
-            snackbar.dismiss();
-
-        if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
-
-            String formDa = formDate.getButton().getText().toString();
-            String personDOB = App.getPatient().getPerson().getBirthdate();
-
-            Date date = new Date();
-            if (formDateCalendar.after(App.getCalendar(date))) {
-
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
-                snackbar.show();
-
-                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-
-            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-                tv.setMaxLines(2);
-                snackbar.show();
-                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-            } else
-                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-
-        }
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
     }
 
     @Override
     public boolean validate() {
 
         Boolean error = false;
-
-        if (diabetesFootScreeningDetailedClinicalNotes.getEditText().getText().toString().length() > 0 && diabetesFootScreeningDetailedClinicalNotes.getEditText().getText().toString().trim().isEmpty()) {
-            diabetesFootScreeningDetailedClinicalNotes.getEditText().setError(getString(R.string.comorbidities_patient_information_father_name_error));
-            diabetesFootScreeningDetailedClinicalNotes.getEditText().requestFocus();
-            error = true;
-        }
 
         if (error) {
 
@@ -330,24 +293,21 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
     @Override
     public boolean submit() {
 
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
-
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean saveFlag = bundle.getBoolean("save", false);
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
-                observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
-            }else {
-                endTime = new Date();
-                observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
             bundle.putBoolean("save", false);
-        } else {
-            endTime = new Date();
-            observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
+
+        endTime = new Date();
+
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
+        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         observations.add(new String[]{"FOLLOW-UP MONTH", App.get(diabetesFootScreeningMonthOfVisit)});
@@ -443,7 +403,7 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
             observations.add(new String[]{"ULCER HISTORY", App.get(diabetesFootScreeningPreviousUlcer).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         }
 
-        observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(diabetesFootScreeningDetailedClinicalNotes).trim()});
+        observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(diabetesFootScreeningDetailedClinicalNotes)});
         observations.add(new String[]{"DIABETES RECOMMENDATAION", App.get(diabetesFootScreeningRecommendations).equals(getResources().getString(R.string.comorbidities_foot_screening_recommendations_options_referral)) ? "PATIENT REFERRED" : "DIABETES MANAGEMENT"});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
@@ -478,13 +438,7 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
                 loading.dismiss();
 
                 if (result.equals("SUCCESS")) {
-                    MainActivity.backToMainMenu();
-                    try {
-                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
-                    } catch (Exception e) {
-                        // TODO: handle exception
-                    }
+                    resetViews();
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.form_submitted));
@@ -574,15 +528,11 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
         String date = fo.getFormDate();
         ArrayList<String[][]> obsValue = fo.getObsValue();
         formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
-                timeTakeToFill = obs[0][1];
-            }
 
             if (obs[0][0].equals("FOLLOW-UP MONTH")) {
                 diabetesFootScreeningMonthOfVisit.getSpinner().selectValue(obs[0][1]);
@@ -863,8 +813,6 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
         displayFootComplicationsAndAmputationHistory();
         allExaminationSkipLogic();
 
-        Boolean flag = true;
-
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");
@@ -877,57 +825,53 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
                 int formId = Integer.valueOf(id);
 
                 refill(formId);
-                flag = false;
 
             } else bundle.putBoolean("save", false);
 
         }
 
-        if(flag) {
-            //HERE FOR AUTOPOPULATING OBS
-            final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
-                @Override
-                protected HashMap<String, String> doInBackground(String... params) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            loading.setInverseBackgroundForced(true);
-                            loading.setIndeterminate(true);
-                            loading.setCancelable(false);
-                            loading.setMessage(getResources().getString(R.string.fetching_data));
-                            loading.show();
-                        }
-                    });
+        //HERE FOR AUTOPOPULATING OBS
+        final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
+            @Override
+            protected HashMap<String, String> doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.fetching_data));
+                        loading.show();
+                    }
+                });
 
-                    HashMap<String, String> result = new HashMap<String, String>();
-                    String monthOfTreatment = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "FOLLOW-UP MONTH");
+                HashMap<String, String> result = new HashMap<String, String>();
+                String monthOfTreatment = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "FOLLOW-UP MONTH");
 
-                    if (monthOfTreatment != null && !monthOfTreatment.equals(""))
-                        monthOfTreatment = monthOfTreatment.replace(".0", "");
+                if (monthOfTreatment != null && !monthOfTreatment .equals(""))
+                    monthOfTreatment = monthOfTreatment.replace(".0", "");
 
-                    if (monthOfTreatment != null)
-                        if (!monthOfTreatment.equals(""))
-                            result.put("FOLLOW-UP MONTH", monthOfTreatment);
+                if (monthOfTreatment != null)
+                    if (!monthOfTreatment .equals(""))
+                        result.put("FOLLOW-UP MONTH", monthOfTreatment);
 
-                    return result;
-                }
+                return result;
+            }
 
-                @Override
-                protected void onProgressUpdate(String... values) {
-                }
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
 
-                @Override
-                protected void onPostExecute(HashMap<String, String> result) {
-                    super.onPostExecute(result);
-                    loading.dismiss();
+            @Override
+            protected void onPostExecute(HashMap<String, String> result) {
+                super.onPostExecute(result);
+                loading.dismiss();
 
-                    if (result.get("FOLLOW-UP MONTH") != null)
-                        diabetesFootScreeningMonthOfVisit.getSpinner().selectValue(result.get("FOLLOW-UP MONTH"));
+                diabetesFootScreeningMonthOfVisit.getSpinner().selectValue(result.get("FOLLOW-UP MONTH"));
 
-                }
-            };
-            autopopulateFormTask.execute("");
-        }
+            }
+        };
+        autopopulateFormTask.execute("");
     }
 
     @Override

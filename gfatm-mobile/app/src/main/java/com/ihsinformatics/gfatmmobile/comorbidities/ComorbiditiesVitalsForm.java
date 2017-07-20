@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -24,11 +23,9 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
-import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
-import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
@@ -131,7 +128,7 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
     public void initViews() {
 
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         vitalsMonthOfVisit = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_month_of_visit), "", getResources().getString(R.string.comorbidities_vitals_month_of_visit_range), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         vitalsWeight = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_weight), "", getResources().getString(R.string.comorbidities_vitals_weight_range), 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
@@ -139,13 +136,13 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
         vitalsHeightInMeters = new MyTextView(context, "");
         vitalsHeightInMeters.setVisibility(View.GONE);
         vitalsBodyMassIndex = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_bmi), "", getResources().getString(R.string.comorbidities_vitals_bmi_range), 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        //vitalsBodyMassIndex.getEditText().setFocusable(false);
+        vitalsBodyMassIndex.getEditText().setFocusable(false);
         vitalsWaistCircumference = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_waist_circumference), "", getResources().getString(R.string.comorbidities_vitals_waist_hip_whr_range), 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         vitalsHipCircumference = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_hip_circumference), "", getResources().getString(R.string.comorbidities_vitals_waist_hip_whr_range), 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         vitalsWaistHipRatio = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_whr), "", getResources().getString(R.string.comorbidities_vitals_waist_hip_whr_range), 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         vitalsWaistHipRatio.getEditText().setFocusable(false);
-        vitalsBloodPressureSystolic = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_bp_systolic), "", getResources().getString(R.string.comorbidities_vitals_bp_systolic_range1), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        vitalsBloodPressureDiastolic = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_bp_diastolic), "", getResources().getString(R.string.comorbidities_vitals_bp_diastolic_range1), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        vitalsBloodPressureSystolic = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_bp_systolic), "", getResources().getString(R.string.comorbidities_vitals_bp_systolic_diastolic_range), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        vitalsBloodPressureDiastolic = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_bp_diastolic), "", getResources().getString(R.string.comorbidities_vitals_bp_systolic_diastolic_range), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), vitalsMonthOfVisit.getEditText(), vitalsWeight.getEditText(), vitalsHeight.getEditText(), vitalsBodyMassIndex.getEditText(), vitalsWaistCircumference.getEditText(),
@@ -205,46 +202,10 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
                             vitalsWeight.getEditText().setError(getString(R.string.comorbidities_vitals_weight_limit));
                         } else {
                             if (!App.get(vitalsWeight).isEmpty() && !App.get(vitalsHeight).isEmpty()) {
-
-                                if(calculateBMI() < 0 || calculateBMI() > 200) {
-
-                                    //For Invalid BMI
-                                    vitalsBodyMassIndex.getEditText().setError(getString(R.string.comorbidities_vitals_bmi_invalid));
-
-                                    int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
-
-                                    final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
-                                    alertDialog.setMessage(getString(R.string.comorbidities_vitals_bmi_invalid));
-                                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-                                    DrawableCompat.setTint(clearIcon, color);
-                                    alertDialog.setIcon(clearIcon);
-                                    alertDialog.setTitle(getResources().getString(R.string.title_error));
-                                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
-                                            new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    try {
-                                                        InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
-                                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
-                                                    } catch (Exception e) {
-                                                        // TODO: handle exception
-                                                    }
-                                                    dialog.dismiss();
-                                                }
-                                            });
-                                    alertDialog.show();
-                                }
-                                else {
-                                    //For Valid BMI
-                                    vitalsBodyMassIndex.getEditText().setText(String.valueOf(calculateBMI()));
-                                    vitalsBodyMassIndex.getEditText().setKeyListener(null);
-                                    vitalsBodyMassIndex.getEditText().setError(null);
-                                }
+                                vitalsBodyMassIndex.getEditText().setText(String.valueOf(calculateBMI()));
+                                vitalsBodyMassIndex.getEditText().setError(null);
                             }
                         }
-                    }
-                    else if (vitalsWeight.getEditText().getText().length() == 0) {
-                        vitalsBodyMassIndex.getEditText().setText("");
-                        vitalsBodyMassIndex.getEditText().setError(null);
                     }
                 } catch (NumberFormatException nfe) {
                     //Exception: User might be entering " " (empty) value
@@ -275,47 +236,12 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
                             vitalsHeightInMeters.setText(getResources().getString(R.string.comorbidities_vitals_height_metres) + String.valueOf(convertCentimeterToMeter(Double.parseDouble(vitalsHeight.getEditText().getText().toString()))) + " m");
                             vitalsHeightInMeters.setVisibility(View.VISIBLE);
                             if (!App.get(vitalsWeight).isEmpty() && !App.get(vitalsHeight).isEmpty()) {
-
-                                if(calculateBMI() < 0 || calculateBMI() > 200) {
-
-                                    //For Invalid BMI
-                                    vitalsBodyMassIndex.getEditText().setError(getString(R.string.comorbidities_vitals_bmi_invalid));
-
-                                    int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
-
-                                    final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
-                                    alertDialog.setMessage(getString(R.string.comorbidities_vitals_bmi_invalid));
-                                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-                                    DrawableCompat.setTint(clearIcon, color);
-                                    alertDialog.setIcon(clearIcon);
-                                    alertDialog.setTitle(getResources().getString(R.string.title_error));
-                                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
-                                            new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    try {
-                                                        InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
-                                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
-                                                    } catch (Exception e) {
-                                                        // TODO: handle exception
-                                                    }
-                                                    dialog.dismiss();
-                                                }
-                                            });
-                                    alertDialog.show();
-                                }
-                                else {
-
-                                    //For Valid BMI
-                                    vitalsBodyMassIndex.getEditText().setText(String.valueOf(calculateBMI()));
-                                    vitalsBodyMassIndex.getEditText().setKeyListener(null);
-                                    vitalsBodyMassIndex.getEditText().setError(null);
-                                }
+                                vitalsBodyMassIndex.getEditText().setText(String.valueOf(calculateBMI()));
+                                vitalsBodyMassIndex.getEditText().setError(null);
                             }
                         }
                     } else if (vitalsHeight.getEditText().getText().length() == 0) {
                         vitalsHeightInMeters.setVisibility(View.GONE);
-                        vitalsBodyMassIndex.getEditText().setText("");
-                        vitalsBodyMassIndex.getEditText().setError(null);
                     }
                 } catch (NumberFormatException nfe) {
                     //Exception: User might be entering " " (empty) value
@@ -344,49 +270,10 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
                             vitalsWaistCircumference.getEditText().setError(getString(R.string.comorbidities_vitals_waist_hip_whr_limit));
                         } else {
                             if (!App.get(vitalsWaistCircumference).isEmpty() && !App.get(vitalsHipCircumference).isEmpty()) {
-                                //vitalsWaistHipRatio.getEditText().setText(String.valueOf(calculateWHR()));
-                                //vitalsWaistHipRatio.getEditText().setError(null);
-
-                                if(calculateWHR() < 0 || calculateWHR() > 100) {
-
-                                    //For Invalid WHR
-                                    vitalsWaistHipRatio.getEditText().setError(getString(R.string.comorbidities_vitals_whr_invalid));
-
-                                    int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
-
-                                    final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
-                                    alertDialog.setMessage(getString(R.string.comorbidities_vitals_whr_invalid));
-                                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-                                    DrawableCompat.setTint(clearIcon, color);
-                                    alertDialog.setIcon(clearIcon);
-                                    alertDialog.setTitle(getResources().getString(R.string.title_error));
-                                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
-                                            new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    try {
-                                                        InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
-                                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
-                                                    } catch (Exception e) {
-                                                        // TODO: handle exception
-                                                    }
-                                                    dialog.dismiss();
-                                                }
-                                            });
-                                    alertDialog.show();
-                                }
-                                else {
-
-                                    //For Valid WHR
-                                    vitalsWaistHipRatio.getEditText().setText(String.valueOf(calculateWHR()));
-                                    vitalsWaistHipRatio.getEditText().setKeyListener(null);
-                                    vitalsWaistHipRatio.getEditText().setError(null);
-                                }
-
+                                vitalsWaistHipRatio.getEditText().setText(String.valueOf(calculateWHR()));
+                                vitalsWaistHipRatio.getEditText().setError(null);
                             }
                         }
-                    } else if (vitalsWaistCircumference.getEditText().getText().length() == 0) {
-                        vitalsWaistHipRatio.getEditText().setText("");
-                        vitalsWaistHipRatio.getEditText().setError(null);
                     }
                 } catch (NumberFormatException nfe) {
                     //Exception: User might be entering " " (empty) value
@@ -415,48 +302,10 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
                             vitalsHipCircumference.getEditText().setError(getString(R.string.comorbidities_vitals_waist_hip_whr_limit));
                         } else {
                             if (!App.get(vitalsWaistCircumference).isEmpty() && !App.get(vitalsHipCircumference).isEmpty()) {
-                                //vitalsWaistHipRatio.getEditText().setText(String.valueOf(calculateWHR()));
-                                //vitalsWaistHipRatio.getEditText().setError(null);
-
-                                if(calculateWHR() < 0 || calculateWHR() > 100) {
-
-                                    //For Invalid WHR
-                                    vitalsWaistHipRatio.getEditText().setError(getString(R.string.comorbidities_vitals_whr_invalid));
-
-                                    int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
-
-                                    final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
-                                    alertDialog.setMessage(getString(R.string.comorbidities_vitals_whr_invalid));
-                                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-                                    DrawableCompat.setTint(clearIcon, color);
-                                    alertDialog.setIcon(clearIcon);
-                                    alertDialog.setTitle(getResources().getString(R.string.title_error));
-                                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
-                                            new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    try {
-                                                        InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
-                                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
-                                                    } catch (Exception e) {
-                                                        // TODO: handle exception
-                                                    }
-                                                    dialog.dismiss();
-                                                }
-                                            });
-                                    alertDialog.show();
-                                }
-                                else {
-
-                                    //For Valid WHR
-                                    vitalsWaistHipRatio.getEditText().setText(String.valueOf(calculateWHR()));
-                                    vitalsWaistHipRatio.getEditText().setKeyListener(null);
-                                    vitalsWaistHipRatio.getEditText().setError(null);
-                                }
+                                vitalsWaistHipRatio.getEditText().setText(String.valueOf(calculateWHR()));
+                                vitalsWaistHipRatio.getEditText().setError(null);
                             }
                         }
-                    }  else if (vitalsHipCircumference.getEditText().getText().length() == 0) {
-                        vitalsWaistHipRatio.getEditText().setText("");
-                        vitalsWaistHipRatio.getEditText().setError(null);
                     }
                 } catch (NumberFormatException nfe) {
                     //Exception: User might be entering " " (empty) value
@@ -481,8 +330,8 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
                 try {
                     if (vitalsBloodPressureSystolic.getEditText().getText().length() > 0) {
                         int num = Integer.parseInt(vitalsBloodPressureSystolic.getEditText().getText().toString());
-                        if (num < 0 || num > 250) {
-                            vitalsBloodPressureSystolic.getEditText().setError(getString(R.string.comorbidities_vitals_bp_systolic_limit1));
+                        if (num < 0 || num > 300) {
+                            vitalsBloodPressureSystolic.getEditText().setError(getString(R.string.comorbidities_vitals_bp_systolic_diastolic_limit));
                         }
                     }
                 } catch (NumberFormatException nfe) {
@@ -508,8 +357,8 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
                 try {
                     if (vitalsBloodPressureDiastolic.getEditText().getText().length() > 0) {
                         int num = Integer.parseInt(vitalsBloodPressureDiastolic.getEditText().getText().toString());
-                        if (num < 0 || num > 150) {
-                            vitalsBloodPressureDiastolic.getEditText().setError(getString(R.string.comorbidities_vitals_bp_diastolic_limit1));
+                        if (num < 0 || num > 300) {
+                            vitalsBloodPressureDiastolic.getEditText().setError(getString(R.string.comorbidities_vitals_bp_systolic_diastolic_limit));
                         }
                     }
                 } catch (NumberFormatException nfe) {
@@ -524,37 +373,7 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
     @Override
     public void updateDisplay() {
 
-        //formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-        if (snackbar != null)
-            snackbar.dismiss();
-
-        if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
-
-            String formDa = formDate.getButton().getText().toString();
-            String personDOB = App.getPatient().getPerson().getBirthdate();
-
-            Date date = new Date();
-            if (formDateCalendar.after(App.getCalendar(date))) {
-
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
-                snackbar.show();
-
-                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-
-            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-                tv.setMaxLines(2);
-                snackbar.show();
-                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-            } else
-                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-
-        }
-        formDate.getButton().setEnabled(true);
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
     }
 
     @Override
@@ -567,9 +386,9 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
             vitalsBloodPressureDiastolic.getEditText().setError(getString(R.string.empty_field));
             vitalsBloodPressureDiastolic.getEditText().requestFocus();
             error = true;
-        } else if (!App.get(vitalsBloodPressureDiastolic).isEmpty() && Integer.parseInt(App.get(vitalsBloodPressureDiastolic)) > 150) {
+        } else if (!App.get(vitalsBloodPressureDiastolic).isEmpty() && Integer.parseInt(App.get(vitalsBloodPressureDiastolic)) > 300) {
             gotoFirstPage();
-            vitalsBloodPressureDiastolic.getEditText().setError(getString(R.string.comorbidities_vitals_bp_diastolic_limit1));
+            vitalsBloodPressureDiastolic.getEditText().setError(getString(R.string.comorbidities_vitals_bp_systolic_diastolic_limit));
             vitalsBloodPressureDiastolic.getEditText().requestFocus();
             error = true;
         }
@@ -579,9 +398,9 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
             vitalsBloodPressureSystolic.getEditText().setError(getString(R.string.empty_field));
             vitalsBloodPressureSystolic.getEditText().requestFocus();
             error = true;
-        } else if (!App.get(vitalsBloodPressureSystolic).isEmpty() && Integer.parseInt(App.get(vitalsBloodPressureSystolic)) > 250) {
+        } else if (!App.get(vitalsBloodPressureSystolic).isEmpty() && Integer.parseInt(App.get(vitalsBloodPressureSystolic)) > 300) {
             gotoFirstPage();
-            vitalsBloodPressureSystolic.getEditText().setError(getString(R.string.comorbidities_vitals_bp_systolic_limit1));
+            vitalsBloodPressureSystolic.getEditText().setError(getString(R.string.comorbidities_vitals_bp_systolic_diastolic_limit));
             vitalsBloodPressureSystolic.getEditText().requestFocus();
             error = true;
         }
@@ -713,24 +532,21 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
     @Override
     public boolean submit() {
 
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
-
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean saveFlag = bundle.getBoolean("save", false);
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
-                observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
-            }else {
-                endTime = new Date();
-                observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
             bundle.putBoolean("save", false);
-        } else {
-            endTime = new Date();
-            observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
+
+        endTime = new Date();
+
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
+        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         observations.add(new String[]{"FOLLOW-UP MONTH", App.get(vitalsMonthOfVisit)});
@@ -775,13 +591,7 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
                 loading.dismiss();
 
                 if (result.equals("SUCCESS")) {
-                    MainActivity.backToMainMenu();
-                    try {
-                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
-                    } catch (Exception e) {
-                        // TODO: handle exception
-                    }
+                    resetViews();
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.form_submitted));
@@ -825,7 +635,7 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
                 } else {
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
-                    alertDialog.setMessage(message);
+                    alertDialog.setMessage(getResources().getString(R.string.insert_error));
                     Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                     alertDialog.setIcon(clearIcon);
                     alertDialog.setTitle(getResources().getString(R.string.title_error));
@@ -871,15 +681,11 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
         String date = fo.getFormDate();
         ArrayList<String[][]> obsValue = fo.getObsValue();
         formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
-                timeTakeToFill = obs[0][1];
-            }
 
             if (obs[0][0].equals("FOLLOW-UP MONTH")) {
                 vitalsMonthOfVisit.getEditText().setText(obs[0][1]);
@@ -909,7 +715,6 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
         super.onClick(view);
 
         if (view == formDate.getButton()) {
-            formDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
@@ -938,7 +743,7 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
     public void resetViews() {
         super.resetViews();
 
-        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {

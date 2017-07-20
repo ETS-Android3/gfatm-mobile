@@ -1,20 +1,13 @@
 package com.ihsinformatics.gfatmmobile;
 
-import android.*;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
@@ -23,19 +16,13 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.internal.view.SupportMenu;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,7 +38,6 @@ import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.shared.FormsObject;
 import com.ihsinformatics.gfatmmobile.util.LocationService;
-import com.ihsinformatics.gfatmmobile.util.OfflineFormSyncService;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 import java.io.ByteArrayInputStream;
@@ -71,7 +57,7 @@ public class MainActivity extends AppCompatActivity
     LinearLayout buttonLayout;
     LinearLayout programLayout;
     public static LinearLayout headerLayout;
-    public static  Button formButton;
+    Button formButton;
     Button reportButton;
     Button searchButton;
     RadioGroup radioGroup;
@@ -81,40 +67,10 @@ public class MainActivity extends AppCompatActivity
     ImageView change;
     ImageView update;
 
-    public static TextView patientName;
-    public static TextView patientDob;
-    public static TextView patientId;
-    public static TextView id;
-
-    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            // Get extra data included in the Intent
-            String message = intent.getStringExtra("message");
-            if(message.equals("completed")) {
-                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
-                mBuilder.setSmallIcon(R.drawable.ic_checked);
-                mBuilder.setContentTitle("Notification Alert, Click Me!");
-                mBuilder.setContentText("Hi, This is Android Notification Detail!");
-                mBuilder.setPriority(Notification.PRIORITY_HIGH);
-
-                Intent notificationIntent = new Intent(context, MainActivity.class);
-                PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent,
-                        PendingIntent.FLAG_UPDATE_CURRENT);
-                mBuilder.setContentIntent(contentIntent);
-                mBuilder.setDefaults(Notification.DEFAULT_ALL);
-
-                // Add as notification
-                NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                manager.notify(0, mBuilder.build());
-
-            }
-        }
-    };
-
-//    TextView nav_default;
-
-    public static ActionBar actionBar;
+    TextView patientName;
+    TextView patientDob;
+    TextView patientId;
+    TextView id;
 
     FragmentManager fm = getFragmentManager();
     private ServerService serverService;
@@ -124,7 +80,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        loading = new ProgressDialog(this, ProgressDialog.THEME_HOLO_LIGHT);
+        loading = new ProgressDialog(this);
         serverService = new ServerService(getApplicationContext());
 
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
@@ -140,7 +96,6 @@ public class MainActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        actionBar = getSupportActionBar();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -152,10 +107,6 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         View hView = navigationView.getHeaderView(0);
-        TextView nav_appName = (TextView) hView.findViewById(R.id.appName);
-        nav_appName.setText(getResources().getString(R.string.app_name) + " (" + App.getVersion() + ")");
-        //nav_default = (TextView) hView.findViewById(R.id.selectedDefault);
-        //nav_default.setText(getResources().getString(R.string.program) + App.getProgram() + "  |  " + getResources().getString(R.string.location) + App.getLocation());
         TextView nav_user = (TextView) hView.findViewById(R.id.menuUsername);
         nav_user.setText(App.getUserFullName());
         TextView nav_userRole = (TextView) hView.findViewById(R.id.menuUserRoles);
@@ -170,12 +121,14 @@ public class MainActivity extends AppCompatActivity
         DrawableCompat.setTint(update.getDrawable(), color);
         update.setOnTouchListener(this);
 
-        getSupportActionBar().setTitle(Html.fromHtml("<small>" + App.getProgram() + "  |  " + App.getLocation() + "</small>"));
+        String title = toolbar.getTitle() + " (" + App.getVersion() + ")";
         if (App.getMode().equalsIgnoreCase("OFFLINE")) {
-            getSupportActionBar().setSubtitle("Offline Mode");
+            if (!title.contains(" ----- Offline Mode"))
+                title = title + " ----- Offline Mode";
             update.setVisibility(View.GONE);
         } else {
-            getSupportActionBar().setSubtitle(null);
+            if (!title.contains(" ----- Offline Mode"))
+                title.replace(" ----- Offline Mode", "");
 
             if (App.getPatient() == null)
                 update.setVisibility(View.GONE);
@@ -183,6 +136,9 @@ public class MainActivity extends AppCompatActivity
                 update.setVisibility(View.VISIBLE);
 
         }
+        getSupportActionBar().setTitle(title);
+        String subtitle = getResources().getString(R.string.program) + " " + App.getProgram() + "  |  " + "Location:" + " " + App.getLocation();
+        getSupportActionBar().setSubtitle(subtitle);
 
         buttonLayout = (LinearLayout) findViewById(R.id.buttonLayout);
         programLayout = (LinearLayout) findViewById(R.id.programLayout);
@@ -203,8 +159,8 @@ public class MainActivity extends AppCompatActivity
                 programLayout.setVisibility(View.GONE);
                 headerLayout.setVisibility(View.VISIBLE);
 
-                getSupportActionBar().setTitle(App.getProgram() + "  |  " + App.getLocation());
-                //nav_default.setText(getResources().getString(R.string.program) + App.getProgram() + "  |  " + getResources().getString(R.string.location) + App.getLocation());
+                String subtitle = getResources().getString(R.string.program) + " " + App.getProgram();
+                getSupportActionBar().setSubtitle(subtitle);
                 fragmentForm.fillMainContent();
                 fragmentReport.fillReportFragment();
                 showFormFragment();
@@ -229,21 +185,12 @@ public class MainActivity extends AppCompatActivity
             String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
             String lname = App.getPatient().getPerson().getFamilyName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getFamilyName().substring(1);
 
-            patientName.setText(fname + " " + lname + " (" + App.getPatient().getPerson().getGender() + ")");
+            patientName.setText(fname + " " + lname);
             String dob = App.getPatient().getPerson().getBirthdate().substring(0, 10);
             if (!dob.equals("")) {
                 Date date = App.stringToDate(dob, "yyyy-MM-dd");
                 DateFormat df = new SimpleDateFormat("MMM dd, yyyy");
-                if(App.getPatient().getPerson().getAge() == 0){
-                    Date birthDate = App.stringToDate(App.getPatient().getPerson().getBirthdate(), "yyyy-MM-dd");
-                    int age = App.getDiffMonths(birthDate, new Date());
-                    if(age == 0 ){
-                        long ageInLong = App.getDiffDays(birthDate, new Date());
-                        patientDob.setText(ageInLong + " days (" + df.format(date) + ")");
-                    }
-                    else patientDob.setText(age + " months (" + df.format(date) + ")");
-                }
-                else patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
+                patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
             } else patientDob.setText(dob);
             if (!App.getPatient().getPatientId().equals(""))
                 id.setVisibility(View.VISIBLE);
@@ -259,84 +206,52 @@ public class MainActivity extends AppCompatActivity
         else
             showProgramSelection();
 
-        /*int count = serverService.getSavedFormsCount(App.getUsername(), App.getProgram());
-        if(count > 0){
-
-            final int color1 = App.getColor(this, R.attr.colorAccent);
-
-            final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
-            alertDialog.setMessage(count + " " + getString(R.string.offline_form_alert));
-            Drawable clearIcon = getResources().getDrawable(R.drawable.ic_submit);
-            DrawableCompat.setTint(clearIcon, color1);
-            alertDialog.setIcon(clearIcon);
-            alertDialog.setTitle(getResources().getString(R.string.title_offline_form_found));
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
-                                    new IntentFilter("background-offline-sync"));
-                            startSync();
-                            dialog.dismiss();
-                        }
-                    });
-            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-            alertDialog.show();
-            alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
-
-        }*/
     }
 
     @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
 
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
-            return;
-        }
-        else {
-            final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                showLocationAlert();
-            } else {
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            showLocationAlert();
+        } else {
 
-                if (!LocationService.isInstanceCreated()) {
-                    Intent intent = new Intent(MainActivity.this, LocationService.class);
-                    startService(intent);
-                }
+            if (!LocationService.isInstanceCreated()) {
+                Intent intent = new Intent(MainActivity.this, LocationService.class);
+                startService(intent);
             }
         }
 
 
-        if (!getSupportActionBar().getTitle().toString().contains(App.getProgram())) {
-            //nav_default.setText(getResources().getString(R.string.program) + App.getProgram() + "  |  " + getResources().getString(R.string.location) + App.getLocation());
-            getSupportActionBar().setTitle(App.getProgram() + "  |  " + App.getLocation());
+        if (!getSupportActionBar().getSubtitle().toString().contains(App.getProgram())) {
+            String subtitle = getResources().getString(R.string.program) + " " + App.getProgram() + "  |  " + getResources().getString(R.string.location) + " " + App.getLocation();
+            getSupportActionBar().setSubtitle(subtitle);
+
             fragmentForm.fillMainContent();
             fragmentReport.fillReportFragment();
             showFormFragment();
         }
 
-        if (!getSupportActionBar().getTitle().toString().contains(App.getLocation())) {
-            //nav_default.setText(getResources().getString(R.string.program) + App.getProgram() + "  |  " + getResources().getString(R.string.location) + App.getLocation());
-            getSupportActionBar().setTitle(App.getProgram() + "  |  " + App.getLocation());
+        if (!getSupportActionBar().getSubtitle().toString().contains(App.getLocation())) {
+            String subtitle = getResources().getString(R.string.program) + " " + App.getProgram() + "  |  " + getResources().getString(R.string.location) + " " + App.getLocation();
+            getSupportActionBar().setSubtitle(subtitle);
         }
 
+        String title = getSupportActionBar().getTitle().toString();
         if (App.getMode().equalsIgnoreCase("OFFLINE")) {
-            getSupportActionBar().setSubtitle("Offline Mode");
+            if (!title.contains(" ----- Offline Mode"))
+                title = title + " ----- Offline Mode";
             update.setVisibility(View.GONE);
         } else {
-            getSupportActionBar().setSubtitle(null);
+            if (!title.contains(" ----- Offline Mode"))
+                title.replace(" ----- Offline Mode", "");
             if (App.getPatient() == null)
                 update.setVisibility(View.GONE);
             else
                 update.setVisibility(View.VISIBLE);
-
         }
+        getSupportActionBar().setTitle(title);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String lang = preferences.getString(Preferences.LANGUAGE, "");
@@ -382,7 +297,6 @@ public class MainActivity extends AppCompatActivity
 
                             fragmentForm.setMainContentVisible(true);
                             headerLayout.setVisibility(View.VISIBLE);
-                            getSupportActionBar().show();
                         }
                     });
             alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
@@ -715,33 +629,6 @@ public class MainActivity extends AppCompatActivity
                 if (result.equals("SUCCESS")) {
                     //resetViews();
 
-                    String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
-                    String lname = App.getPatient().getPerson().getFamilyName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getFamilyName().substring(1);
-
-                    patientName.setText(fname + " " + lname + " (" + App.getPatient().getPerson().getGender() + ")");
-                    String dob = App.getPatient().getPerson().getBirthdate().substring(0, 10);
-                    if (!dob.equals("")) {
-                        Date date = App.stringToDate(dob, "yyyy-MM-dd");
-                        DateFormat df = new SimpleDateFormat("MMM dd, yyyy");
-                        if(App.getPatient().getPerson().getAge() == 0){
-                            Date birthDate = App.stringToDate(App.getPatient().getPerson().getBirthdate(), "yyyy-MM-dd");
-                            int age = App.getDiffMonths(birthDate, new Date());
-                            if(age == 0 ){
-                                long ageInLong = App.getDiffDays(birthDate, new Date());
-                                patientDob.setText(ageInLong + " days (" + df.format(date) + ")");
-                            }
-                            else patientDob.setText(age + " months (" + df.format(date) + ")");
-                        }
-                        else patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
-                    } else patientDob.setText(dob);
-                    if (!App.getPatient().getPatientId().equals(""))
-                        id.setVisibility(View.VISIBLE);
-                    patientId.setText(App.getPatient().getPatientId());
-
-                    fragmentReport.fillReportFragment();
-                    fragmentForm.fillMainContent();
-
-
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.patient_updated));
                     Drawable submitIcon = getResources().getDrawable(R.drawable.ic_submit);
@@ -810,21 +697,12 @@ public class MainActivity extends AppCompatActivity
                         String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
                         String lname = App.getPatient().getPerson().getFamilyName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getFamilyName().substring(1);
 
-                        patientName.setText(fname + " " + lname + " (" + App.getPatient().getPerson().getGender() + ")");
+                        patientName.setText(fname + " " + lname);
                         String dob = App.getPatient().getPerson().getBirthdate().substring(0, 10);
                         if (!dob.equals("")) {
                             Date date = App.stringToDate(dob, "yyyy-MM-dd");
                             DateFormat df = new SimpleDateFormat("MMM dd, yyyy");
-                            if(App.getPatient().getPerson().getAge() == 0){
-                                Date birthDate = App.stringToDate(App.getPatient().getPerson().getBirthdate(), "yyyy-MM-dd");
-                                int age = App.getDiffMonths(birthDate, new Date());
-                                if(age == 0 ){
-                                    long ageInLong = App.getDiffDays(birthDate, new Date());
-                                    patientDob.setText(ageInLong + " days (" + df.format(date) + ")");
-                                }
-                                else patientDob.setText(age + " months (" + df.format(date) + ")");
-                            }
-                            else patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
+                            patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
                         } else patientDob.setText(dob);
                         if (!App.getPatient().getPatientId().equals(""))
                             id.setVisibility(View.VISIBLE);
@@ -840,29 +718,20 @@ public class MainActivity extends AppCompatActivity
                         String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
                         String lname = App.getPatient().getPerson().getFamilyName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getFamilyName().substring(1);
 
-                        patientName.setText(fname + " " + lname + " (" + App.getPatient().getPerson().getGender() + ")");
+                        patientName.setText(fname + " " + lname);
                         String dob = App.getPatient().getPerson().getBirthdate().substring(0, 10);
                         if (!dob.equals("")) {
                             Date date = App.stringToDate(dob, "yyyy-MM-dd");
                             DateFormat df = new SimpleDateFormat("MMM dd, yyyy");
-                            if(App.getPatient().getPerson().getAge() == 0){
-                                Date birthDate = App.stringToDate(App.getPatient().getPerson().getBirthdate(), "yyyy-MM-dd");
-                                int age = App.getDiffMonths(birthDate, new Date());
-                                if(age == 0 ){
-                                    long ageInLong = App.getDiffDays(birthDate, new Date());
-                                    patientDob.setText(ageInLong + " days (" + df.format(date) + ")");
-                                }
-                                else patientDob.setText(age + " months (" + df.format(date) + ")");
-                            }
-                            else patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
+                            patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
                         } else patientDob.setText(dob);
                         if (!App.getPatient().getPatientId().equals(""))
                             id.setVisibility(View.VISIBLE);
                         patientId.setText(App.getPatient().getPatientId());
 
-                        /*Toast toast = Toast.makeText(MainActivity.this, getResources().getString(R.string.patient_created_successfully), Toast.LENGTH_LONG);
+                        Toast toast = Toast.makeText(MainActivity.this, getResources().getString(R.string.patient_created_successfully), Toast.LENGTH_LONG);
                         toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();*/
+                        toast.show();
 
                         fragmentReport.fillReportFragment();
                         fragmentForm.fillMainContent();
@@ -908,28 +777,19 @@ public class MainActivity extends AppCompatActivity
                 editor.putString(Preferences.LOCATION, App.getLocation());
                 editor.apply();
 
-                //nav_default.setText(getResources().getString(R.string.program) + App.getProgram() + "  |  " + getResources().getString(R.string.location) + App.getLocation());
-                getSupportActionBar().setTitle(App.getProgram() + "  |  " + App.getLocation());
+                String subtitle = getResources().getString(R.string.program) + " " + App.getProgram() + "  |  " + getResources().getString(R.string.location) + " " + App.getLocation();
+                getSupportActionBar().setSubtitle(subtitle);
 
                 if(!(pid == null || pid.equals("null"))) {
                 String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
                 String lname = App.getPatient().getPerson().getFamilyName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getFamilyName().substring(1);
 
-                    patientName.setText(fname + " " + lname + " (" + App.getPatient().getPerson().getGender() + ")");
+                    patientName.setText(fname + " " + lname);
                     String dob = App.getPatient().getPerson().getBirthdate().substring(0, 10);
                     if (!dob.equals("")) {
                         Date date = App.stringToDate(dob, "yyyy-MM-dd");
                         DateFormat df = new SimpleDateFormat("MMM dd, yyyy");
-                        if(App.getPatient().getPerson().getAge() == 0){
-                            Date birthDate = App.stringToDate(App.getPatient().getPerson().getBirthdate(), "yyyy-MM-dd");
-                            int age = App.getDiffMonths(birthDate, new Date());
-                            if(age == 0 ){
-                                long ageInLong = App.getDiffDays(birthDate, new Date());
-                                patientDob.setText(ageInLong + " days (" + df.format(date) + ")");
-                            }
-                            else patientDob.setText(age + " months (" + df.format(date) + ")");
-                        }
-                        else patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
+                        patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
                     } else patientDob.setText(dob);
                     if (!App.getPatient().getPatientId().equals(""))
                         id.setVisibility(View.VISIBLE);
@@ -1000,32 +860,6 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
         alertDialog.show();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case 101:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    //granted
-                } else {
-                    //not granted
-                }
-                break;
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-    }
-
-    private void startSync(){
-        startService(new Intent(this, OfflineFormSyncService.class));
-    }
-
-    @Override
-    protected void onDestroy() {
-        // Unregister since the activity is about to be closed.
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
-        super.onDestroy();
     }
 
 }

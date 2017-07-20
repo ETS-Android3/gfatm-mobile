@@ -14,7 +14,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 /* Copyright(C) 2015 Interactive Health Solutions, Pvt. Ltd.
 
@@ -32,16 +31,14 @@ public class Encounter extends AbstractModel {
     private String encounterDatetime;
     private String encounterLocation;
     private String patientId;
-    private String dateCreated;
     private ArrayList<com.ihsinformatics.gfatmmobile.model.Obs> obsGroup;
 
-    public Encounter(String uuid, String encounterType, String encounterDatetime, ArrayList<com.ihsinformatics.gfatmmobile.model.Obs> obsGroup, String encounterLocation, String dateCreated) {
+    public Encounter(String uuid, String encounterType, String encounterDatetime, ArrayList<com.ihsinformatics.gfatmmobile.model.Obs> obsGroup, String encounterLocation) {
         super(uuid);
         this.encounterType = encounterType;
         this.encounterDatetime = encounterDatetime;
         this.obsGroup = obsGroup;
         this.encounterLocation = encounterLocation;
-        this.dateCreated = dateCreated;
     }
 
     public static Encounter parseJSONObject(JSONObject json, Context context) {
@@ -50,7 +47,6 @@ public class Encounter extends AbstractModel {
         String encounterType = "";
         String encounterDatetime = "";
         String encounterLocation = "";
-        String dateCreated = "";
         ArrayList<com.ihsinformatics.gfatmmobile.model.Obs> obsGroup = new ArrayList<>();
         try {
             uuid = json.getString("uuid");
@@ -61,10 +57,6 @@ public class Encounter extends AbstractModel {
             encounterLocation = locationObject.getString("display");
             JSONObject patientObject = json.getJSONObject("patient");
             String patientUuid = patientObject.getString("uuid");
-            if(json.has("auditInfo"))
-                dateCreated  = json.getJSONObject("auditInfo").getString("dateCreated");
-            else
-                dateCreated = App.getSqlDateTime(new Date());
             JSONArray obsArray = json.getJSONArray("obs");
             for (int i = 0; i < obsArray.length(); i++) {
                 JSONObject jsonObject = obsArray.getJSONObject(i);
@@ -102,7 +94,7 @@ public class Encounter extends AbstractModel {
             e.printStackTrace();
             encounter = null;
         }
-        encounter = new Encounter(uuid, encounterType, encounterDatetime, obsGroup, encounterLocation, dateCreated);
+        encounter = new Encounter(uuid, encounterType, encounterDatetime, obsGroup, encounterLocation);
         return encounter;
     }
 
@@ -157,14 +149,6 @@ public class Encounter extends AbstractModel {
 
     public void setPatientId(String patientId) {
         this.patientId = patientId;
-    }
-
-    public String getDateCreated() {
-        return dateCreated;
-    }
-
-    public void setDateCreated(String dateCreated) {
-        this.dateCreated = dateCreated;
     }
 
     @Override

@@ -97,7 +97,9 @@ public class StartActivity extends Activity {
         progressTextView.setText(progressLabel);
     }
 
-
+    /**
+     * Async Task to make http call
+     */
     private class PrefetchData extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -109,13 +111,6 @@ public class StartActivity extends Activity {
         @Override
         protected Void doInBackground(Void... arg0) {
             StartActivity.resetPreferences(context);      //loading preferences
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    setProgress(getResources().getString(R.string.saving_trees));
-                }
-            });
 
             try {
 

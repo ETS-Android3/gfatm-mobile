@@ -7,7 +7,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -26,11 +25,9 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
-import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
-import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
@@ -41,7 +38,6 @@ import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -138,7 +134,7 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
     public void initViews() {
 
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         aherenceTextView = new MyTextView(context, getResources().getString(R.string.comorbidities_drug_disbursement_adherence_text));
         aherenceTextView.setTypeface(null, Typeface.BOLD);
@@ -150,7 +146,7 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
         drugsPickedUp = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_drug_disbursement_drugs_picked_up), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL);
         drugDistributionDetail = new MyTextView(context, getResources().getString(R.string.comorbidities_drug_disbursement_drug_dist_detail_text));
         drugDistributionDetail.setTypeface(null, Typeface.BOLD);
-        drugDistributionDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_drug_disbursement_drug_dist_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
+        drugDistributionDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_drug_disbursement_drug_dist_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         //specifyOther = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_drug_disbursement_specify_other), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         drugsDispersedDays = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_drug_disbursement_days_worth), "", getResources().getString(R.string.comorbidities_drug_disbursement_days_worth_range), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         metformin = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_drug_disbursement_number_of_metformin), "", getResources().getString(R.string.comorbidities_drug_disbursement_number_of_metformin_range), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
@@ -214,7 +210,7 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
                 try {
                     if (drugsDispersedDays.getEditText().getText().length() > 0) {
                         double num = Double.parseDouble(drugsDispersedDays.getEditText().getText().toString());
-                        if (num < 1 || num > 90) {
+                        if (num < 1 || num > 10) {
                             drugsDispersedDays.getEditText().setError(getString(R.string.comorbidities_drug_disbursement_days_worth_limit));
                         }
                     }
@@ -296,7 +292,7 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
                     if (metformin.getEditText().getText().length() > 0) {
                         int num = Integer.parseInt(metformin.getEditText().getText().toString());
                         if (num < 0 || num > 15) {
-                            metformin.getEditText().setError(getString(R.string.comorbidities_drug_disbursement_number_of_metformin_limit));
+                            metformin.getEditText().setError(getString(R.string.comorbidities_drug_disbursement_number_of_metformin));
                         }
                     }
                 } catch (NumberFormatException nfe) {
@@ -311,82 +307,8 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
     @Override
     public void updateDisplay() {
 
-        //formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-        if (snackbar != null)
-            snackbar.dismiss();
-
-        if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
-
-            String formDa = formDate.getButton().getText().toString();
-            String personDOB = App.getPatient().getPerson().getBirthdate();
-
-            Date date = new Date();
-            if (formDateCalendar.after(App.getCalendar(date))) {
-
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
-                snackbar.show();
-
-                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-
-            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-                tv.setMaxLines(2);
-                snackbar.show();
-                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-            } else
-                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-
-        }
-
-        //drugDistributionDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-        if (!(drugDistributionDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
-
-            Calendar fourthDateCalendar = Calendar.getInstance();
-            fourthDateCalendar.set(Calendar.YEAR, formDateCalendar.get(Calendar.YEAR));
-            fourthDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
-            fourthDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
-            fourthDateCalendar.add(Calendar.MONTH, 24); //To check Drug Distribution Date cannot be greater than 24 months from FormDate.
-
-            String formDa = drugDistributionDate.getButton().getText().toString();
-            String personDOB = App.getPatient().getPerson().getBirthdate();
-
-            Date date = new Date();
-            if (secondDateCalendar.before(formDateCalendar)/*secondDateCalendar.before(App.getCalendar(date))*/) {
-
-                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-
-                //snackbar = Snackbar.make(mainContent, getResources().getString(R.string.next_date_past), Snackbar.LENGTH_INDEFINITE);
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.next_visit_date_cannot_before_form_date), Snackbar.LENGTH_INDEFINITE);
-                snackbar.show();
-
-                drugDistributionDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-
-            }
-            else if(secondDateCalendar.after(fourthDateCalendar)){
-                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_date_cant_be_greater_than_24_months), Snackbar.LENGTH_INDEFINITE);
-                snackbar.show();
-
-                drugDistributionDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-            }
-            else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
-                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-                tv.setMaxLines(2);
-                snackbar.show();
-                drugDistributionDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-            } else
-                drugDistributionDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-
-        }
-        formDate.getButton().setEnabled(true);
-        drugDistributionDate.getButton().setEnabled(true);
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        drugDistributionDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
     }
 
     @Override
@@ -435,7 +357,7 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
             drugsDispersedDays.getEditText().setError(getString(R.string.empty_field));
             drugsDispersedDays.getEditText().requestFocus();
             error = true;
-        } else if (!App.get(drugsDispersedDays).isEmpty() && Integer.parseInt(App.get(drugsDispersedDays)) > 90) {
+        } else if (!App.get(drugsDispersedDays).isEmpty() && Integer.parseInt(App.get(drugsDispersedDays)) > 10) {
             gotoFirstPage();
             drugsDispersedDays.getEditText().setError(getString(R.string.comorbidities_drug_disbursement_days_worth_limit));
             drugsDispersedDays.getEditText().requestFocus();
@@ -501,24 +423,21 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
     @Override
     public boolean submit() {
 
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
-
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean saveFlag = bundle.getBoolean("save", false);
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
-                observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
-            }else {
-                endTime = new Date();
-                observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
             bundle.putBoolean("save", false);
-        } else {
-            endTime = new Date();
-            observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
+
+        endTime = new Date();
+
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        observations.add(new String[]{"FORM START TIME", App.getSqlDateTime(startTime)});
+        observations.add(new String[]{"FORM END TIME", App.getSqlDateTime(endTime)});
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
 
@@ -569,13 +488,7 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
                 loading.dismiss();
 
                 if (result.equals("SUCCESS")) {
-                    MainActivity.backToMainMenu();
-                    try {
-                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
-                    } catch (Exception e) {
-                        // TODO: handle exception
-                    }
+                    resetViews();
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.form_submitted));
@@ -664,15 +577,11 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
         String date = fo.getFormDate();
         ArrayList<String[][]> obsValue = fo.getObsValue();
         formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
-                timeTakeToFill = obs[0][1];
-            }
 
             if (obs[0][0].equals("NUMBER OF MISSED MEDICATION DOSES IN LAST MONTH")) {
                 adherence.getEditText().setText(obs[0][1]);
@@ -691,7 +600,7 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
             } else if (obs[0][0].equals("NEXT DATE OF DRUG DISPERSAL")) {
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
-                drugDistributionDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+                drugDistributionDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
             } else if (obs[0][0].equals("DAYS WORTH OF DRUGS DISPERSED")) {
                 drugsDispersedDays.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("METFORMIN DOSE")) {
@@ -710,7 +619,6 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
         super.onClick(view);
 
         if (view == formDate.getButton()) {
-            formDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
@@ -718,12 +626,10 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
         } else if (view == drugDistributionDate.getButton()) {
-            drugDistributionDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", false);
             args.putBoolean("allowFutureDate", true);
-            args.putString("formDate", formDate.getButtonText());
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
         }
@@ -748,8 +654,8 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
     public void resetViews() {
         super.resetViews();
 
-        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-        drugDistributionDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        drugDistributionDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {

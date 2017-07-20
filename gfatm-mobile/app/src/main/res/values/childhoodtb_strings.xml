@@ -64,10 +64,10 @@
     <string name="ctb_screening">Screening</string>
     <string name="ctb_reffered">Referred</string>
     <string name="ctb_patient_referral_source">If referred, and the patient came to you for investigation, what was the source of the patient\’s referral?</string>
-    <string name="ctb_doctor_healthworker_in_hospital">Within the hospital</string>
-    <string name="ctb_doctor_healthworker_out_hospital">Outside the hospital</string>
-    <string name="ctb_child_tested_for_tb">Self-referral</string>
-    <string name="ctb_family_member_tb_patient">Through a TB contact</string>
+    <string name="ctb_doctor_healthworker_in_hospital">By a doctor or health worker within the hospital</string>   
+    <string name="ctb_doctor_healthworker_out_hospital">By a doctor or health worker outside of the hospital</string>
+    <string name="ctb_child_tested_for_tb">Care giver wants to get the child tested for TB (self-refferal)</string>
+    <string name="ctb_family_member_tb_patient">Child is a family member(contact) of a TB patient who wants to be investigated</string>
     <string name="ctb_facility_department">Where within the hospital was the child referred from?</string>
     <string name="ctb_referral_inside">If OPD Clinic or Ward, please specify</string>
     <string name="ctb_referral_outside">Where outside the hospital was the child referred from?</string>
@@ -117,11 +117,11 @@
     <string name="ctb_weight">Weight (kg)</string>
     <string name="ctb_height">Height (cm)</string>
     <string name="ctb_weight_percentile">Weight Percentile</string>
-    <string name="ctb_less_than_5">&lt;=5th percentile</string>
-    <string name="ctb_less_than_10">6-&lt;=10th percentile</string>
-    <string name="ctb_less_than_25">11-&lt;=25th percentile</string>
-    <string name="ctb_less_than_50">26-&lt;=50th percentile</string>
-    <string name="ctb_greater_than_50">&gt;50th percentile</string>
+    <string name="ctb_less_than_5">≤5th percentile</string>
+    <string name="ctb_less_than_10">6-≤10th percentile</string>
+    <string name="ctb_less_than_25">11-≤25th percentile</string>
+    <string name="ctb_less_than_50">26-≤50th percentile</string>
+    <string name="ctb_greater_than_50">>50th percentile</string>
     <string name="ctb_fever">Does the child have a fever?</string>
     <string name="ctb_general_appearance">General Appearance</string>
     <string name="ctb_remarkable">Remarkable</string>
@@ -308,7 +308,6 @@
     <string name="ctb_ct_brain_interpretation">CT brain interpretation</string>
     <string name="ctb_ct_bone_suggestive_tb">CT bone suggestive of TB</string>
     <string name="ctb_ct_spine_suggestive_tb">CT spine suggestive of TB</string>
-    <string name="ctb_ct_scan_outcome">CT Scan Outcome</string>
     <string name="ctb_meningeal_enhancement">Meningeal enhancement</string>
     <string name="ctb_tuberculomas">Tuberculomas</string>
     <string name="ctb_tuberculin_skin_test">Tuberculin Skin Test Result</string>
@@ -336,9 +335,9 @@
     <string name="ctb_able_to_contact_patient">Have you been able to contact the patient?</string>
     <string name="ctb_why_unable_to_contact">If no, why were you unable to contact the patient?</string>
     <string name="ctb_phone_switched_off">Phone switched off</string>
-    <string name="ctb_patient_did_not_recieve_call">Patient not responding</string>
+    <string name="ctb_patient_did_not_recieve_call">Patient did not receive call</string>
     <string name="ctb_reason_why_missed">Reason why missed visit?</string>
-    <string name="ctb_pateint_moved">Patient relocated</string>
+    <string name="ctb_pateint_moved">Patient moved</string>
     <string name="ctb_pateint_continue_another_location">Patient continuing treatment at another location</string>
     <string name="ctb_patient_unable_to_visit_due_to_reason">Patient unable to visit hospital due to personal reasons</string>
     <string name="ctb_patient_died">Patient died</string>
@@ -384,7 +383,7 @@
     <string name="ctb_name_of_person_provided_details">Provide name and contact number of person at referral / transfer site who provided details about the patient		</string>
     <string name="ctb_other_reason_remarks">Other Reason/Remarks</string>
     <string name="ctb_age_greater_than_15">Child age can not be greater than 15</string>
-    <string name="ctb_incorrect_contact_number">Invalid / incorrect contact number</string>
+    <string name="ctb_incorrect_contact_number">Incorrect contact number</string>
     <string name="ctb_son_daughter_of">S/O D/O</string>
     <string name="ctb_weight_at_baseline">Weight at baseline (kg)</string>
     <string name="ctb_spaces_only">Can not contains space only</string>
@@ -400,7 +399,6 @@
     <string name="ctb_genitourinary">Genitourinary</string>
     <string name="ctb_other_extra_pulmonary_site">Other Extra-Pulmonary TB Site</string>
     <string name="ctb_patient_type">Patient Type</string>
-    <string name="ctb_test_confirming_diagnosis">Test Confirming Diagnosis</string>
     <string name="ctb_new">New</string>
     <string name="ctb_relapse">Relapse</string>
     <string name="ctb_referred_transferred">Referred/Transferred in</string>
@@ -523,67 +521,18 @@
     <string name="ctb_23">23</string>
     <string name="ctb_24">24</string>
     <string name="ctb_other_dst_media">Other DST Media</string>
-    <string name="ctb_submission_can_not_be_less_than_form_date">Submission date can not be less than form date</string>
-    <string name="ctb_next_visit_less_than_form_date">Next visit date can not be less than Form Date</string>
-    <string name="ctb_form_date_less_than_treatment_initiation">Form date cannot be before treatment initiation date</string>
-    <string name="ctb_date_can_not_be_less_than_form_date">Date can not be less than Form Date</string>
-    <string name="ctb_return_visit_less_than_23_months">Next appointment date cannot be more than 24 months</string>
-    <string name="ctb_abnormal_diagnosis">If Abnormal, Detailed Diagnosis</string>
-    <string name="ctb_abnormal_suggestive_tb">Abnormal Suggestive of TB</string>
-    <string name="ctb_abnormal_not_suggestive_tb">Abnormal Not Suggestive of TB</string>
-    <string name="ctb_mobile_number">Mobile number</string>
-    <string name="ctb_select_form_type">Please select form type</string>
-    <string name="ctb_xray_in_6_month">Has the patient had an X-Ray in the past 6 months at an X-Ray Van?</string>
-    <string name="ctb_patient_acceptance_ipt">Patient acceptance to IPT</string>
-    <string name="ctb_empty"></string>
-    <string name="ctb_ipt_reg_no">IPT Registration No.</string>
-    <string name="ctb_1_and_half">1.5</string>
-    <string name="ctb_no_histopathology_order_found">No Histopatology Order found for the patient.</string>
-    <string name="ctb_no_afb_order_found">No AFB Smear Order found for the patient.</string>
-    <string name="ctb_no_dst_order_found">No DST Order found for the patient.</string>
-    <string name="ctb_no_cxr_order_found">No CXR Order found for the patient.</string>
-    <string name="ctb_no_ultrasound_found">No Ultrasound found for the patient.</string>
-    <string name="ctb_no_ct_scan_order_found">No CT Scan Order for the patient.</string>
-    <string name="ctb_no_mantoux_order_found">No Mantoux Order for the patient.</string>
-    <string name="ctb_order_result_found_error">Test Result already existls for Order ID:"</string>
-    <string name="ctb_gxp_result_exist_for_order_id">GXP Result already exists for Order ID:"</string>
-    <string name="ctb_test_result_found_error">Test Result already exists for Test ID:"</string>
-    <string name="ctb_no_gxp_speciman_error">No GXP Specimen Collection for the patient </string>
-    <string name="ctb_missed_visit_less_than_formdate">Missed visit date can not be greater than Form date</string>
-    <string name="ctb_patient_referred_transfered">Has this patient being referred out or transferred out?</string>
-    <string name="ctb_not_applicable">Not applicable</string>
-    <string name="ctb_patient_service_complain">Patient has a service complaint</string>
-    <string name="ctb_lack_fund_travel">Patient lacks funds to travel to the facility</string>
-    <string name="ctb_unable_to_locate_referral">Unable to locate referral site</string>
-    <string name="ctb_treatment_at_parent_side">Want treatment at parent site</string>
-    <string name="ctb_new_location">New location</string>
-    <string name="ctb_new_facility_name">New treatment facility name</string>
-    <string name="ctb_reason_changing_facility">Reason for changing to new facility</string>
-    <string name="ctb_relocated">Relocated</string>
-    <string name="ctb_old_facility_far">Old facility too far</string>
-    <string name="ctb_service_complain">Service complain</string>
-    
-    <string-array name="ctb_reason_changing_facility_list">
-        <item>@string/ctb_relocated</item>
-        <item>@string/ctb_old_facility_far</item>
-        <item>@string/ctb_service_complain</item>
-        <item>@string/ctb_other_title</item>
-    </string-array>
-
-
-    <string-array name="ctb_abnormal_list">
-        <item>@string/ctb_normal</item>
-        <item>@string/ctb_abnormal_suggestive_tb</item>
-        <item>@string/ctb_abnormal_not_suggestive_tb</item>
-    </string-array>
 
     <string-array name="ctb_screening_location_list">
         <item>@string/ctb_hospital</item>
         <item>@string/ctb_community</item>
     </string-array>
 
+    <string-array name="ctb_hospital_list">
+        <item>@string/ctb_indus_hospital</item>
+        <item>@string/ctb_jinnah_hospital</item>
+    </string-array>
+
     <string-array name="ctb_facility_section_list">
-        <item>@string/ctb_empty</item>
         <item>@string/ctb_opd_clinic</item>
         <item>@string/ctb_ward</item>
         <item>@string/ctb_registration_desk</item>
@@ -592,7 +541,6 @@
     </string-array>
 
     <string-array name="ctb_opd_ward_section_list">
-        <item>@string/ctb_empty</item>
         <item>@string/ctb_paediatrics</item>
         <item>@string/ctb_general_medicine_filter_clinic</item>
         <item>@string/ctb_chest_tb_clinic_screening</item>
@@ -607,7 +555,6 @@
     </string-array>
 
     <string-array name="ctb_cough_duration_list">
-        <item>@string/ctb_empty</item>
         <item>@string/ctb_less_than_2_weeks</item>
         <item>@string/ctb_2_to_3_weeks</item>
         <item>@string/ctb_more_than_3_weeks</item>
@@ -643,7 +590,6 @@
     </string-array>
 
     <string-array name="ctb_patient_referral_source_list">
-        <item>@string/ctb_empty</item>
         <item>@string/ctb_doctor_healthworker_in_hospital</item>
         <item>@string/ctb_doctor_healthworker_out_hospital</item>
         <item>@string/ctb_child_tested_for_tb</item>
@@ -663,7 +609,6 @@
     </string-array>
 
     <string-array name="ctb_referral_outside_list">
-        <item>@string/ctb_empty</item>
         <item>@string/ctb_public_hospital</item>
         <item>@string/ctb_private_hospital</item>
         <item>@string/ctb_gp</item>
@@ -671,7 +616,6 @@
     </string-array>
 
     <string-array name="ctb_hear_about_us_list">
-        <item>@string/ctb_empty</item>
         <item>@string/ctb_radio</item>
         <item>@string/ctb_tv</item>
         <item>@string/ctb_newspaper</item>
@@ -698,7 +642,6 @@
     </string-array>
 
     <string-array name="ctb_weight_percentile_list">
-        <item>@string/ctb_empty</item>
         <item>@string/ctb_less_than_5</item>
         <item>@string/ctb_less_than_10</item>
         <item>@string/ctb_less_than_25</item>
@@ -736,19 +679,6 @@
         <item>@string/ctb_not_tb_presumptive</item>
     </string-array>
 
-    <string-array name="ctb_confirming_diagnosis_list">
-        <item>@string/ctb_chest_xray</item>
-        <item>@string/ctb_ultrasound</item>
-        <item>@string/ctb_ct_scan</item>
-        <item>@string/ctb_gene_xpert</item>
-        <item>@string/ctb_mantoux</item>
-        <item>@string/ctb_smear_microscopy</item>
-        <item>@string/ctb_histopathology</item>
-        <item>@string/ctb_cbc</item>
-        <item>@string/ctb_esr</item>
-        <item>@string/ctb_drug_sensitivity</item>
-    </string-array>
-
     <string-array name="ctb_ctb_baseline_repeat_followup_list">
         <item>@string/ctb_baseline</item>
         <item>@string/ctb_baseline_repeat</item>
@@ -764,7 +694,6 @@
         <item>@string/ctb_rr_positive</item>
         <item>@string/ctb_indeterminate</item>
         <item>@string/ctb_error_invalid_no_result</item>
-        <item>@string/ctb_other_title</item>
     </string-array>
     
     <string-array name="ctb_specimen_type_list">
@@ -826,6 +755,7 @@
         <item>@string/ctb_infiltration</item>
         <item>@string/ctb_consolidation</item>
         <item>@string/ctb_effusion</item>
+        <item>@string/ctb_normal</item>
         <item>@string/ctb_cavitation</item>
         <item>@string/ctb_miliary_tb</item>
         <item>@string/ctb_other_title</item>
@@ -970,10 +900,6 @@
         <item>@string/ctb_patient_unable_to_visit_due_to_reason</item>
         <item>@string/ctb_patient_died</item>
         <item>@string/ctb_patient_refused_treatment</item>
-        <item>@string/ctb_patient_service_complain</item>
-        <item>@string/ctb_lack_fund_travel</item>
-        <item>@string/ctb_unable_to_locate_referral</item>
-        <item>@string/ctb_treatment_at_parent_side</item>
         <item>@string/ctb_other_title</item>
     </string-array>
 
@@ -1174,39 +1100,9 @@
         <item>@string/ctb_22</item>
         <item>@string/ctb_23</item>
         <item>@string/ctb_24</item>
-    </string-array>
-
-    <string-array name="ctb_1_to_5_list">
-        <item>@string/ctb_1</item>
-        <item>@string/ctb_2</item>
-        <item>@string/ctb_3</item>
-        <item>@string/ctb_4</item>
-        <item>@string/ctb_5</item>
-    </string-array>
-
-    <string-array name="ctb_2_to_5_list">
-        <item>@string/ctb_2</item>
-        <item>@string/ctb_3</item>
-        <item>@string/ctb_4</item>
-        <item>@string/ctb_5</item>
-    </string-array>
-
-    <string-array name="ctb_2_to_4">
-        <item>@string/ctb_2</item>
-        <item>@string/ctb_3</item>
-        <item>@string/ctb_4</item>
-    </string-array>
-
-    <string-array name="ctb_1_to_2">
-        <item>@string/ctb_1</item>
-        <item>@string/ctb_1_and_half</item>
-        <item>@string/ctb_2</item>
-    </string-array>
 
 
-    <string-array name="ctb_patient_referred_transfered_list">
-        <item>@string/ctb_referral_before_starting_treatment</item>
-        <item>@string/ctb_transfer_after_starting_treatment</item>
-        <item>@string/ctb_not_applicable</item>
+
     </string-array>
+
 </resources>

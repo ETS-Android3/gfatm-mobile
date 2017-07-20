@@ -2,7 +2,6 @@ package com.ihsinformatics.gfatmmobile.pet;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,10 +10,7 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
-import android.text.Editable;
-import android.text.InputFilter;
 import android.text.InputType;
-import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,8 +18,6 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
@@ -36,10 +30,6 @@ import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
-import com.ihsinformatics.gfatmmobile.custom.MyEditText;
-import com.ihsinformatics.gfatmmobile.custom.MyLinearLayout;
-import com.ihsinformatics.gfatmmobile.custom.MySpinner;
-import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
@@ -77,26 +67,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
     TitledCheckBoxes treatmentRegimen2;
     TitledButton treatmentEnrollmentDate;
 
-    LinearLayout phone1Layout;
-    MyEditText phone1a;
-    MyEditText phone1b;
-    LinearLayout phone2Layout;
-    MyEditText phone2a;
-    MyEditText phone2b;
-    TitledEditText address1;
-    MyLinearLayout addressLayout;
-    MyTextView townTextView;
-    AutoCompleteTextView address2;
-    TitledSpinner province;
-    TitledSpinner district;
-    TitledSpinner city;
-    TitledRadioGroup addressType;
-    TitledEditText landmark;
-
     ScrollView scrollView;
-
-    Boolean refillFlag = false;
-
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -182,7 +153,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
         infectionType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_infection_type), getResources().getStringArray(R.array.pet_infection_types), getResources().getString(R.string.pet_dstb), App.HORIZONTAL, App.VERTICAL);
         dstAvailable = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_dst_available), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         resistanceType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_resistance_Type), getResources().getStringArray(R.array.pet_resistance_types), getResources().getString(R.string.pet_rr_tb), App.VERTICAL, App.VERTICAL);
-        patientType = new TitledSpinner(context, "", getResources().getString(R.string.pet_patient_Type), getResources().getStringArray(R.array.pet_patient_types), getResources().getString(R.string.pet_new), App.HORIZONTAL);
+        patientType = new TitledSpinner(context, "", getResources().getString(R.string.pet_patient_Type), getResources().getStringArray(R.array.pet_patient_types), getResources().getString(R.string.pet_new), App.HORIZONTAL, true);
         dstPattern = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_dst_pattern), getResources().getStringArray(R.array.pet_dst_patterns), null, App.VERTICAL, App.VERTICAL, true);
         regimenlinearLayout = new LinearLayout(context);
         regimenlinearLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -192,79 +163,19 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
         regimenlinearLayout.addView(treatmentRegimen2);
         treatmentEnrollmentDate = new TitledButton(context, null, getResources().getString(R.string.pet_treatment_enrollment), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.VERTICAL);
 
-        phone1Layout = new LinearLayout(context);
-        phone1Layout.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout phone1QuestionLayout = new LinearLayout(context);
-        phone1QuestionLayout.setOrientation(LinearLayout.HORIZONTAL);
-        TextView mandatoryPhone1Sign = new TextView(context);
-        mandatoryPhone1Sign.setText(" *");
-        mandatoryPhone1Sign.setTextColor(Color.parseColor("#ff0000"));
-        phone1QuestionLayout.addView(mandatoryPhone1Sign);
-        MyTextView phone1Text = new MyTextView(context, getResources().getString(R.string.pet_phone_1));
-        phone1QuestionLayout.addView(phone1Text);
-        phone1Layout.addView(phone1QuestionLayout);
-        LinearLayout phone1PartLayout = new LinearLayout(context);
-        phone1PartLayout.setOrientation(LinearLayout.HORIZONTAL);
-        phone1a = new MyEditText(context,"", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
-        phone1a.setHint("0XXX");
-        phone1PartLayout.addView(phone1a);
-        MyTextView phone1Dash = new MyTextView(context, " - ");
-        phone1PartLayout.addView(phone1Dash);
-        phone1b = new MyEditText(context,"",  7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
-        phone1b.setHint("XXXXXXX");
-        phone1PartLayout.addView(phone1b);
-        phone1Layout.addView(phone1PartLayout);
-        phone2Layout = new LinearLayout(context);
-        phone2Layout.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout phone2QuestionLayout = new LinearLayout(context);
-        phone2QuestionLayout.setOrientation(LinearLayout.HORIZONTAL);
-        MyTextView phone2Text = new MyTextView(context, getResources().getString(R.string.pet_phone_2));
-        phone2QuestionLayout.addView(phone2Text);
-        phone2Layout.addView(phone2QuestionLayout);
-        LinearLayout phone2PartLayout = new LinearLayout(context);
-        phone2PartLayout.setOrientation(LinearLayout.HORIZONTAL);
-        phone2a = new MyEditText(context, "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
-        phone2a.setHint("0XXX");
-        phone2PartLayout.addView(phone2a);
-        MyTextView phone2Dash = new MyTextView(context, " - ");
-        phone2PartLayout.addView(phone2Dash);
-        phone2b = new MyEditText(context, "",7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
-        phone2b.setHint("XXXXXXX");
-        phone2PartLayout.addView(phone2b);
-        phone2Layout.addView(phone2PartLayout);
-        address1 = new TitledEditText(context, null, getResources().getString(R.string.pet_address_1), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        addressLayout = new MyLinearLayout(context, null, App.VERTICAL);
-        townTextView = new MyTextView(context, getResources().getString(R.string.pet_address_2));
-        address2 = new AutoCompleteTextView(context);
-        InputFilter[] fArray = new InputFilter[1];
-        fArray[0] = new InputFilter.LengthFilter(20);
-        address2.setFilters(fArray);
-        addressLayout.addView(townTextView);
-        addressLayout.addView(address2);
-        province = new TitledSpinner(context, "", getResources().getString(R.string.province), getResources().getStringArray(R.array.provinces), App.getProvince(), App.VERTICAL);
-        district = new TitledSpinner(context, "", getResources().getString(R.string.pet_district), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
-        city = new TitledSpinner(context, "", getResources().getString(R.string.pet_city), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
-        addressType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_address_type), getResources().getStringArray(R.array.pet_address_types), getResources().getString(R.string.pet_permanent), App.HORIZONTAL, App.VERTICAL);
-        landmark = new TitledEditText(context, null, getResources().getString(R.string.pet_landmark), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-
-
         views = new View[]{formDate.getButton(), husbandName.getEditText(), indexExternalPatientId.getEditText(), ernsNumber.getEditText(),
                 tbType.getRadioGroup(), infectionType.getRadioGroup(), dstAvailable.getRadioGroup(), resistanceType.getRadioGroup(),
-                patientType.getSpinner(), dstPattern, treatmentRegimen1, treatmentRegimen2, phone1a, phone1b, phone2a, phone2b,
-                address1.getEditText(), province.getSpinner(), district.getSpinner(), city.getSpinner(),
-                addressType.getRadioGroup(), landmark.getEditText()};
+                patientType.getSpinner(), dstPattern, treatmentRegimen1, treatmentRegimen2};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formDate, husbandName, indexExternalPatientId, ernsNumber, tbType, infectionType, dstAvailable, resistanceType,
-                        patientType, dstPattern, regimenlinearLayout, treatmentEnrollmentDate,  phone1Layout, phone2Layout, address1, addressLayout, province, district, city, addressType, landmark}};
+                        patientType, dstPattern, regimenlinearLayout, treatmentEnrollmentDate}};
 
         formDate.getButton().setOnClickListener(this);
         treatmentEnrollmentDate.getButton().setOnClickListener(this);
         dstAvailable.getRadioGroup().setOnCheckedChangeListener(this);
         infectionType.getRadioGroup().setOnCheckedChangeListener(this);
-        district.getSpinner().setOnItemSelectedListener(this);
-        province.getSpinner().setOnItemSelectedListener(this);
         for (CheckBox cb : treatmentRegimen1.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
         for (CheckBox cb : treatmentRegimen2.getCheckedBoxes())
@@ -274,101 +185,13 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
 
         resetViews();
 
-        phone1a.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()==4){
-                    phone1b.requestFocus();
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        phone1b.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                if(s.length()==0){
-                    phone1a.requestFocus();
-                    phone1a.setSelection(phone1a.getText().length());
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        phone2a.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()==4){
-                    phone2b.requestFocus();
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        phone2b.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                if(s.length()==0){
-                    phone2a.requestFocus();
-                    phone2a.setSelection(phone2a.getText().length());
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
     }
 
     @Override
     public void updateDisplay() {
 
-        if(refillFlag){
-            refillFlag = false;
-            return;
-        }
-
         if (snackbar != null)
             snackbar.dismiss();
-
-        formDate.getButton().setEnabled(true);
-        treatmentEnrollmentDate.getButton().setEnabled(true);
 
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
@@ -430,27 +253,6 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
 
         Boolean error = false;
         View view = null;
-
-        if(!(App.get(phone2a).equals("") && App.get(phone2b).equals(""))){
-            if (!RegexUtil.isContactNumber(App.get(phone2a) + App.get(phone2b))) {
-                phone2b.setError(getResources().getString(R.string.invalid_value));
-                phone2b.requestFocus();
-                error = true;
-            }
-        }
-        if (App.get(phone1a).isEmpty()) {
-            phone1a.setError(getResources().getString(R.string.mandatory_field));
-            phone1a.requestFocus();
-            error = true;
-        } else if (App.get(phone1b).isEmpty()) {
-            phone1b.setError(getResources().getString(R.string.mandatory_field));
-            phone1b.requestFocus();
-            error = true;
-        } else if (!RegexUtil.isContactNumber(App.get(phone1a) + App.get(phone1b))) {
-            phone1b.setError(getResources().getString(R.string.invalid_value));
-            phone1b.requestFocus();
-            error = true;
-        }
 
         Boolean flag = false;
         for (CheckBox cb : treatmentRegimen1.getCheckedBoxes()) {
@@ -682,17 +484,6 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
         observations.add(new String[]{"TUBERCULOSIS DRUGS", treatmentRegimenString});
         observations.add(new String[]{"TREATMENT ENROLLMENT DATE", App.getSqlDate(secondDateCalendar)});
 
-        observations.add(new String[]{"CONTACT PHONE NUMBER", App.get(phone1a) + "-" + App.get(phone1b)});
-        if (!App.get(phone2a).equals(""))
-            observations.add(new String[]{"SECONDARY MOBILE NUMBER", App.get(phone2a) + "-" + App.get(phone2b)});
-        observations.add(new String[]{"ADDRESS (TEXT)", App.get(address1)});
-        observations.add(new String[]{"EXTENDED PERMANENT ADDRESS (TEXT)", App.get(address2)});
-        observations.add(new String[]{"PROVINCE", App.get(province)});
-        observations.add(new String[]{"DISTRICT", App.get(district)});
-        observations.add(new String[]{"VILLAGE", App.get(city)});
-        observations.add(new String[]{"NEAREST LANDMARK", App.get(landmark)});
-        observations.add(new String[]{"TYPE OF ADDRESS", App.get(addressType).equals(getResources().getString(R.string.pet_permanent)) ? "PERMANENT ADDRESS" : "TEMPORARY ADDRESS"});
-
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
             protected String doInBackground(String... params) {
@@ -720,7 +511,6 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                         encounterId = successArray[1];
                     }
 
-
                     if (App.hasKeyListener(ernsNumber)) {
                         result = serverService.saveIdentifier("ENRS", App.get(ernsNumber), encounterId);
                         if (!result.equals("SUCCESS"))
@@ -735,22 +525,6 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
 
                     if (App.hasKeyListener(husbandName)) {
                         result = serverService.savePersonAttributeType("Guardian Name", App.get(husbandName), encounterId);
-                        if (!result.equals("SUCCESS"))
-                            return result;
-                    }
-
-                    if (!(App.get(address1).equals("") && App.get(address2).equals("") && App.get(district).equals("") && App.get(landmark).equals(""))) {
-                        result = serverService.savePersonAddress(App.get(address1), App.get(address2), App.get(city), App.get(district), App.get(province), App.getCountry(), App.getLongitude(), App.getLatitude(), App.get(landmark), encounterId);
-                        if (!result.equals("SUCCESS"))
-                            return result;
-                    }
-
-                    result = serverService.savePersonAttributeType("Primary Contact", App.get(phone1a) + "-" + App.get(phone1b), encounterId);
-                    if (!result.equals("SUCCESS"))
-                        return result;
-
-                    if (!App.get(phone2a).equals("")) {
-                        result = serverService.savePersonAttributeType("Secondary Contact", App.get(phone2a) + "-" + App.get(phone2b), encounterId);
                         if (!result.equals("SUCCESS"))
                             return result;
                     }
@@ -772,9 +546,6 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                 loading.dismiss();
 
                 if (result.equals("SUCCESS")) {
-
-                    serverService.addTown(address2.getText().toString());
-
                     MainActivity.backToMainMenu();
                     try {
                         InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
@@ -877,7 +648,6 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
-            formDate.getButton().setEnabled(false);
         } else if (view == treatmentEnrollmentDate.getButton()) {
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
@@ -885,7 +655,6 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
             args.putBoolean("allowPastDate", true);
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
-            treatmentEnrollmentDate.getButton().setEnabled(false);
         }
 
     }
@@ -898,25 +667,6 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-        MySpinner spinner = (MySpinner) parent;
-
-        if (spinner == district.getSpinner()) {
-
-            if(district.getSpinner().getTag() == null) {
-
-                String[] cities = serverService.getCityList(App.get(district));
-                city.getSpinner().setSpinnerData(cities);
-            }
-            else city.getSpinner().setTag(null);
-
-        } else if (spinner == province.getSpinner()) {
-
-            if(province.getSpinner().getTag() == null) {
-                String[] districts = serverService.getDistrictList(App.get(province));
-                district.getSpinner().setSpinnerData(districts);
-            }
-            else province.getSpinner().setTag(null);
-        }
     }
 
     @Override
@@ -927,24 +677,6 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
     @Override
     public void resetViews() {
         super.resetViews();
-
-        address2.setText("");
-        Object[][]  towns = serverService.getAllTowns();
-        String[] townList = new String[towns.length];
-
-        for (int i = 0; i < towns.length; i++) {
-            townList[i] = String.valueOf(towns[i][1]);
-        }
-
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, townList);
-        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        address2.setAdapter(spinnerArrayAdapter);
-
-        String[] districts = serverService.getDistrictList(App.getProvince());
-        district.getSpinner().setSpinnerData(districts);
-
-        String[] cities = serverService.getCityList(App.get(district));
-        city.getSpinner().setSpinnerData(cities);
 
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
@@ -984,7 +716,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
         if (App.get(ernsNumber).equals("")) {
             String enrsId = App.getPatient().getEnrs();
 
-            if (enrsId == null || enrsId.equals("")) {
+            if (enrsId.equals("")) {
                 ernsNumber.getEditText().setText("");
             } else {
                 ernsNumber.getEditText().setText(enrsId);
@@ -994,7 +726,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
 
         if (App.get(indexExternalPatientId).equals("")) {
             String externalId = App.getPatient().getExternalId();
-            if (externalId ==  null || externalId.equals("")) {
+            if (externalId.equals("")) {
                 indexExternalPatientId.getEditText().setText("");
             } else {
                 indexExternalPatientId.getEditText().setText(externalId);
@@ -1004,11 +736,11 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
 
         if (App.get(husbandName).equals("")) {
             String husbandNameString = App.getPatient().getPerson().getGuardianName();
-            if (husbandNameString == null || husbandNameString.equals("")) {
+            if (husbandNameString.equals("")) {
                 husbandName.getEditText().setText("");
             } else {
                 husbandName.getEditText().setText(husbandNameString);
-                husbandName.getEditText().setKeyListener(null);
+                // husbandName.getEditText().setKeyListener(null);
             }
         }
 
@@ -1126,16 +858,11 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
     @Override
     public void refill(int formId) {
 
-        refillFlag = true;
-
         OfflineForm fo = serverService.getOfflineFormById(formId);
         String date = fo.getFormDate();
         ArrayList<String[][]> obsValue = fo.getObsValue();
         formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
         formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-
-        province.getSpinner().setOnItemSelectedListener(null);
-        district.getSpinner().setOnItemSelectedListener(null);
 
         for (int i = 0; i < obsValue.size(); i++) {
 
@@ -1354,47 +1081,8 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                 treatmentEnrollmentDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-            } else if (obs[0][0].equals("CONTACT PHONE NUMBER")) {
-                String[] phoneArray = obs[0][1].split("-");
-                phone1a.setText(phoneArray[0]);
-                phone1b.setText(phoneArray[1]);
-            } else if (obs[0][0].equals("SECONDARY MOBILE NUMBER")) {
-                String[] phoneArray = obs[0][1].split("-");
-                phone2a.setText(phoneArray[0]);
-                phone2b.setText(phoneArray[1]);
-            } else if (obs[0][0].equals("NEAREST LANDMARK")) {
-                landmark.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("ADDRESS (TEXT)")) {
-                address1.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("EXTENDED PERMANENT ADDRESS (TEXT)")) {
-                address2.setText(obs[0][1]);
-            } else if (obs[0][0].equals("PROVINCE")) {
-                province.getSpinner().selectValue(obs[0][1]);
-            } else if (obs[0][0].equals("DISTRICT")) {
-                String[] districts = serverService.getDistrictList(App.get(province));
-                district.getSpinner().setSpinnerData(districts);
-                district.getSpinner().selectValue(obs[0][1]);
-                district.getSpinner().setTag("selected");
-            } else if (obs[0][0].equals("VILLAGE")) {
-                String[] cities = serverService.getCityList(App.get(district));
-                city.getSpinner().setSpinnerData(cities);
-                city.getSpinner().selectValue(obs[0][1]);
-                city.getSpinner().setTag("selected");
-            } else if (obs[0][0].equals("TYPE OF ADDRESS")) {
-                for (RadioButton rb : addressType.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_permanent)) && obs[0][1].equals("PERMANENT ADDRESS")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_temporary)) && obs[0][1].equals("TEMPORARY ADDRESS")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
             }
         }
-
-        province.getSpinner().setOnItemSelectedListener(this);
-        district.getSpinner().setOnItemSelectedListener(this);
 
     }
 

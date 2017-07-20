@@ -36,7 +36,6 @@ public class Metadata {
     public static final String PROVINCE = "province";
     public static final String DISTRICT = "district";
     public static final String CITY = "city";
-    public static final String TOWN = "town";
     public static final String ADDRESS_HIERARCHY = "address_hierarchy";
 
 }

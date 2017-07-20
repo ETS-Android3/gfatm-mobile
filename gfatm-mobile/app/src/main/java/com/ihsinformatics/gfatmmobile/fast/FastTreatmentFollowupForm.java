@@ -58,13 +58,11 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
     // Views...
     Boolean dateChoose = false;
     TitledButton formDate;
-    TitledEditText tbRegisterationNumber;
     TitledButton treatmentStartDate;
     TitledEditText weight;
     TitledRadioGroup treatmentPlan;
     TitledButton returnVisitDate;
 
-    boolean refillFlag = false;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -139,9 +137,8 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
 
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        tbRegisterationNumber = new TitledEditText(context, null, getResources().getString(R.string.fast_tb_registeration_no), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         treatmentStartDate = new TitledButton(context, null, getResources().getString(R.string.fast_treatment_initiation_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
-        weight = new TitledEditText(context, null, getResources().getString(R.string.fast_patient_weight), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
+        weight = new TitledEditText(context, null, getResources().getString(R.string.fast_patient_weight), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
         treatmentPlan = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_what_is_patient_current_treatment_plan), getResources().getStringArray(R.array.fast_treatment_plan_list), getResources().getString(R.string.fast_continuation_phase), App.VERTICAL, App.VERTICAL);
         thirdDateCalendar.set(Calendar.YEAR, secondDateCalendar.get(Calendar.YEAR));
         thirdDateCalendar.set(Calendar.DAY_OF_MONTH, secondDateCalendar.get(Calendar.DAY_OF_MONTH));
@@ -150,12 +147,12 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
         returnVisitDate = new TitledButton(context, null, getResources().getString(R.string.fast_next_appointment_date), DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), tbRegisterationNumber.getEditText(), treatmentStartDate.getButton(), weight.getEditText(),
+        views = new View[]{formDate.getButton(), treatmentStartDate.getButton(), weight.getEditText(),
                 treatmentPlan.getRadioGroup(), returnVisitDate.getButton()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, tbRegisterationNumber, treatmentStartDate, weight, treatmentPlan, returnVisitDate}};
+                {{formDate, treatmentStartDate, weight, treatmentPlan, returnVisitDate}};
         formDate.getButton().setOnClickListener(this);
         treatmentStartDate.getButton().setOnClickListener(this);
         returnVisitDate.getButton().setOnClickListener(this);
@@ -165,12 +162,6 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
 
     @Override
     public void updateDisplay() {
-
-        if(refillFlag){
-            refillFlag = false;
-            return;
-        }
-
         if (snackbar != null)
             snackbar.dismiss();
 
@@ -207,7 +198,18 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
             String formDa = treatmentStartDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
 
-            if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+            Date date = new Date();
+            if (secondDateCalendar.after(App.getCalendar(date))) {
+
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                treatmentStartDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+
+            }
+            else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
@@ -220,8 +222,8 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
                 treatmentStartDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         }
         if (!dateChoose) {
-            Calendar requiredDate = formDateCalendar.getInstance();
-            requiredDate.setTime(formDateCalendar.getTime());
+            Calendar requiredDate = secondDateCalendar.getInstance();
+            requiredDate.setTime(secondDateCalendar.getTime());
             requiredDate.add(Calendar.DATE, 30);
 
             if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
@@ -236,14 +238,6 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
         maxDateCalender.setTime(formDateCalendar.getTime());
         maxDateCalender.add(Calendar.YEAR, 2);
 
-        String nextAppointmentDateString = App.getSqlDate(thirdDateCalendar);
-        Date nextAppointmentDate = App.stringToDate(nextAppointmentDateString, "yyyy-MM-dd");
-
-        String treatStartDateString = App.getSqlDate(secondDateCalendar);
-        Date treatmentStDate = App.stringToDate(treatStartDateString, "yyyy-MM-dd");
-
-
-
         if (!(returnVisitDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString()))) {
 
             String formDa = returnVisitDate.getButton().getText().toString();
@@ -254,35 +248,12 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
 
                 thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_date_past_treatment), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-                tv.setMaxLines(2);
-                snackbar.show();
-
-                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
-
-            }
-
-            else if (thirdDateCalendar.before(formDateCalendar)) {
-
-                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_date_past), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
 
             }
-
-            else if(nextAppointmentDate.compareTo(treatmentStDate) == 0){
-                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_treatment_start_date_and_next_visit_date_cant_be_same), Snackbar.LENGTH_INDEFINITE);
-                snackbar.show();
-
-                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
-            }
-
             else if (thirdDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
@@ -307,10 +278,6 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
         }
         dateChoose = false;
-
-        formDate.getButton().setEnabled(true);
-        treatmentStartDate.getButton().setEnabled(true);
-        returnVisitDate.getButton().setEnabled(true);
     }
 
     @Override
@@ -323,26 +290,6 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
                 gotoPage(0);
             weight.getEditText().setError(getString(R.string.empty_field));
             weight.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (tbRegisterationNumber.getVisibility() == View.VISIBLE && tbRegisterationNumber.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            tbRegisterationNumber.getEditText().setError(getString(R.string.empty_field));
-            tbRegisterationNumber.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (tbRegisterationNumber.getEditText().getText().toString().length() > 0 && tbRegisterationNumber.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            tbRegisterationNumber.getEditText().setError(getString(R.string.invalid_value));
-            tbRegisterationNumber.getEditText().requestFocus();
             error = true;
         }
 
@@ -398,10 +345,6 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
 
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-
-        if (tbRegisterationNumber.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TB REGISTRATION NUMBER", App.get(tbRegisterationNumber)});
-
         observations.add(new String[]{"TREATMENT START DATE", App.getSqlDateTime(secondDateCalendar)});
         observations.add(new String[]{"WEIGHT (KG)", App.get(weight)});
         observations.add(new String[]{"TREATMENT PLAN", App.get(treatmentPlan).equals(getResources().getString(R.string.fast_intensive_phase)) ? "INTENSIVE PHASE" :
@@ -534,8 +477,6 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
     @Override
     public void refill(int formId) {
 
-        refillFlag = true;
-
         OfflineForm fo = serverService.getOfflineFormById(formId);
         String date = fo.getFormDate();
         ArrayList<String[][]> obsValue = fo.getObsValue();
@@ -549,12 +490,7 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
                 timeTakeToFill = obs[0][1];
             }
 
-            else if (obs[0][0].equals("TB REGISTRATION NUMBER")) {
-                tbRegisterationNumber.getEditText().setText(obs[0][1]);
-                tbRegisterationNumber.setVisibility(View.VISIBLE);
-            }
-
-            else if (obs[0][0].equals("TREATMENT START DATE")) {
+            else if (obs[0][0].equals("SPECIMEN SUBMISSION DATE")) {
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                 treatmentStartDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
@@ -599,7 +535,6 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
         super.onClick(view);
 
         if (view == formDate.getButton()) {
-            formDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             formDateFragment.setArguments(args);
@@ -609,7 +544,6 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
         }
 
         if (view == treatmentStartDate.getButton()) {
-            treatmentStartDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             secondDateFragment.setArguments(args);
@@ -619,7 +553,6 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
         }
 
         if (view == returnVisitDate.getButton()) {
-            returnVisitDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", THIRD_DATE_DIALOG_ID);
             thirdDateFragment.setArguments(args);
@@ -653,7 +586,58 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
         returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
         updateDisplay();
 
-        boolean flag = true;
+
+        final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
+            @Override
+            protected HashMap<String, String> doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.fetching_data));
+                        loading.show();
+                    }
+                });
+
+                HashMap<String, String> result = new HashMap<String, String>();
+
+                String regDate = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+
+                if (regDate != null)
+                    result.put("REGISTRATION DATE", regDate);
+
+                return result;
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+
+            @Override
+            protected void onPostExecute(HashMap<String, String> result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                if (result.get("REGISTRATION DATE") != null) {
+                    String format = "";
+                    String registerationDate = result.get("REGISTRATION DATE");
+                    if (registerationDate.contains("/")) {
+                        format = "dd/MM/yyyy";
+                    } else {
+                        format = "yyyy-MM-dd";
+                    }
+                    secondDateCalendar.setTime(App.stringToDate(registerationDate, format));
+                    updateDisplay();
+                    treatmentStartDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+                }
+            }
+        };
+        autopopulateFormTask.execute("");
+
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");
@@ -666,75 +650,10 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
                 int formId = Integer.valueOf(id);
 
                 refill(formId);
-                flag = false;
 
             } else bundle.putBoolean("save", false);
 
         }
-
-        if(flag) {
-            final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
-                @Override
-                protected HashMap<String, String> doInBackground(String... params) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            loading.setInverseBackgroundForced(true);
-                            loading.setIndeterminate(true);
-                            loading.setCancelable(false);
-                            loading.setMessage(getResources().getString(R.string.fetching_data));
-                            loading.show();
-                        }
-                    });
-
-                    HashMap<String, String> result = new HashMap<String, String>();
-
-                    String tbRegNum = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "TB REGISTRATION NUMBER");
-                    String regDate = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
-
-                    if (tbRegNum != null)
-                        result.put("TB REGISTRATION NUMBER", tbRegNum);
-
-                    if (regDate != null)
-                        result.put("REGISTRATION DATE", regDate);
-
-
-                    return result;
-                }
-
-                @Override
-                protected void onProgressUpdate(String... values) {
-                }
-
-
-                @Override
-                protected void onPostExecute(HashMap<String, String> result) {
-                    super.onPostExecute(result);
-                    loading.dismiss();
-
-                    if (result.get("TB REGISTRATION NUMBER") != null) {
-                        tbRegisterationNumber.getEditText().setText(result.get("TB REGISTRATION NUMBER"));
-                        tbRegisterationNumber.getEditText().setKeyListener(null);
-                        tbRegisterationNumber.getEditText().setFocusable(false);
-                    }
-
-                    if (result.get("REGISTRATION DATE") != null) {
-                        String format = "";
-                        String registerationDate = result.get("REGISTRATION DATE");
-                        if (registerationDate.contains("/")) {
-                            format = "dd/MM/yyyy";
-                        } else {
-                            format = "yyyy-MM-dd";
-                        }
-                        secondDateCalendar.setTime(App.stringToDate(registerationDate, format));
-                        updateDisplay();
-                        treatmentStartDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-                    }
-                }
-            };
-            autopopulateFormTask.execute("");
-        }
-
     }
 
     @Override
@@ -777,12 +696,6 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
                 secondDateCalendar.set(yy, mm, dd);
             else if (((int) view.getTag()) == THIRD_DATE_DIALOG_ID)
                 thirdDateCalendar.set(yy, mm, dd);
-            updateDisplay();
-        }
-
-        @Override
-        public void onCancel(DialogInterface dialog) {
-            super.onCancel(dialog);
             updateDisplay();
         }
     }

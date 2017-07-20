@@ -2,7 +2,6 @@ package com.ihsinformatics.gfatmmobile.childhoodTb;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -30,11 +30,8 @@ import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
-import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
-import com.ihsinformatics.gfatmmobile.custom.MyEditText;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
-import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
@@ -42,6 +39,8 @@ import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
+
+import org.openmrs.api.impl.VisitServiceImpl;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -65,9 +64,9 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
     TitledEditText enrsNumber;
     TitledEditText firstName;
     TitledEditText lastName;
-    MyEditText mobileNumber1;
-    MyEditText mobileNumber2;
-    LinearLayout mobileLinearLayout;
+    TitledEditText contactNumber1;
+    TitledEditText contactNumber2;
+    LinearLayout contactNumberLayout;
     Snackbar snackbar;
     ScrollView scrollView;
 
@@ -154,39 +153,23 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
         enrsNumber = new TitledEditText(context,null,getResources().getString(R.string.ctb_enrs_number),"","####/##",RegexUtil.idLength, RegexUtil.ERNS_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         firstName = new TitledEditText(context,getResources().getString(R.string.ctb_name_of_person_provided_details),getResources().getString(R.string.first_name),"","",50,RegexUtil.ALPHA_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,true);
         lastName = new TitledEditText(context,null,getResources().getString(R.string.last_name),"","",50,RegexUtil.ALPHA_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,true);
-        mobileLinearLayout = new LinearLayout(context);
-        mobileLinearLayout.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout mobileQuestion = new LinearLayout(context);
-        mobileQuestion.setOrientation(LinearLayout.HORIZONTAL);
-        MyTextView mobileNumberLabel = new MyTextView(context, getResources().getString(R.string.ctb_mobile_number));
-        mobileQuestion.addView(mobileNumberLabel);
-        TextView mandatorySign = new TextView(context);
-        mandatorySign.setText("*");
-        mandatorySign.setTextColor(Color.parseColor("#ff0000"));
-        mobileQuestion.addView(mandatorySign);
-        mobileLinearLayout.addView(mobileQuestion);
-        LinearLayout mobileNumberPart = new LinearLayout(context);
-        mobileNumberPart.setOrientation(LinearLayout.HORIZONTAL);
-        mobileNumber1 = new MyEditText(context,"", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
-        mobileNumber1.setHint("03XX");
-        mobileNumberPart.addView(mobileNumber1);
-        MyTextView mobileNumberDash = new MyTextView(context, " - ");
-        mobileNumberPart.addView(mobileNumberDash);
-        mobileNumber2 = new MyEditText(context,"",  7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
-        mobileNumber2.setHint("XXXXXXX");
-        mobileNumberPart.addView(mobileNumber2);
+        contactNumberLayout = new LinearLayout(context);
+        contactNumberLayout.setOrientation(LinearLayout.HORIZONTAL);
+        contactNumber1 = new TitledEditText(context, null, getResources().getString(R.string.ctb_contact_number), "", "####", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL,true);
+        contactNumberLayout.addView(contactNumber1);
+        contactNumber2 = new TitledEditText(context, null, "-", "", "#######", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        contactNumberLayout.addView(contactNumber2);
 
-        mobileLinearLayout.addView(mobileNumberPart);
 
         views = new View[]{formDate.getButton(),treatmentOutcome.getSpinner(),otherReasonRemarks.getEditText(),treatmentIntiatedAtReferralTransfer.getRadioGroup(),
                 reasonTreatmentNotIntiated.getSpinner(),otherReasonTreatmentNotIntiated.getEditText(),
                 drConfirmation.getRadioGroup(),enrsNumber.getEditText(),firstName.getEditText(),lastName.getEditText(),
-                mobileNumber1, mobileNumber2};
+                contactNumber1.getEditText(),contactNumber2.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formDate,treatmentOutcome,otherReasonRemarks,locationOfTransferOutReferral,treatmentIntiatedAtReferralTransfer,reasonTreatmentNotIntiated,otherReasonTreatmentNotIntiated
-                        ,drConfirmation,enrsNumber,firstName,lastName, mobileLinearLayout}};
+                        ,drConfirmation,enrsNumber,firstName,lastName,contactNumberLayout}};
 
         formDate.getButton().setOnClickListener(this);
         treatmentOutcome.getSpinner().setOnItemSelectedListener(this);
@@ -195,44 +178,6 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
         reasonTreatmentNotIntiated.getSpinner().setOnItemSelectedListener(this);
         drConfirmation.getRadioGroup().setOnCheckedChangeListener(this);
 
-        mobileNumber1.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()==4){
-                    mobileNumber2.requestFocus();
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        mobileNumber2.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()==0){
-                    mobileNumber1.requestFocus();
-                    mobileNumber1.setSelection(mobileNumber1.getText().length());
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
 
 
         resetViews();
@@ -249,7 +194,7 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
             Date date = new Date();
 
 
-        if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
+        if (!(formDate.getButton().getText().equals(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
@@ -257,39 +202,38 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
 
             if (formDateCalendar.after(App.getCalendar(date))) {
 
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
-            }  else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
-                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+            }  else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
-                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
             } else
-                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
         }
-        formDate.getButton().setEnabled(true);
     }
 
     @Override
     public boolean validate() {
         boolean error=false;
-        if (App.get(mobileNumber1).isEmpty() || App.get(mobileNumber2).isEmpty() ) {
-            mobileNumber2.setError(getString(R.string.empty_field));
-            mobileNumber2.requestFocus();
+        if (App.get(contactNumber1).isEmpty() || App.get(contactNumber2).isEmpty() ) {
+            contactNumber2.getEditText().setError(getString(R.string.empty_field));
+            contactNumber2.getEditText().requestFocus();
             error = true;
         }
-        String contactNumber = App.get(mobileNumber1) + App.get(mobileNumber2);
+        String contactNumber = App.get(contactNumber1) + App.get(contactNumber2);
         if (!RegexUtil.isContactNumber(contactNumber)) {
-            mobileNumber2.setError(getString(R.string.ctb_invalid_number));
-            mobileNumber2.requestFocus();
+            contactNumber2.getEditText().setError(getString(R.string.ctb_invalid_number));
+            contactNumber2.getEditText().requestFocus();
             error = true;
         }
         if (App.get(firstName).isEmpty()) {
@@ -347,12 +291,10 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
                 error = true;
             }else{
                 String enrsId = App.getPatient().getEnrs();
-                if(enrsId!=null) {
-                    if (enrsId.equalsIgnoreCase(App.get(enrsNumber))) {
-                        enrsNumber.getEditText().setError(getString(R.string.ctb_duplicate_enrs));
-                        enrsNumber.getEditText().requestFocus();
-                        error = true;
-                    }
+                if(enrsId.equalsIgnoreCase(App.get(enrsNumber))){
+                    enrsNumber.getEditText().setError(getString(R.string.ctb_duplicate_enrs));
+                    enrsNumber.getEditText().requestFocus();
+                    error = true;
                 }
             }
 
@@ -471,8 +413,8 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
         if(!App.get(lastName).isEmpty()){
             observations.add(new String[]{"REFERRAL CONTACT LAST NAME", App.get(lastName)});
         }
-        if(!App.get(mobileNumber1).isEmpty() && !App.get(mobileNumber2).isEmpty()){
-            String contactNumber = App.get(mobileNumber1) + "-" + App.get(mobileNumber2);
+        if(!App.get(contactNumber1).isEmpty() && !App.get(contactNumber2).isEmpty()){
+            String contactNumber = App.get(contactNumber1) + "-" + App.get(contactNumber2);
             observations.add(new String[]{"REFERRAL CONTACT NUMBER", contactNumber});
         }
 
@@ -521,13 +463,7 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
                 loading.dismiss();
 
                 if (result.equals("SUCCESS")) {
-                    MainActivity.backToMainMenu();
-                    try {
-                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
-                    } catch (Exception e) {
-                        // TODO: handle exception
-                    }
+                    resetViews();
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.form_submitted));
@@ -631,9 +567,9 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
                                                                 (obs[0][1].equals("LOST TO FOLLOW-UP") ? getResources().getString(R.string.ctb_lost_to_followup) :
                                                                     getResources().getString(R.string.ctb_other_title)))))));
                 if(value.equals(getResources().getString(R.string.ctb_transfer_out)) || value.equals(getResources().getString(R.string.ctb_referral))){
-                    String referralTransferLocation = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Referral", "REFERRING FACILITY NAME");
+                    String referralTransferLocation = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Referral", "REFERRING FACILITY NAME");
                     if(referralTransferLocation.equalsIgnoreCase(getResources().getString(R.string.ctb_other_title))){
-                        String otherReferralTransferLocation = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Referral", "LOCATION OF REFERRAL OR TRANSFER OTHER");
+                        String otherReferralTransferLocation = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Referral", "LOCATION OF REFERRAL OR TRANSFER OTHER");
                         locationOfTransferOutReferral.setVisibility(View.VISIBLE);
                         locationOfTransferOutReferral.getEditText().setText(otherReferralTransferLocation);
                     }
@@ -692,8 +628,8 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
             }
             else if (obs[0][0].equals("REFERRAL CONTACT NUMBER")) {
                 String[] contactNumber = obs[0][1].split("-");
-                mobileNumber1.setText(contactNumber[0]);
-                mobileNumber2.setText(contactNumber[1]);
+                contactNumber1.getEditText().setText(contactNumber[0]);
+                contactNumber2.getEditText().setText(contactNumber[1]);
             }
 
         }
@@ -706,7 +642,6 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
         super.onClick(view);
 
         if (view == formDate.getButton()) {
-            formDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
@@ -731,13 +666,13 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
                 otherReasonRemarks.setVisibility(View.GONE);
             }
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_referral)) || parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_transfer_out))) {
-                String referralTransferLocation = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Referral", "REFERRING FACILITY NAME");
+                String referralTransferLocation = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Referral", "REFERRING FACILITY NAME");
                 locationOfTransferOutReferral.setVisibility(View.VISIBLE);
                 locationOfTransferOutReferral.getEditText().setKeyListener(null);
                 if(referralTransferLocation!=null) {
                     treatmentIntiatedAtReferralTransfer.setVisibility(View.VISIBLE);
                     if (referralTransferLocation.equalsIgnoreCase(getResources().getString(R.string.ctb_other_title))) {
-                        String otherReferralTransferLocation = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Referral", "LOCATION OF REFERRAL OR TRANSFER OTHER");
+                        String otherReferralTransferLocation = serverService.getObsValue(App.getPatientId(), App.getProgram() + "-" + "Referral", "LOCATION OF REFERRAL OR TRANSFER OTHER");
                         locationOfTransferOutReferral.getEditText().setText(otherReferralTransferLocation);
                     } else {
                         locationOfTransferOutReferral.getEditText().setText(referralTransferLocation);
@@ -776,7 +711,7 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
         if (snackbar != null)
             snackbar.dismiss();
 
-        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
         otherReasonRemarks.setVisibility(View.GONE);
         locationOfTransferOutReferral.setVisibility(View.GONE);
         treatmentIntiatedAtReferralTransfer.setVisibility(View.GONE);
