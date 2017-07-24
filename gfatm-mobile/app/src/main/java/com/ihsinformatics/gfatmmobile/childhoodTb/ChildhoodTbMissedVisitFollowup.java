@@ -153,7 +153,7 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
         formDate.setTag("formDate");
         missedVisitDate = new TitledButton(context, null,  getResources().getString(R.string.ctb_missed_visit_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         missedVisitDate.setTag("missedVisitDate");
-        ableToContact = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_able_to_contact_patient), getResources().getStringArray(R.array.yes_no_options),getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL, true);
+        ableToContact = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_able_to_contact_patient), getResources().getStringArray(R.array.yes_no_options),getResources().getString(R.string.no), App.VERTICAL, App.VERTICAL, true);
         whyUnableToContact = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_why_unable_to_contact), getResources().getStringArray(R.array.ctb_unable_to_contact_list),null, App.VERTICAL, App.VERTICAL);
         otherUnableToContact = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 250, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         patientReferredTransfer = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_referred_transfered), getResources().getStringArray(R.array.ctb_patient_referred_transfered_list),null, App.VERTICAL, App.VERTICAL);
@@ -385,7 +385,7 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
                 }
             }
         }
-        if(App.get(patientReferredTransfer).isEmpty()){
+        if(patientReferredTransfer.getVisibility()==View.VISIBLE && App.get(patientReferredTransfer).isEmpty()){
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -462,27 +462,32 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
             observations.add(new String[]{"OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT", App.get(otherUnableToContact).toUpperCase()});
         }
 
-        observations.add(new String[]{"PATIENT BEING REFEREED OUT OR TRANSFERRED OUT", App.get(patientReferredTransfer).equals(getResources().getString(R.string.ctb_referral_before_starting_treatment)) ? "PATIENT REFERRED" :
-                (App.get(patientReferredTransfer).equals(getResources().getString(R.string.ctb_transfer_after_starting_treatment)) ? "PATIENT TRANSFERRED OUT" :
-                                "NOT APPLICABLE")});
+        if(patientReferredTransfer.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"PATIENT BEING REFEREED OUT OR TRANSFERRED OUT", App.get(patientReferredTransfer).equals(getResources().getString(R.string.ctb_referral_before_starting_treatment)) ? "PATIENT REFERRED" :
+                    (App.get(patientReferredTransfer).equals(getResources().getString(R.string.ctb_transfer_after_starting_treatment)) ? "PATIENT TRANSFERRED OUT" :
+                            "NOT APPLICABLE")});
+        }
 
+        if(referralTransferLocation.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"REFERRING FACILITY NAME", App.get(referralTransferLocation)});
+        }
 
-        observations.add(new String[]{"REFERRING FACILITY NAME", App.get(referralTransferLocation)});
-
-        observations.add(new String[]{"REASON FOR MISSED VISIT", App.get(missedVisitReason).equals(getResources().getString(R.string.ctb_pateint_moved)) ? "PATIENT MOVED" :
-                (App.get(missedVisitReason).equals(getResources().getString(R.string.ctb_pateint_continue_another_location)) ? "PATIENT CHOOSE ANOTHER FACILITY" :
+        if(missedVisitReason.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"REASON FOR MISSED VISIT", App.get(missedVisitReason).equals(getResources().getString(R.string.ctb_pateint_moved)) ? "PATIENT MOVED" :
+                    (App.get(missedVisitReason).equals(getResources().getString(R.string.ctb_pateint_continue_another_location)) ? "PATIENT CHOOSE ANOTHER FACILITY" :
                             (App.get(missedVisitReason).equals(getResources().getString(R.string.ctb_patient_unable_to_visit_due_to_reason)) ? "PATIENT UNABLE TO VISIT HOSPITAL DUE TO PERSONAL REASON" :
-                                    (App.get(missedVisitReason).equals(getResources().getString(R.string.ctb_patient_died)) ? "DIED":
+                                    (App.get(missedVisitReason).equals(getResources().getString(R.string.ctb_patient_died)) ? "DIED" :
                                             (App.get(missedVisitReason).equals(getResources().getString(R.string.ctb_patient_service_complain)) ? "SERVICE COMPLAINT" :
                                                     (App.get(missedVisitReason).equals(getResources().getString(R.string.ctb_lack_fund_travel)) ? "LACK OF FUNDS TO TRAVEL TO THE FACILITY" :
                                                             (App.get(missedVisitReason).equals(getResources().getString(R.string.ctb_unable_to_locate_referral)) ? "UNABLE TO RELOCATE REFERRAL SITE" :
-                                                                    (App.get(missedVisitReason).equals(getResources().getString(R.string.ctb_treatment_at_parent_side)) ? "WANT TREATMENT AT PARENT SITE":
-                                                                                                                                                            "OTHER REASON TO MISSED VISIT")))))))});
+                                                                    (App.get(missedVisitReason).equals(getResources().getString(R.string.ctb_treatment_at_parent_side)) ? "WANT TREATMENT AT PARENT SITE" :
+                                                                            "OTHER REASON TO MISSED VISIT")))))))});
+        }
+
 
         if (otherMissedVisitReason.getVisibility() == View.VISIBLE){
             observations.add(new String[]{"OTHER REASON TO MISSED VISIT", App.get(otherMissedVisitReason)});
         }
-
 
         if (newLocation.getVisibility() == View.VISIBLE){
             observations.add(new String[]{"NEW LOCATION", App.get(newLocation)});
@@ -498,7 +503,6 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
                             (App.get(reasonChangingNewFacility).equals(getResources().getString(R.string.ctb_service_complain)) ? "SERVICE COMPLAINT" :
                                     "OTHER REASON FOR CHANGING FACILITY"))});
         }
-
 
         if (nextVisitDate.getVisibility() == View.VISIBLE){
             observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDateTime(thirdDateCalender).toUpperCase()});
@@ -787,15 +791,25 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_pateint_moved))) {
                 newLocation.setVisibility(View.VISIBLE);
                 newTreatmentFacilityName.setVisibility(View.VISIBLE);
+                nextVisitDate.setVisibility(View.GONE);
             }
             else if(parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_pateint_continue_another_location))){
                 newLocation.setVisibility(View.VISIBLE);
                 newTreatmentFacilityName.setVisibility(View.VISIBLE);
                 reasonChangingNewFacility.setVisibility(View.VISIBLE);
-            } else {
+                nextVisitDate.setVisibility(View.GONE);
+            }
+            else if(parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_patient_died))){
+                nextVisitDate.setVisibility(View.GONE);
+            }
+            else if(parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_patient_refused_treatment))){
+                nextVisitDate.setVisibility(View.GONE);
+            }
+            else {
                 newLocation.setVisibility(View.GONE);
                 newTreatmentFacilityName.setVisibility(View.GONE);
                 reasonChangingNewFacility.setVisibility(View.GONE);
+                nextVisitDate.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -820,11 +834,33 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
         thirdDateCalender.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
         thirdDateCalender.add(Calendar.DAY_OF_MONTH, 30);
         nextVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalender).toString());
-        whyUnableToContact.setVisibility(View.GONE);
         otherUnableToContact.setVisibility(View.GONE);
         otherMissedVisitReason.setVisibility(View.GONE);
         referralTransferLocation.setVisibility(View.GONE);
         reasonChangingNewFacility.setVisibility(View.GONE);
+        patientReferredTransfer.setVisibility(View.GONE);
+        missedVisitReason.setVisibility(View.GONE);
+        newLocation.setVisibility(View.GONE);
+        newTreatmentFacilityName.setVisibility(View.GONE);
+
+        String referredTransferred = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Referral", "PATIENT BEING REFEREED OUT OR TRANSFERRED OUT");
+        if(referredTransferred!=null || !referredTransferred.equals("")){
+            for (RadioButton rb : patientReferredTransfer.getRadioGroup().getButtons()) {
+                if (rb.getText().equals(getResources().getString(R.string.ctb_referral_before_starting_treatment)) && referredTransferred.equals("PATIENT REFERRED")) {
+                    rb.setChecked(true);
+                    break;
+                } else if (rb.getText().equals(getResources().getString(R.string.ctb_transfer_after_starting_treatment)) && referredTransferred.equals("PATIENT TRANSFERRED OUT")) {
+                    rb.setChecked(true);
+                    break;
+                }
+            }
+        }
+
+        String locationOfReferralTransfer = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Referral", "REFERRING FACILITY NAME");
+        if(locationOfReferralTransfer!=null || !locationOfReferralTransfer.equals("")){
+            referralTransferLocation.getSpinner().selectValue(locationOfReferralTransfer);
+        }
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");
@@ -851,10 +887,24 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
                 if(App.get(whyUnableToContact).equals(getResources().getString(R.string.ctb_other_title))){
                     otherUnableToContact.setVisibility(View.VISIBLE);
                 }
-                nextVisitDate.setVisibility(View.GONE);
             } else {
                 whyUnableToContact.setVisibility(View.GONE);
                 otherUnableToContact.setVisibility(View.GONE);
+                patientReferredTransfer.setVisibility(View.VISIBLE);
+                if(App.get(patientReferredTransfer).equals(getResources().getString(R.string.ctb_not_applicable))) {
+                    referralTransferLocation.setVisibility(View.VISIBLE);
+                }
+                missedVisitReason.setVisibility(View.VISIBLE);
+                if(App.get(missedVisitReason).equals(getResources().getString(R.string.ctb_other_title))) {
+                    otherMissedVisitReason.setVisibility(View.VISIBLE);
+                }
+                if(App.get(missedVisitReason).equals(getResources().getString(R.string.ctb_pateint_moved)) || App.get(missedVisitReason).equals(getResources().getString(R.string.ctb_pateint_continue_another_location))) {
+                    newLocation.setVisibility(View.VISIBLE);
+                    newTreatmentFacilityName.setVisibility(View.VISIBLE);
+                }
+                if(App.get(missedVisitReason).equals(getResources().getString(R.string.ctb_pateint_continue_another_location))) {
+                    reasonChangingNewFacility.setVisibility(View.VISIBLE);
+                }
                 nextVisitDate.setVisibility(View.VISIBLE);
             }
         }
