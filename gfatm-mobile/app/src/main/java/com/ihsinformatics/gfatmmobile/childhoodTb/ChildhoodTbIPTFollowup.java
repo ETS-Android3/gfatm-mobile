@@ -173,7 +173,7 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
         complaints = new TitledEditText(context, null, getResources().getString(R.string.ctb_complaints), "", "", 500, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         iptDose = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_dose), getResources().getStringArray(R.array.ctb_dose_list),getResources().getString(R.string.ctb_quater_per_day), App.VERTICAL, App.VERTICAL, true);
         iptCompliance = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ipt_compliance), getResources().getStringArray(R.array.yes_no_options), null, App.VERTICAL, App.VERTICAL);
-        iptOutcome = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ipt_outcome), getResources().getStringArray(R.array.ctb_ipt_outcome_list),getResources().getString(R.string.ctb_complete), App.VERTICAL, App.VERTICAL, true);
+        iptOutcome = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ipt_outcome), getResources().getStringArray(R.array.ctb_ipt_outcome_list),getResources().getString(R.string.ctb_continuing), App.VERTICAL, App.VERTICAL, true);
 
         views = new View[]{formDate.getButton(), fathersName.getEditText(),weightAtBaseline.getEditText(),iptStartDate.getButton(), iptDose.getRadioGroup(),iptCompliance.getRadioGroup(),iptOutcome.getRadioGroup(),
                 dose.getEditText(),weightVisit.getEditText(),complaints.getEditText(),iptRegNo.getEditText()
@@ -308,6 +308,26 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
                 weightVisit.getEditText().requestFocus();
                 error = true;
             }
+            if(iptOutcome.getVisibility()==View.VISIBLE && App.get(iptOutcome).isEmpty()){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                iptOutcome.getQuestionView().setError(getString(R.string.empty_field));
+                iptOutcome.requestFocus();
+                error = true;
+            }
+            if(iptCompliance.getVisibility()==View.VISIBLE && App.get(iptCompliance).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                iptCompliance.getQuestionView().setError(getString(R.string.empty_field));
+                iptCompliance.requestFocus();
+                error = true;
+            }
+
+
             if (error) {
 
                 int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
@@ -676,7 +696,12 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
-
+        if (group == iptOutcome.getRadioGroup()) {
+            iptOutcome.getQuestionView().setError(null);
+        }
+        if (group == iptCompliance.getRadioGroup()) {
+            iptCompliance.getQuestionView().setError(null);
+        }
     }
 
     class MyAdapter extends PagerAdapter {

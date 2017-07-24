@@ -842,6 +842,25 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
         missedVisitReason.setVisibility(View.GONE);
         newLocation.setVisibility(View.GONE);
         newTreatmentFacilityName.setVisibility(View.GONE);
+
+        String referredTransferred = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Referral", "PATIENT BEING REFEREED OUT OR TRANSFERRED OUT");
+        if(referredTransferred!=null || !referredTransferred.equals("")){
+            for (RadioButton rb : patientReferredTransfer.getRadioGroup().getButtons()) {
+                if (rb.getText().equals(getResources().getString(R.string.ctb_referral_before_starting_treatment)) && referredTransferred.equals("PATIENT REFERRED")) {
+                    rb.setChecked(true);
+                    break;
+                } else if (rb.getText().equals(getResources().getString(R.string.ctb_transfer_after_starting_treatment)) && referredTransferred.equals("PATIENT TRANSFERRED OUT")) {
+                    rb.setChecked(true);
+                    break;
+                }
+            }
+        }
+
+        String locationOfReferralTransfer = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Referral", "REFERRING FACILITY NAME");
+        if(locationOfReferralTransfer!=null || !locationOfReferralTransfer.equals("")){
+            referralTransferLocation.getSpinner().selectValue(locationOfReferralTransfer);
+        }
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");
