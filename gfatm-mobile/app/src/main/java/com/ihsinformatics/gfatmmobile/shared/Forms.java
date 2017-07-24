@@ -332,7 +332,7 @@ public class Forms{
     public static final String CHILDHOODTB_ANTIBIOTIC_FOLLOWUP = "Antibiotic Followup Form";
     public static final FormsObject childhoodTb_antibiotic_followup_form = new FormsObject(CHILDHOODTB_ANTIBIOTIC_FOLLOWUP, ChildhoodTbAntibioticFollowup.class, R.drawable.ctb_antibiotic, FormTypeColor.FOLLOWUP_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_MEDICAL_OFFICER});
     public static final String CHILDHOODTB_END_OF_FOLLOWUP = "End Of Followup";
-    public static final FormsObject childhoodTb_end_of_followup = new FormsObject(CHILDHOODTB_END_OF_FOLLOWUP, ChildhoodTbEndOfFollowUp.class, R.drawable.pet_followup_end, FormTypeColor.FOLLOWUP_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER});
+    public static final FormsObject childhoodTb_end_of_followup = new FormsObject(CHILDHOODTB_END_OF_FOLLOWUP, ChildhoodTbEndOfFollowUp.class, R.drawable.pet_followup_end, FormTypeColor.FOLLOWUP_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER, Roles.CHILDHOODTB_MEDICAL_OFFICER});
 
     /********************************************************************************************************************************/
 
