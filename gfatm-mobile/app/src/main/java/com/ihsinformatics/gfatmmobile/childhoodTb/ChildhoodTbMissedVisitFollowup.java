@@ -843,22 +843,72 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
         newLocation.setVisibility(View.GONE);
         newTreatmentFacilityName.setVisibility(View.GONE);
 
+
         String referredTransferred = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Referral", "PATIENT BEING REFEREED OUT OR TRANSFERRED OUT");
-        if(referredTransferred!=null || !referredTransferred.equals("")){
+        String encounterDate = serverService.getLatestEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + "Referral");
+        if(encounterDate==null || encounterDate.equals("")){
             for (RadioButton rb : patientReferredTransfer.getRadioGroup().getButtons()) {
-                if (rb.getText().equals(getResources().getString(R.string.ctb_referral_before_starting_treatment)) && referredTransferred.equals("PATIENT REFERRED")) {
-                    rb.setChecked(true);
-                    break;
-                } else if (rb.getText().equals(getResources().getString(R.string.ctb_transfer_after_starting_treatment)) && referredTransferred.equals("PATIENT TRANSFERRED OUT")) {
+                 if (rb.getText().equals(getResources().getString(R.string.ctb_not_applicable))) {
                     rb.setChecked(true);
                     break;
                 }
             }
+        }else {
+            if (referredTransferred != null || !referredTransferred.equals("")) {
+                for (RadioButton rb : patientReferredTransfer.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_referral_before_starting_treatment)) && referredTransferred.equals("PATIENT REFERRED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_transfer_after_starting_treatment)) && referredTransferred.equals("PATIENT TRANSFERRED OUT")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            }
         }
 
+
         String locationOfReferralTransfer = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Referral", "REFERRING FACILITY NAME");
-        if(locationOfReferralTransfer!=null || !locationOfReferralTransfer.equals("")){
+        if(locationOfReferralTransfer!=null){
             referralTransferLocation.getSpinner().selectValue(locationOfReferralTransfer);
+        }
+
+        String treatmentInitiationNextDateString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "RETURN VISIT DATE");
+        String treatmentFollowupNextDateString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "TB Treatment Followup", "RETURN VISIT DATE");
+
+        if(treatmentInitiationNextDateString!=null && treatmentFollowupNextDateString==null){
+            secondDateCalendar = App.getCalendar(App.stringToDate(treatmentInitiationNextDateString, "yyyy-MM-dd"));
+            missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+        }
+        else if(treatmentInitiationNextDateString==null && treatmentFollowupNextDateString!=null){
+            secondDateCalendar = App.getCalendar(App.stringToDate(treatmentFollowupNextDateString, "yyyy-MM-dd"));
+            missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+        }else if(treatmentInitiationNextDateString!=null && treatmentFollowupNextDateString!=null){
+            Date d1 = null;
+            Date d2 = null;
+            if (treatmentInitiationNextDateString.contains("/")) {
+                d1 = App.stringToDate(treatmentInitiationNextDateString, "dd/MM/yyyy");
+            } else {
+                d1 = App.stringToDate(treatmentInitiationNextDateString, "yyyy-MM-dd");
+            }
+
+            if (treatmentFollowupNextDateString.contains("/")) {
+                d2 = App.stringToDate(treatmentFollowupNextDateString, "dd/MM/yyyy");
+            } else {
+                d2 = App.stringToDate(treatmentFollowupNextDateString, "yyyy-MM-dd");
+            }
+
+
+            if (d2.after(d1)) {
+                secondDateCalendar = App.getCalendar(App.stringToDate(treatmentFollowupNextDateString, "yyyy-MM-dd"));
+                missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+            }else if(d2.equals(d1)) {
+                secondDateCalendar = App.getCalendar(App.stringToDate(treatmentInitiationNextDateString, "yyyy-MM-dd"));
+                missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+            }else {
+                secondDateCalendar = App.getCalendar(App.stringToDate(treatmentInitiationNextDateString, "yyyy-MM-dd"));
+                missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+            }
         }
 
         Bundle bundle = this.getArguments();
