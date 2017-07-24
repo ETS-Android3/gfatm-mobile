@@ -4765,7 +4765,7 @@ INSERT OR IGNORE INTO location VALUES (57,'BVH-BWP','10fab16a-ea66-4f3c-840a-5a6
 INSERT OR IGNORE INTO location VALUES (58,'SZH-RYK','21af21f4-903c-4d69-9711-b3f24a92c23f',NULL,'N','N','N','N','Y','N',NULL,'Sheikh Zayed Medical College/Hospital',NULL,NULL,'Rahimyar Khan','Punjab', NULL, 'Sheikh Zayed Hospital, Rahimyar Khan');
 INSERT OR IGNORE INTO location VALUES (59,'DHH-KZD','4229393b-eb7d-454f-8db5-559aa31d7b85',NULL,'N','N','N','N','Y','N',NULL,NULL,NULL,NULL,'Khuzdar','Balochistan', NULL, 'District Headquarter Hospital, Khuzdar');
 INSERT OR IGNORE INTO location VALUES (60,'DHH-TRB','e8e1d4cd-ec9b-4edb-9329-9b9a42db121e',NULL,'N','N','N','N','Y','N',NULL,NULL,NULL,NULL,'Turbat','Balochistan', NULL, 'District Headquarter Hospital, Turbat');
-INSERT OR IGNORE INTO location VALUES (61,'LRBKNG-KHI','1e72a4d8-99ec-4c09-8550-51e101d45fd9',NULL,'N','N','N','Y','N','N',NULL,'37-C, Sunset Lane 4','24th Commercial Street',NULL,'Karachi','Sindh', NULL, 'Layton Rehmatullah Benevolent Trust Eye Hospital Korangi');
+INSERT OR IGNORE INTO location VALUES (61,'LRBKNG-KHI','1e72a4d8-99ec-4c09-8550-51e101d45fd9',NULL,'Y','N','N','Y','N','N',NULL,'37-C, Sunset Lane 4','24th Commercial Street',NULL,'Karachi','Sindh', NULL, 'Layton Rehmatullah Benevolent Trust Eye Hospital Korangi');
 INSERT OR IGNORE INTO location VALUES (62,'IHNK-KHI','43307598-a468-49d0-bca4-d8a23074fc7d',NULL,'Y','N','Y','Y','Y','Y',NULL,'New Karachi', NULL ,NULL,'Karachi','Sindh', NULL, 'Indus Hospital New Karachi');
 
 -- Countries List

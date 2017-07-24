@@ -1,0 +1,2 @@
+-- update queries
+update OR IGNORE location set fast_location='Y' where uuid = '1e72a4d8-99ec-4c09-8550-51e101d45fd9';
