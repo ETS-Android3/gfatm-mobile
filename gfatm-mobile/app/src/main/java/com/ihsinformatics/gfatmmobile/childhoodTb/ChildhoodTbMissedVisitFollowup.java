@@ -462,7 +462,7 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
             observations.add(new String[]{"OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT", App.get(otherUnableToContact).toUpperCase()});
         }
 
-        if(patientReferredTransfer.getVisibility()==View.VISIBLE) {
+      /*  if(patientReferredTransfer.getVisibility()==View.VISIBLE) {
             observations.add(new String[]{"PATIENT BEING REFEREED OUT OR TRANSFERRED OUT", App.get(patientReferredTransfer).equals(getResources().getString(R.string.ctb_referral_before_starting_treatment)) ? "PATIENT REFERRED" :
                     (App.get(patientReferredTransfer).equals(getResources().getString(R.string.ctb_transfer_after_starting_treatment)) ? "PATIENT TRANSFERRED OUT" :
                             "NOT APPLICABLE")});
@@ -471,6 +471,7 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
         if(referralTransferLocation.getVisibility()==View.VISIBLE) {
             observations.add(new String[]{"REFERRING FACILITY NAME", App.get(referralTransferLocation)});
         }
+       */
 
         if(missedVisitReason.getVisibility()==View.VISIBLE) {
             observations.add(new String[]{"REASON FOR MISSED VISIT", App.get(missedVisitReason).equals(getResources().getString(R.string.ctb_pateint_moved)) ? "PATIENT MOVED" :
@@ -672,6 +673,7 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
             } else if (obs[0][0].equals("OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT")) {
                 otherUnableToContact.getEditText().setText(obs[0][1]);
             }
+            /*
             else if (obs[0][0].equals("PATIENT BEING REFEREED OUT OR TRANSFERRED OUT")) {
                 for (RadioButton rb : patientReferredTransfer.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.ctb_referral_before_starting_treatment)) && obs[0][1].equals("PATIENT REFERRED")) {
@@ -689,7 +691,7 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
             else if (obs[0][0].equals("REFERRING FACILITY NAME")) {
                 referralTransferLocation.getSpinner().selectValue(obs[0][1]);
             }
-
+            */
 
             else if (obs[0][0].equals("REASON FOR MISSED VISIT")) {
                 String value = obs[0][1].equals("PATIENT MOVED") ? getResources().getString(R.string.ctb_pateint_moved) :
@@ -837,6 +839,8 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
         otherUnableToContact.setVisibility(View.GONE);
         otherMissedVisitReason.setVisibility(View.GONE);
         referralTransferLocation.setVisibility(View.GONE);
+        patientReferredTransfer.getRadioGroup().setEnabled(false);
+        referralTransferLocation.getSpinner().setEnabled(false);
         reasonChangingNewFacility.setVisibility(View.GONE);
         patientReferredTransfer.setVisibility(View.GONE);
         missedVisitReason.setVisibility(View.GONE);
@@ -942,6 +946,8 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
                 otherUnableToContact.setVisibility(View.GONE);
                 patientReferredTransfer.setVisibility(View.VISIBLE);
                 if(App.get(patientReferredTransfer).equals(getResources().getString(R.string.ctb_not_applicable))) {
+                    referralTransferLocation.setVisibility(View.GONE);
+                }else{
                     referralTransferLocation.setVisibility(View.VISIBLE);
                 }
                 missedVisitReason.setVisibility(View.VISIBLE);
@@ -969,10 +975,10 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
         else if(group == patientReferredTransfer.getRadioGroup()){
             patientReferredTransfer.getQuestionView().setError(null);
             if (patientReferredTransfer.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_not_applicable))) {
-                referralTransferLocation.setVisibility(View.VISIBLE);
+                referralTransferLocation.setVisibility(View.GONE);
             }
             else{
-                referralTransferLocation.setVisibility(View.GONE);
+                referralTransferLocation.setVisibility(View.VISIBLE);
             }
         }
     }

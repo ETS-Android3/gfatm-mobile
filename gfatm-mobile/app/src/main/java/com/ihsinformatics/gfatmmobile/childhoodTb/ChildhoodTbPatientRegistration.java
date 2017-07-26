@@ -97,8 +97,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
     LinearLayout secondaryLandlineNumber;
     MyEditText secondaryLandlineNumber1;
     MyEditText secondaryLandlineNumber2;
-
-
+    TitledEditText externalID;
 
     Snackbar snackbar;
     ScrollView scrollView;
@@ -305,6 +304,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         secondaryLandlineNumber.addView(secondaryLandlineNumberPart);
         secondaryLandlineContact = new TitledSpinner(context,null,getResources().getString(R.string.ctb_whose_contact),getResources().getStringArray(R.array.ctb_close_contact_type_list),null,App.VERTICAL);
         permissionSecondaryLandlineNumber = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_permission),getResources().getStringArray(R.array.yes_no_options),getResources().getString(R.string.no),App.HORIZONTAL,App.VERTICAL,true);
+        externalID = new TitledEditText(context,null,getResources().getString(R.string.ctb_external_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.VERTICAL,false);
 
 
         cnic1.addTextChangedListener(new TextWatcher() {
@@ -663,11 +663,11 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
             }
         });
 
-        views = new View[]{formDate.getButton(),cnicLayout,cnicOwner.getSpinner(),cnicOwnerOther.getEditText(),addressProvided.getRadioGroup(), address1.getEditText(), province.getSpinner(),city.getSpinner(),district.getSpinner(),addressType.getRadioGroup(),nearestLandmark.getEditText(),mobileLinearLayout,mobileNumberContact.getSpinner(),permissionMobileNumberContact.getRadioGroup(),secondaryMobileLinearLayout,secondaryMobileNumberContact.getSpinner(),permissionSecondaryMobileNumber.getRadioGroup(),landlineLayout,landlineNumberContact.getSpinner(),permissionLandlineNumber.getRadioGroup(),secondaryLandlineNumber,secondaryLandlineContact.getSpinner(),permissionSecondaryLandlineNumber.getRadioGroup()};
+        views = new View[]{formDate.getButton(),cnicLayout,cnicOwner.getSpinner(),cnicOwnerOther.getEditText(),addressProvided.getRadioGroup(), address1.getEditText(), province.getSpinner(),city.getSpinner(),district.getSpinner(),addressType.getRadioGroup(),nearestLandmark.getEditText(),mobileLinearLayout,mobileNumberContact.getSpinner(),permissionMobileNumberContact.getRadioGroup(),secondaryMobileLinearLayout,secondaryMobileNumberContact.getSpinner(),permissionSecondaryMobileNumber.getRadioGroup(),landlineLayout,landlineNumberContact.getSpinner(),permissionLandlineNumber.getRadioGroup(),secondaryLandlineNumber,secondaryLandlineContact.getSpinner(),permissionSecondaryLandlineNumber.getRadioGroup(),externalID.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate,cnicLayout,cnicOwner,cnicOwnerOther,addressProvided,address1, addressLayout, province,district,city,addressType,nearestLandmark,mobileLinearLayout,mobileNumberContact,permissionMobileNumberContact,secondaryMobileLinearLayout,secondaryMobileNumberContact,permissionSecondaryMobileNumber,landlineLayout,landlineNumberContact,permissionLandlineNumber,secondaryLandlineNumber,secondaryLandlineContact,permissionSecondaryLandlineNumber}};
+                {{formDate,externalID,cnicLayout,cnicOwner,cnicOwnerOther,addressProvided,address1, addressLayout, province,district,city,addressType,nearestLandmark,mobileLinearLayout,mobileNumberContact,permissionMobileNumberContact,secondaryMobileLinearLayout,secondaryMobileNumberContact,permissionSecondaryMobileNumber,landlineLayout,landlineNumberContact,permissionLandlineNumber,secondaryLandlineNumber,secondaryLandlineContact,permissionSecondaryLandlineNumber}};
 
         formDate.getButton().setOnClickListener(this);
         cnicOwner.getSpinner().setOnItemSelectedListener(this);
@@ -926,6 +926,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
 
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
+
         if(cnicLayout.getVisibility()==View.VISIBLE) {
             String cnicNumber = App.get(cnic1) + "-" + App.get(cnic2) + "-" + App.get(cnic3);
             if (RegexUtil.isValidNIC(cnicNumber)) {
@@ -1098,6 +1099,27 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                     result = serverService.saveProgramEnrollement(App.getSqlDate(formDateCalendar), encounterId);
                     if (!result.equals("SUCCESS"))
                         return result;
+
+                    if (!App.get(externalID).isEmpty() && App.hasKeyListener(externalID)) {
+                        if(App.getPatient().getExternalId() != null) {
+                            if(!App.getPatient().getExternalId().equals("")) {
+                                if (!App.getPatient().getExternalId().equalsIgnoreCase(App.get(externalID))) {
+                                    result = serverService.saveIdentifier("External ID", App.get(externalID), encounterId);
+                                    if (!result.equals("SUCCESS"))
+                                        return result;
+                                }
+                            }
+                            else {
+                                result = serverService.saveIdentifier("External ID", App.get(externalID), encounterId);
+                                if (!result.equals("SUCCESS"))
+                                    return result;
+                            }
+                        } else {
+                            result = serverService.saveIdentifier("External ID", App.get(externalID), encounterId);
+                            if (!result.equals("SUCCESS"))
+                                return result;
+                        }
+                    }
 
                     if (!(App.get(address1).equals("") && App.get(district).equals("") && App.get(nearestLandmark).equals(""))) {
                         result = serverService.savePersonAddress(App.get(address1),App.get(address2),App.get(city), App.get(district), App.get(province), App.getCountry(), App.getLongitude(), App.getLatitude(), App.get(nearestLandmark), encounterId);
@@ -1575,6 +1597,20 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
 
             } else bundle.putBoolean("save", false);
 
+        }
+
+        if (App.get(externalID).equals("")) {
+            String externalId = App.getPatient().getExternalId();
+            if (externalId != null) {
+                if (externalId.equals("")) {
+                    externalID.getEditText().setText("");
+                } else {
+                    externalID.getEditText().setText(externalId);
+                    //indexExternalPatientId.getEditText().setKeyListener(null);
+                }
+            } else {
+                externalID.getEditText().setText("");
+            }
         }
 
 
