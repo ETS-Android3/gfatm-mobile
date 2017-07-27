@@ -646,6 +646,7 @@
     </string-array>
 
     <string-array name="fast_hear_about_us_from_list">
+        <item></item>
         <item>@string/fast_radio</item>
         <item>@string/fast_tv</item>
         <item>@string/fast_newspaper</item>
