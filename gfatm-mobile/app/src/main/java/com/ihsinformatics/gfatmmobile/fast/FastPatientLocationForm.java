@@ -161,7 +161,7 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
         referralWithinOpd = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_which_opd_clinic_or_ward_has_patient_referred_from), getResources().getStringArray(R.array.fast_opd_clinic_or_ward_patient_reffered_from_list), "", App.VERTICAL, true);
         referralWithinOpdOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         facilityType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_outside_hospital_was_patient_referred), getResources().getStringArray(R.array.fast_outside_hospital_patient_reffered_from), "", App.VERTICAL, App.VERTICAL, true);
-        hearAboutUs = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_where_did_you_hear_about_us), getResources().getStringArray(R.array.fast_hear_about_us_from_list), getResources().getString(R.string.fast_radio), App.VERTICAL, true);
+        hearAboutUs = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_where_did_you_hear_about_us), getResources().getStringArray(R.array.fast_hear_about_us_from_list), "", App.VERTICAL, true);
         hearAboutUsOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         contactReferral = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_enrolled_in_any_tb_program), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL, true);
         contactIdType = new TitledCheckBoxes(context, null, getResources().getString(R.string.fast_tb_contact_any_identifications_id), getResources().getStringArray(R.array.fast_tb_contact_identification_list), null, App.VERTICAL, App.VERTICAL);
@@ -350,9 +350,14 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
             error = true;
         }
 
-
-
-
+        if (hearAboutUs.getVisibility() == View.VISIBLE && App.get(hearAboutUs).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(1);
+            else
+                gotoPage(0);
+            emptyError = true;
+            error = true;
+        }
 
         if (facilitySectionOther.getVisibility() == View.VISIBLE && facilitySectionOther.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())

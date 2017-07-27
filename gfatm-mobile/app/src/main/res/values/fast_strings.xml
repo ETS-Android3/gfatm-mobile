@@ -99,11 +99,11 @@
     <string name="fast_presumptive_refused">Presumptive refused</string>
     <string name="fast_identified_patient_through_screening">Have you identified this patient through screening?</string>
     <string name="fast_source_of_patient_referral">What was the source of the patient\'s referral?</string>
-    <string name="fast_doctor_or_health_worker_within_the_hospital">By a doctor or health worker within the hospital</string>
-    <string name="fast_doctor_or_health_worker_outside_the_hospital">By a doctor or health worker outside of the hospital</string>
+    <string name="fast_doctor_or_health_worker_within_the_hospital">Within the hospital</string>
+    <string name="fast_doctor_or_health_worker_outside_the_hospital">Outside of the hospital</string>
     <string name="fast_self_referral">Self referral</string>
-    <string name="fast_contact_of_tb_patient">Patient is a contact of a TB patient</string>
-    <string name="fast_referred_after_xray_cad4tb">Patient referred after xray/high CAD4TB score</string>
+    <string name="fast_contact_of_tb_patient">Contact of a TB patient</string>
+    <string name="fast_referred_after_xray_cad4tb">Xray/high CAD4TB score</string>
     <string name="fast_ward_title">Ward</string>
     <string name="fast_opd_clinic">OPD Clinic</string>
     <string name="fast_outside_hospital_was_patient_referred">Where outside the hospital was the patient referred from?</string>
@@ -646,6 +646,7 @@
     </string-array>
 
     <string-array name="fast_hear_about_us_from_list">
+        <item></item>
         <item>@string/fast_radio</item>
         <item>@string/fast_tv</item>
         <item>@string/fast_newspaper</item>
