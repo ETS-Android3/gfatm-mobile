@@ -2079,7 +2079,6 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         }
         else if (spinner == patientType.getSpinner()) {
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_referred_transferred))) {
-                testConfirmingDiagnosis.setVisibility(View.VISIBLE);
                 treatmentInitiated.setVisibility(View.GONE);
                 initiatingAdditionalTreatment.setVisibility(View.GONE);
                 reasonTreatmentNotIniated.setVisibility(View.GONE);
@@ -2097,7 +2096,6 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 closeContactTypeTreatmentSupport.setVisibility(View.GONE);
                 otherCloseContactSupporterType.setVisibility(View.GONE);
             } else {
-                testConfirmingDiagnosis.setVisibility(View.GONE);
                 treatmentInitiated.setVisibility(View.VISIBLE);
                 initiatingAdditionalTreatment.setVisibility(View.VISIBLE);
                 if(App.get(treatmentInitiated).equals(getResources().getString(R.string.no))) {
@@ -2395,9 +2393,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 tbRegisterationNumber.setVisibility(View.VISIBLE);
                 tbType.setVisibility(View.VISIBLE);
                 patientType.setVisibility(View.VISIBLE);
-                if(App.get(patientType).equals(getResources().getString(R.string.ctb_referred_transferred))) {
-                    testConfirmingDiagnosis.setVisibility(View.VISIBLE);
-                }
+                testConfirmingDiagnosis.setVisibility(View.VISIBLE);
                 treatmentInitiated.setVisibility(View.VISIBLE);
                 if(App.get(treatmentInitiated).equals(getResources().getString(R.string.no))){
                     reasonTreatmentNotIniated.setVisibility(View.VISIBLE);

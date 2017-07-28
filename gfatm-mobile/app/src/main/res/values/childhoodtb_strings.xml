@@ -562,7 +562,17 @@
     <string name="ctb_relocated">Relocated</string>
     <string name="ctb_old_facility_far">Old facility too far</string>
     <string name="ctb_service_complain">Service complain</string>
-    
+    <string name="ctb_missed_visit_for_treatment_regimen">Missed visit for which treatment regimen?</string>
+    <string name="ctb_ipt_followup">IPT Follow-up</string>
+    <string name="ctb_tb_treatment_followup">TB treatment Follow-up</string>
+    <string name="ctb_antibiotic_trial_followup">Antibiotic Trial Follow-up</string>
+
+    <string-array name="ctb_missed_visit_list">
+        <item>@string/ctb_ipt_followup</item>
+        <item>@string/ctb_tb_treatment_followup</item>
+        <item>@string/ctb_antibiotic_trial_followup</item>
+    </string-array>
+
     <string-array name="ctb_reason_changing_facility_list">
         <item>@string/ctb_relocated</item>
         <item>@string/ctb_old_facility_far</item>

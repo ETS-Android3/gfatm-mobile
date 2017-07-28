@@ -1,5 +1,9 @@
 package com.ihsinformatics.gfatmmobile.childhoodTb;
 
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
@@ -19,6 +23,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -38,6 +43,7 @@ import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -49,6 +55,11 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
 
 
     Context context;
+
+    public static final int THIRD_DATE_DIALOG_ID = 3;
+    protected Calendar thirdDateCalendar;
+    protected DialogFragment thirdDateFragment;
+
     TitledButton formDate;
     TitledEditText fathersName;
     TitledEditText weightAtBaseline;
@@ -60,6 +71,7 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
     TitledRadioGroup iptDose;
     TitledRadioGroup iptCompliance;
     TitledRadioGroup iptOutcome;
+    TitledButton appointmentDate;
 
     Snackbar snackbar;
     ScrollView scrollView;
@@ -160,6 +172,11 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
         }
 
         // first page views...
+
+        thirdDateCalendar = Calendar.getInstance();
+        thirdDateFragment = new SelectDateFragment();
+
+
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         fathersName = new TitledEditText(context, null, getResources().getString(R.string.ctb_father_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
@@ -175,13 +192,16 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
         iptCompliance = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ipt_compliance), getResources().getStringArray(R.array.yes_no_options), null, App.VERTICAL, App.VERTICAL);
         iptOutcome = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ipt_outcome), getResources().getStringArray(R.array.ctb_ipt_outcome_list),getResources().getString(R.string.ctb_continuing), App.VERTICAL, App.VERTICAL, true);
 
+        appointmentDate = new TitledButton(context, null, getResources().getString(R.string.ctb_next_appointment_date), DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
+        appointmentDate.setTag("appointmentDate");
+
+
         views = new View[]{formDate.getButton(), fathersName.getEditText(),weightAtBaseline.getEditText(),iptStartDate.getButton(), iptDose.getRadioGroup(),iptCompliance.getRadioGroup(),iptOutcome.getRadioGroup(),
-                dose.getEditText(),weightVisit.getEditText(),complaints.getEditText(),iptRegNo.getEditText()
-        };
+                dose.getEditText(),weightVisit.getEditText(),complaints.getEditText(),iptRegNo.getEditText(),appointmentDate.getButton()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, fathersName,weightAtBaseline,iptStartDate,iptRegNo,dose,weightVisit,complaints,iptDose,iptCompliance,iptOutcome
+                {{formDate, fathersName,weightAtBaseline,iptStartDate,iptRegNo,dose,weightVisit,complaints,iptDose,iptCompliance,iptOutcome,appointmentDate
         }};
 
         formDate.getButton().setOnClickListener(this);
@@ -189,6 +209,8 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
         iptDose.getRadioGroup().setOnCheckedChangeListener(this);
         iptCompliance.getRadioGroup().setOnCheckedChangeListener(this);
         iptOutcome.getRadioGroup().setOnCheckedChangeListener(this);
+        appointmentDate.getButton().setOnClickListener(this);
+
         resetViews();
     }
 
@@ -198,13 +220,14 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
         if (snackbar != null)
             snackbar.dismiss();
 
+        String formDa = formDate.getButton().getText().toString();
+        String personDOB = App.getPatient().getPerson().getBirthdate();
+
 
         Date date = new Date();
 
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
-            String formDa = formDate.getButton().getText().toString();
-            String personDOB = App.getPatient().getPerson().getBirthdate();
 
             if (formDateCalendar.after(App.getCalendar(date))) {
 
@@ -222,8 +245,18 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-            }else
+            } else
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+            Calendar requiredDate = formDateCalendar.getInstance();
+            requiredDate.setTime(formDateCalendar.getTime());
+            requiredDate.add(Calendar.DATE, 30);
+
+            if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                thirdDateCalendar.setTime(requiredDate.getTime());
+            } else {
+                requiredDate.add(Calendar.DATE, 1);
+                thirdDateCalendar.setTime(requiredDate.getTime());
+            }
 
         }
         if (!iptStartDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString())) {
@@ -238,8 +271,39 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
             } else
                 iptStartDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         }
+
+        if (!appointmentDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString())) {
+
+            //
+            // +Date date = App.stringToDate(sampleSubmitDate.getButton().getText().toString(), "dd-MMM-yyyy");
+
+            if (thirdDateCalendar.after(date)) {
+
+                thirdDateCalendar = App.getCalendar(date);
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+            } else if (thirdDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                appointmentDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
+            }else if (thirdDateCalendar.before(formDateCalendar)) {
+                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.ctb_date_can_not_be_less_than_form_date), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                appointmentDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
+            }else
+                appointmentDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
+        }
         formDate.getButton().setEnabled(true);
         iptStartDate.getButton().setEnabled(true);
+        appointmentDate.getButton().setEnabled(true);
       }
 
     @Override
@@ -397,6 +461,11 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
         observations.add(new String[]{"IPT OUTCOME", App.get(iptOutcome).equals(getResources().getString(R.string.ctb_complete)) ? "COMPLETED" :
                 (App.get(iptOutcome).equals(getResources().getString(R.string.ctb_continuing)) ? "CONTINUING" :
                         "LOST TO FOLLOW-UP")});
+
+        if(appointmentDate.getVisibility()==View.VISIBLE){
+            observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDateTime(thirdDateCalendar)});
+        }
+
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -584,8 +653,11 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
                     }
                 }
             }
-
-
+            else if (obs[0][0].equals("RETURN VISIT DATE")) {
+                String secondDate = obs[0][1];
+                thirdDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
+                appointmentDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+            }
         }
     }
 
@@ -611,6 +683,15 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
             args.putBoolean("allowFutureDate", false);
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
+        }
+        if (view == appointmentDate.getButton()) {
+            appointmentDate.getButton().setEnabled(false);
+            Bundle args = new Bundle();
+            args.putInt("type", THIRD_DATE_DIALOG_ID);
+            args.putBoolean("allowPastDate", true);
+            args.putBoolean("allowFutureDate", true);
+            thirdDateFragment.setArguments(args);
+            thirdDateFragment.show(getFragmentManager(), "DatePicker");
         }
        }
 
@@ -638,6 +719,11 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
             snackbar.dismiss();
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        thirdDateCalendar.set(Calendar.YEAR, formDateCalendar.get(Calendar.YEAR));
+        thirdDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
+        thirdDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
+        thirdDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
+        appointmentDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -698,6 +784,11 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         if (group == iptOutcome.getRadioGroup()) {
             iptOutcome.getQuestionView().setError(null);
+            if (iptOutcome.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_continuing))) {
+                appointmentDate.setVisibility(View.VISIBLE);
+            }else{
+                appointmentDate.setVisibility(View.GONE);
+            }
         }
         if (group == iptCompliance.getRadioGroup()) {
             iptCompliance.getQuestionView().setError(null);
@@ -728,6 +819,55 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
         @Override
         public boolean isViewFromObject(View container, Object obj) {
             return container == obj;
+        }
+
+    }
+
+    @SuppressLint("ValidFragment")
+    public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final Calendar calendar;
+            if (getArguments().getInt("type") == DATE_DIALOG_ID)
+                calendar = formDateCalendar;
+            else if (getArguments().getInt("type") == SECOND_DATE_DIALOG_ID)
+                calendar = secondDateCalendar;
+
+            else if (getArguments().getInt("type") == THIRD_DATE_DIALOG_ID)
+                calendar = thirdDateCalendar;
+            else
+                return null;
+
+            int yy = calendar.get(Calendar.YEAR);
+            int mm = calendar.get(Calendar.MONTH);
+            int dd = calendar.get(Calendar.DAY_OF_MONTH);
+            DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, yy, mm, dd);
+            dialog.getDatePicker().setTag(getArguments().getInt("type"));
+            if (!getArguments().getBoolean("allowFutureDate", false))
+                dialog.getDatePicker().setMaxDate(new Date().getTime());
+            if (!getArguments().getBoolean("allowPastDate", false))
+                dialog.getDatePicker().setMinDate(new Date().getTime());
+            return dialog;
+        }
+
+        @Override
+        public void onDateSet(DatePicker view, int yy, int mm, int dd) {
+
+            if (((int) view.getTag()) == DATE_DIALOG_ID)
+                formDateCalendar.set(yy, mm, dd);
+            else if (((int) view.getTag()) == SECOND_DATE_DIALOG_ID)
+                secondDateCalendar.set(yy, mm, dd);
+            else if(((int) view.getTag()) == THIRD_DATE_DIALOG_ID)
+                thirdDateCalendar.set(yy, mm, dd);
+            updateDisplay();
+
+        }
+
+        @Override
+        public void onCancel(DialogInterface dialog) {
+            super.onCancel(dialog);
+            updateDisplay();
         }
 
     }

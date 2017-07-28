@@ -43,10 +43,16 @@ import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Babar on 31/1/2017.
@@ -58,6 +64,7 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
     protected DialogFragment thirdDateFragment;
     Context context;
     TitledButton formDate;
+    TitledRadioGroup treatmentRegimen;
     TitledButton missedVisitDate;
     TitledRadioGroup ableToContact;
     TitledRadioGroup whyUnableToContact;
@@ -151,6 +158,7 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
+        treatmentRegimen = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_missed_visit_for_treatment_regimen), getResources().getStringArray(R.array.ctb_missed_visit_list),getResources().getString(R.string.no), App.VERTICAL, App.VERTICAL, true);
         missedVisitDate = new TitledButton(context, null,  getResources().getString(R.string.ctb_missed_visit_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         missedVisitDate.setTag("missedVisitDate");
         ableToContact = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_able_to_contact_patient), getResources().getStringArray(R.array.yes_no_options),getResources().getString(R.string.no), App.VERTICAL, App.VERTICAL, true);
@@ -191,7 +199,7 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
 
         nextVisitDate = new TitledButton(context, null,  getResources().getString(R.string.ctb_next_visit_date), DateFormat.format("dd-MMM-yyyy", thirdDateCalender).toString(), App.HORIZONTAL);
         nextVisitDate.setTag("nextVisitDate");
-        views = new View[]{formDate.getButton(), missedVisitDate.getButton(),  nextVisitDate.getButton(),
+        views = new View[]{formDate.getButton(),treatmentRegimen.getRadioGroup(), missedVisitDate.getButton(),  nextVisitDate.getButton(),
                 ableToContact.getRadioGroup(),whyUnableToContact.getRadioGroup(),missedVisitReason.getSpinner(),
                 otherUnableToContact.getEditText(),otherMissedVisitReason.getEditText(),patientReferredTransfer.getRadioGroup(),referralTransferLocation.getSpinner(),
                 newLocation.getEditText(),newTreatmentFacilityName.getEditText(),reasonChangingNewFacility.getRadioGroup()
@@ -199,7 +207,7 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate,missedVisitDate,ableToContact,whyUnableToContact,otherUnableToContact,patientReferredTransfer,referralTransferLocation,missedVisitReason,otherMissedVisitReason,newLocation,
+                {{formDate,treatmentRegimen,missedVisitDate,ableToContact,whyUnableToContact,otherUnableToContact,patientReferredTransfer,referralTransferLocation,missedVisitReason,otherMissedVisitReason,newLocation,
                     newTreatmentFacilityName,reasonChangingNewFacility,nextVisitDate
         }};
 
@@ -212,6 +220,7 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
         missedVisitReason.getSpinner().setOnItemSelectedListener(this);
         referralTransferLocation.getSpinner().setOnItemSelectedListener(this);
         reasonChangingNewFacility.getRadioGroup().setOnCheckedChangeListener(this);
+        treatmentRegimen.getRadioGroup().setOnCheckedChangeListener(this);
         resetViews();
     }
 
@@ -394,6 +403,15 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
             patientReferredTransfer.requestFocus();
             error = true;
         }
+        if(treatmentRegimen.getVisibility()==View.VISIBLE && App.get(treatmentRegimen).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            treatmentRegimen.getQuestionView().setError(getString(R.string.empty_field));
+            treatmentRegimen.requestFocus();
+            error = true;
+        }
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
@@ -447,6 +465,11 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
 
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
+
+        observations.add(new String[]{"MISSED VISIT FOR TREATMENT REGIMEN", App.get(treatmentRegimen).equals(getResources().getString(R.string.ctb_tb_treatment_followup)) ? "TB TREATMENT FOLLOWUP" :
+                (App.get(treatmentRegimen).equals(getResources().getString(R.string.ctb_antibiotic_trial_followup)) ? "ANTIBIOTIC TRIAL FOLLOWUP" :
+                                "IPT FOLLOWUP")});
+
         observations.add(new String[]{"DATE OF MISSED VISIT", App.getSqlDateTime(secondDateCalendar)});
 
         observations.add(new String[]{"CONTACT TO THE PATIENT", App.get(ableToContact).toUpperCase()});
@@ -640,7 +663,22 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
             String[][] obs = obsValue.get(i);
             if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
                 timeTakeToFill = obs[0][1];
-            }else if (obs[0][0].equals("DATE OF MISSED VISIT")) {
+            }
+            else if (obs[0][0].equals("UNABLE TO CONTACT THE PATIENT")) {
+                for (RadioButton rb : treatmentRegimen.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_tb_treatment_followup)) && obs[0][1].equals("TB TREATMENT FOLLOWUP")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_antibiotic_trial_followup)) && obs[0][1].equals("ANTIBIOTIC TRIAL FOLLOWUP")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_ipt_followup)) && obs[0][1].equals("IPT FOLLOWUP")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            }
+            else if (obs[0][0].equals("DATE OF MISSED VISIT")) {
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                 missedVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
@@ -877,43 +915,56 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
             referralTransferLocation.getSpinner().selectValue(locationOfReferralTransfer);
         }
 
+        List<String> appointDateStringList = new ArrayList<String>();
         String treatmentInitiationNextDateString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "RETURN VISIT DATE");
+        if(treatmentInitiationNextDateString!=null){
+            appointDateStringList.add(treatmentInitiationNextDateString);
+        }
         String treatmentFollowupNextDateString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "TB Treatment Followup", "RETURN VISIT DATE");
-
-        if(treatmentInitiationNextDateString!=null && treatmentFollowupNextDateString==null){
-            secondDateCalendar = App.getCalendar(App.stringToDate(treatmentInitiationNextDateString, "yyyy-MM-dd"));
-            missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+        if(treatmentFollowupNextDateString!=null){
+            appointDateStringList.add(treatmentFollowupNextDateString);
         }
-        else if(treatmentInitiationNextDateString==null && treatmentFollowupNextDateString!=null){
-            secondDateCalendar = App.getCalendar(App.stringToDate(treatmentFollowupNextDateString, "yyyy-MM-dd"));
-            missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-        }else if(treatmentInitiationNextDateString!=null && treatmentFollowupNextDateString!=null){
-            Date d1 = null;
-            Date d2 = null;
-            if (treatmentInitiationNextDateString.contains("/")) {
-                d1 = App.stringToDate(treatmentInitiationNextDateString, "dd/MM/yyyy");
-            } else {
-                d1 = App.stringToDate(treatmentInitiationNextDateString, "yyyy-MM-dd");
-            }
-
-            if (treatmentFollowupNextDateString.contains("/")) {
-                d2 = App.stringToDate(treatmentFollowupNextDateString, "dd/MM/yyyy");
-            } else {
-                d2 = App.stringToDate(treatmentFollowupNextDateString, "yyyy-MM-dd");
-            }
-
-
-            if (d2.after(d1)) {
-                secondDateCalendar = App.getCalendar(App.stringToDate(treatmentFollowupNextDateString, "yyyy-MM-dd"));
-                missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-            }else if(d2.equals(d1)) {
-                secondDateCalendar = App.getCalendar(App.stringToDate(treatmentInitiationNextDateString, "yyyy-MM-dd"));
-                missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-            }else {
-                secondDateCalendar = App.getCalendar(App.stringToDate(treatmentInitiationNextDateString, "yyyy-MM-dd"));
-                missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-            }
+        String iptAppointmentDateString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "IPT Followup", "RETURN VISIT DATE");
+        if(iptAppointmentDateString!=null){
+            appointDateStringList.add(iptAppointmentDateString);
         }
+        String antibioticAppointmentDateString  = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Antibiotic Trial Followup", "RETURN VISIT DATE");
+        if(antibioticAppointmentDateString!=null){
+            appointDateStringList.add(antibioticAppointmentDateString);
+        }
+
+        Collections.sort(appointDateStringList, new Comparator<String>() {
+            java.text.DateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+
+            @Override
+            public int compare(String o1, String o2) {
+                try {
+                    return f.parse(o1).compareTo(f.parse(o2));
+                } catch (Exception e) {
+                    throw new IllegalArgumentException(e);
+                }
+            }
+        });
+
+        String maxDateString = appointDateStringList.get(appointDateStringList.size()-1);
+       /* if(appointDateStringList.size()>0){
+            String maxDateString = appointDateStringList.get(0);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd h:m");
+            for(int i=1; i<appointDateStringList.size(); i++){
+                try {
+                    Date d1 = sdf.parse(maxDateString);
+                    Date d2 = sdf.parse(appointDateStringList.get(i));
+                    if(d2.compareTo(d1)>0){
+                        maxDateString = appointDateStringList.get(i);
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+            }*/
+            secondDateCalendar = App.getCalendar(App.stringToDate(maxDateString.toString(), "yyyy-MM-dd"));
+            missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {

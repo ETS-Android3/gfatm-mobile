@@ -147,7 +147,7 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
 
 
         views = new View[]{formDate.getButton(),patientHaveTb.getRadioGroup(),patientNeedMoreTests.getRadioGroup(),endOfFollowUp.getRadioGroup(),scheduleAnotherVisit.getRadioGroup(),
-                appointmentDate.getButton(),};
+                appointmentDate.getButton()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
@@ -548,8 +548,6 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
         secondDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
         secondDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
         secondDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
-
-
         appointmentDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         patientNeedMoreTests.setVisibility(View.GONE);
         appointmentDate.setVisibility(View.GONE);
@@ -590,6 +588,8 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
                 appointmentDate.setVisibility(View.GONE);
             }
         }
+
+
 
     }
 
