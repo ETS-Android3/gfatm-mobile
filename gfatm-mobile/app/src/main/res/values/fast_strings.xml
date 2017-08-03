@@ -473,7 +473,28 @@
     <string name="fast_relocated">Relocated</string>
     <string name="fast_old_facility_too_far">Old facility too far</string>
     <string name="fast_service_complaint_title">Service complaint</string>
-
+    <string name="fast_screener">Screener</string>
+    <string name="fast_doctor_referral">Doctor Referral</string>
+    <string name="fast_fast_site">FAST Site</string>
+    <string name="fast_where_was_the_sample_collected_from">Where was the sample collected from?</string>
+    <string name="fast_where_within_hospital_sample_collected_from">Where within the hospital was the sample collected from?</string>
+    <string name="fast_where_outside_hospital_sample_collected_from">Where outside the hospital was the sample collected from</string>
+    <string name="fast_please_select_fast_site">Please select FAST Site</string>
+    <string-array name="fast_sample_collected_from_list">
+        <item>@string/fast_doctor_or_health_worker_within_the_hospital</item>
+        <item>@string/fast_doctor_or_health_worker_outside_the_hospital</item>
+    </string-array>
+    
+    <string-array name="fast_sample_collected_within_the_hospital_list">
+        <item>@string/fast_screener</item>
+        <item>@string/fast_doctor_referral</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+    
+    <string-array name="fast_sample_collected_outside_the_hospital_list">
+        <item>@string/fast_fast_site</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
 
     <string-array name="fast_reason_for_changing_facility_array">
         <item>@string/fast_relocated</item>

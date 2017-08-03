@@ -90,6 +90,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
     TitledRadioGroup addressType;
     TitledEditText nearestLandmark;
     TitledRadioGroup contactPermission;
+    TitledEditText contactExternalId;
 
     ArrayAdapter<String> districtArrayAdapter;
     ArrayAdapter<String> cityArrayAdapter;
@@ -164,7 +165,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
 
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-
+        contactExternalId = new TitledEditText(context, null, getResources().getString(R.string.fast_external_id), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         cnicLinearLayout = new LinearLayout(context);
         cnicLinearLayout.setOrientation(LinearLayout.VERTICAL);
         MyTextView cnic = new MyTextView(context, getResources().getString(R.string.fast_nic_number));
@@ -201,7 +202,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         addressLayout.addView(townTextView);
         addressLayout.addView(addressStreet);        district = new TitledSpinner(context, "", getResources().getString(R.string.pet_district), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
         city = new TitledSpinner(context, "", getResources().getString(R.string.pet_city), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
-        addressType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_type_of_address_is_this), getResources().getStringArray(R.array.fast_type_of_address_list), "", App.VERTICAL, App.VERTICAL, true);
+        addressType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_type_of_address_is_this), getResources().getStringArray(R.array.fast_type_of_address_list), "", App.VERTICAL, App.VERTICAL);
         nearestLandmark = new TitledEditText(context, null, getResources().getString(R.string.fast_nearest_landmark), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         contactPermission = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_can_we_call_you), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
      
@@ -314,7 +315,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
 
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), cnic1, cnic2, cnic3, cnicOwner.getSpinner(), otherCnicOwner.getEditText(),
+        views = new View[]{formDate.getButton(), contactExternalId.getEditText(), cnic1, cnic2, cnic3, cnicOwner.getSpinner(), otherCnicOwner.getEditText(),
                 addressProvided.getRadioGroup(), addressHouse.getEditText(), district.getSpinner(),
                 city.getSpinner(), addressType.getRadioGroup(), nearestLandmark.getEditText(), contactPermission.getRadioGroup()
                 , mobile1, mobile2, secondaryMobile1, secondaryMobile2, landline1,
@@ -322,7 +323,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, cnicLinearLayout, cnicOwner, otherCnicOwner, addressProvided, addressHouse, addressLayout, province, district,
+                {{formDate, contactExternalId, cnicLinearLayout, cnicOwner, otherCnicOwner, addressProvided, addressHouse, addressLayout, province, district,
                         city, addressType, nearestLandmark, contactPermission, mobileLinearLayout, secondaryMobileLinearLayout,
                         landlineLinearLayout, secondaryLandlineLinearLayout}};
 
@@ -631,6 +632,25 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
     public boolean validate() {
         Boolean error = false;
 
+        if (contactExternalId.getEditText().getText().toString().length() > 0 && contactExternalId.getEditText().getText().toString().trim().isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            contactExternalId.getEditText().setError(getString(R.string.invalid_value));
+            contactExternalId.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (contactExternalId.getVisibility() == View.VISIBLE && contactExternalId.getEditText().getText().toString().trim().isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            contactExternalId.getEditText().setError(getString(R.string.empty_field));
+            contactExternalId.getEditText().requestFocus();
+            error = true;
+        }
 
         if (addressHouse.getEditText().getText().toString().length() > 0 && addressHouse.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
@@ -694,14 +714,14 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         }*/
 
 
-        if (addressType.getVisibility() == View.VISIBLE && App.get(addressType).isEmpty()) {
+      /*  if (addressType.getVisibility() == View.VISIBLE && App.get(addressType).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
             emptyError = true;
             error = true;
-        }
+        }*/
 
         if (!cnic1.getText().toString().trim().isEmpty() && cnic2.getText().toString().trim().isEmpty() && cnic3.getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
@@ -1132,6 +1152,8 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         final String landlineNumber = landline1.getText().toString() +"-"+ landline2.getText().toString();
         final String secondaryLandlineLinearLayout = secondaryLandline1.getText().toString() +"-"+ secondaryLandline2.getText().toString();
 
+        if (contactExternalId.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"CONTACT EXTERNAL ID", App.get(contactExternalId)});
 
         if(cnicNumber.length() == 15)
             observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnicNumber});
@@ -1157,7 +1179,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         if (addressProvided.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"PATIENT PROVIDED ADDRESS", App.get(addressProvided).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
 
-        if (addressType.getVisibility() == View.VISIBLE)
+        if (addressType.getVisibility() == View.VISIBLE && !addressType.getRadioGroup().getSelectedValue().isEmpty())
             observations.add(new String[]{"TYPE OF ADDRESS", App.get(addressType).equals(getResources().getString(R.string.fast_perminant)) ? "PERMANENT ADDRESS" : "TEMPORARY ADDRESS"});
 
         if (nearestLandmark.getVisibility() == View.VISIBLE && !App.get(nearestLandmark).isEmpty())
@@ -1373,7 +1395,12 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             String[][] obs = obsValue.get(i);
             if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
                 timeTakeToFill = obs[0][1];
-            } else if (obs[0][0].equals("NATIONAL IDENTIFICATION NUMBER")) {
+            }
+            else if (obs[0][0].equals("CONTACT EXTERNAL ID")) {
+                contactExternalId.getEditText().setText(obs[0][1]);
+                contactExternalId.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("NATIONAL IDENTIFICATION NUMBER")) {
                 String data = obs[0][1];
                 cnic1.setText(data.substring(0,5));
                 cnic2.setText(data.substring(6,13));

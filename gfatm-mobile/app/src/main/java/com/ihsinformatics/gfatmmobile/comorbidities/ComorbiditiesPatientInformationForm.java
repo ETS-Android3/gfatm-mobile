@@ -1563,6 +1563,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
                     String province = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "PROVINCE");
                     String district = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "DISTRICT");
                     String village = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "VILLAGE");
+                    String nearestLandmark = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "NEAREST LANDMARK");
                     String mobile1 = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "CONTACT PHONE NUMBER");
                     String mobile2 = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "SECONDARY MOBILE NUMBER");
                     String landline1 = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "TERTIARY CONTACT NUMBER");
@@ -1610,6 +1611,9 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
                     if (village != null)
                         if (!village.equals(""))
                             result.put("VILLAGE", village);
+                    if (nearestLandmark != null)
+                        if (!nearestLandmark.equals(""))
+                            result.put("NEAREST LANDMARK", nearestLandmark);
                     if (mobile1 != null)
                         if (!mobile1.equals(""))
                             result.put("CONTACT PHONE NUMBER", mobile1);
@@ -1675,6 +1679,12 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
                                 mobileNumber1a.setText(mobile1Array[0]);
                                 mobileNumber1b.setText(mobile1Array[1]);
                             }
+                        }
+                    }
+
+                    if (result.get("NEAREST LANDMARK") != null) {
+                        if (!result.get("NEAREST LANDMARK").equals("")) {
+                            landmark.getEditText().setText(result.get("NEAREST LANDMARK"));
                         }
                     }
 
