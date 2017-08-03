@@ -1406,35 +1406,38 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
             preferredModeOfTherapy.setVisibility(View.VISIBLE);
             String tbCategory = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_PATIENT_INFORMATION_FORM, "TB CATEGORY");
 
-            if(tbCategory.equalsIgnoreCase("MULTI-DRUG RESISTANT TUBERCULOSIS INFECTION")) {
-                ArrayList<MyCheckBox> rbs = preferredModeOfTherapy.getCheckedBoxes();
+            if(tbCategory != null) {
+                if (!tbCategory.isEmpty()) {
+                    if (tbCategory.equalsIgnoreCase("MULTI-DRUG RESISTANT TUBERCULOSIS INFECTION")) {
+                        ArrayList<MyCheckBox> rbs = preferredModeOfTherapy.getCheckedBoxes();
 
-                for (MyCheckBox rb : rbs) {
+                        for (MyCheckBox rb : rbs) {
                     /*if (rb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_facility)))
                         rb.setVisibility(View.GONE);
                     else if (rb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_call_centre)))
                         rb.setVisibility(View.GONE);
                     else {*/
-                        rb.setVisibility(View.VISIBLE);
+                            rb.setVisibility(View.VISIBLE);
 
                         /*if (rb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_home)))
                             rb.setChecked(true);*/
-                    //}
-                }
-            }
-            else {
-                ArrayList<MyCheckBox> rbs1 = preferredModeOfTherapy.getCheckedBoxes();
+                            //}
+                        }
+                    } else {
+                        ArrayList<MyCheckBox> rbs1 = preferredModeOfTherapy.getCheckedBoxes();
 
-                for (MyCheckBox rb : rbs1) {
-                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_facility)))
-                        rb.setVisibility(View.VISIBLE);
-                    else if (rb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_call_centre)))
-                        rb.setVisibility(View.VISIBLE);
-                    else {
-                        rb.setVisibility(View.GONE);
+                        for (MyCheckBox rb : rbs1) {
+                            if (rb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_facility)))
+                                rb.setVisibility(View.VISIBLE);
+                            else if (rb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_call_centre)))
+                                rb.setVisibility(View.VISIBLE);
+                            else {
+                                rb.setVisibility(View.GONE);
 
                         /*if (rb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_home)))
                             rb.setChecked(true);*/
+                            }
+                        }
                     }
                 }
             }
@@ -1467,16 +1470,16 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
                 ArrayList<MyCheckBox> rbs = preferredModeOfTherapy.getCheckedBoxes();
 
                 for (MyCheckBox rb : rbs) {
-                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_facility)))
+                    /*if (rb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_facility)))
                         rb.setVisibility(View.GONE);
                     else if (rb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_call_centre)))
                         rb.setVisibility(View.GONE);
-                    else {
+                    else {*/
                         rb.setVisibility(View.VISIBLE);
 
                         /*if (rb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_home)))
                             rb.setChecked(true);*/
-                    }
+                    //}
                 }
             }
             else {

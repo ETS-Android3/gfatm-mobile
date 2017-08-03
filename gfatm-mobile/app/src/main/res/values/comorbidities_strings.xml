@@ -1301,4 +1301,79 @@
         <item>@string/comorbidities_patient_information_education_options_refused</item>
     </string-array>
 
+
+    <string name="comorbidities_copd_screening">COPD Screening Form</string>
+    <string name="comorbidities_copd_screening_header">COPD Screening</string>
+    <string name="comorbidities_copd_breathless_week">During the past 4 weeks, how much of the time did you feel short of breath?</string>
+    <string name="comorbidities_copd_productive_cough">Do you ever cough up any “stuff,’’ such as mucus or phlegm?</string>
+    <string name="comorbidities_copd_less_activity">Please select the answer that best describes you in the past 12 months.
+I do less than I used to because of my breathing problems. </string>
+    <string name="comorbidities_copd_smoked_cigarettes">Have you smoked at least 100 cigarettes  in your ENTIRE LIFE?</string>
+    <string name="comorbidities_copd_age_range">How old are you?</string>
+    <string name="comorbidities_copd_score">Total Score: COPD Screening</string>
+    <string name="comorbidities_copd_referred_to_pulmonologist">Has the patient been referred to the pulmonologist?</string>
+
+    <string name="comorbidities_copd_breathless_week_options_none">None of the time</string>
+    <string name="comorbidities_copd_breathless_week_options_little">A little of the time</string>
+    <string name="comorbidities_copd_breathless_week_options_some">Some of the time</string>
+    <string name="comorbidities_copd_breathless_week_options_most">Most of the time</string>
+    <string name="comorbidities_copd_breathless_week_options_all">All of the time</string>
+
+    <string-array name="comorbidities_copd_breathless_week_options">
+        <item>@string/comorbidities_copd_breathless_week_options_none</item>
+        <item>@string/comorbidities_copd_breathless_week_options_little</item>
+        <item>@string/comorbidities_copd_breathless_week_options_some</item>
+        <item>@string/comorbidities_copd_breathless_week_options_most</item>
+        <item>@string/comorbidities_copd_breathless_week_options_all</item>
+    </string-array>
+
+    <string name="comorbidities_copd_productive_cough_options_never">No, never</string>
+    <string name="comorbidities_copd_productive_cough_options_occasional">Only with occasional colds or chest infections</string>
+    <string name="comorbidities_copd_productive_cough_options_few_days">Yes, a few days a month</string>
+    <string name="comorbidities_copd_productive_cough_options_most_days">Yes, most days a week</string>
+    <string name="comorbidities_copd_productive_cough_options_everyday">Yes, every day</string>
+
+    <string-array name="comorbidities_copd_productive_cough_options">
+        <item>@string/comorbidities_copd_productive_cough_options_never</item>
+        <item>@string/comorbidities_copd_productive_cough_options_occasional</item>
+        <item>@string/comorbidities_copd_productive_cough_options_few_days</item>
+        <item>@string/comorbidities_copd_productive_cough_options_most_days</item>
+        <item>@string/comorbidities_copd_productive_cough_options_everyday</item>
+    </string-array>
+
+    <string name="comorbidities_copd_less_activity_options_strongly_disagree">Strongly disagree</string>
+    <string name="comorbidities_copd_less_activity_options_disagree">Disagree</string>
+    <string name="comorbidities_copd_less_activity_options_unsure">Unsure</string>
+    <string name="comorbidities_copd_less_activity_options_agree">Agree</string>
+    <string name="comorbidities_copd_less_activity_options_strongly_agree">Strongly agree</string>
+
+    <string-array name="comorbidities_copd_less_activity_options">
+        <item>@string/comorbidities_copd_less_activity_options_strongly_disagree</item>
+        <item>@string/comorbidities_copd_less_activity_options_disagree</item>
+        <item>@string/comorbidities_copd_less_activity_options_unsure</item>
+        <item>@string/comorbidities_copd_less_activity_options_agree</item>
+        <item>@string/comorbidities_copd_less_activity_options_strongly_agree</item>
+    </string-array>
+
+    <string name="comorbidities_copd_smoked_cigarettes_options_no">No</string>
+    <string name="comorbidities_copd_smoked_cigarettes_options_yes">Yes</string>
+    <string name="comorbidities_copd_smoked_cigarettes_options_unknown">Unknown</string>
+
+    <string-array name="comorbidities_copd_smoked_cigarettes_options">
+        <item>@string/comorbidities_copd_smoked_cigarettes_options_no</item>
+        <item>@string/comorbidities_copd_smoked_cigarettes_options_yes</item>
+        <item>@string/comorbidities_copd_smoked_cigarettes_options_unknown</item>
+    </string-array>
+
+    <string name="comorbidities_copd_age_range_options_35">35 &#8211; 49</string>
+    <string name="comorbidities_copd_age_range_options_50">50 &#8211; 59</string>
+    <string name="comorbidities_copd_age_range_options_60">60 &#8211; 69</string>
+    <string name="comorbidities_copd_age_range_options_70">70+</string>
+
+    <string-array name="comorbidities_copd_age_range_options">
+        <item>@string/comorbidities_copd_age_range_options_35</item>
+        <item>@string/comorbidities_copd_age_range_options_50</item>
+        <item>@string/comorbidities_copd_age_range_options_60</item>
+        <item>@string/comorbidities_copd_age_range_options_70</item>
+    </string-array>
 </resources>
