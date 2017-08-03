@@ -59,6 +59,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
     TitledButton formDate;
     TitledEditText weight;
     TitledEditText height;
+    TitledEditText weightPercentileEditText;
     TitledSpinner weightPercentile;
     TitledRadioGroup cough;
     TitledSpinner coughDuration;
@@ -205,6 +206,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
         formDate.setTag("formDate");
         weight = new TitledEditText(context, null, getResources().getString(R.string.ctb_weight), "", "", 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         height = new TitledEditText(context, null, getResources().getString(R.string.ctb_height), "", "", 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        weightPercentileEditText = new TitledEditText(context, null, "(Autocalculated)", "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         weightPercentile = new TitledSpinner(context, null, getResources().getString(R.string.ctb_weight_percentile), getResources().getStringArray(R.array.ctb_weight_percentile_list), null, App.VERTICAL);
         cough = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_cough), getResources().getStringArray(R.array.yes_no_unknown_refused_options), null, App.HORIZONTAL, App.VERTICAL, true);
         coughDuration = new TitledSpinner(context, null, getResources().getString(R.string.ctb_cough_duration), getResources().getStringArray(R.array.ctb_cough_duration_list), null, App.VERTICAL);
@@ -276,12 +278,12 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                 weight.getEditText(),height.getEditText(),generalAppearanceExplanation.getEditText(),headEyeEearNoseThroatExplanation.getEditText(),
                 lymphNodeExplanation.getEditText(),spineExplanation.getEditText(),jointsExplanation.getEditText(),
                 skinExplanation.getEditText(),chestExplanation.getEditText(),abdominalExplanation.getEditText(),othersExplanation.getEditText(),
-                otherContactType.getEditText(),additionalCommentHistoryOfPatient.getEditText(),doctorNotes.getEditText()
+                otherContactType.getEditText(),additionalCommentHistoryOfPatient.getEditText(),doctorNotes.getEditText(), weightPercentileEditText.getEditText()
         };
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, weight, height, weightPercentile, cough, coughDuration, fever, nightSweats, weightLoss, appetite, generalAppearance, generalAppearanceExplanation, headEyeEearNoseThroat, headEyeEearNoseThroatExplanation, lymphNodeExamination, lymphNodeExplanation, spineExamination, spineExplanation,
+                {{formDate, weight, height, weightPercentile, weightPercentileEditText, cough, coughDuration, fever, nightSweats, weightLoss, appetite, generalAppearance, generalAppearanceExplanation, headEyeEearNoseThroat, headEyeEearNoseThroatExplanation, lymphNodeExamination, lymphNodeExplanation, spineExamination, spineExplanation,
                         jointsExamination, jointsExplanation, skinExamination, skinExplanation, chestExamination, chestExplanation, abdominalExamination, abdominalExplanation, othersExplanation, tbExamOutcome, bcgScar, tbBefore, tbMedication, contactTbHistory, closeContactType, otherContactType, additionalCommentHistoryOfPatient, tbInfectionForm, tbType, smearPositive, childPrimaryCaregiver
                         , sameBedAsChild, sameRoomRAsChild, liveInSameHoushold, seeChildEveryday, contactCoughing, oneCloseContactInHousehold, conclusion, doctorNotes
                 }};
@@ -322,6 +324,35 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
         ArrayList<MyCheckBox> checkBoxList = closeContactType.getCheckedBoxes();
         for (CheckBox cb : closeContactType.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
+
+        weight.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (!App.get(weight).equals("")){
+                    String percentile = serverService.getPercentile(App.get(weight));
+                    weightPercentileEditText.getEditText().setText(percentile);
+
+                } else {
+                    weightPercentileEditText.getEditText().setText("");
+                }
+
+            }
+        });
+        weightPercentileEditText.getEditText().setKeyListener(null);
+
         resetViews();
     }
 
