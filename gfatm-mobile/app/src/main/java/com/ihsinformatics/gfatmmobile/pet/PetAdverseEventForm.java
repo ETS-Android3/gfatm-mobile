@@ -37,6 +37,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
+import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
@@ -57,17 +58,10 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
     TitledButton formDate;
     TitledEditText weight;
 
-
-    TitledRadioGroup dizziness;
-    TitledRadioGroup nausea;
-    TitledRadioGroup abdominalPain;
-    TitledRadioGroup lossOfAppetite;
-    TitledRadioGroup jaundice;
-    TitledRadioGroup rash;
-    TitledRadioGroup tendonPain;
-    TitledRadioGroup eyeProblem;
+    TitledCheckBoxes symptoms;
     TitledEditText otherSideEffects;
     TitledRadioGroup sideeffectsConsistent;
+    TitledRadioGroup severity;
 
     TitledCheckBoxes actionPlan;
     TitledEditText medicationDiscontinueReason;
@@ -153,31 +147,19 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         weight = new TitledEditText(context, null, getResources().getString(R.string.pet_weight), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_NUMBER_FLAG_DECIMAL, App.HORIZONTAL, false);
 
+        symptoms = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_symptoms), getResources().getStringArray(R.array.pet_pet_symptoms_list), null, App.VERTICAL, App.VERTICAL, true);
 
         MyLinearLayout linearLayout1 = new MyLinearLayout(context, getResources().getString(R.string.pet_adverse_events_followup_details), App.VERTICAL);
-        dizziness = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_dizziness), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
-        nausea = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_nausea_vomiting), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
-        abdominalPain = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_abdominal_pain), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
-        lossOfAppetite = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_loss_of_appetite), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
-        jaundice = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_jaundice), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
-        rash = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_rash), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
-        tendonPain = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_tendon_pain), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
-        eyeProblem = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_eye_problems), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         otherSideEffects = new TitledEditText(context, null, getResources().getString(R.string.pet_other_side_effects), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         otherSideEffects.getEditText().setSingleLine(false);
         otherSideEffects.getEditText().setMinimumHeight(150);
         sideeffectsConsistent = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_side_effect_consistent), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
+        severity = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_adverse_event_severity), getResources().getStringArray(R.array.pet_adverse_event_severity_list), getResources().getString(R.string.pet_mild), App.VERTICAL, App.VERTICAL);
 
-        linearLayout1.addView(dizziness);
-        linearLayout1.addView(nausea);
-        linearLayout1.addView(abdominalPain);
-        linearLayout1.addView(lossOfAppetite);
-        linearLayout1.addView(jaundice);
-        linearLayout1.addView(rash);
-        linearLayout1.addView(tendonPain);
-        linearLayout1.addView(eyeProblem);
+        linearLayout1.addView(symptoms);
         linearLayout1.addView(otherSideEffects);
         linearLayout1.addView(sideeffectsConsistent);
+        linearLayout1.addView(severity);
 
         MyLinearLayout linearLayout2 = new MyLinearLayout(context, getResources().getString(R.string.pet_symptoms_require), App.VERTICAL);
         actionPlan = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_action_plan), getResources().getStringArray(R.array.pet_action_plan), null, App.VERTICAL, App.VERTICAL, true);
@@ -222,11 +204,10 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
         linearLayout2.addView(returnVisitDate);
         linearLayout2.addView(clincianNote);
 
-        views = new View[]{formDate.getButton(), weight.getEditText(), dizziness.getRadioGroup(), nausea.getRadioGroup(), abdominalPain.getRadioGroup(), lossOfAppetite.getRadioGroup(), jaundice.getRadioGroup(), jaundice.getRadioGroup(), rash.getRadioGroup(),
-                tendonPain.getRadioGroup(), eyeProblem.getRadioGroup(), otherSideEffects.getEditText(), sideeffectsConsistent.getRadioGroup(),
+        views = new View[]{formDate.getButton(), weight.getEditText(), otherSideEffects.getEditText(), sideeffectsConsistent.getRadioGroup(),
                 actionPlan, medicationDiscontinueReason.getEditText(), medicationDiscontinueDuration.getEditText(), newMedication.getEditText(), newMedicationDuration.getEditText(),
                 petRegimen.getRadioGroup(), isoniazidDose.getEditText(), rifapentineDose.getEditText(), levofloxacinDose.getEditText(), ethionamideDose.getEditText(), ancillaryDrugs, ancillaryDrugDuration,
-                newInstruction.getEditText(), returnVisitDate.getButton(), rifapentineAvailable.getRadioGroup(), clincianNote.getEditText()
+                newInstruction.getEditText(), returnVisitDate.getButton(), rifapentineAvailable.getRadioGroup(), clincianNote.getEditText(), symptoms, severity.getRadioGroup()
         };
 
         viewGroups = new View[][]{{formDate, weight, linearLayout1},
@@ -237,6 +218,8 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
         petRegimen.getRadioGroup().setOnCheckedChangeListener(this);
         rifapentineAvailable.getRadioGroup().setOnCheckedChangeListener(this);
         for (CheckBox cb : actionPlan.getCheckedBoxes())
+            cb.setOnCheckedChangeListener(this);
+        for (CheckBox cb : symptoms.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
         petRegimen.getRadioGroup().setOnCheckedChangeListener(this);
 
@@ -505,6 +488,8 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
         ethionamideDose.setVisibility(View.GONE);
         ancillaryDrugs.setVisibility(View.GONE);
         ancillaryDrugDuration.setVisibility(View.GONE);
+        otherSideEffects.setVisibility(View.GONE);
+        rifapentineAvailable.setVisibility(View.GONE);
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -940,16 +925,45 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         observations.add(new String[]{"WEIGHT (KG)", App.get(weight)});
-        observations.add(new String[]{"DIZZINESS AND GIDDINESS", App.get(dizziness).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        observations.add(new String[]{"NAUSEA AND VOMITING", App.get(nausea).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        observations.add(new String[]{"ABDOMINAL PAIN", App.get(abdominalPain).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        observations.add(new String[]{"LOSS OF APPETITE", App.get(lossOfAppetite).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        observations.add(new String[]{"JAUNDICE", App.get(jaundice).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        observations.add(new String[]{"RASH", App.get(rash).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        observations.add(new String[]{"MUSCLE PAIN", App.get(tendonPain).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        observations.add(new String[]{"VISION PROBLEM", App.get(eyeProblem).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        observations.add(new String[]{"OTHER ADVERSE EVENT", App.get(otherSideEffects)});
+
+        String adverseEventString = "";
+        for(CheckBox cb : symptoms.getCheckedBoxes()){
+            if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_dizziness)))
+                adverseEventString = adverseEventString + "DIZZINESS AND GIDDINESS" + " ; ";
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_nausea_vomiting)))
+                adverseEventString = adverseEventString + "NAUSEA AND VOMITING" + " ; ";
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_abdominal_pain)))
+                adverseEventString = adverseEventString + "ABDOMINAL PAIN" + " ; ";
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_reduced_appetite)))
+                adverseEventString = adverseEventString + "LOSS OF APPETITE" + " ; ";
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_jaundice)))
+                adverseEventString = adverseEventString + "JAUNDICE" + " ; ";
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_rash)))
+                adverseEventString = adverseEventString + "RASH" + " ; ";
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_tendon_pain)))
+                adverseEventString = adverseEventString + "TENDON PAIN" + " ; ";
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_eye_problems)))
+                adverseEventString = adverseEventString + "VISION PROBLEM" + " ; ";
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_hypersensitivity_reaction)))
+                adverseEventString = adverseEventString + "HYPERSENSITIVITY REACTION" + " ; ";
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_body_fluid_discoloration)))
+                adverseEventString = adverseEventString + "DISCOLORATION OF BODY FLUID" + " ; ";
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_diarrohea)))
+                adverseEventString = adverseEventString + "DIARRHEA" + " ; ";
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_muscle_pain)))
+                adverseEventString = adverseEventString + "MUSCLE PAIN" + " ; ";
+            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_other)))
+                adverseEventString = adverseEventString + "OTHER ADVERSE EVENT" + " ; ";
+        }
+        observations.add(new String[]{"ADVERSE EVENTS", adverseEventString});
+
+        if(otherSideEffects.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"OTHER ADVERSE EVENT", App.get(otherSideEffects)});
         observations.add(new String[]{"COMPLAINTS CONSISTENT WITH DRUG SIDE EFFECTS", App.get(sideeffectsConsistent).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+
+        observations.add(new String[]{"SEVERITY OF ADVERSE REACTION", App.get(severity).equals(getResources().getString(R.string.pet_mild)) ? "MILD" :
+                (App.get(severity).equals(getResources().getString(R.string.pet_moderate)) ? "MODERATE" : "SEVERE")});
+
         String actionPlanString = "";
         for (CheckBox cb : actionPlan.getCheckedBoxes()) {
             if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_continue_medication_greater_adherence)))
@@ -1228,6 +1242,17 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
             }
         }
 
+        for (CheckBox cb : symptoms.getCheckedBoxes()) {
+
+            if (App.get(cb).equals(getResources().getString(R.string.pet_other))) {
+                if (cb.isChecked()) {
+                    otherSideEffects.setVisibility(View.VISIBLE);
+                } else {
+                    otherSideEffects.setVisibility(View.GONE);
+                }
+            }
+        }
+
     }
 
     @Override
@@ -1407,86 +1432,51 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
                 timeTakeToFill = obs[0][1];
             }else if (obs[0][0].equals("WEIGHT (KG)")) {
                 weight.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("DIZZINESS AND GIDDINESS")) {
-                for (RadioButton rb : dizziness.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
+            } else if (obs[0][0].equals("ADVERSE EVENTS")) {
+                for (CheckBox cb : symptoms.getCheckedBoxes()) {
+                    if (cb.getText().equals(getResources().getString(R.string.pet_dizziness)) && obs[0][1].equals("DIZZINESS AND GIDDINESS")) {
+                        cb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_nausea_vomiting)) && obs[0][1].equals("NAUSEA AND VOMITING")) {
+                        cb.setChecked(true);
                         break;
-                    }
-                }
-            } else if (obs[0][0].equals("NAUSEA AND VOMITING")) {
-                for (RadioButton rb : nausea.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_abdominal_pain)) && obs[0][1].equals("ABDOMINAL PAIN")) {
+                        cb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_reduced_appetite)) && obs[0][1].equals("LOSS OF APPETITE")) {
+                        cb.setChecked(true);
                         break;
-                    }
-                }
-            } else if (obs[0][0].equals("ABDOMINAL PAIN")) {
-                for (RadioButton rb : abdominalPain.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_jaundice)) && obs[0][1].equals("JAUNDICE")) {
+                        cb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_rash)) && obs[0][1].equals("RASH")) {
+                        cb.setChecked(true);
                         break;
-                    }
-                }
-            } else if (obs[0][0].equals("LOSS OF APPETITE")) {
-                for (RadioButton rb : lossOfAppetite.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_tendon_pain)) && obs[0][1].equals("TENDON PAIN")) {
+                        cb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_eye_problems)) && obs[0][1].equals("VISION PROBLEM")) {
+                        cb.setChecked(true);
                         break;
-                    }
-                }
-            } else if (obs[0][0].equals("JAUNDICE")) {
-                for (RadioButton rb : jaundice.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_hypersensitivity_reaction)) && obs[0][1].equals("HYPERSENSITIVITY REACTION")) {
+                        cb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_body_fluid_discoloration)) && obs[0][1].equals("DISCOLORATION OF BODY FLUID")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_diarrohea)) && obs[0][1].equals("DIARRHEA")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_muscle_pain)) && obs[0][1].equals("MUSCLE PAIN")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.pet_other)) && obs[0][1].equals("OTHER ADVERSE EVENT")) {
+                        cb.setChecked(true);
                         break;
                     }
+
                 }
-            } else if (obs[0][0].equals("RASH")) {
-                for (RadioButton rb : rash.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("MUSCLE PAIN")) {
-                for (RadioButton rb : tendonPain.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("VISION PROBLEM")) {
-                for (RadioButton rb : eyeProblem.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
+                symptoms.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("OTHER ADVERSE EVENT")) {
                 otherSideEffects.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("COMPLAINTS CONSISTENT WITH DRUG SIDE EFFECTS")) {
@@ -1551,6 +1541,21 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
                         rb.setChecked(true);
                         break;
                     } else if (rb.getText().equals(getResources().getString(R.string.pet_levofloxacin_ethionamide)) && obs[0][1].equals("LEVOFLOXACIN AND ETHIONAMIDE")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+
+                }
+                petRegimen.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("SEVERITY OF ADVERSE REACTION")) {
+                for (RadioButton rb : severity.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet_mild)) && obs[0][1].equals("MILD")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_moderate)) && obs[0][1].equals("MODERATE")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_severe)) && obs[0][1].equals("SEVERE")) {
                         rb.setChecked(true);
                         break;
                     }
