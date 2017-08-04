@@ -27,6 +27,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -59,6 +60,7 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
     TitledEditText height;
     TitledEditText bmi;
     TitledEditText muac;
+    TitledEditText weightPercentileEditText;
     TitledSpinner weightPercentile;
 
     TitledRadioGroup cough;
@@ -180,6 +182,7 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
         height = new TitledEditText(context, null, getResources().getString(R.string.pet_height), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         bmi = new TitledEditText(context, null, getResources().getString(R.string.pet_bmi), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         muac = new TitledEditText(context, null, getResources().getString(R.string.pet_muac), "", "", 3, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        weightPercentileEditText = new TitledEditText(context, null, "(Autocalculated)", "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         weightPercentile = new TitledSpinner(context, null, getResources().getString(R.string.pet_weight_percentile), getResources().getStringArray(R.array.pet_weight_percentiles), getResources().getString(R.string.pet_less_third_percentile), App.VERTICAL);
         MyLinearLayout linearLayout1 = new MyLinearLayout(context, getResources().getString(R.string.pet_contact_symptom_screen), App.VERTICAL);
         cough = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_cough), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
@@ -314,9 +317,9 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
                 generalAppearence.getRadioGroup(), generalAppearenceExplanation.getEditText(), heent.getRadioGroup(), heentExplanation.getEditText(), lymphnode.getRadioGroup(), lymphnodeExplanation.getEditText(),
                 spine.getRadioGroup(), spineExplanation.getEditText(), joints.getRadioGroup(), jointsExplanation.getEditText(), jointsExplanation.getEditText(), skin.getRadioGroup(), skinExplanation.getEditText(),
                 chest.getRadioGroup(), chestExplanation.getEditText(), abdominal.getRadioGroup(), abdominal.getRadioGroup(), examOutcome.getRadioGroup(), comorbidCondition,
-                otherCondition.getEditText(), referral.getRadioGroup(), clincianNote.getEditText()};
+                otherCondition.getEditText(), referral.getRadioGroup(), clincianNote.getEditText(), weightPercentileEditText.getEditText()};
 
-        viewGroups = new View[][]{{formDate, externalPatientId, weight, height, bmi, muac, weightPercentile},
+        viewGroups = new View[][]{{formDate, externalPatientId, weight, height, bmi, muac, weightPercentile, weightPercentileEditText},
                 {linearLayout1},
                 {linearLayout2},
                 {linearLayout3}};
@@ -364,6 +367,14 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
 
                     bmi.getEditText().setText(result + "   -   " + bmiCategory);
 
+                }
+
+                if (!App.get(weight).equals("")){
+                    String percentile = serverService.getPercentile(App.get(weight));
+                    weightPercentileEditText.getEditText().setText(percentile);
+
+                } else {
+                    weightPercentileEditText.getEditText().setText("");
                 }
 
 
@@ -418,6 +429,7 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
         });
         bmi.getEditText().setKeyListener(null);
         exposureScore.getEditText().setKeyListener(null);
+        weightPercentileEditText.getEditText().setKeyListener(null);
 
         View listenerViewer[] = new View[]{formDate, cough, fever, exposurePoint1, exposurePoint2, exposurePoint3, exposurePoint4, exposurePoint5,
                 exposurePoint6, exposurePoint7, exposurePoint8, exposurePoint9, exposurePoint10, abdominal, chest,
