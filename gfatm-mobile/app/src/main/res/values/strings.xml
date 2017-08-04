@@ -574,4 +574,14 @@
     <string name="offline_form_alert">offline form found. Press yes, to start upload in background.</string>
     <string name="pid_copied">Patient ID copied.</string>
     <string name="warning_before_get_Patient">Are you sure you want to select this patient? If yes, app will fetch this patient from openmrs.</string>
+
+    <string name="feedback_sms_permission_needed">You need to grant SEND SMS permission to send sms</string>
+    <string name="feedback_enter_message">Please enter your message to continue.</string>
+    <string name="feedback_permission_denied">Permission denied</string>
+    <string name="feedback_permission_granted">Permission granted</string>
+    <string name="feedback_submitting_error">ERROR WHILE SENDING FEEDBACK TO SERVER</string>
+    <string name="feedback_submitted_successfully">FEEDBACK SUCCESSFULLY SENT TO SERVER</string>
+    <string name="feedback_sms_error">SMS failed, please try again later!</string>
+    <string name="feedback_sms_send">SMS SEND.</string>
+
 </resources>
