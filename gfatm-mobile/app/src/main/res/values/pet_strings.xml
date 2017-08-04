@@ -871,6 +871,39 @@
     <string name="pet_comment_psychologist">Psychologist\'s comments</string>
 
     <!-- Adverse Events -->
+    <string name="pet_symptoms">Symptoms</string>
+    <string-array name="pet_pet_symptoms_list">
+        <item>@string/pet_dizziness</item>
+        <item>@string/pet_nausea_vomiting</item>
+        <item>@string/pet_abdominal_pain</item>
+        <item>@string/pet_reduced_appetite</item>
+        <item>@string/pet_jaundice</item>
+        <item>@string/pet_rash</item>
+        <item>@string/pet_tendon_pain</item>
+        <item>@string/pet_eye_problems</item>
+        <item>@string/pet_hypersensitivity_reaction</item>
+        <item>@string/pet_body_fluid_discoloration</item>
+        <item>@string/pet_diarrohea</item>
+        <item>@string/pet_muscle_pain</item>
+        <item>@string/pet_other</item>
+    </string-array>
+
+    <string name="pet_hypersensitivity_reaction">Hypersensitivity Reaction</string>
+    <string name="pet_body_fluid_discoloration">Discoloration of Body Fluids</string>
+    <string name="pet_muscle_pain">Muscle Pain</string>
+    <string name="pet_diarrohea">Diarrohea</string>
+
+    <string name="pet_adverse_event_severity">Adverse Event Severity</string>
+    <string name="pet_mild">Mild</string>
+    <string name="pet_moderate">Moderate</string>
+    <string name="pet_severe">Severe</string>
+    <string-array name="pet_adverse_event_severity_list">
+        <item>@string/pet_mild</item>
+        <item>@string/pet_moderate</item>
+        <item>@string/pet_severe</item>
+    </string-array>
+
+
     <string name="pet_adverse_events_followup_details">Adverse Events Follow-up Details</string>
     <string name="pet_symptoms_require">Do symptoms require</string>
     <string name="pet_incentive_occasion">Incentive occasion</string>
