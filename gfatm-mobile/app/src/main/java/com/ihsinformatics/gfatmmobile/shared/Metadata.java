@@ -39,4 +39,6 @@ public class Metadata {
     public static final String TOWN = "town";
     public static final String ADDRESS_HIERARCHY = "address_hierarchy";
 
+    public static final String WEIGHT_PERCENTILE = "weight_percentile_measurement";
+
 }
