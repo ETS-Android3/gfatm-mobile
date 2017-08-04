@@ -113,7 +113,7 @@ public class ServerService {
 
         // GWT Connections
         fastGfatmUri = App.getIp()+":"+App.getPort() + "/gfatmweb/fastweb.jsp";
-        searchGfatmUri = App.getIp()+":"+App.getPort() + "/gfatmweb/gfatmtasks.jsp";
+        searchGfatmUri = "199.172.1.44:8888" + "/gfatmtasks.jsp";
         httpGwtClient = new HttpGwtRequest(this.context);
 
     }
@@ -2428,6 +2428,65 @@ public class ServerService {
         return response;
     }
 
+    public String submitFeedbackToServer(String encounterType, FormsObject form, ContentValues values, String[][] observations) {
+
+        if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
+            if (!isURLReachable()) {
+                return null;
+            }
+        }
+
+        String response = "";
+
+        String formDate = values.getAsString("entereddate");
+        String location = values.getAsString("location");
+
+        try {
+
+            // Save Form
+            JSONObject json = new JSONObject();
+            json.put("app_ver", App.getVersion());
+            json.put("type", encounterType);
+            json.put("username", App.getUsername());
+            json.put("password", App.getPassword());
+            json.put("location", "IHS");
+            json.put("entereddate", formDate);
+
+            JSONArray obs = new JSONArray();
+            for (int i = 0; i < observations.length; i++) {
+                if ("".equals(observations[i][0])
+                        || "".equals(observations[i][1]))
+                    continue;
+                JSONObject obsJson = new JSONObject();
+                obsJson.put("name", observations[i][0]);
+                obsJson.put("value", observations[i][1]);
+
+                obs.put(obsJson);
+            }
+            json.put("results", obs);
+
+            String val = json.toString();
+
+            response = httpGwtClient.clientPost(searchGfatmUri, val);
+            JSONObject jsonResponse = JSONParser.getJSONObject(response);
+            if (jsonResponse == null) {
+                return response;
+            }
+            if (jsonResponse.has("response")) {
+                String result = jsonResponse.getString("response");
+                if (jsonResponse.getString("response").equals("ERROR"))
+                    result = result + " <br> "
+                            + jsonResponse.getString("details");
+                return result;
+            }
+            return response;
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+            response = "POST_ERROR";
+        }
+        return response;
+    }
+
 
     public JSONObject searchPatients(String encounterType, ContentValues values, String[][] params) {
 
@@ -2611,6 +2670,68 @@ public class ServerService {
         }
 
         return jsonResponse;
+    }
+
+
+    /**
+     * @param weight
+     * @return String
+     */
+    public String getPercentile(String weight) {
+
+        String result = "";
+
+        String genderValue = "1";
+        if(App.getPatient().getPerson().getGender().equalsIgnoreCase("F") || App.getPatient().getPerson().getGender().equalsIgnoreCase("FEMALE"))
+            genderValue = "2";
+
+        Date birthDate = App.stringToDate(App.getPatient().getPerson().getBirthdate(), "yyyy-MM-dd");
+        int age = App.getDiffMonths(birthDate, new Date());
+
+        Object[][] percentile = dbUtil.getFormTableData("select * from " + Metadata.WEIGHT_PERCENTILE + " where gender = '" + genderValue + "' and age = '" + age + "'");
+
+        double weightInDouble = Double.parseDouble(weight);
+
+        ///this Parse is not required if we store data in Double(when read )..
+        double p3 = Double.parseDouble(String.valueOf(percentile[0][3]));
+        double p5 = Double.parseDouble(String.valueOf(percentile[0][4]));
+        double p10 = Double.parseDouble(String.valueOf(percentile[0][5]));
+        double p25 = Double.parseDouble(String.valueOf(percentile[0][6]));
+        double p50 = Double.parseDouble(String.valueOf(percentile[0][7]));
+        double p75 = Double.parseDouble(String.valueOf(percentile[0][8]));
+        double p90 = Double.parseDouble(String.valueOf(percentile[0][9]));
+        double p95 = Double.parseDouble(String.valueOf(percentile[0][10]));
+        double p97 = Double.parseDouble(String.valueOf(percentile[0][11]));
+
+        if (weightInDouble <= p50) { //if weight or height less then  medium
+
+            if (weightInDouble <= p3) {
+                return "≤3rd Centile";
+            } else if (weightInDouble <= p5) {
+                return "≤5th Centile";
+            } else if (weightInDouble <= p10) {
+                return "Between 6-10th Centile";
+            } else if (weightInDouble <= p25) {
+                return "Between 11-25th Centile";
+            } else if (weightInDouble <= p50) {
+                return "Between 26-50th Centile";
+            }
+
+        } else if (weightInDouble > p50) {//if weight or height greater then  medium
+
+            if (weightInDouble <= p75) {
+                return "Between 51-75th Centile";
+            } else if (weightInDouble <= p90) {
+                return "Between 76-90th Centile";
+            } else if (weightInDouble <= p95) {
+                return "Between 91-95th Centile";
+            } else if (weightInDouble <= p97) {
+                return "Between 96-98th Centile";
+            }
+            else
+                return "> 98th Centile";
+        }
+        return "";
     }
 
 }
