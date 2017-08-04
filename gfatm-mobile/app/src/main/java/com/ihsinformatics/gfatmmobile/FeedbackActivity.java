@@ -2,8 +2,11 @@ package com.ihsinformatics.gfatmmobile;
 
 import android.Manifest;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -20,6 +23,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ihsinformatics.gfatmmobile.util.ServerService;
+
+import java.util.ArrayList;
+import java.util.Date;
+
 /**
  * A login screen that offers login via email/password.
  */
@@ -29,6 +37,10 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
     TextView sendButton;
     Spinner feedbacktype;
     EditText description;
+
+    protected static ProgressDialog loading;
+    private ServerService serverService;
+
     private static final int PERMISSION_REQUEST = 100;
 
     @Override
@@ -36,6 +48,9 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.feedback);
+
+        loading = new ProgressDialog(FeedbackActivity.this, ProgressDialog.THEME_HOLO_LIGHT);
+        serverService = new ServerService(getApplicationContext());
 
         cancelButton = (TextView) findViewById(R.id.cancelButton);
         sendButton = (TextView) findViewById(R.id.sendButton);
@@ -61,12 +76,86 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         try {
             SmsManager sms = SmsManager.getDefault();
             sms.sendTextMessage(phoneNumber, null, msg, null, null);
+
+            Toast.makeText(getApplicationContext(),
+                    getResources().getString(R.string.feedback_sms_send),
+                    Toast.LENGTH_LONG).show();
+
+            description.setText("");
+            feedbacktype.setSelection(0,true);
+
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(),
-                    "SMS faild, please try again later!",
+                    getResources().getString(R.string.feedback_sms_error),
                     Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
+
+        //sendFeedbackToServer();
+    }
+
+    private boolean sendFeedbackToServer(){
+
+        String msg = "Feedback by " + App.getUserFullName() + "\n";
+        msg = msg + "Feedback type: " + feedbacktype.getSelectedItem().toString() + "\n";
+        msg = msg + "Description: " + description.getText().toString();
+
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        final ContentValues values = new ContentValues();
+
+        values.put("location", App.getLocation());
+        values.put("entereddate", App.getSqlDateTime(new Date()));
+
+        observations.add(new String[]{"FEEDBACK", msg});
+
+        AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.submitting_form));
+                        loading.show();
+                    }
+                });
+
+                String result = serverService.submitFeedbackToServer("gfatm_feedback", null, values, observations.toArray(new String[][]{}));
+                if (result != null && result.contains("SUCCESS"))
+                    return "SUCCESS";
+
+                return "ERROR";
+
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                if (result.equals("SUCCESS"))
+                    Toast.makeText(getApplicationContext(),
+                            getResources().getString(R.string.feedback_submitted_successfully),
+                            Toast.LENGTH_LONG).show();
+
+                 else
+
+                    Toast.makeText(getApplicationContext(),
+                            getResources().getString(R.string.feedback_submitting_error),
+                            Toast.LENGTH_LONG).show();
+
+
+            }
+        };
+        submissionFormTask.execute("");
+
+        return true;
     }
 
     @Override
@@ -74,13 +163,13 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-            Snackbar.make(findViewById(R.id.description), "Permission Granted",
+            Snackbar.make(findViewById(R.id.description), getResources().getString(R.string.feedback_permission_granted),
                     Snackbar.LENGTH_LONG).show();
             sendSMS();
 
         } else {
 
-            Snackbar.make(findViewById(R.id.description), "Permission denied",
+            Snackbar.make(findViewById(R.id.description), getResources().getString(R.string.feedback_permission_denied),
                     Snackbar.LENGTH_LONG).show();
 
         }
@@ -106,28 +195,33 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         } else if (v == sendButton) {
 
             if(description.getText().toString().equals("")){
-                Toast.makeText(this,"Please enter your message to continue.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,getResources().getString(R.string.feedback_enter_message), Toast.LENGTH_SHORT).show();
             }else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (checkSelfPermission(Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
-                        if (shouldShowRequestPermissionRationale(Manifest.permission.SEND_SMS)) {
-                            Snackbar.make(findViewById(R.id.description), "You need to grant SEND SMS permission to send sms",
-                                    Snackbar.LENGTH_LONG).setAction("OK", new View.OnClickListener() {
-                                @RequiresApi(api = Build.VERSION_CODES.M)
-                                @Override
-                                public void onClick(View v) {
-                                    requestPermissions(new String[]{Manifest.permission.SEND_SMS}, PERMISSION_REQUEST);
-                                }
-                            }).show();
+                if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEPHONY)) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (checkSelfPermission(Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+                            if (shouldShowRequestPermissionRationale(Manifest.permission.SEND_SMS)) {
+                                Snackbar.make(findViewById(R.id.description), getResources().getString(R.string.feedback_sms_permission_needed),
+                                        Snackbar.LENGTH_LONG).setAction("OK", new View.OnClickListener() {
+                                    @RequiresApi(api = Build.VERSION_CODES.M)
+                                    @Override
+                                    public void onClick(View v) {
+                                        requestPermissions(new String[]{Manifest.permission.SEND_SMS}, PERMISSION_REQUEST);
+                                    }
+                                }).show();
+                            } else {
+                                requestPermissions(new String[]{Manifest.permission.SEND_SMS}, PERMISSION_REQUEST);
+                            }
                         } else {
-                            requestPermissions(new String[]{Manifest.permission.SEND_SMS}, PERMISSION_REQUEST);
+                            sendSMS();
                         }
                     } else {
                         sendSMS();
                     }
-                } else {
-                    sendSMS();
                 }
+
+                sendFeedbackToServer();
+
             }
         }
     }
