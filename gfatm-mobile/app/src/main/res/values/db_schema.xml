@@ -282,6 +282,23 @@
             );
 		</item>
 
+        <item>
+            create table weight_percentile_measurement(
+                id integer primary key,
+                gender text,
+                age text,
+                P3  text,
+                P5  text,
+                P10 text,
+                P25 text,
+                P50 text,
+                P75 text,
+                P90 text,
+                P95 text,
+                P97 text
+            );
+        </item>
+
     </string-array>
 
 </resources>
