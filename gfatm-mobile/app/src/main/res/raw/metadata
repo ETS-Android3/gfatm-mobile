@@ -4554,6 +4554,16 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('FAST SITE','fas
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SAMPLE COLLECTED OUTSIDE THE HOSPITAL OTHER','sample_collected_outside_hospital_other','Text','8c42a1c0-1102-4dd6-82b5-00f255351ee7');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SAMPLE COLLECTION SITE','sample_site','Text','871c0d16-6596-4649-aea1-4d9b56394c6d');
 
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SMOKING HISTORY','smoking_history','Coded','48039109-caf3-4796-aee2-d8d265f3f133');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('FAMILY CONSENT FOR CONTACT INVESTIGATION','consent_for_contact_investigation','Coded','0ba30b51-c962-4f60-a65f-b666909302e6');
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INTERVENTION','intervention','Text','ec353614-a939-4c31-84b5-bb8e2a3199a2');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CITIZENSHIP','citizenship','Text','6e5b2f59-7338-4859-b0b2-22939d81c816');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER IDENTIFICATION NUMBER','other_identification_number','Text','90c4723e-5fac-4b9d-b6c7-1e12a70f185d');
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CLINICALLY EVALUATED, NO TB','clinically_evaluated_no_tb','N/A','39d760c6-7711-490d-8c59-ff911ac3ca10');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ANTIBIOTIC COMPLETE','antibiotic_complete','N/A','689597aa-554b-4189-9a02-bf9da81564e0');
+
 -- Program
 INSERT OR IGNORE INTO program VALUES (1, "86ba1232-d576-416e-b102-5f335c6746ce", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
 INSERT OR IGNORE INTO program VALUES (2, "5d372a38-ae27-4a68-a8d2-bc517a2c9c40", "PET", "Post-Exposure Treatment");
