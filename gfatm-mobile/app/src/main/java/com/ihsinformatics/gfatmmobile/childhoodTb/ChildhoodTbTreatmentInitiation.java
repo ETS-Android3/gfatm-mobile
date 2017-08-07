@@ -1028,15 +1028,25 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             doctorNotes.getEditText().requestFocus();
             error = true;
         }
-        if(testConfirmingDiagnosis.getVisibility()==View.VISIBLE && App.get(testConfirmingDiagnosis).isEmpty()){
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            testConfirmingDiagnosis.getQuestionView().setError(getString(R.string.empty_field));
-            testConfirmingDiagnosis.getQuestionView().requestFocus();
-            error = true;
+        if(testConfirmingDiagnosis.getVisibility() == View.VISIBLE) {
+            Boolean flag = false;
+            for (CheckBox cb : testConfirmingDiagnosis.getCheckedBoxes()) {
+                if (cb.isChecked()) {
+                    flag = true;
+                    break;
+                }
+            }
+            if(!flag){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                testConfirmingDiagnosis.getQuestionView().setError(getString(R.string.empty_field));
+                testConfirmingDiagnosis.getQuestionView().requestFocus();
+                error = true;
+            }
         }
+
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
