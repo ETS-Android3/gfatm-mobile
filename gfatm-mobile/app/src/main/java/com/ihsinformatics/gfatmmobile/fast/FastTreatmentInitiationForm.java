@@ -63,10 +63,15 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
     protected DialogFragment thirdDateFragment;
     Boolean dateChoose = false;
     boolean refillFlag = false;
+    Boolean emptyError = false;
     Context context;
 
     // Views...
     TitledButton formDate;
+    TitledRadioGroup tbPatient;
+    TitledRadioGroup antibiotic;
+
+
     TitledButton regDate;
     LinearLayout cnicLinearLayout;
     MyEditText cnic1;
@@ -166,6 +171,10 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         regDate = new TitledButton(context, null, getResources().getString(R.string.fast_registeration_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
 
+        tbPatient = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_does_the_patient_have_tb), getResources().getStringArray(R.array.fast_tb_patient_list), "", App.VERTICAL, App.VERTICAL, true);
+        antibiotic = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_are_you_prescribing_an_antibiotic_trial), getResources().getStringArray(R.array.fast_yes_no_list), "", App.VERTICAL, App.VERTICAL, true);
+
+
         cnicLinearLayout = new LinearLayout(context);
         cnicLinearLayout.setOrientation(LinearLayout.VERTICAL);
         MyTextView cnic = new MyTextView(context, getResources().getString(R.string.fast_nic_number));
@@ -186,18 +195,18 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         cnic3.setHint("X");
         cnicPartLayout.addView(cnic3);
         cnicLinearLayout.addView(cnicPartLayout);
-       
+
         cnicOwner = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_cnic), getResources().getStringArray(R.array.fast_whose_nic_is_this_list), getResources().getString(R.string.fast_self), App.VERTICAL);
-        cnicOwnerOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        cnicOwnerOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         tbRegisterationNumber = new TitledEditText(context, null, getResources().getString(R.string.fast_tb_registeration_no), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        diagonosisType = new TitledCheckBoxes(context, null, getResources().getString(R.string.fast_type_of_diagnosis), getResources().getStringArray(R.array.fast_diagonosis_type_list), new Boolean[]{true, false}, App.VERTICAL, App.VERTICAL, false);
+        diagonosisType = new TitledCheckBoxes(context, null, getResources().getString(R.string.fast_type_of_diagnosis), getResources().getStringArray(R.array.fast_diagonosis_type_list), new Boolean[]{true, false}, App.VERTICAL, App.VERTICAL, true);
         tbType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_what_type_of_tb), getResources().getStringArray(R.array.fast_tb_type_list), getResources().getString(R.string.fast_pulmonary), App.VERTICAL, App.VERTICAL);
         extraPulmonarySite = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_site_of_extra_pulmonary), getResources().getStringArray(R.array.fast_extra_pulmonary_site_list), getResources().getString(R.string.fast_lymph_node), App.VERTICAL);
         extraPulmonarySiteOther = new TitledEditText(context, null, getResources().getString(R.string.other_extra_pulmonary_tb_site), "", "", 100, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         patientType = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_patient_type), getResources().getStringArray(R.array.fast_patient_type_list), getResources().getString(R.string.fast_new), App.VERTICAL);
         treatmentInitiated = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_was_treatment_initiated), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
         reasonTreatmentNotIniated = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_reason_the_treatment_was_not_iniated), getResources().getStringArray(R.array.fast_reason_treatment_notinitiated_list), getResources().getString(R.string.fast_patient_refused_treatment), App.VERTICAL);
-        reasonTreatmentNotInitiatedOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        reasonTreatmentNotInitiatedOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100,null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         tbCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_category), getResources().getStringArray(R.array.fast_tb_category_list), getResources().getString(R.string.fast_category1), App.VERTICAL, App.VERTICAL);
         historyCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_if_category_2_history_of_previous), getResources().getStringArray(R.array.fast_history_category_2_list), getResources().getString(R.string.fast_cat_1), App.VERTICAL, App.VERTICAL);
         outcomePreviousCategory = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_if_category_2_outcome_of_previous), getResources().getStringArray(R.array.fast_outcome_previous_category_list), getResources().getString(R.string.fast_cured), App.VERTICAL);
@@ -214,13 +223,13 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                 cnicOwner.getSpinner(), cnicOwnerOther.getEditText(), tbRegisterationNumber.getEditText(), diagonosisType, tbType.getRadioGroup(),
                 extraPulmonarySite.getSpinner(), extraPulmonarySiteOther.getEditText(), patientType.getSpinner(), treatmentInitiated.getRadioGroup(),
                 reasonTreatmentNotIniated.getSpinner(), reasonTreatmentNotInitiatedOther.getEditText(), tbCategory.getRadioGroup(),
-                historyCategory.getRadioGroup(), outcomePreviousCategory.getSpinner(), weight.getEditText(), returnVisitDate.getButton()};
+                historyCategory.getRadioGroup(), outcomePreviousCategory.getSpinner(), weight.getEditText(), returnVisitDate.getButton(), tbPatient.getRadioGroup(), antibiotic.getRadioGroup()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, regDate, cnicLinearLayout, cnicOwner, cnicOwnerOther, diagonosisType, tbType, extraPulmonarySite,
-                        extraPulmonarySiteOther, patientType, treatmentInitiated, reasonTreatmentNotIniated, reasonTreatmentNotInitiatedOther,
-                        tbRegisterationNumber, tbCategory, historyCategory, outcomePreviousCategory, weight, returnVisitDate}};
+                {{formDate, tbPatient, antibiotic, diagonosisType, treatmentInitiated, reasonTreatmentNotIniated, reasonTreatmentNotInitiatedOther,
+                        cnicLinearLayout, cnicOwner, cnicOwnerOther, tbType, extraPulmonarySite, extraPulmonarySiteOther, patientType,
+                        tbCategory, historyCategory, outcomePreviousCategory, regDate, tbRegisterationNumber, weight, returnVisitDate}};
         formDate.getButton().setOnClickListener(this);
         regDate.getButton().setOnClickListener(this);
         returnVisitDate.getButton().setOnClickListener(this);
@@ -230,6 +239,8 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         reasonTreatmentNotIniated.getSpinner().setOnItemSelectedListener(this);
         tbCategory.getRadioGroup().setOnCheckedChangeListener(this);
         cnicOwner.getSpinner().setOnItemSelectedListener(this);
+        tbPatient.getRadioGroup().setOnCheckedChangeListener(this);
+        antibiotic.getRadioGroup().setOnCheckedChangeListener(this);
 
         resetViews();
 
@@ -242,7 +253,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()==5){
+                if (s.length() == 5) {
                     cnic2.requestFocus();
                 }
             }
@@ -261,11 +272,11 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()==7){
+                if (s.length() == 7) {
                     cnic3.requestFocus();
                 }
 
-                if(s.length()==0){
+                if (s.length() == 0) {
                     cnic1.requestFocus();
                     cnic1.setSelection(cnic1.getText().length());
                 }
@@ -285,7 +296,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()==0){
+                if (s.length() == 0) {
                     cnic2.requestFocus();
                     cnic2.setSelection(cnic2.getText().length());
                 }
@@ -302,7 +313,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
     @Override
     public void updateDisplay() {
 
-        if(refillFlag){
+        if (refillFlag) {
             refillFlag = false;
             return;
         }
@@ -314,7 +325,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
-            personDOB = personDOB.substring(0,10);
+            personDOB = personDOB.substring(0, 10);
 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
@@ -352,18 +363,14 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
                 regDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
-            }
-
-            else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+            } else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 regDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-            }
-
-            else
+            } else
                 regDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         }
 
@@ -392,7 +399,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             String formDa = returnVisitDate.getButton().getText().toString();
 
             //Date date = new Date();
-            if (thirdDateCalendar.before(formDateCalendar)){
+            if (thirdDateCalendar.before(formDateCalendar)) {
 
                 thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
@@ -401,9 +408,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
 
-            }
-
-            else if (thirdDateCalendar.before(secondDateCalendar)) {
+            } else if (thirdDateCalendar.before(secondDateCalendar)) {
 
                 thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
@@ -412,18 +417,14 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                 tv.setMaxLines(2);
                 snackbar.show();
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
-            }
-
-            else if(nextAppointmentDate.compareTo(treatmentStDate) == 0){
+            } else if (nextAppointmentDate.compareTo(treatmentStDate) == 0) {
                 thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_registeration_date_and_next_visit_date_cant_be_same), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
-            }
-
-            else
+            } else
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
         }
         dateChoose = false;
@@ -436,7 +437,34 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
     public boolean validate() {
         Boolean error = false;
 
-        if (cnic1.getText().toString().trim().isEmpty()) {
+        if (tbPatient.getVisibility() == View.VISIBLE && App.get(tbPatient).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            emptyError = true;
+            error = true;
+        }
+
+        if(diagonosisType.getVisibility() == View.VISIBLE) {
+            for (CheckBox cb : diagonosisType.getCheckedBoxes()) {
+                if (cb.isChecked()) {
+                    emptyError = true;
+                    break;
+                }
+            }
+        }
+
+        if (antibiotic.getVisibility() == View.VISIBLE && App.get(antibiotic).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            emptyError = true;
+            error = true;
+        }
+
+        if (cnicLinearLayout.getVisibility() == View.VISIBLE && cnic1.getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -446,7 +474,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             error = true;
         }
 
-        if (cnic2.getText().toString().trim().isEmpty()) {
+        if (cnicLinearLayout.getVisibility() == View.VISIBLE && cnic2.getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -456,7 +484,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             error = true;
         }
 
-        if (cnic3.getText().toString().trim().isEmpty()) {
+        if (cnicLinearLayout.getVisibility() == View.VISIBLE && cnic3.getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -466,7 +494,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             error = true;
         }
 
-        if (App.get(cnic1).length() != 5) {
+        if (cnicLinearLayout.getVisibility() == View.VISIBLE && App.get(cnic1).length() != 5) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -476,7 +504,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             error = true;
         }
 
-        if (App.get(cnic2).length() != 7) {
+        if (cnicLinearLayout.getVisibility() == View.VISIBLE && App.get(cnic2).length() != 7) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -486,7 +514,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             error = true;
         }
 
-        if (App.get(cnic3).length() != 1) {
+        if ( cnicLinearLayout.getVisibility() == View.VISIBLE && App.get(cnic3).length() != 1) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -550,7 +578,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         }
 
 
-        if (weight.getVisibility() == View.VISIBLE &&  weight.getEditText().getText().toString().length() > 0 && weight.getEditText().getText().toString().trim().isEmpty()) {
+        if (weight.getVisibility() == View.VISIBLE && weight.getEditText().getText().toString().length() > 0 && weight.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -565,7 +593,10 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
-            alertDialog.setMessage(getString(R.string.form_error));
+            if(!emptyError)
+                alertDialog.setMessage(getString(R.string.form_error));
+            else
+                alertDialog.setMessage(getString(R.string.fast_required_field_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             //  DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
@@ -616,8 +647,18 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
         String cnicNumber = cnic1.getText().toString() + "-" + cnic2.getText().toString() + "-" + cnic3.getText().toString();
 
-        observations.add(new String[]{"REGISTRATION DATE", App.getSqlDateTime(secondDateCalendar)});
-        observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnicNumber});
+        if (tbPatient.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"PATIENT HAVE TB", App.get(tbPatient).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
+                    (App.get(tbPatient).equals(getResources().getString(R.string.fast_no_title)) ? "NO" : "INCONCLUSIVE")});
+
+        if (antibiotic.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"ANTIBIOTIC GIVEN", App.get(antibiotic).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
+
+        if (regDate.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"REGISTRATION DATE", App.getSqlDateTime(secondDateCalendar)});
+
+        if (cnicLinearLayout.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnicNumber});
 
         if (cnicOwner.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(cnicOwner).equals(getResources().getString(R.string.fast_self)) ? "SELF" :
@@ -850,7 +891,42 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             String[][] obs = obsValue.get(i);
             if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
-            } else if (obs[0][0].equals("REGISTRATION DATE")) {
+            }
+
+            else if (obs[0][0].equals("PATIENT HAVE TB")) {
+
+                for (RadioButton rb : tbPatient.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.fast_inconclusive)) && obs[0][1].equals("INCONCLUSIVE")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                tbPatient.setVisibility(View.VISIBLE);
+            }
+
+            else if (obs[0][0].equals("ANTIBIOTIC GIVEN")) {
+
+                for (RadioButton rb : antibiotic.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                antibiotic.setVisibility(View.VISIBLE);
+            }
+
+
+            else if (obs[0][0].equals("REGISTRATION DATE")) {
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                 regDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
@@ -897,8 +973,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                     }
                 }
                 diagonosisType.setVisibility(View.VISIBLE);
-            }
-             else if (obs[0][0].equals("SITE OF TUBERCULOSIS DISEASE")) {
+            } else if (obs[0][0].equals("SITE OF TUBERCULOSIS DISEASE")) {
 
                 for (RadioButton rb : tbType.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_pulmonary)) && obs[0][1].equals("PULMONARY TUBERCULOSIS")) {
@@ -1069,6 +1144,12 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             } else {
                 reasonTreatmentNotInitiatedOther.setVisibility(View.GONE);
             }
+
+            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_patient_died)) || parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_patient_refused_treatment))) {
+                returnVisitDate.setVisibility(View.GONE);
+            } else {
+                returnVisitDate.setVisibility(View.VISIBLE);
+            }
         } else if (spinner == cnicOwner.getSpinner()) {
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title))) {
                 cnicOwnerOther.setVisibility(View.VISIBLE);
@@ -1100,9 +1181,71 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                 } else {
                     reasonTreatmentNotInitiatedOther.setVisibility(View.GONE);
                 }
+
+                cnicLinearLayout.setVisibility(View.GONE);
+                cnicOwner.setVisibility(View.GONE);
+                cnicOwnerOther.setVisibility(View.GONE);
+                tbType.setVisibility(View.GONE);
+                extraPulmonarySite.setVisibility(View.GONE);
+                extraPulmonarySiteOther.setVisibility(View.GONE);
+                patientType.setVisibility(View.GONE);
+                tbCategory.setVisibility(View.GONE);
+                historyCategory.setVisibility(View.GONE);
+                regDate.setVisibility(View.GONE);
+                outcomePreviousCategory.setVisibility(View.GONE);
+                tbRegisterationNumber.setVisibility(View.GONE);
+                weight.setVisibility(View.GONE);
             } else {
                 reasonTreatmentNotIniated.setVisibility(View.GONE);
                 reasonTreatmentNotInitiatedOther.setVisibility(View.GONE);
+
+                cnicLinearLayout.setVisibility(View.VISIBLE);
+                cnicOwner.setVisibility(View.VISIBLE);
+                if (cnicOwner.getSpinner().getSelectedItem().toString().equals(getResources().getString(R.string.fast_other_title))) {
+                    cnicOwnerOther.setVisibility(View.VISIBLE);
+                } else {
+                    cnicOwnerOther.setVisibility(View.GONE);
+                }
+                tbType.setVisibility(View.VISIBLE);
+                if (tbType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_extra_pulmonary))) {
+                    extraPulmonarySite.setVisibility(View.VISIBLE);
+                    if (extraPulmonarySite.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))) {
+                        extraPulmonarySiteOther.setVisibility(View.VISIBLE);
+                    } else {
+                        extraPulmonarySiteOther.setVisibility(View.GONE);
+                    }
+                } else {
+                    extraPulmonarySite.setVisibility(View.GONE);
+                    extraPulmonarySiteOther.setVisibility(View.GONE);
+                }
+
+                if (tbPatient.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+                    diagonosisType.setVisibility(View.VISIBLE);
+                    treatmentInitiated.setVisibility(View.VISIBLE);
+                    patientType.setVisibility(View.VISIBLE);
+                    tbCategory.setVisibility(View.VISIBLE);
+
+                    if (tbCategory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_category2))) {
+                        historyCategory.setVisibility(View.VISIBLE);
+                        outcomePreviousCategory.setVisibility(View.VISIBLE);
+                    } else {
+                        historyCategory.setVisibility(View.GONE);
+                        outcomePreviousCategory.setVisibility(View.GONE);
+                    }
+                    regDate.setVisibility(View.VISIBLE);
+                    tbRegisterationNumber.setVisibility(View.VISIBLE);
+                } else {
+                    diagonosisType.setVisibility(View.GONE);
+                    treatmentInitiated.setVisibility(View.GONE);
+                    patientType.setVisibility(View.GONE);
+                    tbCategory.setVisibility(View.GONE);
+                    historyCategory.setVisibility(View.GONE);
+                    outcomePreviousCategory.setVisibility(View.GONE);
+                    regDate.setVisibility(View.GONE);
+                    tbRegisterationNumber.setVisibility(View.GONE);
+                }
+
+                weight.setVisibility(View.VISIBLE);
             }
         } else if (radioGroup == tbCategory.getRadioGroup()) {
             if (tbCategory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_category2))) {
@@ -1111,6 +1254,317 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             } else {
                 historyCategory.setVisibility(View.GONE);
                 outcomePreviousCategory.setVisibility(View.GONE);
+            }
+        } else if (radioGroup == tbPatient.getRadioGroup()) {
+            if (tbPatient.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+                antibiotic.setVisibility(View.GONE);
+                diagonosisType.setVisibility(View.VISIBLE);
+                treatmentInitiated.setVisibility(View.VISIBLE);
+
+                if (treatmentInitiated.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))) {
+                    reasonTreatmentNotIniated.setVisibility(View.VISIBLE);
+                    if (reasonTreatmentNotIniated.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))) {
+                        reasonTreatmentNotInitiatedOther.setVisibility(View.VISIBLE);
+                    } else {
+                        reasonTreatmentNotInitiatedOther.setVisibility(View.GONE);
+                    }
+
+                    cnicLinearLayout.setVisibility(View.GONE);
+                    cnicOwner.setVisibility(View.GONE);
+                    cnicOwnerOther.setVisibility(View.GONE);
+                    tbType.setVisibility(View.GONE);
+                    extraPulmonarySite.setVisibility(View.GONE);
+                    extraPulmonarySiteOther.setVisibility(View.GONE);
+                    patientType.setVisibility(View.GONE);
+                    tbCategory.setVisibility(View.GONE);
+                    historyCategory.setVisibility(View.GONE);
+                    outcomePreviousCategory.setVisibility(View.GONE);
+                    regDate.setVisibility(View.GONE);
+                    tbRegisterationNumber.setVisibility(View.GONE);
+                    weight.setVisibility(View.GONE);
+                } else {
+                    reasonTreatmentNotIniated.setVisibility(View.GONE);
+                    reasonTreatmentNotInitiatedOther.setVisibility(View.GONE);
+
+                    cnicLinearLayout.setVisibility(View.VISIBLE);
+                    cnicOwner.setVisibility(View.VISIBLE);
+                    if (cnicOwner.getSpinner().getSelectedItem().toString().equals(getResources().getString(R.string.fast_other_title))) {
+                        cnicOwnerOther.setVisibility(View.VISIBLE);
+                    } else {
+                        cnicOwnerOther.setVisibility(View.GONE);
+                    }
+                    tbType.setVisibility(View.VISIBLE);
+                    if (tbType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_extra_pulmonary))) {
+                        extraPulmonarySite.setVisibility(View.VISIBLE);
+                        if (extraPulmonarySite.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))) {
+                            extraPulmonarySiteOther.setVisibility(View.VISIBLE);
+                        } else {
+                            extraPulmonarySiteOther.setVisibility(View.GONE);
+                        }
+                    } else {
+                        extraPulmonarySite.setVisibility(View.GONE);
+                        extraPulmonarySiteOther.setVisibility(View.GONE);
+                    }
+
+                    if (tbPatient.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+                        diagonosisType.setVisibility(View.VISIBLE);
+                        treatmentInitiated.setVisibility(View.VISIBLE);
+                        patientType.setVisibility(View.VISIBLE);
+                        tbCategory.setVisibility(View.VISIBLE);
+
+                        if (tbCategory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_category2))) {
+                            historyCategory.setVisibility(View.VISIBLE);
+                            outcomePreviousCategory.setVisibility(View.VISIBLE);
+                        } else {
+                            historyCategory.setVisibility(View.GONE);
+                            outcomePreviousCategory.setVisibility(View.GONE);
+                        }
+                        regDate.setVisibility(View.VISIBLE);
+                        tbRegisterationNumber.setVisibility(View.VISIBLE);
+                    } else {
+                        diagonosisType.setVisibility(View.GONE);
+                        treatmentInitiated.setVisibility(View.GONE);
+                        patientType.setVisibility(View.GONE);
+                        tbCategory.setVisibility(View.GONE);
+                        historyCategory.setVisibility(View.GONE);
+                        outcomePreviousCategory.setVisibility(View.GONE);
+                        regDate.setVisibility(View.GONE);
+                        tbRegisterationNumber.setVisibility(View.GONE);
+                    }
+
+                    weight.setVisibility(View.VISIBLE);
+                }
+
+            } else if (tbPatient.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_inconclusive))) {
+
+                diagonosisType.setVisibility(View.GONE);
+                treatmentInitiated.setVisibility(View.GONE);
+                reasonTreatmentNotIniated.setVisibility(View.GONE);
+                reasonTreatmentNotInitiatedOther.setVisibility(View.GONE);
+                returnVisitDate.setVisibility(View.VISIBLE);
+
+                cnicLinearLayout.setVisibility(View.VISIBLE);
+                cnicOwner.setVisibility(View.VISIBLE);
+                if (cnicOwner.getSpinner().getSelectedItem().toString().equals(getResources().getString(R.string.fast_other_title))) {
+                    cnicOwnerOther.setVisibility(View.VISIBLE);
+                } else {
+                    cnicOwnerOther.setVisibility(View.GONE);
+                }
+                tbType.setVisibility(View.VISIBLE);
+                if (tbType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_extra_pulmonary))) {
+                    extraPulmonarySite.setVisibility(View.VISIBLE);
+                    if (extraPulmonarySite.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))) {
+                        extraPulmonarySiteOther.setVisibility(View.VISIBLE);
+                    } else {
+                        extraPulmonarySiteOther.setVisibility(View.GONE);
+                    }
+                } else {
+                    extraPulmonarySite.setVisibility(View.GONE);
+                    extraPulmonarySiteOther.setVisibility(View.GONE);
+                }
+
+                if (tbPatient.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+                    diagonosisType.setVisibility(View.VISIBLE);
+                    treatmentInitiated.setVisibility(View.VISIBLE);
+                    patientType.setVisibility(View.VISIBLE);
+                    tbCategory.setVisibility(View.VISIBLE);
+
+                    if (tbCategory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_category2))) {
+                        historyCategory.setVisibility(View.VISIBLE);
+                        outcomePreviousCategory.setVisibility(View.VISIBLE);
+                    } else {
+                        historyCategory.setVisibility(View.GONE);
+                        outcomePreviousCategory.setVisibility(View.GONE);
+                    }
+                    regDate.setVisibility(View.VISIBLE);
+                    tbRegisterationNumber.setVisibility(View.VISIBLE);
+                } else {
+                    diagonosisType.setVisibility(View.GONE);
+                    treatmentInitiated.setVisibility(View.GONE);
+                    patientType.setVisibility(View.GONE);
+                    tbCategory.setVisibility(View.GONE);
+                    historyCategory.setVisibility(View.GONE);
+                    outcomePreviousCategory.setVisibility(View.GONE);
+                    regDate.setVisibility(View.GONE);
+                    tbRegisterationNumber.setVisibility(View.GONE);
+                }
+
+                weight.setVisibility(View.VISIBLE);
+
+
+                patientType.setVisibility(View.GONE);
+                tbCategory.setVisibility(View.GONE);
+                historyCategory.setVisibility(View.GONE);
+                outcomePreviousCategory.setVisibility(View.GONE);
+                regDate.setVisibility(View.GONE);
+                tbRegisterationNumber.setVisibility(View.GONE);
+
+
+                antibiotic.setVisibility(View.VISIBLE);
+                if (antibiotic.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+                    cnicLinearLayout.setVisibility(View.GONE);
+                    cnicOwner.setVisibility(View.GONE);
+                    cnicOwnerOther.setVisibility(View.GONE);
+                    tbType.setVisibility(View.GONE);
+                    extraPulmonarySite.setVisibility(View.GONE);
+                    extraPulmonarySiteOther.setVisibility(View.GONE);
+                    patientType.setVisibility(View.GONE);
+                    tbCategory.setVisibility(View.GONE);
+                    historyCategory.setVisibility(View.GONE);
+                    outcomePreviousCategory.setVisibility(View.GONE);
+                    regDate.setVisibility(View.GONE);
+                    tbRegisterationNumber.setVisibility(View.GONE);
+                    weight.setVisibility(View.GONE);
+                } else {
+                    cnicLinearLayout.setVisibility(View.VISIBLE);
+                    cnicOwner.setVisibility(View.VISIBLE);
+                    if (cnicOwner.getSpinner().getSelectedItem().toString().equals(getResources().getString(R.string.fast_other_title))) {
+                        cnicOwnerOther.setVisibility(View.VISIBLE);
+                    } else {
+                        cnicOwnerOther.setVisibility(View.GONE);
+                    }
+                    tbType.setVisibility(View.VISIBLE);
+                    if (tbType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_extra_pulmonary))) {
+                        extraPulmonarySite.setVisibility(View.VISIBLE);
+                        if (extraPulmonarySite.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))) {
+                            extraPulmonarySiteOther.setVisibility(View.VISIBLE);
+                        } else {
+                            extraPulmonarySiteOther.setVisibility(View.GONE);
+                        }
+                    } else {
+                        extraPulmonarySite.setVisibility(View.GONE);
+                        extraPulmonarySiteOther.setVisibility(View.GONE);
+                    }
+
+                    if (tbPatient.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+                        diagonosisType.setVisibility(View.VISIBLE);
+                        treatmentInitiated.setVisibility(View.VISIBLE);
+                        patientType.setVisibility(View.VISIBLE);
+                        tbCategory.setVisibility(View.VISIBLE);
+
+                        if (tbCategory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_category2))) {
+                            historyCategory.setVisibility(View.VISIBLE);
+                            outcomePreviousCategory.setVisibility(View.VISIBLE);
+                        } else {
+                            historyCategory.setVisibility(View.GONE);
+                            outcomePreviousCategory.setVisibility(View.GONE);
+                        }
+                        regDate.setVisibility(View.VISIBLE);
+                        tbRegisterationNumber.setVisibility(View.VISIBLE);
+                    } else {
+                        diagonosisType.setVisibility(View.GONE);
+                        treatmentInitiated.setVisibility(View.GONE);
+                        patientType.setVisibility(View.GONE);
+                        tbCategory.setVisibility(View.GONE);
+                        historyCategory.setVisibility(View.GONE);
+                        outcomePreviousCategory.setVisibility(View.GONE);
+                        regDate.setVisibility(View.GONE);
+                        tbRegisterationNumber.setVisibility(View.GONE);
+                    }
+
+                    weight.setVisibility(View.VISIBLE);
+                }
+            } else if (tbPatient.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))) {
+                antibiotic.setVisibility(View.GONE);
+                diagonosisType.setVisibility(View.GONE);
+                treatmentInitiated.setVisibility(View.GONE);
+                reasonTreatmentNotIniated.setVisibility(View.GONE);
+                reasonTreatmentNotInitiatedOther.setVisibility(View.GONE);
+                patientType.setVisibility(View.GONE);
+                cnicLinearLayout.setVisibility(View.VISIBLE);
+                cnicOwner.setVisibility(View.VISIBLE);
+                tbCategory.setVisibility(View.GONE);
+                historyCategory.setVisibility(View.GONE);
+                outcomePreviousCategory.setVisibility(View.GONE);
+                tbRegisterationNumber.setVisibility(View.GONE);
+                regDate.setVisibility(View.GONE);
+
+                if (cnicOwner.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))) {
+                    cnicOwnerOther.setVisibility(View.VISIBLE);
+                } else {
+                    cnicOwnerOther.setVisibility(View.GONE);
+                }
+
+                tbType.setVisibility(View.VISIBLE);
+                if (tbType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_extra_pulmonary))) {
+                    extraPulmonarySite.setVisibility(View.VISIBLE);
+                    if (extraPulmonarySite.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))) {
+                        extraPulmonarySiteOther.setVisibility(View.VISIBLE);
+                    } else {
+                        extraPulmonarySiteOther.setVisibility(View.GONE);
+                    }
+                } else {
+                    extraPulmonarySite.setVisibility(View.GONE);
+                    extraPulmonarySiteOther.setVisibility(View.GONE);
+                }
+
+                weight.setVisibility(View.VISIBLE);
+                returnVisitDate.setVisibility(View.VISIBLE);
+            }
+
+        } else if (radioGroup == antibiotic.getRadioGroup()) {
+            if (antibiotic.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+                cnicLinearLayout.setVisibility(View.GONE);
+                cnicOwner.setVisibility(View.GONE);
+                cnicOwnerOther.setVisibility(View.GONE);
+                tbType.setVisibility(View.GONE);
+                extraPulmonarySite.setVisibility(View.GONE);
+                extraPulmonarySiteOther.setVisibility(View.GONE);
+                patientType.setVisibility(View.GONE);
+                tbCategory.setVisibility(View.GONE);
+                historyCategory.setVisibility(View.GONE);
+                outcomePreviousCategory.setVisibility(View.GONE);
+                regDate.setVisibility(View.GONE);
+                tbRegisterationNumber.setVisibility(View.GONE);
+                weight.setVisibility(View.GONE);
+            } else {
+                cnicLinearLayout.setVisibility(View.VISIBLE);
+                cnicOwner.setVisibility(View.VISIBLE);
+                if (cnicOwner.getSpinner().getSelectedItem().toString().equals(getResources().getString(R.string.fast_other_title))) {
+                    cnicOwnerOther.setVisibility(View.VISIBLE);
+                } else {
+                    cnicOwnerOther.setVisibility(View.GONE);
+                }
+                tbType.setVisibility(View.VISIBLE);
+                if (tbType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_extra_pulmonary))) {
+                    extraPulmonarySite.setVisibility(View.VISIBLE);
+                    if (extraPulmonarySite.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))) {
+                        extraPulmonarySiteOther.setVisibility(View.VISIBLE);
+                    } else {
+                        extraPulmonarySiteOther.setVisibility(View.GONE);
+                    }
+                } else {
+                    extraPulmonarySite.setVisibility(View.GONE);
+                    extraPulmonarySiteOther.setVisibility(View.GONE);
+                }
+
+                if (tbPatient.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+                    diagonosisType.setVisibility(View.VISIBLE);
+                    treatmentInitiated.setVisibility(View.VISIBLE);
+                    patientType.setVisibility(View.VISIBLE);
+                    tbCategory.setVisibility(View.VISIBLE);
+
+                    if (tbCategory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_category2))) {
+                        historyCategory.setVisibility(View.VISIBLE);
+                        outcomePreviousCategory.setVisibility(View.VISIBLE);
+                    } else {
+                        historyCategory.setVisibility(View.GONE);
+                        outcomePreviousCategory.setVisibility(View.GONE);
+                    }
+                    regDate.setVisibility(View.VISIBLE);
+                    tbRegisterationNumber.setVisibility(View.VISIBLE);
+                } else {
+                    diagonosisType.setVisibility(View.GONE);
+                    treatmentInitiated.setVisibility(View.GONE);
+                    patientType.setVisibility(View.GONE);
+                    tbCategory.setVisibility(View.GONE);
+                    historyCategory.setVisibility(View.GONE);
+                    outcomePreviousCategory.setVisibility(View.GONE);
+                    regDate.setVisibility(View.GONE);
+                    tbRegisterationNumber.setVisibility(View.GONE);
+                }
+
+                weight.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -1126,13 +1580,21 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         regDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
-        extraPulmonarySite.setVisibility(View.GONE);
-        cnicOwnerOther.setVisibility(View.GONE);
-        extraPulmonarySiteOther.setVisibility(View.GONE);
+
+        antibiotic.setVisibility(View.GONE);
+        diagonosisType.setVisibility(View.GONE);
+        treatmentInitiated.setVisibility(View.GONE);
         reasonTreatmentNotIniated.setVisibility(View.GONE);
         reasonTreatmentNotInitiatedOther.setVisibility(View.GONE);
+        cnicOwnerOther.setVisibility(View.GONE);
+        extraPulmonarySite.setVisibility(View.GONE);
+        extraPulmonarySiteOther.setVisibility(View.GONE);
+        patientType.setVisibility(View.GONE);
+        tbCategory.setVisibility(View.GONE);
         historyCategory.setVisibility(View.GONE);
         outcomePreviousCategory.setVisibility(View.GONE);
+        regDate.setVisibility(View.GONE);
+        tbRegisterationNumber.setVisibility(View.GONE);
 
         boolean flag = true;
         Bundle bundle = this.getArguments();
@@ -1153,7 +1615,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
         }
 
-        if(flag) {
+        if (flag) {
             final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
                 @Override
                 protected HashMap<String, String> doInBackground(String... params) {
@@ -1215,7 +1677,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
                     if (result.get("NATIONAL IDENTIFICATION NUMBER") != null) {
                         String value = result.get("NATIONAL IDENTIFICATION NUMBER");
-                        if(value.length() == 15) {
+                        if (value.length() == 15) {
                             cnic1.setText(value.substring(0, 5));
                             cnic2.setText(value.substring(6, 13));
                             cnic3.setText(value.substring(14));

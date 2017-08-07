@@ -480,9 +480,22 @@
     <string name="fast_where_within_hospital_sample_collected_from">Where within the hospital was the sample collected from?</string>
     <string name="fast_where_outside_hospital_sample_collected_from">Where outside the hospital was the sample collected from</string>
     <string name="fast_please_select_fast_site">Please select FAST Site</string>
+    <string name="fast_inconclusive">Inconclusive</string>
+    <string name="fast_does_the_patient_have_tb">Does the patient have TB?</string>
+    <string name="fast_are_you_prescribing_an_antibiotic_trial">Are you prescribing an antibiotic trial?</string>
+    <string name="fast_clinically_evaluated_no_tb">Clinically evaluated, No TB</string>
+    <string name="fast_antibiotic_complete">Antibiotic Complete</string>
+    
+    
     <string-array name="fast_sample_collected_from_list">
         <item>@string/fast_doctor_or_health_worker_within_the_hospital</item>
         <item>@string/fast_doctor_or_health_worker_outside_the_hospital</item>
+    </string-array>
+    
+    <string-array name="fast_tb_patient_list">
+        <item>@string/fast_yes_title</item>
+        <item>@string/fast_no_title</item>
+        <item>@string/fast_inconclusive</item>
     </string-array>
     
     <string-array name="fast_sample_collected_within_the_hospital_list">
@@ -1054,6 +1067,8 @@
         <item>@string/fast_transfer_out</item>
         <item>@string/fast_referral_new</item>
         <item>@string/fast_loss_to_follow_up</item>
+        <item>@string/fast_clinically_evaluated_no_tb</item>
+        <item>@string/fast_antibiotic_complete</item>
         <item>@string/fast_other_title</item>
     </string-array>
 
