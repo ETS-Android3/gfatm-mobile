@@ -143,6 +143,7 @@
     <string name="pet_total_childern_contacts">Total Number of childhood contacts</string>
     <string name="pet_total_childern_contacts_hint">0-25</string>
     <string name="pet_count_mismatch">Total count doesn\'t match.</string>
+    <string name="pet_family_consent">Does the family agree for investigation of their contacts for PET?</string>
 
     <!-- Baseline Screening -->
     <string name="pet_index_patient_id">Index Patient ID</string>
@@ -575,6 +576,7 @@
         <item>@string/pet_other</item>
     </string-array>
     <string name="pet_referral_needed">Does the contact need referral for his/her condition?</string>
+    <string name="pet_smoking_history">Does the contact have smoking history or not?</string>
     <string name="pet_doctor_notes">Clinician\'s notes</string>
 
     <!-- Infection Treatment Eligibility -->
@@ -1028,5 +1030,20 @@
 
     <string name="pet_payment_date">Payment Date</string>
     <string name="pet_incentive_date">Incentive Date</string>
+
+    <string name="sci">SCI</string>
+    <string name="pet_intervention">Intervention</string>
+    <string-array name="pet_interventions">
+        <item>@string/pet</item>
+        <item>@string/sci</item>
+    </string-array>
+
+    <string name="pet_pakistani">Pakistani</string>
+    <string name="pet_citizenship">Citizenship</string>
+    <string-array name="pet_citizenships">
+        <item>@string/pet_pakistani</item>
+        <item>@string/other</item>
+    </string-array>
+    <string name="pet_other_identification_number">Other Identification Number</string>
 
 </resources>
