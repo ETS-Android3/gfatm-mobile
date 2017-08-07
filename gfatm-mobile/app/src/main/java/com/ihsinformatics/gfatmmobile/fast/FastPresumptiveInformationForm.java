@@ -165,7 +165,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
 
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        contactExternalId = new TitledEditText(context, null, getResources().getString(R.string.fast_external_id), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        contactExternalId = new TitledEditText(context, null, getResources().getString(R.string.fast_external_id), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         cnicLinearLayout = new LinearLayout(context);
         cnicLinearLayout.setOrientation(LinearLayout.VERTICAL);
         MyTextView cnic = new MyTextView(context, getResources().getString(R.string.fast_nic_number));
@@ -642,7 +642,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             error = true;
         }
 
-        if (contactExternalId.getVisibility() == View.VISIBLE && contactExternalId.getEditText().getText().toString().trim().isEmpty()) {
+      /*  if (contactExternalId.getVisibility() == View.VISIBLE && contactExternalId.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -650,7 +650,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             contactExternalId.getEditText().setError(getString(R.string.empty_field));
             contactExternalId.getEditText().requestFocus();
             error = true;
-        }
+        }*/
 
         if (addressHouse.getEditText().getText().toString().length() > 0 && addressHouse.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
