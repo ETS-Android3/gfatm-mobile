@@ -55,6 +55,7 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
     Context context;
 
     TitledButton formDate;
+    TitledRadioGroup intervention;
     TitledEditText externalPatientId;
     TitledEditText weight;
     TitledEditText height;
@@ -112,6 +113,7 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
     CheckBox otherComorbidCondition;
     TitledEditText otherCondition;
     TitledRadioGroup referral;
+    TitledRadioGroup smokingHistory;
     TitledEditText clincianNote;
 
     Boolean refillFlag = false;
@@ -176,6 +178,7 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
     public void initViews() {
 
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        intervention = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_intervention), getResources().getStringArray(R.array.pet_interventions), "", App.HORIZONTAL, App.VERTICAL);
         externalPatientId = new TitledEditText(context, null, getResources().getString(R.string.external_id), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
 
         weight = new TitledEditText(context, null, getResources().getString(R.string.pet_weight), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
@@ -281,6 +284,7 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
         comorbidCondition = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_comorbid_condition), getResources().getStringArray(R.array.pet_comorbid_conditions), null, App.VERTICAL, App.VERTICAL);
         otherCondition = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 15, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         referral = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_referral_needed), getResources().getStringArray(R.array.yes_no_unknown_options), getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
+        smokingHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_smoking_history), getResources().getStringArray(R.array.yes_no_unknown_options), getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         clincianNote = new TitledEditText(context, null, getResources().getString(R.string.pet_doctor_notes), "", "", 250, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         clincianNote.getEditText().setSingleLine(false);
         clincianNote.getEditText().setMinimumHeight(150);
@@ -306,6 +310,7 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
         linearLayout3.addView(comorbidCondition);
         linearLayout3.addView(otherCondition);
         linearLayout3.addView(referral);
+        linearLayout3.addView(smokingHistory);
         linearLayout3.addView(clincianNote);
 
         views = new View[]{formDate.getButton(), externalPatientId.getEditText(), weight.getEditText(), height.getEditText(), bmi.getEditText(), muac.getEditText(), weightPercentile.getSpinner(),
@@ -317,9 +322,9 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
                 generalAppearence.getRadioGroup(), generalAppearenceExplanation.getEditText(), heent.getRadioGroup(), heentExplanation.getEditText(), lymphnode.getRadioGroup(), lymphnodeExplanation.getEditText(),
                 spine.getRadioGroup(), spineExplanation.getEditText(), joints.getRadioGroup(), jointsExplanation.getEditText(), jointsExplanation.getEditText(), skin.getRadioGroup(), skinExplanation.getEditText(),
                 chest.getRadioGroup(), chestExplanation.getEditText(), abdominal.getRadioGroup(), abdominal.getRadioGroup(), examOutcome.getRadioGroup(), comorbidCondition,
-                otherCondition.getEditText(), referral.getRadioGroup(), clincianNote.getEditText(), weightPercentileEditText.getEditText()};
+                otherCondition.getEditText(), referral.getRadioGroup(), clincianNote.getEditText(), weightPercentileEditText.getEditText(),smokingHistory.getRadioGroup(), intervention.getRadioGroup()};
 
-        viewGroups = new View[][]{{formDate, externalPatientId, weight, height, bmi, muac, weightPercentile, weightPercentileEditText},
+        viewGroups = new View[][]{{formDate, intervention, externalPatientId, weight, height, bmi, muac, weightPercentile, weightPercentileEditText},
                 {linearLayout1},
                 {linearLayout2},
                 {linearLayout3}};
@@ -681,6 +686,7 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
 
+        observations.add(new String[]{"INTERVENTION", App.get(intervention).equals(getResources().getString(R.string.pet)) ? "PET" : "SCI"});
         observations.add(new String[]{"WEIGHT (KG)", App.get(weight)});
         observations.add(new String[]{"HEIGHT (CM)", App.get(height)});
         String[] bmiString = App.get(bmi).split(" - ");
@@ -828,6 +834,8 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
             observations.add(new String[]{"OTHER DISEASE", App.get(otherCondition)});
         observations.add(new String[]{"PATIENT REFERRED", App.get(referral).equals(getResources().getString(R.string.yes)) ? "YES" :
                 (App.get(referral).equals(getResources().getString(R.string.yes)) ? "NO" : "UNKNOWN")});
+        observations.add(new String[]{"SMOKING HISTORY", App.get(smokingHistory).equals(getResources().getString(R.string.yes)) ? "YES" :
+                (App.get(smokingHistory).equals(getResources().getString(R.string.yes)) ? "NO" : "UNKNOWN")});
         observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(clincianNote)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
@@ -1101,6 +1109,16 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
 
             if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
                 timeTakeToFill = obs[0][1];
+            } else if (obs[0][0].equals("INTERVENTION")) {
+                for (RadioButton rb : intervention.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet)) && obs[0][1].equals("PET")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.sci)) && obs[0][1].equals("SCI")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
             } else if (obs[0][0].equals("WEIGHT (KG)")) {
                 weight.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("HEIGHT (CM)")) {
@@ -1641,7 +1659,20 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
                         break;
                     }
                 }
-            } else if (obs[0][0].equals("CLINICIAN NOTES (TEXT)")) {
+            } else if (obs[0][0].equals("SMOKING HISTORY")) {
+                for (RadioButton rb : smokingHistory.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            }else if (obs[0][0].equals("CLINICIAN NOTES (TEXT)")) {
                 clincianNote.getEditText().setText(obs[0][1]);
             }
         }

@@ -22,6 +22,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -32,6 +33,7 @@ import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
+import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
@@ -47,6 +49,7 @@ import java.util.Date;
 public class PetSocioecnomicDataForm extends AbstractFormActivity {
 
     Context context;
+    TitledRadioGroup intervention;
     TitledButton formDate;
     TitledSpinner ethinicity;
     TitledEditText otherEthinicity;
@@ -127,6 +130,7 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
     public void initViews() {
 
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        intervention = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_intervention), getResources().getStringArray(R.array.pet_interventions), "", App.HORIZONTAL, App.VERTICAL);
         ethinicity = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_ethnicity), getResources().getStringArray(R.array.pet_ethnicities), "", App.VERTICAL);
         otherEthinicity = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         contactEducationLevel = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_contact_education_level), getResources().getStringArray(R.array.pet_contact_education_levels), getResources().getString(R.string.pet_intermediate), App.VERTICAL);
@@ -145,9 +149,9 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
         otherMotherTongue = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
 
         views = new View[]{formDate.getButton(), ethinicity.getSpinner(), otherEthinicity.getEditText(), contactEducationLevel.getSpinner(), maritalStatus.getSpinner(), emloyementStatus.getSpinner(), occupation.getSpinner(), contactIncome.getEditText(), contactIncomeGroup.getEditText(),
-                householdHead.getSpinner(), otherHouseholdHead.getEditText(), householdHeadEducationLevel.getSpinner(), motherTongue.getSpinner(), otherMotherTongue.getEditText(), otherOccupation.getEditText(), otherContactEducationLevel.getEditText(), otherHouseholdHeadEducationLevel.getEditText()};
+                householdHead.getSpinner(), otherHouseholdHead.getEditText(), householdHeadEducationLevel.getSpinner(), motherTongue.getSpinner(), otherMotherTongue.getEditText(), otherOccupation.getEditText(), otherContactEducationLevel.getEditText(), otherHouseholdHeadEducationLevel.getEditText(), intervention.getRadioGroup()};
 
-        viewGroups = new View[][]{{formDate, ethinicity, otherEthinicity, contactEducationLevel, otherContactEducationLevel, maritalStatus, emloyementStatus, occupation, otherOccupation, contactIncome, contactIncomeGroup, householdHead, otherHouseholdHead, householdHeadEducationLevel, otherHouseholdHeadEducationLevel, motherTongue, otherMotherTongue}};
+        viewGroups = new View[][]{{formDate, intervention, ethinicity, otherEthinicity, contactEducationLevel, otherContactEducationLevel, maritalStatus, emloyementStatus, occupation, otherOccupation, contactIncome, contactIncomeGroup, householdHead, otherHouseholdHead, householdHeadEducationLevel, otherHouseholdHeadEducationLevel, motherTongue, otherMotherTongue}};
 
         contactIncome.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
@@ -343,6 +347,7 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
 
+        observations.add(new String[]{"INTERVENTION", App.get(intervention).equals(getResources().getString(R.string.pet)) ? "PET" : "SCI"});
         final String ethnicityString = App.get(ethinicity).equals(getResources().getString(R.string.pet_urdu_speaking)) ? "URDU SPEAKING" :
                 (App.get(ethinicity).equals(getResources().getString(R.string.pet_sindhi)) ? "SINDHI" :
                         (App.get(ethinicity).equals(getResources().getString(R.string.pet_pakhtun)) ? "PASHTUN" :
@@ -750,7 +755,17 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
 
             if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
                 timeTakeToFill = obs[0][1];
-            }  else if (obs[0][0].equals("ETHNICITY")) {
+            } else if (obs[0][0].equals("INTERVENTION")) {
+                for (RadioButton rb : intervention.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet)) && obs[0][1].equals("PET")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.sci)) && obs[0][1].equals("SCI")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("ETHNICITY")) {
                 String value = obs[0][1].equals("URDU SPEAKING") ? getResources().getString(R.string.pet_urdu_speaking) :
                         (obs[0][1].equals("SINDHI") ? getResources().getString(R.string.pet_sindhi) :
                                 (obs[0][1].equals("PASHTUN") ? getResources().getString(R.string.pet_pakhtun) :

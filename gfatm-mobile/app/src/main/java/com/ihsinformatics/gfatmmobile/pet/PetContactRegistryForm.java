@@ -20,6 +20,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -29,6 +30,7 @@ import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
+import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
@@ -44,9 +46,11 @@ public class PetContactRegistryForm extends AbstractFormActivity {
 
     Context context;
     TitledButton formDate;
+    TitledRadioGroup intervention;
     TitledEditText totalContacts;
     TitledEditText totalAdultContacts;
     TitledEditText totalChildrenContacts;
+    TitledRadioGroup familyConsent;
 
     Boolean refillFlag = false;
 
@@ -112,13 +116,15 @@ public class PetContactRegistryForm extends AbstractFormActivity {
     public void initViews() {
 
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        intervention = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_intervention), getResources().getStringArray(R.array.pet_interventions), "", App.HORIZONTAL, App.VERTICAL);
         totalContacts = new TitledEditText(context, null, getResources().getString(R.string.pet_total_contacts), "", getResources().getString(R.string.pet_total_contacts_hint), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         totalAdultContacts = new TitledEditText(context, null, getResources().getString(R.string.pet_total_adult_contacts), "", getResources().getString(R.string.pet_total_adult_contacts_hint), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         totalChildrenContacts = new TitledEditText(context, null, getResources().getString(R.string.pet_total_childern_contacts), "", getResources().getString(R.string.pet_total_childern_contacts_hint), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        familyConsent = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_smoking_history), getResources().getStringArray(R.array.yes_no_options), getString(R.string.no), App.HORIZONTAL, App.HORIZONTAL);
 
-        views = new View[]{formDate.getButton(), totalContacts.getEditText(), totalAdultContacts.getEditText(), totalChildrenContacts.getEditText()};
+        views = new View[]{formDate.getButton(), totalContacts.getEditText(), totalAdultContacts.getEditText(), totalChildrenContacts.getEditText(), familyConsent.getRadioGroup(), intervention.getRadioGroup()};
 
-        viewGroups = new View[][]{{formDate, totalContacts, totalAdultContacts, totalChildrenContacts}};
+        viewGroups = new View[][]{{formDate, intervention, totalContacts, totalAdultContacts, totalChildrenContacts, familyConsent}};
 
         formDate.getButton().setOnClickListener(this);
 
@@ -274,9 +280,11 @@ public class PetContactRegistryForm extends AbstractFormActivity {
 
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
+        observations.add(new String[]{"INTERVENTION", App.get(intervention).equals(getResources().getString(R.string.pet)) ? "PET" : "SCI"});
         observations.add(new String[]{"NUMBER OF CONTACTS", App.get(totalContacts)});
         observations.add(new String[]{"NUMBER OF ADULT CONTACTS", App.get(totalAdultContacts)});
         observations.add(new String[]{"NUMBER OF CHILDHOOD CONTACTS", App.get(totalChildrenContacts)});
+        observations.add(new String[]{"FAMILY CONSENT FOR CONTACT INVESTIGATION", App.get(familyConsent).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -430,6 +438,16 @@ public class PetContactRegistryForm extends AbstractFormActivity {
 
             if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
                 timeTakeToFill = obs[0][1];
+            } else if (obs[0][0].equals("INTERVENTION")) {
+                for (RadioButton rb : intervention.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet)) && obs[0][1].equals("PET")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.sci)) && obs[0][1].equals("SCI")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
             } else if (obs[0][0].equals("NUMBER OF CONTACTS")) {
 
                 String value = obs[0][1].replace(".0", "");
@@ -445,6 +463,16 @@ public class PetContactRegistryForm extends AbstractFormActivity {
                 String value = obs[0][1].replace(".0", "");
                 totalChildrenContacts.getEditText().setText(value);
 
+            } else if (obs[0][0].equals("FAMILY CONSENT FOR CONTACT INVESTIGATION")) {
+                for (RadioButton rb : familyConsent.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
             }
         }
     }

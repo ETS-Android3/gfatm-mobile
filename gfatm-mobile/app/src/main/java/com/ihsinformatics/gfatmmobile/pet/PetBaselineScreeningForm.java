@@ -73,6 +73,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
 
     // Views...
     TitledButton formDate;
+    TitledRadioGroup intervention;
     TitledEditText indexPatientId;
     Button scanQRCode;
     TitledRadioGroup treatmentStatus;
@@ -81,12 +82,14 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
     TitledRadioGroup tbHistory;
     TitledSpinner relationship;
     TitledEditText otherRelation;
+    TitledRadioGroup citizenship;
     LinearLayout cnicLayout;
     MyEditText cnic1;
     MyEditText cnic2;
     MyEditText cnic3;
     TitledSpinner cnicOwner;
     TitledEditText otherCnicOwner;
+    TitledEditText otherNIC;
     LinearLayout phone1Layout;
     MyEditText phone1a;
     MyEditText phone1b;
@@ -119,7 +122,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
 
     MyLinearLayout linearLayout;
 
-
+    ScrollView scrollView;
     Boolean refillFlag = false;
 
     /**
@@ -159,7 +162,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                     View v = viewGroups[i][j];
                     layout.addView(v);
                 }
-                ScrollView scrollView = new ScrollView(mainContent.getContext());
+                scrollView = new ScrollView(mainContent.getContext());
                 scrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
                 scrollView.addView(layout);
                 groups.add(scrollView);
@@ -173,7 +176,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                     View v = viewGroups[i][j];
                     layout.addView(v);
                 }
-                ScrollView scrollView = new ScrollView(mainContent.getContext());
+                scrollView = new ScrollView(mainContent.getContext());
                 scrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
                 scrollView.addView(layout);
                 groups.add(scrollView);
@@ -193,6 +196,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
+        intervention = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_intervention), getResources().getStringArray(R.array.pet_interventions), "", App.HORIZONTAL, App.VERTICAL);
         indexPatientId = new TitledEditText(context, null, getResources().getString(R.string.pet_index_patient_id), "", "", RegexUtil.idLength, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         scanQRCode = new Button(context);
         scanQRCode.setText("Scan QR Code");
@@ -202,6 +206,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         tbHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_tb_history), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         relationship = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_relationship), getResources().getStringArray(R.array.pet_household_heads), "", App.VERTICAL);
         otherRelation = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 15, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        citizenship = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_citizenship), getResources().getStringArray(R.array.pet_citizenships), getResources().getString(R.string.pet_pakistani), App.HORIZONTAL, App.VERTICAL);
         cnicLayout = new LinearLayout(context);
         cnicLayout.setOrientation(LinearLayout.VERTICAL);
         LinearLayout cnicQuestionLayout = new LinearLayout(context);
@@ -231,6 +236,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         cnicLayout.addView(cnicPartLayout);
         cnicOwner = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_cnic_owner), getResources().getStringArray(R.array.pet_cnic_owners), "", App.VERTICAL);
         otherCnicOwner = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        otherNIC = new TitledEditText(context, null, getResources().getString(R.string.pet_other_identification_number), "", "", 30, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         phone1Layout = new LinearLayout(context);
         phone1Layout.setOrientation(LinearLayout.VERTICAL);
         LinearLayout phone1QuestionLayout = new LinearLayout(context);
@@ -342,12 +348,12 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                 cnic1, cnic2, cnic3, cnicOwner.getSpinner(), otherCnicOwner.getEditText(), phone1a, phone1b, phone2a, phone2b, address1.getEditText(), province.getSpinner(), district.getSpinner(), city.getSpinner(),
                 addressType.getRadioGroup(), landmark.getEditText(), entryLocation.getRadioGroup(),
                 cough.getRadioGroup(), coughDuration.getRadioGroup(), haemoptysis.getRadioGroup(), fever.getRadioGroup(), weightLoss.getRadioGroup(), reduceAppetite.getRadioGroup(), reduceActivity.getRadioGroup(),
-                nightSweats.getRadioGroup(), nightSweats.getRadioGroup(), swelling.getRadioGroup(), referral.getRadioGroup(), referredFacility.getSpinner(), treatmentInitiationDate.getButton(), clincianNote.getEditText()};
+                nightSweats.getRadioGroup(), nightSweats.getRadioGroup(), swelling.getRadioGroup(), referral.getRadioGroup(), referredFacility.getSpinner(), treatmentInitiationDate.getButton(), clincianNote.getEditText(), intervention.getRadioGroup(), citizenship, otherNIC};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, indexPatientId, scanQRCode, treatmentStatus, treatmentInitiationDate, contactRegistered, tbHistory, relationship, otherRelation,
-                        cnicLayout, cnicOwner, otherCnicOwner, phone1Layout, phone2Layout, address1, addressLayout, province, district, city, addressType, landmark, entryLocation, linearLayout},
+                {{formDate, intervention, indexPatientId, scanQRCode, treatmentStatus, treatmentInitiationDate, contactRegistered, tbHistory, relationship, otherRelation,
+                        citizenship, cnicLayout, cnicOwner, otherCnicOwner, otherNIC, phone1Layout, phone2Layout, address1, addressLayout, province, district, city, addressType, landmark, entryLocation, linearLayout},
                 };
 
         formDate.getButton().setOnClickListener(this);
@@ -360,6 +366,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         province.getSpinner().setOnItemSelectedListener(this);
         treatmentStatus.getRadioGroup().setOnCheckedChangeListener(this);
         referral.getRadioGroup().setOnCheckedChangeListener(this);
+        citizenship.getRadioGroup().setOnCheckedChangeListener(this);
 
         resetViews();
 
@@ -557,6 +564,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
     public boolean validate() {
 
         Boolean error = false;
+        View view = null;
 
         if(!(App.get(phone2a).equals("") && App.get(phone2b).equals(""))){
             if (!RegexUtil.isContactNumber(App.get(phone2a) + App.get(phone2b))) {
@@ -583,35 +591,37 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
             otherCnicOwner.getEditText().requestFocus();
             error = true;
         }
-        if (App.get(cnic1).isEmpty()) {
-            cnic1.setError(getResources().getString(R.string.mandatory_field));
-            cnic1.requestFocus();
-            error = true;
-        }
-        if (App.get(cnic2).isEmpty()) {
-            cnic2.setError(getResources().getString(R.string.mandatory_field));
-            cnic2.requestFocus();
-            error = true;
-        }
-        if (App.get(cnic3).isEmpty()) {
-            cnic3.setError(getResources().getString(R.string.mandatory_field));
-            cnic3.requestFocus();
-            error = true;
-        }
-        if (App.get(cnic1).length() != 5) {
-            cnic1.setError(getResources().getString(R.string.invalid_value));
-            cnic1.requestFocus();
-            error = true;
-        }
-        if (App.get(cnic2).length() != 7) {
-            cnic2.setError(getResources().getString(R.string.invalid_value));
-            cnic2.requestFocus();
-            error = true;
-        }
-        if (App.get(cnic3).length() != 1) {
-            cnic3.setError(getResources().getString(R.string.invalid_value));
-            cnic3.requestFocus();
-            error = true;
+        if(cnicLayout.getVisibility() == View.VISIBLE) {
+            if (App.get(cnic1).isEmpty()) {
+                cnic1.setError(getResources().getString(R.string.mandatory_field));
+                cnic1.requestFocus();
+                error = true;
+            }
+            if (App.get(cnic2).isEmpty()) {
+                cnic2.setError(getResources().getString(R.string.mandatory_field));
+                cnic2.requestFocus();
+                error = true;
+            }
+            if (App.get(cnic3).isEmpty()) {
+                cnic3.setError(getResources().getString(R.string.mandatory_field));
+                cnic3.requestFocus();
+                error = true;
+            }
+            if (App.get(cnic1).length() != 5) {
+                cnic1.setError(getResources().getString(R.string.invalid_value));
+                cnic1.requestFocus();
+                error = true;
+            }
+            if (App.get(cnic2).length() != 7) {
+                cnic2.setError(getResources().getString(R.string.invalid_value));
+                cnic2.requestFocus();
+                error = true;
+            }
+            if (App.get(cnic3).length() != 1) {
+                cnic3.setError(getResources().getString(R.string.invalid_value));
+                cnic3.requestFocus();
+                error = true;
+            }
         }
 
         if (App.get(otherRelation).isEmpty() && otherRelation.getVisibility() == View.VISIBLE) {
@@ -633,6 +643,12 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
             error = true;
         }
 
+        if(App.get(intervention).equals("")){
+            intervention.getRadioGroup().requestFocus();
+            error = true;
+            view = intervention;
+        }
+
         if (error) {
 
             // int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
@@ -643,9 +659,17 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
             // DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_error));
+            final View finalView = view;
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
+                            scrollView.post(new Runnable() {
+                                public void run() {
+                                    if (finalView != null) {
+                                        scrollView.scrollTo(0, finalView.getTop());
+                                    }
+                                }
+                            });
                             try {
                                 InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
@@ -687,6 +711,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
 
         observations.add(new String[]{"PATIENT ID OF INDEX CASE", App.get(indexPatientId)});
+        observations.add(new String[]{"INTERVENTION", App.get(intervention).equals(getResources().getString(R.string.pet)) ? "PET" : "SCI"});
         observations.add(new String[]{"TUBERCULOSIS TREATMENT STATUS", App.get(treatmentStatus).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         if (treatmentInitiationDate.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TREATMENT START DATE", App.getSqlDate(secondDateCalendar)});
@@ -710,27 +735,37 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         if (otherRelation.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER FAMILY MEMBER", App.get(otherRelation)});
 
-        final String cnic = App.get(cnic1) + "-" + App.get(cnic2) + "-" + App.get(cnic3);
-        observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnic});
+        observations.add(new String[]{"CITIZENSHIP", App.get(citizenship)});
 
-        final String ownerString = App.get(cnicOwner).equals(getResources().getString(R.string.pet_self)) ? "SELF" :
-                (App.get(cnicOwner).equals(getResources().getString(R.string.pet_mother)) ? "MOTHER" :
-                        (App.get(cnicOwner).equals(getResources().getString(R.string.pet_father)) ? "FATHER" :
-                                (App.get(cnicOwner).equals(getResources().getString(R.string.pet_maternal_grandmother)) ? "MATERNAL GRANDMOTHER" :
-                                        (App.get(cnicOwner).equals(getResources().getString(R.string.pet_maternal_grandfather)) ? "MATERNAL GRANDFATHER" :
-                                                (App.get(cnicOwner).equals(getResources().getString(R.string.pet_paternal_grandmother)) ? "PATERNAL GRANDMOTHER" :
-                                                        (App.get(cnicOwner).equals(getResources().getString(R.string.pet_paternal_grandfather)) ? "PATERNAL GRANDFATHER" :
-                                                                (App.get(cnicOwner).equals(getResources().getString(R.string.pet_brother)) ? "BROTHER" :
-                                                                        (App.get(cnicOwner).equals(getResources().getString(R.string.pet_sister)) ? "SISTER" :
-                                                                                (App.get(cnicOwner).equals(getResources().getString(R.string.pet_son)) ? "SON" :
-                                                                                        (App.get(cnicOwner).equals(getResources().getString(R.string.pet_daughter)) ? "DAUGHTER" :
-                                                                                                (App.get(cnicOwner).equals(getResources().getString(R.string.pet_spouse)) ? "SPOUSE" :
-                                                                                                        (App.get(cnicOwner).equals(getResources().getString(R.string.pet_aunt)) ? "AUNT" :
-                                                                                                                (App.get(cnicOwner).equals(getResources().getString(R.string.pet_uncle)) ? "UNCLE" : "OTHER FAMILY MEMBER")))))))))))));
+        String cnic = "";
+        String ownerString = "";
+        if(cnicLayout.getVisibility() == View.VISIBLE) {
 
-        observations.add(new String[]{"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", ownerString});
-        if (otherCnicOwner.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(otherCnicOwner)});
+            cnic = App.get(cnic1) + "-" + App.get(cnic2) + "-" + App.get(cnic3);
+            observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnic});
+
+            ownerString = App.get(cnicOwner).equals(getResources().getString(R.string.pet_self)) ? "SELF" :
+                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_mother)) ? "MOTHER" :
+                            (App.get(cnicOwner).equals(getResources().getString(R.string.pet_father)) ? "FATHER" :
+                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_maternal_grandmother)) ? "MATERNAL GRANDMOTHER" :
+                                            (App.get(cnicOwner).equals(getResources().getString(R.string.pet_maternal_grandfather)) ? "MATERNAL GRANDFATHER" :
+                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_paternal_grandmother)) ? "PATERNAL GRANDMOTHER" :
+                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.pet_paternal_grandfather)) ? "PATERNAL GRANDFATHER" :
+                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_brother)) ? "BROTHER" :
+                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.pet_sister)) ? "SISTER" :
+                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_son)) ? "SON" :
+                                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.pet_daughter)) ? "DAUGHTER" :
+                                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_spouse)) ? "SPOUSE" :
+                                                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.pet_aunt)) ? "AUNT" :
+                                                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_uncle)) ? "UNCLE" : "OTHER FAMILY MEMBER")))))))))))));
+
+            observations.add(new String[]{"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", ownerString});
+            if (otherCnicOwner.getVisibility() == View.VISIBLE)
+                observations.add(new String[]{"OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(otherCnicOwner)});
+        }
+        if(otherNIC.getVisibility() == View.VISIBLE){
+            observations.add(new String[]{"OTHER IDENTIFICATION NUMBER", App.get(otherNIC)});
+        }
 
         observations.add(new String[]{"LOCATION OF EVENT", App.get(entryLocation).equals(getResources().getString(R.string.pet_facility)) ? "HEALTH FACILITY" : "HOME"});
 
@@ -798,6 +833,8 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
 
         observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(clincianNote)});
 
+        final String finalCnic = cnic;
+        final String finalOwnerString = ownerString;
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
             protected String doInBackground(String... params) {
@@ -840,12 +877,20 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                             return result;
                     }
 
-                    result = serverService.savePersonAttributeType("National ID", cnic, encounterId);
-                    if (!result.equals("SUCCESS"))
-                        return result;
+                    if(!finalCnic.equals("")) {
+                        result = serverService.savePersonAttributeType("National ID", finalCnic, encounterId);
+                        if (!result.equals("SUCCESS"))
+                            return result;
+                    }
 
-                    String[][] cnicOwnerConcept = serverService.getConceptUuidAndDataType(ownerString);
-                    result = serverService.savePersonAttributeType("National ID Owner", cnicOwnerConcept[0][0], encounterId);
+                    if(!finalOwnerString.equals("")) {
+                        String[][] cnicOwnerConcept = serverService.getConceptUuidAndDataType(finalOwnerString);
+                        result = serverService.savePersonAttributeType("National ID Owner", cnicOwnerConcept[0][0], encounterId);
+                        if (!result.equals("SUCCESS"))
+                            return result;
+                    }
+
+                    result = serverService.savePersonAttributeType("Citizenship", App.get(citizenship), encounterId);
                     if (!result.equals("SUCCESS"))
                         return result;
                 }
@@ -1141,6 +1186,22 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                 referredFacility.setVisibility(View.VISIBLE);
             else
                 referredFacility.setVisibility(View.GONE);
+        } else if (group == citizenship.getRadioGroup()) {
+            if (App.get(citizenship).equals(getResources().getString(R.string.pet_pakistani))) {
+                cnicLayout.setVisibility(View.VISIBLE);
+                cnicOwner.setVisibility(View.VISIBLE);
+                if(App.get(cnicOwner).equals(getResources().getString(R.string.pet_other)))
+                    otherCnicOwner.setVisibility(View.VISIBLE);
+                else
+                    otherCnicOwner.setVisibility(View.GONE);
+                otherNIC.setVisibility(View.GONE);
+            }
+            else {
+                otherNIC.setVisibility(View.VISIBLE);
+                cnicLayout.setVisibility(View.GONE);
+                cnicOwner.setVisibility(View.GONE);
+                otherCnicOwner.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -1230,6 +1291,16 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                 startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
             } else if (obs[0][0].equals("PATIENT ID OF INDEX CASE")) {
                 indexPatientId.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("INTERVENTION")) {
+                for (RadioButton rb : intervention.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet)) && obs[0][1].equals("PET")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.sci)) && obs[0][1].equals("SCI")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
             } else if (obs[0][0].equals("TUBERCULOSIS TREATMENT STATUS")) {
 
                 for (RadioButton rb : treatmentStatus.getRadioGroup().getButtons()) {
@@ -1285,6 +1356,16 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
             } else if (obs[0][0].equals("OTHER FAMILY MEMBER")) {
                 otherRelation.getEditText().setText(obs[0][1]);
                 otherRelation.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("CITIZENSHIP")) {
+                for (RadioButton rb : entryLocation.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet_pakistani)) && obs[0][1].equals(getResources().getString(R.string.pet_pakistani))) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_other)) && obs[0][1].equals(getResources().getString(R.string.pet_other))) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
             } else if (obs[0][0].equals("NATIONAL IDENTIFICATION NUMBER")) {
                 String[] cnicArray = obs[0][1].split("-");
                 cnic1.setText(cnicArray[0]);
@@ -1309,6 +1390,8 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
             } else if (obs[0][0].equals("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER")) {
                 otherCnicOwner.getEditText().setText(obs[0][1]);
                 otherCnicOwner.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("OTHER IDENTIFICATION NUMBER")) {
+                otherNIC.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("LOCATION OF EVENT")) {
                 for (RadioButton rb : entryLocation.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.pet_facility)) && obs[0][1].equals("HEALTH FACILITY")) {

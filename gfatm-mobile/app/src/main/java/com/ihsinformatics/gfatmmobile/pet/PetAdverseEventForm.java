@@ -56,6 +56,7 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
     Context context;
 
     TitledButton formDate;
+    TitledRadioGroup intervention;
     TitledEditText weight;
 
     TitledCheckBoxes symptoms;
@@ -145,6 +146,7 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
     public void initViews() {
 
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        intervention = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_intervention), getResources().getStringArray(R.array.pet_interventions), "", App.HORIZONTAL, App.VERTICAL);
         weight = new TitledEditText(context, null, getResources().getString(R.string.pet_weight), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_NUMBER_FLAG_DECIMAL, App.HORIZONTAL, false);
 
         symptoms = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_symptoms), getResources().getStringArray(R.array.pet_pet_symptoms_list), null, App.VERTICAL, App.VERTICAL, true);
@@ -207,10 +209,10 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
         views = new View[]{formDate.getButton(), weight.getEditText(), otherSideEffects.getEditText(), sideeffectsConsistent.getRadioGroup(),
                 actionPlan, medicationDiscontinueReason.getEditText(), medicationDiscontinueDuration.getEditText(), newMedication.getEditText(), newMedicationDuration.getEditText(),
                 petRegimen.getRadioGroup(), isoniazidDose.getEditText(), rifapentineDose.getEditText(), levofloxacinDose.getEditText(), ethionamideDose.getEditText(), ancillaryDrugs, ancillaryDrugDuration,
-                newInstruction.getEditText(), returnVisitDate.getButton(), rifapentineAvailable.getRadioGroup(), clincianNote.getEditText(), symptoms, severity.getRadioGroup()
+                newInstruction.getEditText(), returnVisitDate.getButton(), rifapentineAvailable.getRadioGroup(), clincianNote.getEditText(), symptoms, severity.getRadioGroup(), intervention.getRadioGroup()
         };
 
-        viewGroups = new View[][]{{formDate, weight, linearLayout1},
+        viewGroups = new View[][]{{formDate, intervention, weight, linearLayout1},
                 {linearLayout2}};
 
         formDate.getButton().setOnClickListener(this);
@@ -288,11 +290,11 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
                         w = weightInt * 15;
                         isoniazidDose.getEditText().setText(String.valueOf(w));
 
-                        rifapentineDose.getEditText().setText("");
+                        /*rifapentineDose.getEditText().setText("");
                         if (age < 12)
                             rifapentineDose.getEditText().setHint("300 - 450 mg");
                         else
-                            rifapentineDose.getEditText().setHint("450 - 900 mg");
+                            rifapentineDose.getEditText().setHint("450 - 900 mg");*/
 
                         isoniazidDose.setVisibility(View.VISIBLE);
                         rifapentineDose.setVisibility(View.VISIBLE);
@@ -338,7 +340,7 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
         });
 
 
-        rifapentineDose.getEditText().addTextChangedListener(new TextWatcher() {
+        /*rifapentineDose.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
@@ -366,7 +368,7 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
                     }
                 }
             }
-        });
+        });*/
 
         isoniazidDose.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
@@ -789,7 +791,7 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
                 rifapentineDose.getQuestionView().requestFocus();
                 view = null;
                 error = true;
-            } else {
+            }/* else {
                 int dose = Integer.parseInt(App.get(rifapentineDose));
                 String hint = rifapentineDose.getEditText().getHint().toString();
 
@@ -808,7 +810,7 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
                         error = true;
                     }
                 }
-            }
+            }*/
         }
         if (levofloxacinDose.getVisibility() == View.VISIBLE && App.get(levofloxacinDose).isEmpty()) {
             levofloxacinDose.getEditText().setError(getString(R.string.empty_field));
@@ -922,6 +924,7 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
             observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
 
+        observations.add(new String[]{"INTERVENTION", App.get(intervention).equals(getResources().getString(R.string.pet)) ? "PET" : "SCI"});
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         observations.add(new String[]{"WEIGHT (KG)", App.get(weight)});
@@ -1313,11 +1316,11 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
                     w = weightInt * 15;
                     isoniazidDose.getEditText().setText(String.valueOf(w));
 
-                    rifapentineDose.getEditText().setText("");
+                   /* rifapentineDose.getEditText().setText("");
                     if (age < 12)
                         rifapentineDose.getEditText().setHint("300 - 450 mg");
                     else
-                        rifapentineDose.getEditText().setHint("450 - 900 mg");
+                        rifapentineDose.getEditText().setHint("450 - 900 mg");*/
 
                     isoniazidDose.setVisibility(View.VISIBLE);
                     rifapentineDose.setVisibility(View.VISIBLE);
@@ -1397,11 +1400,11 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
                 w = weightInt * 15;
                 isoniazidDose.getEditText().setText(String.valueOf(w));
 
-                rifapentineDose.getEditText().setText("");
+                /*rifapentineDose.getEditText().setText("");
                 if (age < 12)
                     rifapentineDose.getEditText().setHint("300 - 450 mg");
                 else
-                    rifapentineDose.getEditText().setHint("450 - 900 mg");
+                    rifapentineDose.getEditText().setHint("450 - 900 mg");*/
 
                 isoniazidDose.setVisibility(View.VISIBLE);
                 rifapentineDose.setVisibility(View.VISIBLE);
@@ -1430,7 +1433,17 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
 
             if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
                 timeTakeToFill = obs[0][1];
-            }else if (obs[0][0].equals("WEIGHT (KG)")) {
+            } else if (obs[0][0].equals("INTERVENTION")) {
+                for (RadioButton rb : intervention.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet)) && obs[0][1].equals("PET")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.sci)) && obs[0][1].equals("SCI")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("WEIGHT (KG)")) {
                 weight.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("ADVERSE EVENTS")) {
                 for (CheckBox cb : symptoms.getCheckedBoxes()) {

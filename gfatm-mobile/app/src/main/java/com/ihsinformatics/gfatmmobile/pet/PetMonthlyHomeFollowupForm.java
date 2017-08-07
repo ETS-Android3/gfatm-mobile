@@ -53,6 +53,7 @@ public class PetMonthlyHomeFollowupForm extends AbstractFormActivity implements 
 
     // Views...
     TitledButton formDate;
+    TitledRadioGroup intervention;
     TitledRadioGroup cough;
     TitledRadioGroup coughDuration;
     TitledRadioGroup haemoptysis;
@@ -147,6 +148,7 @@ public class PetMonthlyHomeFollowupForm extends AbstractFormActivity implements 
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
+        intervention = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_intervention), getResources().getStringArray(R.array.pet_interventions), "", App.HORIZONTAL, App.VERTICAL);
 
         MyLinearLayout linearLayout = new MyLinearLayout(context, getResources().getString(R.string.pet_followup_details), App.VERTICAL);
         cough = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_has_cough), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
@@ -190,12 +192,12 @@ public class PetMonthlyHomeFollowupForm extends AbstractFormActivity implements 
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), cough.getRadioGroup(), coughDuration.getRadioGroup(), fever.getRadioGroup(), weightLoss.getRadioGroup(), reduceAppetite.getRadioGroup(),
-                reduceActivity.getRadioGroup(), nightSweats.getRadioGroup(), swelling.getRadioGroup(), adverseEventReport.getRadioGroup(),
+                reduceActivity.getRadioGroup(), nightSweats.getRadioGroup(), swelling.getRadioGroup(), adverseEventReport.getRadioGroup(), intervention.getRadioGroup(),
                 adverseEffects1, adverseEffects2, clinicianInformed.getRadioGroup(), visitSuggested.getRadioGroup(), clinicalReferral.getRadioGroup(), missedDosage.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, linearLayout}};
+                {{formDate, intervention, linearLayout}};
 
         formDate.getButton().setOnClickListener(this);
         cough.getRadioGroup().setOnCheckedChangeListener(this);
@@ -389,6 +391,7 @@ public class PetMonthlyHomeFollowupForm extends AbstractFormActivity implements 
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
 
+        observations.add(new String[]{"INTERVENTION", App.get(intervention).equals(getResources().getString(R.string.pet)) ? "PET" : "SCI"});
         observations.add(new String[]{"COUGH", App.get(cough).equals(getResources().getString(R.string.yes)) ? "YES" :
                 (App.get(cough).equals(getResources().getString(R.string.no)) ? "NO" :
                         (App.get(cough).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
@@ -675,6 +678,16 @@ public class PetMonthlyHomeFollowupForm extends AbstractFormActivity implements 
 
             if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
                 timeTakeToFill = obs[0][1];
+            }  else if (obs[0][0].equals("INTERVENTION")) {
+                for (RadioButton rb : intervention.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet)) && obs[0][1].equals("PET")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.sci)) && obs[0][1].equals("SCI")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
             } else if (obs[0][0].equals("COUGH")) {
                 for (RadioButton rb : cough.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {

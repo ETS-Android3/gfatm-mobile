@@ -55,6 +55,7 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
     Context context;
 
     TitledButton formDate;
+    TitledRadioGroup intervention;
     TitledEditText indexPatientId;
     Button scanQRCode;
     TitledEditText indexExternalPatientId;
@@ -145,6 +146,7 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
     public void initViews() {
 
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_payment_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        intervention = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_intervention), getResources().getStringArray(R.array.pet_interventions), "", App.HORIZONTAL, App.VERTICAL);
         indexPatientId = new TitledEditText(context, null, getResources().getString(R.string.pet_index_patient_id), "", "", RegexUtil.idLength, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         scanQRCode = new Button(context);
         scanQRCode.setText("Scan QR Code");
@@ -193,10 +195,10 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
 
         views = new View[]{formDate.getButton(), incentiveDate.getButton(), indexPatientId.getEditText(), scanQRCode, indexExternalPatientId.getEditText(), cnic1.getEditText(), cnic2.getEditText(), cnic3.getEditText(), cnicOwner.getSpinner(), otherCnicOwner.getEditText(), incentiveOccasion.getRadioGroup(), incentiveFor.getRadioGroup(),
                 nameTreatmentSupporter.getEditText(), phone1a.getEditText(), phone1b.getEditText(), typeTreatmentSupporter.getRadioGroup(), relationshipTreatmentSuppoter.getSpinner(), other.getEditText(), petRegimen.getRadioGroup(), incentiveAmount.getEditText(),
-                followupMonth.getEditText(), incentiveDisbursalLocation.getRadioGroup(), recieverName.getEditText(), recieverRelationWithContact.getSpinner(), otherRelation.getEditText()
+                followupMonth.getEditText(), incentiveDisbursalLocation.getRadioGroup(), recieverName.getEditText(), recieverRelationWithContact.getSpinner(), otherRelation.getEditText(), intervention.getRadioGroup()
         };
 
-        viewGroups = new View[][]{{formDate, indexPatientId, scanQRCode, indexExternalPatientId, cnicLayout, cnicOwner, otherCnicOwner, incentiveOccasion, incentiveFor,
+        viewGroups = new View[][]{{formDate, intervention, indexPatientId, scanQRCode, indexExternalPatientId, cnicLayout, cnicOwner, otherCnicOwner, incentiveOccasion, incentiveFor,
                 nameTreatmentSupporter, contactNumberTreatmentSupporter, typeTreatmentSupporter, relationshipTreatmentSuppoter, other, petRegimen},
                 {linearLayout}};
 
@@ -428,6 +430,7 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
 
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
+        observations.add(new String[]{"INTERVENTION", App.get(intervention).equals(getResources().getString(R.string.pet)) ? "PET" : "SCI"});
         observations.add(new String[]{"PATIENT ID OF INDEX CASE", App.get(indexPatientId)});
         final String cnic = App.get(cnic1) + "-" + App.get(cnic2) + "-" + App.get(cnic3);
         observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnic});
@@ -1011,6 +1014,17 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
 
             if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
                 timeTakeToFill = obs[0][1];
+            }  else if (obs[0][0].equals("INTERVENTION")) {
+                for (RadioButton rb : intervention.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet)) && obs[0][1].equals("PET")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.sci)) && obs[0][1].equals("SCI")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("External ID")) {
             } else if (obs[0][0].equals("External ID")) {
                 indexExternalPatientId.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("PATIENT ID OF INDEX CASE")) {
