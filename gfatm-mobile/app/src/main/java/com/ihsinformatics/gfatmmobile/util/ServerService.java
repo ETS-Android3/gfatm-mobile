@@ -396,11 +396,11 @@ public class ServerService {
                 e.printStackTrace();
             }
 
-            /*if (providerUUid == "")
-                return "PROVIDER_NOT_FOUND";*/
+            if (providerUUid == "")
+                return "PROVIDER_NOT_FOUND";
 
-            if (!isMobileAppCompatible())
-                return "VERSION_MISMATCH";
+            /*if (!isMobileAppCompatible())
+                return "VERSION_MISMATCH";*/
 
             App.setUserFullName(user.getFullName());
             App.setRoles(user.getRoles());
