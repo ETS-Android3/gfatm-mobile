@@ -1046,4 +1046,6 @@
     </string-array>
     <string name="pet_other_identification_number">Other Identification Number</string>
 
+    <string name="pet_other_detail">Details of Others</string>
+
 </resources>
