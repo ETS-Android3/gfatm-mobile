@@ -57,6 +57,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
 
     Context context;
     TitledButton formDate;
+    TitledRadioGroup childPresumptive;
     TitledEditText weight;
     TitledEditText height;
     TitledEditText weightPercentileEditText;
@@ -204,6 +205,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
+        childPresumptive = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_mo_think_child_presumptive), getResources().getStringArray(R.array.yes_no_options), null, App.HORIZONTAL, App.VERTICAL, true);
         weight = new TitledEditText(context, null, getResources().getString(R.string.ctb_weight), "", "", 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         height = new TitledEditText(context, null, getResources().getString(R.string.ctb_height), "", "", 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         weightPercentileEditText = new TitledEditText(context, null, "(Autocalculated)", "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
@@ -267,7 +269,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
         doctorNotes = new TitledEditText(context, null, getResources().getString(R.string.ctb_doctor_notes), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
 
 
-        views = new View[]{formDate.getButton(), weightPercentile.getSpinner(), cough.getRadioGroup(), coughDuration.getSpinner(), fever.getRadioGroup(),
+        views = new View[]{formDate.getButton(), childPresumptive.getRadioGroup(),weightPercentile.getSpinner(), cough.getRadioGroup(), coughDuration.getSpinner(), fever.getRadioGroup(),
                 nightSweats.getRadioGroup(), weightLoss.getRadioGroup(), appetite.getRadioGroup(), generalAppearance.getRadioGroup(),
                 headEyeEearNoseThroat.getRadioGroup(), lymphNodeExamination.getRadioGroup(), spineExamination.getRadioGroup(),
                 jointsExamination.getRadioGroup(), skinExamination.getRadioGroup(), chestExamination.getRadioGroup(), abdominalExamination.getRadioGroup(),
@@ -283,12 +285,13 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, weight, height, weightPercentile, weightPercentileEditText, cough, coughDuration, fever, nightSweats, weightLoss, appetite, generalAppearance, generalAppearanceExplanation, headEyeEearNoseThroat, headEyeEearNoseThroatExplanation, lymphNodeExamination, lymphNodeExplanation, spineExamination, spineExplanation,
+                {{formDate, childPresumptive, weight, height, weightPercentile, weightPercentileEditText, cough, coughDuration, fever, nightSweats, weightLoss, appetite, generalAppearance, generalAppearanceExplanation, headEyeEearNoseThroat, headEyeEearNoseThroatExplanation, lymphNodeExamination, lymphNodeExplanation, spineExamination, spineExplanation,
                         jointsExamination, jointsExplanation, skinExamination, skinExplanation, chestExamination, chestExplanation, abdominalExamination, abdominalExplanation, othersExplanation, tbExamOutcome, bcgScar, tbBefore, tbMedication, contactTbHistory, closeContactType, otherContactType, additionalCommentHistoryOfPatient, tbInfectionForm, tbType, smearPositive, childPrimaryCaregiver
                         , sameBedAsChild, sameRoomRAsChild, liveInSameHoushold, seeChildEveryday, contactCoughing, oneCloseContactInHousehold, conclusion, doctorNotes
                 }};
 
         formDate.getButton().setOnClickListener(this);
+        childPresumptive.getRadioGroup().setOnCheckedChangeListener(this);
         weightPercentile.getSpinner().setOnItemSelectedListener(this);
         cough.getRadioGroup().setOnCheckedChangeListener(this);
         coughDuration.getSpinner().setOnItemSelectedListener(this);
@@ -320,6 +323,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
         contactCoughing.getRadioGroup().setOnCheckedChangeListener(this);
         oneCloseContactInHousehold.getRadioGroup().setOnCheckedChangeListener(this);
         conclusion.getRadioGroup().setOnCheckedChangeListener(this);
+
 
         ArrayList<MyCheckBox> checkBoxList = closeContactType.getCheckedBoxes();
         for (CheckBox cb : closeContactType.getCheckedBoxes())
@@ -421,7 +425,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
             return false;
         } else {
             boolean error = false;
-            if (App.get(weight).isEmpty()) {
+            if (App.get(weight).isEmpty() && weight.getVisibility()==View.VISIBLE) {
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
@@ -449,7 +453,16 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                         error = true;
                 }
             }
-            if (App.get(height).isEmpty()) {
+            if (App.get(childPresumptive).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                childPresumptive.getQuestionView().setError(getString(R.string.empty_field));
+                childPresumptive.requestFocus();
+                error = true;
+            }
+            if (App.get(height).isEmpty() && height.getVisibility()==View.VISIBLE) {
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
@@ -669,7 +682,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                 doctorNotes.getEditText().requestFocus();
                 error = true;
             }
-            if(App.get(weightPercentile).equals(getResources().getString(R.string.ctb_empty))){
+            if(App.get(weightPercentile).equals(getResources().getString(R.string.ctb_empty)) && weightPercentile.getVisibility()==View.VISIBLE){
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
@@ -678,7 +691,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                 weightPercentile.getQuestionView().requestFocus();
                 error = true;
             }
-            if(App.get(cough).isEmpty()){
+            if(App.get(cough).isEmpty() && cough.getVisibility()==View.VISIBLE){
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
@@ -696,7 +709,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                 coughDuration.getQuestionView().requestFocus();
                 error = true;
             }
-            if(App.get(fever).isEmpty()){
+            if(App.get(fever).isEmpty() && fever.getVisibility()==View.VISIBLE){
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
@@ -705,7 +718,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                 fever.getQuestionView().requestFocus();
                 error = true;
             }
-            if(App.get(nightSweats).isEmpty()){
+            if(App.get(nightSweats).isEmpty() && nightSweats.getVisibility()==View.VISIBLE){
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
@@ -714,7 +727,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                 nightSweats.getQuestionView().requestFocus();
                 error = true;
             }
-            if(App.get(weightLoss).isEmpty()){
+            if(App.get(weightLoss).isEmpty() && weightLoss.getVisibility()==View.VISIBLE){
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
@@ -723,7 +736,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                 weightLoss.getQuestionView().requestFocus();
                 error = true;
             }
-            if(App.get(appetite).isEmpty()){
+            if(App.get(appetite).isEmpty() && appetite.getVisibility()==View.VISIBLE){
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
@@ -732,7 +745,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                 appetite.getQuestionView().requestFocus();
                 error = true;
             }
-            if(App.get(generalAppearance).isEmpty()){
+            if(App.get(generalAppearance).isEmpty() && generalAppearance.getVisibility()==View.VISIBLE){
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
@@ -741,7 +754,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                 generalAppearance.getQuestionView().requestFocus();
                 error = true;
             }
-            if(App.get(headEyeEearNoseThroat).isEmpty()){
+            if(App.get(headEyeEearNoseThroat).isEmpty() && headEyeEearNoseThroat.getVisibility()==View.VISIBLE){
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
@@ -750,7 +763,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                 headEyeEearNoseThroat.getQuestionView().requestFocus();
                 error = true;
             }
-            if(App.get(lymphNodeExamination).isEmpty()){
+            if(App.get(lymphNodeExamination).isEmpty() && lymphNodeExamination.getVisibility()==View.VISIBLE){
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
@@ -760,7 +773,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                 error = true;
             }
 
-            if(App.get(spineExamination).isEmpty()){
+            if(App.get(spineExamination).isEmpty() && spineExamination.getVisibility()==View.VISIBLE){
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
@@ -770,7 +783,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                 error = true;
             }
 
-            if(App.get(jointsExamination).isEmpty()){
+            if(App.get(jointsExamination).isEmpty() && jointsExamination.getVisibility()==View.VISIBLE){
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
@@ -780,7 +793,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                 error = true;
             }
 
-            if(App.get(skinExamination).isEmpty()){
+            if(App.get(skinExamination).isEmpty() && skinExamination.getVisibility()==View.VISIBLE){
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
@@ -790,7 +803,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                 error = true;
             }
 
-            if(App.get(chestExamination).isEmpty()){
+            if(App.get(chestExamination).isEmpty() && chestExamination.getVisibility()==View.VISIBLE){
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
@@ -800,7 +813,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                 error = true;
             }
 
-            if(App.get(abdominalExamination).isEmpty()){
+            if(App.get(abdominalExamination).isEmpty() && abdominalExamination.getVisibility()==View.VISIBLE){
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
@@ -810,7 +823,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                 error = true;
             }
 
-            if(App.get(tbExamOutcome).isEmpty()){
+            if(App.get(tbExamOutcome).isEmpty() && tbExamOutcome.getVisibility()==View.VISIBLE){
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
@@ -819,7 +832,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                 tbExamOutcome.getQuestionView().requestFocus();
                 error = true;
             }
-            if(App.get(bcgScar).isEmpty()){
+            if(App.get(bcgScar).isEmpty() && bcgScar.getVisibility()==View.VISIBLE){
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
@@ -828,7 +841,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                 bcgScar.getQuestionView().requestFocus();
                 error = true;
             }
-            if(App.get(tbBefore).isEmpty()){
+            if(App.get(tbBefore).isEmpty() && tbBefore.getVisibility()==View.VISIBLE){
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
@@ -846,7 +859,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                 tbMedication.getQuestionView().requestFocus();
                 error = true;
             }
-            if(App.get(contactTbHistory).isEmpty()){
+            if(App.get(contactTbHistory).isEmpty() && contactTbHistory.getVisibility()==View.VISIBLE){
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
@@ -1000,36 +1013,52 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
 
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-        observations.add(new String[]{"WEIGHT (KG)", App.get(weight)});
-        observations.add(new String[]{"HEIGHT (CM)", App.get(height)});
+        observations.add(new String[]{"CHILD DIAGNOSED PRESUMPTIVE BY MO", App.get(childPresumptive).toUpperCase()});
+        if(weight.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"WEIGHT (KG)", App.get(weight)});
+        }
+        if(height.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"HEIGHT (CM)", App.get(height)});
+        }
         if(!App.get(weightPercentile).equals(getResources().getString(R.string.ctb_empty))) {
             observations.add(new String[]{"WEIGHT PERCENTILE GROUP", App.get(weightPercentile)});
         }
 
-        observations.add(new String[]{"COUGH", App.get(cough).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(cough).equals(getResources().getString(R.string.no)) ? "NO" :
-                        (App.get(cough).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+        if(cough.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"COUGH", App.get(cough).equals(getResources().getString(R.string.yes)) ? "YES" :
+                    (App.get(cough).equals(getResources().getString(R.string.no)) ? "NO" :
+                            (App.get(cough).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+        }
         if (coughDuration.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"COUGH DURATION", App.get(coughDuration).equals(getResources().getString(R.string.ctb_less_than_2_weeks)) ? "COUGH LASTING LESS THAN 2 WEEKS" :
                     (App.get(coughDuration).equals(getResources().getString(R.string.ctb_2_to_3_weeks)) ? "COUGH LASTING MORE THAN 2 WEEKS" :
                             (App.get(coughDuration).equals(getResources().getString(R.string.ctb_more_than_3_weeks)) ? "COUGH LASTING MORE THAN 3 WEEKS" :
                                     (App.get(coughDuration).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSED")))});
 
-        observations.add(new String[]{"FEVER", App.get(fever).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(fever).equals(getResources().getString(R.string.no)) ? "NO" :
-                        (App.get(fever).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+        if(fever.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"FEVER", App.get(fever).equals(getResources().getString(R.string.yes)) ? "YES" :
+                    (App.get(fever).equals(getResources().getString(R.string.no)) ? "NO" :
+                            (App.get(fever).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+        }
 
-        observations.add(new String[]{"NIGHT SWEATS", App.get(nightSweats).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(nightSweats).equals(getResources().getString(R.string.no)) ? "NO" :
-                        (App.get(nightSweats).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+        if(nightSweats.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"NIGHT SWEATS", App.get(nightSweats).equals(getResources().getString(R.string.yes)) ? "YES" :
+                    (App.get(nightSweats).equals(getResources().getString(R.string.no)) ? "NO" :
+                            (App.get(nightSweats).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+        }
 
-        observations.add(new String[]{"WEIGHT LOSS", App.get(weightLoss).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(weightLoss).equals(getResources().getString(R.string.no)) ? "NO" :
-                        (App.get(weightLoss).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+        if(weightLoss.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"WEIGHT LOSS", App.get(weightLoss).equals(getResources().getString(R.string.yes)) ? "YES" :
+                    (App.get(weightLoss).equals(getResources().getString(R.string.no)) ? "NO" :
+                            (App.get(weightLoss).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+        }
 
-        observations.add(new String[]{"APPETITE", App.get(appetite).equals(getResources().getString(R.string.ctb_poor)) ? "POOR APPETITE" :
-                (App.get(appetite).equals(getResources().getString(R.string.ctb_ok)) ? "OK" :
-                        (App.get(appetite).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+
+        if(appetite.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"APPETITE", App.get(appetite).equals(getResources().getString(R.string.ctb_poor)) ? "POOR APPETITE" :
+                    (App.get(appetite).equals(getResources().getString(R.string.ctb_ok)) ? "OK" :
+                            (App.get(appetite).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+        }
 
         if(generalAppearanceExplanation.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"GENERAL APPEARANCE EXPLANATION", App.get(generalAppearanceExplanation)});
@@ -1056,18 +1085,24 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
             observations.add(new String[]{"FREE TEXT COMMENT", App.get(othersExplanation)});
         }
 
-        observations.add(new String[]{"TUBERCULOSIS PHYSICAL EXAM OUTCOME", App.get(tbExamOutcome).equals(getResources().getString(R.string.ctb_suggestive_tb)) ? "SUGGESTIVE OF TB" :
-                (App.get(tbExamOutcome).equals(getResources().getString(R.string.ctb_strongly_suggestive_tb)) ? "STRONGLY SUGGESTIVE OF TB" :
-                         "NO TB INDICATION")});
+        if(tbExamOutcome.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"TUBERCULOSIS PHYSICAL EXAM OUTCOME", App.get(tbExamOutcome).equals(getResources().getString(R.string.ctb_suggestive_tb)) ? "SUGGESTIVE OF TB" :
+                    (App.get(tbExamOutcome).equals(getResources().getString(R.string.ctb_strongly_suggestive_tb)) ? "STRONGLY SUGGESTIVE OF TB" :
+                            "NO TB INDICATION")});
+        }
 
-        observations.add(new String[]{"BACILLUS CALMETTE–GUÉRIN VACCINE", App.get(bcgScar).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(bcgScar).equals(getResources().getString(R.string.no)) ? "NO" :
-                        (App.get(bcgScar).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+        if(bcgScar.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"BACILLUS CALMETTE–GUÉRIN VACCINE", App.get(bcgScar).equals(getResources().getString(R.string.yes)) ? "YES" :
+                    (App.get(bcgScar).equals(getResources().getString(R.string.no)) ? "NO" :
+                            (App.get(bcgScar).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+        }
 
+        if(tbBefore.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"HISTORY OF TUBERCULOSIS", App.get(tbBefore).equals(getResources().getString(R.string.yes)) ? "YES" :
+                    (App.get(tbBefore).equals(getResources().getString(R.string.no)) ? "NO" :
+                            (App.get(tbBefore).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+        }
 
-        observations.add(new String[]{"HISTORY OF TUBERCULOSIS", App.get(tbBefore).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(tbBefore).equals(getResources().getString(R.string.no)) ? "NO" :
-                        (App.get(tbBefore).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
         if(tbMedication.getVisibility()==View.VISIBLE) {
             observations.add(new String[]{"PATIENT TAKEN TB MEDICATION BEFORE", App.get(tbMedication).equals(getResources().getString(R.string.yes)) ? "YES" :
                     (App.get(tbMedication).equals(getResources().getString(R.string.no)) ? "NO" :
@@ -1099,8 +1134,10 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
             else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_other_title)))
                 closeContactString = closeContactString + "OTHER CONTACT TYPE" + " ; ";
         }
-        observations.add(new String[]{"CLOSE CONTACT WITH PATIENT", closeContactString});
+        if(closeContactType.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"CLOSE CONTACT WITH PATIENT", closeContactString});
 
+        }
         if (otherContactType.getVisibility() == View.VISIBLE){
             observations.add(new String[]{"OTHER CONTACT TYPE", App.get(otherContactType)});
         }
@@ -1167,7 +1204,9 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                             (App.get(oneCloseContactInHousehold).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
         }
 
-        observations.add(new String[]{"CONCLUSION", App.get(conclusion).equals(getResources().getString(R.string.ctb_tb_presumptive_confirmed)) ? "TB PRESUMPTIVE CONFIRMED" : "NOT A TB PRESUMPTIVE" });
+        if(conclusion.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"CONCLUSION", App.get(conclusion).equals(getResources().getString(R.string.ctb_tb_presumptive_confirmed)) ? "TB PRESUMPTIVE CONFIRMED" : "NOT A TB PRESUMPTIVE"});
+        }
 
         if(!App.get(doctorNotes).isEmpty()){
             observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(doctorNotes)});
@@ -1307,6 +1346,16 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
             String[][] obs = obsValue.get(i);
             if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
                 timeTakeToFill = obs[0][1];
+            }else if (obs[0][0].equals("CHILD DIAGNOSED PRESUMPTIVE BY MO")) {
+                for (RadioButton rb : childPresumptive.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
             }else if (obs[0][0].equals("WEIGHT (KG)")) {
                 weight.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("HEIGHT (CM)")) {
@@ -1732,6 +1781,41 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
             else if (obs[0][0].equals("CLINICIAN NOTES (TEXT)")) {
                 doctorNotes.getEditText().setText(obs[0][1]);
             }
+
+            if(generalAppearanceExplanation.getVisibility()==View.GONE){
+                generalAppearance.getRadioGroup().getButtons().get(1).setChecked(true);
+            }
+
+            if(headEyeEearNoseThroatExplanation.getVisibility()==View.GONE){
+                headEyeEearNoseThroat.getRadioGroup().getButtons().get(1).setChecked(true);
+            }
+
+            if(lymphNodeExplanation.getVisibility()==View.GONE){
+                lymphNodeExamination.getRadioGroup().getButtons().get(1).setChecked(true);
+            }
+
+            if(spineExplanation.getVisibility()==View.GONE){
+                spineExamination.getRadioGroup().getButtons().get(1).setChecked(true);
+            }
+
+            if(jointsExplanation.getVisibility()==View.GONE){
+                jointsExamination.getRadioGroup().getButtons().get(1).setChecked(true);
+            }
+
+            if(skinExplanation.getVisibility()==View.GONE){
+                skinExamination.getRadioGroup().getButtons().get(1).setChecked(true);
+            }
+
+            if(chestExplanation.getVisibility()==View.GONE){
+                chestExamination.getRadioGroup().getButtons().get(1).setChecked(true);
+            }
+
+            if(abdominalExplanation.getVisibility()==View.GONE){
+                abdominalExamination.getRadioGroup().getButtons().get(1).setChecked(true);
+            }
+
+
+
         }
 
 
@@ -1791,6 +1875,32 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
             snackbar.dismiss();
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
+        weight.setVisibility(View.GONE);
+        height.setVisibility(View.GONE);
+        weightPercentile.setVisibility(View.GONE);
+        weightPercentileEditText.setVisibility(View.GONE);
+        cough.setVisibility(View.GONE);
+        fever.setVisibility(View.GONE);
+        nightSweats.setVisibility(View.GONE);
+        weightLoss.setVisibility(View.GONE);
+        appetite.setVisibility(View.GONE);
+        generalAppearance.setVisibility(View.GONE);
+        headEyeEearNoseThroat.setVisibility(View.GONE);
+        lymphNodeExamination.setVisibility(View.GONE);
+        spineExamination.setVisibility(View.GONE);
+        jointsExamination.setVisibility(View.GONE);
+        skinExamination.setVisibility(View.GONE);
+        chestExamination.setVisibility(View.GONE);
+        abdominalExamination.setVisibility(View.GONE);
+        othersExplanation.setVisibility(View.GONE);
+        tbExamOutcome.setVisibility(View.GONE);
+        bcgScar.setVisibility(View.GONE);
+        tbBefore.setVisibility(View.GONE);
+        contactTbHistory.setVisibility(View.GONE);
+        conclusion.setVisibility(View.GONE);
+        doctorNotes.setVisibility(View.GONE);
+
         coughDuration.setVisibility(View.GONE);
         generalAppearanceExplanation.setVisibility(View.GONE);
         headEyeEearNoseThroatExplanation.setVisibility(View.GONE);
@@ -1892,13 +2002,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
         }
         else if(group == oneCloseContactInHousehold.getRadioGroup()){
             oneCloseContactInHousehold.getQuestionView().setError(null);
-        }
-
-
-
-
-
-        else if (group == generalAppearance.getRadioGroup()) {
+        }else if (group == generalAppearance.getRadioGroup()) {
             generalAppearance.getQuestionView().setError(null);
             if (generalAppearance.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_remarkable))) {
                 generalAppearanceExplanation.setVisibility(View.VISIBLE);
@@ -1993,6 +2097,61 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                 contactCoughing.setVisibility(View.GONE);
                 oneCloseContactInHousehold.setVisibility(View.GONE);
             }
+        }
+        else if(group==childPresumptive.getRadioGroup()){
+            childPresumptive.getQuestionView().setError(null);
+            if (childPresumptive.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
+                weight.setVisibility(View.VISIBLE);
+                height.setVisibility(View.VISIBLE);
+                weightPercentile.setVisibility(View.VISIBLE);
+                weightPercentileEditText.setVisibility(View.VISIBLE);
+                coughDuration.setVisibility(View.VISIBLE);
+                fever.setVisibility(View.VISIBLE);
+                nightSweats.setVisibility(View.VISIBLE);
+                weightLoss.setVisibility(View.VISIBLE);
+                appetite.setVisibility(View.VISIBLE);
+                generalAppearance.setVisibility(View.VISIBLE);
+                headEyeEearNoseThroat.setVisibility(View.VISIBLE);
+                lymphNodeExamination.setVisibility(View.VISIBLE);
+                spineExamination.setVisibility(View.VISIBLE);
+                jointsExamination.setVisibility(View.VISIBLE);
+                skinExamination.setVisibility(View.VISIBLE);
+                chestExamination.setVisibility(View.VISIBLE);
+                abdominalExamination.setVisibility(View.VISIBLE);
+                othersExplanation.setVisibility(View.VISIBLE);
+                tbExamOutcome.setVisibility(View.VISIBLE);
+                bcgScar.setVisibility(View.VISIBLE);
+                tbBefore.setVisibility(View.VISIBLE);
+                contactTbHistory.setVisibility(View.VISIBLE);
+                conclusion.setVisibility(View.VISIBLE);
+                doctorNotes.setVisibility(View.VISIBLE);
+            }else{
+                weight.setVisibility(View.GONE);
+                height.setVisibility(View.GONE);
+                weightPercentile.setVisibility(View.GONE);
+                weightPercentileEditText.setVisibility(View.GONE);
+                coughDuration.setVisibility(View.GONE);
+                fever.setVisibility(View.GONE);
+                nightSweats.setVisibility(View.GONE);
+                weightLoss.setVisibility(View.GONE);
+                appetite.setVisibility(View.GONE);
+                generalAppearance.setVisibility(View.GONE);
+                headEyeEearNoseThroat.setVisibility(View.GONE);
+                lymphNodeExamination.setVisibility(View.GONE);
+                spineExamination.setVisibility(View.GONE);
+                jointsExamination.setVisibility(View.GONE);
+                skinExamination.setVisibility(View.GONE);
+                chestExamination.setVisibility(View.GONE);
+                abdominalExamination.setVisibility(View.GONE);
+                othersExplanation.setVisibility(View.GONE);
+                tbExamOutcome.setVisibility(View.GONE);
+                bcgScar.setVisibility(View.GONE);
+                tbBefore.setVisibility(View.GONE);
+                contactTbHistory.setVisibility(View.GONE);
+                conclusion.setVisibility(View.GONE);
+                doctorNotes.setVisibility(View.GONE);
+            }
+
         }
 
 
