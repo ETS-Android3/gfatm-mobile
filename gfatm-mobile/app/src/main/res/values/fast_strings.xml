@@ -494,7 +494,6 @@
     
     <string-array name="fast_tb_patient_list">
         <item>@string/fast_yes_title</item>
-        <item>@string/fast_no_title</item>
         <item>@string/fast_inconclusive</item>
     </string-array>
     
