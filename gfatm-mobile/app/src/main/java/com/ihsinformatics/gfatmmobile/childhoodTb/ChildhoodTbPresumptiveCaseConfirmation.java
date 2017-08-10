@@ -1813,12 +1813,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
             if(abdominalExplanation.getVisibility()==View.GONE){
                 abdominalExamination.getRadioGroup().getButtons().get(1).setChecked(true);
             }
-
-
-
         }
-
-
     }
 
     @Override
