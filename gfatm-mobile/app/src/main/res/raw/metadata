@@ -4563,6 +4563,12 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER IDENTIFIC
 
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CLINICALLY EVALUATED, NO TB','clinically_evaluated_no_tb','N/A','39d760c6-7711-490d-8c59-ff911ac3ca10');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ANTIBIOTIC COMPLETE','antibiotic_complete','N/A','689597aa-554b-4189-9a02-bf9da81564e0');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CHILD DIAGNOSED PRESUMPTIVE BY MO','child_diagnosed_presumptive_by_mo','Coded','1487a1a2-fbbd-4be3-a90a-f2e562700a21');
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MISSED VISIT FOR TREATMENT REGIMEN','missed_visit_for_treatment_regimen','Coded','3ac5352c-6d3a-4c51-bc07-a5e7d7bbbdf1');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TB TREATMENT FOLLOWUP','tb_treatment_followup','N/A','59ae8e4d-3d9f-44a1-bcb8-31452e966bb7');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ANTIBIOTIC TRIAL FOLLOWUP','antibiotic_trial_followup','N/A','6de50b5d-d612-4242-9f35-53cc57116034');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('IPT FOLLOWUP','ipt_followup','N/A','efd9d22d-bcc6-4289-adef-27b322a2e5cb');
 
 -- Program
 INSERT OR IGNORE INTO program VALUES (1, "86ba1232-d576-416e-b102-5f335c6746ce", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
