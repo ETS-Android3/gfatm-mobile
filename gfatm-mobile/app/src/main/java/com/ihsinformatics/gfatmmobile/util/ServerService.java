@@ -113,7 +113,7 @@ public class ServerService {
 
         // GWT Connections
         fastGfatmUri = App.getIp()+":"+App.getPort() + "/gfatmweb/fastweb.jsp";
-        searchGfatmUri = "199.172.1.44:8888" + "/gfatmtasks.jsp";
+        searchGfatmUri = App.getIp()+":"+App.getPort() + "/gfatmweb/gfatmtasks.jsp";
         httpGwtClient = new HttpGwtRequest(this.context);
 
     }
