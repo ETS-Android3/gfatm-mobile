@@ -4570,6 +4570,10 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TB TREATMENT FO
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ANTIBIOTIC TRIAL FOLLOWUP','antibiotic_trial_followup','N/A','6de50b5d-d612-4242-9f35-53cc57116034');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('IPT FOLLOWUP','ipt_followup','N/A','efd9d22d-bcc6-4289-adef-27b322a2e5cb');
 
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DAILY CIGARETTE USE','cigarettes_smoked_in_day','Numeric','1546AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DURATION OF SMOKING (IN YEARS)','smoking_duration','Numeric','159931AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PACK YEARS','pack_years','Numeric','383384bc-6008-4ce3-961e-9e6db88c9e08');
+
 -- Program
 INSERT OR IGNORE INTO program VALUES (1, "86ba1232-d576-416e-b102-5f335c6746ce", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
 INSERT OR IGNORE INTO program VALUES (2, "5d372a38-ae27-4a68-a8d2-bc517a2c9c40", "PET", "Post-Exposure Treatment");
@@ -4586,7 +4590,7 @@ INSERT OR IGNORE INTO encounter_type VALUES ('PET-Baseline Counselling','Add PET
 INSERT OR IGNORE INTO encounter_type VALUES ('PET-Baseline Screening','Add PET Forms','View PET Forms','25a042b2-60bc-4940-a909-debd098b7d82');
 INSERT OR IGNORE INTO encounter_type VALUES ('PET-Treatment Initiation','Add PET Forms','View PET Forms','7b68d557-85ef-4fc8-b767-4fa4f5eb5c23');
 INSERT OR IGNORE INTO encounter_type VALUES ('PET-Clinician Contact Screening','Add PET Forms','View PET Forms','44edace7-7af8-456b-b37e-765cf03bdd48');
-INSERT OR IGNORE INTO encounter_type VALUES ('PET-Monthly Home Follow-up','Add PET Forms','View PET Forms','b25caf16-6315-4bf8-a3e7-5a7f8da5de4b');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-Home Follow-up','Add PET Forms','View PET Forms','b25caf16-6315-4bf8-a3e7-5a7f8da5de4b');
 INSERT OR IGNORE INTO encounter_type VALUES ('PET-Clinician Follow-up','Add PET Forms','View PET Forms','ba27d152-a555-48b2-96a9-69f34878e395');
 INSERT OR IGNORE INTO encounter_type VALUES ('PET-Counselling Follow-up','Add PET Forms','View PET Forms','338abb66-2a88-4cd0-8e53-05771ed40d3b');
 INSERT OR IGNORE INTO encounter_type VALUES ('PET-Adverse Events','Add PET Forms','View PET Forms','1ea240ef-8275-4743-af3d-0dd128d1a840');
