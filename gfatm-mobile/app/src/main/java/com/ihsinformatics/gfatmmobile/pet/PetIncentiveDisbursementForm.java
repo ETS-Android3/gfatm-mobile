@@ -2,6 +2,7 @@ package com.ihsinformatics.gfatmmobile.pet;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,7 +11,9 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,8 +33,10 @@ import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
+import com.ihsinformatics.gfatmmobile.custom.MyEditText;
 import com.ihsinformatics.gfatmmobile.custom.MyLinearLayout;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
+import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
@@ -60,9 +65,9 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
     Button scanQRCode;
     TitledEditText indexExternalPatientId;
     LinearLayout cnicLayout;
-    TitledEditText cnic1;
-    TitledEditText cnic2;
-    TitledEditText cnic3;
+    MyEditText cnic1;
+    MyEditText cnic2;
+    MyEditText cnic3;
     TitledSpinner cnicOwner;
     TitledEditText otherCnicOwner;
     TitledRadioGroup incentiveOccasion;
@@ -152,13 +157,32 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
         scanQRCode.setText("Scan QR Code");
         indexExternalPatientId = new TitledEditText(context, null, getResources().getString(R.string.pet_index_patient_external_id), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         cnicLayout = new LinearLayout(context);
-        cnicLayout.setOrientation(LinearLayout.HORIZONTAL);
-        cnic1 = new TitledEditText(context, null, getResources().getString(R.string.pet_cnic), "", "XXXXX", 5, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        cnicLayout.addView(cnic1);
-        cnic2 = new TitledEditText(context, null, "-", "", "XXXXXXX", 7, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        cnicLayout.addView(cnic2);
-        cnic3 = new TitledEditText(context, null, "-", "", "X", 1, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        cnicLayout.addView(cnic3);
+        cnicLayout.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout cnicQuestionLayout = new LinearLayout(context);
+        cnicQuestionLayout.setOrientation(LinearLayout.HORIZONTAL);
+        TextView mandatorycnicSign = new TextView(context);
+        mandatorycnicSign.setText(" *");
+        mandatorycnicSign.setTextColor(Color.parseColor("#ff0000"));
+        cnicQuestionLayout.addView(mandatorycnicSign);
+        MyTextView cnic = new MyTextView(context, getResources().getString(R.string.pet_cnic));
+        cnicQuestionLayout.addView(cnic);
+        cnicLayout.addView(cnicQuestionLayout);
+        LinearLayout cnicPartLayout = new LinearLayout(context);
+        cnicPartLayout.setOrientation(LinearLayout.HORIZONTAL);
+        cnic1 = new MyEditText(context, "", 5, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE);
+        cnic1.setHint("XXXXX");
+        cnicPartLayout.addView(cnic1);
+        MyTextView cnicDash = new MyTextView(context, " - ");
+        cnicPartLayout.addView(cnicDash);
+        cnic2 = new MyEditText(context, "", 7, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE);
+        cnic2.setHint("XXXXXXX");
+        cnicPartLayout.addView(cnic2);
+        MyTextView cnicDash2 = new MyTextView(context, " - ");
+        cnicPartLayout.addView(cnicDash2);
+        cnic3 = new MyEditText(context, "", 1, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_PHONE);
+        cnic3.setHint("X");
+        cnicPartLayout.addView(cnic3);
+        cnicLayout.addView(cnicPartLayout);
         cnicOwner = new TitledSpinner(context, "", getResources().getString(R.string.pet_cnic_owner), getResources().getStringArray(R.array.pet_cnic_owners), getResources().getString(R.string.pet_self), App.VERTICAL, true);
         otherCnicOwner = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         incentiveOccasion = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_incentive_occasion), getResources().getStringArray(R.array.pet_incentive_occasions), getResources().getString(R.string.pet_baseline_visit), App.HORIZONTAL, App.VERTICAL, true);
@@ -193,7 +217,7 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
         linearLayout.addView(recieverRelationWithContact);
         linearLayout.addView(otherRelation);
 
-        views = new View[]{formDate.getButton(), incentiveDate.getButton(), indexPatientId.getEditText(), scanQRCode, indexExternalPatientId.getEditText(), cnic1.getEditText(), cnic2.getEditText(), cnic3.getEditText(), cnicOwner.getSpinner(), otherCnicOwner.getEditText(), incentiveOccasion.getRadioGroup(), incentiveFor.getRadioGroup(),
+        views = new View[]{formDate.getButton(), incentiveDate.getButton(), indexPatientId.getEditText(), scanQRCode, indexExternalPatientId.getEditText(), cnic1, cnic2, cnic3, cnicOwner.getSpinner(), otherCnicOwner.getEditText(), incentiveOccasion.getRadioGroup(), incentiveFor.getRadioGroup(),
                 nameTreatmentSupporter.getEditText(), phone1a.getEditText(), phone1b.getEditText(), typeTreatmentSupporter.getRadioGroup(), relationshipTreatmentSuppoter.getSpinner(), other.getEditText(), petRegimen.getRadioGroup(), incentiveAmount.getEditText(),
                 followupMonth.getEditText(), incentiveDisbursalLocation.getRadioGroup(), recieverName.getEditText(), recieverRelationWithContact.getSpinner(), otherRelation.getEditText(), intervention.getRadioGroup()
         };
@@ -215,6 +239,70 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
         }
 
         resetViews();
+
+        cnic1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()==5){
+                    cnic2.requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
+        cnic2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()==7){
+                    cnic3.requestFocus();
+                }
+
+                if(s.length()==0){
+                    cnic1.requestFocus();
+                    cnic1.setSelection(cnic1.getText().length());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        cnic3.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()==0){
+                    cnic2.requestFocus();
+                    cnic2.setSelection(cnic2.getText().length());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     @Override
@@ -337,38 +425,38 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
         }
 
         if (App.get(cnic1).isEmpty()) {
-            cnic1.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            cnic1.getEditText().requestFocus();
+            cnic1.setError(getResources().getString(R.string.mandatory_field));
+            cnic1.requestFocus();
             error = true;
             gotoFirstPage();
         }
         if (App.get(cnic2).isEmpty()) {
-            cnic2.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            cnic2.getEditText().requestFocus();
+            cnic2.setError(getResources().getString(R.string.mandatory_field));
+            cnic2.requestFocus();
             error = true;
             gotoFirstPage();
         }
         if (App.get(cnic3).isEmpty()) {
-            cnic3.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            cnic3.getEditText().requestFocus();
+            cnic3.setError(getResources().getString(R.string.mandatory_field));
+            cnic3.requestFocus();
             error = true;
             gotoFirstPage();
         }
         if (App.get(cnic1).length() != 5) {
-            cnic1.getEditText().setError(getResources().getString(R.string.invalid_value));
-            cnic1.getEditText().requestFocus();
+            cnic1.setError(getResources().getString(R.string.invalid_value));
+            cnic1.requestFocus();
             error = true;
             gotoFirstPage();
         }
         if (App.get(cnic2).length() != 7) {
-            cnic2.getEditText().setError(getResources().getString(R.string.invalid_value));
-            cnic2.getEditText().requestFocus();
+            cnic2.setError(getResources().getString(R.string.invalid_value));
+            cnic2.requestFocus();
             error = true;
             gotoFirstPage();
         }
         if (App.get(cnic3).length() != 1) {
-            cnic3.getEditText().setError(getResources().getString(R.string.invalid_value));
-            cnic3.getEditText().requestFocus();
+            cnic3.setError(getResources().getString(R.string.invalid_value));
+            cnic3.requestFocus();
             error = true;
             gotoFirstPage();
         }
@@ -837,9 +925,9 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
                     }
                     if (!result.get("NATIONAL IDENTIFICATION NUMBER").equals("")) {
                         String[] cnicArray = result.get("NATIONAL IDENTIFICATION NUMBER").split("-");
-                        cnic1.getEditText().setText(cnicArray[0]);
-                        cnic2.getEditText().setText(cnicArray[1]);
-                        cnic3.getEditText().setText(cnicArray[2]);
+                        cnic1.setText(cnicArray[0]);
+                        cnic2.setText(cnicArray[1]);
+                        cnic3.setText(cnicArray[2]);
                     }
                     if (!result.get("COMPUTERIZED NATIONAL IDENTIFICATION OWNER").equals("")) {
                         String value = result.get("COMPUTERIZED NATIONAL IDENTIFICATION OWNER").equals("SELF") ? getResources().getString(R.string.pet_self) :
@@ -1031,9 +1119,9 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
                 indexPatientId.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("NATIONAL IDENTIFICATION NUMBER")) {
                 String[] cnicArray = obs[0][1].split("-");
-                cnic1.getEditText().setText(cnicArray[0]);
-                cnic2.getEditText().setText(cnicArray[1]);
-                cnic3.getEditText().setText(cnicArray[2]);
+                cnic1.setText(cnicArray[0]);
+                cnic2.setText(cnicArray[1]);
+                cnic3.setText(cnicArray[2]);
             } else if (obs[0][0].equals("COMPUTERIZED NATIONAL IDENTIFICATION OWNER")) {
                 String value = obs[0][1].equals("SELF") ? getResources().getString(R.string.pet_self) :
                         (obs[0][1].equals("MOTHER") ? getResources().getString(R.string.pet_mother) :

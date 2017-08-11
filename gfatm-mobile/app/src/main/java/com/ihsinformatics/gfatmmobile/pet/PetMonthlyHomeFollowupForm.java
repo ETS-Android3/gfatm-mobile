@@ -90,8 +90,8 @@ public class PetMonthlyHomeFollowupForm extends AbstractFormActivity implements 
                              ViewGroup container, Bundle savedInstanceState) {
 
         PAGE_COUNT = 1;
-        FORM_NAME = Forms.PET_MONTHLY_HOME_FOLLOWUP;
-        FORM = Forms.pet_monthlyHomeFollowup;
+        FORM_NAME = Forms.PET_HOME_FOLLOWUP;
+        FORM = Forms.pet_homeFollowup;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();

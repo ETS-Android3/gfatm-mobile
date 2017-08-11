@@ -86,6 +86,7 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
     TitledEditText akuadsTotalScore;
     TitledRadioGroup akuadsSeverity;
     TitledRadioGroup continuationStatus;
+    TitledEditText otherContinuationStatus;
     TitledRadioGroup akuadsAgree;
     TitledButton nextAppointmentDate;
 
@@ -198,6 +199,7 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
             akuadsSeverity.getRadioGroup().getChildAt(i).setClickable(false);
         }
         continuationStatus = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_continuatioon_status), getResources().getStringArray(R.array.pet_continuatioon_statuses), getResources().getString(R.string.pet_continue_therapy), App.VERTICAL, App.VERTICAL);
+        otherContinuationStatus = new TitledEditText(context, null, getResources().getString(R.string.pet_other_detail), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         akuadsAgree = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_agree_AKUADS), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL);
         nextAppointmentDate = new TitledButton(context, null, getResources().getString(R.string.pet_next_appointment_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.VERTICAL);
 
@@ -215,14 +217,14 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
                 akuadsNumbness.getRadioGroup(), akuadsTension.getRadioGroup(),
                 akuadsHeadaches.getRadioGroup(), akuadsBodyPain.getRadioGroup(),
                 akuadsUrination.getRadioGroup(), akuadsTotalScore.getEditText(), akuadsSeverity.getRadioGroup(), continuationStatus.getRadioGroup(),
-                akuadsAgree.getRadioGroup(), nextAppointmentDate.getButton()};
+                akuadsAgree.getRadioGroup(), nextAppointmentDate.getButton(), otherContinuationStatus.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formDate, mentalHealthScreening, akuadsSleep, akuadsLackOfInterest, akuadsLostInterestHobbies, akuadsAnxious, akuadsImpendingDoom, akuadsDifficultyThinkingClearly,
                         akuadsAlone, akuadsUnhappy, akuadsHopeless, akuadsHelpless, akuadsWorried, akuadsCried, akuadsSuicide, akuadsLossOfAppetite, akuadsRetrosternalBurning,
                         akuadsIndigestion, akuadsNausea, akuadsConstipation, akuadsDifficultBreathing, akuadsTremulous, akuadsNumbness, akuadsTension, akuadsHeadaches, akuadsBodyPain,
-                        akuadsUrination, akuadsTotalScore, akuadsSeverity, continuationStatus, akuadsAgree, nextAppointmentDate}};
+                        akuadsUrination, akuadsTotalScore, akuadsSeverity, continuationStatus, otherContinuationStatus, akuadsAgree, nextAppointmentDate}};
 
         formDate.getButton().setOnClickListener(this);
         nextAppointmentDate.getButton().setOnClickListener(this);
@@ -253,6 +255,7 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
         akuadsUrination.getRadioGroup().setOnCheckedChangeListener(this);
         akuadsSeverity.getRadioGroup().setOnCheckedChangeListener(this);
         akuadsAgree.getRadioGroup().setOnCheckedChangeListener(this);
+        continuationStatus.getRadioGroup().setOnCheckedChangeListener(this);
 
         resetViews();
     }
@@ -469,6 +472,9 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
             observations.add(new String[]{"CONTINUATION STATUS", App.get(continuationStatus).equals(getResources().getString(R.string.pet_continue_therapy)) ? "EXERCISE THERAPY" :
                     (App.get(continuationStatus).equals(getResources().getString(R.string.pet_last_session)) ? "END OF THERAPY" :
                             (App.get(continuationStatus).equals(getResources().getString(R.string.pet_referred)) ? "PATIENT REFERRED" : "OTHER CONTINUATION STATUS"))});
+        }
+        if(otherContinuationStatus.getVisibility() == View.VISIBLE){
+            observations.add(new String[]{"OTHER CONTINUATION STATUS", App.get(otherContinuationStatus)});
         }
         observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDate(secondDateCalendar)});
 
@@ -1048,7 +1054,10 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
                         break;
                     }
                 }
-            }else if (obs[0][0].equals("LOSS OF APPETITE (AKUADS)")) {
+            } else if (obs[0][0].equals("OTHER CONTINUATION STATUS")) {
+                otherContinuationStatus.getEditText().setText(obs[0][1]);
+                otherContinuationStatus.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("LOSS OF APPETITE (AKUADS)")) {
                 for (RadioButton rb : akuadsLossOfAppetite.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.pet_severity_level_normal)) && obs[0][1].equals("NORMAL")) {
                         rb.setChecked(true);
@@ -1129,6 +1138,7 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
         super.resetViews();
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        otherContinuationStatus.setVisibility(View.GONE);
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -1167,6 +1177,13 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
                 || radioGroup == akuadsHeadaches.getRadioGroup() || radioGroup == akuadsBodyPain.getRadioGroup() || radioGroup == akuadsUrination.getRadioGroup()) {
             akuadsTotalScore.getEditText().setText(String.valueOf(getTotalScore()));
             setAkuadsSeverityLevel();
+        }
+        else if (radioGroup == continuationStatus.getRadioGroup()){
+
+            if(App.get(continuationStatus).equals(getResources().getString(R.string.pet_other)))
+                otherContinuationStatus.setVisibility(View.VISIBLE);
+            else
+                otherContinuationStatus.setVisibility(View.GONE);
         }
     }
 

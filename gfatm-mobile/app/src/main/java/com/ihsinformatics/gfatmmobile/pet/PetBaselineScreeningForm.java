@@ -1134,6 +1134,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         contactRegistered.setVisibility(View.GONE);
         linearLayout.setVisibility(View.VISIBLE);
         referredFacility.setVisibility(View.GONE);
+        otherNIC.setVisibility(View.GONE);
 
         String[] districts = serverService.getDistrictList(App.getProvince());
         district.getSpinner().setSpinnerData(districts);

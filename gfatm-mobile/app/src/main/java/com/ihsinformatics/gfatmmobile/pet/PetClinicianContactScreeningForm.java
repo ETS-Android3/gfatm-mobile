@@ -45,6 +45,7 @@ import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.StringTokenizer;
 
 /**
  * Created by Rabbia on 11/24/2016.
@@ -114,6 +115,9 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
     TitledEditText otherCondition;
     TitledRadioGroup referral;
     TitledRadioGroup smokingHistory;
+    TitledEditText dailyCigarettesIntake;
+    TitledEditText smokingDuration;
+    TitledEditText packYears;
     TitledEditText clincianNote;
 
     Boolean refillFlag = false;
@@ -285,6 +289,10 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
         otherCondition = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 15, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         referral = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_referral_needed), getResources().getStringArray(R.array.yes_no_unknown_options), getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         smokingHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_smoking_history), getResources().getStringArray(R.array.yes_no_unknown_options), getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
+        dailyCigarettesIntake  = new TitledEditText(context, null, getResources().getString(R.string.pet_daily_cigarettes_cosumption), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        smokingDuration = new TitledEditText(context, null, getResources().getString(R.string.pet_smoking_duration), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        packYears = new TitledEditText(context, null, getResources().getString(R.string.pet_pack_years), "", "", 6, null, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+
         clincianNote = new TitledEditText(context, null, getResources().getString(R.string.pet_doctor_notes), "", "", 250, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         clincianNote.getEditText().setSingleLine(false);
         clincianNote.getEditText().setMinimumHeight(150);
@@ -311,6 +319,9 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
         linearLayout3.addView(otherCondition);
         linearLayout3.addView(referral);
         linearLayout3.addView(smokingHistory);
+        linearLayout3.addView(dailyCigarettesIntake);
+        linearLayout3.addView(smokingDuration);
+        linearLayout3.addView(packYears);
         linearLayout3.addView(clincianNote);
 
         views = new View[]{formDate.getButton(), externalPatientId.getEditText(), weight.getEditText(), height.getEditText(), bmi.getEditText(), muac.getEditText(), weightPercentile.getSpinner(),
@@ -322,7 +333,8 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
                 generalAppearence.getRadioGroup(), generalAppearenceExplanation.getEditText(), heent.getRadioGroup(), heentExplanation.getEditText(), lymphnode.getRadioGroup(), lymphnodeExplanation.getEditText(),
                 spine.getRadioGroup(), spineExplanation.getEditText(), joints.getRadioGroup(), jointsExplanation.getEditText(), jointsExplanation.getEditText(), skin.getRadioGroup(), skinExplanation.getEditText(),
                 chest.getRadioGroup(), chestExplanation.getEditText(), abdominal.getRadioGroup(), abdominal.getRadioGroup(), examOutcome.getRadioGroup(), comorbidCondition,
-                otherCondition.getEditText(), referral.getRadioGroup(), clincianNote.getEditText(), weightPercentileEditText.getEditText(),smokingHistory.getRadioGroup(), intervention.getRadioGroup()};
+                otherCondition.getEditText(), referral.getRadioGroup(), clincianNote.getEditText(), weightPercentileEditText.getEditText(),smokingHistory.getRadioGroup(), intervention.getRadioGroup(),
+                dailyCigarettesIntake.getEditText(), smokingDuration.getEditText(), packYears.getEditText()};
 
         viewGroups = new View[][]{{formDate, intervention, externalPatientId, weight, height, bmi, muac, weightPercentile, weightPercentileEditText},
                 {linearLayout1},
@@ -374,7 +386,7 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
 
                 }
 
-                if (!App.get(weight).equals("")){
+                if (weightPercentileEditText.getVisibility() == View.VISIBLE && !App.get(weight).equals("")){
                     String percentile = serverService.getPercentile(App.get(weight));
                     weightPercentileEditText.getEditText().setText(percentile);
 
@@ -432,13 +444,76 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
 
             }
         });
+        dailyCigarettesIntake.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (App.get(dailyCigarettesIntake).equals("") || App.get(smokingDuration).equals(""))
+                    packYears.getEditText().setText("");
+                else {
+
+                    int dailyIntake = Integer.parseInt(App.get(dailyCigarettesIntake));
+                    int smokingDur = Integer.parseInt(App.get(smokingDuration));
+
+                    Double packY =  (dailyIntake * 1.0) / smokingDur;
+
+                    packYears.getEditText().setText(String.valueOf(packY));
+                }
+
+
+            }
+        });
+        smokingDuration.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (App.get(dailyCigarettesIntake).equals("") || App.get(smokingDuration).equals(""))
+                    packYears.getEditText().setText("");
+                else {
+
+                    int dailyIntake = Integer.parseInt(App.get(dailyCigarettesIntake));
+                    int smokingDur = Integer.parseInt(App.get(smokingDuration));
+
+                    Double packY =  (dailyIntake * 1.0) / smokingDur;
+
+                    packYears.getEditText().setText(String.valueOf(packY));
+                }
+
+
+            }
+        });
+        packYears.getEditText().setKeyListener(null);
         bmi.getEditText().setKeyListener(null);
         exposureScore.getEditText().setKeyListener(null);
         weightPercentileEditText.getEditText().setKeyListener(null);
 
         View listenerViewer[] = new View[]{formDate, cough, fever, exposurePoint1, exposurePoint2, exposurePoint3, exposurePoint4, exposurePoint5,
                 exposurePoint6, exposurePoint7, exposurePoint8, exposurePoint9, exposurePoint10, abdominal, chest,
-                skin, joints, spine, lymphnode, heent, generalAppearence};
+                skin, joints, spine, lymphnode, heent, generalAppearence, smokingHistory};
         for (View v : listenerViewer) {
 
             if (v instanceof TitledButton)
@@ -478,16 +553,23 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
         chestExplanation.setVisibility(View.GONE);
         abdominalExplanation.setVisibility(View.GONE);
         otherCondition.setVisibility(View.GONE);
+        dailyCigarettesIntake.setVisibility(View.GONE);
+        smokingDuration.setVisibility(View.GONE);
+        packYears.setVisibility(View.GONE);
 
         if (App.getPatient().getPerson().getAge() < 6)
             muac.setVisibility(View.VISIBLE);
         else
             muac.setVisibility(View.GONE);
 
-        if (App.getPatient().getPerson().getAge() < 18)
+        if (App.getPatient().getPerson().getAge() < 18) {
             weightPercentile.setVisibility(View.VISIBLE);
-        else
+            weightPercentileEditText.setVisibility(View.VISIBLE);
+        }
+        else {
             weightPercentile.setVisibility(View.GONE);
+            weightPercentileEditText.setVisibility(View.GONE);
+        }
 
         Boolean flag = false;
         Bundle bundle = this.getArguments();
@@ -565,6 +647,20 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
     public boolean validate() {
 
         Boolean error = false;
+
+        if (App.get(smokingDuration).isEmpty() && smokingDuration.getVisibility() == View.VISIBLE) {
+            smokingDuration.getEditText().setError(getString(R.string.empty_field));
+            smokingDuration.getEditText().requestFocus();
+            error = true;
+            gotoLastPage();
+        }
+
+        if (App.get(dailyCigarettesIntake).isEmpty() && dailyCigarettesIntake.getVisibility() == View.VISIBLE) {
+            dailyCigarettesIntake.getEditText().setError(getString(R.string.empty_field));
+            dailyCigarettesIntake.getEditText().requestFocus();
+            error = true;
+            gotoLastPage();
+        }
 
         if (App.get(abdominalExplanation).isEmpty() && abdominalExplanation.getVisibility() == View.VISIBLE) {
             abdominalExplanation.getEditText().setError(getString(R.string.empty_field));
@@ -836,6 +932,13 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
                 (App.get(referral).equals(getResources().getString(R.string.yes)) ? "NO" : "UNKNOWN")});
         observations.add(new String[]{"SMOKING HISTORY", App.get(smokingHistory).equals(getResources().getString(R.string.yes)) ? "YES" :
                 (App.get(smokingHistory).equals(getResources().getString(R.string.yes)) ? "NO" : "UNKNOWN")});
+        if(dailyCigarettesIntake.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"DAILY CIGARETTE USE", App.get(dailyCigarettesIntake)});
+        if(coughDuration.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"DURATION OF SMOKING (IN YEARS)", App.get(coughDuration)});
+        if(packYears.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"PACK YEARS", App.get(packYears)});
+
         observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(clincianNote)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
@@ -1088,6 +1191,17 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
                 abdominalExplanation.setVisibility(View.VISIBLE);
             else
                 abdominalExplanation.setVisibility(View.GONE);
+        }  else if (group == smokingHistory.getRadioGroup()) {
+            if (App.get(smokingHistory).equals(getResources().getString(R.string.yes))) {
+                smokingDuration.setVisibility(View.VISIBLE);
+                dailyCigarettesIntake.setVisibility(View.VISIBLE);
+                packYears.setVisibility(View.VISIBLE);
+            }
+            else {
+                smokingDuration.setVisibility(View.GONE);
+                dailyCigarettesIntake.setVisibility(View.GONE);
+                packYears.setVisibility(View.GONE);
+            }
         }
 
     }
@@ -1672,6 +1786,12 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
                         break;
                     }
                 }
+            }else if (obs[0][0].equals("DAILY CIGARETTE USE")) {
+                dailyCigarettesIntake.getEditText().setText(obs[0][1]);
+            }else if (obs[0][0].equals("DURATION OF SMOKING (IN YEARS)")) {
+                smokingDuration.getEditText().setText(obs[0][1]);
+            }else if (obs[0][0].equals("PACK YEARS")) {
+                packYears.getEditText().setText(obs[0][1]);
             }else if (obs[0][0].equals("CLINICIAN NOTES (TEXT)")) {
                 clincianNote.getEditText().setText(obs[0][1]);
             }
