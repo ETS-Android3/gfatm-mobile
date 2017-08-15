@@ -484,7 +484,7 @@
     <string name="fast_does_the_patient_have_tb">Does the patient have TB?</string>
     <string name="fast_are_you_prescribing_an_antibiotic_trial">Are you prescribing an antibiotic trial?</string>
     <string name="fast_clinically_evaluated_no_tb">Clinically evaluated, No TB</string>
-    <string name="fast_antibiotic_complete">Antibiotic Complete</string>
+    <string name="fast_antibiotic_complete">Antibiotic Complete - No TB</string>
     <string name="fast_screening_title">Screening</string>
     <string name="fast_childhood_tb_program">Childhood TB Program</string>
     <string name="fast_PET_tb_program">PET TB Program</string>
