@@ -4562,7 +4562,7 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CITIZENSHIP','c
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER IDENTIFICATION NUMBER','other_identification_number','Text','90c4723e-5fac-4b9d-b6c7-1e12a70f185d');
 
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CLINICALLY EVALUATED, NO TB','clinically_evaluated_no_tb','N/A','39d760c6-7711-490d-8c59-ff911ac3ca10');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ANTIBIOTIC COMPLETE','antibiotic_complete','N/A','689597aa-554b-4189-9a02-bf9da81564e0');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ANTIBIOTIC COMPLETE - NO TB','antibiotic_complete_no_tb','N/A','689597aa-554b-4189-9a02-bf9da81564e0');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CHILD DIAGNOSED PRESUMPTIVE BY MO','child_diagnosed_presumptive_by_mo','Coded','1487a1a2-fbbd-4be3-a90a-f2e562700a21');
 
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MISSED VISIT FOR TREATMENT REGIMEN','missed_visit_for_treatment_regimen','Coded','3ac5352c-6d3a-4c51-bc07-a5e7d7bbbdf1');
@@ -4573,6 +4573,12 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('IPT FOLLOWUP','
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DAILY CIGARETTE USE','cigarettes_smoked_in_day','Numeric','1546AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DURATION OF SMOKING (IN YEARS)','smoking_duration','Numeric','159931AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PACK YEARS','pack_years','Numeric','383384bc-6008-4ce3-961e-9e6db88c9e08');
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REASON FOR X-RAY','reason_for_xray','Coded','ec213c25-821c-4c75-87e8-49f10c3badca');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PRESUMPTIVE TB THROUGH CXR','presumptive_tb_cxr','Coded','b8548f87-1219-4962-8337-bdb04fb4351f');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CAD4TB SCORE RANGE','cad_score_range','Coded','ce4eb356-40c9-4859-b166-aebcf05a073c');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('1- 69 (NORMAL)','1_69_normal_cad4tb','N/A','364ec723-14bb-496f-a236-85dc33f21faa');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('70 -100 (ABNORMAL)','70_100_abnormal_cadrtb','N/A','ae1549dc-8481-4a1c-9688-6fb1ddbdab4b');
 
 -- Program
 INSERT OR IGNORE INTO program VALUES (1, "86ba1232-d576-416e-b102-5f335c6746ce", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
