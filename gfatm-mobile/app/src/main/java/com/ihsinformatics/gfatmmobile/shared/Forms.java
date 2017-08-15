@@ -101,8 +101,6 @@ import com.ihsinformatics.gfatmmobile.pmdt.PmdtProviderRegistration;
 import com.ihsinformatics.gfatmmobile.pmdt.PmdtSocialSupportFoodBasketForm;
 import com.ihsinformatics.gfatmmobile.pmdt.PmdtTreatmentCoordinatorMonitoringForm;
 
-import org.openmrs.Role;
-
 import java.util.ArrayList;
 
 /**
@@ -123,7 +121,7 @@ public class Forms{
     public static final String PET_TREATMENT_INITIATION = "Treatment Initiation";
     public static final String PET_BASELINE_COUNSELLING = "Baseline Counselling";
     public static final String PET_TREATMENT_ADHERENCE = "Treatment Adherence";
-    public static final String PET_MONTHLY_HOME_FOLLOWUP = "Monthly Home Follow-up";
+    public static final String PET_HOME_FOLLOWUP = "Home Follow-up";
     public static final String PET_CLINICIAN_FOLLOWUP = "Clinician Follow-up";
     public static final String PET_COUNSELLING_FOLLOWUP = "Counselling Follow-up";
     public static final String PET_ADVERSE_EVENTS = "Adverse Events";
@@ -152,7 +150,7 @@ public class Forms{
     public static final FormsObject pet_baselineCounselling = new FormsObject(PET_BASELINE_COUNSELLING, PetBaselineCounsellingForm.class, R.drawable.pet_baseline_counselling, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_PSYCHOLOGIST});
     public static final FormsObject pet_akuad = new FormsObject(PET_AKUAD, PETAKUADForm.class, R.drawable.comorbidities_mental_health, FormTypeColor.FOLLOWUP_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_FIELD_SUPERVISOR, Roles.PET_PSYCHOLOGIST});
     public static final FormsObject pet_treatmentAdherence = new FormsObject(PET_TREATMENT_ADHERENCE, PetTreatmentAdherenceForm.class, R.drawable.pet_treatment_adherence, FormTypeColor.TREATMENT_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_PSYCHOLOGIST});
-    public static final FormsObject pet_monthlyHomeFollowup = new FormsObject(PET_MONTHLY_HOME_FOLLOWUP, PetMonthlyHomeFollowupForm.class, R.drawable.pet_monthly_followup, FormTypeColor.FOLLOWUP_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_HEALTH_WORKER, Roles.PET_FIELD_SUPERVISOR});
+    public static final FormsObject pet_homeFollowup = new FormsObject(PET_HOME_FOLLOWUP, PetMonthlyHomeFollowupForm.class, R.drawable.pet_monthly_followup, FormTypeColor.FOLLOWUP_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_HEALTH_WORKER, Roles.PET_FIELD_SUPERVISOR});
     public static final FormsObject pet_clinicianFollowup = new FormsObject(PET_CLINICIAN_FOLLOWUP, PetClinicianFollowupForm.class, R.drawable.pet_clinician_followup, FormTypeColor.FOLLOWUP_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN});
     public static final FormsObject pet_counsellingFollowup = new FormsObject(PET_COUNSELLING_FOLLOWUP, PetCounsellingFollowupForm.class, R.drawable.pet_counselling_followup, FormTypeColor.FOLLOWUP_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_PSYCHOLOGIST});
     public static final FormsObject pet_adverseEvents = new FormsObject(PET_ADVERSE_EVENTS, PetAdverseEventForm.class, R.drawable.pet_adverse_events, FormTypeColor.OTHER_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN});
@@ -175,12 +173,12 @@ public class Forms{
      ********************************/
     public static final String FAST_SCREENING_FORM = "1. Screening Form";
     public static final String FAST_PRESUMPTIVE_FORM = "2. Presumptive Form";
-    public static final String FAST_PROMPT_FORM = "4. Sputum Container and X-Ray Voucher Form";
-    public static final String FAST_PATIENT_LOCATION_FORM = "Patient Location Form";
+    public static final String FAST_PROMPT_FORM = "Sputum Container and X-Ray Voucher Form";
+    public static final String FAST_PATIENT_LOCATION_FORM = "3. Patient Location Form";
     public static final String FAST_GXP_SPECIMEN_COLLECTION_FORM = "5. GXP Specimen Collection Form";
-    public static final String FAST_PRESUMPTIVE_INFORMATION_FORM = "3. Presumptive Information Form";
-    public static final String FAST_GENEXPERT_RESULT_FORM = "6. GeneXpert Result Form";
-    public static final String FAST_SCREENING_CHEST_XRAY_ORDER_AND_RESULT_FORM = "Screening CXR(CAD4TB) Order and Result Form";
+    public static final String FAST_PRESUMPTIVE_INFORMATION_FORM = "4. Presumptive Information Form";
+    public static final String FAST_GENEXPERT_RESULT_FORM = "GeneXpert Result Form";
+    public static final String FAST_SCREENING_CHEST_XRAY_ORDER_AND_RESULT_FORM = "6. Screening CXR(CAD4TB) Order and Result Form";
     public static final String FAST_AFB_SMEAR_MICROSCOPY_ORDER_AND_RESULT_FORM = "AFB Smear Microscopy Order and Result Form";
     public static final String FAST_DST_ORDER_AND_RESULT_FORM = "DST Order And Result Form";
     public static final String FAST_CONTACT_REGISTRY_FORM = "Contact Registry Form";
@@ -190,14 +188,14 @@ public class Forms{
     public static final String FAST_MISSED_VISIT_FOLLOWUP_FORM = "Missed Visit Follow-up";
     public static final String FAST_END_OF_FOLLOWUP_FORM = "End of Follow up Form";
 
-    public static final FormsObject fastScreeningForm = new FormsObject(FAST_SCREENING_FORM, FastScreeningForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SCREENER});
-    public static final FormsObject fastPromptForm = new FormsObject(FAST_PROMPT_FORM, FastPromptForm.class, R.drawable.fast_prompt_form, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SCREENER});
-    public static final FormsObject fastPresumptiveForm = new FormsObject(FAST_PRESUMPTIVE_FORM, FastPresumptiveForm.class, R.drawable.fast_presumptive_form, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SCREENER});
-    public static final FormsObject fastPatientLocationForm = new FormsObject(FAST_PATIENT_LOCATION_FORM, FastPatientLocationForm.class, R.drawable.fast_patient_location, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SCREENER});
-    public static final FormsObject fastGpxSpecimenCollectionForm = new FormsObject(FAST_GXP_SPECIMEN_COLLECTION_FORM, FastGpxSpecimenCollectionForm.class, R.drawable.pet_treatment_adherence, FormTypeColor.TEST_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_LAB_TECHNICIAN, Roles.FAST_SCREENER});
-    public static final FormsObject fastPresumptiveInformationForm = new FormsObject(FAST_PRESUMPTIVE_INFORMATION_FORM, FastPresumptiveInformationForm.class, R.drawable.fast_presumptive_information_form, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SCREENER});
-    public static final FormsObject fastGeneXpertResultForm = new FormsObject(FAST_GENEXPERT_RESULT_FORM, FastGeneXpertResultForm.class, R.drawable.fast_result_form, FormTypeColor.TEST_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_LAB_TECHNICIAN});
-    public static final FormsObject fastScreeningChestXrayOrderAndResultForm = new FormsObject(FAST_SCREENING_CHEST_XRAY_ORDER_AND_RESULT_FORM, FastScreeningChestXrayOrderAndResultForm.class, R.drawable.ctb_xray, FormTypeColor.TEST_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_LAB_TECHNICIAN});
+    public static final FormsObject fastScreeningForm = new FormsObject(FAST_SCREENING_FORM, FastScreeningForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SCREENER, Roles.FAST_SITE_MANAGER});
+    public static final FormsObject fastPromptForm = new FormsObject(FAST_PROMPT_FORM, FastPromptForm.class, R.drawable.fast_prompt_form, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SITE_MANAGER});
+    public static final FormsObject fastPresumptiveForm = new FormsObject(FAST_PRESUMPTIVE_FORM, FastPresumptiveForm.class, R.drawable.fast_presumptive_form, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SCREENER, Roles.FAST_SITE_MANAGER});
+    public static final FormsObject fastPatientLocationForm = new FormsObject(FAST_PATIENT_LOCATION_FORM, FastPatientLocationForm.class, R.drawable.fast_patient_location, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SCREENER, Roles.FAST_SITE_MANAGER});
+    public static final FormsObject fastGpxSpecimenCollectionForm = new FormsObject(FAST_GXP_SPECIMEN_COLLECTION_FORM, FastGpxSpecimenCollectionForm.class, R.drawable.pet_treatment_adherence, FormTypeColor.TEST_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_LAB_TECHNICIAN, Roles.FAST_SCREENER, Roles.FAST_SITE_MANAGER});
+    public static final FormsObject fastPresumptiveInformationForm = new FormsObject(FAST_PRESUMPTIVE_INFORMATION_FORM, FastPresumptiveInformationForm.class, R.drawable.fast_presumptive_information_form, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SCREENER, Roles.FAST_SITE_MANAGER});
+    public static final FormsObject fastGeneXpertResultForm = new FormsObject(FAST_GENEXPERT_RESULT_FORM, FastGeneXpertResultForm.class, R.drawable.fast_result_form, FormTypeColor.TEST_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_LAB_TECHNICIAN, Roles.FAST_SITE_MANAGER});
+    public static final FormsObject fastScreeningChestXrayOrderAndResultForm = new FormsObject(FAST_SCREENING_CHEST_XRAY_ORDER_AND_RESULT_FORM, FastScreeningChestXrayOrderAndResultForm.class, R.drawable.ctb_xray, FormTypeColor.TEST_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SCREENER, Roles.FAST_LAB_TECHNICIAN, Roles.FAST_SITE_MANAGER});
     public static final FormsObject fastAfbSmearMicroscopyOrderAndResultForm = new FormsObject(FAST_AFB_SMEAR_MICROSCOPY_ORDER_AND_RESULT_FORM, FastAfbSmearMicroscopyOrderAndResultForm.class, R.drawable.ctb_afb_smear, FormTypeColor.TEST_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SITE_MANAGER, Roles.FAST_FACILITATOR});
     public static final FormsObject fastDstOrderAndResultForm = new FormsObject(FAST_DST_ORDER_AND_RESULT_FORM, FastDSTOrderAndResultForm.class, R.drawable.ctb_dst_culture, FormTypeColor.TEST_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SITE_MANAGER, Roles.FAST_FACILITATOR});
     public static final FormsObject fastContactRegistryForm = new FormsObject(FAST_CONTACT_REGISTRY_FORM, FastContactRegistryForm.class, R.drawable.pet_contact, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_FACILITATOR, Roles.FAST_SITE_MANAGER});
@@ -353,7 +351,7 @@ public class Forms{
         petList.add(pet_treatmentInitiation);
         petList.add(pet_baselineCounselling);
         petList.add(pet_akuad);
-        petList.add(pet_monthlyHomeFollowup);
+        petList.add(pet_homeFollowup);
         petList.add(pet_missed_visit_followup);
         petList.add(pet_treatmentAdherence);
         petList.add(pet_clinicianFollowup);
@@ -384,10 +382,10 @@ public class Forms{
         fastList.add(fastPresumptiveForm);
         fastList.add(fastPatientLocationForm);
         fastList.add(fastPresumptiveInformationForm);
-        fastList.add(fastPromptForm);
         fastList.add(fastGpxSpecimenCollectionForm);
-        fastList.add(fastGeneXpertResultForm);
         fastList.add(fastScreeningChestXrayOrderAndResultForm);
+        fastList.add(fastPromptForm);
+        fastList.add(fastGeneXpertResultForm);
         fastList.add(fastAfbSmearMicroscopyOrderAndResultForm);
         fastList.add(fastDstOrderAndResultForm);
         fastList.add(fastContactRegistryForm);
