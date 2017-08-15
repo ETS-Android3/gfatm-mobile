@@ -1159,32 +1159,23 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                 for (CheckBox cb : closeContactType.getCheckedBoxes()) {
                     if (cb.getText().equals(getResources().getString(R.string.ctb_mother)) && obs[0][1].equals("MOTHER")) {
                         cb.setChecked(true);
-                        break;
                     } else if (cb.getText().equals(getResources().getString(R.string.ctb_father)) && obs[0][1].equals("FATHER")) {
                         cb.setChecked(true);
-                        break;
                     } else if (cb.getText().equals(getResources().getString(R.string.ctb_brother)) && obs[0][1].equals("BROTHER")) {
                         cb.setChecked(true);
-                        break;
                     } else if (cb.getText().equals(getResources().getString(R.string.ctb_sister)) && obs[0][1].equals("SISTER")) {
                         cb.setChecked(true);
-                        break;
                     } else if (cb.getText().equals(getResources().getString(R.string.ctb_paternal_grandfather)) && obs[0][1].equals("PATERNAL GRANDFATHER")) {
                         cb.setChecked(true);
-                        break;
                     } else if (cb.getText().equals(getResources().getString(R.string.ctb_paternal_grandmother)) && obs[0][1].equals("PATERNAL GRANDMOTHER")) {
                         cb.setChecked(true);
-                        break;
                     } else if (cb.getText().equals(getResources().getString(R.string.ctb_maternal_grandfather)) && obs[0][1].equals("MATERNAL GRANDFATHER")) {
                         cb.setChecked(true);
-                        break;
                     } else if (cb.getText().equals(getResources().getString(R.string.ctb_maternal_grandmother)) && obs[0][1].equals("MATERNAL GRANDMOTHER")) {
                         cb.setChecked(true);
-                        break;
                     } else if (cb.getText().equals(getResources().getString(R.string.ctb_other_title)) && obs[0][1].equals("OTHER CONTACT TYPE")) {
                         cb.setChecked(true);
                         otherContactType.setVisibility(View.VISIBLE);
-                        break;
                     }
                 }
             }
