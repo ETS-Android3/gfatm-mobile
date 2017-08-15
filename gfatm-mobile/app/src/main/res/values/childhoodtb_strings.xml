@@ -567,6 +567,7 @@
     <string name="ctb_tb_treatment_followup">TB treatment Follow-up</string>
     <string name="ctb_antibiotic_trial_followup">Antibiotic Trial Follow-up</string>
     <string name="ctb_mo_think_child_presumptive">Does MO think child is presumptive?</string>
+    <string name="ctb_school">School</string>
 
 
     <string-array name="ctb_missed_visit_list">
@@ -592,6 +593,8 @@
     <string-array name="ctb_screening_location_list">
         <item>@string/ctb_hospital</item>
         <item>@string/ctb_community</item>
+        <item>@string/ctb_school</item>
+        <item>@string/ctb_other_title</item>
     </string-array>
 
     <string-array name="ctb_facility_section_list">

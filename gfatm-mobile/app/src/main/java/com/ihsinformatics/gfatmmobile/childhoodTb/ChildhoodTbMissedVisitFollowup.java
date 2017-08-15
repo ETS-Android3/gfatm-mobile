@@ -945,27 +945,12 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
                 }
             }
         });
-
-        String maxDateString = appointDateStringList.get(appointDateStringList.size()-1);
-       /* if(appointDateStringList.size()>0){
-            String maxDateString = appointDateStringList.get(0);
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd h:m");
-            for(int i=1; i<appointDateStringList.size(); i++){
-                try {
-                    Date d1 = sdf.parse(maxDateString);
-                    Date d2 = sdf.parse(appointDateStringList.get(i));
-                    if(d2.compareTo(d1)>0){
-                        maxDateString = appointDateStringList.get(i);
-                    }
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-            }*/
+        if(appointDateStringList.size()>0) {
+            String maxDateString = appointDateStringList.get(appointDateStringList.size() - 1);
             secondDateCalendar = App.getCalendar(App.stringToDate(maxDateString.toString(), "yyyy-MM-dd"));
             missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-
-
+        }
+     
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");

@@ -2100,24 +2100,72 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                 height.setVisibility(View.VISIBLE);
                 weightPercentile.setVisibility(View.VISIBLE);
                 weightPercentileEditText.setVisibility(View.VISIBLE);
-                coughDuration.setVisibility(View.VISIBLE);
+                cough.setVisibility(View.VISIBLE);
+                if(App.get(cough).equals(getResources().getString(R.string.yes))){
+                    coughDuration.setVisibility(View.VISIBLE);
+                }
                 fever.setVisibility(View.VISIBLE);
                 nightSweats.setVisibility(View.VISIBLE);
                 weightLoss.setVisibility(View.VISIBLE);
                 appetite.setVisibility(View.VISIBLE);
                 generalAppearance.setVisibility(View.VISIBLE);
+                if(App.get(generalAppearance).equals(getResources().getString(R.string.ctb_remarkable))){
+                    generalAppearanceExplanation.setVisibility(View.VISIBLE);
+                }
                 headEyeEearNoseThroat.setVisibility(View.VISIBLE);
+                if(App.get(headEyeEearNoseThroat).equals(getResources().getString(R.string.ctb_remarkable))){
+                    headEyeEearNoseThroatExplanation.setVisibility(View.VISIBLE);
+                }
                 lymphNodeExamination.setVisibility(View.VISIBLE);
+                if(App.get(lymphNodeExamination).equals(getResources().getString(R.string.ctb_remarkable))){
+                    lymphNodeExplanation.setVisibility(View.VISIBLE);
+                }
                 spineExamination.setVisibility(View.VISIBLE);
+                if(App.get(spineExamination).equals(getResources().getString(R.string.ctb_remarkable))){
+                    spineExplanation.setVisibility(View.VISIBLE);
+                }
                 jointsExamination.setVisibility(View.VISIBLE);
+                if(App.get(jointsExamination).equals(getResources().getString(R.string.ctb_remarkable))){
+                    jointsExplanation.setVisibility(View.VISIBLE);
+                }
                 skinExamination.setVisibility(View.VISIBLE);
+                if(App.get(skinExamination).equals(getResources().getString(R.string.ctb_remarkable))){
+                    skinExplanation.setVisibility(View.VISIBLE);
+                }
                 chestExamination.setVisibility(View.VISIBLE);
+                if(App.get(chestExamination).equals(getResources().getString(R.string.ctb_remarkable))){
+                    chestExplanation.setVisibility(View.VISIBLE);
+                }
                 abdominalExamination.setVisibility(View.VISIBLE);
+                if(App.get(abdominalExamination).equals(getResources().getString(R.string.ctb_remarkable))){
+                    abdominalExplanation.setVisibility(View.VISIBLE);
+                }
                 othersExplanation.setVisibility(View.VISIBLE);
                 tbExamOutcome.setVisibility(View.VISIBLE);
                 bcgScar.setVisibility(View.VISIBLE);
                 tbBefore.setVisibility(View.VISIBLE);
                 contactTbHistory.setVisibility(View.VISIBLE);
+                if(App.get(contactTbHistory).equals(getResources().getString(R.string.yes))){
+                    closeContactType.setVisibility(View.VISIBLE);
+                    for (CheckBox cb : closeContactType.getCheckedBoxes()) {
+                        if (cb.getText().equals(getResources().getString(R.string.ctb_other_title))) {
+                            otherContactType.setVisibility(View.VISIBLE);
+                        }
+                    }
+                    additionalCommentHistoryOfPatient.setVisibility(View.VISIBLE);
+                    tbInfectionForm.setVisibility(View.VISIBLE);
+                    tbType.setVisibility(View.VISIBLE);
+                    smearPositive.setVisibility(View.VISIBLE);
+                    childPrimaryCaregiver.setVisibility(View.VISIBLE);
+                    sameBedAsChild.setVisibility(View.VISIBLE);
+                    sameRoomRAsChild.setVisibility(View.VISIBLE);
+                    liveInSameHoushold.setVisibility(View.VISIBLE);
+                    seeChildEveryday.setVisibility(View.VISIBLE);
+                    contactCoughing.setVisibility(View.VISIBLE);
+                    oneCloseContactInHousehold.setVisibility(View.VISIBLE);
+
+                }
+
                 conclusion.setVisibility(View.VISIBLE);
                 doctorNotes.setVisibility(View.VISIBLE);
             }else{
@@ -2125,24 +2173,47 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                 height.setVisibility(View.GONE);
                 weightPercentile.setVisibility(View.GONE);
                 weightPercentileEditText.setVisibility(View.GONE);
+                cough.setVisibility(View.GONE);
                 coughDuration.setVisibility(View.GONE);
                 fever.setVisibility(View.GONE);
                 nightSweats.setVisibility(View.GONE);
                 weightLoss.setVisibility(View.GONE);
                 appetite.setVisibility(View.GONE);
                 generalAppearance.setVisibility(View.GONE);
+                generalAppearanceExplanation.setVisibility(View.GONE);
                 headEyeEearNoseThroat.setVisibility(View.GONE);
+                headEyeEearNoseThroatExplanation.setVisibility(View.GONE);
                 lymphNodeExamination.setVisibility(View.GONE);
+                lymphNodeExplanation.setVisibility(View.GONE);
                 spineExamination.setVisibility(View.GONE);
+                spineExplanation.setVisibility(View.GONE);
                 jointsExamination.setVisibility(View.GONE);
+                jointsExplanation.setVisibility(View.GONE);
                 skinExamination.setVisibility(View.GONE);
+                skinExplanation.setVisibility(View.GONE);
                 chestExamination.setVisibility(View.GONE);
+                chestExplanation.setVisibility(View.GONE);
                 abdominalExamination.setVisibility(View.GONE);
+                abdominalExplanation.setVisibility(View.GONE);
                 othersExplanation.setVisibility(View.GONE);
                 tbExamOutcome.setVisibility(View.GONE);
                 bcgScar.setVisibility(View.GONE);
                 tbBefore.setVisibility(View.GONE);
                 contactTbHistory.setVisibility(View.GONE);
+                closeContactType.setVisibility(View.GONE);
+                otherContactType.setVisibility(View.GONE);
+                additionalCommentHistoryOfPatient.setVisibility(View.GONE);
+                tbInfectionForm.setVisibility(View.GONE);
+                tbType.setVisibility(View.GONE);
+                smearPositive.setVisibility(View.GONE);
+                childPrimaryCaregiver.setVisibility(View.GONE);
+                sameBedAsChild.setVisibility(View.GONE);
+                sameRoomRAsChild.setVisibility(View.GONE);
+                liveInSameHoushold.setVisibility(View.GONE);
+                seeChildEveryday.setVisibility(View.GONE);
+                contactCoughing.setVisibility(View.GONE);
+                oneCloseContactInHousehold.setVisibility(View.GONE);
+
                 conclusion.setVisibility(View.GONE);
                 doctorNotes.setVisibility(View.GONE);
             }
