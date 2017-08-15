@@ -1,0 +1,10 @@
+-- insert queries
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REASON FOR X-RAY','reason_for_xray','Coded','ec213c25-821c-4c75-87e8-49f10c3badca');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PRESUMPTIVE TB THROUGH CXR','presumptive_tb_cxr','Coded','b8548f87-1219-4962-8337-bdb04fb4351f');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CAD4TB SCORE RANGE','cad_score_range','Coded','ce4eb356-40c9-4859-b166-aebcf05a073c');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('1- 69 (NORMAL)','1_69_normal_cad4tb','N/A','364ec723-14bb-496f-a236-85dc33f21faa');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('70 -100 (ABNORMAL)','70_100_abnormal_cadrtb','N/A','ae1549dc-8481-4a1c-9688-6fb1ddbdab4b');
+
+-- update queries
+update OR IGNORE concept set full_name='ANTIBIOTIC COMPLETE - NO TB' where uuid = '689597aa-554b-4189-9a02-bf9da81564e0';
+
