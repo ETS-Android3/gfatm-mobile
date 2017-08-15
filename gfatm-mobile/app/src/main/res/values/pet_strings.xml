@@ -577,6 +577,9 @@
     </string-array>
     <string name="pet_referral_needed">Does the contact need referral for his/her condition?</string>
     <string name="pet_smoking_history">Does the contact have smoking history or not?</string>
+    <string name="pet_smoking_duration">Number of years contact has been smoking</string>
+    <string name="pet_daily_cigarettes_cosumption">Number of cigarettes smoked each day</string>
+    <string name="pet_pack_years">Pack Years</string>
     <string name="pet_doctor_notes">Clinician\'s notes</string>
 
     <!-- Infection Treatment Eligibility -->
