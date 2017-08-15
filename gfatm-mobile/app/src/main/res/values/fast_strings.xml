@@ -485,7 +485,27 @@
     <string name="fast_are_you_prescribing_an_antibiotic_trial">Are you prescribing an antibiotic trial?</string>
     <string name="fast_clinically_evaluated_no_tb">Clinically evaluated, No TB</string>
     <string name="fast_antibiotic_complete">Antibiotic Complete</string>
+    <string name="fast_screening_title">Screening</string>
+    <string name="fast_childhood_tb_program">Childhood TB Program</string>
+    <string name="fast_PET_tb_program">PET TB Program</string>
+    <string name="fast_reason_for_xray">Reason for X-ray?</string>
+    <string name="fast_1_69_normal">1-69 (Normal)</string>
+    <string name="fast_70_100_abnormal">70-100 (Abnormal)</string>
+    <string name="fast_cad_score_range">CAD Score Range</string>
+    <string name="fast_presumptive_tb_score_through_cxr">Presumptive TB through CXR</string>
+
+    <string-array name="fast_reason_for_xray_list">
+        <item>@string/fast_screening_title</item>
+        <item>@string/fast_childhood_tb_program</item>
+        <item>@string/fast_PET_tb_program</item>
+        <item>@string/fast_doctor_referral</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
     
+    <string-array name="fast_cad_score_range_list">
+        <item>@string/fast_1_69_normal</item>
+        <item>@string/fast_70_100_abnormal</item>
+    </string-array>
     
     <string-array name="fast_sample_collected_from_list">
         <item>@string/fast_doctor_or_health_worker_within_the_hospital</item>
