@@ -54,6 +54,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
     Context context;
     TitledButton formDate;
     TitledRadioGroup screeningLocation;
+    TitledEditText otherScreeningLocation;
     TitledSpinner hospital;
     TitledSpinner facility_section;
     TitledEditText facility_section_other;
@@ -176,6 +177,8 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         screeningLocation = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_screening_location), getResources().getStringArray(R.array.ctb_screening_location_list), getResources().getString(R.string.ctb_hospital), App.HORIZONTAL, App.VERTICAL, true);
+        otherScreeningLocation = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 250, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+
         String columnName = "";
         if (App.getProgram().equals(getResources().getString(R.string.pet)))
             columnName = "pet_location";
@@ -217,14 +220,14 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
         presumptiveTb = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_presumptive_tb), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true);
 
 
-        views = new View[]{formDate.getButton(), screeningLocation.getRadioGroup(), hospital.getSpinner(), facility_section.getSpinner(), facility_section_other.getEditText(), opd_ward_section.getSpinner(), motherName.getEditText(), fatherName.getEditText(), patientAttendant.getRadioGroup(),
+        views = new View[]{formDate.getButton(), screeningLocation.getRadioGroup(), otherScreeningLocation.getEditText(),hospital.getSpinner(), facility_section.getSpinner(), facility_section_other.getEditText(), opd_ward_section.getSpinner(), motherName.getEditText(), fatherName.getEditText(), patientAttendant.getRadioGroup(),
                 cough.getRadioGroup(), coughDuration.getSpinner(), fever.getRadioGroup(), nightSweats.getRadioGroup(), weightLoss.getRadioGroup(), appeptite.getRadioGroup(),
                 lymphnodeSwelling.getRadioGroup(), jointSwellingTwoWeeks.getRadioGroup(), tbHistory.getRadioGroup(), tbMedication.getRadioGroup(), contactTbHistoryTwoYears.getRadioGroup(),
                 closeContactType, otherContactType.getEditText(), presumptiveTb.getRadioGroup()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, screeningLocation, hospital, facility_section, facility_section_other, opd_ward_section, motherName, fatherName,
+                {{formDate, screeningLocation, otherScreeningLocation, hospital, facility_section, facility_section_other, opd_ward_section, motherName, fatherName,
                         patientAttendant, cough, coughDuration, fever, nightSweats, weightLoss, appeptite, lymphnodeSwelling, jointSwellingTwoWeeks, tbHistory,
                         tbMedication, contactTbHistoryTwoYears, closeContactType, otherContactType, presumptiveTb}};
 
@@ -578,7 +581,15 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                 opd_ward_section.getSpinner().requestFocus();
                 error = true;
             }
-
+            if(otherScreeningLocation.getVisibility()==View.VISIBLE && App.get(otherScreeningLocation).isEmpty()){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                otherScreeningLocation.getEditText().setError(getString(R.string.empty_field));
+                otherScreeningLocation.getEditText().requestFocus();
+                error = true;
+            }
 
                 if (error) {
 
@@ -647,7 +658,12 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
 
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-        observations.add(new String[]{"SCREENING LOCATION", App.get(screeningLocation).toUpperCase()});
+
+        observations.add(new String[]{"SCREENING LOCATION", App.get(screeningLocation).equals(getResources().getString(R.string.ctb_hospital)) ? "HOSPITAL" :
+                (App.get(screeningLocation).equals(getResources().getString(R.string.ctb_community)) ? "COMMUNITY" :
+                        (App.get(screeningLocation).equals(getResources().getString(R.string.ctb_school)) ? "SCHOOL" : "OTHER SCREENING LOCATION"))});
+
+        observations.add(new String[]{"OTHER SCREENING LOCATION", App.get(otherScreeningLocation)});
 
         if(hospital.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"HOSPITAL", App.get(hospital)});
@@ -922,8 +938,27 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                         opd_ward_section.setVisibility(View.GONE);
                         break;
                     }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_school)) && obs[0][1].equals("SCHOOL")) {
+                        rb.setChecked(true);
+                        hospital.setVisibility(View.GONE);
+                        facility_section.setVisibility(View.GONE);
+                        opd_ward_section.setVisibility(View.GONE);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_other_title)) && obs[0][1].equals("OTHER SCREENING LOCATION")) {
+                        rb.setChecked(true);
+                        hospital.setVisibility(View.GONE);
+                        facility_section.setVisibility(View.GONE);
+                        opd_ward_section.setVisibility(View.GONE);
+                        otherScreeningLocation.setVisibility(View.VISIBLE);
+                        break;
+                    }
                 }
-            } else if (obs[0][0].equals("HOSPITAL")) {
+            }
+            else if (obs[0][0].equals("OTHER SCREENING LOCATION")) {
+                otherScreeningLocation.getEditText().setText(obs[0][1]);
+            }
+            else if (obs[0][0].equals("HOSPITAL")) {
                 String value = obs[0][1].equals("Jinnah Hospital") ? getResources().getString(R.string.ctb_jinnah_hospital) : "Indus Hospital";
                 hospital.getSpinner().selectValue(value);
 
@@ -1124,32 +1159,23 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                 for (CheckBox cb : closeContactType.getCheckedBoxes()) {
                     if (cb.getText().equals(getResources().getString(R.string.ctb_mother)) && obs[0][1].equals("MOTHER")) {
                         cb.setChecked(true);
-                        break;
                     } else if (cb.getText().equals(getResources().getString(R.string.ctb_father)) && obs[0][1].equals("FATHER")) {
                         cb.setChecked(true);
-                        break;
                     } else if (cb.getText().equals(getResources().getString(R.string.ctb_brother)) && obs[0][1].equals("BROTHER")) {
                         cb.setChecked(true);
-                        break;
                     } else if (cb.getText().equals(getResources().getString(R.string.ctb_sister)) && obs[0][1].equals("SISTER")) {
                         cb.setChecked(true);
-                        break;
                     } else if (cb.getText().equals(getResources().getString(R.string.ctb_paternal_grandfather)) && obs[0][1].equals("PATERNAL GRANDFATHER")) {
                         cb.setChecked(true);
-                        break;
                     } else if (cb.getText().equals(getResources().getString(R.string.ctb_paternal_grandmother)) && obs[0][1].equals("PATERNAL GRANDMOTHER")) {
                         cb.setChecked(true);
-                        break;
                     } else if (cb.getText().equals(getResources().getString(R.string.ctb_maternal_grandfather)) && obs[0][1].equals("MATERNAL GRANDFATHER")) {
                         cb.setChecked(true);
-                        break;
                     } else if (cb.getText().equals(getResources().getString(R.string.ctb_maternal_grandmother)) && obs[0][1].equals("MATERNAL GRANDMOTHER")) {
                         cb.setChecked(true);
-                        break;
                     } else if (cb.getText().equals(getResources().getString(R.string.ctb_other_title)) && obs[0][1].equals("OTHER CONTACT TYPE")) {
                         cb.setChecked(true);
                         otherContactType.setVisibility(View.VISIBLE);
-                        break;
                     }
                 }
             }
@@ -1254,7 +1280,14 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
         hospital.getSpinner().selectValue(App.getLocation());
         hospital.getSpinner().setEnabled(false);
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-        facility_section_other.setVisibility(View.GONE);
+        hospital.setVisibility(View.VISIBLE);
+        facility_section.setVisibility(View.VISIBLE);
+        if(App.get(facility_section).equals(getResources().getString(R.string.ctb_opd_clinic)) || App.get(facility_section).equals(getResources().getString(R.string.ctb_ward))) {
+            opd_ward_section.setVisibility(View.VISIBLE);
+        }
+        else if(App.get(facility_section).equals(getResources().getString(R.string.ctb_other_title))){
+            facility_section_other.setVisibility(View.VISIBLE);
+        }
         coughDuration.setVisibility(View.GONE);
         tbMedication.setVisibility(View.GONE);
         closeContactType.setVisibility(View.GONE);
@@ -1296,11 +1329,22 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                 else if(App.get(facility_section).equals(getResources().getString(R.string.ctb_other_title))){
                     facility_section_other.setVisibility(View.VISIBLE);
                 }
-            } else {
+            }
+            else if (screeningLocation.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_other_title))) {
                 opd_ward_section.setVisibility(View.GONE);
                 hospital.setVisibility(View.GONE);
                 facility_section.setVisibility(View.GONE);
                 facility_section_other.setVisibility(View.GONE);
+
+                otherScreeningLocation.setVisibility(View.VISIBLE);
+            }
+            else {
+                opd_ward_section.setVisibility(View.GONE);
+                hospital.setVisibility(View.GONE);
+                facility_section.setVisibility(View.GONE);
+                facility_section_other.setVisibility(View.GONE);
+
+                otherScreeningLocation.setVisibility(View.GONE);
             }
         } else if (group == cough.getRadioGroup()) {
             cough.getQuestionView().setError(null);

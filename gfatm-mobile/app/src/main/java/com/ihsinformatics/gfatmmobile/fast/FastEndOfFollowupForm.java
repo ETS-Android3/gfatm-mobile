@@ -477,7 +477,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
                                                     (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_referral)) ? "PATIENT REFERRED" :
                                                             (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_treatment_after_loss_to_follow_up)) ? "LOST TO FOLLOW-UP" :
                                                                     (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_clinically_evaluated_no_tb)) ? "CLINICALLY EVALUATED, NO TB" :
-                                                                            (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_antibiotic_complete)) ? "ANTIBIOTIC COMPLETE" : "OTHER TREATMENT OUTCOME"))))))))});
+                                                                            (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_antibiotic_complete)) ? "ANTIBIOTIC COMPLETE - NO TB" : "OTHER TREATMENT OUTCOME"))))))))});
 
 
         if (transferOutLocations.getVisibility() == View.VISIBLE)
@@ -672,7 +672,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
                                                         (obs[0][1].equals("PATIENT REFERRED") ? getResources().getString(R.string.fast_referral) :
                                                                 (obs[0][1].equals("LOST TO FOLLOW-UP") ? getResources().getString(R.string.fast_treatment_after_loss_to_follow_up) :
                                                                         (obs[0][1].equals("CLINICALLY EVALUATED, NO TB") ? getResources().getString(R.string.fast_clinically_evaluated_no_tb) :
-                                                                                (obs[0][1].equals("ANTIBIOTIC COMPLETE") ? getResources().getString(R.string.fast_antibiotic_complete) :
+                                                                                (obs[0][1].equals("ANTIBIOTIC COMPLETE - NO TB") ? getResources().getString(R.string.fast_antibiotic_complete) :
                                                                         getResources().getString(R.string.fast_other_title)))))))));
 
                 treatmentOutcome.getSpinner().selectValue(value);
