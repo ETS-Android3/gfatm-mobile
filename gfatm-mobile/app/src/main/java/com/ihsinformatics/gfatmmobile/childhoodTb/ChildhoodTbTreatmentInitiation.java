@@ -2178,6 +2178,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         iptStartDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
         iptStartDate.setVisibility(View.GONE);
         returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", forthDateCalender).toString());
+        typeOfDiagnosis.setVisibility(View.GONE);
         radiologicalEvidence.setVisibility(View.GONE);
         histopathologicalEvidence.setVisibility(View.GONE);
         regDate.setVisibility(View.GONE);
@@ -2386,6 +2387,16 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             patientHaveTb.getRadioGroup().getButtons().get(2).setError(null);
             int patientAge = App.getPatient().getPerson().getAge();
             if (patientHaveTb.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
+                typeOfDiagnosis.setVisibility(View.VISIBLE);
+                for (CheckBox cb : typeOfDiagnosis.getCheckedBoxes()) {
+                    if (cb.getText().equals(getResources().getString(R.string.ctb_clinically_diagnosed))) {
+                        if (cb.isChecked())
+                        {
+                            histopathologicalEvidence.setVisibility(View.VISIBLE);
+                            radiologicalEvidence.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
                 regDate.setVisibility(View.VISIBLE);
                 cnicLinearLayout.setVisibility(View.VISIBLE);
                 String cnicString = App.get(cnic1) + "-" + App.get(cnic2) + "-" + App.get(cnic3);
@@ -2492,6 +2503,9 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                     initiatingAdditionalTreatmentIpt.setVisibility(View.GONE);
                 }
                 regDate.setVisibility(View.GONE);
+                typeOfDiagnosis.setVisibility(View.GONE);
+                radiologicalEvidence.setVisibility(View.GONE);
+                histopathologicalEvidence.setVisibility(View.GONE);
                 cnicLinearLayout.setVisibility(View.GONE);
                 cnicOwner.setVisibility(View.GONE);
                 cnicOwnerOther.setVisibility(View.GONE);
@@ -2526,6 +2540,9 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 initiatingAdditionalTreatmentAntibiotic.setVisibility(View.VISIBLE);
 
                 regDate.setVisibility(View.GONE);
+                typeOfDiagnosis.setVisibility(View.GONE);
+                radiologicalEvidence.setVisibility(View.GONE);
+                histopathologicalEvidence.setVisibility(View.GONE);
                 cnicLinearLayout.setVisibility(View.GONE);
                 tbRegisterationNumber.setVisibility(View.GONE);
                 cnicOwner.setVisibility(View.GONE);
