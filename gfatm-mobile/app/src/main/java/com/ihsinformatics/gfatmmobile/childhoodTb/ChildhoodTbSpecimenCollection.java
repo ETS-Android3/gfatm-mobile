@@ -29,6 +29,7 @@ import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
+import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
@@ -50,6 +51,13 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
 
     Context context;
     TitledButton formDate;
+    TitledRadioGroup sampleCollectedFrom;
+    TitledRadioGroup inHospitalSampleCollected;
+    TitledEditText otherInHospitalSampleCollected;
+    TitledRadioGroup outHospitalSampleCollected;
+    TitledSpinner childhoodSite;
+    TitledEditText otherChildhoodSite;
+
     TitledButton sampleSubmitDate;
     TitledRadioGroup baselineRepeatFollowup;
     TitledSpinner monthTreatment;
@@ -138,6 +146,33 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         orderId = new TitledEditText(context,null,getResources().getString(R.string.order_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,true);
+        sampleCollectedFrom = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_sample_collected_from), getResources().getStringArray(R.array.ctb_sample_collected_from_list), null, App.HORIZONTAL,App.VERTICAL,true);
+        inHospitalSampleCollected = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_where_sample_collected_in_hospital), getResources().getStringArray(R.array.ctb_sample_collected_in_hospital_list), null, App.HORIZONTAL,App.VERTICAL,true);
+        otherInHospitalSampleCollected = new TitledEditText(context,null,getResources().getString(R.string.ctb_other_specify),"","",250,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,true);
+        outHospitalSampleCollected = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_where_sample_collected_out_hospital), getResources().getStringArray(R.array.ctb_sample_collected_out_hospital_list), null, App.HORIZONTAL,App.VERTICAL,true);
+        String columnName = "";
+        if (App.getProgram().equals(getResources().getString(R.string.pet)))
+            columnName = "pet_location";
+        else if (App.getProgram().equals(getResources().getString(R.string.fast)))
+            columnName = "fast_location";
+        else if (App.getProgram().equals(getResources().getString(R.string.comorbidities)))
+            columnName = "comorbidities_location";
+        else if (App.getProgram().equals(getResources().getString(R.string.pmdt)))
+            columnName = "pmdt_location";
+        else if (App.getProgram().equals(getResources().getString(R.string.childhood_tb)))
+            columnName = "childhood_tb_location";
+
+        final Object[][] locations = serverService.getAllLocations(columnName);
+        String[] locationArray = new String[locations.length+1];
+        for (int i = 0; i < locations.length; i++) {
+            Object objLoc = locations[i][1];
+            locationArray[i] = objLoc.toString();
+        }
+        locationArray[locations.length] = "Other";
+        childhoodSite = new TitledSpinner(context, null, getResources().getString(R.string.ctb_select_childhood_site), locationArray,null, App.VERTICAL, true);
+        otherChildhoodSite = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL,true);
+
+
         sampleSubmitDate = new TitledButton(context, null, getResources().getString(R.string.ctb_sample_submitted), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         sampleSubmitDate.setTag("sampleSubmitDate");
         baselineRepeatFollowup = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_baseline_repeat_followup), getResources().getStringArray(R.array.ctb_ctb_baseline_repeat_followup_list), null, App.VERTICAL,App.VERTICAL,true);
@@ -151,13 +186,13 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
         reasonBaselineRepeatOther = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
 
 
-        views = new View[]{formDate.getButton(), sampleSubmitDate.getButton(), baselineRepeatFollowup.getRadioGroup(), patientCategory.getRadioGroup(), reasonBaselineRepeat.getRadioGroup(),
-                specimenType.getRadioGroup(),monthTreatment.getSpinner(), specimenComeFrom.getRadioGroup(),
+        views = new View[]{formDate.getButton(), sampleCollectedFrom.getQuestionView(),inHospitalSampleCollected.getQuestionView(),otherInHospitalSampleCollected.getEditText(),outHospitalSampleCollected.getQuestionView(),sampleSubmitDate.getButton(), baselineRepeatFollowup.getRadioGroup(), patientCategory.getRadioGroup(), reasonBaselineRepeat.getRadioGroup(),
+                otherChildhoodSite.getEditText(),specimenType.getRadioGroup(),monthTreatment.getSpinner(), specimenComeFrom.getRadioGroup(),
                 otherSpecimentComeFrom.getEditText(), reasonBaselineRepeatOther.getEditText(), orderId.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate,orderId, sampleSubmitDate, baselineRepeatFollowup,monthTreatment, patientCategory, reasonBaselineRepeat,reasonBaselineRepeatOther,specimenType, specimenComeFrom, otherSpecimentComeFrom}};
+                {{formDate,orderId, sampleCollectedFrom,inHospitalSampleCollected,otherInHospitalSampleCollected,outHospitalSampleCollected,childhoodSite,otherChildhoodSite,sampleSubmitDate, baselineRepeatFollowup,monthTreatment, patientCategory, reasonBaselineRepeat,reasonBaselineRepeatOther,specimenType, specimenComeFrom, otherSpecimentComeFrom}};
 
         formDate.getButton().setOnClickListener(this);
         sampleSubmitDate.getButton().setOnClickListener(this);
@@ -167,7 +202,10 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
         specimenType.getRadioGroup().setOnCheckedChangeListener(this);
         specimenComeFrom.getRadioGroup().setOnCheckedChangeListener(this);
         monthTreatment.getSpinner().setOnItemSelectedListener(this);
-
+        sampleCollectedFrom.getRadioGroup().setOnCheckedChangeListener(this);
+        inHospitalSampleCollected.getRadioGroup().setOnCheckedChangeListener(this);
+        outHospitalSampleCollected.getRadioGroup().setOnCheckedChangeListener(this);
+        childhoodSite.getSpinner().setOnItemSelectedListener(this);
         resetViews();
 
     }
@@ -272,6 +310,51 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
     @Override
     public boolean validate() {
         boolean error = false;
+        if(App.get(sampleCollectedFrom).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            sampleCollectedFrom.getQuestionView().setError(getString(R.string.empty_field));
+            sampleCollectedFrom.requestFocus();
+            error = true;
+        }
+        if(inHospitalSampleCollected.getVisibility()==View.VISIBLE && App.get(inHospitalSampleCollected).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            inHospitalSampleCollected.getQuestionView().setError(getString(R.string.empty_field));
+            inHospitalSampleCollected.requestFocus();
+            error = true;
+        }
+        if(otherInHospitalSampleCollected.getVisibility()==View.VISIBLE && App.get(otherInHospitalSampleCollected).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            otherInHospitalSampleCollected.getEditText().setError(getString(R.string.empty_field));
+            otherInHospitalSampleCollected.getEditText().requestFocus();
+            error = true;
+        }
+        if(outHospitalSampleCollected.getVisibility()==View.VISIBLE && App.get(outHospitalSampleCollected).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            outHospitalSampleCollected.getQuestionView().setError(getString(R.string.empty_field));
+            outHospitalSampleCollected.requestFocus();
+            error = true;
+        }
+        if(otherChildhoodSite.getVisibility()==View.VISIBLE && App.get(otherChildhoodSite).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            otherChildhoodSite.getEditText().setError(getString(R.string.empty_field));
+            otherChildhoodSite.getEditText().requestFocus();
+            error = true;
+        }
         if (patientCategory.getVisibility() == View.VISIBLE && App.get(patientCategory).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
@@ -387,9 +470,35 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         observations.add(new String[]{"ORDER ID", App.get(orderId)});
         observations.add(new String[]{"SPECIMEN SUBMISSION DATE", App.getSqlDateTime(secondDateCalendar)});
+
+        observations.add(new String[]{"SAMPLE COLLECTED FROM", App.get(sampleCollectedFrom).equals(getResources().getString(R.string.ctb_within_hospital)) ? "CLINICAL OFFICER/DOCTOR" : "PRIVATE PRACTIONER"});
+
+        if(inHospitalSampleCollected.getVisibility()==View.VISIBLE){
+            observations.add(new String[]{"SAMPLE COLLECTED WITHIN THE HOSPITAL", App.get(inHospitalSampleCollected).equals(getResources().getString(R.string.ctb_screener)) ? "SCREENER" :
+                    (App.get(inHospitalSampleCollected).equals(getResources().getString(R.string.ctb_doctor_referral)) ? "DOCTOR REFERRAL" :
+                            "SAMPLE COLLECTED WITHIN THE HOSPITAL OTHER")});
+        }
+
+        if(otherInHospitalSampleCollected.getVisibility()==View.VISIBLE){
+            observations.add(new String[]{"SAMPLE COLLECTED WITHIN THE HOSPITAL OTHER", App.get(otherInHospitalSampleCollected)});
+        }
+
+        if(outHospitalSampleCollected.getVisibility()==View.VISIBLE){
+            observations.add(new String[]{"SAMPLE COLLECTED OUTSIDE THE HOSPITAL", App.get(outHospitalSampleCollected).equals(getResources().getString(R.string.ctb_childhoodtb_site)) ? "CHILDHOOD SITE" :
+                            "SAMPLE COLLECTED OUTSIDE THE HOSPITAL OTHER"});
+        }
+
+        if(childhoodSite.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"SAMPLE COLLECTION SITE", App.get(childhoodSite)});
+        }
+        if(otherChildhoodSite.getVisibility()==View.VISIBLE){
+            observations.add(new String[]{"SAMPLE COLLECTED OUTSIDE THE HOSPITAL OTHER", App.get(otherChildhoodSite)});
+        }
+
         observations.add(new String[]{"TEST CONTEXT STATUS", App.get(baselineRepeatFollowup).equals(getResources().getString(R.string.ctb_baseline)) ? "BASELINE" :
                 (App.get(baselineRepeatFollowup).equals(getResources().getString(R.string.ctb_baseline_repeat)) ? "BASELINE REPEAT" :
                         "REGULAR FOLLOW UP")});
+
         if(monthTreatment.getVisibility()==View.VISIBLE) {
             observations.add(new String[]{"FOLLOW-UP MONTH", App.get(monthTreatment)});
         }
@@ -567,7 +676,54 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                 sampleSubmitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-            } else if (obs[0][0].equals("TEST CONTEXT STATUS")) {
+            }
+            else if (obs[0][0].equals("SAMPLE COLLECTED FROM")) {
+                for (RadioButton rb : sampleCollectedFrom.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_within_hospital)) && obs[0][1].equals("CLINICAL OFFICER/DOCTOR")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_outside_hospital)) && obs[0][1].equals("PRIVATE PRACTIONER")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            }
+            else if (obs[0][0].equals("SAMPLE COLLECTED WITHIN THE HOSPITAL")) {
+                for (RadioButton rb : inHospitalSampleCollected.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_screener)) && obs[0][1].equals("SCREENER")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_doctor_referral)) && obs[0][1].equals("DOCTOR REFERRAL")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_other_title)) && obs[0][1].equals("SAMPLE COLLECTED WITHIN THE HOSPITAL OTHER")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            }
+            else if (obs[0][0].equals("SAMPLE COLLECTED WITHIN THE HOSPITAL OTHER")) {
+                otherInHospitalSampleCollected.getEditText().setText(obs[0][1]);
+            }
+            else if (obs[0][0].equals("SAMPLE COLLECTED OUTSIDE THE HOSPITAL")) {
+                for (RadioButton rb : outHospitalSampleCollected.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_childhoodtb_site)) && obs[0][1].equals("CHILDHOOD SITE")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_other_title)) && obs[0][1].equals("SAMPLE COLLECTED OUTSIDE THE HOSPITAL OTHER")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            }
+            else if (obs[0][0].equals("SAMPLE COLLECTION SITE")) {
+                childhoodSite.getSpinner().selectValue(obs[0][1]);
+            }
+            else if (obs[0][0].equals("SAMPLE COLLECTED OUTSIDE THE HOSPITAL OTHER")) {
+                otherChildhoodSite.getEditText().setText(obs[0][1]);
+            }
+            else if (obs[0][0].equals("TEST CONTEXT STATUS")) {
                 for (RadioButton rb : baselineRepeatFollowup.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.ctb_baseline)) && obs[0][1].equals("BASELINE")) {
                         rb.setChecked(true);
@@ -675,7 +831,14 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+        MySpinner spinner = (MySpinner) parent;
+        if (spinner == childhoodSite.getSpinner()) {
+            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_other_title))) {
+                otherChildhoodSite.setVisibility(View.VISIBLE);
+            } else {
+                otherChildhoodSite.setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override
@@ -692,11 +855,17 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
         formDate.setEnabled(true);
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         sampleSubmitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+
         reasonBaselineRepeat.setVisibility(View.GONE);
         specimenComeFrom.setVisibility(View.GONE);
         otherSpecimentComeFrom.setVisibility(View.GONE);
         reasonBaselineRepeatOther.setVisibility(View.GONE);
         monthTreatment.setVisibility(View.GONE);
+        inHospitalSampleCollected.setVisibility(View.GONE);
+        otherInHospitalSampleCollected.setVisibility(View.GONE);
+        outHospitalSampleCollected.setVisibility(View.GONE);
+        childhoodSite.setVisibility(View.GONE);
+        otherChildhoodSite.setVisibility(View.GONE);
         orderId.getEditText().setKeyListener(null);
         Date nowDate = new Date();
         orderId.getEditText().setText(App.getSqlDateTime(nowDate));
@@ -771,6 +940,51 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
         }
         if(group == patientCategory.getRadioGroup()){
            patientCategory.getQuestionView().setError(null);
+        }
+        if(group == sampleCollectedFrom.getRadioGroup()){
+            sampleCollectedFrom.getQuestionView().setError(null);
+            if (sampleCollectedFrom.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_within_hospital))) {
+                inHospitalSampleCollected.setVisibility(View.VISIBLE);
+                if(App.get(inHospitalSampleCollected).equals(getResources().getString(R.string.ctb_other_title))){
+                    otherInHospitalSampleCollected.setVisibility(View.VISIBLE);
+                }
+                outHospitalSampleCollected.setVisibility(View.GONE);
+                childhoodSite.setVisibility(View.GONE);
+                otherChildhoodSite.setVisibility(View.GONE);
+            }
+            else if (sampleCollectedFrom.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_outside_hospital))) {
+                outHospitalSampleCollected.setVisibility(View.VISIBLE);
+                if(App.get(outHospitalSampleCollected).equals(getResources().getString(R.string.ctb_childhoodtb_site))){
+                    childhoodSite.setVisibility(View.VISIBLE);
+                    if(App.get(childhoodSite).equals(getResources().getString(R.string.ctb_other_title))){
+                        otherChildhoodSite.setVisibility(View.VISIBLE);
+                    }
+                }
+                inHospitalSampleCollected.setVisibility(View.GONE);
+                otherInHospitalSampleCollected.setVisibility(View.GONE);
+            }
+        }
+        if(group == inHospitalSampleCollected.getRadioGroup()){
+            inHospitalSampleCollected.getQuestionView().setError(null);
+            if (inHospitalSampleCollected.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_other_title))) {
+                otherInHospitalSampleCollected.setVisibility(View.VISIBLE);
+            }
+            else{
+                otherInHospitalSampleCollected.setVisibility(View.GONE);
+            }
+        }
+
+        if(group == outHospitalSampleCollected.getRadioGroup()){
+            outHospitalSampleCollected.getQuestionView().setError(null);
+            if (outHospitalSampleCollected.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_childhoodtb_site))) {
+                childhoodSite.setVisibility(View.VISIBLE);
+                if(App.get(childhoodSite).equals(getResources().getString(R.string.ctb_other_title))){
+                    otherChildhoodSite.setVisibility(View.VISIBLE);
+                }
+            }else{
+                childhoodSite.setVisibility(View.GONE);
+                otherChildhoodSite.setVisibility(View.GONE);
+            }
         }
 
     }

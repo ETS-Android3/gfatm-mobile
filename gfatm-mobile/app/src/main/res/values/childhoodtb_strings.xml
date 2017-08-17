@@ -568,7 +568,31 @@
     <string name="ctb_antibiotic_trial_followup">Antibiotic Trial Follow-up</string>
     <string name="ctb_mo_think_child_presumptive">Does MO think child is presumptive?</string>
     <string name="ctb_school">School</string>
+    <string name="ctb_sample_collected_from">Where was the sample collected from?</string>
+    <string name="ctb_within_hospital">Within the hospital</string>
+    <string name="ctb_outside_hospital">Outside the hospital</string>
+    <string name="ctb_where_sample_collected_in_hospital">Where within the hospital was the sample collected from?</string>
+    <string name="ctb_screener">Screener</string>
+    <string name="ctb_doctor_referral">Doctor Referral</string>
+    <string name="ctb_where_sample_collected_out_hospital">Where outside the hospital was the sample collected from</string>
+    <string name="ctb_childhoodtb_site">ChildhoodTB Site</string>
+    <string name="ctb_select_childhood_site">Please select Childhood Site</string>
 
+    <string-array name="ctb_sample_collected_from_list">
+        <item>@string/ctb_within_hospital</item>
+        <item>@string/ctb_outside_hospital</item>
+    </string-array>
+
+    <string-array name="ctb_sample_collected_in_hospital_list">
+        <item>@string/ctb_screener</item>
+        <item>@string/ctb_doctor_referral</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
+
+    <string-array name="ctb_sample_collected_out_hospital_list">
+        <item>@string/ctb_childhoodtb_site</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
 
     <string-array name="ctb_missed_visit_list">
         <item>@string/ctb_ipt_followup</item>
