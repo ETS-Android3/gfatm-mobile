@@ -800,19 +800,26 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
                     for (CheckBox cb : abnormalDiagnosis.getCheckedBoxes()) {
                         if (cb.getText().equals(getResources().getString(R.string.ctb_adenopathy)) && obs[0][1].equals("ADENOPATHY")) {
                             cb.setChecked(true);
+                            break;
                         } else if (cb.getText().equals(getResources().getString(R.string.ctb_infiltration)) && obs[0][1].equals("INFILTRATE")) {
                             cb.setChecked(true);
+                            break;
                         } else if (cb.getText().equals(getResources().getString(R.string.ctb_consolidation)) && obs[0][1].equals("CONSOLIDATION")) {
                             cb.setChecked(true);
+                            break;
                         } else if (cb.getText().equals(getResources().getString(R.string.ctb_effusion)) && obs[0][1].equals("PLEURAL EFFUSION")) {
                             cb.setChecked(true);
+                            break;
                         } else if (cb.getText().equals(getResources().getString(R.string.ctb_cavitation)) && obs[0][1].equals("CAVIATION")) {
                             cb.setChecked(true);
+                            break;
                         }else if (cb.getText().equals(getResources().getString(R.string.ctb_miliary_tb)) && obs[0][1].equals("MILIARY")) {
                             cb.setChecked(true);
+                            break;
                         } else if (cb.getText().equals(getResources().getString(R.string.ctb_other_title)) && obs[0][1].equals("OTHER ABNORMAL DETAILED DIAGNOSIS")) {
                             cb.setChecked(true);
                             otherRadiologicalDiagnosis.setVisibility(View.VISIBLE);
+                            break;
                         }
                     }
                     abnormalDiagnosis.setVisibility(View.VISIBLE);
