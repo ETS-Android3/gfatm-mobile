@@ -1012,6 +1012,9 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
             presumptiveTbCxr.setVisibility(View.VISIBLE);
             radiologistRemarks.setVisibility(View.VISIBLE);
             cadScoreRange.getRadioGroup().setEnabled(false);
+            for (RadioButton rb : cadScoreRange.getRadioGroup().getButtons()) {
+                rb.setClickable(false);
+            }
 
             if (radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_not_suggestive_of_tb))) {
                 abnormalDetailedDiagnosis.setVisibility(View.VISIBLE);
@@ -1029,6 +1032,7 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
             String value = serverService.getObsValueByObs(App.getPatientId(), App.getProgram() + "-" + "Screening CXR Test Order", "ORDER ID", App.get(orderIds),"TYPE OF X RAY");
             if(value != null && formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result))&& value.equals("RADIOLOGICAL DIAGNOSIS")){
                 cat4tbScore.setVisibility(View.VISIBLE);
+                cadScoreRange.setVisibility(View.VISIBLE);
 
                 radiologicalDiagnosis.setVisibility(View.GONE);
                 extentOfDisease.setVisibility(View.GONE);
@@ -1036,6 +1040,8 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
                 abnormalDetailedDiagnosisOther.setVisibility(View.GONE);
             }else{
                 cat4tbScore.setVisibility(View.GONE);
+                cadScoreRange.setVisibility(View.GONE);
+
                 radiologicalDiagnosis.setVisibility(View.VISIBLE);
                 if (radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_not_suggestive_of_tb))) {
                     abnormalDetailedDiagnosis.setVisibility(View.VISIBLE);
