@@ -357,7 +357,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
             error = true;
         }
 
-        if (mobile1.getText().toString().trim().isEmpty()) {
+        if (mobileLinearLayout.getVisibility()== View.VISIBLE && mobile1.getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -367,7 +367,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
             error = true;
         }
 
-        if (mobile2.getText().toString().trim().isEmpty()) {
+        if (mobileLinearLayout.getVisibility()== View.VISIBLE && mobile2.getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -377,7 +377,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
             error = true;
         }
 
-        if (App.get(mobile1).length() != 4) {
+        if (mobileLinearLayout.getVisibility()== View.VISIBLE && App.get(mobile1).length() != 4) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -387,7 +387,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
             error = true;
         }
 
-        if (App.get(mobile2).length() != 7) {
+        if (mobileLinearLayout.getVisibility()== View.VISIBLE && App.get(mobile2).length() != 7) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -399,7 +399,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
 
         final String mobileNumber = mobile1.getText().toString() + mobile2.getText().toString();
 
-        if (!RegexUtil.isMobileNumber(mobileNumber)) {
+        if (mobileLinearLayout.getVisibility()== View.VISIBLE && !RegexUtil.isMobileNumber(mobileNumber)) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -511,6 +511,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
         if (lastName.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"REFERRAL CONTACT LAST NAME", App.get(lastName)});
 
+        if (mobileLinearLayout.getVisibility() == View.VISIBLE)
         observations.add(new String[]{"REFERRAL CONTACT NUMBER", mobileNumber});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
@@ -780,6 +781,47 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
             } else {
                 remarks.setVisibility(View.GONE);
             }
+
+            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_transfer_out)) ||
+                    parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_referral_new))) {
+                treatmentInitiatedReferralSite.setVisibility(View.VISIBLE);
+                if (treatmentInitiatedReferralSite.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))) {
+                    treatmentNotInitiatedReferralSite.setVisibility(View.VISIBLE);
+                    if (treatmentNotInitiatedReferralSite.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))) {
+                        treatmentNotInitiatedReferralSiteOther.setVisibility(View.VISIBLE);
+                    } else {
+                        treatmentNotInitiatedReferralSiteOther.setVisibility(View.GONE);
+                    }
+
+                } else {
+                    treatmentNotInitiatedReferralSite.setVisibility(View.GONE);
+                }
+
+                firstName.setVisibility(View.VISIBLE);
+                lastName.setVisibility(View.VISIBLE);
+                mobileLinearLayout.setVisibility(View.VISIBLE);
+            } else {
+                treatmentInitiatedReferralSite.setVisibility(View.GONE);
+                treatmentNotInitiatedReferralSite.setVisibility(View.GONE);
+                treatmentNotInitiatedReferralSiteOther.setVisibility(View.GONE);
+                firstName.setVisibility(View.GONE);
+                lastName.setVisibility(View.GONE);
+                mobileLinearLayout.setVisibility(View.GONE);
+            }
+
+            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_treatment_failure))) {
+                drConfirmation.setVisibility(View.VISIBLE);
+                if (drConfirmation.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+                    enrsId.setVisibility(View.VISIBLE);
+                } else {
+                    enrsId.setVisibility(View.GONE);
+                }
+            } else {
+                drConfirmation.setVisibility(View.GONE);
+                enrsId.setVisibility(View.GONE);
+            }
+
+
         } else if (spinner == treatmentNotInitiatedReferralSite.getSpinner()) {
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title))) {
                 treatmentNotInitiatedReferralSiteOther.setVisibility(View.VISIBLE);
@@ -807,8 +849,13 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         transferOutLocations.setVisibility(View.GONE);
         remarks.setVisibility(View.GONE);
+        treatmentInitiatedReferralSite.setVisibility(View.GONE);
         treatmentNotInitiatedReferralSite.setVisibility(View.GONE);
         treatmentNotInitiatedReferralSiteOther.setVisibility(View.GONE);
+        drConfirmation.setVisibility(View.GONE);
+        firstName.setVisibility(View.GONE);
+        lastName.setVisibility(View.GONE);
+        mobileLinearLayout.setVisibility(View.GONE);
         enrsId.setVisibility(View.GONE);
 
         Bundle bundle = this.getArguments();
