@@ -120,7 +120,7 @@ public class PetContactRegistryForm extends AbstractFormActivity {
         totalContacts = new TitledEditText(context, null, getResources().getString(R.string.pet_total_contacts), "", getResources().getString(R.string.pet_total_contacts_hint), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         totalAdultContacts = new TitledEditText(context, null, getResources().getString(R.string.pet_total_adult_contacts), "", getResources().getString(R.string.pet_total_adult_contacts_hint), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         totalChildrenContacts = new TitledEditText(context, null, getResources().getString(R.string.pet_total_childern_contacts), "", getResources().getString(R.string.pet_total_childern_contacts_hint), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        familyConsent = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_smoking_history), getResources().getStringArray(R.array.yes_no_options), getString(R.string.no), App.HORIZONTAL, App.HORIZONTAL);
+        familyConsent = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_smoking_history), getResources().getStringArray(R.array.yes_no_options), getString(R.string.no), App.VERTICAL, App.HORIZONTAL);
 
         views = new View[]{formDate.getButton(), totalContacts.getEditText(), totalAdultContacts.getEditText(), totalChildrenContacts.getEditText(), familyConsent.getRadioGroup(), intervention.getRadioGroup()};
 

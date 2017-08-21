@@ -124,7 +124,7 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         intervention = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_intervention), getResources().getStringArray(R.array.pet_interventions), "", App.HORIZONTAL, App.VERTICAL);
         reasonForFollowupEnd = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_reason_for_end_of_followup), getResources().getStringArray(R.array.pet_reasons_for_end_of_followup), "", App.VERTICAL, true);
-        explanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 250, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        explanation = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 250, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         explanation.getEditText().setSingleLine(false);
         explanation.getEditText().setMinimumHeight(150);
         reasonForExclusion = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_reason_for_exclusion), getResources().getStringArray(R.array.pet_reason_for_exclusions), getResources().getString(R.string.pet_xdr), App.VERTICAL, App.VERTICAL);
@@ -314,7 +314,10 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
                                 (App.get(reasonForFollowupEnd).equals(getResources().getString(R.string.pet_transferred_out)) ? "PATIENT TRANSFERRED OUT" :
                                         (App.get(reasonForFollowupEnd).equals(getResources().getString(R.string.pet_not_eligible_for_study)) ? "NOT ELIGIBLE FOR PROGRAM" :
                                                 (App.get(reasonForFollowupEnd).equals(getResources().getString(R.string.pet_refused_treatment)) ? "REFUSAL OF TREATMENT BY PATIENT" :
-                                                        (App.get(reasonForFollowupEnd).equals(getResources().getString(R.string.pet_died)) ? "DIED" : "OTHER"))))))});
+                                                        (App.get(reasonForFollowupEnd).equals(getResources().getString(R.string.pet_died)) ? "DIED" :
+                                                                (App.get(reasonForFollowupEnd).equals(getResources().getString(R.string.pet_refused_participation)) ? "REFUSED PARTICIPATION IN STUDY" :
+                                                                        (App.get(reasonForFollowupEnd).equals(getResources().getString(R.string.pet_screening)) ? "REFUSED SCREENING" :
+                                                                                (App.get(reasonForFollowupEnd).equals(getResources().getString(R.string.pet_index_patient_refused_treatment)) ? "INDEX PATIENT REFUSED TREATMENT" : "OTHER")))))))))});
         if (explanation.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"REASON TO END FOLLOW-UP (TEXT)", App.get(explanation)});
         if (reasonForExclusion.getVisibility() == View.VISIBLE)
@@ -561,7 +564,16 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
                     } else if (rb.getText().equals(getResources().getString(R.string.pet_index_refused_treatment)) && obs[0][1].equals("REFUSAL OF TREATMENT BY PATIENT")) {
                         rb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_other)) && obs[0][1].equals("OTHER")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_refused_participation)) && obs[0][1].equals("REFUSED PARTICIPATION IN STUDY")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_screening)) && obs[0][1].equals("REFUSED SCREENING")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_index_patient_refused_treatment)) && obs[0][1].equals("INDEX PATIENT REFUSED TREATMENT")) {
+                        rb.setChecked(true);
+                        break;
+                    }else if (rb.getText().equals(getResources().getString(R.string.pet_other)) && obs[0][1].equals("OTHER")) {
                         rb.setChecked(true);
                         break;
                     }

@@ -229,7 +229,7 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
         psycologistAnswer.getEditText().setSingleLine(false);
         psycologistAnswer.getEditText().setMinimumHeight(150);
         contactBehavior = new TitledSpinner(context, "", getResources().getString(R.string.pet_contact_behaviour), getResources().getStringArray(R.array.pet_contact_behaviours), "", App.VERTICAL);
-        otherBehavior = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        otherBehavior = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 70, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         caretakerComments = new TitledEditText(context, null, getResources().getString(R.string.pet_caretaker_comments), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         caretakerComments.getEditText().setSingleLine(false);
         caretakerComments.getEditText().setMinimumHeight(150);

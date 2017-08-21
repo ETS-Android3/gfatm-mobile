@@ -772,7 +772,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                 loading.dismiss();
 
                 if (result.equals("SUCCESS")) {
-
+                    
                     serverService.addTown(address2.getText().toString());
 
                     MainActivity.backToMainMenu();
