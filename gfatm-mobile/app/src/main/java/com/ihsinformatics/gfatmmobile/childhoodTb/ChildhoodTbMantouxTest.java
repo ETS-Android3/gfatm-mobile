@@ -66,7 +66,7 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
     TitledButton formDate;
     TitledRadioGroup formType;
     TitledEditText orderId;
-    TitledSpinner weightPercentile;
+    TitledEditText weightPercentileEditText;
 
     TitledSpinner orderIds;
     TitledEditText testId;
@@ -152,21 +152,19 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
         formDate.setTag("formDate");
         orderId = new TitledEditText(context,null,getResources().getString(R.string.order_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,true);
         formType = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_type_of_form),getResources().getStringArray(R.array.ctb_type_of_form_list),null,App.HORIZONTAL,App.VERTICAL,true);
-        weightPercentile = new TitledSpinner(context,null,getResources().getString(R.string.ctb_weight_percentile),getResources().getStringArray(R.array.ctb_weight_percentile_list),null,App.VERTICAL,true);
-
+        weightPercentileEditText = new TitledEditText(context, null, "(Autocalculated)", "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         orderIds = new TitledSpinner(context, "", getResources().getString(R.string.order_id), getResources().getStringArray(R.array.pet_empty_array), "", App.HORIZONTAL);
         testId = new TitledEditText(context,null,getResources().getString(R.string.ctb_test_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
         tuberculinSkinTest = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_tuberculin_skin_test),getResources().getStringArray(R.array.ctb_tuberculin_skin_test_list),getResources().getString(R.string.ctb_less_than_5mm),App.VERTICAL,App.VERTICAL,true);
         interpretationMantouxTest = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_interpretation_mantoux),getResources().getStringArray(R.array.ctb_positive_negative),null,App.VERTICAL,App.VERTICAL);
 
 
-        views = new View[]{formDate.getButton(),formType.getRadioGroup(),orderId.getEditText(),weightPercentile.getSpinner()
-                ,tuberculinSkinTest.getRadioGroup(),interpretationMantouxTest.getRadioGroup(),
+        views = new View[]{formDate.getButton(),formType.getRadioGroup(),orderId.getEditText(),tuberculinSkinTest.getRadioGroup(),interpretationMantouxTest.getRadioGroup(),weightPercentileEditText.getEditText(),
                 testId.getEditText(),orderIds.getSpinner()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formType,formDate,orderId,weightPercentile,orderIds,testId,tuberculinSkinTest
+                {{formType,formDate,orderId,weightPercentileEditText,orderIds,testId,tuberculinSkinTest
                 ,interpretationMantouxTest}};
 
         formDate.getButton().setOnClickListener(this);
@@ -321,6 +319,16 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
             formType.getRadioGroup().getButtons().get(1).setError(null);
         }
 
+        if(App.get(weightPercentileEditText).equals(getResources().getString(R.string.ctb_empty)) && weightPercentileEditText.getVisibility()==View.VISIBLE){
+        if (App.isLanguageRTL())
+            gotoPage(0);
+        else
+            gotoPage(0);
+        weightPercentileEditText.getEditText().setError(getString(R.string.empty_field));
+        weightPercentileEditText.getEditText().requestFocus();
+        error = true;
+    }
+
         if(orderIds.getVisibility()==View.VISIBLE){
             String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Mantoux Test Result", "ORDER ID");
             if(resultTestIds != null){
@@ -444,7 +452,7 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         if (App.get(formType).equals(getResources().getString(R.string.ctb_order))) {
             observations.add(new String[]{"ORDER ID", App.get(orderId)});
-            observations.add(new String[]{"WEIGHT PERCENTILE GROUP", App.get(weightPercentile)});
+            observations.add(new String[]{"WEIGHT PERCENTILE GROUP", App.get(weightPercentileEditText)});
 
         } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
             observations.add(new String[]{"ORDER ID", App.get(orderIds)});
@@ -610,7 +618,8 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
                 formType.getRadioGroup().getButtons().get(0).setChecked(true);
                 formType.getRadioGroup().getButtons().get(1).setEnabled(false);
                 if (obs[0][0].equals("WEIGHT PERCENTILE GROUP")) {
-                    weightPercentile.getSpinner().selectValue(obs[0][1]);
+                    weightPercentileEditText.getEditText().setKeyListener(null);
+                    weightPercentileEditText.getEditText().setText(obs[0][1]);
                 }
                 submitButton.setEnabled(true);
             }else{
@@ -680,8 +689,6 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
         if (spinner == orderIds.getSpinner()) {
             updateDisplay();
         }
-
-
     }
 
     @Override
@@ -701,6 +708,7 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
         orderId.setVisibility(View.GONE);
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         formDate.setVisibility(View.GONE);
+        weightPercentileEditText.getEditText().setKeyListener(null);
         goneVisibility();
         submitButton.setEnabled(false);
 
@@ -728,7 +736,7 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
 
         String weightPercentileString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Case Confirmation", "WEIGHT PERCENTILE GROUP");
         if(weightPercentileString!=null){
-            weightPercentile.getSpinner().selectValue(weightPercentileString);
+            weightPercentileEditText.getEditText().setText(weightPercentileString);
         }
 
 
@@ -736,7 +744,7 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
         }
 
     void goneVisibility(){
-        weightPercentile.setVisibility(View.GONE);
+        weightPercentileEditText.setVisibility(View.GONE);
         tuberculinSkinTest.setVisibility(View.GONE);
         interpretationMantouxTest.setVisibility(View.GONE);
 
@@ -755,13 +763,13 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
         }
 
         if(group == tuberculinSkinTest.getRadioGroup()){
-            String weightPercentileString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Mantoux Test Order", "WEIGHT PERCENTILE GROUP");
+            String weightPercentileString= serverService.getObsValueByObs(App.getPatientId(), App.getProgram() + "-" + "Mantoux Test Order", "ORDER ID", App.get(orderIds), "WEIGHT PERCENTILE GROUP");
             if (tuberculinSkinTest.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_greater_than_10mm))) {
                 interpretationMantouxTest.getRadioGroup().getButtons().get(0).setChecked(true);
             }
             else if(tuberculinSkinTest.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_5_to_9mm))) {
                 if(weightPercentileString!=null) {
-                    if (weightPercentileString.equalsIgnoreCase(getResources().getString(R.string.ctb_less_than_5))) {
+                    if (weightPercentileString.equalsIgnoreCase("<=3rd Centile") || weightPercentileString.equalsIgnoreCase("<=5th Centile")) {
                         interpretationMantouxTest.getRadioGroup().getButtons().get(0).setChecked(true);
                     }
                 }
@@ -778,7 +786,7 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
         if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.ctb_order))) {
 
             formDate.setVisibility(View.VISIBLE);
-            weightPercentile.setVisibility(View.VISIBLE);
+            weightPercentileEditText.setVisibility(View.VISIBLE);
             orderId.setVisibility(View.VISIBLE);
             Date nowDate = new Date();
             orderId.getEditText().setText(App.getSqlDateTime(nowDate));
@@ -798,7 +806,7 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
             testId.getEditText().setDefaultValue();
 
             orderId.setVisibility(View.GONE);
-            weightPercentile.setVisibility(View.GONE);
+            weightPercentileEditText.setVisibility(View.GONE);
 
             String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Mantoux Test Order", "ORDER ID");
             if(testIds == null || testIds.length == 0){
