@@ -18,6 +18,8 @@ import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -49,6 +51,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.FormsObject;
 import com.ihsinformatics.gfatmmobile.util.LocationService;
 import com.ihsinformatics.gfatmmobile.util.OfflineFormSyncService;
@@ -86,6 +89,8 @@ public class MainActivity extends AppCompatActivity
     public static TextView patientId;
     public static TextView id;
 
+    static boolean active = false;
+
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -94,11 +99,40 @@ public class MainActivity extends AppCompatActivity
             if(message.equals("completed")) {
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
                 mBuilder.setSmallIcon(R.drawable.ic_checked);
-                mBuilder.setContentTitle("Notification Alert, Click Me!");
-                mBuilder.setContentText("Hi, This is Android Notification Detail!");
+                mBuilder.setContentTitle("Aao TB Mitao - Forms Upload completed");
+                mBuilder.setContentText("Offline form upload completed successfully.");
                 mBuilder.setPriority(Notification.PRIORITY_HIGH);
+                Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                mBuilder.setSound(alarmSound);
 
-                Intent notificationIntent = new Intent(context, MainActivity.class);
+                Intent notificationIntent = new Intent();
+                notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                Bundle bundle = new Bundle();
+                bundle.putString("buzz", "buzz");
+                notificationIntent.putExtras(bundle);
+                PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+                mBuilder.setContentIntent(contentIntent);
+                mBuilder.setDefaults(Notification.DEFAULT_ALL);
+
+                // Add as notification
+                NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                manager.notify(0, mBuilder.build());
+            } else if (message.equals("completed_with_error")){
+
+                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
+                mBuilder.setSmallIcon(R.drawable.error);
+                mBuilder.setContentTitle("Aao TB Mitao - Forms Upload completed");
+                mBuilder.setContentText("Offline form upload with some error. Go to offline forms to see pending forms.");
+                mBuilder.setPriority(Notification.PRIORITY_HIGH);
+                Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                mBuilder.setSound(alarmSound);
+
+                Intent notificationIntent = new Intent(context, OfflineFormActivity.class);
+                notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                Bundle bundle = new Bundle();
+                bundle.putString("buzz", "buzz");
+                notificationIntent.putExtras(bundle);
                 PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT);
                 mBuilder.setContentIntent(contentIntent);
@@ -120,9 +154,27 @@ public class MainActivity extends AppCompatActivity
     private ServerService serverService;
 
     @Override
+    public void onStart() {
+        super.onStart();
+        active = true;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        active = false;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if(active){
+            return;
+        }
 
         loading = new ProgressDialog(this, ProgressDialog.THEME_HOLO_LIGHT);
         serverService = new ServerService(getApplicationContext());
@@ -227,7 +279,9 @@ public class MainActivity extends AppCompatActivity
 
         if (App.getPatient() != null) {
             String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
-            String lname = App.getPatient().getPerson().getFamilyName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getFamilyName().substring(1);
+            String lname = App.getPatient().getPerson().getFamilyName();
+            if(!lname.equals(""))
+                lname = lname.substring(0, 1).toUpperCase() + lname.substring(1);
 
             patientName.setText(fname + " " + lname + " (" + App.getPatient().getPerson().getGender() + ")");
             String dob = App.getPatient().getPerson().getBirthdate().substring(0, 10);
@@ -259,35 +313,37 @@ public class MainActivity extends AppCompatActivity
         else
             showProgramSelection();
 
-        /*int count = serverService.getSavedFormsCount(App.getUsername(), App.getProgram());
-        if(count > 0){
+        /*if(App.getMode().equalsIgnoreCase("ONLINE")) {
+            int count = serverService.getSavedFormsCount(App.getUsername(), App.getProgram());
+            if (count > 0) {
 
-            final int color1 = App.getColor(this, R.attr.colorAccent);
+                final int color1 = App.getColor(this, R.attr.colorAccent);
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
-            alertDialog.setMessage(count + " " + getString(R.string.offline_form_alert));
-            Drawable clearIcon = getResources().getDrawable(R.drawable.ic_submit);
-            DrawableCompat.setTint(clearIcon, color1);
-            alertDialog.setIcon(clearIcon);
-            alertDialog.setTitle(getResources().getString(R.string.title_offline_form_found));
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
-                                    new IntentFilter("background-offline-sync"));
-                            startSync();
-                            dialog.dismiss();
-                        }
-                    });
-            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-            alertDialog.show();
-            alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
+                final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                alertDialog.setMessage(count + " " + getString(R.string.offline_form_alert));
+                Drawable clearIcon = getResources().getDrawable(R.drawable.ic_submit);
+                DrawableCompat.setTint(clearIcon, color1);
+                alertDialog.setIcon(clearIcon);
+                alertDialog.setTitle(getResources().getString(R.string.title_offline_form_found));
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
+                                        new IntentFilter("background-offline-sync"));
+                                startSync();
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();
+                alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
 
+            }
         }*/
     }
 
@@ -330,11 +386,47 @@ public class MainActivity extends AppCompatActivity
             getSupportActionBar().setSubtitle("Offline Mode");
             update.setVisibility(View.GONE);
         } else {
+
+            Boolean flag = getSupportActionBar().getSubtitle() == null ? false : true;
+
             getSupportActionBar().setSubtitle(null);
             if (App.getPatient() == null)
                 update.setVisibility(View.GONE);
             else
                 update.setVisibility(View.VISIBLE);
+
+            /*if(flag) {
+                int count = serverService.getSavedFormsCount(App.getUsername(), App.getProgram());
+                if (count > 0) {
+
+                    final int color1 = App.getColor(this, R.attr.colorAccent);
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(count + " " + getString(R.string.offline_form_alert));
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.ic_submit);
+                    DrawableCompat.setTint(clearIcon, color1);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_offline_form_found));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
+                                            new IntentFilter("background-offline-sync"));
+                                    startSync();
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                    alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
+
+                }
+            }*/
 
         }
 
@@ -716,7 +808,9 @@ public class MainActivity extends AppCompatActivity
                     //resetViews();
 
                     String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
-                    String lname = App.getPatient().getPerson().getFamilyName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getFamilyName().substring(1);
+                    String lname = App.getPatient().getPerson().getFamilyName();
+                    if(!lname.equals(""))
+                        lname = lname.substring(0, 1).toUpperCase() + lname.substring(1);
 
                     patientName.setText(fname + " " + lname + " (" + App.getPatient().getPerson().getGender() + ")");
                     String dob = App.getPatient().getPerson().getBirthdate().substring(0, 10);
@@ -808,7 +902,9 @@ public class MainActivity extends AppCompatActivity
 
                     if (App.getPatient() != null) {
                         String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
-                        String lname = App.getPatient().getPerson().getFamilyName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getFamilyName().substring(1);
+                        String lname = App.getPatient().getPerson().getFamilyName();
+                        if(!lname.equals(""))
+                            lname = lname.substring(0, 1).toUpperCase() + lname.substring(1);
 
                         patientName.setText(fname + " " + lname + " (" + App.getPatient().getPerson().getGender() + ")");
                         String dob = App.getPatient().getPerson().getBirthdate().substring(0, 10);
@@ -838,7 +934,9 @@ public class MainActivity extends AppCompatActivity
 
                     if (App.getPatient() != null) {
                         String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
-                        String lname = App.getPatient().getPerson().getFamilyName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getFamilyName().substring(1);
+                        String lname = App.getPatient().getPerson().getFamilyName();
+                        if(!lname.equals(""))
+                            lname = lname.substring(0, 1).toUpperCase() + lname.substring(1);
 
                         patientName.setText(fname + " " + lname + " (" + App.getPatient().getPerson().getGender() + ")");
                         String dob = App.getPatient().getPerson().getBirthdate().substring(0, 10);
@@ -913,7 +1011,9 @@ public class MainActivity extends AppCompatActivity
 
                 if(!(pid == null || pid.equals("null"))) {
                 String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
-                String lname = App.getPatient().getPerson().getFamilyName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getFamilyName().substring(1);
+                    String lname = App.getPatient().getPerson().getFamilyName();
+                    if(!lname.equals(""))
+                        lname = lname.substring(0, 1).toUpperCase() + lname.substring(1);
 
                     patientName.setText(fname + " " + lname + " (" + App.getPatient().getPerson().getGender() + ")");
                     String dob = App.getPatient().getPerson().getBirthdate().substring(0, 10);

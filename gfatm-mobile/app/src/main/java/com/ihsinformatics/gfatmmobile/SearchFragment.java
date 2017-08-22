@@ -1080,7 +1080,9 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Co
 
                     if (App.getPatient() != null) {
                         String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
-                        String lname = App.getPatient().getPerson().getFamilyName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getFamilyName().substring(1);
+                        String lname = App.getPatient().getPerson().getFamilyName();
+                        if(!lname.equals(""))
+                            lname = lname.substring(0, 1).toUpperCase() + lname.substring(1);
 
                         MainActivity.patientName.setText(fname + " " + lname + " (" + App.getPatient().getPerson().getGender() + ")");
                         String dob = App.getPatient().getPerson().getBirthdate().substring(0, 10);
