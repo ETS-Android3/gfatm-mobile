@@ -725,7 +725,7 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         MySpinner spinner = (MySpinner) parent;
         if (spinner == treatmentOutcome.getSpinner()) {
-            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_other_title)) || parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_referral)) || parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_lost_to_followup))){
+            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_other_title)) || parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_referral)) || parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_lost_to_followup))|| parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_treatment_failure))|| parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_transfer_out)) || parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_died))){
                 otherReasonRemarks.setVisibility(View.VISIBLE);
             } else {
                 otherReasonRemarks.setVisibility(View.GONE);
