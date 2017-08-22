@@ -1,0 +1,94 @@
+-- insert queries
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-Refusal Form','Add PET Forms','View PET Forms','7bfaca54-1fc1-40c2-ace9-258b41a0f66d');
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-Retrieval Form','Add PET Forms','View PET Forms','1c02bb2c-8037-4600-9699-dfdbae0254a0');
+
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('REFUSED PARTICIPATION IN STUDY','refused_participation_in_study','N/A','bdb15cec-e467-4f89-8978-98a7fa8506d8');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('REFUSED SCREENING','refused_screening','N/A','b85b9c52-5f68-466a-baba-12b8ce9c1a6f');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('INDEX PATIENT REFUSED TREATMENT','index_patient_refused_treatment','N/A','3e1a7a90-ac72-455f-a79c-35044b6f6042');
+
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('REFUSAL FOR','refusal_for','Coded','a1402bba-a8d2-4911-ab96-24cc5b67824a');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('SEARCH STUDY PARTICIPANT',null,'N/A','162224AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('VERBAL SYMPTOM SCREENING','symptom_screening','N/A','a7acf651-b476-4a8d-b760-5906909f9d47');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('INVESTIGATION','investigation','N/A','b28449d3-a376-48f2-b3c8-e1e5663fe9ff');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('PET INITIATION','pet_initiation','N/A','bb01e0d7-06ca-41e4-8f96-350268271171');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('PET CONTINUATION','pet_continuation','N/A','c0204c85-eab0-43c0-a9b8-92c6fd4bd5d3');
+
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('PET DURATION','pet_duration','Numeric','df944e81-024b-4190-9854-8c3236326c72');
+
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('COUNSELING MODE','counseling_mode','Coded','6e1278ec-3c47-452d-8200-1f052877b048');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('FACE TO FACE','inperson','N/A','f2295464-c907-401e-ac39-c0831d1e1adf');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('ON PHONE','on_phone','N/A','d27dc414-fb12-49bd-bc84-a77f7fab199b');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('HOME VISIT','home_visit','N/A','537cd406-c0ce-49f8-a72c-852a1137350a');
+
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('TOTAL NUMBER OF SESSIONS','total_sessions','Numeric','b4c713d5-321d-4cb3-8bf1-920850883760');
+
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('SESSION DATE','total_sessions','Date','4e61857b-1880-408d-be08-fbfbf4b27f68');
+
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('COUNSELING BY','counseling_by','Coded','9bb6eb94-8e58-427c-8f2a-0a83f1ef3cce');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('COUNSELOR','counselor','N/A','a90a57d0-68ca-4967-93ee-52c48ce88bbc');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('HEALTH WORKER','person_healthworker','Coded','4d4d0404-14b8-46c9-9d64-1ff535e79b34');
+
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CONTACT SCREENING','contact_screening','N/A','7f91993f-64e3-44be-9927-537a46925bc1');
+
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('COUNSELING TECHNIQUE','counseling_technique','Coded','54962178-ff46-4096-a76d-0bcfd368b8d7');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('COST BENEFIT ANALYSIS','cost_benefit_analysis','N/A','d07792cd-6707-4125-9501-ed8ae5604894');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('DECATASTROPHIZING','decatastrophizing','N/A','70221ec6-fa1d-4bd3-9ac0-b86dca43cd90');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('WHAT IF TECHNIQUE','what_if_technique','N/A','c148e6d4-6958-4651-90e9-5ece1a4bc26c');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('WORST POSSIBLE OUTCOME','worst_possible_outcome','N/A','3cd40de0-fabd-483e-b2d4-5c5d5118e06b');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('WORKING THROUGH ROGERIAN PRINCIPLES','working_through_rogerian_prinicples','N/A','36f3d1f1-f8f8-43f7-b9ec-d58c438d0ae4');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('DOWNWARD ARROW TECHNIQUE','downward_arrow_technique','N/A','b4feb9f9-9cf0-4035-951c-b297efd36a0d');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CLARIFICATION','clarification','N/A','c189c3e9-97b6-4aa8-a1fc-bfefb944b6a4');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('REFLECTION','reflection','N/A','4bae707b-2141-4953-84b7-0ae6c67461c4');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('SUMMARIZATION','summarization','N/A','4d9e9fcd-4f03-4533-be00-8a10bdbc3b9e');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CATHARSIS','catharsis','N/A','f756559c-d30e-41ea-8f58-b988c7d9e283');
+
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER COUNSELING TECHNIQUE','other_counseling_technique','Text','1082f970-bbe7-4553-bceb-1e8bc545af46');
+
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('REFUSAL REASON','refusal_reason','Coded','13178673-63e6-4fd0-906d-3b6e0efa1b89');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('NOT CONTIGUOUS','not_contiguous','N/A','0f29e819-fe36-43f6-abf7-ab73b7cf0e4c');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('ADVERSE EFFECT',null,'N/A','155006AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('HIGH DOSE OF MEDICINE','medicine_high_dose','N/A','436c82f6-0af3-4134-b7c5-ec2298dca1c0');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('MISCONCEPTIONS','misconception','N/A','a73ca229-a793-4dcc-a1c3-b89ef2ad0f82');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('ANY FEAR OR BELIEF','fear_or_belief','N/A','5645f50a-c96b-4b48-9d7f-eca6f8a74d4f');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CONSIDER PET INSIGNIFICANT','consider_pet_insignificant','N/A','3f34ea44-0e75-4606-b8a2-d082166c3560');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CONSIDER CONTACT HEALTHY','consider_contact_healthy','N/A','760a1794-364e-41ce-86a4-eba0afddfbde');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('LONG DURATION OF TREATMENT','treatment_long_duration','N/A','c9bdeb6a-756c-47e3-aa0a-72b22c39a577');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CONTACT SCHEDULE','contact_schedule','N/A','55cde6bc-8119-49b4-b1ef-507de2e62dc4');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('DUE TO LABS','due_to_labs','N/A','2c1d64b8-6302-4cfb-959b-fa41caef19a4');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CANNOT TAKE RESPONSIBILITY FOR FAMILY TREATMENT','cannot_take_responsibility_for_family_treatment','N/A','17637af2-8142-4249-9904-00c83a1975ab');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('LACK OF INFORMATION REGARDING TB','lack_of_tb_information','N/A','da0752fd-836b-49d0-8934-5a122243361a');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('LONG QUEUE AT HOSPITAL','long_queue_at_treatment','N/A','4b2dee47-1e36-4cad-b3b2-28458408b92c');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('DISCOURAGEMENT FROM EXTERNAL SOURCES','discouragement_from_external_sources','N/A','5140020f-b8cd-4ddd-93cf-d64985b7e630');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('DISCOURAGEMENT FROM INTERNAL SOURCES','discouragement_from_internal_sources','N/A','b71c89c7-76a6-4e27-a67c-d48bb67084b0');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('DELAY IN INCENTIVES','incentives_delay','N/A','6893f7ea-c87e-45e8-b2aa-39879e8e2827');
+
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('REFUSAL DUE TO MISCONCEPTION (TEXT)','refusal_due_to_misconception','Text','e4323b25-498a-4810-907a-7637cd121517');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('DETAIL OF DISCOURAGEMENT FROM EXTERNAL SOURCES','discouragement_from_external_source_explanation','Text','12b43f36-a2ad-4a4f-a156-41d88b4baba6');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('DETAIL OF DISCOURAGEMENT FROM INTERNAL SOURCES','discouragement_from_internal_source_explanation','Text','dba88d1c-7bcd-4d54-91ea-f6de66fbb817');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('DETAIL OF DELAY IN INCENTIVES','incentives_delay_explanation','Text','f62edb7a-2dea-44e0-987f-d19bd10c819b');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER REFUSAL REASON','other_refusal_reason','Text','494a38d4-5572-4cdb-9065-c0f1e5e4733d');
+
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('REASON FOR AGREEMENT','reason_for_agreement','Coded','cbac2a11-68ed-4db7-80a8-2743e9fe2ba3');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CONVINCED AFTER COUNSELING','convinced_after_counseling','N/A','b76b86ca-4649-4ddc-9ddd-e3c40ffa04f7');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('SELF APPROACH FOR PET','self_approach_for_pet','N/A','c65703f3-e980-4df6-aa60-d6a63156cccb');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('FOR SCREENING ONLY','for_screening_only','N/A','97b2204c-6b1f-4a41-91eb-2f84fdb22f15');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('DURATION OF PET REDUCED','duration_of_pet_reduced','N/A','d8063fbc-0b46-4367-abdc-341b398dc91e');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CLINICALLY MANAGEMENT OF ADVERSE EFFECTS','clinically_management_of_adverse_effects','N/A','cccadd37-4174-467a-b077-9440b3ded303');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('MANAGEMENT OF ADVERSE EFFECTS BY ANCILLARY DRUGS','management_of_adverse_effects_by_ancillary_drugs','N/A','aa5e34b8-35aa-43da-8754-7bfae0f9c1e3');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('INFORMATION OF PET FROM EXTERNAL SOURCE','information_of_pet_from_external_source','N/A','a6e980f0-30e3-453c-9a71-fb023c14e1d1');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER THAN INDEX CASE, FAMILY MEMBER DIAGNOSED WITH TB','family_member_diagnosed_tb_with_index_case','N/A','0111f9a1-8b93-4496-ac52-cb75dc9e42c4');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('INCENTIVE CONTINUATION','incentive_continuation','N/A','ce0b2bbb-ba90-4e57-9ebd-df0ac8ece737');
+
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('SELF APPROACH FOR PET (TEXT)','explanation_for_self_approach','Text','a9098e19-b72f-46f9-9243-04c91caec552');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CONTACT INVESTIGATION (TEXT)','explanation_for_contact_investigation','Text','a30b7cdd-638d-4642-be83-3c050cbbd79a');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('INFORMATION OF PET FROM EXTERNAL SOURCE (TEXT)','explanation_for_information_of_pet_from_external_source','Text','66e36145-cf49-4ccb-9020-c573332a370e');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('INCENTIVE CONTINUATION (TEXT)','explanation_for_incentive_contnuation','Text','501981f8-d577-4161-9cce-f343d9bb1229');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER REASON FOR AGREEMENT','other_reason_for_agreement','Text','5a0736b3-4058-4f0c-a3d6-4b7172322c22');
+
+
+
+
+
+
+
+
