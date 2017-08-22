@@ -32,19 +32,6 @@ public class OfflineFormSyncService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        // Tapping the notification will open the specified Activity.
-        Intent activityIntent = new Intent(this, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0,
-                activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        // This always shows up in the notifications area when this Service is running.
-        // TODO: String localization
-        Notification not = new Notification.Builder(this).
-                setContentTitle("NOTIFICATION").
-                setContentInfo("Doing stuff in the background...").
-                setContentIntent(pendingIntent).build();
-        startForeground(1, not);
-
         //Creating new thread for my service
         new Thread(new Runnable() {
             @Override
@@ -60,7 +47,7 @@ public class OfflineFormSyncService extends Service {
                         flag = false;
                 }
 
-                /*if(flag) {
+                if(flag) {
                     Intent intent = new Intent("background-offline-sync");
                     intent.putExtra("message", "completed");
                     LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
@@ -68,7 +55,9 @@ public class OfflineFormSyncService extends Service {
                 else{
                     Intent intent = new Intent("background-offline-sync");
                     intent.putExtra("message", "completed_with_error");
-                }*/
+                    LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+
+                }
                 //Stop service once it finishes its task
                 stopSelf();
             }
@@ -89,4 +78,5 @@ public class OfflineFormSyncService extends Service {
         isRunning = false;
         Log.i(TAG, "Service onDestroy");
     }
+
 }

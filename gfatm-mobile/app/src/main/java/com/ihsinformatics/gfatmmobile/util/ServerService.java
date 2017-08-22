@@ -275,6 +275,10 @@ public class ServerService {
 
         Object[][] forms = dbUtil.getFormTableData("select id, program, form_name, p_id, form_date, timestamp, form_object, location, encounter_id, username from " + Metadata.FORMS + " where id='" + id + "'");
 
+        if(forms == null || forms.length == 0){
+            return true;
+        }
+
         String encounterId = dbUtil.getObject(Metadata.FORMS, "encounter_id", "id='" + id + "'");
 
         if(!(encounterId == "" || encounterId == null)) {
@@ -2706,9 +2710,9 @@ public class ServerService {
         if (weightInDouble <= p50) { //if weight or height less then  medium
 
             if (weightInDouble <= p3) {
-                return "≤3rd Centile";
+                return "<=3rd Centile";
             } else if (weightInDouble <= p5) {
-                return "≤5th Centile";
+                return "<=5th Centile";
             } else if (weightInDouble <= p10) {
                 return "Between 6-10th Centile";
             } else if (weightInDouble <= p25) {
