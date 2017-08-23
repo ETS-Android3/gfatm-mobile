@@ -733,9 +733,13 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_referral)) || parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_transfer_out))) {
                 String referralTransferLocation = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Referral", "REFERRING FACILITY NAME");
                 locationOfTransferOutReferral.setVisibility(View.VISIBLE);
+                treatmentIntiatedAtReferralTransfer.setVisibility(View.VISIBLE);
+                firstName.setVisibility(View.VISIBLE);
+                lastName.setVisibility(View.VISIBLE);
+                mobileLinearLayout.setVisibility(View.VISIBLE);
+
                 locationOfTransferOutReferral.getEditText().setKeyListener(null);
                 if(referralTransferLocation!=null) {
-                    treatmentIntiatedAtReferralTransfer.setVisibility(View.VISIBLE);
                     if (referralTransferLocation.equalsIgnoreCase(getResources().getString(R.string.ctb_other_title))) {
                         String otherReferralTransferLocation = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Referral", "LOCATION OF REFERRAL OR TRANSFER OTHER");
                         locationOfTransferOutReferral.getEditText().setText(otherReferralTransferLocation);
@@ -743,7 +747,7 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
                         locationOfTransferOutReferral.getEditText().setText(referralTransferLocation);
                     }
                 }else{
-                    treatmentIntiatedAtReferralTransfer.setVisibility(View.GONE);
+
                     reasonTreatmentNotIntiated.setVisibility(View.GONE);
                     otherReasonTreatmentNotIntiated.setVisibility(View.GONE);
                 }
@@ -753,7 +757,19 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
                 reasonTreatmentNotIntiated.setVisibility(View.GONE);
                 otherReasonTreatmentNotIntiated.setVisibility(View.GONE);
                 locationOfTransferOutReferral.setVisibility(View.GONE);
+                treatmentIntiatedAtReferralTransfer.setVisibility(View.GONE);
+
+                firstName.setVisibility(View.GONE);
+                lastName.setVisibility(View.GONE);
+                mobileLinearLayout.setVisibility(View.GONE);
             }
+
+            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_treatment_failure))){
+                drConfirmation.setVisibility(View.VISIBLE);
+            }else{
+                drConfirmation.setVisibility(View.GONE);
+            }
+
         }else if(spinner == reasonTreatmentNotIntiated.getSpinner()) {
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_other_title))) {
                 otherReasonTreatmentNotIntiated.setVisibility(View.VISIBLE);
@@ -782,7 +798,12 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
         treatmentIntiatedAtReferralTransfer.setVisibility(View.GONE);
         reasonTreatmentNotIntiated.setVisibility(View.GONE);
         otherReasonTreatmentNotIntiated.setVisibility(View.GONE);
+        drConfirmation.setVisibility(View.GONE);
         enrsNumber.setVisibility(View.GONE);
+        firstName.setVisibility(View.GONE);
+        lastName.setVisibility(View.GONE);
+        mobileLinearLayout.setVisibility(View.GONE);
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");
