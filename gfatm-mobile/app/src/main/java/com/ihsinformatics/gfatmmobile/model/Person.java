@@ -144,9 +144,9 @@ public class Person extends AbstractModel {
 
         try {
             uuid = json.getString("uuid");
-            String[] names = json.getString("display").split(" ");
-            givenName = names[0];
-            familyName = names[1];
+            String names = json.getString("display");
+            givenName = names;
+            familyName = "";
             age = json.getInt("age");
             birthdate = json.getString("birthdate");
             gender = json.getString("gender");
