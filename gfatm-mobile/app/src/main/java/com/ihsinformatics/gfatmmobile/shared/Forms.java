@@ -81,6 +81,7 @@ import com.ihsinformatics.gfatmmobile.pet.PetInfectionTreatmentEligibilityForm;
 import com.ihsinformatics.gfatmmobile.pet.PetMantouxTestForm;
 import com.ihsinformatics.gfatmmobile.pet.PetMissedVisitFollowup;
 import com.ihsinformatics.gfatmmobile.pet.PetMonthlyHomeFollowupForm;
+import com.ihsinformatics.gfatmmobile.pet.PetRefusalForm;
 import com.ihsinformatics.gfatmmobile.pet.PetSocioecnomicDataForm;
 import com.ihsinformatics.gfatmmobile.pet.PetSpecimenCollectionForm;
 import com.ihsinformatics.gfatmmobile.pet.PetTestIndicationForm;
@@ -139,6 +140,7 @@ public class Forms{
     public static final String PET_MANTOUX_TEST = "Mantoux Order & Result";
     public static final String PET_HISTOPATHOLOGY_TEST = "Histopathology Order & Result";
     public static final String PET_MISSED_VISIT_FOLLOWUP = "Missed Visit Followup";
+    public static final String PET_REFUSAL = "Refusal";
 
     public static final FormsObject pet_indexPatientRegistration = new FormsObject(PET_INDEX_PATIENT_REGISTRATION, PetIndexPatientRegistrationForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_FIELD_SUPERVISOR, Roles.PET_HEALTH_WORKER});
     public static final FormsObject pet_contactRegistry = new FormsObject(PET_CONTACT_REGISTRY, PetContactRegistryForm.class, R.drawable.pet_contact, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_FIELD_SUPERVISOR, Roles.PET_HEALTH_WORKER});
@@ -167,6 +169,8 @@ public class Forms{
     public static final FormsObject pet_mantoux_order_and_result = new FormsObject(PET_MANTOUX_TEST, PetMantouxTestForm.class, R.drawable.ctb_mantoux, FormTypeColor.TEST_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN});
     public static final FormsObject pet_histopathology_order_and_result = new FormsObject(PET_HISTOPATHOLOGY_TEST, ChildhoodTbHistopathologySite.class, R.drawable.ctb_histopathology, FormTypeColor.TEST_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN});
     public static final FormsObject pet_missed_visit_followup = new FormsObject(PET_MISSED_VISIT_FOLLOWUP, PetMissedVisitFollowup.class, R.drawable.ctb_missed_followup, FormTypeColor.FOLLOWUP_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_HEALTH_WORKER, Roles.PET_FIELD_SUPERVISOR});
+    public static final FormsObject pet_refusal = new FormsObject(PET_REFUSAL, PetRefusalForm.class, R.drawable.pet_refusal, FormTypeColor.FOLLOWUP_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_PSYCHOLOGIST});
+
 
     /********************************
      * FAST
@@ -210,7 +214,7 @@ public class Forms{
      ********************************/
     public static final String COMORBIDITIES_PATIENT_INFORMATION_FORM = "Patient Information";
     public static final String COMORBIDITIES_MENTAL_HEALTH_SCREENING_FORM = "Mental Health Screening";
-    public static final String COMORBIDITIES_DIABETES_MELLITUS_SCREENING_FORM = "Diabetes Mellitus Screening";
+    public static final String COMORBIDITIES_DIABETES_MELLITUS_SCREENING_FORM = "Co-morbid Conditions Screening";
     public static final String COMORBIDITIES_HbA1C_FORM = "HbA1C Test";
     public static final String COMORBIDITIES_BLOOD_SUGAR_FORM = "Blood Sugar Test";
     public static final String COMORBIDITIES_VITALS_FORM = "Vitals";
@@ -359,6 +363,7 @@ public class Forms{
         petList.add(pet_adverseEvents);
         petList.add(pet_incentiveDisbursement);
         petList.add(pet_endOfFollowup);
+        petList.add(pet_refusal);
         petList.add(pet_test_indication_form);
         petList.add(pet_gxp_specimen_form);
         petList.add(pet_gxp_test);
