@@ -132,7 +132,7 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
     @Override
     public void initViews() {
 
-        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
 
         String columnName = "";
         if (App.getProgram().equals(getResources().getString(R.string.pet)))

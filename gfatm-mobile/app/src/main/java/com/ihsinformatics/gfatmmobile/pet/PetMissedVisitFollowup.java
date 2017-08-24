@@ -149,7 +149,7 @@ public class PetMissedVisitFollowup extends AbstractFormActivity implements Radi
 
 
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         missedVisitDate = new TitledButton(context, null,  getResources().getString(R.string.ctb_missed_visit_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         missedVisitDate.setTag("missedVisitDate");
