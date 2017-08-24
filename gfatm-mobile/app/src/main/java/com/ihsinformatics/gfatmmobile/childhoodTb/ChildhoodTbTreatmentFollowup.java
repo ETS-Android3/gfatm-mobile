@@ -165,7 +165,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
 
 
         // first page views...
-        formDate = new TitledButton(context,null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context,null, getResources().getString(R.string.pet_form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
 
         patientType = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_patient_type), getResources().getStringArray(R.array.ctb_patient_type_list), getResources().getString(R.string.ctb_new), App.VERTICAL,true);

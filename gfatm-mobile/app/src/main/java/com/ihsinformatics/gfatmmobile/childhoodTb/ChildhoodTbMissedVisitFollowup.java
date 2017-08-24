@@ -43,11 +43,9 @@ import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -156,7 +154,7 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
 
 
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         treatmentRegimen = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_missed_visit_for_treatment_regimen), getResources().getStringArray(R.array.ctb_missed_visit_list),getResources().getString(R.string.no), App.VERTICAL, App.VERTICAL, true);
         missedVisitDate = new TitledButton(context, null,  getResources().getString(R.string.ctb_missed_visit_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);

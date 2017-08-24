@@ -16,7 +16,6 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -173,7 +172,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
     public void initViews() {
 
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         cnicLayout = new LinearLayout(context);
         cnicLayout.setOrientation(LinearLayout.VERTICAL);

@@ -10,7 +10,6 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
-import android.text.InputType;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,12 +30,9 @@ import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
-import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
-import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
-import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -130,7 +126,7 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
     public void initViews() {
 
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         patientHaveTb = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_patient_have_tb),getResources().getStringArray(R.array.ctb_patient_have_tb_list),getResources().getString(R.string.no),App.HORIZONTAL,App.VERTICAL,true);
         patientNeedMoreTests = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_patient_need_more_test),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL);

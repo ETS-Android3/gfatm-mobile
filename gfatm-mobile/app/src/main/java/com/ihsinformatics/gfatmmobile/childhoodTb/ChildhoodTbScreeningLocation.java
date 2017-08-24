@@ -152,7 +152,7 @@ public class ChildhoodTbScreeningLocation extends AbstractFormActivity implement
     public void initViews() {
 
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
 
         screeningReferral = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_screening_referral),getResources().getStringArray(R.array.ctb_screening_referral_list),null,App.HORIZONTAL,App.VERTICAL,true);

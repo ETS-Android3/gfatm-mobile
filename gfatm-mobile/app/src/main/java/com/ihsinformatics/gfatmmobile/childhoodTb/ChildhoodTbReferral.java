@@ -138,7 +138,7 @@ public class ChildhoodTbReferral extends AbstractFormActivity implements RadioGr
 
 
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         patientReferedOrTransfered = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_referred_transferred), getResources().getStringArray(R.array.ctb_patient_referred_or_tranferred_list),getResources().getString(R.string.ctb_referral_before_starting_treatment), App.VERTICAL, App.VERTICAL, false);
         referralTransferReason = new TitledSpinner(context, null, getResources().getString(R.string.ctb_reason_for_referral_transfer), getResources().getStringArray(R.array.ctb_reason_for_referral_transfer_list),null, App.VERTICAL, true);

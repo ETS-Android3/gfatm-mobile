@@ -142,7 +142,7 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
     public void initViews() {
 
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         treatmentOutcome = new TitledSpinner(context,null,getResources().getString(R.string.ctb_treatment_outcome),getResources().getStringArray(R.array.ctb_treatment_outcome_list),getResources().getString(R.string.ctb_cured),App.HORIZONTAL,true);
         otherReasonRemarks = new TitledEditText(context,null,getResources().getString(R.string.ctb_other_reason_remarks),"","",250,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);

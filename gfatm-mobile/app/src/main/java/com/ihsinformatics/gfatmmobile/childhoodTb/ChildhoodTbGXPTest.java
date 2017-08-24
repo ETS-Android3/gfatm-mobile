@@ -138,7 +138,7 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
     public void initViews() {
 
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         sampleAccepted = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_sample_accepted_lab_techician),getResources().getStringArray(R.array.ctb_accepted_by_techician_list),getResources().getString(R.string.ctb_accepted),App.HORIZONTAL,App.VERTICAL,true);
         whySampleRejected = new TitledSpinner(context,null,getResources().getString(R.string.ctb_why_sample_rejected),getResources().getStringArray(R.array.ctb_why_sample_rejected_list),getResources().getString(R.string.ctb_saliva),App.HORIZONTAL,true);
