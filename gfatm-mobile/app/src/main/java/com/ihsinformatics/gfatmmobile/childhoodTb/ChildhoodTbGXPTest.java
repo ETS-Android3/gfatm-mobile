@@ -144,7 +144,8 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
         whySampleRejected = new TitledSpinner(context,null,getResources().getString(R.string.ctb_why_sample_rejected),getResources().getStringArray(R.array.ctb_why_sample_rejected_list),getResources().getString(R.string.ctb_saliva),App.HORIZONTAL,true);
         otherReasonForRejection = new TitledEditText(context,null,getResources().getString(R.string.ctb_other_specify),"","",50,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
         orderIds = new TitledSpinner(context, "", getResources().getString(R.string.order_id), getResources().getStringArray(R.array.pet_empty_array), "", App.HORIZONTAL);
-        cartidgeID = new TitledEditText(context,null,getResources().getString(R.string.ctb_cartridge_id),"","",10,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,true);
+        cartidgeID = new TitledEditText(context,null,getResources().getString(R.string.ctb_cartridge_id),"","",10,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,true);
+
         geneXpertMTBResult = new TitledSpinner(context,null,getResources().getString(R.string.ctb_mtb_result),getResources().getStringArray(R.array.ctb_mtb_result_list),getResources().getString(R.string.ctb_mtb_not_detected),App.HORIZONTAL,true);
         mtbBurden = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_mtb_burden),getResources().getStringArray(R.array.ctb_mtb_burden_list),getResources().getString(R.string.ctb_very_low),App.HORIZONTAL,App.VERTICAL,true);
         mtbRIFResult = new TitledSpinner(context,null,getResources().getString(R.string.ctb_mtb_rif_result),getResources().getStringArray(R.array.ctb_mtb_rif_result_list),getResources().getString(R.string.ctb_not_detected),App.HORIZONTAL,true);

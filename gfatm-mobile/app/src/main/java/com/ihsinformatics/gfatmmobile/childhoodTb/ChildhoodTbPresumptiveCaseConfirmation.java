@@ -207,7 +207,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
         childPresumptive = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_mo_think_child_presumptive), getResources().getStringArray(R.array.yes_no_options), null, App.HORIZONTAL, App.VERTICAL, true);
         weight = new TitledEditText(context, null, getResources().getString(R.string.ctb_weight), "", "", 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         height = new TitledEditText(context, null, getResources().getString(R.string.ctb_height), "", "", 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        weightPercentileEditText = new TitledEditText(context, null, "(Autocalculated)", "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        weightPercentileEditText = new TitledEditText(context, null,getResources().getString(R.string.ctb_weight_percentile), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         cough = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_cough), getResources().getStringArray(R.array.yes_no_unknown_refused_options), null, App.HORIZONTAL, App.VERTICAL, true);
         coughDuration = new TitledSpinner(context, null, getResources().getString(R.string.ctb_cough_duration), getResources().getStringArray(R.array.ctb_cough_duration_list), null, App.VERTICAL);
         fever = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_fever), getResources().getStringArray(R.array.yes_no_unknown_refused_options), null, App.HORIZONTAL, App.VERTICAL, true);
@@ -1057,25 +1057,25 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                             (App.get(appetite).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
         }
 
-        if(generalAppearanceExplanation.getVisibility()==View.VISIBLE){
+        if(generalAppearanceExplanation.getVisibility()==View.VISIBLE || App.get(generalAppearance).equals(getResources().getString(R.string.ctb_did_not_examine))){
             observations.add(new String[]{"GENERAL APPEARANCE EXPLANATION", App.get(generalAppearanceExplanation)});
         }
-        if(headEyeEearNoseThroatExplanation.getVisibility()==View.VISIBLE){
+        if(headEyeEearNoseThroatExplanation.getVisibility()==View.VISIBLE  || App.get(headEyeEearNoseThroat).equals(getResources().getString(R.string.ctb_did_not_examine))){
             observations.add(new String[]{"HEAD, EARS, EYES, NOSE AND THROAT DESCRIPTION", App.get(headEyeEearNoseThroatExplanation)});
         }
-        if(lymphNodeExplanation.getVisibility()==View.VISIBLE){
+        if(lymphNodeExplanation.getVisibility()==View.VISIBLE || App.get(lymphNodeExamination).equals(getResources().getString(R.string.ctb_did_not_examine))){
             observations.add(new String[]{"LYMPH NODE EXAMIMATION OF NECK, AXILLA AND GORIN", App.get(lymphNodeExplanation)});
         }
-        if(jointsExplanation.getVisibility()==View.VISIBLE){
+        if(jointsExplanation.getVisibility()==View.VISIBLE || App.get(jointsExamination).equals(getResources().getString(R.string.ctb_did_not_examine))){
             observations.add(new String[]{"JOINTS PHYSICAL EXAMINATION (TEXT)", App.get(jointsExplanation)});
         }
-        if(skinExplanation.getVisibility()==View.VISIBLE){
+        if(skinExplanation.getVisibility()==View.VISIBLE || App.get(skinExamination).equals(getResources().getString(R.string.ctb_did_not_examine))){
             observations.add(new String[]{"SKIN EXAMINATION (TEXT)", App.get(skinExplanation)});
         }
-        if(chestExplanation.getVisibility()==View.VISIBLE){
+        if(chestExplanation.getVisibility()==View.VISIBLE || App.get(chestExamination).equals(getResources().getString(R.string.ctb_did_not_examine))){
             observations.add(new String[]{"CHEST EXAMINATION (TEXT)", App.get(chestExplanation)});
         }
-        if(abdominalExplanation.getVisibility()==View.VISIBLE){
+        if(abdominalExplanation.getVisibility()==View.VISIBLE || App.get(abdominalExamination).equals(getResources().getString(R.string.ctb_did_not_examine))){
             observations.add(new String[]{"ABDOMINAL EXAMINATION (TEXT)", App.get(abdominalExplanation)});
         }
         if(!App.get(othersExplanation).isEmpty()){
@@ -1450,33 +1450,61 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                     }
                 }
             }else if (obs[0][0].equals("GENERAL APPEARANCE EXPLANATION")) {
-                generalAppearance.getRadioGroup().getButtons().get(0).setChecked(true);
-                generalAppearanceExplanation.setVisibility(View.VISIBLE);
-                generalAppearanceExplanation.getEditText().setText(obs[0][1]);
+                if(obs[0][1].equals(getResources().getString(R.string.ctb_did_not_examine))){
+                    generalAppearance.getRadioGroup().getButtons().get(2).setChecked(true);
+                }else {
+                    generalAppearance.getRadioGroup().getButtons().get(0).setChecked(true);
+                    generalAppearanceExplanation.setVisibility(View.VISIBLE);
+                    generalAppearanceExplanation.getEditText().setText(obs[0][1]);
+                }
             } else if (obs[0][0].equals("HEAD, EARS, EYES, NOSE AND THROAT DESCRIPTION")) {
-                headEyeEearNoseThroat.getRadioGroup().getButtons().get(0).setChecked(true);
-                headEyeEearNoseThroatExplanation.setVisibility(View.VISIBLE);
-                headEyeEearNoseThroatExplanation.getEditText().setText(obs[0][1]);
+                if(obs[0][1].equals(getResources().getString(R.string.ctb_did_not_examine))){
+                    headEyeEearNoseThroat.getRadioGroup().getButtons().get(2).setChecked(true);
+                }else {
+                    headEyeEearNoseThroat.getRadioGroup().getButtons().get(0).setChecked(true);
+                    headEyeEearNoseThroatExplanation.setVisibility(View.VISIBLE);
+                    headEyeEearNoseThroatExplanation.getEditText().setText(obs[0][1]);
+                }
             }  else if (obs[0][0].equals("LYMPH NODE EXAMIMATION OF NECK, AXILLA AND GORIN")) {
-                lymphNodeExamination.getRadioGroup().getButtons().get(0).setChecked(true);
-                lymphNodeExplanation.setVisibility(View.VISIBLE);
-                lymphNodeExplanation.getEditText().setText(obs[0][1]);
+                if(obs[0][1].equals(getResources().getString(R.string.ctb_did_not_examine))){
+                    lymphNodeExamination.getRadioGroup().getButtons().get(2).setChecked(true);
+                }else {
+                    lymphNodeExamination.getRadioGroup().getButtons().get(0).setChecked(true);
+                    lymphNodeExplanation.setVisibility(View.VISIBLE);
+                    lymphNodeExplanation.getEditText().setText(obs[0][1]);
+                }
             } else if (obs[0][0].equals("JOINTS PHYSICAL EXAMINATION (TEXT)")) {
-                jointsExamination.getRadioGroup().getButtons().get(0).setChecked(true);
-                jointsExplanation.setVisibility(View.VISIBLE);
-                jointsExplanation.getEditText().setText(obs[0][1]);
+                if(obs[0][1].equals(getResources().getString(R.string.ctb_did_not_examine))){
+                    jointsExamination.getRadioGroup().getButtons().get(2).setChecked(true);
+                }else {
+                    jointsExamination.getRadioGroup().getButtons().get(0).setChecked(true);
+                    jointsExplanation.setVisibility(View.VISIBLE);
+                    jointsExplanation.getEditText().setText(obs[0][1]);
+                }
             }else if (obs[0][0].equals("SKIN EXAMINATION (TEXT)")) {
-                skinExamination.getRadioGroup().getButtons().get(0).setChecked(true);
-                skinExplanation.setVisibility(View.VISIBLE);
-                skinExplanation.getEditText().setText(obs[0][1]);
+                if(obs[0][1].equals(getResources().getString(R.string.ctb_did_not_examine))){
+                    skinExamination.getRadioGroup().getButtons().get(2).setChecked(true);
+                }else {
+                    skinExamination.getRadioGroup().getButtons().get(0).setChecked(true);
+                    skinExplanation.setVisibility(View.VISIBLE);
+                    skinExplanation.getEditText().setText(obs[0][1]);
+                }
             }else if (obs[0][0].equals("CHEST EXAMINATION (TEXT)")) {
-                chestExamination.getRadioGroup().getButtons().get(0).setChecked(true);
-                chestExplanation.setVisibility(View.VISIBLE);
-                chestExplanation.getEditText().setText(obs[0][1]);
+                if(obs[0][1].equals(getResources().getString(R.string.ctb_did_not_examine))){
+                    chestExamination.getRadioGroup().getButtons().get(2).setChecked(true);
+                }else {
+                    chestExamination.getRadioGroup().getButtons().get(0).setChecked(true);
+                    chestExplanation.setVisibility(View.VISIBLE);
+                    chestExplanation.getEditText().setText(obs[0][1]);
+                }
             }else if (obs[0][0].equals("ABDOMINAL EXAMINATION (TEXT)")) {
-                abdominalExamination.getRadioGroup().getButtons().get(0).setChecked(true);
-                abdominalExplanation.setVisibility(View.VISIBLE);
-                abdominalExplanation.getEditText().setText(obs[0][1]);
+                if(obs[0][1].equals(getResources().getString(R.string.ctb_did_not_examine))){
+                    abdominalExamination.getRadioGroup().getButtons().get(2).setChecked(true);
+                }else {
+                    abdominalExamination.getRadioGroup().getButtons().get(0).setChecked(true);
+                    abdominalExplanation.setVisibility(View.VISIBLE);
+                    abdominalExplanation.getEditText().setText(obs[0][1]);
+                }
             }else if (obs[0][0].equals("FREE TEXT COMMENT")) {
                 othersExplanation.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("TUBERCULOSIS PHYSICAL EXAM OUTCOME")) {
@@ -1779,35 +1807,35 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                 doctorNotes.getEditText().setText(obs[0][1]);
             }
 
-            if(generalAppearanceExplanation.getVisibility()==View.GONE){
+            if(generalAppearanceExplanation.getVisibility()==View.GONE && !App.get(generalAppearanceExplanation).equals(getResources().getString(R.string.ctb_did_not_examine))){
                 generalAppearance.getRadioGroup().getButtons().get(1).setChecked(true);
             }
 
-            if(headEyeEearNoseThroatExplanation.getVisibility()==View.GONE){
+            if(headEyeEearNoseThroatExplanation.getVisibility()==View.GONE && !App.get(headEyeEearNoseThroatExplanation).equals(getResources().getString(R.string.ctb_did_not_examine))){
                 headEyeEearNoseThroat.getRadioGroup().getButtons().get(1).setChecked(true);
             }
 
-            if(lymphNodeExplanation.getVisibility()==View.GONE){
+            if(lymphNodeExplanation.getVisibility()==View.GONE && !App.get(lymphNodeExplanation).equals(getResources().getString(R.string.ctb_did_not_examine))){
                 lymphNodeExamination.getRadioGroup().getButtons().get(1).setChecked(true);
             }
 
-            if(spineExplanation.getVisibility()==View.GONE){
+            if(spineExplanation.getVisibility()==View.GONE && !App.get(spineExplanation).equals(getResources().getString(R.string.ctb_did_not_examine))){
                 spineExamination.getRadioGroup().getButtons().get(1).setChecked(true);
             }
 
-            if(jointsExplanation.getVisibility()==View.GONE){
+            if(jointsExplanation.getVisibility()==View.GONE && !App.get(jointsExplanation).equals(getResources().getString(R.string.ctb_did_not_examine))){
                 jointsExamination.getRadioGroup().getButtons().get(1).setChecked(true);
             }
 
-            if(skinExplanation.getVisibility()==View.GONE){
+            if(skinExplanation.getVisibility()==View.GONE && !App.get(skinExplanation).equals(getResources().getString(R.string.ctb_did_not_examine))){
                 skinExamination.getRadioGroup().getButtons().get(1).setChecked(true);
             }
 
-            if(chestExplanation.getVisibility()==View.GONE){
+            if(chestExplanation.getVisibility()==View.GONE && !App.get(chestExplanation).equals(getResources().getString(R.string.ctb_did_not_examine))){
                 chestExamination.getRadioGroup().getButtons().get(1).setChecked(true);
             }
 
-            if(abdominalExplanation.getVisibility()==View.GONE){
+            if(abdominalExplanation.getVisibility()==View.GONE && !App.get(abdominalExplanation).equals(getResources().getString(R.string.ctb_did_not_examine))){
                 abdominalExamination.getRadioGroup().getButtons().get(1).setChecked(true);
             }
         }
@@ -1993,57 +2021,114 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
         }else if (group == generalAppearance.getRadioGroup()) {
             generalAppearance.getQuestionView().setError(null);
             if (generalAppearance.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_remarkable))) {
+                generalAppearanceExplanation.getEditText().setText("");
+
                 generalAppearanceExplanation.setVisibility(View.VISIBLE);
-            } else {
+            }
+            else if (generalAppearance.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_did_not_examine))) {
+                generalAppearanceExplanation.getEditText().setText(getResources().getString(R.string.ctb_did_not_examine));
+                generalAppearanceExplanation.setVisibility(View.GONE);
+            }
+            else {
+                generalAppearanceExplanation.getEditText().setText("");
                 generalAppearanceExplanation.setVisibility(View.GONE);
             }
         } else if (group == headEyeEearNoseThroat.getRadioGroup()) {
             headEyeEearNoseThroat.getQuestionView().setError(null);
             if (headEyeEearNoseThroat.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_remarkable))) {
                 headEyeEearNoseThroatExplanation.setVisibility(View.VISIBLE);
-            } else {
+                headEyeEearNoseThroatExplanation.getEditText().setText("");
+            }
+            else if (headEyeEearNoseThroat.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_did_not_examine))) {
+                headEyeEearNoseThroatExplanation.getEditText().setText(getResources().getString(R.string.ctb_did_not_examine));
+                headEyeEearNoseThroatExplanation.setVisibility(View.GONE);
+            }
+            else {
+                headEyeEearNoseThroatExplanation.getEditText().setText("");
                 headEyeEearNoseThroatExplanation.setVisibility(View.GONE);
             }
         } else if (group == lymphNodeExamination.getRadioGroup()) {
             lymphNodeExamination.getQuestionView().setError(null);
             if (lymphNodeExamination.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_remarkable))) {
                 lymphNodeExplanation.setVisibility(View.VISIBLE);
-            } else {
+                lymphNodeExplanation.getEditText().setText("");
+            }
+            else if (lymphNodeExamination.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_did_not_examine))) {
+                lymphNodeExplanation.getEditText().setText(getResources().getString(R.string.ctb_did_not_examine));
+                lymphNodeExplanation.setVisibility(View.GONE);
+            }
+            else {
+                lymphNodeExplanation.getEditText().setText("");
                 lymphNodeExplanation.setVisibility(View.GONE);
             }
         } else if (group == spineExamination.getRadioGroup()) {
             spineExamination.getQuestionView().setError(null);
             if (spineExamination.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_remarkable))) {
                 spineExplanation.setVisibility(View.VISIBLE);
-            } else {
+                spineExplanation.getEditText().setText("");
+            }
+            else if (spineExamination.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_did_not_examine))) {
+                spineExplanation.getEditText().setText(getResources().getString(R.string.ctb_did_not_examine));
+                spineExplanation.setVisibility(View.GONE);
+            }
+            else {
+                spineExplanation.getEditText().setText("");
                 spineExplanation.setVisibility(View.GONE);
             }
         } else if (group == jointsExamination.getRadioGroup()) {
             jointsExamination.getQuestionView().setError(null);
             if (jointsExamination.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_remarkable))) {
+                jointsExplanation.getEditText().setText("");
                 jointsExplanation.setVisibility(View.VISIBLE);
-            } else {
+            }
+            else if (jointsExamination.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_did_not_examine))) {
+                jointsExplanation.getEditText().setText(getResources().getString(R.string.ctb_did_not_examine));
+                jointsExplanation.setVisibility(View.GONE);
+            }
+            else {
+                jointsExplanation.getEditText().setText("");
                 jointsExplanation.setVisibility(View.GONE);
             }
         } else if (group == skinExamination.getRadioGroup()) {
             skinExamination.getQuestionView().setError(null);
             if (skinExamination.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_remarkable))) {
+                skinExplanation.getEditText().setText("");
                 skinExplanation.setVisibility(View.VISIBLE);
-            } else {
+            }
+            else if (skinExamination.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_did_not_examine))) {
+                skinExplanation.getEditText().setText(getResources().getString(R.string.ctb_did_not_examine));
+                skinExplanation.setVisibility(View.GONE);
+            }
+            else {
+                skinExplanation.getEditText().setText("");
                 skinExplanation.setVisibility(View.GONE);
             }
         } else if (group == chestExamination.getRadioGroup()) {
             chestExamination.getQuestionView().setError(null);
             if (chestExamination.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_remarkable))) {
+                chestExplanation.getEditText().setText("");
                 chestExplanation.setVisibility(View.VISIBLE);
-            } else {
+            }
+            else if (chestExamination.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_did_not_examine))) {
+                chestExplanation.getEditText().setText(getResources().getString(R.string.ctb_did_not_examine));
+                chestExplanation.setVisibility(View.GONE);
+            }
+            else {
+                chestExplanation.getEditText().setText("");
                 chestExplanation.setVisibility(View.GONE);
             }
         } else if (group == abdominalExamination.getRadioGroup()) {
             abdominalExamination.getQuestionView().setError(null);
             if (abdominalExamination.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_remarkable))) {
+                abdominalExplanation.getEditText().setText("");
                 abdominalExplanation.setVisibility(View.VISIBLE);
-            } else {
+            }
+            else if (abdominalExamination.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_did_not_examine))) {
+                abdominalExplanation.getEditText().setText(getResources().getString(R.string.ctb_did_not_examine));
+                abdominalExplanation.setVisibility(View.GONE);
+            }
+            else {
+                abdominalExplanation.getEditText().setText("");
                 abdominalExplanation.setVisibility(View.GONE);
             }
         } else if (group == tbBefore.getRadioGroup()) {

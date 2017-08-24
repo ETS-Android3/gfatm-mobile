@@ -577,6 +577,7 @@
     <string name="ctb_where_sample_collected_out_hospital">Where outside the hospital was the sample collected from</string>
     <string name="ctb_childhoodtb_site">ChildhoodTB Site</string>
     <string name="ctb_select_childhood_site">Please select Childhood Site</string>
+    <string name="ctb_did_not_examine">Did not examine</string>
 
     <string-array name="ctb_sample_collected_from_list">
         <item>@string/ctb_within_hospital</item>
@@ -748,6 +749,7 @@
     <string-array name="ctb_remarkable_unremarkable">
         <item>@string/ctb_remarkable</item>
         <item>@string/ctb_unremarkable</item>
+        <item>@string/ctb_did_not_examine</item>
     </string-array>
     
     <string-array name="ctb_tb_exam_outcome_list">
