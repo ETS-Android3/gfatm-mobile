@@ -148,7 +148,7 @@ public class PetUltrasoundTestForm extends AbstractFormActivity implements Radio
 
 
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         orderId = new TitledEditText(context,null,getResources().getString(R.string.order_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,true);
         formType = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_type_of_form),getResources().getStringArray(R.array.ctb_type_of_form_list),null,App.HORIZONTAL,App.VERTICAL,true);
@@ -211,11 +211,18 @@ public class PetUltrasoundTestForm extends AbstractFormActivity implements Radio
                 monthArray[0] = "1";
                 monthTreatment.getSpinner().setSpinnerData(monthArray);
             } else {
-                monthArray = new String[diffMonth];
-                for (int i = 0; i < diffMonth; i++) {
-                    monthArray[i] = String.valueOf(i+1);
+                if(diffMonth < 0){
+                    monthArray = new String[1];
+                    monthArray[0] = "0";
+                    monthTreatment.getSpinner().setSpinnerData(monthArray);
                 }
-                monthTreatment.getSpinner().setSpinnerData(monthArray);
+                else {
+                    monthArray = new String[diffMonth];
+                    for (int i = 0; i < diffMonth; i++) {
+                        monthArray[i] = String.valueOf(i + 1);
+                    }
+                    monthTreatment.getSpinner().setSpinnerData(monthArray);
+                }
             }
         }
     }
