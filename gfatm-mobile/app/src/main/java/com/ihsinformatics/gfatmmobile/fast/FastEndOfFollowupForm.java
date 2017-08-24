@@ -137,7 +137,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
     public void initViews() {
 
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         treatmentOutcome = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_treatment_outcome), getResources().getStringArray(R.array.fast_treatment_outcome_list), getResources().getString(R.string.fast_cured), App.VERTICAL);
         String columnName = "";
         if (App.getProgram().equals(getResources().getString(R.string.pet)))

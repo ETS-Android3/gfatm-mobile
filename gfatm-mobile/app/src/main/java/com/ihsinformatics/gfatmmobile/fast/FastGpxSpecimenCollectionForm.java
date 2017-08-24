@@ -3,7 +3,6 @@ package com.ihsinformatics.gfatmmobile.fast;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
-import android.opengl.GLDebugHelper;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -140,7 +139,7 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
     public void initViews() {
 
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         sampleCollectedFrom = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_where_was_the_sample_collected_from), getResources().getStringArray(R.array.fast_sample_collected_from_list), "", App.VERTICAL, App.VERTICAL, true);
         sampleCollectedWithinHospital = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_where_within_hospital_sample_collected_from), getResources().getStringArray(R.array.fast_sample_collected_within_the_hospital_list), "", App.VERTICAL, App.VERTICAL, true);
         sampleCollectedWithinHospitalOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);

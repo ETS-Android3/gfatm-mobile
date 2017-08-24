@@ -168,7 +168,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         thirdDateCalendar = Calendar.getInstance();
         thirdDateFragment = new SelectDateFragment();
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         regDate = new TitledButton(context, null, getResources().getString(R.string.fast_registeration_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
 
         tbPatient = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_does_the_patient_have_tb), getResources().getStringArray(R.array.fast_tb_patient_list), "", App.VERTICAL, App.VERTICAL, true);

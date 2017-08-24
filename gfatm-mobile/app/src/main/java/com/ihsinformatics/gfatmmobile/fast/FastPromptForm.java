@@ -130,7 +130,7 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
     public void initViews() {
 
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         testingOfPresumptivePatientsTitle = new MyTextView(context, getResources().getString(R.string.fast_testing_of_presumptive_patients));
         testingOfPresumptivePatientsTitle.setTypeface(null, Typeface.BOLD);
         sputumContainerGiven = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_a_sputum_container), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL, true);

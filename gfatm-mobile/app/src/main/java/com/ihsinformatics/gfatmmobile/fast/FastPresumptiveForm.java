@@ -161,7 +161,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
             alertDialog.show();
         }
 
-        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         patientDemographicsTitle = new MyTextView(context, getResources().getString(R.string.fast_demographics_title));
         patientDemographicsTitle.setTypeface(null, Typeface.BOLD);
         husbandName = new TitledEditText(context, null, getResources().getString(R.string.fast_husband_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);

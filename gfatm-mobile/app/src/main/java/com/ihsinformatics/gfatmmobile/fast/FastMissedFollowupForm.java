@@ -11,13 +11,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -150,7 +148,7 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
         thirdDateFragment = new SelectDateFragment();
 
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         missedVisitDate = new TitledButton(context, null, getResources().getString(R.string.fast_date_of_missed_visit), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         patientContacted = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_have_you_been_able_to_contact_the_patient), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
         reasonPatientNotContacted = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_why_were_you_unable_to_contact_the_patient), getResources().getStringArray(R.array.fast_reason_patient_not_contacted_list), getResources().getString(R.string.fast_other_title), App.VERTICAL, App.VERTICAL);
