@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="pet_date">Form Date:</string>
+    <string name="pet_form_date">Form Date:</string>
     <string name="pet_first_name">First Name:</string>
     <string name="pet_last_name">Last Name:</string>
     <string name="pet_father_husband_name">Father\'s/Husband\'s name:</string>

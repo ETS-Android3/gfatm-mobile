@@ -3,7 +3,7 @@
 
     <!-- Index Patient Registration Form -->
     <string name="pet_enrollment_date_future">Enrollment date can\'t be in future.</string>
-    <string name="pet_date">Form Date</string>
+    <string name="pet_form_date">Form Date</string>
     <string name="pet_father_husband_name">Father\'s/Husband\'s name</string>
     <string name="pet_index_patient_external_id">Index Patient External ID</string>
     <string name="pet_erns_number">Index ENRS/District TB number</string>
@@ -1057,5 +1057,177 @@
     <string name="pet_other_identification_number">Other Identification Number</string>
 
     <string name="pet_other_detail">Details of Others</string>
+
+    <!-- Refusal Form -->
+    <string name="pet_refusal_for">Refusal For</string>
+    <string name="pet_study_participation">Study participation</string>
+    <string name="pet_verbal_symptom_screening">Verbal Symptom Screening</string>
+    <string name="pet_investigations">Investigations</string>
+    <string name="pet_pet_initiation">PET Initiation</string>
+    <string name="pet_pet_continuation">PET Continuation</string>
+    <string-array name="pet_refusal_for_array">
+        <item>@string/pet_study_participation</item>
+        <item>@string/pet_verbal_symptom_screening</item>
+        <item>@string/pet_investigations</item>
+        <item>@string/pet_pet_initiation</item>
+        <item>@string/pet_pet_continuation</item>
+    </string-array>
+
+    <string name="pet_duration">Number of days after PET Initiation</string>
+
+    <string name="pet_counseling_provided">Counseling provided</string>
+    <string name="pet_face_to_face">Face to face</string>
+    <string name="pet_on_phone">On phone</string>
+    <string name="pet_home_visit">Home Visit</string>
+    <string-array name="pet_counseling_provided_array">
+        <item>@string/pet_face_to_face</item>
+        <item>@string/pet_on_phone</item>
+        <item>@string/pet_home_visit</item>
+    </string-array>
+
+    <string name="pet_number_of_counselinng_sessions">Number of counseling sessions</string>
+
+    <string name="pet_session_date">Date - Session</string>
+
+    <string name="pet_counseling_provided_to">Counseling provided to</string>
+    <string name="pet_guardian">Guardian</string>
+    <string name="pet_complete_family">Complete family</string>
+    <string-array name="pet_counseling_provided_to_array">
+        <item>@string/pet_self</item>
+        <item>@string/pet_guardian</item>
+        <item>@string/pet_mother</item>
+        <item>@string/pet_father</item>
+        <item>@string/pet_maternal_grandfather</item>
+        <item>@string/pet_maternal_grandmother</item>
+        <item>@string/pet_paternal_grandfather</item>
+        <item>@string/pet_paternal_grandmother</item>
+        <item>@string/pet_brother</item>
+        <item>@string/pet_sister</item>
+        <item>@string/pet_son</item>
+        <item>@string/pet_daughter</item>
+        <item>@string/pet_spouse</item>
+        <item>@string/pet_aunt</item>
+        <item>@string/pet_uncle</item>
+        <item>@string/pet_complete_family</item>
+        <item>@string/other</item>
+    </string-array>
+
+    <string name="pet_counseling_provided_by">Counseling provided by</string>
+    <string name="pet_counselor">Counselor</string>
+    <string name="pet_health_worker">Health Worker</string>
+    <string-array name="pet_counseling_provided_by_array">
+        <item>@string/pet_counselor</item>
+        <item>@string/pet_health_worker</item>
+    </string-array>
+
+    <string name="pet_counseled_regarding">Counseled regarding</string>
+    <string name="pet_tb_disease">TB Disease</string>
+    <string name="pet_contact_screening">Contact Screening</string>
+    <string-array name="pet_counseled_regarding_array">
+        <item>@string/pet_tb_disease</item>
+        <item>@string/pet_contact_screening</item>
+        <item>@string/pet</item>
+        <item>@string/pet_adherence</item>
+    </string-array>
+
+    <string name="pet_counseling_technique_used">Counseling techniques used</string>
+    <string name="pet_cost_analysis">Cost/benefit analysis</string>
+    <string name="pet_decatastrophization">Catastrophization/decatastrophization</string>
+    <string name="pet_what_if_technique">What if technique</string>
+    <string name="pet_worst_possible_outcome">Worst possible outcome</string>
+    <string name="pet_rogerian_principles">Working through Rogerian prinicples</string>
+    <string name="pet_downward_arrow">Downward arrow</string>
+    <string name="pet_clarification">Clarification</string>
+    <string name="pet_reflection">Reflection</string>
+    <string name="pet_summarization">Summarization</string>
+    <string name="pet_catharsis">Catharsis</string>
+    <string-array name="pet_counseling_technique_used_array">
+        <item>@string/pet_cost_analysis</item>
+        <item>@string/pet_decatastrophization</item>
+        <item>@string/pet_what_if_technique</item>
+        <item>@string/pet_worst_possible_outcome</item>
+        <item>@string/pet_rogerian_principles</item>
+        <item>@string/pet_downward_arrow</item>
+        <item>@string/pet_clarification</item>
+        <item>@string/pet_reflection</item>
+        <item>@string/pet_summarization</item>
+        <item>@string/pet_clarification</item>
+        <item>@string/pet_catharsis</item>
+        <item>@string/pet_other</item>
+    </string-array>
+
+    <string name="pet_other_counseling_technique">Other counseling techniques</string>
+
+    <string name="pet_reasons_for_refusal">Reasons for refusal</string>
+    <string name="pet_not_contagious">Not contagious</string>
+    <string name="pet_due_to_adverse_effects">Due to adverse effects</string>
+    <string name="pet_high_dose_of_medicines">Due to high dose of medicines</string>
+    <string name="pet_due_to_misconception">Due to any misconception</string>
+    <string name="pet_due_to_any_fear">Due to any fear or belief</string>
+    <string name="pet_consider_pet_as_insignificant">Consider PET as insignificant</string>
+    <string name="pet_consider_contact_healthy">Consider Self/contacts as healthy</string>
+    <string name="pet_long_duration_of_treatment">Due to long duration of treatment</string>
+    <string name="pet_due_to_schedule">Due to job/school schedule</string>
+    <string name="pet_due_to_labs">Due to Labs</string>
+    <string name="pet_can_not_treatment_responsibility">Can’t take responsibility for family Tx</string>
+    <string name="pet_lack_of_tb_information">Lack of information regarding TB</string>
+    <string name="pet_long_queues_at_hospital">Long awaiting in queue for check up at hospital</string>
+    <string name="pet_discouragement_from_external_source">Discouragement from external source</string>
+    <string name="pet_discouragement_from_internal_source">Discouragement from internal source</string>
+    <string name="pet_delay_in_incentives">Delay in incentives</string>
+    <string name="pet_other_reason">Other reason</string>
+    <string-array name="pet_reasons_for_refusal_array">
+        <item>@string/pet_not_contagious</item>
+        <item>@string/pet_due_to_adverse_effects</item>
+        <item>@string/pet_high_dose_of_medicines</item>
+        <item>@string/pet_due_to_misconception</item>
+        <item>@string/pet_consider_pet_as_insignificant</item>
+        <item>@string/pet_consider_contact_healthy</item>
+        <item>@string/pet_long_duration_of_treatment</item>
+        <item>@string/pet_due_to_schedule</item>
+        <item>@string/pet_due_to_labs</item>
+        <item>@string/pet_can_not_treatment_responsibility</item>
+        <item>@string/pet_lack_of_tb_information</item>
+        <item>@string/pet_long_queues_at_hospital</item>
+        <item>@string/pet_discouragement_from_external_source</item>
+        <item>@string/pet_discouragement_from_internal_source</item>
+        <item>@string/pet_delay_in_incentives</item>
+        <item>@string/pet_other_reason</item>
+    </string-array>
+
+    <string name="pet_explain_misconception">Explain Misconception</string>
+    <string name="pet_explain_discouragment_from_external_source">Explain discouragement from external source</string>
+    <string name="pet_explain_discouragment_from_internal_source">Explain discouragement from internal source</string>
+    <string name="pet_explain_delay_in_incentives">Explain delay in incentives</string>
+    <string name="pet_explain_others">Explain others</string>
+    <string name="pet_psychologist_notes">Psychologist\'s notes</string>
+
+    <!-- Retrieval Form -->
+    <string name="pet_reason_for_aggrement">Reason for agreement</string>
+    <string name="pet_convinced_after_counseling">Convinced after counseling</string>
+    <string name="pet_for_screening_only">for screening only</string>
+    <string name="pet_self_approach_for_pet">Self approach for PET</string>
+    <string name="pet_duration_reduced">Duration of PET reduced</string>
+    <string name="pet_management_of_adverse_effects_clinically">Management of adverse effects symptomatically/clinically</string>
+    <string name="pet_management_of_adverse_effects_by_ancillary_drugs">Management of adverse effects by ancillary drugs</string>
+    <string name="pet_information_of_pet_from_external_source">Information of PET from external source</string>
+    <string name="pet_family_diagnosed_other_than_index_case">Other than index case, family member diagnosed with TB</string>
+    <string name="pet_incentives_continuation">Incentives continuation</string>
+    <string-array name="pet_reason_for_aggrement_array">
+        <item>@string/pet_convinced_after_counseling</item>
+        <item>@string/pet_for_screening_only</item>
+        <item>@string/pet_self_approach_for_pet</item>
+        <item>@string/pet_duration_reduced</item>
+        <item>@string/pet_management_of_adverse_effects_clinically</item>
+        <item>@string/pet_management_of_adverse_effects_by_ancillary_drugs</item>
+        <item>@string/pet_information_of_pet_from_external_source</item>
+        <item>@string/pet_family_diagnosed_other_than_index_case</item>
+        <item>@string/pet_incentives_continuation</item>
+        <item>@string/pet_other_reason</item>
+    </string-array>
+    <string name="pet_explain_self_approach">Explain self approach</string>
+    <string name="pet_explain_contact_investigation_only">Explain contact investigation only</string>
+    <string name="pet_explain_information_from_external_source">Explain infromation from external source</string>
+    <string name="pet_explain_incentives_continuation">Explain incentives continuation</string>
 
 </resources>
