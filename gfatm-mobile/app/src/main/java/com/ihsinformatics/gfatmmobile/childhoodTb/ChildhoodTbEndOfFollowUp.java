@@ -281,35 +281,38 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
     @Override
     public boolean validate() {
         boolean error=false;
-        if (App.get(mobileNumber1).isEmpty() || App.get(mobileNumber2).isEmpty() ) {
-            mobileNumber2.setError(getString(R.string.empty_field));
-            mobileNumber2.requestFocus();
-            error = true;
+        if(mobileLinearLayout.getVisibility()==View.VISIBLE){
+            if (App.get(mobileNumber1).isEmpty() || App.get(mobileNumber2).isEmpty()) {
+                mobileNumber2.setError(getString(R.string.empty_field));
+                mobileNumber2.requestFocus();
+                error = true;
+            }
+            String contactNumber = App.get(mobileNumber1) + App.get(mobileNumber2);
+            if (!RegexUtil.isContactNumber(contactNumber)) {
+                mobileNumber2.setError(getString(R.string.ctb_invalid_number));
+                mobileNumber2.requestFocus();
+                error = true;
+            }
         }
-        String contactNumber = App.get(mobileNumber1) + App.get(mobileNumber2);
-        if (!RegexUtil.isContactNumber(contactNumber)) {
-            mobileNumber2.setError(getString(R.string.ctb_invalid_number));
-            mobileNumber2.requestFocus();
-            error = true;
-        }
-        if (App.get(firstName).isEmpty()) {
+        if (firstName.getVisibility()==View.VISIBLE && App.get(firstName).isEmpty()) {
             firstName.getEditText().setError(getString(R.string.empty_field));
             firstName.getEditText().requestFocus();
             error = true;
         }
-        if (!App.get(firstName).isEmpty()) {
+        if (!App.get(firstName).isEmpty() && firstName.getVisibility()==View.VISIBLE) {
             if(App.get(firstName).trim().length() <= 0) {
                 firstName.getEditText().setError(getString(R.string.ctb_spaces_only));
                 firstName.getEditText().requestFocus();
                 error = true;
             }
         }
-        if (App.get(lastName).isEmpty()) {
+        if (App.get(lastName).isEmpty() && lastName.getVisibility()==View.VISIBLE) {
+
             lastName.getEditText().setError(getString(R.string.empty_field));
             lastName.getEditText().requestFocus();
             error = true;
         }
-        if (!App.get(lastName).isEmpty()) {
+        if (!App.get(lastName).isEmpty() && lastName.getVisibility()==View.VISIBLE) {
             if(App.get(lastName).trim().length() <= 0) {
                 lastName.getEditText().setError(getString(R.string.ctb_spaces_only));
                 lastName.getEditText().requestFocus();
