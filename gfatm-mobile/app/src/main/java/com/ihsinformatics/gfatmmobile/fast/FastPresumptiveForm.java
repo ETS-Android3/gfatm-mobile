@@ -75,6 +75,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
     TitledRadioGroup tbContact;
     TitledRadioGroup tbHistory;
     TitledRadioGroup presumptiveTb;
+    TitledRadioGroup pregnancyHistory;
 
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -169,6 +170,8 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
         patientAttendant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_is_this_patient_or_attendant), getResources().getStringArray(R.array.fast_patient_or_attendant_list), getResources().getString(R.string.fast_patient_title), App.VERTICAL, App.VERTICAL, true);
         patientConsultation = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_speciality_patient_consult), getResources().getStringArray(R.array.fast_patient_consultation_list), "", App.VERTICAL);
         patientConsultationOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        pregnancyHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_is_this_patient_pregnant), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
+
 
         patientSymptomTitle = new MyTextView(context, getResources().getString(R.string.fast_symptoms_title));
         patientSymptomTitle.setTypeface(null, Typeface.BOLD);
@@ -192,11 +195,11 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
         views = new View[]{formDate.getButton(), husbandName.getEditText(), fatherName.getEditText(), patientAttendant.getRadioGroup(), patientConsultation.getSpinner(),
                 patientConsultationOther.getEditText(), cough.getRadioGroup(), coughDuration.getSpinner(),
                 productiveCough.getRadioGroup(), haemoptysis.getRadioGroup(), fever.getRadioGroup(), feverDuration.getSpinner(),
-                tbContact.getRadioGroup(), tbHistory.getRadioGroup(), nightSweats.getRadioGroup(), weightLoss.getRadioGroup(), presumptiveTb.getRadioGroup()};
+                tbContact.getRadioGroup(), tbHistory.getRadioGroup(), nightSweats.getRadioGroup(), weightLoss.getRadioGroup(), presumptiveTb.getRadioGroup(), pregnancyHistory.getRadioGroup()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, patientDemographicsTitle, husbandName, fatherName, patientAttendant, patientConsultation, patientConsultationOther},
+                {{formDate, patientDemographicsTitle, husbandName, fatherName, patientAttendant, patientConsultation, patientConsultationOther, pregnancyHistory},
                         {patientSymptomTitle, cough, coughDuration, productiveCough, haemoptysis, fever, feverDuration, nightSweats, weightLoss},
                         {patientTbHistoryTitle, tbHistory, tbContact, presumptiveTb}};
 
@@ -308,6 +311,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
                 error = true;
             }
 
+
             if (husbandName.getVisibility() == View.VISIBLE && App.get(husbandName).length() == 1) {
                 if (App.isLanguageRTL())
                     gotoPage(2);
@@ -328,6 +332,15 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
                 error = true;
             }
 
+            if (pregnancyHistory.getVisibility() == View.VISIBLE && App.get(pregnancyHistory).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                emptyError = true;
+                error = true;
+            }
+
             if (cough.getVisibility() == View.VISIBLE && App.get(cough).isEmpty()) {
                 if (App.isLanguageRTL())
                     gotoPage(0);
@@ -336,6 +349,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
                 emptyError = true;
                 error = true;
             }
+
 
             if (productiveCough.getVisibility() == View.VISIBLE && App.get(productiveCough).isEmpty()) {
                 if (App.isLanguageRTL())
@@ -486,6 +500,11 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
                                                                                                                                     (App.get(patientConsultation).equals(getResources().getString(R.string.fast_endocrionology_title)) ? "ENDOCRINOLOGY DEPARTMENT" : "OTHER FACILITY DEPARTMENT")))))))))))))))});
         if (patientConsultationOther.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER FACILITY DEPARTMENT", App.get(patientConsultationOther)});
+
+        if (pregnancyHistory.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"PREGNANCY STATUS", App.get(pregnancyHistory).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
+                    (App.get(pregnancyHistory).equals(getResources().getString(R.string.fast_no_title)) ? "NO" :
+                            (App.get(pregnancyHistory).equals(getResources().getString(R.string.fast_refused_title)) ? "REFUSED" : "UNKNOWN"))});
 
         if (cough.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"COUGH", App.get(cough).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
@@ -738,7 +757,28 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
                 patientConsultation.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("OTHER FACILITY DEPARTMENT")) {
                 patientConsultationOther.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("COUGH")) {
+            }
+
+            else if (obs[0][0].equals("PREGNANCY STATUS")) {
+                for (RadioButton rb : pregnancyHistory.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_refused_title)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_dont_know_title)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                pregnancyHistory.setVisibility(View.VISIBLE);
+            }
+
+            else if (obs[0][0].equals("COUGH")) {
                 for (RadioButton rb : cough.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);
@@ -1078,6 +1118,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
         Log.d("abc", App.getPatient().getPerson().getGender());
         if (App.getPatient().getPerson().getGender().equals("male") || App.getPatient().getPerson().getGender().equals("M")) {
             husbandName.setVisibility(View.GONE);
+            pregnancyHistory.setVisibility(View.GONE);
         }
         patientConsultationOther.setVisibility(View.GONE);
         feverDuration.setVisibility(View.GONE);

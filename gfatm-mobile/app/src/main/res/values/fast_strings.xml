@@ -494,6 +494,7 @@
     <string name="fast_cad_score_range">CAD Score Range</string>
     <string name="fast_presumptive_tb_score_through_cxr">Presumptive TB through CXR</string>
     <string name="fast_presumptive_tb">Presumptive TB?</string>
+    <string name="fast_is_this_patient_pregnant">Is the person pregnant?</string>
 
     <string-array name="fast_reason_for_xray_list">
         <item>@string/fast_screening_title</item>
