@@ -174,10 +174,10 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
         adverseEffectsLayout.addView(adverseEffects1);
         adverseEffects2 = new TitledCheckBoxes(context, null, "", getResources().getStringArray(R.array.pet_adverse_effects_2), null, App.VERTICAL, App.VERTICAL);
         adverseEffectsLayout.addView(adverseEffects2);
-        otherEffects = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        otherEffects = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
 
         treatmentSuppoterRelation = new TitledSpinner(context, "", getResources().getString(R.string.pet_treatment_support), getResources().getStringArray(R.array.pet_cnic_owners), "", App.VERTICAL);
-        otherTreatmentSuppoterRelation = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        otherTreatmentSuppoterRelation = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         behavioralComplaint = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_behavioural_complain), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         behaviouralComplaintType = new TitledSpinner(context, "", getResources().getString(R.string.pet_behavioural_complain), getResources().getStringArray(R.array.pet_contact_behaviours), "", App.VERTICAL);
         other = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 250, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
@@ -189,7 +189,7 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
         infectionControllFollowing = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_infection_control_following), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL);
         infectionControlCounselling = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_infection_control_counselling), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL);
         patientFacingProblem = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_patient_problem), getResources().getStringArray(R.array.pet_patient_problem), null, App.VERTICAL, App.VERTICAL);
-        otherProblem = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        otherProblem = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
 
         contactComments = new TitledEditText(context, null, getResources().getString(R.string.pet_contact_comments), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         contactComments.getEditText().setSingleLine(false);
@@ -500,7 +500,7 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
             observations.add(new String[]{"ADVERSE EVENTS", adverseEffects});
         }
         if (otherEffects.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"ADVERSE EVENTS", App.get(otherEffects)});
+            observations.add(new String[]{"OTHER ADVERSE EVENT", App.get(otherEffects)});
         observations.add(new String[]{"TREATMENT SUPPORTER RELATIONSHIP TO PATIENT", (App.get(treatmentSuppoterRelation).equals(getResources().getString(R.string.pet_mother))) ? "MOTHER" :
                 (App.get(treatmentSuppoterRelation).equals(getResources().getString(R.string.pet_self)) ? "SELF" :
                     (App.get(treatmentSuppoterRelation).equals(getResources().getString(R.string.pet_father)) ? "FATHER" :
