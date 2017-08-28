@@ -16,6 +16,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,7 @@ import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
+import com.ihsinformatics.gfatmmobile.custom.MyCheckBox;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
@@ -46,6 +48,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Fawad Jawaid on 10-Feb-17.
@@ -91,6 +94,8 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
     TitledRadioGroup akuadsSeverity;
     TitledRadioGroup continuationStatus;
     TitledRadioGroup akuadsAgree;
+    TitledRadioGroup akuadsTreatmentFacilityConsent;
+    TitledRadioGroup akuadsPhoneCounsellingConsent;
     TitledSpinner preferredTherapyLocationSpinner;
     TitledButton nextAppointmentDate;
     //TitledEditText otherPreferredLocation;
@@ -228,13 +233,15 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
             locationArray[i] = String.valueOf(locations[i][1]);
         }
 
+        akuadsTreatmentFacilityConsent =  new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_treatment_facility_consent), getResources().getStringArray(R.array.yes_no_options), "", App.VERTICAL, App.VERTICAL);
+        akuadsPhoneCounsellingConsent =  new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_phone_counselling_consent), getResources().getStringArray(R.array.comorbidities_phone_counselling_consent_options), "", App.VERTICAL, App.VERTICAL);
         preferredTherapyLocationSpinner = new TitledSpinner(mainContent.getContext(), null, getResources().getString(R.string.comorbidities_preferredlocation_id), locationArray, "IHK-KHI", App.VERTICAL, true);
         //reasonForDiscontinuation = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_preferredlocation_id), getResources().getStringArray(R.array.comorbidities_location), "Sehatmand Zindagi Center - Korangi", App.HORIZONTAL);
         //showPreferredLocationOrNot();
         gpClinicCode = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_preferredlocation_gpcliniccode), "", getResources().getString(R.string.comorbidities_preferredlocation_gpcliniccode_range), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
         nextAppointmentDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_assessment_form_MH_appointment_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
-        //displayAkuadsAgreeOrNot();
-        //displayPreferredTherapyLocationOrNot();
+        displayAkuadsAgreeOrNot();
+        displayPreferredTherapyLocationOrNot();
         //otherPreferredLocation = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_preferredlocation_other_comorbidities), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         //otherPreferredLocation.setVisibility(View.GONE);
 
@@ -252,14 +259,14 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
                 akuadsNumbness.getRadioGroup(), akuadsTension.getRadioGroup(),
                 akuadsHeadaches.getRadioGroup(), akuadsBodyPain.getRadioGroup(),
                 akuadsUrination.getRadioGroup(), akuadsTotalScore.getEditText(), akuadsSeverity.getRadioGroup(),
-                akuadsAgree.getRadioGroup(), preferredTherapyLocationSpinner.getSpinner(), nextAppointmentDate.getButton()/*, otherPreferredLocation.getEditText()*/};
+                akuadsAgree.getRadioGroup(), akuadsTreatmentFacilityConsent.getRadioGroup(), akuadsPhoneCounsellingConsent.getRadioGroup(), preferredTherapyLocationSpinner.getSpinner(), nextAppointmentDate.getButton()/*, otherPreferredLocation.getEditText()*/};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formDate, typeOfRescreening, otherAssestmentReason, gpClinicCode, mentalHealthScreening, akuadsSleep, akuadsLackOfInterest, akuadsLostInterestHobbies, akuadsAnxious, akuadsImpendingDoom, akuadsDifficultyThinkingClearly,
                         akuadsAlone, akuadsUnhappy, akuadsHopeless, akuadsHelpless, akuadsWorried, akuadsCried, akuadsSuicide, akuadsLossOfAppetite, akuadsRetrosternalBurning,
                         akuadsIndigestion, akuadsNausea, akuadsConstipation, akuadsDifficultBreathing, akuadsTremulous, akuadsNumbness, akuadsTension, akuadsHeadaches, akuadsBodyPain,
-                        akuadsUrination, akuadsTotalScore, akuadsSeverity, continuationStatus, akuadsAgree, preferredTherapyLocationSpinner, nextAppointmentDate /*otherPreferredLocation*/}};
+                        akuadsUrination, akuadsTotalScore, akuadsSeverity, continuationStatus, akuadsAgree, akuadsTreatmentFacilityConsent, akuadsPhoneCounsellingConsent, preferredTherapyLocationSpinner, nextAppointmentDate /*otherPreferredLocation*/}};
 
         formDate.getButton().setOnClickListener(this);
         akuadsSleep.getRadioGroup().setOnCheckedChangeListener(this);
@@ -289,6 +296,8 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
         akuadsUrination.getRadioGroup().setOnCheckedChangeListener(this);
         akuadsSeverity.getRadioGroup().setOnCheckedChangeListener(this);
         akuadsAgree.getRadioGroup().setOnCheckedChangeListener(this);
+        akuadsTreatmentFacilityConsent.getRadioGroup().setOnCheckedChangeListener(this);
+        akuadsPhoneCounsellingConsent.getRadioGroup().setOnCheckedChangeListener(this);
         nextAppointmentDate.getButton().setOnClickListener(this);
 
         /*reasonForDiscontinuation.getSpinner().setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -602,6 +611,14 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
                 (App.get(continuationStatus).equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_continuation_status_options_last)) ? "END OF THERAPY" :
                         (App.get(continuationStatus).equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_continuation_status_options_referred)) ? "PATIENT REFERRED" : "OTHER CONTINUATION STATUS"))});
         observations.add(new String[]{"THERAPY CONSENT", App.get(akuadsAgree).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        if (akuadsTreatmentFacilityConsent.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"COUNSELLING AT TREATMENT FACILITY CONSENT", App.get(akuadsTreatmentFacilityConsent).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        }
+        if (akuadsPhoneCounsellingConsent.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"PHONE COUNSELLING CONSENT", App.get(akuadsPhoneCounsellingConsent).equals(getResources().getString(R.string.comorbidities_phone_counselling_consent_weekly)) ? "WEEKLY" :
+                    (App.get(akuadsPhoneCounsellingConsent).equals(getResources().getString(R.string.comorbidities_phone_counselling_consent_monthly)) ? "MONTHLY" :
+                            (App.get(akuadsPhoneCounsellingConsent).equals(getResources().getString(R.string.comorbidities_phone_counselling_consent_both)) ? "BOTH" : "NONE"))});
+        }
 
         if(preferredTherapyLocationSpinner.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"FACILITY REFERRED TO", App.get(preferredTherapyLocationSpinner)});
@@ -1219,6 +1236,32 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
                         break;
                     }
                 }
+            } else if (obs[0][0].equals("COUNSELLING AT TREATMENT FACILITY CONSENT")) {
+                for (RadioButton rb : akuadsTreatmentFacilityConsent.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("PHONE COUNSELLING CONSENT")) {
+                for (RadioButton rb : akuadsPhoneCounsellingConsent.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_phone_counselling_consent_weekly)) && obs[0][1].equals("WEEKLY")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_phone_counselling_consent_monthly)) && obs[0][1].equals("MONTHLY")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_phone_counselling_consent_both)) && obs[0][1].equals("BOTH")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_phone_counselling_consent_none)) && obs[0][1].equals("NONE")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
             } else if (obs[0][0].equals("FACILITY REFERRED TO")) {
                 preferredTherapyLocationSpinner.getSpinner().selectValue(obs[0][1]);
             } else if (obs[0][0].equals("RETURN VISIT DATE")) {
@@ -1318,12 +1361,13 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
                 || radioGroup == akuadsHeadaches.getRadioGroup() || radioGroup == akuadsBodyPain.getRadioGroup() || radioGroup == akuadsUrination.getRadioGroup()) {
             akuadsTotalScore.getEditText().setText(String.valueOf(getTotalScore()));
             setAkuadsSeverityLevel();
-            //displayAkuadsAgreeOrNot();
+            displayAkuadsAgreeOrNot();
         } else if (radioGroup == akuadsSeverity.getRadioGroup()) {
-            //displayAkuadsAgreeOrNot();
+            displayAkuadsAgreeOrNot();
         } /*else if (radioGroup == akuadsAgree.getRadioGroup()) {
             //displayPreferredTherapyLocationOrNot();
         }*/ else if (radioGroup == akuadsAgree.getRadioGroup()) {
+            displayPreferredTherapyLocationOrNot();
             showPreferredLocationOrNot();
         }
     }
@@ -1411,6 +1455,110 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
         }
         else {
             otherAssestmentReason.setVisibility(View.GONE);
+        }
+    }
+
+    void displayAkuadsAgreeOrNot() {
+        if (akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_mild)) || akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_moderate))
+                || akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_severe))) {
+            //akuadsAgree.setVisibility(View.VISIBLE);
+
+            String treatmentInitiationNextDateString = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST" + "-" + "Treatment Initiation");
+            String treatmentFollowupNextDateString = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST" + "-" + "Treatment Followup");
+            String location = "";
+
+            if(treatmentInitiationNextDateString!=null && treatmentFollowupNextDateString!=null) {
+                if(App.stringToDate(treatmentInitiationNextDateString, "yyyy-MM-dd").after(App.stringToDate(treatmentFollowupNextDateString, "yyyy-MM-dd"))) {
+                    location = serverService.getEncounterLocation(App.getPatientId(), "FAST" + "-" + "Treatment Initiation");
+                }
+                else {
+                    location = serverService.getEncounterLocation(App.getPatientId(), "FAST" + "-" + "Treatment Followup");
+                }
+            }
+            else if(treatmentInitiationNextDateString!=null && treatmentFollowupNextDateString==null) {
+                location = serverService.getEncounterLocation(App.getPatientId(), "FAST" + "-" + "Treatment Initiation");
+            }
+            else if(treatmentInitiationNextDateString==null && treatmentFollowupNextDateString!=null) {
+                location = serverService.getEncounterLocation(App.getPatientId(), "FAST" + "-" + "Treatment Followup");
+            }
+            else if(treatmentInitiationNextDateString==null && treatmentFollowupNextDateString==null) {
+
+            }
+
+            Log.v("LOCATION_HERE", location);
+            final Object[][] locations = serverService.getAllLocations("comorbidities_location");
+            String[] locationArray = new String[locations.length];
+            for (int i = 0; i < locations.length; i++) {
+                locationArray[i] = String.valueOf(locations[i][1]);
+            }
+
+            for (String aLocationArray : locationArray) {
+                if (aLocationArray.equalsIgnoreCase(location) && akuadsAgree.getVisibility() == View.VISIBLE && akuadsAgree.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.yes))) {
+                    akuadsTreatmentFacilityConsent.setVisibility(View.VISIBLE);
+                    break;
+                }
+            }
+
+            akuadsPhoneCounsellingConsent.setVisibility(View.VISIBLE);
+
+        } else if (akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_normal))) {
+            //akuadsAgree.setVisibility(View.GONE);
+            akuadsTreatmentFacilityConsent.setVisibility(View.GONE);
+            akuadsPhoneCounsellingConsent.setVisibility(View.GONE);
+        }
+    }
+
+    void displayPreferredTherapyLocationOrNot() {
+
+        List<String> appointDateStringList = new ArrayList<String>();
+
+        if (akuadsAgree.getVisibility() == View.VISIBLE && akuadsAgree.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.yes)) && !akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_normal))) {
+            if(snackbar!=null)
+                snackbar.dismiss();
+
+            String treatmentInitiationNextDateString = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST" + "-" + "Treatment Initiation");
+            String treatmentFollowupNextDateString = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST" + "-" + "Treatment Followup");
+            String location = "";
+
+            if(treatmentInitiationNextDateString!=null && treatmentFollowupNextDateString!=null) {
+                if(App.stringToDate(treatmentInitiationNextDateString, "yyyy-MM-dd").after(App.stringToDate(treatmentFollowupNextDateString, "yyyy-MM-dd"))) {
+                    location = serverService.getEncounterLocation(App.getPatientId(), "FAST" + "-" + "Treatment Initiation");
+                }
+                else {
+                    location = serverService.getEncounterLocation(App.getPatientId(), "FAST" + "-" + "Treatment Followup");
+                }
+            }
+            else if(treatmentInitiationNextDateString!=null && treatmentFollowupNextDateString==null) {
+                location = serverService.getEncounterLocation(App.getPatientId(), "FAST" + "-" + "Treatment Initiation");
+            }
+            else if(treatmentInitiationNextDateString==null && treatmentFollowupNextDateString!=null) {
+                location = serverService.getEncounterLocation(App.getPatientId(), "FAST" + "-" + "Treatment Followup");
+            }
+            else if(treatmentInitiationNextDateString==null && treatmentFollowupNextDateString==null) {
+
+            }
+
+            Log.v("LOCATION_HERE", location);
+            final Object[][] locations = serverService.getAllLocations("comorbidities_location");
+            String[] locationArray = new String[locations.length];
+            for (int i = 0; i < locations.length; i++) {
+                locationArray[i] = String.valueOf(locations[i][1]);
+            }
+
+            for (String aLocationArray : locationArray) {
+                if (aLocationArray.equalsIgnoreCase(location) && akuadsAgree.getVisibility() == View.VISIBLE && akuadsAgree.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.yes))) {
+                    akuadsTreatmentFacilityConsent.setVisibility(View.VISIBLE);
+                    break;
+                }
+            }
+
+            akuadsPhoneCounsellingConsent.setVisibility(View.VISIBLE);
+            preferredTherapyLocationSpinner.setVisibility(View.VISIBLE);
+
+        } else if (akuadsAgree.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.no))) {
+
+            akuadsTreatmentFacilityConsent.setVisibility(View.GONE);
+            akuadsPhoneCounsellingConsent.setVisibility(View.GONE);
         }
     }
 
