@@ -32,6 +32,10 @@ public class Roles {
     public static final String COMORBIDITIES_DIABETES_EDUCATOR = "Comorbidities Diabetes Educator";
     public static final String COMORBIDITIES_COUNSELOR = "Comorbidities Counselor";
     public static final String COMORBIDITIES_HEALTH_WORKER = "Comorbidities Health Worker";
+    public static final String COMORBIDITIES_FOOT_SCREENER= "Comorbidities Foot Screener";
+    public static final String COMORBIDITIES_EYE_SCREENER = "Comorbidities Eye Screener";
+    public static final String COMORBIDITIES_ASSOCIATE_DIABETOLOGIST = "Comorbidities Associate Diabetologist";
+    public static final String COMORBIDITIES_PSYCHOLOGIST = "Comorbidities Psychologist";
 
     public static final String PMDT_PROGRAM_MANAGER = "PMDT Program Manager";
     public static final String PMDT_TREATMENT_SUPPORT = "PMDT Treatment Supporter";
