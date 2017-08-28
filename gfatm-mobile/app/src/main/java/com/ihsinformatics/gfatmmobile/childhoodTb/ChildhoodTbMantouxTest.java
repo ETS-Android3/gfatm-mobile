@@ -457,7 +457,8 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
                             "≥10 mm"});
 
             observations.add(new String[]{"INTERPRETATION OF MANTOUX TEST", App.get(interpretationMantouxTest).equals(getResources().getString(R.string.ctb_positive)) ? "POSITIVE" :
-                    "NEGATIVE"});
+                    App.get(interpretationMantouxTest).equals(getResources().getString(R.string.ctb_negative)) ? "NEGATIVE" :
+                            "LOST TO FOLLOW-UP"});
         }
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -644,6 +645,9 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
                             rb.setChecked(true);
                             break;
                         } else if (rb.getText().equals(getResources().getString(R.string.ctb_negative)) && obs[0][1].equals("NEGATIVE")) {
+                            rb.setChecked(true);
+                            break;
+                        }else if (rb.getText().equals(getResources().getString(R.string.ctb_default)) && obs[0][1].equals("LOST TO FOLLOW-UP")) {
                             rb.setChecked(true);
                             break;
                         }

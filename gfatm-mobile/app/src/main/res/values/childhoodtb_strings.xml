@@ -578,6 +578,7 @@
     <string name="ctb_childhoodtb_site">ChildhoodTB Site</string>
     <string name="ctb_select_childhood_site">Please select Childhood Site</string>
     <string name="ctb_did_not_examine">Did not examine</string>
+    <string name="ctb_default">Default</string>
 
     <string-array name="ctb_sample_collected_from_list">
         <item>@string/ctb_within_hospital</item>
@@ -979,6 +980,7 @@
     <string-array name="ctb_positive_negative">
         <item>@string/ctb_positive</item>
         <item>@string/ctb_negative</item>
+        <item>@string/ctb_default</item>
     </string-array>
 
     <string-array name="ctb_suggestive_tb_normal">
