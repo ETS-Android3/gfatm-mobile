@@ -1,0 +1,7 @@
+-- insert queries
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('GUARDIAN','guardian','N/A','160639AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('COMPLETE FAMILY','complete_family','N/A','50a49527-110c-4e2d-a4e7-b21a400692a9');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER TREATMENT SUPPORTER RELATIONSHIP TO PATIENT','other_treatment_supporter_relationship_to_supporter','Text','012790a0-4365-4b6a-93a7-a0ecc9b9848e');
+
+-- update queries
+update OR IGNORE concept set full_name='SESSION DATE' where var_name = 'session_date';

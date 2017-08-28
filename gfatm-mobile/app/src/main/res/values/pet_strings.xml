@@ -1151,7 +1151,6 @@
         <item>@string/pet_clarification</item>
         <item>@string/pet_reflection</item>
         <item>@string/pet_summarization</item>
-        <item>@string/pet_clarification</item>
         <item>@string/pet_catharsis</item>
         <item>@string/pet_other</item>
     </string-array>
@@ -1181,6 +1180,7 @@
         <item>@string/pet_due_to_adverse_effects</item>
         <item>@string/pet_high_dose_of_medicines</item>
         <item>@string/pet_due_to_misconception</item>
+        <item>@string/pet_due_to_any_fear</item>
         <item>@string/pet_consider_pet_as_insignificant</item>
         <item>@string/pet_consider_contact_healthy</item>
         <item>@string/pet_long_duration_of_treatment</item>
