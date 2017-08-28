@@ -260,7 +260,7 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
     @Override
     public void updateDisplay() {
 
-        if(refillFlag){
+        if (refillFlag) {
             refillFlag = true;
             return;
         }
@@ -297,7 +297,7 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
 
-            if(formDateCalendar.after(secondDateCalendar)){
+            if (formDateCalendar.after(secondDateCalendar)) {
 
                 secondDateCalendar.set(formDateCalendar.get(Calendar.YEAR), formDateCalendar.get(Calendar.MONTH), formDateCalendar.get(Calendar.DAY_OF_MONTH));
                 secondDateCalendar.add(Calendar.DAY_OF_MONTH, 1);
@@ -318,9 +318,7 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
                 tv.setMaxLines(2);
                 snackbar.show();
                 nextAppointmentDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-            }
-
-            else
+            } else
                 nextAppointmentDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         }
     }
@@ -372,7 +370,7 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
-            }else {
+            } else {
                 endTime = new Date();
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
@@ -462,15 +460,15 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
         observations.add(new String[]{"AKUADS SEVERITY", App.get(akuadsSeverity).equals(getResources().getString(R.string.pet_normal)) ? "NORMAL" :
                 (App.get(akuadsSeverity).equals(getResources().getString(R.string.pet_severity_level_mild)) ? "MILD" :
                         (App.get(akuadsSeverity).equals(getResources().getString(R.string.pet_severity_level_moderate)) ? "MODERATE" : "SEVERE"))});
-        if(akuadsAgree.getVisibility() == View.VISIBLE) {
+        if (akuadsAgree.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"THERAPY CONSENT", App.get(akuadsAgree).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         }
-        if(continuationStatus.getVisibility() == View.VISIBLE) {
+        if (continuationStatus.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"CONTINUATION STATUS", App.get(continuationStatus).equals(getResources().getString(R.string.pet_continue_therapy)) ? "EXERCISE THERAPY" :
                     (App.get(continuationStatus).equals(getResources().getString(R.string.pet_last_session)) ? "END OF THERAPY" :
                             (App.get(continuationStatus).equals(getResources().getString(R.string.pet_referred)) ? "PATIENT REFERRED" : "OTHER CONTINUATION STATUS"))});
         }
-        if(otherContinuationStatus.getVisibility() == View.VISIBLE){
+        if (otherContinuationStatus.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"OTHER CONTINUATION STATUS", App.get(otherContinuationStatus)});
         }
         observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDate(secondDateCalendar)});
@@ -613,7 +611,7 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
         for (int i = 0; i < obsValue.size(); i++) {
             String[][] obs = obsValue.get(i);
 
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
             }
 
@@ -1070,7 +1068,7 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
                         break;
                     }
                 }
-            }else if (obs[0][0].equals("THERAPY CONSENT")) {
+            } else if (obs[0][0].equals("THERAPY CONSENT")) {
                 for (RadioButton rb : akuadsAgree.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);
@@ -1080,7 +1078,7 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
                         break;
                     }
                 }
-            }else if (obs[0][0].equals("RETURN VISIT DATE")) {
+            } else if (obs[0][0].equals("RETURN VISIT DATE")) {
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                 nextAppointmentDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
@@ -1102,8 +1100,7 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
             formDate.getButton().setEnabled(false);
-        }
-        else if (view == nextAppointmentDate.getButton()) {
+        } else if (view == nextAppointmentDate.getButton()) {
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             args.putString("formDate", formDate.getButtonText());
@@ -1174,10 +1171,9 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
                 || radioGroup == akuadsHeadaches.getRadioGroup() || radioGroup == akuadsBodyPain.getRadioGroup() || radioGroup == akuadsUrination.getRadioGroup()) {
             akuadsTotalScore.getEditText().setText(String.valueOf(getTotalScore()));
             setAkuadsSeverityLevel();
-        }
-        else if (radioGroup == continuationStatus.getRadioGroup()){
+        } else if (radioGroup == continuationStatus.getRadioGroup()) {
 
-            if(App.get(continuationStatus).equals(getResources().getString(R.string.pet_other)))
+            if (App.get(continuationStatus).equals(getResources().getString(R.string.pet_other)))
                 otherContinuationStatus.setVisibility(View.VISIBLE);
             else
                 otherContinuationStatus.setVisibility(View.GONE);
@@ -1227,17 +1223,22 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
     }
 
     void setAkuadsSeverityLevel() {
+
+        //0 - Mild
+        //1 - Moderate
+        //2 - Severe
+        //3 - Normal
+
         int score = Integer.parseInt(akuadsTotalScore.getEditText().getText().toString());
 
-        if (score >= 21 && score <= 40) {
-            akuadsSeverity.getRadioGroup().check((akuadsSeverity.getRadioGroup().getChildAt(1)).getId());
-        } else if (score >= 41 && score <= 60) {
-            akuadsSeverity.getRadioGroup().check((akuadsSeverity.getRadioGroup().getChildAt(2)).getId());
-        } else if (score >= 61 && score <= 75) {
+        if (score >= 0 && score <= 20) {
             akuadsSeverity.getRadioGroup().check((akuadsSeverity.getRadioGroup().getChildAt(3)).getId());
-        }
-        else {
+        } else if (score >= 21 && score <= 40) {
             akuadsSeverity.getRadioGroup().check((akuadsSeverity.getRadioGroup().getChildAt(0)).getId());
+        } else if (score >= 41 && score <= 60) {
+            akuadsSeverity.getRadioGroup().check((akuadsSeverity.getRadioGroup().getChildAt(1)).getId());
+        } else if (score >= 61 && score <= 75) {
+            akuadsSeverity.getRadioGroup().check((akuadsSeverity.getRadioGroup().getChildAt(2)).getId());
         }
     }
 
