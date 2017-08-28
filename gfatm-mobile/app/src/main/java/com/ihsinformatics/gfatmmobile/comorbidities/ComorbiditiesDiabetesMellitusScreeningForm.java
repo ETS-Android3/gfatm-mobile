@@ -140,7 +140,7 @@ public class ComorbiditiesDiabetesMellitusScreeningForm extends AbstractFormActi
     public void initViews() {
 
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         //dMScreening = new MyTextView(context, getResources().getString(R.string.comorbidities_dm_screening));
         //dMScreening.setTypeface(null, Typeface.BOLD);

@@ -157,7 +157,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
     public void initViews() {
 
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         previousHistory = new MyTextView(context, getResources().getString(R.string.comorbidities_diabetes_previous_history));
         previousHistory.setTypeface(null, Typeface.BOLD);
