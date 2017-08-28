@@ -4598,7 +4598,7 @@ INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('FACE 
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('ON PHONE','on_phone','N/A','d27dc414-fb12-49bd-bc84-a77f7fab199b');
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('HOME VISIT','home_visit','N/A','537cd406-c0ce-49f8-a72c-852a1137350a');
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('TOTAL NUMBER OF SESSIONS','total_sessions','Numeric','b4c713d5-321d-4cb3-8bf1-920850883760');
-INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('SESSION DATE','total_sessions','Date','4e61857b-1880-408d-be08-fbfbf4b27f68');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('SESSION DATE','session_date','Date','4e61857b-1880-408d-be08-fbfbf4b27f68');
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('COUNSELING BY','counseling_by','Coded','9bb6eb94-8e58-427c-8f2a-0a83f1ef3cce');
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('COUNSELOR','counselor','N/A','a90a57d0-68ca-4967-93ee-52c48ce88bbc');
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('HEALTH WORKER','person_healthworker','Coded','4d4d0404-14b8-46c9-9d64-1ff535e79b34');
@@ -4655,6 +4655,11 @@ INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CONTA
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('INFORMATION OF PET FROM EXTERNAL SOURCE (TEXT)','explanation_for_information_of_pet_from_external_source','Text','66e36145-cf49-4ccb-9020-c573332a370e');
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('INCENTIVE CONTINUATION (TEXT)','explanation_for_incentive_contnuation','Text','501981f8-d577-4161-9cce-f343d9bb1229');
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER REASON FOR AGREEMENT','other_reason_for_agreement','Text','5a0736b3-4058-4f0c-a3d6-4b7172322c22');
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('GUARDIAN','guardian','N/A','160639AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('COMPLETE FAMILY','complete_family','N/A','50a49527-110c-4e2d-a4e7-b21a400692a9');
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER TREATMENT SUPPORTER RELATIONSHIP TO PATIENT','other_treatment_supporter_relationship_to_supporter','Text','012790a0-4365-4b6a-93a7-a0ecc9b9848e');
 
 -- Program
 INSERT OR IGNORE INTO program VALUES (1, "86ba1232-d576-416e-b102-5f335c6746ce", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
