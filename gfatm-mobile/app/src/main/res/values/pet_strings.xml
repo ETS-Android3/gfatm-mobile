@@ -970,8 +970,7 @@
         <item>@string/pet_other</item>
     </string-array>
 
-    <string-array name="pet_empty_array">
-    </string-array>
+    <string-array name="pet_empty_array"></string-array>
 
     <string name="pet_continuatioon_status">Continuation Status</string>
     <string name="pet_continue_therapy">Continue therapy</string>
@@ -1230,4 +1229,60 @@
     <string name="pet_explain_information_from_external_source">Explain infromation from external source</string>
     <string name="pet_explain_incentives_continuation">Explain incentives continuation</string>
 
+    <!-- Home visit form -->
+    <string name="pet_home_visit_form">Home visit form</string>
+    <string name="pet_verbal_symptom_screening_1">Verbal symptom screening</string>
+    <string name="pet_reminder_for_investigations">Reminder for investigations</string>
+    <string name="pet_reminder_for_PET_initiation">Reminder for PET initiation</string>
+    <string name="pet_reminder_for_followup_visit">Reminder for follow-up visit</string>
+    <string name="pet_counseling_to_revert_refusal_for_screening">counseling to revert refusal for screening</string>
+    <string name="pet_counseling_to_revert_refusal_for_investigation">counseling to revert refusal for investigation</string>
+    <string name="pet_counseling_to_revert_refusal_for_PET_initiation">counseling to revert refusal for PET initiation</string>
+    <string name="pet_counseling_to_revrt_refusal_for_PET_continuation">counseling to revrt refusal for PET continuation</string>
+    <string name="pet_to_check_for_treatment_adherence">to check for treatment adherence</string>
+    <string name="pet_to_help_in_the_management_of_Adverse_Events">to help in the management of Adverse Events</string>
+    <string name="pet_other_1">Other</string>
+    <string name="pet_purpose_of_home_visit">Purpose of home visit</string>
+    <string-array name="pet_purpose_of_home_visit_array">
+        <item>@string/pet_verbal_symptom_screening_1</item>
+        <item>@string/pet_reminder_for_investigations</item>
+        <item>@string/pet_reminder_for_PET_initiation</item>
+        <item>@string/pet_reminder_for_followup_visit</item>
+        <item>@string/pet_counseling_to_revert_refusal_for_screening</item>
+        <item>@string/pet_counseling_to_revert_refusal_for_investigation</item>
+        <item>@string/pet_counseling_to_revert_refusal_for_PET_initiation</item>
+        <item>@string/pet_counseling_to_revrt_refusal_for_PET_continuation</item>
+        <item>@string/pet_to_check_for_treatment_adherence</item>
+        <item>@string/pet_to_help_in_the_management_of_Adverse_Events</item>
+        <item>@string/pet_other_1</item>
+    </string-array>
+
+    <string name="pet_other_purpose_of_home_visit">other purpose of home visit</string>
+    <string name="pet_number_of_visits">Number of visits</string>
+    <string name="pet_number_of_calls">Number of calls</string>
+
+
+    <string name="pet_Clinician">Clinician</string>
+    <string name="pet_Counselor">Counselor</string>
+    <string name="pet_RA_or_M_and_E_officer">RA/M&amp;E officer</string>
+    <string name="pet_Patients_request">Patient\'s request</string>
+    <string name="pet_Field_supervisor">Field supervisor</string>
+    <string name="pet_health_workers_discretion">health worker\'s discretion</string>
+    <string name="pet_Monitoring_visit">Monitoring visit</string>
+    <string name="pet_others">Others</string>
+    <string name="pet_visit_made_on_the_request_of">Visit made on the request of</string>
+    <string-array name="pet_visit_made_on_the_request_of_array">
+        <item>@string/pet_Clinician</item>
+        <item>@string/pet_Counselor</item>
+        <item>@string/pet_RA_or_M_and_E_officer</item>
+        <item>@string/pet_Patients_request</item>
+        <item>@string/pet_Field_supervisor</item>
+        <item>@string/pet_health_workers_discretion</item>
+        <item>@string/pet_Monitoring_visit</item>
+        <item>@string/pet_others</item>
+    </string-array>
+
+    <string name="pet_other_request_for_visit">Other request for visit</string>
+
 </resources>
+
