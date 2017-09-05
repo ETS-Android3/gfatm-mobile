@@ -750,7 +750,8 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         if (weight.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"WEIGHT (KG)", App.get(weight)});
 
-        observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDateTime(thirdDateCalendar)});
+        if (returnVisitDate.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDateTime(thirdDateCalendar)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -1415,8 +1416,9 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                     regDate.setVisibility(View.GONE);
                     tbRegisterationNumber.setVisibility(View.GONE);
                     weight.setVisibility(View.GONE);
+                    returnVisitDate.setVisibility(View.VISIBLE);
                 } else {
-                    cnicLinearLayout.setVisibility(View.VISIBLE);
+                   /* cnicLinearLayout.setVisibility(View.VISIBLE);
                     cnicOwner.setVisibility(View.VISIBLE);
                     if (cnicOwner.getSpinner().getSelectedItem().toString().equals(getResources().getString(R.string.fast_other_title))) {
                         cnicOwnerOther.setVisibility(View.VISIBLE);
@@ -1462,8 +1464,24 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                         tbRegisterationNumber.setVisibility(View.GONE);
                     }
 
-                    weight.setVisibility(View.VISIBLE);
+                    weight.setVisibility(View.VISIBLE);*/
+
+                    cnicLinearLayout.setVisibility(View.GONE);
+                    cnicOwner.setVisibility(View.GONE);
+                    cnicOwnerOther.setVisibility(View.GONE);
+                    tbType.setVisibility(View.GONE);
+                    extraPulmonarySite.setVisibility(View.GONE);
+                    extraPulmonarySiteOther.setVisibility(View.GONE);
+                    patientType.setVisibility(View.GONE);
+                    tbCategory.setVisibility(View.GONE);
+                    historyCategory.setVisibility(View.GONE);
+                    outcomePreviousCategory.setVisibility(View.GONE);
+                    regDate.setVisibility(View.GONE);
+                    tbRegisterationNumber.setVisibility(View.GONE);
+                    weight.setVisibility(View.GONE);
+                    returnVisitDate.setVisibility(View.GONE);
                 }
+
             } else if (tbPatient.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))) {
                 antibiotic.setVisibility(View.GONE);
                 diagonosisType.setVisibility(View.GONE);
@@ -1517,8 +1535,10 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                 regDate.setVisibility(View.GONE);
                 tbRegisterationNumber.setVisibility(View.GONE);
                 weight.setVisibility(View.GONE);
+                returnVisitDate.setVisibility(View.VISIBLE);
+
             } else {
-                cnicLinearLayout.setVisibility(View.VISIBLE);
+              /*  cnicLinearLayout.setVisibility(View.VISIBLE);
                 cnicOwner.setVisibility(View.VISIBLE);
                 if (cnicOwner.getSpinner().getSelectedItem().toString().equals(getResources().getString(R.string.fast_other_title))) {
                     cnicOwnerOther.setVisibility(View.VISIBLE);
@@ -1564,7 +1584,22 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                     tbRegisterationNumber.setVisibility(View.GONE);
                 }
 
-                weight.setVisibility(View.VISIBLE);
+                weight.setVisibility(View.VISIBLE);*/
+
+                cnicLinearLayout.setVisibility(View.GONE);
+                cnicOwner.setVisibility(View.GONE);
+                cnicOwnerOther.setVisibility(View.GONE);
+                tbType.setVisibility(View.GONE);
+                extraPulmonarySite.setVisibility(View.GONE);
+                extraPulmonarySiteOther.setVisibility(View.GONE);
+                patientType.setVisibility(View.GONE);
+                tbCategory.setVisibility(View.GONE);
+                historyCategory.setVisibility(View.GONE);
+                outcomePreviousCategory.setVisibility(View.GONE);
+                regDate.setVisibility(View.GONE);
+                tbRegisterationNumber.setVisibility(View.GONE);
+                weight.setVisibility(View.GONE);
+                returnVisitDate.setVisibility(View.GONE);
             }
         }
     }
