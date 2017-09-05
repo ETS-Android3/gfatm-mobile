@@ -4643,6 +4643,7 @@ INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('REASO
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CONVINCED AFTER COUNSELING','convinced_after_counseling','N/A','b76b86ca-4649-4ddc-9ddd-e3c40ffa04f7');
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('SELF APPROACH FOR PET','self_approach_for_pet','N/A','c65703f3-e980-4df6-aa60-d6a63156cccb');
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('FOR SCREENING ONLY','for_screening_only','N/A','97b2204c-6b1f-4a41-91eb-2f84fdb22f15');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CONTACT INVESTIGATION ONLY','contact_investigation','N/A','73b2089a-a9b7-4439-8993-49ce2dec6ec7');
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('DURATION OF PET REDUCED','duration_of_pet_reduced','N/A','d8063fbc-0b46-4367-abdc-341b398dc91e');
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CLINICALLY MANAGEMENT OF ADVERSE EFFECTS','clinically_management_of_adverse_effects','N/A','cccadd37-4174-467a-b077-9440b3ded303');
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('MANAGEMENT OF ADVERSE EFFECTS BY ANCILLARY DRUGS','management_of_adverse_effects_by_ancillary_drugs','N/A','aa5e34b8-35aa-43da-8754-7bfae0f9c1e3');
@@ -4661,6 +4662,26 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('COMPLETE FAMILY
 
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER TREATMENT SUPPORTER RELATIONSHIP TO PATIENT','other_treatment_supporter_relationship_to_supporter','Text','012790a0-4365-4b6a-93a7-a0ecc9b9848e');
 
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REASON FOR HOME VISIT','reason_for_home_visit','Coded','162182AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REMINDER FOR INVESTIGATIONS','reminder_for_investigations','N/A','07f329e6-d012-427f-a31e-6e56c2ddea51');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REMINDER FOR PET INITIATION','reminder_for_pet_initiation','N/A','0840660b-7a55-4fb2-ba7c-00f25ed8f528');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REMINDER FOR FOLLOWUP VISIT','reminder_for_followup_visits','N/A','77781789-6d2d-407a-86dc-67c669d53f8b');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('COUNSELING TO REVERT REFUSAL FOR SCREENING','counseling_to_revert_screening_refusal','N/A','7a0c2648-08d4-4a1a-a09c-b05800699f69');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('COUNSELING TO REVERT REFUSAL FOR INVESTIGATION','counseling_to_revert_investigation_refusal','N/A','31a6523a-8c38-47d9-81fd-992ee138cd02');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('COUNSELING TO REVERT REFUSAL FOR PET INITIATION','counseling_to_revert_pet_initiation_refusal','N/A','a6063647-0b71-41d1-8baf-3ae4cc4c4319');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('COUNSELING TO REVERT REFUSAL FOR PET CONTINUATION','counseling_to_revert_pet_continuation_refusal','N/A','37e3a626-62d3-4a89-9ffc-b23ddaa622ea');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CHECK FOR TREATMENT ADHERENCE','check_for_treatment_adherence','N/A','ce410e02-cca6-410f-a51a-6dc060feaf4e');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('HELP IN MANAGEMENT OF ADVERSE EVENTS','help_in_adverse_events_management','N/A','11e2cee1-ca91-4545-a462-f3fa961cd24c');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER REASON FOR HOME VISIT','other_reason_for_home_visit','Text','307b67b7-5aeb-44b8-99d0-950380b557d6');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NUMBER OF VISITS','number_of_visits','Numeric','ecb678b4-9e31-40e6-b014-586628b7487c');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NUMBER OF CALLS','number_of_calls','Numeric','55005162-abed-4605-8c54-de0a78ce4585');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('VISIT REQUEST BY','visit_request_by','Coded','315d033c-3360-4310-a9e8-ef147a462443');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RA/M&E officer','program_team','N/A','fe9937f8-9ce0-4c84-94c1-17148dabc669');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('FIELD SUPERVISOR','field_supervisor','N/A','527651a0-65c6-4512-b99f-2e4114bf0ae7');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('HEALTH WORKER DISCRETION','health_worker_discretion','N/A','f284e9bb-90a0-4ec0-8ac6-0960d2b9af8d');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MONITORING VISIT','monitoring_visit','N/A','beb4402b-5013-4b49-b788-60983bed9075');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER VISIT REQUEST BY','other_visit_request_by','Text','340c4ad7-0719-4faa-94f9-d1146232b86d');
+
 -- Program
 INSERT OR IGNORE INTO program VALUES (1, "86ba1232-d576-416e-b102-5f335c6746ce", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
 INSERT OR IGNORE INTO program VALUES (2, "5d372a38-ae27-4a68-a8d2-bc517a2c9c40", "PET", "Post-Exposure Treatment");
@@ -4669,6 +4690,7 @@ INSERT OR IGNORE INTO program VALUES (4, "d056c989-7b3d-4be7-91b6-b751963081e3",
 INSERT OR IGNORE INTO program VALUES (5, "fbab6ec8-dca5-421c-aef1-283a439d310b", "Comorbidities", "Co-morbidities Program");
 
 -- Encounter Types: select name as encounter_type, edit_privilege, view_privilege, uuid from encounter_type where retired = 0
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-Home Visit','Add PET Forms','View PET Forms','e7fb1ad3-cbf9-4638-affc-5c19fd2ba66f');
 INSERT OR IGNORE INTO encounter_type VALUES ('PET-Contact Registry','Add PET Forms','View PET Forms','ca3aed11-1aa4-42a1-b85c-8332fc8001fc');
 INSERT OR IGNORE INTO encounter_type VALUES ('PET-Treatment Adherence','Add PET Forms','View PET Forms','67a71486-1a54-468f-ac3e-7091a9a79584');
 INSERT OR IGNORE INTO encounter_type VALUES ('PET-Infection Treatment Eligibility','Add PET Forms','View PET Forms','181820aa-88c9-479b-9077-af92f5364329');

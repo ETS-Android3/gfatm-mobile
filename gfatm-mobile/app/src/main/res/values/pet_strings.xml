@@ -1204,8 +1204,9 @@
     <!-- Retrieval Form -->
     <string name="pet_reason_for_aggrement">Reason for agreement</string>
     <string name="pet_convinced_after_counseling">Convinced after counseling</string>
-    <string name="pet_for_screening_only">for screening only</string>
     <string name="pet_self_approach_for_pet">Self approach for PET</string>
+    <string name="pet_for_screening_only">for screening only</string>
+    <string name="pet_contact_investigation_only">Contact Investigation Only</string>
     <string name="pet_duration_reduced">Duration of PET reduced</string>
     <string name="pet_management_of_adverse_effects_clinically">Management of adverse effects symptomatically/clinically</string>
     <string name="pet_management_of_adverse_effects_by_ancillary_drugs">Management of adverse effects by ancillary drugs</string>
@@ -1214,8 +1215,9 @@
     <string name="pet_incentives_continuation">Incentives continuation</string>
     <string-array name="pet_reason_for_aggrement_array">
         <item>@string/pet_convinced_after_counseling</item>
-        <item>@string/pet_for_screening_only</item>
         <item>@string/pet_self_approach_for_pet</item>
+        <item>@string/pet_for_screening_only</item>
+        <item>@string/pet_contact_investigation_only</item>
         <item>@string/pet_duration_reduced</item>
         <item>@string/pet_management_of_adverse_effects_clinically</item>
         <item>@string/pet_management_of_adverse_effects_by_ancillary_drugs</item>
