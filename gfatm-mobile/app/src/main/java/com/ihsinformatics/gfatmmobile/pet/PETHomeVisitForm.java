@@ -252,7 +252,7 @@ public class PETHomeVisitForm extends AbstractFormActivity implements RadioGroup
         }
 
         Boolean flagVisitMadeOnTheRequestOf = false;
-        for (CheckBox cb : purposeOfHomeVisit.getCheckedBoxes()) {
+        for (CheckBox cb : visitMadeOnTheRequestOf.getCheckedBoxes()) {
             if (cb.isChecked()) {
                 flagVisitMadeOnTheRequestOf = true;
                 break;
