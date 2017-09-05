@@ -100,6 +100,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
     TitledCheckBoxes initiatingAdditionalTreatment;
     TitledRadioGroup patientCategory;
     TitledEditText weight;
+    TitledEditText weightPercentileEditText;
     TitledRadioGroup regimen;
     TitledSpinner typeFixedDosePrescribed;
     TitledRadioGroup currentTabletsofRHZ;
@@ -247,6 +248,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         initiatingAdditionalTreatment = new TitledCheckBoxes(context, null, getResources().getString(R.string.ctb_initiating_additional_treatment), getResources().getStringArray(R.array.ctb_pediasure_vitamin_iron_anthelminthic), null, App.VERTICAL, App.VERTICAL);
         patientCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_category), getResources().getStringArray(R.array.ctb_patient_category3_list), getResources().getString(R.string.ctb_categoryI), App.VERTICAL, App.VERTICAL,true);
         weight = new TitledEditText(context, null, getResources().getString(R.string.ctb_patient_weight), "", "", 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        weightPercentileEditText = new TitledEditText(context, null,getResources().getString(R.string.ctb_weight_percentile), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         regimen = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_regimen), getResources().getStringArray(R.array.ctb_regimen_list), getResources().getString(R.string.ctb_rhz), App.HORIZONTAL, App.VERTICAL);
         typeFixedDosePrescribed = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_type_of_fixed_dose), getResources().getStringArray(R.array.ctb_type_of_fixed_dose_list), null, App.VERTICAL);
         currentTabletsofRHZ = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_current_formulation_number_of_tablet_rhz), getResources().getStringArray(R.array.ctb_1_to_5_list), null, App.HORIZONTAL, App.VERTICAL);
@@ -319,7 +321,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 tbHistoryIn2Years.getRadioGroup(),eligibleForIpt.getRadioGroup(),acceptanceToIpt.getRadioGroup(),iptStartDate.getButton(),
                 iptDose.getRadioGroup(),initiatingAdditionalTreatmentIpt,precribingAntibioticTrial.getRadioGroup(),
                 precribingFurthertest.getRadioGroup(),initiatingAdditionalTreatmentAntibiotic,returnVisitDate.getButton(),
-                doctorNotes.getEditText(),testConfirmingDiagnosis,iptRegNo.getEditText()};
+                doctorNotes.getEditText(),testConfirmingDiagnosis,iptRegNo.getEditText(),weightPercentileEditText.getEditText()};
         viewGroups = new View[][]
                 {{
                         formDate,
@@ -343,6 +345,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                         initiatingAdditionalTreatment,
                         patientCategory,
                         weight,
+                        weightPercentileEditText,
                         regimen,
                         typeFixedDosePrescribed,
                         currentTabletsofRHZ,
@@ -637,6 +640,34 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 }
             }
         });
+
+        weight.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (!App.get(weight).equals("")){
+                    String percentile = serverService.getPercentile(App.get(weight));
+                    weightPercentileEditText.getEditText().setText(percentile);
+
+                } else {
+                    weightPercentileEditText.getEditText().setText("");
+                }
+
+            }
+        });
+        weightPercentileEditText.getEditText().setKeyListener(null);
 
         resetViews();
 
@@ -1221,6 +1252,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             observations.add(new String[]{"WEIGHT (KG)", App.get(weight)});
         }
 
+
         if(regimen.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"REGIMEN", App.get(regimen).equals(getResources().getString(R.string.ctb_rhze)) ? "RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL PROPHYLAXIS" : "RIFAMPICIN/ISONIAZID/PYRAZINAMIDE"});
         }
@@ -1675,6 +1707,9 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             }else if (obs[0][0].equals("WEIGHT (KG)")) {
                 weight.getEditText().setText(obs[0][1]);
                 weight.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("WEIGHT PERCENTILE GROUP")) {
+                weightPercentileEditText.getEditText().setText(obs[0][1]);
             }else if (obs[0][0].equals("REGIMEN")) {
                 for (RadioButton rb : regimen.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.ctb_rhze)) && obs[0][1].equals("RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL PROPHYLAXIS")) {
@@ -2195,6 +2230,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         reasonTreatmentNotIniated.setVisibility(View.GONE);
         patientCategory.setVisibility(View.GONE);
         weight.setVisibility(View.GONE);
+        weightPercentileEditText.setVisibility(View.GONE);
         regimen.setVisibility(View.GONE);
         typeFixedDosePrescribed.setVisibility(View.GONE);
         initiatingAdditionalTreatment.setVisibility(View.GONE);
@@ -2421,6 +2457,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 }
                 patientCategory.setVisibility(View.VISIBLE);
                 weight.setVisibility(View.VISIBLE);
+                weightPercentileEditText.setVisibility(View.VISIBLE);
                 regimen.setVisibility(View.VISIBLE);
                 typeFixedDosePrescribed.setVisibility(View.VISIBLE);
                 currentTabletsofRHZ.setVisibility(View.VISIBLE);
@@ -2521,6 +2558,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 reasonTreatmentNotIniated.setVisibility(View.GONE);
                 patientCategory.setVisibility(View.GONE);
                 weight.setVisibility(View.GONE);
+                weightPercentileEditText.setVisibility(View.GONE);
                 regimen.setVisibility(View.GONE);
                 typeFixedDosePrescribed.setVisibility(View.GONE);
                 currentTabletsofE.setVisibility(View.GONE);
@@ -2556,6 +2594,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 reasonTreatmentNotIniated.setVisibility(View.GONE);
                 patientCategory.setVisibility(View.GONE);
                 weight.setVisibility(View.GONE);
+                weightPercentileEditText.setVisibility(View.GONE);
                 regimen.setVisibility(View.GONE);
                 typeFixedDosePrescribed.setVisibility(View.GONE);
                 currentTabletsofE.setVisibility(View.GONE);

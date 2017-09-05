@@ -71,6 +71,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
     TitledSpinner monthTreatment;
     TitledRadioGroup patientCategory;
     TitledEditText weight;
+    TitledEditText weightPercentileEditText;
     TitledRadioGroup treatmentPlan;
     TitledRadioGroup intensivePhaseRegimen;
     TitledSpinner typeFixedDosePrescribedIntensive;
@@ -175,6 +176,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         updateFollowUpMonth();
         patientCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_category), getResources().getStringArray(R.array.ctb_patient_category3_list), getResources().getString(R.string.ctb_categoryI), App.VERTICAL, App.VERTICAL,true);
         weight = new TitledEditText(context, null, getResources().getString(R.string.ctb_patient_weight), "", "", 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true);
+        weightPercentileEditText = new TitledEditText(context, null,getResources().getString(R.string.ctb_weight_percentile), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         treatmentPlan = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_treatment_plan), getResources().getStringArray(R.array.ctb_treatment_plan_list), null, App.VERTICAL, App.VERTICAL,true);
 
         intensivePhaseRegimen = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_regimen), getResources().getStringArray(R.array.ctb_regimen_list), getResources().getString(R.string.ctb_rhz), App.HORIZONTAL, App.VERTICAL,true);
@@ -206,7 +208,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 treatmentPlan.getRadioGroup(), intensivePhaseRegimen.getRadioGroup(),typeFixedDosePrescribedIntensive.getSpinner(),currentTabletsofRHZ.getRadioGroup(),currentTabletsofE.getRadioGroup(),
                 newTabletsofRHZ.getRadioGroup(),newTabletsofE.getRadioGroup(),adultFormulationofHRZE.getRadioGroup(), continuationPhaseRegimen.getRadioGroup(),typeFixedDosePrescribedContinuation.getSpinner(),
                 currentTabletsOfContinuationRH.getRadioGroup(), currentTabletsOfContinuationE.getRadioGroup(), newTabletsOfContinuationRH.getRadioGroup(), newTabletsOfContinuationE.getRadioGroup(),
-                adultFormulationOfContinuationRH.getRadioGroup(), adultFormulationOfContinuationRHE.getRadioGroup(),conclusionOfTreatment.getRadioGroup(),returnVisitDate.getButton(),doctorNotes.getEditText()};
+                adultFormulationOfContinuationRH.getRadioGroup(), adultFormulationOfContinuationRHE.getRadioGroup(),conclusionOfTreatment.getRadioGroup(),returnVisitDate.getButton(),doctorNotes.getEditText(),weightPercentileEditText.getEditText()};
         viewGroups = new View[][]
                 {{
                         formDate,
@@ -215,6 +217,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                         monthTreatment,
                         patientCategory,
                         weight,
+                        weightPercentileEditText,
                         treatmentPlan,
                         intensivePhaseRegimen,
                         typeFixedDosePrescribedIntensive,
@@ -375,7 +378,33 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 }
             }
         });
+        weight.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
 
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (!App.get(weight).equals("")){
+                    String percentile = serverService.getPercentile(App.get(weight));
+                    weightPercentileEditText.getEditText().setText(percentile);
+
+                } else {
+                    weightPercentileEditText.getEditText().setText("");
+                }
+
+            }
+        });
+        weightPercentileEditText.getEditText().setKeyListener(null);
         resetViews();
 
     }
@@ -811,6 +840,10 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
             observations.add(new String[]{"WEIGHT (KG)", App.get(weight)});
         }
 
+        if(!App.get(weightPercentileEditText).equals(getResources().getString(R.string.ctb_empty))) {
+            observations.add(new String[]{"WEIGHT PERCENTILE GROUP", App.get(weightPercentileEditText)});
+        }
+
         observations.add(new String[]{"TREATMENT PLAN", App.get(treatmentPlan).equals(getResources().getString(R.string.ctb_intensive_phase)) ? "INTENSIVE PHASE" :
                 App.get(treatmentPlan).equals(getResources().getString(R.string.ctb_continuation_phase)) ? "CONTINUE REGIMEN"
                         : "TREATMENT COMPLETE"});
@@ -1046,7 +1079,11 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
             }else if (obs[0][0].equals("WEIGHT (KG)")) {
                 weight.getEditText().setText(obs[0][1]);
                 weight.setVisibility(View.VISIBLE);
-            }else if (obs[0][0].equals("TREATMENT PLAN")) {
+            }
+            else if (obs[0][0].equals("WEIGHT PERCENTILE GROUP")) {
+                weightPercentileEditText.getEditText().setText(obs[0][1]);
+            }
+            else if (obs[0][0].equals("TREATMENT PLAN")) {
                 for (RadioButton rb : treatmentPlan.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.ctb_intensive_phase)) && obs[0][1].equals("INTENSIVE PHASE")) {
                         rb.setChecked(true);
@@ -1457,10 +1494,16 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         adultFormulationOfContinuationRHE.setVisibility(View.GONE);
 
         String tbRegistrationNumber = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "TB REGISTRATION NUMBER");
-        if(tbRegistrationNumber!=null){
+        if(!tbRegistrationNumber.equalsIgnoreCase("")){
+            //HERE NOW
             tbRegisterationNumber.getEditText().setKeyListener(null);
             tbRegisterationNumber.getEditText().setText(tbRegistrationNumber);
         }
+
+      /*  if(tbRegistrationNumber!=null || tbRegistrationNumber!=""){
+            tbRegisterationNumber.getEditText().setKeyListener(null);
+            tbRegisterationNumber.getEditText().setText(tbRegistrationNumber);
+        } */
         String patientTypeString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "TB PATIENT TYPE");
 
         if(patientTypeString!=null) {

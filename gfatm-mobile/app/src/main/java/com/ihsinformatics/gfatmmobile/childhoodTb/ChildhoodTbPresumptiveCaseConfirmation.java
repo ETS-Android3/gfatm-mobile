@@ -1894,6 +1894,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         weight.setVisibility(View.GONE);
+        weightPercentileEditText.setVisibility(View.GONE);
         height.setVisibility(View.GONE);
         weightPercentileEditText.setVisibility(View.GONE);
         cough.setVisibility(View.GONE);
