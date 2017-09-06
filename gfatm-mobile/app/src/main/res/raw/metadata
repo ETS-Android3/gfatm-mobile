@@ -4685,6 +4685,13 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MONITORING VISI
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER VISIT REQUEST BY','other_visit_request_by','Text','340c4ad7-0719-4faa-94f9-d1146232b86d');
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CONTACT INVESTIGATION ONLY','contact_investigation','N/A','73b2089a-a9b7-4439-8993-49ce2dec6ec7');
 
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('COUNSELLING AT TREATMENT FACILITY CONSENT','treatment_facility_counselling_consent','Coded','e53f87bd-226c-499e-87c5-f93cee49d967');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PHONE COUNSELLING CONSENT','phone_counselling_consent','Coded','d080d75c-316c-46b9-9ccf-91091954f24d');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('WEEKLY','weekly','N/A','1099AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MONTHLY',NULL,'N/A','1098AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RESCREENING DONE','rescreening_done','Coded','5c210888-3022-432e-8d2c-d40751b51aac');
+
+
 -- Program
 INSERT OR IGNORE INTO program VALUES (1, "86ba1232-d576-416e-b102-5f335c6746ce", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
 INSERT OR IGNORE INTO program VALUES (2, "5d372a38-ae27-4a68-a8d2-bc517a2c9c40", "PET", "Post-Exposure Treatment");

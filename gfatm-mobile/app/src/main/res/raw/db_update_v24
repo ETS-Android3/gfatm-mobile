@@ -1,0 +1,8 @@
+-- insert queries
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RESCREENING DONE','rescreening_done','Coded','5c210888-3022-432e-8d2c-d40751b51aac');
+
+-- Add autoSyncTries column in forms table
+CREATE TABLE IF NOT EXISTS FORM2 ( id INTEGER PRIMARY KEY AUTOINCREMENT, program TEXT NOT NULL COLLATE NOCASE, username TEXT NOT NULL COLLATE NOCASE, form_name TEXT NOT NULL COLLATE NOCASE, p_id TEXT COLLATE NOCASE, form_date DATETIME, timestamp DATETIME NOT NULL, location TEXT NOT NULL COLLATE NOCASE, form_object BLOB COLLATE NOCASE, encounter_id INT COLLATE NOCASE, autoSyncTries INT DEFAULT 0);
+INSERT INTO FORM2 (id, program, username, form_name, p_id, form_date, timestamp, location, form_object, encounter_id) SELECT * FROM FORM;
+DROP TABLE FORM;
+ALTER TABLE FORM2 RENAME TO FORM;
