@@ -257,11 +257,16 @@ public class ServerService {
     }
 
     public Object[][] getSavedForms(String username, String programName) {
-        Object[][] forms = dbUtil.getFormTableData("select id, program, form_name, p_id, form_date, timestamp, form_object, location, encounter_id, username from " + Metadata.FORMS + " where username='" + username + "' and program = '" + programName + "'");
+        Object[][] forms = dbUtil.getFormTableData("select id, program, form_name, p_id, form_date, timestamp, form_object, location, encounter_id, username, autoSyncTries  from " + Metadata.FORMS + " where username='" + username + "' and program = '" + programName + "'");
         return forms;
     }
 
-    public int getSavedFormsCount(String username, String programName) {
+    public int getPendingSavedFormsCount(String username, String programName) {
+        Object[][] forms = dbUtil.getFormTableData("select count(*) from " + Metadata.FORMS + " where username='" + username + "' and program = '" + programName + "' and autoSyncTries < 3");
+        return Integer.parseInt(String.valueOf(forms[0][0]));
+    }
+
+    public int getTotalSavedFormsCount(String username, String programName) {
         Object[][] forms = dbUtil.getFormTableData("select count(*) from " + Metadata.FORMS + " where username='" + username + "' and program = '" + programName + "'");
         return Integer.parseInt(String.valueOf(forms[0][0]));
     }
@@ -403,8 +408,8 @@ public class ServerService {
             if (providerUUid == "")
                 return "PROVIDER_NOT_FOUND";
 
-            /*if (!isMobileAppCompatible())
-                return "VERSION_MISMATCH";*/
+            if (!isMobileAppCompatible())
+                return "VERSION_MISMATCH";
 
             App.setUserFullName(user.getFullName());
             App.setRoles(user.getRoles());
@@ -734,7 +739,7 @@ public class ServerService {
                         values3.put("birthdate", dob);
                         dbUtil.insert(Metadata.PATIENT, values3);
 
-                        getPatient(patientId, true);
+                        getPatient(patientId, true, false);
 
                         ContentValues values5 = new ContentValues();
                         values5.put("program", App.getProgram());
@@ -798,7 +803,7 @@ public class ServerService {
 
                     } else {
                         httpPost.savePatientByEntitiy(patient);
-                        getPatient(patientId, true);
+                        getPatient(patientId, true, false);
                     }
 
                 } catch (Exception e) {
@@ -836,7 +841,7 @@ public class ServerService {
 
     }
 
-    public String getPatient(String patientId, Boolean select) {
+    public String getPatient(String patientId, Boolean select, Boolean offlinePatient) {
 
         if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
             if (!isURLReachable()) {
@@ -847,7 +852,9 @@ public class ServerService {
         if (App.getCommunicationMode().equals("REST")) {
             try {
                 com.ihsinformatics.gfatmmobile.model.Patient patient = null;
-                patient = getPatientByIdentifierFromLocalDB(patientId);
+
+                if(!offlinePatient)
+                    patient = getPatientByIdentifierFromLocalDB(patientId);
 
                 if (patient == null && App.getMode().equalsIgnoreCase("OFFLINE"))
                     return "PATIENT_NOT_FOUND";
@@ -936,7 +943,17 @@ public class ServerService {
                         values.put("cityVillage", cityVillage);
                         values.put("countyDistrict", countyDistict);
                         values.put("country", country);
-                        dbUtil.insert(Metadata.PATIENT, values);
+
+                        if(!offlinePatient)
+                            dbUtil.insert(Metadata.PATIENT, values);
+                        else{
+                            dbUtil.update(Metadata.PATIENT, values, "uuid=?", new String[]{App.getPatient().getUuid()});
+
+                            App.setPatientId(getPatientSystemIdByUuidLocalDB(uuid));
+                            App.setPatient(patient);
+
+                            deletePatientEncounters(App.getPatientId());
+                        }
 
                         JSONArray jsonArray = httpGet.getPatientsEncounters(patientId);
                         String pid = getPatientSystemIdByUuidLocalDB(uuid);
@@ -1805,7 +1822,15 @@ public class ServerService {
         return true;
     }
 
-    public String submitOfflineForm(String formId) {
+    public void syncTriesIncrementOfflineform(String formId, int tries){
+
+        ContentValues values = new ContentValues();
+        values.put("autoSyncTries", tries);
+        dbUtil.update(Metadata.FORMS, values, "id=?", new String[]{formId});
+
+    }
+
+    public String submitOfflineForm(String formId, Boolean check) {
 
         if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
             if (!isURLReachable()) {

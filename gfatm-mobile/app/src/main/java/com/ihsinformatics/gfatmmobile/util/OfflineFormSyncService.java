@@ -42,9 +42,21 @@ public class OfflineFormSyncService extends Service {
 
                 Boolean flag = true;
                 for (int i = 0; i < forms.length; i++) {
-                    String returnString = serverService.submitOfflineForm(String.valueOf(forms[i][0]));
-                    if (!returnString.equals("SUCCESS"))
-                        flag = false;
+
+                    int tries = Integer.parseInt(String.valueOf(forms[i][10]));
+
+                    if(tries < 3) {
+
+                        String returnString = serverService.submitOfflineForm(String.valueOf(forms[i][0]), false);
+                        if (!returnString.equals("SUCCESS")) {
+                            flag = false;
+
+                            tries = tries + 1;
+                            serverService.syncTriesIncrementOfflineform(String.valueOf(forms[i][0]), tries);
+
+                        }
+
+                    }
                 }
 
                 if(flag) {
