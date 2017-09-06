@@ -15,7 +15,8 @@
                 timestamp DATETIME NOT NULL,
                 location TEXT NOT NULL COLLATE NOCASE,
                 form_object BLOB COLLATE NOCASE,
-                encounter_id INT COLLATE NOCASE
+                encounter_id INT COLLATE NOCASE,
+                autoSyncTries INT DEFAULT 0
             )
 		</item>
 
