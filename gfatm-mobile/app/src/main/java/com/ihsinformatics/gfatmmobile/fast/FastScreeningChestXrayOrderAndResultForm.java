@@ -1383,6 +1383,11 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
         goneVisibility();
         submitButton.setEnabled(false);
 
+        presumptiveTbCxr.getRadioGroup().setEnabled(false);
+        for (RadioButton rb : presumptiveTbCxr.getRadioGroup().getButtons()) {
+            rb.setClickable(false);
+        }
+
         Calendar requiredDate = formDateCalendar.getInstance();
         requiredDate.setTime(formDateCalendar.getTime());
         requiredDate.add(Calendar.DATE, 2);
