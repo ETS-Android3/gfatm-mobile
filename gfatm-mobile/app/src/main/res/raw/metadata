@@ -4643,7 +4643,6 @@ INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('REASO
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CONVINCED AFTER COUNSELING','convinced_after_counseling','N/A','b76b86ca-4649-4ddc-9ddd-e3c40ffa04f7');
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('SELF APPROACH FOR PET','self_approach_for_pet','N/A','c65703f3-e980-4df6-aa60-d6a63156cccb');
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('FOR SCREENING ONLY','for_screening_only','N/A','97b2204c-6b1f-4a41-91eb-2f84fdb22f15');
-INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CONTACT INVESTIGATION ONLY','contact_investigation','N/A','73b2089a-a9b7-4439-8993-49ce2dec6ec7');
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('DURATION OF PET REDUCED','duration_of_pet_reduced','N/A','d8063fbc-0b46-4367-abdc-341b398dc91e');
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CLINICALLY MANAGEMENT OF ADVERSE EFFECTS','clinically_management_of_adverse_effects','N/A','cccadd37-4174-467a-b077-9440b3ded303');
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('MANAGEMENT OF ADVERSE EFFECTS BY ANCILLARY DRUGS','management_of_adverse_effects_by_ancillary_drugs','N/A','aa5e34b8-35aa-43da-8754-7bfae0f9c1e3');
@@ -4661,6 +4660,9 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('GUARDIAN','guar
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('COMPLETE FAMILY','complete_family','N/A','50a49527-110c-4e2d-a4e7-b21a400692a9');
 
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER TREATMENT SUPPORTER RELATIONSHIP TO PATIENT','other_treatment_supporter_relationship_to_supporter','Text','012790a0-4365-4b6a-93a7-a0ecc9b9848e');
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CONTACT CURRENT TB TREATMENT TYPE','contact_current_tb_treatment_type','Coded','247bed48-9e2f-497b-a863-256e9626002d');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CONTACT PAST TB TREATMENT TYPE','contact_past_tb_treatment_type','Coded','04e8bc3d-68aa-4168-af67-640d4a4488cb');
 
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REASON FOR HOME VISIT','reason_for_home_visit','Coded','162182AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REMINDER FOR INVESTIGATIONS','reminder_for_investigations','N/A','07f329e6-d012-427f-a31e-6e56c2ddea51');
@@ -4681,6 +4683,7 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('FIELD SUPERVISO
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('HEALTH WORKER DISCRETION','health_worker_discretion','N/A','f284e9bb-90a0-4ec0-8ac6-0960d2b9af8d');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MONITORING VISIT','monitoring_visit','N/A','beb4402b-5013-4b49-b788-60983bed9075');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER VISIT REQUEST BY','other_visit_request_by','Text','340c4ad7-0719-4faa-94f9-d1146232b86d');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CONTACT INVESTIGATION ONLY','contact_investigation','N/A','73b2089a-a9b7-4439-8993-49ce2dec6ec7');
 
 -- Program
 INSERT OR IGNORE INTO program VALUES (1, "86ba1232-d576-416e-b102-5f335c6746ce", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
@@ -4690,7 +4693,6 @@ INSERT OR IGNORE INTO program VALUES (4, "d056c989-7b3d-4be7-91b6-b751963081e3",
 INSERT OR IGNORE INTO program VALUES (5, "fbab6ec8-dca5-421c-aef1-283a439d310b", "Comorbidities", "Co-morbidities Program");
 
 -- Encounter Types: select name as encounter_type, edit_privilege, view_privilege, uuid from encounter_type where retired = 0
-INSERT OR IGNORE INTO encounter_type VALUES ('PET-Home Visit','Add PET Forms','View PET Forms','e7fb1ad3-cbf9-4638-affc-5c19fd2ba66f');
 INSERT OR IGNORE INTO encounter_type VALUES ('PET-Contact Registry','Add PET Forms','View PET Forms','ca3aed11-1aa4-42a1-b85c-8332fc8001fc');
 INSERT OR IGNORE INTO encounter_type VALUES ('PET-Treatment Adherence','Add PET Forms','View PET Forms','67a71486-1a54-468f-ac3e-7091a9a79584');
 INSERT OR IGNORE INTO encounter_type VALUES ('PET-Infection Treatment Eligibility','Add PET Forms','View PET Forms','181820aa-88c9-479b-9077-af92f5364329');
@@ -4726,7 +4728,7 @@ INSERT OR IGNORE INTO encounter_type VALUES ('PET-Histopathology Test Order','Ad
 INSERT OR IGNORE INTO encounter_type VALUES ('PET-Histopathology Test Result','Add PET Forms','View PET Forms','73e8a6ab-db28-4319-9c63-3dd42a328862');
 INSERT OR IGNORE INTO encounter_type VALUES ('PET-Refusal Form','Add PET Forms','View PET Forms','7bfaca54-1fc1-40c2-ace9-258b41a0f66d');
 INSERT OR IGNORE INTO encounter_type VALUES ('PET-Retrieval Form','Add PET Forms','View PET Forms','1c02bb2c-8037-4600-9699-dfdbae0254a0');
-
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-Home Visit','Add PET Forms','View PET Forms','e7fb1ad3-cbf9-4638-affc-5c19fd2ba66f');
 INSERT OR IGNORE INTO encounter_type VALUES ('FAST-Screening','Add FAST Forms','View FAST Forms','5e7c8124-0018-4e5d-9156-bf6d58c720e5');
 INSERT OR IGNORE INTO encounter_type VALUES ('FAST-Prompt','Add FAST Forms','View FAST Forms','1284afd6-0928-43ee-be41-a4c259604fc4');
 INSERT OR IGNORE INTO encounter_type VALUES ('FAST-Presumptive','Add FAST Forms','View FAST Forms','a3a60738-cb1f-4c8d-ac78-91204821e0f3');
@@ -6268,4 +6270,3 @@ INSERT INTO weight_percentile_measurement ('gender','age','P3','P5','P10','P25',
 INSERT INTO weight_percentile_measurement ('gender','age','P3','P5','P10','P25','P50','P75','P90','P95','P97') VALUES ('2','238','45.03852','46.27498','48.358','52.43376','58.15104','65.76413','75.25831','82.87546','88.99253');
 INSERT INTO weight_percentile_measurement ('gender','age','P3','P5','P10','P25','P50','P75','P90','P95','P97') VALUES ('2','239','45.0451','46.28612','48.37657','52.46576','58.19877','65.82574','75.32321','82.92975','89.02867');
 INSERT INTO weight_percentile_measurement ('gender','age','P3','P5','P10','P25','P50','P75','P90','P95','P97') VALUES ('2','240','45.04655','46.28963','48.38346','52.47876','58.21897','65.85238','75.35165','82.95375','89.04485');
-

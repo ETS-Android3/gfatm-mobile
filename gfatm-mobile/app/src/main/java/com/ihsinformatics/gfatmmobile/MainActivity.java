@@ -1,6 +1,5 @@
 package com.ihsinformatics.gfatmmobile;
 
-import android.*;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -29,7 +28,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.internal.view.SupportMenu;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -38,7 +36,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -51,7 +48,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.FormsObject;
 import com.ihsinformatics.gfatmmobile.util.LocationService;
 import com.ihsinformatics.gfatmmobile.util.OfflineFormSyncService;
@@ -314,7 +310,7 @@ public class MainActivity extends AppCompatActivity
             showProgramSelection();
 
         /*if(App.getMode().equalsIgnoreCase("ONLINE")) {
-            int count = serverService.getSavedFormsCount(App.getUsername(), App.getProgram());
+            int count = serverService.getPendingSavedFormsCount(App.getUsername(), App.getProgram());
             if (count > 0) {
 
                 final int color1 = App.getColor(this, R.attr.colorAccent);
@@ -396,7 +392,7 @@ public class MainActivity extends AppCompatActivity
                 update.setVisibility(View.VISIBLE);
 
             /*if(flag) {
-                int count = serverService.getSavedFormsCount(App.getUsername(), App.getProgram());
+                int count = serverService.getPendingSavedFormsCount(App.getUsername(), App.getProgram());
                 if (count > 0) {
 
                     final int color1 = App.getColor(this, R.attr.colorAccent);

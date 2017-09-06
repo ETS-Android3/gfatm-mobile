@@ -1,0 +1,31 @@
+-- insert queries
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CONTACT CURRENT TB TREATMENT TYPE','contact_current_tb_treatment_type','Coded','247bed48-9e2f-497b-a863-256e9626002d');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CONTACT PAST TB TREATMENT TYPE','contact_past_tb_treatment_type','Coded','04e8bc3d-68aa-4168-af67-640d4a4488cb');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('REASON FOR HOME VISIT','reason_for_home_visit','Coded','162182AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('REMINDER FOR INVESTIGATIONS','reminder_for_investigations','N/A','07f329e6-d012-427f-a31e-6e56c2ddea51');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('REMINDER FOR PET INITIATION','reminder_for_pet_initiation','N/A','0840660b-7a55-4fb2-ba7c-00f25ed8f528');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('REMINDER FOR FOLLOWUP VISIT','reminder_for_followup_visits','N/A','77781789-6d2d-407a-86dc-67c669d53f8b');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('COUNSELING TO REVERT REFUSAL FOR SCREENING','counseling_to_revert_screening_refusal','N/A','7a0c2648-08d4-4a1a-a09c-b05800699f69');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('COUNSELING TO REVERT REFUSAL FOR INVESTIGATION','counseling_to_revert_investigation_refusal','N/A','31a6523a-8c38-47d9-81fd-992ee138cd02');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('COUNSELING TO REVERT REFUSAL FOR PET INITIATION','counseling_to_revert_pet_initiation_refusal','N/A','a6063647-0b71-41d1-8baf-3ae4cc4c4319');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('COUNSELING TO REVERT REFUSAL FOR PET CONTINUATION','counseling_to_revert_pet_continuation_refusal','N/A','37e3a626-62d3-4a89-9ffc-b23ddaa622ea');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CHECK FOR TREATMENT ADHERENCE','check_for_treatment_adherence','N/A','ce410e02-cca6-410f-a51a-6dc060feaf4e');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('HELP IN MANAGEMENT OF ADVERSE EVENTS','help_in_adverse_events_management','N/A','11e2cee1-ca91-4545-a462-f3fa961cd24c');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER REASON FOR HOME VISIT','other_reason_for_home_visit','Text','307b67b7-5aeb-44b8-99d0-950380b557d6');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('NUMBER OF VISITS','number_of_visits','Numeric','ecb678b4-9e31-40e6-b014-586628b7487c');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('NUMBER OF CALLS','number_of_calls','Numeric','55005162-abed-4605-8c54-de0a78ce4585');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('VISIT REQUEST BY','visit_request_by','Coded','315d033c-3360-4310-a9e8-ef147a462443');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('RA/M&E officer','program_team','N/A','fe9937f8-9ce0-4c84-94c1-17148dabc669');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('FIELD SUPERVISOR','field_supervisor','N/A','527651a0-65c6-4512-b99f-2e4114bf0ae7');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('HEALTH WORKER DISCRETION','health_worker_discretion','N/A','f284e9bb-90a0-4ec0-8ac6-0960d2b9af8d');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('MONITORING VISIT','monitoring_visit','N/A','beb4402b-5013-4b49-b788-60983bed9075');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER VISIT REQUEST BY','other_visit_request_by','Text','340c4ad7-0719-4faa-94f9-d1146232b86d');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CONTACT INVESTIGATION ONLY','contact_investigation','N/A','73b2089a-a9b7-4439-8993-49ce2dec6ec7');
+
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-Home Visit','Add PET Forms','View PET Forms','e7fb1ad3-cbf9-4638-affc-5c19fd2ba66f');
+
+-- Add autoSyncTries column in forms table
+CREATE TABLE IF NOT EXISTS FORM2 ( id INTEGER PRIMARY KEY AUTOINCREMENT, program TEXT NOT NULL COLLATE NOCASE, username TEXT NOT NULL COLLATE NOCASE, form_name TEXT NOT NULL COLLATE NOCASE, p_id TEXT COLLATE NOCASE, form_date DATETIME, timestamp DATETIME NOT NULL, location TEXT NOT NULL COLLATE NOCASE, form_object BLOB COLLATE NOCASE, encounter_id INT COLLATE NOCASE, autoSyncTries INT DEFAULT 0);
+INSERT INTO FORM2 (id, program, username, form_name, p_id, form_date, timestamp, location, form_object, encounter_id) SELECT * FROM FORM;
+DROP TABLE FORM;
+ALTER TABLE FORM2 RENAME TO FORM;
