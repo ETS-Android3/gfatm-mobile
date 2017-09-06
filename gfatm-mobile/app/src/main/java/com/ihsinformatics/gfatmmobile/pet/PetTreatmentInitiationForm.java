@@ -527,7 +527,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                     String resistanceType = "";
                     String dstbType = "";
 
-                    serverService.getPatient(indexId, false);
+                    serverService.getPatient(indexId, false, false);
 
                     if (!(indexId == null || indexId.equals(""))) {
                         String id = serverService.getPatientSystemIdByIdentifierLocalDB(indexId);

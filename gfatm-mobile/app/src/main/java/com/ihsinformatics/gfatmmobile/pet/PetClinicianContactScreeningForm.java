@@ -927,9 +927,9 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
         if (otherCondition.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER DISEASE", App.get(otherCondition)});
         observations.add(new String[]{"PATIENT REFERRED", App.get(referral).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(referral).equals(getResources().getString(R.string.yes)) ? "NO" : "UNKNOWN")});
+                (App.get(referral).equals(getResources().getString(R.string.no)) ? "NO" : "UNKNOWN")});
         observations.add(new String[]{"SMOKING HISTORY", App.get(smokingHistory).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(smokingHistory).equals(getResources().getString(R.string.yes)) ? "NO" : "UNKNOWN")});
+                (App.get(smokingHistory).equals(getResources().getString(R.string.no)) ? "NO" : "UNKNOWN")});
         if(dailyCigarettesIntake.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"DAILY CIGARETTE USE", App.get(dailyCigarettesIntake)});
         if(smokingDuration.getVisibility() == View.VISIBLE)

@@ -540,27 +540,26 @@ public class PetRefusalForm extends AbstractFormActivity implements RadioGroup.O
         observations.add(new String[]{"COUNSELING MODE", counselingProvidedString});
         observations.add(new String[]{"TOTAL NUMBER OF SESSIONS", App.get(totalSession)});
         if(datesLinearLayout.getVisibility() == View.VISIBLE) {
+            String sessionDateString = "";
             for (int i = 0; i < datesLinearLayout.getChildCount(); i++) {
 
                 TitledEditText v = (TitledEditText) datesLinearLayout.getChildAt(i);
-                String s = v.getEditText().toString();
-                if (v.getEditText().getTag().toString().equals(clickDate)) {
-                    String date = v.getEditText().getText().toString();
-                    if (!date.equals("")) {
-                        Date dateFormat = App.stringToDate(date, "EEEE, MMM dd,yyyy");
-                        Calendar calendar = Calendar.getInstance();
-
-                        calendar.setTime(dateFormat);
-                        String dateOnString = App.getSqlDate(calendar);
-
-                        observations.add(new String[]{"SESSION DATE", dateOnString});
-                    }
-
-                    break;
+                String date = v.getEditText().getText().toString();
+                if (!date.equals("")) {
+                    Date dateFormat = App.stringToDate(date, "EEEE, MMM dd,yyyy");
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(dateFormat);
+                    String dateOnString = App.getSqlDate(calendar);
+                    if(i == 0)
+                        sessionDateString = dateOnString;
+                    else
+                        sessionDateString = sessionDateString + " ; " + dateOnString;
                 }
 
             }
+            observations.add(new String[]{"SESSION DATE", sessionDateString});
         }
+
         String counsellingProvidedToString = "";
         for (CheckBox cb : counselingProvidedTo.getCheckedBoxes()) {
             if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_self)))

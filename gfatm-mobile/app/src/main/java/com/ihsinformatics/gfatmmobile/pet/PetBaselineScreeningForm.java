@@ -74,9 +74,11 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
     TitledEditText indexPatientId;
     Button scanQRCode;
     TitledRadioGroup treatmentStatus;
+    TitledRadioGroup tbCurrentTreatmentType;
     TitledButton treatmentInitiationDate;
     TitledRadioGroup contactRegistered;
     TitledRadioGroup tbHistory;
+    TitledRadioGroup tbHistoryTreatmentType;
     TitledSpinner relationship;
     TitledEditText otherRelation;
     TitledRadioGroup citizenship;
@@ -198,9 +200,11 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         scanQRCode = new Button(context);
         scanQRCode.setText("Scan QR Code");
         treatmentStatus = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_tb_treatment_status), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
+        tbCurrentTreatmentType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_type_tb_treatment), getResources().getStringArray(R.array.pet_types_tb_treatment), "", App.HORIZONTAL, App.VERTICAL);
         treatmentInitiationDate = new TitledButton(context, null, getResources().getString(R.string.pet_treatment_initiation_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.VERTICAL);
         contactRegistered = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_contact_registered), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         tbHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_tb_history), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
+        tbHistoryTreatmentType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_type_tb_treatment), getResources().getStringArray(R.array.pet_types_tb_treatment), "", App.HORIZONTAL, App.VERTICAL);
         relationship = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_relationship), getResources().getStringArray(R.array.pet_household_heads), "", App.VERTICAL);
         otherRelation = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 15, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         citizenship = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_citizenship), getResources().getStringArray(R.array.pet_citizenships), getResources().getString(R.string.pet_pakistani), App.HORIZONTAL, App.VERTICAL);
@@ -341,7 +345,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         linearLayout.addView(clincianNote);
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), indexPatientId.getEditText(), treatmentStatus.getRadioGroup(), contactRegistered.getRadioGroup(), tbHistory.getRadioGroup(), relationship.getSpinner(), otherRelation.getEditText(),
+        views = new View[]{formDate.getButton(), indexPatientId.getEditText(), treatmentStatus.getRadioGroup(), tbCurrentTreatmentType.getRadioGroup(), contactRegistered.getRadioGroup(), tbHistory.getRadioGroup(), tbHistoryTreatmentType.getRadioGroup(), relationship.getSpinner(), otherRelation.getEditText(),
                 cnic1, cnic2, cnic3, cnicOwner.getSpinner(), otherCnicOwner.getEditText(), phone1a, phone1b, phone2a, phone2b, address1.getEditText(), province.getSpinner(), district.getSpinner(), city.getSpinner(),
                 addressType.getRadioGroup(), landmark.getEditText(), entryLocation.getRadioGroup(),
                 cough.getRadioGroup(), coughDuration.getRadioGroup(), haemoptysis.getRadioGroup(), fever.getRadioGroup(), weightLoss.getRadioGroup(), reduceAppetite.getRadioGroup(), reduceActivity.getRadioGroup(),
@@ -349,7 +353,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, intervention, indexPatientId, scanQRCode, treatmentStatus, treatmentInitiationDate, contactRegistered, tbHistory, relationship, otherRelation,
+                {{formDate, intervention, indexPatientId, scanQRCode, treatmentStatus, tbCurrentTreatmentType, treatmentInitiationDate, contactRegistered, tbHistory, tbHistoryTreatmentType, relationship, otherRelation,
                         citizenship, cnicLayout, cnicOwner, otherCnicOwner, otherNIC, phone1Layout, phone2Layout, address1, addressLayout, province, district, city, addressType, landmark, entryLocation, linearLayout},
                 };
 
@@ -362,6 +366,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         district.getSpinner().setOnItemSelectedListener(this);
         province.getSpinner().setOnItemSelectedListener(this);
         treatmentStatus.getRadioGroup().setOnCheckedChangeListener(this);
+        tbHistory.getRadioGroup().setOnCheckedChangeListener(this);
         referral.getRadioGroup().setOnCheckedChangeListener(this);
         citizenship.getRadioGroup().setOnCheckedChangeListener(this);
 
@@ -710,11 +715,15 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         observations.add(new String[]{"PATIENT ID OF INDEX CASE", App.get(indexPatientId)});
         observations.add(new String[]{"INTERVENTION", App.get(intervention).equals(getResources().getString(R.string.pet)) ? "PET" : "SCI"});
         observations.add(new String[]{"TUBERCULOSIS TREATMENT STATUS", App.get(treatmentStatus).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        if (tbCurrentTreatmentType.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"CONTACT CURRENT TB TREATMENT TYPE", App.get(tbCurrentTreatmentType).equals(getResources().getString(R.string.pet_ds)) ? "DRUG-SENSITIVE TUBERCULOSIS INFECTION" : "DRUG-RESISTANT TB"});
         if (treatmentInitiationDate.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TREATMENT START DATE", App.getSqlDate(secondDateCalendar)});
         if (contactRegistered.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"REGISTERED IN ZERO TB", App.get(contactRegistered).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         observations.add(new String[]{"HISTORY OF TUBERCULOSIS", App.get(tbHistory).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        if (tbHistoryTreatmentType.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"CONTACT PAST TB TREATMENT TYPE", App.get(tbHistoryTreatmentType).equals(getResources().getString(R.string.pet_ds)) ? "DRUG-SENSITIVE TUBERCULOSIS INFECTION" : "DRUG-RESISTANT TB"});
         observations.add(new String[]{"FAMILY MEMBER", App.get(relationship).equals(getResources().getString(R.string.pet_self)) ? "SELF" :
                 (App.get(relationship).equals(getResources().getString(R.string.pet_mother)) ? "MOTHER" :
                         (App.get(relationship).equals(getResources().getString(R.string.pet_father)) ? "FATHER" :
@@ -1132,6 +1141,8 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         linearLayout.setVisibility(View.VISIBLE);
         referredFacility.setVisibility(View.GONE);
         otherNIC.setVisibility(View.GONE);
+        tbCurrentTreatmentType.setVisibility(View.GONE);
+        tbHistoryTreatmentType.setVisibility(View.GONE);
 
         String[] districts = serverService.getDistrictList(App.getProvince());
         district.getSpinner().setSpinnerData(districts);
@@ -1172,13 +1183,19 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
             if (App.get(treatmentStatus).equals(getResources().getString(R.string.yes))) {
                 contactRegistered.setVisibility(View.VISIBLE);
                 treatmentInitiationDate.setVisibility(View.VISIBLE);
-
+                tbCurrentTreatmentType.setVisibility(View.VISIBLE);
                 linearLayout.setVisibility(View.GONE);
             } else {
                 contactRegistered.setVisibility(View.GONE);
                 treatmentInitiationDate.setVisibility(View.GONE);
+                tbCurrentTreatmentType.setVisibility(View.GONE);
                 linearLayout.setVisibility(View.VISIBLE);
             }
+        } else if (group == tbHistory.getRadioGroup()) {
+            if (App.get(tbHistory).equals(getResources().getString(R.string.yes)))
+                tbHistoryTreatmentType.setVisibility(View.VISIBLE);
+             else
+                tbHistoryTreatmentType.setVisibility(View.GONE);
         } else if (group == referral.getRadioGroup()) {
             if (App.get(referral).equals(getResources().getString(R.string.yes)))
                 referredFacility.setVisibility(View.VISIBLE);
@@ -1310,6 +1327,18 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                         break;
                     }
                 }
+            } else if (obs[0][0].equals("CONTACT CURRENT TB TREATMENT TYPE")) {
+
+                for (RadioButton rb : tbCurrentTreatmentType.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet_ds)) && obs[0][1].equals("DRUG-SENSITIVE TUBERCULOSIS INFECTION")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_dr)) && obs[0][1].equals("DRUG-RESISTANT TB")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                treatmentStatus.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("TREATMENT START DATE")) {
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
@@ -1336,6 +1365,18 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                         break;
                     }
                 }
+            } else if (obs[0][0].equals("CONTACT PAST TB TREATMENT TYPE")) {
+
+                for (RadioButton rb : tbHistoryTreatmentType.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet_ds)) && obs[0][1].equals("DRUG-SENSITIVE TUBERCULOSIS INFECTION")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_dr)) && obs[0][1].equals("DRUG-RESISTANT TB")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                treatmentStatus.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("FAMILY MEMBER")) {
                 String value = obs[0][1].equals("MOTHER") ? getResources().getString(R.string.pet_mother) :
                         (obs[0][1].equals("FATHER") ? getResources().getString(R.string.pet_father) :
