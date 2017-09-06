@@ -1053,6 +1053,7 @@
     <!-- Strings for ComorbiditiesEndOfTreatmentMentalHealthForm -->
     <string name="comorbidities_end_treatment_MH_number_of_sessions">Total number of sessions conducted:</string>
     <string name="comorbidities_end_treatment_MH_akuads_score">AKAUDS re-screening score:</string>
+    <string name="comorbidities_end_treatment_MH_rescreening_done">Patient rescreening done?</string>
     <string name="comorbidities_end_treatment_MH_reason_of_discontinuation">Reason for discontinuation:</string>
     <string name="comorbidities_end_treatment_MH_feeling_better">If Feeling better because of the counseling:</string>
     <string name="comorbidities_end_treatment_MH_loss_to_followup">If Lost to follow up: Reason for loss to Follow-up:</string>

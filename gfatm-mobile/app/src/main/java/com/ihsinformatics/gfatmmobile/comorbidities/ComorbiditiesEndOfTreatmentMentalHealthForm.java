@@ -52,6 +52,7 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
     // Views...
     TitledButton formDate;
     TitledEditText numberOfSessionsConducted;
+    TitledRadioGroup patientRescreeningDone;
     TitledEditText akuadsRescreeningScore;
     TitledSpinner reasonForDiscontinuation;
     TitledRadioGroup feelingBetterReason;
@@ -136,6 +137,7 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         numberOfSessionsConducted = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_number_of_sessions), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        patientRescreeningDone = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_rescreening_done), getResources().getStringArray(R.array.yes_no_options), "", App.VERTICAL, App.VERTICAL);
         akuadsRescreeningScore = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_akuads_score), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         reasonForDiscontinuation = new TitledSpinner(mainContent.getContext(), null, getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation), getResources().getStringArray(R.array.comorbidities_end_treatment_MH_reason_of_discontinuation_options), getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_feeling_better), App.VERTICAL, true);
         feelingBetterReason = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_feeling_better), getResources().getStringArray(R.array.comorbidities_end_treatment_MH_feeling_better_options), getResources().getString(R.string.comorbidities_end_treatment_MH_feeling_better_options_therapy_completed), App.VERTICAL, App.VERTICAL);
@@ -150,15 +152,16 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
         displayFeelingBetterReason();
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), numberOfSessionsConducted.getEditText(), akuadsRescreeningScore.getEditText(), reasonForDiscontinuation.getSpinner(), /*feelingBetterReason.getRadioGroup(),*/
+        views = new View[]{formDate.getButton(), numberOfSessionsConducted.getEditText(), patientRescreeningDone.getRadioGroup(), akuadsRescreeningScore.getEditText(), reasonForDiscontinuation.getSpinner(), /*feelingBetterReason.getRadioGroup(),*/
                 lossToFollowup.getRadioGroup(), referredTo.getEditText(), reasonForReferral.getEditText(), /*ifOther.getEditText(), otherSevereMentalIllness.getEditText(),*/ remarks.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, numberOfSessionsConducted, akuadsRescreeningScore, reasonForDiscontinuation, /*feelingBetterReason,*/
+                {{formDate, numberOfSessionsConducted, patientRescreeningDone, akuadsRescreeningScore, reasonForDiscontinuation, /*feelingBetterReason,*/
                         lossToFollowup, referredTo, reasonForReferral, /*ifOther, otherSevereMentalIllness,*/ remarks}};
 
         formDate.getButton().setOnClickListener(this);
+        patientRescreeningDone.getRadioGroup().setOnCheckedChangeListener(this);
         feelingBetterReason.getRadioGroup().setOnCheckedChangeListener(this);
         lossToFollowup.getRadioGroup().setOnCheckedChangeListener(this);
         //referredTo.getRadioGroup().setOnCheckedChangeListener(this);
@@ -292,6 +295,7 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         observations.add(new String[]{"TOTAL NUMBER OF SESSIONS", App.get(numberOfSessionsConducted)});
+        observations.add(new String[]{"RESCREENING DONE", App.get(patientRescreeningDone).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         observations.add(new String[]{"AKUADS SCORE", App.get(akuadsRescreeningScore)});
 
         final String reasonForDiscontinuationString = App.get(reasonForDiscontinuation).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_feeling_better)) ? "FEELING BETTER" :
@@ -457,7 +461,18 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
 
             if (obs[0][0].equals("TOTAL NUMBER OF SESSIONS")) {
                 numberOfSessionsConducted.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("AKUADS SCORE")) {
+            } else if (obs[0][0].equals("RESCREENING DONE")) {
+                for (RadioButton rb : patientRescreeningDone.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            }
+            else if (obs[0][0].equals("AKUADS SCORE")) {
                 akuadsRescreeningScore.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("REASON FOR DISCONTINUATION OF PROGRAM")) {
                 String value = obs[0][1].equals("FEELING BETTER") ? getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_feeling_better) :
@@ -583,6 +598,7 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
                     HashMap<String, String> result = new HashMap<String, String>();
                     String akuadsScore = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_ASSESSMENT_FORM_MENTAL_HEALTH, "AKUADS SCORE");
                     String sessionNumber = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_TREATMENT_FOLLOWUP_MENTAL_HEALTH_FORM, "SESSION NUMBER");
+                    String assessmentFilled = serverService.getLatestEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_ASSESSMENT_FORM_MENTAL_HEALTH);
 
                     if (akuadsScore != null)
                         if (!akuadsScore.equals(""))
@@ -593,6 +609,13 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
                     if (sessionNumber != null)
                         if (!sessionNumber.equals(""))
                             result.put("SESSION NUMBER", sessionNumber);
+                    if (assessmentFilled != null && !assessmentFilled.equals("")) {
+                        result.put("ASSESSMENT FILLED", assessmentFilled);
+                    }
+                    else {
+                        result.put("ASSESSMENT FILLED", "");
+                    }
+
 
                     return result;
                 }
@@ -608,6 +631,27 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
 
                     akuadsRescreeningScore.getEditText().setText(result.get("AKUADS SCORE"));
                     numberOfSessionsConducted.getEditText().setText(result.get("SESSION NUMBER"));
+
+                    if(result.get("ASSESSMENT FILLED") != null) {
+                        if(result.get("ASSESSMENT FILLED").equals("")) {
+                            for (RadioButton rb : patientRescreeningDone.getRadioGroup().getButtons()) {
+                                if (rb.getText().equals(getResources().getString(R.string.no))) {
+                                    rb.setChecked(true);
+                                    akuadsRescreeningScore.setVisibility(View.GONE);
+                                    break;
+                                }
+                            }
+                        }
+                        else {
+                            for (RadioButton rb : patientRescreeningDone.getRadioGroup().getButtons()) {
+                                if (rb.getText().equals(getResources().getString(R.string.yes))) {
+                                    rb.setChecked(true);
+                                    akuadsRescreeningScore.setVisibility(View.VISIBLE);
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
             };
             autopopulateFormTask.execute("");
@@ -621,7 +665,14 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
 
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
-
+        if (radioGroup == patientRescreeningDone.getRadioGroup()) {
+            if( patientRescreeningDone.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.yes))) {
+                akuadsRescreeningScore.setVisibility(View.VISIBLE);
+            }
+            else {
+                akuadsRescreeningScore.setVisibility(View.GONE);
+            }
+        }
     }
 
     void displayFeelingBetterReason() {
