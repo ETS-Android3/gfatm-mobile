@@ -1286,5 +1286,13 @@
 
     <string name="pet_other_request_for_visit">Other request for visit</string>
 
+    <string name="pet_type_tb_treatment">What type of TB treatment?</string>
+    <string name="pet_ds">DS</string>
+    <string name="pet_dr">DR</string>
+    <string-array name="pet_types_tb_treatment">
+        <item>@string/pet_ds</item>
+        <item>@string/pet_dr</item>
+    </string-array>
+
 </resources>
 
