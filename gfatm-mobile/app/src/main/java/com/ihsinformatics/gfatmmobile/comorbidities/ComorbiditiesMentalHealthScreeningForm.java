@@ -205,6 +205,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
             akuadsSeverity.getRadioGroup().getChildAt(i).setClickable(false);
         }
 
+
         // second page views...
         akuadsAgree = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_agree_AKUADS), getResources().getStringArray(R.array.comorbidities_yes_no), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL);
 
@@ -238,6 +239,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
         displayPreferredTherapyLocationOrNot();
         //otherPreferredLocation = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_preferredlocation_other_comorbidities), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         //otherPreferredLocation.setVisibility(View.GONE);
+        preferredModeOfTherapy.setVisibility(View.GONE);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), akuadsSleep.getRadioGroup(), akuadsLackOfInterest.getRadioGroup(),
@@ -1446,7 +1448,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
                 || akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_severe))) {
             akuadsAgree.setVisibility(View.VISIBLE);
 
-            preferredModeOfTherapy.setVisibility(View.VISIBLE);
+           // preferredModeOfTherapy.setVisibility(View.VISIBLE);
             String tbCategory = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_PATIENT_INFORMATION_FORM, "TB CATEGORY");
 
             if(tbCategory != null) {
@@ -1548,7 +1550,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
             if(snackbar!=null)
                 snackbar.dismiss();
 
-            preferredModeOfTherapy.setVisibility(View.VISIBLE);
+          //  preferredModeOfTherapy.setVisibility(View.VISIBLE);
             String tbCategory = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_PATIENT_INFORMATION_FORM, "TB CATEGORY");
 
             if(tbCategory != null) {
