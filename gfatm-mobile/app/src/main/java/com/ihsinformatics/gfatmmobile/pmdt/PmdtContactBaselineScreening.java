@@ -610,7 +610,7 @@ public class PmdtContactBaselineScreening extends AbstractFormActivity implement
                     }
                 });
 
-                String result = serverService.getPatient(App.get(indexPatientId), false);
+                String result = serverService.getPatient(App.get(indexPatientId), false, false);
                 return result;
 
             }

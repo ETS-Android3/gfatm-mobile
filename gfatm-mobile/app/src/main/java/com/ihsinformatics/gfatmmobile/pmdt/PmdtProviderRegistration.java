@@ -129,7 +129,7 @@ public class PmdtProviderRegistration extends AbstractFormActivity {
     @Override
     public void initViews() {
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         personRole = new TitledSpinner(context, "", getResources().getString(R.string.pmdt_person_role), getResources().getStringArray(R.array.pmdt_roles), getResources().getString(R.string.pmdt_treatment_coordinator), App.HORIZONTAL);
         registeringFacility = new TitledSpinner(context, "", getResources().getString(R.string.pmdt_facility_registered), getResources().getStringArray(R.array.pmdt_roles), getResources().getString(R.string.pmdt_treatment_coordinator), App.HORIZONTAL);
@@ -157,7 +157,7 @@ public class PmdtProviderRegistration extends AbstractFormActivity {
         treatmentSupporterTraining = new TitledSpinner(context, "", getResources().getString(R.string.pmdt_treatment_supporter_training), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL);
         trainingFacility = new TitledSpinner(context, "", getResources().getString(R.string.pmdt_training_facility), getResources().getStringArray(R.array.fast_locations), getResources().getString(R.string.pmdt_karachi), App.HORIZONTAL);
         trainer = new TitledEditText(context, "", getResources().getString(R.string.pmdt_trainer), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
-        trainingDate = new TitledButton(context, null, getResources().getString(R.string.pet_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        trainingDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
 
         languages = new TitledSpinner(context, "", getResources().getString(R.string.pmdt_mother_tongue), getResources().getStringArray(R.array.pmdt_mother_tongues), "", App.HORIZONTAL);
         otherLanguage = new TitledEditText(context, "", getResources().getString(R.string.pmdt_mother_tongue_other), "", "", 25, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
