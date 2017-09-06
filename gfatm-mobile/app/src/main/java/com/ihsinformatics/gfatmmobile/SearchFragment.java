@@ -1003,7 +1003,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Co
                     }
                 });
 
-                String result = serverService.getPatient(pid, true);
+                String result = serverService.getPatient(pid, true, false);
                 return result;
 
             }

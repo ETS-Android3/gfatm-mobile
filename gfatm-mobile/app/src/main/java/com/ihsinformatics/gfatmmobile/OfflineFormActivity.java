@@ -433,11 +433,16 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                 });
 
 
+                Boolean errorFlag  = false;
                 for (int i = 0; i < checkedTag.size(); i++) {
-                    String returnString = serverService.submitOfflineForm(checkedTag.get(i));
-                    if (!returnString.equals("SUCCESS"))
-                        return returnString;
+                    String returnString = serverService.submitOfflineForm(checkedTag.get(i), true);
+                    if (!returnString.equals("SUCCESS")) {
+                        errorFlag = true;
+                    }
                 }
+
+                if(errorFlag)
+                    return "COMPLETE_WITH_ERROR";
 
                 return "SUCCESS";
 
@@ -452,10 +457,17 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
             @Override
             protected void onPostExecute(String result) {
                 super.onPostExecute(result);
+
                 loading.dismiss();
                 if (result.equals("SUCCESS")) {
 
                     Toast toast = Toast.makeText(OfflineFormActivity.this, getResources().getString(R.string.forms_submitted), Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.BOTTOM, 0, 0);
+                    toast.show();
+
+                } else if (result.equals("COMPLETE_WITH_ERROR")) {
+
+                    Toast toast = Toast.makeText(OfflineFormActivity.this, getResources().getString(R.string.forms_submitted_with_error), Toast.LENGTH_LONG);
                     toast.setGravity(Gravity.BOTTOM, 0, 0);
                     toast.show();
 

@@ -319,7 +319,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                     }
                 });
 
-                String result = serverService.getPatient(App.get(selectPatientId), true);
+                String result = serverService.getPatient(App.get(selectPatientId), true, false);
                 return result;
 
             }
