@@ -496,6 +496,7 @@
     <string name="verifying_test_id">Verifying Test ID...</string>
     <string name="form_submitted">Form successfully submitted.</string>
     <string name="forms_submitted">Form(s) successfully submitted.</string>
+    <string name="forms_submitted_with_error">Form successfully submitted with some errors.</string>
     <string name="patient_updated">Patient successfully updated.</string>
     <string name="title_completed">Compeleted</string>
     <string name="insert_error">Error while trying to submit form to openmrs.</string>
