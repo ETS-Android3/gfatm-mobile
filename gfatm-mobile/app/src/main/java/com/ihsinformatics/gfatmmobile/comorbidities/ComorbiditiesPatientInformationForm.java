@@ -1489,7 +1489,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
         displayHusbandName();
         otherNicOwner.setVisibility(View.GONE);
         displayAddressOrNot();
-        displayTBCategory();
+        displayTBTypeAndTBCategory();
 
         String[] districts = serverService.getDistrictList(App.getProvince());
         district.getSpinner().setSpinnerData(districts);
@@ -1828,10 +1828,12 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
         }
     }
 
-    void displayTBCategory() {
+    void displayTBTypeAndTBCategory() {
         if (App.get(tbStatus).equalsIgnoreCase(getResources().getString(R.string.comorbidities_patient_information_tb_status_positive))) {
+            tbType.setVisibility(View.VISIBLE);
             tbCategory.setVisibility(View.VISIBLE);
         } else {
+            tbType.setVisibility(View.GONE);
             tbCategory.setVisibility(View.GONE);
         }
     }
@@ -1852,7 +1854,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
         }
 
         if (radioGroup == tbStatus.getRadioGroup()) {
-            displayTBCategory();
+            displayTBTypeAndTBCategory();
         }
     }
 
