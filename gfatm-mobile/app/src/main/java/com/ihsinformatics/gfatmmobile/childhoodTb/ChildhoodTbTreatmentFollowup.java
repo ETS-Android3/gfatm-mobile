@@ -1494,7 +1494,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         adultFormulationOfContinuationRHE.setVisibility(View.GONE);
 
         String tbRegistrationNumber = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "TB REGISTRATION NUMBER");
-        if(!tbRegistrationNumber.equalsIgnoreCase("")){
+        if(tbRegistrationNumber!=null){
             //HERE NOW
             tbRegisterationNumber.getEditText().setKeyListener(null);
             tbRegisterationNumber.getEditText().setText(tbRegistrationNumber);
