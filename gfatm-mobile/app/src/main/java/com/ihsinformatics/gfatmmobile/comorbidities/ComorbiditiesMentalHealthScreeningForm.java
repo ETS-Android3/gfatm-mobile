@@ -35,6 +35,7 @@ import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.MyCheckBox;
+import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
@@ -49,6 +50,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
 /**
@@ -62,6 +64,8 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
     // Views...
     TitledButton formDate;
     MyTextView mentalHealthScreening;
+    TitledSpinner reasonForNotDoingMentalHealthScreening;
+    TitledEditText otherReasonForNotDoingMentalHealthScreening;
     TitledRadioGroup akuadsSleep;
     TitledRadioGroup akuadsLackOfInterest;
     TitledRadioGroup akuadsLostInterestHobbies;
@@ -96,6 +100,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
     TitledSpinner preferredTherapyLocationSpinner;
     TitledEditText gpClinicCode;
     TitledButton mentalHealthNextScheduledVisit;
+
     //TitledEditText otherPreferredLocation;
 
     /**
@@ -171,6 +176,9 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
         formDate.setTag("formDate");
         mentalHealthScreening = new MyTextView(context, getResources().getString(R.string.comorbidities_akuads_Mental_Health_Screening));
         mentalHealthScreening.setTypeface(null, Typeface.BOLD);
+        reasonForNotDoingMentalHealthScreening = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.reason_for_not_doing_mental_health_screening), getResources().getStringArray(R.array.reason_for_not_doing_mental_health_screening_array), getResources().getString(R.string.none), App.VERTICAL, true);
+        otherReasonForNotDoingMentalHealthScreening = new TitledEditText(context, null, getResources().getString(R.string.other_reason_for_not_doing_mental_health_screening), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        otherReasonForNotDoingMentalHealthScreening.setVisibility(View.GONE);
         akuadsSleep = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_sleep), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL);
         akuadsLackOfInterest = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_lackofinterest), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL);
         akuadsLostInterestHobbies = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_lostinteresthobbies), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL);
@@ -228,8 +236,8 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
             locationArray[i] = String.valueOf(locations[i][1]);
         }
 
-        akuadsTreatmentFacilityConsent =  new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_treatment_facility_consent), getResources().getStringArray(R.array.yes_no_options), "", App.VERTICAL, App.VERTICAL);
-        akuadsPhoneCounsellingConsent =  new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_phone_counselling_consent), getResources().getStringArray(R.array.comorbidities_phone_counselling_consent_options), "", App.VERTICAL, App.VERTICAL);
+        akuadsTreatmentFacilityConsent = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_treatment_facility_consent), getResources().getStringArray(R.array.yes_no_options), "", App.VERTICAL, App.VERTICAL);
+        akuadsPhoneCounsellingConsent = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_phone_counselling_consent), getResources().getStringArray(R.array.comorbidities_phone_counselling_consent_options), "", App.VERTICAL, App.VERTICAL);
         preferredModeOfTherapy = new TitledCheckBoxes(context, null, getResources().getString(R.string.comorbidities_preferredmode_id), getResources().getStringArray(R.array.comorbidities_preferred_modeoptions), new Boolean[]{false, false, false}, App.VERTICAL, App.VERTICAL);
         preferredTherapyLocationSpinner = new TitledSpinner(mainContent.getContext(), null, getResources().getString(R.string.comorbidities_preferredlocation_id), locationArray, "", App.VERTICAL, true);
         //reasonForDiscontinuation = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_preferredlocation_id), getResources().getStringArray(R.array.comorbidities_location), "Sehatmand Zindagi Center - Korangi", App.HORIZONTAL);
@@ -242,7 +250,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
         preferredModeOfTherapy.setVisibility(View.GONE);
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), akuadsSleep.getRadioGroup(), akuadsLackOfInterest.getRadioGroup(),
+        views = new View[]{formDate.getButton(), reasonForNotDoingMentalHealthScreening.getSpinner(), otherReasonForNotDoingMentalHealthScreening.getEditText(), akuadsSleep.getRadioGroup(), akuadsLackOfInterest.getRadioGroup(),
                 akuadsLostInterestHobbies.getRadioGroup(), akuadsAnxious.getRadioGroup(),
                 akuadsImpendingDoom.getRadioGroup(), akuadsDifficultyThinkingClearly.getRadioGroup(),
                 akuadsAlone.getRadioGroup(), akuadsUnhappy.getRadioGroup(),
@@ -260,12 +268,13 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, mentalHealthScreening, akuadsSleep, akuadsLackOfInterest, akuadsLostInterestHobbies, akuadsAnxious, akuadsImpendingDoom, akuadsDifficultyThinkingClearly,
+                {{formDate, mentalHealthScreening, reasonForNotDoingMentalHealthScreening, otherReasonForNotDoingMentalHealthScreening, akuadsSleep, akuadsLackOfInterest, akuadsLostInterestHobbies, akuadsAnxious, akuadsImpendingDoom, akuadsDifficultyThinkingClearly,
                         akuadsAlone, akuadsUnhappy, akuadsHopeless, akuadsHelpless, akuadsWorried, akuadsCried, akuadsSuicide, akuadsLossOfAppetite, akuadsRetrosternalBurning,
                         akuadsIndigestion, akuadsNausea, akuadsConstipation, akuadsDifficultBreathing, akuadsTremulous, akuadsNumbness, akuadsTension, akuadsHeadaches, akuadsBodyPain,
                         akuadsUrination, akuadsTotalScore, akuadsSeverity, akuadsAgree, akuadsTreatmentFacilityConsent, akuadsPhoneCounsellingConsent, preferredModeOfTherapy, preferredTherapyLocationSpinner, gpClinicCode, mentalHealthNextScheduledVisit/*otherPreferredLocation*/}};
 
         formDate.getButton().setOnClickListener(this);
+        reasonForNotDoingMentalHealthScreening.getSpinner().setOnItemSelectedListener(this);
         mentalHealthNextScheduledVisit.getButton().setOnClickListener(this);
         akuadsSleep.getRadioGroup().setOnCheckedChangeListener(this);
         akuadsLackOfInterest.getRadioGroup().setOnCheckedChangeListener(this);
@@ -412,12 +421,19 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
 
         Boolean error = false;
 
+        if (otherReasonForNotDoingMentalHealthScreening.getVisibility() == View.VISIBLE && App.get(otherReasonForNotDoingMentalHealthScreening).isEmpty()) {
+            gotoPage(1);
+            otherReasonForNotDoingMentalHealthScreening.getEditText().setError(getString(R.string.mandatory_field));
+            otherReasonForNotDoingMentalHealthScreening.getEditText().requestFocus();
+            error = true;
+        }
         if (!akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_normal)) && gpClinicCode.getVisibility() == View.VISIBLE && App.get(gpClinicCode).isEmpty()) {
             gotoPage(1);
             gpClinicCode.getEditText().setError(getString(R.string.empty_field));
             gpClinicCode.getEditText().requestFocus();
             error = true;
-        } else if (gpClinicCode.getVisibility() == View.VISIBLE && !App.get(gpClinicCode).isEmpty() && (Double.parseDouble(App.get(gpClinicCode)) < 1 || Double.parseDouble(App.get(gpClinicCode)) > 50)) {
+        }
+        if (gpClinicCode.getVisibility() == View.VISIBLE && !App.get(gpClinicCode).isEmpty() && (Double.parseDouble(App.get(gpClinicCode)) < 1 || Double.parseDouble(App.get(gpClinicCode)) > 50)) {
             gotoPage(1);
             gpClinicCode.getEditText().setError(getString(R.string.comorbidities_preferredlocation_gpcliniccode_limit));
             gpClinicCode.getEditText().requestFocus();
@@ -509,115 +525,143 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
         }
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-        observations.add(new String[]{"SLEEPING LESS (AKUADS)", App.get(akuadsSleep).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
-                (App.get(akuadsSleep).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsSleep).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"INTEREST LOSS (AKUADS)", App.get(akuadsLackOfInterest).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
-                (App.get(akuadsLackOfInterest).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsLackOfInterest).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"INTEREST LOSS IN HOBBIES (AKUADS)", App.get(akuadsLostInterestHobbies).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
-                (App.get(akuadsLostInterestHobbies).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsLostInterestHobbies).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"ANXIOUS (AKUADS)", App.get(akuadsAnxious).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
-                (App.get(akuadsAnxious).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsAnxious).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"IMPENDING DOOM SENSATION (AKUADS)", App.get(akuadsImpendingDoom).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
-                (App.get(akuadsImpendingDoom).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsImpendingDoom).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"DIFFICULTY THINKING CLEARLY (AKUADS)", App.get(akuadsDifficultyThinkingClearly).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
-                (App.get(akuadsDifficultyThinkingClearly).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsDifficultyThinkingClearly).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"PREFER BEING ALONE (AKUADS)", App.get(akuadsAlone).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
-                (App.get(akuadsAlone).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsAlone).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"FEELING UNHAPPY (AKUADS)", App.get(akuadsUnhappy).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
-                (App.get(akuadsUnhappy).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsUnhappy).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"FEELING HOPELESS (AKUADS)", App.get(akuadsHopeless).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
-                (App.get(akuadsHopeless).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsHopeless).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"FEELING HELPLESS (AKUADS)", App.get(akuadsHelpless).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
-                (App.get(akuadsHelpless).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsHelpless).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"WORRIED (AKUADS)", App.get(akuadsWorried).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
-                (App.get(akuadsWorried).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsWorried).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"CRIED (AKUADS)", App.get(akuadsCried).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
-                (App.get(akuadsCried).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsCried).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"FEELING SUICIDAL (AKUADS)", App.get(akuadsSuicide).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
-                (App.get(akuadsSuicide).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsSuicide).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"LOSS OF APPETITE (AKUADS)", App.get(akuadsLossOfAppetite).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
-                (App.get(akuadsLossOfAppetite).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsLossOfAppetite).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"RETROSTERNAL BURNING (AKUADS)", App.get(akuadsRetrosternalBurning).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
-                (App.get(akuadsRetrosternalBurning).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsRetrosternalBurning).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"INDIGESTION (AKUADS)", App.get(akuadsIndigestion).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
-                (App.get(akuadsIndigestion).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsIndigestion).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"NAUSEA (AKUADS)", App.get(akuadsNausea).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
-                (App.get(akuadsNausea).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsNausea).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"CONSTIPATION (AKUADS)", App.get(akuadsConstipation).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
-                (App.get(akuadsConstipation).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsConstipation).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"BREATHING DIFFICULTY (AKUADS)", App.get(akuadsDifficultBreathing).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
-                (App.get(akuadsDifficultBreathing).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsDifficultBreathing).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"TREMULOUS (AKUADS)", App.get(akuadsTremulous).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
-                (App.get(akuadsTremulous).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsTremulous).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"NUMBNESS (AKUADS)", App.get(akuadsNumbness).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
-                (App.get(akuadsNumbness).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsNumbness).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"TENSION IN NECK AND SHOULDERS (AKUADS)", App.get(akuadsTension).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
-                (App.get(akuadsTension).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsTension).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"HEADACHE (AKUADS)", App.get(akuadsHeadaches).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
-                (App.get(akuadsHeadaches).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsHeadaches).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"BODY PAIN (AKUADS)", App.get(akuadsBodyPain).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
-                (App.get(akuadsBodyPain).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsBodyPain).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"FREQUENT URINATION (AKUADS)", App.get(akuadsUrination).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
-                (App.get(akuadsUrination).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsUrination).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"AKUADS SCORE", App.get(akuadsTotalScore)});
-        observations.add(new String[]{"AKUADS SEVERITY", App.get(akuadsSeverity).equals(getResources().getString(R.string.comorbidities_MH_severity_level_normal)) ? "NORMAL" :
-                (App.get(akuadsSeverity).equals(getResources().getString(R.string.comorbidities_MH_severity_level_mild)) ? "MILD" :
-                        (App.get(akuadsSeverity).equals(getResources().getString(R.string.comorbidities_MH_severity_level_moderate)) ? "MODERATE" : "SEVERE"))});
-        if (akuadsAgree.getVisibility() == View.VISIBLE) {
-            observations.add(new String[]{"THERAPY CONSENT", App.get(akuadsAgree).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        }
-        if (akuadsTreatmentFacilityConsent.getVisibility() == View.VISIBLE) {
-            observations.add(new String[]{"COUNSELLING AT TREATMENT FACILITY CONSENT", App.get(akuadsTreatmentFacilityConsent).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        }
-        if (akuadsPhoneCounsellingConsent.getVisibility() == View.VISIBLE) {
-            observations.add(new String[]{"PHONE COUNSELLING CONSENT", App.get(akuadsPhoneCounsellingConsent).equals(getResources().getString(R.string.comorbidities_phone_counselling_consent_weekly)) ? "WEEKLY" :
-                    (App.get(akuadsPhoneCounsellingConsent).equals(getResources().getString(R.string.comorbidities_phone_counselling_consent_monthly)) ? "MONTHLY" :
-                            (App.get(akuadsPhoneCounsellingConsent).equals(getResources().getString(R.string.comorbidities_phone_counselling_consent_both)) ? "BOTH" : "NONE"))});
-        }
-        if(preferredModeOfTherapy.getVisibility() == View.VISIBLE) {
-            String diabetesTreatmentInitiationString = "";
-            for (CheckBox cb : preferredModeOfTherapy.getCheckedBoxes()) {
-                if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_facility)))
-                    diabetesTreatmentInitiationString = diabetesTreatmentInitiationString + "HEALTH FACILITY" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_call_centre)))
-                    diabetesTreatmentInitiationString = diabetesTreatmentInitiationString + "CALL CENTER" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_home)))
-                    diabetesTreatmentInitiationString = diabetesTreatmentInitiationString + "HOME" + " ; ";
+
+        if (App.get(reasonForNotDoingMentalHealthScreening).equals(getResources().getString(R.string.none))) {
+            observations.add(new String[]{"REASON FOR NOT DOING MENTAL HEALTH SCREENING", "NONE"});
+            observations.add(new String[]{"SLEEPING LESS (AKUADS)", App.get(akuadsSleep).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
+                    (App.get(akuadsSleep).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
+                            (App.get(akuadsSleep).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
+            observations.add(new String[]{"INTEREST LOSS (AKUADS)", App.get(akuadsLackOfInterest).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
+                    (App.get(akuadsLackOfInterest).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
+                            (App.get(akuadsLackOfInterest).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
+            observations.add(new String[]{"INTEREST LOSS IN HOBBIES (AKUADS)", App.get(akuadsLostInterestHobbies).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
+                    (App.get(akuadsLostInterestHobbies).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
+                            (App.get(akuadsLostInterestHobbies).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
+            observations.add(new String[]{"ANXIOUS (AKUADS)", App.get(akuadsAnxious).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
+                    (App.get(akuadsAnxious).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
+                            (App.get(akuadsAnxious).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
+            observations.add(new String[]{"IMPENDING DOOM SENSATION (AKUADS)", App.get(akuadsImpendingDoom).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
+                    (App.get(akuadsImpendingDoom).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
+                            (App.get(akuadsImpendingDoom).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
+            observations.add(new String[]{"DIFFICULTY THINKING CLEARLY (AKUADS)", App.get(akuadsDifficultyThinkingClearly).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
+                    (App.get(akuadsDifficultyThinkingClearly).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
+                            (App.get(akuadsDifficultyThinkingClearly).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
+            observations.add(new String[]{"PREFER BEING ALONE (AKUADS)", App.get(akuadsAlone).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
+                    (App.get(akuadsAlone).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
+                            (App.get(akuadsAlone).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
+            observations.add(new String[]{"FEELING UNHAPPY (AKUADS)", App.get(akuadsUnhappy).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
+                    (App.get(akuadsUnhappy).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
+                            (App.get(akuadsUnhappy).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
+            observations.add(new String[]{"FEELING HOPELESS (AKUADS)", App.get(akuadsHopeless).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
+                    (App.get(akuadsHopeless).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
+                            (App.get(akuadsHopeless).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
+            observations.add(new String[]{"FEELING HELPLESS (AKUADS)", App.get(akuadsHelpless).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
+                    (App.get(akuadsHelpless).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
+                            (App.get(akuadsHelpless).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
+            observations.add(new String[]{"WORRIED (AKUADS)", App.get(akuadsWorried).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
+                    (App.get(akuadsWorried).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
+                            (App.get(akuadsWorried).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
+            observations.add(new String[]{"CRIED (AKUADS)", App.get(akuadsCried).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
+                    (App.get(akuadsCried).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
+                            (App.get(akuadsCried).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
+            observations.add(new String[]{"FEELING SUICIDAL (AKUADS)", App.get(akuadsSuicide).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
+                    (App.get(akuadsSuicide).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
+                            (App.get(akuadsSuicide).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
+            observations.add(new String[]{"LOSS OF APPETITE (AKUADS)", App.get(akuadsLossOfAppetite).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
+                    (App.get(akuadsLossOfAppetite).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
+                            (App.get(akuadsLossOfAppetite).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
+            observations.add(new String[]{"RETROSTERNAL BURNING (AKUADS)", App.get(akuadsRetrosternalBurning).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
+                    (App.get(akuadsRetrosternalBurning).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
+                            (App.get(akuadsRetrosternalBurning).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
+            observations.add(new String[]{"INDIGESTION (AKUADS)", App.get(akuadsIndigestion).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
+                    (App.get(akuadsIndigestion).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
+                            (App.get(akuadsIndigestion).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
+            observations.add(new String[]{"NAUSEA (AKUADS)", App.get(akuadsNausea).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
+                    (App.get(akuadsNausea).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
+                            (App.get(akuadsNausea).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
+            observations.add(new String[]{"CONSTIPATION (AKUADS)", App.get(akuadsConstipation).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
+                    (App.get(akuadsConstipation).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
+                            (App.get(akuadsConstipation).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
+            observations.add(new String[]{"BREATHING DIFFICULTY (AKUADS)", App.get(akuadsDifficultBreathing).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
+                    (App.get(akuadsDifficultBreathing).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
+                            (App.get(akuadsDifficultBreathing).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
+            observations.add(new String[]{"TREMULOUS (AKUADS)", App.get(akuadsTremulous).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
+                    (App.get(akuadsTremulous).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
+                            (App.get(akuadsTremulous).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
+            observations.add(new String[]{"NUMBNESS (AKUADS)", App.get(akuadsNumbness).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
+                    (App.get(akuadsNumbness).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
+                            (App.get(akuadsNumbness).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
+            observations.add(new String[]{"TENSION IN NECK AND SHOULDERS (AKUADS)", App.get(akuadsTension).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
+                    (App.get(akuadsTension).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
+                            (App.get(akuadsTension).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
+            observations.add(new String[]{"HEADACHE (AKUADS)", App.get(akuadsHeadaches).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
+                    (App.get(akuadsHeadaches).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
+                            (App.get(akuadsHeadaches).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
+            observations.add(new String[]{"BODY PAIN (AKUADS)", App.get(akuadsBodyPain).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
+                    (App.get(akuadsBodyPain).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
+                            (App.get(akuadsBodyPain).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
+            observations.add(new String[]{"FREQUENT URINATION (AKUADS)", App.get(akuadsUrination).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
+                    (App.get(akuadsUrination).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
+                            (App.get(akuadsUrination).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
+            observations.add(new String[]{"AKUADS SCORE", App.get(akuadsTotalScore)});
+            observations.add(new String[]{"AKUADS SEVERITY", App.get(akuadsSeverity).equals(getResources().getString(R.string.comorbidities_MH_severity_level_normal)) ? "NORMAL" :
+                    (App.get(akuadsSeverity).equals(getResources().getString(R.string.comorbidities_MH_severity_level_mild)) ? "MILD" :
+                            (App.get(akuadsSeverity).equals(getResources().getString(R.string.comorbidities_MH_severity_level_moderate)) ? "MODERATE" : "SEVERE"))});
+            if (akuadsAgree.getVisibility() == View.VISIBLE) {
+                observations.add(new String[]{"THERAPY CONSENT", App.get(akuadsAgree).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
             }
-            observations.add(new String[]{"PREFERRED MODE OF THERAPY", diabetesTreatmentInitiationString});
-        }
-        if (preferredTherapyLocationSpinner.getVisibility() == View.VISIBLE) {
-            observations.add(new String[]{"FACILITY REFERRED TO", App.get(preferredTherapyLocationSpinner)});
-        }
-        if (mentalHealthNextScheduledVisit.getVisibility() == View.VISIBLE) {
+            if (akuadsTreatmentFacilityConsent.getVisibility() == View.VISIBLE) {
+                observations.add(new String[]{"COUNSELLING AT TREATMENT FACILITY CONSENT", App.get(akuadsTreatmentFacilityConsent).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+            }
+            if (akuadsPhoneCounsellingConsent.getVisibility() == View.VISIBLE) {
+                observations.add(new String[]{"PHONE COUNSELLING CONSENT", App.get(akuadsPhoneCounsellingConsent).equals(getResources().getString(R.string.comorbidities_phone_counselling_consent_weekly)) ? "WEEKLY" :
+                        (App.get(akuadsPhoneCounsellingConsent).equals(getResources().getString(R.string.comorbidities_phone_counselling_consent_monthly)) ? "MONTHLY" :
+                                (App.get(akuadsPhoneCounsellingConsent).equals(getResources().getString(R.string.comorbidities_phone_counselling_consent_both)) ? "BOTH" : "NONE"))});
+            }
+            if (preferredModeOfTherapy.getVisibility() == View.VISIBLE) {
+                String diabetesTreatmentInitiationString = "";
+                for (CheckBox cb : preferredModeOfTherapy.getCheckedBoxes()) {
+                    if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_facility)))
+                        diabetesTreatmentInitiationString = diabetesTreatmentInitiationString + "HEALTH FACILITY" + " ; ";
+                    else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_call_centre)))
+                        diabetesTreatmentInitiationString = diabetesTreatmentInitiationString + "CALL CENTER" + " ; ";
+                    else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_preferred_mode_home)))
+                        diabetesTreatmentInitiationString = diabetesTreatmentInitiationString + "HOME" + " ; ";
+                }
+                observations.add(new String[]{"PREFERRED MODE OF THERAPY", diabetesTreatmentInitiationString});
+            }
+            if (preferredTherapyLocationSpinner.getVisibility() == View.VISIBLE) {
+                observations.add(new String[]{"FACILITY REFERRED TO", App.get(preferredTherapyLocationSpinner)});
+            }
+            if (mentalHealthNextScheduledVisit.getVisibility() == View.VISIBLE) {
+                observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDateTime(secondDateCalendar)});
+            }
+            observations.add(new String[]{"HEALTH CLINIC/POST", App.get(gpClinicCode)});
+        } else if (App.get(reasonForNotDoingMentalHealthScreening).equals(getResources().getString(R.string.patient_unwell))) {
+            observations.add(new String[]{"REASON FOR NOT DOING MENTAL HEALTH SCREENING", "PATIENT UNWELL"});
             observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDateTime(secondDateCalendar)});
+
+        } else if (App.get(reasonForNotDoingMentalHealthScreening).equals(getResources().getString(R.string.other_reason_for_not_doing_mental_health_screening))) {
+
+            observations.add(new String[]{"REASON FOR NOT DOING MENTAL HEALTH SCREENING", "OTHER REASON FOR NOT DOING MENTAL HEALTH SCREENING"});
+            observations.add(new String[]{"OTHER REASON FOR NOT DOING MENTAL HEALTH SCREENING", App.get(otherReasonForNotDoingMentalHealthScreening)});
+
+        } else if (App.get(reasonForNotDoingMentalHealthScreening).equals(getResources().getString(R.string.language_barrier))) {
+            observations.add(new String[]{"REASON FOR NOT DOING MENTAL HEALTH SCREENING", "LANGUAGE BARRIER"});
+
+        } else if (App.get(reasonForNotDoingMentalHealthScreening).equals(getResources().getString(R.string.less_than_15_years))) {
+            observations.add(new String[]{"REASON FOR NOT DOING MENTAL HEALTH SCREENING", "LESS THAN 15 YEARS"});
+
+        } else if (App.get(reasonForNotDoingMentalHealthScreening).equals(getResources().getString(R.string.patient_refused))) {
+            observations.add(new String[]{"REASON FOR NOT DOING MENTAL HEALTH SCREENING", "PATIENT REFUSED"});
+
+        } else if (App.get(reasonForNotDoingMentalHealthScreening).equals(getResources().getString(R.string.unable_to_hear_or_speak))) {
+            observations.add(new String[]{"REASON FOR NOT DOING MENTAL HEALTH SCREENING", "PATIENT UNABLE TO HEAR/SPEAK"});
+
+        } else if (App.get(reasonForNotDoingMentalHealthScreening).equals(getResources().getString(R.string.patient_does_not_visit_facility))) {
+            observations.add(new String[]{"REASON FOR NOT DOING MENTAL HEALTH SCREENING", "PATIENT DOES NOT VISIT FACILITY HIMSELF OR HERSELF"});
+
         }
-        observations.add(new String[]{"HEALTH CLINIC/POST", App.get(gpClinicCode)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -758,7 +802,41 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
             if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
             }
+            if (obs[0][0].equals("REASON FOR NOT DOING MENTAL HEALTH SCREENING")) {
+                if (obs[0][1].equals("NONE")) {
+                    reasonForNotDoingMentalHealthScreening.getSpinner().selectValue(getString(R.string.none));
+                    setVisibility(View.VISIBLE);
+                    mentalHealthNextScheduledVisit.setVisibility(View.GONE);
+                    otherReasonForNotDoingMentalHealthScreening.setVisibility(View.GONE);
+                } else if (obs[0][1].equals("LANGUAGE BARRIER")) {
+                    reasonForNotDoingMentalHealthScreening.getSpinner().selectValue(getString(R.string.language_barrier));
+                    setVisibility(View.GONE);
+                } else if (obs[0][1].equals("LESS THAN 15 YEARS")) {
+                    reasonForNotDoingMentalHealthScreening.getSpinner().selectValue(getString(R.string.less_than_15_years));
+                    setVisibility(View.GONE);
+                } else if (obs[0][1].equals("PATIENT UNWELL")) {
+                    reasonForNotDoingMentalHealthScreening.getSpinner().selectValue(getString(R.string.patient_unwell));
+                    setVisibility(View.GONE);
+                    mentalHealthNextScheduledVisit.setVisibility(View.VISIBLE);
+                } else if (obs[0][1].equals("PATIENT REFUSED")) {
+                    reasonForNotDoingMentalHealthScreening.getSpinner().selectValue(getString(R.string.patient_refused));
+                    setVisibility(View.GONE);
+                } else if (obs[0][1].equals("PATIENT UNABLE TO HEAR/SPEAK")) {
+                    reasonForNotDoingMentalHealthScreening.getSpinner().selectValue(getString(R.string.unable_to_hear_or_speak));
+                    setVisibility(View.GONE);
+                } else if (obs[0][1].equals("PATIENT DOES NOT VISIT FACILITY HIMSELF OR HERSELF")) {
+                    reasonForNotDoingMentalHealthScreening.getSpinner().selectValue(getString(R.string.patient_does_not_visit_facility));
+                    setVisibility(View.GONE);
 
+                } else {
+                    reasonForNotDoingMentalHealthScreening.getSpinner().selectValue(getString(R.string.other_reason_for_not_doing_mental_health_screening));
+                    setVisibility(View.GONE);
+                    otherReasonForNotDoingMentalHealthScreening.setVisibility(View.VISIBLE);
+                }
+            }
+            if (obs[0][0].equals("OTHER REASON FOR NOT DOING MENTAL HEALTH SCREENING") && otherReasonForNotDoingMentalHealthScreening.getVisibility()==View.VISIBLE){
+                otherReasonForNotDoingMentalHealthScreening.getEditText().setText(obs[0][1]);
+            }
             if (obs[0][0].equals("SLEEPING LESS (AKUADS)")) {
                 for (RadioButton rb : akuadsSleep.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) && obs[0][1].equals("NEVER")) {
@@ -1269,9 +1347,105 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
         return false;
     }
 
+    public void setVisibility(int visibility) {
+        akuadsSleep.setVisibility(visibility);
+        akuadsLackOfInterest.setVisibility(visibility);
+        akuadsLostInterestHobbies.setVisibility(visibility);
+        akuadsAnxious.setVisibility(visibility);
+        akuadsImpendingDoom.setVisibility(visibility);
+        akuadsDifficultyThinkingClearly.setVisibility(visibility);
+        akuadsAlone.setVisibility(visibility);
+        akuadsUnhappy.setVisibility(visibility);
+        akuadsHopeless.setVisibility(visibility);
+        akuadsHelpless.setVisibility(visibility);
+        akuadsWorried.setVisibility(visibility);
+        akuadsCried.setVisibility(visibility);
+        akuadsSuicide.setVisibility(visibility);
+        akuadsLossOfAppetite.setVisibility(visibility);
+        akuadsRetrosternalBurning.setVisibility(visibility);
+        akuadsIndigestion.setVisibility(visibility);
+        akuadsNausea.setVisibility(visibility);
+        akuadsConstipation.setVisibility(visibility);
+        akuadsDifficultBreathing.setVisibility(visibility);
+        akuadsTremulous.setVisibility(visibility);
+        akuadsNumbness.setVisibility(visibility);
+        akuadsTension.setVisibility(visibility);
+        akuadsHeadaches.setVisibility(visibility);
+        akuadsBodyPain.setVisibility(visibility);
+        akuadsUrination.setVisibility(visibility);
+        akuadsTotalScore.setVisibility(visibility);
+        akuadsSeverity.setVisibility(visibility);
+        mentalHealthNextScheduledVisit.setVisibility(visibility);
+        otherReasonForNotDoingMentalHealthScreening.setVisibility(visibility);
+        akuadsAgree.setVisibility(View.GONE);
+        akuadsTreatmentFacilityConsent.setVisibility(View.GONE);
+        akuadsPhoneCounsellingConsent.setVisibility(View.GONE);
+        preferredModeOfTherapy.setVisibility(View.GONE);
+        preferredTherapyLocationSpinner.setVisibility(View.GONE);
+        gpClinicCode.setVisibility(View.GONE);
+    }
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        MySpinner spinner = (MySpinner) parent;
+        if (spinner == reasonForNotDoingMentalHealthScreening.getSpinner()) {
+            if (App.get(reasonForNotDoingMentalHealthScreening).equals(getResources().getString(R.string.none))) {
+                setVisibility(View.VISIBLE);
+                mentalHealthNextScheduledVisit.setVisibility(View.GONE);
+                otherReasonForNotDoingMentalHealthScreening.setVisibility(View.GONE);
+            } else if (App.get(reasonForNotDoingMentalHealthScreening).equals(getResources().getString(R.string.patient_unwell))) {
+                setVisibility(View.GONE);
+                mentalHealthNextScheduledVisit.setVisibility(View.VISIBLE);
+            } else if (App.get(reasonForNotDoingMentalHealthScreening).equals(getResources().getString(R.string.other_reason_for_not_doing_mental_health_screening))) {
+                setVisibility(View.GONE);
+                otherReasonForNotDoingMentalHealthScreening.setVisibility(View.VISIBLE);
+            } else {
+                setVisibility(View.GONE);
+            }
+        }
 
+//        if (spinner == reasonForNotDoingMentalHealthScreening.getSpinner()) {
+//            if (App.get(reasonForNotDoingMentalHealthScreening).equals(getResources().getString(R.string.none)))
+//                for (View[] v : viewGroups) {
+//                    for (View v1 : v) {
+//                        if (v1 instanceof TitledButton) {
+//                            if (App.get(v1).equals(R.string.pet_form_date)) {
+//
+//                            }
+//                        } else if (v1 instanceof MyTextView) {
+//                            if (App.get(v1).equals(R.string.comorbidities_akuads_Mental_Health_Screening)) {
+//
+//                            }
+//                        } else if (v1 instanceof TitledSpinner) {
+//                            if (App.get(v1).equals(R.string.reason_for_not_doing_mental_health_screening)) {
+//
+//                            }
+//                        }else{
+//                            v1.setVisibility(View.VISIBLE);
+//                        }
+//                    }
+//                }
+//            else
+//                for (View[] v : viewGroups) {
+//                    for (View v1 : v) {
+//                        if (v1 instanceof TitledButton) {
+//                            if (App.get(v1).equals(R.string.pet_form_date)) {
+//
+//                            }
+//                        } else if (v1 instanceof MyTextView) {
+//                            if (App.get(v1).equals(R.string.comorbidities_akuads_Mental_Health_Screening)) {
+//
+//                            }
+//                        } else if (v1 instanceof TitledSpinner) {
+//                            if (App.get(v1).equals(R.string.reason_for_not_doing_mental_health_screening)) {
+//
+//                            }
+//                        }else{
+//                            v1.setVisibility(View.GONE);
+//                        }
+//                    }
+//                }
+//        }
     }
 
     @Override
@@ -1448,10 +1622,10 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
                 || akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_severe))) {
             akuadsAgree.setVisibility(View.VISIBLE);
 
-           // preferredModeOfTherapy.setVisibility(View.VISIBLE);
+            // preferredModeOfTherapy.setVisibility(View.VISIBLE);
             String tbCategory = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_PATIENT_INFORMATION_FORM, "TB CATEGORY");
 
-            if(tbCategory != null) {
+            if (tbCategory != null) {
                 if (!tbCategory.isEmpty()) {
                     if (tbCategory.equalsIgnoreCase("MULTI-DRUG RESISTANT TUBERCULOSIS INFECTION")) {
                         ArrayList<MyCheckBox> rbs = preferredModeOfTherapy.getCheckedBoxes();
@@ -1491,21 +1665,17 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
             String treatmentFollowupNextDateString = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST" + "-" + "Treatment Followup");
             String location = "";
 
-            if(treatmentInitiationNextDateString!=null && treatmentFollowupNextDateString!=null) {
-                if(App.stringToDate(treatmentInitiationNextDateString, "yyyy-MM-dd").after(App.stringToDate(treatmentFollowupNextDateString, "yyyy-MM-dd"))) {
+            if (treatmentInitiationNextDateString != null && treatmentFollowupNextDateString != null) {
+                if (App.stringToDate(treatmentInitiationNextDateString, "yyyy-MM-dd").after(App.stringToDate(treatmentFollowupNextDateString, "yyyy-MM-dd"))) {
                     location = serverService.getEncounterLocation(App.getPatientId(), "FAST" + "-" + "Treatment Initiation");
-                }
-                else {
+                } else {
                     location = serverService.getEncounterLocation(App.getPatientId(), "FAST" + "-" + "Treatment Followup");
                 }
-            }
-            else if(treatmentInitiationNextDateString!=null && treatmentFollowupNextDateString==null) {
+            } else if (treatmentInitiationNextDateString != null && treatmentFollowupNextDateString == null) {
                 location = serverService.getEncounterLocation(App.getPatientId(), "FAST" + "-" + "Treatment Initiation");
-            }
-            else if(treatmentInitiationNextDateString==null && treatmentFollowupNextDateString!=null) {
+            } else if (treatmentInitiationNextDateString == null && treatmentFollowupNextDateString != null) {
                 location = serverService.getEncounterLocation(App.getPatientId(), "FAST" + "-" + "Treatment Followup");
-            }
-            else if(treatmentInitiationNextDateString==null && treatmentFollowupNextDateString==null) {
+            } else if (treatmentInitiationNextDateString == null && treatmentFollowupNextDateString == null) {
 
             }
 
@@ -1547,13 +1717,13 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
         List<String> appointDateStringList = new ArrayList<String>();
 
         if (akuadsAgree.getVisibility() == View.VISIBLE && akuadsAgree.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.yes)) && !akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_normal))) {
-            if(snackbar!=null)
+            if (snackbar != null)
                 snackbar.dismiss();
 
-          //  preferredModeOfTherapy.setVisibility(View.VISIBLE);
+            //  preferredModeOfTherapy.setVisibility(View.VISIBLE);
             String tbCategory = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_PATIENT_INFORMATION_FORM, "TB CATEGORY");
 
-            if(tbCategory != null) {
+            if (tbCategory != null) {
                 if (tbCategory.equalsIgnoreCase("MULTI-DRUG RESISTANT TUBERCULOSIS INFECTION")) {
                     ArrayList<MyCheckBox> rbs = preferredModeOfTherapy.getCheckedBoxes();
 
@@ -1591,21 +1761,17 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
             String treatmentFollowupNextDateString = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST" + "-" + "Treatment Followup");
             String location = "";
 
-            if(treatmentInitiationNextDateString!=null && treatmentFollowupNextDateString!=null) {
-                if(App.stringToDate(treatmentInitiationNextDateString, "yyyy-MM-dd").after(App.stringToDate(treatmentFollowupNextDateString, "yyyy-MM-dd"))) {
+            if (treatmentInitiationNextDateString != null && treatmentFollowupNextDateString != null) {
+                if (App.stringToDate(treatmentInitiationNextDateString, "yyyy-MM-dd").after(App.stringToDate(treatmentFollowupNextDateString, "yyyy-MM-dd"))) {
                     location = serverService.getEncounterLocation(App.getPatientId(), "FAST" + "-" + "Treatment Initiation");
-                }
-                else {
+                } else {
                     location = serverService.getEncounterLocation(App.getPatientId(), "FAST" + "-" + "Treatment Followup");
                 }
-            }
-            else if(treatmentInitiationNextDateString!=null && treatmentFollowupNextDateString==null) {
+            } else if (treatmentInitiationNextDateString != null && treatmentFollowupNextDateString == null) {
                 location = serverService.getEncounterLocation(App.getPatientId(), "FAST" + "-" + "Treatment Initiation");
-            }
-            else if(treatmentInitiationNextDateString==null && treatmentFollowupNextDateString!=null) {
+            } else if (treatmentInitiationNextDateString == null && treatmentFollowupNextDateString != null) {
                 location = serverService.getEncounterLocation(App.getPatientId(), "FAST" + "-" + "Treatment Followup");
-            }
-            else if(treatmentInitiationNextDateString==null && treatmentFollowupNextDateString==null) {
+            } else if (treatmentInitiationNextDateString == null && treatmentFollowupNextDateString == null) {
 
             }
 
