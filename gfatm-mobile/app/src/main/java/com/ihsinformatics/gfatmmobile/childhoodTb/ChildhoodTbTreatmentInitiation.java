@@ -1154,11 +1154,13 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                                                                                                     (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_aunt)) ? "AUNT" :
                                                                                                              "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER")))))))))))});
 
-        if(cnicOwnerOther.getVisibility() == View.VISIBLE)
+        if(cnicOwnerOther.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(cnicOwnerOther)});
+        }
 
         if(tbRegisterationNumber.getVisibility()==View.VISIBLE)
             observations.add(new String[]{"TB REGISTRATION NUMBER", App.get(tbRegisterationNumber)});
+
         if(tbType.getVisibility()==View.VISIBLE){
             String testConfirmingString = "";
             for (CheckBox cb : tbType.getCheckedBoxes()) {
@@ -1220,7 +1222,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         }
 
         if (treatmentInitiated.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"CONFIRMED DIAGNOSIS", App.get(treatmentInitiated).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+            observations.add(new String[]{"TREATMENT INITIATED", App.get(treatmentInitiated).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         if (reasonTreatmentNotIniated.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TREATMENT NOT STARTED", App.get(reasonTreatmentNotIniated).equals(getResources().getString(R.string.ctb_patient_refused_treatment)) ? "REFUSAL OF TREATMENT BY PATIENT" :
                     (App.get(reasonTreatmentNotIniated).equals(getResources().getString(R.string.ctb_patient_loss_to_followup)) ? "LOST TO FOLLOW-UP" :
@@ -1242,7 +1244,6 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             observations.add(new String[]{"ADDITIONAL TREATMENT TO TB PATIENT", additionalTreatmentString});
         }
 
-
         if (patientCategory.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TB CATEGORY", App.get(patientCategory).equals(getResources().getString(R.string.ctb_categoryI)) ? "CATEGORY I TUBERCULOSIS" :
                     App.get(patientCategory).equals(getResources().getString(R.string.ctb_categoryII)) ? "CATEGORY II TUBERCULOSIS"
@@ -1251,7 +1252,6 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         if(weight.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"WEIGHT (KG)", App.get(weight)});
         }
-
 
         if(regimen.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"REGIMEN", App.get(regimen).equals(getResources().getString(R.string.ctb_rhze)) ? "RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL PROPHYLAXIS" : "RIFAMPICIN/ISONIAZID/PYRAZINAMIDE"});
@@ -1262,18 +1262,23 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                     App.get(typeFixedDosePrescribed).equals(getResources().getString(R.string.ctb_new_formulation)) ? "NEW FORMULATION"
                             : "ADULT FORMULATION"});
         }
+
         if(currentTabletsofRHZ.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"CURRENT FORMULATION OF TABLETS OF RHZ", App.get(currentTabletsofRHZ)});
         }
+
         if(currentTabletsofE.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"CURRENT FORMULATION OF TABLETS OF  E", App.get(currentTabletsofE)});
         }
+
         if(newTabletsofE.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"NEW FORMULATION OF TABLETS OF E", App.get(newTabletsofE)});
         }
+
         if(newTabletsofRHZ.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"NEW FORMULATION OF TABLETS OF RHZ", App.get(newTabletsofRHZ)});
         }
+
         if(adultFormulationofHRZE.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"ADULT FORMULATION OF TABLETS OF RHZE", App.get(adultFormulationofHRZE)});
         }
