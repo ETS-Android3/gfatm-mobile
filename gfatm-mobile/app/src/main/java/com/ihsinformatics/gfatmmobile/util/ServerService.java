@@ -739,7 +739,7 @@ public class ServerService {
                         values3.put("birthdate", dob);
                         dbUtil.insert(Metadata.PATIENT, values3);
 
-                        getPatient(patientId, true, false);
+                        getPatient(patientId, true);
 
                         ContentValues values5 = new ContentValues();
                         values5.put("program", App.getProgram());
@@ -803,7 +803,7 @@ public class ServerService {
 
                     } else {
                         httpPost.savePatientByEntitiy(patient);
-                        getPatient(patientId, true, false);
+                        getPatient(patientId, true);
                     }
 
                 } catch (Exception e) {
@@ -841,7 +841,7 @@ public class ServerService {
 
     }
 
-    public String getPatient(String patientId, Boolean select, Boolean offlinePatient) {
+    public String getPatient(String patientId, Boolean select) {
 
         if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
             if (!isURLReachable()) {
@@ -853,8 +853,7 @@ public class ServerService {
             try {
                 com.ihsinformatics.gfatmmobile.model.Patient patient = null;
 
-                if(!offlinePatient)
-                    patient = getPatientByIdentifierFromLocalDB(patientId);
+                patient = getPatientByIdentifierFromLocalDB(patientId);
 
                 if (patient == null && App.getMode().equalsIgnoreCase("OFFLINE"))
                     return "PATIENT_NOT_FOUND";
@@ -944,16 +943,7 @@ public class ServerService {
                         values.put("countyDistrict", countyDistict);
                         values.put("country", country);
 
-                        if(!offlinePatient)
-                            dbUtil.insert(Metadata.PATIENT, values);
-                        else{
-                            dbUtil.update(Metadata.PATIENT, values, "uuid=?", new String[]{App.getPatient().getUuid()});
-
-                            App.setPatientId(getPatientSystemIdByUuidLocalDB(uuid));
-                            App.setPatient(patient);
-
-                            deletePatientEncounters(App.getPatientId());
-                        }
+                        dbUtil.insert(Metadata.PATIENT, values);
 
                         JSONArray jsonArray = httpGet.getPatientsEncounters(patientId);
                         String pid = getPatientSystemIdByUuidLocalDB(uuid);
@@ -1845,7 +1835,24 @@ public class ServerService {
 
                 Object[] form = forms[i];
 
+                if(form[3].toString().contains("uuid-replacement-string") || form[4].toString().contains("uuid-replacement-string"))
+                    return "POST_ERROR";
+
                 if (String.valueOf(form[1]).contains("CREATE")) {
+
+                    /*if(check){
+
+                        Object[][] identifier = dbUtil.getFormTableData("select identifier from " + Metadata.PATIENT + " where patient_id='" + String.valueOf(form[2]) + "'");
+                        String identifierString = String.valueOf(identifier[0][0]);
+
+                        String returnString = searchPatient(identifierString);
+                        if(!returnString.equals("PATIENT_NOT_FOUND")){
+
+                            return returnString;
+
+                        }
+
+                    }*/
 
                     String returnString = httpPost.backgroundPost(String.valueOf(form[3]), String.valueOf(form[4]));
 
@@ -2156,7 +2163,7 @@ public class ServerService {
                     values.put("cityVillage", cityVillage);
                     values.put("country", country);
                     values.put("treatmentsupporter", treatmentSupporter);
-                    dbUtil.update(Metadata.PATIENT, values, "uuid=?", new String[]{App.getPatient().getUuid()});
+                    dbUtil.update(Metadata.PATIENT, values, "identifier=?", new String[]{patientId});
 
                     App.setPatientId(getPatientSystemIdByUuidLocalDB(uuid));
                     App.setPatient(patient);
@@ -2721,6 +2728,9 @@ public class ServerService {
 
         double weightInDouble = Double.parseDouble(weight);
 
+        if(percentile == null || percentile.length == 0)
+            return "";
+
         ///this Parse is not required if we store data in Double(when read )..
         double p3 = Double.parseDouble(String.valueOf(percentile[0][3]));
         double p5 = Double.parseDouble(String.valueOf(percentile[0][4]));
@@ -2760,6 +2770,43 @@ public class ServerService {
             else
                 return "> 98th Centile";
         }
+        return "";
+    }
+
+    public String searchPatient(String patientId){
+
+        if (App.getCommunicationMode().equals("REST")) {
+
+            com.ihsinformatics.gfatmmobile.model.Patient patient = null;
+
+            String uuid = getPatientUuid(patientId);
+            if (uuid == null)
+                return "PATIENT_NOT_FOUND";
+
+
+            JSONObject response = httpGet.getPatientByUuid(uuid);
+            patient = com.ihsinformatics.gfatmmobile.model.Patient.parseJSONObject(response);
+
+            com.ihsinformatics.gfatmmobile.model.Person person = patient.getPerson();
+            String identifier = patient.getPatientId();
+            String fname = patient.getPerson().getGivenName();
+            String lname = patient.getPerson().getFamilyName();
+            String gender = patient.getPerson().getGender();
+            String birthdate = patient.getPerson().getBirthdate();
+            int age = patient.getPerson().getAge();
+
+
+            String returnString = "PATIENT ALREADY EXISTS" + " ; ";
+            returnString = returnString + identifier + " ; ";
+            returnString = returnString + fname + " " + lname + " ; ";
+            returnString = returnString + gender + " ; ";
+            returnString = returnString + age + " ; ";
+            returnString = returnString + birthdate + " ; ";
+
+            return returnString;
+
+        }
+
         return "";
     }
 
