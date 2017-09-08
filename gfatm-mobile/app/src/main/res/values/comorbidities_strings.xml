@@ -93,6 +93,27 @@
         <item>@string/comorbidities_phone_counselling_consent_none</item>
     </string-array>
 
+    <string name="reason_for_not_doing_mental_health_screening">Reason for not doing meantal health screening</string>
+    <string name="none">None</string>
+    <string name="language_barrier">Language Barrier</string>
+    <string name="less_than_15_years">Less than 15 years</string>
+    <string name="patient_unwell">Patient unwell</string>
+    <string name="patient_refused">Patient Refused</string>
+    <string name="unable_to_hear_or_speak">Patient unable to hear/speak</string>
+    <string name="patient_does_not_visit_facility">Patient does not visit facility himself/herself</string>
+    <string name="other_reason_for_not_doing_mental_health_screening">Other reason for not doing meantal health screening</string>
+
+    <string-array name="reason_for_not_doing_mental_health_screening_array">
+        <item>@string/none</item>
+        <item>@string/language_barrier</item>
+        <item>@string/less_than_15_years</item>
+        <item>@string/patient_unwell</item>
+        <item>@string/patient_refused</item>
+        <item>@string/unable_to_hear_or_speak</item>
+        <item>@string/patient_does_not_visit_facility</item>
+        <item>@string/other_reason_for_not_doing_mental_health_screening</item>
+    </string-array>
+
     <string name="comorbidities_hba1c_test_order">Test Order HbA1C</string>
     <string name="comorbidities_hba1c_testtype">Test Type:</string>
     <string name="comorbidities_mth_txcomorbidities_hba1c">Which Follow up Month Test?</string>
