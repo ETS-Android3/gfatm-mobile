@@ -11,6 +11,7 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -25,6 +26,7 @@ import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * A login screen that offers login via email/password.
@@ -42,6 +44,9 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
 
     ArrayList<CheckBox> checkBoxes = new ArrayList<CheckBox>();
     ServerService serverService;
+
+    final ArrayList<String> errorEncounterFormsId = new ArrayList<>();
+    final ArrayList<String> errorCreatePatientFormsId = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -432,11 +437,18 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                     }
                 });
 
-
                 Boolean errorFlag  = false;
                 for (int i = 0; i < checkedTag.size(); i++) {
                     String returnString = serverService.submitOfflineForm(checkedTag.get(i), true);
                     if (!returnString.equals("SUCCESS")) {
+
+                        /*if(returnString.contains("PATIENT ALREADY EXISTS")) {
+                            returnString = returnString + checkedTag.get(i);
+                            errorCreatePatientFormsId.add(returnString);
+                        }
+                        else
+                            errorEncounterFormsId.add(checkedTag.get(i));*/
+
                         errorFlag = true;
                     }
                 }
@@ -450,9 +462,47 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
 
             @Override
             protected void onProgressUpdate(String... values) {
-            }
 
-            ;
+                final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
+                String result = values[0];
+                result = result.replace("PATIENT ALREADY EXISTS ; ", "");
+                final String[] resultArray = result.split(" ; ");
+                String message = getResources().getString(R.string.patient_id)  + resultArray[0] + " " + getResources().getString(R.string.patient_already_exists_error) + "<br><br>";
+                message = message + getResources().getString(R.string.patient_id) + " <b>" + resultArray[0] + "</b><br>";
+                message = message + getResources().getString(R.string.name) + " <b>" + resultArray[1] + "</b><br>";
+                String gender = resultArray[2];
+                if(gender.equalsIgnoreCase("M")) gender = "Male";
+                else if(gender.equalsIgnoreCase("F")) gender = "Female";
+                message = message + getResources().getString(R.string.gender) + " <b>" + gender + "</b><br>";
+                if(resultArray[3].equals("0")){
+                    Date birthDate = App.stringToDate(resultArray[4].substring(0,10), "yyyy-MM-dd");
+                    int age = App.getDiffMonths(birthDate, new Date());
+                    message = message + getResources().getString(R.string.age) + " <b>" + age + " month(s)</b><br>";
+                }
+                else message = message + getResources().getString(R.string.age) + " <b>" + resultArray[3] + " year(s)</b><br>";
+                message = message + getResources().getString(R.string.dob) + " <b>" + resultArray[4].substring(0,10) + "</b><br><br>";
+                message = message + getResources().getString(R.string.merge_patient);
+                alertDialog.setMessage(Html.fromHtml(message));
+                Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                alertDialog.setIcon(clearIcon);
+                alertDialog.setTitle(getResources().getString(R.string.patient_already_exists));
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.merge),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                errorCreatePatientFormsId.add(resultArray[5]);
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.no),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();
+                alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
+
+            };
 
             @Override
             protected void onPostExecute(String result) {
@@ -505,6 +555,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                 }
 
                 fillList();
+
             }
         };
         submissionTask.execute("");
