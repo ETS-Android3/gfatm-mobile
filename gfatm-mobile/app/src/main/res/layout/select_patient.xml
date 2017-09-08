@@ -73,7 +73,6 @@
                         android:background="@drawable/template_button"
                         android:text="@string/title_search_patient"
                         android:textColor="@color/white"
-                        android:visibility="gone"
                         android:textSize="@dimen/large" />
 
                     <TextView
