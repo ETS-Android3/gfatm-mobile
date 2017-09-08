@@ -4691,6 +4691,13 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('WEEKLY','weekly
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MONTHLY',NULL,'N/A','1098AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RESCREENING DONE','rescreening_done','Coded','5c210888-3022-432e-8d2c-d40751b51aac');
 
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REASON FOR NOT DOING MENTAL HEALTH SCREENING','reason_for_not_doing_mental_health_screening','Coded','9f640c9c-7dd3-4f8b-951a-90419adf4d93');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LANGUAGE BARRIER','language_barrier','N/A','70b3b060-522f-4940-a086-4008f6405148');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT REFUSED','patient_refused','N/A','24576f6a-be8c-4814-b185-f1bb60e610b3');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT UNABLE TO HEAR/SPEAK','unable_to_hear_or_speak','N/A','7fede7af-fe47-40b2-9415-ec015283dd1a');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT DOES NOT VISIT FACILITY HIMSELF OR HERSELF','patient_does_not_visit_facility','N/A','557c9639-69d4-42df-846f-4c659a15765b');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT IS TOO OLD','patient_too_old','N/A','9b1ba5ee-f926-49b0-b7a4-d114f9d995b3');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER REASON FOR NOT DOING MENTAL HEALTH SCREENING','other_reason_for_not_doing_mental_health_screening','Text','a3d52899-6af8-4f1a-9050-e47606e8a4a0');
 
 -- Program
 INSERT OR IGNORE INTO program VALUES (1, "86ba1232-d576-416e-b102-5f335c6746ce", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
