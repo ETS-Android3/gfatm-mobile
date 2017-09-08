@@ -349,8 +349,8 @@
     <string name="city_default" translatable="false">Karachi</string>
     <string name="province_default" translatable="false">Sindh</string>
     <string name="country_default" translatable="false">Pakistan</string>
-    <!--<string name="ip_default" translatable="false">mrs.ghd.ihn.org.pk</string>
-    <string name="port_default" translatable="false">443</string>-->
+    <!--<string name="ip_default" translatable="false">mrs.ghd.ihn.org.pk</string>-->
+    <!--<string name="port_default" translatable="false">443</string>-->
     <string name="ip_default" translatable="false">202.141.249.106</string>
     <string name="port_default" translatable="false">9902</string>
 
@@ -371,6 +371,7 @@
     <string name="no">No</string>
     <string name="unknown">Unknown</string>
     <string name="refused">Refused</string>
+    <string name="merge">Merge</string>
 
     <!-- Errors String -->
     <string name="user_not_found">No record of username found in local DB.</string>
@@ -424,6 +425,9 @@
     <string name="duplicate_patient_id">Patient ID already exists.</string>
     <string name="barcode_scanner_missing">Missing Barcode Scanner. Please download and install Barcode Scanner from Play Store to be able to scan the QR Codes.</string>
     <string name="form_cannot_be_before_person_dob">Form date should be after Patient\'s DOB</string>
+    <string name="patient_already_exists">Patient already exists</string>
+    <string name="patient_already_exists_error">has already been created. Patient Details are: </string>
+    <string name="merge_patient">Would you like to merge these patients?</string>
 
     <!-- Strings related to login -->
     <string name="username">Username</string>
