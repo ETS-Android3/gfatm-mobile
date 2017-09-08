@@ -20,6 +20,7 @@ import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbPatientRegistration
 import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbPresumptiveCaseConfirmation;
 import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbReferral;
 import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbScreeningLocation;
+import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbSupplementDispersement;
 import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbTestIndicationForm;
 import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbTreatmentFollowup;
 import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbTreatmentInitiation;
@@ -345,6 +346,8 @@ public class Forms{
     public static final FormsObject childhoodTb_antibiotic_followup_form = new FormsObject(CHILDHOODTB_ANTIBIOTIC_FOLLOWUP, ChildhoodTbAntibioticFollowup.class, R.drawable.ctb_antibiotic, FormTypeColor.FOLLOWUP_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_MEDICAL_OFFICER});
     public static final String CHILDHOODTB_END_OF_FOLLOWUP = "End Of Followup";
     public static final FormsObject childhoodTb_end_of_followup = new FormsObject(CHILDHOODTB_END_OF_FOLLOWUP, ChildhoodTbEndOfFollowUp.class, R.drawable.pet_followup_end, FormTypeColor.FOLLOWUP_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER, Roles.CHILDHOODTB_MEDICAL_OFFICER});
+    public static final String CHILDHOODTB_SUPPLEMENT_DISBURSEMENT = "Supplement Disbursement Form";
+    public static final FormsObject childhoodTb_supplement_disbursement = new FormsObject(CHILDHOODTB_SUPPLEMENT_DISBURSEMENT, ChildhoodTbSupplementDispersement.class, R.drawable.comorbidities_drugs_disbursement, FormTypeColor.FOLLOWUP_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_NURSE,Roles.CHILDHOODTB_MEDICAL_OFFICER});
 
     /********************************************************************************************************************************/
 
@@ -487,7 +490,7 @@ public class Forms{
         childhoodtbList.add(childhoodTb_treatment_intiation);
         childhoodtbList.add(childhoodTb_tb_treatment_followup);
         childhoodtbList.add(childhoodTb_antibiotic_followup_form);
-        childhoodtbList.add(childhoodTb_drug_dispersal);
+        //childhoodtbList.add(childhoodTb_drug_dispersal);
         childhoodtbList.add(childhoodTb_isoniazid_preventive_therapy_followup);
         childhoodtbList.add(childhoodTb_missed_visit_followup);
         childhoodtbList.add(childhoodTb_referral_and_transfer_form);
