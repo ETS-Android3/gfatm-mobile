@@ -1010,6 +1010,10 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
                 rb.setClickable(false);
             }
 
+            for (RadioButton rb : presumptiveTbCxr.getRadioGroup().getButtons()) {
+                rb.setClickable(false);
+            }
+
             if (radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_not_suggestive_of_tb))) {
                 abnormalDetailedDiagnosis.setVisibility(View.VISIBLE);
                 for (CheckBox cb : abnormalDetailedDiagnosis.getCheckedBoxes()) {
@@ -1383,10 +1387,7 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
         goneVisibility();
         submitButton.setEnabled(false);
 
-        presumptiveTbCxr.getRadioGroup().setEnabled(false);
-        for (RadioButton rb : presumptiveTbCxr.getRadioGroup().getButtons()) {
-            rb.setClickable(false);
-        }
+
 
         Calendar requiredDate = formDateCalendar.getInstance();
         requiredDate.setTime(formDateCalendar.getTime());
