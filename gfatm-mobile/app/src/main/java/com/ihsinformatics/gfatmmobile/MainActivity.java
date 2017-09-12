@@ -386,8 +386,13 @@ public class MainActivity extends AppCompatActivity
             Boolean flag = getSupportActionBar().getSubtitle() == null ? false : true;
 
             getSupportActionBar().setSubtitle(null);
-            if (App.getPatient() == null)
+            if (App.getPatient() == null) {
                 update.setVisibility(View.GONE);
+                patientName.setText("");
+                patientDob.setText("");
+                patientId.setText("");
+                id.setText("");
+            }
             else
                 update.setVisibility(View.VISIBLE);
 
@@ -784,7 +789,7 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
 
-                String result = serverService.updatePatientDetails(App.getPatient().getPatientId());
+                String result = serverService.updatePatientDetails(App.getPatient().getPatientId(), true);
                 return result;
                 //return "SUCCESS";
             }
