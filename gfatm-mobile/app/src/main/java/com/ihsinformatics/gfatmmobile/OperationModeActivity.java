@@ -185,6 +185,9 @@ public class OperationModeActivity extends AbstractSettingActivity implements Ra
                             App.setUsername(App.get(userNameEditText));
                             App.setPassword(App.get(passwordEditText));
 
+                            App.setPatient(null);
+                            App.setPatientId(null);
+
                             String result = serverService.getUser();
                             return result;
 
