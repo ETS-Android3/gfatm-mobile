@@ -2064,7 +2064,7 @@ public class ServerService {
         return true;
     }
 
-    public String updatePatientDetails(String patientId) {
+    public String updatePatientDetails(String patientId, Boolean select) {
 
         if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
             if (!isURLReachable()) {
@@ -2165,8 +2165,10 @@ public class ServerService {
                     values.put("treatmentsupporter", treatmentSupporter);
                     dbUtil.update(Metadata.PATIENT, values, "identifier=?", new String[]{patientId});
 
-                    App.setPatientId(getPatientSystemIdByUuidLocalDB(uuid));
-                    App.setPatient(patient);
+                    if(select) {
+                        App.setPatientId(getPatientSystemIdByUuidLocalDB(uuid));
+                        App.setPatient(patient);
+                    }
 
                     deletePatientEncounters(App.getPatientId());
 
@@ -2771,6 +2773,51 @@ public class ServerService {
                 return "> 98th Centile";
         }
         return "";
+    }
+
+    public String mergePatient(String pid, String offlineFormId){
+
+        String resultString = updatePatientDetails(pid, false);
+        if(!resultString.equals("SUCCESS"))
+            return resultString;
+
+        dbUtil.delete(Metadata.OFFLINE_FORM, "form_id=?", new String[]{offlineFormId});
+        dbUtil.delete(Metadata.FORMS, "id=?", new String[]{offlineFormId});
+        dbUtil.delete(Metadata.FORMS_VALUE, "form_id=?", new String[]{offlineFormId});
+
+        String[][] result = dbUtil.getTableData(Metadata.PATIENT, "uuid, patient_id ", "identifier = '" + pid + "'");
+
+        try {
+
+            Object[][] encounterForms = dbUtil.getFormTableData("select id, form, pid, uri, content, form_id from " + Metadata.OFFLINE_FORM + " where pid='" + String.valueOf(result[0][1]) + "'");
+            for (int j = 0; j < encounterForms.length; j++) {
+                Object[] encounterForm = encounterForms[j];
+
+                if (String.valueOf(encounterForm[4]).contains("uuid-replacement-string")) {
+                    String content = String.valueOf(encounterForm[4]).replace("uuid-replacement-string", String.valueOf(result[0][0]));
+
+                    ContentValues values = new ContentValues();
+                    values.put("content", content);
+                    dbUtil.update(Metadata.OFFLINE_FORM, values, "id=?", new String[]{String.valueOf(encounterForm[0])});
+                }
+
+                if (String.valueOf(encounterForm[3]).contains("uuid-replacement-string")) {
+                    String uri = String.valueOf(encounterForm[3]).replace("uuid-replacement-string", String.valueOf(result[0][0]));
+
+                    ContentValues values = new ContentValues();
+                    values.put("uri", uri);
+
+                    dbUtil.update(Metadata.OFFLINE_FORM, values, "id=?", new String[]{String.valueOf(encounterForm[0])});
+                }
+
+            }
+
+        } catch (Exception e) {
+            return "PARSER_ERROR";
+        }
+
+        return "SUCCESS";
+
     }
 
     public String searchPatient(String patientId){
