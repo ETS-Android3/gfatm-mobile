@@ -27,6 +27,7 @@ import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.Semaphore;
 
 /**
  * A login screen that offers login via email/password.
@@ -44,9 +45,6 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
 
     ArrayList<CheckBox> checkBoxes = new ArrayList<CheckBox>();
     ServerService serverService;
-
-    final ArrayList<String> errorEncounterFormsId = new ArrayList<>();
-    final ArrayList<String> errorCreatePatientFormsId = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -441,15 +439,78 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                 for (int i = 0; i < checkedTag.size(); i++) {
                     String returnString = serverService.submitOfflineForm(checkedTag.get(i), true);
                     if (!returnString.equals("SUCCESS")) {
+                        final String[] retStr = {""};
 
-                        /*if(returnString.contains("PATIENT ALREADY EXISTS")) {
+                        if(returnString.contains("PATIENT ALREADY EXISTS")) {
                             returnString = returnString + checkedTag.get(i);
-                            errorCreatePatientFormsId.add(returnString);
-                        }
-                        else
-                            errorEncounterFormsId.add(checkedTag.get(i));*/
+                            final String result = returnString.replace("PATIENT ALREADY EXISTS ; ", "");
 
-                        errorFlag = true;
+                            final Semaphore dialogSemaphore = new Semaphore(0, true);
+                            Runnable uiRunnable = new Runnable() {
+                                public void run() {
+
+                                    final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
+                                    final String[] resultArray = result.split(" ; ");
+                                    String message = getResources().getString(R.string.patient_id) + resultArray[0] + " " + getResources().getString(R.string.patient_already_exists_error) + "<br><br>";
+                                    message = message + getResources().getString(R.string.patient_id) + " <b>" + resultArray[0] + "</b><br>";
+                                    message = message + getResources().getString(R.string.name) + " <b>" + resultArray[1] + "</b><br>";
+                                    String gender = resultArray[2];
+                                    if (gender.equalsIgnoreCase("M")) gender = "Male";
+                                    else if (gender.equalsIgnoreCase("F")) gender = "Female";
+                                    message = message + getResources().getString(R.string.gender) + " <b>" + gender + "</b><br>";
+                                    if (resultArray[3].equals("0")) {
+                                        Date birthDate = App.stringToDate(resultArray[4].substring(0, 10), "yyyy-MM-dd");
+                                        int age = App.getDiffMonths(birthDate, new Date());
+                                        message = message + getResources().getString(R.string.age) + " <b>" + age + " month(s)</b><br>";
+                                    } else
+                                        message = message + getResources().getString(R.string.age) + " <b>" + resultArray[3] + " year(s)</b><br>";
+                                    message = message + getResources().getString(R.string.dob) + " <b>" + resultArray[4].substring(0, 10) + "</b><br><br>";
+                                    message = message + getResources().getString(R.string.merge_patient);
+                                    alertDialog.setMessage(Html.fromHtml(message));
+                                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                                    alertDialog.setIcon(clearIcon);
+                                    alertDialog.setTitle(getResources().getString(R.string.patient_already_exists));
+                                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.merge),
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+
+                                                    dialog.dismiss();
+                                                    retStr[0] = serverService.mergePatient(String.valueOf(resultArray[0]), String.valueOf(resultArray[5]));
+                                                    dialogSemaphore.release();
+
+                                                }
+                                            });
+                                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.no),
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    dialogSemaphore.release();
+                                                    dialog.dismiss();
+                                                }
+                                            });
+                                    alertDialog.show();
+                                    alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
+
+                                }
+                            };
+
+                            runOnUiThread(uiRunnable);
+                            try {
+                                dialogSemaphore.acquire();
+                            }
+                            catch (InterruptedException e ) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                        else if(returnString.equals("CONNECTION_ERROR"))
+                            return returnString;
+
+                        else if(!returnString.equals("SUCCESS")) {
+
+                            if(!(returnString.contains("PATIENT ALREADY EXISTS") && retStr[0].equals("SUCCESS")))
+                                errorFlag = true;
+
+                        }
                     }
                 }
 
@@ -462,46 +523,6 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
 
             @Override
             protected void onProgressUpdate(String... values) {
-
-                final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
-                String result = values[0];
-                result = result.replace("PATIENT ALREADY EXISTS ; ", "");
-                final String[] resultArray = result.split(" ; ");
-                String message = getResources().getString(R.string.patient_id)  + resultArray[0] + " " + getResources().getString(R.string.patient_already_exists_error) + "<br><br>";
-                message = message + getResources().getString(R.string.patient_id) + " <b>" + resultArray[0] + "</b><br>";
-                message = message + getResources().getString(R.string.name) + " <b>" + resultArray[1] + "</b><br>";
-                String gender = resultArray[2];
-                if(gender.equalsIgnoreCase("M")) gender = "Male";
-                else if(gender.equalsIgnoreCase("F")) gender = "Female";
-                message = message + getResources().getString(R.string.gender) + " <b>" + gender + "</b><br>";
-                if(resultArray[3].equals("0")){
-                    Date birthDate = App.stringToDate(resultArray[4].substring(0,10), "yyyy-MM-dd");
-                    int age = App.getDiffMonths(birthDate, new Date());
-                    message = message + getResources().getString(R.string.age) + " <b>" + age + " month(s)</b><br>";
-                }
-                else message = message + getResources().getString(R.string.age) + " <b>" + resultArray[3] + " year(s)</b><br>";
-                message = message + getResources().getString(R.string.dob) + " <b>" + resultArray[4].substring(0,10) + "</b><br><br>";
-                message = message + getResources().getString(R.string.merge_patient);
-                alertDialog.setMessage(Html.fromHtml(message));
-                Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-                alertDialog.setIcon(clearIcon);
-                alertDialog.setTitle(getResources().getString(R.string.patient_already_exists));
-                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.merge),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                errorCreatePatientFormsId.add(resultArray[5]);
-                                dialog.dismiss();
-                            }
-                        });
-                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.no),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                alertDialog.show();
-                alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
-
             };
 
             @Override
