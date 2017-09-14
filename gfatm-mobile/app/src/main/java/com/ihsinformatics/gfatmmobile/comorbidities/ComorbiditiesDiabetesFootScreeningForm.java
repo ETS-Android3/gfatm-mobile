@@ -97,7 +97,7 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
 
         PAGE_COUNT = 1;
         FORM_NAME = Forms.COMORBIDITIES_DIABETES_FOOT_SCREENING_FORM;
-        FORM =  Forms.comorbidities_diabetesFootScreeningForm;
+        FORM = Forms.comorbidities_diabetesFootScreeningForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -191,15 +191,15 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), diabetesFootScreeningMonthOfVisit.getSpinner(), diabetesFootScreeningRightFootExamined.getRadioGroup(), /*diabetesFootScreeningReasonRightFootNotExamined.getRadioGroup(),*/
-        diabetesFootScreeningLeftFootExamined.getRadioGroup(), /*diabetesFootScreeningReasonLeftFootNotExamined.getRadioGroup(),*/ diabetesFootScreeningComplicationsOfFeet.getRadioGroup(),
-        diabetesFootScreeningHistoryOfAmputation.getRadioGroup(), diabetesFootScreeningDermatologicalExamination, diabetesFootScreeningSkinRightFootExamination.getSpinner(),
-        diabetesFootScreeningSkinLeftFootExamination.getSpinner(), diabetesFootScreeningRightFootSweating.getRadioGroup(), diabetesFootScreeningLeftFootSweating.getRadioGroup(),
-        diabetesFootScreeningMusculoskeletalExamination, diabetesFootScreeningRightFootDeformity.getRadioGroup(), diabetesFootScreeningLeftFootDeformity.getRadioGroup(),
-        diabetesFootScreeningNeurologicalExamination, diabetesFootScreeningRightFootMonofilament.getRadioGroup(), diabetesFootScreeningLeftFootMonofilament.getRadioGroup(),
-        diabetesFootScreeningRightFootTuningFork.getRadioGroup(), diabetesFootScreeningLeftFootTuningFork.getRadioGroup(), diabetesFootScreeningVascularExamination,
-        diabetesFootScreeningRightFootVascular.getRadioGroup(), diabetesFootScreeningLeftFootVascular.getRadioGroup(), diabetesFootScreeningOtherExamination,
-        diabetesFootScreeningFootHygiene.getRadioGroup(), diabetesFootScreeningFootwearAppropriate.getRadioGroup(), diabetesFootScreeningPreviousUlcer.getRadioGroup(),
-        diabetesFootScreeningDetailedClinicalNotes.getEditText(), diabetesFootScreeningRecommendations.getRadioGroup()};
+                diabetesFootScreeningLeftFootExamined.getRadioGroup(), /*diabetesFootScreeningReasonLeftFootNotExamined.getRadioGroup(),*/ diabetesFootScreeningComplicationsOfFeet.getRadioGroup(),
+                diabetesFootScreeningHistoryOfAmputation.getRadioGroup(), diabetesFootScreeningDermatologicalExamination, diabetesFootScreeningSkinRightFootExamination.getSpinner(),
+                diabetesFootScreeningSkinLeftFootExamination.getSpinner(), diabetesFootScreeningRightFootSweating.getRadioGroup(), diabetesFootScreeningLeftFootSweating.getRadioGroup(),
+                diabetesFootScreeningMusculoskeletalExamination, diabetesFootScreeningRightFootDeformity.getRadioGroup(), diabetesFootScreeningLeftFootDeformity.getRadioGroup(),
+                diabetesFootScreeningNeurologicalExamination, diabetesFootScreeningRightFootMonofilament.getRadioGroup(), diabetesFootScreeningLeftFootMonofilament.getRadioGroup(),
+                diabetesFootScreeningRightFootTuningFork.getRadioGroup(), diabetesFootScreeningLeftFootTuningFork.getRadioGroup(), diabetesFootScreeningVascularExamination,
+                diabetesFootScreeningRightFootVascular.getRadioGroup(), diabetesFootScreeningLeftFootVascular.getRadioGroup(), diabetesFootScreeningOtherExamination,
+                diabetesFootScreeningFootHygiene.getRadioGroup(), diabetesFootScreeningFootwearAppropriate.getRadioGroup(), diabetesFootScreeningPreviousUlcer.getRadioGroup(),
+                diabetesFootScreeningDetailedClinicalNotes.getEditText(), diabetesFootScreeningRecommendations.getRadioGroup()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
@@ -339,7 +339,7 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
-            }else {
+            } else {
                 endTime = new Date();
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
@@ -356,17 +356,17 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
         observations.add(new String[]{"LEFT FOOT EXAMINATION", App.get(diabetesFootScreeningLeftFootExamined).equals(getResources().getString(R.string.comorbidities_foot_screening_foot_options_yes)) ? "YES" :
                 (App.get(diabetesFootScreeningLeftFootExamined).equals(getResources().getString(R.string.comorbidities_foot_screening_foot_options_amputation)) ? "AMPUTATION" : "REFUSED")});
 
-        if(diabetesFootScreeningComplicationsOfFeet.getVisibility() == View.VISIBLE) {
+        if (diabetesFootScreeningComplicationsOfFeet.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"FOOT COMPLICATIONS", App.get(diabetesFootScreeningComplicationsOfFeet).equals(getResources().getString(R.string.comorbidities_foot_screening_complications_of_foot_options_infection)) ? "FOOT INFECTION" :
                     (App.get(diabetesFootScreeningComplicationsOfFeet).equals(getResources().getString(R.string.comorbidities_foot_screening_complications_of_foot_options_ulcers)) ? "FOOT ULCER" :
                             App.get(diabetesFootScreeningComplicationsOfFeet).equals(getResources().getString(R.string.comorbidities_foot_screening_complications_of_foot_options_ingrown)) ? "INGROWING TOENAIL" : "OTHER INFECTION")});
         }
 
-        if(diabetesFootScreeningHistoryOfAmputation.getVisibility() == View.VISIBLE) {
+        if (diabetesFootScreeningHistoryOfAmputation.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"HISTORY OF AMPUTATION", App.get(diabetesFootScreeningHistoryOfAmputation).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         }
 
-        if(diabetesFootScreeningSkinRightFootExamination.getVisibility() == View.VISIBLE) {
+        if (diabetesFootScreeningSkinRightFootExamination.getVisibility() == View.VISIBLE) {
             final String diabetesFootScreeningSkinRightFootExaminationString = App.get(diabetesFootScreeningSkinRightFootExamination).equals(getResources().getString(R.string.comorbidities_foot_screening_skin_foot_options_normal)) ? "NORMAL" :
                     (App.get(diabetesFootScreeningSkinRightFootExamination).equals(getResources().getString(R.string.comorbidities_foot_screening_skin_foot_options_thickened)) ? "THICKENING OF SKIN" :
                             (App.get(diabetesFootScreeningSkinRightFootExamination).equals(getResources().getString(R.string.comorbidities_foot_screening_skin_foot_options_dry)) ? "DRY SKIN" :
@@ -377,7 +377,7 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
             observations.add(new String[]{"RIGHT FOOT SKIN EXAMINATION", diabetesFootScreeningSkinRightFootExaminationString});
         }
 
-        if(diabetesFootScreeningSkinLeftFootExamination.getVisibility() == View.VISIBLE) {
+        if (diabetesFootScreeningSkinLeftFootExamination.getVisibility() == View.VISIBLE) {
             final String diabetesFootScreeningSkinLefttFootExaminationString = App.get(diabetesFootScreeningSkinLeftFootExamination).equals(getResources().getString(R.string.comorbidities_foot_screening_skin_foot_options_normal)) ? "NORMAL" :
                     (App.get(diabetesFootScreeningSkinLeftFootExamination).equals(getResources().getString(R.string.comorbidities_foot_screening_skin_foot_options_thickened)) ? "THICKENING OF SKIN" :
                             (App.get(diabetesFootScreeningSkinLeftFootExamination).equals(getResources().getString(R.string.comorbidities_foot_screening_skin_foot_options_dry)) ? "DRY SKIN" :
@@ -388,63 +388,66 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
             observations.add(new String[]{"LEFT FOOT SKIN EXAMINATION", diabetesFootScreeningSkinLefttFootExaminationString});
         }
 
-        if(diabetesFootScreeningRightFootSweating.getVisibility() == View.VISIBLE) {
+        if (diabetesFootScreeningRightFootSweating.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"RIGHT FOOT SWEATING", App.get(diabetesFootScreeningRightFootSweating).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         }
 
-        if(diabetesFootScreeningLeftFootSweating.getVisibility() == View.VISIBLE) {
+        if (diabetesFootScreeningLeftFootSweating.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"LEFT FOOT SWEATING", App.get(diabetesFootScreeningLeftFootSweating).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         }
 
-        if(diabetesFootScreeningRightFootDeformity.getVisibility() == View.VISIBLE) {
+        if (diabetesFootScreeningRightFootDeformity.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"DEFORMITY OF RIGHT FOOT", App.get(diabetesFootScreeningRightFootDeformity).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         }
 
-        if(diabetesFootScreeningLeftFootDeformity.getVisibility() == View.VISIBLE) {
+        if (diabetesFootScreeningLeftFootDeformity.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"DEFORMITY OF LEFT FOOT", App.get(diabetesFootScreeningLeftFootDeformity).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         }
 
-        if(diabetesFootScreeningRightFootMonofilament.getVisibility() == View.VISIBLE) {
+        if (diabetesFootScreeningRightFootMonofilament.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"RIGHT FOOT MONOFILAMENT", App.get(diabetesFootScreeningRightFootMonofilament).equals(getResources().getString(R.string.comorbidities_foot_screening_neurological_examination_options_detectable)) ? "DETECTED" : "NOT DETECTED"});
         }
 
-        if(diabetesFootScreeningLeftFootMonofilament.getVisibility() == View.VISIBLE) {
+        if (diabetesFootScreeningLeftFootMonofilament.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"LEFT FOOT MONOFILAMENT", App.get(diabetesFootScreeningLeftFootMonofilament).equals(getResources().getString(R.string.comorbidities_foot_screening_neurological_examination_options_detectable)) ? "DETECTED" : "NOT DETECTED"});
         }
 
-        if(diabetesFootScreeningRightFootTuningFork.getVisibility() == View.VISIBLE) {
+        if (diabetesFootScreeningRightFootTuningFork.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"RIGHT FOOT TURING FORK", App.get(diabetesFootScreeningRightFootTuningFork).equals(getResources().getString(R.string.comorbidities_foot_screening_neurological_examination_options_detectable)) ? "DETECTED" : "NOT DETECTED"});
         }
 
-        if(diabetesFootScreeningLeftFootTuningFork.getVisibility() == View.VISIBLE) {
+        if (diabetesFootScreeningLeftFootTuningFork.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"LEFT FOOT TURING FORK", App.get(diabetesFootScreeningLeftFootTuningFork).equals(getResources().getString(R.string.comorbidities_foot_screening_neurological_examination_options_detectable)) ? "DETECTED" : "NOT DETECTED"});
         }
 
-        if(diabetesFootScreeningRightFootVascular.getVisibility() == View.VISIBLE) {
+        if (diabetesFootScreeningRightFootVascular.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"RIGHT FOOT VASCULAR", App.get(diabetesFootScreeningRightFootVascular).equals(getResources().getString(R.string.comorbidities_foot_screening_vascular_examination_options_present)) ? "PRESENT" :
                     (App.get(diabetesFootScreeningRightFootVascular).equals(getResources().getString(R.string.comorbidities_foot_screening_vascular_examination_options_diminished)) ? "REDUCED" : "ABSENT")});
         }
 
-        if(diabetesFootScreeningLeftFootVascular.getVisibility() == View.VISIBLE) {
+        if (diabetesFootScreeningLeftFootVascular.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"LEFT FOOT VASCULAR", App.get(diabetesFootScreeningLeftFootVascular).equals(getResources().getString(R.string.comorbidities_foot_screening_vascular_examination_options_present)) ? "PRESENT" :
                     (App.get(diabetesFootScreeningLeftFootVascular).equals(getResources().getString(R.string.comorbidities_foot_screening_vascular_examination_options_diminished)) ? "REDUCED" : "ABSENT")});
         }
 
-        if(diabetesFootScreeningFootHygiene.getVisibility() == View.VISIBLE) {
+        if (diabetesFootScreeningFootHygiene.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"FOOT HYGENE", App.get(diabetesFootScreeningFootHygiene).equals(getResources().getString(R.string.comorbidities_foot_screening_foot_hygiene_options_poor)) ? "POOR" :
                     (App.get(diabetesFootScreeningFootHygiene).equals(getResources().getString(R.string.comorbidities_foot_screening_foot_hygiene_options_average)) ? "AVERAGE" : "GOOD")});
         }
 
-        if(diabetesFootScreeningFootwearAppropriate.getVisibility() == View.VISIBLE) {
+        if (diabetesFootScreeningFootwearAppropriate.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"FOOTWEAR", App.get(diabetesFootScreeningFootwearAppropriate).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         }
 
-        if(diabetesFootScreeningPreviousUlcer.getVisibility() == View.VISIBLE) {
+        if (diabetesFootScreeningPreviousUlcer.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"ULCER HISTORY", App.get(diabetesFootScreeningPreviousUlcer).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         }
 
         observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(diabetesFootScreeningDetailedClinicalNotes).trim()});
-        observations.add(new String[]{"DIABETES RECOMMENDATAION", App.get(diabetesFootScreeningRecommendations).equals(getResources().getString(R.string.comorbidities_foot_screening_recommendations_options_referral)) ? "PATIENT REFERRED" : "DIABETES MANAGEMENT"});
+        observations.add(new String[]{"DIABETES RECOMMENDATAION",
+                App.get(diabetesFootScreeningRecommendations).equals(getResources().getString(R.string.comorbidities_foot_screening_recommendations_options_12_month)) ? "NO LOSS OF SENSATION, 12 MONTH FOLLOWUP" :
+                        App.get(diabetesFootScreeningRecommendations).equals(getResources().getString(R.string.comorbidities_foot_screening_recommendations_options_3_month)) ? "NO LOSS OF PROTECTIVE SENSATION, 3 MONTH FOLLOWUP" :
+                                App.get(diabetesFootScreeningRecommendations).equals(getResources().getString(R.string.comorbidities_foot_screening_recommendations_options_1_month)) ? "LOSS OF SENSATION IN FEET WITH HIGH PRESSURE OR CALLUS FORMATION WITH POOR CIRCULATION, 1 MONTH FOLLOWUP" : "HISTORY OF PLANTAR ULCERATION OR NEUROPATHIC FRACTURE, REFERRAL TO FOOT DOCTOR"});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -580,7 +583,7 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
 
             String[][] obs = obsValue.get(i);
 
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
             }
 
@@ -754,7 +757,7 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
                     } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_vascular_examination_options_diminished)) && obs[0][1].equals("REDUCED")) {
                         rb.setChecked(true);
                         break;
-                    }  else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_vascular_examination_options_absent)) && obs[0][1].equals("ABSENT")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_vascular_examination_options_absent)) && obs[0][1].equals("ABSENT")) {
                         rb.setChecked(true);
                         break;
                     }
@@ -768,7 +771,7 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
                     } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_vascular_examination_options_diminished)) && obs[0][1].equals("REDUCED")) {
                         rb.setChecked(true);
                         break;
-                    }  else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_vascular_examination_options_absent)) && obs[0][1].equals("ABSENT")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_vascular_examination_options_absent)) && obs[0][1].equals("ABSENT")) {
                         rb.setChecked(true);
                         break;
                     }
@@ -782,7 +785,7 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
                     } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_foot_hygiene_options_average)) && obs[0][1].equals("AVERAGE")) {
                         rb.setChecked(true);
                         break;
-                    }  else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_foot_hygiene_options_good)) && obs[0][1].equals("GOOD")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_foot_hygiene_options_good)) && obs[0][1].equals("GOOD")) {
                         rb.setChecked(true);
                         break;
                     }
@@ -814,10 +817,16 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
                 diabetesFootScreeningDetailedClinicalNotes.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("DIABETES RECOMMENDATAION")) {
                 for (RadioButton rb : diabetesFootScreeningRecommendations.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_recommendations_options_referral)) && obs[0][1].equals("PATIENT REFERRED")) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_recommendations_options_12_month)) && obs[0][1].equals("NO LOSS OF SENSATION, 12 MONTH FOLLOWUP")) {
                         rb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_recommendations_options_management)) && obs[0][1].equals("DIABETES MANAGEMENT")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_recommendations_options_3_month)) && obs[0][1].equals("NO LOSS OF PROTECTIVE SENSATION, 3 MONTH FOLLOWUP")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_recommendations_options_1_month)) && obs[0][1].equals("LOSS OF SENSATION IN FEET WITH HIGH PRESSURE OR CALLUS FORMATION WITH POOR CIRCULATION, 1 MONTH FOLLOWUP")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_recommendations_options_history)) && obs[0][1].equals("HISTORY OF PLANTAR ULCERATION OR NEUROPATHIC FRACTURE, REFERRAL TO FOOT DOCTOR")) {
                         rb.setChecked(true);
                         break;
                     }
@@ -883,7 +892,7 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
 
         }
 
-        if(flag) {
+        if (flag) {
             //HERE FOR AUTOPOPULATING OBS
             final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
                 @Override
@@ -938,11 +947,11 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
 
-        if(radioGroup == diabetesFootScreeningRightFootExamined.getRadioGroup()) {
+        if (radioGroup == diabetesFootScreeningRightFootExamined.getRadioGroup()) {
             allExaminationSkipLogic();
         }
 
-        if(radioGroup == diabetesFootScreeningLeftFootExamined.getRadioGroup()) {
+        if (radioGroup == diabetesFootScreeningLeftFootExamined.getRadioGroup()) {
             allExaminationSkipLogic();
         }
 
@@ -951,11 +960,10 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
     void displayFootComplicationsAndAmputationHistory() {
         String text = diabetesFootScreeningMonthOfVisit.getSpinner().getSelectedItem().toString();
 
-        if(text.equalsIgnoreCase("0")) {
+        if (text.equalsIgnoreCase("0")) {
             diabetesFootScreeningComplicationsOfFeet.setVisibility(View.VISIBLE);
             diabetesFootScreeningHistoryOfAmputation.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             diabetesFootScreeningComplicationsOfFeet.setVisibility(View.GONE);
             diabetesFootScreeningHistoryOfAmputation.setVisibility(View.GONE);
         }
@@ -963,15 +971,14 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
 
     void allExaminationSkipLogic() {
 
-        if(diabetesFootScreeningRightFootExamined.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_foot_screening_foot_options_amputation))) {
+        if (diabetesFootScreeningRightFootExamined.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_foot_screening_foot_options_amputation))) {
             diabetesFootScreeningSkinRightFootExamination.setVisibility(View.GONE);
             diabetesFootScreeningRightFootSweating.setVisibility(View.GONE);
             diabetesFootScreeningRightFootDeformity.setVisibility(View.GONE);
             diabetesFootScreeningRightFootMonofilament.setVisibility(View.GONE);
             diabetesFootScreeningRightFootTuningFork.setVisibility(View.GONE);
             diabetesFootScreeningRightFootVascular.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             diabetesFootScreeningSkinRightFootExamination.setVisibility(View.VISIBLE);
             diabetesFootScreeningRightFootSweating.setVisibility(View.VISIBLE);
             diabetesFootScreeningRightFootDeformity.setVisibility(View.VISIBLE);
@@ -980,15 +987,14 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
             diabetesFootScreeningRightFootVascular.setVisibility(View.VISIBLE);
         }
 
-        if(diabetesFootScreeningLeftFootExamined.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_foot_screening_foot_options_amputation))) {
+        if (diabetesFootScreeningLeftFootExamined.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_foot_screening_foot_options_amputation))) {
             diabetesFootScreeningSkinLeftFootExamination.setVisibility(View.GONE);
             diabetesFootScreeningLeftFootSweating.setVisibility(View.GONE);
             diabetesFootScreeningLeftFootDeformity.setVisibility(View.GONE);
             diabetesFootScreeningLeftFootMonofilament.setVisibility(View.GONE);
             diabetesFootScreeningLeftFootTuningFork.setVisibility(View.GONE);
             diabetesFootScreeningLeftFootVascular.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             diabetesFootScreeningSkinLeftFootExamination.setVisibility(View.VISIBLE);
             diabetesFootScreeningLeftFootSweating.setVisibility(View.VISIBLE);
             diabetesFootScreeningLeftFootDeformity.setVisibility(View.VISIBLE);
@@ -997,7 +1003,7 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
             diabetesFootScreeningLeftFootVascular.setVisibility(View.VISIBLE);
         }
 
-        if(diabetesFootScreeningRightFootExamined.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_foot_screening_foot_options_amputation)) &&
+        if (diabetesFootScreeningRightFootExamined.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_foot_screening_foot_options_amputation)) &&
                 diabetesFootScreeningLeftFootExamined.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_foot_screening_foot_options_amputation))) {
             diabetesFootScreeningFootHygiene.setVisibility(View.GONE);
             diabetesFootScreeningFootwearAppropriate.setVisibility(View.GONE);
@@ -1008,8 +1014,7 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
             diabetesFootScreeningNeurologicalExamination.setVisibility(View.GONE);
             diabetesFootScreeningVascularExamination.setVisibility(View.GONE);
             diabetesFootScreeningOtherExamination.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             diabetesFootScreeningFootHygiene.setVisibility(View.VISIBLE);
             diabetesFootScreeningFootwearAppropriate.setVisibility(View.VISIBLE);
             diabetesFootScreeningPreviousUlcer.setVisibility(View.VISIBLE);

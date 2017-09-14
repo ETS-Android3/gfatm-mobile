@@ -1,11 +1,13 @@
 package com.ihsinformatics.gfatmmobile.comorbidities;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -69,6 +71,7 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
     MyTextView testOrderBloodSugar;
     TitledRadioGroup bloodSugarTestType;
     TitledSpinner bloodSugarFollowupMonth;
+    TitledRadioGroup hadFoodInTwoHour;
     TitledButton bloodSugarTestOrderDate;
     //TitledEditText bloodSugarTestID;
     //ImageView testIdView;
@@ -164,6 +167,7 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
         testOrderBloodSugar.setTypeface(null, Typeface.BOLD);
         bloodSugarTestType = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_hba1c_testtype), getResources().getStringArray(R.array.comorbidities_HbA1C_test_type), getResources().getString(R.string.comorbidities_HbA1C_test_type_baseline), App.HORIZONTAL, App.VERTICAL);
         bloodSugarFollowupMonth = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_mth_txcomorbidities_hba1c), getResources().getStringArray(R.array.comorbidities_followup_month), "0", App.HORIZONTAL);
+        hadFoodInTwoHour = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_blood_sugar_had_food_in_two_hours), getResources().getStringArray(R.array.comorbidities_yes_no), "", App.VERTICAL, App.VERTICAL);
         showFollowupField();
         bloodSugarTestOrderDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_hba1cdate_test_order), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         /*LinearLayout linearLayout = new LinearLayout(context);
@@ -188,9 +192,9 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
 
         linearLayout.addView(testIdView);*/
 
-        orderId = new TitledEditText(context,null,getResources().getString(R.string.order_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,true);
+        orderId = new TitledEditText(context, null, getResources().getString(R.string.order_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         orderIds = new TitledSpinner(context, "", getResources().getString(R.string.order_id), getResources().getStringArray(R.array.pet_empty_array), "", App.HORIZONTAL);
-        testId = new TitledEditText(context,null,getResources().getString(R.string.ctb_test_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
+        testId = new TitledEditText(context, null, getResources().getString(R.string.ctb_test_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
 
 
         //second page views...
@@ -202,17 +206,18 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
         goneVisibility();
 
         // Used for reset fields...
-        views = new View[]{/*bloodSugarTestID.getEditText(),*/ formDate.getButton(), formType.getRadioGroup(), bloodSugarTestType.getRadioGroup(), bloodSugarFollowupMonth.getSpinner(),
-                bloodSugarTestOrderDate.getButton(), bloodSugarTestResultDate.getButton(), bloodSugarResult.getEditText(),orderIds.getSpinner(),testId};
+        views = new View[]{/*bloodSugarTestID.getEditText(),*/ formDate.getButton(), formType.getRadioGroup(), bloodSugarTestType.getRadioGroup(), bloodSugarFollowupMonth.getSpinner(), hadFoodInTwoHour.getRadioGroup(),
+                bloodSugarTestOrderDate.getButton(), bloodSugarTestResultDate.getButton(), bloodSugarResult.getEditText(), orderIds.getSpinner(), testId};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formType, formDate, orderId, /*linearLayout,*/ testOrderBloodSugar, bloodSugarTestType, bloodSugarFollowupMonth, bloodSugarTestOrderDate,
-                        testResultBloodSugar, bloodSugarTestResultDate, orderIds,testId, bloodSugarResult}};
+                {{formType, formDate, orderId, /*linearLayout,*/ testOrderBloodSugar, bloodSugarTestType, bloodSugarFollowupMonth, hadFoodInTwoHour, bloodSugarTestOrderDate,
+                        testResultBloodSugar, bloodSugarTestResultDate, orderIds, testId, bloodSugarResult}};
 
         formDate.getButton().setOnClickListener(this);
         formType.getRadioGroup().setOnCheckedChangeListener(this);
         bloodSugarTestType.getRadioGroup().setOnCheckedChangeListener(this);
+        hadFoodInTwoHour.getRadioGroup().setOnCheckedChangeListener(this);
         bloodSugarTestOrderDate.getButton().setOnClickListener(this);
         bloodSugarTestResultDate.getButton().setOnClickListener(this);
         orderIds.getSpinner().setOnItemSelectedListener(this);
@@ -315,126 +320,126 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
             snackbar.dismiss();
 
         /*** if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))) {
-            if (beforeResult) {
-                Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "Comorbidities-Blood Sugar Test Order");
-                String format = "";
-                String formDa = formDate.getButton().getText().toString();
+         if (beforeResult) {
+         Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "Comorbidities-Blood Sugar Test Order");
+         String format = "";
+         String formDa = formDate.getButton().getText().toString();
 
-                for (int i = 0; i < testIds.length; i++) {
-                    if (testIds[i][0].equals(bloodSugarTestID.getEditText().getText().toString())) {
-                        String date = testIds[i][1].toString();
-                        if (date.contains("/")) {
-                            format = "dd/MM/yyyy";
-                        } else {
-                            format = "yyyy-MM-dd";
-                        }
+         for (int i = 0; i < testIds.length; i++) {
+         if (testIds[i][0].equals(bloodSugarTestID.getEditText().getText().toString())) {
+         String date = testIds[i][1].toString();
+         if (date.contains("/")) {
+         format = "dd/MM/yyyy";
+         } else {
+         format = "yyyy-MM-dd";
+         }
 
 
-                        Date orderDate = App.stringToDate(date, format);
-                        Date orderDateForValidation = App.stringToDate(date, format);
+         Date orderDate = App.stringToDate(date, format);
+         Date orderDateForValidation = App.stringToDate(date, format);
 
-                        Calendar dateCalendar = Calendar.getInstance();
-                        dateCalendar.setTime(orderDateForValidation);
-                        // dateCalendar.add(Calendar.DATE, 1);
-                        SimpleDateFormat newFormat = new SimpleDateFormat("EEEE, MMM dd,yyyy");
-                        finalDate = newFormat.format(dateCalendar.getTime());
+         Calendar dateCalendar = Calendar.getInstance();
+         dateCalendar.setTime(orderDateForValidation);
+         // dateCalendar.add(Calendar.DATE, 1);
+         SimpleDateFormat newFormat = new SimpleDateFormat("EEEE, MMM dd,yyyy");
+         finalDate = newFormat.format(dateCalendar.getTime());
 
-                        if (formDateCalendar.before(App.getCalendar(orderDate))) {
-                            //formDateCalendar = App.getCalendar(App.stringToDate(finalDate, "EEEE, MMM dd,yyyy"));
-                            changeDate = true;
+         if (formDateCalendar.before(App.getCalendar(orderDate))) {
+         //formDateCalendar = App.getCalendar(App.stringToDate(finalDate, "EEEE, MMM dd,yyyy"));
+         changeDate = true;
 
-                            break;
-                        } else {
-                            changeDate = false;
-                            if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
+         break;
+         } else {
+         changeDate = false;
+         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
-                                String personDOB = App.getPatient().getPerson().getBirthdate();
+         String personDOB = App.getPatient().getPerson().getBirthdate();
 
-                                Date date1 = new Date();
-                                if (formDateCalendar.after(App.getCalendar(date1))) {
-                                    changeDate = false;
-                                    formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+         Date date1 = new Date();
+         if (formDateCalendar.after(App.getCalendar(date1))) {
+         changeDate = false;
+         formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
-                                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
-                                    snackbar.show();
+         snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+         snackbar.show();
 
-                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                                    break;
+         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+         break;
 
-                                } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
-                                    changeDate = false;
-                                    formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-                                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                                    TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-                                    tv.setMaxLines(2);
-                                    snackbar.show();
-                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                                    break;
-                                } else {
-                                    changeDate = false;
-                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                                }
-                            }
-                        }
-                    }
-                }
-            } else if (isResultForm) {
-                changeDate = false;
-                Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "Comorbidities-Blood Sugar Test Order");
-                String format = "";
-                String formDa = formDate.getButton().getText().toString();
+         } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+         changeDate = false;
+         formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+         snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+         TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+         tv.setMaxLines(2);
+         snackbar.show();
+         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+         break;
+         } else {
+         changeDate = false;
+         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+         }
+         }
+         }
+         }
+         }
+         } else if (isResultForm) {
+         changeDate = false;
+         Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "Comorbidities-Blood Sugar Test Order");
+         String format = "";
+         String formDa = formDate.getButton().getText().toString();
 
-                for (int i = 0; i < testIds.length; i++) {
-                    if (testIds[i][0].equals(bloodSugarTestID.getEditText().getText().toString())) {
-                        String date = testIds[i][1].toString();
-                        if (date.contains("/")) {
-                            format = "dd/MM/yyyy";
-                        } else {
-                            format = "yyyy-MM-dd";
-                        }
+         for (int i = 0; i < testIds.length; i++) {
+         if (testIds[i][0].equals(bloodSugarTestID.getEditText().getText().toString())) {
+         String date = testIds[i][1].toString();
+         if (date.contains("/")) {
+         format = "dd/MM/yyyy";
+         } else {
+         format = "yyyy-MM-dd";
+         }
 
-                        Date orderDate = App.stringToDate(date, format);
+         Date orderDate = App.stringToDate(date, format);
 
-                        if (formDateCalendar.before(App.getCalendar(orderDate))) {
-                            formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+         if (formDateCalendar.before(App.getCalendar(orderDate))) {
+         formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
-                            snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
-                            snackbar.show();
+         snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
+         snackbar.show();
 
-                            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                            break;
-                        } else {
-                            if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
+         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+         break;
+         } else {
+         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
-                                String personDOB = App.getPatient().getPerson().getBirthdate();
+         String personDOB = App.getPatient().getPerson().getBirthdate();
 
-                                Date date1 = new Date();
-                                if (formDateCalendar.after(App.getCalendar(date1))) {
+         Date date1 = new Date();
+         if (formDateCalendar.after(App.getCalendar(date1))) {
 
-                                    formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+         formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
-                                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
-                                    snackbar.show();
+         snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+         snackbar.show();
 
-                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                                    break;
+         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+         break;
 
-                                } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
-                                    formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-                                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                                    TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-                                    tv.setMaxLines(2);
-                                    snackbar.show();
-                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                                    break;
-                                } else
-                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                            }
-                        }
-                    }
-                }
-            }
-        } ***/
+         } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+         formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+         snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+         TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+         tv.setMaxLines(2);
+         snackbar.show();
+         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+         break;
+         } else
+         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+         }
+         }
+         }
+         }
+         }
+         } ***/
 
         /*if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))){
             Object[][] testIds = serverService.getTestIdByPatientAndEncounterType(App.getPatientId(), "Comorbidities-Blood Sugar Test Order");
@@ -472,7 +477,7 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
-            personDOB = personDOB.substring(0,10);
+            personDOB = personDOB.substring(0, 10);
 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
@@ -531,7 +536,7 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
 
             }
 
-        } else{
+        } else {
             String formDa = formDate.getButton().getText().toString();
 
             formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
@@ -639,8 +644,7 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
             bloodSugarResult.getEditText().setError(getString(R.string.empty_field));
             bloodSugarResult.getEditText().requestFocus();
             error = true;
-        }
-        else if (bloodSugarResult.getVisibility() == View.VISIBLE && !App.get(bloodSugarResult).isEmpty() && Double.parseDouble(App.get(bloodSugarResult)) > 500) {
+        } else if (bloodSugarResult.getVisibility() == View.VISIBLE && !App.get(bloodSugarResult).isEmpty() && Double.parseDouble(App.get(bloodSugarResult)) > 500) {
             gotoLastPage();
             bloodSugarResult.getEditText().setError(getString(R.string.comorbidities_rbs_result_limit1));
             bloodSugarResult.getEditText().requestFocus();
@@ -648,13 +652,23 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
         }
 
         Boolean flag = false;
-        if(!App.get(formType).equalsIgnoreCase("")) {
+        if (!App.get(formType).equalsIgnoreCase("")) {
             flag = true;
         }
         if (!flag) {
             formType.getQuestionView().setError(getString(R.string.empty_field));
             formType.getQuestionView().requestFocus();
             view = formType;
+            error = true;
+        }
+        Boolean flag2 = false;
+        if (!App.get(hadFoodInTwoHour).equalsIgnoreCase("")) {
+            flag2 = true;
+        }
+        if (!flag2) {
+            hadFoodInTwoHour.getQuestionView().setError(getString(R.string.empty_field));
+            hadFoodInTwoHour.getQuestionView().requestFocus();
+            view = hadFoodInTwoHour;
             error = true;
         }
 
@@ -677,15 +691,15 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
             Boolean saveFlag = bundle.getBoolean("save", false);
             if (saveFlag) {
                 flag1 = false;
-            }else {
+            } else {
                 flag1 = true;
             }
         }
 
-        if(orderIds.getVisibility()==View.VISIBLE && flag1){
+        if (orderIds.getVisibility() == View.VISIBLE && flag1) {
             String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Blood Sugar Test Result", "ORDER ID");
-            if(resultTestIds != null){
-                for(String id : resultTestIds) {
+            if (resultTestIds != null) {
+                for (String id : resultTestIds) {
 
                     if (id.equals(App.get(orderIds))) {
                         final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
@@ -713,9 +727,9 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
             }
         }
 
-        if(testId.getVisibility() == View.VISIBLE && flag1){
+        if (testId.getVisibility() == View.VISIBLE && flag1) {
             String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Blood Sugar Test Result", "TEST ID");
-            if(resultTestIds != null) {
+            if (resultTestIds != null) {
                 for (String id : resultTestIds) {
                     if (id.equals(App.get(testId))) {
                         final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
@@ -797,7 +811,7 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
-            }else {
+            } else {
                 endTime = new Date();
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
@@ -822,7 +836,13 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
             observations.add(new String[]{"ORDER ID", App.get(orderIds)});
             observations.add(new String[]{"TEST ID", App.get(testId)});
             //observations.add(new String[]{"TEST RESULT DATE", App.getSqlDateTime(thirdDateCalendar)});
-            observations.add(new String[]{"RANDOM BLOOD SUGAR", App.get(bloodSugarResult)});
+            if (bloodSugarResult.getVisibility() == View.VISIBLE)
+                observations.add(new String[]{"RANDOM BLOOD SUGAR", App.get(bloodSugarResult)});
+            if (App.get(hadFoodInTwoHour).equals(getString(R.string.yes))) {
+                observations.add(new String[]{"FOOD CONSUMPTION IN PAST 2 HOURS", "YES"});
+            } else if (App.get(hadFoodInTwoHour).equals(getString(R.string.no))) {
+                observations.add(new String[]{"FOOD CONSUMPTION IN PAST 2 HOURS", "NO"});
+            }
         }
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
@@ -970,7 +990,7 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
 
             String[][] obs = obsValue.get(i);
 
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
             }
 
@@ -980,8 +1000,7 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
                 if (obs[0][0].equals("ORDER ID")) {
                     orderId.getEditText().setText(obs[0][1]);
                     orderId.getEditText().setKeyListener(null);
-                }
-                else if (obs[0][0].equals("TEST CONTEXT STATUS")) {
+                } else if (obs[0][0].equals("TEST CONTEXT STATUS")) {
                     for (RadioButton rb : bloodSugarTestType.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.comorbidities_HbA1C_test_type_baseline)) && obs[0][1].equals("BASELINE")) {
                             rb.setChecked(true);
@@ -998,7 +1017,8 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
                 } else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
                     bloodSugarFollowupMonth.getSpinner().selectValue(obs[0][1]);
                     bloodSugarFollowupMonth.setVisibility(View.VISIBLE);
-                } /*else if (obs[0][0].equals("DATE TEST ORDERED")) {
+                }
+                /*else if (obs[0][0].equals("DATE TEST ORDERED")) {
                     String secondDate = obs[0][1];
                     secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                     bloodSugarTestOrderDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
@@ -1012,14 +1032,26 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
                 if (obs[0][0].equals("ORDER ID")) {
                     orderIds.getSpinner().selectValue(obs[0][1]);
                     orderIds.getSpinner().setEnabled(false);
-                }
-                else if (obs[0][0].equals("TEST ID")) {
+                } else if (obs[0][0].equals("TEST ID")) {
                     testId.getEditText().setText(obs[0][1]);
                 } /*else if (obs[0][0].equals("TEST RESULT DATE")) {
                     String secondDate = obs[0][1];
                     thirdDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                     bloodSugarTestResultDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
-                }*/ else if (obs[0][0].equals("RANDOM BLOOD SUGAR")) {
+                }*/
+                else if (obs[0][0].equals("FOOD CONSUMPTION IN PAST 2 HOURS")) {
+                    for (RadioButton rb : hadFoodInTwoHour.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                            rb.setChecked(true);
+                            bloodSugarResult.setVisibility(View.GONE);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                            rb.setChecked(true);
+                            bloodSugarResult.setVisibility(View.VISIBLE);
+                            break;
+                        }
+                    }
+                } else if (obs[0][0].equals("RANDOM BLOOD SUGAR")) {
                     bloodSugarResult.getEditText().setText(obs[0][1]);
                 }
             }
@@ -1100,7 +1132,7 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
         ///testIdView.setImageResource(R.drawable.ic_checked);
 
         String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Blood Sugar Test Order", "ORDER ID");
-        if(testIds != null) {
+        if (testIds != null) {
             orderIds.getSpinner().setSpinnerData(testIds);
         }
 
@@ -1144,6 +1176,37 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
             formDate.setVisibility(View.VISIBLE);
             showTestOrderOrTestResult();
         }
+
+        if (radioGroup == hadFoodInTwoHour.getRadioGroup()) {
+            hadFoodInTwoHour.getQuestionView().setError(null);
+            if (App.get(hadFoodInTwoHour).equals(getString(R.string.yes))) {
+                bloodSugarResult.setVisibility(View.GONE);
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.comorbidities_dmscrnng_screener_instructions), Snackbar.LENGTH_INDEFINITE)
+                        .setAction("CLOSE", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                snackbar.dismiss();
+                            }
+                        });
+
+                // Changing message text color
+                snackbar.setActionTextColor(Color.RED);
+
+                //Changing Typeface of Snackbar Action text
+                TextView snackbarActionTextView = (TextView) snackbar.getView().findViewById( android.support.design.R.id.snackbar_action );
+                snackbarActionTextView.setTextSize(20);
+                snackbarActionTextView.setTypeface(snackbarActionTextView.getTypeface(), Typeface.BOLD);
+
+                // Setting Maximum lines for the textview in snackbar
+                View sbView = snackbar.getView();
+                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                textView.setMaxLines(3);
+                snackbar.show();
+            } else if (App.get(hadFoodInTwoHour).equals(getString(R.string.no))) {
+                bloodSugarResult.setVisibility(View.VISIBLE);
+                snackbar.dismiss();
+            }
+        }
     }
 
     void showFollowupField() {
@@ -1164,7 +1227,7 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
         testResultBloodSugar.setVisibility(View.GONE);
         bloodSugarTestResultDate.setVisibility(View.GONE);
         bloodSugarResult.setVisibility(View.GONE);
-
+        hadFoodInTwoHour.setVisibility(View.GONE);
         orderId.setVisibility(View.GONE);
         orderIds.setVisibility(View.GONE);
         testId.setVisibility(View.GONE);
@@ -1188,6 +1251,7 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
             orderIds.setVisibility(View.GONE);
             testResultBloodSugar.setVisibility(View.GONE);
             bloodSugarTestResultDate.setVisibility(View.GONE);
+            hadFoodInTwoHour.setVisibility(View.GONE);
             bloodSugarResult.setVisibility(View.GONE);
 
         } else if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))) {
@@ -1199,6 +1263,7 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
 
             testResultBloodSugar.setVisibility(View.VISIBLE);
             //bloodSugarTestResultDate.setVisibility(View.VISIBLE);
+            hadFoodInTwoHour.setVisibility(View.VISIBLE);
             bloodSugarResult.setVisibility(View.VISIBLE);
             orderIds.setVisibility(View.VISIBLE);
             testId.setVisibility(View.VISIBLE);
@@ -1207,7 +1272,7 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
 
             String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Blood Sugar Test Order", "ORDER ID");
 
-            if(testIds == null || testIds.length == 0){
+            if (testIds == null || testIds.length == 0) {
                 final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                 alertDialog.setMessage(getResources().getString(R.string.comorbidities_blood_sugar_no_order_found));
                 Drawable clearIcon = getResources().getDrawable(R.drawable.error);
@@ -1230,7 +1295,7 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
                 return;
             }
 
-            if(testIds != null) {
+            if (testIds != null) {
                 orderIds.getSpinner().setSpinnerData(testIds);
             }
         }
@@ -1264,6 +1329,7 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
 
     }
 
+    @SuppressLint("ValidFragment")
     public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
         @Override
