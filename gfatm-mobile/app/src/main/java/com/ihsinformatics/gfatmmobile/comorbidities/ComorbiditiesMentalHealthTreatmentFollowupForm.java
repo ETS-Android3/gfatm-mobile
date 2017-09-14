@@ -938,7 +938,7 @@ public class ComorbiditiesMentalHealthTreatmentFollowupForm extends AbstractForm
                             result.put("HEALTH CLINIC/POST", gpClinic);
                     if (sessionNumber != null && !sessionNumber.equals("")) {
                         sessionNumber = sessionNumber.replace(".0", "");
-                        result.put("SESSION NUMBER", String.valueOf(Integer.parseInt(sessionNumber) + 1));
+                        result.put("SESSION NUMBER", String.valueOf(Integer.parseInt(sessionNumber) + 2));
                     } else if (sessionNumber != null && sessionNumber.equals("")) {
                         result.put("SESSION NUMBER", "1");
                     } else if (sessionNumber == null) {

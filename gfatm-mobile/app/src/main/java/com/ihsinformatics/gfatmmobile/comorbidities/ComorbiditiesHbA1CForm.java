@@ -1,5 +1,6 @@
 package com.ihsinformatics.gfatmmobile.comorbidities;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -76,6 +77,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
     TitledButton hba1cTestResultDate;
     TitledEditText hba1cResult;
     TitledRadioGroup hba1cDiabetic;
+    TitledRadioGroup diabetes_previous_diagnosed;
 
     ScrollView scrollView;
 
@@ -84,6 +86,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
     TitledSpinner orderIds;
     TitledEditText testId;
     TitledEditText orderId;
+    boolean isDiabeticDiagnosed;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -178,6 +181,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
         //microalbuminResult = new TitledEditText(context, null, getResources().getString(R.string.hba1c_result), "", "", 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         hba1cResult = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hba1c_result), "", getResources().getString(R.string.comorbidities_hba1c_result_range), 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         hba1cDiabetic = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_hba1c_diabetic), getResources().getStringArray(R.array.comorbidities_yes_no), "", App.VERTICAL, App.VERTICAL);
+        diabetes_previous_diagnosed = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_hba1c_previously_diagnosed_diabetic), getResources().getStringArray(R.array.comorbidities_yes_no), "", App.VERTICAL, App.VERTICAL);
 
         //showHba1cDiabetic();
         autopopulateHba1cDiabetic();
@@ -185,12 +189,12 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), testId.getEditText(), formType.getRadioGroup(), hba1cTestType.getRadioGroup(), hba1cFollowupMonth.getSpinner(),
-                hba1cTestOrderDate.getButton(), hba1cTestResultDate.getButton(), hba1cResult.getEditText(), hba1cDiabetic.getRadioGroup()};
+                hba1cTestOrderDate.getButton(), hba1cTestResultDate.getButton(), hba1cResult.getEditText(), diabetes_previous_diagnosed.getRadioGroup(), hba1cDiabetic.getRadioGroup()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formType, formDate, orderId, testOrderHba1C, hba1cTestType, hba1cFollowupMonth, hba1cTestOrderDate,
-                        testResultHba1c, orderIds, testId, hba1cTestResultDate, hba1cResult, hba1cDiabetic}};
+                        testResultHba1c, orderIds, testId, hba1cTestResultDate, hba1cResult, diabetes_previous_diagnosed, hba1cDiabetic}};
 
         formDate.getButton().setOnClickListener(this);
         formType.getRadioGroup().setOnCheckedChangeListener(this);
@@ -198,7 +202,9 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
         hba1cTestOrderDate.getButton().setOnClickListener(this);
         hba1cTestResultDate.getButton().setOnClickListener(this);
         orderIds.getSpinner().setOnItemSelectedListener(this);
-
+        for (int i = 0; i < diabetes_previous_diagnosed.getRadioGroup().getChildCount(); i++) {
+            diabetes_previous_diagnosed.getRadioGroup().getChildAt(i).setClickable(false);
+        }
         hba1cResult.getEditText().addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -221,10 +227,6 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
                         } else {
                             autopopulateHba1cDiabetic();
                         }
-                    } else if (hba1cResult.getEditText().getText().length() == 0) {
-                        hba1cDiabetic.getRadioGroup().clearCheck();
-                        if (snackbar != null)
-                            snackbar.dismiss();
                     }
                 } catch (NumberFormatException nfe) {
                     //Exception: User might be entering " " (empty) value
@@ -659,6 +661,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
             observations.add(new String[]{"TEST ID", App.get(testId)});
             //observations.add(new String[]{"TEST RESULT DATE", App.getSqlDateTime(thirdDateCalendar)});
             observations.add(new String[]{"HBA1C RESULT", App.get(hba1cResult)});
+            observations.add(new String[]{"PREVIOUSLY DIAGNOSED DIABETES", App.get(diabetes_previous_diagnosed).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
             if (hba1cDiabetic.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"DIABETES MELLITUS", App.get(hba1cDiabetic).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         }
@@ -979,6 +982,8 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
     public void resetViews() {
         super.resetViews();
 
+        Boolean flag = true;
+
         formDate.setVisibility(View.GONE);
 
         testId.getEditText().setEnabled(true);
@@ -1017,6 +1022,79 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
 
             } else bundle.putBoolean("save", false);
 
+        }
+
+
+        if (flag) {
+            //HERE FOR AUTOPOPULATING OBS
+            final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
+                @Override
+                protected HashMap<String, String> doInBackground(String... params) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            loading.setInverseBackgroundForced(true);
+                            loading.setIndeterminate(true);
+                            loading.setCancelable(false);
+                            loading.setMessage(getResources().getString(R.string.fetching_data));
+                            loading.show();
+                        }
+                    });
+
+                    HashMap<String, String> result = new HashMap<String, String>();
+                    String diabetes_diagnosed = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_DIABETES_MELLITUS_SCREENING_FORM, "DIABETES DIAGNOSED");
+
+                    if (diabetes_diagnosed != null)
+                        if (!diabetes_diagnosed.equals(""))
+                            result.put("DIABETES DIAGNOSED", diabetes_diagnosed);
+
+                    return result;
+                }
+
+                @Override
+                protected void onProgressUpdate(String... values) {
+                }
+
+                @Override
+                protected void onPostExecute(HashMap<String, String> result) {
+                    super.onPostExecute(result);
+                    loading.dismiss();
+
+                    if (result.get("DIABETES DIAGNOSED") != null) {
+                        if (result.get("DIABETES DIAGNOSED").toLowerCase().equals("no")) {
+                            for (RadioButton rb : diabetes_previous_diagnosed.getRadioGroup().getButtons()) {
+                                if (rb.getText().equals(getResources().getString(R.string.no))) {
+                                    rb.setChecked(true);
+                                    break;
+                                }
+                            }
+                            isDiabeticDiagnosed = false;
+                            hba1cDiabetic.getRadioGroup().getButtons().get(1).setChecked(true);
+
+                        } else {
+                            for (RadioButton rb : diabetes_previous_diagnosed.getRadioGroup().getButtons()) {
+                                if (rb.getText().equals(getResources().getString(R.string.yes))) {
+                                    rb.setChecked(true);
+                                    break;
+                                }
+                            }
+                            isDiabeticDiagnosed = true;
+                            hba1cDiabetic.getRadioGroup().getButtons().get(0).setChecked(true);
+                        }
+                    } else {
+                        for (RadioButton rb : diabetes_previous_diagnosed.getRadioGroup().getButtons()) {
+                            if (rb.getText().equals(getResources().getString(R.string.no))) {
+                                rb.setChecked(true);
+                                break;
+                            }
+                        }
+                        isDiabeticDiagnosed = false;
+                        hba1cDiabetic.getRadioGroup().getButtons().get(1).setChecked(true);
+
+                    }
+                }
+            };
+            autopopulateFormTask.execute("");
         }
     }
 
@@ -1090,11 +1168,12 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
 
     void autopopulateHba1cDiabetic() {
         try {
-            if (Double.parseDouble(hba1cResult.getEditText().getText().toString()) >= 6.5) {
+            if (Double.parseDouble(hba1cResult.getEditText().getText().toString()) >= 6.5 || isDiabeticDiagnosed) {
                 hba1cDiabetic.getRadioGroup().check((hba1cDiabetic.getRadioGroup().getChildAt(0)).getId());
-            } else {
+            } else if (isDiabeticDiagnosed && Double.parseDouble(hba1cResult.getEditText().getText().toString()) < 6.5) {
                 hba1cDiabetic.getRadioGroup().check((hba1cDiabetic.getRadioGroup().getChildAt(1)).getId());
-
+            } else if (!isDiabeticDiagnosed && Double.parseDouble(hba1cResult.getEditText().getText().toString()) < 6.5) {
+                hba1cDiabetic.getRadioGroup().check((hba1cDiabetic.getRadioGroup().getChildAt(1)).getId());
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.comorbidities_hba1c_screener_instructions), Snackbar.LENGTH_INDEFINITE)
                         .setAction("CLOSE", new View.OnClickListener() {
                             @Override
@@ -1144,6 +1223,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
         hba1cTestResultDate.setVisibility(View.GONE);
         hba1cResult.setVisibility(View.GONE);
         hba1cDiabetic.setVisibility(View.GONE);
+        diabetes_previous_diagnosed.setVisibility(View.GONE);
 
         orderId.setVisibility(View.GONE);
         orderIds.setVisibility(View.GONE);
@@ -1164,6 +1244,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
             testResultHba1c.setVisibility(View.GONE);
             hba1cTestResultDate.setVisibility(View.GONE);
             hba1cResult.setVisibility(View.GONE);
+            diabetes_previous_diagnosed.setVisibility(View.GONE);
             hba1cDiabetic.setVisibility(View.GONE);
             orderIds.setVisibility(View.GONE);
             testId.setVisibility(View.GONE);
@@ -1182,6 +1263,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
             testResultHba1c.setVisibility(View.VISIBLE);
             //hba1cTestResultDate.setVisibility(View.VISIBLE);
             hba1cResult.setVisibility(View.VISIBLE);
+            diabetes_previous_diagnosed.setVisibility(View.VISIBLE);
             //hba1cDiabetic.setVisibility(View.GONE);
             orderIds.setVisibility(View.VISIBLE);
             testId.setVisibility(View.VISIBLE);
@@ -1258,6 +1340,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
 
     }
 
+    @SuppressLint("ValidFragment")
     public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
         @Override
