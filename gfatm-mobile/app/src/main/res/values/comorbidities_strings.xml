@@ -826,10 +826,16 @@
 
     <string name="comorbidities_foot_screening_recommendations_options_management">Management of Diabetes</string>
     <string name="comorbidities_foot_screening_recommendations_options_referral">Referral to Foot doctor</string>
+    <string name="comorbidities_foot_screening_recommendations_options_12_month">No loss of sensation, 12 month Followup</string>
+    <string name="comorbidities_foot_screening_recommendations_options_3_month">Loss of protective sensation, 3 month Followup</string>
+    <string name="comorbidities_foot_screening_recommendations_options_1_month">Loss of sensation in feet with high pressure/callus formation with poor circulation, 1 month Followup</string>
+    <string name="comorbidities_foot_screening_recommendations_options_history">History of plantar ulceration or Neuropathic fracture (Charcots foot), Referal to Foot Doctor</string>
 
     <string-array name="comorbidities_foot_screening_recommendations_options">
-        <item>@string/comorbidities_foot_screening_recommendations_options_management</item>
-        <item>@string/comorbidities_foot_screening_recommendations_options_referral</item>
+        <item>@string/comorbidities_foot_screening_recommendations_options_12_month</item>
+        <item>@string/comorbidities_foot_screening_recommendations_options_3_month</item>
+        <item>@string/comorbidities_foot_screening_recommendations_options_1_month</item>
+        <item>@string/comorbidities_foot_screening_recommendations_options_history</item>
     </string-array>
 
     <!-- Strings for ComorbiditiesDiabetesEyeScreeningForm -->
@@ -1059,15 +1065,23 @@
     <string name="comorbidities_assessment_form_MH_rescreening_options_end">End of treatment</string>
     <string name="comorbidities_assessment_form_MH_rescreening_options_relapse">Relapse</string>
     <string name="comorbidities_assessment_form_MH_rescreening_options_change_in_TB">Change in TB</string>
+
+    <string name="comorbidities_assessment_form_MH_rescreening_options_reassessment">Reassessment</string>
+    <string name="comorbidities_assessment_form_MH_rescreening_options_relapse_or_change">Relapse/Change in TB Category</string>
+    <string name="comorbidities_assessment_form_MH_rescreening_options_end_of_tb">End of Treatment-TB</string>
+    <string name="comorbidities_assessment_form_MH_rescreening_options_relapse_mental_health">Relapse-Mental Health</string>
+    <string name="comorbidities_assessment_form_MH_rescreening_options_better">Patient Feels Better</string>
+    <string name="comorbidities_assessment_form_MH_rescreening_options_worse">Patient Feels Worse</string>
     <string name="comorbidities_assessment_form_MH_rescreening_options_other">Other</string>
     <string name="comorbidities_assessment_form_MH_other_assesment_reason">Other assesment reason:</string>
 
     <string-array name="comorbidities_assessment_form_MH_rescreening_options">
-        <item>@string/comorbidities_assessment_form_MH_rescreening_options_6th_session</item>
-        <item>@string/comorbidities_assessment_form_MH_rescreening_options_rescreening</item>
-        <item>@string/comorbidities_assessment_form_MH_rescreening_options_end</item>
-        <item>@string/comorbidities_assessment_form_MH_rescreening_options_relapse</item>
-        <item>@string/comorbidities_assessment_form_MH_rescreening_options_change_in_TB</item>
+        <item>@string/comorbidities_assessment_form_MH_rescreening_options_reassessment</item>
+        <item>@string/comorbidities_assessment_form_MH_rescreening_options_relapse_or_change</item>
+        <item>@string/comorbidities_assessment_form_MH_rescreening_options_end_of_tb</item>
+        <item>@string/comorbidities_assessment_form_MH_rescreening_options_relapse_mental_health</item>
+        <item>@string/comorbidities_assessment_form_MH_rescreening_options_better</item>
+        <item>@string/comorbidities_assessment_form_MH_rescreening_options_worse</item>
         <item>@string/comorbidities_assessment_form_MH_rescreening_options_other</item>
     </string-array>
 
