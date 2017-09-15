@@ -4698,6 +4698,19 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT UNABLE 
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT DOES NOT VISIT FACILITY HIMSELF OR HERSELF','patient_does_not_visit_facility','N/A','557c9639-69d4-42df-846f-4c659a15765b');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT IS TOO OLD','patient_too_old','N/A','9b1ba5ee-f926-49b0-b7a4-d114f9d995b3');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER REASON FOR NOT DOING MENTAL HEALTH SCREENING','other_reason_for_not_doing_mental_health_screening','Text','a3d52899-6af8-4f1a-9050-e47606e8a4a0');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NON-FAMILY MEMBER',null,'N/A','1582AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PREVIOUSLY DIAGNOSED DIABETES','diabetes_previous_diagnosed','Coded','ef2570e6-9241-4afe-bf29-5ffd03540cdc');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REASSESSMENT','reassessment','    N/A','842b97bb-f916-432f-8615-895e53722b17');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RELAPSE OR CHANGE IN TB CATEGORY','relapse_in_tb_category','N/A','    d4d0c1ca-6253-4e31-8dab-f1fec4f1e892');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('END OF TREATMENT-TB','end_of_treatment_tb','N/A','2fc7eca7-729f-4963-ba62-0cce445777c2');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RELAPSE-MENTAL HEALTH','relapse_mental_health','N/A','1f182c7b-782a-415c-b48e-14f64765efbe');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT FEELS BETTER','feels_better','N/A','d116bead-df64-450a-a1d9-8f81c8b0d719');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT FEELS WORSE','feels_worse','N/A','e913b572-c2ae-4713-a6ff-a5fba65d40a9');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NO LOSS OF SENSATION, 12 MONTH FOLLOWUP','no_loss_of_sensation_followup','N/A','1779665f-4e16-4003-b347-171e9fa504f2');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NO LOSS OF PROTECTIVE SENSATION, 3 MONTH FOLLOWUP','no_loss_of_protective_sensation_3_month_followup','N/A','d658291e-d71f-4730-a3eb-0d9b3f9c06d4');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LOSS OF SENSATION IN FEET WITH HIGH PRESSURE OR CALLUS FORMATION WITH POOR CIRCULATION, 1 MONTH FOLLOWUP','loss_of_sensation_in_feet_with_high_pressure_1_month_followup','N/A','ec869f0e-305c-426f-8ab8-280b0240ffca');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('HISTORY OF PLANTAR ULCERATION OR NEUROPATHIC FRACTURE, REFERRAL TO FOOT DOCTOR','history_of_plantar_ulcreation_referral_to_foot_doctor','N/A','b1bc4706-d889-4ffb-b962-758c07eef523');
 
 -- Program
 INSERT OR IGNORE INTO program VALUES (1, "86ba1232-d576-416e-b102-5f335c6746ce", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
@@ -4857,6 +4870,7 @@ INSERT OR IGNORE INTO encounter_type VALUES ('PMDT-Clinician Contact Screening',
 INSERT OR IGNORE INTO encounter_type VALUES ('PMDT-Contact Screening Result','Add PMDT Forms','View PMDT Forms','0b0bd204-5e66-44d4-b5f2-dbd0478efcdc');
 INSERT OR IGNORE INTO encounter_type VALUES ('PMDT-Referral Form','Add PMDT Forms','View PMDT Forms','dcd5cdd1-ae90-45de-875f-57c331257da7');
 INSERT OR IGNORE INTO encounter_type VALUES ('PMDT-Transfer-in Details','Add PMDT Forms','View PMDT Forms','13f7c8ef-5274-4003-bcd7-11f517227bbd');
+INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-Supplement Disbursement Form','Add Childhood TB Forms','View Childhood TB Forms','5d0d8c09-5919-4a05-b978-45863fa6474b');
 
 -- Person Attribute Types: select name as person_attribute_type, format, uuid from person_attribute_type
 INSERT OR IGNORE INTO person_attribute_type VALUES ('Race','java.lang.String','8d871386-c2cc-11de-8d13-0010c6dffd0f');
