@@ -1426,4 +1426,12 @@ I do less than I used to because of my breathing problems. </string>
         <item>@string/comorbidities_copd_age_range_options_60</item>
         <item>@string/comorbidities_copd_age_range_options_70</item>
     </string-array>
+
+    <string name="comorbidities_blood_sugar_had_food_in_two_hours">Have you had something to eat within the last two hours?</string>
+    <string name="comorbidities_foot_screening_recommendations_options_instruction_12_month">Kindly instruct the patient on Diabetes Management, Proper shoe fit and design, and Foot Hygeine. If the patient has any callus, ulcer formation advise the patient to visit the foot screening technician</string>
+    <string name="comorbidities_foot_screening_recommendations_options_instruction_3_month">Kindly instruct the patient on Diabetes Management, Proper shoe fit and design, Daily self inspection, Skin/nail care, Early reporting of foot injuries</string>
+    <string name="comorbidities_foot_screening_recommendations_options_instruction_1_month">Kindly instruct the patient on Diabetes Management, Proper shoe fit and design, Daily self inspection, Skin/nail care, Early reporting of foot injuries, Foot wear medification, Foot inlay advise</string>
+    <string name="comorbidities_foot_screening_recommendations_options_instruction_history">Kindly instruct the patient on Diabetes Management, Proper shoe fit and design, Daily self inspection, Skin/nail care, Early reporting of foot injuries, Foot wear medification, Foot inlay advise</string>
+
+    <string name="comorbidities_hba1c_previously_diagnosed_diabetic">Previously Diagnosed Diabetes?</string>
 </resources>
