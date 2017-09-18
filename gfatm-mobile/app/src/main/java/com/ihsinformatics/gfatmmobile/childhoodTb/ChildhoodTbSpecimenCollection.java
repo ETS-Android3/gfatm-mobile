@@ -832,13 +832,7 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         MySpinner spinner = (MySpinner) parent;
-        if (spinner == childhoodSite.getSpinner()) {
-            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_other_title))) {
-                otherChildhoodSite.setVisibility(View.VISIBLE);
-            } else {
-                otherChildhoodSite.setVisibility(View.GONE);
-            }
-        }
+
     }
 
     @Override
@@ -956,9 +950,9 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
                 outHospitalSampleCollected.setVisibility(View.VISIBLE);
                 if(App.get(outHospitalSampleCollected).equals(getResources().getString(R.string.ctb_childhoodtb_site))){
                     childhoodSite.setVisibility(View.VISIBLE);
-                    if(App.get(childhoodSite).equals(getResources().getString(R.string.ctb_other_title))){
-                        otherChildhoodSite.setVisibility(View.VISIBLE);
-                    }
+                }
+                else if(App.get(outHospitalSampleCollected).equals(getResources().getString(R.string.ctb_other_title))){
+                    otherChildhoodSite.setVisibility(View.VISIBLE);
                 }
                 inHospitalSampleCollected.setVisibility(View.GONE);
                 otherInHospitalSampleCollected.setVisibility(View.GONE);
@@ -978,12 +972,11 @@ public class ChildhoodTbSpecimenCollection extends AbstractFormActivity implemen
             outHospitalSampleCollected.getQuestionView().setError(null);
             if (outHospitalSampleCollected.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_childhoodtb_site))) {
                 childhoodSite.setVisibility(View.VISIBLE);
-                if(App.get(childhoodSite).equals(getResources().getString(R.string.ctb_other_title))){
-                    otherChildhoodSite.setVisibility(View.VISIBLE);
-                }
-            }else{
-                childhoodSite.setVisibility(View.GONE);
                 otherChildhoodSite.setVisibility(View.GONE);
+            }
+            else if (outHospitalSampleCollected.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_other_title))) {
+                otherChildhoodSite.setVisibility(View.VISIBLE);
+                childhoodSite.setVisibility(View.GONE);
             }
         }
 

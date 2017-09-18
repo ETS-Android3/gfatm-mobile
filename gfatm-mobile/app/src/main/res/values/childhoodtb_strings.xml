@@ -579,6 +579,39 @@
     <string name="ctb_select_childhood_site">Please select Childhood Site</string>
     <string name="ctb_did_not_examine">Did not examine</string>
     <string name="ctb_default">Default</string>
+    <string name="ctb_treatment_currently_on">Which treatment is patient currently on?</string>
+    <string name="ctb_under_investigation">Under Investigation</string>
+    <string name="ctb_att">ATT</string>
+    <string name="ctb_antibiotic_trial">Antibiotic Trial</string>
+    <string name="ctb_ipt">IPT</string>
+    <string name="ctb_tb_patient_tb_treatment">TB Patient: TB Treatment</string>
+    <string name="ctb_tb_classification">TB Classification</string>
+    <string name="ctb_dstb">DSTB</string>
+    <string name="ctb_drtb">DRTB</string>
+    <string name="ctb_calpol">Calpol</string>
+    <string name="ctb_calpol_dispersed">Calpol Dispersed?</string>
+    <string name="ctb_pediasure_quantity">If yes, Quantity of pediasure dispersed</string>
+    <string name="ctb_vitamin_b_qunantity">If yes, Quantity of Vitamin B dispersed</string>
+    <string name="ctb_iron_qunantity">If yes, Quantity of Iron dispersed</string>
+    <string name="ctb_anthelminthic_quantity">If yes, Quantity of Anthelminthic dispersed</string>
+    <string name="ctb_calpol_quantity">If yes, Quantity of Calpol dispersed</string>
+    <string name="ctb_non_tb_patient">Non TB Patient</string>
+
+
+
+
+    <string-array name="ctb_tb_classification_list">
+        <item>@string/ctb_dstb</item>
+        <item>@string/ctb_drtb</item>
+    </string-array>
+
+
+    <string-array name="ctb_treatment_currently_on_list">
+        <item>@string/ctb_att</item>
+        <item>@string/ctb_antibiotic_trial</item>
+        <item>@string/ctb_ipt</item>
+        <item>@string/ctb_under_investigation</item>
+    </string-array>
 
     <string-array name="ctb_sample_collected_from_list">
         <item>@string/ctb_within_hospital</item>
@@ -1120,6 +1153,20 @@
     </string-array>
 
 
+    <string-array name="ctb_vitamin_iron_anthelminthic_calpol">
+        <item>@string/ctb_vitamin_B_complex</item>
+        <item>@string/ctb_iron</item>
+        <item>@string/ctb_anthelminthic</item>
+        <item>@string/ctb_calpol</item>
+    </string-array>
+
+    <string-array name="ctb_pediasure_vitamin_iron_anthelminthic_calpol">
+        <item>@string/ctb_pediasure</item>
+        <item>@string/ctb_vitamin_B_complex</item>
+        <item>@string/ctb_iron</item>
+        <item>@string/ctb_anthelminthic</item>
+        <item>@string/ctb_calpol</item>
+    </string-array>
     
     <string-array name="ctb_pediasure_vitamin_iron_anthelminthic">
         <item>@string/ctb_pediasure</item>
@@ -1218,6 +1265,14 @@
         <item>@string/ctb_23</item>
         <item>@string/ctb_24</item>
     </string-array>
+
+    <string-array name="ctb_1_to_4_list">
+        <item>@string/ctb_1</item>
+        <item>@string/ctb_2</item>
+        <item>@string/ctb_3</item>
+        <item>@string/ctb_4</item>
+    </string-array>
+
 
     <string-array name="ctb_1_to_5_list">
         <item>@string/ctb_1</item>
