@@ -349,10 +349,10 @@
     <string name="city_default" translatable="false">Karachi</string>
     <string name="province_default" translatable="false">Sindh</string>
     <string name="country_default" translatable="false">Pakistan</string>
-    <!--<string name="ip_default" translatable="false">mrs.ghd.ihn.org.pk</string>
-    <string name="port_default" translatable="false">443</string>-->
-    <string name="ip_default" translatable="false">202.141.249.106</string>
-    <string name="port_default" translatable="false">9902</string>
+    <string name="ip_default" translatable="false">mrs.ghd.ihn.org.pk</string>
+    <string name="port_default" translatable="false">443</string>
+    <!--<string name="ip_default" translatable="false">202.141.249.106</string>
+    <string name="port_default" translatable="false">9902</string>-->
 
     <string name="support_contact">Support Contact</string>
     <string name="support_email">Support Email</string>
@@ -455,6 +455,7 @@
     <string name="age">Age: </string>
     <string name="age_modifier">Age Modifier: </string>
     <string name="external_id">External ID: \n (Optional) </string>
+    <string name="search_criteria">Search Criteria</string>
 
     <!-- Forms -->
     <string name="no_saved_form">No saved form found.</string>
@@ -500,13 +501,13 @@
     <string name="verifying_test_id">Verifying Test ID...</string>
     <string name="form_submitted">Form successfully submitted.</string>
     <string name="forms_submitted">Form(s) successfully submitted.</string>
-    <string name="forms_submitted_with_error">Form successfully submitted with some errors.</string>
+    <string name="forms_submitted_with_error">Form submission completed.</string>
     <string name="patient_updated">Patient successfully updated.</string>
     <string name="title_completed">Compeleted</string>
     <string name="insert_error">Error while trying to submit form to openmrs.</string>
     <string name="no_province">No province selected.</string>
 
-    <string name="latest_encocunter">Latest Encounters</string>
+    <string name="encocunter">Encounters</string>
     <string name="no_encounters">No Encounters</string>
     <string name="updating_patient">Updating Patient</string>
 
