@@ -4712,6 +4712,12 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NO LOSS OF PROT
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LOSS OF SENSATION IN FEET WITH HIGH PRESSURE OR CALLUS FORMATION WITH POOR CIRCULATION, 1 MONTH FOLLOWUP','loss_of_sensation_in_feet_with_high_pressure_1_month_followup','N/A','ec869f0e-305c-426f-8ab8-280b0240ffca');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('HISTORY OF PLANTAR ULCERATION OR NEUROPATHIC FRACTURE, REFERRAL TO FOOT DOCTOR','history_of_plantar_ulcreation_referral_to_foot_doctor','N/A','b1bc4706-d889-4ffb-b962-758c07eef523');
 
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CALPOL','calpol','N/A','1ec4f97f-0c5d-4d6f-8343-7e4a1d57315f');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RESCREENED SESSION NO','rescreened_session_no','Numeric','2a4287f0-09f3-4cc6-a7d2-907c8286d37b');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT CONSENT TO RECEIVE TREATMENT FOR DIABETES','patient_agree_for_diabetes_treatment','Coded','f2f51824-4a77-4915-9240-3636946c8cb0');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT CONSENT TO CONTINUE TREATMENT FOR DIABETES','patient_agree_to_continue_diabetes_treatment','Coded','933ee589-d2c4-435c-81a0-551e92c763bb');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REASON FOR DISCONTINUATION','discontinuation_reason','Text','473d8a1c-77be-42c8-ac2d-a7801f254435');
+
 -- Program
 INSERT OR IGNORE INTO program VALUES (1, "86ba1232-d576-416e-b102-5f335c6746ce", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
 INSERT OR IGNORE INTO program VALUES (2, "5d372a38-ae27-4a68-a8d2-bc517a2c9c40", "PET", "Post-Exposure Treatment");

@@ -1,5 +1,6 @@
--- Add autoSyncTries column in forms table
-CREATE TABLE IF NOT EXISTS FORM2 ( id INTEGER PRIMARY KEY AUTOINCREMENT, program TEXT NOT NULL COLLATE NOCASE, username TEXT NOT NULL COLLATE NOCASE, form_name TEXT NOT NULL COLLATE NOCASE, p_id TEXT COLLATE NOCASE, form_date DATETIME, timestamp DATETIME NOT NULL, location TEXT NOT NULL COLLATE NOCASE, form_object BLOB COLLATE NOCASE, encounter_id INT COLLATE NOCASE, autoSyncTries INT DEFAULT 0);
-INSERT INTO FORM2 (id, program, username, form_name, p_id, form_date, timestamp, location, form_object, encounter_id) SELECT * FROM FORM;
-DROP TABLE FORM;
-ALTER TABLE FORM2 RENAME TO FORM;
+-- inserts
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CALPOL','calpol','N/A','1ec4f97f-0c5d-4d6f-8343-7e4a1d57315f');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RESCREENED SESSION NO','rescreened_session_no','Numeric','2a4287f0-09f3-4cc6-a7d2-907c8286d37b');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT CONSENT TO RECEIVE TREATMENT FOR DIABETES','patient_agree_for_diabetes_treatment','Coded','f2f51824-4a77-4915-9240-3636946c8cb0');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT CONSENT TO CONTINUE TREATMENT FOR DIABETES','patient_agree_to_continue_diabetes_treatment','Coded','933ee589-d2c4-435c-81a0-551e92c763bb');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REASON FOR DISCONTINUATION','discontinuation_reason','Text','473d8a1c-77be-42c8-ac2d-a7801f254435');
