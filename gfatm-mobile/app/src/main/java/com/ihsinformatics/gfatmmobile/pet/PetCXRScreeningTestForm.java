@@ -63,8 +63,6 @@ public class PetCXRScreeningTestForm extends AbstractFormActivity implements Rad
     TitledSpinner monthTreatment;
     TitledEditText orderId;
 
-
-
     TitledSpinner orderIds;
     TitledEditText testId;
     TitledEditText chestXRayScore;

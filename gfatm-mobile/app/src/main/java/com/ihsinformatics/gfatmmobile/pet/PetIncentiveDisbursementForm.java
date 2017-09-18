@@ -925,9 +925,11 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
                     }
                     if (!result.get("NATIONAL IDENTIFICATION NUMBER").equals("")) {
                         String[] cnicArray = result.get("NATIONAL IDENTIFICATION NUMBER").split("-");
-                        cnic1.setText(cnicArray[0]);
-                        cnic2.setText(cnicArray[1]);
-                        cnic3.setText(cnicArray[2]);
+                        if(cnicArray.length == 3) {
+                            cnic1.setText(cnicArray[0]);
+                            cnic2.setText(cnicArray[1]);
+                            cnic3.setText(cnicArray[2]);
+                        }
                     }
                     if (!result.get("COMPUTERIZED NATIONAL IDENTIFICATION OWNER").equals("")) {
                         String value = result.get("COMPUTERIZED NATIONAL IDENTIFICATION OWNER").equals("SELF") ? getResources().getString(R.string.pet_self) :
@@ -955,8 +957,10 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
                     }
                     if (!result.get("TREATMENT SUPPORTER CONTACT NUMBER").equals("")) {
                         String[] phoneArray = result.get("TREATMENT SUPPORTER CONTACT NUMBER").split("-");
-                        phone1a.getEditText().setText(phoneArray[0]);
-                        phone1b.getEditText().setText(phoneArray[1]);
+                        if(phoneArray.length == 2) {
+                            phone1a.getEditText().setText(phoneArray[0]);
+                            phone1b.getEditText().setText(phoneArray[1]);
+                        }
                     }
                     if (!result.get("TREATMENT SUPPORTER TYPE").equals("")) {
                         for (RadioButton rb : typeTreatmentSupporter.getRadioGroup().getButtons()) {

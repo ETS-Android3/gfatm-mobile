@@ -210,7 +210,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         phone1PartLayout.addView(phone1b);
         contactNumberTreatmentSupporter.addView(phone1PartLayout);
         typeTreatmentSupporter = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_treatment_supporter_type), getResources().getStringArray(R.array.pet_treatment_supporter_type), "", App.VERTICAL, App.VERTICAL);
-        relationshipTreatmentSuppoter = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_treatment_supporter_relationship), getResources().getStringArray(R.array.pet_household_heads), "", App.VERTICAL);
+        relationshipTreatmentSuppoter = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_treatment_supporter_relationship), getResources().getStringArray(R.array.pet_household_heads_required), "", App.VERTICAL);
         other = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
 
         clincianNote = new TitledEditText(context, null, getResources().getString(R.string.pet_doctor_notes), "", "", 250, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
@@ -1097,9 +1097,11 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         if (ancillaryDrugDuration.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"MEDICATION DURATION", App.get(ancillaryDrugDuration)});
         observations.add(new String[]{"NAME OF TREATMENT SUPPORTER", App.get(nameTreatmentSupporter)});
-        observations.add(new String[]{"TREATMENT SUPPORTER CONTACT NUMBER", App.get(phone1a) + "-" + App.get(phone1b)});
-        observations.add(new String[]{"TREATMENT SUPPORTER TYPE", App.get(typeTreatmentSupporter).equals(getResources().getString(R.string.pet_family_treatment_supporter)) ? "FAMILY MEMBER" : "NON-FAMILY MEMBER"});
-        if (relationshipTreatmentSuppoter.getVisibility() == View.VISIBLE)
+        if (!App.get(phone1a).equals(""))
+            observations.add(new String[]{"TREATMENT SUPPORTER CONTACT NUMBER", App.get(phone1a) + "-" + App.get(phone1b)});
+        if (!App.get(typeTreatmentSupporter).equals(""))
+         observations.add(new String[]{"TREATMENT SUPPORTER TYPE", App.get(typeTreatmentSupporter).equals(getResources().getString(R.string.pet_family_treatment_supporter)) ? "FAMILY MEMBER" : "NON-FAMILY MEMBER"});
+        if (relationshipTreatmentSuppoter.getVisibility() == View.VISIBLE && !App.get(relationshipTreatmentSuppoter).equals(""))
             observations.add(new String[]{"TREATMENT SUPPORTER RELATIONSHIP TO PATIENT", (App.get(relationshipTreatmentSuppoter).equals(getResources().getString(R.string.pet_mother))) ? "MOTHER" :
                     (App.get(relationshipTreatmentSuppoter).equals(getResources().getString(R.string.pet_father)) ? "FATHER" :
                             (App.get(relationshipTreatmentSuppoter).equals(getResources().getString(R.string.pet_maternal_grandmother)) ? "MATERNAL GRANDMOTHER" :

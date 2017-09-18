@@ -215,11 +215,19 @@ public class PetAFBSmearTestForm extends AbstractFormActivity implements RadioGr
                 monthArray[0] = "1";
                 monthTreatment.getSpinner().setSpinnerData(monthArray);
             } else {
-                monthArray = new String[diffMonth];
-                for (int i = 0; i < diffMonth; i++) {
-                    monthArray[i] = String.valueOf(i+1);
+
+                if(diffMonth < 0){
+                    monthArray = new String[1];
+                    monthArray[0] = "0";
+                    monthTreatment.getSpinner().setSpinnerData(monthArray);
                 }
-                monthTreatment.getSpinner().setSpinnerData(monthArray);
+                else {
+                    monthArray = new String[diffMonth];
+                    for (int i = 0; i < diffMonth; i++) {
+                        monthArray[i] = String.valueOf(i + 1);
+                    }
+                    monthTreatment.getSpinner().setSpinnerData(monthArray);
+                }
             }
         }
     }
