@@ -835,6 +835,30 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
         }
     }
 
+    public void showInstrucrtions(int instructions) {
+        snackbar = Snackbar.make(mainContent, getResources().getString(instructions), Snackbar.LENGTH_INDEFINITE)
+                .setAction("CLOSE", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        snackbar.dismiss();
+                    }
+                });
+
+        // Changing message text color
+        //snackbar.setActionTextColor(Color.RED);
+
+        //Changing Typeface of Snackbar Action text
+        TextView snackbarActionTextView = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_action);
+        snackbarActionTextView.setTextSize(20);
+        snackbarActionTextView.setTypeface(snackbarActionTextView.getTypeface(), Typeface.BOLD);
+
+        // Setting Maximum lines for the textview in snackbar
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setMaxLines(9);
+        snackbar.show();
+    }
+
     @Override
     public void onClick(View view) {
 
@@ -953,6 +977,17 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
 
         if (radioGroup == diabetesFootScreeningLeftFootExamined.getRadioGroup()) {
             allExaminationSkipLogic();
+        }
+        if (radioGroup == diabetesFootScreeningRecommendations.getRadioGroup()) {
+            if (diabetesFootScreeningRecommendations.getRadioGroupSelectedValue().equals(getString(R.string.comorbidities_foot_screening_recommendations_options_12_month))) {
+                showInstrucrtions(R.string.comorbidities_foot_screening_recommendations_options_instruction_12_month);
+            } else if (diabetesFootScreeningRecommendations.getRadioGroupSelectedValue().equals(getString(R.string.comorbidities_foot_screening_recommendations_options_3_month))) {
+                showInstrucrtions(R.string.comorbidities_foot_screening_recommendations_options_instruction_3_month);
+            } else if (diabetesFootScreeningRecommendations.getRadioGroupSelectedValue().equals(getString(R.string.comorbidities_foot_screening_recommendations_options_1_month))) {
+                showInstrucrtions(R.string.comorbidities_foot_screening_recommendations_options_instruction_1_month);
+            } else if (diabetesFootScreeningRecommendations.getRadioGroupSelectedValue().equals(getString(R.string.comorbidities_foot_screening_recommendations_options_history))) {
+                showInstrucrtions(R.string.comorbidities_foot_screening_recommendations_options_instruction_history);
+            }
         }
 
     }
