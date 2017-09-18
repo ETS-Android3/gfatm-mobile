@@ -170,7 +170,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
         selfReportedDiabetesTreatmentHistory = new TitledCheckBoxes(context, null, getResources().getString(R.string.comorbidities_self_reported_diabetes_treatment_history), getResources().getStringArray(R.array.comorbidities_self_reported_diabetes_treatment_history_options), new Boolean[]{true, true}, App.VERTICAL, App.VERTICAL);
         showSelfReportedDiabetesTreatmentHistory();
         typeDiabetes = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_type_diabetes), getResources().getStringArray(R.array.comorbidities_type_diabetes_types), getResources().getString(R.string.comorbidities_type_diabetes_type2), App.HORIZONTAL, App.VERTICAL);
-        showDiabetesType();
+        //showDiabetesType();
         statusDiabetes = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_status_diabetes), getResources().getStringArray(R.array.comorbidities_status_diabetes_options), getResources().getString(R.string.comorbidities_status_diabetes_uncontrolled), App.HORIZONTAL, App.VERTICAL);
         hxHypoglycemia = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_hx_hypoglycemia), getResources().getStringArray(R.array.comorbidities_hx_diabetic_cemia_pathies_options), getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_no), App.HORIZONTAL, App.VERTICAL);
         hxDiabeticRetinopathy = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_hx_diabetic_retinopathy), getResources().getStringArray(R.array.comorbidities_hx_diabetic_cemia_pathies_options), getResources().getString(R.string.comorbidities_hx_diabetic_cemia_pathies_no), App.HORIZONTAL, App.VERTICAL);
@@ -1401,7 +1401,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
 
         if (radioGroup == previousDiabetesTreatmentHistory.getRadioGroup()) {
             showSelfReportedDiabetesTreatmentHistory();
-            showDiabetesType();
+            //showDiabetesType();
         }
 
         if (hxDiabeticGestationalDiabetes.getVisibility() == View.VISIBLE) {
@@ -1449,7 +1449,7 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
         if (View.VISIBLE == visibility) {
             showDiabetesFamilyHistorySpecify();
             showSelfReportedDiabetesTreatmentHistory();
-            showDiabetesType();
+            //showDiabetesType();
             showGestationalDiabetesDuringPregnancy();
             showHxDiabeticBirth();
             showMetforminPerDayAndPrescribed();
@@ -1475,13 +1475,13 @@ public class ComorbiditiesDiabetesTreatmentInitiationForm extends AbstractFormAc
         }
     }
 
-    void showDiabetesType() {
+    /*void showDiabetesType() {
         if (previousDiabetesTreatmentHistory.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.no))) {
             typeDiabetes.setVisibility(View.VISIBLE);
         } else {
             typeDiabetes.setVisibility(View.GONE);
         }
-    }
+    }*/
 
     void showGestationalDiabetesDuringPregnancy() {
         if (App.getPatient().getPerson().getGender().equalsIgnoreCase("F")) {
