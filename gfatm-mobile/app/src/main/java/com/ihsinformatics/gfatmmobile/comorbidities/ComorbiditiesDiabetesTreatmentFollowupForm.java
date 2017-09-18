@@ -36,7 +36,6 @@ import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
-import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
@@ -57,6 +56,8 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
     // Views...
     TitledButton formDate;
     TitledEditText diabetesFollowupMonthOfVisit;
+    TitledRadioGroup patientAgreeToContinueTreatment;
+    TitledEditText reasonForDiscontinuation;
     TitledEditText diabetesFollowupBodyMassIndex;
     TitledEditText diabetesFollowupWaistHipRatio;
     TitledEditText diabetesFollowupBloodPressureSystolic;
@@ -70,8 +71,9 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
     TitledRadioGroup diabetesFollowupChangeInRegimen;
     //TitledSpinner diabetesFollowupNewPrescribedMedication;
     TitledCheckBoxes diabetesFollowupNewPrescribedMedication;
-    TitledEditText diabetesFollowupNewPrescribedMedicationDetail;
     TitledRadioGroup diabetesFollowupDosageStrengthofMetformin;
+    TitledEditText diabetesTreatmentInitiationTabletsPerDay;
+    TitledEditText diabetesTreatmentInitiationMetforminPrescribed;
     TitledEditText diabetesFollowupDosageInsulinN;
     TitledEditText diabetesFollowupDosageInsulinR;
     TitledButton diabetesFollowupNextScheduledVisit;
@@ -93,7 +95,7 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        PAGE_COUNT = 2;
+        PAGE_COUNT = 1;
         FORM_NAME = Forms.COMORBIDITIES_DIABETES_TREATMENT_FOLLOWUP_FORM;
         FORM = Forms.comorbidities_diabetesTreatmentFollowupForm;
 
@@ -155,6 +157,8 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         //diabetesFollowupMonthOfVisit = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_urinedr_month_of_treatment), getResources().getStringArray(R.array.comorbidities_followup_month), "1", App.HORIZONTAL);
+        patientAgreeToContinueTreatment = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_diabetes_patient_agree_to_continue_treatment), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.comorbidities_diabetes_family_history_yes), App.HORIZONTAL, App.VERTICAL);
+        reasonForDiscontinuation = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_patient_reason_for_discontinuation), "", "", 200, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         diabetesFollowupMonthOfVisit = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_urinedr_month_of_treatment), "", getResources().getString(R.string.comorbidities_vitals_month_of_visit_range), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
         diabetesFollowupBodyMassIndex = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_followup_bmi), "", getResources().getString(R.string.comorbidities_vitals_bmi_range), 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         //diabetesFollowupBodyMassIndex.getEditText().setFocusable(false);
@@ -171,8 +175,9 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
         diabetesFollowupChangeInRegimen = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_diabetes_followup_change_in_regimen), getResources().getStringArray(R.array.comorbidities_yes_no), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL);
         //diabetesFollowupNewPrescribedMedication = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_diabetes_followup_new_prescribed), getResources().getStringArray(R.array.comorbidities_diabetes_followup_new_prescribed_options), getResources().getString(R.string.comorbidities_diabetes_followup_new_prescribed_options_biguanides), App.HORIZONTAL);
         diabetesFollowupNewPrescribedMedication = new TitledCheckBoxes(context, null, getResources().getString(R.string.comorbidities_diabetes_followup_new_prescribed), getResources().getStringArray(R.array.comorbidities_diabetes_treatment_initiation_options), new Boolean[]{true, false, false, false, false, false, false, false}, App.VERTICAL, App.VERTICAL);
-        diabetesFollowupNewPrescribedMedicationDetail = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_followup_new_prescribed_detail), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         //diabetesFollowupDosageStrengthofMetformin = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_diabetes_followup_metformin), getResources().getStringArray(R.array.comorbidities_diabetes_treatment_initiation_metformin_options), getResources().getString(R.string.comorbidities_diabetes_followup_metformin_options_500), App.HORIZONTAL);
+        diabetesTreatmentInitiationTabletsPerDay = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_metformin_per_day), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        diabetesTreatmentInitiationMetforminPrescribed = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_metformin_prescribed), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         diabetesFollowupDosageStrengthofMetformin = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_diabetes_followup_metformin), getResources().getStringArray(R.array.comorbidities_diabetes_treatment_initiation_metformin_options), getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_metformin_500), App.HORIZONTAL, App.VERTICAL);
         diabetesFollowupDosageInsulinN = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_followup_isulinN), "", getResources().getString(R.string.comorbidities_vitals_waist_hip_whr_range), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         diabetesFollowupDosageInsulinR = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_diabetes_followup_isulinR), "", getResources().getString(R.string.comorbidities_vitals_waist_hip_whr_range), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
@@ -180,24 +185,26 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
         diabetesFollowupNextScheduledVisit = new TitledButton(context, null, getResources().getString(R.string.comorbidities_diabetes_followup_next_scheduled_visit), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), diabetesFollowupMonthOfVisit.getEditText(), diabetesFollowupBodyMassIndex.getEditText(),
+        views = new View[]{formDate.getButton(), diabetesFollowupMonthOfVisit.getEditText(), reasonForDiscontinuation.getEditText(), patientAgreeToContinueTreatment.getRadioGroup(), diabetesFollowupBodyMassIndex.getEditText(),
                 diabetesFollowupWaistHipRatio.getEditText(), diabetesFollowupBloodPressureSystolic.getEditText(), diabetesFollowupBloodPressureDiastolic.getEditText(),
                 diabetesFollowupHba1cTestResult.getEditText(), diabetesFollowupRBSTestResult.getEditText(), diabetesFollowupHasPrescribedMedication.getRadioGroup(), diabetesFollowupReasonsForNonComplianceCB, diabetesFollowupIfOther.getEditText(), diabetesFollowupStatusOfDiabetesCondition.getRadioGroup(),
-                diabetesFollowupChangeInRegimen.getRadioGroup(), diabetesFollowupNewPrescribedMedication, diabetesFollowupNewPrescribedMedicationDetail.getEditText(),
-                diabetesFollowupDosageStrengthofMetformin.getRadioGroup(), diabetesFollowupDosageInsulinN.getEditText(), diabetesFollowupDosageInsulinR.getEditText(), diabetesFollowupNextScheduledVisit.getButton()};
+                diabetesFollowupChangeInRegimen.getRadioGroup(), diabetesFollowupNewPrescribedMedication,
+                diabetesTreatmentInitiationTabletsPerDay.getEditText(), diabetesTreatmentInitiationMetforminPrescribed.getEditText(), diabetesFollowupDosageStrengthofMetformin.getRadioGroup(), diabetesFollowupDosageInsulinN.getEditText(), diabetesFollowupDosageInsulinR.getEditText(), diabetesFollowupNextScheduledVisit.getButton()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, diabetesFollowupMonthOfVisit, diabetesFollowupBodyMassIndex, diabetesFollowupWaistHipRatio,
-                        diabetesFollowupBloodPressureSystolic, diabetesFollowupBloodPressureDiastolic, diabetesFollowupHba1cTestResult, diabetesFollowupRBSTestResult},
-                        {diabetesFollowupHasPrescribedMedication, diabetesFollowupReasonsForNonComplianceCB, diabetesFollowupIfOther,
-                                diabetesFollowupStatusOfDiabetesCondition, diabetesFollowupChangeInRegimen,
-                                diabetesFollowupNewPrescribedMedication, diabetesFollowupNewPrescribedMedicationDetail, diabetesFollowupDosageStrengthofMetformin,
-                                diabetesFollowupDosageInsulinN, diabetesFollowupDosageInsulinR, diabetesFollowupNextScheduledVisit}};
+                {{formDate, patientAgreeToContinueTreatment, reasonForDiscontinuation, diabetesFollowupMonthOfVisit, diabetesFollowupBodyMassIndex, diabetesFollowupWaistHipRatio,
+                        diabetesFollowupBloodPressureSystolic, diabetesFollowupBloodPressureDiastolic, diabetesFollowupHba1cTestResult, diabetesFollowupRBSTestResult,
+                        diabetesFollowupHasPrescribedMedication, diabetesFollowupReasonsForNonComplianceCB, diabetesFollowupIfOther,
+                        diabetesFollowupStatusOfDiabetesCondition, diabetesFollowupChangeInRegimen,
+                        diabetesFollowupNewPrescribedMedication, diabetesTreatmentInitiationTabletsPerDay, diabetesTreatmentInitiationMetforminPrescribed, diabetesFollowupDosageStrengthofMetformin,
+                        diabetesFollowupDosageInsulinN, diabetesFollowupDosageInsulinR, diabetesFollowupNextScheduledVisit}};
 
         formDate.getButton().setOnClickListener(this);
         diabetesFollowupNextScheduledVisit.getButton().setOnClickListener(this);
         diabetesFollowupHasPrescribedMedication.getRadioGroup().setOnCheckedChangeListener(this);
+        patientAgreeToContinueTreatment.getRadioGroup().setOnCheckedChangeListener(this);
+
         diabetesFollowupChangeInRegimen.getRadioGroup().setOnCheckedChangeListener(this);
 
         diabetesFollowupDosageInsulinR.getEditText().addTextChangedListener(new TextWatcher() {
@@ -584,14 +591,23 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
             diabetesFollowupDosageInsulinN.getEditText().requestFocus();
             error = true;
         }
-
-        if (diabetesFollowupNewPrescribedMedicationDetail.getVisibility() == View.VISIBLE && App.get(diabetesFollowupNewPrescribedMedicationDetail).isEmpty()) {
+        if (diabetesTreatmentInitiationMetforminPrescribed.getVisibility() == View.VISIBLE && App.get(diabetesTreatmentInitiationMetforminPrescribed).isEmpty()) {
             if (App.isLanguageRTL())
-                gotoPage(0);
+                gotoPage(1);
             else
                 gotoPage(1);
-            diabetesFollowupNewPrescribedMedicationDetail.getEditText().setError(getString(R.string.empty_field));
-            diabetesFollowupNewPrescribedMedicationDetail.getEditText().requestFocus();
+            diabetesTreatmentInitiationMetforminPrescribed.getEditText().setError(getString(R.string.empty_field));
+            diabetesTreatmentInitiationMetforminPrescribed.getEditText().requestFocus();
+            error = true;
+        }
+
+        if (diabetesTreatmentInitiationTabletsPerDay.getVisibility() == View.VISIBLE && App.get(diabetesTreatmentInitiationTabletsPerDay).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(1);
+            else
+                gotoPage(1);
+            diabetesTreatmentInitiationTabletsPerDay.getEditText().setError(getString(R.string.empty_field));
+            diabetesTreatmentInitiationTabletsPerDay.getEditText().requestFocus();
             error = true;
         }
 
@@ -776,7 +792,6 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
                                         diabetesFollowupHba1cTestResult.clearFocus();
                                         diabetesFollowupRBSTestResult.clearFocus();
                                         diabetesFollowupIfOther.clearFocus();
-                                        diabetesFollowupNewPrescribedMedicationDetail.clearFocus();
                                         diabetesFollowupDosageInsulinN.clearFocus();
                                         diabetesFollowupDosageInsulinR.clearFocus();
                                     }
@@ -822,15 +837,25 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
         }
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-        observations.add(new String[]{"FOLLOW-UP MONTH", App.get(diabetesFollowupMonthOfVisit)});
-        observations.add(new String[]{"BODY MASS INDEX", App.get(diabetesFollowupBodyMassIndex)});
-        observations.add(new String[]{"WAIST-HIP RATIO", App.get(diabetesFollowupWaistHipRatio)});
-
-        observations.add(new String[]{"SYSTOLIC BLOOD PRESSURE", App.get(diabetesFollowupBloodPressureSystolic)});
-        observations.add(new String[]{"DIASTOLIC BLOOD PRESSURE", App.get(diabetesFollowupBloodPressureDiastolic)});
-        observations.add(new String[]{"HBA1C RESULT", App.get(diabetesFollowupHba1cTestResult)});
-        observations.add(new String[]{"RANDOM BLOOD SUGAR", App.get(diabetesFollowupRBSTestResult)});
-        observations.add(new String[]{"PATIENT ADHERENT TO TRETMENT", App.get(diabetesFollowupHasPrescribedMedication).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        if (diabetesFollowupMonthOfVisit.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"FOLLOW-UP MONTH", App.get(diabetesFollowupMonthOfVisit)});
+        if (reasonForDiscontinuation.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"REASON FOR DISCONTINUATION", App.get(reasonForDiscontinuation)});
+        observations.add(new String[]{"PATIENT CONSENT TO CONTINUE TREATMENT FOR DIABETES", App.get(patientAgreeToContinueTreatment).equals(getResources().getString(R.string.comorbidities_diabetes_family_history_yes)) ? "YES" : "NO"});
+        if (diabetesFollowupBodyMassIndex.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"BODY MASS INDEX", App.get(diabetesFollowupBodyMassIndex)});
+        if (diabetesFollowupWaistHipRatio.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"WAIST-HIP RATIO", App.get(diabetesFollowupWaistHipRatio)});
+        if (diabetesFollowupBloodPressureSystolic.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"SYSTOLIC BLOOD PRESSURE", App.get(diabetesFollowupBloodPressureSystolic)});
+        if (diabetesFollowupBloodPressureDiastolic.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"DIASTOLIC BLOOD PRESSURE", App.get(diabetesFollowupBloodPressureDiastolic)});
+        if (diabetesFollowupHba1cTestResult.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"HBA1C RESULT", App.get(diabetesFollowupHba1cTestResult)});
+        if (diabetesFollowupRBSTestResult.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"RANDOM BLOOD SUGAR", App.get(diabetesFollowupRBSTestResult)});
+        if (diabetesFollowupHasPrescribedMedication.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"PATIENT ADHERENT TO TRETMENT", App.get(diabetesFollowupHasPrescribedMedication).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
 
         if (diabetesFollowupReasonsForNonComplianceCB.getVisibility() == View.VISIBLE) {
             String diabetesFollowupReasonsForNonComplianceString = "";
@@ -871,8 +896,10 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
         if (diabetesFollowupIfOther.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"NON-ADHERENCE REASON (TEXT)", App.get(diabetesFollowupIfOther)});
         }
-        observations.add(new String[]{"DIABETES CONTROL STATUS", App.get(diabetesFollowupStatusOfDiabetesCondition).equals(getResources().getString(R.string.comorbidities_diabetes_followup_status_of_diabetes_condition_option_controlled)) ? "CONTROLLED DIABETES MELLITUS" : "UNCONTROLLED DIABETES MELLITUS"});
-        observations.add(new String[]{"CHANGE REGIMEN", App.get(diabetesFollowupChangeInRegimen).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        if (diabetesFollowupStatusOfDiabetesCondition.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"DIABETES CONTROL STATUS", App.get(diabetesFollowupStatusOfDiabetesCondition).equals(getResources().getString(R.string.comorbidities_diabetes_followup_status_of_diabetes_condition_option_controlled)) ? "CONTROLLED DIABETES MELLITUS" : "UNCONTROLLED DIABETES MELLITUS"});
+        if (diabetesFollowupChangeInRegimen.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"CHANGE REGIMEN", App.get(diabetesFollowupChangeInRegimen).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
 
         if (diabetesFollowupNewPrescribedMedication.getVisibility() == View.VISIBLE) {
             String diabetesTreatmentInitiationString = "";
@@ -896,12 +923,18 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
             }
             observations.add(new String[]{"DIABETES MEDICATIONS", diabetesTreatmentInitiationString});
         }
-
-        observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(diabetesFollowupNewPrescribedMedicationDetail).trim()});
-        observations.add(new String[]{"METFORMIN DOSE", App.get(diabetesFollowupDosageStrengthofMetformin)});
-        observations.add(new String[]{"INSULIN N DOSAGE", App.get(diabetesFollowupDosageInsulinN)});
-        observations.add(new String[]{"INSULIN R DOSAGE", App.get(diabetesFollowupDosageInsulinR)});
-        observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDate(secondDateCalendar)});
+        if (diabetesFollowupDosageStrengthofMetformin.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"METFORMIN DOSE", App.get(diabetesFollowupDosageStrengthofMetformin)});
+        if (diabetesTreatmentInitiationTabletsPerDay.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"METFORMIN TABLET PER DAY", App.get(diabetesTreatmentInitiationTabletsPerDay)});
+        if (diabetesTreatmentInitiationMetforminPrescribed.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"METFORMIN PRESCRIBED (FOR DAYS)", App.get(diabetesTreatmentInitiationMetforminPrescribed)});
+        if (diabetesFollowupDosageInsulinN.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"INSULIN N DOSAGE", App.get(diabetesFollowupDosageInsulinN)});
+        if (diabetesFollowupDosageInsulinR.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"INSULIN R DOSAGE", App.get(diabetesFollowupDosageInsulinR)});
+        if (diabetesFollowupNextScheduledVisit.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDate(secondDateCalendar)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -1048,6 +1081,22 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
                 diabetesFollowupMonthOfVisit.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("BODY MASS INDEX")) {
                 diabetesFollowupBodyMassIndex.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("REASON FOR DISCONTINUATION")) {
+                reasonForDiscontinuation.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("PATIENT CONSENT TO CONTINUE TREATMENT FOR DIABETES")) {
+                for (RadioButton rb : patientAgreeToContinueTreatment.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        reasonForDiscontinuation.setVisibility(View.GONE);
+                        showHideOnAgreeDisagree(View.VISIBLE);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        reasonForDiscontinuation.setVisibility(View.VISIBLE);
+                        showHideOnAgreeDisagree(View.GONE);
+                        break;
+                    }
+                }
             } else if (obs[0][0].equals("WAIST-HIP RATIO")) {
                 diabetesFollowupWaistHipRatio.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("SYSTOLIC BLOOD PRESSURE")) {
@@ -1109,7 +1158,7 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
                     } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_followup_non_compliance_options_transport_problems)) && obs[0][1].equals("TRANSPORT PROBLEMS")) {
                         cb.setChecked(true);
                         break;
-                    }else if (cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_followup_non_compliance_options_other)) && obs[0][1].equals("NON-ADHERENCE REASON (TEXT)")) {
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_followup_non_compliance_options_other)) && obs[0][1].equals("NON-ADHERENCE REASON (TEXT)")) {
                         cb.setChecked(true);
                         displayIfOther();
                         break;
@@ -1166,8 +1215,6 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
                         break;
                     }
                 }
-            } else if (obs[0][0].equals("CLINICIAN NOTES (TEXT)")) {
-                diabetesFollowupNewPrescribedMedicationDetail.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("METFORMIN DOSE")) {
                 for (RadioButton rb : diabetesFollowupDosageStrengthofMetformin.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_metformin_500)) && obs[0][1].equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_metformin_500))) {
@@ -1187,6 +1234,11 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
                         break;
                     }
                 }
+
+            } else if (obs[0][0].equals("METFORMIN TABLET PER DAY")) {
+                diabetesTreatmentInitiationTabletsPerDay.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("METFORMIN PRESCRIBED (FOR DAYS)")) {
+                diabetesTreatmentInitiationMetforminPrescribed.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("INSULIN N DOSAGE")) {
                 diabetesFollowupDosageInsulinN.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("INSULIN R DOSAGE")) {
@@ -1240,6 +1292,7 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        showMetforminPerDayAndPrescribed();
 
         for (CheckBox cb : diabetesFollowupNewPrescribedMedication.getCheckedBoxes()) {
             if (cb.isChecked()) {
@@ -1274,6 +1327,7 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
         }
         displayReasonForNonCompliance();
         displayIfOther();
+        showMetforminPerDayAndPrescribed();
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -1386,6 +1440,16 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
         if (radioGroup == diabetesFollowupChangeInRegimen.getRadioGroup()) {
             displayChangeInRegimenOrNot();
         }
+        if (radioGroup == patientAgreeToContinueTreatment.getRadioGroup()) {
+            if (patientAgreeToContinueTreatment.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.yes))) {
+                reasonForDiscontinuation.setVisibility(View.GONE);
+                showHideOnAgreeDisagree(View.VISIBLE);
+            } else {
+                reasonForDiscontinuation.setVisibility(View.VISIBLE);
+                showHideOnAgreeDisagree(View.GONE);
+
+            }
+        }
     }
 
     void displayReasonForNonCompliance() {
@@ -1406,16 +1470,61 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
         }
     }
 
+    void showMetforminPerDayAndPrescribed() {
+
+        Boolean flag = false;
+        for (CheckBox cb : diabetesFollowupNewPrescribedMedication.getCheckedBoxes()) {
+            if (cb.getText().equals(getResources().getString(R.string.comorbidities_diabetes_treatment_initiation_metformin_option)) && cb.isChecked()) {
+                flag = true;
+                break;
+            }
+        }
+        if (flag) {
+            diabetesTreatmentInitiationTabletsPerDay.setVisibility(View.VISIBLE);
+            diabetesTreatmentInitiationMetforminPrescribed.setVisibility(View.VISIBLE);
+        } else {
+            diabetesTreatmentInitiationTabletsPerDay.setVisibility(View.GONE);
+            diabetesTreatmentInitiationMetforminPrescribed.setVisibility(View.GONE);
+        }
+    }
+
+    void showHideOnAgreeDisagree(int visibility) {
+        diabetesFollowupMonthOfVisit.setVisibility(visibility);
+        diabetesFollowupBodyMassIndex.setVisibility(visibility);
+        diabetesFollowupWaistHipRatio.setVisibility(visibility);
+        diabetesFollowupBloodPressureSystolic.setVisibility(visibility);
+        diabetesFollowupBloodPressureDiastolic.setVisibility(visibility);
+        diabetesFollowupHba1cTestResult.setVisibility(visibility);
+        diabetesFollowupRBSTestResult.setVisibility(visibility);
+        diabetesFollowupHasPrescribedMedication.setVisibility(visibility);
+        diabetesFollowupReasonsForNonComplianceCB.setVisibility(visibility);
+        diabetesFollowupIfOther.setVisibility(visibility);
+        diabetesFollowupStatusOfDiabetesCondition.setVisibility(visibility);
+        diabetesFollowupChangeInRegimen.setVisibility(visibility);
+        diabetesFollowupNewPrescribedMedication.setVisibility(visibility);
+        diabetesTreatmentInitiationTabletsPerDay.setVisibility(visibility);
+        diabetesTreatmentInitiationMetforminPrescribed.setVisibility(visibility);
+        diabetesFollowupDosageStrengthofMetformin.setVisibility(visibility);
+        diabetesFollowupDosageInsulinN.setVisibility(visibility);
+        diabetesFollowupDosageInsulinR.setVisibility(visibility);
+        diabetesFollowupNextScheduledVisit.setVisibility(visibility);
+
+        if (visibility == View.VISIBLE) {
+            displayReasonForNonCompliance();
+            showMetforminPerDayAndPrescribed();
+            displayIfOther();
+            displayChangeInRegimenOrNot();
+        }
+    }
+
     void displayChangeInRegimenOrNot() {
         if (diabetesFollowupChangeInRegimen.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.yes))) {
             diabetesFollowupNewPrescribedMedication.setVisibility(View.VISIBLE);
-            diabetesFollowupNewPrescribedMedicationDetail.setVisibility(View.VISIBLE);
             diabetesFollowupDosageStrengthofMetformin.setVisibility(View.VISIBLE);
             diabetesFollowupDosageInsulinN.setVisibility(View.VISIBLE);
             diabetesFollowupDosageInsulinR.setVisibility(View.VISIBLE);
         } else {
             diabetesFollowupNewPrescribedMedication.setVisibility(View.GONE);
-            diabetesFollowupNewPrescribedMedicationDetail.setVisibility(View.GONE);
             diabetesFollowupDosageStrengthofMetformin.setVisibility(View.GONE);
             diabetesFollowupDosageInsulinN.setVisibility(View.GONE);
             diabetesFollowupDosageInsulinR.setVisibility(View.GONE);

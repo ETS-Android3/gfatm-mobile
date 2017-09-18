@@ -365,16 +365,14 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
 
                 drugDistributionDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
-            }
-            else if(secondDateCalendar.after(fourthDateCalendar)){
+            } else if (secondDateCalendar.after(fourthDateCalendar)) {
                 secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_date_cant_be_greater_than_24_months), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
                 drugDistributionDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-            }
-            else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+            } else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
@@ -510,7 +508,7 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
-            }else {
+            } else {
                 endTime = new Date();
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
@@ -670,7 +668,7 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
 
             String[][] obs = obsValue.get(i);
 
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
             }
 
@@ -747,6 +745,7 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
     @Override
     public void resetViews() {
         super.resetViews();
+        boolean flag = true;
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         drugDistributionDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
@@ -763,10 +762,69 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
                 int formId = Integer.valueOf(id);
 
                 refill(formId);
-
+                flag = false;
             } else bundle.putBoolean("save", false);
-
         }
+
+        if (flag) {
+            //HERE FOR AUTOPOPULATING OBS
+            final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
+                @Override
+                protected HashMap<String, String> doInBackground(String... params) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            loading.setInverseBackgroundForced(true);
+                            loading.setIndeterminate(true);
+                            loading.setCancelable(false);
+                            loading.setMessage(getResources().getString(R.string.fetching_data));
+                            loading.show();
+                        }
+                    });
+
+                    HashMap<String, String> result = new HashMap<String, String>();
+                    String diabetesMedication = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_DIABETES_TREATMENT_INITIATION, "DIABETES MEDICATIONS");
+
+                    if (diabetesMedication != null)
+                        if (!diabetesMedication.equals(""))
+                            result.put("DIABETES MEDICATIONS", diabetesMedication);
+
+
+                    return result;
+                }
+
+                @Override
+                protected void onProgressUpdate(String... values) {
+                }
+
+                @Override
+                protected void onPostExecute(HashMap<String, String> result) {
+                    super.onPostExecute(result);
+                    loading.dismiss();
+                    if (!result.get("DIABETES MEDICATIONS").equals("")) {
+                        metformin.setVisibility(View.GONE);
+                        insulinN.setVisibility(View.GONE);
+                        insulinR.setVisibility(View.GONE);
+
+                    }
+                    if (result.get("DIABETES MEDICATIONS").contains("METFORMIN")) {
+                        metformin.setVisibility(View.VISIBLE);
+                    }
+                    if (result.get("DIABETES MEDICATIONS").contains("ISOPHANE")) {
+                        insulinN.setVisibility(View.VISIBLE);
+                    }
+
+                    if (result.get("DIABETES MEDICATIONS").contains("REGULAR")) {
+                        insulinR.setVisibility(View.VISIBLE);
+                    }
+
+
+                }
+            };
+            autopopulateFormTask.execute("");
+        }
+
+
     }
 
     @Override
