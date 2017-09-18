@@ -546,6 +546,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.location_setup) {
             Intent locationSetupActivityIntent = new Intent(this, LocationSetupActivity.class);
             startActivity(locationSetupActivityIntent);
+        } else if (id == R.id.search) {
+            Intent selectPatientActivityIntent = new Intent(this, SearchActivity.class);
+            startActivityForResult(selectPatientActivityIntent, SELECT_PATIENT_ACTIVITY);
         }
 
         return super.onOptionsItemSelected(item);

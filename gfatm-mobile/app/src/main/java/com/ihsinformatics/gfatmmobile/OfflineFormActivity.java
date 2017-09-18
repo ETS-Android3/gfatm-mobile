@@ -46,6 +46,9 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
     ArrayList<CheckBox> checkBoxes = new ArrayList<CheckBox>();
     ServerService serverService;
 
+    int errorNumber = 0;
+    int successNumber = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -436,6 +439,8 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                 });
 
                 Boolean errorFlag  = false;
+                errorNumber = 0;
+                successNumber = 0;
                 for (int i = 0; i < checkedTag.size(); i++) {
                     String returnString = serverService.submitOfflineForm(checkedTag.get(i), true);
                     if (!returnString.equals("SUCCESS")) {
@@ -507,11 +512,18 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
 
                         else if(!returnString.equals("SUCCESS")) {
 
-                            if(!(returnString.contains("PATIENT ALREADY EXISTS") && retStr[0].equals("SUCCESS")))
+                            if(!(returnString.contains("PATIENT ALREADY EXISTS") && retStr[0].equals("SUCCESS"))) {
                                 errorFlag = true;
+                                errorNumber = errorNumber + 1;
+                            } else
+                                successNumber = successNumber + 1;
 
                         }
                     }
+
+                    else
+                        successNumber = successNumber + 1;
+
                 }
 
                 if(errorFlag)
@@ -538,9 +550,22 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
 
                 } else if (result.equals("COMPLETE_WITH_ERROR")) {
 
-                    Toast toast = Toast.makeText(OfflineFormActivity.this, getResources().getString(R.string.forms_submitted_with_error), Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.BOTTOM, 0, 0);
-                    toast.show();
+                    String msg = getResources().getString(R.string.forms_submitted_with_error) + "\n" +
+                            successNumber + " forms successfully submitted. \n" +
+                            errorNumber + " forms failed due to error while submitting to openmrs.";
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
+                    alertDialog.setMessage(msg);
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
 
                 } else if (result.equals("CONNECTION_ERROR")) {
 

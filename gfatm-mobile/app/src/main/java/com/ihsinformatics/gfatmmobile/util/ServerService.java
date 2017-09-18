@@ -1728,7 +1728,7 @@ public class ServerService {
 
         if (App.getPatient() == null)
             return null;
-        Object[][] encounter = dbUtil.getFormTableData("select value, conceptName from " + Metadata.OBS + " where encounter_id=" + encounterId + "");
+        Object[][] encounter = dbUtil.getFormTableData("select value, conceptName from " + Metadata.OBS + " where encounter_id=" + encounterId + " order by conceptName ASC");
         return encounter;
 
     }
@@ -2360,7 +2360,7 @@ public class ServerService {
             json.put("type", encounterType);
             json.put("username", App.getUsername());
             json.put("password", App.getPassword());
-            json.put("location", "IHS");
+            json.put("location", location);
             json.put("entereddate", formDate);
 
             JSONArray obs = new JSONArray();

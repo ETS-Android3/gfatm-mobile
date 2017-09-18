@@ -425,11 +425,20 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
 
             hideKeyboard();
 
-            Intent intent = new Intent();
+            /*Intent intent = new Intent();
             intent.putExtra("key", "SEARCH");
             setResult(RESULT_OK, intent);
-            finish();
+            finish();*/
 
+            View view = this.getCurrentFocus();
+            if (view != null) {
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+            }
+            super.onBackPressed();
+
+            Intent searchActivityIntent = new Intent(this, SearchActivity.class);
+            startActivity(searchActivityIntent);
 
         } else if (v == createPatient) {
             selectLayout.setVisibility(View.GONE);
