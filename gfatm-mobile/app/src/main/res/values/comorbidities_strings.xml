@@ -286,8 +286,8 @@
     <string name="comorbidities_diabetes_treatment_initiation">Prescribed Diabetes Medication?</string>
     <string name="comorbidities_diabetes_treatment_detail">Prescription details:</string>
     <string name="comorbidities_diabetes_treatment_initiation_metformin">Dosage Strength of Metformin/Day</string>
-    <string name="comorbidities_diabetes_treatment_initiation_metformin_per_day">How many tablets per day?</string>
-    <string name="comorbidities_diabetes_treatment_initiation_metformin_prescribed">Prescribed for how many days?</string>
+    <string name="comorbidities_diabetes_treatment_initiation_metformin_per_day">How many tablets of metformin per day?</string>
+    <string name="comorbidities_diabetes_treatment_initiation_metformin_prescribed">Metformin prescribed for how many days?</string>
     <string name="comorbidities_diabetes_treatment_initiation_insulinN">Dosage of Insulin N (Units/Day):</string>
     <string name="comorbidities_diabetes_treatment_initiation_insulinR">Dosage of Insulin R (Units/Day):</string>
     <string name="comorbidities_diabetes_treatment_initiation_insulin_mix">Dosage of Mixed Insulin (Units/Day):</string>
@@ -439,6 +439,10 @@
         <item>@string/comorbidities_diabetes_treatment_initiation_metformin_2000</item>
         <item>@string/comorbidities_diabetes_treatment_initiation_metformin_2500</item>
     </string-array>
+
+    <string name="comorbidities_diabetes_patient_agree_to_receive_treatment">Does the patient agree to receive treatment for diabetes</string>
+    <string name="comorbidities_diabetes_patient_agree_to_continue_treatment">Does the patient agree to continue treatment for diabetes</string>
+    <string name="comorbidities_diabetes_patient_reason_for_discontinuation">Reason for discontinuation</string>
 
     <!-- Strings for UrineDRForm -->
     <string name="comorbidities_urinedr_test_order">Test Order Urine DR</string>
@@ -837,6 +841,11 @@
         <item>@string/comorbidities_foot_screening_recommendations_options_1_month</item>
         <item>@string/comorbidities_foot_screening_recommendations_options_history</item>
     </string-array>
+
+    <string name="comorbidities_foot_screening_recommendations_options_instruction_12_month">Kindly instruct the patient on Diabetes Management, Proper shoe fit and design, and Foot Hygeine. If the patient has any callus, ulcer formation advise the patient to visit the foot screening technician</string>
+    <string name="comorbidities_foot_screening_recommendations_options_instruction_3_month">Kindly instruct the patient on Diabetes Management, Proper shoe fit and design, Daily self inspection, Skin/nail care, Early reporting of foot injuries</string>
+    <string name="comorbidities_foot_screening_recommendations_options_instruction_1_month">Kindly instruct the patient on Diabetes Management, Proper shoe fit and design, Daily self inspection, Skin/nail care, Early reporting of foot injuries, Foot wear medification, Foot inlay advise</string>
+    <string name="comorbidities_foot_screening_recommendations_options_instruction_history">Kindly instruct the patient on Diabetes Management, Proper shoe fit and design, Daily self inspection, Skin/nail care, Early reporting of foot injuries, Foot wear medification, Foot inlay advise</string>
 
     <!-- Strings for ComorbiditiesDiabetesEyeScreeningForm -->
     <string name="comorbidities_eye_screening_eye_status">Eye Status:</string>
@@ -1345,6 +1354,7 @@
         <item>@string/comorbidities_patient_information_education_options_doc</item>
         <item>@string/comorbidities_patient_information_education_options_religious</item>
         <item>@string/comorbidities_patient_information_education_options_polytechnic</item>
+        <item>@string/comorbidities_patient_information_education_options_special_education</item>
         <item>@string/comorbidities_patient_information_education_options_no_education</item>
         <item>@string/comorbidities_patient_information_education_options_other</item>
         <item>@string/comorbidities_patient_information_education_options_unknown</item>

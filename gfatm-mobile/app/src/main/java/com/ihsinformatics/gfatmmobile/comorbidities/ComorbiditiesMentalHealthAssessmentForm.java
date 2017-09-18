@@ -64,6 +64,7 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
     //TitledRadioGroup typeOfRescreening;
     TitledSpinner typeOfRescreening;
     TitledEditText otherAssestmentReason;
+    TitledEditText rescreenedSessionNum;
     TitledEditText gpClinicCode;
     MyTextView mentalHealthScreening;
     TitledRadioGroup akuadsSleep;
@@ -175,6 +176,7 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
         //typeOfRescreening = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_assessment_form_MH_rescreening), getResources().getStringArray(R.array.comorbidities_assessment_form_MH_rescreening_options), getResources().getString(R.string.comorbidities_assessment_form_MH_rescreening_options_6th_session), App.VERTICAL, App.VERTICAL);
         typeOfRescreening = new TitledSpinner(mainContent.getContext(), null, getResources().getString(R.string.comorbidities_assessment_form_MH_rescreening), getResources().getStringArray(R.array.comorbidities_assessment_form_MH_rescreening_options), getResources().getString(R.string.comorbidities_assessment_form_MH_rescreening_options_reassessment), App.VERTICAL, true);
         otherAssestmentReason = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_assessment_form_MH_other_assesment_reason), "", "", 200, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        rescreenedSessionNum = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_assessment_form_MH_rescrened_number), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
         mentalHealthScreening = new MyTextView(context, getResources().getString(R.string.comorbidities_akuads_Mental_Health_Screening));
         mentalHealthScreening.setTypeface(null, Typeface.BOLD);
         akuadsSleep = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_sleep), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL);
@@ -247,7 +249,7 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
         //otherPreferredLocation.setVisibility(View.GONE);
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), typeOfRescreening.getSpinner(), otherAssestmentReason.getEditText(), gpClinicCode.getEditText(), akuadsSleep.getRadioGroup(), akuadsLackOfInterest.getRadioGroup(),
+        views = new View[]{formDate.getButton(), typeOfRescreening.getSpinner(), otherAssestmentReason.getEditText(), rescreenedSessionNum.getEditText(), gpClinicCode.getEditText(), akuadsSleep.getRadioGroup(), akuadsLackOfInterest.getRadioGroup(),
                 akuadsLostInterestHobbies.getRadioGroup(), akuadsAnxious.getRadioGroup(),
                 akuadsImpendingDoom.getRadioGroup(), akuadsDifficultyThinkingClearly.getRadioGroup(),
                 akuadsAlone.getRadioGroup(), akuadsUnhappy.getRadioGroup(),
@@ -264,7 +266,7 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, typeOfRescreening, otherAssestmentReason, gpClinicCode, mentalHealthScreening, akuadsSleep, akuadsLackOfInterest, akuadsLostInterestHobbies, akuadsAnxious, akuadsImpendingDoom, akuadsDifficultyThinkingClearly,
+                {{formDate, typeOfRescreening, otherAssestmentReason, rescreenedSessionNum, gpClinicCode, mentalHealthScreening, akuadsSleep, akuadsLackOfInterest, akuadsLostInterestHobbies, akuadsAnxious, akuadsImpendingDoom, akuadsDifficultyThinkingClearly,
                         akuadsAlone, akuadsUnhappy, akuadsHopeless, akuadsHelpless, akuadsWorried, akuadsCried, akuadsSuicide, akuadsLossOfAppetite, akuadsRetrosternalBurning,
                         akuadsIndigestion, akuadsNausea, akuadsConstipation, akuadsDifficultBreathing, akuadsTremulous, akuadsNumbness, akuadsTension, akuadsHeadaches, akuadsBodyPain,
                         akuadsUrination, akuadsTotalScore, akuadsSeverity, continuationStatus, akuadsAgree, akuadsTreatmentFacilityConsent, akuadsPhoneCounsellingConsent, preferredTherapyLocationSpinner, nextAppointmentDate /*otherPreferredLocation*/}};
@@ -525,6 +527,9 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
         if (otherAssestmentReason.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"OTHER ASSESSMENT REASON", App.get(otherAssestmentReason)});
         }
+
+        observations.add(new String[]{"RESCREENED SESSION NO", App.get(rescreenedSessionNum)});
+
         if (gpClinicCode.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"HEALTH CLINIC/POST", App.get(gpClinicCode)});
         }
@@ -793,6 +798,8 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
                 typeOfRescreening.getSpinner().selectValue(value);
             } else if (obs[0][0].equals("OTHER ASSESSMENT REASON")) {
                 otherAssestmentReason.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("RESCREENED SESSION NO")) {
+                rescreenedSessionNum.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("HEALTH CLINIC/POST")) {
                 gpClinicCode.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("SLEEPING LESS (AKUADS)")) {
@@ -1329,6 +1336,7 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
     @Override
     public void resetViews() {
         super.resetViews();
+        Boolean flag = true;
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         nextAppointmentDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
@@ -1348,10 +1356,54 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
                 int formId = Integer.valueOf(id);
 
                 refill(formId);
+                flag = false;
 
             } else bundle.putBoolean("save", false);
-
         }
+
+        if (flag) {
+            //HERE FOR AUTOPOPULATING OBS
+            final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
+                @Override
+                protected HashMap<String, String> doInBackground(String... params) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            loading.setInverseBackgroundForced(true);
+                            loading.setIndeterminate(true);
+                            loading.setCancelable(false);
+                            loading.setMessage(getResources().getString(R.string.fetching_data));
+                            loading.show();
+                        }
+                    });
+
+                    HashMap<String, String> result = new HashMap<String, String>();
+                    String sessionNumber = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_TREATMENT_FOLLOWUP_MENTAL_HEALTH_FORM, "SESSION NUMBER");
+
+                    if (sessionNumber != null)
+                        if (!sessionNumber.equals(""))
+                            result.put("SESSION NUMBER", sessionNumber);
+
+
+                    return result;
+                }
+
+                @Override
+                protected void onProgressUpdate(String... values) {
+                }
+
+                @Override
+                protected void onPostExecute(HashMap<String, String> result) {
+                    super.onPostExecute(result);
+                    loading.dismiss();
+
+                    rescreenedSessionNum.getEditText().setText(result.get("SESSION NUMBER"));
+
+                }
+            };
+            autopopulateFormTask.execute("");
+        }
+
     }
 
     @Override
