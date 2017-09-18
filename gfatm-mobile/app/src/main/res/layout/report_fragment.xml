@@ -15,16 +15,6 @@
             android:orientation="vertical"
             android:padding="@dimen/small">
 
-
-            <TextView
-                android:id="@+id/program"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/small"
-                android:textColor="?colorPrimary"
-                android:textSize="@dimen/large" />
-
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -36,7 +26,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.9"
                     android:paddingBottom="@dimen/small"
-                    android:text="@string/latest_encocunter"
+                    android:text="@string/encocunter"
                     android:textColor="?colorAccent"
                     android:textStyle="bold" />
 
@@ -50,14 +40,93 @@
 
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/fast"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/medium"
+                android:textColor="?colorPrimary"
+                android:textSize="@dimen/large"
+                android:text="@string/fast"
+                android:drawableRight="@drawable/ic_more" />
+
             <LinearLayout
-                android:id="@+id/reportFragment"
+                android:id="@+id/fastReportFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:divider="?android:attr/dividerHorizontal"
                 android:orientation="vertical"
                 android:paddingBottom="@dimen/small"
-                android:showDividers="middle|end">
+                android:showDividers="middle|end"
+                android:visibility="gone">
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/childhoodtb"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/medium"
+                android:textColor="?colorPrimary"
+                android:textSize="@dimen/large"
+                android:text="@string/childhood_tb"
+                android:drawableRight="@drawable/ic_more"/>
+
+            <LinearLayout
+                android:id="@+id/childhoodtbReportFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="?android:attr/dividerHorizontal"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/small"
+                android:showDividers="middle|end"
+                android:visibility="gone">
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/commorbidties"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/small"
+                android:textColor="?colorPrimary"
+                android:textSize="@dimen/large"
+                android:text="@string/comorbidities"
+                android:drawableRight="@drawable/ic_more"
+                android:padding="@dimen/medium" />
+
+            <LinearLayout
+                android:id="@+id/commorbidtiesReportFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="?android:attr/dividerHorizontal"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/small"
+                android:showDividers="middle|end"
+                android:visibility="gone">
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/pet"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/small"
+                android:textColor="?colorPrimary"
+                android:textSize="@dimen/large"
+                android:text="@string/pet"
+                android:drawableRight="@drawable/ic_more"
+                android:padding="@dimen/medium"/>
+
+            <LinearLayout
+                android:id="@+id/petReportFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="?android:attr/dividerHorizontal"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/small"
+                android:showDividers="middle|end"
+                android:visibility="gone">
 
             </LinearLayout>
 
