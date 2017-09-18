@@ -17,6 +17,7 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -1568,6 +1569,10 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
                     String landline1 = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "TERTIARY CONTACT NUMBER");
                     String landline2 = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "QUATERNARY CONTACT NUMBER");
 
+                    String maritalStatus = serverService.getLatestObsValue(App.getPatientId(), "PET" + "-" + "Socioeconomic Data", "MARITAL STATUS");
+                    String householdEducation = serverService.getLatestObsValue(App.getPatientId(), "PET" + "-" + "Socioeconomic Data", "CURRENT EDUCATION LEVEL OF HEAD OF HOUSEHOLD");
+                    String educationLevel = serverService.getLatestObsValue(App.getPatientId(), "PET" + "-" + "Socioeconomic Data", "HIGHEST EDUCATION LEVEL");
+
                     if (regNo != null)
                         if (!regNo.equals(""))
                             result.put("TB REGISTRATION NUMBER", regNo);
@@ -1625,6 +1630,16 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
                     if (landline2 != null)
                         if (!landline2.equals(""))
                             result.put("QUATERNARY CONTACT NUMBER", landline2);
+                    if (maritalStatus != null)
+                        if (!maritalStatus.equals(""))
+                            result.put("MARITAL STATUS", maritalStatus);
+                    if (householdEducation != null)
+                        if (!householdEducation.equals(""))
+                            result.put("CURRENT EDUCATION LEVEL OF HEAD OF HOUSEHOLD", householdEducation);
+                    if (educationLevel != null)
+                        if (!educationLevel.equals(""))
+                            result.put("HIGHEST EDUCATION LEVEL", educationLevel);
+
 
                     return result;
                 }
@@ -1795,6 +1810,65 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
                     }
 
                     tbRegistrationNumber.getEditText().setText(result.get("TB REGISTRATION NUMBER"));
+
+                    String maritalStatus1 = result.get("MARITAL STATUS");
+                    if (maritalStatus1 != null) {
+                        if (!maritalStatus1.equals("")) {
+                            String value = maritalStatus1.equals("SINGLE") ? getResources().getString(R.string.comorbidities_patient_information_marital_status_options_single) :
+                                    (maritalStatus1.equals("ENGAGED") ? getResources().getString(R.string.comorbidities_patient_information_marital_status_options_engaged) :
+                                            (maritalStatus1.equals("MARRIED") ? getResources().getString(R.string.comorbidities_patient_information_marital_status_options_married) :
+                                                    (maritalStatus1.equals("SEPARATED") ? getResources().getString(R.string.comorbidities_patient_information_marital_status_options_separated) :
+                                                            (maritalStatus1.equals("DIVORCED") ? getResources().getString(R.string.comorbidities_patient_information_marital_status_options_divorced) :
+                                                                    (maritalStatus1.equals("WIDOWED") ? getResources().getString(R.string.comorbidities_patient_information_marital_status_options_widow) :
+                                                                            (maritalStatus1.equals("OTHER") ? getResources().getString(R.string.comorbidities_patient_information_marital_status_options_other) :
+                                                                                    (maritalStatus1.equals("UNKNOWN") ? getResources().getString(R.string.comorbidities_patient_information_marital_status_options_unknown) : getResources().getString(R.string.comorbidities_patient_information_marital_status_options_refused))))))));
+                            maritalStatus.getSpinner().selectValue(value);
+                        }
+                    }
+
+                    String householdEducation1 = result.get("CURRENT EDUCATION LEVEL OF HEAD OF HOUSEHOLD");
+                    Log.v("HOUSE_EDU_LEVEL", householdEducation1);
+                    if (householdEducation1 != null) {
+                        if (!householdEducation1.equals("")) {
+                            Log.v("HOUSE_EDU_LEVEL1", householdEducation1);
+                            String value = householdEducation1.equals("ELEMENTARY EDUCATION") ? getResources().getString(R.string.comorbidities_patient_information_education_options_ele) :
+                                    (householdEducation1.equals("PRIMARY EDUCATION") ? getResources().getString(R.string.comorbidities_patient_information_education_options_pri) :
+                                            (householdEducation1.equals("SECONDARY EDUCATION") ? getResources().getString(R.string.comorbidities_patient_information_education_options_sec) :
+                                                    (householdEducation1.equals("INTERMEDIATE EDUCATION") ? getResources().getString(R.string.comorbidities_patient_information_education_options_inter) :
+                                                            (householdEducation1.equals("UNDERGRADUATE EDUCATION") ? getResources().getString(R.string.comorbidities_patient_information_education_options_undergrad) :
+                                                                    (householdEducation1.equals("GRADUATE EDUCATION") ? getResources().getString(R.string.ccomorbidities_patient_information_education_options_grad) :
+                                                                            (householdEducation1.equals("DOCTORATE EDUCATION") ? getResources().getString(R.string.comorbidities_patient_information_education_options_doc) :
+                                                                                    (householdEducation1.equals("RELIGIOUS EDUCATION") ? getResources().getString(R.string.comorbidities_patient_information_education_options_religious) :
+                                                                                            (householdEducation1.equals("POLYTECHNIC EDUCATION") ? getResources().getString(R.string.comorbidities_patient_information_education_options_polytechnic) :
+                                                                                                    (householdEducation1.equals("SPECIAL EDUCATION RECEIVED") ? getResources().getString(R.string.comorbidities_patient_information_education_options_special_education) :
+                                                                                                            (householdEducation1.equals("NO FORMAL EDUCATION") ? getResources().getString(R.string.comorbidities_patient_information_education_options_no_education) :
+                                                                                                                    (householdEducation1.equals("OTHER") ? getResources().getString(R.string.comorbidities_patient_information_education_options_other) :
+                                                                                                                            (householdEducation1.equals("UNKNOWN") ? getResources().getString(R.string.comorbidities_patient_information_education_options_unknown) : getResources().getString(R.string.comorbidities_patient_information_education_options_refused)))))))))))));
+                            Log.v("HOUSE_EDU_LEVEL2", value);
+                            householdHeadEducationLevel.getSpinner().selectValue(value);
+                        }
+                    }
+
+                    String educationLevel1 = result.get("HIGHEST EDUCATION LEVEL");
+                    Log.v("EDU LEVEL", educationLevel1);
+                    if (educationLevel1 != null) {
+                        if (!educationLevel1.equals("")) {
+                            String value = educationLevel1.equals("ELEMENTARY EDUCATION") ? getResources().getString(R.string.comorbidities_patient_information_education_options_ele) :
+                                    (educationLevel1.equals("PRIMARY EDUCATION") ? getResources().getString(R.string.comorbidities_patient_information_education_options_pri) :
+                                            (educationLevel1.equals("SECONDARY EDUCATION") ? getResources().getString(R.string.comorbidities_patient_information_education_options_sec) :
+                                                    (educationLevel1.equals("INTERMEDIATE EDUCATION") ? getResources().getString(R.string.comorbidities_patient_information_education_options_inter) :
+                                                            (educationLevel1.equals("UNDERGRADUATE EDUCATION") ? getResources().getString(R.string.comorbidities_patient_information_education_options_undergrad) :
+                                                                    (educationLevel1.equals("GRADUATE EDUCATION") ? getResources().getString(R.string.ccomorbidities_patient_information_education_options_grad) :
+                                                                            (educationLevel1.equals("DOCTORATE EDUCATION") ? getResources().getString(R.string.comorbidities_patient_information_education_options_doc) :
+                                                                                    (educationLevel1.equals("RELIGIOUS EDUCATION") ? getResources().getString(R.string.comorbidities_patient_information_education_options_religious) :
+                                                                                            (educationLevel1.equals("POLYTECHNIC EDUCATION") ? getResources().getString(R.string.comorbidities_patient_information_education_options_polytechnic) :
+                                                                                                    (educationLevel1.equals("SPECIAL EDUCATION RECEIVED") ? getResources().getString(R.string.comorbidities_patient_information_education_options_special_education) :
+                                                                                                            (educationLevel1.equals("NO FORMAL EDUCATION") ? getResources().getString(R.string.comorbidities_patient_information_education_options_no_education) :
+                                                                                                                    (educationLevel1.equals("OTHER") ? getResources().getString(R.string.comorbidities_patient_information_education_options_other) :
+                                                                                                                            (educationLevel1.equals("UNKNOWN") ? getResources().getString(R.string.comorbidities_patient_information_education_options_unknown) : getResources().getString(R.string.comorbidities_patient_information_education_options_refused)))))))))))));
+                            patientEducationalLevel.getSpinner().selectValue(value);
+                        }
+                    }
                     loading.dismiss();
                 }
             };
