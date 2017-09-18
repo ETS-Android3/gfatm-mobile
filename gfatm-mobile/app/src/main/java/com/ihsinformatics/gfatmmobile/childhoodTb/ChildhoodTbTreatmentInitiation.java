@@ -245,7 +245,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         testConfirmingDiagnosis = new TitledCheckBoxes(mainContent.getContext(), "", getResources().getString(R.string.ctb_test_confirming_diagnosis), getResources().getStringArray(R.array.ctb_confirming_diagnosis_list), null, App.VERTICAL,App.VERTICAL,true);
         treatmentInitiated = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_are_you_intiating_treatment), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL,true);
         reasonTreatmentNotIniated = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_reason_treatment_not_intiated), getResources().getStringArray(R.array.ctb_reason_treatment_not_intiated_list), getResources().getString(R.string.ctb_patient_refused_treatment), App.VERTICAL,true);
-        initiatingAdditionalTreatment = new TitledCheckBoxes(context, null, getResources().getString(R.string.ctb_initiating_additional_treatment), getResources().getStringArray(R.array.ctb_pediasure_vitamin_iron_anthelminthic), null, App.VERTICAL, App.VERTICAL);
+        initiatingAdditionalTreatment = new TitledCheckBoxes(context, null, getResources().getString(R.string.ctb_initiating_additional_treatment), getResources().getStringArray(R.array.ctb_pediasure_vitamin_iron_anthelminthic_calpol), null, App.VERTICAL, App.VERTICAL);
         patientCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_category), getResources().getStringArray(R.array.ctb_patient_category3_list), getResources().getString(R.string.ctb_categoryI), App.VERTICAL, App.VERTICAL,true);
         weight = new TitledEditText(context, null, getResources().getString(R.string.ctb_patient_weight), "", "", 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         weightPercentileEditText = new TitledEditText(context, null,getResources().getString(R.string.ctb_weight_percentile), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
@@ -1240,6 +1240,8 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                     additionalTreatmentString = additionalTreatmentString + "VITAMIN B COMPLEX" + " ; ";
                 else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_anthelminthic)))
                     additionalTreatmentString = additionalTreatmentString + "ANTHELMINTHIC" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_calpol)))
+                    additionalTreatmentString = additionalTreatmentString + "CALPOL" + " ; ";
             }
             observations.add(new String[]{"ADDITIONAL TREATMENT TO TB PATIENT", additionalTreatmentString});
         }
@@ -1689,6 +1691,9 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                         cb.setChecked(true);
                         break;
                     } else if (cb.getText().equals(getResources().getString(R.string.ctb_anthelminthic)) && obs[0][1].equals("ANTHELMINTHIC")) {
+                        cb.setChecked(true);
+                        break;
+                    }else if (cb.getText().equals(getResources().getString(R.string.ctb_calpol)) && obs[0][1].equals("CALPOL")) {
                         cb.setChecked(true);
                         break;
                     }
