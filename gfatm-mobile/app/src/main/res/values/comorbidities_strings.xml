@@ -842,11 +842,6 @@
         <item>@string/comorbidities_foot_screening_recommendations_options_history</item>
     </string-array>
 
-    <string name="comorbidities_foot_screening_recommendations_options_instruction_12_month">Kindly instruct the patient on Diabetes Management, Proper shoe fit and design, and Foot Hygeine. If the patient has any callus, ulcer formation advise the patient to visit the foot screening technician</string>
-    <string name="comorbidities_foot_screening_recommendations_options_instruction_3_month">Kindly instruct the patient on Diabetes Management, Proper shoe fit and design, Daily self inspection, Skin/nail care, Early reporting of foot injuries</string>
-    <string name="comorbidities_foot_screening_recommendations_options_instruction_1_month">Kindly instruct the patient on Diabetes Management, Proper shoe fit and design, Daily self inspection, Skin/nail care, Early reporting of foot injuries, Foot wear medification, Foot inlay advise</string>
-    <string name="comorbidities_foot_screening_recommendations_options_instruction_history">Kindly instruct the patient on Diabetes Management, Proper shoe fit and design, Daily self inspection, Skin/nail care, Early reporting of foot injuries, Foot wear medification, Foot inlay advise</string>
-
     <!-- Strings for ComorbiditiesDiabetesEyeScreeningForm -->
     <string name="comorbidities_eye_screening_eye_status">Eye Status:</string>
     <string name="comorbidities_eye_screening_right_eye_diagnosed">Right Eye Diagnosed:</string>
@@ -1065,6 +1060,8 @@
     </string-array>
 
     <!-- Strings for ComorbiditiesAssessmentFormMentalHealth -->
+    <string name="comorbidities_assessment_form_MH_rescrened_number">Rescreened at session number:</string>
+
     <string name="comorbidities_assessment_form_MH_rescreening">Type of rescreening:</string>
     <string name="comorbidities_assessment_form_MH_appointment_date">Next Appointment Date:</string>
     <string name="next_date_past">Date can\'t be in past.</string>
