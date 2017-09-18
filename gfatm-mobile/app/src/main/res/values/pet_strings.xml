@@ -427,6 +427,23 @@
         <item>@string/pet_uncle</item>
         <item>@string/pet_other</item>
     </string-array>
+    <string-array name="pet_household_heads_required">
+        <item></item>
+        <item>@string/pet_mother</item>
+        <item>@string/pet_father</item>
+        <item>@string/pet_maternal_grandmother</item>
+        <item>@string/pet_maternal_grandfather</item>
+        <item>@string/pet_paternal_grandmother</item>
+        <item>@string/pet_paternal_grandfather</item>
+        <item>@string/pet_brother</item>
+        <item>@string/pet_sister</item>
+        <item>@string/pet_son</item>
+        <item>@string/pet_daughter</item>
+        <item>@string/pet_spouse</item>
+        <item>@string/pet_aunt</item>
+        <item>@string/pet_uncle</item>
+        <item>@string/pet_other</item>
+    </string-array>
     <string name="pet_household_education">Highest Level of Education Attainment of Head of Household</string>
     <string name="pet_mother_tongue">Mother tongue</string>
     <string name="pet_urdu">Urdu</string>
