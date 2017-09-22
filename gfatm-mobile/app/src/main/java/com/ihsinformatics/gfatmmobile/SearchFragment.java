@@ -1117,6 +1117,11 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Co
                                 ((ImageView)img).setImageResource(R.drawable.ic_checked);
                             }
                         }
+
+                        if(App.getMode().equalsIgnoreCase("OFFLINE"))
+                            MainActivity.update.setVisibility(View.GONE);
+                        else
+                            MainActivity.update.setVisibility(View.VISIBLE);
                     }
 
 

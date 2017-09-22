@@ -76,9 +76,9 @@ public class MainActivity extends AppCompatActivity
     RadioGroup radioGroup;
     public static FormFragment fragmentForm = new FormFragment();
     public static ReportFragment fragmentReport = new ReportFragment();
-    public static SearchFragment fragmentSearch = new SearchFragment();
+    public static SummaryFragment fragmentSearch = new SummaryFragment();
     ImageView change;
-    ImageView update;
+    public static ImageView update;
 
     public static TextView patientName;
     public static TextView patientDob;
@@ -370,6 +370,7 @@ public class MainActivity extends AppCompatActivity
             getSupportActionBar().setTitle(App.getProgram() + "  |  " + App.getLocation());
             fragmentForm.fillMainContent();
             fragmentReport.fillReportFragment();
+            fragmentSearch.updateSummaryFragment();
             showFormFragment();
         }
 
@@ -392,9 +393,50 @@ public class MainActivity extends AppCompatActivity
                 patientDob.setText("");
                 patientId.setText("");
                 id.setText("");
+
+                getSupportActionBar().setTitle(App.getProgram() + "  |  " + App.getLocation());
+                fragmentForm.fillMainContent();
+                fragmentReport.fillReportFragment();
+                fragmentSearch.updateSummaryFragment();
+                showFormFragment();
+
             }
-            else
+            else {
+
+                String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
+                String lname = App.getPatient().getPerson().getFamilyName();
+                if(!lname.equals(""))
+                    lname = lname.substring(0, 1).toUpperCase() + lname.substring(1);
+
+                patientName.setText(fname + " " + lname + " (" + App.getPatient().getPerson().getGender() + ")");
+                String dob = App.getPatient().getPerson().getBirthdate().substring(0, 10);
+                if (!dob.equals("")) {
+                    Date date = App.stringToDate(dob, "yyyy-MM-dd");
+                    DateFormat df = new SimpleDateFormat("MMM dd, yyyy");
+                    if(App.getPatient().getPerson().getAge() == 0){
+                        Date birthDate = App.stringToDate(App.getPatient().getPerson().getBirthdate(), "yyyy-MM-dd");
+                        int age = App.getDiffMonths(birthDate, new Date());
+                        if(age == 0 ){
+                            long ageInLong = App.getDiffDays(birthDate, new Date());
+                            patientDob.setText(ageInLong + " days (" + df.format(date) + ")");
+                        }
+                        else patientDob.setText(age + " months (" + df.format(date) + ")");
+                    }
+                    else patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
+                } else patientDob.setText(dob);
+                if (!App.getPatient().getPatientId().equals(""))
+                    id.setVisibility(View.VISIBLE);
+                patientId.setText(App.getPatient().getPatientId());
+
+                getSupportActionBar().setTitle(App.getProgram() + "  |  " + App.getLocation());
+                fragmentForm.fillMainContent();
+                fragmentReport.fillReportFragment();
+                fragmentSearch.updateSummaryFragment();
+                showFormFragment();
+
                 update.setVisibility(View.VISIBLE);
+            }
+
 
             /*if(flag) {
                 int count = serverService.getPendingSavedFormsCount(App.getUsername(), App.getProgram());
@@ -489,6 +531,12 @@ public class MainActivity extends AppCompatActivity
             alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
 
 
+            return;
+        }
+
+        form = fm.findFragmentByTag("SEARCH");
+        if (form != null && form.isVisible() && fragmentSearch.isViewVisible()) {
+            fragmentSearch.setMainContentVisible(true);
             return;
         }
 
@@ -838,7 +886,7 @@ public class MainActivity extends AppCompatActivity
 
                     fragmentReport.fillReportFragment();
                     fragmentForm.fillMainContent();
-
+                    fragmentSearch.updateSummaryFragment();
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.patient_updated));
@@ -932,6 +980,7 @@ public class MainActivity extends AppCompatActivity
 
                         fragmentReport.fillReportFragment();
                         fragmentForm.fillMainContent();
+                        fragmentSearch.updateSummaryFragment();
 
                     }
                 } else if (returnString != null && returnString.equals("CREATE")) {
@@ -968,6 +1017,7 @@ public class MainActivity extends AppCompatActivity
 
                         fragmentReport.fillReportFragment();
                         fragmentForm.fillMainContent();
+                        fragmentSearch.updateSummaryFragment();
                     }
                 }
 
