@@ -497,8 +497,10 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
             observations.add(new String[]{"TB CATEGORY", App.get(tbCategory).equals(getResources().getString(R.string.fast_category_1)) ? "CATEGORY I TUBERCULOSIS" : "CATEGORY II TUBERCULOSIS"});
 
         if (baselineRepeatReason.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"REASON FOR BASELINE REPEAT TEST", App.get(baselineRepeatReason).equals(getResources().getString(R.string.fast_baseline_new)) ? "RIF RESISTANT POSITIVE" :
-                    (App.get(baselineRepeatReason).equals(getResources().getString(R.string.fast_baseline_repeat)) ? "INDETERMINATE" : "INVALID")});
+            observations.add(new String[]{"REASON FOR BASELINE REPEAT TEST", App.get(baselineRepeatReason).equals(getResources().getString(R.string.fast_rif_resistant)) ? "RIF RESISTANT POSITIVE" :
+                (App.get(baselineRepeatReason).equals(getResources().getString(R.string.fast_error_invalid_no_result)) ? "INVALID" :
+                        (App.get(baselineRepeatReason).equals(getResources().getString(R.string.fast_indeterminate)) ? "INDETERMINATE" :
+                                "OTHER REASON FOR REPEATING TEST"))});
 
         if (baselineRepeatReasonOther.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER REASON FOR REPEATING TEST", App.get(baselineRepeatReasonOther)});
@@ -765,6 +767,10 @@ public class FastGpxSpecimenCollectionForm extends AbstractFormActivity implemen
                         rb.setChecked(true);
                         break;
                     } else if (rb.getText().equals(getResources().getString(R.string.fast_error_invalid_no_result)) && obs[0][1].equals("INVALID")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.fast_other_title)) && obs[0][1].equals("OTHER REASON FOR REPEATING TEST")) {
                         rb.setChecked(true);
                         break;
                     }
