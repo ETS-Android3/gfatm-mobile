@@ -349,10 +349,10 @@
     <string name="city_default" translatable="false">Karachi</string>
     <string name="province_default" translatable="false">Sindh</string>
     <string name="country_default" translatable="false">Pakistan</string>
-    <!--<string name="ip_default" translatable="false">mrs.ghd.ihn.org.pk</string>
-    <string name="port_default" translatable="false">443</string>-->
-    <string name="ip_default" translatable="false">202.141.249.106</string>
-    <string name="port_default" translatable="false">9902</string>
+    <string name="ip_default" translatable="false">mrs.ghd.ihn.org.pk</string>
+    <string name="port_default" translatable="false">443</string>
+    <!--<string name="ip_default" translatable="false">124.29.207.74</string>
+    <string name="port_default" translatable="false">9902</string>-->
 
     <string name="support_contact">Support Contact</string>
     <string name="support_email">Support Email</string>
@@ -427,7 +427,7 @@
     <string name="form_cannot_be_before_person_dob">Form date should be after Patient\'s DOB</string>
     <string name="patient_already_exists">Patient already exists</string>
     <string name="patient_already_exists_error">has already been created. Patient Details are: </string>
-    <string name="merge_patient">Would you like to merge these patients?</string>
+    <string name="merge_patient">Would you like to merge this patient?</string>
 
     <!-- Strings related to login -->
     <string name="username">Username</string>
@@ -454,7 +454,6 @@
     <string name="dob">Date of Birth: </string>
     <string name="age">Age: </string>
     <string name="age_modifier">Age Modifier: </string>
-    <string name="external_id">External ID: \n (Optional) </string>
     <string name="search_criteria">Search Criteria</string>
 
     <!-- Forms -->
@@ -589,5 +588,46 @@
     <string name="feedback_submitted_successfully">FEEDBACK SUCCESSFULLY SENT TO SERVER</string>
     <string name="feedback_sms_error">SMS failed, please try again later!</string>
     <string name="feedback_sms_send">SMS SEND.</string>
+
+    <string name="patient_attribute">Patient Attribute</string>
+    <string name="general_patient_view">General Patient View</string>
+    <string name="fast_patient_view">FAST Patient View</string>
+    <string name="pet_patient_view">PET Patient View</string>
+    <string name="childhood_tb_patient_view">Childhood TB Patient View</string>
+    <string name="comorbidities_patient_view">Comorbidities Patient View</string>
+    <string name="fast_staff_view">FAST Daily Staff View</string>
+    <string name="pet_staff_view">PET Daily Staff View</string>
+    <string name="childhood_tb_staff_view">Childhood TB Daily Staff View</string>
+    <string name="comorbidities_staff_view">Comorbidities Daily Staff View</string>
+
+    <string name="back">Back</string>
+
+    <!-- Views Strings -->
+    <string name="external_id">External ID:</string>
+    <string name="screening_facility">Screening Facility:</string>
+    <string name="pet_sci_intervention">PET/SCI Intervention:</string>
+    <string name="presumptive_date">Presumptive Date:</string>
+    <string name="diagnosed_on">Diagnosed on:</string>
+    <string name="diagnosed_type">Type of diagnosis:</string>
+    <string name="xpert_result">Xpert Result:</string>
+    <string name="xray_result">X-ray Result:</string>
+    <string name="tb_type">Type of TB:</string>
+    <string name="tb_initiation_date">TB Treatment Initiation Date:</string>
+    <string name="tb_registration_no">TB Registration #:</string>
+    <string name="infection_tb_initiation_date">PET Treatment Initiation Date:</string>
+    <string name="tb_regimen">PET Infection Treatment Regimen:</string>
+    <string name="treatment_facility">Treatment Facility:</string>
+    <string name="next_followup_tb_date">Next Followup TB Date:</string>
+    <string name="date_last_smear_done">Date at which last smear was done:</string>
+    <string name="result_last_smear">Result of last smear:</string>
+    <string name="date_last_xray_done">Date at which last x-ray was done:</string>
+    <string name="result_last_xray">Result of last x-ray:</string>
+    <string name="treatment_plan">Treatment Plan:</string>
+    <string name="akuads_screening_date">AKUADS Screening date:</string>
+    <string name="akuads_score">AKUADS Score:</string>
+    <string name="depression_followup_date">Depression Next Followup date:</string>
+    <string name="diabetes_status">Diabetes Status:</string>
+    <string name="diabetes_followup_date">Diabetes Followup date:</string>
+    <string name="final_treatment_outcome">Final treatment outcome:</string>
 
 </resources>
