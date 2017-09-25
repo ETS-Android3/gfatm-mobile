@@ -353,7 +353,7 @@ public class ChildhoodTbReferral extends AbstractFormActivity implements RadioGr
                         encounterId = successArray[1];
                     }
                     if(!App.get(referralTransferLocation).equalsIgnoreCase(getResources().getString(R.string.ctb_other_title))){
-                        result = serverService.savePersonAttributeType("Health Center", serverService.getLocationUuid(App.getLocation()), encounterId);
+                        result = serverService.savePersonAttributeType("Health Center", serverService.getLocationUuid(App.get(referralTransferLocation)), encounterId);
                         if (!result.equals("SUCCESS"))
                             return result;
                     }
