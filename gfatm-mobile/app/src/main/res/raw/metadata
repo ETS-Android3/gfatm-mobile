@@ -4466,7 +4466,7 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RIFAMPICIN/ISON
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NEVER',NULL,'N/A','1090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LOWENSTEIN-JENSEN MYCOBACTERIA CULTURE METHOD','L-J CULTURE METHOD','N/A','160011AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER ABNORMAL DETAILED DIAGNOSIS','other_abnormal_diagnosis','Text','7cda03c9-af8b-4d01-8f88-01365c85cf7a');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ABNORMAL DETAILED DIAGNOSIS','abnormal_detailed_diagnosis','Coded','12AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CHEST XRAY','chest_xray','Coded','12AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RADIOLOGICAL DIAGNOSIS','radiological_diagnosis','Coded','7b8a4bea-4217-4cfd-920b-f0c66ab23680');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ABNORMAL SUGGESTIVE OF TB','abnormal_suggestive_tb','N/A','d9bfc2f2-aae4-4015-9794-afc9c2b93e1f');
