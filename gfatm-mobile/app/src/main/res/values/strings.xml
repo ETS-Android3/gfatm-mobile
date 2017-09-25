@@ -351,7 +351,7 @@
     <string name="country_default" translatable="false">Pakistan</string>
     <!--<string name="ip_default" translatable="false">mrs.ghd.ihn.org.pk</string>
     <string name="port_default" translatable="false">443</string>-->
-    <string name="ip_default" translatable="false">202.141.249.106</string>
+    <string name="ip_default" translatable="false">124.29.207.74</string>
     <string name="port_default" translatable="false">9902</string>
 
     <string name="support_contact">Support Contact</string>

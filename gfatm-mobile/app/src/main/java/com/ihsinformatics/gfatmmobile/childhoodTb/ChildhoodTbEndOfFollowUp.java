@@ -443,7 +443,9 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
                                 (App.get(treatmentOutcome).equals(getResources().getString(R.string.ctb_treatment_failure)) ? "TUBERCULOSIS TREATMENT FAILURE":
                                      (App.get(treatmentOutcome).equals(getResources().getString(R.string.ctb_died)) ? "DIED" :
                                             (App.get(treatmentOutcome).equals(getResources().getString(R.string.ctb_referral)) ? "PATIENT REFERRED" :
-                                                    (App.get(treatmentOutcome).equals(getResources().getString(R.string.ctb_lost_to_followup)) ? "LOST TO FOLLOW-UP" : "OTHER TREATMENT OUTCOME"))))))});
+                                                    (App.get(treatmentOutcome).equals(getResources().getString(R.string.ctb_lost_to_followup)) ? "LOST TO FOLLOW-UP" :
+                                                            (App.get(treatmentOutcome).equals(getResources().getString(R.string.ctb_clinically_evaluated_no_tb)) ? "CLINICALLY EVALUATED, NO TB" :
+                                                                    (App.get(treatmentOutcome).equals(getResources().getString(R.string.ctb_antibiotic_complete_no_tb)) ? "ANTIBIOTIC COMPLETE - NO TB" : "OTHER TREATMENT OUTCOME"))))))))});
 
         if(otherReasonRemarks.getVisibility()==View.VISIBLE) {
             observations.add(new String[]{"OTHER REASON TO END FOLLOW UP", App.get(otherReasonRemarks)});
@@ -510,6 +512,8 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
                         if (!result.equals("SUCCESS"))
                             return result;
                     }
+
+
                 }
                 return "SUCCESS";
             }
@@ -632,7 +636,9 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
                                                 (obs[0][1].equals("DIED") ? getResources().getString(R.string.ctb_died) :
                                                         (obs[0][1].equals("PATIENT REFERRED") ? getResources().getString(R.string.ctb_referral) :
                                                                 (obs[0][1].equals("LOST TO FOLLOW-UP") ? getResources().getString(R.string.ctb_lost_to_followup) :
-                                                                    getResources().getString(R.string.ctb_other_title)))))));
+                                                                        (obs[0][1].equals("CLINICALLY EVALUATED, NO TB") ? getResources().getString(R.string.ctb_clinically_evaluated_no_tb) :
+                                                                                (obs[0][1].equals("ANTIBIOTIC COMPLETE - NO TB") ? getResources().getString(R.string.ctb_antibiotic_complete_no_tb) :
+                                                                    getResources().getString(R.string.ctb_other_title)))))))));
                 if(value.equals(getResources().getString(R.string.ctb_transfer_out)) || value.equals(getResources().getString(R.string.ctb_referral))){
                     String referralTransferLocation = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Referral", "REFERRING FACILITY NAME");
                     if(referralTransferLocation.equalsIgnoreCase(getResources().getString(R.string.ctb_other_title))){

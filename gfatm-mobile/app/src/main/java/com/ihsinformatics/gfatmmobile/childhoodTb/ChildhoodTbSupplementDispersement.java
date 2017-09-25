@@ -104,8 +104,8 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                              ViewGroup container, Bundle savedInstanceState) {
 
         PAGE_COUNT = 1;
-        //FORM_NAME = Forms.CHILDHOODTB_DRUG_DISPERSAL;
-        //FORM = Forms.childhoodTb_drug_dispersal;
+        FORM_NAME = Forms.CHILDHOODTB_SUPPLEMENT_DISBURSEMENT;
+        FORM = Forms.childhoodTb_supplement_disbursement;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -452,18 +452,16 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
 
-                        /****************** NEEEEED TO RESOLVE**************************************/
-//        observations.add(new String[]{"TREATMENT PLAN", App.get(currentPatientTreatment).equals(getResources().getString(R.string.ctb_att)) ? "INTENSIVE PHASE" :
-//                App.get(currentPatientTreatment).equals(getResources().getString(R.string.ctb_antibiotic_trial)) ? "CONTINUE REGIMEN" :
-//                        App.get(currentPatientTreatment).equals(getResources().getString(R.string.ctb_ipt)) ? "CONTINUE REGIMEN"
-//                        : "TREATMENT COMPLETE"});
+        observations.add(new String[]{"PATIENT CURRENT TREATMENT", App.get(currentPatientTreatment).equals(getResources().getString(R.string.ctb_att)) ? "ATT" :
+                App.get(currentPatientTreatment).equals(getResources().getString(R.string.ctb_antibiotic_trial)) ? "ANTIBIOTIC TRIAL" :
+                        App.get(currentPatientTreatment).equals(getResources().getString(R.string.ctb_ipt)) ? "IPT"
+                        : "UNDER INVESTIGATION"});
 
         if(!App.get(tbClassification).isEmpty()) {
             observations.add(new String[]{"TUBERCULOSIS INFECTION TYPE", App.get(tbClassification).equals(getResources().getString(R.string.ctb_dstb)) ? "DRUG-SENSITIVE TUBERCULOSIS INFECTION" : "DRUG-RESISTANT TB"});
         }
 
 
-                /*********** NEEED TO RESOLVEEEEE *****************************/
         if(tbTreatmentAdditionalTreatment.getVisibility()==View.VISIBLE){
             String additionalTreatmentString = "";
             for (CheckBox cb : tbTreatmentAdditionalTreatment.getCheckedBoxes()) {
@@ -476,7 +474,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                 else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_anthelminthic)))
                     additionalTreatmentString = additionalTreatmentString + "ANTHELMINTHIC" + " ; ";
                 else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_calpol)))
-                    additionalTreatmentString = additionalTreatmentString + "ANTHELMINTHIC" + " ; ";
+                    additionalTreatmentString = additionalTreatmentString + "CALPOL" + " ; ";
             }
             observations.add(new String[]{"ADDITIONAL TREATMENT TO TB PATIENT", additionalTreatmentString});
         }
@@ -507,18 +505,12 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
             observations.add(new String[]{"QUANTITY OF ANTHELMINTHIC DISPERSED", App.get(tbTreatmentAnthelminthicQuantity)});
         }
 
-
-        //************ NEED TO RESOLVE ********************************************//
         if(tbTreatmentCalpolDispersed.getVisibility()==View.VISIBLE && !App.get(tbTreatmentCalpolDispersed).isEmpty()){
-            observations.add(new String[]{"ANTHELMINTIC DISPERSED", App.get(tbTreatmentCalpolDispersed).toUpperCase()});
+            observations.add(new String[]{"CALPOL DISPERSED", App.get(tbTreatmentCalpolDispersed).toUpperCase()});
         }
         if(tbTreatmentCalpolQuantity.getVisibility()==View.VISIBLE && !App.get(tbTreatmentCalpolQuantity).isEmpty()) {
-            observations.add(new String[]{"QUANTITY OF ANTHELMINTHIC DISPERSED", App.get(tbTreatmentCalpolQuantity)});
+            observations.add(new String[]{"QUANTITY OF CALPOL DISPERSED", App.get(tbTreatmentCalpolQuantity)});
         }
-
-
-
-        /************ NEED TO RESOLVEE ******************************************/
 
         if(nonTBAdditionalTreatment.getVisibility()==View.VISIBLE){
             String additionalTreatmentString = "";
@@ -530,9 +522,9 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                 else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_anthelminthic)))
                     additionalTreatmentString = additionalTreatmentString + "ANTHELMINTHIC" + " ; ";
                 else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_calpol)))
-                    additionalTreatmentString = additionalTreatmentString + "ANTHELMINTHIC" + " ; ";
+                    additionalTreatmentString = additionalTreatmentString + "CALPOL" + " ; ";
             }
-            observations.add(new String[]{"ADDITIONAL TREATMENT TO TB PATIENT", additionalTreatmentString});
+            observations.add(new String[]{"ADDITIONAL TREATMENT TO NON TB PATIENT", additionalTreatmentString});
         }
 
 
@@ -557,17 +549,14 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
             observations.add(new String[]{"QUANTITY OF ANTHELMINTHIC DISPERSED", App.get(nonTBAnthelminthicQuantity)});
         }
 
-
-        //************ NEED TO RESOLVE ********************************************//
         if(nonTBCalpolDispersed.getVisibility()==View.VISIBLE && !App.get(nonTBCalpolDispersed).isEmpty()){
-            observations.add(new String[]{"ANTHELMINTIC DISPERSED", App.get(nonTBCalpolDispersed).toUpperCase()});
+            observations.add(new String[]{"CALPOL DISPERSED", App.get(nonTBCalpolDispersed).toUpperCase()});
         }
         if(nonTBCalpolQuantity.getVisibility()==View.VISIBLE && !App.get(nonTBCalpolQuantity).isEmpty()) {
-            observations.add(new String[]{"QUANTITY OF ANTHELMINTHIC DISPERSED", App.get(nonTBCalpolQuantity)});
+            observations.add(new String[]{"QUANTITY OF CALPOL DISPERSED", App.get(nonTBCalpolQuantity)});
         }
 
         observations.add(new String[]{"NEXT DATE OF DRUG DISPERSAL", App.getSqlDateTime(secondDateCalendar)});
-
 
 
 
@@ -585,7 +574,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("Drug Dispersal Form", FORM, formDateCalendar, observations.toArray(new String[][]{}),true);
+                String result = serverService.saveEncounterAndObservation("Supplement Disbursement Form", FORM, formDateCalendar, observations.toArray(new String[][]{}),true);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 
@@ -706,275 +695,379 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
             if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
             }
-//            else if (obs[0][0].equals("IF NEW FORMULATION, E TABLETS DISPERSED")) {
-//                for (RadioButton rb : newTabletsofE.getRadioGroup().getButtons()) {
-//                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_incomplete)) && obs[0][1].equals("INCOMPLETE")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    }
-//                }
-//                newTabletsofE.setVisibility(View.VISIBLE);
-//            } else if (obs[0][0].equals("IF NEW FORMULATION, RHZ TABLETS DISPERSED")) {
-//                for (RadioButton rb : newTabletsofRHZ.getRadioGroup().getButtons()) {
-//                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_incomplete)) && obs[0][1].equals("INCOMPLETE")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    }
-//                }
-//                newTabletsofRHZ.setVisibility(View.VISIBLE);
-//            } else if (obs[0][0].equals("IF ADULT FORMULATION, HRZE TABLETS DISPERSED")) {
-//                for (RadioButton rb : adultFormulationofHRZE.getRadioGroup().getButtons()) {
-//                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_incomplete)) && obs[0][1].equals("INCOMPLETE")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    }
-//                }
-//                adultFormulationofHRZE.setVisibility(View.VISIBLE);
-//            } else if (obs[0][0].equals("PAEDIATRIC FIXED DOSE COMBINATION FOR CONTINUATION PHASE")) {
-//                String value = obs[0][1].equals("CURRENT FORMULATION OF TABLETS OF RHE FOR CONTINUATION PHASE") ? getResources().getString(R.string.ctb_current_formulation_continuation) :
-//                        (obs[0][1].equals("NEW FORMULATION OF TABLETS OF RHE FOR CONTINUATION PHASE") ? getResources().getString(R.string.ctb_new_formulation_continuation) :
-//                                (obs[0][1].equals("ADULT FORMULATION OF TABLETS OF RHE FOR CONTINUATION PHASE") ? getResources().getString(R.string.ctb_adult_formulation_continuation_rhe) :
-//                                        getResources().getString(R.string.ctb_adult_formulation_continuation_rh)));
-//
-//                typeFixedDosePrescribedContinuation.getSpinner().selectValue(value);
-//                typeFixedDosePrescribedContinuation.setVisibility(View.VISIBLE);
-//            } else if (obs[0][0].equals("IF CURRENT FORMULATION, RH TABLETS DISPERSED")) {
-//                for (RadioButton rb : currentTabletsOfContinuationRH.getRadioGroup().getButtons()) {
-//                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_incomplete)) && obs[0][1].equals("INCOMPLETE")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    }
-//                }
-//                currentTabletsOfContinuationRH.setVisibility(View.VISIBLE);
-//            } else if (obs[0][0].equals("IF CURRENT FORMULATION, E TABLETS DISPERSED")) {
-//                for (RadioButton rb : currentTabletsOfContinuationE.getRadioGroup().getButtons()) {
-//                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_incomplete)) && obs[0][1].equals("INCOMPLETE")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    }
-//                }
-//                currentTabletsOfContinuationE.setVisibility(View.VISIBLE);
-//            } else if (obs[0][0].equals("IF NEW FORMULATION, RHZ TABLETS DISPERSED")) {
-//                for (RadioButton rb : newTabletsOfContinuationRH.getRadioGroup().getButtons()) {
-//                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_incomplete)) && obs[0][1].equals("INCOMPLETE")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    }
-//                }
-//                newTabletsOfContinuationRH.setVisibility(View.VISIBLE);
-//            } else if (obs[0][0].equals("IF NEW FORMULATION, E TABLETS DISPERSED")) {
-//                for (RadioButton rb : newTabletsOfContinuationE.getRadioGroup().getButtons()) {
-//                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_incomplete)) && obs[0][1].equals("INCOMPLETE")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    }
-//                }
-//                newTabletsOfContinuationE.setVisibility(View.VISIBLE);
-//            } else if (obs[0][0].equals("IF ADULT FORMULATION, RH TABLETS DISPERSED")) {
-//                for (RadioButton rb : adultFormulationOfContinuationRH.getRadioGroup().getButtons()) {
-//                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_incomplete)) && obs[0][1].equals("INCOMPLETE")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    }
-//                }
-//                adultFormulationOfContinuationRH.setVisibility(View.VISIBLE);
-//            } else if (obs[0][0].equals("IF ADULT FORMULATION OF RHE, E TABLETS DISPERSED")) {
-//                for (RadioButton rb : adultFormulationOfContinuationRHE_E.getRadioGroup().getButtons()) {
-//                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_incomplete)) && obs[0][1].equals("INCOMPLETE")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    }
-//                }
-//                adultFormulationOfContinuationRHE_E.setVisibility(View.VISIBLE);
-//            } else if (obs[0][0].equals("IF ADULT FORMULATION OF RHE, RHE TABLETS DISPERSED")) {
-//                for (RadioButton rb : adultFormulationOfContinuationRHE_RHE.getRadioGroup().getButtons()) {
-//                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_incomplete)) && obs[0][1].equals("INCOMPLETE")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    }
-//                }
-//                adultFormulationOfContinuationRHE_RHE.setVisibility(View.VISIBLE);
-//            } else if (obs[0][0].equals("ADDITIONAL TREATMENT TO TB PATIENT")) {
-//                for (CheckBox cb : moAdditionalTreatment.getCheckedBoxes()) {
-//                    if (cb.getText().equals(getResources().getString(R.string.ctb_pediasure)) && obs[0][1].equals("PEDIASURE")) {
-//                        cb.setChecked(true);
-//                        break;
-//                    } else if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && obs[0][1].equals("IRON")) {
-//                        cb.setChecked(true);
-//                        break;
-//                    } else if (cb.getText().equals(getResources().getString(R.string.ctb_vitamin_B_complex)) && obs[0][1].equals("VITAMIN B COMPLEX")) {
-//                        cb.setChecked(true);
-//                        break;
-//                    } else if (cb.getText().equals(getResources().getString(R.string.ctb_anthelminthic)) && obs[0][1].equals("ANTHELMINTHIC")) {
-//                        cb.setChecked(true);
-//                        break;
-//                    }
-//                }
-//                moAdditionalTreatment.setVisibility(View.VISIBLE);
-//            } else if (obs[0][0].equals("PEDIASURE DISPERSED")) {
-//                for (RadioButton rb : pediasureDispersed.getRadioGroup().getButtons()) {
-//                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_incomplete)) && obs[0][1].equals("INCOMPLETE")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    }
-//                }
-//                pediasureDispersed.setVisibility(View.VISIBLE);
-//            } else if (obs[0][0].equals("VITAMIN B-COMPLEX DISPERSED")) {
-//                for (RadioButton rb : vitaminBComplexDispersed.getRadioGroup().getButtons()) {
-//                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_incomplete)) && obs[0][1].equals("INCOMPLETE")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    }
-//                }
-//                vitaminBComplexDispersed.setVisibility(View.VISIBLE);
-//            } else if (obs[0][0].equals("IPT DOSE")) {
-//                for (RadioButton rb : iptDose.getRadioGroup().getButtons()) {
-//                    if (rb.getText().equals(getResources().getString(R.string.ctb_quater_per_day)) && obs[0][1].equals("1/4 TAB ONCE A DAY")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_half_per_day)) && obs[0][1].equals("1/2 TAB ONCE A DAY")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_per_day)) && obs[0][1].equals("1 TAB ONCE A DAY")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    }
-//                }
-//            } else if (obs[0][0].equals("IPT DRUG DISPERSED")) {
-//                for (RadioButton rb : iptDrugDispersed.getRadioGroup().getButtons()) {
-//                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_incomplete)) && obs[0][1].equals("INCOMPLETE")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    }
-//                }
-//                iptDrugDispersed.setVisibility(View.VISIBLE);
-//            } else if (obs[0][0].equals("ADDITIONAL TREATMENT IPT PATIENT")) {
-//                for (CheckBox cb : moInitiateTreatmentIpt.getCheckedBoxes()) {
-//                    if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && obs[0][1].equals("IRON")) {
-//                        cb.setChecked(true);
-//                        break;
-//                    } else if (cb.getText().equals(getResources().getString(R.string.ctb_multivitamins)) && obs[0][1].equals("MULTIVITAMIN")) {
-//                        cb.setChecked(true);
-//                        break;
-//                    } else if (cb.getText().equals(getResources().getString(R.string.ctb_anthelmintic_albendazole)) && obs[0][1].equals("ANTHELMINTHIC")) {
-//                        cb.setChecked(true);
-//                        break;
-//                    }
-//                }
-//                moInitiateTreatmentIpt.setVisibility(View.VISIBLE);
-//            } else if (obs[0][0].equals("ANTIBIOTIC DISPERSED")) {
-//                for (RadioButton rb : antibioticTrialDispersed.getRadioGroup().getButtons()) {
-//                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_incomplete)) && obs[0][1].equals("INCOMPLETE")) {
-//                        rb.setChecked(true);
-//                        break;
-//                    }
-//                }
-//                antibioticTrialDispersed.setVisibility(View.VISIBLE);
-//            } else if (obs[0][0].equals("ADDITIONAL TREATMENT FOR INCONCLUSIVE PATIENT")) {
-//                for (CheckBox cb : moInitiatingAdditionalTreatmentAntibiotic.getCheckedBoxes()) {
-//                    if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && obs[0][1].equals("IRON")) {
-//                        cb.setChecked(true);
-//                        break;
-//                    } else if (cb.getText().equals(getResources().getString(R.string.ctb_multivitamins)) && obs[0][1].equals("MULTIVITAMIN")) {
-//                        cb.setChecked(true);
-//                        break;
-//                    } else if (cb.getText().equals(getResources().getString(R.string.ctb_anthelminthic)) && obs[0][1].equals("ANTHELMINTHIC")) {
-//                        cb.setChecked(true);
-//                        break;
-//                    } else if (cb.getText().equals(getResources().getString(R.string.ctb_other_title)) && obs[0][1].equals("OTHER")) {
-//                        cb.setChecked(true);
-//                        break;
-//                    } else if (cb.getText().equals(getResources().getString(R.string.ctb_none)) && obs[0][1].equals("NONE")) {
-//                        cb.setChecked(true);
-//                        break;
-//                    }
-//                }
-//                moInitiatingAdditionalTreatmentAntibiotic.setVisibility(View.VISIBLE);
-//            }
+            else if (obs[0][0].equals("PATIENT CURRENT TREATMENT")) {
+                for (RadioButton rb : currentPatientTreatment.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_att)) && obs[0][1].equals("ATT")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_antibiotic_trial)) && obs[0][1].equals("ANTIBIOTIC TRIAL")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_ipt)) && obs[0][1].equals("IPT")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_under_investigation)) && obs[0][1].equals("UNDER INVESTIGATION")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                currentPatientTreatment.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("TUBERCULOSIS INFECTION TYPE")) {
+                for (RadioButton rb : tbClassification.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_dstb)) && obs[0][1].equals("DRUG-SENSITIVE TUBERCULOSIS INFECTION")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_drtb)) && obs[0][1].equals("DRUG-RESISTANT TB")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                tbClassification.setVisibility(View.VISIBLE);
+            }else if (obs[0][0].equals("ADDITIONAL TREATMENT TO TB PATIENT")) {
+                for (CheckBox cb : tbTreatmentAdditionalTreatment.getCheckedBoxes()) {
+                    if (cb.getText().equals(getResources().getString(R.string.ctb_pediasure)) && obs[0][1].equals("PEDIASURE")) {
+                        cb.setChecked(true);
+                        break;
+                    }
+                    else if (cb.getText().equals(getResources().getString(R.string.ctb_vitamin_B_complex)) && obs[0][1].equals("VITAMIN B COMPLEX")) {
+                        cb.setChecked(true);
+                        break;
+                    }
+                    else if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && obs[0][1].equals("IRON")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.ctb_anthelminthic)) && obs[0][1].equals("ANTHELMINTHIC")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.ctb_calpol)) && obs[0][1].equals("CALPOL")) {
+                        cb.setChecked(true);
+                        break;
+                    }
+                }
+                tbTreatmentAdditionalTreatment.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("PEDIASURE DISPERSED")) {
+                for (RadioButton rb : tbTreatmentPediasureDispersed.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_incomplete)) && obs[0][1].equals("INCOMPLETE")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                tbTreatmentPediasureDispersed.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("QUANTITY OF PEDIASURE DISPERSED")) {
+                for (RadioButton rb : tbTreatmentPediasureQuantity.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_2)) && obs[0][1].equals("2")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                tbTreatmentPediasureQuantity.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("VITAMIN B-COMPLEX DISPERSED")) {
+                for (RadioButton rb : tbTreatmentVitaminBDispersed.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_incomplete)) && obs[0][1].equals("INCOMPLETE")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                tbTreatmentVitaminBDispersed.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("QUANTITY OF VITAMIN B COMPLEX DISPERSED")) {
+                for (RadioButton rb : tbTreatmentVitaminBQuantity.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_2)) && obs[0][1].equals("2")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                tbTreatmentVitaminBQuantity.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("IRON DISPERSED")) {
+                for (RadioButton rb : tbTreatmentIronDispersed.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_incomplete)) && obs[0][1].equals("INCOMPLETE")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                tbTreatmentIronDispersed.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("QUANTITY OF IRON DISPERSED")) {
+                for (RadioButton rb : tbTreatmentIronQuantity.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_2)) && obs[0][1].equals("2")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                tbTreatmentIronQuantity.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("ANTHELMINTIC DISPERSED")) {
+                for (RadioButton rb : tbTreatmentAnthelminthicDispersed.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_incomplete)) && obs[0][1].equals("INCOMPLETE")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                tbTreatmentAnthelminthicDispersed.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("QUANTITY OF ANTHELMINTHIC DISPERSED")) {
+                for (RadioButton rb : tbTreatmentAnthelminthicQuantity.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_2)) && obs[0][1].equals("2")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                tbTreatmentAnthelminthicQuantity.setVisibility(View.VISIBLE);
+            }else if (obs[0][0].equals("CALPOL DISPERSED")) {
+                for (RadioButton rb : tbTreatmentCalpolDispersed.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_incomplete)) && obs[0][1].equals("INCOMPLETE")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                tbTreatmentCalpolDispersed.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("QUANTITY OF CALPOL DISPERSED")) {
+                for (RadioButton rb : tbTreatmentCalpolQuantity.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_2)) && obs[0][1].equals("2")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                tbTreatmentCalpolQuantity.setVisibility(View.VISIBLE);
+            }
+
+
+            else if (obs[0][0].equals("ADDITIONAL TREATMENT TO NON TB PATIENT")) {
+                for (CheckBox cb : nonTBAdditionalTreatment.getCheckedBoxes()) {
+                   if (cb.getText().equals(getResources().getString(R.string.ctb_vitamin_B_complex)) && obs[0][1].equals("VITAMIN B COMPLEX")) {
+                        cb.setChecked(true);
+                        break;
+                    }
+                    else if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && obs[0][1].equals("IRON")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.ctb_anthelminthic)) && obs[0][1].equals("ANTHELMINTHIC")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.ctb_calpol)) && obs[0][1].equals("CALPOL")) {
+                        cb.setChecked(true);
+                        break;
+                    }
+                }
+                nonTBAdditionalTreatment.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("VITAMIN B-COMPLEX DISPERSED")) {
+                for (RadioButton rb : nonTBVitaminBDispersed.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_incomplete)) && obs[0][1].equals("INCOMPLETE")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                nonTBVitaminBDispersed.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("QUANTITY OF VITAMIN B COMPLEX DISPERSED")) {
+                for (RadioButton rb : nonTBVitaminBQuantity.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_2)) && obs[0][1].equals("2")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                nonTBVitaminBQuantity.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("IRON DISPERSED")) {
+                for (RadioButton rb : nonTBIronDispersed.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_incomplete)) && obs[0][1].equals("INCOMPLETE")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                nonTBIronDispersed.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("QUANTITY OF IRON DISPERSED")) {
+                for (RadioButton rb : nonTBIronQuantity.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_2)) && obs[0][1].equals("2")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                nonTBIronQuantity.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("ANTHELMINTIC DISPERSED")) {
+                for (RadioButton rb : nonTBAnthelminthicDispersed.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_incomplete)) && obs[0][1].equals("INCOMPLETE")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                nonTBAnthelminthicDispersed.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("QUANTITY OF ANTHELMINTHIC DISPERSED")) {
+                for (RadioButton rb : nonTBAnthelminthicQuantity.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_2)) && obs[0][1].equals("2")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                nonTBAnthelminthicQuantity.setVisibility(View.VISIBLE);
+            }else if (obs[0][0].equals("CALPOL DISPERSED")) {
+                for (RadioButton rb : nonTBCalpolDispersed.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_incomplete)) && obs[0][1].equals("INCOMPLETE")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                nonTBCalpolDispersed.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("QUANTITY OF CALPOL DISPERSED")) {
+                for (RadioButton rb : nonTBCalpolQuantity.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_2)) && obs[0][1].equals("2")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                nonTBCalpolQuantity.setVisibility(View.VISIBLE);
+            }
             else if (obs[0][0].equals("NEXT DATE OF DRUG DISPERSAL")) {
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
@@ -1064,6 +1157,41 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
         }
 
 
+        for (CheckBox cb : nonTBAdditionalTreatment.getCheckedBoxes()) {
+            if (App.get(cb).equals(getResources().getString(R.string.ctb_vitamin_B_complex))) {
+                if (cb.isChecked()) {
+                    nonTBVitaminBDispersed.setVisibility(View.VISIBLE);
+
+                } else {
+                    nonTBVitaminBDispersed.setVisibility(View.GONE);
+                }
+            } else if (App.get(cb).equals(getResources().getString(R.string.ctb_iron))) {
+                if (cb.isChecked()) {
+                    nonTBIronDispersed.setVisibility(View.VISIBLE);
+
+                } else {
+                    nonTBIronDispersed.setVisibility(View.GONE);
+                }
+            } else if (App.get(cb).equals(getResources().getString(R.string.ctb_anthelminthic))) {
+                if (cb.isChecked()) {
+                    nonTBAnthelminthicDispersed.setVisibility(View.VISIBLE);
+
+                } else {
+                    nonTBAnthelminthicDispersed.setVisibility(View.GONE);
+                }
+            }
+            else if (App.get(cb).equals(getResources().getString(R.string.ctb_calpol))) {
+                if (cb.isChecked()) {
+                    nonTBCalpolDispersed.setVisibility(View.VISIBLE);
+
+                } else {
+                    nonTBCalpolDispersed.setVisibility(View.GONE);
+                }
+            }
+
+        }
+
+
     }
 
     @Override
@@ -1103,6 +1231,10 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
 
 
         String additionalTreatment = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "ADDITIONAL TREATMENT TO TB PATIENT");
+        String conclusionPresumptive = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Case Confirmation", "CONCLUSION");
+        String tbPatient = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "PATIENT HAVE TB");
+
+
 
         if (additionalTreatment != null) {
             for (CheckBox cb : tbTreatmentAdditionalTreatment.getCheckedBoxes()) {
@@ -1128,6 +1260,30 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                 }
             }
             tbTreatmentAdditionalTreatment.setVisibility(View.VISIBLE);
+        }
+
+        if(conclusionPresumptive!=null){
+            if(conclusionPresumptive.equalsIgnoreCase(getResources().getString(R.string.ctb_tb_presumptive_confirmed))){
+                if(tbPatient!=null){
+                    if(tbPatient.equalsIgnoreCase(getResources().getString(R.string.ctb_no)) || tbPatient.equalsIgnoreCase(getResources().getString(R.string.ctb_inconclusive))){
+                        nonTBAdditionalTreatment.setVisibility(View.VISIBLE);
+                        for (CheckBox cb : nonTBAdditionalTreatment.getCheckedBoxes()) {
+                            if (cb.getText().equals(getResources().getString(R.string.ctb_vitamin_B_complex)) && cb.isChecked()==true) {
+                                nonTBVitaminBDispersed.setVisibility(View.VISIBLE);
+                            }
+                            if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && cb.isChecked()==true) {
+                                nonTBIronDispersed.setVisibility(View.VISIBLE);
+                            }
+                            if (cb.getText().equals(getResources().getString(R.string.ctb_anthelminthic)) && cb.isChecked()==true) {
+                                nonTBAnthelminthicDispersed.setVisibility(View.VISIBLE);
+                            }
+                            if (cb.getText().equals(getResources().getString(R.string.ctb_calpol)) && cb.isChecked()==true) {
+                                nonTBCalpolDispersed.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
 

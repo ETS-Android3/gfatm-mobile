@@ -453,8 +453,6 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
         observations.add(new String[]{"SPECIMEN ACCEPTED", App.get(sampleAccepted).equals(getResources().getString(R.string.ctb_accepted)) ? "ACCEPTED" :
                 "REJECTED"});
 
-        if(whySampleRejected.getVisibility()==View.VISIBLE){
-        }
         observations.add(new String[]{"SPECIMEN UNSATISFACTORY FOR DIAGNOSIS", App.get(whySampleRejected).equals(getResources().getString(R.string.ctb_saliva)) ? "SALIVA" :
                 (App.get(whySampleRejected).equals(getResources().getString(R.string.ctb_blood)) ? "BLOOD IN SAMPLE" :
                         (App.get(whySampleRejected).equals(getResources().getString(R.string.ctb_food_particles)) ? "FOOD PARTICALS" :
