@@ -408,8 +408,8 @@ public class ServerService {
             if (providerUUid == "")
                 return "PROVIDER_NOT_FOUND";
 
-            /*if (!isMobileAppCompatible())
-                return "VERSION_MISMATCH";*/
+            if (!isMobileAppCompatible())
+                return "VERSION_MISMATCH";
 
             App.setUserFullName(user.getFullName());
             App.setRoles(user.getRoles());
@@ -1039,11 +1039,11 @@ public class ServerService {
             return null;
     }
 
-    public String getPersonAttributeTypeUuid(String personAttributeType) {
+    public String[][] getPersonAttributeTypeUuid(String personAttributeType) {
 
-        String[][] result = dbUtil.getTableData(Metadata.PERSON_ATTRIBUTE_TYPE, "uuid", "person_attribute_type = '" + personAttributeType + "'");
+        String[][] result = dbUtil.getTableData(Metadata.PERSON_ATTRIBUTE_TYPE, "uuid, format", "person_attribute_type = '" + personAttributeType + "'");
         if (result.length > 0)
-            return result[0][0];
+            return result;
         else
             return null;
 
@@ -1461,7 +1461,7 @@ public class ServerService {
         if (App.getCommunicationMode().equals("REST")) {
             try {
 
-                String personAttributeTypeUuid = getPersonAttributeTypeUuid(attributeType);
+                String[][] personAttributeType = getPersonAttributeTypeUuid(attributeType);
 
                 String patientUuid = "";
                 if (App.getPatient().getUuid() == null || App.getPatient().getUuid().equals(""))
@@ -1469,7 +1469,7 @@ public class ServerService {
                 else
                     patientUuid = App.getPatient().getUuid();
 
-                String uri = httpPost.savePersonAttribute(personAttributeTypeUuid, value, patientUuid);
+                String uri = httpPost.savePersonAttribute(personAttributeType[0][0], personAttributeType[0][1], value, patientUuid);
 
                 if (App.getMode().equalsIgnoreCase("OFFLINE")) {
                     String[] uriArray = uri.split(" ;;;; ");
@@ -1840,7 +1840,7 @@ public class ServerService {
 
                 if (String.valueOf(form[1]).contains("CREATE")) {
 
-                    /*if(check){
+                    if(check){
 
                         Object[][] identifier = dbUtil.getFormTableData("select identifier from " + Metadata.PATIENT + " where patient_id='" + String.valueOf(form[2]) + "'");
                         String identifierString = String.valueOf(identifier[0][0]);
@@ -1852,7 +1852,7 @@ public class ServerService {
 
                         }
 
-                    }*/
+                    }
 
                     String returnString = httpPost.backgroundPost(String.valueOf(form[3]), String.valueOf(form[4]));
 
@@ -2032,6 +2032,16 @@ public class ServerService {
             return null;
 
         return String.valueOf(encounter[0][0]);
+
+    }
+
+    public String getEncounterDateTimeByObsValue(String patientId, String encounterType, String filterConceptName, String filterConceptValue) {
+
+        Object[][] obs = dbUtil.getFormTableData("select "+ Metadata.ENCOUNTER +".encounterDatetime from " + Metadata.OBS + ", " + Metadata.ENCOUNTER + " where encounterType = '" + encounterType + "' and patientId=" + patientId + " and " + Metadata.ENCOUNTER + ".encounter_id=" + Metadata.OBS + ".encounter_id and conceptName = '" + filterConceptName + "' and " + Metadata.OBS + ".value = '" + filterConceptValue  + "' order by encounterDatetime DESC, dateCreated DESC");
+        if (obs == null || obs.length < 1)
+            return null;
+
+        return String.valueOf(obs[0][0]);
 
     }
 
