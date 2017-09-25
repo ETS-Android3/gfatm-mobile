@@ -402,12 +402,14 @@ public class HttpPost {
         return null;
     }
 
-    public String savePersonAttribute(String attributeType, String value, String patientUuid) {
+    public String savePersonAttribute(String attributeType, String attributeTypeFormat, String value, String patientUuid) {
         try {
 
             JSONObject personAttributeObject = new JSONObject();
             personAttributeObject.put("attributeType", attributeType);
-            personAttributeObject.put("value", value);
+            if(attributeTypeFormat.equals("org.openmrs.Location") || attributeTypeFormat.equals("org.openmrs.Concept"))
+                personAttributeObject.put("hydratedObject", value);
+            else personAttributeObject.put("value", value);
 
             if (App.getMode().equalsIgnoreCase("OFFLINE")) {
 
