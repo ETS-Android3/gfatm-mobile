@@ -192,7 +192,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         if(externalId == null)
             externalId =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Verbal Screening", "CONTACT EXTERNAL ID");
         if(externalId == null)
-            externalId = "N/A";
+            externalId = "-";
         else
             externalId = App.convertToTitleCase(externalId);
 
@@ -200,11 +200,11 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         if(screeningFacility == null)
             screeningFacility =  serverService.getEncounterLocation(App.getPatientId(), "Childhood TB-Verbal Screening");
         if(screeningFacility == null)
-            screeningFacility= "N/A";
+            screeningFacility= "-";
 
         String intervention =  serverService.getLatestObsValue(App.getPatientId(), "PET-" + Forms.PET_BASELINE_SCREENING, "INTERVENTION");
         if(intervention == null)
-            intervention = "N/A";
+            intervention = "-";
 
         String presumptive = serverService.getLatestObsValue(App.getPatientId(), "FAST-Presumptive", "PRESUMPTIVE TUBERCULOSIS");
         if(presumptive == null) {
@@ -218,11 +218,11 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
                 presumptive = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST-Presumptive");
         }
         if(presumptive == null || presumptive.equalsIgnoreCase("No"))
-            presumptive = "N/A";
+            presumptive = "-";
 
         String diagnoseOn = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation","TUBERCULOSIS DIAGNOSIS METHOD");
         if(diagnoseOn == null)
-            diagnoseOn = "N/A";
+            diagnoseOn = "-";
         else
             diagnoseOn = App.convertToTitleCase(diagnoseOn);
 
@@ -230,11 +230,12 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         if(diagnosisType == null)
             diagnosisType = serverService.getLatestObsValue(App.getPatientId(), "FAST-Treatment Initiation","TUBERCULOSIS DIAGNOSIS METHOD");
         if(diagnosisType == null)
-            diagnosisType = "N/A";
+            diagnosisType = "-";
         else
             diagnosisType = App.convertToTitleCase(diagnosisType);
 
         String xpertResult = "";
+        String rifResult = "";
         String xpertResultDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB-GXP Specimen Collection");
         if(xpertResultDate != null){
             String xpertResultOderId = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-GXP Specimen Collection" , "TEST CONTEXT STATUS", "BASELINE REPEAT", "ORDER ID");
@@ -242,11 +243,15 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
                 xpertResultOderId = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-GXP Specimen Collection", "TEST CONTEXT STATUS", "BASELINE", "ORDER ID");
                 if(xpertResultOderId == null)
                     xpertResult = null;
-                else
+                else {
                     xpertResult = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-GXP Test", "ORDER ID", xpertResultOderId, "GENEXPERT MTB/RIF RESULT");
+                    rifResult = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-GXP Test", "ORDER ID", xpertResultOderId, "RIF RESISTANCE RESULT");
+                }
             }
-            else
+            else {
                 xpertResult = serverService.getObsValueByObs(App.getPatientId(), "FAST-GXP Test", "ORDER ID", xpertResultOderId, "GENEXPERT MTB/RIF RESULT");
+                rifResult = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-GXP Test", "ORDER ID", xpertResultOderId, "RIF RESISTANCE RESULT");
+            }
         } else {
             xpertResultDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST-GXP Specimen Collection");
             if(xpertResultDate != null) {
@@ -255,18 +260,27 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
                     xpertResultOderId = serverService.getObsValueByObs(App.getPatientId(), "FAST-GXP Specimen Collection", "TEST CONTEXT STATUS", "BASELINE", "ORDER ID");
                     if (xpertResultOderId == null)
                         xpertResult = null;
-                    else
+                    else {
                         xpertResult = serverService.getObsValueByObs(App.getPatientId(), "FAST-GXP Test", "ORDER ID", xpertResultOderId, "GENEXPERT MTB/RIF RESULT");
+                        rifResult = serverService.getObsValueByObs(App.getPatientId(), "FAST-GXP Test", "ORDER ID", xpertResultOderId, "RIF RESISTANCE RESULT");
+
+                    }
                 }
-                else
+                else {
                     xpertResult = serverService.getObsValueByObs(App.getPatientId(), "FAST-GXP Test", "ORDER ID", xpertResultOderId, "GENEXPERT MTB/RIF RESULT");
+                    rifResult = serverService.getObsValueByObs(App.getPatientId(), "FAST-GXP Test", "ORDER ID", xpertResultOderId, "RIF RESISTANCE RESULT");
+
+                }
 
             }
         }
         if(xpertResult != null && !xpertResult.equals(""))
             xpertResult = App.convertToTitleCase(xpertResult);
         else
-            xpertResult = "N/A";
+            xpertResult = "-";
+        String xpertHighlight = null;
+        if(rifResult != null && rifResult.equals("DETECTED"))
+            xpertHighlight = "Highlight";
 
         String xrayResult = "";
         String xrayResultDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB-CXR Screening Test Order");
@@ -295,13 +309,13 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         if(xrayResult != null && !xrayResult.equals(""))
             xrayResult = App.convertToTitleCase(xrayResult);
         else
-            xrayResult = "N/A";
+            xrayResult = "-";
 
         String tbType =  serverService.getLatestObsValue(App.getPatientId(), "FAST-Treatment Initiation", "SITE OF TUBERCULOSIS DISEASE");
         if(tbType == null)
            tbType =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "SITE OF TUBERCULOSIS DISEASE");
         if(tbType == null)
-            tbType= "N/A";
+            tbType= "-";
         else
             tbType = App.convertToTitleCase(tbType);
 
@@ -309,21 +323,21 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         if(treatmentInitiationDate == null)
             treatmentInitiationDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST-Treatment Initiation");
         if(treatmentInitiationDate == null)
-            treatmentInitiationDate= "N/A";
+            treatmentInitiationDate= "-";
 
         String registrationNo = serverService.getLatestObsValue(App.getPatientId(), "FAST-Treatment Followup", "TB REGISTRATION NUMBER");
         if(registrationNo == null)
             registrationNo = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-TB Treatment Followup", "TB REGISTRATION NUMBER");
         if(registrationNo == null)
-            registrationNo= "N/A";
+            registrationNo= "-";
 
         String infectionTreatmentInitiationDate =  serverService.getLatestEncounterDateTime(App.getPatientId(), "PET-" + Forms.PET_TREATMENT_INITIATION);
         if(infectionTreatmentInitiationDate == null)
-            infectionTreatmentInitiationDate = "N/A";
+            infectionTreatmentInitiationDate = "-";
 
         String infectionTreatmentRegimen =  serverService.getLatestObsValue(App.getPatientId(), "PET-" + Forms.PET_TREATMENT_INITIATION, "POST-EXPOSURE TREATMENT REGIMEN");
         if(infectionTreatmentRegimen == null)
-            infectionTreatmentRegimen = "N/A";
+            infectionTreatmentRegimen = "-";
         else
             infectionTreatmentRegimen = App.convertToTitleCase(infectionTreatmentRegimen);
 
@@ -331,7 +345,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         if(treatmentFacility == null)
             treatmentFacility =  serverService.getEncounterLocation(App.getPatientId(), "Childhood TB-Treatment Initiation");
         if(treatmentFacility == null)
-            treatmentFacility= "N/A";
+            treatmentFacility= "-";
 
         String nextFollowupDate = serverService.getLatestObsValue(App.getPatientId(), "FAST-Treatment Followup" + Forms.FAST_TREATMENT_FOLLOWUP_FORM, "RETURN VISIT DATE");
         if (nextFollowupDate == null) {
@@ -343,19 +357,19 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
             }
         }
         if(nextFollowupDate == null)
-            nextFollowupDate = "N/A";
+            nextFollowupDate = "-";
 
         String lastSmearDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB-AFB Smear Test Result");
         if(lastSmearDate == null)
             lastSmearDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST-AFB Smear Test Result");
         if(lastSmearDate == null)
-            lastSmearDate= "N/A";
+            lastSmearDate= "-";
 
         String lastSmearResult = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-AFB Smear Test Result", "SPUTUM FOR ACID FAST BACILLI");
         if(lastSmearResult == null)
             lastSmearResult = serverService.getLatestObsValue(App.getPatientId(), "FAST-AFB Smear Test Result", "SPUTUM FOR ACID FAST BACILLI");
         if(lastSmearResult == null)
-            lastSmearResult= "N/A";
+            lastSmearResult= "-";
 
         String lastXrayDate = "";
         String lastXrayResult = "";
@@ -442,15 +456,15 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         if(treatmentPlan == null)
             treatmentPlan = serverService.getLatestObsValue(App.getPatientId(), "FAST-Treatment Followup","TREATMENT PLAN");
         if(treatmentPlan == null)
-            treatmentPlan= "N/A";
+            treatmentPlan= "-";
 
         String akuadsScreeningDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Comorbidities-"+ Forms.COMORBIDITIES_MENTAL_HEALTH_SCREENING_FORM);
         if(akuadsScreeningDate == null)
-            akuadsScreeningDate = "N/A";
+            akuadsScreeningDate = "-";
 
         String akuadsScore = serverService.getLatestObsValue(App.getPatientId(), "Comorbidities-"+ Forms.COMORBIDITIES_MENTAL_HEALTH_SCREENING_FORM, "AKUADS SCORE");
         if(akuadsScore == null)
-            akuadsScore = "N/A";
+            akuadsScore = "-";
 
         String depressionNextFollowupDate = serverService.getLatestObsValue(App.getPatientId(), "Comorbidities-", "RETURN VISIT DATE");
         if(depressionNextFollowupDate == null) {
@@ -462,25 +476,25 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
             }
         }
         if(depressionNextFollowupDate == null)
-            depressionNextFollowupDate = "N/A";
+            depressionNextFollowupDate = "-";
 
         String diabetesStatus =  serverService.getLatestObsValue(App.getPatientId(), "Comorbidities-HbA1C Test Result", "DIABETES MELLITUS");
         if (diabetesStatus == null)
             diabetesStatus =  serverService.getLatestObsValue(App.getPatientId(), "Comorbidities-HbA1C Test Result", "PREVIOUSLY DIAGNOSED DIABETES");
         if(diabetesStatus == null)
-            diabetesStatus = "N/A";
+            diabetesStatus = "-";
 
         String diabetesFollowupDate =  serverService.getLatestObsValue(App.getPatientId(), "Comorbidities-"+ Forms.COMORBIDITIES_DIABETES_TREATMENT_INITIATION, "RETURN VISIT DATE");
         if (diabetesFollowupDate == null)
             diabetesFollowupDate =  serverService.getLatestObsValue(App.getPatientId(), "Comorbidities-"+ Forms.COMORBIDITIES_DIABETES_TREATMENT_FOLLOWUP_FORM, "RETURN VISIT DATE");
         if(diabetesFollowupDate == null)
-            diabetesFollowupDate = "N/A";
+            diabetesFollowupDate = "-";
 
         String treatmentOutcome = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-End of Followup","TUBERCULOUS TREATMENT OUTCOME");
         if(treatmentOutcome == null)
             treatmentOutcome = serverService.getLatestObsValue(App.getPatientId(), "FAST-End of Followup","TUBERCULOUS TREATMENT OUTCOME");
         if(treatmentOutcome == null)
-            treatmentOutcome= "N/A";
+            treatmentOutcome= "-";
 
         String[][] dataset = { {getString(R.string.patient_id), App.getPatient().getPatientId(),null},
                 {getString(R.string.external_id),externalId,null},
@@ -489,7 +503,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
                 {getString(R.string.presumptive_date),presumptive,null},
                 {getString(R.string.diagnosed_on),diagnoseOn,null},
                 {getString(R.string.diagnosed_type),diagnosisType,null},
-                {getString(R.string.xpert_result),xpertResult,null},
+                {getString(R.string.xpert_result),xpertResult,"Highlight"},
                 {getString(R.string.xray_result),xrayResult,null},
                 {getString(R.string.tb_type),tbType,null},
                 {getString(R.string.tb_initiation_date),treatmentInitiationDate,null},
