@@ -1417,9 +1417,20 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 });
 
                 String result = serverService.saveEncounterAndObservation("Treatment Initiation", FORM, formDateCalendar, observations.toArray(new String[][]{}),false);
-                if (result.contains("SUCCESS"))
-                    return "SUCCESS";
+                if (!result.contains("SUCCESS"))
+                    return result;
+                else {
+                    String encounterId = "";
 
+                    if (result.contains("_")) {
+                        String[] successArray = result.split("_");
+                        encounterId = successArray[1];
+                    }
+
+                    result = serverService.savePersonAttributeType("Health Center", serverService.getLocationUuid(App.getLocation()), encounterId);
+                    if (!result.equals("SUCCESS"))
+                        return result;
+                }
                 return result;
             }
 

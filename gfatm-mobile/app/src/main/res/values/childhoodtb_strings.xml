@@ -596,8 +596,8 @@
     <string name="ctb_anthelminthic_quantity">If yes, Quantity of Anthelminthic dispersed</string>
     <string name="ctb_calpol_quantity">If yes, Quantity of Calpol dispersed</string>
     <string name="ctb_non_tb_patient">Non TB Patient</string>
-
-
+    <string name="ctb_clinically_evaluated_no_tb">Clinically evaluated, No TB</string>
+    <string name="ctb_antibiotic_complete_no_tb">Antibiotic Complete - No TB</string>
 
 
     <string-array name="ctb_tb_classification_list">
@@ -1082,6 +1082,8 @@
         <item>@string/ctb_transfer_out</item>
         <item>@string/ctb_referral</item>
         <item>@string/ctb_lost_to_followup</item>
+        <item>@string/ctb_clinically_evaluated_no_tb</item>
+        <item>@string/ctb_antibiotic_complete_no_tb</item>
         <item>@string/ctb_other_title</item>
     </string-array>
 
