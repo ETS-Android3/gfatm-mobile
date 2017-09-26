@@ -602,7 +602,7 @@
 
     <string name="back">Back</string>
 
-    <!-- Views Strings -->
+    <!--  General Views Strings -->
     <string name="external_id">External ID:</string>
     <string name="screening_facility">Screening Facility:</string>
     <string name="pet_sci_intervention">PET/SCI Intervention:</string>
@@ -629,5 +629,24 @@
     <string name="diabetes_status">Diabetes Status:</string>
     <string name="diabetes_followup_date">Diabetes Followup date:</string>
     <string name="final_treatment_outcome">Final treatment outcome:</string>
+
+    <!--  Fast Staff Views Strings -->
+    <string name="screening_forms">Screening Forms:</string>
+    <string name="presumptive_forms">Presumptive Forms:</string>
+    <string name="patient_location_forms">Patient Location Forms:</string>
+    <string name="presumptive_information_forms">Presumptive Information Forms:</string>
+    <string name="screnning_cxr_order_forms">Screening CXR Order Forms:</string>
+    <string name="screening_cxr_result_forms">Screening CXR Result Forms:</string>
+    <string name="specimen_collection_forms">Specimen Collection Forms:</string>
+    <string name="gxp_result_forms">GXP Results Forms:</string>
+    <string name="afb_order_forms">AFB Order Forms:</string>
+    <string name="afb_result_forms">AFB Result Forms:</string>
+    <string name="treatment_initiation_forms">Treatment Initiation Forms:</string>
+    <string name="treatment_followup_forms">Treatment Followup Forms:</string>
+    <string name="referal_forms">Referal Forms:</string>
+    <string name="contact_registry_forms">Contact Registry Forms:</string>
+
+
+
 
 </resources>
