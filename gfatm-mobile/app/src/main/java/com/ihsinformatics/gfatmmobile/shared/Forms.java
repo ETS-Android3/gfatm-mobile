@@ -332,8 +332,8 @@ public class Forms{
 
     public static final String CHILDHOODTB_TREATMENT_INITIATION = "Treatment Intiation Form";
     public static final FormsObject childhoodTb_treatment_intiation = new FormsObject(CHILDHOODTB_TREATMENT_INITIATION, ChildhoodTbTreatmentInitiation.class, R.drawable.pet_treatment_initiation, FormTypeColor.TREATMENT_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_MEDICAL_OFFICER});
-    public static final String CHILDHOODTB_DRUG_DISPERSAL = "Drug Dsipersal";
-    public static final FormsObject childhoodTb_drug_dispersal = new FormsObject(CHILDHOODTB_DRUG_DISPERSAL, ChildhoodTbDrugDrugDispersal.class, R.drawable.ctb_drug_dispersal, FormTypeColor.FOLLOWUP_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_NURSE});
+    //public static final String CHILDHOODTB_DRUG_DISPERSAL = "Drug Dsipersal";
+    //public static final FormsObject childhoodTb_drug_dispersal = new FormsObject(CHILDHOODTB_DRUG_DISPERSAL, ChildhoodTbDrugDrugDispersal.class, R.drawable.ctb_drug_dispersal, FormTypeColor.FOLLOWUP_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_NURSE});
     public static final String CHILDHOODTB_TB_TREATMENT_FOLLOWUP = "TB Treatment Followup";
     public static final FormsObject childhoodTb_tb_treatment_followup = new FormsObject(CHILDHOODTB_TB_TREATMENT_FOLLOWUP, ChildhoodTbTreatmentFollowup.class, R.drawable.pet_treatment_adherence, FormTypeColor.FOLLOWUP_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_MEDICAL_OFFICER});
     public static final String CHILDHOODTB_IPT_FOLLOWUP = "Isoniazid Preventive Therapy Followup";
