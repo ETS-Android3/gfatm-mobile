@@ -21,5 +21,7 @@
     <dimen name="check_size">30dp</dimen>
     <dimen name="more_size">15dp</dimen>
     <dimen name="form_size">33dp</dimen>
+    <dimen name="summary_size">50dp</dimen>
+
 
 </resources>
