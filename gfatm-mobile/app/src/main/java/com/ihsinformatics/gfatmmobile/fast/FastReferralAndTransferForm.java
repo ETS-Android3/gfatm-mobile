@@ -316,9 +316,24 @@ public class FastReferralAndTransferForm extends AbstractFormActivity implements
                 });
 
                 String result = serverService.saveEncounterAndObservation("Referral Form", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
-                if (result.contains("SUCCESS"))
-                    return "SUCCESS";
+                if (!result.contains("SUCCESS"))
+                    return result;
+                else {
 
+                    String encounterId = "";
+
+                    if (result.contains("_")) {
+                        String[] successArray = result.split("_");
+                        encounterId = successArray[1];
+                    }
+
+                    if(!App.get(referralSite).equalsIgnoreCase("Other")) {
+                        result = serverService.savePersonAttributeType("Health Center", serverService.getLocationUuid(App.get(referralSite)), encounterId);
+                        if (!result.equals("SUCCESS"))
+                            return result;
+                    }
+
+                }
                 return result;
 
             }
