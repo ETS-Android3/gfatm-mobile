@@ -2055,6 +2055,17 @@ public class ServerService {
 
     }
 
+
+    public int getEncounterCountForDate(String date, String encounterType) {
+
+        Object[][] encounter = dbUtil.getFormTableData("select count(*) from " + Metadata.ENCOUNTER + " where encounterType = '" + encounterType + "' and dateCreated like '"+ date +"%'");
+        if (encounter.length < 1)
+            return -1;
+
+        return Integer.parseInt(String.valueOf(encounter[0][0]));
+
+    }
+
     public Object[][] getTestIdByPatientAndEncounterType(String patientId, String encounterType) {
 
         Object[][] testId = dbUtil.getFormTableData("select test_id, encounterDateTime from " + Metadata.TEST_ID + " where pid='" + patientId + "' and form = '" + encounterType + "'");
