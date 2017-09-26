@@ -356,8 +356,6 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
             treatmentFacility =  serverService.getEncounterLocation(App.getPatientId(), "Childhood TB-Treatment Initiation");
         if(treatmentFacility == null)
             treatmentFacility= "-";
-        else
-            treatmentFacility = App.convertToTitleCase(treatmentFacility);
 
         String nextFollowupDate = serverService.getLatestObsValue(App.getPatientId(), "FAST-Treatment Followup" + Forms.FAST_TREATMENT_FOLLOWUP_FORM, "RETURN VISIT DATE");
         if (nextFollowupDate == null) {
@@ -371,15 +369,23 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         if(nextFollowupDate == null)
             nextFollowupDate = "-";
 
-        String lastSmearDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB-AFB Smear Test Result");
-        if(lastSmearDate == null)
-            lastSmearDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST-AFB Smear Test Result");
+        String lastSmearResult = null;
+        String lastSmearDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB-AFB Smear Test Order");
+        if(lastSmearDate != null) {
+            String orderId = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-AFB Smear Test Order", "ORDER ID");
+            if(orderId != null)
+                lastSmearResult = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-AFB Smear Test Result", "ORDER ID", orderId, "SPUTUM FOR ACID FAST BACILLI");
+        }
+        else {
+            lastSmearDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST-AFB Smear Test Order");
+            if(lastSmearDate != null) {
+                String orderId = serverService.getLatestObsValue(App.getPatientId(), "FAST-AFB Smear Test Order", "ORDER ID");
+                if(orderId != null)
+                    lastSmearResult = serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", orderId, "SPUTUM FOR ACID FAST BACILLI");
+            }
+        }
         if(lastSmearDate == null)
             lastSmearDate= "-";
-
-        String lastSmearResult = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-AFB Smear Test Result", "SPUTUM FOR ACID FAST BACILLI");
-        if(lastSmearResult == null)
-            lastSmearResult = serverService.getLatestObsValue(App.getPatientId(), "FAST-AFB Smear Test Result", "SPUTUM FOR ACID FAST BACILLI");
         if(lastSmearResult == null)
             lastSmearResult= "-";
         else
@@ -414,7 +420,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
                     }
                 }
                 if(followupMonthInt != 0) {
-                    lastXrayDate = serverService.getEncounterDateTimeByObsValue(App.getPatientId(), "Childhood TB-CXR Screening Test Result","FOLLOW-UP MONTH", String.valueOf(followupMonthInt));
+                    lastXrayDate = serverService.getEncounterDateTimeByObsValue(App.getPatientId(), "Childhood TB-CXR Screening Test Order","FOLLOW-UP MONTH", String.valueOf(followupMonthInt));
                     if(lastXrayDate != null) {
                         String orderId = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-CXR Screening Test Order", "FOLLOW-UP MONTH", String.valueOf(followupMonthInt), "ORDER ID");
                         lastXrayResult = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-CXR Screening Test Result", "ORDER ID", orderId, "CHEST X-RAY SCORE");
@@ -449,7 +455,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
                         }
                     }
                     if(followupMonthInt != 0) {
-                        lastXrayDate = serverService.getEncounterDateTimeByObsValue(App.getPatientId(), "FAST-Screening CXR Test Result","FOLLOW-UP MONTH", String.valueOf(followupMonthInt));
+                        lastXrayDate = serverService.getEncounterDateTimeByObsValue(App.getPatientId(), "FAST-Screening CXR Test Order","FOLLOW-UP MONTH", String.valueOf(followupMonthInt));
                         if(lastXrayDate != null) {
                             String orderId = serverService.getObsValueByObs(App.getPatientId(), "FAST-Screening CXR Test Order", "FOLLOW-UP MONTH", String.valueOf(followupMonthInt), "ORDER ID");
                             lastXrayResult = serverService.getObsValueByObs(App.getPatientId(), "FAST-Screening CXR Test Result", "ORDER ID", orderId, "CHEST X-RAY SCORE");
@@ -486,6 +492,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
             akuadsScore = "-";
         else {
             akuadsScore = App.convertToTitleCase(akuadsScore);
+            akuadsScore = akuadsScore.replace(" ", "");
             int as = Integer.parseInt(akuadsScore);
             if(as >=21)
                 akuadsScoreHighlight = "Highlight";
