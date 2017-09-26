@@ -28,6 +28,8 @@ import com.ihsinformatics.gfatmmobile.shared.FormTypeColor;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
+import java.util.Date;
+
 
 public class SummaryFragment extends Fragment implements View.OnClickListener {
 
@@ -83,29 +85,33 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
 
     public void updateSummaryFragment(){
 
+        interventionStaffView.setVisibility(View.GONE);
+        patientAttribute.setVisibility(View.GONE);
+        interventionPatientView.setVisibility(View.GONE);
+        generalPatientView.setVisibility(View.VISIBLE);
+
         if(App.getPatient() == null) {
             patientAttribute.setVisibility(View.GONE);
             generalPatientView.setVisibility(View.GONE);
             interventionPatientView.setVisibility(View.GONE);
         }
         else {
-            patientAttribute.setVisibility(View.VISIBLE);
-            generalPatientView.setVisibility(View.VISIBLE);
-            interventionPatientView.setVisibility(View.VISIBLE);
-        }
 
-        if(App.getProgram().equals(getResources().getString(R.string.fast))){
-            interventionPatientView.setText(getString(R.string.fast_patient_view));
-            interventionStaffView.setText(getString(R.string.fast_staff_view));
-        } else if(App.getProgram().equals(getResources().getString(R.string.pet))){
-            interventionPatientView.setText(getString(R.string.pet_patient_view));
-            interventionStaffView.setText(getString(R.string.pet_staff_view));
-        } else if(App.getProgram().equals(getResources().getString(R.string.childhood_tb))){
-            interventionPatientView.setText(getString(R.string.childhood_tb_patient_view));
-            interventionStaffView.setText(getString(R.string.childhood_tb_staff_view));
-        } else if(App.getProgram().equals(getResources().getString(R.string.comorbidities))){
-            interventionPatientView.setText(getString(R.string.comorbidities_patient_view));
-            interventionStaffView.setText(getString(R.string.comorbidities_patient_view));
+            if(App.getProgram().equals(getResources().getString(R.string.fast))){
+                interventionPatientView.setText(getString(R.string.fast_patient_view));
+                interventionStaffView.setText(getString(R.string.fast_staff_view));
+                interventionStaffView.setVisibility(View.VISIBLE);
+                interventionPatientView.setVisibility(View.VISIBLE);
+            } else if(App.getProgram().equals(getResources().getString(R.string.pet))){
+                interventionPatientView.setText(getString(R.string.pet_patient_view));
+                interventionStaffView.setText(getString(R.string.pet_staff_view));
+            } else if(App.getProgram().equals(getResources().getString(R.string.childhood_tb))){
+                interventionPatientView.setText(getString(R.string.childhood_tb_patient_view));
+                interventionStaffView.setText(getString(R.string.childhood_tb_staff_view));
+            } else if(App.getProgram().equals(getResources().getString(R.string.comorbidities))){
+                interventionPatientView.setText(getString(R.string.comorbidities_patient_view));
+                interventionStaffView.setText(getString(R.string.comorbidities_patient_view));
+            }
         }
 
         mainView.setVisibility(View.VISIBLE);
@@ -152,34 +158,38 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
             if(App.getProgram().equals(getResources().getString(R.string.fast))){
                 heading.setText(getString(R.string.fast_patient_view));
                 content.removeAllViews();
+                fillFastPatientView();
             } else if(App.getProgram().equals(getResources().getString(R.string.pet))){
                 heading.setText(getString(R.string.pet_patient_view));
                 content.removeAllViews();
-            } else if(App.getProgram().equals(getResources().getString(R.string.childhood_tb))){
-                heading.setText(getString(R.string.childhood_tb_patient_view));
-                content.removeAllViews();
-            } else if(App.getProgram().equals(getResources().getString(R.string.comorbidities))){
-                heading.setText(getString(R.string.comorbidities_patient_view));
-                content.removeAllViews();
-            }
-        } else if(v == interventionStaffView){
-            setMainContentVisible(false);
-            if(App.getProgram().equals(getResources().getString(R.string.fast))){
-                heading.setText(getString(R.string.fast_staff_view));
-                content.removeAllViews();
-                fillFastPatientView();
-            } else if(App.getProgram().equals(getResources().getString(R.string.pet))){
-                heading.setText(getString(R.string.pet_staff_view));
-                content.removeAllViews();
                 fillPetPatientView();
             } else if(App.getProgram().equals(getResources().getString(R.string.childhood_tb))){
-                heading.setText(getString(R.string.childhood_tb_staff_view));
+                heading.setText(getString(R.string.childhood_tb_patient_view));
                 content.removeAllViews();
                 fillChildhoodTbPatientView();
             } else if(App.getProgram().equals(getResources().getString(R.string.comorbidities))){
                 heading.setText(getString(R.string.comorbidities_patient_view));
                 content.removeAllViews();
                 fillComorbiditiesPatientView();
+            }
+        } else if(v == interventionStaffView){
+            setMainContentVisible(false);
+            if(App.getProgram().equals(getResources().getString(R.string.fast))){
+                heading.setText(getString(R.string.fast_staff_view));
+                content.removeAllViews();
+                fillFastStaffView();
+            } else if(App.getProgram().equals(getResources().getString(R.string.pet))){
+                heading.setText(getString(R.string.pet_staff_view));
+                content.removeAllViews();
+                fillPetStaffView();
+            } else if(App.getProgram().equals(getResources().getString(R.string.childhood_tb))){
+                heading.setText(getString(R.string.childhood_tb_staff_view));
+                content.removeAllViews();
+                fillChildhoodTbStaffView();
+            } else if(App.getProgram().equals(getResources().getString(R.string.comorbidities))){
+                heading.setText(getString(R.string.comorbidities_patient_view));
+                content.removeAllViews();
+                fillComorbiditiesStaffView();
             }
         } else if(v == backButton){
             setMainContentVisible(true);
@@ -452,9 +462,9 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         }
 
         if(lastXrayDate == null || lastXrayDate.equals(""))
-            lastXrayDate = "N/A";
+            lastXrayDate = "-";
         if(lastXrayResult == null || lastXrayResult.equals(""))
-            lastXrayResult = "N/A";
+            lastXrayResult = "-";
         else
             lastXrayResult = App.convertToTitleCase(lastXrayResult);
 
@@ -470,11 +480,16 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         if(akuadsScreeningDate == null)
             akuadsScreeningDate = "-";
 
+        String akuadsScoreHighlight = null;
         String akuadsScore = serverService.getLatestObsValue(App.getPatientId(), "Comorbidities-"+ Forms.COMORBIDITIES_MENTAL_HEALTH_SCREENING_FORM, "AKUADS SCORE");
         if(akuadsScore == null)
             akuadsScore = "-";
-        else
+        else {
             akuadsScore = App.convertToTitleCase(akuadsScore);
+            int as = Integer.parseInt(akuadsScore);
+            if(as >=21)
+                akuadsScoreHighlight = "Highlight";
+        }
 
         String depressionNextFollowupDate = serverService.getLatestObsValue(App.getPatientId(), "Comorbidities-", "RETURN VISIT DATE");
         if(depressionNextFollowupDate == null) {
@@ -532,7 +547,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
                 {getString(R.string.result_last_xray),lastXrayResult,null},
                 {getString(R.string.treatment_plan),treatmentPlan,null},
                 {getString(R.string.akuads_screening_date),akuadsScreeningDate,null},
-                {getString(R.string.akuads_score),akuadsScore,null},
+                {getString(R.string.akuads_score),akuadsScore,akuadsScoreHighlight},
                 {getString(R.string.depression_followup_date),depressionNextFollowupDate,null},
                 {getString(R.string.diabetes_status),diabetesStatus,null},
                 {getString(R.string.diabetes_followup_date),diabetesFollowupDate,null},
@@ -544,10 +559,10 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
 
     public void fillPatientAttribute(){
 
-        String[][] dataset = { {"rabbia", "hassan"},
-                {"hadi","hassan"},
-                {"mohammad","hassan"},
-                {"farzana","hassan"}};
+        String[][] dataset = { {"rabbia", "hassan", null},
+                {"hadi","hassan", null},
+                {"mohammad","hassan", null},
+                {"farzana","hassan", null}};
 
         fillContent(dataset);
 
@@ -556,9 +571,9 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
     public void fillFastPatientView(){
 
         String[][] dataset = { {"rabbia", "hassan", null},
-                {"hadi","hassan"},
-                {"mohammad","hassan"},
-                {"farzana","hassan"}};
+                {"hadi","hassan", null},
+                {"mohammad","hassan", null},
+                {"farzana","hassan", null}};
 
         fillContent(dataset);
 
@@ -566,10 +581,10 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
 
     public void fillPetPatientView(){
 
-        String[][] dataset = { {"rabbia", "hassan"},
-                {"hadi","hassan"},
-                {"mohammad","hassan"},
-                {"farzana","hassan"}};
+        String[][] dataset = { {"rabbia", "hassan", null},
+                {"hadi","hassan", null},
+                {"mohammad","hassan", null},
+                {"farzana","hassan", null}};
 
         fillContent(dataset);
 
@@ -577,10 +592,10 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
 
     public void fillChildhoodTbPatientView(){
 
-        String[][] dataset = { {"rabbia", "hassan"},
-                {"hadi","hassan"},
-                {"mohammad","hassan"},
-                {"farzana","hassan"}};
+        String[][] dataset = { {"rabbia", "hassan", null},
+                {"hadi","hassan", null},
+                {"mohammad","hassan", null},
+                {"farzana","hassan", null}};
 
         fillContent(dataset);
 
@@ -588,10 +603,82 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
 
     public void fillComorbiditiesPatientView(){
 
-        String[][] dataset = { {"rabbia", "hassan"},
-                {"hadi","hassan"},
-                {"mohammad","hassan"},
-                {"farzana","hassan"}};
+        String[][] dataset = { {"rabbia", "hassan", null},
+                {"hadi","hassan", null},
+                {"mohammad","hassan", null},
+                {"farzana","hassan", null}};
+
+        fillContent(dataset);
+
+    }
+
+    public void fillFastStaffView(){
+
+        Date date = new Date();
+        String todayDate = App.getSqlDate(date);
+
+        int countScreening =  serverService.getEncounterCountForDate(todayDate, "FAST-Presumptive");
+        int countPresumptive =  serverService.getEncounterCountForDate(todayDate, "FAST-Presumptive");
+        int countPatientLocation =  serverService.getEncounterCountForDate(todayDate, "FAST-Patient Location");
+        int countPresumptiveInformation =  serverService.getEncounterCountForDate(todayDate, "FAST-Presumptive Information");
+        int countCxrOrder =  serverService.getEncounterCountForDate(todayDate, "FAST-Screening CXR Test Order");
+        int countCxrResult =  serverService.getEncounterCountForDate(todayDate, "FAST-Screening CXR Test Result");
+        int countSpecimenCollection =  serverService.getEncounterCountForDate(todayDate, "FAST-GXP Specimen Collection");
+        int countGxpResultTest =  serverService.getEncounterCountForDate(todayDate, "FAST-GXP Test");
+        int countAfbOrder =  serverService.getEncounterCountForDate(todayDate, "FAST-AFB Smear Test Order");
+        int countAfbResult =  serverService.getEncounterCountForDate(todayDate, "FAST-AFB Smear Test Result");
+        int countTreatmentInitiation =  serverService.getEncounterCountForDate(todayDate, "FAST-Treatment Initiation");
+        int countTreatmentFollowup =  serverService.getEncounterCountForDate(todayDate, "FAST-Treatment Followup");
+        int countReferal =  serverService.getEncounterCountForDate(todayDate, "FAST-Referral Form");
+        int countContactRegistry =  serverService.getEncounterCountForDate(todayDate, "FAST-Contact Registry");
+
+        String[][] dataset = { {getString(R.string.screening_forms), String.valueOf(countReferal), null},
+                {getString(R.string.presumptive_forms),String.valueOf(countPresumptive), null},
+                {getString(R.string.patient_location_forms),String.valueOf(countPatientLocation), null},
+                {getString(R.string.presumptive_information_forms),String.valueOf(countPresumptiveInformation), null},
+                {getString(R.string.screnning_cxr_order_forms),String.valueOf(countCxrOrder), null},
+                {getString(R.string.screening_cxr_result_forms),String.valueOf(countCxrResult), null},
+                {getString(R.string.specimen_collection_forms),String.valueOf(countSpecimenCollection), null},
+                {getString(R.string.gxp_result_forms),String.valueOf(countGxpResultTest), null},
+                {getString(R.string.afb_order_forms),String.valueOf(countAfbOrder), null},
+                {getString(R.string.afb_result_forms),String.valueOf(countAfbResult), null},
+                {getString(R.string.treatment_initiation_forms),String.valueOf(countTreatmentInitiation), null},
+                {getString(R.string.treatment_followup_forms),String.valueOf(countTreatmentFollowup), null},
+                {getString(R.string.referal_forms),String.valueOf(countReferal), null},
+                {getString(R.string.contact_registry_forms), String.valueOf(countContactRegistry), null},};
+
+        fillContent(dataset);
+
+    }
+
+    public void fillPetStaffView(){
+
+        String[][] dataset = { {"rabbia", "hassan", null},
+                {"hadi","hassan", null},
+                {"mohammad","hassan", null},
+                {"farzana","hassan", null}};
+
+        fillContent(dataset);
+
+    }
+
+    public void fillChildhoodTbStaffView(){
+
+        String[][] dataset = { {"rabbia", "hassan", null},
+                {"hadi","hassan", null},
+                {"mohammad","hassan", null},
+                {"farzana","hassan", null}};
+
+        fillContent(dataset);
+
+    }
+
+    public void fillComorbiditiesStaffView(){
+
+        String[][] dataset = { {"rabbia", "hassan", null},
+                {"hadi","hassan", null},
+                {"mohammad","hassan", null},
+                {"farzana","hassan", null}};
 
         fillContent(dataset);
 
