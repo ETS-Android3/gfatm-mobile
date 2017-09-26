@@ -490,7 +490,8 @@ public class Forms{
         childhoodtbList.add(childhoodTb_treatment_intiation);
         childhoodtbList.add(childhoodTb_tb_treatment_followup);
         childhoodtbList.add(childhoodTb_antibiotic_followup_form);
-        childhoodtbList.add(childhoodTb_drug_dispersal);
+        childhoodtbList.add(childhoodTb_supplement_disbursement);
+        //childhoodtbList.add(childhoodTb_drug_dispersal);
         childhoodtbList.add(childhoodTb_isoniazid_preventive_therapy_followup);
         childhoodtbList.add(childhoodTb_missed_visit_followup);
         childhoodtbList.add(childhoodTb_referral_and_transfer_form);
