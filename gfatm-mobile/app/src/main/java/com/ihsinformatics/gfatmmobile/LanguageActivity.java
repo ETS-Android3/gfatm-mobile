@@ -60,12 +60,12 @@ public class LanguageActivity extends AbstractSettingActivity {
 
                                 App.setLanguage(rb.getText().toString());
 
-                                Locale locale = new Locale(App.getLanguage().substring(0, 2).toLowerCase());
+                                /*Locale locale = new Locale(App.getLanguage().substring(0, 2).toLowerCase());
                                 Locale.setDefault(locale);
                                 Configuration config = new Configuration();
                                 config.setLocale(locale);
                                 getResources().updateConfiguration(config, null);
-                                App.setCurrentLocale(locale);
+                                App.setCurrentLocale(locale);*/
 
                                 onBackPressed();
                             }
