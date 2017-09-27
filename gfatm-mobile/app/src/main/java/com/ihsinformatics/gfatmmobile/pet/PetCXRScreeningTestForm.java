@@ -556,7 +556,7 @@ public class PetCXRScreeningTestForm extends AbstractFormActivity implements Rad
         if (App.get(formType).equals(getResources().getString(R.string.ctb_order))) {
             observations.add(new String[]{"ORDER ID", App.get(orderId)});
             observations.add(new String[]{"FOLLOW-UP MONTH", App.get(monthTreatment)});
-            observations.add(new String[]{"TYPE OF X RAY", App.get(typeOfXRay).equals(getResources().getString(R.string.ctb_chest_xray_cad4tb)) ? "RADIOLOGICAL DIAGNOSIS" :
+            observations.add(new String[]{"TYPE OF X RAY", App.get(typeOfXRay).equals(getResources().getString(R.string.ctb_chest_xray_cad4tb)) ? "CHEST XRAY" :
                      "X-RAY, OTHER"});
         } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
             observations.add(new String[]{"ORDER ID", App.get(orderIds)});
@@ -757,7 +757,7 @@ public class PetCXRScreeningTestForm extends AbstractFormActivity implements Rad
                 formType.getRadioGroup().getButtons().get(1).setEnabled(false);
                  if (obs[0][0].equals("TYPE OF X RAY")) {
                     for (RadioButton rb : typeOfXRay.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.ctb_chest_xray_cad4tb)) && obs[0][1].equals("RADIOLOGICAL DIAGNOSIS")) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_chest_xray_cad4tb)) && obs[0][1].equals("CHEST XRAY")) {
                             rb.setChecked(true);
                             break;
                         } else if (rb.getText().equals(getResources().getString(R.string.ctb_chest_xray_other)) && obs[0][1].equals("X-RAY, OTHER")) {
@@ -872,7 +872,7 @@ public class PetCXRScreeningTestForm extends AbstractFormActivity implements Rad
                 typeofXray = serverService.getObsValueByObs(App.getPatientId(), App.getProgram() + "-" + "CXR Screening Test Order", "ORDER ID", App.get(orderIds), "TYPE OF X RAY");
             }
             if(typeofXray!=null) {
-                if (typeofXray.equalsIgnoreCase("RADIOLOGICAL DIAGNOSIS")) {
+                if (typeofXray.equalsIgnoreCase("CHEST XRAY")) {
                     chestXRayScore.setVisibility(View.VISIBLE);
                 }else{
                     chestXRayScore.setVisibility(View.GONE);
@@ -1034,7 +1034,7 @@ public class PetCXRScreeningTestForm extends AbstractFormActivity implements Rad
                     typeofXray = serverService.getObsValueByObs(App.getPatientId(), App.getProgram() + "-" + "CXR Screening Test Order", "ORDER ID", App.get(orderIds), "TYPE OF X RAY");
                 }
                 if(typeofXray!=null) {
-                    if (typeofXray.equalsIgnoreCase("RADIOLOGICAL DIAGNOSIS")) {
+                    if (typeofXray.equalsIgnoreCase("CHEST XRAY")) {
                         chestXRayScore.setVisibility(View.VISIBLE);
                     }
                 }
