@@ -4718,6 +4718,10 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT CONSENT
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT CONSENT TO CONTINUE TREATMENT FOR DIABETES','patient_agree_to_continue_diabetes_treatment','Coded','933ee589-d2c4-435c-81a0-551e92c763bb');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REASON FOR DISCONTINUATION','discontinuation_reason','Text','473d8a1c-77be-42c8-ac2d-a7801f254435');
 
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT SCREENED FOR MENTAL HEALTH','mental_health_screening_status','Coded','73483647-aaad-4b3e-9431-d9d3de8e95b3');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LOSS OF PROTECTIVE SENSATION, 3 MONTH FOLLOWUP','loss_of_protective_sensation_3_month_followup','N/A','9cd61137-0fbf-4382-87af-160afd7b96c5');INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT SCREENED FOR MENTAL HEALTH','mental_health_screening_status','Coded','73483647-aaad-4b3e-9431-d9d3de8e95b3');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ABNORMAL, DETAILED DIAGNOSIS','abnormal_detailed_diagnosis','Coded','ef5567b2-3d12-49b7-b6c6-6443af0078e5');
+
 -- Program
 INSERT OR IGNORE INTO program VALUES (1, "86ba1232-d576-416e-b102-5f335c6746ce", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
 INSERT OR IGNORE INTO program VALUES (2, "5d372a38-ae27-4a68-a8d2-bc517a2c9c40", "PET", "Post-Exposure Treatment");
