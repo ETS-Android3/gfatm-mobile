@@ -1827,10 +1827,10 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
                     }
 
                     String householdEducation1 = result.get("CURRENT EDUCATION LEVEL OF HEAD OF HOUSEHOLD");
-                    Log.v("HOUSE_EDU_LEVEL", householdEducation1);
+//                    Log.v("HOUSE_EDU_LEVEL", householdEducation1);
                     if (householdEducation1 != null) {
                         if (!householdEducation1.equals("")) {
-                            Log.v("HOUSE_EDU_LEVEL1", householdEducation1);
+//                            Log.v("HOUSE_EDU_LEVEL1", householdEducation1);
                             String value = householdEducation1.equals("ELEMENTARY EDUCATION") ? getResources().getString(R.string.comorbidities_patient_information_education_options_ele) :
                                     (householdEducation1.equals("PRIMARY EDUCATION") ? getResources().getString(R.string.comorbidities_patient_information_education_options_pri) :
                                             (householdEducation1.equals("SECONDARY EDUCATION") ? getResources().getString(R.string.comorbidities_patient_information_education_options_sec) :
@@ -1844,13 +1844,13 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
                                                                                                             (householdEducation1.equals("NO FORMAL EDUCATION") ? getResources().getString(R.string.comorbidities_patient_information_education_options_no_education) :
                                                                                                                     (householdEducation1.equals("OTHER") ? getResources().getString(R.string.comorbidities_patient_information_education_options_other) :
                                                                                                                             (householdEducation1.equals("UNKNOWN") ? getResources().getString(R.string.comorbidities_patient_information_education_options_unknown) : getResources().getString(R.string.comorbidities_patient_information_education_options_refused)))))))))))));
-                            Log.v("HOUSE_EDU_LEVEL2", value);
+//                            Log.v("HOUSE_EDU_LEVEL2", value);
                             householdHeadEducationLevel.getSpinner().selectValue(value);
                         }
                     }
 
                     String educationLevel1 = result.get("HIGHEST EDUCATION LEVEL");
-                    Log.v("EDU LEVEL", educationLevel1);
+//                    Log.v("EDU LEVEL", educationLevel1);
                     if (educationLevel1 != null) {
                         if (!educationLevel1.equals("")) {
                             String value = educationLevel1.equals("ELEMENTARY EDUCATION") ? getResources().getString(R.string.comorbidities_patient_information_education_options_ele) :
