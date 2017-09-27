@@ -539,7 +539,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
                 {getString(R.string.presumptive_date),presumptive,null},
                 {getString(R.string.diagnosed_on),diagnoseOn,null},
                 {getString(R.string.diagnosed_type),diagnosisType,null},
-                {getString(R.string.xpert_result),xpertResult,"Highlight"},
+                {getString(R.string.xpert_result),xpertResult,xpertHighlight},
                 {getString(R.string.xray_result),xrayResult,null},
                 {getString(R.string.tb_type),tbType,null},
                 {getString(R.string.tb_initiation_date),treatmentInitiationDate,null},
