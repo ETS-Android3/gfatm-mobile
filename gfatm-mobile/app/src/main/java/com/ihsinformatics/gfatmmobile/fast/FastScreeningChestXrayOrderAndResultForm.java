@@ -751,7 +751,7 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
             }
 
             if (screenXrayType.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"TYPE OF X RAY", App.get(screenXrayType).equals(getResources().getString(R.string.fast_chest_xray_cad4tb)) ? "RADIOLOGICAL DIAGNOSIS" : "X-RAY, OTHER"});
+                observations.add(new String[]{"TYPE OF X RAY", App.get(screenXrayType).equals(getResources().getString(R.string.fast_chest_xray_cad4tb)) ? "CHEST XRAY" : "X-RAY, OTHER"});
             if (monthOfTreatment.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"FOLLOW-UP MONTH", monthOfTreatment.getSpinner().getSelectedItem().toString()});
             if (formDate.getVisibility() == View.VISIBLE)
@@ -1028,7 +1028,7 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
             }
 
             String value = serverService.getObsValueByObs(App.getPatientId(), App.getProgram() + "-" + "Screening CXR Test Order", "ORDER ID", App.get(orderIds),"TYPE OF X RAY");
-            if(value != null && formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result))&& value.equals("RADIOLOGICAL DIAGNOSIS")){
+            if(value != null && formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result))&& value.equals("CHEST XRAY")){
                 cat4tbScore.setVisibility(View.VISIBLE);
                 cadScoreRange.setVisibility(View.VISIBLE);
 
@@ -1192,7 +1192,7 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
 
                 else if (obs[0][0].equals("TYPE OF X RAY")) {
                     for (RadioButton rb : screenXrayType.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.fast_chest_xray_cad4tb)) && obs[0][1].equals("RADIOLOGICAL DIAGNOSIS")) {
+                        if (rb.getText().equals(getResources().getString(R.string.fast_chest_xray_cad4tb)) && obs[0][1].equals("CHEST XRAY")) {
                             rb.setChecked(true);
                             break;
                         } else if (rb.getText().equals(getResources().getString(R.string.fast_chest_xray_other)) && obs[0][1].equals("X-RAY, OTHER")) {
@@ -1466,7 +1466,7 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
 
         if (spinner == orderIds.getSpinner()) {
             String value = serverService.getObsValueByObs(App.getPatientId(), App.getProgram() + "-" + "Screening CXR Test Order", "ORDER ID", App.get(orderIds),"TYPE OF X RAY");
-            if(value != null && formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result))&& value.equals("RADIOLOGICAL DIAGNOSIS")){
+            if(value != null && formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result))&& value.equals("CHEST XRAY")){
                 cat4tbScore.setVisibility(View.VISIBLE);
 
                 radiologicalDiagnosis.setVisibility(View.GONE);
