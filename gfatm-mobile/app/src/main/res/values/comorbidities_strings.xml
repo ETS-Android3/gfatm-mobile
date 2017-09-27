@@ -4,6 +4,7 @@
     <string name="comorbidities_index_patient_registration">Index Patient Registration</string>
 
     <string name="comorbidities_akuads_Mental_Health_Screening">MENTAL HEALTH SCREENING - AKUADS</string>
+    <string name="comorbidities_akuads_will_be_screened">Will the patient be screened for mental health??</string>
     <string name="comorbidities_akuads_sleep">Have you been sleeping less?</string>
     <string name="comorbidities_akuads_lackofinterest">Have you had lack of interest in your daily activities?</string>
     <string name="comorbidities_akuads_lostinteresthobbies">Have you lost interest in your hobbies?</string>
@@ -43,7 +44,6 @@
     <string name="comorbidities_preferredlocation_other_comorbidities">Other preferred location:</string>
     <string name="comorbidities_dm_screening">DIABETES MELLITUS SCREENING</string>
     <string name="comorbidities_dm_screening_diabetes_diagnosed">Diabetes Diagnosed through?</string>
-    <string name="comorbidities_dmscrnng_food">Have you had something to eat within the last two hours?</string>
     <string name="comorbidities_dmscrnng_diagnosed_with_diabetes">Have you been diagnosed with Diabetes?</string>
     <string name="comorbidities_dmscrnng_diagnosed_through">Diabetes Diagnosed through?</string>
     <string name="comorbidities_dmscrnng_hba1c_availability">Availability of HbA1c at site?</string>
@@ -128,6 +128,7 @@
     <string name="comorbidities_hba1c_resultdate">Test Result Date:</string>
     <string name="comorbidities_hba1c_result">HbA1C Result (%):</string>
     <string name="comorbidities_hba1c_result_range">Range 0&#8211;20 (Including decimal)</string>
+    <string name="comorbidities_hba1c_previously_diagnosed_diabetic">Previously Diagnosed Diabetes?</string>
     <string name="comorbidities_hba1c_diabetic">Is the patient Diabetic?</string>
     <string name="comorbidities_form_type_error">Please select Form Type!</string>
     <string name="comorbidities_hba1c_screener_instructions">Screener Instructions:\nIf the patient is present at the time of handing over the result then kindly give the Zero TB Pamphlet to the patient.</string>
@@ -223,6 +224,7 @@
     <string name="comorbidities_rbs_result_limit1">The value should be in the range of 0&#8211;500</string>
     <string name="comorbidities_rbs_result_range">Range 0&#8211;300</string>
     <string name="comorbidities_rbs_result_range1">Range 0&#8211;500</string>
+    <string name="comorbidities_blood_sugar_had_food_in_two_hours">Have you had something to eat within the last two hours?</string>
     <string name="comorbidities_rbs_result">RBS Test Result (mg/dl):</string>
     <string name="comorbidities_blood_sugar_no_order_found">No Blood Sugar Order found for the patient.</string>
 
@@ -266,6 +268,9 @@
 
     <!-- Strings for ComorbiditiesDiabetesTreatmentInitiationForm -->
     <string name="comorbidities_diabetes_previous_history">Previous History</string>
+    <string name="comorbidities_diabetes_patient_agree_to_receive_treatment">Does the patient agree to receive treatment for diabetes</string>
+    <string name="comorbidities_diabetes_patient_agree_to_continue_treatment">Does the patient agree to continue treatment for diabetes</string>
+    <string name="comorbidities_diabetes_patient_reason_for_discontinuation">Reason for discontinuation</string>
     <string name="comorbidities_diabetes_family_history">Does the patient have any blood relatives who have diabetes?</string>
     <string name="comorbidities_diabetes_family_history_specify">If yes, who?</string>
     <string name="comorbidities_previous_diabetes_treatment_history">Has the patient been taking any diabetes medication?</string>
@@ -286,8 +291,8 @@
     <string name="comorbidities_diabetes_treatment_initiation">Prescribed Diabetes Medication?</string>
     <string name="comorbidities_diabetes_treatment_detail">Prescription details:</string>
     <string name="comorbidities_diabetes_treatment_initiation_metformin">Dosage Strength of Metformin/Day</string>
-    <string name="comorbidities_diabetes_treatment_initiation_metformin_per_day">How many tablets per day?</string>
-    <string name="comorbidities_diabetes_treatment_initiation_metformin_prescribed">Prescribed for how many days?</string>
+    <string name="comorbidities_diabetes_treatment_initiation_metformin_per_day">How many tablets of metformin per day?</string>
+    <string name="comorbidities_diabetes_treatment_initiation_metformin_prescribed">Metformin prescribed for how many days?</string>
     <string name="comorbidities_diabetes_treatment_initiation_insulinN">Dosage of Insulin N (Units/Day):</string>
     <string name="comorbidities_diabetes_treatment_initiation_insulinR">Dosage of Insulin R (Units/Day):</string>
     <string name="comorbidities_diabetes_treatment_initiation_insulin_mix">Dosage of Mixed Insulin (Units/Day):</string>
@@ -824,12 +829,24 @@
         <item>@string/comorbidities_foot_screening_foot_hygiene_options_good</item>
     </string-array>
 
+    <string name="comorbidities_foot_screening_recommendations_options_instruction_12_month">Kindly instruct the patient on Diabetes Management, Proper shoe fit and design, and Foot Hygeine. If the patient has any callus, ulcer formation advise the patient to visit the foot screening technician</string>
+    <string name="comorbidities_foot_screening_recommendations_options_instruction_3_month">Kindly instruct the patient on Diabetes Management, Proper shoe fit and design, Daily self inspection, Skin/nail care, Early reporting of foot injuries</string>
+    <string name="comorbidities_foot_screening_recommendations_options_instruction_1_month">Kindly instruct the patient on Diabetes Management, Proper shoe fit and design, Daily self inspection, Skin/nail care, Early reporting of foot injuries, Foot wear medification, Foot inlay advise</string>
+    <string name="comorbidities_foot_screening_recommendations_options_instruction_history">Kindly instruct the patient on Diabetes Management, Proper shoe fit and design, Daily self inspection, Skin/nail care, Early reporting of foot injuries, Foot wear medification, Foot inlay advise</string>
+
+
     <string name="comorbidities_foot_screening_recommendations_options_management">Management of Diabetes</string>
     <string name="comorbidities_foot_screening_recommendations_options_referral">Referral to Foot doctor</string>
+    <string name="comorbidities_foot_screening_recommendations_options_12_month">No loss of sensation, 12 month Followup</string>
+    <string name="comorbidities_foot_screening_recommendations_options_3_month">Loss of protective sensation, 3 month Followup</string>
+    <string name="comorbidities_foot_screening_recommendations_options_1_month">Loss of sensation in feet with high pressure/callus formation with poor circulation, 1 month Followup</string>
+    <string name="comorbidities_foot_screening_recommendations_options_history">History of plantar ulceration or Neuropathic fracture (Charcots foot), Referal to Foot Doctor</string>
 
     <string-array name="comorbidities_foot_screening_recommendations_options">
-        <item>@string/comorbidities_foot_screening_recommendations_options_management</item>
-        <item>@string/comorbidities_foot_screening_recommendations_options_referral</item>
+        <item>@string/comorbidities_foot_screening_recommendations_options_12_month</item>
+        <item>@string/comorbidities_foot_screening_recommendations_options_3_month</item>
+        <item>@string/comorbidities_foot_screening_recommendations_options_1_month</item>
+        <item>@string/comorbidities_foot_screening_recommendations_options_history</item>
     </string-array>
 
     <!-- Strings for ComorbiditiesDiabetesEyeScreeningForm -->
@@ -938,7 +955,7 @@
     <string name="comorbidities_treatment_followup_MH_client_complaint_options_financial">Economic problem</string>
     <string name="comorbidities_treatment_followup_MH_client_complaint_options_physical_abuse">Physical Abuse</string>
     <string name="comorbidities_treatment_followup_MH_client_complaint_options_sexual_problems">Sexual problems</string>
-    <string name="comorbidities_treatment_followup_MH_client_complaint_options_other">Other</string>
+    <string name="comorbidities_treatment_followup_MH_client_complaint_options_other">Other Complaint</string>
 
     <string-array name="comorbidities_treatment_followup_MH_client_complaint_options">
         <item>@string/comorbidities_treatment_followup_MH_client_complaint_options_relationship_problems</item>
@@ -1050,6 +1067,10 @@
     </string-array>
 
     <!-- Strings for ComorbiditiesAssessmentFormMentalHealth -->
+
+
+    <string name="comorbidities_assessment_form_MH_rescrened_number">Rescreened at session number:</string>
+
     <string name="comorbidities_assessment_form_MH_rescreening">Type of rescreening:</string>
     <string name="comorbidities_assessment_form_MH_appointment_date">Next Appointment Date:</string>
     <string name="next_date_past">Date can\'t be in past.</string>
@@ -1059,15 +1080,25 @@
     <string name="comorbidities_assessment_form_MH_rescreening_options_end">End of treatment</string>
     <string name="comorbidities_assessment_form_MH_rescreening_options_relapse">Relapse</string>
     <string name="comorbidities_assessment_form_MH_rescreening_options_change_in_TB">Change in TB</string>
+
+
+
+    <string name="comorbidities_assessment_form_MH_rescreening_options_reassessment">Reassessment</string>
+    <string name="comorbidities_assessment_form_MH_rescreening_options_relapse_or_change">Relapse/Change in TB Category</string>
+    <string name="comorbidities_assessment_form_MH_rescreening_options_end_of_tb">End of Treatment-TB</string>
+    <string name="comorbidities_assessment_form_MH_rescreening_options_relapse_mental_health">Relapse-Mental Health</string>
+    <string name="comorbidities_assessment_form_MH_rescreening_options_better">Patient Feels Better</string>
+    <string name="comorbidities_assessment_form_MH_rescreening_options_worse">Patient Feels Worse</string>
     <string name="comorbidities_assessment_form_MH_rescreening_options_other">Other</string>
     <string name="comorbidities_assessment_form_MH_other_assesment_reason">Other assesment reason:</string>
 
     <string-array name="comorbidities_assessment_form_MH_rescreening_options">
-        <item>@string/comorbidities_assessment_form_MH_rescreening_options_6th_session</item>
-        <item>@string/comorbidities_assessment_form_MH_rescreening_options_rescreening</item>
-        <item>@string/comorbidities_assessment_form_MH_rescreening_options_end</item>
-        <item>@string/comorbidities_assessment_form_MH_rescreening_options_relapse</item>
-        <item>@string/comorbidities_assessment_form_MH_rescreening_options_change_in_TB</item>
+        <item>@string/comorbidities_assessment_form_MH_rescreening_options_reassessment</item>
+        <item>@string/comorbidities_assessment_form_MH_rescreening_options_relapse_or_change</item>
+        <item>@string/comorbidities_assessment_form_MH_rescreening_options_end_of_tb</item>
+        <item>@string/comorbidities_assessment_form_MH_rescreening_options_relapse_mental_health</item>
+        <item>@string/comorbidities_assessment_form_MH_rescreening_options_better</item>
+        <item>@string/comorbidities_assessment_form_MH_rescreening_options_worse</item>
         <item>@string/comorbidities_assessment_form_MH_rescreening_options_other</item>
     </string-array>
 
@@ -1163,6 +1194,7 @@
     <string name="comorbidities_drug_disbursement_number_of_metformin_limit">The value should be in the range of 0&#8211;15</string>
     <string name="comorbidities_drug_disbursement_number_of_insulinN">Number of Insulin N vials (10 ml) distributed:</string>
     <string name="comorbidities_drug_disbursement_number_of_insulinR">Number of Insulin R vials (10 ml) distributed:</string>
+    <string name="comorbidities_drug_disbursement_number_of_insulinMixDose">Number of Insulin Mix 30/70 vials (10 ml) distributed:</string>
     <string name="comorbidities_drug_disbursement_number_of_insulin_range">Range 0&#8211;3</string>
     <string name="comorbidities_drug_disbursement_number_of_insulin_limit">The value should be in the range of 0&#8211;3</string>
 

@@ -55,12 +55,12 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
 
     // Views...
     TitledButton formDate;
-    MyTextView aherenceTextView;
+    //    MyTextView aherenceTextView;
     //TitledRadioGroup aherence;
-    TitledEditText adherence;
-    MyTextView drugDistributionRecord;
-    TitledEditText drugDistributionNumber;
-    TitledRadioGroup drugsPickedUp;
+//    TitledEditText adherence;
+//    MyTextView drugDistributionRecord;
+//    TitledEditText drugDistributionNumber;
+//    TitledRadioGroup drugsPickedUp;
     MyTextView drugDistributionDetail;
     TitledButton drugDistributionDate;
     //TitledEditText specifyOther;
@@ -68,6 +68,7 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
     TitledEditText metformin;
     TitledEditText insulinN;
     TitledEditText insulinR;
+    TitledEditText insulinMixDoseDistributed;
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -140,14 +141,14 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        aherenceTextView = new MyTextView(context, getResources().getString(R.string.comorbidities_drug_disbursement_adherence_text));
-        aherenceTextView.setTypeface(null, Typeface.BOLD);
+//        aherenceTextView = new MyTextView(context, getResources().getString(R.string.comorbidities_drug_disbursement_adherence_text));
+//        aherenceTextView.setTypeface(null, Typeface.BOLD);
         //aherence = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_drug_disbursement_adherence), getResources().getStringArray(R.array.comorbidities_drug_disbursement_adherence_options), "", App.VERTICAL, App.VERTICAL);
-        adherence = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_drug_disbursement_adherence), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        drugDistributionRecord = new MyTextView(context, getResources().getString(R.string.comorbidities_drug_disbursement_drug_distribution));
-        drugDistributionRecord.setTypeface(null, Typeface.BOLD);
-        drugDistributionNumber = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_drug_disbursement_drug_distribution_number), "", getResources().getString(R.string.comorbidities_drug_disbursement_drug_distribution_number_range), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        drugsPickedUp = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_drug_disbursement_drugs_picked_up), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL);
+//        adherence = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_drug_disbursement_adherence), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+//        drugDistributionRecord = new MyTextView(context, getResources().getString(R.string.comorbidities_drug_disbursement_drug_distribution));
+//        drugDistributionRecord.setTypeface(null, Typeface.BOLD);
+//        drugDistributionNumber = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_drug_disbursement_drug_distribution_number), "", getResources().getString(R.string.comorbidities_drug_disbursement_drug_distribution_number_range), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+//        drugsPickedUp = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_drug_disbursement_drugs_picked_up), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL);
         drugDistributionDetail = new MyTextView(context, getResources().getString(R.string.comorbidities_drug_disbursement_drug_dist_detail_text));
         drugDistributionDetail.setTypeface(null, Typeface.BOLD);
         drugDistributionDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_drug_disbursement_drug_dist_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
@@ -156,19 +157,20 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
         metformin = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_drug_disbursement_number_of_metformin), "", getResources().getString(R.string.comorbidities_drug_disbursement_number_of_metformin_range), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
         insulinN = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_drug_disbursement_number_of_insulinN), "", getResources().getString(R.string.comorbidities_drug_disbursement_number_of_insulin_range), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         insulinR = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_drug_disbursement_number_of_insulinR), "", getResources().getString(R.string.comorbidities_drug_disbursement_number_of_insulin_range), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        insulinMixDoseDistributed = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_drug_disbursement_number_of_insulinMixDose), "", getResources().getString(R.string.comorbidities_drug_disbursement_number_of_insulin_range), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), adherence.getEditText(),/*aherence.getRadioGroup(),*/ drugDistributionNumber.getEditText(), drugsPickedUp.getRadioGroup(), drugDistributionDate.getButton(), /*specifyOther.getEditText(),*/
-                drugsDispersedDays.getEditText(), metformin.getEditText(), insulinN.getEditText(), insulinR.getEditText()};
+        views = new View[]{formDate.getButton(), /*adherence.getEditText(),*//*aherence.getRadioGroup(),*/ /*drugDistributionNumber.getEditText(), drugsPickedUp.getRadioGroup(),*/  /*specifyOther.getEditText(),*/
+                drugsDispersedDays.getEditText(), metformin.getEditText(), insulinN.getEditText(), insulinR.getEditText(), insulinMixDoseDistributed.getEditText(), drugDistributionDate.getButton()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, aherenceTextView, adherence,/*aherence,*/ drugDistributionRecord, drugDistributionNumber, drugsPickedUp, drugDistributionDetail, drugDistributionDate, /*specifyOther,*/ drugsDispersedDays, metformin, insulinN, insulinR}};
+                {{formDate, /*aherenceTextView,*/ /*adherence,*//*aherence,*/ /*drugDistributionRecord,*//* drugDistributionNumber, drugsPickedUp,*/ drugDistributionDetail, /*specifyOther,*/ drugsDispersedDays, metformin, insulinN, insulinR, insulinMixDoseDistributed, drugDistributionDate}};
 
         formDate.getButton().setOnClickListener(this);
         drugDistributionDate.getButton().setOnClickListener(this);
 
-        drugDistributionNumber.getEditText().addTextChangedListener(new TextWatcher() {
+       /* drugDistributionNumber.getEditText().addTextChangedListener(new TextWatcher() {
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -195,7 +197,7 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
                     //Exception: User might be entering " " (empty) value
                 }
             }
-        });
+        });*/
 
         drugsDispersedDays.getEditText().addTextChangedListener(new TextWatcher() {
 
@@ -447,7 +449,7 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
             error = true;
         }*/
 
-        if (App.get(drugDistributionNumber).isEmpty()) {
+       /* if (App.get(drugDistributionNumber).isEmpty()) {
             gotoFirstPage();
             drugDistributionNumber.getEditText().setError(getString(R.string.empty_field));
             drugDistributionNumber.getEditText().requestFocus();
@@ -457,14 +459,14 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
             drugDistributionNumber.getEditText().setError(getString(R.string.comorbidities_drug_disbursement_drug_distribution_number_limit));
             drugDistributionNumber.getEditText().requestFocus();
             error = true;
-        }
+        }*/
 
-        if (App.get(adherence).isEmpty()) {
+       /* if (App.get(adherence).isEmpty()) {
             gotoFirstPage();
             adherence.getEditText().setError(getString(R.string.empty_field));
             adherence.getEditText().requestFocus();
             error = true;
-        }
+        }*/
 
         if (error) {
 
@@ -526,9 +528,9 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
                         (App.get(aherence).equals(getResources().getString(R.string.comorbidities_drug_disbursement_adherence_options_more_than_3)) ? "NORMAL" : "OPEN BEHAVIOUR"));
         observations.add(new String[]{"NUMBER OF MISSED MEDICATION DOSES IN LAST MONTH", treatmentFollowupMHDefensivenessString});*/
 
-        observations.add(new String[]{"NUMBER OF MISSED MEDICATION DOSES IN LAST MONTH", App.get(adherence)});
-        observations.add(new String[]{"DRUG DISPERSAL NUMBER", App.get(drugDistributionNumber)});
-        observations.add(new String[]{"DRUGS RECEIVED BY PATIENT", App.get(drugsPickedUp).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+//        observations.add(new String[]{"NUMBER OF MISSED MEDICATION DOSES IN LAST MONTH", App.get(adherence)});
+//        observations.add(new String[]{"DRUG DISPERSAL NUMBER", App.get(drugDistributionNumber)});
+//        observations.add(new String[]{"DRUGS RECEIVED BY PATIENT", App.get(drugsPickedUp).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         observations.add(new String[]{"NEXT DATE OF DRUG DISPERSAL", App.getSqlDate(secondDateCalendar)});
         observations.add(new String[]{"DAYS WORTH OF DRUGS DISPERSED", App.get(drugsDispersedDays)});
         observations.add(new String[]{"METFORMIN DOSE", App.get(metformin)});
@@ -672,9 +674,9 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
                 timeTakeToFill = obs[0][1];
             }
 
-            if (obs[0][0].equals("NUMBER OF MISSED MEDICATION DOSES IN LAST MONTH")) {
+           /* if (obs[0][0].equals("NUMBER OF MISSED MEDICATION DOSES IN LAST MONTH")) {
                 adherence.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("DRUG DISPERSAL NUMBER")) {
+            } else *//*if (obs[0][0].equals("DRUG DISPERSAL NUMBER")) {
                 drugDistributionNumber.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("DRUGS RECEIVED BY PATIENT")) {
                 for (RadioButton rb : drugsPickedUp.getRadioGroup().getButtons()) {
@@ -686,7 +688,8 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
                         break;
                     }
                 }
-            } else if (obs[0][0].equals("NEXT DATE OF DRUG DISPERSAL")) {
+            } else */
+            if (obs[0][0].equals("NEXT DATE OF DRUG DISPERSAL")) {
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                 drugDistributionDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
@@ -805,6 +808,7 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
                         metformin.setVisibility(View.GONE);
                         insulinN.setVisibility(View.GONE);
                         insulinR.setVisibility(View.GONE);
+                        insulinMixDoseDistributed.setVisibility(View.GONE);
 
                     }
                     if (result.get("DIABETES MEDICATIONS").contains("METFORMIN")) {
@@ -816,6 +820,10 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
 
                     if (result.get("DIABETES MEDICATIONS").contains("REGULAR")) {
                         insulinR.setVisibility(View.VISIBLE);
+                    }
+
+                    if (result.get("DIABETES MEDICATIONS").contains("70/30")) {
+                        insulinMixDoseDistributed.setVisibility(View.VISIBLE);
                     }
 
 
@@ -864,6 +872,3 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
 
     }
 }
-
-
-
