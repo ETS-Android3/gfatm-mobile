@@ -349,7 +349,7 @@
     <string name="city_default" translatable="false">Karachi</string>
     <string name="province_default" translatable="false">Sindh</string>
     <string name="country_default" translatable="false">Pakistan</string>
-    <!--<string name="ip_default" translatable="false">mrs.ghd.ihn.org.pk</string>
+    <!--string name="ip_default" translatable="false">mrs.ghd.ihn.org.pk</string>
     <string name="port_default" translatable="false">443</string>-->
     <string name="ip_default" translatable="false">124.29.207.74</string>
     <string name="port_default" translatable="false">9902</string>
@@ -645,8 +645,5 @@
     <string name="treatment_followup_forms">Treatment Followup Forms:</string>
     <string name="referal_forms">Referal Forms:</string>
     <string name="contact_registry_forms">Contact Registry Forms:</string>
-
-
-
 
 </resources>
