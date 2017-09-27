@@ -446,7 +446,7 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
         observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(diabetesFootScreeningDetailedClinicalNotes).trim()});
         observations.add(new String[]{"DIABETES RECOMMENDATAION",
                 App.get(diabetesFootScreeningRecommendations).equals(getResources().getString(R.string.comorbidities_foot_screening_recommendations_options_12_month)) ? "NO LOSS OF SENSATION, 12 MONTH FOLLOWUP" :
-                        App.get(diabetesFootScreeningRecommendations).equals(getResources().getString(R.string.comorbidities_foot_screening_recommendations_options_3_month)) ? "NO LOSS OF PROTECTIVE SENSATION, 3 MONTH FOLLOWUP" :
+                        App.get(diabetesFootScreeningRecommendations).equals(getResources().getString(R.string.comorbidities_foot_screening_recommendations_options_3_month)) ? "LOSS OF PROTECTIVE SENSATION, 3 MONTH FOLLOWUP" :
                                 App.get(diabetesFootScreeningRecommendations).equals(getResources().getString(R.string.comorbidities_foot_screening_recommendations_options_1_month)) ? "LOSS OF SENSATION IN FEET WITH HIGH PRESSURE OR CALLUS FORMATION WITH POOR CIRCULATION, 1 MONTH FOLLOWUP" : "HISTORY OF PLANTAR ULCERATION OR NEUROPATHIC FRACTURE, REFERRAL TO FOOT DOCTOR"});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
@@ -820,7 +820,7 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
                     if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_recommendations_options_12_month)) && obs[0][1].equals("NO LOSS OF SENSATION, 12 MONTH FOLLOWUP")) {
                         rb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_recommendations_options_3_month)) && obs[0][1].equals("NO LOSS OF PROTECTIVE SENSATION, 3 MONTH FOLLOWUP")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_recommendations_options_3_month)) && obs[0][1].equals("LOSS OF PROTECTIVE SENSATION, 3 MONTH FOLLOWUP")) {
                         rb.setChecked(true);
                         break;
                     } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_recommendations_options_1_month)) && obs[0][1].equals("LOSS OF SENSATION IN FEET WITH HIGH PRESSURE OR CALLUS FORMATION WITH POOR CIRCULATION, 1 MONTH FOLLOWUP")) {
