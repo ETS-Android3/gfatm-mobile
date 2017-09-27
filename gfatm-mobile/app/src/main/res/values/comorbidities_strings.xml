@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="comorbidities_akuads_will_be_screened">Will the patient be screened for mental health??</string>
 
     <string name="comorbidities_index_patient_registration">Index Patient Registration</string>
 
