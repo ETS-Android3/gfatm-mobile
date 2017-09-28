@@ -585,7 +585,7 @@ public class PetCXRScreeningTestForm extends AbstractFormActivity implements Rad
                     else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_other_title)))
                         abnormalDiagnosisString = abnormalDiagnosisString + "OTHER ABNORMAL DETAILED DIAGNOSIS" + " ; ";
                 }
-                observations.add(new String[]{"ABNORMAL DETAILED DIAGNOSIS", abnormalDiagnosisString});
+                observations.add(new String[]{"ABNORMAL, DETAILED DIAGNOSIS", abnormalDiagnosisString});
             }
 
             observations.add(new String[]{"RADIOLOGICAL DIAGNOSIS", App.get(radiologicalDiagnosis).equals(getResources().getString(R.string.ctb_normal)) ? "NORMAL" :
