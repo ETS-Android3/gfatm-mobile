@@ -798,7 +798,7 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
                     else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_others)))
                         abnormalDetailedDiagnosisString = abnormalDetailedDiagnosisString + "OTHER ABNORMAL DETAILED DIAGNOSIS" + " ; ";
                 }
-                observations.add(new String[]{"ABNORMAL DETAILED DIAGNOSIS", abnormalDetailedDiagnosisString});
+                observations.add(new String[]{"ABNORMAL, DETAILED DIAGNOSIS", abnormalDetailedDiagnosisString});
             }
 
             if (returnVisitDate.getVisibility() == View.VISIBLE)
