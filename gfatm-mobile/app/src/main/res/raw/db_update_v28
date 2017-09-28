@@ -1,5 +1,6 @@
 -- update...
 update OR IGNORE concept set full_name='CHEST XRAY', var_name='chest_xray' where uuid = '12AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
+update OR IGNORE concept set uuid='d4d0c1ca-6253-4e31-8dab-f1fec4f1e892' where full_name = 'RELAPSE OR CHANGE IN TB CATEGORY';
 
 -- insert ---
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT SCREENED FOR MENTAL HEALTH','mental_health_screening_status','Coded','73483647-aaad-4b3e-9431-d9d3de8e95b3');

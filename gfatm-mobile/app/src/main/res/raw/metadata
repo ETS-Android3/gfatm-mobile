@@ -4702,7 +4702,7 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NON-FAMILY MEMB
 
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PREVIOUSLY DIAGNOSED DIABETES','diabetes_previous_diagnosed','Coded','ef2570e6-9241-4afe-bf29-5ffd03540cdc');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REASSESSMENT','reassessment','    N/A','842b97bb-f916-432f-8615-895e53722b17');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RELAPSE OR CHANGE IN TB CATEGORY','relapse_in_tb_category','N/A','    d4d0c1ca-6253-4e31-8dab-f1fec4f1e892');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RELAPSE OR CHANGE IN TB CATEGORY','relapse_in_tb_category','N/A','d4d0c1ca-6253-4e31-8dab-f1fec4f1e892');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('END OF TREATMENT-TB','end_of_treatment_tb','N/A','2fc7eca7-729f-4963-ba62-0cce445777c2');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RELAPSE-MENTAL HEALTH','relapse_mental_health','N/A','1f182c7b-782a-415c-b48e-14f64765efbe');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT FEELS BETTER','feels_better','N/A','d116bead-df64-450a-a1d9-8f81c8b0d719');
