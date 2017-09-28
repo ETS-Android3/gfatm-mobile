@@ -149,8 +149,10 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
         //referredTo = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_referred_to), getResources().getStringArray(R.array.comorbidities_end_treatment_MH_referred_to_options), "", App.VERTICAL, App.VERTICAL);
         referredTo = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_referred_to), getResources().getString(R.string.comorbidities_end_treatment_MH_referred_to_options_referred), "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         referredTo.setVisibility(View.GONE);
-        otherReasonForLossToFollowUp = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_if_other), "", "", 500, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        otherReasonForDiscontinuation = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_if_other), "", "", 500, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        otherReasonForLossToFollowUp = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_if_other), "", "", 500, null, InputType.TYPE_TEXT_FLAG_MULTI_LINE, App.HORIZONTAL, true);
+        otherReasonForLossToFollowUp.getEditText().setSingleLine(false);
+        otherReasonForDiscontinuation = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_if_other), "", "", 500, null, InputType.TYPE_TEXT_FLAG_MULTI_LINE, App.HORIZONTAL, true);
+        otherReasonForDiscontinuation.getEditText().setSingleLine(false);
         otherReasonForDiscontinuation.setVisibility(View.GONE);
         //reasonForReferral = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_referral_reason), getResources().getStringArray(R.array.comorbidities_end_treatment_MH_referral_reason_options), "", App.VERTICAL, App.VERTICAL);
         reasonForReferral = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_referral_reason), getResources().getString(R.string.comorbidities_end_treatment_MH_referral_reason_options_depression), "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
@@ -184,7 +186,7 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
                 MySpinner spinner = (MySpinner) parentView;
                 if (spinner == reasonForDiscontinuation.getSpinner()) {
                     lossToFollowup.setVisibility(View.GONE);
-//                    otherReasonForLossToFollowUp.setVisibility(View.GONE);
+                    otherReasonForLossToFollowUp.setVisibility(View.GONE);
                     referredTo.setVisibility(View.GONE);
                     reasonForReferral.setVisibility(View.GONE);
                     otherReasonForDiscontinuation.setVisibility(View.GONE);
@@ -192,7 +194,7 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
 
                     if (App.get(reasonForDiscontinuation).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_lost_followup))) {
                         lossToFollowup.setVisibility(View.VISIBLE);
-//                        lossToFollowup.getRadioGroup().getButtons().get(0).setChecked(true);
+                        lossToFollowup.getRadioGroup().getButtons().get(0).setChecked(true);
                     } else if (App.get(reasonForDiscontinuation).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_referred))) {
                         referredTo.setVisibility(View.VISIBLE);
                         reasonForReferral.setVisibility(View.VISIBLE);

@@ -187,7 +187,7 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
         diabetesFootScreeningFootwearAppropriate = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_foot_screening_footwear_appropriate), getResources().getStringArray(R.array.comorbidities_yes_no), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL);
         diabetesFootScreeningPreviousUlcer = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_foot_screening_previous_ulcer), getResources().getStringArray(R.array.comorbidities_yes_no), getResources().getString(R.string.no), App.VERTICAL, App.VERTICAL);
         diabetesFootScreeningDetailedClinicalNotes = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_foot_screening_clinical_notes), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        diabetesFootScreeningRecommendations = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_foot_screening_recommendations), getResources().getStringArray(R.array.comorbidities_foot_screening_recommendations_options), getResources().getString(R.string.comorbidities_foot_screening_recommendations_options_management), App.VERTICAL, App.VERTICAL);
+        diabetesFootScreeningRecommendations = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_foot_screening_recommendations), getResources().getStringArray(R.array.comorbidities_foot_screening_recommendations_options), getResources().getString(R.string.comorbidities_foot_screening_recommendations_options_12_month), App.VERTICAL, App.VERTICAL);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), diabetesFootScreeningMonthOfVisit.getSpinner(), diabetesFootScreeningRightFootExamined.getRadioGroup(), /*diabetesFootScreeningReasonRightFootNotExamined.getRadioGroup(),*/
@@ -836,27 +836,30 @@ public class ComorbiditiesDiabetesFootScreeningForm extends AbstractFormActivity
     }
 
     public void showInstrucrtions(int instructions) {
-        snackbar = Snackbar.make(mainContent, getResources().getString(instructions), Snackbar.LENGTH_INDEFINITE)
-                .setAction("CLOSE", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        snackbar.dismiss();
-                    }
-                });
+        try {
+            snackbar = Snackbar.make(mainContent, getResources().getString(instructions).toString(), Snackbar.LENGTH_INDEFINITE)
+                    .setAction("CLOSE", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            snackbar.dismiss();
+                        }
+                    });
 
-        // Changing message text color
-        //snackbar.setActionTextColor(Color.RED);
+            // Changing message text color
+            //snackbar.setActionTextColor(Color.RED);
 
-        //Changing Typeface of Snackbar Action text
-        TextView snackbarActionTextView = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_action);
-        snackbarActionTextView.setTextSize(20);
-        snackbarActionTextView.setTypeface(snackbarActionTextView.getTypeface(), Typeface.BOLD);
+            //Changing Typeface of Snackbar Action text
+            TextView snackbarActionTextView = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_action);
+            snackbarActionTextView.setTextSize(20);
+            snackbarActionTextView.setTypeface(snackbarActionTextView.getTypeface(), Typeface.BOLD);
 
-        // Setting Maximum lines for the textview in snackbar
-        View sbView = snackbar.getView();
-        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-        textView.setMaxLines(9);
-        snackbar.show();
+            // Setting Maximum lines for the textview in snackbar
+            View sbView = snackbar.getView();
+            TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+            textView.setMaxLines(9);
+            snackbar.show();
+        } catch (Exception e) {
+        }
     }
 
     @Override
