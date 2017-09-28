@@ -1204,7 +1204,6 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
                 snackbar.show();
             } else if (App.get(hadFoodInTwoHour).equals(getString(R.string.no))) {
                 bloodSugarResult.setVisibility(View.VISIBLE);
-                snackbar.dismiss();
             }
         }
     }
