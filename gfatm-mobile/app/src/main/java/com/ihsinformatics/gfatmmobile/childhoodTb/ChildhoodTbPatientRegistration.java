@@ -98,6 +98,9 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
     MyEditText secondaryLandlineNumber2;
     TitledEditText externalID;
 
+    String secondaryMobileNumberContactString;
+    String primaryMobileNumberContactString;
+
     Snackbar snackbar;
     ScrollView scrollView;
 
@@ -983,7 +986,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         observations.add(new String[]{"CONTACT PHONE NUMBER", primaryMobile});
 
         if(mobileNumberContact.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"CONTACT OWNER", App.get(mobileNumberContact).equals(getResources().getString(R.string.ctb_mother)) ? "MOTHER" :
+            primaryMobileNumberContactString=  App.get(mobileNumberContact).equals(getResources().getString(R.string.ctb_mother)) ? "MOTHER" :
                     (App.get(mobileNumberContact).equals(getResources().getString(R.string.ctb_father)) ? "FATHER" :
                             (App.get(mobileNumberContact).equals(getResources().getString(R.string.ctb_brother)) ? "BROTHER" :
                                     (App.get(mobileNumberContact).equals(getResources().getString(R.string.ctb_sister)) ? "SISTER" :
@@ -992,7 +995,8 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                                                             (App.get(mobileNumberContact).equals(getResources().getString(R.string.ctb_maternal_grandfather)) ? "MATERNAL GRANDFATHER" :
                                                                     (App.get(mobileNumberContact).equals(getResources().getString(R.string.ctb_maternal_grandmother)) ? "MATERNAL GRANDMOTHER" :
                                                                             (App.get(mobileNumberContact).equals(getResources().getString(R.string.ctb_uncle)) ? "UNCLE":
-                                                                                    (App.get(mobileNumberContact).equals(getResources().getString(R.string.ctb_aunt)) ? "AUNT" : "OTHER FAMILY RELATION")))))))))});
+                                                                                    (App.get(mobileNumberContact).equals(getResources().getString(R.string.ctb_aunt)) ? "AUNT" : "OTHER FAMILY RELATION")))))))));
+            observations.add(new String[]{"CONTACT OWNER",primaryMobileNumberContactString});
         }
 
         if(permissionMobileNumberContact.getVisibility()==View.VISIBLE){
@@ -1029,7 +1033,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         }
 
         if(secondaryMobileNumberContact.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"SECONDARY CONTACT OWNER", App.get(secondaryMobileNumberContact).equals(getResources().getString(R.string.ctb_mother)) ? "MOTHER" :
+            secondaryMobileNumberContactString =  App.get(secondaryMobileNumberContact).equals(getResources().getString(R.string.ctb_mother)) ? "MOTHER" :
                     (App.get(secondaryMobileNumberContact).equals(getResources().getString(R.string.ctb_father)) ? "FATHER" :
                             (App.get(secondaryMobileNumberContact).equals(getResources().getString(R.string.ctb_brother)) ? "BROTHER" :
                                     (App.get(secondaryMobileNumberContact).equals(getResources().getString(R.string.ctb_sister)) ? "SISTER" :
@@ -1038,7 +1042,9 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                                                             (App.get(secondaryMobileNumberContact).equals(getResources().getString(R.string.ctb_maternal_grandfather)) ? "MATERNAL GRANDFATHER" :
                                                                     (App.get(secondaryMobileNumberContact).equals(getResources().getString(R.string.ctb_maternal_grandmother)) ? "MATERNAL GRANDMOTHER" :
                                                                             (App.get(secondaryMobileNumberContact).equals(getResources().getString(R.string.ctb_uncle)) ? "UNCLE":
-                                                                                    (App.get(secondaryMobileNumberContact).equals(getResources().getString(R.string.ctb_aunt)) ? "AUNT" : "OTHER FAMILY RELATION")))))))))});
+                                                                                    (App.get(secondaryMobileNumberContact).equals(getResources().getString(R.string.ctb_aunt)) ? "AUNT" : "OTHER FAMILY RELATION")))))))));
+
+            observations.add(new String[]{"SECONDARY CONTACT OWNER",secondaryMobileNumberContactString});
         }
 
         if(permissionSecondaryMobileNumber.getVisibility()==View.VISIBLE){
@@ -1130,7 +1136,8 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                     if (!result.equals("SUCCESS"))
                         return result;
 
-                    result = serverService.savePersonAttributeType("Primary Contact Owner", App.get(mobileNumberContact), encounterId);
+                    String[][] concept = serverService.getConceptUuidAndDataType(primaryMobileNumberContactString);
+                    result = serverService.savePersonAttributeType("Primary Contact Owner", concept[0][0], encounterId);
                     if (!result.equals("SUCCESS"))
                         return result;
 
@@ -1142,7 +1149,9 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                             return result;
                     }
                     if(!(App.get(secondaryMobileNumber1).isEmpty() && App.get(secondaryMobileNumber2).isEmpty())) {
-                        result = serverService.savePersonAttributeType("Secondary Contact Owner", App.get(secondaryMobileNumberContact), encounterId);
+                        String[][] concept2 = serverService.getConceptUuidAndDataType(secondaryMobileNumberContactString);
+
+                        result = serverService.savePersonAttributeType("Secondary Contact Owner",concept2[0][0] , encounterId);
                         if (!result.equals("SUCCESS"))
                             return result;
                     }

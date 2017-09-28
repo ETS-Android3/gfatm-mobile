@@ -399,6 +399,186 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
             currentPatientTreatment.requestFocus();
             error = true;
         }
+        if(tbTreatmentPediasureDispersed.getVisibility()==View.VISIBLE && App.get(tbTreatmentPediasureDispersed).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            tbTreatmentPediasureDispersed.getQuestionView().setError(getString(R.string.empty_field));
+            tbTreatmentPediasureDispersed.requestFocus();
+            error = true;
+        }
+        if(tbTreatmentPediasureQuantity.getVisibility()==View.VISIBLE && App.get(tbTreatmentPediasureQuantity).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            tbTreatmentPediasureQuantity.getQuestionView().setError(getString(R.string.empty_field));
+            tbTreatmentPediasureQuantity.requestFocus();
+            error = true;
+        }
+
+
+
+        if(tbTreatmentVitaminBDispersed.getVisibility()==View.VISIBLE && App.get(tbTreatmentVitaminBDispersed).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            tbTreatmentVitaminBDispersed.getQuestionView().setError(getString(R.string.empty_field));
+            tbTreatmentVitaminBDispersed.requestFocus();
+            error = true;
+        }
+        if(tbTreatmentVitaminBQuantity.getVisibility()==View.VISIBLE && App.get(tbTreatmentVitaminBQuantity).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            tbTreatmentVitaminBQuantity.getQuestionView().setError(getString(R.string.empty_field));
+            tbTreatmentVitaminBQuantity.requestFocus();
+            error = true;
+        }
+
+
+        if(tbTreatmentIronDispersed.getVisibility()==View.VISIBLE && App.get(tbTreatmentIronDispersed).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            tbTreatmentIronDispersed.getQuestionView().setError(getString(R.string.empty_field));
+            tbTreatmentIronDispersed.requestFocus();
+            error = true;
+        }
+        if(tbTreatmentIronQuantity.getVisibility()==View.VISIBLE && App.get(tbTreatmentIronQuantity).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            tbTreatmentIronQuantity.getQuestionView().setError(getString(R.string.empty_field));
+            tbTreatmentIronQuantity.requestFocus();
+            error = true;
+        }
+
+
+        if(tbTreatmentAnthelminthicDispersed.getVisibility()==View.VISIBLE && App.get(tbTreatmentAnthelminthicDispersed).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            tbTreatmentAnthelminthicDispersed.getQuestionView().setError(getString(R.string.empty_field));
+            tbTreatmentAnthelminthicDispersed.requestFocus();
+            error = true;
+        }
+        if(tbTreatmentAnthelminthicQuantity.getVisibility()==View.VISIBLE && App.get(tbTreatmentAnthelminthicQuantity).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            tbTreatmentAnthelminthicQuantity.getQuestionView().setError(getString(R.string.empty_field));
+            tbTreatmentAnthelminthicQuantity.requestFocus();
+            error = true;
+        }
+
+        if(tbTreatmentCalpolDispersed.getVisibility()==View.VISIBLE && App.get(tbTreatmentCalpolDispersed).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            tbTreatmentCalpolDispersed.getQuestionView().setError(getString(R.string.empty_field));
+            tbTreatmentCalpolDispersed.requestFocus();
+            error = true;
+        }
+        if(tbTreatmentCalpolQuantity.getVisibility()==View.VISIBLE && App.get(tbTreatmentCalpolQuantity).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            tbTreatmentCalpolQuantity.getQuestionView().setError(getString(R.string.empty_field));
+            tbTreatmentCalpolQuantity.requestFocus();
+            error = true;
+        }
+
+
+
+
+        if(nonTBVitaminBDispersed.getVisibility()==View.VISIBLE && App.get(nonTBVitaminBDispersed).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            nonTBVitaminBDispersed.getQuestionView().setError(getString(R.string.empty_field));
+            nonTBVitaminBDispersed.requestFocus();
+            error = true;
+        }
+        if(nonTBVitaminBQuantity.getVisibility()==View.VISIBLE && App.get(nonTBVitaminBQuantity).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            nonTBVitaminBQuantity.getQuestionView().setError(getString(R.string.empty_field));
+            nonTBVitaminBQuantity.requestFocus();
+            error = true;
+        }
+
+        if(nonTBIronDispersed.getVisibility()==View.VISIBLE && App.get(nonTBIronDispersed).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            nonTBIronDispersed.getQuestionView().setError(getString(R.string.empty_field));
+            nonTBIronDispersed.requestFocus();
+            error = true;
+        }
+        if(nonTBIronQuantity.getVisibility()==View.VISIBLE && App.get(nonTBIronQuantity).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            nonTBIronQuantity.getQuestionView().setError(getString(R.string.empty_field));
+            nonTBIronQuantity.requestFocus();
+            error = true;
+        }
+
+        if(nonTBAnthelminthicDispersed.getVisibility()==View.VISIBLE && App.get(nonTBAnthelminthicDispersed).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            nonTBAnthelminthicDispersed.getQuestionView().setError(getString(R.string.empty_field));
+            nonTBAnthelminthicDispersed.requestFocus();
+            error = true;
+        }
+        if(nonTBAnthelminthicQuantity.getVisibility()==View.VISIBLE && App.get(nonTBAnthelminthicQuantity).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            nonTBAnthelminthicQuantity.getQuestionView().setError(getString(R.string.empty_field));
+            nonTBAnthelminthicQuantity.requestFocus();
+            error = true;
+        }
+
+        if(nonTBCalpolDispersed.getVisibility()==View.VISIBLE && App.get(nonTBCalpolDispersed).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            nonTBCalpolDispersed.getQuestionView().setError(getString(R.string.empty_field));
+            nonTBCalpolDispersed.requestFocus();
+            error = true;
+        }
+        if(nonTBCalpolQuantity.getVisibility()==View.VISIBLE && App.get(nonTBCalpolQuantity).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            nonTBCalpolQuantity.getQuestionView().setError(getString(R.string.empty_field));
+            nonTBCalpolQuantity.requestFocus();
+            error = true;
+        }
+
+
+
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
@@ -1254,7 +1434,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                     cb.setChecked(true);
                     tbTreatmentAnthelminthicDispersed.setVisibility(View.VISIBLE);
                 }
-                if (cb.getText().equals(getResources().getString(R.string.ctb_calpol)) && additionalTreatment.contains("STREPTOMYCIN")) {
+                if (cb.getText().equals(getResources().getString(R.string.ctb_calpol)) && additionalTreatment.contains("CALPOL")) {
                     cb.setChecked(true);
                     tbTreatmentCalpolDispersed.setVisibility(View.VISIBLE);
                 }
@@ -1347,67 +1527,104 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
            if (group == tbTreatmentPediasureDispersed.getRadioGroup()) {
+               tbTreatmentPediasureDispersed.getQuestionView().setError(null);
                if (tbTreatmentPediasureDispersed.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
                    tbTreatmentPediasureQuantity.setVisibility(View.VISIBLE);
                } else {
                    tbTreatmentPediasureQuantity.setVisibility(View.GONE);
                }
            }
+           else if (group == tbTreatmentPediasureQuantity.getRadioGroup()) {
+               tbTreatmentPediasureQuantity.getQuestionView().setError(null);
+           }
            else if (group == tbTreatmentVitaminBDispersed.getRadioGroup()) {
+               tbTreatmentVitaminBDispersed.getQuestionView().setError(null);
                    if (tbTreatmentVitaminBDispersed.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
                        tbTreatmentVitaminBQuantity.setVisibility(View.VISIBLE);
                    } else {
                        tbTreatmentVitaminBQuantity.setVisibility(View.GONE);
                    }
            }
+           else if (group == tbTreatmentVitaminBQuantity.getRadioGroup()) {
+               tbTreatmentVitaminBQuantity.getQuestionView().setError(null);
+           }
+
            else if (group == tbTreatmentIronDispersed.getRadioGroup()) {
+               tbTreatmentIronDispersed.getQuestionView().setError(null);
                if (tbTreatmentIronDispersed.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
                    tbTreatmentIronQuantity.setVisibility(View.VISIBLE);
                } else {
                    tbTreatmentIronQuantity.setVisibility(View.GONE);
                }
            }
+           else if (group == tbTreatmentIronQuantity.getRadioGroup()) {
+               tbTreatmentIronQuantity.getQuestionView().setError(null);
+           }
            else if (group == tbTreatmentAnthelminthicDispersed.getRadioGroup()) {
+               tbTreatmentAnthelminthicDispersed.getQuestionView().setError(null);
                if (tbTreatmentAnthelminthicDispersed.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
                    tbTreatmentAnthelminthicQuantity.setVisibility(View.VISIBLE);
                } else {
                    tbTreatmentAnthelminthicQuantity.setVisibility(View.GONE);
                }
            }
+           else if (group == tbTreatmentAnthelminthicQuantity.getRadioGroup()) {
+               tbTreatmentAnthelminthicQuantity.getQuestionView().setError(null);
+           }
            else if (group == tbTreatmentCalpolDispersed.getRadioGroup()) {
+               tbTreatmentCalpolDispersed.getQuestionView().setError(null);
                if (tbTreatmentCalpolDispersed.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
                    tbTreatmentCalpolQuantity.setVisibility(View.VISIBLE);
                } else {
                    tbTreatmentCalpolQuantity.setVisibility(View.GONE);
                }
            }
+           else if (group == tbTreatmentCalpolQuantity.getRadioGroup()) {
+               tbTreatmentCalpolQuantity.getQuestionView().setError(null);
+           }
            else if (group == nonTBVitaminBDispersed.getRadioGroup()) {
+               nonTBVitaminBDispersed.getQuestionView().setError(null);
                if (nonTBVitaminBDispersed.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
                    nonTBVitaminBQuantity.setVisibility(View.VISIBLE);
                } else {
                    nonTBVitaminBQuantity.setVisibility(View.GONE);
                }
            }
+           else if (group == nonTBVitaminBQuantity.getRadioGroup()) {
+               nonTBVitaminBQuantity.getQuestionView().setError(null);
+           }
            else if (group == nonTBIronDispersed.getRadioGroup()) {
+               nonTBIronDispersed.getQuestionView().setError(null);
                if (nonTBIronDispersed.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
                    nonTBIronQuantity.setVisibility(View.VISIBLE);
                } else {
                    nonTBIronQuantity.setVisibility(View.GONE);
                }
            }
+           else if (group == nonTBIronQuantity.getRadioGroup()) {
+               nonTBIronQuantity.getQuestionView().setError(null);
+           }
            else if (group == nonTBAnthelminthicDispersed.getRadioGroup()) {
+               nonTBAnthelminthicDispersed.getQuestionView().setError(null);
                if (nonTBAnthelminthicDispersed.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
                    nonTBAnthelminthicQuantity.setVisibility(View.VISIBLE);
                } else {
                    nonTBAnthelminthicQuantity.setVisibility(View.GONE);
                }
            }
+           else if (group == nonTBAnthelminthicQuantity.getRadioGroup()) {
+               nonTBAnthelminthicQuantity.getQuestionView().setError(null);
+           }
            else if (group == nonTBCalpolDispersed.getRadioGroup()) {
+               nonTBCalpolDispersed.getQuestionView().setError(null);
                if (nonTBCalpolDispersed.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
                    nonTBCalpolQuantity.setVisibility(View.VISIBLE);
                } else {
                    nonTBCalpolQuantity.setVisibility(View.GONE);
                }
+           }
+           else if (group == nonTBCalpolQuantity.getRadioGroup()) {
+               nonTBCalpolQuantity.getQuestionView().setError(null);
            }
     }
 
