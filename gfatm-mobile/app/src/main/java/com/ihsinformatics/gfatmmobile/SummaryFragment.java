@@ -576,14 +576,274 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
     }
 
     public void fillFastPatientView(){
+        String externalId =  serverService.getLatestObsValue(App.getPatientId(), "FAST-Presumptive Information", "CONTACT EXTERNAL ID");
+        if(externalId == null)
+            externalId = "-";
+        else
+            externalId = App.convertToTitleCase(externalId);
 
-        String[][] dataset = { {"rabbia", "hassan", null},
-                {"hadi","hassan", null},
-                {"mohammad","hassan", null},
-                {"farzana","hassan", null}};
+        String screeningFacility =  serverService.getEncounterLocation(App.getPatientId(), "FAST-Presumptive");
+        if(screeningFacility == null)
+            screeningFacility= "-";
+
+        String presumptive = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST-Presumptive");
+        if(presumptive == null)
+            presumptive= "-";
+
+        String gxpResult=null,rifResult=null;
+        String xpertResultOderId = serverService.getLatestObsValue(App.getPatientId(), "FAST-GXP Specimen Collection","ORDER ID");
+        if (xpertResultOderId != null) {
+            gxpResult = serverService.getObsValueByObs(App.getPatientId(), "FAST-GXP Test", "ORDER ID", xpertResultOderId, "GENEXPERT MTB/RIF RESULT");
+            rifResult = serverService.getObsValueByObs(App.getPatientId(), "FAST-GXP Test", "ORDER ID", xpertResultOderId, "RIF RESISTANCE RESULT");
+            if(gxpResult==null){
+                gxpResult = "-";
+            }
+            if(rifResult==null){
+                rifResult = "-";
+            }
+        }
+        else{
+            gxpResult = "-";
+            rifResult = "-";
+        }
+
+
+
+        String cxrResultOrderID = null;
+        String cad4TbScore=null,radioLogicalDiagnosis=null;
+        String cxrDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST-Screening CXR Test Order");
+        if(cxrDate!=null) {
+            cxrResultOrderID = serverService.getLatestObsValue(App.getPatientId(), "FAST-Screening CXR Test Order","ORDER ID");
+            if (cxrResultOrderID != null) {
+                cad4TbScore = serverService.getObsValueByObs(App.getPatientId(), "FAST-Screening CXR Test Result", "ORDER ID", cxrResultOrderID, "CHEST X-RAY SCORE");
+                radioLogicalDiagnosis = serverService.getObsValueByObs(App.getPatientId(), "FAST-Screening CXR Test Result", "ORDER ID", cxrResultOrderID, "RADIOLOGICAL DIAGNOSIS");
+                if (cad4TbScore == null) {
+                    cad4TbScore = "-";
+                }
+                if(radioLogicalDiagnosis==null){
+                    radioLogicalDiagnosis="-";
+                }
+            } else {
+                cad4TbScore = "-";
+                radioLogicalDiagnosis="-";
+            }
+        }else{
+            cxrDate= "-";
+            cad4TbScore = "-";
+            radioLogicalDiagnosis="-";
+        }
+
+
+        String sputumResultOrderID = null;
+        String smearResult=null;
+        String sputumDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST-AFB Smear Test Order");
+        if(sputumDate!=null) {
+            sputumResultOrderID = serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Order", "TEST CONTEXT STATUS", "BASELINE", "ORDER ID");
+            if (sputumResultOrderID != null) {
+                smearResult = serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", xpertResultOderId, "SPUTUM FOR ACID FAST BACILLI");
+                if (smearResult == null) {
+                    smearResult = "-";
+                }
+
+            } else {
+                smearResult = "-";
+            }
+        }else{
+            sputumDate= "-";
+            smearResult = "-";
+        }
+
+        String referredTransfer = serverService.getLatestObsValue(App.getPatientId(), "FAST-Referral Form","PATIENT BEING REFEREED OUT OR TRANSFERRED OUT");
+        if(referredTransfer==null){
+            referredTransfer="-";
+        }
+
+        String referralSite = serverService.getLatestObsValue(App.getPatientId(), "FAST-Referral Form","REFERRING FACILITY NAME");
+        if(referralSite==null){
+            referralSite="-";
+        }
+
+        String tbPatient = serverService.getLatestObsValue(App.getPatientId(), "FAST-Treatment Initiation","PATIENT HAVE TB");
+        if(tbPatient==null){
+            tbPatient="-";
+        }
+
+        String diagnosisType = serverService.getLatestObsValue(App.getPatientId(), "FAST-Treatment Initiation","TUBERCULOSIS DIAGNOSIS METHOD");
+        if(diagnosisType==null){
+            diagnosisType="-";
+        }
+
+        String typeOfTB = serverService.getLatestObsValue(App.getPatientId(), "FAST-Treatment Initiation","SITE OF TUBERCULOSIS DISEASE");
+        if(typeOfTB==null){
+            typeOfTB="-";
+        }
+
+        String extraPulmonarySite = serverService.getLatestObsValue(App.getPatientId(), "FAST-Treatment Initiation","EXTRA PULMONARY SITE");
+        if(extraPulmonarySite==null){
+            extraPulmonarySite="-";
+        }
+
+        String patientType = serverService.getLatestObsValue(App.getPatientId(), "FAST-Treatment Initiation","TB PATIENT TYPE");
+        if(patientType==null){
+            patientType="-";
+        }
+
+        String tbCategory = serverService.getLatestObsValue(App.getPatientId(), "FAST-Treatment Initiation","TB CATEGORY");
+        if(tbCategory==null){
+            tbCategory="-";
+        }
+
+        String treatmentInitiated = serverService.getLatestObsValue(App.getPatientId(), "FAST-Treatment Initiation","TREATMENT INITIATED");
+        if(treatmentInitiated==null){
+            treatmentInitiated="-";
+        }
+
+        String reasonTreatmentNotInitiated = serverService.getLatestObsValue(App.getPatientId(), "FAST-Treatment Initiation","TREATMENT NOT INITIATED REASON");
+        if(reasonTreatmentNotInitiated==null){
+            reasonTreatmentNotInitiated="-";
+        }
+
+
+        String tbRegisrationNo = serverService.getLatestObsValue(App.getPatientId(), "FAST-Treatment Initiation","TB REGISTRATION NUMBER");
+        if(tbRegisrationNo==null){
+            tbRegisrationNo="-";
+        }
+
+        String returnVisitDate = serverService.getLatestObsValue(App.getPatientId(), "FAST-Treatment Initiation","RETURN VISIT DATE");
+        if(returnVisitDate==null){
+            returnVisitDate="-";
+        }
+        String followupDate = serverService.getLatestEncounterDateTime(App.getPatientId(),"FAST-Treatment Followup");
+        if(followupDate==null) {
+            followupDate = "-";
+        }
+
+
+
+        String smearResult2=null;
+
+        String afbSmearOrderId2 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Order", "FOLLOW-UP MONTH", "2", "ORDER ID");
+        if(afbSmearOrderId2==null){
+            smearResult2="-";
+        }else{
+            smearResult2 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", afbSmearOrderId2, "SPUTUM FOR ACID FAST BACILLI");
+            if(smearResult2==null){
+                smearResult2="-";
+            }
+        }
+
+        String afbSmearOrderId3 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Order", "FOLLOW-UP MONTH", "3", "ORDER ID");
+        String smearResult3=null;
+        if(afbSmearOrderId3==null){
+            smearResult3="-";
+        }else{
+            smearResult3 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", afbSmearOrderId3, "SPUTUM FOR ACID FAST BACILLI");
+            if(smearResult3==null){
+                smearResult3="-";
+            }
+        }
+
+        String smearResult5=null;
+        String afbSmearOrderId5 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Order", "FOLLOW-UP MONTH", "5", "ORDER ID");
+        if(afbSmearOrderId5==null){
+            smearResult5="-";
+        }else{
+            smearResult5 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", afbSmearOrderId5, "SPUTUM FOR ACID FAST BACILLI");
+            if(smearResult5==null){
+                smearResult5="-";
+            }
+        }
+
+        String smearResult6=null;
+        String afbSmearOrderId6 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Order", "FOLLOW-UP MONTH", "6", "ORDER ID");
+        if(afbSmearOrderId6==null){
+            smearResult6="-";
+        }else{
+            smearResult6 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", afbSmearOrderId6, "SPUTUM FOR ACID FAST BACILLI");
+            if(smearResult6==null){
+                smearResult6="-";
+            }
+        }
+
+        String smearResult7=null;
+        String afbSmearOrderId7 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Order", "FOLLOW-UP MONTH", "7", "ORDER ID");
+        if(afbSmearOrderId7==null){
+            smearResult7="-";
+        }else{
+            smearResult7 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", afbSmearOrderId7, "SPUTUM FOR ACID FAST BACILLI");
+            if(smearResult7==null){
+                smearResult7="-";
+            }
+        }
+
+        String smearResult8=null;
+        String afbSmearOrderId8 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Order", "FOLLOW-UP MONTH", "8", "ORDER ID");
+        if(afbSmearOrderId8==null){
+            smearResult8="-";
+        }else{
+            smearResult8 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", afbSmearOrderId8, "SPUTUM FOR ACID FAST BACILLI");
+            if(smearResult8==null){
+                smearResult8="-";
+            }
+        }
+
+        String patientTreatmentPlan = serverService.getLatestObsValue(App.getPatientId(),"FAST-Treatment Followup","TREATMENT PLAN");
+        if(patientTreatmentPlan==null) {
+            patientTreatmentPlan = "-";
+        }
+
+        String treatmentOutcome = serverService.getLatestObsValue(App.getPatientId(),"FAST-End of Followup","TUBERCULOUS TREATMENT OUTCOME");
+        if(treatmentOutcome==null) {
+            treatmentOutcome = "-";
+        }
+
+
+
+
+        String[][] dataset = {{getResources().getString(R.string.patient_id), App.getPatient().getPatientId(), null},
+                {getResources().getString(R.string.external_id), externalId, null},
+                {getResources().getString(R.string.screening_facility), screeningFacility, null},
+                {getResources().getString(R.string.presumptive_date), presumptive, null},
+                {getResources().getString(R.string.gxp_result), App.convertToTitleCase(gxpResult), null},
+                {getResources().getString(R.string.rif_result), App.convertToTitleCase(rifResult), null},
+                {getResources().getString(R.string.cxr_date), cxrDate, null},
+                {getResources().getString(R.string.cxr_cad4tb_score),App.convertToTitleCase(cad4TbScore), null},
+
+                {getResources().getString(R.string.radiological_diagnosis), App.convertToTitleCase(radioLogicalDiagnosis), null},
+                {getResources().getString(R.string.sputum_submission_date), sputumDate, null},
+                {getResources().getString(R.string.smear_result), App.convertToTitleCase(smearResult), null},
+                {getResources().getString(R.string.referred_transferred), App.convertToTitleCase(referredTransfer),null},
+                {getResources().getString(R.string.referral_site), referralSite, null},
+                {getResources().getString(R.string.tb_patient), App.convertToTitleCase(tbPatient), null},
+                {getResources().getString(R.string.diagnosis_type), App.convertToTitleCase(diagnosisType), null},
+                {getResources().getString(R.string.type_of_tb), App.convertToTitleCase(typeOfTB), null},
+                {getResources().getString(R.string.extra_pulmonary_site), App.convertToTitleCase(extraPulmonarySite), null},
+                {getResources().getString(R.string.patient_type), App.convertToTitleCase(patientType), null},
+                {getResources().getString(R.string.tb_category), App.convertToTitleCase(tbCategory), null},
+
+
+                {getResources().getString(R.string.treatment_initiated), App.convertToTitleCase(treatmentInitiated), null},
+                {getResources().getString(R.string.reason_not_initiated),App.convertToTitleCase(reasonTreatmentNotInitiated), null},
+                {getResources().getString(R.string.tb_registration_no), tbRegisrationNo, null},
+                {getResources().getString(R.string.return_visit_date), returnVisitDate, null},
+                {getResources().getString(R.string.followup_date), App.convertToTitleCase(followupDate), null},
+
+                {getResources().getString(R.string.smear_result_2), App.convertToTitleCase(smearResult2), null},
+
+                {getResources().getString(R.string.smear_result_3), App.convertToTitleCase(smearResult3), null},
+
+                {getResources().getString(R.string.smear_result_5), App.convertToTitleCase(smearResult5), null},
+
+                {getResources().getString(R.string.smear_result_6), App.convertToTitleCase(smearResult6), null},
+
+                {getResources().getString(R.string.smear_result_7), App.convertToTitleCase(smearResult7), null},
+
+                {getResources().getString(R.string.smear_result_8), App.convertToTitleCase(smearResult8), null},
+
+                {getResources().getString(R.string.patient_treatment_plan), App.convertToTitleCase(patientTreatmentPlan), null},
+                {getResources().getString(R.string.treatment_outcome), App.convertToTitleCase(treatmentOutcome), null}};
 
         fillContent(dataset);
-
     }
 
     public void fillPetPatientView(){
