@@ -646,4 +646,34 @@
     <string name="referal_forms">Referal Forms:</string>
     <string name="contact_registry_forms">Contact Registry Forms:</string>
 
+    <!-- FAST Patient View -->
+    <string name="cxr_date">CXR Date:</string>
+    <string name="cxr_cad4tb_score">CAD4TB Score:</string>
+    <string name="radiological_diagnosis">Radiological Diagnosis:</string>
+    <string name="sputum_submission_date">Sputum Submission Date:</string>
+    <string name="smear_result">Smear Result:</string>
+    <string name="referred_transferred">Referred or Transferred:</string>
+    <string name="referral_site">Referral Site</string>
+    <string name="tb_patient">TB Patient:</string>
+    <string name="diagnosis_type">Diagnosis Type:</string>
+    <string name="type_of_tb">Type of TB:</string>
+    <string name="extra_pulmonary_site">Extra Pulmonary Site:</string>
+    <string name="patient_type">Patient Type:</string>
+    <string name="tb_category">TB Category:</string>
+    <string name="treatment_initiated">Treatment Initiated:</string>
+    <string name="reason_not_initiated">Reason treatment not initiated:</string>
+    <string name="return_visit_date">Return visit Date:</string>
+    <string name="patient_treatment_plan">Patient Treatment Plan (Latest):</string>
+    <string name="followup_date">Followup Date (Latest):</string>
+    <string name="smear_result_2">Smear Result (Followup month:2):</string>
+    <string name="smear_result_3">Smear Result (Followup month:3):</string>
+    <string name="smear_result_5">Smear Result (Followup month:5):</string>
+    <string name="smear_result_6">Smear Result (Followup month:6):</string>
+    <string name="smear_result_7">Smear Result (Followup month:7):</string>
+    <string name="smear_result_8">Smear Result (Followup month:8):</string>
+    <string name="treatment_outcome">Treatment Outcome:</string>
+
+    <string name="gxp_result">GXP Result:</string>
+    <string name="rif_result">RIF Result:</string>
+
 </resources>
