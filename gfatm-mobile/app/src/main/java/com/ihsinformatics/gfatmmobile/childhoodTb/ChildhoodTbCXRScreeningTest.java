@@ -789,7 +789,7 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
                     }
                 }
 
-                else if (obs[0][0].equals("ABNORMAL DETAILED DIAGNOSIS")) {
+                else if (obs[0][0].equals("ABNORMAL, DETAILED DIAGNOSIS")) {
                     for (CheckBox cb : abnormalDiagnosis.getCheckedBoxes()) {
                         if (cb.getText().equals(getResources().getString(R.string.ctb_adenopathy)) && obs[0][1].equals("ADENOPATHY")) {
                             cb.setChecked(true);
