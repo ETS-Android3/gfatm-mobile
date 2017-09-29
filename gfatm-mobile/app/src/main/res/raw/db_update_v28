@@ -2,16 +2,13 @@
 update OR IGNORE concept set full_name='CHEST XRAY', var_name='chest_xray' where uuid = '12AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 update OR IGNORE concept set uuid='d4d0c1ca-6253-4e31-8dab-f1fec4f1e892' where full_name = 'RELAPSE OR CHANGE IN TB CATEGORY';
 
--- insert ---
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT SCREENED FOR MENTAL HEALTH','mental_health_screening_status','Coded','73483647-aaad-4b3e-9431-d9d3de8e95b3');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LOSS OF PROTECTIVE SENSATION, 3 MONTH FOLLOWUP','loss_of_protective_sensation_3_month_followup','N/A','9cd61137-0fbf-4382-87af-160afd7b96c5');INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT SCREENED FOR MENTAL HEALTH','mental_health_screening_status','Coded','73483647-aaad-4b3e-9431-d9d3de8e95b3');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ABNORMAL, DETAILED DIAGNOSIS','abnormal_detailed_diagnosis','Coded','ef5567b2-3d12-49b7-b6c6-6443af0078e5');
+-- clean CXR Data
+update OR IGNORE obs set value = 'CHEST XRAY' where conceptName = 'TYPE OF X RAY' and value = 'RADIOLOGICAL DIAGNOSIS'
 
--- Add autoSyncTries column in forms table
-CREATE TABLE IF NOT EXISTS FORM2 ( id INTEGER PRIMARY KEY AUTOINCREMENT, program TEXT NOT NULL COLLATE NOCASE, username TEXT NOT NULL COLLATE NOCASE, form_name TEXT NOT NULL COLLATE NOCASE, p_id TEXT COLLATE NOCASE, form_date DATETIME, timestamp DATETIME NOT NULL, location TEXT NOT NULL COLLATE NOCASE, form_object BLOB COLLATE NOCASE, encounter_id INT COLLATE NOCASE, autoSyncTries INT DEFAULT 0);
-INSERT INTO FORM2 (id, program, username, form_name, p_id, form_date, timestamp, location, form_object, encounter_id) SELECT * FROM FORM;
-DROP TABLE FORM;
-ALTER TABLE FORM2 RENAME TO FORM;
-                                                                                                                                                                                                               INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LOSS OF PROTECTIVE SENSATION, 3 MONTH FOLLOWUP','loss_of_protective_sensation_3_month_followup','N/A','9cd61137-0fbf-4382-87af-160afd7b96c5');
+-- insert ---
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT SCREENED FOR MENTAL HEALTH','mental_health_screening_status','Coded','73483647-aaad-4b3e-9431-d9d3de8e95b3');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('LOSS OF PROTECTIVE SENSATION, 3 MONTH FOLLOWUP','loss_of_protective_sensation_3_month_followup','N/A','9cd61137-0fbf-4382-87af-160afd7b96c5');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('ABNORMAL, DETAILED DIAGNOSIS','abnormal_detailed_diagnosis','Coded','ef5567b2-3d12-49b7-b6c6-6443af0078e5');
+
 
 
