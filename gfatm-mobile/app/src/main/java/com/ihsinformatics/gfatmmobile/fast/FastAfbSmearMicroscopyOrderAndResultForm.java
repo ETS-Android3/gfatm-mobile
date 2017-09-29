@@ -890,11 +890,11 @@ public class FastAfbSmearMicroscopyOrderAndResultForm extends AbstractFormActivi
             if (formDate.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"DATE OF  TEST RESULT RECEIVED", App.getSqlDateTime(formDateCalendar)});
 
-            if (smearResult.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"SPUTUM FOR ACID FAST BACILLI", App.get(smearResult).equals(getResources().getString(R.string.fast_negative)) ? "PATIENT COULD NOT BE CONTACTED" :
-                        (App.get(smearResult).equals(getResources().getString(R.string.fast_scanty_3_to_24)) ? "PATIENT LEFT THE CITY" :
-                                (App.get(smearResult).equals(getResources().getString(R.string.fast_1_plus)) ? "REFUSAL OF TREATMENT BY PATIENT" :
-                                        (App.get(smearResult).equals(getResources().getString(R.string.fast_2_plus)) ? "DIED" : "OTHER REASON FOR TREATMENT NOT INITIATED")))});
+            observations.add(new String[]{"SPUTUM FOR ACID FAST BACILLI", App.get(smearResult).equals(getResources().getString(R.string.ctb_negative)) ? "NEGATIVE" :
+                    (App.get(smearResult).equals(getResources().getString(R.string.ctb_scanty_3_24)) ? "SCANTY 3 - 24" :
+                            (App.get(smearResult).equals(getResources().getString(R.string.ctb_1_positive)) ? "ONE PLUS" :
+                                    (App.get(smearResult).equals(getResources().getString(R.string.ctb_2_positive)) ? "TWO PLUS" :
+                                            "THREE PLUS")))});
 
             if (noAfb.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"AFB COUNT", App.get(noAfb)});

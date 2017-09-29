@@ -1266,7 +1266,7 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
                     presumptiveTbCxr.setVisibility(View.VISIBLE);
                 }
 
-                else if (obs[0][0].equals("ABNORMAL DETAILED DIAGNOSIS")) {
+                else if (obs[0][0].equals("ABNORMAL, DETAILED DIAGNOSIS")) {
                     for (CheckBox cb : abnormalDetailedDiagnosis.getCheckedBoxes()) {
                         if (cb.getText().equals(getResources().getString(R.string.fast_adenopathy)) && obs[0][1].equals("ADENOPATHY")) {
                             cb.setChecked(true);
