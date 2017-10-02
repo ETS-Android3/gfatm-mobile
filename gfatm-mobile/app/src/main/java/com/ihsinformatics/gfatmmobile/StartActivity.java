@@ -146,6 +146,8 @@ public class StartActivity extends Activity {
                 finish();
             } else {
                 Intent intent = new Intent(context, LoginActivity.class);
+                ServerService service = new ServerService(context);
+                service.resetScreeningCounts();
                 startActivity(intent);
                 finish();
             }
