@@ -573,7 +573,9 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
                     (App.get(referralWithinOpd).equals(getResources().getString(R.string.fast_chesttbclinic_title)) ? "CHEST MEDICINE DEPARTMENT" :
                             (App.get(referralWithinOpd).equals(getResources().getString(R.string.fast_gynaeobstetrics_title)) ? "OBSTETRICS AND GYNECOLOGY DEPARTMENT" :
                                     (App.get(referralWithinOpd).equals(getResources().getString(R.string.fast_surgery_title)) ? "GENERAL SURGERY DEPARTMENT" :
-                                            (App.get(referralWithinOpd).equals(getResources().getString(R.string.fast_emergency_title)) ? "EMERGENCY DEPARTMENT" : "OTHER TYPE OF OPD OR WARD"))))});
+                                            (App.get(referralWithinOpd).equals(getResources().getString(R.string.fast_emergency_title)) ? "EMERGENCY DEPARTMENT" :
+                                                    (App.get(referralWithinOpd).equals(getResources().getString(R.string.fast_diabetic)) ? "DIABETIC" :
+                                                            "OTHER TYPE OF OPD OR WARD")))))});
 
         if (referralWithinOpdOther.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER TYPE OF OPD OR WARD", App.get(referralWithinOpdOther)});
@@ -840,7 +842,8 @@ public class FastPatientLocationForm extends AbstractFormActivity implements Rad
                                 (obs[0][1].equals("OBSTETRICS AND GYNECOLOGY DEPARTMENT") ? getResources().getString(R.string.fast_gynaeobstetrics_title) :
                                         (obs[0][1].equals("GENERAL SURGERY DEPARTMENT") ? getResources().getString(R.string.fast_surgery_title) :
                                                 (obs[0][1].equals("EMERGENCY DEPARTMENT") ? getResources().getString(R.string.fast_er_title) :
-                                                        getResources().getString(R.string.fast_other_title)))));
+                                                        (obs[0][1].equals("DIABETIC") ? getResources().getString(R.string.fast_diabetic) :
+                                                        getResources().getString(R.string.fast_other_title))))));
 
                 referralWithinOpd.getSpinner().selectValue(value);
                 referralWithinOpd.setVisibility(View.VISIBLE);
