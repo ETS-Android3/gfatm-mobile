@@ -298,6 +298,7 @@ public class MainActivity extends AppCompatActivity
             if (!App.getPatient().getPatientId().equals(""))
                 id.setVisibility(View.VISIBLE);
             patientId.setText(App.getPatient().getPatientId());
+            update.setVisibility(View.VISIBLE);
         }
 
         if (!App.getProgram().equals("")) {
@@ -346,6 +347,16 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
+
+        String d = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+        String v = App.getLastLogin();
+        if (!(App.getAutoLogin().equals("Enabled") && App.getLastLogin().equals(d))) {
+            Intent intent = new Intent(context, LoginActivity.class);
+            ServerService service = new ServerService(context);
+            service.resetScreeningCounts();
+            startActivity(intent);
+            finish();
+        }
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
@@ -436,8 +447,9 @@ public class MainActivity extends AppCompatActivity
                     fragmentSearch.updateSummaryFragment();
                     showFormFragment();
 
-                    update.setVisibility(View.VISIBLE);
                 }
+
+                update.setVisibility(View.VISIBLE);
             }
 
 
