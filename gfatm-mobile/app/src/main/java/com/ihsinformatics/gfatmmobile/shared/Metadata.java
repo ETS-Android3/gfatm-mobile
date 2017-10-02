@@ -41,4 +41,6 @@ public class Metadata {
 
     public static final String WEIGHT_PERCENTILE = "weight_percentile_measurement";
 
+    public static final String SCREENING_COUNT = "screening_form_count";
+
 }
