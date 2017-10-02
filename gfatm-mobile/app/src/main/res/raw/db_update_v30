@@ -1,0 +1,8 @@
+-- Create screening form count table
+create table IF NOT EXISTS screening_form_count(username text, today datetime, form text, counts int DEFAULT 0);
+
+-- Add createdBy column in encounter table
+CREATE TABLE IF NOT EXISTS encounter2 ( encounter_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, uuid VARCHAR, encounterType VARCHAR, encounterDatetime datetime, encounterLocation VARCHAR, patientId INT NOT NULL COLLATE NOCASE, form_date VARCHAR, dateCreated datetime default current_timestamp,createdBy VARCHAR, FOREIGN KEY (patientId) REFERENCES PATIENT(patient_id));
+INSERT INTO encounter2 (encounter_id, uuid, encounterType, encounterDatetime, encounterLocation, patientId, form_date, dateCreated ) SELECT * FROM encounter;
+DROP TABLE encounter;
+ALTER TABLE encounter2 RENAME TO encounter;
