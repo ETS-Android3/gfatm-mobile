@@ -89,11 +89,19 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         patientAttribute.setVisibility(View.GONE);
         interventionPatientView.setVisibility(View.GONE);
         generalPatientView.setVisibility(View.VISIBLE);
+        interventionStaffView.setVisibility(View.VISIBLE);
 
         if(App.getPatient() == null) {
             patientAttribute.setVisibility(View.GONE);
             generalPatientView.setVisibility(View.GONE);
             interventionPatientView.setVisibility(View.GONE);
+
+            if(App.getProgram().equals(getResources().getString(R.string.fast))) {
+                interventionStaffView.setText(getString(R.string.fast_staff_view));
+                interventionStaffView.setVisibility(View.VISIBLE);
+            }
+
+
         }
         else {
 
@@ -493,7 +501,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         else {
             akuadsScore = App.convertToTitleCase(akuadsScore);
             akuadsScore = akuadsScore.replace(" ", "");
-            int as = Integer.parseInt(akuadsScore);
+            Float as = Float.parseFloat(akuadsScore);
             if(as >=21)
                 akuadsScoreHighlight = "Highlight";
         }
@@ -884,7 +892,8 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         Date date = new Date();
         String todayDate = App.getSqlDate(date);
 
-        int countScreening =  serverService.getEncounterCountForDate(todayDate, "FAST-Presumptive");
+        int countScreening =  serverService.getGwtAppFormCount(todayDate, "fast_screening");
+        if(countScreening == -1) countScreening = 0;
         int countPresumptive =  serverService.getEncounterCountForDate(todayDate, "FAST-Presumptive");
         int countPatientLocation =  serverService.getEncounterCountForDate(todayDate, "FAST-Patient Location");
         int countPresumptiveInformation =  serverService.getEncounterCountForDate(todayDate, "FAST-Presumptive Information");
@@ -899,7 +908,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         int countReferal =  serverService.getEncounterCountForDate(todayDate, "FAST-Referral Form");
         int countContactRegistry =  serverService.getEncounterCountForDate(todayDate, "FAST-Contact Registry");
 
-        String[][] dataset = { {getString(R.string.screening_forms), String.valueOf(countReferal), null},
+        String[][] dataset = { {getString(R.string.screening_forms), String.valueOf(countScreening), null},
                 {getString(R.string.presumptive_forms),String.valueOf(countPresumptive), null},
                 {getString(R.string.patient_location_forms),String.valueOf(countPatientLocation), null},
                 {getString(R.string.presumptive_information_forms),String.valueOf(countPresumptiveInformation), null},
