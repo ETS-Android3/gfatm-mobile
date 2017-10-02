@@ -251,6 +251,14 @@ public class ServerService {
         return Integer.parseInt(dbUtil.getObject("select count(*) from " + Metadata.FORMS + " where username='" + App.getUsername() + "'"));
     }
 
+    public int getGwtAppFormCount(String date, String formName){
+        Object[][] data = dbUtil.getFormTableData("select counts from " + Metadata.SCREENING_COUNT + " where username='" + App.getUsername() + "' and form='" + formName + "' and today='" + date + "'");
+        if(data.length == 0)
+            return -1;
+        else
+            return Integer.parseInt(String.valueOf(data[0][0]));
+    }
+
     public Object[][] getSavedForms(String username) {
         Object[][] forms = dbUtil.getFormTableData("select id, program, form_name, p_id, form_date, timestamp, form_object from " + Metadata.FORMS + " where username='" + username + "'");
         return forms;
@@ -408,8 +416,8 @@ public class ServerService {
             if (providerUUid == "")
                 return "PROVIDER_NOT_FOUND";
 
-            /*if (!isMobileAppCompatible())
-                return "VERSION_MISMATCH";*/
+            if (!isMobileAppCompatible())
+                return "VERSION_MISMATCH";
 
             App.setUserFullName(user.getFullName());
             App.setRoles(user.getRoles());
@@ -967,6 +975,7 @@ public class ServerService {
                             values1.put("encounterLocation", encounter.getEncounterLocation());
                             values1.put("patientId", encounter.getPatientId());
                             values1.put("dateCreated", encounter.getDateCreated());
+                            values1.put("createdBy", encounter.getCreator());
                             dbUtil.insert(Metadata.ENCOUNTER, values1);
 
                             String id = dbUtil.getObject(Metadata.ENCOUNTER, "encounter_id", "uuid='" + encounter.getUuid() + "'");
@@ -1326,6 +1335,7 @@ public class ServerService {
                     values2.put("encounterLocation", App.getLocation());
                     values2.put("patientId", App.getPatientId());
                     values2.put("dateCreated", App.getSqlDateTime(now));
+                    values2.put("createdBy", App.getUsername());
                     dbUtil.insert(Metadata.ENCOUNTER, values2);
 
                     String encounterId  = dbUtil.getObject(Metadata.ENCOUNTER, "encounter_id", "dateCreated = '" + App.getSqlDateTime(now) +"' and encounterType='" + App.getProgram() + "-" + formName + "' and patientId=" + App.getPatientId());
@@ -1427,7 +1437,7 @@ public class ServerService {
                     values2.put("encounterLocation", encounter1.getEncounterLocation());
                     values2.put("patientId", encounter1.getPatientId());
                     values2.put("dateCreated", encounter1.getDateCreated());
-
+                    values2.put("createdBy", App.getUsername());
                     dbUtil.insert(Metadata.ENCOUNTER, values2);
 
                     String id = dbUtil.getObject(Metadata.ENCOUNTER, "encounter_id", "uuid='" + encounter1.getUuid() + "'");
@@ -2058,7 +2068,7 @@ public class ServerService {
 
     public int getEncounterCountForDate(String date, String encounterType) {
 
-        Object[][] encounter = dbUtil.getFormTableData("select count(*) from " + Metadata.ENCOUNTER + " where encounterType = '" + encounterType + "' and dateCreated like '"+ date +"%'");
+        Object[][] encounter = dbUtil.getFormTableData("select count(*) from " + Metadata.ENCOUNTER + " where encounterType = '" + encounterType + "' and dateCreated like '"+ date +"%' and createdBy = '" + App.getUsername() + "'");
         if (encounter.length < 1)
             return -1;
 
@@ -2215,6 +2225,7 @@ public class ServerService {
                         values1.put("encounterLocation", encounter.getEncounterLocation());
                         values1.put("patientId", encounter.getPatientId());
                         values1.put("dateCreated", encounter.getDateCreated());
+                        values1.put("createdBy", encounter.getCreator());
                         dbUtil.insert(Metadata.ENCOUNTER, values1);
 
                         String id = dbUtil.getObject(Metadata.ENCOUNTER, "encounter_id", "uuid='" + encounter.getUuid() + "'");
@@ -2463,6 +2474,26 @@ public class ServerService {
                 values4.put("username", App.getUsername());
                 dbUtil.insert(Metadata.OFFLINE_FORM, values4);
 
+                Date date1 = new Date();
+                String dateInString = App.getSqlDate(date1);
+                int count = getGwtAppFormCount(dateInString, encounterType);
+                if(count == -1){
+
+                    ContentValues v = new ContentValues();
+                    v.put("username", App.getUsername());
+                    v.put("today", dateInString);
+                    v.put("form", encounterType);
+                    v.put("counts", 1);
+                    dbUtil.insert(Metadata.SCREENING_COUNT, v);
+                } else {
+
+                    count = count+1;
+                    ContentValues v = new ContentValues();
+                    v.put("counts", count);
+                    dbUtil.update(Metadata.SCREENING_COUNT, v, "username=? and today=? and form=?", new String[]{App.getUsername(), dateInString,encounterType});
+
+                }
+
                 return "SUCCESS";
 
             }
@@ -2475,8 +2506,31 @@ public class ServerService {
             if (jsonResponse.has("response")) {
                 String result = jsonResponse.getString("response");
                 if (jsonResponse.getString("response").equals("ERROR"))
-                    result = result + " <br> "
-                            + jsonResponse.getString("details");
+                    result = result + " <br> " + jsonResponse.getString("details");
+                else {
+
+                    Date date1 = new Date();
+                    String dateInString = App.getSqlDate(date1);
+
+                    int count = getGwtAppFormCount(dateInString, encounterType);
+                    if(count == -1){
+
+                        ContentValues v = new ContentValues();
+                        v.put("username", App.getUsername());
+                        v.put("today", dateInString);
+                        v.put("form", encounterType);
+                        v.put("counts", 1);
+                        dbUtil.insert(Metadata.SCREENING_COUNT, v);
+                    } else {
+
+                        count = count+1;
+                        ContentValues v = new ContentValues();
+                        v.put("counts", count);
+                        dbUtil.update(Metadata.SCREENING_COUNT, v, "username=? and today=? and form=?", new String[]{App.getUsername(), dateInString,encounterType});
+
+                    }
+
+                }
                 return result;
             }
             return response;
@@ -2877,5 +2931,10 @@ public class ServerService {
 
         return "";
     }
+
+    public void resetScreeningCounts(){
+        dbUtil.delete(Metadata.SCREENING_COUNT,null,null);
+    }
+
 
 }
