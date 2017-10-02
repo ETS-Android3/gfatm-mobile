@@ -35,7 +35,7 @@ import java.util.ArrayList;
 public class DatabaseUtil extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseUtil";
     private static final String DB_NAME = "globalfund.db";
-    private static final int DB_VERSION = 28;
+    private static final int DB_VERSION = 30;
     private Context context;
 
     public DatabaseUtil(Context context) {
@@ -139,6 +139,15 @@ public class DatabaseUtil extends SQLiteOpenHelper {
             case 27: // Script to upgrade from version 27 to 28
                 insertsStream = context.getResources().openRawResource(R.raw.db_update_v28);
                 break;
+            case 28: // Script to upgrade from version 28 to 29
+                if (!isColumnExists(db, "FORM", "autoSyncTries")) {
+                    insertsStream = context.getResources().openRawResource(R.raw.db_update_v29_offline_forms_sync);
+                }
+                break;
+            case 29: // Script to upgrade from version 29 to 30
+                insertsStream = context.getResources().openRawResource(R.raw.db_update_v30);
+                break;
+
         }
 
         if(insertsStream !=  null) {
@@ -429,5 +438,34 @@ public class DatabaseUtil extends SQLiteOpenHelper {
         }
         readableDatabase.close();
         return data.toArray(new Object[][]{});
+    }
+
+    public static boolean isColumnExists(SQLiteDatabase sqliteDatabase,
+                                         String tableName,
+                                         String columnToFind) {
+        Cursor cursor = null;
+
+        try {
+            cursor = sqliteDatabase.rawQuery(
+                    "PRAGMA table_info(" + tableName + ")",
+                    null
+            );
+
+            int nameColumnIndex = cursor.getColumnIndexOrThrow("name");
+
+            while (cursor.moveToNext()) {
+                String name = cursor.getString(nameColumnIndex);
+
+                if (name.equals(columnToFind)) {
+                    return true;
+                }
+            }
+
+            return false;
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
     }
 }
