@@ -693,6 +693,7 @@
         <item>@string/fast_chesttbclinic_title</item>
         <item>@string/fast_gynaeobstetrics_title</item>
         <item>@string/fast_surgery_title</item>
+        <item>@string/fast_diabetic</item>
         <item>@string/fast_other_title</item>
     </string-array>
 

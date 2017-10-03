@@ -598,6 +598,11 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         if(presumptive == null)
             presumptive= "-";
 
+        String gxpSputumDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST-GXP Specimen Collection");
+        if(gxpSputumDate==null){
+            gxpSputumDate= "-";
+        }
+
         String gxpResult=null,rifResult=null;
         String xpertResultOderId = serverService.getLatestObsValue(App.getPatientId(), "FAST-GXP Specimen Collection","ORDER ID");
         if (xpertResultOderId != null) {
@@ -812,13 +817,14 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
                 {getResources().getString(R.string.external_id), externalId, null},
                 {getResources().getString(R.string.screening_facility), screeningFacility, null},
                 {getResources().getString(R.string.presumptive_date), presumptive, null},
+                {getResources().getString(R.string.sputum_submission_date_gxp), gxpSputumDate, null},
                 {getResources().getString(R.string.gxp_result), App.convertToTitleCase(gxpResult), null},
                 {getResources().getString(R.string.rif_result), App.convertToTitleCase(rifResult), null},
                 {getResources().getString(R.string.cxr_date), cxrDate, null},
                 {getResources().getString(R.string.cxr_cad4tb_score),App.convertToTitleCase(cad4TbScore), null},
 
                 {getResources().getString(R.string.radiological_diagnosis), App.convertToTitleCase(radioLogicalDiagnosis), null},
-                {getResources().getString(R.string.sputum_submission_date), sputumDate, null},
+                {getResources().getString(R.string.sputum_submission_date_afb), sputumDate, null},
                 {getResources().getString(R.string.smear_result), App.convertToTitleCase(smearResult), null},
                 {getResources().getString(R.string.referred_transferred), App.convertToTitleCase(referredTransfer),null},
                 {getResources().getString(R.string.referral_site), referralSite, null},

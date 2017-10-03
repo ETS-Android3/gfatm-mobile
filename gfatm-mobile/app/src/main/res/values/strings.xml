@@ -651,7 +651,8 @@
     <string name="cxr_date">CXR Date:</string>
     <string name="cxr_cad4tb_score">CAD4TB Score:</string>
     <string name="radiological_diagnosis">Radiological Diagnosis:</string>
-    <string name="sputum_submission_date">Sputum Submission Date:</string>
+    <string name="sputum_submission_date_gxp">Sputum Submission Date(GXP):</string>
+    <string name="sputum_submission_date_afb">Sputum Submission Date(AFB):</string>
     <string name="smear_result">Smear Result:</string>
     <string name="referred_transferred">Referred or Transferred:</string>
     <string name="referral_site">Referral Site</string>
