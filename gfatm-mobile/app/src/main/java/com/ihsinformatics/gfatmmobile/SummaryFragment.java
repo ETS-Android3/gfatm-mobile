@@ -934,25 +934,42 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
     }
 
     public void fillPetStaffView(){
-
         String[][] dataset = { {"rabbia", "hassan", null},
                 {"hadi","hassan", null},
                 {"mohammad","hassan", null},
                 {"farzana","hassan", null}};
 
         fillContent(dataset);
-
     }
 
     public void fillChildhoodTbStaffView(){
+        Date date = new Date();
+        String todayDate = App.getSqlDate(date);
 
-        String[][] dataset = { {"rabbia", "hassan", null},
-                {"hadi","hassan", null},
-                {"mohammad","hassan", null},
-                {"farzana","hassan", null}};
+        int countVerbalScreening =  serverService.getEncounterCountForDate(todayDate, "Childhood TB-Verbal Screening");
+        int countScreeningLocation =  serverService.getEncounterCountForDate(todayDate, "Childhood TB-Screening Location");
+        int countPatientRegistration =  serverService.getEncounterCountForDate(todayDate, "Childhood TB-Patient Registration");
+        int countPresumptiveCaseConfirmation =  serverService.getEncounterCountForDate(todayDate, "Childhood TB-Presumptive Case Confirmation");
+        int countTestIndication =  serverService.getEncounterCountForDate(todayDate, "Childhood TB-Test Indication");
+        int countTreatmentInitiation =  serverService.getEncounterCountForDate(todayDate, "Childhood TB-Treatment Initiation");
+        int countTbTreatmentFollowup =  serverService.getEncounterCountForDate(todayDate, "Childhood TB-TB Treatment Followup");
+        int countEndOfFollowup =  serverService.getEncounterCountForDate(todayDate, "Childhood TB-End of Followup");
+        int countContactRegistry =  serverService.getEncounterCountForDate(todayDate, "Childhood TB-Contact Registry");
+
+        String[][] dataset = {
+                {getString(R.string.number_of_verbal_screening), String.valueOf(countVerbalScreening), null},
+                {getString(R.string.number_of_screening_location), String.valueOf(countScreeningLocation), null},
+                {getString(R.string.number_of_patient_registration), String.valueOf(countPatientRegistration), null},
+                {getString(R.string.number_of_presumptive_case_confirmation), String.valueOf(countPresumptiveCaseConfirmation), null},
+                {getString(R.string.number_of_test_indication), String.valueOf(countTestIndication), null},
+                {getString(R.string.number_of_treatment_initiation), String.valueOf(countTreatmentInitiation), null},
+                {getString(R.string.number_of_tb_treatment_followup), String.valueOf(countTbTreatmentFollowup), null},
+                {getString(R.string.number_of_end_of_followup), String.valueOf(countEndOfFollowup), null},
+                {getString(R.string.number_of_contact_registry), String.valueOf(countContactRegistry), null}
+
+        };
 
         fillContent(dataset);
-
     }
 
     public void fillComorbiditiesStaffView(){

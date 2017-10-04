@@ -678,4 +678,18 @@
     <string name="gxp_result">GXP Result:</string>
     <string name="rif_result">RIF Result:</string>
 
+
+
+    <!-- ChildTB Daily Staff View -->
+
+    <string name="number_of_verbal_screening"># of Verbal Screening</string>
+    <string name="number_of_screening_location"># of Screening Location</string>
+    <string name="number_of_patient_registration"># of Patient Registration</string>
+    <string name="number_of_presumptive_case_confirmation"># of Presumptive Case Confirmation</string>
+    <string name="number_of_test_indication"># of Test Indication</string>
+    <string name="number_of_treatment_initiation"># of Treatment Initiation</string>
+    <string name="number_of_tb_treatment_followup"># of TB Treatment Followup</string>
+    <string name="number_of_end_of_followup"># of End of Follow up</string>
+    <string name="number_of_contact_registry"># of Contact Registry</string>
+
 </resources>
