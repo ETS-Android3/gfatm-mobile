@@ -1,3 +1,11 @@
+-- inserts
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('GLAUCOMA',NULL,'N/A','117789AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MANAGEMENT OF DIABETES WITH 12 MONTHS FOLLOWUP','diabetes_management_with_12_months_followup','N/A','036e77ac-84d7-46e5-b78a-4faa5e045d33');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MANAGEMENT OF DIABETES WITH 6 MONTH FOLLOWUP (UNCONTROLLED BLOOD SUGAR)','diabetes_management_with_6_month_followup','N/A','606ffa60-df06-4d03-a8c4-ca7f3fe1ba4f');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MANAGEMENT OF DIABETES WITH 3 MONTHS FOLLOWUP (MILD DIABETIC RETINOPATHY)','diabetes_management_with_3_months_followup','N/A','17f47b99-fa20-4116-bd18-c334511f38bd');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REFERRAL TO OPHTHALMOLOGIST (MODERATE OR SEVERE RETINOPATHY)','referral_to_ophthalmologist','N/A','6f725da7-117a-4302-ac8f-91a77c8b0234');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INSULIN MIX 30/70 DISTRIBUTED','insulin_mix_distributed','Numeric','d4960b50-f264-4242-bc44-847c349e0c22');
+
 -- Create screening form count table
 create table IF NOT EXISTS screening_form_count(username text, today datetime, form text, counts int DEFAULT 0);
 

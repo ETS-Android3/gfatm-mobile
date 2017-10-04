@@ -4722,6 +4722,13 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT SCREENE
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LOSS OF PROTECTIVE SENSATION, 3 MONTH FOLLOWUP','loss_of_protective_sensation_3_month_followup','N/A','9cd61137-0fbf-4382-87af-160afd7b96c5');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ABNORMAL, DETAILED DIAGNOSIS','abnormal_detailed_diagnosis','Coded','ef5567b2-3d12-49b7-b6c6-6443af0078e5');
 
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('GLAUCOMA',NULL,'N/A','117789AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MANAGEMENT OF DIABETES WITH 12 MONTHS FOLLOWUP','diabetes_management_with_12_months_followup','N/A','036e77ac-84d7-46e5-b78a-4faa5e045d33');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MANAGEMENT OF DIABETES WITH 6 MONTH FOLLOWUP (UNCONTROLLED BLOOD SUGAR)','diabetes_management_with_6_month_followup','N/A','606ffa60-df06-4d03-a8c4-ca7f3fe1ba4f');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MANAGEMENT OF DIABETES WITH 3 MONTHS FOLLOWUP (MILD DIABETIC RETINOPATHY)','diabetes_management_with_3_months_followup','N/A','17f47b99-fa20-4116-bd18-c334511f38bd');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REFERRAL TO OPHTHALMOLOGIST (MODERATE OR SEVERE RETINOPATHY)','referral_to_ophthalmologist','N/A','6f725da7-117a-4302-ac8f-91a77c8b0234');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INSULIN MIX 30/70 DISTRIBUTED','insulin_mix_distributed','Numeric','d4960b50-f264-4242-bc44-847c349e0c22');
+
 -- Program
 INSERT OR IGNORE INTO program VALUES (1, "86ba1232-d576-416e-b102-5f335c6746ce", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
 INSERT OR IGNORE INTO program VALUES (2, "5d372a38-ae27-4a68-a8d2-bc517a2c9c40", "PET", "Post-Exposure Treatment");
