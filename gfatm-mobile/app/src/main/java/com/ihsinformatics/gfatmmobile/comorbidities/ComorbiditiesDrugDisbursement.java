@@ -393,65 +393,66 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
     public boolean validate() {
 
         Boolean error = false;
-
-        if (App.get(insulinR).isEmpty()) {
-            gotoFirstPage();
-            insulinR.getEditText().setError(getString(R.string.empty_field));
-            insulinR.getEditText().requestFocus();
-            error = true;
-        } else if (!App.get(insulinR).isEmpty() && Integer.parseInt(App.get(insulinR)) > 3) {
-            gotoFirstPage();
-            insulinR.getEditText().setError(getString(R.string.comorbidities_drug_disbursement_number_of_insulin_limit));
-            insulinR.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (App.get(insulinN).isEmpty()) {
-            gotoFirstPage();
-            insulinN.getEditText().setError(getString(R.string.empty_field));
-            insulinN.getEditText().requestFocus();
-            error = true;
-        } else if (!App.get(insulinN).isEmpty() && Integer.parseInt(App.get(insulinN)) > 3) {
-            gotoFirstPage();
-            insulinN.getEditText().setError(getString(R.string.comorbidities_drug_disbursement_number_of_insulin_limit));
-            insulinN.getEditText().requestFocus();
-            error = true;
-        }
-        if (App.get(insulinMixDoseDistributed).isEmpty()) {
-            gotoFirstPage();
-            insulinMixDoseDistributed.getEditText().setError(getString(R.string.empty_field));
-            insulinMixDoseDistributed.getEditText().requestFocus();
-            error = true;
-        } else if (!App.get(insulinMixDoseDistributed).isEmpty() && Integer.parseInt(App.get(insulinMixDoseDistributed)) > 9) {
-            gotoFirstPage();
-            insulinMixDoseDistributed.getEditText().setError(getString(R.string.comorbidities_drug_disbursement_number_of_insulin_mix_limit));
-            insulinMixDoseDistributed.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (App.get(metformin).isEmpty()) {
-            gotoFirstPage();
-            metformin.getEditText().setError(getString(R.string.empty_field));
-            metformin.getEditText().requestFocus();
-            error = true;
-        } else if (!App.get(metformin).isEmpty() && Integer.parseInt(App.get(metformin)) > 15) {
-            gotoFirstPage();
-            metformin.getEditText().setError(getString(R.string.comorbidities_drug_disbursement_number_of_metformin_limit));
-            metformin.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (App.get(drugsDispersedDays).isEmpty()) {
-            gotoFirstPage();
-            drugsDispersedDays.getEditText().setError(getString(R.string.empty_field));
-            drugsDispersedDays.getEditText().requestFocus();
-            error = true;
-        } else if (!App.get(drugsDispersedDays).isEmpty() && Integer.parseInt(App.get(drugsDispersedDays)) > 90) {
-            gotoFirstPage();
-            drugsDispersedDays.getEditText().setError(getString(R.string.comorbidities_drug_disbursement_days_worth_limit));
-            drugsDispersedDays.getEditText().requestFocus();
-            error = true;
-        }
+        if (insulinR.getVisibility() == View.VISIBLE)
+            if (App.get(insulinR).isEmpty()) {
+                gotoFirstPage();
+                insulinR.getEditText().setError(getString(R.string.empty_field));
+                insulinR.getEditText().requestFocus();
+                error = true;
+            } else if (!App.get(insulinR).isEmpty() && Integer.parseInt(App.get(insulinR)) > 3) {
+                gotoFirstPage();
+                insulinR.getEditText().setError(getString(R.string.comorbidities_drug_disbursement_number_of_insulin_limit));
+                insulinR.getEditText().requestFocus();
+                error = true;
+            }
+        if (insulinN.getVisibility() == View.VISIBLE)
+            if (App.get(insulinN).isEmpty()) {
+                gotoFirstPage();
+                insulinN.getEditText().setError(getString(R.string.empty_field));
+                insulinN.getEditText().requestFocus();
+                error = true;
+            } else if (!App.get(insulinN).isEmpty() && Integer.parseInt(App.get(insulinN)) > 3) {
+                gotoFirstPage();
+                insulinN.getEditText().setError(getString(R.string.comorbidities_drug_disbursement_number_of_insulin_limit));
+                insulinN.getEditText().requestFocus();
+                error = true;
+            }
+        if (insulinMixDoseDistributed.getVisibility() == View.VISIBLE)
+            if (App.get(insulinMixDoseDistributed).isEmpty()) {
+                gotoFirstPage();
+                insulinMixDoseDistributed.getEditText().setError(getString(R.string.empty_field));
+                insulinMixDoseDistributed.getEditText().requestFocus();
+                error = true;
+            } else if (!App.get(insulinMixDoseDistributed).isEmpty() && Integer.parseInt(App.get(insulinMixDoseDistributed)) > 9) {
+                gotoFirstPage();
+                insulinMixDoseDistributed.getEditText().setError(getString(R.string.comorbidities_drug_disbursement_number_of_insulin_mix_limit));
+                insulinMixDoseDistributed.getEditText().requestFocus();
+                error = true;
+            }
+        if (metformin.getVisibility() == View.VISIBLE)
+            if (App.get(metformin).isEmpty()) {
+                gotoFirstPage();
+                metformin.getEditText().setError(getString(R.string.empty_field));
+                metformin.getEditText().requestFocus();
+                error = true;
+            } else if (!App.get(metformin).isEmpty() && Integer.parseInt(App.get(metformin)) > 15) {
+                gotoFirstPage();
+                metformin.getEditText().setError(getString(R.string.comorbidities_drug_disbursement_number_of_metformin_limit));
+                metformin.getEditText().requestFocus();
+                error = true;
+            }
+        if (drugsDispersedDays.getVisibility() == View.VISIBLE)
+            if (App.get(drugsDispersedDays).isEmpty()) {
+                gotoFirstPage();
+                drugsDispersedDays.getEditText().setError(getString(R.string.empty_field));
+                drugsDispersedDays.getEditText().requestFocus();
+                error = true;
+            } else if (!App.get(drugsDispersedDays).isEmpty() && Integer.parseInt(App.get(drugsDispersedDays)) > 90) {
+                gotoFirstPage();
+                drugsDispersedDays.getEditText().setError(getString(R.string.comorbidities_drug_disbursement_days_worth_limit));
+                drugsDispersedDays.getEditText().requestFocus();
+                error = true;
+            }
 
         /*if (App.get(specifyOther).isEmpty()) {
             gotoFirstPage();
@@ -544,10 +545,14 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
 //        observations.add(new String[]{"DRUGS RECEIVED BY PATIENT", App.get(drugsPickedUp).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         observations.add(new String[]{"NEXT DATE OF DRUG DISPERSAL", App.getSqlDate(secondDateCalendar)});
         observations.add(new String[]{"DAYS WORTH OF DRUGS DISPERSED", App.get(drugsDispersedDays)});
-        observations.add(new String[]{"METFORMIN DOSE", App.get(metformin)});
-        observations.add(new String[]{"INSULIN N DOSAGE", App.get(insulinN)});
-        observations.add(new String[]{"INSULIN R DOSAGE", App.get(insulinR)});
-        observations.add(new String[]{"INSULIN MIX 30/70 DISTRIBUTED", App.get(insulinMixDoseDistributed)});
+        if (metformin.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"METFORMIN DOSE", App.get(metformin)});
+        if (insulinN.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"INSULIN N DOSAGE", App.get(insulinN)});
+        if (insulinR.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"INSULIN R DOSAGE", App.get(insulinR)});
+        if (insulinMixDoseDistributed.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"INSULIN MIX 30/70 DISTRIBUTED", App.get(insulinMixDoseDistributed)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -818,28 +823,29 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
                 protected void onPostExecute(HashMap<String, String> result) {
                     super.onPostExecute(result);
                     loading.dismiss();
-                    if (!result.get("DIABETES MEDICATIONS").equals("")) {
-                        metformin.setVisibility(View.GONE);
-                        insulinN.setVisibility(View.GONE);
-                        insulinR.setVisibility(View.GONE);
-                        insulinMixDoseDistributed.setVisibility(View.GONE);
+                    metformin.setVisibility(View.GONE);
+                    insulinN.setVisibility(View.GONE);
+                    insulinR.setVisibility(View.GONE);
+                    insulinMixDoseDistributed.setVisibility(View.GONE);
+                    if (result != null) {
+                        if (result.get("DIABETES MEDICATIONS") != null) {
 
-                    }
-                    if (result.get("DIABETES MEDICATIONS").contains("METFORMIN")) {
-                        metformin.setVisibility(View.VISIBLE);
-                    }
-                    if (result.get("DIABETES MEDICATIONS").contains("ISOPHANE")) {
-                        insulinN.setVisibility(View.VISIBLE);
-                    }
+                            if (result.get("DIABETES MEDICATIONS").contains("METFORMIN")) {
+                                metformin.setVisibility(View.VISIBLE);
+                            }
+                            if (result.get("DIABETES MEDICATIONS").contains("ISOPHANE")) {
+                                insulinN.setVisibility(View.VISIBLE);
+                            }
 
-                    if (result.get("DIABETES MEDICATIONS").contains("REGULAR")) {
-                        insulinR.setVisibility(View.VISIBLE);
-                    }
+                            if (result.get("DIABETES MEDICATIONS").contains("REGULAR")) {
+                                insulinR.setVisibility(View.VISIBLE);
+                            }
 
-                    if (result.get("DIABETES MEDICATIONS").contains("70/30")) {
-                        insulinMixDoseDistributed.setVisibility(View.VISIBLE);
+                            if (result.get("DIABETES MEDICATIONS").contains("70/30")) {
+                                insulinMixDoseDistributed.setVisibility(View.VISIBLE);
+                            }
+                        }
                     }
-
 
                 }
             };
