@@ -317,8 +317,6 @@ public class ComorbiditiesMentalHealthTreatmentFollowupForm extends AbstractForm
         }
 
 
-
-
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
@@ -370,7 +368,7 @@ public class ComorbiditiesMentalHealthTreatmentFollowupForm extends AbstractForm
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
-            }else {
+            } else {
                 endTime = new Date();
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
@@ -381,14 +379,14 @@ public class ComorbiditiesMentalHealthTreatmentFollowupForm extends AbstractForm
         }
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-        if(gpClinicCode.getVisibility() == View.VISIBLE)
+        if (gpClinicCode.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"HEALTH CLINIC/POST", App.get(gpClinicCode)});
         observations.add(new String[]{"SESSION NUMBER", App.get(treatmentFollowupMHSessionNumber)});
 
         final String treatmentFollowupMHConditionBeforeSessionString = App.get(treatmentFollowupMHConditionBeforeSession).equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_condition_before_session_options_very_bad)) ? "VERY BAD" :
                 (App.get(treatmentFollowupMHConditionBeforeSession).equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_condition_before_session_options_bad)) ? "POOR" :
-                        (App.get(treatmentFollowupMHConditionBeforeSession).equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_condition_before_session_options_neutral)) ? "AVERAGE":
-                        (App.get(treatmentFollowupMHConditionBeforeSession).equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_condition_before_session_options_good)) ? "GOOD" : "VERY GOOD")));
+                        (App.get(treatmentFollowupMHConditionBeforeSession).equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_condition_before_session_options_neutral)) ? "AVERAGE" :
+                                (App.get(treatmentFollowupMHConditionBeforeSession).equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_condition_before_session_options_good)) ? "GOOD" : "VERY GOOD")));
         observations.add(new String[]{"CONDITION BEFORE SESSION", treatmentFollowupMHConditionBeforeSessionString});
 
         /*final String treatmentFollowupMHClientsComplaintString = App.get(treatmentFollowupMHClientsComplaint).equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options_relationship_problems)) ? "RELATIONSHIP PROBLEMS" :
@@ -437,7 +435,8 @@ public class ComorbiditiesMentalHealthTreatmentFollowupForm extends AbstractForm
         }
         observations.add(new String[]{"CHIEF COMPLAINT", treatmentFollowupMHClientsComplaintString});
 
-        observations.add(new String[]{"OTHER COMPLAINT", App.get(otherComplaint)});
+        if (otherComplaint.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"OTHER COMPLAINT", App.get(otherComplaint)});
 
         observations.add(new String[]{"CO-OPERATION", App.get(treatmentFollowupMHCooperation).equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_cooperation_options_complaint)) ? "COOPERATIVE BEHAVIOUR" :
                 (App.get(treatmentFollowupMHCooperation).equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_cooperation_options_uncomfortable)) ? "UNCOMFORTABLE" : "NON-COOPERATIVE BEHAVIOUR")});
@@ -449,13 +448,13 @@ public class ComorbiditiesMentalHealthTreatmentFollowupForm extends AbstractForm
 
         final String treatmentFollowupMHDistressString = App.get(treatmentFollowupMHDistress).equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_distress_options_severly)) ? "SEVERE" :
                 (App.get(treatmentFollowupMHDistress).equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_distress_options_moderately)) ? "MODERATE" :
-                        (App.get(treatmentFollowupMHDistress).equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_distress_options_mildly)) ? "MILD":
+                        (App.get(treatmentFollowupMHDistress).equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_distress_options_mildly)) ? "MILD" :
                                 (App.get(treatmentFollowupMHDistress).equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_distress_options_rarely)) ? "RARELY" : "NONE")));
         observations.add(new String[]{"MENTAL DISTRESS", treatmentFollowupMHDistressString});
 
         final String treatmentFollowupMHConditionAfterSessionString = App.get(treatmentFollowupMHConditionAfterSession).equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_condition_before_session_options_very_bad)) ? "VERY BAD" :
                 (App.get(treatmentFollowupMHConditionAfterSession).equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_condition_before_session_options_bad)) ? "POOR" :
-                        (App.get(treatmentFollowupMHConditionAfterSession).equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_condition_before_session_options_neutral)) ? "AVERAGE":
+                        (App.get(treatmentFollowupMHConditionAfterSession).equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_condition_before_session_options_neutral)) ? "AVERAGE" :
                                 (App.get(treatmentFollowupMHConditionAfterSession).equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_condition_before_session_options_good)) ? "GOOD" : "VERY GOOD")));
         observations.add(new String[]{"CONDITION AFTER SESSION", treatmentFollowupMHConditionAfterSessionString});
 
@@ -467,7 +466,7 @@ public class ComorbiditiesMentalHealthTreatmentFollowupForm extends AbstractForm
                         (App.get(treatmentFollowupMHContinuationStatus).equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_continuation_status_options_referred)) ? "PATIENT REFERRED" : "OTHER CONTINUATION STATUS"));
         observations.add(new String[]{"CONTINUATION STATUS", treatmentFollowupMHContinuationStatusString});
 
-        if(App.get(treatmentFollowupMHContinuationStatus).equalsIgnoreCase(getResources().getString(R.string.comorbidities_treatment_followup_MH_continuation_status_options_continue))) {
+        if (App.get(treatmentFollowupMHContinuationStatus).equalsIgnoreCase(getResources().getString(R.string.comorbidities_treatment_followup_MH_continuation_status_options_continue))) {
             observations.add(new String[]{"PREFERRED HEALTH FACILITY", App.get(preferredTherapyLocationSpinner)});
             observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDate(secondDateCalendar)});
         }
@@ -605,7 +604,7 @@ public class ComorbiditiesMentalHealthTreatmentFollowupForm extends AbstractForm
 
             String[][] obs = obsValue.get(i);
 
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
             }
 
@@ -699,11 +698,9 @@ public class ComorbiditiesMentalHealthTreatmentFollowupForm extends AbstractForm
                         break;
                     }
                 }
-            }
-            else if (obs[0][0].equals("OTHER COMPLAINT")) {
+            } else if (obs[0][0].equals("OTHER COMPLAINT")) {
                 otherComplaint.getEditText().setText(obs[0][1]);
-            }
-            else if (obs[0][0].equals("CO-OPERATION")) {
+            } else if (obs[0][0].equals("CO-OPERATION")) {
                 for (RadioButton rb : treatmentFollowupMHCooperation.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_cooperation_options_complaint)) && obs[0][1].equals("COOPERATIVE BEHAVIOUR")) {
                         rb.setChecked(true);
@@ -711,7 +708,7 @@ public class ComorbiditiesMentalHealthTreatmentFollowupForm extends AbstractForm
                     } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_cooperation_options_uncomfortable)) && obs[0][1].equals("UNCOMFORTABLE")) {
                         rb.setChecked(true);
                         break;
-                    }  else if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_cooperation_options_uncooperative)) && obs[0][1].equals("NON-COOPERATIVE BEHAVIOUR")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_cooperation_options_uncooperative)) && obs[0][1].equals("NON-COOPERATIVE BEHAVIOUR")) {
                         rb.setChecked(true);
                         break;
                     }
@@ -725,10 +722,10 @@ public class ComorbiditiesMentalHealthTreatmentFollowupForm extends AbstractForm
                     } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_defensiveness_options_aggressive)) && obs[0][1].equals("AGGRESSIVE BEHAVIOUR")) {
                         rb.setChecked(true);
                         break;
-                    }  else if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_defensiveness_options_normal)) && obs[0][1].equals("NORMAL")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_defensiveness_options_normal)) && obs[0][1].equals("NORMAL")) {
                         rb.setChecked(true);
                         break;
-                    }  else if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_defensiveness_options_open)) && obs[0][1].equals("OPEN BEHAVIOUR")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_defensiveness_options_open)) && obs[0][1].equals("OPEN BEHAVIOUR")) {
                         rb.setChecked(true);
                         break;
                     }
@@ -805,10 +802,10 @@ public class ComorbiditiesMentalHealthTreatmentFollowupForm extends AbstractForm
                     } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_continuation_status_options_last)) && obs[0][1].equals("END OF THERAPY")) {
                         rb.setChecked(true);
                         break;
-                    }  else if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_continuation_status_options_referred)) && obs[0][1].equals("PATIENT REFERRED")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_continuation_status_options_referred)) && obs[0][1].equals("PATIENT REFERRED")) {
                         rb.setChecked(true);
                         break;
-                    }  else if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_continuation_status_options_other)) && obs[0][1].equals("OTHER CONTINUATION STATUS")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_continuation_status_options_other)) && obs[0][1].equals("OTHER CONTINUATION STATUS")) {
                         rb.setChecked(true);
                         break;
                     }
@@ -864,7 +861,7 @@ public class ComorbiditiesMentalHealthTreatmentFollowupForm extends AbstractForm
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         Boolean flag = false;
         for (CheckBox cb : treatmentFollowupMHClientsComplaint.getCheckedBoxes()) {
-            if (cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_complaint_options_other)) && cb.isChecked()) {
+            if (cb.getText().equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_client_other_complaint)) && cb.isChecked()) {
                 flag = true;
                 break;
             }
@@ -913,7 +910,7 @@ public class ComorbiditiesMentalHealthTreatmentFollowupForm extends AbstractForm
 
         }
 
-        if(flag) {
+        if (flag) {
             //HERE FOR AUTOPOPULATING OBS
             final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
                 @Override
@@ -994,10 +991,9 @@ public class ComorbiditiesMentalHealthTreatmentFollowupForm extends AbstractForm
     }
 
     void displayGPClinicOrNot() {
-        if(App.getLocation().equalsIgnoreCase("GP-CLINIC")) {
+        if (App.getLocation().equalsIgnoreCase("GP-CLINIC")) {
             gpClinicCode.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             gpClinicCode.setVisibility(View.GONE);
         }
     }

@@ -78,6 +78,8 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
     TitledEditText hba1cResult;
     TitledRadioGroup hba1cDiabetic;
     TitledRadioGroup diabetes_previous_diagnosed;
+    MyTextView screenerInst;
+
 
     ScrollView scrollView;
 
@@ -182,7 +184,8 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
         hba1cResult = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_hba1c_result), "", getResources().getString(R.string.comorbidities_hba1c_result_range), 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         hba1cDiabetic = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_hba1c_diabetic), getResources().getStringArray(R.array.comorbidities_yes_no), "", App.VERTICAL, App.VERTICAL);
         diabetes_previous_diagnosed = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_hba1c_previously_diagnosed_diabetic), getResources().getStringArray(R.array.comorbidities_yes_no), "", App.VERTICAL, App.VERTICAL);
-
+        screenerInst = new MyTextView(context, getResources().getString(R.string.comorbidities_hba1c_screener_instructions));
+        screenerInst.setTypeface(null, Typeface.BOLD);
         //showHba1cDiabetic();
         autopopulateHba1cDiabetic();
         goneVisibility();
@@ -194,7 +197,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formType, formDate, orderId, testOrderHba1C, hba1cTestType, hba1cFollowupMonth, hba1cTestOrderDate,
-                        testResultHba1c, orderIds, testId, hba1cTestResultDate, hba1cResult, diabetes_previous_diagnosed, hba1cDiabetic}};
+                        testResultHba1c, orderIds, testId, hba1cTestResultDate, hba1cResult, diabetes_previous_diagnosed, hba1cDiabetic,screenerInst}};
 
         formDate.getButton().setOnClickListener(this);
         formType.getRadioGroup().setOnCheckedChangeListener(this);
@@ -1224,6 +1227,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
         hba1cResult.setVisibility(View.GONE);
         hba1cDiabetic.setVisibility(View.GONE);
         diabetes_previous_diagnosed.setVisibility(View.GONE);
+        screenerInst.setVisibility(View.GONE);
 
         orderId.setVisibility(View.GONE);
         orderIds.setVisibility(View.GONE);
@@ -1245,6 +1249,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
             hba1cTestResultDate.setVisibility(View.GONE);
             hba1cResult.setVisibility(View.GONE);
             diabetes_previous_diagnosed.setVisibility(View.GONE);
+            screenerInst.setVisibility(View.GONE);
             hba1cDiabetic.setVisibility(View.GONE);
             orderIds.setVisibility(View.GONE);
             testId.setVisibility(View.GONE);
@@ -1264,6 +1269,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
             //hba1cTestResultDate.setVisibility(View.VISIBLE);
             hba1cResult.setVisibility(View.VISIBLE);
             diabetes_previous_diagnosed.setVisibility(View.VISIBLE);
+            screenerInst.setVisibility(View.VISIBLE);
             //hba1cDiabetic.setVisibility(View.GONE);
             orderIds.setVisibility(View.VISIBLE);
             testId.setVisibility(View.VISIBLE);

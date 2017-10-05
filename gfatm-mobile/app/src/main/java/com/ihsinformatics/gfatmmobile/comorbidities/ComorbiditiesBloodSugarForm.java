@@ -652,20 +652,20 @@ public class ComorbiditiesBloodSugarForm extends AbstractFormActivity implements
         }
 
         Boolean flag = false;
-        if (!App.get(formType).equalsIgnoreCase("")) {
+        if (App.get(formType).equals("")) {
             flag = true;
         }
-        if (!flag) {
+        if (flag) {
             formType.getQuestionView().setError(getString(R.string.empty_field));
             formType.getQuestionView().requestFocus();
             view = formType;
             error = true;
         }
         Boolean flag2 = false;
-        if (!App.get(hadFoodInTwoHour).equalsIgnoreCase("")) {
+        if (App.get(hadFoodInTwoHour).equals("") && hadFoodInTwoHour.getVisibility() == View.VISIBLE) {
             flag2 = true;
         }
-        if (!flag2) {
+        if (flag2) {
             hadFoodInTwoHour.getQuestionView().setError(getString(R.string.empty_field));
             hadFoodInTwoHour.getQuestionView().requestFocus();
             view = hadFoodInTwoHour;

@@ -881,14 +881,14 @@
     </string-array>
 
     <string name="comorbidities_eye_screening_evidence_eye_options_cataract">Cataract</string>
+    <string name="comorbidities_eye_screening_evidence_eye_options_glaucoma">Glaucoma</string>
     <string name="comorbidities_eye_screening_evidence_eye_options_papillitis">Papillitis</string>
     <string name="comorbidities_eye_screening_evidence_eye_options_ischemic">Ischemic Neuropathy</string>
     <string name="comorbidities_eye_screening_evidence_eye_options_other">Other</string>
 
     <string-array name="comorbidities_eye_screening_evidence_eye_options">
         <item>@string/comorbidities_eye_screening_evidence_eye_options_cataract</item>
-        <item>@string/comorbidities_eye_screening_evidence_eye_options_papillitis</item>
-        <item>@string/comorbidities_eye_screening_evidence_eye_options_ischemic</item>
+        <item>@string/comorbidities_eye_screening_evidence_eye_options_glaucoma</item>
         <item>@string/comorbidities_eye_screening_evidence_eye_options_other</item>
     </string-array>
 
@@ -907,9 +907,16 @@
     <string name="comorbidities_eye_screening_recommendations_options_management">Management of Diabetes</string>
     <string name="comorbidities_eye_screening_recommendations_options_referral">Referral to Opthalmologist</string>
 
+    <string name="comorbidities_eye_screening_recommendations_options_12_month">Management of Diabetes with 12 months follow up</string>
+    <string name="comorbidities_eye_screening_recommendations_options_6_month">Management of Diabetes with 6 months follow up (uncontrolled blood sugar)</string>
+    <string name="comorbidities_eye_screening_recommendations_options_3_month">Management of Diabetes with 3 months follow up (mild diabetic retinopathy)</string>
+    <string name="comorbidities_eye_screening_recommendations_options_ophthalmologist">Referral to Ophthalmologist (moderate or severe retinopathy)</string>
+
     <string-array name="comorbidities_eye_screening_recommendations_options">
-        <item>@string/comorbidities_eye_screening_recommendations_options_management</item>
-        <item>@string/comorbidities_eye_screening_recommendations_options_referral</item>
+        <item>@string/comorbidities_eye_screening_recommendations_options_12_month</item>
+        <item>@string/comorbidities_eye_screening_recommendations_options_6_month</item>
+        <item>@string/comorbidities_eye_screening_recommendations_options_3_month</item>
+        <item>@string/comorbidities_eye_screening_recommendations_options_ophthalmologist</item>
     </string-array>
 
     <!-- Strings for ComorbiditiesTreatmentFollowupMentalHealth -->
@@ -917,7 +924,7 @@
     <string name="comorbidities_treatment_followup_MH_session_number">Session Number:</string>
     <string name="comorbidities_treatment_followup_MH_condition_before_session">How did the client feel before the session?</string>
     <string name="comorbidities_treatment_followup_MH_client_complaint">What is the client\'s main complaint?</string>
-    <string name="comorbidities_treatment_followup_MH_client_other_complaint">Other Complaint:</string>
+    <string name="comorbidities_treatment_followup_MH_client_other_complaint">Other Complaint</string>
     <string name="comorbidities_treatment_followup_MH_cooperation">Client\'s co-operation:</string>
     <string name="comorbidities_treatment_followup_MH_defensiveness">Client\'s defensiveness:</string>
     <string name="comorbidities_treatment_followup_MH_distress">Client\'s level of distress:</string>
@@ -1184,8 +1191,11 @@
     <string name="comorbidities_drug_disbursement_number_of_metformin_limit">The value should be in the range of 0&#8211;15</string>
     <string name="comorbidities_drug_disbursement_number_of_insulinN">Number of Insulin N vials (10 ml) distributed:</string>
     <string name="comorbidities_drug_disbursement_number_of_insulinR">Number of Insulin R vials (10 ml) distributed:</string>
+    <string name="comorbidities_drug_disbursement_number_of_insulinMixDose">Number of Insulin Mix 30/70 vials (10 ml) distributed:</string>
     <string name="comorbidities_drug_disbursement_number_of_insulin_range">Range 0&#8211;3</string>
+    <string name="comorbidities_drug_disbursement_number_of_insulin_mix_range">Range 0&#8211;9</string>
     <string name="comorbidities_drug_disbursement_number_of_insulin_limit">The value should be in the range of 0&#8211;3</string>
+    <string name="comorbidities_drug_disbursement_number_of_insulin_mix_limit">The value should be in the range of 0&#8211;9</string>
 
     <string name="comorbidities_drug_disbursement_adherence_options_no_dose_missed">No dose missed</string>
     <string name="comorbidities_drug_disbursement_adherence_options_1to3">1 to 3 doses missed</string>
