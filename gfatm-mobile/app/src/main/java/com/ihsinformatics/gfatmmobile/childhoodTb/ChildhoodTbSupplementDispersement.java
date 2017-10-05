@@ -75,9 +75,6 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
     TitledRadioGroup tbTreatmentCalpolQuantity;
 
 
-
-
-
     TitledCheckBoxes nonTBAdditionalTreatment;
     TitledRadioGroup nonTBVitaminBDispersed;
     TitledRadioGroup nonTBVitaminBQuantity;
@@ -174,7 +171,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
         tbTreatmentVitaminBQuantity = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_vitamin_b_qunantity), getResources().getStringArray(R.array.ctb_1_to_4_list), null, App.HORIZONTAL, App.VERTICAL);
         tbTreatmentIronDispersed = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_iron_dispersed), getResources().getStringArray(R.array.ctb_yes_no_incomplete), null, App.HORIZONTAL, App.VERTICAL);
         tbTreatmentIronQuantity = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_iron_qunantity), getResources().getStringArray(R.array.ctb_1_to_4_list), null, App.HORIZONTAL, App.VERTICAL);
-        tbTreatmentAnthelminthicDispersed= new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_anthelminthic_dispersed), getResources().getStringArray(R.array.ctb_yes_no_incomplete), null, App.HORIZONTAL, App.VERTICAL);
+        tbTreatmentAnthelminthicDispersed = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_anthelminthic_dispersed), getResources().getStringArray(R.array.ctb_yes_no_incomplete), null, App.HORIZONTAL, App.VERTICAL);
         tbTreatmentAnthelminthicQuantity = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_anthelminthic_quantity), getResources().getStringArray(R.array.ctb_1_to_4_list), null, App.HORIZONTAL, App.VERTICAL);
         tbTreatmentCalpolDispersed = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_calpol_dispersed), getResources().getStringArray(R.array.ctb_yes_no_incomplete), null, App.HORIZONTAL, App.VERTICAL);
         tbTreatmentCalpolQuantity = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_calpol_quantity), getResources().getStringArray(R.array.ctb_1_to_4_list), null, App.HORIZONTAL, App.VERTICAL);
@@ -184,14 +181,10 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
         nonTBVitaminBQuantity = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_vitamin_b_qunantity), getResources().getStringArray(R.array.ctb_1_to_4_list), null, App.HORIZONTAL, App.VERTICAL);
         nonTBIronDispersed = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_iron_dispersed), getResources().getStringArray(R.array.ctb_yes_no_incomplete), null, App.HORIZONTAL, App.VERTICAL);
         nonTBIronQuantity = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_iron_qunantity), getResources().getStringArray(R.array.ctb_1_to_4_list), null, App.HORIZONTAL, App.VERTICAL);
-        nonTBAnthelminthicDispersed= new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_anthelminthic_dispersed), getResources().getStringArray(R.array.ctb_yes_no_incomplete), null, App.HORIZONTAL, App.VERTICAL);
+        nonTBAnthelminthicDispersed = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_anthelminthic_dispersed), getResources().getStringArray(R.array.ctb_yes_no_incomplete), null, App.HORIZONTAL, App.VERTICAL);
         nonTBAnthelminthicQuantity = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_anthelminthic_quantity), getResources().getStringArray(R.array.ctb_1_to_4_list), null, App.HORIZONTAL, App.VERTICAL);
-        nonTBCalpolDispersed= new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_calpol_dispersed), getResources().getStringArray(R.array.ctb_yes_no_incomplete), null, App.HORIZONTAL, App.VERTICAL);
-        nonTBCalpolQuantity= new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_calpol_quantity), getResources().getStringArray(R.array.ctb_1_to_4_list), null, App.HORIZONTAL, App.VERTICAL);
-
-
-
-
+        nonTBCalpolDispersed = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_calpol_dispersed), getResources().getStringArray(R.array.ctb_yes_no_incomplete), null, App.HORIZONTAL, App.VERTICAL);
+        nonTBCalpolQuantity = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_calpol_quantity), getResources().getStringArray(R.array.ctb_1_to_4_list), null, App.HORIZONTAL, App.VERTICAL);
 
 
         nextDateOfDrug = new TitledButton(context, null, getResources().getString(R.string.ctb_next_date_drug_dispersal), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
@@ -237,9 +230,6 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                         tbTreatmentAnthelminthicQuantity,
                         tbTreatmentCalpolDispersed,
                         tbTreatmentCalpolQuantity,
-
-
-
 
 
                         nonTBAdditionalTreatment,
@@ -317,16 +307,16 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
             } else
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                Calendar requiredDate = formDateCalendar.getInstance();
-                requiredDate.setTime(formDateCalendar.getTime());
-                requiredDate.add(Calendar.DATE, 30);
+            Calendar requiredDate = formDateCalendar.getInstance();
+            requiredDate.setTime(formDateCalendar.getTime());
+            requiredDate.add(Calendar.DATE, 30);
 
-                if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
-                    secondDateCalendar.setTime(requiredDate.getTime());
-                } else {
-                    requiredDate.add(Calendar.DATE, 1);
-                    secondDateCalendar.setTime(requiredDate.getTime());
-                }
+            if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                secondDateCalendar.setTime(requiredDate.getTime());
+            } else {
+                requiredDate.add(Calendar.DATE, 1);
+                secondDateCalendar.setTime(requiredDate.getTime());
+            }
 
         }
 
@@ -352,34 +342,28 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
 
                 nextDateOfDrug.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
-            }
-            else if(secondDateCalendar.after(dateToday)){
+            } else if (secondDateCalendar.after(dateToday)) {
                 secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_date_cant_be_greater_than_24_months), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
                 nextDateOfDrug.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-            }
-
-            else if(secondDateCalendar.before(secondDateCalendar)){
+            } else if (secondDateCalendar.before(secondDateCalendar)) {
                 secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_date_of_next_visit_cant_be_before_missed_visit_date), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
                 nextDateOfDrug.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-            }
-
-            else if(nextAppointmentDate.compareTo(formStDate) == 0){
+            } else if (nextAppointmentDate.compareTo(formStDate) == 0) {
                 secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_start_date_and_next_visit_date_cant_be_same), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
                 nextDateOfDrug.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-            }
-            else
+            } else
                 nextDateOfDrug.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
         }
@@ -390,7 +374,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
     @Override
     public boolean validate() {
         Boolean error = false;
-        if(App.get(currentPatientTreatment).isEmpty()){
+        if (App.get(currentPatientTreatment).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -399,7 +383,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
             currentPatientTreatment.requestFocus();
             error = true;
         }
-        if(tbTreatmentPediasureDispersed.getVisibility()==View.VISIBLE && App.get(tbTreatmentPediasureDispersed).isEmpty()){
+        if (tbTreatmentPediasureDispersed.getVisibility() == View.VISIBLE && App.get(tbTreatmentPediasureDispersed).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -408,7 +392,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
             tbTreatmentPediasureDispersed.requestFocus();
             error = true;
         }
-        if(tbTreatmentPediasureQuantity.getVisibility()==View.VISIBLE && App.get(tbTreatmentPediasureQuantity).isEmpty()){
+        if (tbTreatmentPediasureQuantity.getVisibility() == View.VISIBLE && App.get(tbTreatmentPediasureQuantity).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -419,8 +403,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
         }
 
 
-
-        if(tbTreatmentVitaminBDispersed.getVisibility()==View.VISIBLE && App.get(tbTreatmentVitaminBDispersed).isEmpty()){
+        if (tbTreatmentVitaminBDispersed.getVisibility() == View.VISIBLE && App.get(tbTreatmentVitaminBDispersed).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -429,7 +412,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
             tbTreatmentVitaminBDispersed.requestFocus();
             error = true;
         }
-        if(tbTreatmentVitaminBQuantity.getVisibility()==View.VISIBLE && App.get(tbTreatmentVitaminBQuantity).isEmpty()){
+        if (tbTreatmentVitaminBQuantity.getVisibility() == View.VISIBLE && App.get(tbTreatmentVitaminBQuantity).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -440,7 +423,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
         }
 
 
-        if(tbTreatmentIronDispersed.getVisibility()==View.VISIBLE && App.get(tbTreatmentIronDispersed).isEmpty()){
+        if (tbTreatmentIronDispersed.getVisibility() == View.VISIBLE && App.get(tbTreatmentIronDispersed).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -449,7 +432,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
             tbTreatmentIronDispersed.requestFocus();
             error = true;
         }
-        if(tbTreatmentIronQuantity.getVisibility()==View.VISIBLE && App.get(tbTreatmentIronQuantity).isEmpty()){
+        if (tbTreatmentIronQuantity.getVisibility() == View.VISIBLE && App.get(tbTreatmentIronQuantity).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -460,7 +443,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
         }
 
 
-        if(tbTreatmentAnthelminthicDispersed.getVisibility()==View.VISIBLE && App.get(tbTreatmentAnthelminthicDispersed).isEmpty()){
+        if (tbTreatmentAnthelminthicDispersed.getVisibility() == View.VISIBLE && App.get(tbTreatmentAnthelminthicDispersed).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -469,7 +452,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
             tbTreatmentAnthelminthicDispersed.requestFocus();
             error = true;
         }
-        if(tbTreatmentAnthelminthicQuantity.getVisibility()==View.VISIBLE && App.get(tbTreatmentAnthelminthicQuantity).isEmpty()){
+        if (tbTreatmentAnthelminthicQuantity.getVisibility() == View.VISIBLE && App.get(tbTreatmentAnthelminthicQuantity).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -479,7 +462,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
             error = true;
         }
 
-        if(tbTreatmentCalpolDispersed.getVisibility()==View.VISIBLE && App.get(tbTreatmentCalpolDispersed).isEmpty()){
+        if (tbTreatmentCalpolDispersed.getVisibility() == View.VISIBLE && App.get(tbTreatmentCalpolDispersed).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -488,7 +471,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
             tbTreatmentCalpolDispersed.requestFocus();
             error = true;
         }
-        if(tbTreatmentCalpolQuantity.getVisibility()==View.VISIBLE && App.get(tbTreatmentCalpolQuantity).isEmpty()){
+        if (tbTreatmentCalpolQuantity.getVisibility() == View.VISIBLE && App.get(tbTreatmentCalpolQuantity).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -499,9 +482,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
         }
 
 
-
-
-        if(nonTBVitaminBDispersed.getVisibility()==View.VISIBLE && App.get(nonTBVitaminBDispersed).isEmpty()){
+        if (nonTBVitaminBDispersed.getVisibility() == View.VISIBLE && App.get(nonTBVitaminBDispersed).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -510,7 +491,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
             nonTBVitaminBDispersed.requestFocus();
             error = true;
         }
-        if(nonTBVitaminBQuantity.getVisibility()==View.VISIBLE && App.get(nonTBVitaminBQuantity).isEmpty()){
+        if (nonTBVitaminBQuantity.getVisibility() == View.VISIBLE && App.get(nonTBVitaminBQuantity).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -520,7 +501,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
             error = true;
         }
 
-        if(nonTBIronDispersed.getVisibility()==View.VISIBLE && App.get(nonTBIronDispersed).isEmpty()){
+        if (nonTBIronDispersed.getVisibility() == View.VISIBLE && App.get(nonTBIronDispersed).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -529,7 +510,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
             nonTBIronDispersed.requestFocus();
             error = true;
         }
-        if(nonTBIronQuantity.getVisibility()==View.VISIBLE && App.get(nonTBIronQuantity).isEmpty()){
+        if (nonTBIronQuantity.getVisibility() == View.VISIBLE && App.get(nonTBIronQuantity).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -539,7 +520,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
             error = true;
         }
 
-        if(nonTBAnthelminthicDispersed.getVisibility()==View.VISIBLE && App.get(nonTBAnthelminthicDispersed).isEmpty()){
+        if (nonTBAnthelminthicDispersed.getVisibility() == View.VISIBLE && App.get(nonTBAnthelminthicDispersed).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -548,7 +529,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
             nonTBAnthelminthicDispersed.requestFocus();
             error = true;
         }
-        if(nonTBAnthelminthicQuantity.getVisibility()==View.VISIBLE && App.get(nonTBAnthelminthicQuantity).isEmpty()){
+        if (nonTBAnthelminthicQuantity.getVisibility() == View.VISIBLE && App.get(nonTBAnthelminthicQuantity).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -558,7 +539,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
             error = true;
         }
 
-        if(nonTBCalpolDispersed.getVisibility()==View.VISIBLE && App.get(nonTBCalpolDispersed).isEmpty()){
+        if (nonTBCalpolDispersed.getVisibility() == View.VISIBLE && App.get(nonTBCalpolDispersed).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -567,7 +548,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
             nonTBCalpolDispersed.requestFocus();
             error = true;
         }
-        if(nonTBCalpolQuantity.getVisibility()==View.VISIBLE && App.get(nonTBCalpolQuantity).isEmpty()){
+        if (nonTBCalpolQuantity.getVisibility() == View.VISIBLE && App.get(nonTBCalpolQuantity).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -576,7 +557,6 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
             nonTBCalpolQuantity.requestFocus();
             error = true;
         }
-
 
 
         if (error) {
@@ -635,14 +615,14 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
         observations.add(new String[]{"PATIENT CURRENT TREATMENT", App.get(currentPatientTreatment).equals(getResources().getString(R.string.ctb_att)) ? "ATT" :
                 App.get(currentPatientTreatment).equals(getResources().getString(R.string.ctb_antibiotic_trial)) ? "ANTIBIOTIC TRIAL" :
                         App.get(currentPatientTreatment).equals(getResources().getString(R.string.ctb_ipt)) ? "IPT"
-                        : "UNDER INVESTIGATION"});
+                                : "UNDER INVESTIGATION"});
 
-        if(!App.get(tbClassification).isEmpty()) {
+        if (!App.get(tbClassification).isEmpty()) {
             observations.add(new String[]{"TUBERCULOSIS INFECTION TYPE", App.get(tbClassification).equals(getResources().getString(R.string.ctb_dstb)) ? "DRUG-SENSITIVE TUBERCULOSIS INFECTION" : "DRUG-RESISTANT TB"});
         }
 
 
-        if(tbTreatmentAdditionalTreatment.getVisibility()==View.VISIBLE){
+        if (tbTreatmentAdditionalTreatment.getVisibility() == View.VISIBLE) {
             String additionalTreatmentString = "";
             for (CheckBox cb : tbTreatmentAdditionalTreatment.getCheckedBoxes()) {
                 if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_pediasure)))
@@ -658,41 +638,41 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
             }
             observations.add(new String[]{"ADDITIONAL TREATMENT TO TB PATIENT", additionalTreatmentString});
         }
-        if(tbTreatmentPediasureDispersed.getVisibility()==View.VISIBLE && !App.get(tbTreatmentPediasureDispersed).isEmpty()) {
+        if (tbTreatmentPediasureDispersed.getVisibility() == View.VISIBLE && !App.get(tbTreatmentPediasureDispersed).isEmpty()) {
             observations.add(new String[]{"PEDIASURE DISPERSED", App.get(tbTreatmentPediasureDispersed).toUpperCase()});
         }
-        if(tbTreatmentPediasureQuantity.getVisibility()==View.VISIBLE && !App.get(tbTreatmentPediasureQuantity).isEmpty()) {
+        if (tbTreatmentPediasureQuantity.getVisibility() == View.VISIBLE && !App.get(tbTreatmentPediasureQuantity).isEmpty()) {
             observations.add(new String[]{"QUANTITY OF PEDIASURE DISPERSED", App.get(tbTreatmentPediasureQuantity)});
         }
-        if(tbTreatmentVitaminBDispersed.getVisibility()==View.VISIBLE && !App.get(tbTreatmentVitaminBDispersed).isEmpty()){
+        if (tbTreatmentVitaminBDispersed.getVisibility() == View.VISIBLE && !App.get(tbTreatmentVitaminBDispersed).isEmpty()) {
             observations.add(new String[]{"VITAMIN B-COMPLEX DISPERSED", App.get(tbTreatmentVitaminBDispersed).toUpperCase()});
         }
-        if(tbTreatmentVitaminBQuantity.getVisibility()==View.VISIBLE && !App.get(tbTreatmentVitaminBQuantity).isEmpty()) {
+        if (tbTreatmentVitaminBQuantity.getVisibility() == View.VISIBLE && !App.get(tbTreatmentVitaminBQuantity).isEmpty()) {
             observations.add(new String[]{"QUANTITY OF VITAMIN B COMPLEX DISPERSED", App.get(tbTreatmentVitaminBQuantity)});
         }
 
-        if(tbTreatmentIronDispersed.getVisibility()==View.VISIBLE && !App.get(tbTreatmentIronDispersed).isEmpty()){
+        if (tbTreatmentIronDispersed.getVisibility() == View.VISIBLE && !App.get(tbTreatmentIronDispersed).isEmpty()) {
             observations.add(new String[]{"IRON DISPERSED", App.get(tbTreatmentIronDispersed).toUpperCase()});
         }
-        if(tbTreatmentIronQuantity.getVisibility()==View.VISIBLE && !App.get(tbTreatmentIronQuantity).isEmpty()) {
+        if (tbTreatmentIronQuantity.getVisibility() == View.VISIBLE && !App.get(tbTreatmentIronQuantity).isEmpty()) {
             observations.add(new String[]{"QUANTITY OF IRON DISPERSED", App.get(tbTreatmentIronQuantity)});
         }
 
-        if(tbTreatmentAnthelminthicDispersed.getVisibility()==View.VISIBLE && !App.get(tbTreatmentAnthelminthicDispersed).isEmpty()){
+        if (tbTreatmentAnthelminthicDispersed.getVisibility() == View.VISIBLE && !App.get(tbTreatmentAnthelminthicDispersed).isEmpty()) {
             observations.add(new String[]{"ANTHELMINTIC DISPERSED", App.get(tbTreatmentAnthelminthicDispersed).toUpperCase()});
         }
-        if(tbTreatmentAnthelminthicQuantity.getVisibility()==View.VISIBLE && !App.get(tbTreatmentAnthelminthicQuantity).isEmpty()) {
+        if (tbTreatmentAnthelminthicQuantity.getVisibility() == View.VISIBLE && !App.get(tbTreatmentAnthelminthicQuantity).isEmpty()) {
             observations.add(new String[]{"QUANTITY OF ANTHELMINTHIC DISPERSED", App.get(tbTreatmentAnthelminthicQuantity)});
         }
 
-        if(tbTreatmentCalpolDispersed.getVisibility()==View.VISIBLE && !App.get(tbTreatmentCalpolDispersed).isEmpty()){
+        if (tbTreatmentCalpolDispersed.getVisibility() == View.VISIBLE && !App.get(tbTreatmentCalpolDispersed).isEmpty()) {
             observations.add(new String[]{"CALPOL DISPERSED", App.get(tbTreatmentCalpolDispersed).toUpperCase()});
         }
-        if(tbTreatmentCalpolQuantity.getVisibility()==View.VISIBLE && !App.get(tbTreatmentCalpolQuantity).isEmpty()) {
+        if (tbTreatmentCalpolQuantity.getVisibility() == View.VISIBLE && !App.get(tbTreatmentCalpolQuantity).isEmpty()) {
             observations.add(new String[]{"QUANTITY OF CALPOL DISPERSED", App.get(tbTreatmentCalpolQuantity)});
         }
 
-        if(nonTBAdditionalTreatment.getVisibility()==View.VISIBLE){
+        if (nonTBAdditionalTreatment.getVisibility() == View.VISIBLE) {
             String additionalTreatmentString = "";
             for (CheckBox cb : nonTBAdditionalTreatment.getCheckedBoxes()) {
                 if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_iron)))
@@ -708,36 +688,35 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
         }
 
 
-        if(nonTBVitaminBDispersed.getVisibility()==View.VISIBLE && !App.get(nonTBVitaminBDispersed).isEmpty()){
+        if (nonTBVitaminBDispersed.getVisibility() == View.VISIBLE && !App.get(nonTBVitaminBDispersed).isEmpty()) {
             observations.add(new String[]{"VITAMIN B-COMPLEX DISPERSED", App.get(nonTBVitaminBDispersed).toUpperCase()});
         }
-        if(nonTBVitaminBQuantity.getVisibility()==View.VISIBLE && !App.get(nonTBVitaminBQuantity).isEmpty()) {
+        if (nonTBVitaminBQuantity.getVisibility() == View.VISIBLE && !App.get(nonTBVitaminBQuantity).isEmpty()) {
             observations.add(new String[]{"QUANTITY OF VITAMIN B COMPLEX DISPERSED", App.get(nonTBVitaminBQuantity)});
         }
 
-        if(nonTBIronDispersed.getVisibility()==View.VISIBLE && !App.get(nonTBIronDispersed).isEmpty()){
+        if (nonTBIronDispersed.getVisibility() == View.VISIBLE && !App.get(nonTBIronDispersed).isEmpty()) {
             observations.add(new String[]{"IRON DISPERSED", App.get(nonTBIronDispersed).toUpperCase()});
         }
-        if(nonTBIronQuantity.getVisibility()==View.VISIBLE && !App.get(nonTBIronQuantity).isEmpty()) {
+        if (nonTBIronQuantity.getVisibility() == View.VISIBLE && !App.get(nonTBIronQuantity).isEmpty()) {
             observations.add(new String[]{"QUANTITY OF IRON DISPERSED", App.get(nonTBIronQuantity)});
         }
 
-        if(nonTBAnthelminthicDispersed.getVisibility()==View.VISIBLE && !App.get(nonTBAnthelminthicDispersed).isEmpty()){
+        if (nonTBAnthelminthicDispersed.getVisibility() == View.VISIBLE && !App.get(nonTBAnthelminthicDispersed).isEmpty()) {
             observations.add(new String[]{"ANTHELMINTIC DISPERSED", App.get(nonTBAnthelminthicDispersed).toUpperCase()});
         }
-        if(nonTBAnthelminthicQuantity.getVisibility()==View.VISIBLE && !App.get(nonTBAnthelminthicQuantity).isEmpty()) {
+        if (nonTBAnthelminthicQuantity.getVisibility() == View.VISIBLE && !App.get(nonTBAnthelminthicQuantity).isEmpty()) {
             observations.add(new String[]{"QUANTITY OF ANTHELMINTHIC DISPERSED", App.get(nonTBAnthelminthicQuantity)});
         }
 
-        if(nonTBCalpolDispersed.getVisibility()==View.VISIBLE && !App.get(nonTBCalpolDispersed).isEmpty()){
+        if (nonTBCalpolDispersed.getVisibility() == View.VISIBLE && !App.get(nonTBCalpolDispersed).isEmpty()) {
             observations.add(new String[]{"CALPOL DISPERSED", App.get(nonTBCalpolDispersed).toUpperCase()});
         }
-        if(nonTBCalpolQuantity.getVisibility()==View.VISIBLE && !App.get(nonTBCalpolQuantity).isEmpty()) {
+        if (nonTBCalpolQuantity.getVisibility() == View.VISIBLE && !App.get(nonTBCalpolQuantity).isEmpty()) {
             observations.add(new String[]{"QUANTITY OF CALPOL DISPERSED", App.get(nonTBCalpolQuantity)});
         }
 
         observations.add(new String[]{"NEXT DATE OF DRUG DISPERSAL", App.getSqlDateTime(secondDateCalendar)});
-
 
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
@@ -754,7 +733,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("Supplement Disbursement Form", FORM, formDateCalendar, observations.toArray(new String[][]{}),true);
+                String result = serverService.saveEncounterAndObservation("Supplement Disbursement Form", FORM, formDateCalendar, observations.toArray(new String[][]{}), true);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 
@@ -874,8 +853,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
             String[][] obs = obsValue.get(i);
             if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
-            }
-            else if (obs[0][0].equals("PATIENT CURRENT TREATMENT")) {
+            } else if (obs[0][0].equals("PATIENT CURRENT TREATMENT")) {
                 for (RadioButton rb : currentPatientTreatment.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.ctb_att)) && obs[0][1].equals("ATT")) {
                         rb.setChecked(true);
@@ -903,17 +881,15 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                     }
                 }
                 tbClassification.setVisibility(View.VISIBLE);
-            }else if (obs[0][0].equals("ADDITIONAL TREATMENT TO TB PATIENT")) {
+            } else if (obs[0][0].equals("ADDITIONAL TREATMENT TO TB PATIENT")) {
                 for (CheckBox cb : tbTreatmentAdditionalTreatment.getCheckedBoxes()) {
                     if (cb.getText().equals(getResources().getString(R.string.ctb_pediasure)) && obs[0][1].equals("PEDIASURE")) {
                         cb.setChecked(true);
                         break;
-                    }
-                    else if (cb.getText().equals(getResources().getString(R.string.ctb_vitamin_B_complex)) && obs[0][1].equals("VITAMIN B COMPLEX")) {
+                    } else if (cb.getText().equals(getResources().getString(R.string.ctb_vitamin_B_complex)) && obs[0][1].equals("VITAMIN B COMPLEX")) {
                         cb.setChecked(true);
                         break;
-                    }
-                    else if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && obs[0][1].equals("IRON")) {
+                    } else if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && obs[0][1].equals("IRON")) {
                         cb.setChecked(true);
                         break;
                     } else if (cb.getText().equals(getResources().getString(R.string.ctb_anthelminthic)) && obs[0][1].equals("ANTHELMINTHIC")) {
@@ -939,8 +915,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                     }
                 }
                 tbTreatmentPediasureDispersed.setVisibility(View.VISIBLE);
-            }
-            else if (obs[0][0].equals("QUANTITY OF PEDIASURE DISPERSED")) {
+            } else if (obs[0][0].equals("QUANTITY OF PEDIASURE DISPERSED")) {
                 for (RadioButton rb : tbTreatmentPediasureQuantity.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
                         rb.setChecked(true);
@@ -951,15 +926,13 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                     } else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
                         rb.setChecked(true);
                         break;
-                    }
-                    else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
                         rb.setChecked(true);
                         break;
                     }
                 }
                 tbTreatmentPediasureQuantity.setVisibility(View.VISIBLE);
-            }
-            else if (obs[0][0].equals("VITAMIN B-COMPLEX DISPERSED")) {
+            } else if (obs[0][0].equals("VITAMIN B-COMPLEX DISPERSED")) {
                 for (RadioButton rb : tbTreatmentVitaminBDispersed.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);
@@ -973,8 +946,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                     }
                 }
                 tbTreatmentVitaminBDispersed.setVisibility(View.VISIBLE);
-            }
-            else if (obs[0][0].equals("QUANTITY OF VITAMIN B COMPLEX DISPERSED")) {
+            } else if (obs[0][0].equals("QUANTITY OF VITAMIN B COMPLEX DISPERSED")) {
                 for (RadioButton rb : tbTreatmentVitaminBQuantity.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
                         rb.setChecked(true);
@@ -985,8 +957,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                     } else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
                         rb.setChecked(true);
                         break;
-                    }
-                    else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
                         rb.setChecked(true);
                         break;
                     }
@@ -1006,8 +977,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                     }
                 }
                 tbTreatmentIronDispersed.setVisibility(View.VISIBLE);
-            }
-            else if (obs[0][0].equals("QUANTITY OF IRON DISPERSED")) {
+            } else if (obs[0][0].equals("QUANTITY OF IRON DISPERSED")) {
                 for (RadioButton rb : tbTreatmentIronQuantity.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
                         rb.setChecked(true);
@@ -1018,15 +988,13 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                     } else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
                         rb.setChecked(true);
                         break;
-                    }
-                    else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
                         rb.setChecked(true);
                         break;
                     }
                 }
                 tbTreatmentIronQuantity.setVisibility(View.VISIBLE);
-            }
-            else if (obs[0][0].equals("ANTHELMINTIC DISPERSED")) {
+            } else if (obs[0][0].equals("ANTHELMINTIC DISPERSED")) {
                 for (RadioButton rb : tbTreatmentAnthelminthicDispersed.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);
@@ -1040,8 +1008,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                     }
                 }
                 tbTreatmentAnthelminthicDispersed.setVisibility(View.VISIBLE);
-            }
-            else if (obs[0][0].equals("QUANTITY OF ANTHELMINTHIC DISPERSED")) {
+            } else if (obs[0][0].equals("QUANTITY OF ANTHELMINTHIC DISPERSED")) {
                 for (RadioButton rb : tbTreatmentAnthelminthicQuantity.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
                         rb.setChecked(true);
@@ -1052,14 +1019,13 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                     } else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
                         rb.setChecked(true);
                         break;
-                    }
-                    else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
                         rb.setChecked(true);
                         break;
                     }
                 }
                 tbTreatmentAnthelminthicQuantity.setVisibility(View.VISIBLE);
-            }else if (obs[0][0].equals("CALPOL DISPERSED")) {
+            } else if (obs[0][0].equals("CALPOL DISPERSED")) {
                 for (RadioButton rb : tbTreatmentCalpolDispersed.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);
@@ -1073,8 +1039,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                     }
                 }
                 tbTreatmentCalpolDispersed.setVisibility(View.VISIBLE);
-            }
-            else if (obs[0][0].equals("QUANTITY OF CALPOL DISPERSED")) {
+            } else if (obs[0][0].equals("QUANTITY OF CALPOL DISPERSED")) {
                 for (RadioButton rb : tbTreatmentCalpolQuantity.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
                         rb.setChecked(true);
@@ -1085,23 +1050,18 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                     } else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
                         rb.setChecked(true);
                         break;
-                    }
-                    else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
                         rb.setChecked(true);
                         break;
                     }
                 }
                 tbTreatmentCalpolQuantity.setVisibility(View.VISIBLE);
-            }
-
-
-            else if (obs[0][0].equals("ADDITIONAL TREATMENT TO NON TB PATIENT")) {
+            } else if (obs[0][0].equals("ADDITIONAL TREATMENT TO NON TB PATIENT")) {
                 for (CheckBox cb : nonTBAdditionalTreatment.getCheckedBoxes()) {
-                   if (cb.getText().equals(getResources().getString(R.string.ctb_vitamin_B_complex)) && obs[0][1].equals("VITAMIN B COMPLEX")) {
+                    if (cb.getText().equals(getResources().getString(R.string.ctb_vitamin_B_complex)) && obs[0][1].equals("VITAMIN B COMPLEX")) {
                         cb.setChecked(true);
                         break;
-                    }
-                    else if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && obs[0][1].equals("IRON")) {
+                    } else if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && obs[0][1].equals("IRON")) {
                         cb.setChecked(true);
                         break;
                     } else if (cb.getText().equals(getResources().getString(R.string.ctb_anthelminthic)) && obs[0][1].equals("ANTHELMINTHIC")) {
@@ -1113,8 +1073,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                     }
                 }
                 nonTBAdditionalTreatment.setVisibility(View.VISIBLE);
-            }
-            else if (obs[0][0].equals("VITAMIN B-COMPLEX DISPERSED")) {
+            } else if (obs[0][0].equals("VITAMIN B-COMPLEX DISPERSED")) {
                 for (RadioButton rb : nonTBVitaminBDispersed.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);
@@ -1128,8 +1087,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                     }
                 }
                 nonTBVitaminBDispersed.setVisibility(View.VISIBLE);
-            }
-            else if (obs[0][0].equals("QUANTITY OF VITAMIN B COMPLEX DISPERSED")) {
+            } else if (obs[0][0].equals("QUANTITY OF VITAMIN B COMPLEX DISPERSED")) {
                 for (RadioButton rb : nonTBVitaminBQuantity.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
                         rb.setChecked(true);
@@ -1140,8 +1098,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                     } else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
                         rb.setChecked(true);
                         break;
-                    }
-                    else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
                         rb.setChecked(true);
                         break;
                     }
@@ -1161,8 +1118,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                     }
                 }
                 nonTBIronDispersed.setVisibility(View.VISIBLE);
-            }
-            else if (obs[0][0].equals("QUANTITY OF IRON DISPERSED")) {
+            } else if (obs[0][0].equals("QUANTITY OF IRON DISPERSED")) {
                 for (RadioButton rb : nonTBIronQuantity.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
                         rb.setChecked(true);
@@ -1173,15 +1129,13 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                     } else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
                         rb.setChecked(true);
                         break;
-                    }
-                    else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
                         rb.setChecked(true);
                         break;
                     }
                 }
                 nonTBIronQuantity.setVisibility(View.VISIBLE);
-            }
-            else if (obs[0][0].equals("ANTHELMINTIC DISPERSED")) {
+            } else if (obs[0][0].equals("ANTHELMINTIC DISPERSED")) {
                 for (RadioButton rb : nonTBAnthelminthicDispersed.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);
@@ -1195,8 +1149,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                     }
                 }
                 nonTBAnthelminthicDispersed.setVisibility(View.VISIBLE);
-            }
-            else if (obs[0][0].equals("QUANTITY OF ANTHELMINTHIC DISPERSED")) {
+            } else if (obs[0][0].equals("QUANTITY OF ANTHELMINTHIC DISPERSED")) {
                 for (RadioButton rb : nonTBAnthelminthicQuantity.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
                         rb.setChecked(true);
@@ -1207,14 +1160,13 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                     } else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
                         rb.setChecked(true);
                         break;
-                    }
-                    else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
                         rb.setChecked(true);
                         break;
                     }
                 }
                 nonTBAnthelminthicQuantity.setVisibility(View.VISIBLE);
-            }else if (obs[0][0].equals("CALPOL DISPERSED")) {
+            } else if (obs[0][0].equals("CALPOL DISPERSED")) {
                 for (RadioButton rb : nonTBCalpolDispersed.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);
@@ -1228,8 +1180,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                     }
                 }
                 nonTBCalpolDispersed.setVisibility(View.VISIBLE);
-            }
-            else if (obs[0][0].equals("QUANTITY OF CALPOL DISPERSED")) {
+            } else if (obs[0][0].equals("QUANTITY OF CALPOL DISPERSED")) {
                 for (RadioButton rb : nonTBCalpolQuantity.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
                         rb.setChecked(true);
@@ -1240,15 +1191,13 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                     } else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
                         rb.setChecked(true);
                         break;
-                    }
-                    else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
                         rb.setChecked(true);
                         break;
                     }
                 }
                 nonTBCalpolQuantity.setVisibility(View.VISIBLE);
-            }
-            else if (obs[0][0].equals("NEXT DATE OF DRUG DISPERSAL")) {
+            } else if (obs[0][0].equals("NEXT DATE OF DRUG DISPERSAL")) {
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                 nextDateOfDrug.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
@@ -1303,36 +1252,35 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                 } else {
                     tbTreatmentPediasureDispersed.setVisibility(View.GONE);
                 }
-                } else if (App.get(cb).equals(getResources().getString(R.string.ctb_vitamin_B_complex))) {
-                    if (cb.isChecked()) {
-                        tbTreatmentVitaminBDispersed.setVisibility(View.VISIBLE);
+            } else if (App.get(cb).equals(getResources().getString(R.string.ctb_vitamin_B_complex))) {
+                if (cb.isChecked()) {
+                    tbTreatmentVitaminBDispersed.setVisibility(View.VISIBLE);
 
-                    } else {
-                        tbTreatmentVitaminBDispersed.setVisibility(View.GONE);
-                    }
-                } else if (App.get(cb).equals(getResources().getString(R.string.ctb_iron))) {
-                    if (cb.isChecked()) {
-                        tbTreatmentIronDispersed.setVisibility(View.VISIBLE);
-
-                    } else {
-                        tbTreatmentIronDispersed.setVisibility(View.GONE);
-                    }
-                } else if (App.get(cb).equals(getResources().getString(R.string.ctb_anthelminthic))) {
-                    if (cb.isChecked()) {
-                        tbTreatmentAnthelminthicDispersed.setVisibility(View.VISIBLE);
-
-                    } else {
-                        tbTreatmentAnthelminthicDispersed.setVisibility(View.GONE);
-                    }
+                } else {
+                    tbTreatmentVitaminBDispersed.setVisibility(View.GONE);
                 }
-                else if (App.get(cb).equals(getResources().getString(R.string.ctb_calpol))) {
-                    if (cb.isChecked()) {
-                        tbTreatmentCalpolDispersed.setVisibility(View.VISIBLE);
+            } else if (App.get(cb).equals(getResources().getString(R.string.ctb_iron))) {
+                if (cb.isChecked()) {
+                    tbTreatmentIronDispersed.setVisibility(View.VISIBLE);
 
-                    } else {
-                        tbTreatmentCalpolDispersed.setVisibility(View.GONE);
-                    }
+                } else {
+                    tbTreatmentIronDispersed.setVisibility(View.GONE);
                 }
+            } else if (App.get(cb).equals(getResources().getString(R.string.ctb_anthelminthic))) {
+                if (cb.isChecked()) {
+                    tbTreatmentAnthelminthicDispersed.setVisibility(View.VISIBLE);
+
+                } else {
+                    tbTreatmentAnthelminthicDispersed.setVisibility(View.GONE);
+                }
+            } else if (App.get(cb).equals(getResources().getString(R.string.ctb_calpol))) {
+                if (cb.isChecked()) {
+                    tbTreatmentCalpolDispersed.setVisibility(View.VISIBLE);
+
+                } else {
+                    tbTreatmentCalpolDispersed.setVisibility(View.GONE);
+                }
+            }
 
         }
 
@@ -1359,8 +1307,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                 } else {
                     nonTBAnthelminthicDispersed.setVisibility(View.GONE);
                 }
-            }
-            else if (App.get(cb).equals(getResources().getString(R.string.ctb_calpol))) {
+            } else if (App.get(cb).equals(getResources().getString(R.string.ctb_calpol))) {
                 if (cb.isChecked()) {
                     nonTBCalpolDispersed.setVisibility(View.VISIBLE);
 
@@ -1381,7 +1328,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
         if (snackbar != null)
             snackbar.dismiss();
 
-
+        tbClassification.setVisibility(View.GONE);
         tbTreatmentAdditionalTreatment.setVisibility(View.GONE);
         tbTreatmentPediasureDispersed.setVisibility(View.GONE);
         tbTreatmentPediasureQuantity.setVisibility(View.GONE);
@@ -1414,75 +1361,73 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
         String conclusionPresumptive = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Case Confirmation", "CONCLUSION");
         String tbPatient = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "PATIENT HAVE TB");
 
-
-
-        if (additionalTreatment != null) {
-            for (CheckBox cb : tbTreatmentAdditionalTreatment.getCheckedBoxes()) {
-                if (cb.getText().equals(getResources().getString(R.string.ctb_pediasure)) && additionalTreatment.contains("PEDIASURE")) {
-                    cb.setChecked(true);
-                    tbTreatmentPediasureDispersed.setVisibility(View.VISIBLE);
-                }
-                if (cb.getText().equals(getResources().getString(R.string.ctb_vitamin_B_complex)) && additionalTreatment.contains("VITAMIN B COMPLEX")) {
-                    cb.setChecked(true);
-                    tbTreatmentVitaminBDispersed.setVisibility(View.VISIBLE);
-                }
-                if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && additionalTreatment.contains("IRON")) {
-                    cb.setChecked(true);
-                    tbTreatmentIronDispersed.setVisibility(View.VISIBLE);
-                }
-                if (cb.getText().equals(getResources().getString(R.string.ctb_anthelminthic)) && additionalTreatment.contains("ANTHELMINTHIC")) {
-                    cb.setChecked(true);
-                    tbTreatmentAnthelminthicDispersed.setVisibility(View.VISIBLE);
-                }
-                if (cb.getText().equals(getResources().getString(R.string.ctb_calpol)) && additionalTreatment.contains("CALPOL")) {
-                    cb.setChecked(true);
-                    tbTreatmentCalpolDispersed.setVisibility(View.VISIBLE);
-                }
-            }
+        if(tbPatient.equalsIgnoreCase(getResources().getString(R.string.yes))) {
+            tbClassification.setVisibility(View.VISIBLE);
             tbTreatmentAdditionalTreatment.setVisibility(View.VISIBLE);
-        }
-
-        if(conclusionPresumptive!=null){
-            if(conclusionPresumptive.equalsIgnoreCase(getResources().getString(R.string.ctb_tb_presumptive_confirmed))){
-                if(tbPatient!=null){
-                    if(tbPatient.equalsIgnoreCase(getResources().getString(R.string.ctb_no)) || tbPatient.equalsIgnoreCase(getResources().getString(R.string.ctb_inconclusive))){
-                        nonTBAdditionalTreatment.setVisibility(View.VISIBLE);
-                        for (CheckBox cb : nonTBAdditionalTreatment.getCheckedBoxes()) {
-                            if (cb.getText().equals(getResources().getString(R.string.ctb_vitamin_B_complex)) && cb.isChecked()==true) {
-                                nonTBVitaminBDispersed.setVisibility(View.VISIBLE);
-                            }
-                            if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && cb.isChecked()==true) {
-                                nonTBIronDispersed.setVisibility(View.VISIBLE);
-                            }
-                            if (cb.getText().equals(getResources().getString(R.string.ctb_anthelminthic)) && cb.isChecked()==true) {
-                                nonTBAnthelminthicDispersed.setVisibility(View.VISIBLE);
-                            }
-                            if (cb.getText().equals(getResources().getString(R.string.ctb_calpol)) && cb.isChecked()==true) {
-                                nonTBCalpolDispersed.setVisibility(View.VISIBLE);
-                            }
-                        }
+            if (additionalTreatment != null) {
+                for (CheckBox cb : tbTreatmentAdditionalTreatment.getCheckedBoxes()) {
+                    if (cb.getText().equals(getResources().getString(R.string.ctb_pediasure)) && additionalTreatment.contains("PEDIASURE")) {
+                        cb.setChecked(true);
+                        tbTreatmentPediasureDispersed.setVisibility(View.VISIBLE);
+                    }
+                    if (cb.getText().equals(getResources().getString(R.string.ctb_vitamin_B_complex)) && additionalTreatment.contains("VITAMIN B COMPLEX")) {
+                        cb.setChecked(true);
+                        tbTreatmentVitaminBDispersed.setVisibility(View.VISIBLE);
+                    }
+                    if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && additionalTreatment.contains("IRON")) {
+                        cb.setChecked(true);
+                        tbTreatmentIronDispersed.setVisibility(View.VISIBLE);
+                    }
+                    if (cb.getText().equals(getResources().getString(R.string.ctb_anthelminthic)) && additionalTreatment.contains("ANTHELMINTHIC")) {
+                        cb.setChecked(true);
+                        tbTreatmentAnthelminthicDispersed.setVisibility(View.VISIBLE);
+                    }
+                    if (cb.getText().equals(getResources().getString(R.string.ctb_calpol)) && additionalTreatment.contains("CALPOL")) {
+                        cb.setChecked(true);
+                        tbTreatmentCalpolDispersed.setVisibility(View.VISIBLE);
                     }
                 }
             }
         }
-
-
-            Bundle bundle = this.getArguments();
-            if (bundle != null) {
-                Boolean openFlag = bundle.getBoolean("open");
-                if (openFlag) {
-
-                    bundle.putBoolean("open", false);
-                    bundle.putBoolean("save", true);
-
-                    String id = bundle.getString("formId");
-                    int formId = Integer.valueOf(id);
-
-                    refill(formId);
-
-                } else bundle.putBoolean("save", false);
-
+        if(conclusionPresumptive==null) {
+            conclusionPresumptive="";
+        }
+            if (conclusionPresumptive.equalsIgnoreCase(getResources().getString(R.string.ctb_tb_presumptive_confirmed)) || tbPatient.equalsIgnoreCase(getResources().getString(R.string.ctb_no)) || tbPatient.equalsIgnoreCase(getResources().getString(R.string.ctb_inconclusive))) {
+                nonTBAdditionalTreatment.setVisibility(View.VISIBLE);
+                for (CheckBox cb : nonTBAdditionalTreatment.getCheckedBoxes()) {
+                    if (cb.getText().equals(getResources().getString(R.string.ctb_vitamin_B_complex)) && cb.isChecked() == true) {
+                        nonTBVitaminBDispersed.setVisibility(View.VISIBLE);
+                    }
+                    if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && cb.isChecked() == true) {
+                        nonTBIronDispersed.setVisibility(View.VISIBLE);
+                    }
+                    if (cb.getText().equals(getResources().getString(R.string.ctb_anthelminthic)) && cb.isChecked() == true) {
+                        nonTBAnthelminthicDispersed.setVisibility(View.VISIBLE);
+                    }
+                    if (cb.getText().equals(getResources().getString(R.string.ctb_calpol)) && cb.isChecked() == true) {
+                        nonTBCalpolDispersed.setVisibility(View.VISIBLE);
+                    }
+                }
             }
+
+
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean openFlag = bundle.getBoolean("open");
+            if (openFlag) {
+
+                bundle.putBoolean("open", false);
+                bundle.putBoolean("save", true);
+
+                String id = bundle.getString("formId");
+                int formId = Integer.valueOf(id);
+
+                refill(formId);
+
+            } else bundle.putBoolean("save", false);
+
+        }
 
     }
 
@@ -1526,106 +1471,88 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
-           if (group == tbTreatmentPediasureDispersed.getRadioGroup()) {
-               tbTreatmentPediasureDispersed.getQuestionView().setError(null);
-               if (tbTreatmentPediasureDispersed.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
-                   tbTreatmentPediasureQuantity.setVisibility(View.VISIBLE);
-               } else {
-                   tbTreatmentPediasureQuantity.setVisibility(View.GONE);
-               }
-           }
-           else if (group == tbTreatmentPediasureQuantity.getRadioGroup()) {
-               tbTreatmentPediasureQuantity.getQuestionView().setError(null);
-           }
-           else if (group == tbTreatmentVitaminBDispersed.getRadioGroup()) {
-               tbTreatmentVitaminBDispersed.getQuestionView().setError(null);
-                   if (tbTreatmentVitaminBDispersed.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
-                       tbTreatmentVitaminBQuantity.setVisibility(View.VISIBLE);
-                   } else {
-                       tbTreatmentVitaminBQuantity.setVisibility(View.GONE);
-                   }
-           }
-           else if (group == tbTreatmentVitaminBQuantity.getRadioGroup()) {
-               tbTreatmentVitaminBQuantity.getQuestionView().setError(null);
-           }
-
-           else if (group == tbTreatmentIronDispersed.getRadioGroup()) {
-               tbTreatmentIronDispersed.getQuestionView().setError(null);
-               if (tbTreatmentIronDispersed.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
-                   tbTreatmentIronQuantity.setVisibility(View.VISIBLE);
-               } else {
-                   tbTreatmentIronQuantity.setVisibility(View.GONE);
-               }
-           }
-           else if (group == tbTreatmentIronQuantity.getRadioGroup()) {
-               tbTreatmentIronQuantity.getQuestionView().setError(null);
-           }
-           else if (group == tbTreatmentAnthelminthicDispersed.getRadioGroup()) {
-               tbTreatmentAnthelminthicDispersed.getQuestionView().setError(null);
-               if (tbTreatmentAnthelminthicDispersed.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
-                   tbTreatmentAnthelminthicQuantity.setVisibility(View.VISIBLE);
-               } else {
-                   tbTreatmentAnthelminthicQuantity.setVisibility(View.GONE);
-               }
-           }
-           else if (group == tbTreatmentAnthelminthicQuantity.getRadioGroup()) {
-               tbTreatmentAnthelminthicQuantity.getQuestionView().setError(null);
-           }
-           else if (group == tbTreatmentCalpolDispersed.getRadioGroup()) {
-               tbTreatmentCalpolDispersed.getQuestionView().setError(null);
-               if (tbTreatmentCalpolDispersed.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
-                   tbTreatmentCalpolQuantity.setVisibility(View.VISIBLE);
-               } else {
-                   tbTreatmentCalpolQuantity.setVisibility(View.GONE);
-               }
-           }
-           else if (group == tbTreatmentCalpolQuantity.getRadioGroup()) {
-               tbTreatmentCalpolQuantity.getQuestionView().setError(null);
-           }
-           else if (group == nonTBVitaminBDispersed.getRadioGroup()) {
-               nonTBVitaminBDispersed.getQuestionView().setError(null);
-               if (nonTBVitaminBDispersed.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
-                   nonTBVitaminBQuantity.setVisibility(View.VISIBLE);
-               } else {
-                   nonTBVitaminBQuantity.setVisibility(View.GONE);
-               }
-           }
-           else if (group == nonTBVitaminBQuantity.getRadioGroup()) {
-               nonTBVitaminBQuantity.getQuestionView().setError(null);
-           }
-           else if (group == nonTBIronDispersed.getRadioGroup()) {
-               nonTBIronDispersed.getQuestionView().setError(null);
-               if (nonTBIronDispersed.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
-                   nonTBIronQuantity.setVisibility(View.VISIBLE);
-               } else {
-                   nonTBIronQuantity.setVisibility(View.GONE);
-               }
-           }
-           else if (group == nonTBIronQuantity.getRadioGroup()) {
-               nonTBIronQuantity.getQuestionView().setError(null);
-           }
-           else if (group == nonTBAnthelminthicDispersed.getRadioGroup()) {
-               nonTBAnthelminthicDispersed.getQuestionView().setError(null);
-               if (nonTBAnthelminthicDispersed.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
-                   nonTBAnthelminthicQuantity.setVisibility(View.VISIBLE);
-               } else {
-                   nonTBAnthelminthicQuantity.setVisibility(View.GONE);
-               }
-           }
-           else if (group == nonTBAnthelminthicQuantity.getRadioGroup()) {
-               nonTBAnthelminthicQuantity.getQuestionView().setError(null);
-           }
-           else if (group == nonTBCalpolDispersed.getRadioGroup()) {
-               nonTBCalpolDispersed.getQuestionView().setError(null);
-               if (nonTBCalpolDispersed.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
-                   nonTBCalpolQuantity.setVisibility(View.VISIBLE);
-               } else {
-                   nonTBCalpolQuantity.setVisibility(View.GONE);
-               }
-           }
-           else if (group == nonTBCalpolQuantity.getRadioGroup()) {
-               nonTBCalpolQuantity.getQuestionView().setError(null);
-           }
+        if (group == tbTreatmentPediasureDispersed.getRadioGroup()) {
+            tbTreatmentPediasureDispersed.getQuestionView().setError(null);
+            if (tbTreatmentPediasureDispersed.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
+                tbTreatmentPediasureQuantity.setVisibility(View.VISIBLE);
+            } else {
+                tbTreatmentPediasureQuantity.setVisibility(View.GONE);
+            }
+        } else if (group == tbTreatmentPediasureQuantity.getRadioGroup()) {
+            tbTreatmentPediasureQuantity.getQuestionView().setError(null);
+        } else if (group == tbTreatmentVitaminBDispersed.getRadioGroup()) {
+            tbTreatmentVitaminBDispersed.getQuestionView().setError(null);
+            if (tbTreatmentVitaminBDispersed.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
+                tbTreatmentVitaminBQuantity.setVisibility(View.VISIBLE);
+            } else {
+                tbTreatmentVitaminBQuantity.setVisibility(View.GONE);
+            }
+        } else if (group == tbTreatmentVitaminBQuantity.getRadioGroup()) {
+            tbTreatmentVitaminBQuantity.getQuestionView().setError(null);
+        } else if (group == tbTreatmentIronDispersed.getRadioGroup()) {
+            tbTreatmentIronDispersed.getQuestionView().setError(null);
+            if (tbTreatmentIronDispersed.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
+                tbTreatmentIronQuantity.setVisibility(View.VISIBLE);
+            } else {
+                tbTreatmentIronQuantity.setVisibility(View.GONE);
+            }
+        } else if (group == tbTreatmentIronQuantity.getRadioGroup()) {
+            tbTreatmentIronQuantity.getQuestionView().setError(null);
+        } else if (group == tbTreatmentAnthelminthicDispersed.getRadioGroup()) {
+            tbTreatmentAnthelminthicDispersed.getQuestionView().setError(null);
+            if (tbTreatmentAnthelminthicDispersed.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
+                tbTreatmentAnthelminthicQuantity.setVisibility(View.VISIBLE);
+            } else {
+                tbTreatmentAnthelminthicQuantity.setVisibility(View.GONE);
+            }
+        } else if (group == tbTreatmentAnthelminthicQuantity.getRadioGroup()) {
+            tbTreatmentAnthelminthicQuantity.getQuestionView().setError(null);
+        } else if (group == tbTreatmentCalpolDispersed.getRadioGroup()) {
+            tbTreatmentCalpolDispersed.getQuestionView().setError(null);
+            if (tbTreatmentCalpolDispersed.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
+                tbTreatmentCalpolQuantity.setVisibility(View.VISIBLE);
+            } else {
+                tbTreatmentCalpolQuantity.setVisibility(View.GONE);
+            }
+        } else if (group == tbTreatmentCalpolQuantity.getRadioGroup()) {
+            tbTreatmentCalpolQuantity.getQuestionView().setError(null);
+        } else if (group == nonTBVitaminBDispersed.getRadioGroup()) {
+            nonTBVitaminBDispersed.getQuestionView().setError(null);
+            if (nonTBVitaminBDispersed.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
+                nonTBVitaminBQuantity.setVisibility(View.VISIBLE);
+            } else {
+                nonTBVitaminBQuantity.setVisibility(View.GONE);
+            }
+        } else if (group == nonTBVitaminBQuantity.getRadioGroup()) {
+            nonTBVitaminBQuantity.getQuestionView().setError(null);
+        } else if (group == nonTBIronDispersed.getRadioGroup()) {
+            nonTBIronDispersed.getQuestionView().setError(null);
+            if (nonTBIronDispersed.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
+                nonTBIronQuantity.setVisibility(View.VISIBLE);
+            } else {
+                nonTBIronQuantity.setVisibility(View.GONE);
+            }
+        } else if (group == nonTBIronQuantity.getRadioGroup()) {
+            nonTBIronQuantity.getQuestionView().setError(null);
+        } else if (group == nonTBAnthelminthicDispersed.getRadioGroup()) {
+            nonTBAnthelminthicDispersed.getQuestionView().setError(null);
+            if (nonTBAnthelminthicDispersed.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
+                nonTBAnthelminthicQuantity.setVisibility(View.VISIBLE);
+            } else {
+                nonTBAnthelminthicQuantity.setVisibility(View.GONE);
+            }
+        } else if (group == nonTBAnthelminthicQuantity.getRadioGroup()) {
+            nonTBAnthelminthicQuantity.getQuestionView().setError(null);
+        } else if (group == nonTBCalpolDispersed.getRadioGroup()) {
+            nonTBCalpolDispersed.getQuestionView().setError(null);
+            if (nonTBCalpolDispersed.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
+                nonTBCalpolQuantity.setVisibility(View.VISIBLE);
+            } else {
+                nonTBCalpolQuantity.setVisibility(View.GONE);
+            }
+        } else if (group == nonTBCalpolQuantity.getRadioGroup()) {
+            nonTBCalpolQuantity.getQuestionView().setError(null);
+        }
     }
 
     class MyAdapter extends PagerAdapter {
