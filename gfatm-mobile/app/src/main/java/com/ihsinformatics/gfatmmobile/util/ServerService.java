@@ -1752,7 +1752,7 @@ public class ServerService {
     }
 
     public String getLatestObsValue(String patientId, String encounterType, String conceptName) {
-        Object[][] encounter = dbUtil.getFormTableData("select encounter_id from " + Metadata.ENCOUNTER + " where patientId=" + patientId + " and encounterType = '" + encounterType + "' order by encounterDatetime DESC, dateCreated DESC");
+        Object[][] encounter = dbUtil.getFormTableData("select encounter_id, dateCreated from " + Metadata.ENCOUNTER + " where patientId=" + patientId + " and encounterType = '" + encounterType + "' order by encounterDatetime DESC, dateCreated DESC");
         if (encounter.length < 1)
             return null;
         Object[][] obs = dbUtil.getFormTableData("select value from " + Metadata.OBS + " where encounter_id=" + String.valueOf(encounter[0][0]) + " and conceptName = '" + conceptName + "'");
@@ -2033,7 +2033,7 @@ public class ServerService {
 
     public String getObsValueByObs(String patientId, String encounterType, String filterConceptName, String filterConceptValue, String conceptName) {
 
-        Object[][] obs = dbUtil.getFormTableData("select "+ Metadata.ENCOUNTER +".encounter_id from " + Metadata.OBS + ", " + Metadata.ENCOUNTER + " where encounterType = '" + encounterType + "' and patientId=" + patientId + " and " + Metadata.ENCOUNTER + ".encounter_id=" + Metadata.OBS + ".encounter_id and conceptName = '" + filterConceptName + "' and " + Metadata.OBS + ".value = '" + filterConceptValue  + "' order by encounterDatetime DESC, dateCreated DESC");
+        Object[][] obs = dbUtil.getFormTableData("select "+ Metadata.ENCOUNTER +".encounter_id, dateCreated from " + Metadata.OBS + ", " + Metadata.ENCOUNTER + " where encounterType = '" + encounterType + "' and patientId=" + patientId + " and " + Metadata.ENCOUNTER + ".encounter_id=" + Metadata.OBS + ".encounter_id and conceptName = '" + filterConceptName + "' and " + Metadata.OBS + ".value = '" + filterConceptValue  + "' order by encounterDatetime DESC, dateCreated DESC");
         if (obs == null || obs.length < 1)
             return null;
 

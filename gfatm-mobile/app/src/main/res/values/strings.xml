@@ -608,6 +608,7 @@
     <string name="screening_facility">Screening Facility:</string>
     <string name="pet_sci_intervention">PET/SCI Intervention:</string>
     <string name="presumptive_date">Presumptive Date:</string>
+    <string name="sample_submission_date">Sample Submission Date:</string>
     <string name="diagnosed_on">Diagnosed on:</string>
     <string name="diagnosed_type">Type of diagnosis:</string>
     <string name="xpert_result">Xpert Result:</string>

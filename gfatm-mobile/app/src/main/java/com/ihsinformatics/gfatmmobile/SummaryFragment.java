@@ -238,7 +238,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         if(presumptive == null || presumptive.equalsIgnoreCase("No"))
             presumptive = "-";
 
-        String diagnoseOn = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation","TUBERCULOSIS DIAGNOSIS METHOD");
+        String diagnoseOn = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation","CONFIRMED DIAGNOSIS");
         if(diagnoseOn == null)
             diagnoseOn = "-";
         else
@@ -254,6 +254,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
 
         String xpertResult = "";
         String rifResult = "";
+        String sputumSubmissionDate = "";
         String xpertResultDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB-GXP Specimen Collection");
         if(xpertResultDate != null){
             String xpertResultOderId = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-GXP Specimen Collection" , "TEST CONTEXT STATUS", "BASELINE REPEAT", "ORDER ID");
@@ -264,11 +265,13 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
                 else {
                     xpertResult = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-GXP Test", "ORDER ID", xpertResultOderId, "GENEXPERT MTB/RIF RESULT");
                     rifResult = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-GXP Test", "ORDER ID", xpertResultOderId, "RIF RESISTANCE RESULT");
+                    sputumSubmissionDate = serverService.getEncounterDateTimeByObsValue(App.getPatientId(), "Childhood TB-GXP Specimen Collection", "ORDER ID", xpertResultOderId);
                 }
             }
             else {
                 xpertResult = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-GXP Test", "ORDER ID", xpertResultOderId, "GENEXPERT MTB/RIF RESULT");
                 rifResult = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-GXP Test", "ORDER ID", xpertResultOderId, "RIF RESISTANCE RESULT");
+                sputumSubmissionDate = serverService.getEncounterDateTimeByObsValue(App.getPatientId(), "Childhood TB-GXP Specimen Collection", "ORDER ID", xpertResultOderId);
             }
         } else {
             xpertResultDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST-GXP Specimen Collection");
@@ -281,13 +284,13 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
                     else {
                         xpertResult = serverService.getObsValueByObs(App.getPatientId(), "FAST-GXP Test", "ORDER ID", xpertResultOderId, "GENEXPERT MTB/RIF RESULT");
                         rifResult = serverService.getObsValueByObs(App.getPatientId(), "FAST-GXP Test", "ORDER ID", xpertResultOderId, "RIF RESISTANCE RESULT");
-
+                        sputumSubmissionDate = serverService.getEncounterDateTimeByObsValue(App.getPatientId(), "FAST-GXP Specimen Collection", "ORDER ID", xpertResultOderId);
                     }
                 }
                 else {
                     xpertResult = serverService.getObsValueByObs(App.getPatientId(), "FAST-GXP Test", "ORDER ID", xpertResultOderId, "GENEXPERT MTB/RIF RESULT");
                     rifResult = serverService.getObsValueByObs(App.getPatientId(), "FAST-GXP Test", "ORDER ID", xpertResultOderId, "RIF RESISTANCE RESULT");
-
+                    sputumSubmissionDate = serverService.getEncounterDateTimeByObsValue(App.getPatientId(), "FAST-GXP Specimen Collection", "ORDER ID", xpertResultOderId);
                 }
 
             }
@@ -299,6 +302,9 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         String xpertHighlight = null;
         if(rifResult != null && rifResult.equals("DETECTED"))
             xpertHighlight = "Highlight";
+
+        if(sputumSubmissionDate == null || sputumSubmissionDate.equals(""))
+            sputumSubmissionDate = "-";
 
         String xrayResult = "";
         String xrayResultDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB-CXR Screening Test Order");
@@ -545,10 +551,11 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
                 {getString(R.string.screening_facility),screeningFacility,null,null},
                 {getString(R.string.pet_sci_intervention),intervention,null},
                 {getString(R.string.presumptive_date),presumptive,null},
-                {getString(R.string.diagnosed_on),diagnoseOn,null},
-                {getString(R.string.diagnosed_type),diagnosisType,null},
+                {getString(R.string.sample_submission_date),sputumSubmissionDate,null},
                 {getString(R.string.xpert_result),xpertResult,xpertHighlight},
                 {getString(R.string.xray_result),xrayResult,null},
+                {getString(R.string.diagnosed_on),diagnoseOn,null},
+                {getString(R.string.diagnosed_type),diagnosisType,null},
                 {getString(R.string.tb_type),tbType,null},
                 {getString(R.string.tb_initiation_date),treatmentInitiationDate,null},
                 {getString(R.string.tb_registration_no),registrationNo,null},
@@ -653,7 +660,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         if(sputumDate!=null) {
             sputumResultOrderID = serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Order", "TEST CONTEXT STATUS", "BASELINE", "ORDER ID");
             if (sputumResultOrderID != null) {
-                smearResult = serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", xpertResultOderId, "SPUTUM FOR ACID FAST BACILLI");
+                smearResult = serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", sputumResultOrderID, "SPUTUM FOR ACID FAST BACILLI");
                 if (smearResult == null) {
                     smearResult = "-";
                 }
@@ -726,6 +733,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         if(returnVisitDate==null){
             returnVisitDate="-";
         }
+
         String followupDate = serverService.getLatestEncounterDateTime(App.getPatientId(),"FAST-Treatment Followup");
         if(followupDate==null) {
             followupDate = "-";

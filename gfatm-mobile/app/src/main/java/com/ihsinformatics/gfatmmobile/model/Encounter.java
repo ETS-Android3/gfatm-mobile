@@ -66,6 +66,8 @@ public class Encounter extends AbstractModel {
             String patientUuid = patientObject.getString("uuid");
             if(json.has("auditInfo")) {
                 dateCreated = json.getJSONObject("auditInfo").getString("dateCreated");
+                String date[] = dateCreated.split("T");
+                dateCreated = date[0] + " " + date[1].substring(0,8);
                 creator = json.getJSONObject("auditInfo").getJSONObject("creator").getString("display");
             }else
                 dateCreated = App.getSqlDateTime(new Date());

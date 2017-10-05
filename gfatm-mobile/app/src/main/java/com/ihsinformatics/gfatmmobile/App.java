@@ -423,7 +423,7 @@ public class App {
      * @return
      */
     public static String getSqlDateTime(Calendar date) {
-        return DateFormat.format("yyyy-MM-dd hh:mm:ss", date).toString();
+        return DateFormat.format("yyyy-MM-dd HH:mm:ss", date).toString();
     }
 
     /**
@@ -443,7 +443,7 @@ public class App {
      * @return
      */
     public static String getSqlDateTime(Date date) {
-        return DateFormat.format("yyyy-MM-dd hh:mm:ss", date).toString();
+        return DateFormat.format("yyyy-MM-dd HH:mm:ss", date).toString();
     }
 
     public static int getDiffYears(Date first, Date last) {
