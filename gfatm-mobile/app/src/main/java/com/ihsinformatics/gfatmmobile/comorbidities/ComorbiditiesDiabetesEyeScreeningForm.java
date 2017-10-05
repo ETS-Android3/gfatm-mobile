@@ -149,7 +149,7 @@ public class ComorbiditiesDiabetesEyeScreeningForm extends AbstractFormActivity 
         diabetesEyeScreeningRightEyeDiagnosed = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_eye_screening_right_eye_diagnosed), getResources().getStringArray(R.array.comorbidities_eye_screening_eye_diagnosed_options), getResources().getString(R.string.comorbidities_eye_screening_eye_diagnosed_options_yes), App.VERTICAL, App.VERTICAL);
         diabetesEyeScreeningLeftEyeDiagnosed = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_eye_screening_left_eye_diagnosed), getResources().getStringArray(R.array.comorbidities_eye_screening_eye_diagnosed_options), getResources().getString(R.string.comorbidities_eye_screening_eye_diagnosed_options_yes), App.VERTICAL, App.VERTICAL);
         //diabetesEyeScreeningEvidenceEye = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_eye_screening_evidence_eye), getResources().getStringArray(R.array.comorbidities_eye_screening_evidence_eye_options), "", App.VERTICAL, App.VERTICAL);
-        diabetesEyeScreeningEvidenceEye = new TitledCheckBoxes(context, null, getResources().getString(R.string.comorbidities_eye_screening_evidence_eye), getResources().getStringArray(R.array.comorbidities_eye_screening_evidence_eye_options), new Boolean[]{false, false, false, false}, App.VERTICAL, App.VERTICAL);
+        diabetesEyeScreeningEvidenceEye = new TitledCheckBoxes(context, null, getResources().getString(R.string.comorbidities_eye_screening_evidence_eye), getResources().getStringArray(R.array.comorbidities_eye_screening_evidence_eye_options), new Boolean[]{false, false, false}, App.VERTICAL, App.VERTICAL);
         diabetesEyeScreeningEvidenceEyeOther = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_eye_screening_evidence_eye_other), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         diabetesEyeScreeningDiabetecRetinopathy = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_eye_screening_diabetic_retinopathy), getResources().getStringArray(R.array.comorbidities_yes_no), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL);
         diabetesEyeScreeningMildDiabetecRetinopathy = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_eye_screening_mild_diabetic_retinopathy), getResources().getStringArray(R.array.comorbidities_eye_screening_diabetic_retinopathy_options), getResources().getString(R.string.comorbidities_eye_screening_diabetic_retinopathy_options_none), App.VERTICAL, App.VERTICAL);
@@ -160,7 +160,7 @@ public class ComorbiditiesDiabetesEyeScreeningForm extends AbstractFormActivity 
         //diabeteEyeScreeningClinicalDME = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_eye_screening_clinical_dme), getResources().getStringArray(R.array.comorbidities_eye_screening_diabetic_retinopathy_options), getResources().getString(R.string.comorbidities_eye_screening_diabetic_retinopathy_options_none), App.VERTICAL, App.VERTICAL);
         diabetesEyeScreeningOther = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_eye_screening_other), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         diabetesEyeScreeningVisionloss = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_eye_screening_visionloss), getResources().getStringArray(R.array.comorbidities_yes_no), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL);
-        diabetesEyeScreeningRecommendations = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_eye_screening_recommendations), getResources().getStringArray(R.array.comorbidities_eye_screening_recommendations_options), getResources().getString(R.string.comorbidities_eye_screening_recommendations_options_management), App.VERTICAL, App.VERTICAL);
+        diabetesEyeScreeningRecommendations = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_eye_screening_recommendations), getResources().getStringArray(R.array.comorbidities_eye_screening_recommendations_options), getResources().getString(R.string.comorbidities_eye_screening_recommendations_options_12_month), App.VERTICAL, App.VERTICAL);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), diabetesEyeScreeningMonthOfTreatment.getSpinner(), /*diabetesEyeScreeningEyeStatus.getRadioGroup(),*/ diabetesEyeScreeningRightEyeDiagnosed.getRadioGroup(), diabetesEyeScreeningLeftEyeDiagnosed.getRadioGroup(), diabetesEyeScreeningEvidenceEye, /*diabetesEyeScreeningEvidenceEye.getRadioGroup(),*/
@@ -315,7 +315,7 @@ public class ComorbiditiesDiabetesEyeScreeningForm extends AbstractFormActivity 
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
-            }else {
+            } else {
                 endTime = new Date();
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
@@ -338,10 +338,8 @@ public class ComorbiditiesDiabetesEyeScreeningForm extends AbstractFormActivity 
             for (CheckBox cb : diabetesEyeScreeningEvidenceEye.getCheckedBoxes()) {
                 if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_evidence_eye_options_cataract)))
                     diabetesEyeScreeningEvidenceEyeString = diabetesEyeScreeningEvidenceEyeString + "CATARACT" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_evidence_eye_options_papillitis)))
-                    diabetesEyeScreeningEvidenceEyeString = diabetesEyeScreeningEvidenceEyeString + "OPTIC PAPILLITIS" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_evidence_eye_options_ischemic)))
-                    diabetesEyeScreeningEvidenceEyeString = diabetesEyeScreeningEvidenceEyeString + "ISCHAEMIC OPTIC NEUROPATHY" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_evidence_eye_options_glaucoma)))
+                    diabetesEyeScreeningEvidenceEyeString = diabetesEyeScreeningEvidenceEyeString + "GLAUCOMA" + " ; ";
                 else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_evidence_eye_options_other)))
                     diabetesEyeScreeningEvidenceEyeString = diabetesEyeScreeningEvidenceEyeString + "OTHER EYE PROBLEMS" + " ; ";
             }
@@ -379,7 +377,10 @@ public class ComorbiditiesDiabetesEyeScreeningForm extends AbstractFormActivity 
         }
 
         observations.add(new String[]{"OTHER FINDINGS", App.get(diabetesEyeScreeningOther).trim()});
-        observations.add(new String[]{"DIABETES RECOMMENDATAION", App.get(diabetesEyeScreeningRecommendations).equals(getResources().getString(R.string.comorbidities_eye_screening_recommendations_options_referral)) ? "PATIENT REFERRED" : "DIABETES MANAGEMENT"});
+        observations.add(new String[]{"DIABETES RECOMMENDATAION",
+                App.get(diabetesEyeScreeningRecommendations).equals(getResources().getString(R.string.comorbidities_eye_screening_recommendations_options_12_month)) ? "MANAGEMENT OF DIABETES WITH 12 MONTHS FOLLOWUP" :
+                        App.get(diabetesEyeScreeningRecommendations).equals(getResources().getString(R.string.comorbidities_eye_screening_recommendations_options_6_month)) ? "MANAGEMENT OF DIABETES WITH 6 MONTH FOLLOWUP (UNCONTROLLED BLOOD SUGAR)" :
+                                App.get(diabetesEyeScreeningRecommendations).equals(getResources().getString(R.string.comorbidities_eye_screening_recommendations_options_3_month)) ? "MANAGEMENT OF DIABETES WITH 3 MONTHS FOLLOWUP (MILD DIABETIC RETINOPATHY)" : "REFERRAL TO OPHTHALMOLOGIST (MODERATE OR SEVERE RETINOPATHY)"});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -514,7 +515,7 @@ public class ComorbiditiesDiabetesEyeScreeningForm extends AbstractFormActivity 
 
             String[][] obs = obsValue.get(i);
 
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
             }
 
@@ -551,10 +552,7 @@ public class ComorbiditiesDiabetesEyeScreeningForm extends AbstractFormActivity 
                     if (cb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_evidence_eye_options_cataract)) && obs[0][1].equals("CATARACT")) {
                         cb.setChecked(true);
                         break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_evidence_eye_options_papillitis)) && obs[0][1].equals("OPTIC PAPILLITIS")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_evidence_eye_options_ischemic)) && obs[0][1].equals("ISCHAEMIC OPTIC NEUROPATHY")) {
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_evidence_eye_options_glaucoma)) && obs[0][1].equals("GLAUCOMA")) {
                         cb.setChecked(true);
                         break;
                     } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_evidence_eye_options_other)) && obs[0][1].equals("OTHER EYE PROBLEMS")) {
@@ -676,10 +674,16 @@ public class ComorbiditiesDiabetesEyeScreeningForm extends AbstractFormActivity 
                 diabetesEyeScreeningOther.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("DIABETES RECOMMENDATAION")) {
                 for (RadioButton rb : diabetesEyeScreeningRecommendations.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_recommendations_options_referral)) && obs[0][1].equals("PATIENT REFERRED")) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_recommendations_options_12_month)) && obs[0][1].equals("MANAGEMENT OF DIABETES WITH 12 MONTHS FOLLOWUP")) {
                         rb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_foot_screening_recommendations_options_management)) && obs[0][1].equals("DIABETES MANAGEMENT")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_recommendations_options_6_month)) && obs[0][1].equals("MANAGEMENT OF DIABETES WITH 6 MONTH FOLLOWUP (UNCONTROLLED BLOOD SUGAR)")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_recommendations_options_3_month)) && obs[0][1].equals("MANAGEMENT OF DIABETES WITH 3 MONTHS FOLLOWUP (MILD DIABETIC RETINOPATHY)")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_recommendations_options_ophthalmologist)) && obs[0][1].equals("REFERRAL TO OPHTHALMOLOGIST (MODERATE OR SEVERE RETINOPATHY)")) {
                         rb.setChecked(true);
                         break;
                     }
@@ -764,7 +768,7 @@ public class ComorbiditiesDiabetesEyeScreeningForm extends AbstractFormActivity 
 
         }
 
-        if(flag) {
+        if (flag) {
             //HERE FOR AUTOPOPULATING OBS
             final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
                 @Override
