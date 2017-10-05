@@ -365,13 +365,13 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         if(treatmentFacility == null)
             treatmentFacility= "-";
 
-        String nextFollowupDate = serverService.getLatestObsValue(App.getPatientId(), "FAST-Treatment Followup" + Forms.FAST_TREATMENT_FOLLOWUP_FORM, "RETURN VISIT DATE");
+        String nextFollowupDate = serverService.getLatestObsValue(App.getPatientId(), "FAST-Treatment Followup", "RETURN VISIT DATE");
         if (nextFollowupDate == null) {
-            nextFollowupDate = serverService.getLatestObsValue(App.getPatientId(), "FAST-Treatment Initiation" + Forms.FAST_TREATMENT_INITIATION_FORM, "RETURN VISIT DATE");
+            nextFollowupDate = serverService.getLatestObsValue(App.getPatientId(), "FAST-Treatment Initiation", "RETURN VISIT DATE");
             if(nextFollowupDate == null){
-                nextFollowupDate = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-TB Treatment Followup" + Forms.CHILDHOODTB_TB_TREATMENT_FOLLOWUP, "RETURN VISIT DATE");
+                nextFollowupDate = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-TB Treatment Followup", "RETURN VISIT DATE");
                 if(nextFollowupDate == null)
-                    nextFollowupDate = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation" + Forms.CHILDHOODTB_TREATMENT_INITIATION, "RETURN VISIT DATE");
+                    nextFollowupDate = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "RETURN VISIT DATE");
             }
         }
         if(nextFollowupDate == null)
