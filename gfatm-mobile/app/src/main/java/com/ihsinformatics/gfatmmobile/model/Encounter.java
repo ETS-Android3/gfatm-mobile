@@ -34,9 +34,10 @@ public class Encounter extends AbstractModel {
     private String patientId;
     private String dateCreated;
     private String creator;
+    private Boolean voided;
     private ArrayList<com.ihsinformatics.gfatmmobile.model.Obs> obsGroup;
 
-    public Encounter(String uuid, String encounterType, String encounterDatetime, ArrayList<com.ihsinformatics.gfatmmobile.model.Obs> obsGroup, String encounterLocation, String dateCreated, String creator) {
+    public Encounter(String uuid, String encounterType, String encounterDatetime, ArrayList<com.ihsinformatics.gfatmmobile.model.Obs> obsGroup, String encounterLocation, String dateCreated, String creator, Boolean voided) {
         super(uuid);
         this.encounterType = encounterType;
         this.encounterDatetime = encounterDatetime;
@@ -44,6 +45,7 @@ public class Encounter extends AbstractModel {
         this.encounterLocation = encounterLocation;
         this.dateCreated = dateCreated;
         this.creator = creator;
+        this.voided = voided;
     }
 
     public static Encounter parseJSONObject(JSONObject json, Context context) {
@@ -54,12 +56,14 @@ public class Encounter extends AbstractModel {
         String encounterLocation = "";
         String dateCreated = "";
         String creator = "";
+        Boolean voided = false;
         ArrayList<com.ihsinformatics.gfatmmobile.model.Obs> obsGroup = new ArrayList<>();
         try {
             uuid = json.getString("uuid");
             String display = json.getString("display");
             encounterDatetime = display.substring(display.length() - 10, display.length());
             encounterType = display.replace(" " + encounterDatetime, "");
+            voided = json.getBoolean("voided");
             JSONObject locationObject = json.getJSONObject("location");
             encounterLocation = locationObject.getString("display");
             JSONObject patientObject = json.getJSONObject("patient");
@@ -108,7 +112,7 @@ public class Encounter extends AbstractModel {
             e.printStackTrace();
             encounter = null;
         }
-        encounter = new Encounter(uuid, encounterType, encounterDatetime, obsGroup, encounterLocation, dateCreated, creator);
+        encounter = new Encounter(uuid, encounterType, encounterDatetime, obsGroup, encounterLocation, dateCreated, creator, voided);
         return encounter;
     }
 
@@ -179,6 +183,14 @@ public class Encounter extends AbstractModel {
 
     public void setDateCreated(String dateCreated) {
         this.dateCreated = dateCreated;
+    }
+
+    public Boolean getVoided() {
+        return voided;
+    }
+
+    public void setVoided(Boolean voided) {
+        this.voided = voided;
     }
 
     @Override

@@ -21,11 +21,13 @@ Interactive Health Solutions, hereby disclaims all copyright interest in this pr
 public class Obs extends AbstractModel {
     private String conceptName;
     private String value;
+    private Boolean voided;
 
-    public Obs(String uuid, String conceptName, String value) {
+    public Obs(String uuid, String conceptName, String value, Boolean voided) {
         super(uuid);
         this.conceptName = conceptName;
         this.value = value;
+        this.voided = voided;
     }
 
     public static Obs parseJSONObject(JSONObject json) {
@@ -33,11 +35,13 @@ public class Obs extends AbstractModel {
         String uuid = "";
         String conceptName = "";
         String value = "";
+        Boolean voided = false;
         try {
             uuid = json.getString("uuid");
 
             String display = json.getString("display");
             String[] arrayString = display.split(": ");
+            voided = json.getBoolean("voided");
 
             if (arrayString.length == 1)
                 return null;
@@ -49,7 +53,7 @@ public class Obs extends AbstractModel {
             e.printStackTrace();
             obs = null;
         }
-        obs = new Obs(uuid, conceptName, value);
+        obs = new Obs(uuid, conceptName, value, voided);
         return obs;
     }
 
@@ -80,6 +84,14 @@ public class Obs extends AbstractModel {
 
     public void setValue(String username) {
         this.value = value;
+    }
+
+    public Boolean getVoided() {
+        return voided;
+    }
+
+    public void setBoolean(Boolean voided) {
+        this.voided = voided;
     }
 
     @Override

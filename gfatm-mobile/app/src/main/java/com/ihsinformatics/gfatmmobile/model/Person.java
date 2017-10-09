@@ -152,20 +152,22 @@ public class Person extends AbstractModel {
             gender = json.getString("gender");
 
             JSONObject addressObject = json.getJSONObject("preferredAddress");
-            if (addressObject.getString("address1") != null)
-                address1 = addressObject.getString("address1");
-            if (addressObject.getString("address2") != null)
-                address2 = addressObject.getString("address2");
-            if (addressObject.getString("stateProvince") != null)
-                stateProvince = addressObject.getString("stateProvince");
-            if (addressObject.getString("cityVillage") != null)
-                cityVillage = addressObject.getString("cityVillage");
-            if (addressObject.getString("countyDistrict") != null)
-                countyDistrict = addressObject.getString("countyDistrict");
-            if (addressObject.getString("country") != null)
-                country = addressObject.getString("country");
-            if (addressObject.getString("address3") != null)
-                address3 = addressObject.getString("address3");
+            if(!addressObject.getBoolean("voided")) {
+                if (addressObject.getString("address1") != null)
+                    address1 = addressObject.getString("address1");
+                if (addressObject.getString("address2") != null)
+                    address2 = addressObject.getString("address2");
+                if (addressObject.getString("stateProvince") != null)
+                    stateProvince = addressObject.getString("stateProvince");
+                if (addressObject.getString("cityVillage") != null)
+                    cityVillage = addressObject.getString("cityVillage");
+                if (addressObject.getString("countyDistrict") != null)
+                    countyDistrict = addressObject.getString("countyDistrict");
+                if (addressObject.getString("country") != null)
+                    country = addressObject.getString("country");
+                if (addressObject.getString("address3") != null)
+                    address3 = addressObject.getString("address3");
+            }
 
             JSONArray attributes = json.getJSONArray("attributes");
 
@@ -173,34 +175,36 @@ public class Person extends AbstractModel {
 
                 JSONObject object = attributes.getJSONObject(i);
                 String display = object.getString("display");
+                Boolean voided = object.getBoolean("voided");
 
                 String[] displayString = display.split(" = ");
                 if (displayString.length == 2) {
-                    if (displayString[0].equals("Birthplace")) {
+                    if (displayString[0].equals("Birthplace") && !voided) {
                         birthPlace = displayString[1];
-                    } else if (displayString[0].equals("Citizenship")) {
+                    } else if (displayString[0].equals("Citizenship") && !voided) {
                         citizenship = displayString[1];
-                    } else if (displayString[0].equals("Health District")) {
+                    } else if (displayString[0].equals("Health District") && !voided) {
                         healthDistrict = displayString[1];
-                    } else if (displayString[0].equals("Mother Name")) {
+                    } else if (displayString[0].equals("Mother Name") && !voided) {
                         motherName = displayString[1];
-                    } else if (displayString[0].equals("Primary Contact")) {
+                    } else if (displayString[0].equals("Primary Contact") && !voided) {
                         primaryContact = displayString[1];
-                    } else if (displayString[0].equals("Secondary Contact")) {
+                    } else if (displayString[0].equals("Secondary Contact") && !voided) {
                         secondaryContact = displayString[1];
-                    } else if (displayString[0].equals("National ID")) {
+                    } else if (displayString[0].equals("National ID") && !voided) {
                         nationalId = displayString[1];
-                    } else if (displayString[0].equals("Guardian Name")) {
+                    } else if (displayString[0].equals("Guardian Name") && !voided) {
                         guardianName = displayString[1];
-                    } else if (displayString[0].equals("Tertiary Contact")) {
+                    } else if (displayString[0].equals("Tertiary Contact") && !voided) {
                         tertiaryContact = displayString[1];
-                    } else if (displayString[0].equals("Quaternary Contact")) {
+                    } else if (displayString[0].equals("Quaternary Contact") && !voided) {
                         quaternaryContact = displayString[1];
                     }
                 } else {
 
                     JSONObject attributeTypeObj = object.getJSONObject("attributeType");
                     String attributeType = attributeTypeObj.getString("display");
+
 
                     if (attributeType.equals("Marital Status")) {
                         maritalStatus = display;
