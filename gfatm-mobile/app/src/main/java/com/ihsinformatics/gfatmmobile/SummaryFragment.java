@@ -966,7 +966,11 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
 
     public void fillChildhoodTbPatientView(){
 
-        String externalId =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Patient Registration", "CONTACT EXTERNAL ID");
+        String externalId = App.getPatient().getExternalId();
+        if(externalId==null) {
+            serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Patient Registration", "CONTACT EXTERNAL ID");
+        }
+
         if(externalId == null)
             externalId = "-";
         else
