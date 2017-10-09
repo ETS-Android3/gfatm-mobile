@@ -1361,33 +1361,37 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
         String conclusionPresumptive = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Case Confirmation", "CONCLUSION");
         String tbPatient = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "PATIENT HAVE TB");
 
-        if(tbPatient.equalsIgnoreCase(getResources().getString(R.string.yes))) {
-            tbClassification.setVisibility(View.VISIBLE);
-            tbTreatmentAdditionalTreatment.setVisibility(View.VISIBLE);
-            if (additionalTreatment != null) {
-                for (CheckBox cb : tbTreatmentAdditionalTreatment.getCheckedBoxes()) {
-                    if (cb.getText().equals(getResources().getString(R.string.ctb_pediasure)) && additionalTreatment.contains("PEDIASURE")) {
-                        cb.setChecked(true);
-                        tbTreatmentPediasureDispersed.setVisibility(View.VISIBLE);
-                    }
-                    if (cb.getText().equals(getResources().getString(R.string.ctb_vitamin_B_complex)) && additionalTreatment.contains("VITAMIN B COMPLEX")) {
-                        cb.setChecked(true);
-                        tbTreatmentVitaminBDispersed.setVisibility(View.VISIBLE);
-                    }
-                    if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && additionalTreatment.contains("IRON")) {
-                        cb.setChecked(true);
-                        tbTreatmentIronDispersed.setVisibility(View.VISIBLE);
-                    }
-                    if (cb.getText().equals(getResources().getString(R.string.ctb_anthelminthic)) && additionalTreatment.contains("ANTHELMINTHIC")) {
-                        cb.setChecked(true);
-                        tbTreatmentAnthelminthicDispersed.setVisibility(View.VISIBLE);
-                    }
-                    if (cb.getText().equals(getResources().getString(R.string.ctb_calpol)) && additionalTreatment.contains("CALPOL")) {
-                        cb.setChecked(true);
-                        tbTreatmentCalpolDispersed.setVisibility(View.VISIBLE);
+        if(tbPatient!=null) {
+            if (tbPatient.equalsIgnoreCase(getResources().getString(R.string.yes))) {
+                tbClassification.setVisibility(View.VISIBLE);
+                tbTreatmentAdditionalTreatment.setVisibility(View.VISIBLE);
+                if (additionalTreatment != null) {
+                    for (CheckBox cb : tbTreatmentAdditionalTreatment.getCheckedBoxes()) {
+                        if (cb.getText().equals(getResources().getString(R.string.ctb_pediasure)) && additionalTreatment.contains("PEDIASURE")) {
+                            cb.setChecked(true);
+                            tbTreatmentPediasureDispersed.setVisibility(View.VISIBLE);
+                        }
+                        if (cb.getText().equals(getResources().getString(R.string.ctb_vitamin_B_complex)) && additionalTreatment.contains("VITAMIN B COMPLEX")) {
+                            cb.setChecked(true);
+                            tbTreatmentVitaminBDispersed.setVisibility(View.VISIBLE);
+                        }
+                        if (cb.getText().equals(getResources().getString(R.string.ctb_iron)) && additionalTreatment.contains("IRON")) {
+                            cb.setChecked(true);
+                            tbTreatmentIronDispersed.setVisibility(View.VISIBLE);
+                        }
+                        if (cb.getText().equals(getResources().getString(R.string.ctb_anthelminthic)) && additionalTreatment.contains("ANTHELMINTHIC")) {
+                            cb.setChecked(true);
+                            tbTreatmentAnthelminthicDispersed.setVisibility(View.VISIBLE);
+                        }
+                        if (cb.getText().equals(getResources().getString(R.string.ctb_calpol)) && additionalTreatment.contains("CALPOL")) {
+                            cb.setChecked(true);
+                            tbTreatmentCalpolDispersed.setVisibility(View.VISIBLE);
+                        }
                     }
                 }
             }
+        }else{
+            tbPatient = "";
         }
         if(conclusionPresumptive==null) {
             conclusionPresumptive="";
