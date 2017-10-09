@@ -693,4 +693,40 @@
     <string name="number_of_end_of_followup"># of End of Follow up</string>
     <string name="number_of_contact_registry"># of Contact Registry</string>
 
+    <!-- ChildTB Patient View -->
+    <string name="weight">Weight (KG)</string>
+    <string name="height">Height</string>
+    <string name="percentile">Percentile</string>
+    <string name="ppa_score">PPA Score</string>
+    <string name="test_confirming_diagnosis">Test Confirming Diagnosis</string>
+    <string name="type_of_diagnosis">Type of Diagnosis</string>
+    <string name="followup_date_2">Followup Date(Followup Month:2): </string>
+    <string name="patient_treatment_plan_2">Patient Treatment Plan (Followup Month:2): </string>
+    <string name="conclusion_of_tx_followup_2">Conclusion of Tx Followup (Followup Month:2): </string>
+
+    <string name="followup_date_3">Followup Date(Followup Month:3) : </string>
+    <string name="patient_treatment_plan_3">Patient Treatment Plan (Followup Month:3): </string>
+    <string name="conclusion_of_tx_followup_3">Conclusion of Tx Followup (Followup Month:3): </string>
+
+    <string name="followup_date_5">Followup Date(Followup Month:5): </string>
+    <string name="patient_treatment_plan_5">Patient Treatment Plan(Followup Month:5): </string>
+    <string name="conclusion_of_tx_followup_5">Conclusion of Tx Followup (Followup Month:5): </string>
+
+
+    <string name="followup_date_6">Followup Date(Followup Month:6): </string>
+    <string name="patient_treatment_plan_6">Patient Treatment Plan(Followup Month:6): </string>
+    <string name="conclusion_of_tx_followup_6">Conclusion of Tx Followup(Followup Month:6): </string>
+
+
+    <string name="followup_date_7">Followup Date(Followup Month:7): </string>
+    <string name="patient_treatment_plan_7">Patient Treatment Plan(Followup Month:7): </string>
+    <string name="conclusion_of_tx_followup_7">Conclusion of Tx Followup (Followup Month:): </string>
+
+    <string name="followup_date_8">Followup Date(Followup Month:8): </string>
+    <string name="patient_treatment_plan_8">Patient Treatment Plan (Followup Month:8)</string>
+    <string name="conclusion_of_tx_followup_8">Conclusion of Tx Followup (Followup Month:8)</string>
+
+    <string name="additional_treatment">Additional Treatment to TB Patient</string>
+
+
 </resources>
