@@ -353,27 +353,27 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
 
                     //ADULT FORMULATION
                     if(value>=26 && value<=29){
-                        adultFormulationofHRZE.getRadioGroup().getButtons().get(1).setChecked(true);
+                        adultFormulationofHRZE.getRadioGroup().getButtons().get(0).setChecked(true);
                     }
                     else if(value>=30 && value<=39){
                         adultFormulationOfContinuationRHE.getRadioGroup().getButtons().get(0).setChecked(true);
                         adultFormulationOfContinuationRH.getRadioGroup().getButtons().get(0).setChecked(true);
-                        adultFormulationofHRZE.getRadioGroup().getButtons().get(1).setChecked(true);
+                        adultFormulationofHRZE.getRadioGroup().getButtons().get(0).setChecked(true);
                     }
                     else if(value>=40 && value<=54){
                         adultFormulationOfContinuationRHE.getRadioGroup().getButtons().get(1).setChecked(true);
                         adultFormulationOfContinuationRH.getRadioGroup().getButtons().get(1).setChecked(true);
-                        adultFormulationofHRZE.getRadioGroup().getButtons().get(2).setChecked(true);
+                        adultFormulationofHRZE.getRadioGroup().getButtons().get(1).setChecked(true);
                     }
                     else if(value>=55 && value<=70){
                         adultFormulationOfContinuationRHE.getRadioGroup().getButtons().get(2).setChecked(true);
                         adultFormulationOfContinuationRH.getRadioGroup().getButtons().get(2).setChecked(true);
-                        adultFormulationofHRZE.getRadioGroup().getButtons().get(3).setChecked(true);
+                        adultFormulationofHRZE.getRadioGroup().getButtons().get(2).setChecked(true);
                     }
                     else if(value>70){
                         adultFormulationOfContinuationRHE.getRadioGroup().getButtons().get(2).setChecked(true);
                         adultFormulationOfContinuationRH.getRadioGroup().getButtons().get(2).setChecked(true);
-                        adultFormulationofHRZE.getRadioGroup().getButtons().get(4).setChecked(true);
+                        adultFormulationofHRZE.getRadioGroup().getButtons().get(3).setChecked(true);
                     }
                 }
             }
