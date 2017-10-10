@@ -31,7 +31,7 @@ import com.ihsinformatics.gfatmmobile.util.ServerService;
 import java.util.Date;
 
 
-public class SummaryFragment extends Fragment implements View.OnClickListener {
+public class SummaryFragment extends Fragment implements View.OnClickListener, View.OnTouchListener {
 
     Context context;
 
@@ -47,6 +47,8 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
     TextView backButton;
     TextView heading;
     LinearLayout content;
+
+    ImageView refersh;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -72,6 +74,9 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         backButton = (TextView) mainContent.findViewById(R.id.backButton);
         heading = (TextView) mainContent.findViewById(R.id.heading);
         content = (LinearLayout) mainContent.findViewById(R.id.content);
+
+        refersh = (ImageView) mainContent.findViewById(R.id.refresh);
+        refersh.setOnTouchListener(this);
 
         patientAttribute.setOnClickListener(this);
         generalPatientView.setOnClickListener(this);
@@ -108,11 +113,11 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
             if(App.getProgram().equals(getResources().getString(R.string.fast))){
                 interventionPatientView.setText(getString(R.string.fast_patient_view));
                 interventionStaffView.setText(getString(R.string.fast_staff_view));
-                interventionStaffView.setVisibility(View.VISIBLE);
                 interventionPatientView.setVisibility(View.VISIBLE);
             } else if(App.getProgram().equals(getResources().getString(R.string.pet))){
                 interventionPatientView.setText(getString(R.string.pet_patient_view));
                 interventionStaffView.setText(getString(R.string.pet_staff_view));
+                interventionStaffView.setVisibility(View.GONE);
             } else if(App.getProgram().equals(getResources().getString(R.string.childhood_tb))){
                 interventionPatientView.setText(getString(R.string.childhood_tb_patient_view));
                 interventionStaffView.setText(getString(R.string.childhood_tb_staff_view));
@@ -120,6 +125,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
             } else if(App.getProgram().equals(getResources().getString(R.string.comorbidities))){
                 interventionPatientView.setText(getString(R.string.comorbidities_patient_view));
                 interventionStaffView.setText(getString(R.string.comorbidities_patient_view));
+                interventionStaffView.setVisibility(View.GONE);
             }
         }
 
@@ -1453,4 +1459,48 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
 
     }
 
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN: {
+                ImageView view = (ImageView) v;
+                view.getDrawable().setColorFilter(getResources().getColor(R.color.dark_grey), PorterDuff.Mode.SRC_ATOP);
+                view.invalidate();
+
+                content.removeAllViews();
+                String viewName = heading.getText().toString();
+                if(viewName.equals(getString(R.string.general_patient_view)))
+                    fillGeneralPatientView();
+                else if(view.equals(getString(R.string.fast_patient_view)))
+                    fillFastPatientView();
+                else if(view.equals(getString(R.string.fast_staff_view)))
+                    fillFastStaffView();
+                else if(view.equals(getString(R.string.childhood_tb_patient_view)))
+                    fillChildhoodTbPatientView();
+                else if(view.equals(getString(R.string.childhood_tb_staff_view)))
+                    fillChildhoodTbStaffView();
+                else if(view.equals(getString(R.string.comorbidities_patient_view)))
+                    fillComorbiditiesPatientView();
+                else if(view.equals(getString(R.string.comorbidities_staff_view)))
+                    fillComorbiditiesStaffView();
+                else if(view.equals(getString(R.string.pet_patient_view)))
+                    fillPetPatientView();
+                else if(view.equals(getString(R.string.pet_staff_view)))
+                    fillPetStaffView();
+                else if(view.equals(getString(R.string.patient_attribute)))
+                    fillPatientAttribute();
+
+                break;
+            }
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL: {
+                ImageView view = (ImageView) v;
+                //clear the overlay
+                view.getDrawable().clearColorFilter();
+                view.invalidate();
+                break;
+            }
+        }
+        return true;
+    }
 }

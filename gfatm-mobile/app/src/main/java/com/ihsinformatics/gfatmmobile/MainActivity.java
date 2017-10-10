@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity
     public static SummaryFragment fragmentSearch = new SummaryFragment();
     ImageView change;
     public static ImageView update;
+    public static ImageView edit;
 
     public static TextView patientName;
     public static TextView patientDob;
@@ -217,6 +218,11 @@ public class MainActivity extends AppCompatActivity
         update = (ImageView) findViewById(R.id.update);
         DrawableCompat.setTint(update.getDrawable(), color);
         update.setOnTouchListener(this);
+
+        edit = (ImageView) findViewById(R.id.edit);
+        DrawableCompat.setTint(edit.getDrawable(), color);
+        edit.setOnTouchListener(this);
+        edit.setVisibility(View.GONE);
 
         getSupportActionBar().setTitle(Html.fromHtml("<small>" + App.getProgram() + "  |  " + App.getLocation() + "</small>"));
         if (App.getMode().equalsIgnoreCase("OFFLINE")) {
