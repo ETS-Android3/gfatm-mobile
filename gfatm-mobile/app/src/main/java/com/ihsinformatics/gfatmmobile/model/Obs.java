@@ -41,7 +41,8 @@ public class Obs extends AbstractModel {
 
             String display = json.getString("display");
             String[] arrayString = display.split(": ");
-            voided = json.getBoolean("voided");
+            if(json.has("voided"))
+                voided = json.getBoolean("voided");
 
             if (arrayString.length == 1)
                 return null;
