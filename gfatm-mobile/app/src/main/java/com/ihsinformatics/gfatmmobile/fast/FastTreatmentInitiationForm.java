@@ -1259,7 +1259,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                     regDate.setVisibility(View.GONE);
                     tbRegisterationNumber.setVisibility(View.GONE);
                 }
-
+                returnVisitDate.setVisibility(View.VISIBLE);
                 weight.setVisibility(View.VISIBLE);
             }
         } else if (radioGroup == tbCategory.getRadioGroup()) {
@@ -1346,7 +1346,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                         regDate.setVisibility(View.GONE);
                         tbRegisterationNumber.setVisibility(View.GONE);
                     }
-
+                    returnVisitDate.setVisibility(View.VISIBLE);
                     weight.setVisibility(View.VISIBLE);
                 }
 
