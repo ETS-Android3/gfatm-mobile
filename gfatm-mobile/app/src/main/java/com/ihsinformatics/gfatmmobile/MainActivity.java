@@ -222,7 +222,7 @@ public class MainActivity extends AppCompatActivity
         edit = (ImageView) findViewById(R.id.edit);
         DrawableCompat.setTint(edit.getDrawable(), color);
         edit.setOnTouchListener(this);
-        edit.setVisibility(View.GONE);
+        //edit.setVisibility(View.GONE);
 
         getSupportActionBar().setTitle(Html.fromHtml("<small>" + App.getProgram() + "  |  " + App.getLocation() + "</small>"));
         if (App.getMode().equalsIgnoreCase("OFFLINE")) {
@@ -231,10 +231,14 @@ public class MainActivity extends AppCompatActivity
         } else {
             getSupportActionBar().setSubtitle(null);
 
-            if (App.getPatient() == null)
+            if (App.getPatient() == null) {
                 update.setVisibility(View.GONE);
-            else
+                edit.setVisibility(View.GONE);
+            }
+            else {
                 update.setVisibility(View.VISIBLE);
+                edit.setVisibility(View.VISIBLE);
+            }
 
         }
 
@@ -305,6 +309,7 @@ public class MainActivity extends AppCompatActivity
                 id.setVisibility(View.VISIBLE);
             patientId.setText(App.getPatient().getPatientId());
             update.setVisibility(View.VISIBLE);
+            edit.setVisibility(View.VISIBLE);
         }
 
         if (!App.getProgram().equals("")) {
@@ -406,6 +411,7 @@ public class MainActivity extends AppCompatActivity
             getSupportActionBar().setSubtitle(null);
             if (App.getPatient() == null) {
                 update.setVisibility(View.GONE);
+                edit.setVisibility(View.GONE);
                 patientName.setText("");
                 patientDob.setText("");
                 patientId.setText("");
@@ -456,6 +462,7 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 update.setVisibility(View.VISIBLE);
+                edit.setVisibility(View.VISIBLE);
             }
 
 
@@ -831,6 +838,12 @@ public class MainActivity extends AppCompatActivity
                 } else if (view == update) {
 
                     updatePatientDetails();
+
+                    break;
+                } else if (view == edit) {
+
+                    Intent selectPatientActivityIntent = new Intent(this, EditPatientActivity.class);
+                    startActivityForResult(selectPatientActivityIntent, SELECT_PATIENT_ACTIVITY);
 
                     break;
                 }
