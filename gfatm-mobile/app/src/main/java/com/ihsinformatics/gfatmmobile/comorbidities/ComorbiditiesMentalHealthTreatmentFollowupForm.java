@@ -244,7 +244,7 @@ public class ComorbiditiesMentalHealthTreatmentFollowupForm extends AbstractForm
 
         }
 
-        //treatmentFollowupMHNextAppointmentDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+        //missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         if (!(treatmentFollowupMHNextAppointmentDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
 
             String formDa = treatmentFollowupMHNextAppointmentDate.getButton().getText().toString();
@@ -977,6 +977,7 @@ public class ComorbiditiesMentalHealthTreatmentFollowupForm extends AbstractForm
             displayPreferredLocationAndNextAppointmentDate();
         }
     }
+
 
     void displayPreferredLocationAndNextAppointmentDate() {
 

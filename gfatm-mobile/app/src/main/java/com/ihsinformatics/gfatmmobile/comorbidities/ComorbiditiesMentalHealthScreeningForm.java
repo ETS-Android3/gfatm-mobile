@@ -531,9 +531,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
 
         observations.add(new String[]{"PATIENT SCREENED FOR MENTAL HEALTH", App.get(willbeScreened).equals(getString(R.string.yes)) ? "YES" : "NO"});
 
-        if (App.get(reasonForNotDoingMentalHealthScreening).equals(getResources().getString(R.string.none)) || App.get(willbeScreened).equals(getString(R.string.yes))) {
-            if (reasonForNotDoingMentalHealthScreening.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"REASON FOR NOT DOING MENTAL HEALTH SCREENING", "NONE"});
+        if (App.get(willbeScreened).equals(getString(R.string.yes))) {
             observations.add(new String[]{"SLEEPING LESS (AKUADS)", App.get(akuadsSleep).equals(getResources().getString(R.string.comorbidities_MH_screening_options_never)) ? "NEVER" :
                     (App.get(akuadsSleep).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
                             (App.get(akuadsSleep).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
@@ -667,6 +665,8 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
         } else if (App.get(reasonForNotDoingMentalHealthScreening).equals(getResources().getString(R.string.patient_does_not_visit_facility))) {
             observations.add(new String[]{"REASON FOR NOT DOING MENTAL HEALTH SCREENING", "PATIENT DOES NOT VISIT FACILITY HIMSELF OR HERSELF"});
 
+        } else if (App.get(reasonForNotDoingMentalHealthScreening).equals(getResources().getString(R.string.none))) {
+            observations.add(new String[]{"REASON FOR NOT DOING MENTAL HEALTH SCREENING", "NONE"});
         }
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -815,9 +815,11 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
                         setVisibility(View.VISIBLE);
                         reasonForNotDoingMentalHealthScreening.setVisibility(View.GONE);
                         otherReasonForNotDoingMentalHealthScreening.setVisibility(View.GONE);
+                        mentalHealthNextScheduledVisit.setVisibility(View.GONE);
                         break;
                     } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
                         rb.setChecked(true);
+                        setVisibility(View.GONE);
                         reasonForNotDoingMentalHealthScreening.setVisibility(View.VISIBLE);
                         break;
                     }
@@ -827,9 +829,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
             if (obs[0][0].equals("REASON FOR NOT DOING MENTAL HEALTH SCREENING")) {
                 if (obs[0][1].equals("NONE")) {
                     reasonForNotDoingMentalHealthScreening.getSpinner().selectValue(getString(R.string.none));
-                    setVisibility(View.VISIBLE);
-                    mentalHealthNextScheduledVisit.setVisibility(View.GONE);
-                    otherReasonForNotDoingMentalHealthScreening.setVisibility(View.GONE);
+                    setVisibility(View.GONE);
                 } else if (obs[0][1].equals("LANGUAGE BARRIER")) {
                     reasonForNotDoingMentalHealthScreening.getSpinner().selectValue(getString(R.string.language_barrier));
                     setVisibility(View.GONE);
@@ -1412,7 +1412,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
         MySpinner spinner = (MySpinner) parent;
         if (spinner == reasonForNotDoingMentalHealthScreening.getSpinner()) {
             if (App.get(reasonForNotDoingMentalHealthScreening).equals(getResources().getString(R.string.none))) {
-                setVisibility(View.VISIBLE);
+                setVisibility(View.GONE);
                 mentalHealthNextScheduledVisit.setVisibility(View.GONE);
                 otherReasonForNotDoingMentalHealthScreening.setVisibility(View.GONE);
             } else if (App.get(reasonForNotDoingMentalHealthScreening).equals(getResources().getString(R.string.patient_unwell))) {
@@ -1586,9 +1586,11 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
                 setVisibility(View.VISIBLE);
                 reasonForNotDoingMentalHealthScreening.setVisibility(View.GONE);
                 otherReasonForNotDoingMentalHealthScreening.setVisibility(View.GONE);
+                mentalHealthNextScheduledVisit.setVisibility(View.GONE);
 
             } else {
                 reasonForNotDoingMentalHealthScreening.getSpinner().selectValue(getString(R.string.none));
+                setVisibility(View.GONE);
                 reasonForNotDoingMentalHealthScreening.setVisibility(View.VISIBLE);
 
             }

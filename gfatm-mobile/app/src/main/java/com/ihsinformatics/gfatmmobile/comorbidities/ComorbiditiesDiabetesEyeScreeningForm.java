@@ -57,7 +57,7 @@ public class ComorbiditiesDiabetesEyeScreeningForm extends AbstractFormActivity 
     //TitledRadioGroup diabetesEyeScreeningEyeStatus;
     TitledRadioGroup diabetesEyeScreeningRightEyeDiagnosed;
     TitledRadioGroup diabetesEyeScreeningLeftEyeDiagnosed;
-    //TitledRadioGroup diabetesEyeScreeningEvidenceEye;
+    //TitledRadioGroup reasonForChangingFacilityCheckBoxes;
     TitledCheckBoxes diabetesEyeScreeningEvidenceEye;
     TitledEditText diabetesEyeScreeningEvidenceEyeOther;
     TitledRadioGroup diabetesEyeScreeningDiabetecRetinopathy;
@@ -148,7 +148,7 @@ public class ComorbiditiesDiabetesEyeScreeningForm extends AbstractFormActivity 
         //diabetesEyeScreeningEyeStatus = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_eye_screening_eye_status), getResources().getStringArray(R.array.comorbidities_eye_screening_eye_status_options), "", App.VERTICAL, App.VERTICAL);
         diabetesEyeScreeningRightEyeDiagnosed = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_eye_screening_right_eye_diagnosed), getResources().getStringArray(R.array.comorbidities_eye_screening_eye_diagnosed_options), getResources().getString(R.string.comorbidities_eye_screening_eye_diagnosed_options_yes), App.VERTICAL, App.VERTICAL);
         diabetesEyeScreeningLeftEyeDiagnosed = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_eye_screening_left_eye_diagnosed), getResources().getStringArray(R.array.comorbidities_eye_screening_eye_diagnosed_options), getResources().getString(R.string.comorbidities_eye_screening_eye_diagnosed_options_yes), App.VERTICAL, App.VERTICAL);
-        //diabetesEyeScreeningEvidenceEye = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_eye_screening_evidence_eye), getResources().getStringArray(R.array.comorbidities_eye_screening_evidence_eye_options), "", App.VERTICAL, App.VERTICAL);
+        //reasonForChangingFacilityCheckBoxes = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_eye_screening_evidence_eye), getResources().getStringArray(R.array.comorbidities_eye_screening_evidence_eye_options), "", App.VERTICAL, App.VERTICAL);
         diabetesEyeScreeningEvidenceEye = new TitledCheckBoxes(context, null, getResources().getString(R.string.comorbidities_eye_screening_evidence_eye), getResources().getStringArray(R.array.comorbidities_eye_screening_evidence_eye_options), new Boolean[]{false, false, false}, App.VERTICAL, App.VERTICAL);
         diabetesEyeScreeningEvidenceEyeOther = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_eye_screening_evidence_eye_other), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         diabetesEyeScreeningDiabetecRetinopathy = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_eye_screening_diabetic_retinopathy), getResources().getStringArray(R.array.comorbidities_yes_no), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL);
@@ -163,7 +163,7 @@ public class ComorbiditiesDiabetesEyeScreeningForm extends AbstractFormActivity 
         diabetesEyeScreeningRecommendations = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_eye_screening_recommendations), getResources().getStringArray(R.array.comorbidities_eye_screening_recommendations_options), getResources().getString(R.string.comorbidities_eye_screening_recommendations_options_12_month), App.VERTICAL, App.VERTICAL);
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), diabetesEyeScreeningMonthOfTreatment.getSpinner(), /*diabetesEyeScreeningEyeStatus.getRadioGroup(),*/ diabetesEyeScreeningRightEyeDiagnosed.getRadioGroup(), diabetesEyeScreeningLeftEyeDiagnosed.getRadioGroup(), diabetesEyeScreeningEvidenceEye, /*diabetesEyeScreeningEvidenceEye.getRadioGroup(),*/
+        views = new View[]{formDate.getButton(), diabetesEyeScreeningMonthOfTreatment.getSpinner(), /*diabetesEyeScreeningEyeStatus.getRadioGroup(),*/ diabetesEyeScreeningRightEyeDiagnosed.getRadioGroup(), diabetesEyeScreeningLeftEyeDiagnosed.getRadioGroup(), diabetesEyeScreeningEvidenceEye, /*reasonForChangingFacilityCheckBoxes.getRadioGroup(),*/
                 diabetesEyeScreeningEvidenceEyeOther.getEditText(), diabetesEyeScreeningDiabetecRetinopathy.getRadioGroup(), diabetesEyeScreeningMildDiabetecRetinopathy.getRadioGroup(), diabetesEyeScreeningModerateDiabetecRetinopathy.getRadioGroup(),
                 diabetesEyeScreeningSevereDiabetecRetinopathy.getRadioGroup(), diabetesEyeScreeningProliferativeDiabetecRetinopathy.getRadioGroup(), diabetesEyeScreeningDiabeticMacularEdema.getRadioGroup(),
                 /*diabeteEyeScreeningClinicalDME.getRadioGroup(),*/ diabetesEyeScreeningOther.getEditText(), diabetesEyeScreeningVisionloss.getRadioGroup(), diabetesEyeScreeningRecommendations.getRadioGroup()};
@@ -179,7 +179,7 @@ public class ComorbiditiesDiabetesEyeScreeningForm extends AbstractFormActivity 
         //diabetesEyeScreeningEyeStatus.getRadioGroup().setOnCheckedChangeListener(this);
         diabetesEyeScreeningRightEyeDiagnosed.getRadioGroup().setOnCheckedChangeListener(this);
         diabetesEyeScreeningLeftEyeDiagnosed.getRadioGroup().setOnCheckedChangeListener(this);
-        //diabetesEyeScreeningEvidenceEye.getRadioGroup().setOnCheckedChangeListener(this);
+        //reasonForChangingFacilityCheckBoxes.getRadioGroup().setOnCheckedChangeListener(this);
         diabetesEyeScreeningDiabetecRetinopathy.getRadioGroup().setOnCheckedChangeListener(this);
         diabetesEyeScreeningMildDiabetecRetinopathy.getRadioGroup().setOnCheckedChangeListener(this);
         diabetesEyeScreeningModerateDiabetecRetinopathy.getRadioGroup().setOnCheckedChangeListener(this);
@@ -969,25 +969,25 @@ public class ComorbiditiesDiabetesEyeScreeningForm extends AbstractFormActivity 
         }
         /*else
         {
-            ArrayList<RadioButton> rbs = diabetesEyeScreeningMildDiabetecRetinopathy.getRadioGroup().getButtons();
+            ArrayList<RadioButton> rbs = ReasonPatientNotContacted.getRadioGroup().getButtons();
 
             for (RadioButton rb : rbs) {
                     rb.setVisibility(View.VISIBLE);
             }
 
-            ArrayList<RadioButton> rbs1 = diabetesEyeScreeningModerateDiabetecRetinopathy.getRadioGroup().getButtons();
+            ArrayList<RadioButton> rbs1 = phoneCounsellingConsent.getRadioGroup().getButtons();
 
             for (RadioButton rb : rbs1) {
                 rb.setVisibility(View.VISIBLE);
             }
 
-            ArrayList<RadioButton> rbs2 = diabetesEyeScreeningSevereDiabetecRetinopathy.getRadioGroup().getButtons();
+            ArrayList<RadioButton> rbs2 = reasonMissedVisit.getRadioGroup().getButtons();
 
             for (RadioButton rb : rbs2) {
                 rb.setVisibility(View.VISIBLE);
             }
 
-            ArrayList<RadioButton> rbs3 = diabetesEyeScreeningProliferativeDiabetecRetinopathy.getRadioGroup().getButtons();
+            ArrayList<RadioButton> rbs3 = reasonForChangingFacility.getRadioGroup().getButtons();
 
             for (RadioButton rb : rbs3) {
                 rb.setVisibility(View.VISIBLE);
