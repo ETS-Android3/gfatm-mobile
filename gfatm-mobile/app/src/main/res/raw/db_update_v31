@@ -1,0 +1,6 @@
+-- inserts
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MENTAL HEALTH SERVICES','NULL','N/A','5489AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+
+-- create encounter type & encounter table
+create table person_attribute_type(id integer primary key, name VARCHAR, description VARCHAR, format VARCHAR, uuid VARCHAR);
+create table person_attribute(id integer primary key, patient_id integer, person_attribute_type_id integer, value VARCHAR, dateCreated datetime, voided boolean, uuid VARCHAR);
