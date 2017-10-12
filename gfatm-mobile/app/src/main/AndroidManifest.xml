@@ -132,6 +132,13 @@
             android:screenOrientation="portrait"
             android:theme="@style/dialog"
             android:windowSoftInputMode="stateHidden"></activity>
+        <activity
+            android:name=".EditPatientActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/title_patient_demographics"
+            android:screenOrientation="portrait"
+            android:theme="@style/dialog"
+            android:windowSoftInputMode="stateHidden"></activity>
 
         <service android:name="com.ihsinformatics.gfatmmobile.util.LocationService"></service>
         <service android:name=".util.OfflineFormSyncService" android:exported="false"/>
