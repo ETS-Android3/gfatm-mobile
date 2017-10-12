@@ -177,30 +177,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
      * Initializes all views and ArrayList and Views Array
      */
     public void initViews() {
-        if (App.getPatient().getPerson().getAge() > 15) {
 
-            int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
-
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
-            alertDialog.setMessage(getString(R.string.ctb_age_greater_than_15));
-            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-            DrawableCompat.setTint(clearIcon, color);
-            alertDialog.setIcon(clearIcon);
-            alertDialog.setTitle(getResources().getString(R.string.title_error));
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            try {
-                                InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
-                                imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
-                            } catch (Exception e) {
-                                // TODO: handle exception
-                            }
-                            dialog.dismiss();
-                        }
-                    });
-            alertDialog.show();
-        }
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
@@ -396,31 +373,6 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
 
     @Override
     public boolean validate() {
-        if (App.getPatient().getPerson().getAge() > 15) {
-
-            int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
-
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
-            alertDialog.setMessage(getString(R.string.ctb_age_greater_than_15));
-            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-            DrawableCompat.setTint(clearIcon, color);
-            alertDialog.setIcon(clearIcon);
-            alertDialog.setTitle(getResources().getString(R.string.title_error));
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            try {
-                                InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
-                                imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
-                            } catch (Exception e) {
-                                // TODO: handle exception
-                            }
-                            dialog.dismiss();
-                        }
-                    });
-            alertDialog.show();
-            return false;
-        } else {
             boolean error = false;
             if (App.get(weight).isEmpty() && weight.getVisibility()==View.VISIBLE) {
                 if (App.isLanguageRTL())
@@ -984,7 +936,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                 return false;
             }
             return true;
-        }
+
     }
 
     @Override
