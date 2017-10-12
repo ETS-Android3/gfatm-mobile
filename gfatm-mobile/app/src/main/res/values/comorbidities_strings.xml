@@ -1,9 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="comorbidities_akuads_will_be_screened">Will the patient be screened for mental health??</string>
+    <!--Start Missed Visit Follow Up Form-->
+    <string name="comorbidities_missed_visit_for_treatment_regimen">Missed visit for which treatment regimen?</string>
+    <string name="comorbidities_missed_visit_for_treatment_regimen_diabetes">Diabetes</string>
+    <string name="comorbidities_missed_visit_for_treatment_regimen_mental_health">Mental Health</string>
+    <string name="comorbidities_missed_visit_for_treatment_regimen_mental_both">Both</string>
+    <string-array name="comorbidities_missed_visit_for_treatment_regimen_array">
+        <item>@string/comorbidities_missed_visit_for_treatment_regimen_diabetes</item>
+        <item>@string/comorbidities_missed_visit_for_treatment_regimen_mental_health</item>
+        <item>@string/comorbidities_missed_visit_for_treatment_regimen_mental_both</item>
+    </string-array>
 
+    <string name="comorbidities_missed_visit_date">Date of missed visit</string>
+    <string name="comorbidities_patient_contacted">Have you been able to contact the patient?</string>
+
+    <string name="comorbidities_reason_patient_not_contacted">If no, why were you unable to contact the patient?</string>
+    <string name="comorbidities_reason_patient_not_contacted_phone_off">Phone switched off</string>
+    <string name="comorbidities_reason_patient_not_contacted_not_responding">Patient not responding</string>
+    <string name="comorbidities_reason_patient_not_contacted_invalid_number">Invalid / incorrect contact number</string>
+    <string name="comorbidities_reason_patient_not_contacted_other_2">Other</string>
+    <string-array name="comorbidities_reason_patient_not_contacted_array">
+        <item>@string/comorbidities_reason_patient_not_contacted_phone_off</item>
+        <item>@string/comorbidities_reason_patient_not_contacted_not_responding</item>
+        <item>@string/comorbidities_reason_patient_not_contacted_invalid_number</item>
+        <item>@string/comorbidities_reason_patient_not_contacted_other_2</item>
+    </string-array>
+
+    <string name="comorbidities_reason_patient_not_contacted_other">If other, please specify</string>
+
+    <string name="comorbidities_referral_transfer">Has this patient being referred out or transferred out?</string>
+    <string name="comorbidities_referral_transfer_options_refrell">Referral (before starting treatment)</string>
+    <string name="comorbidities_referral_transfer_options_transfer">Transfer (after starting treatment)</string>
+    <string name="comorbidities_referral_transfer_options_not_applicable">Not applicable</string>
+    <string-array name="comorbidities_referral_transfer_array">
+        <item>@string/comorbidities_referral_transfer_options_refrell</item>
+        <item>@string/comorbidities_referral_transfer_options_transfer</item>
+        <item>@string/comorbidities_referral_transfer_options_not_applicable</item>
+    </string-array>
+
+    <string name="comorbidities_referral_transfer_site">Location of referral / transfer</string>
+
+    <string name="comorbidities_phone_counselling_consent_2">Do you agree for phone counselling?</string>
+    <string name="comorbidities_phone_counselling_consent_2_weekly">Monthly</string>
+    <string name="comorbidities_phone_counselling_consent_2_monthly">Weekly</string>
+    <string name="comorbidities_phone_counselling_consent_2_both">Both</string>
+    <string name="comorbidities_phone_counselling_consent_2_none">None</string>
+    <string-array name="comorbidities_phone_counselling_consent_2_array">
+        <item>@string/comorbidities_phone_counselling_consent_2_monthly</item>
+        <item>@string/comorbidities_phone_counselling_consent_2_weekly</item>
+        <item>@string/comorbidities_phone_counselling_consent_2_both</item>
+        <item>@string/comorbidities_phone_counselling_consent_2_none</item>
+    </string-array>
+
+    <string name="comorbidities_reason_missed_visit">Reason why missed visit?</string>
+    <string name="comorbidities_reason_missed_visit_patient_relocated">Patient Relocated</string>
+    <string name="comorbidities_reason_missed_visit_treatment_another_location">Patient continuing treatment at another location</string>
+    <string name="comorbidities_reason_missed_visit_personal_reason">Patient unable to visit hospital due to personal reasons</string>
+    <string name="comorbidities_reason_missed_visit_Died">Patient died</string>
+    <string name="comorbidities_reason_missed_visit_refuse">Patient refused treatment</string>
+    <string name="comorbidities_reason_missed_visit_unwell">Patient unwell</string>
+    <string name="comorbidities_reason_missed_visit_service_complaint">Patient has a service complaint</string>
+    <string name="comorbidities_reason_missed_visit_lack_fund">Patient lacks funds to travel to the facility</string>
+    <string name="comorbidities_reason_missed_visit_unable_to_locate">Unable to locate referral site</string>
+    <string name="comorbidities_reason_missed_visit_want_treatment_at_parent_site">Want treatment at parent site</string>
+    <string name="comorbidities_reason_missed_visit_other_2">Other</string>
+    <string-array name="comorbidities_reason_missed_visit_array">
+        <item>@string/comorbidities_reason_missed_visit_patient_relocated</item>
+        <item>@string/comorbidities_reason_missed_visit_treatment_another_location</item>
+        <item>@string/comorbidities_reason_missed_visit_personal_reason</item>
+        <item>@string/comorbidities_reason_missed_visit_Died</item>
+        <item>@string/comorbidities_reason_missed_visit_refuse</item>
+        <item>@string/comorbidities_reason_missed_visit_unwell</item>
+        <item>@string/comorbidities_reason_missed_visit_service_complaint</item>
+        <item>@string/comorbidities_reason_missed_visit_lack_fund</item>
+        <item>@string/comorbidities_reason_missed_visit_unable_to_locate</item>
+        <item>@string/comorbidities_reason_missed_visit_want_treatment_at_parent_site</item>
+        <item>@string/comorbidities_reason_missed_visit_other_2</item>
+    </string-array>
+
+    <string name="comorbidities_reason_missed_visit_other">If other please specify</string>
+    <string name="comorbidities_new_location">New Location</string>
+    <string name="comorbidities_facility_treatment">New treatment facility name</string>
+
+    <string name="comorbidities_reason_for_changing_facility">Reason for changing to new facility</string>
+    <string name="comorbidities_reason_for_changing_facility_relocated">Relocated</string>
+    <string name="comorbidities_reason_for_changing_facility_too_far">Old facility too far</string>
+    <string name="comorbidities_reason_for_changing_facility_complaint">Service complaint</string>
+    <string name="comorbidities_reason_for_changing_facility_ohter">Other</string>
+    <string-array name="comorbidities_reason_for_changing_facility_array">
+        <item>@string/comorbidities_reason_for_changing_facility_relocated</item>
+        <item>@string/comorbidities_reason_for_changing_facility_too_far</item>
+        <item>@string/comorbidities_reason_for_changing_facility_complaint</item>
+        <item>@string/comorbidities_reason_for_changing_facility_ohter</item>
+    </string-array>
+
+    <string name="comorbidities_return_visit_date">Date of next visit</string>
+    <!--End Missed Visit Follow Up Form-->
+
+    <string name="comorbidities_akuads_will_be_screened">Will the patient be screened for mental health?</string>
     <string name="comorbidities_index_patient_registration">Index Patient Registration</string>
-
     <string name="comorbidities_akuads_Mental_Health_Screening">MENTAL HEALTH SCREENING - AKUADS</string>
     <string name="comorbidities_akuads_sleep">Have you been sleeping less?</string>
     <string name="comorbidities_akuads_lackofinterest">Have you had lack of interest in your daily activities?</string>
@@ -503,9 +598,9 @@
     <string name="comorbidities_urinedr_test_some_options_ind">Indeterminate</string>
 
     <string-array name="comorbidities_urinedr_test_some_options">
-    <item>@string/comorbidities_urinedr_test_some_options_neg</item>
-    <item>@string/comorbidities_urinedr_test_some_options_pos</item>
-    <item>@string/comorbidities_urinedr_test_some_options_ind</item>
+        <item>@string/comorbidities_urinedr_test_some_options_neg</item>
+        <item>@string/comorbidities_urinedr_test_some_options_pos</item>
+        <item>@string/comorbidities_urinedr_test_some_options_ind</item>
     </string-array>
 
     <!-- Strings for ComorbiditiesCreatinineTestForm -->
@@ -1142,8 +1237,8 @@
     <string name="comorbidities_end_treatment_MH_feeling_better_options_therapy_completed">4 or more sessions conducted and AKUADS filled (SUCCESFULLY COMPLETED THERAPY WITH IMPROVED OUTCOMES).</string>
 
     <string-array name="comorbidities_end_treatment_MH_feeling_better_options">
-    <item>@string/comorbidities_end_treatment_MH_feeling_better_options_self_reported</item>
-    <item>@string/comorbidities_end_treatment_MH_feeling_better_options_therapy_completed</item>
+        <item>@string/comorbidities_end_treatment_MH_feeling_better_options_self_reported</item>
+        <item>@string/comorbidities_end_treatment_MH_feeling_better_options_therapy_completed</item>
     </string-array>
 
     <string name="comorbidities_end_treatment_MH_loss_to_followup_options_unreachable">Unreachable by phone</string>
