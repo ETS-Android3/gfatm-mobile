@@ -149,12 +149,12 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
      * Initializes all views and ArrayList and Views Array
      */
     public void initViews() {
-        if (App.getPatient().getPerson().getAge() > 15) {
+        if (App.getPatient().getPerson().getAge() > 18) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
-            alertDialog.setMessage(getString(R.string.ctb_age_greater_than_15));
+            alertDialog.setMessage(getString(R.string.ctb_age_greater_than_18));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
@@ -298,12 +298,12 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
 
     @Override
     public boolean validate() {
-        if (App.getPatient().getPerson().getAge() > 15) {
+        if (App.getPatient().getPerson().getAge() > 18) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
-            alertDialog.setMessage(getString(R.string.ctb_age_greater_than_15));
+            alertDialog.setMessage(getString(R.string.ctb_age_greater_than_18));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
