@@ -4729,6 +4729,8 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MANAGEMENT OF D
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REFERRAL TO OPHTHALMOLOGIST (MODERATE OR SEVERE RETINOPATHY)','referral_to_ophthalmologist','N/A','6f725da7-117a-4302-ac8f-91a77c8b0234');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INSULIN MIX 30/70 DISTRIBUTED','insulin_mix_distributed','Numeric','d4960b50-f264-4242-bc44-847c349e0c22');
 
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MENTAL HEALTH SERVICES','NULL','N/A','5489AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+
 -- Program
 INSERT OR IGNORE INTO program VALUES (1, "86ba1232-d576-416e-b102-5f335c6746ce", "PMDT", "Programmatic Management of Drug-resistant Tuberculosis");
 INSERT OR IGNORE INTO program VALUES (2, "5d372a38-ae27-4a68-a8d2-bc517a2c9c40", "PET", "Post-Exposure Treatment");
