@@ -18,6 +18,7 @@
 
     <string name="forms_main_menu">Forms Main Menu</string>
 
+    <string name="cc">CC</string>
     <string name="pmdt">PMDT</string>
     <string name="pet">PET</string>
     <string name="fast">FAST</string>
@@ -335,6 +336,7 @@
     <string name="title_saved_forms">Saved Forms</string>
     <string name="title_offline_forms">Offline Forms</string>
     <string name="title_select_patient">Select Patient</string>
+    <string name="title_patient_demographics">Patient Demographics</string>
     <string name="title_offline_form_found">Offline form(s) found</string>
     <string name="title_search_patient">Search Patient</string>
     <string name="title_create_new_patient">Create New Patient</string>
@@ -352,7 +354,7 @@
     <string name="country_default" translatable="false">Pakistan</string>
     <!--<string name="ip_default" translatable="false">mrs.ghd.ihn.org.pk</string>
     <string name="port_default" translatable="false">443</string>-->
-    <string name="ip_default" translatable="false">124.29.207.74</string>
+     <string name="ip_default" translatable="false">124.29.207.74</string>
     <string name="port_default" translatable="false">9902</string>
 
     <string name="support_contact">Support Contact</string>
