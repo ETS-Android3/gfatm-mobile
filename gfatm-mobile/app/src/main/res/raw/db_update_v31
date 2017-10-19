@@ -2,5 +2,33 @@
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MENTAL HEALTH SERVICES','NULL','N/A','5489AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 
 -- create encounter type & encounter table
-create table person_attribute_type(id integer primary key, name VARCHAR, description VARCHAR, format VARCHAR, uuid VARCHAR);
+DROP TABLE IF EXISTS person_attribute_type;
+create table person_attribute_type(id integer primary key, name VARCHAR, format VARCHAR, uuid VARCHAR);
 create table person_attribute(id integer primary key, patient_id integer, person_attribute_type_id integer, value VARCHAR, dateCreated datetime, voided boolean, uuid VARCHAR);
+
+-- Person Attribute Types: select name as person_attribute_type, format, uuid from person_attribute_type
+INSERT OR IGNORE INTO person_attribute_type VALUES (1, 'Race','java.lang.String','8d871386-c2cc-11de-8d13-0010c6dffd0f');
+INSERT OR IGNORE INTO person_attribute_type VALUES (2, 'Birthplace','java.lang.String','8d8718c2-c2cc-11de-8d13-0010c6dffd0f');
+INSERT OR IGNORE INTO person_attribute_type VALUES (3, 'Citizenship','java.lang.String','8d871afc-c2cc-11de-8d13-0010c6dffd0f');
+INSERT OR IGNORE INTO person_attribute_type VALUES (4, 'Mother Name','java.lang.String','8d871d18-c2cc-11de-8d13-0010c6dffd0f');
+INSERT OR IGNORE INTO person_attribute_type VALUES (5, 'Marital Status','org.openmrs.Concept','8d871f2a-c2cc-11de-8d13-0010c6dffd0f');
+INSERT OR IGNORE INTO person_attribute_type VALUES (6, 'Health District','java.lang.String','8d872150-c2cc-11de-8d13-0010c6dffd0f');
+INSERT OR IGNORE INTO person_attribute_type VALUES (7, 'Health Center','org.openmrs.Location','8d87236c-c2cc-11de-8d13-0010c6dffd0f');
+INSERT OR IGNORE INTO person_attribute_type VALUES (8, 'Primary Contact','java.lang.String','14d4f066-15f5-102d-96e4-000c29c2a5d7');
+INSERT OR IGNORE INTO person_attribute_type VALUES (10, 'Unknown patient','java.lang.String','8b56eac7-5c76-4b9c-8c6f-1deab8d3fc47');
+INSERT OR IGNORE INTO person_attribute_type VALUES (11, 'Test Patient','java.lang.Boolean','4f07985c-88a5-4abd-aa0c-f3ec8324d8e7');
+INSERT OR IGNORE INTO person_attribute_type VALUES (12, 'Primary Contact Owner','org.openmrs.Concept','6c9c2feb-09b3-435e-8936-0d5510fc9cef');
+INSERT OR IGNORE INTO person_attribute_type VALUES (13, 'Secondary Contact','java.lang.String','0d77f271-e2d0-4f39-898d-1906ff0c5b27');
+INSERT OR IGNORE INTO person_attribute_type VALUES (14, 'Secondary Contact Owner','org.openmrs.Concept','4fbf96bd-2f55-4822-9c33-aa6cea9e0d7c');
+INSERT OR IGNORE INTO person_attribute_type VALUES (15, 'Ethnicity','org.openmrs.Concept','73073baa-e99d-4e9c-b4c4-736b4e3eba47');
+INSERT OR IGNORE INTO person_attribute_type VALUES (16, 'Education Level','org.openmrs.Concept','78d0949a-04c8-4110-b38c-4ac4832639f7');
+INSERT OR IGNORE INTO person_attribute_type VALUES (17, 'Employment Status','org.openmrs.Concept','fa190df0-eacb-4ea8-980b-519ff02957c7');
+INSERT OR IGNORE INTO person_attribute_type VALUES (18, 'Occupation','org.openmrs.Concept','2debbc4b-caaf-4dfc-b0aa-edef1dc4d511');
+INSERT OR IGNORE INTO person_attribute_type VALUES (19,  'Mother Tongue','org.openmrs.Concept','ed6619e6-4177-4a87-8e70-10e11745c047');
+INSERT OR IGNORE INTO person_attribute_type VALUES (20, 'Income Class','org.openmrs.Concept','bfb9c659-660f-4c41-a387-1a315f602f2a');
+INSERT OR IGNORE INTO person_attribute_type VALUES (21, 'National ID','java.lang.String','dc528cb6-8037-4688-960e-7bf484914c43');
+INSERT OR IGNORE INTO person_attribute_type VALUES (22, 'National ID Owner','org.openmrs.Concept','691871fa-4448-4f67-9343-2ad105214cc2');
+INSERT OR IGNORE INTO person_attribute_type VALUES (23, 'Guardian Name','java.lang.String','30b27db4-4e92-4ef8-857a-58e8f65fcad5');
+INSERT OR IGNORE INTO person_attribute_type VALUES (24, 'Tertiary Contact','java.lang.String','c1c2ba98-dc5f-4cf2-9e44-44cd57b2725a');
+INSERT OR IGNORE INTO person_attribute_type VALUES (25, 'Quaternary Contact','java.lang.String','1b2ede79-bfee-4e9f-81be-86d6e1567556');
+INSERT OR IGNORE INTO person_attribute_type VALUES (26, 'Treatment Supporter','java.lang.String','f083e422-b1e9-4951-8bc9-95c2992a6a72');

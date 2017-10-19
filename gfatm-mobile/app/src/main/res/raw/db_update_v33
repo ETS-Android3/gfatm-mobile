@@ -1,0 +1,20 @@
+-- inserts
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MUAC (CM)','muac','Coded','3cf9ecee-ab4c-4d11-b32c-8be66364c4b2');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NORMAL MUAC GREATER THAN EQUAL TO 12.5','normal_muac_greater_than_equal_to_12.5','N/A','63d012bd-9f44-4e27-8312-4c0b82f51064');
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT CURRENT TREATMENT','patient_current_treatment','Coded','9640aa3c-7076-47bf-8b6c-9012dda68c14');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ATT','anti_tuberculosis_treatment','N/A','2af9ebd6-e9a3-4c2e-a07e-66458236f979');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ANTIBIOTIC TRIAL','antibiotic_trial','N/A','e60db89d-9f17-4d27-87d7-7bd1c9e25ccf');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('IPT','ipt','N/A','1dadd5ca-e3f1-483c-b04c-f8bbc236b208');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('UNDER INVESTIGATION','under_investigation','N/A','f645e492-0f38-4794-9d6d-bda911a90667');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('QUANTITY OF PEDIASURE DISPERSED','quantity_of_pediasure_dispersed','Coded','76256f14-4662-4daa-b0a1-ee722615370c');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('QUANTITY OF VITAMIN B COMPLEX DISPERSED','quantity_of_vitamin_b_complex_dispersed','Coded','495e7190-4b2e-45d5-88a4-ec4c0127e235');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('QUANTITY OF IRON DISPERSED','quantity_of_iron_dispersed','Coded','435ad72c-da01-454b-96a3-25284d57b076');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('QUANTITY OF ANTHELMINTHIC DISPERSED','quantity_of_anthelminthic_dispersed','Coded','76c5c036-8c2a-442a-9c41-3c12ec35cce6');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('QUANTITY OF CALPOL DISPERSED','quantity_of_calpol_dispersed','Coded','5c2c6a38-0f98-4869-88bf-5a16f61a544f');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CALPOL DISPERSED','calpol_dispersed','Coded','05ca5a7f-115a-4c0f-931e-8f69d33015cc');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ADDITIONAL TREATMENT TO NON TB PATIENT','additional_treatment_non_tb_patient','Coded','8ccee3f0-95e8-45f5-9b83-5f5a035c671f');
+
+-- updates
+update OR IGNORE concept set full_name='SEVERE ACUTE MALNUTRITION LESS THAN OR EQUAL TO 11.5', var_name = 'severe_acute_malnutrition_less_than_or_equal_11.5' where uuid = '163302AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
+update OR IGNORE concept set full_name='MODERATE ACUTE MALNUTRITION LESS THAN OR EQUAL TO 12.5', var_name = 'moderate_acute_malnutrition_less_than_or_equal_12.5' where uuid = '163303AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
