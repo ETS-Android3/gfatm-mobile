@@ -35,7 +35,7 @@ import java.util.ArrayList;
 public class DatabaseUtil extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseUtil";
     private static final String DB_NAME = "globalfund.db";
-    private static final int DB_VERSION = 31;
+    private static final int DB_VERSION = 33;
     private Context context;
 
     public DatabaseUtil(Context context) {
@@ -150,7 +150,12 @@ public class DatabaseUtil extends SQLiteOpenHelper {
             case 30: // Script to upgrade from version 30 to 31
                 insertsStream = context.getResources().openRawResource(R.raw.db_update_v31);
                 break;
-
+            case 31: // Script to upgrade from version 31 to 32
+                insertsStream = context.getResources().openRawResource(R.raw.db_update_v32);
+                break;
+            case 32: // Script to upgrade from version 32 to 33
+                insertsStream = context.getResources().openRawResource(R.raw.db_update_v33);
+                break;
 
         }
 

@@ -1050,7 +1050,7 @@ public class ServerService {
 
     public String[][] getPersonAttributeTypeUuid(String personAttributeType) {
 
-        String[][] result = dbUtil.getTableData(Metadata.PERSON_ATTRIBUTE_TYPE, "uuid, format", "person_attribute_type = '" + personAttributeType + "'");
+        String[][] result = dbUtil.getTableData(Metadata.PERSON_ATTRIBUTE_TYPE, "uuid, format", "name = '" + personAttributeType + "'");
         if (result.length > 0)
             return result;
         else
