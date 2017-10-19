@@ -2548,7 +2548,6 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                             iptDose.getRadioGroup().getButtons().get(2).setChecked(true);
                         }
                     }
-                    iptDose.setVisibility(View.VISIBLE);
                     initiatingAdditionalTreatmentIpt.setVisibility(View.VISIBLE);
                 }
                 else{
@@ -2651,17 +2650,21 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 acceptanceToIpt.setVisibility(View.VISIBLE);
                 if(App.get(acceptanceToIpt).equals(getResources().getString(R.string.yes))){
                     iptStartDate.setVisibility(View.VISIBLE);
+                    iptDose.setVisibility(View.VISIBLE);
                 }
             } else {
                 acceptanceToIpt.setVisibility(View.GONE);
                 iptStartDate.setVisibility(View.GONE);
+                iptDose.setVisibility(View.GONE);
             }
         }
         else if (group == acceptanceToIpt.getRadioGroup()) {
             if (acceptanceToIpt.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
                 iptStartDate.setVisibility(View.VISIBLE);
+                iptDose.setVisibility(View.VISIBLE);
             } else {
                 iptStartDate.setVisibility(View.GONE);
+                iptDose.setVisibility(View.GONE);
             }
         }
 
@@ -2669,7 +2672,9 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             if (patientCategory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_category_3))) {
                 regimen.getRadioGroup().getButtons().get(1).setChecked(true);
             }
-        }else if (group == regimen.getRadioGroup()) {
+        }
+
+        else if (group == regimen.getRadioGroup()) {
             if (regimen.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_rhz))) {
                 adultFormulationofHRZE.setVisibility(View.GONE);
                 currentTabletsofE.setVisibility(View.GONE);
