@@ -92,15 +92,6 @@
         </item>
 
         <item>
-            CREATE TABLE IF NOT EXISTS person_attribute_type
-            (
-                person_attribute_type VARCHAR PRIMARY KEY UNIQUE NOT NULL,
-                format VARCHAR,
-                uuid VARCHAR UNIQUE NOT NULL
-            );
-        </item>
-
-        <item>
             CREATE TABLE IF NOT EXISTS patient
             (
                 patient_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -311,19 +302,9 @@
         </item>
 
         <item>
-            create table screening_form_count(
-                username text,
-                today datetime,
-                form text,
-                counts int DEFAULT 0
-             );
-        </item>
-
-        <item>
             create table person_attribute_type(
                 id integer primary key,
                 name VARCHAR,
-                description VARCHAR,
                 format VARCHAR,
                 uuid VARCHAR
              );
