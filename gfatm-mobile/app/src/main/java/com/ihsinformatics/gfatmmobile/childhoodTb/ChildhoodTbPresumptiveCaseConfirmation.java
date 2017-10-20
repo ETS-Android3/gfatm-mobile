@@ -60,6 +60,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
     TitledRadioGroup childPresumptive;
     TitledEditText weight;
     TitledEditText height;
+    TitledRadioGroup muac;
     TitledEditText weightPercentileEditText;
     TitledRadioGroup cough;
     TitledSpinner coughDuration;
@@ -177,36 +178,14 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
      * Initializes all views and ArrayList and Views Array
      */
     public void initViews() {
-        if (App.getPatient().getPerson().getAge() > 15) {
 
-            int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
-
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
-            alertDialog.setMessage(getString(R.string.ctb_age_greater_than_15));
-            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-            DrawableCompat.setTint(clearIcon, color);
-            alertDialog.setIcon(clearIcon);
-            alertDialog.setTitle(getResources().getString(R.string.title_error));
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            try {
-                                InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
-                                imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
-                            } catch (Exception e) {
-                                // TODO: handle exception
-                            }
-                            dialog.dismiss();
-                        }
-                    });
-            alertDialog.show();
-        }
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         childPresumptive = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_mo_think_child_presumptive), getResources().getStringArray(R.array.yes_no_options), null, App.HORIZONTAL, App.VERTICAL, true);
         weight = new TitledEditText(context, null, getResources().getString(R.string.ctb_weight), "", "", 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         height = new TitledEditText(context, null, getResources().getString(R.string.ctb_height), "", "", 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        muac = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_muac), getResources().getStringArray(R.array.ctb_muac_list), null, App.VERTICAL, App.VERTICAL, true);
         weightPercentileEditText = new TitledEditText(context, null,getResources().getString(R.string.ctb_weight_percentile), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         cough = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_cough), getResources().getStringArray(R.array.yes_no_unknown_refused_options), null, App.HORIZONTAL, App.VERTICAL, true);
         coughDuration = new TitledSpinner(context, null, getResources().getString(R.string.ctb_cough_duration), getResources().getStringArray(R.array.ctb_cough_duration_list), null, App.VERTICAL);
@@ -267,7 +246,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
         doctorNotes = new TitledEditText(context, null, getResources().getString(R.string.ctb_doctor_notes), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
 
 
-        views = new View[]{formDate.getButton(), childPresumptive.getRadioGroup(), cough.getRadioGroup(), coughDuration.getSpinner(), fever.getRadioGroup(),
+        views = new View[]{formDate.getButton(), muac.getRadioGroup(),childPresumptive.getRadioGroup(), cough.getRadioGroup(), coughDuration.getSpinner(), fever.getRadioGroup(),
                 nightSweats.getRadioGroup(), weightLoss.getRadioGroup(), appetite.getRadioGroup(), generalAppearance.getRadioGroup(),
                 headEyeEearNoseThroat.getRadioGroup(), lymphNodeExamination.getRadioGroup(), spineExamination.getRadioGroup(),
                 jointsExamination.getRadioGroup(), skinExamination.getRadioGroup(), chestExamination.getRadioGroup(), abdominalExamination.getRadioGroup(),
@@ -283,7 +262,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, childPresumptive, weight, height, weightPercentileEditText, cough, coughDuration, fever, nightSweats, weightLoss, appetite, generalAppearance, generalAppearanceExplanation, headEyeEearNoseThroat, headEyeEearNoseThroatExplanation, lymphNodeExamination, lymphNodeExplanation, spineExamination, spineExplanation,
+                {{formDate, childPresumptive, weight, height, muac,weightPercentileEditText, cough, coughDuration, fever, nightSweats, weightLoss, appetite, generalAppearance, generalAppearanceExplanation, headEyeEearNoseThroat, headEyeEearNoseThroatExplanation, lymphNodeExamination, lymphNodeExplanation, spineExamination, spineExplanation,
                         jointsExamination, jointsExplanation, skinExamination, skinExplanation, chestExamination, chestExplanation, abdominalExamination, abdominalExplanation, othersExplanation, tbExamOutcome, bcgScar, tbBefore, tbMedication, contactTbHistory, closeContactType, otherContactType, additionalCommentHistoryOfPatient, tbInfectionForm, tbType, smearPositive, childPrimaryCaregiver
                         , sameBedAsChild, sameRoomRAsChild, liveInSameHoushold, seeChildEveryday, contactCoughing, oneCloseContactInHousehold, conclusion, doctorNotes
                 }};
@@ -319,6 +298,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
         seeChildEveryday.getRadioGroup().setOnCheckedChangeListener(this);
         contactCoughing.getRadioGroup().setOnCheckedChangeListener(this);
         oneCloseContactInHousehold.getRadioGroup().setOnCheckedChangeListener(this);
+        muac.getRadioGroup().setOnCheckedChangeListener(this);
         conclusion.getRadioGroup().setOnCheckedChangeListener(this);
 
 
@@ -396,31 +376,6 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
 
     @Override
     public boolean validate() {
-        if (App.getPatient().getPerson().getAge() > 15) {
-
-            int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
-
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
-            alertDialog.setMessage(getString(R.string.ctb_age_greater_than_15));
-            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-            DrawableCompat.setTint(clearIcon, color);
-            alertDialog.setIcon(clearIcon);
-            alertDialog.setTitle(getResources().getString(R.string.title_error));
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            try {
-                                InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
-                                imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
-                            } catch (Exception e) {
-                                // TODO: handle exception
-                            }
-                            dialog.dismiss();
-                        }
-                    });
-            alertDialog.show();
-            return false;
-        } else {
             boolean error = false;
             if (App.get(weight).isEmpty() && weight.getVisibility()==View.VISIBLE) {
                 if (App.isLanguageRTL())
@@ -984,7 +939,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                 return false;
             }
             return true;
-        }
+
     }
 
     @Override
@@ -1017,6 +972,12 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
         if(height.getVisibility()==View.VISIBLE) {
             observations.add(new String[]{"HEIGHT (CM)", App.get(height)});
         }
+        if(muac.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"MUAC (CM)", App.get(muac).equals(getResources().getString(R.string.ctb_sam)) ? "SEVERE ACUTE MALNUTRITION LESS THAN OR EQUAL TO 11.5" :
+                    (App.get(muac).equals(getResources().getString(R.string.ctb_mam)) ? "MODERATE ACUTE MALNUTRITION LESS THAN OR EQUAL TO 12.5" :
+                            "NORMAL MUAC GREATER THAN EQUAL TO 12.5")});
+        }
+
         if(!App.get(weightPercentileEditText).equals(getResources().getString(R.string.ctb_empty))) {
             observations.add(new String[]{"WEIGHT PERCENTILE GROUP", App.get(weightPercentileEditText)});
         }
@@ -1357,6 +1318,20 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                 weight.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("HEIGHT (CM)")) {
                 height.getEditText().setText(obs[0][1]);
+            }
+            else if (obs[0][0].equals("MUAC (CM)")) {
+                for (RadioButton rb : muac.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_sam)) && obs[0][1].equals("SEVERE ACUTE MALNUTRITION LESS THAN OR EQUAL TO 11.5")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_mam)) && obs[0][1].equals("MODERATE ACUTE MALNUTRITION LESS THAN OR EQUAL TO 12.5")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_normal_12_5)) && obs[0][1].equals("NORMAL MUAC GREATER THAN EQUAL TO 12.5")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
             }
             else if (obs[0][0].equals("WEIGHT PERCENTILE GROUP")) {
                 weightPercentileEditText.getEditText().setText(obs[0][1]);
@@ -1896,6 +1871,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
         weight.setVisibility(View.GONE);
         weightPercentileEditText.setVisibility(View.GONE);
         height.setVisibility(View.GONE);
+        muac.setVisibility(View.GONE);
         weightPercentileEditText.setVisibility(View.GONE);
         cough.setVisibility(View.GONE);
         fever.setVisibility(View.GONE);
@@ -2177,6 +2153,9 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
             if (childPresumptive.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
                 weight.setVisibility(View.VISIBLE);
                 height.setVisibility(View.VISIBLE);
+                if(App.getPatient().getPerson().getAge()>=0 && App.getPatient().getPerson().getAge()<=5){
+                    muac.setVisibility(View.VISIBLE);
+                }
                 weightPercentileEditText.setVisibility(View.VISIBLE);
                 cough.setVisibility(View.VISIBLE);
                 if(App.get(cough).equals(getResources().getString(R.string.yes))){
@@ -2249,6 +2228,7 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
             }else{
                 weight.setVisibility(View.GONE);
                 height.setVisibility(View.GONE);
+                muac.setVisibility(View.GONE);
                 weightPercentileEditText.setVisibility(View.GONE);
                 cough.setVisibility(View.GONE);
                 coughDuration.setVisibility(View.GONE);

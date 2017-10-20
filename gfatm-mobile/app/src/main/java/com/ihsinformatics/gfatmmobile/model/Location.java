@@ -99,22 +99,23 @@ public class Location extends AbstractModel {
                     JSONObject jsonobject = attributes.getJSONObject(i);
                     String display = jsonobject.getString("display");
                     String value = jsonobject.getString("value");
+                    Boolean voided = jsonobject.getBoolean("voided");
 
-                    if (display.contains("Primary Contact")) {
+                    if (display.contains("Primary Contact") && !voided) {
                         primaryContact = value;
-                    } else if (display.contains("Location ID")) {
+                    } else if (display.contains("Location ID") && !voided) {
                         locationId = value;
-                    } else if (display.contains("FAST Location") && display.contains("true")) {
+                    } else if (display.contains("FAST Location") && display.contains("true") && !voided) {
                         fastLocation = "Y";
-                    } else if (display.contains("PET Location") && display.contains("true")) {
+                    } else if (display.contains("PET Location") && display.contains("true") && !voided) {
                         petLocation = "Y";
-                    } else if (display.contains("Comorbidities Location") && display.contains("true")) {
+                    } else if (display.contains("Comorbidities Location") && display.contains("true") && !voided) {
                         comorbiditiesLocation = "Y";
-                    } else if (display.contains("PET Location") && display.contains("true")) {
+                    } else if (display.contains("PET Location") && display.contains("true") && !voided) {
                         petLocation = "Y";
-                    } else if (display.contains("ChildhoodTB Location") && display.contains("true")) {
+                    } else if (display.contains("ChildhoodTB Location") && display.contains("true") && !voided) {
                         childhoodTbLocation = "Y";
-                    } else if (display.contains("PMDT Location") && display.contains("true")) {
+                    } else if (display.contains("PMDT Location") && display.contains("true") && !voided) {
                         pmdtLocation = "Y";
                     }
 

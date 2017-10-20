@@ -376,7 +376,7 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
             gotoLastPage();
         }
 
-        if (App.get(followupMonth).isEmpty()) {
+        if (followupMonth.getVisibility() == View.VISIBLE && App.get(followupMonth).isEmpty()) {
             followupMonth.getEditText().setError(getString(R.string.empty_field));
             followupMonth.getEditText().requestFocus();
             error = true;
@@ -566,7 +566,8 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
                 (App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_rifapentine)) ? "ISONIAZID AND RIFAPENTINE" : "LEVOFLOXACIN AND ETHIONAMIDE")});
         observations.add(new String[]{"INCENTIVE DATE", App.getSqlDate(secondDateCalendar)});
         observations.add(new String[]{"INCENTIVE AMOUNT", App.get(incentiveAmount)});
-        observations.add(new String[]{"MONTH OF INCENTIVE", App.get(followupMonth)});
+        if(followupMonth.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"MONTH OF INCENTIVE", App.get(followupMonth)});
         observations.add(new String[]{"LOCATION OF EVENT", App.get(incentiveDisbursalLocation).equals(getResources().getString(R.string.pet_contact_home)) ? "HOME" : "HEALTH FACILITY"});
         observations.add(new String[]{"NAME OF INCENTIVE RECEIVER", App.get(recieverName)});
         observations.add(new String[]{"RELATIONSHIP WITH INCENTIVE RECEIVER", App.get(recieverRelationWithContact).equals(getResources().getString(R.string.pet_self)) ? "SELF" :
@@ -735,6 +736,7 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
         relationshipTreatmentSuppoter.setVisibility(View.GONE);
         other.setVisibility(View.GONE);
         otherRelation.setVisibility(View.GONE);
+        followupMonth.setVisibility(View.GONE);
 
         Calendar calendar = new GregorianCalendar(2017,4,1);
         if (secondDateCalendar.before(calendar))
@@ -1075,6 +1077,7 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
                 typeTreatmentSupporter.setVisibility(View.GONE);
                 relationshipTreatmentSuppoter.setVisibility(View.GONE);
                 other.setVisibility(View.GONE);
+                followupMonth.setVisibility(View.GONE);
             } else {
                 for (RadioButton rb : incentiveFor.getRadioGroup().getButtons()) {
                     rb.setVisibility(View.VISIBLE);
@@ -1084,6 +1087,7 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
                 typeTreatmentSupporter.setVisibility(View.VISIBLE);
                 relationshipTreatmentSuppoter.setVisibility(View.VISIBLE);
                 other.setVisibility(View.VISIBLE);
+                followupMonth.setVisibility(View.VISIBLE);
             }
         }
 

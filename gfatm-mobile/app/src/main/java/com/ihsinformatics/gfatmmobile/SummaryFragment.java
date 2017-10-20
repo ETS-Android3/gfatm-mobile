@@ -31,7 +31,7 @@ import com.ihsinformatics.gfatmmobile.util.ServerService;
 import java.util.Date;
 
 
-public class SummaryFragment extends Fragment implements View.OnClickListener {
+public class SummaryFragment extends Fragment implements View.OnClickListener, View.OnTouchListener {
 
     Context context;
 
@@ -47,6 +47,8 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
     TextView backButton;
     TextView heading;
     LinearLayout content;
+
+    ImageView refersh;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -72,6 +74,9 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         backButton = (TextView) mainContent.findViewById(R.id.backButton);
         heading = (TextView) mainContent.findViewById(R.id.heading);
         content = (LinearLayout) mainContent.findViewById(R.id.content);
+
+        refersh = (ImageView) mainContent.findViewById(R.id.refresh);
+        refersh.setOnTouchListener(this);
 
         patientAttribute.setOnClickListener(this);
         generalPatientView.setOnClickListener(this);
@@ -108,17 +113,19 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
             if(App.getProgram().equals(getResources().getString(R.string.fast))){
                 interventionPatientView.setText(getString(R.string.fast_patient_view));
                 interventionStaffView.setText(getString(R.string.fast_staff_view));
-                interventionStaffView.setVisibility(View.VISIBLE);
                 interventionPatientView.setVisibility(View.VISIBLE);
             } else if(App.getProgram().equals(getResources().getString(R.string.pet))){
                 interventionPatientView.setText(getString(R.string.pet_patient_view));
                 interventionStaffView.setText(getString(R.string.pet_staff_view));
+                interventionStaffView.setVisibility(View.GONE);
             } else if(App.getProgram().equals(getResources().getString(R.string.childhood_tb))){
                 interventionPatientView.setText(getString(R.string.childhood_tb_patient_view));
                 interventionStaffView.setText(getString(R.string.childhood_tb_staff_view));
+                interventionPatientView.setVisibility(View.VISIBLE);
             } else if(App.getProgram().equals(getResources().getString(R.string.comorbidities))){
                 interventionPatientView.setText(getString(R.string.comorbidities_patient_view));
                 interventionStaffView.setText(getString(R.string.comorbidities_patient_view));
+                interventionStaffView.setVisibility(View.GONE);
             }
         }
 
@@ -310,8 +317,16 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         String xrayResultDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB-CXR Screening Test Order");
         if(xrayResultDate != null){
             String xrayResultOderId = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-CXR Screening Test Order" , "FOLLOW-UP MONTH", "0", "ORDER ID");
-            if(xrayResultOderId == null)
-                xrayResult = null;
+            if(xrayResultOderId == null) {
+                xrayResultOderId = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-CXR Screening Test Order" , "FOLLOW-UP MONTH", "0.0", "ORDER ID");
+                if(xrayResultOderId == null)
+                    xpertResult = null;
+                else{
+                    xrayResult = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-CXR Screening Test Result", "ORDER ID", xrayResultOderId, "CHEST X-RAY SCORE");
+                    if (xrayResult== null)
+                        xrayResult = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-CXR Screening Test Result", "ORDER ID", xrayResultOderId, "RADIOLOGICAL DIAGNOSIS");
+                }
+            }
             else {
                 xrayResult = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-CXR Screening Test Result", "ORDER ID", xrayResultOderId, "CHEST X-RAY SCORE");
                 if (xrayResult== null)
@@ -321,8 +336,16 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
             xrayResultDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST-Screening CXR Test Order");
             if(xrayResultDate != null) {
                 String xrayResultOderId = serverService.getObsValueByObs(App.getPatientId(), "FAST-Screening CXR Test Order", "FOLLOW-UP MONTH", "0", "ORDER ID");
-                if (xrayResultOderId == null)
-                    xrayResult = null;
+                if (xrayResultOderId == null){
+                    xrayResultOderId = serverService.getObsValueByObs(App.getPatientId(), "FAST-Screening CXR Test Order" , "FOLLOW-UP MONTH", "0.0", "ORDER ID");
+                    if(xrayResultOderId == null)
+                        xpertResult = null;
+                    else{
+                        xrayResult = serverService.getObsValueByObs(App.getPatientId(), "FAST-Screening CXR Test Result", "ORDER ID", xrayResultOderId, "CHEST X-RAY SCORE");
+                        if (xrayResult== null)
+                            xrayResult = serverService.getObsValueByObs(App.getPatientId(), "FAST-Screening CXR Test Result", "ORDER ID", xrayResultOderId, "RADIOLOGICAL DIAGNOSIS");
+                    }
+                }
                 else {
                     xrayResult = serverService.getObsValueByObs(App.getPatientId(), "FAST-Screening CXR Test Result", "ORDER ID", xrayResultOderId, "CHEST X-RAY SCORE");
                     if (xrayResult== null)
@@ -410,22 +433,16 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         String lastXrayOrderDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB-CXR Screening Test Order");
         if(lastXrayOrderDate != null){
             String month = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-CXR Screening Test Order","FOLLOW-UP MONTH");
-            if(!month.equals("0")){
-                lastXrayDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB-CXR Screening Test Result");
-                if(lastXrayDate != null) {
-                    String orderId = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-CXR Screening Test Order", "ORDER ID");
-                    if(orderId != null) {
-                        lastXrayResult = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-CXR Screening Test Result", "ORDER ID", orderId, "CHEST X-RAY SCORE");
-                        if (lastXrayResult == null)
-                            lastXrayResult = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-CXR Screening Test Result", "ORDER ID", orderId, "RADIOLOGICAL DIAGNOSIS");
-                    }
-                }
-            } else {
+            if(month.equals("0") || month.equals("0.0")){
+
                 String[] followupMonths = serverService.getAllObsValues(App.getPatientId(), "Childhood TB-CXR Screening Test Order", "FOLLOW-UP MONTH");
                 int followupMonthInt = 0;
                 for(String followupMonth: followupMonths){
-                    if(followupMonth.equals("0"))
+                    if(followupMonth.equals("0") || followupMonth.equals("0.0"))
                         continue;
+
+                    String[] array = followupMonth.split(".");
+                    followupMonth = array[0];
 
                     int value = Integer.parseInt(followupMonth);
                     if(value > 0){
@@ -442,25 +459,34 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
                             lastXrayResult = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-CXR Screening Test Result", "ORDER ID", orderId, "RADIOLOGICAL DIAGNOSIS");
                     }
                 }
+
+            } else {
+
+                lastXrayDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB-CXR Screening Test Result");
+                if(lastXrayDate != null) {
+                    String orderId = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-CXR Screening Test Order", "ORDER ID");
+                    if(orderId != null) {
+                        lastXrayResult = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-CXR Screening Test Result", "ORDER ID", orderId, "CHEST X-RAY SCORE");
+                        if (lastXrayResult == null)
+                            lastXrayResult = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-CXR Screening Test Result", "ORDER ID", orderId, "RADIOLOGICAL DIAGNOSIS");
+                    }
+                }
+
             }
         } else {
             lastXrayOrderDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST-Screening CXR Test Order");
             if(lastXrayOrderDate != null){
                 String month = serverService.getLatestObsValue(App.getPatientId(), "FAST-Screening CXR Test Order","FOLLOW-UP MONTH");
-                if(!month.equals("0")){
-                    lastXrayDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST-Screening CXR Test Result");
-                    if(lastXrayDate != null) {
-                        String orderId = serverService.getLatestObsValue(App.getPatientId(), "FAST-Screening CXR Test Order", "ORDER ID");
-                        lastXrayResult = serverService.getObsValueByObs(App.getPatientId(), "FAST-Screening CXR Test Result", "ORDER ID", orderId, "CHEST X-RAY SCORE");
-                        if(lastXrayResult == null)
-                            lastXrayResult = serverService.getObsValueByObs(App.getPatientId(), "FAST-Screening CXR Test Result", "ORDER ID", orderId, "RADIOLOGICAL DIAGNOSIS");
-                    }
-                } else {
+                if(month.equals("0") || month.equals("0.0")){
+
                     String[] followupMonths = serverService.getAllObsValues(App.getPatientId(), "FAST-Screening CXR Test Order", "FOLLOW-UP MONTH");
                     int followupMonthInt = 0;
                     for(String followupMonth: followupMonths){
-                        if(followupMonth.equals("0"))
+                        if(followupMonth.equals("0") || followupMonth.equals("0.0"))
                             continue;
+
+                        String[] array = followupMonth.split(".");
+                        followupMonth = array[0];
 
                         int value = Integer.parseInt(followupMonth);
                         if(value > 0){
@@ -477,6 +503,17 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
                                 lastXrayResult = serverService.getObsValueByObs(App.getPatientId(), "FAST-Screening CXR Test Result", "ORDER ID", orderId, "RADIOLOGICAL DIAGNOSIS");
                         }
                     }
+
+                } else {
+
+                    lastXrayDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST-Screening CXR Test Result");
+                    if(lastXrayDate != null) {
+                        String orderId = serverService.getLatestObsValue(App.getPatientId(), "FAST-Screening CXR Test Order", "ORDER ID");
+                        lastXrayResult = serverService.getObsValueByObs(App.getPatientId(), "FAST-Screening CXR Test Result", "ORDER ID", orderId, "CHEST X-RAY SCORE");
+                        if(lastXrayResult == null)
+                            lastXrayResult = serverService.getObsValueByObs(App.getPatientId(), "FAST-Screening CXR Test Result", "ORDER ID", orderId, "RADIOLOGICAL DIAGNOSIS");
+                    }
+
                 }
             }
         }
@@ -745,7 +782,16 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
 
         String afbSmearOrderId2 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Order", "FOLLOW-UP MONTH", "2", "ORDER ID");
         if(afbSmearOrderId2==null){
-            smearResult2="-";
+            afbSmearOrderId2 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Order", "FOLLOW-UP MONTH", "2.0", "ORDER ID");
+            if(afbSmearOrderId2==null) {
+                smearResult2 = "-";
+            }
+            else{
+                smearResult2 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", afbSmearOrderId2, "SPUTUM FOR ACID FAST BACILLI");
+                if(smearResult2==null){
+                    smearResult2="-";
+                }
+            }
         }else{
             smearResult2 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", afbSmearOrderId2, "SPUTUM FOR ACID FAST BACILLI");
             if(smearResult2==null){
@@ -756,7 +802,16 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         String afbSmearOrderId3 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Order", "FOLLOW-UP MONTH", "3", "ORDER ID");
         String smearResult3=null;
         if(afbSmearOrderId3==null){
-            smearResult3="-";
+            afbSmearOrderId3 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Order", "FOLLOW-UP MONTH", "3.0", "ORDER ID");
+            if(afbSmearOrderId3==null) {
+                smearResult3 = "-";
+            }
+            else{
+                smearResult3 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", afbSmearOrderId3, "SPUTUM FOR ACID FAST BACILLI");
+                if(smearResult3==null){
+                    smearResult3="-";
+                }
+            }
         }else{
             smearResult3 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", afbSmearOrderId3, "SPUTUM FOR ACID FAST BACILLI");
             if(smearResult3==null){
@@ -767,7 +822,16 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         String smearResult5=null;
         String afbSmearOrderId5 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Order", "FOLLOW-UP MONTH", "5", "ORDER ID");
         if(afbSmearOrderId5==null){
-            smearResult5="-";
+            afbSmearOrderId5 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Order", "FOLLOW-UP MONTH", "5.0", "ORDER ID");
+            if(afbSmearOrderId5==null) {
+                smearResult5 = "-";
+            }
+            else{
+                smearResult5 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", afbSmearOrderId5, "SPUTUM FOR ACID FAST BACILLI");
+                if(smearResult5==null){
+                    smearResult5="-";
+                }
+            }
         }else{
             smearResult5 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", afbSmearOrderId5, "SPUTUM FOR ACID FAST BACILLI");
             if(smearResult5==null){
@@ -778,7 +842,16 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         String smearResult6=null;
         String afbSmearOrderId6 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Order", "FOLLOW-UP MONTH", "6", "ORDER ID");
         if(afbSmearOrderId6==null){
-            smearResult6="-";
+            afbSmearOrderId6 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Order", "FOLLOW-UP MONTH", "6.0", "ORDER ID");
+            if(afbSmearOrderId6==null) {
+                smearResult6 = "-";
+            }
+            else{
+                smearResult6 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", afbSmearOrderId6, "SPUTUM FOR ACID FAST BACILLI");
+                if(smearResult6==null){
+                    smearResult6="-";
+                }
+            }
         }else{
             smearResult6 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", afbSmearOrderId6, "SPUTUM FOR ACID FAST BACILLI");
             if(smearResult6==null){
@@ -789,7 +862,16 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         String smearResult7=null;
         String afbSmearOrderId7 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Order", "FOLLOW-UP MONTH", "7", "ORDER ID");
         if(afbSmearOrderId7==null){
-            smearResult7="-";
+            afbSmearOrderId7 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Order", "FOLLOW-UP MONTH", "7.0", "ORDER ID");
+            if(afbSmearOrderId7==null) {
+                smearResult7 = "-";
+            }
+            else{
+                smearResult7 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", afbSmearOrderId7, "SPUTUM FOR ACID FAST BACILLI");
+                if(smearResult7==null){
+                    smearResult7="-";
+                }
+            }
         }else{
             smearResult7 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", afbSmearOrderId7, "SPUTUM FOR ACID FAST BACILLI");
             if(smearResult7==null){
@@ -800,7 +882,16 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         String smearResult8=null;
         String afbSmearOrderId8 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Order", "FOLLOW-UP MONTH", "8", "ORDER ID");
         if(afbSmearOrderId8==null){
-            smearResult8="-";
+            afbSmearOrderId8 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Order", "FOLLOW-UP MONTH", "8.0", "ORDER ID");
+            if(afbSmearOrderId8==null) {
+                smearResult8 = "-";
+            }
+            else{
+                smearResult8 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", afbSmearOrderId8, "SPUTUM FOR ACID FAST BACILLI");
+                if(smearResult8==null){
+                    smearResult8="-";
+                }
+            }
         }else{
             smearResult8 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", afbSmearOrderId8, "SPUTUM FOR ACID FAST BACILLI");
             if(smearResult8==null){
@@ -881,16 +972,355 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
 
     public void fillChildhoodTbPatientView(){
 
-        String[][] dataset = { {"rabbia", "hassan", null},
-                {"hadi","hassan", null},
-                {"mohammad","hassan", null},
-                {"farzana","hassan", null}};
+        String externalId = App.getPatient().getExternalId();
+        if(externalId==null) {
+            serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Patient Registration", "CONTACT EXTERNAL ID");
+        }
+
+        if(externalId == null)
+            externalId = "-";
+        else
+            externalId = App.convertToTitleCase(externalId);
+
+        String screeningFacility =  serverService.getEncounterLocation(App.getPatientId(), "Childhood TB-Verbal Screening");
+        if(screeningFacility == null)
+            screeningFacility= "-";
+
+        String weight =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Presumptive Case Confirmation", "WEIGHT (KG)");
+        if(weight == null)
+            weight = "-";
+
+        String height =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Presumptive Case Confirmation", "HEIGHT (CM)");
+        if(height == null)
+            height = "-";
+
+        String percentile =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Presumptive Case Confirmation", "WEIGHT PERCENTILE GROUP");
+        if(percentile == null)
+            percentile = "-";
+
+        String ppaScore =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-PPA Score", "PPA SCORE");
+        if(ppaScore == null)
+            ppaScore = "-";
+
+        String testConfirmingDiagnosis =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "CONFIRMED DIAGNOSIS");
+        if(testConfirmingDiagnosis == null)
+            testConfirmingDiagnosis = "-";
+        else
+            testConfirmingDiagnosis = App.convertToTitleCase(testConfirmingDiagnosis);
+
+        String typeOfDiagnosis =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "TUBERCULOSIS DIAGNOSIS METHOD");
+        if(typeOfDiagnosis == null)
+            typeOfDiagnosis = "-";
+        else
+            typeOfDiagnosis = App.convertToTitleCase(typeOfDiagnosis);
+
+
+        String typeOfTB =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "SITE OF TUBERCULOSIS DISEASE");
+        if(typeOfTB == null)
+            typeOfTB = "-";
+        else
+            typeOfTB = App.convertToTitleCase(typeOfTB);
+
+        String extraPulmonarySite =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "EXTRA PULMONARY SITE");
+        if(extraPulmonarySite == null)
+            extraPulmonarySite = "-";
+        else
+            extraPulmonarySite = App.convertToTitleCase(extraPulmonarySite);
+
+        String patientType =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "TB PATIENT TYPE");
+        if(patientType == null)
+            patientType = "-";
+        else
+            patientType = App.convertToTitleCase(patientType);
+
+
+        String tbCategory =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "TB CATEGORY");
+        if(tbCategory == null)
+            tbCategory = "-";
+        else
+            tbCategory = App.convertToTitleCase(tbCategory);
+
+        String treatmentInitiated =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "TREATMENT INITIATED");
+        if(treatmentInitiated == null)
+            treatmentInitiated = "-";
+        else
+            treatmentInitiated = App.convertToTitleCase(treatmentInitiated);
+
+        String reasonNotInitiated =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "TREATMENT NOT INITIATED REASON");
+        if(reasonNotInitiated == null)
+            reasonNotInitiated = "-";
+        else
+            reasonNotInitiated = App.convertToTitleCase(reasonNotInitiated);
+
+        String additionalTreatment =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "ADDITIONAL TREATMENT TO TB PATIENT");
+        if(additionalTreatment == null)
+            additionalTreatment = "-";
+        else
+            additionalTreatment = App.convertToTitleCase(additionalTreatment);
+
+        String tbRegistrationNumber =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "TB REGISTRATION NUMBER");
+        if(tbRegistrationNumber == null)
+            tbRegistrationNumber = "-";
+
+
+        String treatmentPlan2=null,conclusionFollowup2=null;
+        String followUpDate2 = serverService.getEncounterDateTimeByObsValue(App.getPatientId(), "Childhood TB-TB Treatment Followup","FOLLOW-UP MONTH", "2");
+        if(followUpDate2!=null){
+            treatmentPlan2 = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-TB Treatment Followup","FOLLOW-UP MONTH", "2","TREATMENT PLAN");
+            conclusionFollowup2 = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-TB Treatment Followup","FOLLOW-UP MONTH", "2","CONCLUSION OF TREATMENT FOLLOW UP");
+
+            if(treatmentPlan2==null){
+                treatmentPlan2 = "-";
+            }
+            if(conclusionFollowup2==null){
+                conclusionFollowup2 = "-";
+            }
+        }else{
+            followUpDate2 = serverService.getEncounterDateTimeByObsValue(App.getPatientId(), "Childhood TB-TB Treatment Followup","FOLLOW-UP MONTH", "2.0");
+            if(followUpDate2!=null) {
+                treatmentPlan2 = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-TB Treatment Followup", "FOLLOW-UP MONTH", "2.0", "TREATMENT PLAN");
+                conclusionFollowup2 = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-TB Treatment Followup","FOLLOW-UP MONTH", "2.0","CONCLUSION OF TREATMENT FOLLOW UP");
+
+                if (treatmentPlan2 == null) {
+                    treatmentPlan2 = "-";
+                }
+                if (conclusionFollowup2 == null) {
+                    conclusionFollowup2 = "-";
+                }
+            }else{
+                followUpDate2 = "-";
+                treatmentPlan2 = "-";
+                conclusionFollowup2 = "-";
+            }
+        }
+
+
+        String treatmentPlan3=null,conclusionFollowup3=null;
+        String followUpDate3 = serverService.getEncounterDateTimeByObsValue(App.getPatientId(), "Childhood TB-TB Treatment Followup","FOLLOW-UP MONTH", "3");
+        if(followUpDate3!=null){
+            treatmentPlan3 = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-TB Treatment Followup","FOLLOW-UP MONTH", "3","TREATMENT PLAN");
+            conclusionFollowup3 = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-TB Treatment Followup","FOLLOW-UP MONTH", "3","CONCLUSION OF TREATMENT FOLLOW UP");
+
+            if(treatmentPlan3==null){
+                treatmentPlan3 = "-";
+            }
+            if(conclusionFollowup3==null){
+                conclusionFollowup3 = "-";
+            }
+        }else{
+            followUpDate3 = serverService.getEncounterDateTimeByObsValue(App.getPatientId(), "Childhood TB-TB Treatment Followup","FOLLOW-UP MONTH", "3.0");
+            if(followUpDate3!=null) {
+                treatmentPlan3 = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-TB Treatment Followup", "FOLLOW-UP MONTH", "3.0", "TREATMENT PLAN");
+                conclusionFollowup3 = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-TB Treatment Followup","FOLLOW-UP MONTH", "3.0","CONCLUSION OF TREATMENT FOLLOW UP");
+
+                if (treatmentPlan3 == null) {
+                    treatmentPlan3 = "-";
+                }
+                if (conclusionFollowup3 == null) {
+                    conclusionFollowup3 = "-";
+                }
+            }else{
+                followUpDate3 = "-";
+                treatmentPlan3 = "-";
+                conclusionFollowup3 = "-";
+            }
+        }
+
+
+        String treatmentPlan5=null,conclusionFollowup5=null;
+        String followUpDate5 = serverService.getEncounterDateTimeByObsValue(App.getPatientId(), "Childhood TB-TB Treatment Followup","FOLLOW-UP MONTH", "5");
+        if(followUpDate5!=null){
+            treatmentPlan5 = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-TB Treatment Followup","FOLLOW-UP MONTH", "5","TREATMENT PLAN");
+            conclusionFollowup5 = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-TB Treatment Followup","FOLLOW-UP MONTH", "5","CONCLUSION OF TREATMENT FOLLOW UP");
+
+            if(treatmentPlan5==null){
+                treatmentPlan5 = "-";
+            }
+            if(conclusionFollowup5==null){
+                conclusionFollowup5 = "-";
+            }
+        }else{
+            followUpDate5 = serverService.getEncounterDateTimeByObsValue(App.getPatientId(), "Childhood TB-TB Treatment Followup","FOLLOW-UP MONTH", "5.0");
+            if(followUpDate5!=null) {
+                treatmentPlan5 = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-TB Treatment Followup", "FOLLOW-UP MONTH", "5.0", "TREATMENT PLAN");
+                conclusionFollowup5 = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-TB Treatment Followup","FOLLOW-UP MONTH", "5.0","CONCLUSION OF TREATMENT FOLLOW UP");
+
+                if (treatmentPlan5 == null) {
+                    treatmentPlan5 = "-";
+                }
+                if (conclusionFollowup5 == null) {
+                    conclusionFollowup5 = "-";
+                }
+            }else{
+                treatmentPlan5 = "-";
+                conclusionFollowup5 = "-";
+                followUpDate5 = "-";
+            }
+        }
+
+
+        String treatmentPlan6=null,conclusionFollowup6=null;
+        String followUpDate6 = serverService.getEncounterDateTimeByObsValue(App.getPatientId(), "Childhood TB-TB Treatment Followup","FOLLOW-UP MONTH", "6");
+        if(followUpDate6!=null){
+            treatmentPlan6 = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-TB Treatment Followup","FOLLOW-UP MONTH", "6","TREATMENT PLAN");
+            conclusionFollowup6 = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-TB Treatment Followup","FOLLOW-UP MONTH", "6","CONCLUSION OF TREATMENT FOLLOW UP");
+
+            if(treatmentPlan6==null){
+                treatmentPlan6 = "-";
+            }
+            if(conclusionFollowup6==null){
+                conclusionFollowup6 = "-";
+            }
+        }else{
+            followUpDate6 = serverService.getEncounterDateTimeByObsValue(App.getPatientId(), "Childhood TB-TB Treatment Followup","FOLLOW-UP MONTH", "6.0");
+            if(followUpDate6!=null) {
+                treatmentPlan6 = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-TB Treatment Followup", "FOLLOW-UP MONTH", "6.0", "TREATMENT PLAN");
+                conclusionFollowup6 = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-TB Treatment Followup","FOLLOW-UP MONTH", "6.0","CONCLUSION OF TREATMENT FOLLOW UP");
+
+                if (treatmentPlan6 == null) {
+                    treatmentPlan6 = "-";
+                }
+                if (conclusionFollowup6 == null) {
+                    conclusionFollowup6 = "-";
+                }
+            }else{
+                treatmentPlan6 = "-";
+                conclusionFollowup6 = "-";
+                followUpDate6 = "-";
+            }
+        }
+
+        String treatmentPlan7=null,conclusionFollowup7=null;
+        String followUpDate7 = serverService.getEncounterDateTimeByObsValue(App.getPatientId(), "Childhood TB-TB Treatment Followup","FOLLOW-UP MONTH", "7");
+        if(followUpDate7!=null){
+            treatmentPlan7 = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-TB Treatment Followup","FOLLOW-UP MONTH", "7","TREATMENT PLAN");
+            conclusionFollowup7 = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-TB Treatment Followup","FOLLOW-UP MONTH", "7","CONCLUSION OF TREATMENT FOLLOW UP");
+
+            if(treatmentPlan7==null){
+                treatmentPlan7 = "-";
+            }
+            if(conclusionFollowup7==null){
+                conclusionFollowup7 = "-";
+            }
+        }else{
+            followUpDate7 = serverService.getEncounterDateTimeByObsValue(App.getPatientId(), "Childhood TB-TB Treatment Followup","FOLLOW-UP MONTH", "7.0");
+            if(followUpDate7!=null) {
+                treatmentPlan7 = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-TB Treatment Followup", "FOLLOW-UP MONTH", "7.0", "TREATMENT PLAN");
+                conclusionFollowup7 = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-TB Treatment Followup","FOLLOW-UP MONTH", "7.0","CONCLUSION OF TREATMENT FOLLOW UP");
+
+                if (treatmentPlan7 == null) {
+                    treatmentPlan7 = "-";
+                }
+                if (conclusionFollowup7 == null) {
+                    conclusionFollowup7 = "-";
+                }
+            }else{
+                treatmentPlan7 = "-";
+                conclusionFollowup7 = "-";
+                followUpDate7 = "-";
+            }
+        }
+
+        String treatmentPlan8=null,conclusionFollowup8=null;
+        String followUpDate8 = serverService.getEncounterDateTimeByObsValue(App.getPatientId(), "Childhood TB-TB Treatment Followup","FOLLOW-UP MONTH", "8");
+        if(followUpDate8!=null){
+            treatmentPlan8 = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-TB Treatment Followup","FOLLOW-UP MONTH", "8","TREATMENT PLAN");
+            conclusionFollowup8 = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-TB Treatment Followup","FOLLOW-UP MONTH", "8","CONCLUSION OF TREATMENT FOLLOW UP");
+
+            if(treatmentPlan8==null){
+                treatmentPlan8 = "-";
+            }
+            if(conclusionFollowup8==null){
+                conclusionFollowup8 = "-";
+            }
+        }else{
+            followUpDate8 = serverService.getEncounterDateTimeByObsValue(App.getPatientId(), "Childhood TB-TB Treatment Followup","FOLLOW-UP MONTH", "8.0");
+            if(followUpDate8!=null) {
+                treatmentPlan8 = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-TB Treatment Followup", "FOLLOW-UP MONTH", "8.0", "TREATMENT PLAN");
+                conclusionFollowup8 = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-TB Treatment Followup","FOLLOW-UP MONTH", "8.0","CONCLUSION OF TREATMENT FOLLOW UP");
+
+                if (treatmentPlan8 == null) {
+                    treatmentPlan8 = "-";
+                }
+                if (conclusionFollowup8 == null) {
+                    conclusionFollowup8 = "-";
+                }
+            }else{
+                followUpDate8 = "-";
+                conclusionFollowup8 = "-";
+                treatmentPlan8 = "-";
+
+            }
+        }
+
+
+        String treatmentOutCome =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-End of Followup", "TUBERCULOUS TREATMENT OUTCOME");
+        if(treatmentOutCome == null)
+            treatmentOutCome = "-";
+        else
+            treatmentOutCome = App.convertToTitleCase(treatmentOutCome);
+
+
+
+
+
+
+        String[][] dataset = {
+                {getResources().getString(R.string.external_id), externalId, null},
+                {getResources().getString(R.string.screening_facility), screeningFacility, null},
+                {getResources().getString(R.string.weight), weight, null},
+                {getResources().getString(R.string.height), height, null},
+                {getResources().getString(R.string.percentile), percentile, null},
+                {getResources().getString(R.string.ppa_score), App.convertToTitleCase(ppaScore), null},
+                {getResources().getString(R.string.test_confirming_diagnosis), testConfirmingDiagnosis, null},
+                {getResources().getString(R.string.type_of_diagnosis),typeOfDiagnosis, null},
+
+                {getResources().getString(R.string.type_of_tb), typeOfTB, null},
+                {getResources().getString(R.string.extra_pulmonary_site), extraPulmonarySite, null},
+                {getResources().getString(R.string.patient_type), patientType, null},
+                {getResources().getString(R.string.tb_category), tbCategory,null},
+                {getResources().getString(R.string.treatment_initiated), treatmentInitiated, null},
+                {getResources().getString(R.string.reason_not_initiated), reasonNotInitiated, null},
+                {getResources().getString(R.string.additional_treatment), additionalTreatment, null},
+                {getResources().getString(R.string.tb_registration_no), tbRegistrationNumber, null},
+
+                {getResources().getString(R.string.followup_date_2), followUpDate2, null},
+                {getResources().getString(R.string.patient_treatment_plan_2), App.convertToTitleCase(treatmentPlan2), null},
+                {getResources().getString(R.string.conclusion_of_tx_followup_2), App.convertToTitleCase(conclusionFollowup2), null},
+
+
+                {getResources().getString(R.string.followup_date_3), followUpDate3, null},
+                {getResources().getString(R.string.patient_treatment_plan_3), App.convertToTitleCase(treatmentPlan3), null},
+                {getResources().getString(R.string.conclusion_of_tx_followup_3), App.convertToTitleCase(conclusionFollowup3), null},
+
+                {getResources().getString(R.string.followup_date_5),followUpDate5, null},
+                {getResources().getString(R.string.patient_treatment_plan_5), App.convertToTitleCase(treatmentPlan5), null},
+                {getResources().getString(R.string.conclusion_of_tx_followup_5), App.convertToTitleCase(conclusionFollowup5), null},
+
+                {getResources().getString(R.string.followup_date_6), followUpDate6, null},
+                {getResources().getString(R.string.patient_treatment_plan_6), App.convertToTitleCase(treatmentPlan6), null},
+                {getResources().getString(R.string.conclusion_of_tx_followup_6), App.convertToTitleCase(conclusionFollowup6), null},
+
+                {getResources().getString(R.string.followup_date_7), followUpDate7, null},
+                {getResources().getString(R.string.patient_treatment_plan_7), App.convertToTitleCase(treatmentPlan7), null},
+                {getResources().getString(R.string.conclusion_of_tx_followup_7), App.convertToTitleCase(conclusionFollowup7), null},
+
+                {getResources().getString(R.string.followup_date_8), followUpDate8, null},
+                {getResources().getString(R.string.patient_treatment_plan_8), App.convertToTitleCase(treatmentPlan8), null},
+                {getResources().getString(R.string.conclusion_of_tx_followup_8), App.convertToTitleCase(conclusionFollowup8), null},
+
+
+                {getResources().getString(R.string.treatment_outcome), treatmentOutCome, null},
+        };
+
+
 
         fillContent(dataset);
 
     }
 
     public void fillComorbiditiesPatientView(){
+
 
         String[][] dataset = { {"rabbia", "hassan", null},
                 {"hadi","hassan", null},
@@ -1029,4 +1459,48 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
 
     }
 
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN: {
+                ImageView view = (ImageView) v;
+                view.getDrawable().setColorFilter(getResources().getColor(R.color.dark_grey), PorterDuff.Mode.SRC_ATOP);
+                view.invalidate();
+
+                content.removeAllViews();
+                String viewName = heading.getText().toString();
+                if(viewName.equals(getString(R.string.general_patient_view)))
+                    fillGeneralPatientView();
+                else if(view.equals(getString(R.string.fast_patient_view)))
+                    fillFastPatientView();
+                else if(view.equals(getString(R.string.fast_staff_view)))
+                    fillFastStaffView();
+                else if(view.equals(getString(R.string.childhood_tb_patient_view)))
+                    fillChildhoodTbPatientView();
+                else if(view.equals(getString(R.string.childhood_tb_staff_view)))
+                    fillChildhoodTbStaffView();
+                else if(view.equals(getString(R.string.comorbidities_patient_view)))
+                    fillComorbiditiesPatientView();
+                else if(view.equals(getString(R.string.comorbidities_staff_view)))
+                    fillComorbiditiesStaffView();
+                else if(view.equals(getString(R.string.pet_patient_view)))
+                    fillPetPatientView();
+                else if(view.equals(getString(R.string.pet_staff_view)))
+                    fillPetStaffView();
+                else if(view.equals(getString(R.string.patient_attribute)))
+                    fillPatientAttribute();
+
+                break;
+            }
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL: {
+                ImageView view = (ImageView) v;
+                //clear the overlay
+                view.getDrawable().clearColorFilter();
+                view.invalidate();
+                break;
+            }
+        }
+        return true;
+    }
 }

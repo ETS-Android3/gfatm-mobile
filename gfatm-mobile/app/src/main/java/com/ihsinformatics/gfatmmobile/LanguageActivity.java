@@ -58,9 +58,9 @@ public class LanguageActivity extends AbstractSettingActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
 
-                                App.setLanguage(rb.getText().toString());
+                                /*App.setLanguage(rb.getText().toString());
 
-                                /*Locale locale = new Locale(App.getLanguage().substring(0, 2).toLowerCase());
+                                Locale locale = new Locale(App.getLanguage().substring(0, 2).toLowerCase());
                                 Locale.setDefault(locale);
                                 Configuration config = new Configuration();
                                 config.setLocale(locale);

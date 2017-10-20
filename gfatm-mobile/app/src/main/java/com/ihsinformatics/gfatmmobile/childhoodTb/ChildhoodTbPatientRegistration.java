@@ -928,6 +928,9 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
 
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
+        if (externalID.getVisibility() == View.VISIBLE)
+               observations.add(new String[]{"CONTACT EXTERNAL ID", App.get(externalID)});
+
 
         if(cnicLayout.getVisibility()==View.VISIBLE) {
             String cnicNumber = App.get(cnic1) + "-" + App.get(cnic2) + "-" + App.get(cnic3);
@@ -1288,7 +1291,11 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
             String[][] obs = obsValue.get(i);
             if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
                 timeTakeToFill = obs[0][1];
-            }else if (obs[0][0].equals("NATIONAL IDENTIFICATION NUMBER")) {
+            }
+            else if (obs[0][0].equals("CONTACT EXTERNAL ID")) {
+                externalID.getEditText().setText(obs[0][1]);
+            }
+            else if (obs[0][0].equals("NATIONAL IDENTIFICATION NUMBER")) {
                 if(!obs[0][1].equals("--")) {
                     String[] cnicParts = obs[0][1].toString().split("-");
                     cnic1.setText(cnicParts[0]);

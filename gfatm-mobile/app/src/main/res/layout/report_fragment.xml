@@ -130,6 +130,52 @@
 
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/pmdt"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/small"
+                android:textColor="?colorPrimary"
+                android:textSize="@dimen/large"
+                android:text="@string/pmdt"
+                android:drawableRight="@drawable/ic_more"
+                android:padding="@dimen/medium"/>
+
+            <LinearLayout
+                android:id="@+id/pmdtReportFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="?android:attr/dividerHorizontal"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/small"
+                android:showDividers="middle|end"
+                android:visibility="gone">
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/cc"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/small"
+                android:textColor="?colorPrimary"
+                android:textSize="@dimen/large"
+                android:text="@string/cc"
+                android:drawableRight="@drawable/ic_more"
+                android:padding="@dimen/medium"/>
+
+            <LinearLayout
+                android:id="@+id/ccReportFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="?android:attr/dividerHorizontal"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/small"
+                android:showDividers="middle|end"
+                android:visibility="gone">
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </ScrollView>

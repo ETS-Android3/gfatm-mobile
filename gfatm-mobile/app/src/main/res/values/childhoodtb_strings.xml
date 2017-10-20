@@ -116,6 +116,13 @@
     <string name="ctb_secondary_landline_number">Secondary landline number</string>
     <string name="ctb_weight">Weight (kg)</string>
     <string name="ctb_height">Height (cm)</string>
+    <string name="ctb_muac">MUAC</string>
+    <string name="ctb_sam">SAM=&lt;11.5</string>
+    <string name="ctb_mam">MAM=&lt;12.5</string>
+    <string name="ctb_normal_12.5">Normal= > 12.5</string>
+
+
+
     <string name="ctb_weight_percentile">Weight Percentile</string>
     <string name="ctb_less_than_5">&lt;=5th percentile</string>
     <string name="ctb_less_than_10">6-&lt;=10th percentile</string>
@@ -383,7 +390,7 @@
     <string name="ctb_contact_number">Contact Number</string>
     <string name="ctb_name_of_person_provided_details">Provide name and contact number of person at referral / transfer site who provided details about the patient		</string>
     <string name="ctb_other_reason_remarks">Other Reason/Remarks</string>
-    <string name="ctb_age_greater_than_15">Child age can not be greater than 15</string>
+    <string name="ctb_age_greater_than_18">Child age can not be greater than 18</string>
     <string name="ctb_incorrect_contact_number">Invalid / incorrect contact number</string>
     <string name="ctb_son_daughter_of">S/O D/O</string>
     <string name="ctb_weight_at_baseline">Weight at baseline (kg)</string>
@@ -534,6 +541,7 @@
     <string name="ctb_mobile_number">Mobile number</string>
     <string name="ctb_select_form_type">Please select form type</string>
     <string name="ctb_xray_in_6_month">Has the patient had an X-Ray in the past 6 months at an X-Ray Van?</string>
+    <string name="ctb_patient_pregnant">Is the patient pregnant?</string>
     <string name="ctb_patient_acceptance_ipt">Patient acceptance to IPT</string>
     <string name="ctb_empty"></string>
     <string name="ctb_ipt_reg_no">IPT Registration No.</string>
@@ -598,6 +606,25 @@
     <string name="ctb_non_tb_patient">Non TB Patient</string>
     <string name="ctb_clinically_evaluated_no_tb">Clinically evaluated, No TB</string>
     <string name="ctb_antibiotic_complete_no_tb">Antibiotic Complete - No TB</string>
+    <string name="ctb_childhoodtb_program">Childhood TB Program</string>
+    <string name="ctb_pet_tb_program">PET TB Program (Contact)</string>
+    <string name="ctb_reason_for_xray">Reason for X-ray?</string>
+    
+    <string-array name="ctb_reason_xray_list">
+        <item>@string/ctb_screening</item>
+        <item>@string/ctb_childhoodtb_program</item>
+        <item>@string/ctb_pet_tb_program</item>
+        <item>@string/ctb_doctor_referral</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
+
+
+    <string-array name="ctb_muac_list">
+        <item>@string/ctb_sam</item>
+        <item>@string/ctb_mam</item>
+        <item>@string/ctb_normal_12.5</item>
+    </string-array>
+
 
 
     <string-array name="ctb_tb_classification_list">
