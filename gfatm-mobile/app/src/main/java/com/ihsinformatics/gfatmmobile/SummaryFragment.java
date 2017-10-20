@@ -105,8 +105,6 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
                 interventionStaffView.setText(getString(R.string.fast_staff_view));
                 interventionStaffView.setVisibility(View.VISIBLE);
             }
-
-
         }
         else {
 
@@ -117,7 +115,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
             } else if(App.getProgram().equals(getResources().getString(R.string.pet))){
                 interventionPatientView.setText(getString(R.string.pet_patient_view));
                 interventionStaffView.setText(getString(R.string.pet_staff_view));
-                interventionStaffView.setVisibility(View.GONE);
+                interventionStaffView.setVisibility(View.VISIBLE);
             } else if(App.getProgram().equals(getResources().getString(R.string.childhood_tb))){
                 interventionPatientView.setText(getString(R.string.childhood_tb_patient_view));
                 interventionStaffView.setText(getString(R.string.childhood_tb_staff_view));
@@ -1372,10 +1370,43 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
     }
 
     public void fillPetStaffView(){
-        String[][] dataset = { {"rabbia", "hassan", null},
-                {"hadi","hassan", null},
-                {"mohammad","hassan", null},
-                {"farzana","hassan", null}};
+
+
+        Date date = new Date();
+        String todayDate = App.getSqlDate(date);
+
+        int countIndexPatientRegistration =  serverService.getEncounterCountForDate(todayDate, "PET-Index Patient Registration");
+        int countContactRegistry =  serverService.getEncounterCountForDate(todayDate, "PET-Contact Registry");
+        int countBaselineScreening =  serverService.getEncounterCountForDate(todayDate, "PET-Baseline Screening");
+        int countHomeVisit =  serverService.getEncounterCountForDate(todayDate, "PET-Home Visit");
+        int countHomeVisitFollowup =  serverService.getEncounterCountForDate(todayDate, "PET-Home Follow-up");
+        int countBaselineCounselling =  serverService.getEncounterCountForDate(todayDate, "PET-Baseline Counselling");
+        int countTreatmentAdherence =  serverService.getEncounterCountForDate(todayDate, "PET-Treatment Adherence");
+        int countCounsellingFollowup =  serverService.getEncounterCountForDate(todayDate, "PET-Counselling Follow-up");
+        int countRefusal =  serverService.getEncounterCountForDate(todayDate, "PET-Refusal Form");
+        int countRetrival =  serverService.getEncounterCountForDate(todayDate, "PET-Retrieval Form");
+        int countClinicianContactScreening =  serverService.getEncounterCountForDate(todayDate, "PET-Clinician Contact Screening");
+        int countTreatmentEligibility =  serverService.getEncounterCountForDate(todayDate, "PET-Infection Treatment Eligibility");
+        int countTreatmentInitiation =  serverService.getEncounterCountForDate(todayDate, "PET-Treatment Initiation");
+        int countClinicianFollowup =  serverService.getEncounterCountForDate(todayDate, "PET-Clinician Follow-up");
+        int countAdverseEvent =  serverService.getEncounterCountForDate(todayDate, "PET-Adverse Events");
+
+        String[][] dataset = {{getString(R.string.count_index_patient_registration), String.valueOf(countIndexPatientRegistration), null},
+                {getString(R.string.count_contact_registry_form), String.valueOf(countContactRegistry), null},
+                {getString(R.string.count_baseline_screening), String.valueOf(countBaselineScreening), null},
+                {getString(R.string.count_home_visit), String.valueOf(countHomeVisit), null},
+                {getString(R.string.count_home_visit_followup), String.valueOf(countHomeVisitFollowup), null},
+                {getString(R.string.count_baseline_counselling), String.valueOf(countBaselineCounselling), null},
+                {getString(R.string.count_treatment_adherence), String.valueOf(countTreatmentAdherence), null},
+                {getString(R.string.count_counselling_followup), String.valueOf(countCounsellingFollowup), null},
+                {getString(R.string.count_refusal), String.valueOf(countRefusal), null},
+                {getString(R.string.count_retrival), String.valueOf(countRetrival), null},
+                {getString(R.string.count_clinician_contact_screening), String.valueOf(countClinicianContactScreening), null},
+                {getString(R.string.count_treatment_eliglibility), String.valueOf(countTreatmentEligibility), null},
+                {getString(R.string.count_treatment_initiation), String.valueOf(countTreatmentInitiation), null},
+                {getString(R.string.count_clinician_followup), String.valueOf(countClinicianFollowup), null},
+                {getString(R.string.count_adverse_event), String.valueOf(countAdverseEvent), null}
+        };
 
         fillContent(dataset);
     }

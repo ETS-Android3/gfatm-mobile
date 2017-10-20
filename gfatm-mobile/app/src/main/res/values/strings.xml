@@ -634,6 +634,24 @@
     <string name="diabetes_followup_date">Diabetes Followup date:</string>
     <string name="final_treatment_outcome">Final treatment outcome:</string>
 
+
+    <!--  PET Staff Views Strings -->
+    <string name="count_index_patient_registration"># Index Patient Registration:</string>
+    <string name="count_contact_registry_form"># Contact Registry Form:</string>
+    <string name="count_baseline_screening"># Baseline Screening:</string>
+    <string name="count_home_visit"># Home visit:</string>
+    <string name="count_home_visit_followup"># Home visit Followup:</string>
+    <string name="count_baseline_counselling"># Baseline Counselling:</string>
+    <string name="count_treatment_adherence"># Treatment Adherence:</string>
+    <string name="count_counselling_followup"># Counselling Followup:</string>
+    <string name="count_refusal"># Refusal:</string>
+    <string name="count_retrival"># Retrival:</string>
+    <string name="count_clinician_contact_screening"># Clinician Contact Screening:</string>
+    <string name="count_treatment_eliglibility"># Treatment Eligibility:</string>
+    <string name="count_treatment_initiation"># Treatment Initiation:</string>
+    <string name="count_clinician_followup"># Clinician Followup:</string>
+    <string name="count_adverse_event"># Adverse Event:</string>
+
     <!--  Fast Staff Views Strings -->
     <string name="screening_forms">Screening Forms:</string>
     <string name="presumptive_forms">Presumptive Forms:</string>
