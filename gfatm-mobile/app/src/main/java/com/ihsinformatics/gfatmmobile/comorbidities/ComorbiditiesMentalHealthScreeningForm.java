@@ -1698,19 +1698,19 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
             }
 
             String treatmentInitiationNextDateString = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST" + "-" + "Treatment Initiation");
-            String treatmentFollowupNextDateString = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST" + "-" + "Treatment Followup");
+            String treatmentFollowupNextDateString = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST" + "-" + "Referral Form");
             String location = "";
 
             if (treatmentInitiationNextDateString != null && treatmentFollowupNextDateString != null) {
                 if (App.stringToDate(treatmentInitiationNextDateString, "yyyy-MM-dd").after(App.stringToDate(treatmentFollowupNextDateString, "yyyy-MM-dd"))) {
                     location = serverService.getEncounterLocation(App.getPatientId(), "FAST" + "-" + "Treatment Initiation");
                 } else {
-                    location = serverService.getEncounterLocation(App.getPatientId(), "FAST" + "-" + "Treatment Followup");
+                    location = serverService.getEncounterLocation(App.getPatientId(), "FAST" + "-" + "Referral Form");
                 }
             } else if (treatmentInitiationNextDateString != null && treatmentFollowupNextDateString == null) {
                 location = serverService.getEncounterLocation(App.getPatientId(), "FAST" + "-" + "Treatment Initiation");
             } else if (treatmentInitiationNextDateString == null && treatmentFollowupNextDateString != null) {
-                location = serverService.getEncounterLocation(App.getPatientId(), "FAST" + "-" + "Treatment Followup");
+                location = serverService.getEncounterLocation(App.getPatientId(), "FAST" + "-" + "Referral Form");
             } else if (treatmentInitiationNextDateString == null && treatmentFollowupNextDateString == null) {
 
             }
