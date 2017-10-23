@@ -1,6 +1,10 @@
 package com.ihsinformatics.gfatmmobile.comorbidities;
 
 
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,16 +25,19 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
+import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbTreatmentInitiation;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
@@ -40,7 +47,9 @@ import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -51,10 +60,15 @@ import java.util.HashMap;
 public class ComorbiditiesMissedVisitFollowUp extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
     Context context;
+    public static final int THIRD_DATE_DIALOG_ID = 3;
+    protected Calendar thirdDateCalendar;
+    protected DialogFragment thirdDateFragment;
+    Date diabetesDate;
 
+    Date mentalHealthDate;
     // Views...
     TitledButton formDate;
-    TitledSpinner diabetesEyeScreeningMonthOfTreatment;
+    //    TitledSpinner diabetesEyeScreeningMonthOfTreatment;
     TitledRadioGroup missedVisitTreatmentRegimen;
     TitledButton missedVisitDate;
     TitledButton returnVisitDate;
@@ -140,21 +154,22 @@ public class ComorbiditiesMissedVisitFollowUp extends AbstractFormActivity imple
      * Initializes all views and ArrayList and Views Array
      */
     public void initViews() {
-
+        thirdDateCalendar = Calendar.getInstance();
+        thirdDateFragment = new SelectDateFragment();
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        diabetesEyeScreeningMonthOfTreatment = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_urinedr_month_of_treatment), getResources().getStringArray(R.array.comorbidities_followup_month), "0", App.HORIZONTAL);
+//        diabetesEyeScreeningMonthOfTreatment = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_urinedr_month_of_treatment), getResources().getStringArray(R.array.comorbidities_followup_month), "0", App.HORIZONTAL);
         missedVisitTreatmentRegimen = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_missed_visit_for_treatment_regimen), getResources().getStringArray(R.array.comorbidities_missed_visit_for_treatment_regimen_array), getResources().getString(R.string.comorbidities_missed_visit_for_treatment_regimen_diabetes), App.VERTICAL, App.VERTICAL);
         missedVisitDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_missed_visit_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
-        returnVisitDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_return_visit_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
+        returnVisitDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_return_visit_date), DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
         patientContacted = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_patient_contacted), getResources().getStringArray(R.array.comorbidities_yes_no), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL);
         ReasonPatientNotContacted = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_reason_patient_not_contacted), getResources().getStringArray(R.array.comorbidities_reason_patient_not_contacted_array), getResources().getString(R.string.comorbidities_reason_patient_not_contacted_phone_off), App.VERTICAL, App.VERTICAL);
         referralTransfer = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_referral_transfer), getResources().getStringArray(R.array.comorbidities_referral_transfer_array), getResources().getString(R.string.comorbidities_referral_transfer_options_refrell), App.VERTICAL, App.VERTICAL);
         reasonForChangingFacilityCheckBoxes = new TitledCheckBoxes(context, null, getResources().getString(R.string.comorbidities_reason_for_changing_facility), getResources().getStringArray(R.array.comorbidities_reason_for_changing_facility_array), new Boolean[]{true, false, false, false}, App.VERTICAL, App.VERTICAL);
         ReasonPatientNotContactedOther = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_reason_patient_not_contacted_other), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        referralTransferSite = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_referral_transfer_site), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        phoneCounsellingConsent = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_phone_counselling_consent_2), getResources().getStringArray(R.array.comorbidities_phone_counselling_consent_2_array), getResources().getString(R.string.comorbidities_phone_counselling_consent_2_monthly), App.VERTICAL, App.VERTICAL);
+        referralTransferSite = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_referral_transfer_site), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        phoneCounsellingConsent = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_phone_counselling_consent_2), getResources().getStringArray(R.array.comorbidities_phone_counselling_consent_2_array), getResources().getString(R.string.comorbidities_phone_counselling_consent_2_weekly), App.VERTICAL, App.VERTICAL);
         reasonMissedVisit = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_reason_missed_visit), getResources().getStringArray(R.array.comorbidities_reason_missed_visit_array), getResources().getString(R.string.comorbidities_reason_missed_visit_patient_relocated), App.VERTICAL, App.VERTICAL);
         ReasonMissedVisitOther = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_reason_missed_visit_other), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         newLocation = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_new_location), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
@@ -243,8 +258,37 @@ public class ComorbiditiesMissedVisitFollowUp extends AbstractFormActivity imple
                 missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
         }
+
+        if (!(returnVisitDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString()))) {
+
+            String formDa = returnVisitDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
+
+            Date date = new Date();
+            if (thirdDateCalendar.before(formDateCalendar)/*secondDateCalendar.before(App.getCalendar(date))*/) {
+
+                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                //snackbar = Snackbar.make(mainContent, getResources().getString(R.string.next_date_past), Snackbar.LENGTH_INDEFINITE);
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.next_visit_date_cannot_before_form_date), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
+
+            } else if (thirdDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
+            } else
+                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
+
+        }
         formDate.getButton().setEnabled(true);
         missedVisitDate.getButton().setEnabled(true);
+        returnVisitDate.getButton().setEnabled(true);
     }
 
     @Override
@@ -259,7 +303,7 @@ public class ComorbiditiesMissedVisitFollowUp extends AbstractFormActivity imple
             error = true;
         }
 
-        Boolean flag = false;
+        /*Boolean flag = false;
         if (reasonForChangingFacilityCheckBoxes.getVisibility() == View.VISIBLE) {
             for (CheckBox cb : reasonForChangingFacilityCheckBoxes.getCheckedBoxes()) {
                 if (cb.isChecked()) {
@@ -273,7 +317,7 @@ public class ComorbiditiesMissedVisitFollowUp extends AbstractFormActivity imple
                 view = reasonForChangingFacilityCheckBoxes;
                 error = true;
             }
-        }
+        }*/
 
         if (error) {
 
@@ -336,45 +380,65 @@ public class ComorbiditiesMissedVisitFollowUp extends AbstractFormActivity imple
         }
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-        observations.add(new String[]{"FOLLOW-UP MONTH", App.get(diabetesEyeScreeningMonthOfTreatment)});
-        observations.add(new String[]{"RIGHT EYE EXAMINATION", App.get(missedVisitTreatmentRegimen).equals(getResources().getString(R.string.comorbidities_eye_screening_eye_diagnosed_options_yes)) ? "YES" :
-                (App.get(missedVisitTreatmentRegimen).equals(getResources().getString(R.string.comorbidities_eye_screening_eye_diagnosed_options_no_deformity)) ? "EYE DEFORMITY" : "PROSTHETIC EYE")});
-        observations.add(new String[]{"LEFT EYE EXAMINATION", App.get(referralTransfer).equals(getResources().getString(R.string.comorbidities_eye_screening_eye_diagnosed_options_yes)) ? "YES" :
-                (App.get(referralTransfer).equals(getResources().getString(R.string.comorbidities_eye_screening_eye_diagnosed_options_no_deformity)) ? "EYE DEFORMITY" : "PROSTHETIC EYE")});
+        if (missedVisitTreatmentRegimen.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"MISSED VISIT FOR TREATMENT REGIMEN", App.get(missedVisitTreatmentRegimen).equals(getResources().getString(R.string.comorbidities_missed_visit_for_treatment_regimen_diabetes)) ? "DIABETES MELLITUS" :
+                    (App.get(missedVisitTreatmentRegimen).equals(getResources().getString(R.string.comorbidities_missed_visit_for_treatment_regimen_mental_health)) ? "MENTAL HEALTH SERVICES" : "BOTH")});
+        if (missedVisitDate.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"DATE OF MISSED VISIT", App.getSqlDateTime(secondDateCalendar)});
+        if (patientContacted.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"CONTACT TO THE PATIENT", App.get(patientContacted).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        if (ReasonPatientNotContacted.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"UNABLE TO CONTACT THE PATIENT",
+                    App.get(ReasonPatientNotContacted).equals(getResources().getString(R.string.comorbidities_reason_patient_not_contacted_phone_off)) ? "PHONE SWITCHED OFF" :
+                            (App.get(ReasonPatientNotContacted).equals(getResources().getString(R.string.comorbidities_reason_patient_not_contacted_not_responding)) ? "PATIENT DID NOT RECEIVE CALL" :
+                                    (App.get(ReasonPatientNotContacted).equals(getResources().getString(R.string.comorbidities_reason_patient_not_contacted_invalid_number)) ? "INCORRECT CONTACT NUMBER" : "OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT"))});
+        if (ReasonPatientNotContactedOther.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT", App.get(ReasonPatientNotContactedOther)});
+        if (referralTransfer.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"PATIENT BEING REFEREED OUT OR TRANSFERRED OUT",
+                    App.get(referralTransfer).equals(getResources().getString(R.string.comorbidities_referral_transfer_options_refrell)) ? "PATIENT REFERRED" :
+                            (App.get(referralTransfer).equals(getResources().getString(R.string.comorbidities_referral_transfer_options_transfer)) ? "PATIENT TRANSFERRED OUT" : "NOT APPLICABLE")});
+        if (referralTransferSite.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"REFERRING FACILITY NAME", App.get(referralTransferSite)});
+        if (phoneCounsellingConsent.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"PHONE COUNSELLING CONSENT",
+                    App.get(phoneCounsellingConsent).equals(getResources().getString(R.string.comorbidities_phone_counselling_consent_2_weekly)) ? "WEEKLY" :
+                            (App.get(phoneCounsellingConsent).equals(getResources().getString(R.string.comorbidities_phone_counselling_consent_2_monthly)) ? "MONTHLY" :
+                                    (App.get(phoneCounsellingConsent).equals(getResources().getString(R.string.comorbidities_phone_counselling_consent_2_both)) ? "BOTH" : "NONE"))});
+        if (reasonMissedVisit.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"REASON FOR MISSED VISIT",
+                    App.get(reasonMissedVisit).equals(getResources().getString(R.string.comorbidities_reason_missed_visit_patient_relocated)) ? "PATIENT MOVED" :
+                            (App.get(reasonMissedVisit).equals(getResources().getString(R.string.comorbidities_reason_missed_visit_treatment_another_location)) ? "PATIENT CHOOSE ANOTHER FACILITY" :
+                                    (App.get(reasonMissedVisit).equals(getResources().getString(R.string.comorbidities_reason_missed_visit_personal_reason)) ? "PATIENT UNABLE TO VISIT HOSPITAL DUE TO PERSONAL REASON" :
+                                            (App.get(reasonMissedVisit).equals(getResources().getString(R.string.comorbidities_reason_missed_visit_Died)) ? "DIED" :
+                                                    (App.get(reasonMissedVisit).equals(getResources().getString(R.string.comorbidities_reason_missed_visit_refuse)) ? "REFUSAL OF TREATMENT BY PATIENT" :
+                                                            (App.get(reasonMissedVisit).equals(getResources().getString(R.string.comorbidities_reason_missed_visit_unwell)) ? "PATIENT UNWELL" :
+                                                                    (App.get(reasonMissedVisit).equals(getResources().getString(R.string.comorbidities_reason_missed_visit_service_complaint)) ? "SERVICE COMPLAINT" :
+                                                                            (App.get(reasonMissedVisit).equals(getResources().getString(R.string.comorbidities_reason_missed_visit_lack_fund)) ? "LACK OF FUNDS TO TRAVEL TO THE FACILITY" :
+                                                                                    (App.get(reasonMissedVisit).equals(getResources().getString(R.string.comorbidities_reason_missed_visit_unable_to_locate)) ? "UNABLE TO RELOCATE REFERRAL SITE" :
+                                                                                            (App.get(reasonMissedVisit).equals(getResources().getString(R.string.comorbidities_reason_missed_visit_want_treatment_at_parent_site)) ? "WANT TREATMENT AT PARENT SITE" : "OTHER REASON TO MISSED VISIT")))))))))});
+        if (ReasonMissedVisitOther.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"OTHER REASON TO MISSED VISIT", App.get(ReasonMissedVisitOther)});
+        if (newLocation.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"NEW LOCATION", App.get(newLocation)});
+        if (facilityTreatment.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"TREATMENT FACILITY", App.get(facilityTreatment)});
 
-        if (App.get(missedVisitTreatmentRegimen).equalsIgnoreCase(getResources().getString(R.string.comorbidities_eye_screening_eye_diagnosed_options_yes)) ||
-                App.get(referralTransfer).equalsIgnoreCase(getResources().getString(R.string.comorbidities_eye_screening_eye_diagnosed_options_yes))) {
-            String diabetesEyeScreeningEvidenceEyeString = "";
-            for (CheckBox cb : reasonForChangingFacilityCheckBoxes.getCheckedBoxes()) {
-                if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_evidence_eye_options_cataract)))
-                    diabetesEyeScreeningEvidenceEyeString = diabetesEyeScreeningEvidenceEyeString + "CATARACT" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_evidence_eye_options_glaucoma)))
-                    diabetesEyeScreeningEvidenceEyeString = diabetesEyeScreeningEvidenceEyeString + "GLAUCOMA" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_evidence_eye_options_other)))
-                    diabetesEyeScreeningEvidenceEyeString = diabetesEyeScreeningEvidenceEyeString + "OTHER EYE PROBLEMS" + " ; ";
-            }
-            observations.add(new String[]{"EYE EXAMINATION FINDINGS", diabetesEyeScreeningEvidenceEyeString});
-
-            observations.add(new String[]{"OTHER EYE PROBLEMS", App.get(ReasonPatientNotContactedOther)});
-            observations.add(new String[]{"DIABETIC RETINOPATHY", App.get(patientContacted).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-
-            final String diabetesEyeScreeningMildDiabetecRetinopathyString = App.get(ReasonPatientNotContacted).equals(getResources().getString(R.string.comorbidities_eye_screening_diabetic_retinopathy_options_none)) ? "NONE" :
-                    (App.get(ReasonPatientNotContacted).equals(getResources().getString(R.string.comorbidities_eye_screening_diabetic_retinopathy_options_right)) ? "IN RIGHT EYE" :
-                            (App.get(ReasonPatientNotContacted).equals(getResources().getString(R.string.comorbidities_eye_screening_diabetic_retinopathy_options_left)) ? "IN LEFT EYE" : "IN BOTH EYES"));
-            observations.add(new String[]{"MILD NON PROLIFERATIVE DIABETIC RETINOPATHY", diabetesEyeScreeningMildDiabetecRetinopathyString});
-
-            final String diabetesEyeScreeningModerateDiabetecRetinopathyString = App.get(phoneCounsellingConsent).equals(getResources().getString(R.string.comorbidities_eye_screening_diabetic_retinopathy_options_none)) ? "NONE" :
-                    (App.get(phoneCounsellingConsent).equals(getResources().getString(R.string.comorbidities_eye_screening_diabetic_retinopathy_options_right)) ? "IN RIGHT EYE" :
-                            (App.get(phoneCounsellingConsent).equals(getResources().getString(R.string.comorbidities_eye_screening_diabetic_retinopathy_options_left)) ? "IN LEFT EYE" : "IN BOTH EYES"));
-            observations.add(new String[]{"MODERATE NON PROLIFERATIVE DIABETIC RETINOPATHY", diabetesEyeScreeningModerateDiabetecRetinopathyString});
-
-            final String diabetesEyeScreeningSevereDiabetecRetinopathyString = App.get(reasonMissedVisit).equals(getResources().getString(R.string.comorbidities_eye_screening_diabetic_retinopathy_options_none)) ? "NONE" :
-                    (App.get(reasonMissedVisit).equals(getResources().getString(R.string.comorbidities_eye_screening_diabetic_retinopathy_options_right)) ? "IN RIGHT EYE" :
-                            (App.get(reasonMissedVisit).equals(getResources().getString(R.string.comorbidities_eye_screening_diabetic_retinopathy_options_left)) ? "IN LEFT EYE" : "IN BOTH EYES"));
-            observations.add(new String[]{"SEVERE NON PROLIFERATIVE DIABETIC RETINOPATHY", diabetesEyeScreeningSevereDiabetecRetinopathyString});
-
-
+        String reasonForChangingFacilityCheckBoxesString = "";
+        for (CheckBox cb : reasonForChangingFacilityCheckBoxes.getCheckedBoxes()) {
+            if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_reason_for_changing_facility_relocated)))
+                reasonForChangingFacilityCheckBoxesString = reasonForChangingFacilityCheckBoxesString + "RELOCATED PATIENT" + " ; ";
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_reason_for_changing_facility_too_far)))
+                reasonForChangingFacilityCheckBoxesString = reasonForChangingFacilityCheckBoxesString + "OLD FACILITY TOO FAR" + " ; ";
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_reason_for_changing_facility_complaint)))
+                reasonForChangingFacilityCheckBoxesString = reasonForChangingFacilityCheckBoxesString + "SERVICE COMPLAINT" + " ; ";
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_reason_for_changing_facility_ohter)))
+                reasonForChangingFacilityCheckBoxesString = reasonForChangingFacilityCheckBoxesString + "OTHER REASON FOR CHANGING FACILITY" + " ; ";
         }
+        if (reasonForChangingFacilityCheckBoxes.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"REASON FOR CHANGING FACILITY", reasonForChangingFacilityCheckBoxesString});
+        if (returnVisitDate.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDateTime(thirdDateCalendar)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -513,51 +577,24 @@ public class ComorbiditiesMissedVisitFollowUp extends AbstractFormActivity imple
                 timeTakeToFill = obs[0][1];
             }
 
-            if (obs[0][0].equals("FOLLOW-UP MONTH")) {
-                diabetesEyeScreeningMonthOfTreatment.getSpinner().selectValue(obs[0][1]);
-            } else if (obs[0][0].equals("RIGHT EYE EXAMINATION")) {
+            if (obs[0][0].equals("MISSED VISIT FOR TREATMENT REGIMEN")) {
                 for (RadioButton rb : missedVisitTreatmentRegimen.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_eye_diagnosed_options_yes)) && obs[0][1].equals("YES")) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_missed_visit_for_treatment_regimen_diabetes)) && obs[0][1].equals("DIABETES MELLITUS")) {
                         rb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_eye_diagnosed_options_no_deformity)) && obs[0][1].equals("EYE DEFORMITY")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_missed_visit_for_treatment_regimen_mental_health)) && obs[0][1].equals("MENTAL HEALTH SERVICES")) {
                         rb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_eye_diagnosed_options_no_prosthetic)) && obs[0][1].equals("PROSTHETIC EYE")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("LEFT EYE EXAMINATION")) {
-                for (RadioButton rb : referralTransfer.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_eye_diagnosed_options_yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_eye_diagnosed_options_no_deformity)) && obs[0][1].equals("EYE DEFORMITY")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_eye_diagnosed_options_no_prosthetic)) && obs[0][1].equals("PROSTHETIC EYE")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_missed_visit_for_treatment_regimen_mental_both)) && obs[0][1].equals("BOTH")) {
                         rb.setChecked(true);
                         break;
                     }
                 }
-            } else if (obs[0][0].equals("EYE EXAMINATION FINDINGS")) {
-                for (CheckBox cb : reasonForChangingFacilityCheckBoxes.getCheckedBoxes()) {
-                    if (cb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_evidence_eye_options_cataract)) && obs[0][1].equals("CATARACT")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_evidence_eye_options_glaucoma)) && obs[0][1].equals("GLAUCOMA")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_evidence_eye_options_other)) && obs[0][1].equals("OTHER EYE PROBLEMS")) {
-                        cb.setChecked(true);
-                        break;
-                    }
-                }
-                reasonForChangingFacilityCheckBoxes.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("OTHER EYE PROBLEMS")) {
-                ReasonPatientNotContactedOther.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("DIABETIC RETINOPATHY")) {
+            } else if (obs[0][0].equals("DATE OF MISSED VISIT")) {
+                String secondDate = obs[0][1];
+                secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
+                missedVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+            } else if (obs[0][0].equals("CONTACT TO THE PATIENT")) {
                 for (RadioButton rb : patientContacted.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);
@@ -567,60 +604,121 @@ public class ComorbiditiesMissedVisitFollowUp extends AbstractFormActivity imple
                         break;
                     }
                 }
-                patientContacted.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("MILD NON PROLIFERATIVE DIABETIC RETINOPATHY")) {
+            } else if (obs[0][0].equals("UNABLE TO CONTACT THE PATIENT")) {
                 for (RadioButton rb : ReasonPatientNotContacted.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_diabetic_retinopathy_options_none)) && obs[0][1].equals("NONE")) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_reason_patient_not_contacted_phone_off)) && obs[0][1].equals("PHONE SWITCHED OFF")) {
                         rb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_diabetic_retinopathy_options_right)) && obs[0][1].equals("IN RIGHT EYE")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_reason_patient_not_contacted_not_responding)) && obs[0][1].equals("PATIENT DID NOT RECEIVE CALL")) {
                         rb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_diabetic_retinopathy_options_left)) && obs[0][1].equals("IN LEFT EYE")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_reason_patient_not_contacted_invalid_number)) && obs[0][1].equals("INCORRECT CONTACT NUMBER")) {
                         rb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_diabetic_retinopathy_options_both)) && obs[0][1].equals("IN BOTH EYES")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                ReasonPatientNotContacted.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("MODERATE NON PROLIFERATIVE DIABETIC RETINOPATHY")) {
-                for (RadioButton rb : phoneCounsellingConsent.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_diabetic_retinopathy_options_none)) && obs[0][1].equals("NONE")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_diabetic_retinopathy_options_right)) && obs[0][1].equals("IN RIGHT EYE")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_diabetic_retinopathy_options_left)) && obs[0][1].equals("IN LEFT EYE")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_diabetic_retinopathy_options_both)) && obs[0][1].equals("IN BOTH EYES")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_reason_patient_not_contacted_other_2)) && obs[0][1].equals("OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT")) {
                         rb.setChecked(true);
                         break;
                     }
                 }
-                phoneCounsellingConsent.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("SEVERE NON PROLIFERATIVE DIABETIC RETINOPATHY")) {
-                for (RadioButton rb : reasonMissedVisit.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_diabetic_retinopathy_options_none)) && obs[0][1].equals("NONE")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_diabetic_retinopathy_options_right)) && obs[0][1].equals("IN RIGHT EYE")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_diabetic_retinopathy_options_left)) && obs[0][1].equals("IN LEFT EYE")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_eye_screening_diabetic_retinopathy_options_both)) && obs[0][1].equals("IN BOTH EYES")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                reasonMissedVisit.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("PROLIFERATIVE DIABETIC RETINOPATHY")) {
 
+            } else if (obs[0][0].equals("OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT")) {
+                ReasonPatientNotContactedOther.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("PATIENT BEING REFEREED OUT OR TRANSFERRED OUT")) {
+                for (RadioButton rb : referralTransfer.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_referral_transfer_options_refrell)) && obs[0][1].equals("PATIENT REFERRED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_referral_transfer_options_transfer)) && obs[0][1].equals("PATIENT TRANSFERRED OUT")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_referral_transfer_options_not_applicable)) && obs[0][1].equals("NOT APPLICABLE")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("REFERRING FACILITY NAME")) {
+                referralTransferSite.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("PHONE COUNSELLING CONSENT")) {
+                for (RadioButton rb : phoneCounsellingConsent.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_phone_counselling_consent_2_weekly)) && obs[0][1].equals("WEEKLY")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_phone_counselling_consent_2_monthly)) && obs[0][1].equals("MONTHLY")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_phone_counselling_consent_2_both)) && obs[0][1].equals("BOTH")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_phone_counselling_consent_2_none)) && obs[0][1].equals("NONE")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+
+            } else if (obs[0][0].equals("REASON FOR MISSED VISIT")) {
+                for (RadioButton rb : reasonMissedVisit.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_reason_missed_visit_patient_relocated)) && obs[0][1].equals("PATIENT MOVED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_reason_missed_visit_treatment_another_location)) && obs[0][1].equals("PATIENT CHOOSE ANOTHER FACILITY")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_reason_missed_visit_personal_reason)) && obs[0][1].equals("PATIENT UNABLE TO VISIT HOSPITAL DUE TO PERSONAL REASON")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_reason_missed_visit_Died)) && obs[0][1].equals("DIED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_reason_missed_visit_refuse)) && obs[0][1].equals("REFUSAL OF TREATMENT BY PATIENT")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_reason_missed_visit_unwell)) && obs[0][1].equals("PATIENT UNWELL")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_reason_missed_visit_service_complaint)) && obs[0][1].equals("SERVICE COMPLAINT")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_reason_missed_visit_lack_fund)) && obs[0][1].equals("LACK OF FUNDS TO TRAVEL TO THE FACILITY")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_reason_missed_visit_unable_to_locate)) && obs[0][1].equals("UNABLE TO RELOCATE REFERRAL SITE")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_reason_missed_visit_want_treatment_at_parent_site)) && obs[0][1].equals("WANT TREATMENT AT PARENT SITE")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_reason_missed_visit_other_2)) && obs[0][1].equals("OTHER REASON TO MISSED VISIT")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("OTHER REASON TO MISSED VISIT")) {
+                ReasonMissedVisitOther.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("NEW LOCATION")) {
+                newLocation.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("TREATMENT FACILITY")) {
+                facilityTreatment.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("RETURN VISIT DATE")) {
+                String thirddate = obs[0][1];
+                thirdDateCalendar.setTime(App.stringToDate(thirddate, "yyyy-MM-dd"));
+                returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+            } else if (obs[0][0].equals("REASON FOR CHANGING FACILITY")) {
+                reasonForChangingFacilityCheckBoxes.getCheckedBoxes().get(0).setChecked(false);
+                for (CheckBox cb : reasonForChangingFacilityCheckBoxes.getCheckedBoxes()) {
+                    if (cb.getText().equals(getResources().getString(R.string.comorbidities_reason_for_changing_facility_relocated)) && obs[0][1].equals("RELOCATED PATIENT")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_reason_for_changing_facility_too_far)) && obs[0][1].equals("OLD FACILITY TOO FAR")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_reason_for_changing_facility_complaint)) && obs[0][1].equals("SERVICE COMPLAINT")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_reason_for_changing_facility_ohter)) && obs[0][1].equals("OTHER  REASON FOR CHANGING FACILITY")) {
+                        cb.setChecked(true);
+                        break;
+                    }
+                }
             }
         }
     }
@@ -641,7 +739,7 @@ public class ComorbiditiesMissedVisitFollowUp extends AbstractFormActivity imple
             missedVisitDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
-            args.putBoolean("allowPastDate", false);
+            args.putBoolean("allowPastDate", true);
             args.putBoolean("allowFutureDate", true);
             args.putString("formDate", formDate.getButtonText());
             secondDateFragment.setArguments(args);
@@ -649,12 +747,12 @@ public class ComorbiditiesMissedVisitFollowUp extends AbstractFormActivity imple
         } else if (view == returnVisitDate.getButton()) {
             returnVisitDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
-            args.putInt("type", SECOND_DATE_DIALOG_ID);
-            args.putBoolean("allowPastDate", false);
+            args.putInt("type", THIRD_DATE_DIALOG_ID);
+            args.putBoolean("allowPastDate", true);
             args.putBoolean("allowFutureDate", true);
             args.putString("formDate", formDate.getButtonText());
-            secondDateFragment.setArguments(args);
-            secondDateFragment.show(getFragmentManager(), "DatePicker");
+            thirdDateFragment.setArguments(args);
+            thirdDateFragment.show(getFragmentManager(), "DatePicker");
         }
     }
 
@@ -688,6 +786,10 @@ public class ComorbiditiesMissedVisitFollowUp extends AbstractFormActivity imple
         }
     }
 
+    public static Date least(Date a, Date b) {
+        return a == null ? b : (b == null ? a : (a.before(b) ? a : b));
+    }
+
     @Override
     public void resetViews() {
         super.resetViews();
@@ -712,7 +814,6 @@ public class ComorbiditiesMissedVisitFollowUp extends AbstractFormActivity imple
             } else bundle.putBoolean("save", false);
 
         }
-        ReasonPatientNotContacted.setVisibility(View.GONE);
 
         if (flag) {
             //HERE FOR AUTOPOPULATING OBS
@@ -731,14 +832,11 @@ public class ComorbiditiesMissedVisitFollowUp extends AbstractFormActivity imple
                     });
 
                     HashMap<String, String> result = new HashMap<String, String>();
-                    String monthOfTreatment = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_VITALS_FORM, "FOLLOW-UP MONTH");
+                    String refferalTransfer = serverService.getLatestObsValue(App.getPatientId(), "FAST-Referral Form", "PATIENT BEING REFEREED OUT OR TRANSFERRED OUT");
 
-                    if (monthOfTreatment != null && !monthOfTreatment.equals(""))
-                        monthOfTreatment = monthOfTreatment.replace(".0", "");
-
-                    if (monthOfTreatment != null)
-                        if (!monthOfTreatment.equals(""))
-                            result.put("FOLLOW-UP MONTH", monthOfTreatment);
+                    if (refferalTransfer != null)
+                        if (!refferalTransfer.equals(""))
+                            result.put("PATIENT BEING REFEREED OUT OR TRANSFERRED OUT", refferalTransfer);
 
                     return result;
                 }
@@ -751,13 +849,95 @@ public class ComorbiditiesMissedVisitFollowUp extends AbstractFormActivity imple
                 protected void onPostExecute(HashMap<String, String> result) {
                     super.onPostExecute(result);
                     loading.dismiss();
-
-                    if (result.get("FOLLOW-UP MONTH") != null)
-                        diabetesEyeScreeningMonthOfTreatment.getSpinner().selectValue(result.get("FOLLOW-UP MONTH"));
-
+                    if (result.get("PATIENT BEING REFEREED OUT OR TRANSFERRED OUT") != null) {
+                        if (result.get("PATIENT BEING REFEREED OUT OR TRANSFERRED OUT").equals("PATIENT REFERRED")) {
+                            referralTransfer.getRadioGroup().getButtons().get(0).setChecked(true);
+                        } else if (result.get("PATIENT BEING REFEREED OUT OR TRANSFERRED OUT").equals("PATIENT TRANSFERRED OUT")) {
+                            referralTransfer.getRadioGroup().getButtons().get(1).setChecked(true);
+                        }
+                    } else {
+                        referralTransfer.getRadioGroup().getButtons().get(2).setChecked(true);
+                    }
                 }
             };
             autopopulateFormTask.execute("");
+
+            final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask2 = new AsyncTask<String, String, HashMap<String, String>>() {
+                @Override
+                protected HashMap<String, String> doInBackground(String... params) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            loading.setInverseBackgroundForced(true);
+                            loading.setIndeterminate(true);
+                            loading.setCancelable(false);
+                            loading.setMessage(getResources().getString(R.string.fetching_data));
+                            loading.show();
+                        }
+                    });
+
+                    HashMap<String, String> result = new HashMap<String, String>();
+                    String refferalTransfer = serverService.getLatestObsValue(App.getPatientId(), "FAST-Referral Form", "REFERRING FACILITY NAME");
+
+                    if (refferalTransfer != null)
+                        if (!refferalTransfer.equals(""))
+                            result.put("REFERRING FACILITY NAME", refferalTransfer);
+
+                    return result;
+                }
+
+                @Override
+                protected void onProgressUpdate(String... values) {
+                }
+
+                @Override
+                protected void onPostExecute(HashMap<String, String> result) {
+                    super.onPostExecute(result);
+                    loading.dismiss();
+                    if (result.get("REFERRING FACILITY NAME") != null) {
+                        referralTransferSite.getEditText().setText(result.get("REFERRING FACILITY NAME"));
+                    }
+                }
+            };
+            autopopulateFormTask2.execute("");
+            final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTaskDates = new AsyncTask<String, String, HashMap<String, String>>() {
+                @Override
+                protected HashMap<String, String> doInBackground(String... params) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            loading.setInverseBackgroundForced(true);
+                            loading.setIndeterminate(true);
+                            loading.setCancelable(false);
+                            loading.setMessage(getResources().getString(R.string.fetching_data));
+                            loading.show();
+                        }
+                    });
+
+                    HashMap<String, String> result = new HashMap<String, String>();
+                    String date1 = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_DIABETES_TREATMENT_INITIATION, "RETURN VISIT DATE");
+                    String date2 = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_DIABETES_TREATMENT_FOLLOWUP_FORM, "RETURN VISIT DATE");
+                    diabetesDate = least(App.stringToDate(date1, "yyyy-MM-dd"), App.stringToDate(date2, "yyyy-MM-dd"));
+
+                    String datea = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_MENTAL_HEALTH_SCREENING_FORM, "RETURN VISIT DATE");
+                    String dateb = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_TREATMENT_FOLLOWUP_MENTAL_HEALTH_FORM, "RETURN VISIT DATE");
+                    mentalHealthDate = least(App.stringToDate(datea, "yyyy-MM-dd"), App.stringToDate(dateb, "yyyy-MM-dd"));
+                    return result;
+                }
+
+                @Override
+                protected void onProgressUpdate(String... values) {
+                }
+
+                @Override
+                protected void onPostExecute(HashMap<String, String> result) {
+                    super.onPostExecute(result);
+                    loading.dismiss();
+                    thirdDateCalendar.setTime(diabetesDate);
+                    returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+                }
+            };
+            autopopulateFormTaskDates.execute("");
         }
     }
 
@@ -766,23 +946,128 @@ public class ComorbiditiesMissedVisitFollowUp extends AbstractFormActivity imple
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    void showHideReasonPatientNotContacted() {
+    @SuppressLint("ValidFragment")
+    public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final Calendar calendar;
+            if (getArguments().getInt("type") == DATE_DIALOG_ID)
+                calendar = formDateCalendar;
+            else if (getArguments().getInt("type") == SECOND_DATE_DIALOG_ID)
+                calendar = secondDateCalendar;
+
+            else if (getArguments().getInt("type") == THIRD_DATE_DIALOG_ID)
+                calendar = thirdDateCalendar;
+            else
+                return null;
+
+            int yy = calendar.get(Calendar.YEAR);
+            int mm = calendar.get(Calendar.MONTH);
+            int dd = calendar.get(Calendar.DAY_OF_MONTH);
+            DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, yy, mm, dd);
+            dialog.getDatePicker().setTag(getArguments().getInt("type"));
+            if (!getArguments().getBoolean("allowFutureDate", false))
+                dialog.getDatePicker().setMaxDate(new Date().getTime());
+            if (!getArguments().getBoolean("allowPastDate", false))
+                dialog.getDatePicker().setMinDate(new Date().getTime());
+            return dialog;
+        }
+
+        @Override
+        public void onDateSet(DatePicker view, int yy, int mm, int dd) {
+
+            if (((int) view.getTag()) == DATE_DIALOG_ID)
+                formDateCalendar.set(yy, mm, dd);
+            else if (((int) view.getTag()) == SECOND_DATE_DIALOG_ID)
+                secondDateCalendar.set(yy, mm, dd);
+            else if (((int) view.getTag()) == THIRD_DATE_DIALOG_ID)
+                thirdDateCalendar.set(yy, mm, dd);
+
+            updateDisplay();
+
+        }
+
+        @Override
+        public void onCancel(DialogInterface dialog) {
+            super.onCancel(dialog);
+            updateDisplay();
+        }
 
     }
 
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
         if (radioGroup == patientContacted.getRadioGroup()) {
+            ReasonPatientNotContacted.getRadioGroup().getButtons().get(0).setChecked(true);
             if (patientContacted.getRadioGroupSelectedValue().equals(getResources().getString(R.string.yes))) {
                 ReasonPatientNotContacted.setVisibility(View.GONE);
-            } else if (patientContacted.getRadioGroupSelectedValue().equals(getResources().getString(R.string.yes))) {
+            } else if (patientContacted.getRadioGroupSelectedValue().equals(getResources().getString(R.string.no))) {
                 ReasonPatientNotContacted.setVisibility(View.VISIBLE);
 
             }
 
+        } else if (radioGroup == ReasonPatientNotContacted.getRadioGroup()) {
+            if (ReasonPatientNotContacted.getRadioGroupSelectedValue().equals(getResources().getString(R.string.comorbidities_reason_patient_not_contacted_other_2))) {
+                ReasonPatientNotContactedOther.setVisibility(View.VISIBLE);
+            } else {
+                ReasonPatientNotContactedOther.setVisibility(View.GONE);
+            }
+        } else if (radioGroup == reasonMissedVisit.getRadioGroup()) {
+            ReasonMissedVisitOther.setVisibility(View.GONE);
+            newLocation.setVisibility(View.GONE);
+            facilityTreatment.setVisibility(View.GONE);
+            reasonForChangingFacilityCheckBoxes.setVisibility(View.GONE);
+            returnVisitDate.setVisibility(View.GONE);
+
+            if (reasonMissedVisit.getRadioGroupSelectedValue().equals(getResources().getString(R.string.comorbidities_reason_missed_visit_patient_relocated))) {
+                newLocation.setVisibility(View.VISIBLE);
+                facilityTreatment.setVisibility(View.VISIBLE);
+                returnVisitDate.setVisibility(View.VISIBLE);
+            } else if (reasonMissedVisit.getRadioGroupSelectedValue().equals(getResources().getString(R.string.comorbidities_reason_missed_visit_treatment_another_location))) {
+                newLocation.setVisibility(View.VISIBLE);
+                facilityTreatment.setVisibility(View.VISIBLE);
+                reasonForChangingFacilityCheckBoxes.setVisibility(View.VISIBLE);
+                returnVisitDate.setVisibility(View.VISIBLE);
+            } else if (reasonMissedVisit.getRadioGroupSelectedValue().equals(getResources().getString(R.string.comorbidities_reason_missed_visit_personal_reason))) {
+            } else if (reasonMissedVisit.getRadioGroupSelectedValue().equals(getResources().getString(R.string.comorbidities_reason_missed_visit_Died))) {
+                returnVisitDate.setVisibility(View.VISIBLE);
+            } else if (reasonMissedVisit.getRadioGroupSelectedValue().equals(getResources().getString(R.string.comorbidities_reason_missed_visit_refuse))) {
+                returnVisitDate.setVisibility(View.VISIBLE);
+            } else if (reasonMissedVisit.getRadioGroupSelectedValue().equals(getResources().getString(R.string.comorbidities_reason_missed_visit_unwell))) {
+            } else if (reasonMissedVisit.getRadioGroupSelectedValue().equals(getResources().getString(R.string.comorbidities_reason_missed_visit_service_complaint))) {
+            } else if (reasonMissedVisit.getRadioGroupSelectedValue().equals(getResources().getString(R.string.comorbidities_reason_missed_visit_lack_fund))) {
+            } else if (reasonMissedVisit.getRadioGroupSelectedValue().equals(getResources().getString(R.string.comorbidities_reason_missed_visit_unable_to_locate))) {
+            } else if (reasonMissedVisit.getRadioGroupSelectedValue().equals(getResources().getString(R.string.comorbidities_reason_missed_visit_want_treatment_at_parent_site))) {
+            } else if (reasonMissedVisit.getRadioGroupSelectedValue().equals(getResources().getString(R.string.comorbidities_reason_missed_visit_other_2))) {
+                ReasonMissedVisitOther.setVisibility(View.VISIBLE);
+            }
+        } else if (radioGroup == referralTransfer.getRadioGroup()) {
+            if (referralTransfer.getRadioGroupSelectedValue().equals(getResources().getString(R.string.comorbidities_referral_transfer_options_not_applicable))) {
+                referralTransferSite.setVisibility(View.GONE);
+            } else {
+                referralTransferSite.setVisibility(View.VISIBLE);
+            }
+        } else if (radioGroup == missedVisitTreatmentRegimen.getRadioGroup()) {
+
+            if (missedVisitTreatmentRegimen.getRadioGroupSelectedValue().equals(getResources().getString(R.string.comorbidities_missed_visit_for_treatment_regimen_diabetes))) {
+                if (diabetesDate != null) {
+                    thirdDateCalendar.setTime(diabetesDate);
+                    returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+                }
+            } else if (missedVisitTreatmentRegimen.getRadioGroupSelectedValue().equals(getResources().getString(R.string.comorbidities_missed_visit_for_treatment_regimen_mental_health))) {
+                if (mentalHealthDate != null) {
+                    thirdDateCalendar.setTime(mentalHealthDate);
+                    returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+                }
+            } else if (missedVisitTreatmentRegimen.getRadioGroupSelectedValue().equals(getResources().getString(R.string.comorbidities_missed_visit_for_treatment_regimen_mental_both))) {
+                if (mentalHealthDate != null) {
+                    thirdDateCalendar.setTime(mentalHealthDate);
+                    returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+                }
+            }
+
         }
-
-
     }
 
 

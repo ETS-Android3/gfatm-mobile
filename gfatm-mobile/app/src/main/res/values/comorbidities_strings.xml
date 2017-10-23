@@ -41,13 +41,13 @@
     <string name="comorbidities_referral_transfer_site">Location of referral / transfer</string>
 
     <string name="comorbidities_phone_counselling_consent_2">Do you agree for phone counselling?</string>
-    <string name="comorbidities_phone_counselling_consent_2_weekly">Monthly</string>
-    <string name="comorbidities_phone_counselling_consent_2_monthly">Weekly</string>
+    <string name="comorbidities_phone_counselling_consent_2_weekly">weekly</string>
+    <string name="comorbidities_phone_counselling_consent_2_monthly">Monthly</string>
     <string name="comorbidities_phone_counselling_consent_2_both">Both</string>
     <string name="comorbidities_phone_counselling_consent_2_none">None</string>
     <string-array name="comorbidities_phone_counselling_consent_2_array">
-        <item>@string/comorbidities_phone_counselling_consent_2_monthly</item>
         <item>@string/comorbidities_phone_counselling_consent_2_weekly</item>
+        <item>@string/comorbidities_phone_counselling_consent_2_monthly</item>
         <item>@string/comorbidities_phone_counselling_consent_2_both</item>
         <item>@string/comorbidities_phone_counselling_consent_2_none</item>
     </string-array>
