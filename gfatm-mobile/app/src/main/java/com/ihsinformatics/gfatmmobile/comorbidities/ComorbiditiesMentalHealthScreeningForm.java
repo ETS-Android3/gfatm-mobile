@@ -29,6 +29,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -98,6 +99,10 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
     TitledRadioGroup akuadsTreatmentFacilityConsent;
     TitledRadioGroup akuadsPhoneCounsellingConsent;
     TitledCheckBoxes preferredModeOfTherapy;
+    TitledCheckBoxes majorCauseOfMentalDisturbance;
+    TitledEditText otherMajorCauseOfMentalDisturbance;
+    TitledEditText physicalIllnessMajorCauseOfMentalDisturbance;
+
     TitledSpinner preferredTherapyLocationSpinner;
     TitledEditText gpClinicCode;
     TitledButton mentalHealthNextScheduledVisit;
@@ -181,6 +186,12 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
         reasonForNotDoingMentalHealthScreening = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.reason_for_not_doing_mental_health_screening), getResources().getStringArray(R.array.reason_for_not_doing_mental_health_screening_array), getResources().getString(R.string.none), App.VERTICAL, true);
         otherReasonForNotDoingMentalHealthScreening = new TitledEditText(context, null, getResources().getString(R.string.other_reason_for_not_doing_mental_health_screening), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         otherReasonForNotDoingMentalHealthScreening.setVisibility(View.GONE);
+
+        otherMajorCauseOfMentalDisturbance = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_major_cause_of_mental_disturbance_other_specify), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        otherMajorCauseOfMentalDisturbance.setVisibility(View.GONE);
+        physicalIllnessMajorCauseOfMentalDisturbance = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_major_cause_of_mental_disturbance_physical_illness_name), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        physicalIllnessMajorCauseOfMentalDisturbance.setVisibility(View.GONE);
+
         akuadsSleep = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_sleep), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL);
         akuadsLackOfInterest = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_lackofinterest), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL);
         akuadsLostInterestHobbies = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_lostinteresthobbies), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL);
@@ -241,6 +252,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
         akuadsTreatmentFacilityConsent = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_treatment_facility_consent), getResources().getStringArray(R.array.yes_no_options), "", App.VERTICAL, App.VERTICAL);
         akuadsPhoneCounsellingConsent = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_phone_counselling_consent), getResources().getStringArray(R.array.comorbidities_phone_counselling_consent_options), "", App.VERTICAL, App.VERTICAL);
         preferredModeOfTherapy = new TitledCheckBoxes(context, null, getResources().getString(R.string.comorbidities_preferredmode_id), getResources().getStringArray(R.array.comorbidities_preferred_modeoptions), new Boolean[]{false, false, false}, App.VERTICAL, App.VERTICAL);
+        majorCauseOfMentalDisturbance = new TitledCheckBoxes(context, null, getResources().getString(R.string.comorbidities_major_cause_of_mental_disturbance), getResources().getStringArray(R.array.comorbidities_major_cause_of_mental_disturbance_array), null, App.VERTICAL, App.VERTICAL);
         preferredTherapyLocationSpinner = new TitledSpinner(mainContent.getContext(), null, getResources().getString(R.string.comorbidities_preferredlocation_id), locationArray, "", App.VERTICAL, true);
         //reasonForDiscontinuation = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_preferredlocation_id), getResources().getStringArray(R.array.comorbidities_location), "Sehatmand Zindagi Center - Korangi", App.HORIZONTAL);
         gpClinicCode = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_preferredlocation_gpcliniccode), "", getResources().getString(R.string.comorbidities_preferredlocation_gpcliniccode_range), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
@@ -264,7 +276,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
                 akuadsDifficultBreathing.getRadioGroup(), akuadsTremulous.getRadioGroup(),
                 akuadsNumbness.getRadioGroup(), akuadsTension.getRadioGroup(),
                 akuadsHeadaches.getRadioGroup(), akuadsBodyPain.getRadioGroup(),
-                akuadsUrination.getRadioGroup(), akuadsTotalScore.getEditText(), akuadsSeverity.getRadioGroup(),
+                akuadsUrination.getRadioGroup(), akuadsTotalScore.getEditText(), akuadsSeverity.getRadioGroup(), majorCauseOfMentalDisturbance, otherMajorCauseOfMentalDisturbance.getEditText(), physicalIllnessMajorCauseOfMentalDisturbance.getEditText(),
                 akuadsAgree.getRadioGroup(), akuadsTreatmentFacilityConsent.getRadioGroup(), akuadsPhoneCounsellingConsent.getRadioGroup(),
                 preferredModeOfTherapy, preferredTherapyLocationSpinner.getSpinner(), gpClinicCode.getEditText(), mentalHealthNextScheduledVisit.getButton()/*, otherPreferredLocation.getEditText()*/};
 
@@ -273,7 +285,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
                 {{formDate, mentalHealthScreening, willbeScreened, reasonForNotDoingMentalHealthScreening, otherReasonForNotDoingMentalHealthScreening, akuadsSleep, akuadsLackOfInterest, akuadsLostInterestHobbies, akuadsAnxious, akuadsImpendingDoom, akuadsDifficultyThinkingClearly,
                         akuadsAlone, akuadsUnhappy, akuadsHopeless, akuadsHelpless, akuadsWorried, akuadsCried, akuadsSuicide, akuadsLossOfAppetite, akuadsRetrosternalBurning,
                         akuadsIndigestion, akuadsNausea, akuadsConstipation, akuadsDifficultBreathing, akuadsTremulous, akuadsNumbness, akuadsTension, akuadsHeadaches, akuadsBodyPain,
-                        akuadsUrination, akuadsTotalScore, akuadsSeverity, akuadsAgree, akuadsTreatmentFacilityConsent, akuadsPhoneCounsellingConsent, preferredModeOfTherapy, preferredTherapyLocationSpinner, gpClinicCode, mentalHealthNextScheduledVisit/*otherPreferredLocation*/}};
+                        akuadsUrination, akuadsTotalScore, akuadsSeverity, majorCauseOfMentalDisturbance, otherMajorCauseOfMentalDisturbance, physicalIllnessMajorCauseOfMentalDisturbance, akuadsAgree, akuadsTreatmentFacilityConsent, akuadsPhoneCounsellingConsent, preferredModeOfTherapy, preferredTherapyLocationSpinner, gpClinicCode, mentalHealthNextScheduledVisit/*otherPreferredLocation*/}};
 
         formDate.getButton().setOnClickListener(this);
         reasonForNotDoingMentalHealthScreening.getSpinner().setOnItemSelectedListener(this);
@@ -306,6 +318,9 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
         akuadsUrination.getRadioGroup().setOnCheckedChangeListener(this);
         akuadsSeverity.getRadioGroup().setOnCheckedChangeListener(this);
         akuadsAgree.getRadioGroup().setOnCheckedChangeListener(this);
+        for (CheckBox cb : majorCauseOfMentalDisturbance.getCheckedBoxes()) {
+            cb.setOnCheckedChangeListener(this);
+        }
         akuadsTreatmentFacilityConsent.getRadioGroup().setOnCheckedChangeListener(this);
         akuadsPhoneCounsellingConsent.getRadioGroup().setOnCheckedChangeListener(this);
 
@@ -633,6 +648,36 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
                         diabetesTreatmentInitiationString = diabetesTreatmentInitiationString + "HOME" + " ; ";
                 }
                 observations.add(new String[]{"PREFERRED MODE OF THERAPY", diabetesTreatmentInitiationString});
+            }
+
+            if (majorCauseOfMentalDisturbance.getVisibility() == View.VISIBLE) {
+                String majorCauseOfMentalDisturbanceString = "";
+                for (CheckBox cb : majorCauseOfMentalDisturbance.getCheckedBoxes()) {
+                    if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_major_cause_of_mental_disturbance_options_physical_illness)))
+                        majorCauseOfMentalDisturbanceString = majorCauseOfMentalDisturbanceString + "PHYSICAL ILLNESS" + " ; ";
+                    else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_major_cause_of_mental_disturbance_options_family_members)))
+                        majorCauseOfMentalDisturbanceString = majorCauseOfMentalDisturbanceString + "FAMILY PROBLEM" + " ; ";
+                    else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_major_cause_of_mental_disturbance_options_education)))
+                        majorCauseOfMentalDisturbanceString = majorCauseOfMentalDisturbanceString + "EDUCATION PROBLEMS" + " ; ";
+                    else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_major_cause_of_mental_disturbance_options_finances)))
+                        majorCauseOfMentalDisturbanceString = majorCauseOfMentalDisturbanceString + "ECONOMIC PROBLEM" + " ; ";
+                    else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_major_cause_of_mental_disturbance_options_spouse)))
+                        majorCauseOfMentalDisturbanceString = majorCauseOfMentalDisturbanceString + "PROBLEMS RELATED TO SPOUSE" + " ; ";
+                    else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_major_cause_of_mental_disturbance_options_employment)))
+                        majorCauseOfMentalDisturbanceString = majorCauseOfMentalDisturbanceString + "EMPLOYMENT PROBLEM" + " ; ";
+                    else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_major_cause_of_mental_disturbance_options_bereavement)))
+                        majorCauseOfMentalDisturbanceString = majorCauseOfMentalDisturbanceString + "BEREAVEMENT REACTION" + " ; ";
+                    else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.comorbidities_major_cause_of_mental_disturbance_options_other)))
+                        majorCauseOfMentalDisturbanceString = majorCauseOfMentalDisturbanceString + "OTHER MAJOR CAUSE OF MENTAL DISTURBANCE" + " ; ";
+                }
+                observations.add(new String[]{"MAJOR CAUSE OF MENTAL DISTURBANCE", majorCauseOfMentalDisturbanceString});
+            }
+
+            if (otherMajorCauseOfMentalDisturbance.getVisibility() == View.VISIBLE) {
+                observations.add(new String[]{"OTHER MAJOR CAUSE OF MENTAL DISTURBANCE", App.get(otherMajorCauseOfMentalDisturbance)});
+            }
+            if (physicalIllnessMajorCauseOfMentalDisturbance.getVisibility() == View.VISIBLE) {
+                observations.add(new String[]{"PHYSICAL ILLNESS NAME", App.get(physicalIllnessMajorCauseOfMentalDisturbance)});
             }
             if (preferredTherapyLocationSpinner.getVisibility() == View.VISIBLE) {
                 observations.add(new String[]{"FACILITY REFERRED TO", App.get(preferredTherapyLocationSpinner)});
@@ -1326,6 +1371,41 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
                         break;
                     }
                 }
+
+            } else if (obs[0][0].equals("MAJOR CAUSE OF MENTAL DISTURBANCE")) {
+                for (CheckBox cb : majorCauseOfMentalDisturbance.getCheckedBoxes()) {
+                    if (cb.getText().equals(getResources().getString(R.string.comorbidities_major_cause_of_mental_disturbance_options_physical_illness)) && obs[0][1].equals("PHYSICAL ILLNESS")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_major_cause_of_mental_disturbance_options_family_members)) && obs[0][1].equals("FAMILY PROBLEM")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_major_cause_of_mental_disturbance_options_education)) && obs[0][1].equals("EDUCATION PROBLEMS")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_major_cause_of_mental_disturbance_options_finances)) && obs[0][1].equals("ECONOMIC PROBLEM")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_major_cause_of_mental_disturbance_options_spouse)) && obs[0][1].equals("PROBLEMS RELATED TO SPOUSE")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_major_cause_of_mental_disturbance_options_employment)) && obs[0][1].equals("EMPLOYMENT PROBLEM")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_major_cause_of_mental_disturbance_options_bereavement)) && obs[0][1].equals("BEREAVEMENT REACTION")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.comorbidities_major_cause_of_mental_disturbance_options_other)) && obs[0][1].equals("OTHER MAJOR CAUSE OF MENTAL DISTURBANCE")) {
+                        cb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("OTHER MAJOR CAUSE OF MENTAL DISTURBANCE")) {
+                otherMajorCauseOfMentalDisturbance.getEditText().setText(obs[0][1]);
+                otherMajorCauseOfMentalDisturbance.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("PHYSICAL ILLNESS NAME")) {
+                physicalIllnessMajorCauseOfMentalDisturbance.getEditText().setText(obs[0][1]);
+                physicalIllnessMajorCauseOfMentalDisturbance.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("FACILITY REFERRED TO")) {
                 preferredTherapyLocationSpinner.getSpinner().selectValue(obs[0][1]);
             } else if (obs[0][0].equals("HEALTH CLINIC/POST")) {
@@ -1472,7 +1552,22 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
+        for (CheckBox cb : majorCauseOfMentalDisturbance.getCheckedBoxes()) {
+            if (App.get(cb).equals(getResources().getString(R.string.comorbidities_major_cause_of_mental_disturbance_options_physical_illness))) {
+                if (cb.isChecked()) {
+                    physicalIllnessMajorCauseOfMentalDisturbance.setVisibility(View.VISIBLE);
+                } else {
+                    physicalIllnessMajorCauseOfMentalDisturbance.setVisibility(View.GONE);
+                }
+            }
+            if (App.get(cb).equals(getResources().getString(R.string.comorbidities_major_cause_of_mental_disturbance_options_other))) {
+                if (cb.isChecked()) {
+                    otherMajorCauseOfMentalDisturbance.setVisibility(View.VISIBLE);
+                } else {
+                    otherMajorCauseOfMentalDisturbance.setVisibility(View.GONE);
+                }
+            }
+        }
     }
 
     @Override
