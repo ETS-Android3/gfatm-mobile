@@ -443,6 +443,7 @@ public class Forms{
         comorbiditiesList.add(comorbidities_assessmentFormMH);
         comorbiditiesList.add(comorbidities_endOfTreatmentFormMH);
         comorbiditiesList.add(comorbidities_drugDisbursementForm);
+        comorbiditiesList.add(comorbidities_missedVisitFollowUpForm);
 
         return comorbiditiesList;
     }
