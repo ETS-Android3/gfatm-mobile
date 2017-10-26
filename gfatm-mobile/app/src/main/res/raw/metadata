@@ -4750,9 +4750,7 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ADDITIONAL TREA
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('BILATERAL','bilateral','N/A','160406AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MAJOR CAUSE OF MENTAL DISTURBANCE','major_cause_of_mental_disturbance','Coded','f66c21f6-898a-453c-88a5-1691a04d7088');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PHYSICAL ILLNESS','physical_illness','N/A','93024dad-0728-4271-b52a-0bb0b401dcdb');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('FAMILY PROBLEM','null','N/A','37f7fb16-b7a7-4a05-9830-20bb5920d37f');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('EDUCATION PROBLEMS','education_problems','N/A','dd27f177-2ff1-41ab-b30b-f5ef74589d85');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ECONOMIC PROBLEM','economic_problem','N/A','141537AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PROBLEMS RELATED TO SPOUSE','problems_related_to_spouse','N/A','74f3d702-30d2-4216-96f9-e3fd7311169f');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('EMPLOYMENT PROBLEM','employment_problem','N/A','141337AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('BEREAVEMENT REACTION','null','N/A','147428AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
