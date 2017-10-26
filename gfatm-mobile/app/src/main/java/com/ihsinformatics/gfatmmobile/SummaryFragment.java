@@ -38,7 +38,6 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
     ServerService serverService;
 
     ScrollView mainView;
-    Button patientAttribute;
     Button generalPatientView;
     Button interventionPatientView;
     Button interventionStaffView;
@@ -61,8 +60,6 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
 
         serverService = new ServerService(context.getApplicationContext());
 
-        patientAttribute = (Button) mainContent.findViewById(R.id.patientAttribute);
-        DrawableCompat.setTint(patientAttribute.getCompoundDrawables()[1], App.getColor(mainContent.getContext(), FormTypeColor.REGISTRATION_FORM));
         generalPatientView = (Button) mainContent.findViewById(R.id.genralPatientView);
         DrawableCompat.setTint(generalPatientView.getCompoundDrawables()[1], App.getColor(mainContent.getContext(), FormTypeColor.FOLLOWUP_FORM));
         interventionPatientView = (Button) mainContent.findViewById(R.id.patientView);
@@ -78,7 +75,6 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         refersh = (ImageView) mainContent.findViewById(R.id.refresh);
         refersh.setOnTouchListener(this);
 
-        patientAttribute.setOnClickListener(this);
         generalPatientView.setOnClickListener(this);
         interventionPatientView.setOnClickListener(this);
         interventionStaffView.setOnClickListener(this);
@@ -91,19 +87,27 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
     public void updateSummaryFragment(){
 
         interventionStaffView.setVisibility(View.GONE);
-        patientAttribute.setVisibility(View.GONE);
         interventionPatientView.setVisibility(View.GONE);
         generalPatientView.setVisibility(View.VISIBLE);
         interventionStaffView.setVisibility(View.VISIBLE);
 
         if(App.getPatient() == null) {
-            patientAttribute.setVisibility(View.GONE);
             generalPatientView.setVisibility(View.GONE);
             interventionPatientView.setVisibility(View.GONE);
 
             if(App.getProgram().equals(getResources().getString(R.string.fast))) {
                 interventionStaffView.setText(getString(R.string.fast_staff_view));
                 interventionStaffView.setVisibility(View.VISIBLE);
+            }
+            else if(App.getProgram().equals(getResources().getString(R.string.pet))){
+                interventionStaffView.setText(getString(R.string.pet_staff_view));
+                interventionStaffView.setVisibility(View.VISIBLE);
+            } else if(App.getProgram().equals(getResources().getString(R.string.childhood_tb))){
+                interventionStaffView.setText(getString(R.string.childhood_tb_staff_view));
+                interventionStaffView.setVisibility(View.VISIBLE);
+            } else if(App.getProgram().equals(getResources().getString(R.string.comorbidities))){
+                interventionStaffView.setText(getString(R.string.comorbidities_patient_view));
+                interventionStaffView.setVisibility(View.GONE);
             }
         }
         else {
@@ -156,12 +160,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
     @Override
     public void onClick(View v) {
 
-        if(v == patientAttribute){
-            setMainContentVisible(false);
-            heading.setText(getResources().getString(R.string.patient_attribute));
-            content.removeAllViews();
-            fillPatientAttribute();
-        } else if(v == generalPatientView){
+        if(v == generalPatientView){
             setMainContentVisible(false);
             heading.setText(getResources().getString(R.string.general_patient_view));
             content.removeAllViews();
@@ -609,17 +608,6 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
                 {getString(R.string.diabetes_status),diabetesStatus,null},
                 {getString(R.string.diabetes_followup_date),diabetesFollowupDate,null},
                 {getString(R.string.final_treatment_outcome),treatmentOutcome,null}};
-
-        fillContent(dataset);
-
-    }
-
-    public void fillPatientAttribute(){
-
-        String[][] dataset = { {"rabbia", "hassan", null},
-                {"hadi","hassan", null},
-                {"mohammad","hassan", null},
-                {"farzana","hassan", null}};
 
         fillContent(dataset);
 
@@ -1502,24 +1490,22 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
                 String viewName = heading.getText().toString();
                 if(viewName.equals(getString(R.string.general_patient_view)))
                     fillGeneralPatientView();
-                else if(view.equals(getString(R.string.fast_patient_view)))
+                else if(viewName.equals(getString(R.string.fast_patient_view)))
                     fillFastPatientView();
-                else if(view.equals(getString(R.string.fast_staff_view)))
+                else if(viewName.equals(getString(R.string.fast_staff_view)))
                     fillFastStaffView();
-                else if(view.equals(getString(R.string.childhood_tb_patient_view)))
+                else if(viewName.equals(getString(R.string.childhood_tb_patient_view)))
                     fillChildhoodTbPatientView();
-                else if(view.equals(getString(R.string.childhood_tb_staff_view)))
+                else if(viewName.equals(getString(R.string.childhood_tb_staff_view)))
                     fillChildhoodTbStaffView();
-                else if(view.equals(getString(R.string.comorbidities_patient_view)))
+                else if(viewName.equals(getString(R.string.comorbidities_patient_view)))
                     fillComorbiditiesPatientView();
-                else if(view.equals(getString(R.string.comorbidities_staff_view)))
+                else if(viewName.equals(getString(R.string.comorbidities_staff_view)))
                     fillComorbiditiesStaffView();
-                else if(view.equals(getString(R.string.pet_patient_view)))
+                else if(viewName.equals(getString(R.string.pet_patient_view)))
                     fillPetPatientView();
-                else if(view.equals(getString(R.string.pet_staff_view)))
+                else if(viewName.equals(getString(R.string.pet_staff_view)))
                     fillPetStaffView();
-                else if(view.equals(getString(R.string.patient_attribute)))
-                    fillPatientAttribute();
 
                 break;
             }
