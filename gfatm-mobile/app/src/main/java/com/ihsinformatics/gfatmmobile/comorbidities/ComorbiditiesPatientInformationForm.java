@@ -283,12 +283,12 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
         mobileNumber1Layout.addView(phone1QuestionLayout);
         LinearLayout phone1PartLayout = new LinearLayout(context);
         phone1PartLayout.setOrientation(LinearLayout.HORIZONTAL);
-        mobileNumber1a = new MyEditText(context,"", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        mobileNumber1a = new MyEditText(context, "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
         mobileNumber1a.setHint("03XX");
         phone1PartLayout.addView(mobileNumber1a);
         MyTextView phone1Dash = new MyTextView(context, " - ");
         phone1PartLayout.addView(phone1Dash);
-        mobileNumber1b = new MyEditText(context,"",  7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        mobileNumber1b = new MyEditText(context, "", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
         mobileNumber1b.setHint("XXXXXXX");
         phone1PartLayout.addView(mobileNumber1b);
         mobileNumber1Layout.addView(phone1PartLayout);
@@ -313,7 +313,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
         phone2PartLayout.addView(mobileNumber2a);
         MyTextView phone2Dash = new MyTextView(context, " - ");
         phone2PartLayout.addView(phone2Dash);
-        mobileNumber2b = new MyEditText(context, "",7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        mobileNumber2b = new MyEditText(context, "", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
         mobileNumber2b.setHint("XXXXXXX");
         phone2PartLayout.addView(mobileNumber2b);
         mobileNumber2Layout.addView(phone2PartLayout);
@@ -338,7 +338,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
         phone3PartLayout.addView(landline1a);
         MyTextView phone3Dash = new MyTextView(context, " - ");
         phone3PartLayout.addView(phone3Dash);
-        landline1b = new MyEditText(context, "",7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        landline1b = new MyEditText(context, "", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
         landline1b.setHint("XXXXXXX");
         phone3PartLayout.addView(landline1b);
         landline1Layout.addView(phone3PartLayout);
@@ -363,7 +363,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
         phone4PartLayout.addView(landline2a);
         MyTextView phone4Dash = new MyTextView(context, " - ");
         phone4PartLayout.addView(phone4Dash);
-        landline2b = new MyEditText(context, "",7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        landline2b = new MyEditText(context, "", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
         landline2b.setHint("XXXXXXX");
         phone4PartLayout.addView(landline2b);
         landline2Layout.addView(phone4PartLayout);
@@ -442,7 +442,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()==5){
+                if (s.length() == 5) {
                     cnic2.requestFocus();
                 }
             }
@@ -462,11 +462,11 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()==7){
+                if (s.length() == 7) {
                     cnic3.requestFocus();
                 }
 
-                if(s.length()==0){
+                if (s.length() == 0) {
                     cnic1.requestFocus();
                     cnic1.setSelection(cnic1.getText().length());
                 }
@@ -486,7 +486,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()==0){
+                if (s.length() == 0) {
                     cnic2.requestFocus();
                     cnic2.setSelection(cnic2.getText().length());
                 }
@@ -506,7 +506,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()==4){
+                if (s.length() == 4) {
                     mobileNumber1b.requestFocus();
                 }
             }
@@ -526,7 +526,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                if(s.length()==0){
+                if (s.length() == 0) {
                     mobileNumber1a.requestFocus();
                     mobileNumber1a.setSelection(mobileNumber1a.getText().length());
                 }
@@ -546,7 +546,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()==4){
+                if (s.length() == 4) {
                     mobileNumber2b.requestFocus();
                 }
             }
@@ -566,7 +566,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                if(s.length()==0){
+                if (s.length() == 0) {
                     mobileNumber2a.requestFocus();
                     mobileNumber2a.setSelection(mobileNumber2a.getText().length());
                 }
@@ -586,7 +586,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()==4){
+                if (s.length() == 4) {
                     landline1b.requestFocus();
                 }
             }
@@ -606,7 +606,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                if(s.length()==0){
+                if (s.length() == 0) {
                     landline1a.requestFocus();
                     landline1a.setSelection(landline1a.getText().length());
                 }
@@ -626,7 +626,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()==4){
+                if (s.length() == 4) {
                     landline2b.requestFocus();
                 }
             }
@@ -646,7 +646,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                if(s.length()==0){
+                if (s.length() == 0) {
                     landline2a.requestFocus();
                     landline2a.setSelection(landline2a.getText().length());
                 }
@@ -781,8 +781,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
             address2.setError(getString(R.string.empty_field));
             address2.requestFocus();
             error = true;
-        }
-        else if (addressLayout.getVisibility() == View.VISIBLE && address2.getText().toString().length() > 0 && address2.getText().toString().trim().isEmpty()) {
+        } else if (addressLayout.getVisibility() == View.VISIBLE && address2.getText().toString().length() > 0 && address2.getText().toString().trim().isEmpty()) {
             address2.setError(getString(R.string.comorbidities_patient_information_father_name_error));
             address2.requestFocus();
             error = true;
@@ -823,8 +822,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
             husbandName.getEditText().setError(getString(R.string.comorbidities_patient_information_father_name_error));
             husbandName.getEditText().requestFocus();
             error = true;
-        }
-        else if (husbandName.getVisibility() == View.VISIBLE && App.get(husbandName).length() == 1) {
+        } else if (husbandName.getVisibility() == View.VISIBLE && App.get(husbandName).length() == 1) {
             husbandName.getEditText().setError(getString(R.string.fast_husband_name_cannot_be_less_than_2_characters));
             husbandName.getEditText().requestFocus();
             error = true;
@@ -834,8 +832,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
             fatherName.getEditText().setError(getString(R.string.comorbidities_patient_information_father_name_error));
             fatherName.getEditText().requestFocus();
             error = true;
-        }
-        else if (fatherName.getVisibility() == View.VISIBLE && App.get(fatherName).length() == 1) {
+        } else if (fatherName.getVisibility() == View.VISIBLE && App.get(fatherName).length() == 1) {
             fatherName.getEditText().setError(getString(R.string.fast_father_name_cannot_be_less_than_2_characters));
             fatherName.getEditText().requestFocus();
             error = true;
@@ -895,7 +892,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
-            }else {
+            } else {
                 endTime = new Date();
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
@@ -913,7 +910,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
         observations.add(new String[]{"FATHER NAME", App.get(fatherName).trim()});
         observations.add(new String[]{"PARTNER FULL NAME", App.get(husbandName).trim()});
 
-        if(!App.get(cnic1).isEmpty() && !App.get(cnic2).isEmpty() && !App.get(cnic3).isEmpty()) {
+        if (!App.get(cnic1).isEmpty() && !App.get(cnic2).isEmpty() && !App.get(cnic3).isEmpty()) {
             final String cnic = App.get(cnic1) + "-" + App.get(cnic2) + "-" + App.get(cnic3);
             observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnic});
         }
@@ -945,22 +942,22 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
         observations.add(new String[]{"TYPE OF ADDRESS", App.get(addressType).equals(getResources().getString(R.string.comorbidities_patient_information_address_type_permanent)) ? "PERMANENT ADDRESS" : "TEMPORARY ADDRESS"});
         observations.add(new String[]{"NEAREST LANDMARK", App.get(landmark).trim()});
 
-        if(!App.get(mobileNumber1a).isEmpty() && !App.get(mobileNumber1b).isEmpty()) {
+        if (!App.get(mobileNumber1a).isEmpty() && !App.get(mobileNumber1b).isEmpty()) {
             final String mobileNumber1 = App.get(mobileNumber1a) + "-" + App.get(mobileNumber1b);
             observations.add(new String[]{"CONTACT PHONE NUMBER", mobileNumber1});
         }
 
-        if(!App.get(mobileNumber2a).isEmpty() && !App.get(mobileNumber2b).isEmpty()) {
+        if (!App.get(mobileNumber2a).isEmpty() && !App.get(mobileNumber2b).isEmpty()) {
             final String mobileNumber2 = App.get(mobileNumber2a) + "-" + App.get(mobileNumber2b);
             observations.add(new String[]{"SECONDARY MOBILE NUMBER", mobileNumber2});
         }
 
-        if(!App.get(landline1a).isEmpty() && !App.get(landline1b).isEmpty()) {
+        if (!App.get(landline1a).isEmpty() && !App.get(landline1b).isEmpty()) {
             final String landline1 = App.get(landline1a) + "-" + App.get(landline1b);
             observations.add(new String[]{"TERTIARY CONTACT NUMBER", landline1});
         }
 
-        if(!App.get(landline2a).isEmpty() && !App.get(landline2b).isEmpty()) {
+        if (!App.get(landline2a).isEmpty() && !App.get(landline2b).isEmpty()) {
             final String landline2 = App.get(landline2a) + "-" + App.get(landline2b);
             observations.add(new String[]{"QUATERNARY CONTACT NUMBER", landline2});
         }
@@ -1039,29 +1036,28 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
                     }
 
                     if (!App.get(indexExternalPatientId).isEmpty() && App.hasKeyListener(indexExternalPatientId)) {
-                        if(App.getPatient().getExternalId() != null) {
-                            if(!App.getPatient().getExternalId().equals("")) {
+                        if (App.getPatient().getExternalId() != null) {
+                            if (!App.getPatient().getExternalId().equals("")) {
                                 if (!App.getPatient().getExternalId().equalsIgnoreCase(App.get(indexExternalPatientId))) {
                                     result = serverService.saveIdentifier("External ID", App.get(indexExternalPatientId), encounterId);
                                     if (!result.equals("SUCCESS"))
                                         return result;
                                 }
-                            }
-                            else {
+                            } else {
                                 result = serverService.saveIdentifier("External ID", App.get(indexExternalPatientId), encounterId);
                                 if (!result.equals("SUCCESS"))
                                     return result;
                             }
                         } else {
-                               result = serverService.saveIdentifier("External ID", App.get(indexExternalPatientId), encounterId);
-                               if (!result.equals("SUCCESS"))
-                                   return result;
+                            result = serverService.saveIdentifier("External ID", App.get(indexExternalPatientId), encounterId);
+                            if (!result.equals("SUCCESS"))
+                                return result;
                         }
                     }
 
                     /**result = serverService.savePersonAddress(App.get(address1), App.get(address2), App.getCity(), App.get(town), App.getCountry(), longitude, latitude, App.get(landmark), encounterId);
-                    if (!result.equals("SUCCESS"))
-                        return result;**/
+                     if (!result.equals("SUCCESS"))
+                     return result;**/
 
                     if (!(App.get(address1).equals("") && App.get(address2).equals("") && App.get(district).equals("") && App.get(landmark).equals(""))) {
                         result = serverService.savePersonAddress(App.get(address1), App.get(address2), App.get(city), App.get(district), App.get(province), App.getCountry(), App.getLongitude(), App.getLatitude(), App.get(landmark), encounterId);
@@ -1220,7 +1216,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
         for (int i = 0; i < obsValue.size(); i++) {
             String[][] obs = obsValue.get(i);
 
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
             }
 
@@ -1288,7 +1284,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
                 city.getSpinner().setSpinnerData(cities);
                 city.getSpinner().selectValue(obs[0][1]);
                 city.getSpinner().setTag("selected");
-            }else if (obs[0][0].equals("TYPE OF ADDRESS")) {
+            } else if (obs[0][0].equals("TYPE OF ADDRESS")) {
                 for (RadioButton rb : addressType.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.comorbidities_patient_information_address_type_permanent)) && obs[0][1].equals("PERMANENT ADDRESS")) {
                         rb.setChecked(true);
@@ -1438,29 +1434,23 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
                 otherNicOwner.setVisibility(View.VISIBLE);
             else
                 otherNicOwner.setVisibility(View.GONE);
-        }
-
-        else if(spinner == maritalStatus.getSpinner()) {
+        } else if (spinner == maritalStatus.getSpinner()) {
             //Log.e("Marital", App.get(maritalStatus)+"");
             //displayHusbandName();
-        }
+        } else if (spinner == district.getSpinner()) {
 
-        else if (spinner == district.getSpinner()) {
-
-            if(district.getSpinner().getTag() == null) {
+            if (district.getSpinner().getTag() == null) {
 
                 String[] cities = serverService.getCityList(App.get(district));
                 city.getSpinner().setSpinnerData(cities);
-            }
-            else city.getSpinner().setTag(null);
+            } else city.getSpinner().setTag(null);
 
         } else if (spinner == province.getSpinner()) {
 
-            if(province.getSpinner().getTag() == null) {
+            if (province.getSpinner().getTag() == null) {
                 String[] districts = serverService.getDistrictList(App.get(province));
                 district.getSpinner().setSpinnerData(districts);
-            }
-            else province.getSpinner().setTag(null);
+            } else province.getSpinner().setTag(null);
         }
     }
 
@@ -1531,7 +1521,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
             }
         }
 
-        if(flag) {
+        if (flag) {
             //HERE FOR AUTOPOPULATING OBS
             final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
                 @Override
@@ -1550,7 +1540,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
                     //Autopopulating all the data from FAST component.
                     HashMap<String, String> result = new HashMap<String, String>();
                     String regNo = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Treatment Initiation", "TB REGISTRATION NUMBER");
-                    String regDate = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Treatment Initiation", "REGISTRATION DATE");
+                    String regDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST" + "-" + "Treatment Initiation");
                     String husbandName = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive", "PARTNER FULL NAME");
                     String fatherName = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive", "FATHER NAME");
                     String cnic = serverService.getLatestObsValue(App.getPatientId(), "FAST" + "-" + "Presumptive Information", "NATIONAL IDENTIFICATION NUMBER");
@@ -1576,9 +1566,13 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
                     if (regNo != null)
                         if (!regNo.equals(""))
                             result.put("TB REGISTRATION NUMBER", regNo);
-                    if (regDate != null)
-                        if (!regDate.equals(""))
+                    if (regDate != null) {
+                        if (!regDate.equals("")) {
                             result.put("REGISTRATION DATE", regDate);
+                        }
+                    }else{
+
+                    }
                     if (husbandName != null)
                         if (!husbandName.equals(""))
                             result.put("PARTNER FULL NAME", husbandName);
@@ -1656,7 +1650,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
                         if (!result.get("QUATERNARY CONTACT NUMBER").equals("")) {
                             String[] landline2Array = result.get("QUATERNARY CONTACT NUMBER").split("-");
 
-                            if(landline2Array.length > 1) {
+                            if (landline2Array.length > 1) {
                                 landline2a.setText(landline2Array[0]);
                                 landline2b.setText(landline2Array[1]);
                             }
@@ -1667,7 +1661,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
                         if (!result.get("TERTIARY CONTACT NUMBER").equals("")) {
                             String[] landline1Array = result.get("TERTIARY CONTACT NUMBER").split("-");
 
-                            if(landline1Array.length > 1) {
+                            if (landline1Array.length > 1) {
                                 landline1a.setText(landline1Array[0]);
                                 landline1b.setText(landline1Array[1]);
                             }
@@ -1678,7 +1672,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
                         if (!result.get("SECONDARY MOBILE NUMBER").equals("")) {
                             String[] mobile2Array = result.get("SECONDARY MOBILE NUMBER").split("-");
 
-                            if(mobile2Array.length > 1) {
+                            if (mobile2Array.length > 1) {
                                 mobileNumber2a.setText(mobile2Array[0]);
                                 mobileNumber2b.setText(mobile2Array[1]);
                             }
@@ -1689,7 +1683,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
                         if (!result.get("CONTACT PHONE NUMBER").equals("")) {
                             String[] mobile1Array = result.get("CONTACT PHONE NUMBER").split("-");
 
-                            if(mobile1Array.length > 1) {
+                            if (mobile1Array.length > 1) {
                                 mobileNumber1a.setText(mobile1Array[0]);
                                 mobileNumber1b.setText(mobile1Array[1]);
                             }
@@ -1793,7 +1787,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
                         if (!result.get("NATIONAL IDENTIFICATION NUMBER").equals("")) {
                             String[] cnicArray = result.get("NATIONAL IDENTIFICATION NUMBER").split("-");
 
-                            if(cnicArray.length > 2) {
+                            if (cnicArray.length > 2) {
                                 cnic1.setText(cnicArray[0]);
                                 cnic2.setText(cnicArray[1]);
                                 cnic3.setText(cnicArray[2]);
@@ -1804,9 +1798,12 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
                     husbandName.getEditText().setText(result.get("PARTNER FULL NAME"));
                     fatherName.getEditText().setText(result.get("FATHER NAME"));
 
-                    if(result.get("REGISTRATION DATE") != null && !result.get("REGISTRATION DATE").equalsIgnoreCase("")) {
+                    if (result.get("REGISTRATION DATE") != null && !result.get("REGISTRATION DATE").equalsIgnoreCase("")) {
                         secondDateCalendar.setTime(App.stringToDate(result.get("REGISTRATION DATE"), "yyyy-MM-dd"));
                         registrationDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+                    }else {
+                        registrationDate.getButton().setText("");
+
                     }
 
                     tbRegistrationNumber.getEditText().setText(result.get("TB REGISTRATION NUMBER"));
@@ -1913,10 +1910,9 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
     }
 
     void displayGPClinic() {
-        if(App.getLocation().equalsIgnoreCase("GP-CLINIC")) {
+        if (App.getLocation().equalsIgnoreCase("GP-CLINIC")) {
             gpClinicCode.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             gpClinicCode.setVisibility(View.GONE);
         }
     }

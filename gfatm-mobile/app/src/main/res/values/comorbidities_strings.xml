@@ -97,6 +97,30 @@
     <string name="comorbidities_return_visit_date">Date of next visit</string>
     <!--End Missed Visit Follow Up Form-->
 
+
+    <string name="comorbidities_major_cause_of_mental_disturbance">In your opinion, what do you think is the cause of most of your symptoms present from the list above?</string>
+    <string name="comorbidities_major_cause_of_mental_disturbance_options_physical_illness">Physical illness</string>
+    <string name="comorbidities_major_cause_of_mental_disturbance_options_family_members">Problems related to family members (other than spouse)</string>
+    <string name="comorbidities_major_cause_of_mental_disturbance_options_education">Problems related to education</string>
+    <string name="comorbidities_major_cause_of_mental_disturbance_options_finances">Problems related to finances</string>
+    <string name="comorbidities_major_cause_of_mental_disturbance_options_spouse">Problems related to spouse</string>
+    <string name="comorbidities_major_cause_of_mental_disturbance_options_employment">Problems related to employment</string>
+    <string name="comorbidities_major_cause_of_mental_disturbance_options_bereavement">Due to bereavement</string>
+    <string name="comorbidities_major_cause_of_mental_disturbance_options_other">Other</string>
+    <string-array name="comorbidities_major_cause_of_mental_disturbance_array">
+        <item>@string/comorbidities_major_cause_of_mental_disturbance_options_physical_illness</item>
+        <item>@string/comorbidities_major_cause_of_mental_disturbance_options_family_members</item>
+        <item>@string/comorbidities_major_cause_of_mental_disturbance_options_education</item>
+        <item>@string/comorbidities_major_cause_of_mental_disturbance_options_finances</item>
+        <item>@string/comorbidities_major_cause_of_mental_disturbance_options_spouse</item>
+        <item>@string/comorbidities_major_cause_of_mental_disturbance_options_employment</item>
+        <item>@string/comorbidities_major_cause_of_mental_disturbance_options_bereavement</item>
+        <item>@string/comorbidities_major_cause_of_mental_disturbance_options_other</item>
+    </string-array>
+    <string name="comorbidities_major_cause_of_mental_disturbance_other_specify">If other please specify</string>
+    <string name="comorbidities_major_cause_of_mental_disturbance_physical_illness_name">Physical illness (specify the name)</string>
+
+
     <string name="comorbidities_akuads_will_be_screened">Will the patient be screened for mental health?</string>
     <string name="comorbidities_index_patient_registration">Index Patient Registration</string>
     <string name="comorbidities_akuads_Mental_Health_Screening">MENTAL HEALTH SCREENING - AKUADS</string>
