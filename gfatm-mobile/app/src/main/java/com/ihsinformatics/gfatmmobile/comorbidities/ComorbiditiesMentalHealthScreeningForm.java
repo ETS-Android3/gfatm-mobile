@@ -258,7 +258,11 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
         gpClinicCode = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_preferredlocation_gpcliniccode), "", getResources().getString(R.string.comorbidities_preferredlocation_gpcliniccode_range), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         mentalHealthNextScheduledVisit = new TitledButton(context, null, getResources().getString(R.string.comorbidities_treatment_followup_MH_next_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         displayAkuadsAgreeOrNot();
-        displayPreferredTherapyLocationOrNot();
+        try {
+
+            displayPreferredTherapyLocationOrNot();
+        } catch (Exception e) {
+        }
         //otherPreferredLocation = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_preferredlocation_other_comorbidities), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         //otherPreferredLocation.setVisibility(View.GONE);
         preferredModeOfTherapy.setVisibility(View.GONE);
@@ -1485,6 +1489,9 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
         preferredModeOfTherapy.setVisibility(View.GONE);
         preferredTherapyLocationSpinner.setVisibility(View.GONE);
         gpClinicCode.setVisibility(View.GONE);
+        majorCauseOfMentalDisturbance.setVisibility(visibility);
+        otherMajorCauseOfMentalDisturbance.setVisibility(visibility);
+        physicalIllnessMajorCauseOfMentalDisturbance.setVisibility(visibility);
     }
 
     @Override
@@ -1672,9 +1679,29 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
             setAkuadsSeverityLevel();
             displayAkuadsAgreeOrNot();
         } else if (radioGroup == akuadsSeverity.getRadioGroup()) {
-            displayAkuadsAgreeOrNot();
+            try {
+
+                displayAkuadsAgreeOrNot();
+            } catch (Exception e) {
+            }
         } else if (radioGroup == akuadsAgree.getRadioGroup()) {
-            displayPreferredTherapyLocationOrNot();
+            try {
+                displayPreferredTherapyLocationOrNot();
+            } catch (Exception e) {
+            }finally {
+                if (!akuadsSeverity.getRadioGroup().getSelectedValue().equals(getString(R.string.comorbidities_MH_severity_level_normal)) && akuadsAgree.getRadioGroup().getSelectedValue().equals(getString(R.string.yes))) {
+                    akuadsPhoneCounsellingConsent.setVisibility(View.VISIBLE);
+                    preferredTherapyLocationSpinner.setVisibility(View.VISIBLE);
+                    mentalHealthNextScheduledVisit.setVisibility(View.VISIBLE);
+                    akuadsTreatmentFacilityConsent.setVisibility(View.VISIBLE);
+                } else {
+                    akuadsTreatmentFacilityConsent.setVisibility(View.GONE);
+                    akuadsPhoneCounsellingConsent.setVisibility(View.GONE);
+                    preferredTherapyLocationSpinner.setVisibility(View.GONE);
+                    mentalHealthNextScheduledVisit.setVisibility(View.GONE);
+
+                }
+            }
         } else if (radioGroup == willbeScreened.getRadioGroup()) {
 
             if (willbeScreened.getRadioGroup().getSelectedValue().equalsIgnoreCase(getString(R.string.yes))) {
@@ -1683,12 +1710,41 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
                 otherReasonForNotDoingMentalHealthScreening.setVisibility(View.GONE);
                 mentalHealthNextScheduledVisit.setVisibility(View.GONE);
 
+                otherMajorCauseOfMentalDisturbance.setVisibility(View.GONE);
+                physicalIllnessMajorCauseOfMentalDisturbance.setVisibility(View.GONE);
+
+                for (CheckBox cb : majorCauseOfMentalDisturbance.getCheckedBoxes()) {
+                    if (cb.isChecked() && cb.getText().equals(getString(R.string.comorbidities_major_cause_of_mental_disturbance_options_physical_illness))) {
+                        physicalIllnessMajorCauseOfMentalDisturbance.setVisibility(View.VISIBLE);
+                    } else if (cb.isChecked() && cb.getText().equals(getString(R.string.comorbidities_major_cause_of_mental_disturbance_options_other))) {
+                        otherMajorCauseOfMentalDisturbance.setVisibility(View.VISIBLE);
+                    }
+                }
+                if (!akuadsSeverity.getRadioGroup().getSelectedValue().equals(getString(R.string.comorbidities_MH_severity_level_normal))) {
+                    akuadsAgree.setVisibility(View.VISIBLE);
+                } else {
+                    akuadsAgree.setVisibility(View.GONE);
+                }
+                if (!akuadsSeverity.getRadioGroup().getSelectedValue().equals(getString(R.string.comorbidities_MH_severity_level_normal)) && akuadsAgree.getRadioGroup().getSelectedValue().equals(getString(R.string.yes))) {
+                    akuadsPhoneCounsellingConsent.setVisibility(View.VISIBLE);
+                    preferredTherapyLocationSpinner.setVisibility(View.VISIBLE);
+                    mentalHealthNextScheduledVisit.setVisibility(View.VISIBLE);
+                    akuadsTreatmentFacilityConsent.setVisibility(View.VISIBLE);
+                } else {
+                    akuadsPhoneCounsellingConsent.setVisibility(View.GONE);
+                    preferredTherapyLocationSpinner.setVisibility(View.GONE);
+                    mentalHealthNextScheduledVisit.setVisibility(View.GONE);
+                    akuadsTreatmentFacilityConsent.setVisibility(View.GONE);
+
+                }
+
             } else {
                 reasonForNotDoingMentalHealthScreening.getSpinner().selectValue(getString(R.string.none));
                 setVisibility(View.GONE);
                 reasonForNotDoingMentalHealthScreening.setVisibility(View.VISIBLE);
 
             }
+
         }
     }
 
