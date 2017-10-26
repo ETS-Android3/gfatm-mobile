@@ -38,7 +38,6 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
     ServerService serverService;
 
     ScrollView mainView;
-    Button patientAttribute;
     Button generalPatientView;
     Button interventionPatientView;
     Button interventionStaffView;
@@ -61,8 +60,6 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
 
         serverService = new ServerService(context.getApplicationContext());
 
-        patientAttribute = (Button) mainContent.findViewById(R.id.patientAttribute);
-        DrawableCompat.setTint(patientAttribute.getCompoundDrawables()[1], App.getColor(mainContent.getContext(), FormTypeColor.REGISTRATION_FORM));
         generalPatientView = (Button) mainContent.findViewById(R.id.genralPatientView);
         DrawableCompat.setTint(generalPatientView.getCompoundDrawables()[1], App.getColor(mainContent.getContext(), FormTypeColor.FOLLOWUP_FORM));
         interventionPatientView = (Button) mainContent.findViewById(R.id.patientView);
@@ -78,7 +75,6 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         refersh = (ImageView) mainContent.findViewById(R.id.refresh);
         refersh.setOnTouchListener(this);
 
-        patientAttribute.setOnClickListener(this);
         generalPatientView.setOnClickListener(this);
         interventionPatientView.setOnClickListener(this);
         interventionStaffView.setOnClickListener(this);
@@ -91,13 +87,11 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
     public void updateSummaryFragment(){
 
         interventionStaffView.setVisibility(View.GONE);
-        patientAttribute.setVisibility(View.GONE);
         interventionPatientView.setVisibility(View.GONE);
         generalPatientView.setVisibility(View.VISIBLE);
         interventionStaffView.setVisibility(View.VISIBLE);
 
         if(App.getPatient() == null) {
-            patientAttribute.setVisibility(View.GONE);
             generalPatientView.setVisibility(View.GONE);
             interventionPatientView.setVisibility(View.GONE);
 
@@ -105,8 +99,16 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
                 interventionStaffView.setText(getString(R.string.fast_staff_view));
                 interventionStaffView.setVisibility(View.VISIBLE);
             }
-
-
+            else if(App.getProgram().equals(getResources().getString(R.string.pet))){
+                interventionStaffView.setText(getString(R.string.pet_staff_view));
+                interventionStaffView.setVisibility(View.VISIBLE);
+            } else if(App.getProgram().equals(getResources().getString(R.string.childhood_tb))){
+                interventionStaffView.setText(getString(R.string.childhood_tb_staff_view));
+                interventionStaffView.setVisibility(View.VISIBLE);
+            } else if(App.getProgram().equals(getResources().getString(R.string.comorbidities))){
+                interventionStaffView.setText(getString(R.string.comorbidities_patient_view));
+                interventionStaffView.setVisibility(View.GONE);
+            }
         }
         else {
 
@@ -117,7 +119,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
             } else if(App.getProgram().equals(getResources().getString(R.string.pet))){
                 interventionPatientView.setText(getString(R.string.pet_patient_view));
                 interventionStaffView.setText(getString(R.string.pet_staff_view));
-                interventionStaffView.setVisibility(View.GONE);
+                interventionStaffView.setVisibility(View.VISIBLE);
             } else if(App.getProgram().equals(getResources().getString(R.string.childhood_tb))){
                 interventionPatientView.setText(getString(R.string.childhood_tb_patient_view));
                 interventionStaffView.setText(getString(R.string.childhood_tb_staff_view));
@@ -158,12 +160,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
     @Override
     public void onClick(View v) {
 
-        if(v == patientAttribute){
-            setMainContentVisible(false);
-            heading.setText(getResources().getString(R.string.patient_attribute));
-            content.removeAllViews();
-            fillPatientAttribute();
-        } else if(v == generalPatientView){
+        if(v == generalPatientView){
             setMainContentVisible(false);
             heading.setText(getResources().getString(R.string.general_patient_view));
             content.removeAllViews();
@@ -611,17 +608,6 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
                 {getString(R.string.diabetes_status),diabetesStatus,null},
                 {getString(R.string.diabetes_followup_date),diabetesFollowupDate,null},
                 {getString(R.string.final_treatment_outcome),treatmentOutcome,null}};
-
-        fillContent(dataset);
-
-    }
-
-    public void fillPatientAttribute(){
-
-        String[][] dataset = { {"rabbia", "hassan", null},
-                {"hadi","hassan", null},
-                {"mohammad","hassan", null},
-                {"farzana","hassan", null}};
 
         fillContent(dataset);
 
@@ -1372,10 +1358,43 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
     }
 
     public void fillPetStaffView(){
-        String[][] dataset = { {"rabbia", "hassan", null},
-                {"hadi","hassan", null},
-                {"mohammad","hassan", null},
-                {"farzana","hassan", null}};
+
+
+        Date date = new Date();
+        String todayDate = App.getSqlDate(date);
+
+        int countIndexPatientRegistration =  serverService.getEncounterCountForDate(todayDate, "PET-Index Patient Registration");
+        int countContactRegistry =  serverService.getEncounterCountForDate(todayDate, "PET-Contact Registry");
+        int countBaselineScreening =  serverService.getEncounterCountForDate(todayDate, "PET-Baseline Screening");
+        int countHomeVisit =  serverService.getEncounterCountForDate(todayDate, "PET-Home Visit");
+        int countHomeVisitFollowup =  serverService.getEncounterCountForDate(todayDate, "PET-Home Follow-up");
+        int countBaselineCounselling =  serverService.getEncounterCountForDate(todayDate, "PET-Baseline Counselling");
+        int countTreatmentAdherence =  serverService.getEncounterCountForDate(todayDate, "PET-Treatment Adherence");
+        int countCounsellingFollowup =  serverService.getEncounterCountForDate(todayDate, "PET-Counselling Follow-up");
+        int countRefusal =  serverService.getEncounterCountForDate(todayDate, "PET-Refusal Form");
+        int countRetrival =  serverService.getEncounterCountForDate(todayDate, "PET-Retrieval Form");
+        int countClinicianContactScreening =  serverService.getEncounterCountForDate(todayDate, "PET-Clinician Contact Screening");
+        int countTreatmentEligibility =  serverService.getEncounterCountForDate(todayDate, "PET-Infection Treatment Eligibility");
+        int countTreatmentInitiation =  serverService.getEncounterCountForDate(todayDate, "PET-Treatment Initiation");
+        int countClinicianFollowup =  serverService.getEncounterCountForDate(todayDate, "PET-Clinician Follow-up");
+        int countAdverseEvent =  serverService.getEncounterCountForDate(todayDate, "PET-Adverse Events");
+
+        String[][] dataset = {{getString(R.string.count_index_patient_registration), String.valueOf(countIndexPatientRegistration), null},
+                {getString(R.string.count_contact_registry_form), String.valueOf(countContactRegistry), null},
+                {getString(R.string.count_baseline_screening), String.valueOf(countBaselineScreening), null},
+                {getString(R.string.count_home_visit), String.valueOf(countHomeVisit), null},
+                {getString(R.string.count_home_visit_followup), String.valueOf(countHomeVisitFollowup), null},
+                {getString(R.string.count_baseline_counselling), String.valueOf(countBaselineCounselling), null},
+                {getString(R.string.count_treatment_adherence), String.valueOf(countTreatmentAdherence), null},
+                {getString(R.string.count_counselling_followup), String.valueOf(countCounsellingFollowup), null},
+                {getString(R.string.count_refusal), String.valueOf(countRefusal), null},
+                {getString(R.string.count_retrival), String.valueOf(countRetrival), null},
+                {getString(R.string.count_clinician_contact_screening), String.valueOf(countClinicianContactScreening), null},
+                {getString(R.string.count_treatment_eliglibility), String.valueOf(countTreatmentEligibility), null},
+                {getString(R.string.count_treatment_initiation), String.valueOf(countTreatmentInitiation), null},
+                {getString(R.string.count_clinician_followup), String.valueOf(countClinicianFollowup), null},
+                {getString(R.string.count_adverse_event), String.valueOf(countAdverseEvent), null}
+        };
 
         fillContent(dataset);
     }
@@ -1471,24 +1490,22 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
                 String viewName = heading.getText().toString();
                 if(viewName.equals(getString(R.string.general_patient_view)))
                     fillGeneralPatientView();
-                else if(view.equals(getString(R.string.fast_patient_view)))
+                else if(viewName.equals(getString(R.string.fast_patient_view)))
                     fillFastPatientView();
-                else if(view.equals(getString(R.string.fast_staff_view)))
+                else if(viewName.equals(getString(R.string.fast_staff_view)))
                     fillFastStaffView();
-                else if(view.equals(getString(R.string.childhood_tb_patient_view)))
+                else if(viewName.equals(getString(R.string.childhood_tb_patient_view)))
                     fillChildhoodTbPatientView();
-                else if(view.equals(getString(R.string.childhood_tb_staff_view)))
+                else if(viewName.equals(getString(R.string.childhood_tb_staff_view)))
                     fillChildhoodTbStaffView();
-                else if(view.equals(getString(R.string.comorbidities_patient_view)))
+                else if(viewName.equals(getString(R.string.comorbidities_patient_view)))
                     fillComorbiditiesPatientView();
-                else if(view.equals(getString(R.string.comorbidities_staff_view)))
+                else if(viewName.equals(getString(R.string.comorbidities_staff_view)))
                     fillComorbiditiesStaffView();
-                else if(view.equals(getString(R.string.pet_patient_view)))
+                else if(viewName.equals(getString(R.string.pet_patient_view)))
                     fillPetPatientView();
-                else if(view.equals(getString(R.string.pet_staff_view)))
+                else if(viewName.equals(getString(R.string.pet_staff_view)))
                     fillPetStaffView();
-                else if(view.equals(getString(R.string.patient_attribute)))
-                    fillPatientAttribute();
 
                 break;
             }

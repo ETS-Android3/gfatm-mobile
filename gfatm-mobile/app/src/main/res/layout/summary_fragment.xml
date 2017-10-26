@@ -16,21 +16,6 @@
             android:paddingTop="@dimen/small">
 
             <Button
-                android:id="@+id/patientAttribute"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/summary_button"
-                android:drawablePadding="@dimen/medium"
-                android:drawableTop="@drawable/ic_edit_patient"
-                android:padding="@dimen/large"
-                android:layout_gravity="center"
-                android:text="@string/patient_attribute"
-                android:textColor="?colorRegistration"
-                android:drawableTint="?colorRegistration"
-                android:textSize="@dimen/large"
-                android:layout_marginBottom="@dimen/medium"/>
-
-            <Button
                 android:id="@+id/genralPatientView"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
