@@ -137,7 +137,7 @@ public class ChildhoodTbTestIndicationForm extends AbstractFormActivity implemen
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        chestXray = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_chest_xray),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL,true);
+        chestXray = new TitledRadioGroup(context,getResources().getString(R.string.ctb_which_test_ordered),getResources().getString(R.string.ctb_chest_xray),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL,true);
         ultraSound = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_ultrasound),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL,true);
         ctScan = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_ct_scan),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL,true);
         geneXpert = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_gene_xpert),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL,true);

@@ -37,6 +37,7 @@ import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
+import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
@@ -45,6 +46,7 @@ import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
+import java.security.interfaces.RSAKey;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -91,6 +93,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
     TitledRadioGroup adultFormulationOfContinuationRHE;
     TitledRadioGroup conclusionOfTreatment;
     TitledButton returnVisitDate;
+    MyTextView moInstructions;
     TitledEditText doctorNotes;
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -196,6 +199,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         adultFormulationOfContinuationRHE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_if_adult_formulation_continuation_rhe), getResources().getStringArray(R.array.ctb_2_to_4), null, App.HORIZONTAL, App.VERTICAL,true);
         conclusionOfTreatment = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_conclusion_of_treatment), getResources().getStringArray(R.array.ctb_improve_no_improvement), null, App.HORIZONTAL, App.VERTICAL,true);
         returnVisitDate = new TitledButton(context, null, getResources().getString(R.string.ctb_next_appointment_date), DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
+        moInstructions = new MyTextView(context,getResources().getString(R.string.ctb_treatment_initiation_mo_instruction));
         doctorNotes = new TitledEditText(context, null, getResources().getString(R.string.ctb_doctor_notes), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL,false);
 
         thirdDateCalendar.set(Calendar.YEAR, secondDateCalendar.get(Calendar.YEAR));
@@ -236,6 +240,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                         adultFormulationOfContinuationRHE,
                         conclusionOfTreatment,
                         returnVisitDate,
+                        moInstructions,
                         doctorNotes,
                 }};
         formDate.getButton().setOnClickListener(this);

@@ -161,6 +161,7 @@ public class ChildhoodTbReferral extends AbstractFormActivity implements RadioGr
             Object objLoc = locations[i][1];
             locationArray[i] = objLoc.toString();
         }
+
         locationArray[locations.length] = "Other";
 
         referralTransferLocation = new TitledSpinner(context, null, getResources().getString(R.string.ctb_location_referral_transfer), locationArray,null, App.VERTICAL, true);

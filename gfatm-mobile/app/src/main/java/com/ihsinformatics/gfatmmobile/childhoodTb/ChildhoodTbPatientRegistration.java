@@ -59,6 +59,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
 
     Context context;
     TitledButton formDate;
+    MyTextView nurseInstruction;
     MyEditText cnic1;
     MyEditText cnic2;
     MyEditText cnic3;
@@ -177,6 +178,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
+        nurseInstruction = new MyTextView(context,getResources().getString(R.string.ctb_patient_reg_nurse_instruction));
         cnicLayout = new LinearLayout(context);
         cnicLayout.setOrientation(LinearLayout.VERTICAL);
         MyTextView cnic = new MyTextView(context, getResources().getString(R.string.pet_cnic));

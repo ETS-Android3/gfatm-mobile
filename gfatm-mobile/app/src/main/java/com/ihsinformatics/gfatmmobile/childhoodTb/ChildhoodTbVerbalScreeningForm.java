@@ -32,6 +32,7 @@ import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.MyCheckBox;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
+import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
@@ -62,6 +63,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
     TitledEditText motherName;
     TitledEditText fatherName;
     TitledRadioGroup patientAttendant;
+    MyTextView tbSymptomsInstructions;
     TitledRadioGroup cough;
     TitledSpinner coughDuration;
     TitledRadioGroup fever;
@@ -74,8 +76,10 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
     TitledRadioGroup tbMedication;
     TitledRadioGroup contactTbHistoryTwoYears;
     TitledCheckBoxes closeContactType;
+    MyTextView verbalScreeningInstruction;
     TitledEditText otherContactType;
     TitledRadioGroup presumptiveTb;
+    MyTextView screenerInstruction;
 
     Snackbar snackbar;
     ScrollView scrollView;
@@ -204,6 +208,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
         motherName = new TitledEditText(context, null, getResources().getString(R.string.ctb_mother_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         fatherName = new TitledEditText(context, null, getResources().getString(R.string.ctb_father_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         patientAttendant = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_attendant), getResources().getStringArray(R.array.ctb_patient_attendant_list), null, App.HORIZONTAL, App.VERTICAL, true);
+        tbSymptomsInstructions = new MyTextView(context,getResources().getString(R.string.ctb_tb_symptoms_instructions));
         cough = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_cough), getResources().getStringArray(R.array.yes_no_unknown_refused_options), null, App.HORIZONTAL, App.VERTICAL, true);
         coughDuration = new TitledSpinner(context, null, getResources().getString(R.string.ctb_cough_duration), getResources().getStringArray(R.array.ctb_cough_duration_list), null, App.VERTICAL, true);
         fever = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_fever_more_than_2_weeks), getResources().getStringArray(R.array.yes_no_unknown_refused_options), null, App.HORIZONTAL, App.VERTICAL, true);
@@ -217,8 +222,9 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
         contactTbHistoryTwoYears = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_tb_history_2years), getResources().getStringArray(R.array.yes_no_unknown_refused_options), null, App.HORIZONTAL, App.VERTICAL, true);
         closeContactType = new TitledCheckBoxes(context, null, getResources().getString(R.string.ctb_close_contact_type), getResources().getStringArray(R.array.ctb_close_contact_type_list), null, App.VERTICAL, App.VERTICAL);
         otherContactType = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_contact), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        presumptiveTb = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_presumptive_tb), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true);
-
+        verbalScreeningInstruction = new MyTextView(context,getResources().getString(R.string.ctb_verbal_screening_instruction));
+        presumptiveTb = new TitledRadioGroup(context, "TB PRESUMPTIVE", getResources().getString(R.string.ctb_presumptive_tb), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true);
+        screenerInstruction = new MyTextView(context,getResources().getString(R.string.ctb_screener_instruction));
 
         views = new View[]{formDate.getButton(), screeningLocation.getRadioGroup(), otherScreeningLocation.getEditText(),hospital.getSpinner(), facility_section.getSpinner(), facility_section_other.getEditText(), opd_ward_section.getSpinner(), motherName.getEditText(), fatherName.getEditText(), patientAttendant.getRadioGroup(),
                 cough.getRadioGroup(), coughDuration.getSpinner(), fever.getRadioGroup(), nightSweats.getRadioGroup(), weightLoss.getRadioGroup(), appeptite.getRadioGroup(),
@@ -228,8 +234,8 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formDate, screeningLocation, otherScreeningLocation, hospital, facility_section, facility_section_other, opd_ward_section, motherName, fatherName,
-                        patientAttendant, cough, coughDuration, fever, nightSweats, weightLoss, appeptite, lymphnodeSwelling, jointSwellingTwoWeeks, tbHistory,
-                        tbMedication, contactTbHistoryTwoYears, closeContactType, otherContactType, presumptiveTb}};
+                        patientAttendant, tbSymptomsInstructions,cough, coughDuration, fever, nightSweats, weightLoss, appeptite, lymphnodeSwelling, jointSwellingTwoWeeks, tbHistory,
+                        tbMedication, contactTbHistoryTwoYears, closeContactType, otherContactType, verbalScreeningInstruction,presumptiveTb,screenerInstruction}};
 
         formDate.getButton().setOnClickListener(this);
         screeningLocation.getRadioGroup().setOnCheckedChangeListener(this);
@@ -1422,7 +1428,6 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
         else if (group == patientAttendant.getRadioGroup()) {
             patientAttendant.getQuestionView().setError(null);
         }
-
     }
 
     class MyAdapter extends PagerAdapter {
