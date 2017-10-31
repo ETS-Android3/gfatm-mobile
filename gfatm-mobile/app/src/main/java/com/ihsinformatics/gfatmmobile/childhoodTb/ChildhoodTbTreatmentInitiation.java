@@ -940,7 +940,44 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             }
         }
 
+        if(typeOfDiagnosis.getVisibility() == View.VISIBLE) {
+            Boolean flag = false;
+            for (CheckBox cb : typeOfDiagnosis.getCheckedBoxes()) {
+                if (cb.isChecked()) {
+                    flag = true;
+                    break;
+                }
+            }
+            if(!flag){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                typeOfDiagnosis.getQuestionView().setError(getString(R.string.empty_field));
+                typeOfDiagnosis.getQuestionView().requestFocus();
+                error = true;
+            }
+        }
 
+
+        if(tbType.getVisibility() == View.VISIBLE) {
+            Boolean flag = false;
+            for (CheckBox cb : tbType.getCheckedBoxes()) {
+                if (cb.isChecked()) {
+                    flag = true;
+                    break;
+                }
+            }
+            if(!flag){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                tbType.getQuestionView().setError(getString(R.string.empty_field));
+                tbType.getQuestionView().requestFocus();
+                error = true;
+            }
+        }
         if (tbRegisterationNumber.getVisibility() == View.VISIBLE) {
            if(!App.get(tbRegisterationNumber).isEmpty() && App.get(tbRegisterationNumber).trim().length() <= 0){
                 if (App.isLanguageRTL())
@@ -2205,6 +2242,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                     radiologicalEvidence.setVisibility(View.GONE);
                 }
             }
+            typeOfDiagnosis.getQuestionView().setError(null);
         }
 
         for (CheckBox cb : tbType.getCheckedBoxes()) {
@@ -2221,6 +2259,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                     extraPulmonarySiteOther.setVisibility(View.GONE);
                 }
             }
+            tbType.getQuestionView().setError(null);
         }
 
     }
