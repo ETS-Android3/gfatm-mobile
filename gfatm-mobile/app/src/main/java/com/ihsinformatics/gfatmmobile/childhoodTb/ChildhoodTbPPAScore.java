@@ -22,6 +22,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -33,6 +34,7 @@ import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
+import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
@@ -53,7 +55,30 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
 
     Snackbar snackbar;
     ScrollView scrollView;
+
+    TitledRadioGroup ageScore;
+    TitledRadioGroup closeContactStatus;
+    TitledRadioGroup closeContactScore;
+    TitledRadioGroup pemSam;
+    TitledRadioGroup pemSamScore;
+    TitledRadioGroup historyMeaslesCough;
+    TitledRadioGroup historyMeaslesCoughScore;
+    TitledRadioGroup hivStatus;
+    TitledRadioGroup hivScore;
+    TitledRadioGroup immunoCompromisedStatus;
+    TitledRadioGroup immunoCompromisedScore;
+    TitledRadioGroup clinicalManifestationStatus;
+    TitledRadioGroup clinicalManifestationScore;
+    TitledRadioGroup radioDiagnostiImagingStatus;
+    TitledRadioGroup radioDiagnosticImagingScore;
+    TitledRadioGroup tuberculinSkinPpdTestResult;
+    TitledRadioGroup tuberculinSkinPpdTestResultScore;
+    TitledRadioGroup gxpTestResult;
+    TitledRadioGroup gxpTestResultScore;
     TitledEditText ppaScore;
+    TitledRadioGroup ppaScoreInterpretation;
+
+
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -128,13 +153,103 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
+        ageScore = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_age_score),getResources().getStringArray(R.array.ctb_0_to_1_list),null,App.HORIZONTAL,App.VERTICAL,true);
+        closeContactStatus = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_close_contact_status),getResources().getStringArray(R.array.ctb_close_contact_status_list),null,App.VERTICAL,App.VERTICAL,true);
+        closeContactScore = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_close_contact_score),getResources().getStringArray(R.array.ctb_0_to_3_list),null,App.HORIZONTAL,App.VERTICAL,true);
+        pemSam = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_pem_sam),getResources().getStringArray(R.array.ctb_pem_sam_list),null,App.VERTICAL,App.VERTICAL,true);
+        pemSamScore = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_pem_sam_score),getResources().getStringArray(R.array.ctb_0_to_2_list),null,App.HORIZONTAL,App.VERTICAL,true);
+        historyMeaslesCough = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_history_of_measles),getResources().getStringArray(R.array.ctb_history_measles_whooping_cough_list),null,App.HORIZONTAL,App.VERTICAL,true);
+        historyMeaslesCoughScore = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_measles_cough_score),getResources().getStringArray(R.array.ctb_0_to_2_list),null,App.HORIZONTAL,App.VERTICAL,true);
+        hivStatus = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_hiv_status),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL,true);
+        hivScore = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_hiv_score),getResources().getStringArray(R.array.ctb_hiv_score_list),null,App.HORIZONTAL,App.VERTICAL,true);
+        immunoCompromisedStatus = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_immuno_compromised_status),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL,true);
+        immunoCompromisedScore = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_immuno_compromised_score),getResources().getStringArray(R.array.ctb_0_to_1_list),null,App.HORIZONTAL,App.VERTICAL,true);
+        clinicalManifestationStatus = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_clinical_manifestation_status),getResources().getStringArray(R.array.ctb_clinical_manifestation_status_list),null,App.VERTICAL,App.VERTICAL,true);
+        clinicalManifestationScore = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_clinical_manifestation_score),getResources().getStringArray(R.array.ctb_clinical_manifestation_score_list),null,App.HORIZONTAL,App.VERTICAL,true);
+        radioDiagnostiImagingStatus = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_radio_diagnostic_imaging_status),getResources().getStringArray(R.array.ctb_radio_diagnostic_image_status),null,App.VERTICAL,App.VERTICAL,true);
+        radioDiagnosticImagingScore = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_radio_diagnostic_score),getResources().getStringArray(R.array.ctb_0_to_3_list),null,App.HORIZONTAL,App.VERTICAL,true);
+        tuberculinSkinPpdTestResult = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_tuberculin_skin_ppd_result),getResources().getStringArray(R.array.ctb_tuberculin_skin_test_list),null,App.HORIZONTAL,App.VERTICAL,true);
+        tuberculinSkinPpdTestResultScore = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_tuberculin_skin_ppd_result_score),getResources().getStringArray(R.array.ctb_tuberculin_ppd_score_list),null,App.HORIZONTAL,App.VERTICAL,true);
+
+        gxpTestResult = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_gxp_test_result),getResources().getStringArray(R.array.ctb_gxp_test_result_list),null,App.VERTICAL,App.VERTICAL,true);
+        gxpTestResultScore= new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_gxp_test_result_score),getResources().getStringArray(R.array.ctb_gxp_test_score),null,App.HORIZONTAL,App.VERTICAL,true);
+
+        ppaScore = new TitledEditText(context,null,getResources().getString(R.string.ctb_ppa_score),"","",2,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,true);
+        ppaScoreInterpretation = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_ppa_score_interpretation),getResources().getStringArray(R.array.ctb_gxp_test_score),null,App.HORIZONTAL,App.VERTICAL,true);
+
+
+
+
+
+
         ppaScore = new TitledEditText(context, null, getResources().getString(R.string.ctb_ppa_score), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
-        views = new View[]{formDate.getButton(),ppaScore.getEditText()};
+        views = new View[]{formDate.getButton(),ppaScore.getEditText(),
+                ageScore.getRadioGroup(),
+                closeContactStatus.getRadioGroup(),
+                closeContactScore.getRadioGroup(),
+                pemSam.getRadioGroup(),
+                pemSamScore.getRadioGroup(),
+                historyMeaslesCough.getRadioGroup(),
+                historyMeaslesCoughScore.getRadioGroup(),
+                hivStatus.getRadioGroup(),
+                hivScore.getRadioGroup(),
+                immunoCompromisedStatus.getRadioGroup(),
+                immunoCompromisedScore.getRadioGroup(),
+                clinicalManifestationStatus.getRadioGroup(),
+                clinicalManifestationScore.getRadioGroup(),
+                radioDiagnostiImagingStatus.getRadioGroup(),
+                radioDiagnosticImagingScore.getRadioGroup(),
+                tuberculinSkinPpdTestResult.getRadioGroup(),
+                tuberculinSkinPpdTestResultScore.getRadioGroup(),
+                gxpTestResult.getRadioGroup(),
+                gxpTestResultScore.getRadioGroup(),
+                ppaScoreInterpretation.getRadioGroup()
+        };
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, ppaScore}};
+                {{formDate,  ageScore,
+                        closeContactStatus,
+                        closeContactScore,
+                        pemSam,
+                        pemSamScore,
+                        historyMeaslesCough,
+                        historyMeaslesCoughScore,
+                        hivStatus,
+                        hivScore,
+                        immunoCompromisedStatus,
+                        immunoCompromisedScore,
+                        clinicalManifestationStatus,
+                        clinicalManifestationScore,
+                        radioDiagnostiImagingStatus,
+                        radioDiagnosticImagingScore,
+                        tuberculinSkinPpdTestResult,
+                        tuberculinSkinPpdTestResultScore,
+                        gxpTestResult,
+                        gxpTestResultScore,
+                        ppaScore,
+                        ppaScoreInterpretation}};
 
         formDate.getButton().setOnClickListener(this);
+        ageScore.getRadioGroup().setOnCheckedChangeListener(this);
+        closeContactStatus.getRadioGroup().setOnCheckedChangeListener(this);
+        closeContactScore.getRadioGroup().setOnCheckedChangeListener(this);
+        pemSam.getRadioGroup().setOnCheckedChangeListener(this);
+        pemSamScore.getRadioGroup().setOnCheckedChangeListener(this);
+        historyMeaslesCough.getRadioGroup().setOnCheckedChangeListener(this);
+        historyMeaslesCoughScore.getRadioGroup().setOnCheckedChangeListener(this);
+        hivStatus.getRadioGroup().setOnCheckedChangeListener(this);
+        hivScore.getRadioGroup().setOnCheckedChangeListener(this);
+        immunoCompromisedStatus.getRadioGroup().setOnCheckedChangeListener(this);
+        immunoCompromisedScore.getRadioGroup().setOnCheckedChangeListener(this);
+        clinicalManifestationStatus.getRadioGroup().setOnCheckedChangeListener(this);
+        clinicalManifestationScore.getRadioGroup().setOnCheckedChangeListener(this);
+        radioDiagnostiImagingStatus.getRadioGroup().setOnCheckedChangeListener(this);
+        radioDiagnosticImagingScore.getRadioGroup().setOnCheckedChangeListener(this);
+        tuberculinSkinPpdTestResult.getRadioGroup().setOnCheckedChangeListener(this);
+        tuberculinSkinPpdTestResultScore.getRadioGroup().setOnCheckedChangeListener(this);
+        gxpTestResult.getRadioGroup().setOnCheckedChangeListener(this);
+        gxpTestResultScore.getRadioGroup().setOnCheckedChangeListener(this);
+        ppaScoreInterpretation.getRadioGroup().setOnCheckedChangeListener(this);
 
         ppaScore.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
@@ -223,6 +338,184 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
                 error = true;
             }
         }
+        if(closeContactStatus.getVisibility()==View.VISIBLE && App.get(closeContactStatus).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            closeContactStatus.getQuestionView().setError(getString(R.string.empty_field));
+            closeContactStatus.getRadioGroup().requestFocus();
+            error = true;
+        }
+        if(closeContactScore.getVisibility()==View.VISIBLE && App.get(closeContactScore).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            closeContactScore.getQuestionView().setError(getString(R.string.empty_field));
+            closeContactScore.getRadioGroup().requestFocus();
+            error = true;
+        }
+        if(pemSam.getVisibility()==View.VISIBLE && App.get(pemSam).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            pemSam.getQuestionView().setError(getString(R.string.empty_field));
+            pemSam.getRadioGroup().requestFocus();
+            error = true;
+        }
+        if(pemSamScore.getVisibility()==View.VISIBLE && App.get(pemSamScore).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            pemSamScore.getQuestionView().setError(getString(R.string.empty_field));
+            pemSamScore.getRadioGroup().requestFocus();
+            error = true;
+        }
+        if(historyMeaslesCough.getVisibility()==View.VISIBLE && App.get(historyMeaslesCough).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            historyMeaslesCough.getQuestionView().setError(getString(R.string.empty_field));
+            historyMeaslesCough.getRadioGroup().requestFocus();
+            error = true;
+        }
+        if(historyMeaslesCoughScore.getVisibility()==View.VISIBLE && App.get(historyMeaslesCoughScore).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            historyMeaslesCoughScore.getQuestionView().setError(getString(R.string.empty_field));
+            historyMeaslesCoughScore.getRadioGroup().requestFocus();
+            error = true;
+        }
+
+        if(hivStatus.getVisibility()==View.VISIBLE && App.get(hivStatus).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            hivStatus.getQuestionView().setError(getString(R.string.empty_field));
+            hivStatus.getRadioGroup().requestFocus();
+            error = true;
+        }
+
+        if(hivScore.getVisibility()==View.VISIBLE && App.get(hivScore).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            hivScore.getQuestionView().setError(getString(R.string.empty_field));
+            hivScore.getRadioGroup().requestFocus();
+            error = true;
+        }
+
+        if(immunoCompromisedStatus.getVisibility()==View.VISIBLE && App.get(immunoCompromisedStatus).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            immunoCompromisedStatus.getQuestionView().setError(getString(R.string.empty_field));
+            immunoCompromisedStatus.getRadioGroup().requestFocus();
+            error = true;
+        }
+
+        if(immunoCompromisedScore.getVisibility()==View.VISIBLE && App.get(immunoCompromisedScore).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            immunoCompromisedScore.getQuestionView().setError(getString(R.string.empty_field));
+            immunoCompromisedScore.getRadioGroup().requestFocus();
+            error = true;
+        }
+
+        if(clinicalManifestationStatus.getVisibility()==View.VISIBLE && App.get(clinicalManifestationStatus).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            clinicalManifestationStatus.getQuestionView().setError(getString(R.string.empty_field));
+            clinicalManifestationStatus.getRadioGroup().requestFocus();
+            error = true;
+        }
+
+        if(clinicalManifestationScore.getVisibility()==View.VISIBLE && App.get(clinicalManifestationScore).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            clinicalManifestationScore.getQuestionView().setError(getString(R.string.empty_field));
+            clinicalManifestationScore.getRadioGroup().requestFocus();
+            error = true;
+        }
+
+
+        if(radioDiagnostiImagingStatus.getVisibility()==View.VISIBLE && App.get(radioDiagnostiImagingStatus).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            radioDiagnostiImagingStatus.getQuestionView().setError(getString(R.string.empty_field));
+            radioDiagnostiImagingStatus.getRadioGroup().requestFocus();
+            error = true;
+        }
+
+        if(radioDiagnosticImagingScore.getVisibility()==View.VISIBLE && App.get(radioDiagnosticImagingScore).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            radioDiagnosticImagingScore.getQuestionView().setError(getString(R.string.empty_field));
+            radioDiagnosticImagingScore.getRadioGroup().requestFocus();
+            error = true;
+        }
+
+
+        if(tuberculinSkinPpdTestResult.getVisibility()==View.VISIBLE && App.get(tuberculinSkinPpdTestResult).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            tuberculinSkinPpdTestResult.getQuestionView().setError(getString(R.string.empty_field));
+            tuberculinSkinPpdTestResult.getRadioGroup().requestFocus();
+            error = true;
+        }
+
+        if(tuberculinSkinPpdTestResultScore.getVisibility()==View.VISIBLE && App.get(tuberculinSkinPpdTestResultScore).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            tuberculinSkinPpdTestResultScore.getQuestionView().setError(getString(R.string.empty_field));
+            tuberculinSkinPpdTestResultScore.getRadioGroup().requestFocus();
+            error = true;
+        }
+
+
+        if(gxpTestResult.getVisibility()==View.VISIBLE && App.get(gxpTestResult).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            gxpTestResult.getQuestionView().setError(getString(R.string.empty_field));
+            gxpTestResult.getRadioGroup().requestFocus();
+            error = true;
+        }
+
+        if(gxpTestResultScore.getVisibility()==View.VISIBLE && App.get(gxpTestResultScore).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            gxpTestResultScore.getQuestionView().setError(getString(R.string.empty_field));
+            gxpTestResultScore.getRadioGroup().requestFocus();
+            error = true;
+        }
+
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
@@ -461,6 +754,16 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
             snackbar.dismiss();
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
+        if(App.getPatient().getPerson().getAge()<5){
+            ageScore.getRadioGroup().getButtons().get(1).setChecked(true);
+        }else{
+            ageScore.getRadioGroup().getButtons().get(0).setChecked(true);
+        }
+
+        for (RadioButton rb : ageScore.getRadioGroup().getButtons()) {
+            rb.setClickable(false);
+        }
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");
@@ -483,7 +786,46 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
-
+        if (group == closeContactStatus.getRadioGroup()) {
+            closeContactStatus.getQuestionView().setError(null);
+        } else if (group == closeContactScore.getRadioGroup()) {
+            closeContactScore.getQuestionView().setError(null);
+        } else if (group == pemSam.getRadioGroup()) {
+            pemSam.getQuestionView().setError(null);
+        }  else if (group == pemSamScore.getRadioGroup()) {
+            pemSamScore.getQuestionView().setError(null);
+        }  else if (group == historyMeaslesCough.getRadioGroup()) {
+            historyMeaslesCough.getQuestionView().setError(null);
+        } else  if (group == historyMeaslesCoughScore.getRadioGroup()) {
+            historyMeaslesCoughScore.getQuestionView().setError(null);
+        }  else if (group == hivStatus.getRadioGroup()) {
+            hivStatus.getQuestionView().setError(null);
+        }
+        else if (group == immunoCompromisedStatus.getRadioGroup()) {
+            immunoCompromisedStatus.getQuestionView().setError(null);
+        }  else if (group == immunoCompromisedScore.getRadioGroup()) {
+            immunoCompromisedScore.getQuestionView().setError(null);
+        } else  if (group == clinicalManifestationStatus.getRadioGroup()) {
+            clinicalManifestationStatus.getQuestionView().setError(null);
+        }
+        else if (group == clinicalManifestationScore.getRadioGroup()) {
+            clinicalManifestationScore.getQuestionView().setError(null);
+        }  else  if (group == radioDiagnostiImagingStatus.getRadioGroup()) {
+            radioDiagnostiImagingStatus.getQuestionView().setError(null);
+        }  else if (group == radioDiagnosticImagingScore.getRadioGroup()) {
+            radioDiagnosticImagingScore.getQuestionView().setError(null);
+        } else  if (group == tuberculinSkinPpdTestResult.getRadioGroup()) {
+            tuberculinSkinPpdTestResult.getQuestionView().setError(null);
+        } else  if (group == tuberculinSkinPpdTestResultScore.getRadioGroup()) {
+            tuberculinSkinPpdTestResultScore.getQuestionView().setError(null);
+        }
+        else  if (group == gxpTestResult.getRadioGroup()) {
+            gxpTestResult.getQuestionView().setError(null);
+        }  else if (group == gxpTestResultScore.getRadioGroup()) {
+            gxpTestResultScore.getQuestionView().setError(null);
+        } else  if (group == ppaScoreInterpretation.getRadioGroup()) {
+            ppaScoreInterpretation.getQuestionView().setError(null);
+        }
     }
 
     class MyAdapter extends PagerAdapter {
