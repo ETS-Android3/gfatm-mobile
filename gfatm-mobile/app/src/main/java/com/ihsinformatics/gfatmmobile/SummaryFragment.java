@@ -11,6 +11,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.LayoutInflater;
@@ -46,6 +47,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
     TextView backButton;
     TextView heading;
     LinearLayout content;
+    LinearLayout buttonLayout;
 
     ImageView refersh;
 
@@ -71,6 +73,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         backButton = (TextView) mainContent.findViewById(R.id.backButton);
         heading = (TextView) mainContent.findViewById(R.id.heading);
         content = (LinearLayout) mainContent.findViewById(R.id.content);
+        buttonLayout = (LinearLayout) mainContent.findViewById(R.id.buttonsLayout);
 
         refersh = (ImageView) mainContent.findViewById(R.id.refresh);
         refersh.setOnTouchListener(this);
@@ -86,7 +89,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
 
     public void updateSummaryFragment(){
 
-        interventionStaffView.setVisibility(View.GONE);
+        buttonLayout.removeAllViews();
         interventionPatientView.setVisibility(View.GONE);
         generalPatientView.setVisibility(View.VISIBLE);
         interventionStaffView.setVisibility(View.VISIBLE);
@@ -94,7 +97,6 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         if(App.getPatient() == null) {
             generalPatientView.setVisibility(View.GONE);
             interventionPatientView.setVisibility(View.GONE);
-
             if(App.getProgram().equals(getResources().getString(R.string.fast))) {
                 interventionStaffView.setText(getString(R.string.fast_staff_view));
                 interventionStaffView.setVisibility(View.VISIBLE);
@@ -119,11 +121,11 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
             } else if(App.getProgram().equals(getResources().getString(R.string.pet))){
                 interventionPatientView.setText(getString(R.string.pet_patient_view));
                 interventionStaffView.setText(getString(R.string.pet_staff_view));
-                interventionStaffView.setVisibility(View.VISIBLE);
+                interventionPatientView.setVisibility(View.VISIBLE);
             } else if(App.getProgram().equals(getResources().getString(R.string.childhood_tb))){
                 interventionPatientView.setText(getString(R.string.childhood_tb_patient_view));
                 interventionStaffView.setText(getString(R.string.childhood_tb_staff_view));
-                interventionPatientView.setVisibility(View.VISIBLE);
+                //interventionPatientView.setVisibility(View.VISIBLE);
             } else if(App.getProgram().equals(getResources().getString(R.string.comorbidities))){
                 interventionPatientView.setText(getString(R.string.comorbidities_patient_view));
                 interventionStaffView.setText(getString(R.string.comorbidities_patient_view));
@@ -1519,5 +1521,26 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
             }
         }
         return true;
+    }
+
+    private Button createButton(String name, int color){
+
+        Button button = new Button(this.context);
+        button.setText(name);
+        button.setBackgroundResource(R.drawable.summary_button);
+        Drawable top = getResources().getDrawable(R.drawable.ic_summary_view);
+        top.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+        button.setCompoundDrawablesWithIntrinsicBounds(null, top , null, null);
+        button.setCompoundDrawablePadding((int)getResources().getDimension(R.dimen.medium));
+        float padding = getResources().getDimension(R.dimen.large);
+        button.setPadding((int)padding,(int)padding,(int)padding,(int)padding);
+        button.setTextColor(color);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.FILL_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        params.setMargins(0, 0, 0, (int)getResources().getDimension(R.dimen.medium));
+        button.setLayoutParams(params);
+        return button;
     }
 }
