@@ -90,6 +90,7 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
     TitledEditText otherRelation;
 
     Boolean refillFlag = false;
+    ScrollView scrollView;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -120,7 +121,7 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
                     View v = viewGroups[i][j];
                     layout.addView(v);
                 }
-                ScrollView scrollView = new ScrollView(context);
+                scrollView = new ScrollView(context);
                 scrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
                 scrollView.addView(layout);
                 groups.add(scrollView);
@@ -134,7 +135,7 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
                     View v = viewGroups[i][j];
                     layout.addView(v);
                 }
-                ScrollView scrollView = new ScrollView(context);
+                scrollView = new ScrollView(context);
                 scrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
                 scrollView.addView(layout);
                 groups.add(scrollView);
@@ -219,7 +220,8 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
 
         views = new View[]{formDate.getButton(), incentiveDate.getButton(), indexPatientId.getEditText(), scanQRCode, indexExternalPatientId.getEditText(), cnic1, cnic2, cnic3, cnicOwner.getSpinner(), otherCnicOwner.getEditText(), incentiveOccasion.getRadioGroup(), incentiveFor.getRadioGroup(),
                 nameTreatmentSupporter.getEditText(), phone1a.getEditText(), phone1b.getEditText(), typeTreatmentSupporter.getRadioGroup(), relationshipTreatmentSuppoter.getSpinner(), other.getEditText(), petRegimen.getRadioGroup(), incentiveAmount.getEditText(),
-                followupMonth.getEditText(), incentiveDisbursalLocation.getRadioGroup(), recieverName.getEditText(), recieverRelationWithContact.getSpinner(), otherRelation.getEditText(), intervention.getRadioGroup()
+                followupMonth.getEditText(), incentiveDisbursalLocation.getRadioGroup(), recieverName.getEditText(), recieverRelationWithContact.getSpinner(), otherRelation.getEditText(), intervention.getRadioGroup(),
+                intervention
         };
 
         viewGroups = new View[][]{{formDate, intervention, indexPatientId, scanQRCode, indexExternalPatientId, cnicLayout, cnicOwner, otherCnicOwner, incentiveOccasion, incentiveFor,
@@ -360,6 +362,7 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
     @Override
     public boolean validate() {
 
+        View view = null;
         Boolean error = false;
 
         if (App.get(otherRelation).isEmpty() && otherRelation.getVisibility() == View.VISIBLE) {
@@ -367,6 +370,9 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
             otherRelation.getEditText().requestFocus();
             error = true;
             gotoLastPage();
+        } else{
+            otherRelation.getEditText().setError(null);
+            otherRelation.getEditText().clearFocus();
         }
 
         if (App.get(recieverName).isEmpty()) {
@@ -374,6 +380,9 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
             recieverName.getEditText().requestFocus();
             error = true;
             gotoLastPage();
+        }else{
+            recieverName.getEditText().setError(null);
+            recieverName.getEditText().clearFocus();
         }
 
         if (followupMonth.getVisibility() == View.VISIBLE && App.get(followupMonth).isEmpty()) {
@@ -381,6 +390,9 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
             followupMonth.getEditText().requestFocus();
             error = true;
             gotoLastPage();
+        }else{
+            followupMonth.getEditText().setError(null);
+            followupMonth.getEditText().clearFocus();
         }
 
         if (App.get(nameTreatmentSupporter).isEmpty() && nameTreatmentSupporter.getVisibility() == View.VISIBLE) {
@@ -388,12 +400,15 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
             nameTreatmentSupporter.getEditText().requestFocus();
             error = true;
             gotoLastPage();
+        }else{
+            nameTreatmentSupporter.getEditText().setError(null);
+            nameTreatmentSupporter.getEditText().clearFocus();
         }
 
         if (contactNumberTreatmentSupporter.getVisibility() == View.VISIBLE) {
             if (App.get(phone1a).isEmpty()) {
-                phone1a.getEditText().setError(getResources().getString(R.string.mandatory_field));
-                phone1a.getEditText().requestFocus();
+                phone1b.getEditText().setError(getResources().getString(R.string.mandatory_field));
+                phone1b.getEditText().requestFocus();
                 error = true;
                 gotoLastPage();
             } else if (App.get(phone1b).isEmpty()) {
@@ -406,6 +421,9 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
                 phone1b.getEditText().requestFocus();
                 error = true;
                 gotoLastPage();
+            }else{
+                phone1b.getEditText().setError(null);
+                phone1b.getEditText().clearFocus();
             }
         }
 
@@ -414,6 +432,9 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
             other.getEditText().requestFocus();
             error = true;
             gotoFirstPage();
+        } else{
+            other.getEditText().setError(null);
+            other.getEditText().clearFocus();
         }
 
 
@@ -422,43 +443,64 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
             otherCnicOwner.getEditText().requestFocus();
             error = true;
             gotoFirstPage();
+        }else{
+            otherCnicOwner.getEditText().setError(null);
+            otherCnicOwner.getEditText().clearFocus();
         }
 
         if (App.get(cnic1).isEmpty()) {
-            cnic1.setError(getResources().getString(R.string.mandatory_field));
-            cnic1.requestFocus();
+            cnic3.setError(getResources().getString(R.string.mandatory_field));
+            cnic3.requestFocus();
             error = true;
             gotoFirstPage();
+        }else{
+            cnic3.setError(null);
+            cnic3.clearFocus();
         }
         if (App.get(cnic2).isEmpty()) {
-            cnic2.setError(getResources().getString(R.string.mandatory_field));
-            cnic2.requestFocus();
+            cnic3.setError(getResources().getString(R.string.mandatory_field));
+            cnic3.requestFocus();
             error = true;
             gotoFirstPage();
+        }else{
+            cnic3.setError(null);
+            cnic3.clearFocus();
         }
         if (App.get(cnic3).isEmpty()) {
             cnic3.setError(getResources().getString(R.string.mandatory_field));
             cnic3.requestFocus();
             error = true;
             gotoFirstPage();
+        }else{
+            cnic3.setError(null);
+            cnic3.clearFocus();
         }
         if (App.get(cnic1).length() != 5) {
-            cnic1.setError(getResources().getString(R.string.invalid_value));
-            cnic1.requestFocus();
+            cnic3.setError(getResources().getString(R.string.invalid_value));
+            cnic3.requestFocus();
             error = true;
             gotoFirstPage();
+        }else{
+            cnic3.setError(null);
+            cnic3.clearFocus();
         }
         if (App.get(cnic2).length() != 7) {
-            cnic2.setError(getResources().getString(R.string.invalid_value));
-            cnic2.requestFocus();
+            cnic3.setError(getResources().getString(R.string.invalid_value));
+            cnic3.requestFocus();
             error = true;
             gotoFirstPage();
+        }else{
+            cnic3.setError(null);
+            cnic3.clearFocus();
         }
         if (App.get(cnic3).length() != 1) {
             cnic3.setError(getResources().getString(R.string.invalid_value));
             cnic3.requestFocus();
             error = true;
             gotoFirstPage();
+        }else{
+            cnic3.setError(null);
+            cnic3.clearFocus();
         }
 
         if (App.get(indexPatientId).isEmpty()) {
@@ -466,6 +508,20 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
             indexPatientId.getEditText().requestFocus();
             error = true;
             gotoFirstPage();
+        }else{
+            indexPatientId.getEditText().setError(null);
+            indexPatientId.getEditText().clearFocus();
+        }
+
+        if (intervention.getVisibility() == View.VISIBLE && App.get(intervention).isEmpty()) {
+            intervention.getQuestionView().setError(getString(R.string.empty_field));
+            intervention.getQuestionView().requestFocus();
+            gotoFirstPage();
+            view = intervention;
+            error = true;
+        } else{
+            intervention.getQuestionView().setError(null);
+            intervention.getQuestionView().clearFocus();
         }
 
         if (error) {
@@ -476,9 +532,26 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
             // DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_error));
+            final View finalView = view;
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
+                            scrollView.post(new Runnable() {
+                                public void run() {
+                                    if (finalView != null) {
+                                        scrollView.scrollTo(0, finalView.getTop());
+                                        otherRelation.getEditText().clearFocus();
+                                        recieverName.getEditText().clearFocus();
+                                        followupMonth.getEditText().clearFocus();
+                                        nameTreatmentSupporter.getEditText().clearFocus();
+                                        phone1b.clearFocus();
+                                        other.getEditText().clearFocus();
+                                        otherCnicOwner.getEditText().clearFocus();
+                                        cnic3.clearFocus();
+                                        indexPatientId.getEditText().clearFocus();
+                                    }
+                                }
+                            });
                             try {
                                 InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
@@ -746,6 +819,7 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
 
 
         Bundle bundle = this.getArguments();
+        Boolean autoFill = false;
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");
             if (openFlag) {
@@ -756,13 +830,14 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
                 String id = bundle.getString("formId");
                 int formId = Integer.valueOf(id);
 
+                autoFill = true;
                 refill(formId);
 
             } else bundle.putBoolean("save", false);
 
         }
 
-        if (App.get(petRegimen).equals("")) {
+        if(!autoFill) {
             final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
                 @Override
                 protected HashMap<String, String> doInBackground(String... params) {
@@ -779,6 +854,7 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
 
                     HashMap<String, String> result = new HashMap<String, String>();
 
+                    String intervention = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "INTERVENTION");
                     String date1 = "";
                     String date2 = "";
                     String date3 = "";
@@ -882,6 +958,10 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
                     if (treatmentSupporterRelationshipOther == null)
                         treatmentSupporterRelationshipOther = "";
                     result.put("OTHER FAMILY MEMBER", treatmentSupporterRelationshipOther);
+
+                    if(intervention == null)
+                        intervention = "";
+                    result.put("INTERVENTION", intervention);
 
                     return result;
 
@@ -993,6 +1073,16 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
                     }
                     if (!result.get("OTHER FAMILY MEMBER").equals("")) {
                         otherRelation.getEditText().setText(result.get("OTHER FAMILY MEMBER"));
+                    }
+
+                    for (RadioButton rb : intervention.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.pet)) && result.get("INTERVENTION").equals("PET")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.sci)) && result.get("INTERVENTION").equals("SCI")) {
+                            rb.setChecked(true);
+                            break;
+                        }
                     }
                 }
             };

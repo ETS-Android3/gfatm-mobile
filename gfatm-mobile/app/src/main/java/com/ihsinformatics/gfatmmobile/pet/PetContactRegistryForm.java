@@ -53,6 +53,7 @@ public class PetContactRegistryForm extends AbstractFormActivity {
     TitledRadioGroup familyConsent;
 
     Boolean refillFlag = false;
+    ScrollView scrollView;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -83,7 +84,7 @@ public class PetContactRegistryForm extends AbstractFormActivity {
                     View v = viewGroups[i][j];
                     layout.addView(v);
                 }
-                ScrollView scrollView = new ScrollView(context);
+                scrollView = new ScrollView(context);
                 scrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
                 scrollView.setScrollbarFadingEnabled(false);
                 scrollView.addView(layout);
@@ -98,7 +99,7 @@ public class PetContactRegistryForm extends AbstractFormActivity {
                     View v = viewGroups[i][j];
                     layout.addView(v);
                 }
-                ScrollView scrollView = new ScrollView(context);
+                scrollView = new ScrollView(context);
                 scrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
                 scrollView.setScrollbarFadingEnabled(false);
                 scrollView.addView(layout);
@@ -122,7 +123,8 @@ public class PetContactRegistryForm extends AbstractFormActivity {
         totalChildrenContacts = new TitledEditText(context, null, getResources().getString(R.string.pet_total_childern_contacts), "", getResources().getString(R.string.pet_total_childern_contacts_hint), 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         familyConsent = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_family_consent), getResources().getStringArray(R.array.yes_no_options), getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
 
-        views = new View[]{formDate.getButton(), totalContacts.getEditText(), totalAdultContacts.getEditText(), totalChildrenContacts.getEditText(), familyConsent.getRadioGroup(), intervention.getRadioGroup()};
+        views = new View[]{formDate.getButton(), totalContacts.getEditText(), totalAdultContacts.getEditText(), totalChildrenContacts.getEditText(), familyConsent.getRadioGroup(), intervention.getRadioGroup(),
+                            intervention};
 
         viewGroups = new View[][]{{formDate, intervention, totalContacts, totalAdultContacts, totalChildrenContacts, familyConsent}};
 
@@ -178,6 +180,7 @@ public class PetContactRegistryForm extends AbstractFormActivity {
     @Override
     public boolean validate() {
 
+        View view = null;
         Boolean error = false;
 
         if (App.get(totalChildrenContacts).isEmpty()) {
@@ -191,6 +194,10 @@ public class PetContactRegistryForm extends AbstractFormActivity {
                 totalChildrenContacts.getEditText().requestFocus();
                 error = true;
             }
+            else{
+                totalChildrenContacts.getEditText().setError(null);
+                totalChildrenContacts.getEditText().clearFocus();
+            }
         }
 
         if (App.get(totalAdultContacts).isEmpty()) {
@@ -203,6 +210,9 @@ public class PetContactRegistryForm extends AbstractFormActivity {
                 totalAdultContacts.getEditText().setError(getString(R.string.value_out_of_range));
                 totalAdultContacts.getEditText().requestFocus();
                 error = true;
+            }else{
+                totalAdultContacts.getEditText().setError(null);
+                totalAdultContacts.getEditText().clearFocus();
             }
         }
 
@@ -216,6 +226,9 @@ public class PetContactRegistryForm extends AbstractFormActivity {
                 totalContacts.getEditText().setError(getString(R.string.value_out_of_range));
                 totalContacts.getEditText().requestFocus();
                 error = true;
+            }else{
+                totalContacts.getEditText().setError(null);
+                totalContacts.getEditText().clearFocus();
             }
         }
 
@@ -228,21 +241,49 @@ public class PetContactRegistryForm extends AbstractFormActivity {
                 totalContacts.getEditText().setError(getString(R.string.pet_count_mismatch));
                 totalContacts.getEditText().requestFocus();
                 error = true;
+            }else{
+                totalContacts.getEditText().setError(null);
+                totalContacts.getEditText().clearFocus();
             }
+        }
+
+        if (intervention.getVisibility() == View.VISIBLE && App.get(intervention).isEmpty()) {
+            intervention.getQuestionView().setError(getString(R.string.empty_field));
+            intervention.getQuestionView().requestFocus();
+            gotoFirstPage();
+            view = intervention;
+            error = true;
+        }else{
+            intervention.getQuestionView().setError(null);
+            intervention.getQuestionView().clearFocus();
         }
 
         if (error) {
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+            // int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
+
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
             alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+            // DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_error));
+            final View finalView = view;
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
+                            scrollView.post(new Runnable() {
+                                public void run() {
+                                    if (finalView != null) {
+                                        scrollView.scrollTo(0, finalView.getTop());
+                                        totalAdultContacts.getEditText().clearFocus();
+                                        totalChildrenContacts.getEditText().clearFocus();
+                                        totalContacts.getEditText().clearFocus();
+                                    }
+                                }
+                            });
                             try {
-                                InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
                             } catch (Exception e) {
                                 // TODO: handle exception

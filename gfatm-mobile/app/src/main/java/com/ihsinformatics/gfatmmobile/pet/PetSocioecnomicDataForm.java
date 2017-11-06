@@ -69,6 +69,7 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
     TitledEditText otherMotherTongue;
 
     Boolean refillFlag = false;
+    ScrollView scrollView;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -99,7 +100,7 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
                     View v = viewGroups[i][j];
                     layout.addView(v);
                 }
-                ScrollView scrollView = new ScrollView(mainContent.getContext());
+                scrollView = new ScrollView(mainContent.getContext());
                 scrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
                 scrollView.addView(layout);
                 groups.add(scrollView);
@@ -113,7 +114,7 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
                     View v = viewGroups[i][j];
                     layout.addView(v);
                 }
-                ScrollView scrollView = new ScrollView(mainContent.getContext());
+                scrollView = new ScrollView(mainContent.getContext());
                 scrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
                 scrollView.addView(layout);
                 groups.add(scrollView);
@@ -149,7 +150,8 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
         otherMotherTongue = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
 
         views = new View[]{formDate.getButton(), ethinicity.getSpinner(), otherEthinicity.getEditText(), contactEducationLevel.getSpinner(), maritalStatus.getSpinner(), emloyementStatus.getSpinner(), occupation.getSpinner(), contactIncome.getEditText(), contactIncomeGroup.getEditText(),
-                householdHead.getSpinner(), otherHouseholdHead.getEditText(), householdHeadEducationLevel.getSpinner(), motherTongue.getSpinner(), otherMotherTongue.getEditText(), otherOccupation.getEditText(), otherContactEducationLevel.getEditText(), otherHouseholdHeadEducationLevel.getEditText(), intervention.getRadioGroup()};
+                householdHead.getSpinner(), otherHouseholdHead.getEditText(), householdHeadEducationLevel.getSpinner(), motherTongue.getSpinner(), otherMotherTongue.getEditText(), otherOccupation.getEditText(), otherContactEducationLevel.getEditText(), otherHouseholdHeadEducationLevel.getEditText(), intervention.getRadioGroup(),
+                intervention};
 
         viewGroups = new View[][]{{formDate, intervention, ethinicity, otherEthinicity, contactEducationLevel, otherContactEducationLevel, maritalStatus, emloyementStatus, occupation, otherOccupation, contactIncome, contactIncomeGroup, householdHead, otherHouseholdHead, householdHeadEducationLevel, otherHouseholdHeadEducationLevel, motherTongue, otherMotherTongue}};
 
@@ -214,6 +216,8 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
         otherMotherTongue.setVisibility(View.GONE);
 
         Bundle bundle = this.getArguments();
+        Boolean autoFill = false;
+
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");
             if (openFlag) {
@@ -223,10 +227,28 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
 
                 String id = bundle.getString("formId");
                 int formId = Integer.valueOf(id);
+                autoFill = true;
 
                 refill(formId);
 
             } else bundle.putBoolean("save", false);
+        }
+
+        if(!autoFill) {
+            String interventionString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "INTERVENTION");
+            if(interventionString != null){
+
+                for (RadioButton rb : intervention.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet)) && interventionString.equals("PET")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.sci)) && interventionString.equals("SCI")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+
+            }
         }
 
     }
@@ -278,38 +300,73 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
     public boolean validate() {
 
         Boolean error = false;
+        View view = null;
 
         if (App.get(otherMotherTongue).isEmpty() && otherMotherTongue.getVisibility() == View.VISIBLE) {
             otherMotherTongue.getEditText().setError(getString(R.string.empty_field));
             otherMotherTongue.getEditText().requestFocus();
             error = true;
+        }else{
+            otherMotherTongue.getEditText().setError(getString(R.string.empty_field));
+            otherMotherTongue.getEditText().requestFocus();
         }
 
         if (App.get(otherHouseholdHead).isEmpty() && otherHouseholdHead.getVisibility() == View.VISIBLE) {
             otherHouseholdHead.getEditText().setError(getString(R.string.empty_field));
             otherHouseholdHead.getEditText().requestFocus();
             error = true;
+        }else{
+            otherHouseholdHead.getEditText().setError(getString(R.string.empty_field));
+            otherHouseholdHead.getEditText().requestFocus();
         }
+
 
         if (App.get(otherEthinicity).isEmpty() && otherEthinicity.getVisibility() == View.VISIBLE) {
             otherEthinicity.getEditText().setError(getString(R.string.empty_field));
             otherEthinicity.getEditText().requestFocus();
             error = true;
+        }else{
+            otherEthinicity.getEditText().setError(getString(R.string.empty_field));
+            otherEthinicity.getEditText().requestFocus();
+        }
+
+        if (intervention.getVisibility() == View.VISIBLE && App.get(intervention).isEmpty()) {
+            intervention.getQuestionView().setError(getString(R.string.empty_field));
+            intervention.getQuestionView().requestFocus();
+            gotoFirstPage();
+            view = intervention;
+            error = true;
+        }else{
+            intervention.getQuestionView().setError(getString(R.string.empty_field));
+            intervention.getQuestionView().requestFocus();
         }
 
         if (error) {
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
-            alertDialog.setMessage(getResources().getString(R.string.form_error));
+            // int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
+
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
+            alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             // DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_error));
+            final View finalView = view;
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
+                            scrollView.post(new Runnable() {
+                                public void run() {
+                                    if (finalView != null) {
+                                        scrollView.scrollTo(0, finalView.getTop());
+                                        otherMotherTongue.getEditText().clearFocus();
+                                        otherHouseholdHead.getEditText().clearFocus();
+                                        otherEthinicity.getEditText().clearFocus();
+                                    }
+                                }
+                            });
                             try {
-                                InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
                             } catch (Exception e) {
                                 // TODO: handle exception

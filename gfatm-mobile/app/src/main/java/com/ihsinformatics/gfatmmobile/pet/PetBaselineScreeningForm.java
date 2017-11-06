@@ -349,7 +349,10 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                 cnic1, cnic2, cnic3, cnicOwner.getSpinner(), otherCnicOwner.getEditText(), phone1a, phone1b, phone2a, phone2b, address1.getEditText(), province.getSpinner(), district.getSpinner(), city.getSpinner(),
                 addressType.getRadioGroup(), landmark.getEditText(), entryLocation.getRadioGroup(),
                 cough.getRadioGroup(), coughDuration.getRadioGroup(), haemoptysis.getRadioGroup(), fever.getRadioGroup(), weightLoss.getRadioGroup(), reduceAppetite.getRadioGroup(), reduceActivity.getRadioGroup(),
-                nightSweats.getRadioGroup(), nightSweats.getRadioGroup(), swelling.getRadioGroup(), referral.getRadioGroup(), referredFacility.getSpinner(), treatmentInitiationDate.getButton(), clincianNote.getEditText(), intervention.getRadioGroup(), citizenship, otherNIC};
+                nightSweats.getRadioGroup(), nightSweats.getRadioGroup(), swelling.getRadioGroup(), referral.getRadioGroup(), referredFacility.getSpinner(), treatmentInitiationDate.getButton(), clincianNote.getEditText(), intervention.getRadioGroup(), citizenship, otherNIC,
+
+                intervention
+        };
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
@@ -573,11 +576,14 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                 phone2b.setError(getResources().getString(R.string.invalid_value));
                 phone2b.requestFocus();
                 error = true;
+            } else{
+                phone2b.setError(null);
+                phone2b.clearFocus();
             }
         }
         if (App.get(phone1a).isEmpty()) {
-            phone1a.setError(getResources().getString(R.string.mandatory_field));
-            phone1a.requestFocus();
+            phone1b.setError(getResources().getString(R.string.mandatory_field));
+            phone1b.requestFocus();
             error = true;
         } else if (App.get(phone1b).isEmpty()) {
             phone1b.setError(getResources().getString(R.string.mandatory_field));
@@ -587,42 +593,67 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
             phone1b.setError(getResources().getString(R.string.invalid_value));
             phone1b.requestFocus();
             error = true;
+        } else{
+            phone1b.clearFocus();
+            phone1b.setError(null);
         }
+
         if (App.get(otherCnicOwner).isEmpty() && otherCnicOwner.getVisibility() == View.VISIBLE) {
             otherCnicOwner.getEditText().setError(getResources().getString(R.string.mandatory_field));
             otherCnicOwner.getEditText().requestFocus();
             error = true;
+        }else{
+            otherCnicOwner.getEditText().setError(null);
+            otherCnicOwner.getEditText().clearFocus();
         }
         if(cnicLayout.getVisibility() == View.VISIBLE) {
             if (App.get(cnic1).isEmpty()) {
-                cnic1.setError(getResources().getString(R.string.mandatory_field));
-                cnic1.requestFocus();
+                cnic3.setError(getResources().getString(R.string.mandatory_field));
+                cnic3.requestFocus();
                 error = true;
+            }else{
+                cnic3.setError(null);
+                cnic3.clearFocus();
             }
             if (App.get(cnic2).isEmpty()) {
-                cnic2.setError(getResources().getString(R.string.mandatory_field));
-                cnic2.requestFocus();
+                cnic3.setError(getResources().getString(R.string.mandatory_field));
+                cnic3.requestFocus();
                 error = true;
+            }else{
+                cnic3.setError(null);
+                cnic3.clearFocus();
             }
             if (App.get(cnic3).isEmpty()) {
                 cnic3.setError(getResources().getString(R.string.mandatory_field));
                 cnic3.requestFocus();
                 error = true;
+            }else{
+                cnic3.setError(null);
+                cnic3.clearFocus();
             }
             if (App.get(cnic1).length() != 5) {
-                cnic1.setError(getResources().getString(R.string.invalid_value));
-                cnic1.requestFocus();
+                cnic3.setError(getResources().getString(R.string.invalid_value));
+                cnic3.requestFocus();
                 error = true;
+            }else{
+                cnic3.setError(null);
+                cnic3.clearFocus();
             }
             if (App.get(cnic2).length() != 7) {
-                cnic2.setError(getResources().getString(R.string.invalid_value));
-                cnic2.requestFocus();
+                cnic3.setError(getResources().getString(R.string.invalid_value));
+                cnic3.requestFocus();
                 error = true;
+            }else{
+                cnic3.setError(null);
+                cnic3.clearFocus();
             }
             if (App.get(cnic3).length() != 1) {
                 cnic3.setError(getResources().getString(R.string.invalid_value));
                 cnic3.requestFocus();
                 error = true;
+            }else{
+                cnic3.setError(null);
+                cnic3.clearFocus();
             }
         }
 
@@ -630,6 +661,9 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
             otherRelation.getEditText().setError(getResources().getString(R.string.mandatory_field));
             otherRelation.getEditText().requestFocus();
             error = true;
+        }else{
+            otherRelation.getEditText().setError(null);
+            otherRelation.getEditText().clearFocus();
         }
         if (App.get(indexPatientId).isEmpty() && indexPatientId.getVisibility() == View.VISIBLE) {
             indexPatientId.getEditText().setError(getResources().getString(R.string.mandatory_field));
@@ -643,12 +677,20 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
             indexPatientId.getEditText().setError(getResources().getString(R.string.pet_index_contact_id_same_error));
             indexPatientId.getEditText().requestFocus();
             error = true;
+        } else{
+            indexPatientId.getEditText().setError(null);
+            indexPatientId.getEditText().clearFocus();
         }
 
-        if(App.get(intervention).equals("")){
-            intervention.getRadioGroup().requestFocus();
-            error = true;
+        if (intervention.getVisibility() == View.VISIBLE && App.get(intervention).isEmpty()) {
+            intervention.getQuestionView().setError(getString(R.string.empty_field));
+            intervention.getQuestionView().requestFocus();
+            gotoFirstPage();
             view = intervention;
+            error = true;
+        } else {
+            intervention.getQuestionView().clearFocus();
+            intervention.getQuestionView().setError(null);
         }
 
         if (error) {
@@ -669,6 +711,12 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                                 public void run() {
                                     if (finalView != null) {
                                         scrollView.scrollTo(0, finalView.getTop());
+                                        phone2b.clearFocus();
+                                        phone1b.clearFocus();
+                                        otherCnicOwner.getEditText().clearFocus();
+                                        cnic3.clearFocus();
+                                        otherRelation.getEditText().clearFocus();
+                                        indexPatientId.getEditText().clearFocus();
                                     }
                                 }
                             });
@@ -1151,6 +1199,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         city.getSpinner().setSpinnerData(cities);
 
         Bundle bundle = this.getArguments();
+        Boolean autoFill = false;
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");
             if (openFlag) {
@@ -1161,9 +1210,27 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                 String id = bundle.getString("formId");
                 int formId = Integer.valueOf(id);
 
+                autoFill = true;
                 refill(formId);
 
             } else bundle.putBoolean("save", false);
+        }
+
+        if(!autoFill) {
+            String interventionString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "INTERVENTION");
+            if(interventionString != null){
+
+                for (RadioButton rb : intervention.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet)) && interventionString.equals("PET")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.sci)) && interventionString.equals("SCI")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+
+            }
         }
 
     }

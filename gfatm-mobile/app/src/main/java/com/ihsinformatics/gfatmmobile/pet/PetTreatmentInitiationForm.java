@@ -221,7 +221,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         views = new View[]{formDate.getButton(), weight.getEditText(), indexPatientId.getEditText(), tbType.getRadioGroup(), infectionType.getRadioGroup(), dstPattern, resistanceType.getRadioGroup(),
                 treatmentInitiationDate.getButton(), petRegimen.getRadioGroup(), isoniazidDose.getEditText(), rifapentineDose.getEditText(), levofloxacinDose.getEditText(), ethionamideDose.getEditText(),
                 ancillaryNeed.getRadioGroup(), ancillaryDrugs, ancillaryDrugDuration.getEditText(), ancillaryDrugDuration.getEditText(), clincianNote.getEditText(), intervention.getRadioGroup(),
-                nameTreatmentSupporter.getEditText(), phone1a, phone1b, typeTreatmentSupporter.getRadioGroup(), relationshipTreatmentSuppoter.getSpinner(), other.getEditText(), rifapentineAvailable.getRadioGroup()};
+                nameTreatmentSupporter.getEditText(), phone1a, phone1b, typeTreatmentSupporter.getRadioGroup(), relationshipTreatmentSuppoter.getSpinner(), other.getEditText(), rifapentineAvailable.getRadioGroup(),
+                intervention};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
@@ -487,6 +488,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         dstPattern.setEnabled(false);
 
         Bundle bundle = this.getArguments();
+        Boolean autoFill = false;
+
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");
             if (openFlag) {
@@ -496,6 +499,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
                 String id = bundle.getString("formId");
                 int formId = Integer.valueOf(id);
+                autoFill = true;
 
                 refill(formId);
 
@@ -503,7 +507,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
         }
 
-        if (App.get(weight).equals("")) {
+        if(!autoFill) {
             final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
                 @Override
                 protected HashMap<String, String> doInBackground(String... params) {
@@ -521,6 +525,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                     HashMap<String, String> result = new HashMap<String, String>();
                     String weight = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_CONTACT_SCREENING, "WEIGHT (KG)");
                     String indexId = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "PATIENT ID OF INDEX CASE");
+                    String intervention = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "INTERVENTION");
 
                     String tbType = "";
                     String infectionType = "";
@@ -561,6 +566,10 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                     if (dstbType != null)
                         if (!dstbType.equals(""))
                             result.put("RESISTANT TO ANTI-TUBERCULOSIS DRUGS", dstbType);
+
+                    if(intervention == null)
+                        intervention = "";
+                    result.put("INTERVENTION", intervention);
 
                     return result;
 
@@ -702,6 +711,17 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                         if (!result.get("RESISTANT TO ANTI-TUBERCULOSIS DRUGS").equals(""))
                             dstPattern.setVisibility(View.VISIBLE);
                     }
+
+                    for (RadioButton rb : intervention.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.pet)) && result.get("INTERVENTION").equals("PET")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.sci)) && result.get("INTERVENTION").equals("SCI")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+
                     if (App.get(infectionType).equals(getResources().getString(R.string.pet_drtb))) {
 
                         for (RadioButton rb : petRegimen.getRadioGroup().getButtons()) {
@@ -839,11 +859,14 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
         if (other.getVisibility() == View.VISIBLE) {
             if (App.get(other).isEmpty()) {
-                other.getQuestionView().setError(getString(R.string.empty_field));
-                other.getQuestionView().requestFocus();
+                other.getEditText().setError(getString(R.string.empty_field));
+                other.getEditText().requestFocus();
                 view = null;
                 error = true;
                 gotoLastPage();
+            } else {
+                other.getEditText().setError(null);
+                other.getEditText().clearFocus();
             }
         }
         /*if (App.get(phone1a).isEmpty()) {
@@ -863,6 +886,9 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
             phone1b.requestFocus();
             error = true;
             gotoLastPage();
+        }else {
+            phone1b.setError(null);
+            phone1b.clearFocus();
         }
        /* if (App.get(nameTreatmentSupporter).isEmpty()) {
             nameTreatmentSupporter.getQuestionView().setError(getString(R.string.empty_field));
@@ -873,11 +899,15 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         }*/
         if (ancillaryDrugDuration.getVisibility() == View.VISIBLE) {
             if (App.get(ancillaryDrugDuration).isEmpty()) {
-                ancillaryDrugDuration.getQuestionView().setError(getString(R.string.empty_field));
-                ancillaryDrugDuration.getQuestionView().requestFocus();
+                ancillaryDrugDuration.getEditText().setError(getString(R.string.empty_field));
+                ancillaryDrugDuration.getEditText().requestFocus();
                 view = null;
                 error = true;
                 gotoLastPage();
+            }
+            else{
+                ancillaryDrugDuration.getEditText().setError(null);
+                ancillaryDrugDuration.getEditText().clearFocus();
             }
         }
         Boolean flag = false;
@@ -894,6 +924,9 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 view = ancillaryDrugs;
                 error = true;
                 gotoLastPage();
+            }else{
+                ancillaryDrugs.getQuestionView().setError(null);
+                ancillaryDrugs.getQuestionView().clearFocus();
             }
         }
         if (ethionamideDose.getVisibility() == View.VISIBLE) {
@@ -903,6 +936,9 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 view = null;
                 error = true;
                 gotoLastPage();
+            }else{
+                ethionamideDose.getEditText().setError(null);
+                ethionamideDose.getEditText().clearFocus();
             }
         }
         if (levofloxacinDose.getVisibility() == View.VISIBLE) {
@@ -912,6 +948,9 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 view = null;
                 error = true;
                 gotoLastPage();
+            }else{
+                levofloxacinDose.getEditText().setError(null);
+                levofloxacinDose.getEditText().clearFocus();
             }
         }
         if (rifapentineDose.getVisibility() == View.VISIBLE) {
@@ -921,7 +960,10 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 view = null;
                 error = true;
                 gotoLastPage();
-            } /*else {
+            } else{
+                rifapentineDose.getEditText().setError(null);
+                rifapentineDose.getEditText().clearFocus();
+            }/*else {
                 int dose = Integer.parseInt(App.get(rifapentineDose));
                 String hint = rifapentineDose.getEditText().getHint().toString();
 
@@ -959,6 +1001,9 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                         isoniazidDose.getEditText().requestFocus();
                         view = null;
                         error = true;
+                    }else{
+                        isoniazidDose.getEditText().setError(null);
+                        isoniazidDose.getEditText().clearFocus();
                     }
                 }
                 else{
@@ -967,9 +1012,23 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                         isoniazidDose.getEditText().requestFocus();
                         view = null;
                         error = true;
+                    }else{
+                        isoniazidDose.getEditText().setError(null);
+                        isoniazidDose.getEditText().clearFocus();
                     }
                 }
             }
+        }
+
+        if (intervention.getVisibility() == View.VISIBLE && App.get(intervention).isEmpty()) {
+            intervention.getQuestionView().setError(getString(R.string.empty_field));
+            intervention.getQuestionView().requestFocus();
+            gotoFirstPage();
+            view = intervention;
+            error = true;
+        }else{
+            intervention.getQuestionView().setError(null);
+            intervention.getQuestionView().clearFocus();
         }
 
         if (error) {
@@ -990,6 +1049,13 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                                 public void run() {
                                     if (finalView != null) {
                                         scrollView.scrollTo(0, finalView.getTop());
+                                        other.getEditText().clearFocus();
+                                        phone1b.clearFocus();
+                                        ancillaryDrugDuration.getEditText().clearFocus();
+                                        ethionamideDose.getEditText().clearFocus();
+                                        levofloxacinDose.getEditText().clearFocus();
+                                        rifapentineDose.getEditText().clearFocus();
+                                        isoniazidDose.getEditText().clearFocus();
                                     }
                                 }
                             });

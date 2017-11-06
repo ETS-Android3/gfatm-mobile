@@ -132,7 +132,8 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
         other.getEditText().setSingleLine(false);
         other.getEditText().setMinimumHeight(150);
 
-        views = new View[]{formDate.getButton(), reasonForFollowupEnd.getSpinner(), explanation.getEditText(), reasonForExclusion.getRadioGroup(), other.getEditText(), intervention.getRadioGroup()};
+        views = new View[]{formDate.getButton(), reasonForFollowupEnd.getSpinner(), explanation.getEditText(), reasonForExclusion.getRadioGroup(), other.getEditText(), intervention.getRadioGroup(),
+                            intervention, reasonForExclusion};
 
         viewGroups = new View[][]{{formDate, intervention, reasonForFollowupEnd, explanation, reasonForExclusion, other}};
 
@@ -160,6 +161,7 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
         reasonForExclusion.getQuestionView().setError(null);
 
         Bundle bundle = this.getArguments();
+        Boolean autoFill = false;
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");
             if (openFlag) {
@@ -170,10 +172,28 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
                 String id = bundle.getString("formId");
                 int formId = Integer.valueOf(id);
 
+                autoFill = true;
                 refill(formId);
 
             } else bundle.putBoolean("save", false);
 
+        }
+
+        if(!autoFill) {
+            String interventionString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "INTERVENTION");
+            if(interventionString != null){
+
+                for (RadioButton rb : intervention.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet)) && interventionString.equals("PET")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.sci)) && interventionString.equals("SCI")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+
+            }
         }
 
     }
@@ -232,13 +252,19 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
             other.getEditText().requestFocus();
             error = true;
             view = null;
+        }else{
+            other.getEditText().setError(null);
+            other.getEditText().clearFocus();
         }
 
         if (App.get(reasonForExclusion).isEmpty() && reasonForExclusion.getVisibility() == View.VISIBLE) {
             reasonForExclusion.getQuestionView().setError(getResources().getString(R.string.mandatory_field));
-            reasonForExclusion.getRadioGroup().requestFocus();
+            reasonForExclusion.getQuestionView().requestFocus();
             error = true;
             view = reasonForExclusion;
+        }else{
+            reasonForExclusion.getQuestionView().setError(null);
+            reasonForExclusion.getQuestionView().clearFocus();
         }
 
         if (App.get(explanation).isEmpty() && explanation.getVisibility() == View.VISIBLE) {
@@ -246,6 +272,20 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
             explanation.getEditText().requestFocus();
             error = true;
             view = null;
+        }else{
+            explanation.getEditText().setError(null);
+            explanation.getEditText().clearFocus();
+        }
+
+        if (intervention.getVisibility() == View.VISIBLE && App.get(intervention).isEmpty()) {
+            intervention.getQuestionView().setError(getString(R.string.empty_field));
+            intervention.getQuestionView().requestFocus();
+            gotoFirstPage();
+            view = intervention;
+            error = true;
+        }else{
+            intervention.getQuestionView().setError(null);
+            intervention.getQuestionView().clearFocus();
         }
 
         if (error) {
@@ -264,6 +304,8 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
                                 public void run() {
                                     if (finalView != null) {
                                         scrollView.scrollTo(0, finalView.getTop());
+                                        explanation.getEditText().clearFocus();
+                                        other.getEditText().clearFocus();
                                     }
                                 }
                             });

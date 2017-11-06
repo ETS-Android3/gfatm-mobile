@@ -190,7 +190,7 @@ public class PetRefusalForm extends AbstractFormActivity implements RadioGroup.O
 
         views = new View[]{formDate.getButton(), refusalFor.getSpinner(), petDuration.getEditText(), counselingProvided, totalSession.getEditText(), counselingProvidedTo, counselingProvidedBy, counselingRegarding,
                                         counselingTechnique, otherCounselingTechnique.getEditText(), reasonForRefusal, misconception.getEditText(), discouragementFromInternalSource.getEditText(),
-                                        discouragementFromExternalSource.getEditText(), delayInIncentives.getEditText(), otherReasonForRefusal.getEditText(), psychologistNotes.getEditText()};
+                                        discouragementFromExternalSource.getEditText(), delayInIncentives.getEditText(), otherReasonForRefusal.getEditText(), psychologistNotes.getEditText(), intervention};
 
         viewGroups = new View[][]{{formDate, intervention, refusalFor, petDuration,counselingProvided},
                                     {totalSession, datesLinearLayout},
@@ -302,6 +302,8 @@ public class PetRefusalForm extends AbstractFormActivity implements RadioGroup.O
         datesLinearLayout.setVisibility(View.GONE);
 
         Bundle bundle = this.getArguments();
+        Boolean autoFill = false;
+
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");
             if (openFlag) {
@@ -312,11 +314,30 @@ public class PetRefusalForm extends AbstractFormActivity implements RadioGroup.O
                 String id = bundle.getString("formId");
                 int formId = Integer.valueOf(id);
 
+                autoFill = true;
                 refill(formId);
 
             } else bundle.putBoolean("save", false);
 
         }
+
+        if(!autoFill) {
+            String interventionString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "INTERVENTION");
+            if(interventionString != null){
+
+                for (RadioButton rb : intervention.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet)) && interventionString.equals("PET")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.sci)) && interventionString.equals("SCI")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+
+            }
+        }
+
 
     }
 
@@ -420,20 +441,22 @@ public class PetRefusalForm extends AbstractFormActivity implements RadioGroup.O
                 if (isTitledEditTextEmpty((TitledEditText) datesLinearLayout.getChildAt(i), 1))
                     error = true;
         }
-        if (App.get(intervention).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            intervention.getQuestionView().setError(getString(R.string.empty_field));
-            intervention.getQuestionView().requestFocus();
-            error = true;
-        }
 
         if (isTitledEditTextEmpty(petDuration, 0))
             error = true;
         if (isCheckBoxesChecked(counselingProvided, 0))
             error = true;
+
+        if (intervention.getVisibility() == View.VISIBLE && App.get(intervention).isEmpty()) {
+            intervention.getQuestionView().setError(getString(R.string.empty_field));
+            intervention.getQuestionView().requestFocus();
+            gotoFirstPage();
+            view = intervention;
+            error = true;
+        } else {
+            intervention.getQuestionView().setError(null);
+            intervention.getQuestionView().clearFocus();
+        }
 
 
         if (error) {
@@ -485,6 +508,10 @@ public class PetRefusalForm extends AbstractFormActivity implements RadioGroup.O
             gotoPage(pageNumber);
             return true;
         }
+        else{
+            titledCheckBoxes.getQuestionView().setError(null);
+            titledCheckBoxes.getQuestionView().clearFocus();
+        }
         return false;
     }
 
@@ -494,6 +521,9 @@ public class PetRefusalForm extends AbstractFormActivity implements RadioGroup.O
             titledEditText.getEditText().requestFocus();
             gotoPage(pageNumber);
             return true;
+        } else{
+            titledEditText.getEditText().setError(null);
+            titledEditText.getEditText().clearFocus();
         }
         return false;
     }

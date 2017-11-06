@@ -55,7 +55,6 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
     TitledButton formDate;
     TitledRadioGroup intervention;
 
-
     TitledRadioGroup pregnancyHistory;
     TitledRadioGroup pregnancyTestResult;
     TitledCheckBoxes evaluationType;
@@ -187,7 +186,7 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
 
         views = new View[]{formDate.getButton(), pregnancyHistory.getRadioGroup(), pregnancyTestResult.getRadioGroup(), evaluationType, tbDiagnosis.getRadioGroup(),
                 infectionType.getRadioGroup(), tbReferral.getRadioGroup(), referralSite.getSpinner(), othersSite.getEditText(), tbRuledOut.getRadioGroup(),
-                petEligiable.getEditText(), petConsent.getRadioGroup(), clincianNote.getEditText(), intervention.getRadioGroup()};
+                petEligiable.getEditText(), petConsent.getRadioGroup(), clincianNote.getEditText(), intervention.getRadioGroup(), intervention};
 
         viewGroups = new View[][]{{formDate, intervention, linearLayout1}};
 
@@ -275,6 +274,8 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
 
 
         Bundle bundle = this.getArguments();
+        Boolean autoFill = false;
+
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");
             if (openFlag) {
@@ -284,11 +285,29 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
 
                 String id = bundle.getString("formId");
                 int formId = Integer.valueOf(id);
+                autoFill = true;
 
                 refill(formId);
 
             } else bundle.putBoolean("save", false);
 
+        }
+
+        if(!autoFill) {
+            String interventionString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "INTERVENTION");
+            if(interventionString != null){
+
+                for (RadioButton rb : intervention.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet)) && interventionString.equals("PET")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.sci)) && interventionString.equals("SCI")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+
+            }
         }
 
     }
@@ -305,8 +324,10 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
                 othersSite.getEditText().requestFocus();
                 error = true;
             }
-        } else
-            othersSite.clearFocus();
+        } else {
+            othersSite.getEditText().clearFocus();
+            othersSite.getEditText().setError(null);
+        }
 
         Boolean flag = false;
         for (CheckBox cb : evaluationType.getCheckedBoxes()) {
@@ -320,6 +341,20 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
             evaluationType.getQuestionView().requestFocus();
             view = evaluationType;
             error = true;
+        } else {
+            evaluationType.getQuestionView().clearFocus();
+            evaluationType.getQuestionView().setError(null);
+        }
+
+        if (intervention.getVisibility() == View.VISIBLE && App.get(intervention).isEmpty()) {
+            intervention.getQuestionView().setError(getString(R.string.empty_field));
+            intervention.getQuestionView().requestFocus();
+            gotoFirstPage();
+            view = intervention;
+            error = true;
+        }else {
+            intervention.getQuestionView().clearFocus();
+            intervention.getQuestionView().setError(null);
         }
 
         if (error) {
@@ -338,7 +373,7 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
                                 public void run() {
                                     if (finalView != null) {
                                         scrollView.scrollTo(0, finalView.getTop());
-                                        othersSite.clearFocus();
+                                        othersSite.getEditText().clearFocus();
                                     }
                                 }
                             });

@@ -191,7 +191,7 @@ public class PetRetrivelForm extends AbstractFormActivity implements RadioGroup.
 
         views = new View[]{formDate.getButton(), refusalFor.getSpinner(), petDuration.getEditText(), counselingProvided, totalSession.getEditText(), counselingProvidedTo, counselingProvidedBy, counselingRegarding,
                 counselingTechnique, otherCounselingTechnique.getEditText(), reasonForAgreement, selfApproach.getEditText(), informationFromExternalSource.getEditText(),
-                contactInvestigationOnly.getEditText(), incentivesContinuation.getEditText(), otherReasonForAgreement.getEditText(), psychologistNotes.getEditText()};
+                contactInvestigationOnly.getEditText(), incentivesContinuation.getEditText(), otherReasonForAgreement.getEditText(), psychologistNotes.getEditText(), intervention};
 
         viewGroups = new View[][]{{formDate, intervention, refusalFor, petDuration, counselingProvided},
                 {totalSession, datesLinearLayout},
@@ -303,6 +303,8 @@ public class PetRetrivelForm extends AbstractFormActivity implements RadioGroup.
         datesLinearLayout.setVisibility(View.GONE);
 
         Bundle bundle = this.getArguments();
+        Boolean autoFill = false;
+
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");
             if (openFlag) {
@@ -312,11 +314,29 @@ public class PetRetrivelForm extends AbstractFormActivity implements RadioGroup.
 
                 String id = bundle.getString("formId");
                 int formId = Integer.valueOf(id);
+                autoFill = true;
 
                 refill(formId);
 
             } else bundle.putBoolean("save", false);
 
+        }
+
+        if(!autoFill) {
+            String interventionString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "INTERVENTION");
+            if(interventionString != null){
+
+                for (RadioButton rb : intervention.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet)) && interventionString.equals("PET")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.sci)) && interventionString.equals("SCI")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+
+            }
         }
 
     }
@@ -418,14 +438,15 @@ public class PetRetrivelForm extends AbstractFormActivity implements RadioGroup.
                 if (isTitledEditTextEmpty((TitledEditText) datesLinearLayout.getChildAt(i), 1))
                     error = true;
         }
-        if (App.get(intervention).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
+        if (intervention.getVisibility() == View.VISIBLE && App.get(intervention).isEmpty()) {
             intervention.getQuestionView().setError(getString(R.string.empty_field));
             intervention.getQuestionView().requestFocus();
+            gotoFirstPage();
+            view = intervention;
             error = true;
+        }else {
+            intervention.getQuestionView().setError(null);
+            intervention.getQuestionView().clearFocus();
         }
 
         if (isTitledEditTextEmpty(petDuration, 0))
@@ -481,6 +502,9 @@ public class PetRetrivelForm extends AbstractFormActivity implements RadioGroup.
             titledCheckBoxes.getQuestionView().requestFocus();
             gotoPage(pageNumber);
             return true;
+        }else{
+            titledCheckBoxes.getQuestionView().setError(null);
+            titledCheckBoxes.getQuestionView().clearFocus();
         }
         return false;
     }
@@ -491,6 +515,9 @@ public class PetRetrivelForm extends AbstractFormActivity implements RadioGroup.
             titledEditText.getEditText().requestFocus();
             gotoPage(pageNumber);
             return true;
+        }else{
+            titledEditText.getEditText().setError(null);
+            titledEditText.getEditText().clearFocus();
         }
         return false;
     }

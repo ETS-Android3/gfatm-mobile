@@ -193,7 +193,7 @@ public class PetMonthlyHomeFollowupForm extends AbstractFormActivity implements 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), cough.getRadioGroup(), coughDuration.getRadioGroup(), fever.getRadioGroup(), weightLoss.getRadioGroup(), reduceAppetite.getRadioGroup(),
                 reduceActivity.getRadioGroup(), nightSweats.getRadioGroup(), swelling.getRadioGroup(), adverseEventReport.getRadioGroup(), intervention.getRadioGroup(),
-                adverseEffects1, adverseEffects2, clinicianInformed.getRadioGroup(), visitSuggested.getRadioGroup(), clinicalReferral.getRadioGroup(), missedDosage.getEditText()};
+                adverseEffects1, adverseEffects2, clinicianInformed.getRadioGroup(), visitSuggested.getRadioGroup(), clinicalReferral.getRadioGroup(), missedDosage.getEditText(), intervention};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
@@ -226,6 +226,8 @@ public class PetMonthlyHomeFollowupForm extends AbstractFormActivity implements 
         otherEffects.setVisibility(View.GONE);
 
         Bundle bundle = this.getArguments();
+        Boolean autoFill = false;
+
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");
             if (openFlag) {
@@ -235,6 +237,7 @@ public class PetMonthlyHomeFollowupForm extends AbstractFormActivity implements 
 
                 String id = bundle.getString("formId");
                 int formId = Integer.valueOf(id);
+                autoFill = true;
 
                 refill(formId);
 
@@ -242,6 +245,22 @@ public class PetMonthlyHomeFollowupForm extends AbstractFormActivity implements 
 
         }
 
+        if(!autoFill) {
+            String interventionString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "INTERVENTION");
+            if(interventionString != null){
+
+                for (RadioButton rb : intervention.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet)) && interventionString.equals("PET")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.sci)) && interventionString.equals("SCI")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+
+            }
+        }
 
     }
 
@@ -297,8 +316,10 @@ public class PetMonthlyHomeFollowupForm extends AbstractFormActivity implements 
             otherEffects.getEditText().setError(getString(R.string.empty_field));
             otherEffects.getEditText().requestFocus();
             error = true;
-        } else
-            otherEffects.clearFocus();
+        } else {
+            otherEffects.getEditText().setError(null);
+            otherEffects.getEditText().clearFocus();
+        }
 
         if (adverseEffectsLayout.getVisibility() == View.VISIBLE) {
             Boolean flag = false;
@@ -322,12 +343,29 @@ public class PetMonthlyHomeFollowupForm extends AbstractFormActivity implements 
                 view = adverseEffects1;
                 gotoLastPage();
                 error = true;
+            } else {
+                adverseEffects1.getQuestionView().setError(null);
+                adverseEffects1.getQuestionView().clearFocus();
             }
         }
         if (App.get(missedDosage).isEmpty()) {
             missedDosage.getEditText().setError(getString(R.string.empty_field));
             missedDosage.getEditText().requestFocus();
             error = true;
+        } else {
+            missedDosage.getEditText().setError(null);
+            missedDosage.getEditText().clearFocus();
+        }
+
+        if (intervention.getVisibility() == View.VISIBLE && App.get(intervention).isEmpty()) {
+            intervention.getQuestionView().setError(getString(R.string.empty_field));
+            intervention.getQuestionView().requestFocus();
+            gotoFirstPage();
+            view = intervention;
+            error = true;
+        } else {
+            intervention.getQuestionView().setError(null);
+            intervention.getQuestionView().clearFocus();
         }
 
         if (error) {
@@ -348,6 +386,8 @@ public class PetMonthlyHomeFollowupForm extends AbstractFormActivity implements 
                                 public void run() {
                                     if (finalView != null) {
                                         scrollView.scrollTo(0, finalView.getTop());
+                                        otherEffects.getEditText().clearFocus();
+                                        missedDosage.getEditText().clearFocus();
                                     }
                                 }
                             });
