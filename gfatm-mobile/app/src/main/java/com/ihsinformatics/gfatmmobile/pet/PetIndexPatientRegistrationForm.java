@@ -66,6 +66,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
     TitledEditText husbandName;
     TitledEditText indexExternalPatientId;
     TitledEditText ernsNumber;
+    TitledCheckBoxes diagonosisType;
     TitledRadioGroup tbType;
     TitledRadioGroup infectionType;
     TitledRadioGroup dstAvailable;
@@ -178,6 +179,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
         indexExternalPatientId.setFocusableInTouchMode(true);
         ernsNumber = new TitledEditText(context, null, getResources().getString(R.string.pet_erns_number), "", "", RegexUtil.idLength, RegexUtil.ERNS_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         ernsNumber.setFocusableInTouchMode(true);
+        diagonosisType = new TitledCheckBoxes(context, null, getResources().getString(R.string.fast_type_of_diagnosis), getResources().getStringArray(R.array.fast_diagonosis_type_list), null, App.VERTICAL, App.VERTICAL, true);
         tbType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_tb_type), getResources().getStringArray(R.array.pet_tb_types), getResources().getString(R.string.pet_ptb), App.HORIZONTAL, App.VERTICAL);
         infectionType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_infection_type), getResources().getStringArray(R.array.pet_infection_types), getResources().getString(R.string.pet_dstb), App.HORIZONTAL, App.VERTICAL);
         dstAvailable = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_dst_available), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
@@ -249,14 +251,14 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
 
 
         views = new View[]{formDate.getButton(), husbandName.getEditText(), indexExternalPatientId.getEditText(), ernsNumber.getEditText(),
-                tbType.getRadioGroup(), infectionType.getRadioGroup(), dstAvailable.getRadioGroup(), resistanceType.getRadioGroup(),
+                diagonosisType, tbType.getRadioGroup(), infectionType.getRadioGroup(), dstAvailable.getRadioGroup(), resistanceType.getRadioGroup(),
                 patientType.getSpinner(), dstPattern, treatmentRegimen1, treatmentRegimen2, phone1a, phone1b, phone2a, phone2b,
                 address1.getEditText(), province.getSpinner(), district.getSpinner(), city.getSpinner(),
-                addressType.getRadioGroup(), landmark.getEditText()};
+                addressType.getRadioGroup(), landmark.getEditText(),};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, husbandName, indexExternalPatientId, ernsNumber, tbType, infectionType, dstAvailable, resistanceType,
+                {{formDate, husbandName, indexExternalPatientId, ernsNumber, diagonosisType, tbType, infectionType, dstAvailable, resistanceType,
                         patientType, dstPattern, regimenlinearLayout, treatmentEnrollmentDate,  phone1Layout, phone2Layout, address1, addressLayout, province, district, city, addressType, landmark}};
 
         formDate.getButton().setOnClickListener(this);
@@ -436,11 +438,14 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                 phone2b.setError(getResources().getString(R.string.invalid_value));
                 phone2b.requestFocus();
                 error = true;
+            }else {
+                phone2b.setError(null);
+                phone2b.clearFocus();
             }
         }
         if (App.get(phone1a).isEmpty()) {
-            phone1a.setError(getResources().getString(R.string.mandatory_field));
-            phone1a.requestFocus();
+            phone1b.setError(getResources().getString(R.string.mandatory_field));
+            phone1b.requestFocus();
             error = true;
         } else if (App.get(phone1b).isEmpty()) {
             phone1b.setError(getResources().getString(R.string.mandatory_field));
@@ -450,6 +455,9 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
             phone1b.setError(getResources().getString(R.string.invalid_value));
             phone1b.requestFocus();
             error = true;
+        } else {
+            phone1b.setError(null);
+            phone1b.clearFocus();
         }
 
         Boolean flag = false;
@@ -472,6 +480,9 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
             treatmentRegimen1.getQuestionView().requestFocus();
             view = regimenlinearLayout;
             error = true;
+        } else{
+            treatmentRegimen1.getQuestionView().setError(null);
+            treatmentRegimen1.getQuestionView().clearFocus();
         }
 
 
@@ -488,6 +499,28 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                 dstPattern.getQuestionView().requestFocus();
                 view = dstPattern;
                 error = true;
+            }else{
+                dstPattern.getQuestionView().setError(null);
+                dstPattern.getQuestionView().clearFocus();
+            }
+        }
+
+        flag = false;
+        if (diagonosisType.getVisibility() == View.VISIBLE) {
+            for (CheckBox cb : diagonosisType.getCheckedBoxes()) {
+                if (cb.isChecked()) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) {
+                diagonosisType.getQuestionView().setError(getString(R.string.empty_field));
+                diagonosisType.getQuestionView().requestFocus();
+                view = diagonosisType;
+                error = true;
+            }else{
+                diagonosisType.getQuestionView().setError(null);
+                diagonosisType.getQuestionView().clearFocus();
             }
         }
 
@@ -501,8 +534,10 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
             ernsNumber.getEditText().requestFocus();
             view = null;
             error = true;
+        }else{
+            ernsNumber.getEditText().setError(null);
+            ernsNumber.getEditText().clearFocus();
         }
-            ernsNumber.clearFocus();
 
         if (App.get(husbandName).isEmpty()) {
             husbandName.getEditText().setError(getString(R.string.empty_field));
@@ -514,7 +549,10 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
             husbandName.getEditText().requestFocus();
             error = true;
             view = null;
-        } else husbandName.clearFocus();
+        } else{
+            husbandName.getEditText().setError(null);
+            husbandName.getEditText().clearFocus();
+        }
 
         indexExternalPatientId.clearFocus();
 
@@ -537,6 +575,8 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                                         husbandName.clearFocus();
                                         indexExternalPatientId.clearFocus();
                                         ernsNumber.clearFocus();
+                                        phone1b.clearFocus();
+                                        phone2b.clearFocus();
                                     }
                                 }
                             });
@@ -579,6 +619,14 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
 
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
+        String diagonosisTypeString = "";
+        for (CheckBox cb : diagonosisType.getCheckedBoxes()) {
+            if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_bactoriologically_confirmed)))
+                diagonosisTypeString = diagonosisTypeString + "PRIMARY RESPIRATORY TUBERCULOSIS, CONFIRMED BACTERIOLOGICALLY" + " ; ";
+            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_clinically_diagnosed)))
+                diagonosisTypeString = diagonosisTypeString + "CLINICAL SUSPICION" + " ; ";
+        }
+        observations.add(new String[]{"TUBERCULOSIS DIAGNOSIS METHOD", diagonosisTypeString});
         observations.add(new String[]{"SITE OF TUBERCULOSIS DISEASE", App.get(tbType).equals(getResources().getString(R.string.pet_ptb)) ? "PULMONARY TUBERCULOSIS" : "EXTRA-PULMONARY TUBERCULOSIS"});
         observations.add(new String[]{"TUBERCULOSIS INFECTION TYPE", App.get(infectionType).equals(getResources().getString(R.string.pet_dstb)) ? "DRUG-SENSITIVE TUBERCULOSIS INFECTION" : "DRUG-RESISTANT TB"});
         if (dstAvailable.getVisibility() == View.VISIBLE)
@@ -965,6 +1013,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
         husbandName.getEditText().requestFocus();
 
         Bundle bundle = this.getArguments();
+        Boolean autoFill = false;
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");
             if (openFlag) {
@@ -975,40 +1024,74 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                 String id = bundle.getString("formId");
                 int formId = Integer.valueOf(id);
 
+                autoFill = true;
                 refill(formId);
 
-            } else bundle.putBoolean("save", false);
-
+            } else
+                bundle.putBoolean("save", false);
         }
 
-        if (App.get(ernsNumber).equals("")) {
-            String enrsId = App.getPatient().getEnrs();
+        if(!autoFill) {
+            if (App.get(ernsNumber).equals("")) {
+                String enrsId = App.getPatient().getEnrs();
 
-            if (enrsId == null || enrsId.equals("")) {
-                ernsNumber.getEditText().setText("");
-            } else {
-                ernsNumber.getEditText().setText(enrsId);
-                ernsNumber.getEditText().setKeyListener(null);
+                if (enrsId == null || enrsId.equals("")) {
+                    ernsNumber.getEditText().setText("");
+                } else {
+                    ernsNumber.getEditText().setText(enrsId);
+                    ernsNumber.getEditText().setKeyListener(null);
+                }
             }
-        }
 
-        if (App.get(indexExternalPatientId).equals("")) {
-            String externalId = App.getPatient().getExternalId();
-            if (externalId ==  null || externalId.equals("")) {
-                indexExternalPatientId.getEditText().setText("");
-            } else {
-                indexExternalPatientId.getEditText().setText(externalId);
-                indexExternalPatientId.getEditText().setKeyListener(null);
+            if (App.get(indexExternalPatientId).equals("")) {
+                String externalId = App.getPatient().getExternalId();
+                if (externalId == null || externalId.equals("")) {
+                    indexExternalPatientId.getEditText().setText("");
+                } else {
+                    indexExternalPatientId.getEditText().setText(externalId);
+                    indexExternalPatientId.getEditText().setKeyListener(null);
+                }
             }
-        }
 
-        if (App.get(husbandName).equals("")) {
-            String husbandNameString = App.getPatient().getPerson().getGuardianName();
-            if (husbandNameString == null || husbandNameString.equals("")) {
-                husbandName.getEditText().setText("");
-            } else {
-                husbandName.getEditText().setText(husbandNameString);
-                husbandName.getEditText().setKeyListener(null);
+            if (App.get(husbandName).equals("")) {
+                String husbandNameString = App.getPatient().getPerson().getGuardianName();
+                if (husbandNameString == null || husbandNameString.equals("")) {
+                    husbandName.getEditText().setText("");
+                } else {
+                    husbandName.getEditText().setText(husbandNameString);
+                    husbandName.getEditText().setKeyListener(null);
+                }
+            }
+
+            String tbTypeString = serverService.getLatestObsValue(App.getPatientId(), "FAST-Treatment Initiation", "SITE OF TUBERCULOSIS DISEASE");
+            String diagnosisTypeString = serverService.getLatestObsValue(App.getPatientId(), "FAST-Treatment Initiation", "TUBERCULOSIS DIAGNOSIS METHOD");
+
+            if (diagnosisTypeString != null) {
+                for (CheckBox cb : diagonosisType.getCheckedBoxes()) {
+                    if (diagnosisTypeString.contains("PRIMARY RESPIRATORY TUBERCULOSIS, CONFIRMED BACTERIOLOGICALLY") && cb.getText().equals(getResources().getString(R.string.fast_bactoriologically_confirmed)))
+                        cb.setChecked(true);
+                    if (diagnosisTypeString.contains("CLINICAL SUSPICION") && cb.getText().equals(getResources().getString(R.string.fast_clinically_diagnosed)))
+                        cb.setChecked(true);
+                }
+
+
+                /*for (CheckBox rb : diagonosisType.getCheckedBoxes()) {
+                    rb.setClickable(false);
+                }*/
+            }
+
+            if (tbTypeString != null) {
+                for (RadioButton rb : tbType.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.pet_ptb)) && tbTypeString.equals("PULMONARY TUBERCULOSIS")) {
+                        rb.setChecked(true);
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_eptb)) && tbTypeString.equals("EXTRA-PULMONARY TUBERCULOSIS")) {
+                        rb.setChecked(true);
+                    }
+                }
+
+                /*for (RadioButton rb : tbType.getRadioGroup().getButtons()) {
+                    rb.setClickable(false);
+                }*/
             }
         }
 
@@ -1147,6 +1230,17 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                 ernsNumber.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("Gaurdian Name")) {
                 husbandName.getEditText().setText(obs[0][1]);
+            }  else if (obs[0][0].equals("TUBERCULOSIS DIAGNOSIS METHOD")) {
+                for (CheckBox cb : diagonosisType.getCheckedBoxes()) {
+                    if (cb.getText().equals(getResources().getString(R.string.fast_bactoriologically_confirmed)) && obs[0][1].equals("PRIMARY RESPIRATORY TUBERCULOSIS, CONFIRMED BACTERIOLOGICALLY")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.fast_clinically_diagnosed)) && obs[0][1].equals("CLINICAL SUSPICION")) {
+                        cb.setChecked(true);
+                        break;
+                    }
+                }
+                diagonosisType.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("SITE OF TUBERCULOSIS DISEASE")) {
 
                 for (RadioButton rb : tbType.getRadioGroup().getButtons()) {
