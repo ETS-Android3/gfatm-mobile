@@ -36,6 +36,7 @@ import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.MyCheckBox;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
+import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
@@ -86,6 +87,8 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
     TitledRadioGroup nonTBCalpolQuantity;
 
     TitledButton nextDateOfDrug;
+
+    MyTextView staffInstruction;
 
 
     /**
@@ -188,6 +191,9 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
 
 
         nextDateOfDrug = new TitledButton(context, null, getResources().getString(R.string.ctb_next_date_drug_dispersal), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
+
+        staffInstruction = new MyTextView(context,getResources().getString(R.string.ctb_staff_instruction));
+
         secondDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
         views = new View[]{
                 formDate.getButton(),
@@ -242,6 +248,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                         nonTBCalpolDispersed,
                         nonTBCalpolQuantity,
                         nextDateOfDrug,
+                        staffInstruction
                 }};
         formDate.getButton().setOnClickListener(this);
 

@@ -6,6 +6,8 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -29,6 +31,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -62,7 +65,7 @@ public class ChildhoodTbReferral extends AbstractFormActivity implements RadioGr
     TitledEditText otherReferralTransferReason;
     TitledSpinner referralTransferLocation;
     TitledEditText otherReferralTransferLocation;
-    Snackbar snackbar;
+    Snackbar snackbar= null;
     ScrollView scrollView;
 
     /**
@@ -136,6 +139,9 @@ public class ChildhoodTbReferral extends AbstractFormActivity implements RadioGr
      */
     public void initViews() {
 
+        Toast toast=new Toast(context);
+        Toast.makeText(context, getResources().getString(R.string.ctb_pop_up_referral), Toast.LENGTH_LONG).show();
+
 
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
@@ -161,6 +167,7 @@ public class ChildhoodTbReferral extends AbstractFormActivity implements RadioGr
             Object objLoc = locations[i][1];
             locationArray[i] = objLoc.toString();
         }
+
         locationArray[locations.length] = "Other";
 
         referralTransferLocation = new TitledSpinner(context, null, getResources().getString(R.string.ctb_location_referral_transfer), locationArray,null, App.VERTICAL, true);
@@ -175,6 +182,7 @@ public class ChildhoodTbReferral extends AbstractFormActivity implements RadioGr
         patientReferedOrTransfered.getRadioGroup().setOnCheckedChangeListener(this);
         referralTransferReason.getSpinner().setOnItemSelectedListener(this);
         referralTransferLocation.getSpinner().setOnItemSelectedListener(this);
+
         resetViews();
     }
 
@@ -183,6 +191,7 @@ public class ChildhoodTbReferral extends AbstractFormActivity implements RadioGr
 
         if (snackbar != null)
             snackbar.dismiss();
+
 
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
@@ -558,9 +567,14 @@ public class ChildhoodTbReferral extends AbstractFormActivity implements RadioGr
         if (snackbar != null)
             snackbar.dismiss();
 
+
+
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         otherReferralTransferReason.setVisibility(View.GONE);
         otherReferralTransferLocation.setVisibility(View.GONE);
+
+
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");
@@ -577,6 +591,8 @@ public class ChildhoodTbReferral extends AbstractFormActivity implements RadioGr
             } else bundle.putBoolean("save", false);
 
         }
+
+
     }
 
     @Override

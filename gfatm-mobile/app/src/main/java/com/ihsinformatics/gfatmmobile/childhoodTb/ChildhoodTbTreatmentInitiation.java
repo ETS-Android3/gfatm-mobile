@@ -134,6 +134,8 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
 
     //Next Appointment
     TitledButton returnVisitDate;
+
+    MyTextView moInstruction;
     TitledEditText doctorNotes;
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -306,6 +308,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         initiatingAdditionalTreatmentAntibiotic= new TitledCheckBoxes(context, null, getResources().getString(R.string.ctb_initiating_additional_treatment), getResources().getStringArray(R.array.ctb_iron_multivitamins_anthelmintic_other_none), null, App.VERTICAL, App.VERTICAL);
 
         returnVisitDate = new TitledButton(context, null, getResources().getString(R.string.ctb_next_appointment_date), DateFormat.format("dd-MMM-yyyy", forthDateCalender).toString(), App.HORIZONTAL);
+        moInstruction = new MyTextView(context,getResources().getString(R.string.ctb_treatment_initiation_mo_instruction));
         doctorNotes = new TitledEditText(context, null, getResources().getString(R.string.ctb_doctor_notes), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL,false);
 
         forthDateCalender.add(Calendar.DAY_OF_MONTH, 30);
@@ -369,6 +372,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                         precribingFurthertest,
                         initiatingAdditionalTreatmentAntibiotic,
                         returnVisitDate,
+                        moInstruction,
                         doctorNotes,
                 }};
         formDate.getButton().setOnClickListener(this);
@@ -936,7 +940,44 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             }
         }
 
+        if(typeOfDiagnosis.getVisibility() == View.VISIBLE) {
+            Boolean flag = false;
+            for (CheckBox cb : typeOfDiagnosis.getCheckedBoxes()) {
+                if (cb.isChecked()) {
+                    flag = true;
+                    break;
+                }
+            }
+            if(!flag){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                typeOfDiagnosis.getQuestionView().setError(getString(R.string.empty_field));
+                typeOfDiagnosis.getQuestionView().requestFocus();
+                error = true;
+            }
+        }
 
+
+        if(tbType.getVisibility() == View.VISIBLE) {
+            Boolean flag = false;
+            for (CheckBox cb : tbType.getCheckedBoxes()) {
+                if (cb.isChecked()) {
+                    flag = true;
+                    break;
+                }
+            }
+            if(!flag){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                tbType.getQuestionView().setError(getString(R.string.empty_field));
+                tbType.getQuestionView().requestFocus();
+                error = true;
+            }
+        }
         if (tbRegisterationNumber.getVisibility() == View.VISIBLE) {
            if(!App.get(tbRegisterationNumber).isEmpty() && App.get(tbRegisterationNumber).trim().length() <= 0){
                 if (App.isLanguageRTL())
@@ -2201,6 +2242,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                     radiologicalEvidence.setVisibility(View.GONE);
                 }
             }
+            typeOfDiagnosis.getQuestionView().setError(null);
         }
 
         for (CheckBox cb : tbType.getCheckedBoxes()) {
@@ -2217,6 +2259,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                     extraPulmonarySiteOther.setVisibility(View.GONE);
                 }
             }
+            tbType.getQuestionView().setError(null);
         }
 
     }

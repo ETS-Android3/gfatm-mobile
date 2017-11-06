@@ -25,6 +25,85 @@
     <string name="ctb_mother_name">Mother\'s name</string>
     <string name="ctb_father_name">Father\'s name</string>
     <string name="ctb_patient_attendant">Is this child a patient or an attendant?</string><string name="ctb_cough"> Does your child have a cough?</string>
+    <string name="ctb_tb_symptoms_instructions">\nScreener Instructions: Inform the patient and the family member that you will now ask them questions to determine if your child should be further tested  for TB or not.\n</string>
+    <string name="ctb_verbal_screening_instruction">
+        \n
+        Instructions: Carefully read A through E to determine if the child is a TB presumptive.
+        \n
+        a. If the child has been in contact with someone with TB and has one or more symptoms then the child is a TB presumptive.
+        \n
+        b. If the child has any 2 symptoms  then patient is a TB presumptive.
+        \n
+        c. If the child’s lymph node has been swollen for more than 2 weeks or if there is swelling in the bone or spine  then the child is a TB presumptive.
+        \n
+        d. If previous history of TB and any one symptom then child is a TB presumptive.
+        \n
+        e. If the mother is a contact, then the child is a TB presumptive.
+        \n
+        f. If all answers are no but the child is 5 year and below and has a TB patient contact at home then refer to MO for evaluation (for IPT)"
+        \n
+    </string>
+
+    <string name="ctb_patient_reg_nurse_instruction">\nNurse Instructions: This form should be filled if the child\'s care giver has agreed to send the child to an MO.\n</string>
+    <string name="ctb_dst_order">DST Orer</string>
+    <string name="ctb_dst_result">DST Results</string>
+    <string name="ctb_afb_order">AFB Smear Order</string>
+    <string name="ctb_afb_result">AFB Smear Results</string>
+    <string name="ctb_ultrasound_order">Ultrasound Order</string>
+
+    <string name="ctb_histopathology_order">Histopathology Order</string>
+    <string name="ctb_histopathology_results">Histopathology Results</string>
+    <string name="ctb_mantoux_order">Mantoux Test Order</string>
+    <string name="ctb_mantoux_result">Mantoux Test Result</string>
+
+    <string name="ctb_ct_scan_order">CT Scan Order</string>
+    <string name="ctb_ct_scan_results">CT Scan Results</string>
+
+    <string name="ctb_treatment_initiation_mo_instruction">\nMO Instructions: Kindly notify the patient of their next appointment date.\n</string>
+
+    <string name="ctb_staff_instruction">\nStaff Instructions: Kindly notify the patient of their next drug dispersal date.\n</string>
+    <string name="ctb_age_score">Age Score</string>
+    <string name="ctb_close_contact_status">Close contact Status</string>
+    <string name="ctb_tb_suggestive">TB Suggestive</string>
+    <string name="ctb_clinically_diagnosed_tb">Clinically diagnosed TB</string>
+    <string name="ctb_bacteriologically_positive_tb">Bacteriologically positive TB</string>
+    <string name="ctb_ppa_popup_1">The close contact has a history of cough for more than 2 weeks</string>
+    <string name="ctb_close_contact_score">Close contact score</string>
+    <string name="ctb_pem_sam">PEM/SAM</string>
+    <string name="ctb_not_responding_nutritional_rehabilation">Not responding to Nutritional Rehabiliation for 2 months</string>
+    <string name="ctb_pem_sam_score">PEM/SAM Score</string>
+    <string name="ctb_history_of_measles">History of measles or whooping cough</string>
+    <string name="ctb_less_than_3_month">Less than 3 months</string>
+    <string name="ctb_3_to_6_months">3 to 6 months</string>
+    <string name="ctb_measles_cough_score">Measles/whooping cough score</string>
+    <string name="ctb_hiv_status">HIV Status</string>
+    <string name="ctb_hiv_score">HIV Score</string>
+    <string name="ctb_immuno_compromised_status">Immuno-compromised status</string>
+    <string name="ctb_immuno_compromised_score">Immuno-compromised score</string>
+    <string name="ctb_clinical_manifestation_status">Clinical manifestation status</string>
+    <string name="ctb_clinical_manifestation_score">Clinical manifestation score</string>
+    <string name="ctb_radio_diagnostic_imaging_status">Radio diagnostic imaging status</string>
+    <string name="ctb_gxp_test_result">GeneXpert Test Result</string>
+    <string name="ctb_gxp_test_result_score">GeneXpert Test Result score</string>
+    <string name="ctb_non_specific">Non-specific</string>
+    <string name="ctb_ppa_popup_2">Pulmonary Findings (unilateral wheeze, dullness, weight loss, Hepato-splenomegaly, Lymphadenopathy, ascites etc.</string>
+    <string name="ctb_ppa_popup_3">Matted lymph nodes, abdominal mass or doughy abdomen, sinus formation, gibbus formation, chronic mono arthritis, meningeal findings (bulging fontanel, irritability, choroid tubercle, papilloedema)	</string>
+    <string name="ctb_ppa_popup_4">Ill-defined opacity or patchy infiltrates on chest X-Ray, Marked broncho-vascular marking.</string>
+    <string name="ctb_ppa_popup_5">Consolidation not responding to antibiotic therapy.</string>
+    <string name="ctb_ppa_popup_6">Para-tracheal, or mediastinal Lymphadenopathy, Miliary Mottling, cavitation, Tuberculoma on CAT/MRI brain, collapse vertebrae etc</string>
+    <string name="ctb_radio_diagnostic_score">Radio diagnostic imaging score</string>
+    <string name="ctb_tuberculin_skin_ppd_result">Tuberculin Skin/PPD Test Result</string>
+    <string name="ctb_tuberculin_skin_ppd_result_score">Tuberculin Skin/PPD test result score</string>
+    <string name="ctb_genexpert_test_result">GeneXpert Test Result</string>
+    <string name="ctb_genexpert_test_result_score">GeneXpert Test Result score</string>
+    <string name="ctb_ppa_score_interpretation">PPA Score Interpretation</string>
+    <string name="ctb_ppa_popup_7">Suggested Action: Investigate other reasons of illness</string>
+    <string name="ctb_ppa_popup_8">Suggested Action: Do not treat for TB, Manage the presenting symptom(s), Monitor monthly the condition(s) for 3 months using  scoring chart</string>
+    <string name="ctb_ppa_popup_9">Suggested Action: Investigate and exclude other causes of illness, Investigation may justify therapy, if Xpert or Granuloma is positive then start treatment</string>
+    <string name="ctb_ppa_popup_10">Suggested Action: Confirm (if possible)</string>
+    <string name="ctb_pop_up_referral">Referral is when patient is referred before start of treatment. Transfer is when a patient is transferred out during treatment</string>
+    <string name="ctb_which_test_ordered">Which tests have been ordered?</string>
+    <string name="ctb_screener_instruction">\nScreener Instructions: Kindly guide the patient to the MO for further evaluation and testing\n</string>
     <string name="ctb_patient">Patient</string>
     <string name="ctb_attendant">Attendant</string>
     <string name="ctb_no">No</string>
@@ -609,7 +688,95 @@
     <string name="ctb_childhoodtb_program">Childhood TB Program</string>
     <string name="ctb_pet_tb_program">PET TB Program (Contact)</string>
     <string name="ctb_reason_for_xray">Reason for X-ray?</string>
-    
+    <string name="ctb_unlikely_tb">Unlikely TB</string>
+    <string name="ctb_possible_tb">Possible TB</string>
+    <string name="ctb_probable_tb">Probable TB</string>
+
+    <string-array name="ctb_0_to_1_list">
+        <item>@string/ctb_0</item>
+        <item>@string/ctb_1</item>
+    </string-array>
+
+    <string-array name="ctb_close_contact_status_list">
+        <item>@string/ctb_tb_suggestive</item>
+        <item>@string/ctb_clinically_diagnosed_tb</item>
+        <item>@string/ctb_bacteriologically_positive_tb</item>
+    </string-array>
+
+    <string-array name="ctb_0_to_3_list">
+        <item>@string/ctb_0</item>
+        <item>@string/ctb_1</item>
+        <item>@string/ctb_2</item>
+        <item>@string/ctb_3</item>
+    </string-array>
+
+    <string-array name="ctb_pem_sam_list">
+        <item>@string/ctb_no</item>
+        <item>@string/ctb_yes</item>
+        <item>@string/ctb_not_responding_nutritional_rehabilation</item>
+    </string-array>
+
+    <string-array name="ctb_0_to_2_list">
+        <item>@string/ctb_0</item>
+        <item>@string/ctb_1</item>
+        <item>@string/ctb_2</item>
+    </string-array>
+
+    <string-array name="ctb_history_measles_whooping_cough_list">
+        <item>@string/ctb_no</item>
+        <item>@string/ctb_less_than_3_month</item>
+        <item>@string/ctb_3_to_6_months</item>
+    </string-array>
+
+    <string-array name="ctb_hiv_score_list">
+        <item>@string/ctb_0</item>
+        <item>@string/ctb_2</item>
+    </string-array>
+
+    <string-array name="ctb_clinical_manifestation_status_list">
+        <item>@string/ctb_suggestive_tb</item>
+        <item>@string/ctb_strongly_suggestive_tb</item>
+        <item>@string/ctb_not_sugguestive_tb</item>
+    </string-array>
+
+    <string-array name="ctb_clinical_manifestation_score_list">
+        <item>@string/ctb_0</item>
+        <item>@string/ctb_2</item>
+        <item>@string/ctb_4</item>
+    </string-array>
+
+    <string-array name="ctb_radio_diagnostic_image_status">
+        <item>@string/ctb_non_specific</item>
+        <item>@string/ctb_suggestive_tb</item>
+        <item>@string/ctb_strongly_suggestive_tb</item>
+        <item>@string/ctb_none</item>
+    </string-array>
+
+    <string-array name="ctb_tuberculin_ppd_score_list">
+        <item>@string/ctb_0</item>
+        <item>@string/ctb_1</item>
+        <item>@string/ctb_3</item>
+    </string-array>
+
+    <string-array name="ctb_gxp_test_result_list">
+        <item>@string/ctb_mtb_detected</item>
+        <item>@string/ctb_mtb_not_detected</item>
+        <item>@string/ctb_error</item>
+        <item>@string/ctb_invalid</item>
+        <item>@string/ctb_no_result</item>
+    </string-array>
+
+    <string-array name="ctb_gxp_test_score">
+        <item>@string/ctb_0</item>
+        <item>@string/ctb_5</item>
+    </string-array>
+
+    <string-array name="ctb_ppa_interpretation_list">
+        <item>@string/ctb_unlikely_tb</item>
+        <item>@string/ctb_possible_tb</item>
+        <item>@string/ctb_probable_tb</item>
+    </string-array>
+
     <string-array name="ctb_reason_xray_list">
         <item>@string/ctb_screening</item>
         <item>@string/ctb_childhoodtb_program</item>
