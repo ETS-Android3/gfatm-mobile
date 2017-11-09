@@ -205,12 +205,15 @@ public class ComorbiditiesMissedVisitFollowUp extends AbstractFormActivity imple
         if (snackbar != null)
             snackbar.dismiss();
 
+        String formDa = formDate.getButton().getText().toString();
+        String personDOB = App.getPatient().getPerson().getBirthdate();
+
+
+        Date date = new Date();
+
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
-            String formDa = formDate.getButton().getText().toString();
-            String personDOB = App.getPatient().getPerson().getBirthdate();
 
-            Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
 
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
@@ -222,69 +225,65 @@ public class ComorbiditiesMissedVisitFollowUp extends AbstractFormActivity imple
 
             } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
             } else
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+            Calendar requiredDate = formDateCalendar.getInstance();
+            requiredDate.setTime(formDateCalendar.getTime());
+            requiredDate.add(Calendar.DATE, 30);
+
+            if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                thirdDateCalendar.setTime(requiredDate.getTime());
+            } else {
+                requiredDate.add(Calendar.DATE, 1);
+                thirdDateCalendar.setTime(requiredDate.getTime());
+            }
 
         }
-        if (!(missedVisitDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
 
-            String formDa = missedVisitDate.getButton().getText().toString();
-            String personDOB = App.getPatient().getPerson().getBirthdate();
 
-            Date date = new Date();
-            if (secondDateCalendar.before(formDateCalendar)/*secondDateCalendar.before(App.getCalendar(date))*/) {
+        if (!missedVisitDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString())) {
 
-                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+            if (secondDateCalendar.after(App.getCalendar(date))) {
 
-                //snackbar = Snackbar.make(mainContent, getResources().getString(R.string.next_date_past), Snackbar.LENGTH_INDEFINITE);
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.next_visit_date_cannot_before_form_date), Snackbar.LENGTH_INDEFINITE);
+                secondDateCalendar = App.getCalendar(date);
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
-                missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-
-            } else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
-                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-                tv.setMaxLines(2);
-                snackbar.show();
-                missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
             } else
                 missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-
         }
 
-        if (!(returnVisitDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString()))) {
+        if (!returnVisitDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString())) {
 
-            String formDa = returnVisitDate.getButton().getText().toString();
-            String personDOB = App.getPatient().getPerson().getBirthdate();
+            if (thirdDateCalendar.after(date)) {
 
-            Date date = new Date();
-            if (thirdDateCalendar.before(formDateCalendar)/*secondDateCalendar.before(App.getCalendar(date))*/) {
+                thirdDateCalendar = App.getCalendar(date);
 
-                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-
-                //snackbar = Snackbar.make(mainContent, getResources().getString(R.string.next_date_past), Snackbar.LENGTH_INDEFINITE);
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.next_visit_date_cannot_before_form_date), Snackbar.LENGTH_INDEFINITE);
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
-
-                missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
 
             } else if (thirdDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
+            } else if (thirdDateCalendar.before(formDateCalendar)) {
+                thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.ctb_date_can_not_be_less_than_form_date), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
             } else
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
-
         }
         formDate.getButton().setEnabled(true);
         missedVisitDate.getButton().setEnabled(true);
@@ -917,11 +916,11 @@ public class ComorbiditiesMissedVisitFollowUp extends AbstractFormActivity imple
                     HashMap<String, String> result = new HashMap<String, String>();
                     String date1 = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_DIABETES_TREATMENT_INITIATION, "RETURN VISIT DATE");
                     String date2 = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_DIABETES_TREATMENT_FOLLOWUP_FORM, "RETURN VISIT DATE");
-                    diabetesDate = least(App.stringToDate(date1, "yyyy-MM-dd"), App.stringToDate(date2, "yyyy-MM-dd"));
+                        diabetesDate = least(App.stringToDate(date1, "yyyy-MM-dd"), App.stringToDate(date2, "yyyy-MM-dd"));
 
                     String datea = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_MENTAL_HEALTH_SCREENING_FORM, "RETURN VISIT DATE");
                     String dateb = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_TREATMENT_FOLLOWUP_MENTAL_HEALTH_FORM, "RETURN VISIT DATE");
-                    mentalHealthDate = least(App.stringToDate(datea, "yyyy-MM-dd"), App.stringToDate(dateb, "yyyy-MM-dd"));
+                        mentalHealthDate = least(App.stringToDate(datea, "yyyy-MM-dd"), App.stringToDate(dateb, "yyyy-MM-dd"));
                     return result;
                 }
 
@@ -933,8 +932,13 @@ public class ComorbiditiesMissedVisitFollowUp extends AbstractFormActivity imple
                 protected void onPostExecute(HashMap<String, String> result) {
                     super.onPostExecute(result);
                     loading.dismiss();
-                    thirdDateCalendar.setTime(diabetesDate);
-                    returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+                    if (diabetesDate != null) {
+                        secondDateCalendar.setTime(diabetesDate);
+                        missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+                    }else{
+                        secondDateCalendar.setTime(formDateCalendar.getTime());
+                        missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                    }
                 }
             };
             autopopulateFormTaskDates.execute("");
@@ -956,7 +960,6 @@ public class ComorbiditiesMissedVisitFollowUp extends AbstractFormActivity imple
                 calendar = formDateCalendar;
             else if (getArguments().getInt("type") == SECOND_DATE_DIALOG_ID)
                 calendar = secondDateCalendar;
-
             else if (getArguments().getInt("type") == THIRD_DATE_DIALOG_ID)
                 calendar = thirdDateCalendar;
             else
@@ -1052,18 +1055,18 @@ public class ComorbiditiesMissedVisitFollowUp extends AbstractFormActivity imple
 
             if (missedVisitTreatmentRegimen.getRadioGroupSelectedValue().equals(getResources().getString(R.string.comorbidities_missed_visit_for_treatment_regimen_diabetes))) {
                 if (diabetesDate != null) {
-                    thirdDateCalendar.setTime(diabetesDate);
-                    returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+                    secondDateCalendar.setTime(diabetesDate);
+                    missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
                 }
             } else if (missedVisitTreatmentRegimen.getRadioGroupSelectedValue().equals(getResources().getString(R.string.comorbidities_missed_visit_for_treatment_regimen_mental_health))) {
                 if (mentalHealthDate != null) {
-                    thirdDateCalendar.setTime(mentalHealthDate);
-                    returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+                    secondDateCalendar.setTime(mentalHealthDate);
+                    missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
                 }
             } else if (missedVisitTreatmentRegimen.getRadioGroupSelectedValue().equals(getResources().getString(R.string.comorbidities_missed_visit_for_treatment_regimen_mental_both))) {
                 if (mentalHealthDate != null) {
-                    thirdDateCalendar.setTime(mentalHealthDate);
-                    returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+                    secondDateCalendar.setTime(mentalHealthDate);
+                    missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
                 }
             }
 

@@ -181,12 +181,12 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formType, formDate,orderId,ctScanSite, monthTreatment,orderIds,testId,
-                        ctChestTbSuggestive,
                         ctChestInterpretation,
-                        ctAbdomenTbSuggestive,
+                        ctChestTbSuggestive,
                         ctAbdomenInterpretation,
-                        ctBrainTbSuggestive,
+                        ctAbdomenTbSuggestive,
                         ctBrainInterpretation,
+                        ctBrainTbSuggestive,
                         ctBoneSTbSuggestive,
                         ctSpineTbSuggestive,ctScanOutcome}};
 
@@ -901,7 +901,6 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
             }
             if(ctScan!=null){
                 if(ctScan.equalsIgnoreCase("CT SCAN, CHEST")){
-                    ctChestTbSuggestive.setVisibility(View.VISIBLE);
                     ctChestInterpretation.setVisibility(View.VISIBLE);
 
                     ctAbdomenTbSuggestive.setVisibility(View.GONE);
@@ -912,7 +911,6 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
                     ctSpineTbSuggestive.setVisibility(View.GONE);
                 }
                 else if(ctScan.equalsIgnoreCase("COMPUTED TOMOGRAPHY OF ABDOMEN WITH CONTRAST")){
-                    ctAbdomenTbSuggestive.setVisibility(View.VISIBLE);
                     ctAbdomenInterpretation.setVisibility(View.VISIBLE);
 
                     ctChestTbSuggestive.setVisibility(View.GONE);
@@ -923,7 +921,6 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
                     ctSpineTbSuggestive.setVisibility(View.GONE);
                 }
                 else if(ctScan.equalsIgnoreCase("BRAIN CT SCAN")){
-                    ctBrainTbSuggestive.setVisibility(View.VISIBLE);
                     ctBrainInterpretation.setVisibility(View.VISIBLE);
 
 
@@ -1035,22 +1032,28 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
         if(group == ctChestInterpretation.getRadioGroup()){
             if (ctChestInterpretation.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_suggestive_tb))) {
                 ctScanOutcome.getRadioGroup().getButtons().get(0).setChecked(true);
+                ctChestTbSuggestive.setVisibility(View.VISIBLE);
             }else{
+                ctChestTbSuggestive.setVisibility(View.GONE);
                 ctScanOutcome.getRadioGroup().getButtons().get(1).setChecked(true);
             }
         }
         if(group == ctAbdomenInterpretation.getRadioGroup()){
             if (ctAbdomenInterpretation.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_suggestive_tb))) {
                 ctScanOutcome.getRadioGroup().getButtons().get(0).setChecked(true);
+                ctAbdomenTbSuggestive.setVisibility(View.VISIBLE);
             }else{
                 ctScanOutcome.getRadioGroup().getButtons().get(1).setChecked(true);
+                ctAbdomenTbSuggestive.setVisibility(View.GONE);
             }
         }
         if(group == ctBrainInterpretation.getRadioGroup()){
             if (ctBrainInterpretation.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_suggestive_tb))) {
                 ctScanOutcome.getRadioGroup().getButtons().get(0).setChecked(true);
+                ctBrainTbSuggestive.setVisibility(View.VISIBLE);
             }else{
                 ctScanOutcome.getRadioGroup().getButtons().get(1).setChecked(true);
+                ctBrainInterpretation.setVisibility(View.GONE);
             }
         }
         if(group == ctBoneSTbSuggestive.getRadioGroup()){
@@ -1101,15 +1104,12 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
             }
             if(ctScan!=null){
                 if(ctScan.equalsIgnoreCase("CT SCAN, CHEST")){
-                    ctChestTbSuggestive.setVisibility(View.VISIBLE);
                     ctChestInterpretation.setVisibility(View.VISIBLE);
                 }
                 else if(ctScan.equalsIgnoreCase("COMPUTED TOMOGRAPHY OF ABDOMEN WITH CONTRAST")){
-                    ctAbdomenTbSuggestive.setVisibility(View.VISIBLE);
                     ctAbdomenInterpretation.setVisibility(View.VISIBLE);
                 }
                 else if(ctScan.equalsIgnoreCase("BRAIN CT SCAN")){
-                    ctBrainTbSuggestive.setVisibility(View.VISIBLE);
                     ctBrainInterpretation.setVisibility(View.VISIBLE);
                 }else if(ctScan.equalsIgnoreCase("BONE SCAN")){
                     ctBoneSTbSuggestive.setVisibility(View.VISIBLE);

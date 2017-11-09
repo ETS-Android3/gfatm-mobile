@@ -544,7 +544,124 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
 
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
+
+
+        observations.add(new String[]{"AGE SCORE", App.get(ageScore).equals(getResources().getString(R.string.ctb_0)) ? "0" :
+                        "1"});
+
+        if(closeContactStatus.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"CLOSE CONTACT STATUS", App.get(closeContactStatus).equals(getResources().getString(R.string.ctb_tb_suggestive)) ? "SUGGESTIVE OF TB" :
+                    (App.get(closeContactStatus).equals(getResources().getString(R.string.ctb_clinically_diagnosed_tb)) ? "CLINICALLY DIAGNOSED, TB" :
+                            "PRIMARY RESPIRATORY TUBERCULOSIS, CONFIRMED BACTERIOLOGICALLY")});
+        }
+
+        if(closeContactScore.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"CLOSE CONTACT SCORE", App.get(closeContactScore).equals(getResources().getString(R.string.ctb_0)) ? "0" :
+                    (App.get(closeContactScore).equals(getResources().getString(R.string.ctb_1)) ? "1" :
+                            (App.get(closeContactScore).equals(getResources().getString(R.string.ctb_2)) ? "2" :
+                                    "3"))});
+        }
+
+        if(pemSam.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"PEM OR SAM", App.get(pemSam).equals(getResources().getString(R.string.no)) ? "NO" :
+                    (App.get(pemSam).equals(getResources().getString(R.string.yes)) ? "YES" :
+                            "NOT RESPONDING TO NUTRITIONAL REHABILITATION FOR 2 MONTHS")});
+        }
+
+        if(pemSamScore.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"PEM OR SAM SCORE", App.get(pemSamScore).equals(getResources().getString(R.string.ctb_0)) ? "0" :
+                    (App.get(pemSamScore).equals(getResources().getString(R.string.ctb_1)) ? "1" :
+                            "2")});
+        }
+
+        if(historyMeaslesCough.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"HISTORY OF MEASLES OR WHOOPING COUGH", App.get(historyMeaslesCough).equals(getResources().getString(R.string.no)) ? "NO" :
+                    (App.get(historyMeaslesCough).equals(getResources().getString(R.string.ctb_less_than_3_month)) ? "LESS THAN 3 MONTHS" :
+                            "3 TO 6 MONTHS")});
+        }
+
+        if(historyMeaslesCoughScore.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"MEASLES OR WHOOPING COUGH SCORE", App.get(historyMeaslesCoughScore).equals(getResources().getString(R.string.ctb_0)) ? "0" :
+                    (App.get(historyMeaslesCoughScore).equals(getResources().getString(R.string.ctb_1)) ? "1" :
+                            "2")});
+        }
+        if(hivStatus.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"HIV INFECTED", App.get(hivStatus).equals(getResources().getString(R.string.yes)) ? "YES" :
+                    "NO"});
+        }
+
+        if(hivScore.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"HIV SCORE", App.get(hivScore).equals(getResources().getString(R.string.ctb_0)) ? "0" :
+                    "2"});
+        }
+
+        if(immunoCompromisedStatus.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"IMMUNO COMPROMISED STATUS", App.get(immunoCompromisedStatus).equals(getResources().getString(R.string.yes)) ? "YES" :
+                    "NO"});
+        }
+
+        if(immunoCompromisedScore.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"IMMUNO COMPROMISED SCORE", App.get(immunoCompromisedScore).equals(getResources().getString(R.string.ctb_0)) ? "0" :
+                    "1"});
+        }
+
+        if(clinicalManifestationStatus.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"CLINICAL MANIFESTATION STATUS", App.get(clinicalManifestationStatus).equals(getResources().getString(R.string.ctb_suggestive_tb)) ? "SUGGESTIVE OF TB" :
+                    (App.get(clinicalManifestationStatus).equals(getResources().getString(R.string.ctb_strongly_suggestive_tb)) ? "STRONGLY SUGGESTIVE OF TB" :
+                            "NOT SUGGESTIVE OF TB")});
+        }
+
+        if(clinicalManifestationScore.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"CLINICAL MANIFESTATION SCORE", App.get(clinicalManifestationScore).equals(getResources().getString(R.string.ctb_0)) ? "0" :
+                    (App.get(clinicalManifestationScore).equals(getResources().getString(R.string.ctb_2)) ? "2" :
+                            "4")});
+        }
+
+        if(radioDiagnostiImagingStatus.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"RADIO DIAGNOSTIC IMAGING STATUS", App.get(radioDiagnostiImagingStatus).equals(getResources().getString(R.string.ctb_non_specific)) ? "NON SPECIFIC" :
+                    (App.get(radioDiagnostiImagingStatus).equals(getResources().getString(R.string.ctb_suggestive_tb)) ? "SUGGESTIVE OF TB" :
+                            (App.get(radioDiagnostiImagingStatus).equals(getResources().getString(R.string.ctb_strongly_suggestive_tb)) ? "STRONGLY SUGGESTIVE OF TB" :
+                                    "NONE"))});
+        }
+
+        if(radioDiagnosticImagingScore.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"RADIO DIAGNOSTIC IMAGING SCORE", App.get(radioDiagnosticImagingScore).equals(getResources().getString(R.string.ctb_0)) ? "0" :
+                    (App.get(radioDiagnosticImagingScore).equals(getResources().getString(R.string.ctb_1)) ? "1" :
+                            (App.get(radioDiagnosticImagingScore).equals(getResources().getString(R.string.ctb_2)) ? "2" :
+                                    "3"))});
+        }
+
+        if(tuberculinSkinPpdTestResult.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"TUBERCULIN SKIN TEST RESULT", App.get(tuberculinSkinPpdTestResult).equals(getResources().getString(R.string.ctb_less_than_5mm)) ? "<5 mm" :
+                    App.get(tuberculinSkinPpdTestResult).equals(getResources().getString(R.string.ctb_5_to_9mm)) ? "5 - 9 mm" :
+                            "≥10 mm"});
+        }
+
+        if(tuberculinSkinPpdTestResultScore.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"TUBERCULIN SKIN TEST RESULT SCORE", App.get(tuberculinSkinPpdTestResultScore).equals(getResources().getString(R.string.ctb_0)) ? "0" :
+                    App.get(tuberculinSkinPpdTestResultScore).equals(getResources().getString(R.string.ctb_1)) ? "1" :
+                            "3"});
+        }
+
+        if (gxpTestResult.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"GENEXPERT MTB/RIF RESULT", App.get(gxpTestResult).equals(getResources().getString(R.string.ctb_mtb_detected)) ? "DETECTED" :
+                    (App.get(gxpTestResult).equals(getResources().getString(R.string.ctb_mtb_not_detected)) ? "NOT DETECTED" :
+                            (App.get(gxpTestResult).equals(getResources().getString(R.string.ctb_error)) ? "ERROR" :
+                                    (App.get(gxpTestResult).equals(getResources().getString(R.string.ctb_invalid)) ? "INVALID" : "NO RESULT")))});
+        }
+
+        if(gxpTestResultScore.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"GENEXPERT MTB/RIF RESULT SCORE", App.get(gxpTestResultScore).equals(getResources().getString(R.string.ctb_0)) ? "0" :
+                            "5"});
+        }
+
         observations.add(new String[]{"PPA SCORE", App.get(ppaScore)});
+
+        if(ppaScoreInterpretation.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"PPA SCORE INTERPRETATION", App.get(ppaScoreInterpretation).equals(getResources().getString(R.string.ctb_unlikely_tb)) ? "UNLIKELY TB" :
+                    App.get(ppaScoreInterpretation).equals(getResources().getString(R.string.ctb_possible_tb)) ? "POSSIBLE TB" :
+                            "PROBABLE TB"});
+        }
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -683,8 +800,340 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
                 timeTakeToFill = obs[0][1];
             } else if (obs[0][0].equals("FORM START TIME")) {
                 startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
-            } else if (obs[0][0].equals("PPA SCORE")) {
+            }
+            else if (obs[0][0].equals("AGE SCORE")) {
+
+                for (RadioButton rb : ageScore.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_0)) && obs[0][1].equals("0")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                ageScore.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("CLOSE CONTACT STATUS")) {
+
+                for (RadioButton rb : closeContactStatus.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_tb_suggestive)) && obs[0][1].equals("SUGGESTIVE OF TB")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_clinically_diagnosed_tb)) && obs[0][1].equals("CLINICALLY DIAGNOSED, TB")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_bacteriologically_positive_tb)) && obs[0][1].equals("PRIMARY RESPIRATORY TUBERCULOSIS, CONFIRMED BACTERIOLOGICALLY")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                closeContactStatus.setVisibility(View.VISIBLE);
+            }
+
+            else if (obs[0][0].equals("CLOSE CONTACT SCORE")) {
+
+                for (RadioButton rb : closeContactScore.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_0)) && obs[0][1].equals("0")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_2)) && obs[0][1].equals("2")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+
+                }
+                closeContactScore.setVisibility(View.VISIBLE);
+            }else if (obs[0][0].equals("PEM OR SAM")) {
+
+                for (RadioButton rb : pemSam.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_not_responding_nutritional_rehabilation)) && obs[0][1].equals("NOT RESPONDING TO NUTRITIONAL REHABILITATION FOR 2 MONTHS")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                pemSam.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("PEM OR SAM SCORE")) {
+
+                for (RadioButton rb : pemSamScore.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_0)) && obs[0][1].equals("0")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_2)) && obs[0][1].equals("2")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                pemSamScore.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("HISTORY OF MEASLES OR WHOOPING COUGH")) {
+
+                for (RadioButton rb : historyMeaslesCough.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_less_than_3_month)) && obs[0][1].equals("LESS THAN 3 MONTHS")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_3_to_6_months)) && obs[0][1].equals("3 TO 6 MONTHS")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                historyMeaslesCough.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("MEASLES OR WHOOPING COUGH SCORE")) {
+
+                for (RadioButton rb : historyMeaslesCoughScore.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_0)) && obs[0][1].equals("0")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_2)) && obs[0][1].equals("2")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                historyMeaslesCoughScore.setVisibility(View.VISIBLE);
+            }
+
+            else if (obs[0][0].equals("HIV INFECTED")) {
+
+                for (RadioButton rb : hivStatus.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                hivStatus.setVisibility(View.VISIBLE);
+            }
+
+
+            else if (obs[0][0].equals("HIV SCORE")) {
+                for (RadioButton rb : hivScore.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_0)) && obs[0][1].equals("0")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_2)) && obs[0][1].equals("2")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                hivScore.setVisibility(View.VISIBLE);
+            }
+
+            else if (obs[0][0].equals("IMMUNO COMPROMISED STATUS")) {
+
+                for (RadioButton rb : immunoCompromisedStatus.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                immunoCompromisedStatus.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("IMMUNO COMPROMISED SCORE")) {
+
+                for (RadioButton rb : immunoCompromisedScore.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_0)) && obs[0][1].equals("0")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                immunoCompromisedScore.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("CLINICAL MANIFESTATION STATUS")) {
+                for (RadioButton rb : clinicalManifestationStatus.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_suggestive_tb)) && obs[0][1].equals("SUGGESTIVE OF TB")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_strongly_suggestive_tb)) && obs[0][1].equals("STRONGLY SUGGESTIVE OF TB")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_not_sugguestive_tb)) && obs[0][1].equals("NOT SUGGESTIVE OF TB")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                clinicalManifestationStatus.setVisibility(View.VISIBLE);
+            }
+
+
+            else if (obs[0][0].equals("CLINICAL MANIFESTATION SCORE")) {
+                for (RadioButton rb : clinicalManifestationScore.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_0)) && obs[0][1].equals("0")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_2)) && obs[0][1].equals("2")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                clinicalManifestationScore.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("RADIO DIAGNOSTIC IMAGING STATUS")) {
+                for (RadioButton rb : radioDiagnostiImagingStatus.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_non_specific)) && obs[0][1].equals("NON SPECIFIC")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_suggestive_tb)) && obs[0][1].equals("SUGGESTIVE OF TB")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_strongly_suggestive_tb)) && obs[0][1].equals("STRONGLY SUGGESTIVE OF TB")) {
+                        rb.setChecked(true);
+                        break;
+                    }else if (rb.getText().equals(getResources().getString(R.string.ctb_none)) && obs[0][1].equals("NONE")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                radioDiagnostiImagingStatus.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("RADIO DIAGNOSTIC IMAGING SCORE")) {
+                for (RadioButton rb : radioDiagnosticImagingScore.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_0)) && obs[0][1].equals("0")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_2)) && obs[0][1].equals("2")) {
+                        rb.setChecked(true);
+                        break;
+                    }else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                radioDiagnosticImagingScore.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("TUBERCULIN SKIN TEST RESULT")) {
+                for (RadioButton rb : tuberculinSkinPpdTestResult.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_less_than_5mm)) && obs[0][1].equals("<5 mm")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_5_to_9mm)) && obs[0][1].equals("5 - 9 mm")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_greater_than_10mm)) && obs[0][1].equals("≥10 mm")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                tuberculinSkinPpdTestResult.setVisibility(View.VISIBLE);
+            }else if (obs[0][0].equals("TUBERCULIN SKIN TEST RESULT SCORE")) {
+                for (RadioButton rb : tuberculinSkinPpdTestResultScore.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_0)) && obs[0][1].equals("0")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                tuberculinSkinPpdTestResultScore.setVisibility(View.VISIBLE);
+            }
+
+
+
+            else if (obs[0][0].equals("GENEXPERT MTB/RIF RESULT")) {
+                for (RadioButton rb : gxpTestResult.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_mtb_detected)) && obs[0][1].equals("DETECTED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_mtb_not_detected)) && obs[0][1].equals("NOT DETECTED")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_error)) && obs[0][1].equals("ERROR")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_invalid)) && obs[0][1].equals("INVALID")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_no_result)) && obs[0][1].equals("NO RESULT")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                gxpTestResult.setVisibility(View.VISIBLE);
+            }
+
+            else if (obs[0][0].equals("GENEXPERT MTB/RIF RESULT SCORE")) {
+                for (RadioButton rb : gxpTestResultScore.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_0)) && obs[0][1].equals("0")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_5)) && obs[0][1].equals("5")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                gxpTestResultScore.setVisibility(View.VISIBLE);
+            }else if (obs[0][0].equals("PPA SCORE")) {
                 ppaScore.getEditText().setText(obs[0][1]);
+            }
+
+            else if (obs[0][0].equals("PPA SCORE INTERPRETATION")) {
+                for (RadioButton rb : ppaScoreInterpretation.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_unlikely_tb)) && obs[0][1].equals("UNLIKELY TB")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_possible_tb)) && obs[0][1].equals("POSSIBLE TB")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_probable_tb)) && obs[0][1].equals("PROBABLE TB")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                ppaScoreInterpretation.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -729,6 +1178,7 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
         if (snackbar != null)
             snackbar.dismiss();
 
+        closeContactStatus.setVisibility(View.GONE);
         closeContactScore.setVisibility(View.GONE);
         pemSamScore.setVisibility(View.GONE);
         historyMeaslesCoughScore.setVisibility(View.GONE);
@@ -738,7 +1188,6 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
         radioDiagnosticImagingScore.setVisibility(View.GONE);
         tuberculinSkinPpdTestResultScore.setVisibility(View.GONE);
         gxpTestResultScore.setVisibility(View.GONE);
-
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
@@ -791,6 +1240,57 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
 
         for (RadioButton rb : ppaScoreInterpretation.getRadioGroup().getButtons()) {
             rb.setClickable(false);
+        }
+
+
+
+        String presumptiveResult = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Case Confirmation", "PATIENT IS CONTACT OF KNOWN OR SUSPECTED SUSPICIOUS CASE IN PAST 2 YEARS");
+        if(presumptiveResult!=null){
+            if(presumptiveResult.equalsIgnoreCase(getResources().getString(R.string.yes)))   {
+                closeContactStatus.setVisibility(View.VISIBLE);
+            }else{
+                closeContactStatus.setVisibility(View.GONE);
+            }
+        }
+
+
+
+        String mantouxResult = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Mantoux Test Result", "TUBERCULIN SKIN TEST RESULT");
+        if(mantouxResult!=null){
+            for (RadioButton rb : tuberculinSkinPpdTestResult.getRadioGroup().getButtons()) {
+                if (rb.getText().equals(getResources().getString(R.string.ctb_less_than_5mm)) && mantouxResult.equals("<5 mm")) {
+                    rb.setChecked(true);
+                    break;
+                } else if (rb.getText().equals(getResources().getString(R.string.ctb_5_to_9mm)) && mantouxResult.equals("5 - 9 mm")) {
+                    rb.setChecked(true);
+                    break;
+                } else if (rb.getText().equals(getResources().getString(R.string.ctb_greater_than_10mm)) && mantouxResult.equals("≥10 mm")) {
+                    rb.setChecked(true);
+                    break;
+                }
+            }
+        }
+
+        String gxpResult = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "GXP Test", "GENEXPERT MTB/RIF RESULT");
+        if(gxpResult!=null){
+            for (RadioButton rb : gxpTestResult.getRadioGroup().getButtons()) {
+                if (rb.getText().equals(getResources().getString(R.string.ctb_mtb_detected)) && gxpResult.equals("DETECTED")) {
+                    rb.setChecked(true);
+                    break;
+                } else if (rb.getText().equals(getResources().getString(R.string.ctb_mtb_not_detected)) && gxpResult.equals("NOT DETECTED")) {
+                    rb.setChecked(true);
+                    break;
+                } else if (rb.getText().equals(getResources().getString(R.string.ctb_error)) && gxpResult.equals("ERROR")) {
+                    rb.setChecked(true);
+                    break;
+                } else if (rb.getText().equals(getResources().getString(R.string.ctb_invalid)) && gxpResult.equals("INVALID")) {
+                    rb.setChecked(true);
+                    break;
+                } else if (rb.getText().equals(getResources().getString(R.string.ctb_no_result)) && gxpResult.equals("NO RESULT")) {
+                    rb.setChecked(true);
+                    break;
+                }
+            }
         }
 
 
