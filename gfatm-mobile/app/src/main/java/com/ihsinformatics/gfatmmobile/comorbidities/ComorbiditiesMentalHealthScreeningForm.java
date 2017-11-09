@@ -47,6 +47,10 @@ import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -1688,7 +1692,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
             try {
                 displayPreferredTherapyLocationOrNot();
             } catch (Exception e) {
-            }finally {
+            } finally {
                 if (!akuadsSeverity.getRadioGroup().getSelectedValue().equals(getString(R.string.comorbidities_MH_severity_level_normal)) && akuadsAgree.getRadioGroup().getSelectedValue().equals(getString(R.string.yes))) {
                     akuadsPhoneCounsellingConsent.setVisibility(View.VISIBLE);
                     preferredTherapyLocationSpinner.setVisibility(View.VISIBLE);
@@ -1805,8 +1809,8 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
     }
 
     void displayAkuadsAgreeOrNot() {
-        if (akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_mild)) || akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_moderate))
-                || akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_severe))) {
+        if ((akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_mild)) || akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_moderate))
+                || akuadsSeverity.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_severe))) && akuadsAgree.getRadioGroup().getSelectedValue().equals(getString(R.string.yes))) {
             akuadsAgree.setVisibility(View.VISIBLE);
 
             // preferredModeOfTherapy.setVisibility(View.VISIBLE);
@@ -1896,6 +1900,10 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
             preferredTherapyLocationSpinner.setVisibility(View.GONE);
             mentalHealthNextScheduledVisit.setVisibility(View.GONE);
             gpClinicCode.setVisibility(View.GONE);
+        }
+        if(!akuadsSeverity.getRadioGroup().getSelectedValue().equals(getString(R.string.comorbidities_MH_severity_level_normal))){
+            akuadsAgree.setVisibility(View.VISIBLE);
+
         }
     }
 
@@ -2075,4 +2083,6 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
         }
 
     }
+
+
 }
