@@ -7,7 +7,8 @@
     <ScrollView
         android:id="@+id/mainView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:scrollbarFadeDuration="0">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,8 +41,8 @@
                 android:padding="@dimen/large"
                 android:layout_gravity="center"
                 android:text="@string/fast_patient_view"
-                android:textColor="?colorFollowup"
-                android:drawableTint="?colorFollowup"
+                android:textColor="?colorRegistration"
+                android:drawableTint="?colorRegistration"
                 android:textSize="@dimen/large"
                 android:layout_marginBottom="@dimen/medium"/>
 
@@ -79,7 +80,8 @@
         android:id="@+id/contentView"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:scrollbarFadeDuration="0">
 
         <LinearLayout
             android:layout_width="match_parent"

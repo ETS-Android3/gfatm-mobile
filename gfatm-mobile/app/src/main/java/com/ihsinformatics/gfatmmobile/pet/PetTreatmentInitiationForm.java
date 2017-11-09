@@ -586,6 +586,16 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                     super.onPostExecute(result);
                     loading.dismiss();
 
+                    for (RadioButton rb : intervention.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.pet)) && result.get("INTERVENTION").equals("PET")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.sci)) && result.get("INTERVENTION").equals("SCI")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+
                     if (result.get("PATIENT ID OF INDEX CASE") == null || result.get("PATIENT ID OF INDEX CASE").equals("")) {
 
                         /*final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
@@ -710,16 +720,6 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                         }
                         if (!result.get("RESISTANT TO ANTI-TUBERCULOSIS DRUGS").equals(""))
                             dstPattern.setVisibility(View.VISIBLE);
-                    }
-
-                    for (RadioButton rb : intervention.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.pet)) && result.get("INTERVENTION").equals("PET")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.sci)) && result.get("INTERVENTION").equals("SCI")) {
-                            rb.setChecked(true);
-                            break;
-                        }
                     }
 
                     if (App.get(infectionType).equals(getResources().getString(R.string.pet_drtb))) {

@@ -438,7 +438,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                     }
                 });
 
-                Boolean errorFlag  = false;
+                final Boolean[] errorFlag = {false};
                 errorNumber = 0;
                 successNumber = 0;
                 for (int i = 0; i < checkedTag.size(); i++) {
@@ -489,6 +489,8 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                                             new DialogInterface.OnClickListener() {
                                                 public void onClick(DialogInterface dialog, int which) {
                                                     dialogSemaphore.release();
+                                                    errorFlag[0] = true;
+                                                    errorNumber = errorNumber + 1;
                                                     dialog.dismiss();
                                                 }
                                             });
@@ -513,7 +515,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                         else if(!returnString.equals("SUCCESS")) {
 
                             if(!(returnString.contains("PATIENT ALREADY EXISTS") && retStr[0].equals("SUCCESS"))) {
-                                errorFlag = true;
+                                errorFlag[0] = true;
                                 errorNumber = errorNumber + 1;
                             } else
                                 successNumber = successNumber + 1;
@@ -526,7 +528,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
 
                 }
 
-                if(errorFlag)
+                if(errorFlag[0])
                     return "COMPLETE_WITH_ERROR";
 
                 return "SUCCESS";

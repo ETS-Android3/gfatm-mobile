@@ -303,23 +303,28 @@
 
         <item>
             create table person_attribute_type(
-                id integer primary key,
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 name VARCHAR,
                 format VARCHAR,
+                foreign_key VARCHAR,
                 uuid VARCHAR
-             );
+            );
         </item>
 
         <item>
-            create table person_attribute(
-                id integer primary key,
-                patient_id integer,
-                person_attribute_type_id integer,
-                value VARCHAR,
-                dateCreated datetime,
-                voided boolean,
-                uuid VARCHAR
-             );
+            create table concept_mapping(
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                uuid VARCHAR,
+                concept_id integer
+            );
+        </item>
+
+        <item>
+            create table concept_answers(
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                question_concept_uuid VARCHAR,
+                answer_concept_uuid VARCHAR
+            );
         </item>
 
     </string-array>

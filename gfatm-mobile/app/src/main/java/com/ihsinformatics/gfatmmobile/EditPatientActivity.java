@@ -20,6 +20,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.MotionEvent;
@@ -37,6 +38,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
@@ -48,6 +50,7 @@ public class EditPatientActivity extends AppCompatActivity implements View.OnCli
 
     protected static ProgressDialog loading;
 
+    private LinearLayout content;
     private ServerService serverService;
 
     @Override
@@ -55,10 +58,19 @@ public class EditPatientActivity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_patient);
         loading = new ProgressDialog(this, ProgressDialog.THEME_HOLO_LIGHT);
+        content =  (LinearLayout) findViewById(R.id.content);
 
         serverService = new ServerService(getApplicationContext());
-
         this.setFinishOnTouchOutside(false);
+
+        Object personAttributeTypes[][] = serverService.getAllPersonAttributeTypes();
+        for(Object[] personAttributeType : personAttributeTypes){
+            if(String.valueOf(personAttributeType[1]).equalsIgnoreCase("java.lang.string")) {
+
+                TitledEditText attributeTextView = new TitledEditText(this, null, String.valueOf(personAttributeType[0]), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
+                content.addView(attributeTextView);
+            }
+        }
 
     }
 

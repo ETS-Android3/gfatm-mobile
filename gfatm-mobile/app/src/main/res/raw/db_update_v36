@@ -18,7 +18,7 @@ INSERT OR IGNORE INTO person_attribute_type VALUES (15, 'Ethnicity','org.openmrs
 INSERT OR IGNORE INTO person_attribute_type VALUES (16, 'Education Level','org.openmrs.Concept', '1712','78d0949a-04c8-4110-b38c-4ac4832639f7');
 INSERT OR IGNORE INTO person_attribute_type VALUES (17, 'Employment Status','org.openmrs.Concept', '164145','fa190df0-eacb-4ea8-980b-519ff02957c7');
 INSERT OR IGNORE INTO person_attribute_type VALUES (18, 'Occupation','org.openmrs.Concept', '163399','2debbc4b-caaf-4dfc-b0aa-edef1dc4d511');
-INSERT OR IGNORE INTO person_attribute_type VALUES (19,  'Mother Tongue','org.openmrs.Concept', '164205','ed6619e6-4177-4a87-8e70-10e11745c047');
+INSERT OR IGNORE INTO person_attribute_type VALUES (19, 'Mother Tongue','org.openmrs.Concept', '164205','ed6619e6-4177-4a87-8e70-10e11745c047');
 INSERT OR IGNORE INTO person_attribute_type VALUES (20, 'Income Class','org.openmrs.Concept', '164174','bfb9c659-660f-4c41-a387-1a315f602f2a');
 INSERT OR IGNORE INTO person_attribute_type VALUES (21, 'National ID','java.lang.String', NULL,'dc528cb6-8037-4688-960e-7bf484914c43');
 INSERT OR IGNORE INTO person_attribute_type VALUES (22, 'National ID Owner','org.openmrs.Concept', '164078','691871fa-4448-4f67-9343-2ad105214cc2');

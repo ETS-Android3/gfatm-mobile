@@ -352,10 +352,10 @@
     <string name="city_default" translatable="false">Karachi</string>
     <string name="province_default" translatable="false">Sindh</string>
     <string name="country_default" translatable="false">Pakistan</string>
-    <!--<string name="ip_default" translatable="false">mrs.ghd.ihn.org.pk</string>
-    <string name="port_default" translatable="false">443</string>-->
-     <string name="ip_default" translatable="false">124.29.207.74</string>
-    <string name="port_default" translatable="false">9902</string>
+    <string name="ip_default" translatable="false">mrs.ghd.ihn.org.pk</string>
+    <string name="port_default" translatable="false">443</string>
+    <!-- <string name="ip_default" translatable="false">124.29.207.74</string>
+    <string name="port_default" translatable="false">9902</string>-->
 
     <string name="support_contact">Support Contact</string>
     <string name="support_email">Support Email</string>
@@ -747,6 +747,55 @@
     <string name="conclusion_of_tx_followup_8">Conclusion of Tx Followup (Followup Month:8)</string>
 
     <string name="additional_treatment">Additional Treatment to TB Patient</string>
+
+    <!-- PET SS Incentive Dispatch view -->
+    <string name="pet_incentive_dispatch">PET SS\'s Incentive Dispatch View</string>
+    <string name="pet_incentive_dispatch_index_patient_type">Index Type of TB as per drug sensitivity:</string>
+    <string name="pet_incentive_dispatch_investigation_date">Investigation Date:</string>
+    <string name="pet_incentive_dispatch_treatment_initiation_date">Treatment Initiation Date:</string>
+    <string name="pet_incentive_dispatch_followup_month">Followup Month:</string>
+    <string name="pet_incentive_dispatch_return_visit_date">Return Visit Date:</string>
+    <string name="pet_incentive_dispatch_total_amount_paid">Total Incentive amount paid:</string>
+
+    <!-- PET Counselor view -->
+    <string name="pet_counselor_view">PET Counselor\'s Patient View</string>
+    <string name="pet_counselor_view_index_patient_type">Index Type of TB as per drug sensitivity:</string>
+    <string name="pet_counselor_view_tb_type">Index Type of TB:</string>
+    <string name="pet_counselor_view_treatment_initiation_date">Treatment Initiation Date:</string>
+    <string name="pet_counselor_view_treatment_regimen">Treatment Regimen:</string>
+    <string name="pet_counselor_view_treatment_week">Treatment Week:</string>
+    <string name="pet_counselor_view_adverse_events">Adverse event reported:</string>
+    <string name="pet_counselor_view_comment_by_psycologist">Comments by psycologist:</string>
+    <string name="pet_counselor_view_treatment_plan">Treatment Plan:</string>
+    <string name="pet_counselor_view_return_visit_date">Return Visit Date:</string>
+    <string name="pet_counselor_view_missed_dose">Missed Dose:</string>
+    <string name="pet_counselor_view_action_plan">Action Plan:</string>
+
+    <!-- PET Clinician view -->
+    <string name="pet_clinician_view">PET Clinician\'s Patient View</string>
+    <string name="pet_clinician_view_screening_date">Clinician Screening date:</string>
+    <string name="pet_clinician_view_weight">Weight (in kg):</string>
+    <string name="pet_clinician_view_height">Height (in cm):</string>
+    <string name="pet_clinician_view_bmi">BMI:</string>
+    <string name="pet_clinician_view_index_patient_type">Index Type of TB as per drug sensitivity:</string>
+    <string name="pet_clinician_view_index_dst_result">Index DST Culture Test Result:</string>
+    <string name="pet_clinician_view_afb_smear_result">AFB Smear Result:</string>
+    <string name="pet_clinician_view_xray_result">X-Ray Result:</string>
+    <string name="pet_clinician_view_radialogical_diagnosis">Radialogical Diagnosis:</string>
+    <string name="pet_clinician_view_genexpertResult">GeneXpert MTB Result:</string>
+    <string name="pet_clinician_view_dst_culture">DST Culture Test:</string>
+    <string name="pet_clinician_view_treatment_initiation_date">Treatment Initiation Date:</string>
+    <string name="pet_clinician_view_treatment_regimen">Treatment Regimen:</string>
+    <string name="pet_clinician_view_isoniazid_dose">Isoniazid Dose:</string>
+    <string name="pet_clinician_view_rifapentine_dose">Rifapentine Dose:</string>
+    <string name="pet_clinician_view_levofloxacin_dose">Levofloxacin Dose:</string>
+    <string name="pet_clinician_view_ethionamide_dose">Ethionamide Dose:</string>
+    <string name="pet_clinician_view_ancillary_drugs">Ancillary Drugs:</string>
+    <string name="pet_clinician_view_followup_month">Followup Month:</string>
+    <string name="pet_clinician_view_return_visit_date">Return Visit Date:</string>
+    <string name="pet_clinician_view_missed_dose">Missed Dose:</string>
+    <string name="pet_clinician_view_action_plan">Action Plan:</string>
+    <string name="pet_clinician_view_clinician_note">Clinician Note:</string>
 
 
 </resources>

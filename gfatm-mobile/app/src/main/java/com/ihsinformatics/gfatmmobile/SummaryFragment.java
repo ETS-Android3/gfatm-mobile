@@ -5,8 +5,6 @@ package com.ihsinformatics.gfatmmobile;
  */
 
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -21,12 +19,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.shared.FormTypeColor;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
+import com.ihsinformatics.gfatmmobile.shared.Roles;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 import java.util.Date;
@@ -42,6 +40,10 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
     Button generalPatientView;
     Button interventionPatientView;
     Button interventionStaffView;
+
+    Button petIncentiveDispatchView;
+    Button petCounselorPaientView;
+    Button petClinicianPaientView;
 
     LinearLayout contentView;
     TextView backButton;
@@ -65,7 +67,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         generalPatientView = (Button) mainContent.findViewById(R.id.genralPatientView);
         DrawableCompat.setTint(generalPatientView.getCompoundDrawables()[1], App.getColor(mainContent.getContext(), FormTypeColor.FOLLOWUP_FORM));
         interventionPatientView = (Button) mainContent.findViewById(R.id.patientView);
-        DrawableCompat.setTint(interventionPatientView.getCompoundDrawables()[1], App.getColor(mainContent.getContext(), FormTypeColor.FOLLOWUP_FORM));
+        DrawableCompat.setTint(interventionPatientView.getCompoundDrawables()[1], App.getColor(mainContent.getContext(), FormTypeColor.REGISTRATION_FORM));
         interventionStaffView = (Button) mainContent.findViewById(R.id.dailyStaffView);
         DrawableCompat.setTint(interventionStaffView.getCompoundDrawables()[1], App.getColor(mainContent.getContext(), FormTypeColor.OTHER_FORM));
         mainView = (ScrollView) mainContent.findViewById(R.id.mainView);
@@ -88,6 +90,8 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
     }
 
     public void updateSummaryFragment(){
+
+        int color = App.getColor(this.context, R.attr.colorRegistration);
 
         buttonLayout.removeAllViews();
         interventionPatientView.setVisibility(View.GONE);
@@ -121,7 +125,26 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
             } else if(App.getProgram().equals(getResources().getString(R.string.pet))){
                 interventionPatientView.setText(getString(R.string.pet_patient_view));
                 interventionStaffView.setText(getString(R.string.pet_staff_view));
-                interventionPatientView.setVisibility(View.VISIBLE);
+
+                if(App.getRoles().contains(Roles.DEVELOPER) || App.getRoles().contains(Roles.PET_PROGRAM_MANAGER)
+                        || App.getRoles().contains(Roles.PET_FIELD_SUPERVISOR)) {
+                    petIncentiveDispatchView = createButton(getResources().getString(R.string.pet_incentive_dispatch), color);
+                    buttonLayout.addView(petIncentiveDispatchView);
+                }
+
+                if(App.getRoles().contains(Roles.DEVELOPER) || App.getRoles().contains(Roles.PET_PROGRAM_MANAGER)
+                        || App.getRoles().contains(Roles.PET_PSYCHOLOGIST)) {
+                    petCounselorPaientView = createButton(getResources().getString(R.string.pet_counselor_view), color);
+                    buttonLayout.addView(petCounselorPaientView);
+                }
+
+                if(App.getRoles().contains(Roles.DEVELOPER) || App.getRoles().contains(Roles.PET_PROGRAM_MANAGER)
+                        || App.getRoles().contains(Roles.PET_CLINICIAN)) {
+                    petClinicianPaientView = createButton(getResources().getString(R.string.pet_clinician_view), color);
+                    buttonLayout.addView(petClinicianPaientView);
+                }
+
+                interventionPatientView.setVisibility(View.GONE);
             } else if(App.getProgram().equals(getResources().getString(R.string.childhood_tb))){
                 interventionPatientView.setText(getString(R.string.childhood_tb_patient_view));
                 interventionStaffView.setText(getString(R.string.childhood_tb_staff_view));
@@ -207,8 +230,35 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
             }
         } else if(v == backButton){
             setMainContentVisible(true);
+        }  else if(v == petIncentiveDispatchView){
+            setMainContentVisible(false);
+            heading.setText(getString(R.string.pet_incentive_dispatch));
+            content.removeAllViews();
+            fillPetIncentiveDispatchView();
+        } else if (v == petCounselorPaientView){
+            setMainContentVisible(false);
+            heading.setText(getString(R.string.pet_counselor_view));
+            content.removeAllViews();
+            fillPetCounselorPatientView();
+        } else if(v == petClinicianPaientView){
+            setMainContentVisible(false);
+            heading.setText(getString(R.string.pet_clinician_view));
+            content.removeAllViews();
+            fillPetClinicianPatientView();
         }
     }
+
+    // Create an anonymous implementation of OnClickListener
+    private View.OnClickListener myOnClickListener = new View.OnClickListener() {
+        public void onClick(View v) {
+            if(v == petIncentiveDispatchView){
+                heading.setText(getString(R.string.pet_incentive_dispatch));
+                content.removeAllViews();
+                fillComorbiditiesStaffView();
+            }
+
+        }
+    };
 
     public void fillGeneralPatientView(){
 
@@ -584,7 +634,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
 
         String[][] dataset = { {getString(R.string.patient_id), App.getPatient().getPatientId(),null},
                 {getString(R.string.external_id),externalId,null},
-                {getString(R.string.screening_facility),screeningFacility,null,null},
+                {getString(R.string.screening_facility),screeningFacility,null},
                 {getString(R.string.pet_sci_intervention),intervention,null},
                 {getString(R.string.presumptive_date),presumptive,null},
                 {getString(R.string.sample_submission_date),sputumSubmissionDate,null},
@@ -1248,11 +1298,6 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         else
             treatmentOutCome = App.convertToTitleCase(treatmentOutCome);
 
-
-
-
-
-
         String[][] dataset = {
                 {getResources().getString(R.string.external_id), externalId, null},
                 {getResources().getString(R.string.screening_facility), screeningFacility, null},
@@ -1361,7 +1406,6 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
 
     public void fillPetStaffView(){
 
-
         Date date = new Date();
         String todayDate = App.getSqlDate(date);
 
@@ -1442,6 +1486,412 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
 
     }
 
+    public void fillPetClinicianPatientView(){
+
+        String clinicianScreeningDate = serverService.getLatestEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_CONTACT_SCREENING);
+        if(clinicianScreeningDate == null) clinicianScreeningDate = "-";
+
+        String weight = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_CONTACT_SCREENING, "WEIGHT (KG)");
+        if(weight == null) weight = "-";
+
+        String height = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_CONTACT_SCREENING, "HEIGHT (CM)");
+        if(height == null) height = "-";
+
+        String bmi = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_CONTACT_SCREENING, "BODY MASS INDEX");
+        if(bmi == null) bmi = "-";
+
+        String indexIdHighlight = null;
+        String indexId = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "PATIENT ID OF INDEX CASE");
+        String drugSensitivity = "-";
+        String indexDSTCulture = "-";
+        if (!(indexId == null || indexId.equals(""))) {
+            String id = serverService.getPatientSystemIdByIdentifierLocalDB(indexId);
+            if(id == null) {
+                drugSensitivity = "- Missing " + indexId + " details -";
+                indexDSTCulture = "- Missing " + indexId + " details -";
+                indexIdHighlight = "Note";
+            }
+            else {
+                drugSensitivity = serverService.getLatestObsValue(id, App.getProgram() + "-" + Forms.PET_INDEX_PATIENT_REGISTRATION, "TUBERCULOSIS INFECTION TYPE");
+                indexDSTCulture = serverService.getLatestObsValue(id, App.getProgram() + "-" + Forms.PET_INDEX_PATIENT_REGISTRATION, "RESISTANT TO ANTI-TUBERCULOSIS DRUGS");
+            }
+        }
+        if(drugSensitivity == null) drugSensitivity = "-";
+        if(indexDSTCulture == null) indexDSTCulture = "-";
+
+        String afbSmearResult = serverService.getLatestObsValue(App.getPatientId(), "PET-AFB Smear Test Result", "SPUTUM FOR ACID FAST BACILLI");
+        if(afbSmearResult == null) afbSmearResult = "-";
+
+        String cxrResult = serverService.getLatestObsValue(App.getPatientId(), "PET-CXR Screening Test Result", "CHEST X-RAY SCORE");
+        if(cxrResult == null) cxrResult = "-";
+
+        String radiologicalDiagnosis = serverService.getLatestObsValue(App.getPatientId(), "PET-CXR Screening Test Result", "RADIOLOGICAL DIAGNOSIS");
+        if(radiologicalDiagnosis == null) radiologicalDiagnosis = "-";
+
+        String gxpResult = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_GXP_TEST, "GENEXPERT MTB/RIF RESULT");
+        if(gxpResult == null) gxpResult = "-";
+
+        String dstCultureTest = serverService.getLatestEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_CONTACT_SCREENING);
+        if(dstCultureTest == null) dstCultureTest = "-";
+        else {
+
+            dstCultureTest  = "-";
+            String resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "ISONIAZID 0.2 µg/ml RESISTANT");
+            if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
+
+                if(dstCultureTest.equals("-"))
+                    dstCultureTest = "Isoniazid 0.2 µg/ml";
+                else
+                    dstCultureTest = dstCultureTest + ", Isoniazid 0.2 µg/ml";
+            }
+
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "ISONIAZID 1 µg/ml RESISTANT RESULT");
+            if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
+
+                if(dstCultureTest.equals("-"))
+                    dstCultureTest = "Isoniazid 1 µg/ml";
+                else
+                    dstCultureTest = dstCultureTest + ", Isoniazid 1 µg/ml";
+            }
+
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "RIFAMPICIN RESISTANT");
+            if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
+
+                if(dstCultureTest.equals("-"))
+                    dstCultureTest = "Rifampicin";
+                else
+                    dstCultureTest = dstCultureTest + ", Rifampicin";
+            }
+
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "ETHAMBUTOL RESISTANT");
+            if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
+
+                if(dstCultureTest.equals("-"))
+                    dstCultureTest = "Ethambutol";
+                else
+                    dstCultureTest = dstCultureTest + ", Ethambutol";
+            }
+
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "STREPTOMYCIN RESISITANT");
+            if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
+
+                if(dstCultureTest.equals("-"))
+                    dstCultureTest = "Streptomycin";
+                else
+                    dstCultureTest = dstCultureTest + ", Streptomycin";
+            }
+
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "PYRAZINAMIDE RESISTANT");
+            if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
+
+                if(dstCultureTest.equals("-"))
+                    dstCultureTest = "Pyrazinamide";
+                else
+                    dstCultureTest = dstCultureTest + ", Pyrazinamide";
+            }
+
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "OFLOAXCIN RESISTANT");
+            if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
+
+                if(dstCultureTest.equals("-"))
+                    dstCultureTest = "Ofloaxcin";
+                else
+                    dstCultureTest = dstCultureTest + ", Ofloaxcin";
+            }
+
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "LEVOFLOXACIN RESISTANT");
+            if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
+
+                if(dstCultureTest.equals("-"))
+                    dstCultureTest = "Levofloxacin";
+                else
+                    dstCultureTest = dstCultureTest + ", Levofloxacin";
+            }
+
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "MOXIFLOXACIN 0.5 µg/ml RESISTANT RESULT");
+            if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
+
+                if(dstCultureTest.equals("-"))
+                    dstCultureTest = "Moxifloxacin 0.5 µg/ml";
+                else
+                    dstCultureTest = dstCultureTest + ", Moxifloxacin 0.5 µg/ml";
+            }
+
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "MOXIFLOXACIN 2 µg/ml RESISTANT RESULT");
+            if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
+
+                if(dstCultureTest.equals("-"))
+                    dstCultureTest = "Moxifloxacin 2 µg/ml";
+                else
+                    dstCultureTest = dstCultureTest + ", Moxifloxacin 2 µg/ml";
+            }
+
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "AMIKACIN RESISTANT");
+            if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
+
+                if(dstCultureTest.equals("-"))
+                    dstCultureTest = "Amikacin";
+                else
+                    dstCultureTest = dstCultureTest + ", Amikacin";
+            }
+
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "KANAMYCIN RESISTANT");
+            if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
+
+                if(dstCultureTest.equals("-"))
+                    dstCultureTest = "Kanamycin";
+                else
+                    dstCultureTest = dstCultureTest + ", Kanamycin";
+            }
+
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "CAPREOMYCIN RESISTANT");
+            if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
+
+                if(dstCultureTest.equals("-"))
+                    dstCultureTest = "Capreomycin";
+                else
+                    dstCultureTest = dstCultureTest + ", Capreomycin";
+            }
+
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "ETHIONAMIDE RESISTANT Ethionamide");
+            if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
+
+                if(dstCultureTest.equals("-"))
+                    dstCultureTest = "Ethionamide";
+                else
+                    dstCultureTest = dstCultureTest + ", Ethionamide";
+            }
+
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "CYCLOSERINE RESISTANT");
+            if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
+
+                if(dstCultureTest.equals("-"))
+                    dstCultureTest = "Cycloserine";
+                else
+                    dstCultureTest = dstCultureTest + ", Cycloserine";
+            }
+
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "P AMINOSALICYLIC ACID RESISTANT");
+            if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
+
+                if(dstCultureTest.equals("-"))
+                    dstCultureTest = "P Amisonsalicylic acid";
+                else
+                    dstCultureTest = dstCultureTest + ", P Amisonsalicylic acid";
+            }
+
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "BEDAQUILINE RESISTANT");
+            if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
+
+                if(dstCultureTest.equals("-"))
+                    dstCultureTest = "Bedaquiline";
+                else
+                    dstCultureTest = dstCultureTest + ", Bedaquiline";
+            }
+
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "DELAMANID RESISTANT");
+            if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
+
+                if(dstCultureTest.equals("-"))
+                    dstCultureTest = "Delamanid";
+                else
+                    dstCultureTest = dstCultureTest + ", Delamanid";
+            }
+
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "LINEZOLID RESISTANT");
+            if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
+
+                if(dstCultureTest.equals("-"))
+                    dstCultureTest = "Linezolid";
+                else
+                    dstCultureTest = dstCultureTest + ", Linezolid";
+            }
+
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "CLOFAZAMINE RESISTANT");
+            if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
+
+                if(dstCultureTest.equals("-"))
+                    dstCultureTest = "Clofazamine";
+                else
+                    dstCultureTest = dstCultureTest + ", Clofazamine";
+            }
+
+        }
+
+        String treatmentInitiationDate = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "TREATMENT START DATE");
+        if(treatmentInitiationDate == null) treatmentInitiationDate = "-";
+
+        String treatmentRegimen = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "POST-EXPOSURE TREATMENT REGIMEN");
+        if(treatmentRegimen == null) treatmentRegimen = "-";
+
+        String isonazidDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "ISONIAZID DOSE");
+        if(isonazidDose == null) isonazidDose = "-";
+
+        String riapentineDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "RIFAPENTINE DOSE");
+        if(riapentineDose == null) riapentineDose = "-";
+
+        String levofloxacinDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "LEVOFLOXACIN DOSE");
+        if(levofloxacinDose == null) levofloxacinDose = "-";
+
+        String ethinomideDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "ETHIONAMIDE DOSE");
+        if(ethinomideDose == null) ethinomideDose = "-";
+
+        String ancillaryDrugs = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "ANCILLARY DRUGS");
+        if(ancillaryDrugs == null) ancillaryDrugs = "-";
+
+        String followupUpMonth = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_COUNSELLING_FOLLOWUP, "FOLLOW-UP MONTH");
+        if(followupUpMonth == null) followupUpMonth = "-";
+
+        String returnVisitDate = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "RETURN VISIT DATE");
+        if(returnVisitDate == null) returnVisitDate = "-";
+
+        String missedDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "NUMBER OF MISSED MEDICATION DOSES IN LAST MONTH");
+        if(missedDose == null) missedDose = "-";
+
+        String actionPlan = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "ACTION PLAN");
+        if(actionPlan == null) actionPlan = "-";
+
+        String clinicianNote = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "CLINICIAN NOTES (TEXT)");
+        if(clinicianNote == null) clinicianNote = "-";
+
+
+        String[][] dataset = { {getResources().getString(R.string.pet_clinician_view_screening_date), clinicianScreeningDate, null},
+                {getResources().getString(R.string.pet_clinician_view_weight),weight, null},
+                {getResources().getString(R.string.pet_clinician_view_height),height, null},
+                {getResources().getString(R.string.pet_clinician_view_bmi),bmi, null},
+                {getResources().getString(R.string.pet_clinician_view_index_patient_type),App.convertToTitleCase(drugSensitivity), indexIdHighlight},
+                {getResources().getString(R.string.pet_clinician_view_index_dst_result),App.convertToTitleCase(indexDSTCulture), null},
+                {getResources().getString(R.string.pet_clinician_view_afb_smear_result),App.convertToTitleCase(afbSmearResult), null},
+                {getResources().getString(R.string.pet_clinician_view_xray_result),App.convertToTitleCase(cxrResult), null},
+                {getResources().getString(R.string.pet_clinician_view_radialogical_diagnosis),App.convertToTitleCase(radiologicalDiagnosis), null},
+                {getResources().getString(R.string.pet_clinician_view_genexpertResult),App.convertToTitleCase(gxpResult), null},
+                {getResources().getString(R.string.pet_clinician_view_dst_culture),dstCultureTest, null},
+                {getResources().getString(R.string.pet_clinician_view_treatment_initiation_date),treatmentInitiationDate, null},
+                {getResources().getString(R.string.pet_clinician_view_treatment_regimen),App.convertToTitleCase(treatmentRegimen), null},
+                {getResources().getString(R.string.pet_clinician_view_isoniazid_dose),isonazidDose, null},
+                {getResources().getString(R.string.pet_clinician_view_rifapentine_dose),riapentineDose, null},
+                {getResources().getString(R.string.pet_clinician_view_levofloxacin_dose),levofloxacinDose, null},
+                {getResources().getString(R.string.pet_clinician_view_ethionamide_dose),ethinomideDose, null},
+                {getResources().getString(R.string.pet_clinician_view_followup_month),followupUpMonth, null},
+                {getResources().getString(R.string.pet_clinician_view_return_visit_date),returnVisitDate, null},
+                {getResources().getString(R.string.pet_clinician_view_missed_dose),missedDose, null},
+                {getResources().getString(R.string.pet_clinician_view_action_plan),App.convertToTitleCase(actionPlan), null},
+                {getResources().getString(R.string.pet_clinician_view_clinician_note),clinicianNote, null}};
+
+        fillContent(dataset);
+
+    }
+
+    public void fillPetCounselorPatientView(){
+
+        String indexIdHighlight = null;
+        String indexId = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "PATIENT ID OF INDEX CASE");
+        String drugSensitivity = "-";
+        String tbType = "-";
+        if (!(indexId == null || indexId.equals(""))) {
+            String id = serverService.getPatientSystemIdByIdentifierLocalDB(indexId);
+            if(id == null) {
+                drugSensitivity = "- Missing " + indexId + " details -";
+
+                tbType = "- Missing " + indexId + " details -";
+                indexIdHighlight = "Note";
+            }
+            else {
+                drugSensitivity = serverService.getLatestObsValue(id, App.getProgram() + "-" + Forms.PET_INDEX_PATIENT_REGISTRATION, "TUBERCULOSIS INFECTION TYPE");
+                tbType = serverService.getLatestObsValue(id, App.getProgram() + "-" + Forms.PET_INDEX_PATIENT_REGISTRATION, "SITE OF TUBERCULOSIS DISEASE");
+            }
+        }
+        if(drugSensitivity == null) drugSensitivity = "-";
+        if(tbType == null) tbType = "-";
+
+        String treatmentInitiationDate = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "TREATMENT START DATE");
+        if(treatmentInitiationDate == null) treatmentInitiationDate = "-";
+
+        String treatmentRegimen = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "POST-EXPOSURE TREATMENT REGIMEN");
+        if(treatmentRegimen == null) treatmentRegimen = "-";
+
+        String treatmentWeek = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_ADHERENCE, "NUMBER OF WEEKS ON TREATMENT");
+        if(treatmentWeek == null) treatmentRegimen = "-";
+
+        String adverseEventReported = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_ADHERENCE, "ADVERSE EVENTS");
+        if(adverseEventReported == null) adverseEventReported = "-";
+
+        String psychologistComment = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_ADHERENCE, "CLINICIAN NOTES (TEXT)");
+        if(psychologistComment == null) psychologistComment = "-";
+
+        String treatmentPlan = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_ADHERENCE, "TREATMENT PLAN (TEXT)");
+        if(treatmentPlan == null) treatmentPlan = "-";
+
+        String returnVisitDate = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "RETURN VISIT DATE");
+        if(returnVisitDate == null) returnVisitDate = "-";
+
+        String missedDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "NUMBER OF MISSED MEDICATION DOSES IN LAST MONTH");
+        if(missedDose == null) missedDose = "-";
+
+        String actionPlan = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "ACTION PLAN");
+        if(actionPlan == null) actionPlan = "-";
+
+        String[][] dataset = { {getResources().getString(R.string.pet_counselor_view_index_patient_type), App.convertToTitleCase(drugSensitivity), indexIdHighlight},
+                {getResources().getString(R.string.pet_counselor_view_tb_type),App.convertToTitleCase(tbType), indexIdHighlight},
+                {getResources().getString(R.string.pet_counselor_view_treatment_initiation_date),treatmentInitiationDate, null},
+                {getResources().getString(R.string.pet_counselor_view_treatment_regimen),App.convertToTitleCase(treatmentRegimen), null},
+                {getResources().getString(R.string.pet_counselor_view_treatment_week),treatmentWeek, null},
+                {getResources().getString(R.string.pet_counselor_view_adverse_events),App.convertToTitleCase(adverseEventReported), null},
+                {getResources().getString(R.string.pet_counselor_view_comment_by_psycologist),psychologistComment, null},
+                {getResources().getString(R.string.pet_counselor_view_treatment_plan),treatmentPlan, null},
+                {getResources().getString(R.string.pet_counselor_view_return_visit_date),returnVisitDate, null},
+                {getResources().getString(R.string.pet_counselor_view_missed_dose),missedDose, null},
+                {getResources().getString(R.string.pet_counselor_view_action_plan),App.convertToTitleCase(actionPlan), null}};
+
+        fillContent(dataset);
+
+    }
+
+    public void fillPetIncentiveDispatchView(){
+
+        String indexIdHighlight = null;
+        String indexId = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "PATIENT ID OF INDEX CASE");
+        String drugSensitivity = "-";
+        if (!(indexId == null || indexId.equals(""))) {
+            String id = serverService.getPatientSystemIdByIdentifierLocalDB(indexId);
+            if(id == null) {
+                drugSensitivity = "- Missing " + indexId + " details -";
+                indexIdHighlight = "Note";
+            }
+            else
+                drugSensitivity = serverService.getLatestObsValue(id, App.getProgram() + "-" + Forms.PET_INDEX_PATIENT_REGISTRATION, "TUBERCULOSIS INFECTION TYPE");
+        }
+        if(drugSensitivity == null) drugSensitivity = "-";
+
+        String investigationDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "PET-CXR Screening Test Order");
+        if(investigationDate == null) investigationDate = "-";
+
+        String treatmentInitiationDate = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "TREATMENT START DATE");
+        if(treatmentInitiationDate == null) treatmentInitiationDate = "-";
+
+        String followupUpMonth = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_COUNSELLING_FOLLOWUP, "FOLLOW-UP MONTH");
+        if(followupUpMonth == null) followupUpMonth = "-";
+
+        String returnVisitDate = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "RETURN VISIT DATE");
+        if(returnVisitDate == null) returnVisitDate = "-";
+
+        String[] amounts = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + Forms.PET_INCENTIVE_DISBURSEMENT, "INCENTIVE AMOUNT");
+        int totalAmount = 0;
+        if(amounts != null)
+            for(String amount: amounts)
+                totalAmount = totalAmount + Integer.parseInt(amount);
+
+        String[][] dataset = { {getResources().getString(R.string.pet_incentive_dispatch_index_patient_type), App.convertToTitleCase(drugSensitivity), indexIdHighlight},
+                {getResources().getString(R.string.pet_incentive_dispatch_investigation_date),investigationDate, null},
+                {getResources().getString(R.string.pet_incentive_dispatch_treatment_initiation_date),treatmentInitiationDate, null},
+                {getResources().getString(R.string.pet_incentive_dispatch_followup_month),followupUpMonth, null},
+                {getResources().getString(R.string.pet_incentive_dispatch_return_visit_date),returnVisitDate, null},
+                {getResources().getString(R.string.pet_incentive_dispatch_total_amount_paid),String.valueOf(totalAmount), null}};
+
+        fillContent(dataset);
+
+    }
+
     public void fillContent(String[][] dataset){
 
         int color = App.getColor(context, R.attr.colorPrimaryDark);
@@ -1466,6 +1916,9 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
             if(dataset[j][2] != null && dataset[j][2].equals("Highlight")){
                 answer.setTextColor(Color.RED);
                 answer.setTypeface(null, Typeface.BOLD);
+            } else if(dataset[j][2] != null && dataset[j][2].equals("Note")){
+                answer.setTextColor(Color.RED);
+                answer.setTextSize(getResources().getDimension(R.dimen.tiny));
             }
 
             answer.setTextSize(getResources().getDimension(R.dimen.medium));
@@ -1508,6 +1961,12 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
                     fillPetPatientView();
                 else if(viewName.equals(getString(R.string.pet_staff_view)))
                     fillPetStaffView();
+                else if(viewName.equals(getString(R.string.pet_incentive_dispatch)))
+                    fillPetIncentiveDispatchView();
+                else if(viewName.equals(getString(R.string.pet_counselor_view)))
+                    fillPetCounselorPatientView();
+                else if(viewName.equals(getString(R.string.pet_clinician_view)))
+                    fillPetClinicianPatientView();
 
                 break;
             }
@@ -1541,6 +2000,9 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         );
         params.setMargins(0, 0, 0, (int)getResources().getDimension(R.dimen.medium));
         button.setLayoutParams(params);
+
+        button.setOnClickListener(this);
+
         return button;
     }
 }
