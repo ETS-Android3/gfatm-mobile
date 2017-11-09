@@ -1146,7 +1146,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
                 View sbView = snackbar.getView();
                 TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
                 textView.setMaxLines(4);
-                snackbar.show();
+                //snackbar.show();
             }
         }
     }
@@ -1197,7 +1197,7 @@ public class ComorbiditiesHbA1CForm extends AbstractFormActivity implements Radi
                 View sbView = snackbar.getView();
                 TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
                 textView.setMaxLines(4);
-                snackbar.show();
+                //snackbar.show();
 
                 /*snackbar = Snackbar.make(mainContent, getResources().getString(R.string.comorbidities_hba1c_screener_instructions), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
