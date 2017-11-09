@@ -1,0 +1,2 @@
+-- inserts
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT','patient','N/A','162571AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
