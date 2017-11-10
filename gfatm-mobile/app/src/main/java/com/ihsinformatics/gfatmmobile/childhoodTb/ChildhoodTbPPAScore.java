@@ -669,6 +669,7 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        popUpAlerts();
                         loading.setInverseBackgroundForced(true);
                         loading.setIndeterminate(true);
                         loading.setCancelable(false);
@@ -1315,20 +1316,38 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
 
     void popUpAlerts(){
         String s = App.get(ppaScore).toString();
-        if (s.length() > 0) {
-            if (Integer.parseInt(s.toString()) <= 0 && Integer.parseInt(s.toString()) <= 2) {
+        if(closeContactStatus.getVisibility()==View.VISIBLE){
+            if(!App.get(closeContactStatus).isEmpty() && !App.get(pemSam).isEmpty() && !App.get(historyMeaslesCough).isEmpty() && !App.get(hivStatus).isEmpty() && !App.get(immunoCompromisedStatus).isEmpty() && !App.get(clinicalManifestationStatus).isEmpty() && !App.get(radioDiagnostiImagingStatus).isEmpty() && !App.get(tuberculinSkinPpdTestResult).isEmpty() && !App.get(gxpTestResult).isEmpty()){
+                if (Integer.parseInt(s.toString()) >= 0 && Integer.parseInt(s.toString()) <= 2) {
 
-                Toast.makeText(context, getResources().getString(R.string.ctb_ppa_popup_7), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, getResources().getString(R.string.ctb_ppa_popup_7), Toast.LENGTH_SHORT).show();
+                }
+                else if (Integer.parseInt(s.toString()) >= 3 && Integer.parseInt(s.toString()) <= 4) {
+                    Toast.makeText(context, getResources().getString(R.string.ctb_ppa_popup_8), Toast.LENGTH_LONG).show();
+                }else if (Integer.parseInt(s.toString()) >= 5 && Integer.parseInt(s.toString()) <= 6) {
+                    Toast.makeText(context, getResources().getString(R.string.ctb_ppa_popup_9), Toast.LENGTH_LONG).show();
+                }
+                else if (Integer.parseInt(s.toString()) >= 7) {
+                    Toast.makeText(context, getResources().getString(R.string.ctb_ppa_popup_10), Toast.LENGTH_SHORT).show();
+                }
             }
-            else if (Integer.parseInt(s.toString()) <= 3 && Integer.parseInt(s.toString()) <= 4) {
-                Toast.makeText(context, getResources().getString(R.string.ctb_ppa_popup_8), Toast.LENGTH_LONG).show();
-            }else if (Integer.parseInt(s.toString()) <= 5 && Integer.parseInt(s.toString()) <= 6) {
-                Toast.makeText(context, getResources().getString(R.string.ctb_ppa_popup_9), Toast.LENGTH_LONG).show();
-            }
-            else if (Integer.parseInt(s.toString()) <= 7) {
-                Toast.makeText(context, getResources().getString(R.string.ctb_ppa_popup_10), Toast.LENGTH_SHORT).show();
+        }else{
+            if(!App.get(pemSam).isEmpty() && !App.get(historyMeaslesCough).isEmpty() && !App.get(hivStatus).isEmpty() && !App.get(immunoCompromisedStatus).isEmpty() && !App.get(clinicalManifestationStatus).isEmpty() && !App.get(radioDiagnostiImagingStatus).isEmpty() && !App.get(tuberculinSkinPpdTestResult).isEmpty() && !App.get(gxpTestResult).isEmpty()){
+                if (Integer.parseInt(s.toString()) >= 0 && Integer.parseInt(s.toString()) <= 2) {
+
+                    Toast.makeText(context, getResources().getString(R.string.ctb_ppa_popup_7), Toast.LENGTH_SHORT).show();
+                }
+                else if (Integer.parseInt(s.toString()) >= 3 && Integer.parseInt(s.toString()) <= 4) {
+                    Toast.makeText(context, getResources().getString(R.string.ctb_ppa_popup_8), Toast.LENGTH_LONG).show();
+                }else if (Integer.parseInt(s.toString()) >= 5 && Integer.parseInt(s.toString()) <= 6) {
+                    Toast.makeText(context, getResources().getString(R.string.ctb_ppa_popup_9), Toast.LENGTH_LONG).show();
+                }
+                else if (Integer.parseInt(s.toString()) >= 7) {
+                    Toast.makeText(context, getResources().getString(R.string.ctb_ppa_popup_10), Toast.LENGTH_SHORT).show();
+                }
             }
         }
+
     }
     void getPPAScore(){
         int score=0;
@@ -1451,7 +1470,6 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
                 hivScore.getRadioGroup().getButtons().get(1).setChecked(true);
                 getPPAScore();
                 popUpAlerts();
-
             }
         } else if (group == hivScore.getRadioGroup()) {
             hivScore.getQuestionView().setError(null);
@@ -1475,18 +1493,15 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
             if (clinicalManifestationStatus.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_suggestive_tb))) {
                 clinicalManifestationScore.getRadioGroup().getButtons().get(1).setChecked(true);
                 Toast.makeText(context, getResources().getString(R.string.ctb_ppa_popup_2), Toast.LENGTH_LONG).show();
-
                 getPPAScore();
                 popUpAlerts();
             } else if (clinicalManifestationStatus.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_strongly_suggestive_tb))) {
                 clinicalManifestationScore.getRadioGroup().getButtons().get(2).setChecked(true);
                 Toast.makeText(context, getResources().getString(R.string.ctb_ppa_popup_3), Toast.LENGTH_LONG).show();
-
                 getPPAScore();
                 popUpAlerts();
             } else if (clinicalManifestationStatus.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_not_sugguestive_tb))) {
                 clinicalManifestationScore.getRadioGroup().getButtons().get(0).setChecked(true);
-
                 getPPAScore();
                 popUpAlerts();
             }
@@ -1503,18 +1518,15 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
             } else if (radioDiagnostiImagingStatus.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_suggestive_tb))) {
                 Toast.makeText(context, getResources().getString(R.string.ctb_ppa_popup_5), Toast.LENGTH_LONG).show();
                 radioDiagnosticImagingScore.getRadioGroup().getButtons().get(2).setChecked(true);
-
-                getPPAScore();
                 popUpAlerts();
+                getPPAScore();
             } else if (radioDiagnostiImagingStatus.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_strongly_suggestive_tb))) {
                 Toast.makeText(context, getResources().getString(R.string.ctb_ppa_popup_6), Toast.LENGTH_LONG).show();
                 radioDiagnosticImagingScore.getRadioGroup().getButtons().get(3).setChecked(true);
-
                 getPPAScore();
                 popUpAlerts();
             }else if (radioDiagnostiImagingStatus.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_none))) {
                 radioDiagnosticImagingScore.getRadioGroup().getButtons().get(0).setChecked(true);
-
                 getPPAScore();
                 popUpAlerts();
             }
@@ -1529,12 +1541,10 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
                 popUpAlerts();
             } else if (tuberculinSkinPpdTestResult.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_5_to_9mm))) {
                 tuberculinSkinPpdTestResultScore.getRadioGroup().getButtons().get(1).setChecked(true);
-
                 getPPAScore();
                 popUpAlerts();
             } else if (tuberculinSkinPpdTestResult.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_greater_than_10mm))) {
                 tuberculinSkinPpdTestResultScore.getRadioGroup().getButtons().get(2).setChecked(true);
-
                 getPPAScore();
                 popUpAlerts();
             }
@@ -1545,12 +1555,10 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
             gxpTestResultScore.setVisibility(View.VISIBLE);
             if (gxpTestResult.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_mtb_detected))) {
                 gxpTestResultScore.getRadioGroup().getButtons().get(1).setChecked(true);
-
                 getPPAScore();
                 popUpAlerts();
             } else {
                 gxpTestResultScore.getRadioGroup().getButtons().get(0).setChecked(true);
-
                 getPPAScore();
                 popUpAlerts();
             }

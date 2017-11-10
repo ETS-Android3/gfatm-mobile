@@ -902,6 +902,9 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
             if(ctScan!=null){
                 if(ctScan.equalsIgnoreCase("CT SCAN, CHEST")){
                     ctChestInterpretation.setVisibility(View.VISIBLE);
+                    if(App.get(ctChestInterpretation).equalsIgnoreCase(getResources().getString(R.string.ctb_suggestive_tb))){
+                        ctChestTbSuggestive.setVisibility(View.VISIBLE);
+                    }
 
                     ctAbdomenTbSuggestive.setVisibility(View.GONE);
                     ctAbdomenInterpretation.setVisibility(View.GONE);
@@ -912,6 +915,9 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
                 }
                 else if(ctScan.equalsIgnoreCase("COMPUTED TOMOGRAPHY OF ABDOMEN WITH CONTRAST")){
                     ctAbdomenInterpretation.setVisibility(View.VISIBLE);
+                    if(App.get(ctAbdomenInterpretation).equalsIgnoreCase(getResources().getString(R.string.ctb_suggestive_tb))){
+                        ctAbdomenTbSuggestive.setVisibility(View.VISIBLE);
+                    }
 
                     ctChestTbSuggestive.setVisibility(View.GONE);
                     ctChestInterpretation.setVisibility(View.GONE);
@@ -922,6 +928,9 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
                 }
                 else if(ctScan.equalsIgnoreCase("BRAIN CT SCAN")){
                     ctBrainInterpretation.setVisibility(View.VISIBLE);
+                    if(App.get(ctBrainInterpretation).equalsIgnoreCase(getResources().getString(R.string.ctb_suggestive_tb))){
+                        ctBrainTbSuggestive.setVisibility(View.VISIBLE);
+                    }
 
 
                     ctAbdomenTbSuggestive.setVisibility(View.GONE);
@@ -944,6 +953,16 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
                 else if(ctScan.equalsIgnoreCase("SPINE CT SCAN")){
                     ctSpineTbSuggestive.setVisibility(View.VISIBLE);
 
+                    ctAbdomenTbSuggestive.setVisibility(View.GONE);
+                    ctAbdomenInterpretation.setVisibility(View.GONE);
+                    ctChestTbSuggestive.setVisibility(View.GONE);
+                    ctChestInterpretation.setVisibility(View.GONE);
+                    ctBrainTbSuggestive.setVisibility(View.GONE);
+                    ctBrainInterpretation.setVisibility(View.GONE);
+                    ctBoneSTbSuggestive.setVisibility(View.GONE);
+                }else{
+
+                    ctSpineTbSuggestive.setVisibility(View.GONE);
                     ctAbdomenTbSuggestive.setVisibility(View.GONE);
                     ctAbdomenInterpretation.setVisibility(View.GONE);
                     ctChestTbSuggestive.setVisibility(View.GONE);
@@ -1053,7 +1072,7 @@ public class ChildhoodTbCTScanTest extends AbstractFormActivity implements Radio
                 ctBrainTbSuggestive.setVisibility(View.VISIBLE);
             }else{
                 ctScanOutcome.getRadioGroup().getButtons().get(1).setChecked(true);
-                ctBrainInterpretation.setVisibility(View.GONE);
+                ctBrainTbSuggestive.setVisibility(View.GONE);
             }
         }
         if(group == ctBoneSTbSuggestive.getRadioGroup()){

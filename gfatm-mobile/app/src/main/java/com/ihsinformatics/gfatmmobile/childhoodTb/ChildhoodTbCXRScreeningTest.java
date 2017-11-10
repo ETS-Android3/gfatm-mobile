@@ -1454,6 +1454,8 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
                 abnormalDetailedDiagnosisOther.setVisibility(View.GONE);
             } else {
                 cat4tbScore.setVisibility(View.GONE);
+                cadScoreRange.setVisibility(View.GONE);
+
                 radiologicalDiagnosis.setVisibility(View.VISIBLE);
                 if (radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_not_suggestive_of_tb))) {
                     abnormalDetailedDiagnosis.setVisibility(View.VISIBLE);
