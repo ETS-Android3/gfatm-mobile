@@ -337,6 +337,10 @@ public class ServerService {
         return dbUtil.delete(Metadata.PERSON_ATTRIBUTE_TYPE, null, null);
     }
 
+    public Object[][] getAllPersonAttributeTypes() {
+        Object[][] personAttributesType = dbUtil.getFormTableData("select name, format from " + Metadata.PERSON_ATTRIBUTE_TYPE);
+        return personAttributesType;    }
+
     public Object[][] getAllLocations() {
         Object[][] locations = dbUtil.getFormTableData("select location_id, location_name, uuid, parent_uuid, fast_location, pet_location, childhood_tb_location, comorbidities_location, pmdt_location, aic_location, primary_contact, address1, address2, city_village, state_province, county_district, description from " + Metadata.LOCATION);
         return locations;
@@ -353,9 +357,11 @@ public class ServerService {
     }
 
     public void addTown(String name) {
+
         ContentValues values4 = new ContentValues();
         values4.put("name", name);
         dbUtil.insert(Metadata.TOWN, values4);
+
     }
 
     /**
