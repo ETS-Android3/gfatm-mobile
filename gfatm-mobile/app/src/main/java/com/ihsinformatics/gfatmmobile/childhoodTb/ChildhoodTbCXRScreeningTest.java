@@ -1368,16 +1368,7 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
         submitButton.setEnabled(false);
 
 
-        Calendar requiredDate = formDateCalendar.getInstance();
-        requiredDate.setTime(formDateCalendar.getTime());
-        requiredDate.add(Calendar.DATE, 2);
-        if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
-            secondDateCalendar.setTime(requiredDate.getTime());
-        } else {
-            requiredDate.add(Calendar.DATE, 1);
-            secondDateCalendar.setTime(requiredDate.getTime());
-        }
-        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "CXR Screening Test Order", "ORDER ID");
         if (testIds != null) {
