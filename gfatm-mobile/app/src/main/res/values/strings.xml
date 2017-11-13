@@ -336,7 +336,7 @@
     <string name="title_saved_forms">Saved Forms</string>
     <string name="title_offline_forms">Offline Forms</string>
     <string name="title_select_patient">Select Patient</string>
-    <string name="title_patient_demographics">Patient Demographics</string>
+    <string name="title_patient_information">Patient Information Form</string>
     <string name="title_offline_form_found">Offline form(s) found</string>
     <string name="title_search_patient">Search Patient</string>
     <string name="title_create_new_patient">Create New Patient</string>
@@ -490,6 +490,10 @@
     <string name="location">Location: </string>
     <string name="fetching_data">fetching data</string>
     <string name="search_location">Search...</string>
+
+    <!-- Metadata -->
+    <string name="title_sync_metadata">Sync Metadata </string>
+    <string name="person_attribute">Person Attributes: </string>
 
     <!-- Search -->
     <string name="name">Name: </string>
