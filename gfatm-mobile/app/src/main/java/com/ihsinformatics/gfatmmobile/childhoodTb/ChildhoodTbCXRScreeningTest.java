@@ -1368,16 +1368,7 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
         submitButton.setEnabled(false);
 
 
-        Calendar requiredDate = formDateCalendar.getInstance();
-        requiredDate.setTime(formDateCalendar.getTime());
-        requiredDate.add(Calendar.DATE, 2);
-        if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
-            secondDateCalendar.setTime(requiredDate.getTime());
-        } else {
-            requiredDate.add(Calendar.DATE, 1);
-            secondDateCalendar.setTime(requiredDate.getTime());
-        }
-        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "CXR Screening Test Order", "ORDER ID");
         if (testIds != null) {
@@ -1454,6 +1445,8 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
                 abnormalDetailedDiagnosisOther.setVisibility(View.GONE);
             } else {
                 cat4tbScore.setVisibility(View.GONE);
+                cadScoreRange.setVisibility(View.GONE);
+
                 radiologicalDiagnosis.setVisibility(View.VISIBLE);
                 if (radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_not_suggestive_of_tb))) {
                     abnormalDetailedDiagnosis.setVisibility(View.VISIBLE);

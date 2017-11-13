@@ -691,6 +691,10 @@
     <string name="ctb_unlikely_tb">Unlikely TB</string>
     <string name="ctb_possible_tb">Possible TB</string>
     <string name="ctb_probable_tb">Probable TB</string>
+    <string name="ctb_mo_consult_pediatrician">Did the MO Consult any Senior Pediatrician for TB diagnosis?</string>
+    <string name="ctb_name_consultant">Name of Consultant</string>
+    <string name="ctb_reason_consultation">Reason for Consultation</string>
+    <string name="ctb_tb_daignosed">TB Daignosed</string>
 
     <string-array name="ctb_0_to_1_list">
         <item>@string/ctb_0</item>

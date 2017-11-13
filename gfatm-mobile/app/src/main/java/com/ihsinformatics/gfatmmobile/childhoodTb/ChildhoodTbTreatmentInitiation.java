@@ -75,6 +75,13 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
     ScrollView scrollView;
     TitledButton formDate;
     TitledEditText weightAtBaseline;
+    TitledRadioGroup moConsultPediatrician;
+    TitledEditText nameConsultant;
+    TitledEditText reasonConsultation;
+    TitledRadioGroup tbDaignosed;
+
+
+
     TitledRadioGroup patientHaveTb;
     TitledButton regDate;
     LinearLayout cnicLinearLayout;
@@ -215,6 +222,10 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         formDate = new TitledButton(context, "Section A: TB Treatment Initiation ", getResources().getString(R.string.pet_form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         weightAtBaseline = new TitledEditText(context, null, getResources().getString(R.string.ctb_weight_at_baseline), "", "", 3, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
+        moConsultPediatrician = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_mo_consult_pediatrician), getResources().getStringArray(R.array.yes_no_options),null, App.HORIZONTAL, App.VERTICAL,true);
+        nameConsultant = new TitledEditText(context, null, getResources().getString(R.string.ctb_name_consultant), "", "", 250, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        reasonConsultation = new TitledEditText(context, null, getResources().getString(R.string.ctb_reason_consultation), "", "", 250, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        tbDaignosed = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_tb_daignosed), getResources().getStringArray(R.array.yes_no_options),null, App.HORIZONTAL, App.VERTICAL,true);
         patientHaveTb = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_have_tb), getResources().getStringArray(R.array.ctb_patient_have_tb_list),null, App.HORIZONTAL, App.VERTICAL,true);
         regDate = new TitledButton(context, null, getResources().getString(R.string.ctb_registration_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         cnicLinearLayout = new LinearLayout(context);
@@ -313,7 +324,12 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
 
         forthDateCalender.add(Calendar.DAY_OF_MONTH, 30);
 
-        views = new View[]{formDate.getButton(),weightAtBaseline.getEditText(),patientHaveTb.getRadioGroup(),regDate.getButton(),cnicLinearLayout,cnic1,cnic2,cnic3,
+        views = new View[]{formDate.getButton(),weightAtBaseline.getEditText(),
+                moConsultPediatrician.getRadioGroup(),
+                nameConsultant.getEditText(),
+                reasonConsultation.getEditText(),
+                tbDaignosed.getRadioGroup(),
+                patientHaveTb.getRadioGroup(),regDate.getButton(),cnicLinearLayout,cnic1,cnic2,cnic3,
                 cnicOwner.getSpinner(),cnicOwnerOther.getEditText(),tbRegisterationNumber.getEditText(),tbType,
                 extraPulmonarySite.getSpinner(),extraPulmonarySiteOther.getEditText(),patientType.getSpinner(),treatmentInitiated.getRadioGroup(),
                 reasonTreatmentNotIniated.getSpinner(),initiatingAdditionalTreatment,patientCategory.getRadioGroup(),
@@ -329,6 +345,10 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 {{
                         formDate,
                         weightAtBaseline,
+                        moConsultPediatrician,
+                        nameConsultant,
+                        reasonConsultation,
+                        tbDaignosed,
                         patientHaveTb,
                         typeOfDiagnosis,
                         histopathologicalEvidence,
@@ -414,6 +434,8 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         acceptanceToIpt.getRadioGroup().setOnCheckedChangeListener(this);
         iptStartDate.getButton().setOnClickListener(this);
         iptDose.getRadioGroup().setOnCheckedChangeListener(this);
+        moConsultPediatrician.getRadioGroup().setOnCheckedChangeListener(this);
+        tbDaignosed.getRadioGroup().setOnCheckedChangeListener(this);
         ArrayList<MyCheckBox> checkBoxList3 = initiatingAdditionalTreatmentIpt.getCheckedBoxes();
         for (CheckBox cb : initiatingAdditionalTreatmentIpt.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
@@ -848,6 +870,42 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
     @Override
     public boolean validate() {
         Boolean error = false;
+        if(App.get(moConsultPediatrician).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            moConsultPediatrician.getQuestionView().setError(getString(R.string.empty_field));
+            moConsultPediatrician.getRadioGroup().requestFocus();
+            error = true;
+        }
+        if(nameConsultant.getVisibility()==View.VISIBLE && App.get(nameConsultant).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            nameConsultant.getEditText().setError(getString(R.string.empty_field));
+            nameConsultant.requestFocus();
+            error = true;
+        }
+        if(reasonConsultation.getVisibility()==View.VISIBLE && App.get(reasonConsultation).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            reasonConsultation.getEditText().setError(getString(R.string.empty_field));
+            reasonConsultation.requestFocus();
+            error = true;
+        }
+        if(tbDaignosed.getVisibility()==View.VISIBLE && App.get(tbDaignosed).isEmpty()){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            tbDaignosed.getQuestionView().setError(getString(R.string.empty_field));
+            tbDaignosed.getRadioGroup().requestFocus();
+            error = true;
+        }
         if(App.get(patientHaveTb).isEmpty()){
             if (App.isLanguageRTL())
                 gotoPage(0);
@@ -1171,7 +1229,21 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
 
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
+
         observations.add(new String[]{"PATIENT HAVE TB", App.get(patientHaveTb).toUpperCase()});
+
+        if(moConsultPediatrician.getVisibility()==View.VISIBLE){
+            observations.add(new String[]{"MO CONSULTED SENIOR PEDIATRICIAN FOR TB DIAGNOSIS", App.get(moConsultPediatrician).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        }
+        if(nameConsultant.getVisibility()==View.VISIBLE)
+            observations.add(new String[]{"CONSULTANT NAME", App.get(nameConsultant)});
+        if(reasonConsultation.getVisibility()==View.VISIBLE)
+            observations.add(new String[]{"REASON FOR CONSULTATION", App.get(reasonConsultation)});
+        if(tbDaignosed.getVisibility()==View.VISIBLE){
+            observations.add(new String[]{"TUBERCULOSIS DIAGNOSED", App.get(tbDaignosed).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        }
+
+
 
         if(regDate.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"REGISTRATION DATE", App.getSqlDateTime(secondDateCalendar)});
@@ -1588,7 +1660,36 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             String[][] obs = obsValue.get(i);
             if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
                 timeTakeToFill = obs[0][1];
-            } else if (obs[0][0].equals("PATIENT HAVE TB")) {
+            } else if (obs[0][0].equals("MO CONSULTED SENIOR PEDIATRICIAN FOR TB DIAGNOSIS")) {
+                for (RadioButton rb : moConsultPediatrician.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                moConsultPediatrician.setVisibility(View.VISIBLE);
+            }else if (obs[0][0].equals("CONSULTANT NAME")) {
+                nameConsultant.getEditText().setText(obs[0][1]);
+                nameConsultant.setVisibility(View.VISIBLE);
+            }else if (obs[0][0].equals("REASON FOR CONSULTATION")) {
+                reasonConsultation.getEditText().setText(obs[0][1]);
+                reasonConsultation.setVisibility(View.VISIBLE);
+            }else if (obs[0][0].equals("TUBERCULOSIS DIAGNOSED")) {
+                for (RadioButton rb : tbDaignosed.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                tbDaignosed.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("PATIENT HAVE TB")) {
                 for (RadioButton rb : patientHaveTb.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);
@@ -2277,6 +2378,9 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         iptStartDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
         iptStartDate.setVisibility(View.GONE);
         returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", forthDateCalender).toString());
+        nameConsultant.setVisibility(View.GONE);
+        reasonConsultation.setVisibility(View.GONE);
+        tbDaignosed.setVisibility(View.GONE);
         typeOfDiagnosis.setVisibility(View.GONE);
         radiologicalEvidence.setVisibility(View.GONE);
         histopathologicalEvidence.setVisibility(View.GONE);
@@ -2711,6 +2815,21 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             }
         }
 
+        else if (group == moConsultPediatrician.getRadioGroup()) {
+            moConsultPediatrician.getQuestionView().setError(null);
+            if (moConsultPediatrician.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
+                nameConsultant.setVisibility(View.VISIBLE);
+                reasonConsultation.setVisibility(View.VISIBLE);
+                tbDaignosed.setVisibility(View.VISIBLE);
+            } else {
+                nameConsultant.setVisibility(View.GONE);
+                reasonConsultation.setVisibility(View.GONE);
+                tbDaignosed.setVisibility(View.GONE);
+            }
+        }
+        else if (group == tbDaignosed.getRadioGroup()) {
+            tbDaignosed.getQuestionView().setError(null);
+        }
         else if (group == patientCategory.getRadioGroup()) {
             if (patientCategory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_category_3))) {
                 regimen.getRadioGroup().getButtons().get(1).setChecked(true);
