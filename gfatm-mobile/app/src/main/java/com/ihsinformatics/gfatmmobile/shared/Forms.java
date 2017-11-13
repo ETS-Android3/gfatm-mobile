@@ -480,7 +480,7 @@ public class Forms{
         childhoodtbList.add(childhoodTb_patientRegistration);
         childhoodtbList.add(childhoodTb_presumptive_case_confirmation);
         childhoodtbList.add(childhoodTb_contact_registry);
-        //childhoodtbList.add(childhoodTb_ppa_score);
+        childhoodtbList.add(childhoodTb_ppa_score);
         childhoodtbList.add(childhoodTb_test_indication_form);
         childhoodtbList.add(childhoodTb_gxp_specimen_form);
         childhoodtbList.add(childhoodTb_gxp_test);

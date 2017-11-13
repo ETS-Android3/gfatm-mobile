@@ -43,4 +43,7 @@ public class Metadata {
 
     public static final String SCREENING_COUNT = "screening_form_count";
 
+    public static final String CONCEPT_MAPPING = "concept_mapping";
+    public static final String CONCEPT_ANSWERS = "concept_answers";
+
 }
