@@ -20,6 +20,12 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/sync_metadata"
+        android:orderInCategory="100"
+        android:title="@string/title_sync_metadata"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/feedback"
         android:orderInCategory="100"
         android:title="@string/title_feedback"
