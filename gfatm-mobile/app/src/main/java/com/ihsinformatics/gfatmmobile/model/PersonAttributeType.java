@@ -21,26 +21,38 @@ import org.json.JSONObject;
  * @author owais.hussain@irdresearch.org
  */
 public class PersonAttributeType extends AbstractModel {
-    public static final String FIELDS = "uuid,display";
+    public static final String FIELDS = "display,format,foreignKey,uuid";
     private String name = "";
+    private String format = "";
+    private String foreignKey = "";
+    private Boolean retired = false;
 
-    public PersonAttributeType(String uuid, String name) {
+    public PersonAttributeType(String uuid, String name, String format, String foreignKey, Boolean retired) {
         super(uuid);
         this.name = name;
+        this.format = format;
+        this.foreignKey = foreignKey;
+        this.retired = retired;
     }
 
     public static PersonAttributeType parseJSONObject(JSONObject json) {
         PersonAttributeType encounterType = null;
         String uuid = "";
         String name = "";
+        String format = "";
+        String foreignKey = "";
+        Boolean retired = false;
         try {
             uuid = json.getString("uuid");
             name = json.getString("display");
+            format = json.getString("format");
+            foreignKey = json.getString("foreignKey");
+            retired = json.getBoolean("retired");
         } catch (JSONException e) {
             e.printStackTrace();
             encounterType = null;
         }
-        encounterType = new PersonAttributeType(uuid, name);
+        encounterType = new PersonAttributeType(uuid, name, format, foreignKey, retired);
         return encounterType;
     }
 
@@ -49,6 +61,8 @@ public class PersonAttributeType extends AbstractModel {
         try {
             jsonObject.put("uuid", super.getUuid());
             jsonObject.put("name", name);
+            jsonObject.put("format", format);
+            jsonObject.put("foreignKey", foreignKey);
         } catch (JSONException e) {
             e.printStackTrace();
             jsonObject = null;
@@ -62,6 +76,30 @@ public class PersonAttributeType extends AbstractModel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getFormat() {
+        return format;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
+    }
+
+    public String getForeignKey() {
+        return foreignKey;
+    }
+
+    public void setForeignKey(String foreignKey) {
+        this.foreignKey = foreignKey;
+    }
+
+    public Boolean getRetired() {
+        return retired;
+    }
+
+    public void setRetired(Boolean retired) {
+        this.retired = retired;
     }
 
     @Override

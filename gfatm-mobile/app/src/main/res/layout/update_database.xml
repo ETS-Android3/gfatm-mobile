@@ -61,20 +61,21 @@
                     android:paddingTop="20dp">
 
                     <CheckBox
-                        android:id="@+id/location"
+                        android:id="@+id/person_attribute"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/location" />
+                        android:text="@string/person_attribute" />
 
                     <TextView
+                        android:id="@+id/person_attribute_last_update_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/last_update_on"
                         android:textSize="@dimen/medium" />
 
                     <TextView
-                        android:id="@+id/location_last_update"
+                        android:id="@+id/person_attribute_last_update"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/medium" />
@@ -88,7 +89,8 @@
                     android:paddingBottom="20dp"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:paddingTop="20dp">
+                    android:paddingTop="20dp"
+                    android:visibility="gone">
 
                     <CheckBox
                         android:layout_width="wrap_content"
@@ -114,7 +116,8 @@
                     android:paddingBottom="20dp"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:paddingTop="20dp">
+                    android:paddingTop="20dp"
+                    android:visibility="gone">
 
                     <CheckBox
                         android:layout_width="wrap_content"

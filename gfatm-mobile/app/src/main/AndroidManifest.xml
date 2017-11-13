@@ -54,7 +54,7 @@
         <activity
             android:name=".UpdateDatabaseActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:label="@string/title_update_database"
+            android:label="@string/title_sync_metadata"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"></activity>
         <activity
@@ -129,13 +129,6 @@
             android:name=".SelectPatientActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/title_select_patient"
-            android:screenOrientation="portrait"
-            android:theme="@style/dialog"
-            android:windowSoftInputMode="stateHidden"></activity>
-        <activity
-            android:name=".EditPatientActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:label="@string/title_patient_demographics"
             android:screenOrientation="portrait"
             android:theme="@style/dialog"
             android:windowSoftInputMode="stateHidden"></activity>
