@@ -338,7 +338,7 @@ public class ServerService {
     }
 
     public Object[][] getAllPersonAttributeTypes() {
-        Object[][] personAttributesType = dbUtil.getFormTableData("select name, format from " + Metadata.PERSON_ATTRIBUTE_TYPE);
+        Object[][] personAttributesType = dbUtil.getFormTableData("select name, format, foreign_key, uuid from " + Metadata.PERSON_ATTRIBUTE_TYPE);
         return personAttributesType;    }
 
     public Object[][] getAllLocations() {
@@ -354,6 +354,23 @@ public class ServerService {
     public Object[][] getAllTowns() {
         Object[][] locations = dbUtil.getFormTableData("select * from " + Metadata.TOWN);
         return locations;
+    }
+
+    public String getConceptMappingForConceptId(String conceptId){
+        Object[][] uuid = dbUtil.getFormTableData("select uuid from " + Metadata.CONCEPT_MAPPING + " where concept_id = " + conceptId);
+        if(uuid != null && uuid.length > 0)
+            return String.valueOf(uuid[0][0]);
+        else
+            return null;
+    }
+
+    public Object[][] getConceptAnswers(String conceptUuid){
+
+        String query = "SELECT full_name FROM " + Metadata.CONCEPT_ANSWERS + " ca " +
+                "join " + Metadata.CONCEPT + " c on ca.answer_concept_uuid = c.uuid " +
+                "where ca.question_concept_uuid = '"+ conceptUuid +"'";
+
+        return dbUtil.getFormTableData(query);
     }
 
     public void addTown(String name) {
@@ -651,13 +668,20 @@ public class ServerService {
                     JSONObject jsonobject = response.getJSONObject(i);
                     PersonAttributeType personAttributeType = PersonAttributeType.parseJSONObject(jsonobject);
 
-                    String name = personAttributeType.getName();
-                    String uuid = personAttributeType.getUuid();
+                    if(!personAttributeType.getRetired()) {
 
-                    ContentValues values = new ContentValues();
-                    values.put("person_attribute_type", name);
-                    values.put("uuid", uuid);
-                    dbUtil.insert(Metadata.PERSON_ATTRIBUTE_TYPE, values);
+                        String name = personAttributeType.getName();
+                        String uuid = personAttributeType.getUuid();
+                        String format = personAttributeType.getFormat();
+                        String foreignKey = personAttributeType.getForeignKey();
+
+                        ContentValues values = new ContentValues();
+                        values.put("name", name);
+                        values.put("uuid", uuid);
+                        values.put("format", format);
+                        values.put("foreign_key", foreignKey);
+                        dbUtil.insert(Metadata.PERSON_ATTRIBUTE_TYPE, values);
+                    }
 
                 }
             } catch (JSONException e) {
