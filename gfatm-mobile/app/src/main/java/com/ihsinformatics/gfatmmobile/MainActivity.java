@@ -36,21 +36,31 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.InputType;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
+import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.shared.FormsObject;
 import com.ihsinformatics.gfatmmobile.util.LocationService;
 import com.ihsinformatics.gfatmmobile.util.OfflineFormSyncService;
+import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 import java.io.ByteArrayInputStream;
@@ -66,7 +76,6 @@ public class MainActivity extends AppCompatActivity
     private static final int SELECT_PATIENT_ACTIVITY = 0;
     private static final int SAVED_FORM_ACTIVITY = 1;
     protected static ProgressDialog loading;
-    Context context = this;
     LinearLayout buttonLayout;
     LinearLayout programLayout;
     public static LinearLayout headerLayout;
@@ -79,12 +88,18 @@ public class MainActivity extends AppCompatActivity
     public static SummaryFragment fragmentSearch = new SummaryFragment();
     ImageView change;
     public static ImageView update;
+
     public static ImageView edit;
+
 
     public static TextView patientName;
     public static TextView patientDob;
     public static TextView patientId;
     public static TextView id;
+
+    /*View editView;
+    PopupWindow popupWindow;*/
+    Context context = this;
 
     static boolean active = false;
 
@@ -233,11 +248,11 @@ public class MainActivity extends AppCompatActivity
 
             if (App.getPatient() == null) {
                 update.setVisibility(View.GONE);
-                edit.setVisibility(View.GONE);
+                //edit.setVisibility(View.GONE);
             }
             else {
                 update.setVisibility(View.VISIBLE);
-                edit.setVisibility(View.VISIBLE);
+                //edit.setVisibility(View.VISIBLE);
             }
 
         }
@@ -281,9 +296,18 @@ public class MainActivity extends AppCompatActivity
         patientName = (TextView) findViewById(R.id.patientName);
         patientDob = (TextView) findViewById(R.id.patientDob);
         patientId = (TextView) findViewById(R.id.patientId);
-        id = (TextView) findViewById(R.id.id);
+        id = (TextView) findViewById(R.id.id);/*LayoutInflater layoutInflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        editView = layoutInflater.inflate(R.layout.edit_patient,null);
+        popupWindow = new PopupWindow(editView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        popupWindow.setFocusable(true);
+        popupWindow.update();*/
+
+
 
         if (App.getPatient() != null) {
+
+            //loadEditPopup();
+
             String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
             String lname = App.getPatient().getPerson().getFamilyName();
             if(!lname.equals(""))
@@ -309,7 +333,7 @@ public class MainActivity extends AppCompatActivity
                 id.setVisibility(View.VISIBLE);
             patientId.setText(App.getPatient().getPatientId());
             update.setVisibility(View.VISIBLE);
-            edit.setVisibility(View.VISIBLE);
+            //edit.setVisibility(View.VISIBLE);
         }
 
         if (!App.getProgram().equals("")) {
@@ -411,7 +435,7 @@ public class MainActivity extends AppCompatActivity
             getSupportActionBar().setSubtitle(null);
             if (App.getPatient() == null) {
                 update.setVisibility(View.GONE);
-                edit.setVisibility(View.GONE);
+                //edit.setVisibility(View.GONE);
                 patientName.setText("");
                 patientDob.setText("");
                 patientId.setText("");
@@ -462,7 +486,7 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 update.setVisibility(View.VISIBLE);
-                edit.setVisibility(View.VISIBLE);
+                //edit.setVisibility(View.VISIBLE);
             }
 
 
@@ -625,6 +649,12 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.search) {
             Intent selectPatientActivityIntent = new Intent(this, SearchActivity.class);
             startActivityForResult(selectPatientActivityIntent, SELECT_PATIENT_ACTIVITY);
+        } else if (id == R.id.sync_metadata) {
+
+
+
+            Intent updateDatabaseIntent = new Intent(this, UpdateDatabaseActivity.class);
+            startActivityForResult(updateDatabaseIntent, SELECT_PATIENT_ACTIVITY);
         }
 
         return super.onOptionsItemSelected(item);
@@ -840,13 +870,12 @@ public class MainActivity extends AppCompatActivity
                     updatePatientDetails();
 
                     break;
-                } else if (view == edit) {
+                } /*else if (view == edit) {
 
-                    Intent selectPatientActivityIntent = new Intent(this, EditPatientActivity.class);
-                    startActivityForResult(selectPatientActivityIntent, SELECT_PATIENT_ACTIVITY);
+                    popupWindow.showAsDropDown(edit);
 
                     break;
-                }
+                }*/
             }
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL: {
@@ -1215,5 +1244,60 @@ public class MainActivity extends AppCompatActivity
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
         super.onDestroy();
     }
+
+    /*private void loadEditPopup(){
+
+        //popupWindow.showAsDropDown(edit);
+
+        LinearLayout content =  (LinearLayout) editView.findViewById(R.id.content);
+
+        TextView backTextView = (TextView) editView.findViewById(R.id.backButton);
+        backTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+
+        Object personAttributeTypes[][] = serverService.getAllPersonAttributeTypes();
+        for(Object[] personAttributeType : personAttributeTypes){
+            if(String.valueOf(personAttributeType[1]).equalsIgnoreCase("java.lang.string")) {
+
+                TitledEditText attributeTextView = new TitledEditText(context, null, String.valueOf(personAttributeType[0]) + ": ", "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+                content.addView(attributeTextView);
+            } else if(String.valueOf(personAttributeType[1]).equalsIgnoreCase("org.openmrs.concept")) {
+
+                LinearLayout linearLayout = new LinearLayout(this);
+                linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+                int padding = (int) getResources().getDimension(R.dimen.tiny);
+                linearLayout.setPadding(padding, padding, padding, padding);
+
+                TextView tv = new TextView(this);
+                tv.setText(String.valueOf(personAttributeType[0]) + ": ");
+                linearLayout.addView(tv);
+
+                String foreignKey = String.valueOf(personAttributeType[2]);
+                String conceptUuid = serverService.getConceptMappingForConceptId(foreignKey);
+
+                Object[][] conceptAnswers = serverService.getConceptAnswers(conceptUuid);
+                String[] answers = new String[conceptAnswers.length + 1];
+                answers[0] = "";
+                for(int i=0; i<conceptAnswers.length; i++)
+                    answers[i+1] = String.valueOf(conceptAnswers[i][0]);
+
+                Spinner spinner = new Spinner(context, Spinner.MODE_DIALOG);
+                ArrayAdapter<String> adapterr =
+                        new ArrayAdapter<String>(MainActivity.this,
+                                android.R.layout.simple_spinner_item, answers);
+                adapterr.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner.setAdapter(adapterr);
+
+                linearLayout.addView(spinner);
+
+                content.addView(linearLayout);
+            }
+        }
+
+    }*/
 
 }

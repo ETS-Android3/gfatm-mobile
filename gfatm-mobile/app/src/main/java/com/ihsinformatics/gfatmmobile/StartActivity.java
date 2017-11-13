@@ -57,6 +57,7 @@ public class StartActivity extends Activity {
         App.setPatientId(preferences.getString(Preferences.PATIENT_ID, ""));
         App.setRoles(preferences.getString(Preferences.ROLES, ""));
         App.setProviderUUid(preferences.getString(Preferences.PROVIDER_UUID, ""));
+        App.setPersonAttributeLastUpdate(preferences.getString(Preferences.PERSON_ATTRIBUTE_LAST_UPDATE, ""));
 
         ServerService serverService = new ServerService(context);
         com.ihsinformatics.gfatmmobile.model.Patient patient = serverService.getPatientBySystemIdFromLocalDB(App.getPatientId());

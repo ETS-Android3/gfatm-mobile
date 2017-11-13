@@ -46,6 +46,7 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
     public static final String COMMUNICATION_MODE = "communication_mode";
     public static final String LOCATION = "location";
     public static final String LOCATION_LAST_UPDATE = "location_last_update";
+    public static final String PERSON_ATTRIBUTE_LAST_UPDATE = "person_attribute_last_update";
     public static final String PATIENT_ID = "patient_id";
     public static final String ROLES = "roles";
     public static final String PROVIDER_UUID = "provider_uuid";
@@ -128,8 +129,8 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
             App.setRoles(sharedPreferences.getString(key, ""));
         } else if (key.equals(PROVIDER_UUID)) {
             App.setProviderUUid(sharedPreferences.getString(key, ""));
+        }  else if (key.equals(PERSON_ATTRIBUTE_LAST_UPDATE)) {
+            App.setPersonAttributeLastUpdate(sharedPreferences.getString(key, ""));
         }
-
-
     }
 }

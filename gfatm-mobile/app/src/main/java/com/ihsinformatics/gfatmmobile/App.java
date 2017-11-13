@@ -76,6 +76,7 @@ public class App {
     private static String userFullName = "";
     private static String location = "";
     private static String locationLastUpdate = "";
+    private static String personAttributeLastUpdate = "";
     private static String patientId = "";
     private static String roles = "";
     private static String providerUUid = "";
@@ -270,6 +271,15 @@ public class App {
     public static void setLocationLastUpdate(String locationLastUpdate) {
         App.locationLastUpdate = locationLastUpdate;
     }
+
+    public static String getPersonAttributeLastUpdate() {
+        return personAttributeLastUpdate;
+    }
+
+    public static void setPersonAttributeLastUpdate(String personAttributeLastUpdate) {
+        App.personAttributeLastUpdate = personAttributeLastUpdate;
+    }
+
     public static boolean isTabletDevice(Context activityContext) {
 
         boolean device_large = ((activityContext.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE);
