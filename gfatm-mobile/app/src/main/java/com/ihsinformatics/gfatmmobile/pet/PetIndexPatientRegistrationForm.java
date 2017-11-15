@@ -1070,7 +1070,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
             }
 
             if (App.get(husbandName).equals("")) {
-                String husbandNameString = App.getPatient().getPerson().getGuardianName();
+                String husbandNameString = App.getPatient().getPerson().getPersonAttribute("Guardian Name");
                 if (husbandNameString == null || husbandNameString.equals("")) {
                     husbandName.getEditText().setText("");
                 } else {

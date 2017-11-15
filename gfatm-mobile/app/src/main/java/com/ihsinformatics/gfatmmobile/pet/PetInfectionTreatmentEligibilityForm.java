@@ -264,9 +264,9 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
         othersSite.setVisibility(View.GONE);
         tbRuledOut.setVisibility(View.VISIBLE);
 
-        String s = App.getPatient().getPerson().getMaritalStatus();
+        String s = App.getPatient().getPerson().getPersonAttribute("Marital Status");
 
-        if (App.getPatient().getPerson().getAge() > 14 && !(App.getPatient().getPerson().getMaritalStatus().equalsIgnoreCase("Single")))
+        if (App.getPatient().getPerson().getAge() > 14 && !(s.equalsIgnoreCase("Single")))
             pregnancyHistory.setVisibility(View.VISIBLE);
         else
             pregnancyHistory.setVisibility(View.GONE);
