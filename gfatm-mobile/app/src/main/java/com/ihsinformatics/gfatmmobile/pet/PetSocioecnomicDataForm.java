@@ -307,7 +307,7 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
             otherMotherTongue.getEditText().requestFocus();
             error = true;
         }else{
-            otherMotherTongue.getEditText().setError(getString(R.string.empty_field));
+            otherMotherTongue.getEditText().setError(null);
             otherMotherTongue.getEditText().requestFocus();
         }
 
@@ -316,7 +316,7 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
             otherHouseholdHead.getEditText().requestFocus();
             error = true;
         }else{
-            otherHouseholdHead.getEditText().setError(getString(R.string.empty_field));
+            otherHouseholdHead.getEditText().setError(null);
             otherHouseholdHead.getEditText().requestFocus();
         }
 
@@ -326,7 +326,7 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
             otherEthinicity.getEditText().requestFocus();
             error = true;
         }else{
-            otherEthinicity.getEditText().setError(getString(R.string.empty_field));
+            otherEthinicity.getEditText().setError(null);
             otherEthinicity.getEditText().requestFocus();
         }
 
@@ -337,7 +337,7 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
             view = intervention;
             error = true;
         }else{
-            intervention.getQuestionView().setError(getString(R.string.empty_field));
+            intervention.getQuestionView().setError(null);
             intervention.getQuestionView().requestFocus();
         }
 
