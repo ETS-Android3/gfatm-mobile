@@ -18,6 +18,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 /**
  * @author owais.hussain@irdresearch.org
  */
@@ -29,25 +31,6 @@ public class Person extends AbstractModel {
     int age;
     String birthdate;
     String gender;
-    String birthPlace;
-    String citizenship;
-    String maritalStatus;
-    String healthCenter;
-    String healthDistrict;
-    String motherName;
-    String primaryContact;
-    String primaryContactOwner;
-    String secondaryContact;
-    String secondaryContactOwner;
-    String ethnicity;
-    String educationLevel;
-    String employmentStatus;
-    String occupation;
-    String motherTongue;
-    String incomeClass;
-    String nationalId;
-    String nationalIdOwner;
-    String guardianName;
     String address1;
     String address2;
     String address3;
@@ -55,16 +38,10 @@ public class Person extends AbstractModel {
     String cityVillage;
     String countyDistrict;
     String country;
-    String tertiaryContact;
-    String quaternaryContact;
-    String treatmentSupporter;
+    HashMap<String, String> personAttributes;
 
-
-    public Person(String uuid, String givenName, String familyName, int age, String birthdate, String gender, String birthPlace, String citizenship, String maritalStatus, String healthCenter, String healthDistrict, String motherName,
-                  String primaryContact, String primaryContactOwner, String secondaryContact, String secondaryContactOwner, String tertiaryContact, String quaternaryContact,
-                  String ethnicity, String educationLevel, String employmentStatus, String occupation, String motherTongue, String incomeClass,
-                  String nationalId, String nationalIdOwner, String guardianName,
-                  String address1, String address2, String address3, String stateProvince, String countyDistrict, String cityVillage, String country, String treatmentSupporter ) {
+    public Person(String uuid, String givenName, String familyName, int age, String birthdate, String gender, HashMap<String, String> personAttributes,
+                  String address1, String address2, String address3, String stateProvince, String countyDistrict, String cityVillage, String country) {
 
         super(uuid);
         this.givenName = givenName;
@@ -72,25 +49,6 @@ public class Person extends AbstractModel {
         this.age = age;
         this.birthdate = birthdate;
         this.gender = gender;
-        this.birthPlace = birthPlace;
-        this.citizenship = citizenship;
-        this.maritalStatus = maritalStatus;
-        this.healthCenter = healthCenter;
-        this.healthDistrict = healthDistrict;
-        this.motherName = motherName;
-        this.primaryContact = primaryContact;
-        this.primaryContactOwner = primaryContactOwner;
-        this.secondaryContact = secondaryContact;
-        this.secondaryContactOwner = secondaryContactOwner;
-        this.ethnicity = ethnicity;
-        this.educationLevel = educationLevel;
-        this.employmentStatus = employmentStatus;
-        this.occupation = occupation;
-        this.motherTongue = motherTongue;
-        this.incomeClass = incomeClass;
-        this.nationalId = nationalId;
-        this.nationalIdOwner = nationalIdOwner;
-        this.guardianName = guardianName;
         this.address1 = address1;
         this.address2 = address2;
         this.address3 = address3;
@@ -98,9 +56,7 @@ public class Person extends AbstractModel {
         this.cityVillage = cityVillage;
         this.countyDistrict = countyDistrict;
         this.country = country;
-        this.tertiaryContact = tertiaryContact;
-        this.quaternaryContact = quaternaryContact;
-        this.treatmentSupporter = treatmentSupporter;
+        this.personAttributes = personAttributes;
     }
 
     public static Person parseJSONObject(JSONObject json) {
@@ -111,26 +67,6 @@ public class Person extends AbstractModel {
         int age = 0;
         String birthdate = "";
         String gender = "";
-
-        String birthPlace = "";
-        String citizenship = "";
-        String maritalStatus = "";
-        String healthCenter = "";
-        String healthDistrict = "";
-        String motherName = "";
-        String primaryContact = "";
-        String primaryContactOwner = "";
-        String secondaryContact = "";
-        String secondaryContactOwner = "";
-        String ethnicity = "";
-        String educationLevel = "";
-        String employmentStatus = "";
-        String occupation = "";
-        String motherTongue = "";
-        String incomeClass = "";
-        String nationalId = "";
-        String nationalIdOwner = "";
-        String guardianName = "";
         String address1 = "";
         String address2 = "";
         String address3 = "";
@@ -138,9 +74,7 @@ public class Person extends AbstractModel {
         String cityVillage = "";
         String countyDistrict = "";
         String country = "";
-        String tertiaryContact = "";
-        String quaternaryContact = "";
-        String treatmentSupporter = "";
+        HashMap<String, String> personAttributes = new HashMap<String, String>();
 
         try {
             uuid = json.getString("uuid");
@@ -176,72 +110,15 @@ public class Person extends AbstractModel {
                 JSONObject object = attributes.getJSONObject(i);
                 String display = object.getString("display");
                 Boolean voided = object.getBoolean("voided");
-
-                String[] displayString = display.split(" = ");
-                if (displayString.length == 2) {
-                    if (displayString[0].equals("Birthplace") && !voided) {
-                        birthPlace = displayString[1];
-                    } else if (displayString[0].equals("Citizenship") && !voided) {
-                        citizenship = displayString[1];
-                    } else if (displayString[0].equals("Health District") && !voided) {
-                        healthDistrict = displayString[1];
-                    } else if (displayString[0].equals("Mother Name") && !voided) {
-                        motherName = displayString[1];
-                    } else if (displayString[0].equals("Primary Contact") && !voided) {
-                        primaryContact = displayString[1];
-                    } else if (displayString[0].equals("Secondary Contact") && !voided) {
-                        secondaryContact = displayString[1];
-                    } else if (displayString[0].equals("National ID") && !voided) {
-                        nationalId = displayString[1];
-                    } else if (displayString[0].equals("Guardian Name") && !voided) {
-                        guardianName = displayString[1];
-                    } else if (displayString[0].equals("Tertiary Contact") && !voided) {
-                        tertiaryContact = displayString[1];
-                    } else if (displayString[0].equals("Quaternary Contact") && !voided) {
-                        quaternaryContact = displayString[1];
+                if (!voided){
+                    String[] displayString = display.split(" = ");
+                    if (displayString.length == 2) {
+                            personAttributes.put(displayString[0],displayString[1]);
+                    } else {
+                        JSONObject attributeTypeObj = object.getJSONObject("attributeType");
+                        String attributeType = attributeTypeObj.getString("display");
+                        personAttributes.put(attributeType,display);
                     }
-                } else {
-
-                    JSONObject attributeTypeObj = object.getJSONObject("attributeType");
-                    String attributeType = attributeTypeObj.getString("display");
-
-
-                    if (attributeType.equals("Marital Status")) {
-                        maritalStatus = display;
-                    } else if (attributeType.equals("Health Center")) {
-                        healthCenter = display;
-                    } else if (attributeType.equals("Primary Contact Owner")) {
-                        primaryContactOwner = display;
-                    } else if (attributeType.equals("Secondary Contact Owner")) {
-                        secondaryContactOwner = display;
-                    } else if (attributeType.equals("Ethnicity")) {
-                        ethnicity = display;
-                    } else if (attributeType.equals("Education Level")) {
-                        educationLevel = display;
-                    } else if (attributeType.equals("Employment Status")) {
-                        employmentStatus = display;
-                    } else if (attributeType.equals("Occupation")) {
-                        occupation = display;
-                    } else if (attributeType.equals("Mother Tongue")) {
-                        motherTongue = display;
-                    } else if (attributeType.equals("Income Class")) {
-                        incomeClass = display;
-                    } else if (attributeType.equals("National ID")) {
-                        nationalId = display;
-                    } else if (attributeType.equals("National ID Owner")) {
-                        nationalIdOwner = display;
-                    } else if (attributeType.equals("Guardian Name")) {
-                        guardianName = display;
-                    } else if (displayString[0].equals("Tertiary Contact")) {
-                        tertiaryContact = displayString[1];
-                    } else if (displayString[0].equals("Quaternary Contact")) {
-                        quaternaryContact = displayString[1];
-                    } else if (displayString[0].equals("Treatment Supporter")) {
-                        treatmentSupporter = displayString[1];
-                    }
-
-
-
                 }
             }
 
@@ -249,12 +126,8 @@ public class Person extends AbstractModel {
             e.printStackTrace();
             person = null;
         }
-        person = new Person(uuid, givenName, familyName, age, birthdate, gender,
-                birthPlace, citizenship, maritalStatus, healthCenter, healthDistrict, motherName,
-                primaryContact, primaryContactOwner, secondaryContact, secondaryContactOwner, tertiaryContact, quaternaryContact,
-                ethnicity, educationLevel, employmentStatus, occupation, motherTongue, incomeClass,
-                nationalId, nationalIdOwner, guardianName,
-                address1, address2, address3, stateProvince, countyDistrict, cityVillage, country, treatmentSupporter);
+        person = new Person(uuid, givenName, familyName, age, birthdate, gender, personAttributes,
+                address1, address2, address3, stateProvince, countyDistrict, cityVillage, country);
         return person;
     }
 
@@ -307,158 +180,6 @@ public class Person extends AbstractModel {
 
     public void setGender(String gender) {
         this.gender = gender;
-    }
-
-    public String getSecondaryContactOwner() {
-        return secondaryContactOwner;
-    }
-
-    public void setSecondaryContactOwner(String secondaryContactOwner) {
-        this.secondaryContactOwner = secondaryContactOwner;
-    }
-
-    public String getBirthPlace() {
-        return birthPlace;
-    }
-
-    public void setBirthPlace(String birthPlace) {
-        this.birthPlace = birthPlace;
-    }
-
-    public String getCitizenship() {
-        return citizenship;
-    }
-
-    public void setCitizenship(String citizenship) {
-        this.citizenship = citizenship;
-    }
-
-    public String getMaritalStatus() {
-        return maritalStatus;
-    }
-
-    public void setMaritalStatus(String maritalStatus) {
-        this.maritalStatus = maritalStatus;
-    }
-
-    public String getHealthCenter() {
-        return healthCenter;
-    }
-
-    public void setHealthCenter(String healthCenter) {
-        this.healthCenter = healthCenter;
-    }
-
-    public String getHealthDistrict() {
-        return healthDistrict;
-    }
-
-    public void setHealthDistrict(String healthDistrict) {
-        this.healthDistrict = healthDistrict;
-    }
-
-    public String getMotherName() {
-        return motherName;
-    }
-
-    public void setMotherName(String motherName) {
-        this.motherName = motherName;
-    }
-
-    public String getPrimaryContact() {
-        return primaryContact;
-    }
-
-    public void setPrimaryContact(String primaryContact) {
-        this.primaryContact = primaryContact;
-    }
-
-    public String getPrimaryContactOwner() {
-        return primaryContactOwner;
-    }
-
-    public void setPrimaryContactOwner(String primaryContactOwner) {
-        this.primaryContactOwner = primaryContactOwner;
-    }
-
-    public String getSecondaryContact() {
-        return secondaryContact;
-    }
-
-    public void setSecondaryContact(String secondaryContact) {
-        this.secondaryContact = secondaryContact;
-    }
-
-    public String getEthnicity() {
-        return ethnicity;
-    }
-
-    public void setEthnicity(String ethnicity) {
-        this.ethnicity = ethnicity;
-    }
-
-    public String getEducationLevel() {
-        return educationLevel;
-    }
-
-    public void setEducationLevel(String educationLevel) {
-        this.educationLevel = educationLevel;
-    }
-
-    public String getEmploymentStatus() {
-        return employmentStatus;
-    }
-
-    public void setEmploymentStatus(String employmentStatus) {
-        this.employmentStatus = employmentStatus;
-    }
-
-    public String getOccupation() {
-        return occupation;
-    }
-
-    public void setOccupation(String occupation) {
-        this.occupation = occupation;
-    }
-
-    public String getMotherTongue() {
-        return motherTongue;
-    }
-
-    public void setMotherTongue(String motherTongue) {
-        this.motherTongue = motherTongue;
-    }
-
-    public String getIncomeClass() {
-        return incomeClass;
-    }
-
-    public void setIncomeClass(String incomeClass) {
-        this.incomeClass = incomeClass;
-    }
-
-    public String getNationalId() {
-        return nationalId;
-    }
-
-    public void setNationalId(String nationalId) {
-        this.nationalId = nationalId;
-    }
-
-    public String getNationalIdOwner() {
-        return nationalIdOwner;
-    }
-
-    public void setNationalIdOwner(String nationalIdOwner) {
-        this.nationalIdOwner = nationalIdOwner;
-    }
-
-    public String getGuardianName() {
-        return guardianName;
-    }
-
-    public void setGuardianName(String guardianName) {
-        this.guardianName = guardianName;
     }
 
     public String getAddress3() {
@@ -517,13 +238,11 @@ public class Person extends AbstractModel {
         this.country = country;
     }
 
-    public String getTreatmentSupporter() {
-        return treatmentSupporter;
-    }
+    public String getPersonAttribute(String attributeType) {return personAttributes.get(attributeType);}
 
-    public void setTreatmentSupporter(String treatmentSupporter) {
-        this.treatmentSupporter = treatmentSupporter;
-    }
+    public void setPersonAttribute(String attributeType, String personAttribute) { personAttributes.put(attributeType, personAttribute);}
+
+    public HashMap<String, String> getPersonAttributes(){return personAttributes;}
 
     @Override
     public String toString() {
