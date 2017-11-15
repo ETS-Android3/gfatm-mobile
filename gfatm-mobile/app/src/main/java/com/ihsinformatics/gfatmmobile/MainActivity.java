@@ -11,7 +11,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
@@ -37,26 +36,26 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.InputType;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
-import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
+import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.shared.FormsObject;
 import com.ihsinformatics.gfatmmobile.util.LocationService;
 import com.ihsinformatics.gfatmmobile.util.OfflineFormSyncService;
@@ -88,20 +87,21 @@ public class MainActivity extends AppCompatActivity
     public static SummaryFragment fragmentSearch = new SummaryFragment();
     ImageView change;
     public static ImageView update;
-
     public static ImageView edit;
-
 
     public static TextView patientName;
     public static TextView patientDob;
     public static TextView patientId;
     public static TextView id;
 
-    /*View editView;
-    PopupWindow popupWindow;*/
+    View editView;
+    PopupWindow popupWindow;
+    public static LinearLayout popupContent;
     Context context = this;
+    RelativeLayout backDimLayout;
 
     static boolean active = false;
+    public static ServerService serverService;
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
@@ -163,7 +163,6 @@ public class MainActivity extends AppCompatActivity
     public static ActionBar actionBar;
 
     FragmentManager fm = getFragmentManager();
-    private ServerService serverService;
 
     @Override
     public void onStart() {
@@ -248,11 +247,11 @@ public class MainActivity extends AppCompatActivity
 
             if (App.getPatient() == null) {
                 update.setVisibility(View.GONE);
-                //edit.setVisibility(View.GONE);
+                edit.setVisibility(View.GONE);
             }
             else {
                 update.setVisibility(View.VISIBLE);
-                //edit.setVisibility(View.VISIBLE);
+                edit.setVisibility(View.VISIBLE);
             }
 
         }
@@ -296,17 +295,22 @@ public class MainActivity extends AppCompatActivity
         patientName = (TextView) findViewById(R.id.patientName);
         patientDob = (TextView) findViewById(R.id.patientDob);
         patientId = (TextView) findViewById(R.id.patientId);
-        id = (TextView) findViewById(R.id.id);/*LayoutInflater layoutInflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        id = (TextView) findViewById(R.id.id);
+
+        LayoutInflater layoutInflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         editView = layoutInflater.inflate(R.layout.edit_patient,null);
         popupWindow = new PopupWindow(editView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         popupWindow.setFocusable(true);
-        popupWindow.update();*/
+        popupWindow.update();
+        popupContent =  (LinearLayout) editView.findViewById(R.id.content);
 
+        backDimLayout = (RelativeLayout) findViewById(R.id.bac_dim_layout);
 
+        loadEditPopup();
 
         if (App.getPatient() != null) {
 
-            //loadEditPopup();
+            updatePopupContent();
 
             String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
             String lname = App.getPatient().getPerson().getFamilyName();
@@ -333,7 +337,7 @@ public class MainActivity extends AppCompatActivity
                 id.setVisibility(View.VISIBLE);
             patientId.setText(App.getPatient().getPatientId());
             update.setVisibility(View.VISIBLE);
-            //edit.setVisibility(View.VISIBLE);
+            edit.setVisibility(View.VISIBLE);
         }
 
         if (!App.getProgram().equals("")) {
@@ -435,7 +439,7 @@ public class MainActivity extends AppCompatActivity
             getSupportActionBar().setSubtitle(null);
             if (App.getPatient() == null) {
                 update.setVisibility(View.GONE);
-                //edit.setVisibility(View.GONE);
+                edit.setVisibility(View.GONE);
                 patientName.setText("");
                 patientDob.setText("");
                 patientId.setText("");
@@ -457,6 +461,8 @@ public class MainActivity extends AppCompatActivity
                     lname = lname.substring(0, 1).toUpperCase() + lname.substring(1);
 
                 if(!App.get(patientName).equals(fname + " " + lname + " (" + App.getPatient().getPerson().getGender() + ")")) {
+
+                    updatePopupContent();
 
                     patientName.setText(fname + " " + lname + " (" + App.getPatient().getPerson().getGender() + ")");
                     String dob = App.getPatient().getPerson().getBirthdate().substring(0, 10);
@@ -486,7 +492,7 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 update.setVisibility(View.VISIBLE);
-                //edit.setVisibility(View.VISIBLE);
+                edit.setVisibility(View.VISIBLE);
             }
 
 
@@ -870,12 +876,13 @@ public class MainActivity extends AppCompatActivity
                     updatePatientDetails();
 
                     break;
-                } /*else if (view == edit) {
+                } else if (view == edit) {
 
                     popupWindow.showAsDropDown(edit);
+                    backDimLayout.setVisibility(View.VISIBLE);
 
                     break;
-                }*/
+                }
             }
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL: {
@@ -922,6 +929,8 @@ public class MainActivity extends AppCompatActivity
                 if (result.equals("SUCCESS")) {
                     //resetViews();
 
+                    updatePopupContent();
+
                     String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
                     String lname = App.getPatient().getPerson().getFamilyName();
                     if(!lname.equals(""))
@@ -966,6 +975,7 @@ public class MainActivity extends AppCompatActivity
                             });
                     alertDialog.show();
                     fragmentReport.fillReportFragment();
+                    updatePopupContent();
                 } else if (result.equals("CONNECTION_ERROR")) {
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
@@ -1016,6 +1026,9 @@ public class MainActivity extends AppCompatActivity
                 } else if (returnString != null && returnString.equals("SELECT")) {
 
                     if (App.getPatient() != null) {
+
+                        updatePopupContent();
+
                         String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
                         String lname = App.getPatient().getPerson().getFamilyName();
                         if(!lname.equals(""))
@@ -1049,6 +1062,9 @@ public class MainActivity extends AppCompatActivity
                 } else if (returnString != null && returnString.equals("CREATE")) {
 
                     if (App.getPatient() != null) {
+
+                        updatePopupContent();
+
                         String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
                         String lname = App.getPatient().getPerson().getFamilyName();
                         if(!lname.equals(""))
@@ -1081,6 +1097,7 @@ public class MainActivity extends AppCompatActivity
                         fragmentReport.fillReportFragment();
                         fragmentForm.fillMainContent();
                         fragmentSearch.updateSummaryFragment();
+
                     }
                 }
 
@@ -1245,27 +1262,72 @@ public class MainActivity extends AppCompatActivity
         super.onDestroy();
     }
 
-    /*private void loadEditPopup(){
+    private void loadEditPopup(){
 
         //popupWindow.showAsDropDown(edit);
 
-        LinearLayout content =  (LinearLayout) editView.findViewById(R.id.content);
-
-        TextView backTextView = (TextView) editView.findViewById(R.id.backButton);
+        TextView backTextView = (TextView) editView.findViewById(R.id.cancelButton);
         backTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 popupWindow.dismiss();
+                backDimLayout.setVisibility(View.GONE);
             }
         });
 
+        popupContent.removeAllViews();
         Object personAttributeTypes[][] = serverService.getAllPersonAttributeTypes();
         for(Object[] personAttributeType : personAttributeTypes){
-            if(String.valueOf(personAttributeType[1]).equalsIgnoreCase("java.lang.string")) {
+            if(String.valueOf(personAttributeType[1]).equalsIgnoreCase("java.lang.String")) {
 
                 TitledEditText attributeTextView = new TitledEditText(context, null, String.valueOf(personAttributeType[0]) + ": ", "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
-                content.addView(attributeTextView);
-            } else if(String.valueOf(personAttributeType[1]).equalsIgnoreCase("org.openmrs.concept")) {
+                popupContent.addView(attributeTextView);
+            } else if(String.valueOf(personAttributeType[1]).equalsIgnoreCase("java.lang.Integer")) {
+
+                TitledEditText attributeTextView = new TitledEditText(context, null, String.valueOf(personAttributeType[0]) + ": ", "", "", 100, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
+                popupContent.addView(attributeTextView);
+            } else if(String.valueOf(personAttributeType[1]).equalsIgnoreCase("java.lang.Float")) {
+
+                TitledEditText attributeTextView = new TitledEditText(context, null, String.valueOf(personAttributeType[0]) + ": ", "", "", 100, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+                popupContent.addView(attributeTextView);
+            } else if(String.valueOf(personAttributeType[1]).equalsIgnoreCase("java.lang.Boolean")) {
+
+                TitledRadioGroup attributeRadioGroup = new TitledRadioGroup(context, null, String.valueOf(personAttributeType[0]) + ": ", getResources().getStringArray(R.array.yes_no_options), "", App.HORIZONTAL, App.HORIZONTAL);
+                popupContent.addView(attributeRadioGroup);
+            } else if(String.valueOf(personAttributeType[1]).equalsIgnoreCase("org.openmrs.Location")) {
+
+                LinearLayout linearLayout = new LinearLayout(this);
+                linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+                int padding = (int) getResources().getDimension(R.dimen.tiny);
+                linearLayout.setPadding(padding, padding, padding, padding);
+
+                TextView tv = new TextView(this);
+                tv.setText(String.valueOf(personAttributeType[0]) + ": ");
+                linearLayout.addView(tv);
+
+                ServerService serverService = new ServerService(getApplicationContext());
+                final Object[][] locations = serverService.getAllLocations();
+                String[] locs = new String[locations.length+1];
+                locs[0] = "";
+                for(int i=0; i<locations.length; i++) {
+                    if(String.valueOf(locations[i][16]).equals("") || String.valueOf(locations[i][16]).equals("null"))
+                        locs[i+1] = String.valueOf(locations[i][1]);
+                    else
+                        locs[i+1] = String.valueOf(locations[i][16]);
+                }
+
+                Spinner spinner = new Spinner(context, Spinner.MODE_DIALOG);
+                ArrayAdapter<String> adapterr =
+                        new ArrayAdapter<String>(MainActivity.this,
+                                android.R.layout.simple_spinner_item, locs);
+                adapterr.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner.setAdapter(adapterr);
+
+                linearLayout.addView(spinner);
+
+                popupContent.addView(linearLayout);
+
+            }else if(String.valueOf(personAttributeType[1]).equalsIgnoreCase("org.openmrs.Concept")) {
 
                 LinearLayout linearLayout = new LinearLayout(this);
                 linearLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -1294,10 +1356,69 @@ public class MainActivity extends AppCompatActivity
 
                 linearLayout.addView(spinner);
 
-                content.addView(linearLayout);
+                popupContent.addView(linearLayout);
             }
         }
 
-    }*/
+    }
+
+    public static void updatePopupContent(){
+
+        for(int i = 0; i < popupContent.getChildCount(); i++){
+            View v = popupContent.getChildAt(i);
+            if(v instanceof TitledEditText){
+
+                String attributeType = ((TitledEditText)v).getQuestionView().getText().toString();
+                String val = App.getPatient().getPerson().getPersonAttribute(attributeType.replace(": ",""));
+                if(val == null) val = "";
+                ((TitledEditText)v).getEditText().setText(val);
+
+            } else if (v instanceof TitledRadioGroup){
+
+                String attributeType = ((TitledRadioGroup)v).getQuestionView().getText().toString();
+                String val = App.getPatient().getPerson().getPersonAttribute(attributeType.replace(": ",""));
+                if(val == null) val = "";
+                else{
+                    if(val.equalsIgnoreCase("false")) val = "No";
+                    else val = "Yes";
+                }
+
+                ((TitledRadioGroup)v).getRadioGroup().clearCheck();
+                for (RadioButton rb : ((TitledRadioGroup)v).getRadioGroup().getButtons()) {
+                    String str = rb.getText().toString();
+                    if (str.equals(val))
+                        rb.setChecked(true);
+                }
+
+            } else if (v instanceof LinearLayout){
+
+                View v1 = ((LinearLayout)v).getChildAt(0);
+                String attributeType = ((TextView)v1).getText().toString();
+                String val = App.getPatient().getPerson().getPersonAttribute(attributeType.replace(": ",""));
+                if(val == null) val = "";
+                else{
+
+                    if(val.matches("[-+]?\\d*\\.?\\d+")){
+                        Object[] locs = serverService.getLocationNameThroughLocationId(val);
+                        if(locs == null) val = "";
+                        else val = String.valueOf(locs[1]);
+                    }
+
+
+                }
+
+                Spinner spinner = (Spinner) ((LinearLayout)v).getChildAt(1);
+                spinner.setSelection(0);
+                for(int j = 0; j < spinner.getCount(); j++){
+                    if(spinner.getItemAtPosition(j).toString().equals(val)){
+                        spinner.setSelection(j);
+                        break;
+                    }
+                }
+
+            }
+        }
+
+    }
 
 }
