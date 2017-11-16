@@ -248,4 +248,12 @@
         android:layout_alignParentRight="true"
         android:layout_gravity="bottom|right"/>-->
 
+    <RelativeLayout
+        android:id="@+id/bac_dim_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#7FFFFFFF"
+        android:visibility="gone" >
+    </RelativeLayout>
+
 </RelativeLayout>

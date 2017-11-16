@@ -16,6 +16,7 @@ public class Metadata {
     public static final String FORMS = "form";
     public static final String FORMS_VALUE = "form_value";
     public static final String LOCATION = "location";
+    public static final String LOCATION_MAPPING = "location_mapping";
     public static final String USERS = "users";
     public static final String IDENTIFIER_TYPE = "identifier_type";
     public static final String PATIENT = "patient";
@@ -28,9 +29,9 @@ public class Metadata {
     public static final String PROGRAM = "program";
     public static final String TEST_ID = "test_id";
 
-    public static final String PERSON_ADDRESS = "Person Address";
-    public static final String PERSON_ATTRIBUTE = "Person Attribute";
-    public static final String PATIENT_IDENTIFIER = "Patient Identifier";
+    public static final String PERSON_ADDRESS_FORM = "Person Address";
+    public static final String PERSON_ATTRIBUTE_FORM = "Person Attribute";
+    public static final String PATIENT_IDENTIFIER_FORM = "Patient Identifier";
 
     public static final String COUNTRY = "country";
     public static final String PROVINCE = "province";
@@ -45,5 +46,6 @@ public class Metadata {
 
     public static final String CONCEPT_MAPPING = "concept_mapping";
     public static final String CONCEPT_ANSWERS = "concept_answers";
+    public static final String PERSON_ATTRIBUTE = "person_attribute";
 
 }

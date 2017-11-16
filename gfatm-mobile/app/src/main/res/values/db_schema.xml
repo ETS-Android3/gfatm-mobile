@@ -312,6 +312,16 @@
         </item>
 
         <item>
+            create table person_attribute(
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                person_attribute_type INTEGER NOT NULL,
+                value VARCHAR,
+                patient_id INTEGER NOT NULL,
+                retired INTEGER DEFAULT 0
+            );
+        </item>
+
+        <item>
             create table concept_mapping(
                 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 uuid VARCHAR,
@@ -324,6 +334,14 @@
                 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 question_concept_uuid VARCHAR,
                 answer_concept_uuid VARCHAR
+            );
+        </item>
+
+        <item>
+            create table location_mapping(
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                uuid VARCHAR,
+                location_id integer
             );
         </item>
 

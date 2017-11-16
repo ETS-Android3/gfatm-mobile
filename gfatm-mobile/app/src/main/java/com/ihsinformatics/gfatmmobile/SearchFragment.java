@@ -536,7 +536,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Co
             parameters.add(new String[]{"CONTACT_NUMBER", mobileNumber});
         }
         if (patientIdCheckBox.isChecked()) {
-            parameters.add(new String[]{"PATIENT_IDENTIFIER", App.get(patientId)});
+            parameters.add(new String[]{"PATIENT_IDENTIFIER_FORM", App.get(patientId)});
         }
         if (healthCenterCheckBox.isChecked()) {
             parameters.add(new String[]{"HEALTH_CENTRE", App.get(healthCenter)});
@@ -1079,6 +1079,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Co
                     editor.apply();
 
                     if (App.getPatient() != null) {
+                        MainActivity.updatePopupContent();
+
                         String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
                         String lname = App.getPatient().getPerson().getFamilyName();
                         if(!lname.equals(""))

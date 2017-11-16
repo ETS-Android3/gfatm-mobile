@@ -536,7 +536,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             parameters.add(new String[]{"CONTACT_NUMBER", mobileNumber});
         }
         if (patientIdCheckBox.isChecked()) {
-            parameters.add(new String[]{"PATIENT_IDENTIFIER", App.get(patientId)});
+            parameters.add(new String[]{"PATIENT_IDENTIFIER_FORM", App.get(patientId)});
         }
         if (healthCenterCheckBox.isChecked()) {
             parameters.add(new String[]{"HEALTH_CENTRE", App.get(healthCenter)});
