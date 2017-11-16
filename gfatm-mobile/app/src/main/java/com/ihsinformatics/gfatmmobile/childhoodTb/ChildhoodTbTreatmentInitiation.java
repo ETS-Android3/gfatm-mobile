@@ -1369,7 +1369,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         }
 
         if(regimen.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"REGIMEN", App.get(regimen).equals(getResources().getString(R.string.ctb_rhze)) ? "RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL PROPHYLAXIS" : "RIFAMPICIN/ISONIAZID/PYRAZINAMIDE"});
+            observations.add(new String[]{"REGIMEN", App.get(regimen).equals(getResources().getString(R.string.ctb_rhze)) ? "RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL" : "RIFAMPICIN/ISONIAZID/PYRAZINAMIDE"});
         }
 
         if(typeFixedDosePrescribed.getVisibility()==View.VISIBLE){
@@ -1875,7 +1875,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 weightPercentileEditText.getEditText().setText(obs[0][1]);
             }else if (obs[0][0].equals("REGIMEN")) {
                 for (RadioButton rb : regimen.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_rhze)) && obs[0][1].equals("RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL PROPHYLAXIS")) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_rhze)) && obs[0][1].equals("RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL")) {
                         rb.setChecked(true);
                         break;
                     } else if (rb.getText().equals(getResources().getString(R.string.ctb_rhz)) && obs[0][1].equals("RIFAMPICIN/ISONIAZID/PYRAZINAMIDE")) {
@@ -2373,7 +2373,6 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             snackbar.dismiss();
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-        regDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
         iptStartDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
         iptStartDate.setVisibility(View.GONE);
@@ -2511,6 +2510,21 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             }
         }
         weightAtBaseline.getEditText().setKeyListener(null);
+
+        String startDate = serverService.getLatestEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + "Patient Registration");
+        String format = "";
+        if(startDate!=null) {
+            if (startDate.contains("/")) {
+                format = "dd/MM/yyyy";
+            } else {
+                format = "yyyy-MM-dd";
+            }
+            secondDateCalendar.setTime(App.stringToDate(startDate, format));
+            regDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+        }
+
+
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");
