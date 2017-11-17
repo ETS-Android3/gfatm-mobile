@@ -337,7 +337,16 @@ public class ServerService {
 
     public Object[][] getAllPersonAttributeTypes() {
         Object[][] personAttributesType = dbUtil.getFormTableData("select name, format, foreign_key, uuid from " + Metadata.PERSON_ATTRIBUTE_TYPE);
-        return personAttributesType;    }
+        return personAttributesType;
+    }
+
+    public String getPersonAttributeFormat(String attributeType) {
+        Object[][] personAttributesType = dbUtil.getFormTableData("select format from " + Metadata.PERSON_ATTRIBUTE_TYPE + " where name = '" + attributeType + "'");
+        if(personAttributesType != null && personAttributesType.length > 0)
+            return String.valueOf(personAttributesType[0][0]);
+        else
+            return null;
+    }
 
     public Object[][] getAllLocations() {
         Object[][] locations = dbUtil.getFormTableData("select location_id, location_name, uuid, parent_uuid, fast_location, pet_location, childhood_tb_location, comorbidities_location, pmdt_location, aic_location, primary_contact, address1, address2, city_village, state_province, county_district, description from " + Metadata.LOCATION);
@@ -1512,6 +1521,59 @@ public class ServerService {
         return response;
     }
 
+    public String savePatientInformationForm(HashMap<String, String> personAttribute) {
+
+        if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
+            if (!isURLReachable()) {
+                return "CONNECTION_ERROR";
+            }
+        }
+
+        if (App.getCommunicationMode().equals("REST")) {
+
+            try {
+
+                if (App.getMode().equalsIgnoreCase("OFFLINE")) {
+
+                    ContentValues values5 = new ContentValues();
+                    values5.put("program", App.getProgram());
+                    values5.put("form_name", "PATIENT INFORMATION FORM");
+                    values5.put("p_id", App.getPatientId());
+                    Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+                    String formDate = formatter.format(new Date());
+                    values5.put("form_date", formDate);
+                    Date date = new Date();
+                    values5.put("timestamp", date.getTime());
+                    values5.put("location", App.getLocation());
+                    values5.put("username", App.getUsername());
+                    dbUtil.insert(Metadata.FORMS, values5);
+
+                    String formId = dbUtil.getObject(Metadata.FORMS, "id", "p_id='" + App.getPatientId() + "' and timestamp='" + date.getTime() + "'");
+
+                    for (Map.Entry<String, String> entry : personAttribute.entrySet()) {
+                        String key = entry.getKey();
+                        String value = entry.getValue();
+
+                        ContentValues values6 = new ContentValues();
+                        values6.put("field_name", key);
+                        values6.put("value", value);
+                        values6.put("form_id", formId);
+                        dbUtil.insert(Metadata.FORMS_VALUE, values6);
+
+                    }
+
+                    return "SUCCESS_"+formId;
+
+                }
+
+            } catch (Exception e) {
+                return "FAIL";
+            }
+        }
+
+        return "SUCCESS";
+    }
+
 
     public String savePersonAttributeType(String attributeType, String value, String encounterId) {
 
@@ -1552,6 +1614,9 @@ public class ServerService {
                     value = getConceptNameFromUuid(value);
                 } else if(personAttributeT[1].equals("org.openmrs.Location")){
                     value = getLocationSystemIdFromUuid(value);
+                } else if(personAttributeT[1].equals("java.lang.Boolean")){
+                   if(value.equalsIgnoreCase("Yes")) value = "true";
+                    else if(value.equalsIgnoreCase("No")) value = "false";
                 }
 
                 ContentValues contentValues = new ContentValues();
@@ -1566,8 +1631,6 @@ public class ServerService {
                 dbUtil.insert(Metadata.PERSON_ATTRIBUTE, val);
 
                 App.getPatient().getPerson().setPersonAttribute(attributeType,value);
-
-                MainActivity.updatePopupContent();
 
                 //App.setPatient(getPatientBySystemIdFromLocalDB(App.getPatientId()));
 

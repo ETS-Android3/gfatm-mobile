@@ -409,7 +409,14 @@ public class HttpPost {
             personAttributeObject.put("attributeType", attributeType);
             if(attributeTypeFormat.equals("org.openmrs.Location") || attributeTypeFormat.equals("org.openmrs.Concept"))
                 personAttributeObject.put("hydratedObject", value);
-            else personAttributeObject.put("value", value);
+            else if (attributeTypeFormat.equals("java.lang.Boolean")) {
+                if(value.equalsIgnoreCase("Yes"))
+                    personAttributeObject.put("value", "true");
+                else if(value.equalsIgnoreCase("No"))
+                    personAttributeObject.put("value", "false");
+                else
+                    personAttributeObject.put("value", value);
+            }else personAttributeObject.put("value", value);
 
             if (App.getMode().equalsIgnoreCase("OFFLINE")) {
 
