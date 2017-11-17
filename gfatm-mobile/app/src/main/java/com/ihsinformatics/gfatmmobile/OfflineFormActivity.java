@@ -169,7 +169,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                 final Object obj = forms[i][6];
                 final String id = String.valueOf(forms[i][0]);
 
-                if (!forms[i][2].equals("CREATE PATIENT")) {
+                if (!(forms[i][2].equals("CREATE PATIENT") || forms[i][2].equals(""))) {
 
                     text.setOnLongClickListener(new View.OnLongClickListener() {
 

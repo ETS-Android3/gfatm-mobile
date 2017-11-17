@@ -41,6 +41,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -68,6 +69,8 @@ import java.io.ObjectInputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnTouchListener {
@@ -178,7 +181,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -309,8 +311,6 @@ public class MainActivity extends AppCompatActivity
         loadEditPopup();
 
         if (App.getPatient() != null) {
-
-            updatePopupContent();
 
             String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
             String lname = App.getPatient().getPerson().getFamilyName();
@@ -461,8 +461,6 @@ public class MainActivity extends AppCompatActivity
                     lname = lname.substring(0, 1).toUpperCase() + lname.substring(1);
 
                 if(!App.get(patientName).equals(fname + " " + lname + " (" + App.getPatient().getPerson().getGender() + ")")) {
-
-                    updatePopupContent();
 
                     patientName.setText(fname + " " + lname + " (" + App.getPatient().getPerson().getGender() + ")");
                     String dob = App.getPatient().getPerson().getBirthdate().substring(0, 10);
@@ -878,9 +876,9 @@ public class MainActivity extends AppCompatActivity
                     break;
                 } else if (view == edit) {
 
+                    updatePopupContent();
                     popupWindow.showAsDropDown(edit);
                     backDimLayout.setVisibility(View.VISIBLE);
-
                     break;
                 }
             }
@@ -929,8 +927,6 @@ public class MainActivity extends AppCompatActivity
                 if (result.equals("SUCCESS")) {
                     //resetViews();
 
-                    updatePopupContent();
-
                     String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
                     String lname = App.getPatient().getPerson().getFamilyName();
                     if(!lname.equals(""))
@@ -975,7 +971,7 @@ public class MainActivity extends AppCompatActivity
                             });
                     alertDialog.show();
                     fragmentReport.fillReportFragment();
-                    updatePopupContent();
+
                 } else if (result.equals("CONNECTION_ERROR")) {
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
@@ -1027,8 +1023,6 @@ public class MainActivity extends AppCompatActivity
 
                     if (App.getPatient() != null) {
 
-                        updatePopupContent();
-
                         String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
                         String lname = App.getPatient().getPerson().getFamilyName();
                         if(!lname.equals(""))
@@ -1062,8 +1056,6 @@ public class MainActivity extends AppCompatActivity
                 } else if (returnString != null && returnString.equals("CREATE")) {
 
                     if (App.getPatient() != null) {
-
-                        updatePopupContent();
 
                         String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
                         String lname = App.getPatient().getPerson().getFamilyName();
@@ -1275,6 +1267,16 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        TextView saveTextView = (TextView) editView.findViewById(R.id.saveButton);
+        saveTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+                backDimLayout.setVisibility(View.GONE);
+                savePersonAttributes();
+            }
+        });
+
         popupContent.removeAllViews();
         Object personAttributeTypes[][] = serverService.getAllPersonAttributeTypes();
         for(Object[] personAttributeType : personAttributeTypes){
@@ -1419,6 +1421,203 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
+    }
+
+    public void savePersonAttributes(){
+
+        final HashMap<String, String> personAttribute = new HashMap<String, String>();
+
+        for(int i = 0; i < popupContent.getChildCount(); i++){
+            View v = popupContent.getChildAt(i);
+            if(v instanceof TitledEditText){
+
+                String attributeType = ((TitledEditText)v).getQuestionView().getText().toString().replace(": ","");
+                String val = App.getPatient().getPerson().getPersonAttribute(attributeType);
+                if(val == null) val = "";
+                String newVal = ((TitledEditText)v).getEditText().getText().toString();
+                if(!val.equals(newVal)){
+                    personAttribute.put(attributeType,newVal);
+                }
+
+            } else if (v instanceof TitledRadioGroup){
+
+               String attributeType = ((TitledRadioGroup)v).getQuestionView().getText().toString().replace(": ","");
+                String val = App.getPatient().getPerson().getPersonAttribute(attributeType);
+                if(val == null) val = "";
+                else{
+                    if(val.equalsIgnoreCase("false")) val = "No";
+                    else val = "Yes";
+                }
+
+                String newVal = App.get((TitledRadioGroup)v);
+
+                if(!val.equals(newVal)){
+                    personAttribute.put(attributeType,newVal);
+                }
+
+            } else if (v instanceof LinearLayout){
+
+                View v1 = ((LinearLayout)v).getChildAt(0);
+                String attributeType = ((TextView)v1).getText().toString().replace(": ","");
+                String val = App.getPatient().getPerson().getPersonAttribute(attributeType);
+                if(val == null) val = "";
+                else{
+
+                    if(val.matches("[-+]?\\d*\\.?\\d+")){
+                        Object[] locs = serverService.getLocationNameThroughLocationId(val);
+                        if(locs == null) val = "";
+                        else val = String.valueOf(locs[1]);
+                    }
+
+                }
+
+                Spinner spinner = (Spinner) ((LinearLayout)v).getChildAt(1);
+                String newVal = spinner.getSelectedItem().toString();
+                if(!val.equals(newVal)){
+                    personAttribute.put(attributeType,newVal);
+                }
+
+                if(!val.equals(newVal)) {
+                    String format = serverService.getPersonAttributeFormat(attributeType);
+                    if (format != null) {
+                        if (format.equals("org.openmrs.Concept")) {
+                            String[][] concept = serverService.getConceptUuidAndDataType(newVal);
+                            if (concept.length > 0)
+                                personAttribute.put(attributeType, concept[0][0]);
+                        }
+                    }
+
+                }
+            }
+        }
+
+        AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.submitting_form));
+                        loading.show();
+                    }
+                });
+
+                String result = serverService.savePatientInformationForm(personAttribute);
+                if (!result.contains("SUCCESS"))
+                    return result;
+                else {
+
+                    String encounterId = "";
+
+                    if (result.contains("_")) {
+                        String[] successArray = result.split("_");
+                        encounterId = successArray[1];
+                    }
+
+                    for (Map.Entry<String, String> entry : personAttribute.entrySet()) {
+                        String key = entry.getKey();
+                        String value = entry.getValue();
+
+                        result = serverService.savePersonAttributeType(key, value, encounterId);
+                        if (!result.equals("SUCCESS"))
+                            return result;
+
+                    }
+
+                }
+
+                return "SUCCESS";
+
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            ;
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                if (result.equals("SUCCESS")) {
+                    //MainActivity.backToMainMenu();
+                    try {
+                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(buttonLayout.getWindowToken(), 0);
+                    } catch (Exception e) {
+                        // TODO: handle exception
+                    }
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.form_submitted));
+                    Drawable submitIcon = getResources().getDrawable(R.drawable.ic_submit);
+                    alertDialog.setIcon(submitIcon);
+                    int color = App.getColor(context, R.attr.colorAccent);
+                    DrawableCompat.setTint(submitIcon, color);
+                    alertDialog.setTitle(getResources().getString(R.string.title_completed));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(buttonLayout.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else if (result.equals("CONNECTION_ERROR")) {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(buttonLayout.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
+                    alertDialog.setMessage(message);
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(buttonLayout.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+
+
+            }
+        };
+        submissionFormTask.execute("");
     }
 
 }
