@@ -1,0 +1,4 @@
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER DIAGNOSIS','other_diagnosis','Text','1747141c-71f2-4c3f-930f-7e522f6cc6ce');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('1747141c-71f2-4c3f-930f-7e522f6cc6ce',166046);
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('ADULT FORMULATION OF TABLETS OF RH FOR CONTINUATION PHASE UNDER 25KG','adult_formulation_RH_continuation_under_25kg','Numeric','b8322ab9-d7b5-4080-8695-f1518802ab1e');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('b8322ab9-d7b5-4080-8695-f1518802ab1e',166048);
