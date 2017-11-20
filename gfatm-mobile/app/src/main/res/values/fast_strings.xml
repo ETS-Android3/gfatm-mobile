@@ -495,6 +495,11 @@
     <string name="fast_presumptive_tb_score_through_cxr">Presumptive TB through CXR</string>
     <string name="fast_presumptive_tb">Presumptive TB?</string>
     <string name="fast_is_this_patient_pregnant">Is the person pregnant?</string>
+    <string name="fast_screening_instruction">Instructions: If patient answered "yes" to any one of the three questions, fill presumptive form</string>
+    <string name="fast_prompt_instruction_1">Instructions: Kindly guide the patient on how to expectorate and submit a sputum sample and get his/her chest X-ray done from the designated point.</string>
+    <string name="fast_prompt_instruction_2">Instructions: If the patient is not able to submit a sputum sample and is taking the container home, then kindly guide the patient to watch the sputum instruction video.  Please ensure that the presumptive\'s contact details are correct and complete.</string>
+    <string name="fast_treatment_init_instruction">Screener Instructions: Please inform patient of their next appointment date.</string>
+    <string name="fast_end_followup_instruction">Provide name and contact number of person at referral / transfer site who provided details about the patient</string>
 
     <string-array name="fast_reason_for_xray_list">
         <item>@string/fast_screening_title</item>

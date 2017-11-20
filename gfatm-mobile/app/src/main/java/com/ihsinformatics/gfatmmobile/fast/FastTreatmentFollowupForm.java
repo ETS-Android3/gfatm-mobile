@@ -6,6 +6,8 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -33,6 +35,7 @@ import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
+import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
@@ -66,6 +69,7 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
     TitledEditText weight;
     TitledRadioGroup treatmentPlan;
     TitledButton returnVisitDate;
+    MyTextView tbFollowupInstruction;
     TitledButton regDate;
 
 
@@ -157,6 +161,9 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
         thirdDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
         returnVisitDate = new TitledButton(context, null, getResources().getString(R.string.fast_next_appointment_date), DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
         regDate = new TitledButton(context, null, getResources().getString(R.string.fast_registeration_date), DateFormat.format("EEEE, MMM dd,yyyy", forthDateCalendar).toString(), App.HORIZONTAL);
+        tbFollowupInstruction = new MyTextView(context, getResources().getString(R.string.fast_treatment_init_instruction));
+        tbFollowupInstruction.setTextColor(Color.BLACK);
+        tbFollowupInstruction.setTypeface(null, Typeface.NORMAL);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), tbRegisterationNumber.getEditText(), treatmentStartDate.getButton(), weight.getEditText(),
@@ -164,10 +171,11 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, tbRegisterationNumber, regDate, treatmentStartDate, weight, treatmentPlan, returnVisitDate}};
+                {{formDate, tbRegisterationNumber, regDate, treatmentStartDate, weight, treatmentPlan, returnVisitDate,tbFollowupInstruction}};
         formDate.getButton().setOnClickListener(this);
         treatmentStartDate.getButton().setOnClickListener(this);
         returnVisitDate.getButton().setOnClickListener(this);
+
         regDate.getButton().setOnClickListener(this);
 
 

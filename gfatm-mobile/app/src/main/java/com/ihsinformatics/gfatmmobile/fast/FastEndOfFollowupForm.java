@@ -3,6 +3,7 @@ package com.ihsinformatics.gfatmmobile.fast;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -63,6 +64,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
     TitledEditText treatmentNotInitiatedReferralSiteOther;
     TitledRadioGroup drConfirmation;
     TitledEditText enrsId;
+    MyTextView endFollowupInstruction;
     TitledEditText firstName;
     TitledEditText lastName;
     LinearLayout mobileLinearLayout;
@@ -163,6 +165,11 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
         treatmentNotInitiatedReferralSiteOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         drConfirmation = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_dr_confirmation), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_no_title), App.VERTICAL, App.VERTICAL);
         enrsId = new TitledEditText(context, null, getResources().getString(R.string.fast_enrs_number), "", "####/##", RegexUtil.idLength, RegexUtil.ERNS_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        endFollowupInstruction = new MyTextView(context, getResources().getString(R.string.fast_end_followup_instruction));
+        endFollowupInstruction.setTextColor(Color.BLACK);
+        endFollowupInstruction.setTypeface(null, Typeface.NORMAL);
+
+
         firstName = new TitledEditText(context, null, getResources().getString(R.string.fast_first_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         lastName = new TitledEditText(context, null, getResources().getString(R.string.fast_last_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
 
@@ -198,7 +205,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formDate, treatmentOutcome, transferOutLocations, remarks, treatmentInitiatedReferralSite, treatmentNotInitiatedReferralSite
-                        , treatmentNotInitiatedReferralSiteOther, drConfirmation, enrsId, firstName, lastName, mobileLinearLayout}};
+                        , treatmentNotInitiatedReferralSiteOther, drConfirmation, enrsId, endFollowupInstruction,firstName, lastName, mobileLinearLayout}};
 
         formDate.getButton().setOnClickListener(this);
         treatmentOutcome.getSpinner().setOnItemSelectedListener(this);
@@ -796,7 +803,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
                 } else {
                     treatmentNotInitiatedReferralSite.setVisibility(View.GONE);
                 }
-
+                endFollowupInstruction.setVisibility(View.VISIBLE);
                 firstName.setVisibility(View.VISIBLE);
                 lastName.setVisibility(View.VISIBLE);
                 mobileLinearLayout.setVisibility(View.VISIBLE);
@@ -804,6 +811,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
                 treatmentInitiatedReferralSite.setVisibility(View.GONE);
                 treatmentNotInitiatedReferralSite.setVisibility(View.GONE);
                 treatmentNotInitiatedReferralSiteOther.setVisibility(View.GONE);
+                endFollowupInstruction.setVisibility(View.GONE);
                 firstName.setVisibility(View.GONE);
                 lastName.setVisibility(View.GONE);
                 mobileLinearLayout.setVisibility(View.GONE);
@@ -853,6 +861,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
         treatmentNotInitiatedReferralSite.setVisibility(View.GONE);
         treatmentNotInitiatedReferralSiteOther.setVisibility(View.GONE);
         drConfirmation.setVisibility(View.GONE);
+        endFollowupInstruction.setVisibility(View.GONE);
         firstName.setVisibility(View.GONE);
         lastName.setVisibility(View.GONE);
         mobileLinearLayout.setVisibility(View.GONE);

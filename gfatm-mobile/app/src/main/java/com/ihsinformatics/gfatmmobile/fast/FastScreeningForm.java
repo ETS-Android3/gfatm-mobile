@@ -3,6 +3,8 @@ package com.ihsinformatics.gfatmmobile.fast;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -66,6 +68,8 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
     TitledRadioGroup tbContact;
     TitledRadioGroup tbHistory;
     MyTextView tbSymptoms;
+    MyTextView screeningInstruction;
+
 
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
@@ -171,6 +175,9 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
         coughTwoWeeks = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_cough_period_title), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
         tbContact = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_close_with_someone_diagnosed), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
         tbHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_tb_before), getResources().getStringArray(R.array.fast_choice_list),"", App.VERTICAL, App.VERTICAL, true);
+        screeningInstruction = new MyTextView(context, getResources().getString(R.string.fast_screening_instruction));
+        screeningInstruction.setTextColor(Color.BLACK);
+        screeningInstruction.setTypeface(null, Typeface.NORMAL);
 
 
         // Used for reset fields...
@@ -182,7 +189,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formDate, screeningLocation, hospital, hospitalSection, hospitalSectionOther, opdWardSection, patientAttendant, ageRange, gender},
-                        {tbSymptoms, coughTwoWeeks, tbContact, tbHistory}};
+                        {tbSymptoms, coughTwoWeeks, tbContact, tbHistory,screeningInstruction}};
 
         formDate.getButton().setOnClickListener(this);
         hospitalSection.getSpinner().setOnItemSelectedListener(this);

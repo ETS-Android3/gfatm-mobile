@@ -6,6 +6,8 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -94,6 +96,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
     TitledSpinner outcomePreviousCategory;
     TitledEditText weight;
     TitledButton returnVisitDate;
+    MyTextView treatInitInstruction;
 
     Snackbar snackbar;
 
@@ -216,6 +219,9 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         thirdDateCalendar.set(Calendar.MONTH, secondDateCalendar.get(Calendar.MONTH));
         thirdDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
         returnVisitDate = new TitledButton(context, null, getResources().getString(R.string.fast_next_appointment_date), DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
+        treatInitInstruction = new MyTextView(context, getResources().getString(R.string.fast_treatment_init_instruction));
+        treatInitInstruction.setTextColor(Color.BLACK);
+        treatInitInstruction.setTypeface(null, Typeface.NORMAL);
 
 
         // Used for reset fields...
@@ -229,7 +235,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         viewGroups = new View[][]
                 {{formDate, tbPatient, antibiotic, diagonosisType, treatmentInitiated, reasonTreatmentNotIniated, reasonTreatmentNotInitiatedOther,
                         cnicLinearLayout, cnicOwner, cnicOwnerOther, tbType, extraPulmonarySite, extraPulmonarySiteOther, patientType,
-                        tbCategory, historyCategory, outcomePreviousCategory, regDate, tbRegisterationNumber, weight, returnVisitDate}};
+                        tbCategory, historyCategory, outcomePreviousCategory, regDate, tbRegisterationNumber, weight, returnVisitDate,treatInitInstruction}};
         formDate.getButton().setOnClickListener(this);
         regDate.getButton().setOnClickListener(this);
         returnVisitDate.getButton().setOnClickListener(this);
@@ -1097,6 +1103,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                 thirdDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
                 returnVisitDate.setVisibility(View.VISIBLE);
+
             }
         }
     }
@@ -1162,8 +1169,10 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_patient_died)) || parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_patient_refused_treatment))) {
                 returnVisitDate.setVisibility(View.GONE);
+                treatInitInstruction.setVisibility(View.GONE);
             } else {
                 returnVisitDate.setVisibility(View.VISIBLE);
+                treatInitInstruction.setVisibility(View.VISIBLE);
             }
         } else if (spinner == cnicOwner.getSpinner()) {
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title))) {
@@ -1260,6 +1269,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                     tbRegisterationNumber.setVisibility(View.GONE);
                 }
                 returnVisitDate.setVisibility(View.VISIBLE);
+                treatInitInstruction.setVisibility(View.VISIBLE);
                 weight.setVisibility(View.VISIBLE);
             }
         } else if (radioGroup == tbCategory.getRadioGroup()) {
@@ -1347,6 +1357,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                         tbRegisterationNumber.setVisibility(View.GONE);
                     }
                     returnVisitDate.setVisibility(View.VISIBLE);
+                    treatInitInstruction.setVisibility(View.VISIBLE);
                     weight.setVisibility(View.VISIBLE);
                 }
 
@@ -1357,7 +1368,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                 reasonTreatmentNotIniated.setVisibility(View.GONE);
                 reasonTreatmentNotInitiatedOther.setVisibility(View.GONE);
                 returnVisitDate.setVisibility(View.VISIBLE);
-
+                treatInitInstruction.setVisibility(View.VISIBLE);
                 cnicLinearLayout.setVisibility(View.VISIBLE);
                 cnicOwner.setVisibility(View.VISIBLE);
                 if (cnicOwner.getSpinner().getSelectedItem().toString().equals(getResources().getString(R.string.fast_other_title))) {
@@ -1431,6 +1442,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                     tbRegisterationNumber.setVisibility(View.GONE);
                     weight.setVisibility(View.GONE);
                     returnVisitDate.setVisibility(View.VISIBLE);
+                    treatInitInstruction.setVisibility(View.VISIBLE);
                 } else {
                    /* cnicLinearLayout.setVisibility(View.VISIBLE);
                     cnicOwner.setVisibility(View.VISIBLE);
@@ -1494,6 +1506,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                     tbRegisterationNumber.setVisibility(View.GONE);
                     weight.setVisibility(View.GONE);
                     returnVisitDate.setVisibility(View.GONE);
+                    treatInitInstruction.setVisibility(View.GONE);
                 }
 
             } else if (tbPatient.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))) {
@@ -1532,6 +1545,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
                 weight.setVisibility(View.VISIBLE);
                 returnVisitDate.setVisibility(View.VISIBLE);
+                treatInitInstruction.setVisibility(View.VISIBLE);
             }
 
         } else if (radioGroup == antibiotic.getRadioGroup()) {
@@ -1550,6 +1564,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                 tbRegisterationNumber.setVisibility(View.GONE);
                 weight.setVisibility(View.GONE);
                 returnVisitDate.setVisibility(View.VISIBLE);
+                treatInitInstruction.setVisibility(View.VISIBLE);
 
             } else {
               /*  cnicLinearLayout.setVisibility(View.VISIBLE);
@@ -1614,6 +1629,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                 tbRegisterationNumber.setVisibility(View.GONE);
                 weight.setVisibility(View.GONE);
                 returnVisitDate.setVisibility(View.GONE);
+                treatInitInstruction.setVisibility(View.GONE);
             }
         }
     }
@@ -1644,6 +1660,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         outcomePreviousCategory.setVisibility(View.GONE);
         regDate.setVisibility(View.GONE);
         tbRegisterationNumber.setVisibility(View.GONE);
+        returnVisitDate.setVisibility(View.GONE);
 
         boolean flag = true;
         Bundle bundle = this.getArguments();
