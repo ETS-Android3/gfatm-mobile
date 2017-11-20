@@ -695,6 +695,8 @@
     <string name="ctb_name_consultant">Name of Consultant</string>
     <string name="ctb_reason_consultation">Reason for Consultation</string>
     <string name="ctb_tb_daignosed">TB Daignosed</string>
+    <string name="ctb_sms_or_call">Can we call you and SMS you on any of these numbers for matters related to your TB tests and diagnosis?</string>
+    <string name="ctb_adult_formulation_rh_20_to_25">Adult Formulation RH (RH:150/75 mg per tablet for children 20-25 kg</string>
 
     <string-array name="ctb_0_to_1_list">
         <item>@string/ctb_0</item>
@@ -1020,6 +1022,7 @@
         <item>@string/ctb_cbc</item>
         <item>@string/ctb_esr</item>
         <item>@string/ctb_drug_sensitivity</item>
+        <item>@string/ctb_other_title</item>
     </string-array>
 
     <string-array name="ctb_ctb_baseline_repeat_followup_list">
@@ -1420,6 +1423,7 @@
         <item>@string/ctb_new_formulation_continuation</item>
         <item>@string/ctb_adult_formulation_continuation_rh</item>
         <item>@string/ctb_adult_formulation_continuation_rhe</item>
+        <item>@string/ctb_adult_formulation_rh_20_to_25</item>
     </string-array>
 
     <string-array name="ctb_improve_no_improvement">
