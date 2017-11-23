@@ -866,7 +866,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                         : "TREATMENT COMPLETE"});
 
         if(intensivePhaseRegimen.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"REGIMEN", App.get(intensivePhaseRegimen).equals(getResources().getString(R.string.ctb_rhze)) ? "RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL PROPHYLAXIS" : "RIFAMPICIN/ISONIAZID/PYRAZINAMIDE"});
+            observations.add(new String[]{"REGIMEN", App.get(intensivePhaseRegimen).equals(getResources().getString(R.string.ctb_rhze)) ? "RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL" : "RIFAMPICIN/ISONIAZID/PYRAZINAMIDE"});
         }
 
         if(typeFixedDosePrescribedIntensive.getVisibility()==View.VISIBLE){
@@ -890,13 +890,14 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
             observations.add(new String[]{"ADULT FORMULATION OF TABLETS OF RHZE", App.get(adultFormulationofHRZE)});
         }
         if(continuationPhaseRegimen.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"REGIMEN", App.get(intensivePhaseRegimen).equals(getResources().getString(R.string.ctb_rh)) ? "RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL PROPHYLAXIS" : "RIFAMPICIN/ISONIAZID/PYRAZINAMIDE"});
+            observations.add(new String[]{"REGIMEN", App.get(continuationPhaseRegimen).equals(getResources().getString(R.string.ctb_rhze)) ? "RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL" : "RIFAMPICIN/ISONIAZID/PYRAZINAMIDE"});
         }
         if(typeFixedDosePrescribedContinuation.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"PAEDIATRIC FIXED DOSE COMBINATION FOR CONTINUATION PHASE", App.get(typeFixedDosePrescribedContinuation).equals(getResources().getString(R.string.ctb_current_formulation_continuation)) ? "CURRENT FORMULATION OF TABLETS OF RHE FOR CONTINUATION PHASE" :
                     App.get(typeFixedDosePrescribedContinuation).equals(getResources().getString(R.string.ctb_new_formulation_continuation)) ? "NEW FORMULATION OF TABLETS OF RHE FOR CONTINUATION PHASE" :
-                    App.get(typeFixedDosePrescribedContinuation).equals(getResources().getString(R.string.ctb_adult_formulation_continuation_rhe)) ? "ADULT FORMULATION OF TABLETS OF RHE FOR CONTINUATION PHASE"
-                            : "ADULT FORMULATION OF TABLETS OF RH FOR CONTINUATION PHASE"});
+                        App.get(typeFixedDosePrescribedContinuation).equals(getResources().getString(R.string.ctb_adult_formulation_continuation_rhe)) ? "ADULT FORMULATION OF TABLETS OF RHE FOR CONTINUATION PHASE" :
+                            App.get(typeFixedDosePrescribedContinuation).equals(getResources().getString(R.string.ctb_adult_formulation_rh_20_to_25)) ? "ADULT FORMULATION OF TABLETS OF RH FOR CONTINUATION PHASE UNDER 25KG"
+                                    : "ADULT FORMULATION OF TABLETS OF RH FOR CONTINUATION PHASE"});
         }
         if(currentTabletsOfContinuationRH.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"CURRENT FORMULATION OF TABLETS OF RH", App.get(currentTabletsOfContinuationRH)});
@@ -1117,7 +1118,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
             }else if (obs[0][0].equals("REGIMEN")) {
                 if(App.get(treatmentPlan).equals(getResources().getString(R.string.ctb_intensive_phase))) {
                     for (RadioButton rb : intensivePhaseRegimen.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.ctb_rhze)) && obs[0][1].equals("RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL PROPHYLAXIS")) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_rhze)) && obs[0][1].equals("RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL")) {
                             rb.setChecked(true);
                             break;
                         } else if (rb.getText().equals(getResources().getString(R.string.ctb_rhz)) && obs[0][1].equals("RIFAMPICIN/ISONIAZID/PYRAZINAMIDE")) {
@@ -1227,7 +1228,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
             }else if (obs[0][0].equals("REGIMEN")) {
                 if(App.get(treatmentPlan).equals(getResources().getString(R.string.ctb_continuation_phase))) {
                     for (RadioButton rb : continuationPhaseRegimen.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.ctb_rh)) && obs[0][1].equals("RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL PROPHYLAXIS")) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_rh)) && obs[0][1].equals("RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL")) {
                             rb.setChecked(true);
                             break;
                         } else if (rb.getText().equals(getResources().getString(R.string.ctb_rhe)) && obs[0][1].equals("RIFAMPICIN/ISONIAZID/PYRAZINAMIDE")) {
@@ -1241,7 +1242,9 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 String value = obs[0][1].equals("CURRENT FORMULATION OF TABLETS OF RHE FOR CONTINUATION PHASE") ? getResources().getString(R.string.ctb_current_formulation_continuation) :
                         (obs[0][1].equals("NEW FORMULATION OF TABLETS OF RHE FOR CONTINUATION PHASE") ? getResources().getString(R.string.ctb_new_formulation_continuation) :
                                 (obs[0][1].equals("ADULT FORMULATION OF TABLETS OF RHE FOR CONTINUATION PHASE") ? getResources().getString(R.string.ctb_adult_formulation_continuation_rhe) :
-                                    getResources().getString(R.string.ctb_adult_formulation_continuation_rh)));
+                                        (obs[0][1].equals("ADULT FORMULATION OF TABLETS OF RH FOR CONTINUATION PHASE UNDER 25KG") ? getResources().getString(R.string.ctb_adult_formulation_rh_20_to_25) :
+                                        getResources().getString(R.string.ctb_adult_formulation_continuation_rh)
+                                )));
 
                 typeFixedDosePrescribedContinuation.getSpinner().selectValue(value);
                 typeFixedDosePrescribedContinuation.setVisibility(View.VISIBLE);
@@ -1438,6 +1441,12 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 newTabletsofRHZ.setVisibility(View.GONE);
                 currentTabletsofE.setVisibility(View.GONE);
                 currentTabletsofRHZ.setVisibility(View.GONE);
+            }else{
+                adultFormulationofHRZE.setVisibility(View.GONE);
+                newTabletsofE.setVisibility(View.GONE);
+                newTabletsofRHZ.setVisibility(View.GONE);
+                currentTabletsofE.setVisibility(View.GONE);
+                currentTabletsofRHZ.setVisibility(View.GONE);
             }
         }else if (spinner == typeFixedDosePrescribedContinuation.getSpinner()) {
                 if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_current_formulation_continuation))) {
@@ -1471,6 +1480,13 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 }else if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_adult_formulation_continuation_rhe))) {
                     adultFormulationOfContinuationRHE.setVisibility(View.VISIBLE);
 
+                    currentTabletsOfContinuationE.setVisibility(View.GONE);
+                    currentTabletsOfContinuationRH.setVisibility(View.GONE);
+                    newTabletsOfContinuationE.setVisibility(View.GONE);
+                    newTabletsOfContinuationRH.setVisibility(View.GONE);
+                    adultFormulationOfContinuationRH.setVisibility(View.GONE);
+                }else{
+                    adultFormulationOfContinuationRHE.setVisibility(View.GONE);
                     currentTabletsOfContinuationE.setVisibility(View.GONE);
                     currentTabletsOfContinuationRH.setVisibility(View.GONE);
                     newTabletsOfContinuationE.setVisibility(View.GONE);

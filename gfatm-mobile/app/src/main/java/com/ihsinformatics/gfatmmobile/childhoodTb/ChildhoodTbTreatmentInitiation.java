@@ -102,6 +102,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
     TitledEditText extraPulmonarySiteOther;
     TitledSpinner patientType;
     TitledCheckBoxes testConfirmingDiagnosis;
+    TitledEditText testConfirmingOthers;
     TitledRadioGroup treatmentInitiated;
     TitledSpinner reasonTreatmentNotIniated;
     TitledCheckBoxes initiatingAdditionalTreatment;
@@ -256,6 +257,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         extraPulmonarySiteOther = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_extra_pulmonary_site), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         patientType = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_patient_type), getResources().getStringArray(R.array.ctb_patient_type_list), getResources().getString(R.string.ctb_new), App.VERTICAL,true);
         testConfirmingDiagnosis = new TitledCheckBoxes(mainContent.getContext(), "", getResources().getString(R.string.ctb_test_confirming_diagnosis), getResources().getStringArray(R.array.ctb_confirming_diagnosis_list), null, App.VERTICAL,App.VERTICAL,true);
+        testConfirmingOthers = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 250, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         treatmentInitiated = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_are_you_intiating_treatment), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL,true);
         reasonTreatmentNotIniated = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_reason_treatment_not_intiated), getResources().getStringArray(R.array.ctb_reason_treatment_not_intiated_list), getResources().getString(R.string.ctb_patient_refused_treatment), App.VERTICAL,true);
         initiatingAdditionalTreatment = new TitledCheckBoxes(context, null, getResources().getString(R.string.ctb_initiating_additional_treatment), getResources().getStringArray(R.array.ctb_pediasure_vitamin_iron_anthelminthic_calpol), null, App.VERTICAL, App.VERTICAL);
@@ -328,7 +330,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 moConsultPediatrician.getRadioGroup(),
                 nameConsultant.getEditText(),
                 reasonConsultation.getEditText(),
-                tbDaignosed.getRadioGroup(),
+                tbDaignosed.getRadioGroup(),testConfirmingOthers.getEditText(),
                 patientHaveTb.getRadioGroup(),regDate.getButton(),cnicLinearLayout,cnic1,cnic2,cnic3,
                 cnicOwner.getSpinner(),cnicOwnerOther.getEditText(),tbRegisterationNumber.getEditText(),tbType,
                 extraPulmonarySite.getSpinner(),extraPulmonarySiteOther.getEditText(),patientType.getSpinner(),treatmentInitiated.getRadioGroup(),
@@ -363,6 +365,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                         extraPulmonarySiteOther,
                         patientType,
                         testConfirmingDiagnosis,
+                        testConfirmingOthers,
                         treatmentInitiated,
                         reasonTreatmentNotIniated,
                         initiatingAdditionalTreatment,
@@ -1160,10 +1163,15 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         }
         if(testConfirmingDiagnosis.getVisibility() == View.VISIBLE) {
             Boolean flag = false;
+            Boolean flag2 = false;
             for (CheckBox cb : testConfirmingDiagnosis.getCheckedBoxes()) {
                 if (cb.isChecked()) {
                     flag = true;
                     break;
+                }
+
+                if(App.get(cb).equals(getString(R.string.ctb_other_title))){
+                    flag2 = true;
                 }
             }
             if(!flag){
@@ -1173,6 +1181,16 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                     gotoPage(0);
                 testConfirmingDiagnosis.getQuestionView().setError(getString(R.string.empty_field));
                 testConfirmingDiagnosis.getQuestionView().requestFocus();
+                error = true;
+            }
+
+            if(flag2 && App.get(testConfirmingOthers).isEmpty()){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                testConfirmingOthers.getQuestionView().setError(getString(R.string.empty_field));
+                testConfirmingOthers.getQuestionView().requestFocus();
                 error = true;
             }
         }
@@ -1329,9 +1347,15 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                     testConfirmingString = testConfirmingString + "REFERRED ESR TEST" + " ; ";
                 else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_drug_sensitivity)))
                     testConfirmingString = testConfirmingString + "REFERRED DRUG SENSITIVITY TEST" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ctb_other_title)))
+                    testConfirmingString = testConfirmingString + "OTHER DIAGNOSIS" + " ; ";
 
             }
             observations.add(new String[]{"CONFIRMED DIAGNOSIS", testConfirmingString});
+        }
+
+        if(testConfirmingOthers.getVisibility()==View.VISIBLE){
+            observations.add(new String[]{"OTHER DIAGNOSIS", App.get(testConfirmingOthers)});
         }
 
         if (treatmentInitiated.getVisibility() == View.VISIBLE)
@@ -1807,10 +1831,17 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                         cb.setChecked(true);
                         break;
                     }
+                    else if (cb.getText().equals(getResources().getString(R.string.ctb_other_title)) && obs[0][1].equals("OTHER DIAGNOSIS")) {
+                        cb.setChecked(true);
+                        break;
+                    }
                 }
                 testConfirmingDiagnosis.setVisibility(View.VISIBLE);
             }
-
+            else if (obs[0][0].equals("OTHER DIAGNOSIS")) {
+                testConfirmingOthers.getEditText().setText(obs[0][1]);
+                testConfirmingOthers.setVisibility(View.VISIBLE);
+            }
             else if (obs[0][0].equals("TREATMENT INITIATED")) {
 
                 for (RadioButton rb : treatmentInitiated.getRadioGroup().getButtons()) {
@@ -2363,6 +2394,18 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             tbType.getQuestionView().setError(null);
         }
 
+        for (CheckBox cb : testConfirmingDiagnosis.getCheckedBoxes()) {
+            if (App.get(cb).equals(getResources().getString(R.string.ctb_other_title))) {
+                if (cb.isChecked()) {
+                    testConfirmingOthers.setVisibility(View.VISIBLE);
+                } else {
+                    testConfirmingOthers.setVisibility(View.GONE);
+                }
+            }
+            typeOfDiagnosis.getQuestionView().setError(null);
+        }
+
+
     }
 
     @Override
@@ -2393,6 +2436,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         extraPulmonarySiteOther.setVisibility(View.GONE);
         patientType.setVisibility(View.GONE);
         testConfirmingDiagnosis.setVisibility(View.GONE);
+        testConfirmingOthers.setVisibility(View.GONE);
         treatmentInitiated.setVisibility(View.GONE);
         reasonTreatmentNotIniated.setVisibility(View.GONE);
         patientCategory.setVisibility(View.GONE);
@@ -2633,6 +2677,16 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 tbType.setVisibility(View.VISIBLE);
                 patientType.setVisibility(View.VISIBLE);
                 testConfirmingDiagnosis.setVisibility(View.VISIBLE);
+                for (CheckBox cb : testConfirmingDiagnosis.getCheckedBoxes()) {
+                    if (App.get(cb).equals(getResources().getString(R.string.ctb_other_title))) {
+                        if (cb.isChecked()) {
+                            testConfirmingOthers.setVisibility(View.VISIBLE);
+                        } else {
+                            testConfirmingOthers.setVisibility(View.GONE);
+                        }
+                    }
+                    typeOfDiagnosis.getQuestionView().setError(null);
+                }
                 treatmentInitiated.setVisibility(View.VISIBLE);
                 if(App.get(treatmentInitiated).equals(getResources().getString(R.string.no))){
                     reasonTreatmentNotIniated.setVisibility(View.VISIBLE);
@@ -2734,6 +2788,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 extraPulmonarySiteOther.setVisibility(View.GONE);
                 patientType.setVisibility(View.GONE);
                 testConfirmingDiagnosis.setVisibility(View.GONE);
+                testConfirmingOthers.setVisibility(View.GONE);
                 treatmentInitiated.setVisibility(View.GONE);
                 initiatingAdditionalTreatment.setVisibility(View.GONE);
                 reasonTreatmentNotIniated.setVisibility(View.GONE);
@@ -2771,6 +2826,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 extraPulmonarySiteOther.setVisibility(View.GONE);
                 patientType.setVisibility(View.GONE);
                 testConfirmingDiagnosis.setVisibility(View.GONE);
+                testConfirmingOthers.setVisibility(View.GONE);
                 treatmentInitiated.setVisibility(View.GONE);
                 reasonTreatmentNotIniated.setVisibility(View.GONE);
                 patientCategory.setVisibility(View.GONE);
