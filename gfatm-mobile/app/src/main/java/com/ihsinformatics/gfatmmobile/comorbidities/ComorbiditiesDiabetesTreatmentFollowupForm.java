@@ -282,8 +282,8 @@ public class ComorbiditiesDiabetesTreatmentFollowupForm extends AbstractFormActi
                 try {
                     if (diabetesFollowupRBSTestResult.getEditText().getText().length() > 0) {
                         double num = Double.parseDouble(diabetesFollowupRBSTestResult.getEditText().getText().toString());
-                        if (num < 0 || num > 300) {
-                            diabetesFollowupRBSTestResult.getEditText().setError(getString(R.string.comorbidities_rbs_result_limit));
+                        if (num < 0 || num > 500) {
+                            diabetesFollowupRBSTestResult.getEditText().setError(getString(R.string.comorbidities_rbs_result_limit1));
                         } else {
                             //Correct value
                         }
