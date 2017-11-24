@@ -1449,11 +1449,11 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
                 getPPAScore();
                 popUpAlerts();
             } else if (historyMeaslesCough.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_less_than_3_month))) {
-                historyMeaslesCoughScore.getRadioGroup().getButtons().get(1).setChecked(true);
+                historyMeaslesCoughScore.getRadioGroup().getButtons().get(2).setChecked(true);
                 getPPAScore();
                 popUpAlerts();
             } else if (historyMeaslesCough.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_3_to_6_months))) {
-                historyMeaslesCoughScore.getRadioGroup().getButtons().get(2).setChecked(true);
+                historyMeaslesCoughScore.getRadioGroup().getButtons().get(1).setChecked(true);
                 getPPAScore();
                 popUpAlerts();
             }
