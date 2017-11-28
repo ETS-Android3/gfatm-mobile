@@ -453,7 +453,9 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
         if (reasonPatientNotContacted.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"UNABLE TO CONTACT THE PATIENT", App.get(reasonPatientNotContacted).equals(getResources().getString(R.string.fast_phone_switched_off)) ? "PHONE SWITCHED OFF" :
                     (App.get(reasonPatientNotContacted).equals(getResources().getString(R.string.fast_patient_not_responding)) ? "PATIENT DID NOT RECEIVE CALL" :
-                            (App.get(reasonPatientNotContacted).equals(getResources().getString(R.string.fast_incorrect_contact_number)) ? "INCORRECT CONTACT NUMBER" : "OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT"))});
+                            (App.get(reasonPatientNotContacted).equals(getResources().getString(R.string.fast_incorrect_contact_number)) ? "INCORRECT CONTACT NUMBER" :
+                                    (App.get(reasonPatientNotContacted).equals(getResources().getString(R.string.fast_wrong_number)) ? "WRONG NUMBER" :
+                                            "OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT")))});
 
         if (reasonPatientNotContactedOther.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT", App.get(reasonPatientNotContactedOther)});
@@ -662,7 +664,12 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
                     } else if (rb.getText().equals(getResources().getString(R.string.fast_incorrect_contact_number)) && obs[0][1].equals("INCORRECT CONTACT NUMBER")) {
                         rb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_other_title)) && obs[0][1].equals("OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT")) {
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.fast_wrong_number)) && obs[0][1].equals("WRONG NUMBER")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.fast_other_title)) && obs[0][1].equals("OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT")) {
                         rb.setChecked(true);
                         break;
                     }
