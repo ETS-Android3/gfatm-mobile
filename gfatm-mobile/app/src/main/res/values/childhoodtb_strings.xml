@@ -697,6 +697,8 @@
     <string name="ctb_tb_daignosed">TB Daignosed</string>
     <string name="ctb_sms_or_call">Can we call you and SMS you on any of these numbers for matters related to your TB tests and diagnosis?</string>
     <string name="ctb_adult_formulation_rh_20_to_25">Adult Formulation RH (RH:150/75 mg per tablet for children 20-25 kg</string>
+    <string name="ctb_wrong_number">Wrong Number</string>
+
 
     <string-array name="ctb_0_to_1_list">
         <item>@string/ctb_0</item>
@@ -1238,6 +1240,7 @@
         <item>@string/ctb_phone_switched_off</item>
         <item>@string/ctb_patient_did_not_recieve_call</item>
         <item>@string/ctb_incorrect_contact_number</item>
+        <item>@string/ctb_wrong_number</item>
         <item>@string/ctb_other_title</item>
     </string-array>
 
