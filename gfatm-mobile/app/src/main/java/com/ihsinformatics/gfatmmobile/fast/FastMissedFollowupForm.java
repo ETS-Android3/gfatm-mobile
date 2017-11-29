@@ -154,7 +154,7 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
         reasonPatientNotContacted = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_why_were_you_unable_to_contact_the_patient), getResources().getStringArray(R.array.fast_reason_patient_not_contacted_list), getResources().getString(R.string.fast_other_title), App.VERTICAL, App.VERTICAL);
         reasonPatientNotContactedOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 250, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         referralTransfer = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_has_this_patient_referred_or_transferred_out), getResources().getStringArray(R.array.fast_referral_transfer_array), getResources().getString(R.string.fast_referral), App.VERTICAL, App.VERTICAL);
-        referralTransferSite = new TitledEditText(context, null, getResources().getString(R.string.fast_location_for_referral_transfer), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        referralTransferSite = new TitledEditText(context, null, getResources().getString(R.string.fast_location_for_referral_transfer), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         reasonMissedVisit = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_why_missed_visit), getResources().getStringArray(R.array.fast_reason_missed_visit_list), getResources().getString(R.string.fast_patient_moved), App.VERTICAL);
         reasonMissedVisitOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 250, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         newLocation = new TitledEditText(context, null, getResources().getString(R.string.fast_new_location), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
@@ -839,7 +839,33 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
                 } else {
                     reasonPatientNotContactedOther.setVisibility(View.GONE);
                 }
+                referralTransfer.setVisibility(View.GONE);
+                referralTransferSite.setVisibility(View.GONE);
+                reasonMissedVisit.setVisibility(View.GONE);
+                newLocation.setVisibility(View.GONE);
+                facilityTreatment.setVisibility(View.GONE);
+                reasonMissedVisitOther.setVisibility(View.GONE);
+                reasonForChangingFacility.setVisibility(View.GONE);
+
             } else {
+                if(App.get(referralTransfer).equals(getResources().getString(R.string.fast_not_applicable))) {
+                    referralTransferSite.setVisibility(View.GONE);
+                }else{
+                    referralTransferSite.setVisibility(View.VISIBLE);
+                }
+                reasonMissedVisit.setVisibility(View.VISIBLE);
+                if(App.get(reasonMissedVisit).equals(getResources().getString(R.string.fast_other_title))) {
+                    reasonMissedVisitOther.setVisibility(View.VISIBLE);
+                }
+
+                if(App.get(reasonMissedVisit).equals(getResources().getString(R.string.fast_patient_moved)) || App.get(reasonMissedVisit).equals(getResources().getString(R.string.fast_patient_continuing_treatment_at_another_location))) {
+                    newLocation.setVisibility(View.VISIBLE);
+                    facilityTreatment.setVisibility(View.VISIBLE);
+                }
+                if(App.get(reasonMissedVisit).equals(getResources().getString(R.string.fast_patient_continuing_treatment_at_another_location))) {
+                    facilityTreatment.setVisibility(View.VISIBLE);
+                }
+                referralTransfer.setVisibility(View.VISIBLE);
                 returnVisitDate.setVisibility(View.VISIBLE);
                 reasonPatientNotContacted.setVisibility(View.GONE);
                 reasonPatientNotContactedOther.setVisibility(View.GONE);
@@ -852,10 +878,10 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
             }
         } else if(radioGroup == referralTransfer.getRadioGroup()){
             if(referralTransfer.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_not_applicable))){
-                referralTransferSite.setVisibility(View.VISIBLE);
+                referralTransferSite.setVisibility(View.GONE);
             }
             else{
-                referralTransferSite.setVisibility(View.GONE);
+                referralTransferSite.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -875,7 +901,43 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
         reasonPatientNotContactedOther.setVisibility(View.GONE);
         reasonMissedVisitOther.setVisibility(View.GONE);
         referralTransferSite.setVisibility(View.GONE);
+        if(App.get(referralTransfer).equals(getResources().getString(R.string.fast_not_applicable))) {
+            referralTransferSite.setVisibility(View.GONE);
+        }else{
+            referralTransferSite.setVisibility(View.VISIBLE);
+        }
+
         reasonForChangingFacility.setVisibility(View.GONE);
+
+        String referredTransferred = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Referral Form", "PATIENT BEING REFEREED OUT OR TRANSFERRED OUT");
+        String encounterDate = serverService.getLatestEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + "Referral Form");
+        if(encounterDate==null || encounterDate.equals("")){
+            for (RadioButton rb : referralTransfer.getRadioGroup().getButtons()) {
+                if (rb.getText().equals(getResources().getString(R.string.ctb_not_applicable))) {
+                    rb.setChecked(true);
+                    break;
+                }
+            }
+        }else {
+            if (referredTransferred != null || !referredTransferred.equals("")) {
+                for (RadioButton rb : referralTransfer.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_referral_before_starting_treatment)) && referredTransferred.equals("PATIENT REFERRED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_transfer_after_starting_treatment)) && referredTransferred.equals("PATIENT TRANSFERRED OUT")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            }
+        }
+
+        String locationOfReferralTransfer = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Referral Form", "REFERRING FACILITY NAME");
+        if(locationOfReferralTransfer!=null){
+            referralTransferSite.getEditText().setText(locationOfReferralTransfer);
+        }
+        referralTransferSite.getEditText().setKeyListener(null);
+
         updateDisplay();
 
         Bundle bundle = this.getArguments();
