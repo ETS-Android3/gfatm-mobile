@@ -832,7 +832,7 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
                 otherMissedVisitReason.setVisibility(View.GONE);
             }
 
-            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_pateint_moved))) {
+            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_pateint_moved)) && App.get(ableToContact).equals(getResources().getString(R.string.yes))) {
                 newLocation.setVisibility(View.VISIBLE);
                 newTreatmentFacilityName.setVisibility(View.VISIBLE);
                 nextVisitDate.setVisibility(View.GONE);
@@ -981,6 +981,13 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
                 if(App.get(whyUnableToContact).equals(getResources().getString(R.string.ctb_other_title))){
                     otherUnableToContact.setVisibility(View.VISIBLE);
                 }
+                patientReferredTransfer.setVisibility(View.GONE);
+                referralTransferLocation.setVisibility(View.GONE);
+                missedVisitReason.setVisibility(View.GONE);
+                otherMissedVisitReason.setVisibility(View.GONE);
+                newLocation.setVisibility(View.GONE);
+                newTreatmentFacilityName.setVisibility(View.GONE);
+                reasonChangingNewFacility.setVisibility(View.GONE);
             } else {
                 whyUnableToContact.setVisibility(View.GONE);
                 otherUnableToContact.setVisibility(View.GONE);
