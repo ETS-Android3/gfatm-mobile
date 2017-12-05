@@ -38,7 +38,7 @@ public class OfflineFormSyncService extends Service {
             public void run() {
 
                 ServerService serverService = new ServerService(getApplicationContext());
-                final Object[][] forms = serverService.getSavedForms(App.getUsername(), App.getProgram());
+                final Object[][] forms = serverService.getSavedForms(App.getUsername());
 
                 Boolean flag = true;
                 for (int i = 0; i < forms.length; i++) {
