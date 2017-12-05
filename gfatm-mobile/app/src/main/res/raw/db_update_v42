@@ -1,3 +1,14 @@
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('YES, BUT NOT INTERESTED','not_interested','N/A','f3372644-fffe-46db-902e-6b8c1e67e92b');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('f3372644-fffe-46db-902e-6b8c1e67e92b',165784);
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('WRONG NUMBER','wrong_number','N/A','83c9daa8-de8d-4256-a470-8bac9013124e');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('83c9daa8-de8d-4256-a470-8bac9013124e',166045);
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER REASON TO NOT CONTACTED WITH THE THE PATIENT','reason_patient_not_contacted_other','Text','a6f1393f-79ed-430a-9192-1c4e077a77bb');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('a6f1393f-79ed-430a-9192-1c4e077a77bb',164473);
+
+update OR IGNORE concept_answers set answer_concept_uuid='eb532c58-48a6-4770-9c5e-bef293c6bfe2' where answer_concept_uuid = '2fd6470d-3faa-453f-8e1e-e96d805b819e';
+
+update OR IGNORE concept set var_name='cat_1' where uuid = '003399f9-294e-4c2c-add2-a0f3ec8e70c1';
+
 DROP TABLE IF EXISTS person_attribute_type;
 create table person_attribute_type(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name VARCHAR, format VARCHAR, foreign_key VARCHAR, uuid VARCHAR);
 INSERT OR IGNORE INTO person_attribute_type VALUES (1, 'Race','java.lang.String', NULL,'8d871386-c2cc-11de-8d13-0010c6dffd0f');
@@ -31,5 +42,3 @@ INSERT OR IGNORE INTO person_attribute_type VALUES (28, 'Patient type','org.open
 
 DROP TABLE IF EXISTS person_attribute;
 create table if not exists person_attribute(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, person_attribute_type INTEGER NOT NULL, value VARCHAR, patient_id INTEGER NOT NULL, retired INTEGER DEFAULT 0);
-
-update OR IGNORE concept_answers set answer_concept_uuid='eb532c58-48a6-4770-9c5e-bef293c6bfe2' where answer_concept_uuid = '2fd6470d-3faa-453f-8e1e-e96d805b819e';
