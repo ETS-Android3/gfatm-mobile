@@ -692,7 +692,7 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
 
         }
 
-        String husbandNameString = App.getPatient().getPerson().getPersonAttribute("Guardian Name");
+        String husbandNameString = App.getPatient().getPerson().getGuardianName();
         if(husbandNameString!=null) {
             fathersName.getEditText().setText(husbandNameString);
         }
