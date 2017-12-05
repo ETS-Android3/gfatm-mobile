@@ -352,10 +352,10 @@
     <string name="city_default" translatable="false">Karachi</string>
     <string name="province_default" translatable="false">Sindh</string>
     <string name="country_default" translatable="false">Pakistan</string>
-    <!--<string name="ip_default" translatable="false">mrs.ghd.ihn.org.pk</string>
-    <string name="port_default" translatable="false">443</string>-->
-    <string name="ip_default" translatable="false">124.29.207.74</string>
-    <string name="port_default" translatable="false">9902</string>
+    <string name="ip_default" translatable="false">mrs.ghd.ihn.org.pk</string>
+    <string name="port_default" translatable="false">443</string>
+    <!--<string name="ip_default" translatable="false">124.29.207.74</string>
+    <string name="port_default" translatable="false">9902</string>-->
 
     <string name="support_contact">Support Contact</string>
     <string name="support_email">Support Email</string>
@@ -800,6 +800,22 @@
     <string name="pet_clinician_view_missed_dose">Missed Dose:</string>
     <string name="pet_clinician_view_action_plan">Action Plan:</string>
     <string name="pet_clinician_view_clinician_note">Clinician Note:</string>
+
+    <!-- Common Forms -->
+    <string name="patient_source">Patient Source</string>
+    <string name="screening">Screening</string>
+    <string name="referred">Referred</string>
+    <string name="contact_patient">Contact of TB Patient</string>
+    <string name="walkin">Walk-in / Self Referred</string>
+    <string-array name="patient_source_options">
+        <item>@string/screening</item>
+        <item>@string/referred</item>
+        <item>@string/contact_patient</item>
+        <item>@string/walkin</item>
+        <item>@string/other</item>
+    </string-array>
+    <string name="sms_instruction">Instructions: Inform the patient regarding phone calls/sms</string>
+
 
 
 </resources>
