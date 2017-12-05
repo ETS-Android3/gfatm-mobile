@@ -24,4 +24,5 @@ public class BlankFragment extends Fragment {
 
         return mainContent;
     }
+
 }

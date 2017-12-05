@@ -1811,7 +1811,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         if(treatmentRegimen == null) treatmentRegimen = "-";
 
         String treatmentWeek = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_ADHERENCE, "NUMBER OF WEEKS ON TREATMENT");
-        if(treatmentWeek == null) treatmentRegimen = "-";
+        if(treatmentWeek == null) treatmentWeek = "-";
 
         String adverseEventReported = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_ADHERENCE, "ADVERSE EVENTS");
         if(adverseEventReported == null) adverseEventReported = "-";
@@ -1876,10 +1876,10 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         if(returnVisitDate == null) returnVisitDate = "-";
 
         String[] amounts = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + Forms.PET_INCENTIVE_DISBURSEMENT, "INCENTIVE AMOUNT");
-        int totalAmount = 0;
+        Double totalAmount = 0.0;
         if(amounts != null)
             for(String amount: amounts)
-                totalAmount = totalAmount + Integer.parseInt(amount);
+                totalAmount = totalAmount + Double.parseDouble(amount);
 
         String[][] dataset = { {getResources().getString(R.string.pet_incentive_dispatch_index_patient_type), App.convertToTitleCase(drugSensitivity), indexIdHighlight},
                 {getResources().getString(R.string.pet_incentive_dispatch_investigation_date),investigationDate, null},
