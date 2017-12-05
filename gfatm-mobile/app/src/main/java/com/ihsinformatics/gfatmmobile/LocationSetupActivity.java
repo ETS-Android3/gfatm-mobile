@@ -95,7 +95,7 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
 
         ServerService serverService = new ServerService(getApplicationContext());
         String columnName = "";
-        if (App.getProgram().equals(getResources().getString(R.string.pet)))
+        /*if (App.getProgram().equals(getResources().getString(R.string.pet)))
             columnName = "pet_location";
         else if (App.getProgram().equals(getResources().getString(R.string.fast)))
             columnName = "fast_location";
@@ -104,7 +104,7 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
         else if (App.getProgram().equals(getResources().getString(R.string.pmdt)))
             columnName = "pmdt_location";
         else if (App.getProgram().equals(getResources().getString(R.string.childhood_tb)))
-            columnName = "childhood_tb_location";
+            columnName = "childhood_tb_location";*/
 
         final Object[][] locations = serverService.getAllLocations(columnName);
 
@@ -474,18 +474,18 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
 
         Boolean flag = false;
 
-        for (RadioButton rb : radioButtons) {
-            if (rb.isChecked()) {
-                flag = true;
-                super.onBackPressed();
-            }
-        }
-
         try {
             InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(programName.getWindowToken(), 0);
         } catch (Exception e) {
             // TODO: handle exception
+        }
+
+        for (RadioButton rb : radioButtons) {
+            if (rb.isChecked()) {
+                flag = true;
+                super.onBackPressed();
+            }
         }
 
     }

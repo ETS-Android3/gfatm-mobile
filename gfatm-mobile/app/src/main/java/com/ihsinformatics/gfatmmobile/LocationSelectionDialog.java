@@ -1,12 +1,16 @@
 package com.ihsinformatics.gfatmmobile;
 
 
+import android.app.ProgressDialog;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.text.format.DateFormat;
 import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -21,11 +25,16 @@ import android.widget.Toast;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
-public class LocationSelectionDialog extends AbstractSettingActivity {
+public class LocationSelectionDialog extends AbstractSettingActivity implements View.OnTouchListener {
 
     EditText supportContact;
     ArrayList<RadioButton> radioButtons = new ArrayList<RadioButton>();
+    protected static ProgressDialog loading;
+    private ServerService serverService;
+    int color;
+    int color1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +43,99 @@ public class LocationSelectionDialog extends AbstractSettingActivity {
 
         okButton.setVisibility(View.GONE);
 
-        final int color = App.getColor(this, R.attr.colorPrimaryDark);
-        final int color1 = App.getColor(this, R.attr.colorAccent);
+        serverService = new ServerService(getApplicationContext());
+        loading = new ProgressDialog(LocationSelectionDialog.this, ProgressDialog.THEME_HOLO_LIGHT);
+        color = App.getColor(this, R.attr.colorPrimaryDark);
+        color1 = App.getColor(this, R.attr.colorAccent);
+
+        fillList();
+
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        for(RadioButton rb : radioButtons){
+            if(rb.isChecked())
+                super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN: {
+                TextView view = (TextView) v;
+                view.setTextColor(getResources().getColor(R.color.dark_grey));
+                view.invalidate();
+
+                syncLocation();
+
+                break;
+            }
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL: {
+                TextView view = (TextView) v;
+                //clear the overlay
+                int color1 = App.getColor(this, R.attr.colorAccent);
+                view.setTextColor(color1);
+                view.invalidate();
+                break;
+            }
+        }
+        return true;
+    }
+
+    public void syncLocation() {
+        AsyncTask<String, String, String> syncTask = new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.fetching_locations));
+                        loading.show();
+                    }
+                });
+
+                String result = serverService.getLocations();
+                return result;
+
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            ;
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                layout.removeAllViews();
+                loading.dismiss();
+                if (result.equals("SUCCESS")) {
+
+                    Calendar calendar = Calendar.getInstance();
+                    App.setLocationLastUpdate(DateFormat.format("dd-MMM-yyyy HH:mm:ss", calendar).toString());
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString(Preferences.LOCATION_LAST_UPDATE, App.getLocationLastUpdate());
+                    editor.apply();
+
+                    fillList();
+                }
+            }
+        };
+        syncTask.execute("");
+    }
+
+
+    public void fillList(){
+
 
         layout.removeAllViews();
 
@@ -47,7 +147,7 @@ public class LocationSelectionDialog extends AbstractSettingActivity {
 
         ServerService serverService = new ServerService(getApplicationContext());
         String columnName = "";
-        if (App.getProgram().equals(getResources().getString(R.string.pet)))
+        /*if (App.getProgram().equals(getResources().getString(R.string.pet)))
             columnName = "pet_location";
         else if (App.getProgram().equals(getResources().getString(R.string.fast)))
             columnName = "fast_location";
@@ -56,9 +156,19 @@ public class LocationSelectionDialog extends AbstractSettingActivity {
         else if (App.getProgram().equals(getResources().getString(R.string.pmdt)))
             columnName = "pmdt_location";
         else if (App.getProgram().equals(getResources().getString(R.string.childhood_tb)))
-            columnName = "childhood_tb_location";
+            columnName = "childhood_tb_location";*/
 
         final Object[][] locations = serverService.getAllLocations(columnName);
+
+        TextView syncLocations = new TextView(this);
+        syncLocations.setText(getResources().getString(R.string.sync_with_openmrs));
+        syncLocations.setGravity(Gravity.RIGHT);
+        syncLocations.setTextSize(getResources().getDimension(R.dimen.medium));
+        syncLocations.setTextColor(color);
+        layout.addView(syncLocations);
+
+        syncLocations.setOnTouchListener(this);
+
 
         if (locations == null || locations.length == 0) {
             final TextView text = new TextView(this);
@@ -342,15 +452,5 @@ public class LocationSelectionDialog extends AbstractSettingActivity {
 
         }
 
-
-    }
-
-    @Override
-    public void onBackPressed() {
-
-        for(RadioButton rb : radioButtons){
-            if(rb.isChecked())
-                super.onBackPressed();
-        }
     }
 }
