@@ -30,10 +30,12 @@ import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
+import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
+import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
@@ -53,6 +55,9 @@ public class PetTreatmentAdherenceForm extends AbstractFormActivity implements R
     // Views...
     TitledButton formDate;
     TitledEditText treatmentWeekNumber;
+    TitledRadioGroup patientContacted;
+    TitledSpinner reasonPatientNotContacted;
+    TitledEditText otherReasonPatientNotContacted;
     TitledEditText missedDosage;
     TitledRadioGroup adverseEventReport;
     LinearLayout adverseEffectsLayout;
@@ -138,8 +143,11 @@ public class PetTreatmentAdherenceForm extends AbstractFormActivity implements R
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        treatmentWeekNumber = new TitledEditText(context, null, getResources().getString(R.string.pet_week_of_treatment), "", "0-30", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        missedDosage = new TitledEditText(context, null, getResources().getString(R.string.pet_missed_dosed), "0", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
+        treatmentWeekNumber = new TitledEditText(context, null, getResources().getString(R.string.pet_week_of_treatment), "", "0-30", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL,false);
+        patientContacted = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_patient_contacted), getResources().getStringArray(R.array.pet_patient_contacted_option), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL);
+        reasonPatientNotContacted = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_reason_patient_not_contacted), getResources().getStringArray(R.array.pet_reason_patient_not_contacted_option), "", App.VERTICAL);
+        otherReasonPatientNotContacted = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        missedDosage = new TitledEditText(context, null, getResources().getString(R.string.pet_missed_dosed), "0", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
         adverseEventReport = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_adverse_event_report), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         adverseEffectsLayout = new LinearLayout(context);
         adverseEffectsLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -160,16 +168,17 @@ public class PetTreatmentAdherenceForm extends AbstractFormActivity implements R
         clinicianInformed = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_doctor_notified), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), treatmentWeekNumber.getEditText(), missedDosage.getEditText(), adverseEventReport.getRadioGroup(), adverseEffects1, adverseEffects2,
+        views = new View[]{formDate.getButton(), treatmentWeekNumber.getEditText(), patientContacted.getRadioGroup(), reasonPatientNotContacted.getSpinner(), otherReasonPatientNotContacted.getEditText(), missedDosage.getEditText(), adverseEventReport.getRadioGroup(), adverseEffects1, adverseEffects2,
                 otherEffects.getEditText(), caretakerComments.getEditText(), clincianNote.getEditText(), plan.getEditText(), clinicianInformed.getRadioGroup()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, treatmentWeekNumber, missedDosage, adverseEventReport, adverseEffectsLayout, otherEffects, caretakerComments, clincianNote, plan, clinicianInformed}};
+                {{formDate, treatmentWeekNumber, patientContacted, reasonPatientNotContacted, otherReasonPatientNotContacted, missedDosage, adverseEventReport, adverseEffectsLayout, otherEffects, caretakerComments, clincianNote, plan, clinicianInformed}};
 
         formDate.getButton().setOnClickListener(this);
         adverseEventReport.getRadioGroup().setOnCheckedChangeListener(this);
-        adverseEventReport.getRadioGroup().setOnCheckedChangeListener(this);
+        patientContacted.getRadioGroup().setOnCheckedChangeListener(this);
+        reasonPatientNotContacted.getSpinner().setOnItemSelectedListener(this);
         for (CheckBox cb : adverseEffects2.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
 
@@ -261,11 +270,7 @@ public class PetTreatmentAdherenceForm extends AbstractFormActivity implements R
             missedDosage.getEditText().requestFocus();
             error = true;
         }
-        if (App.get(treatmentWeekNumber).isEmpty()) {
-            treatmentWeekNumber.getEditText().setError(getString(R.string.empty_field));
-            treatmentWeekNumber.getEditText().requestFocus();
-            error = true;
-        } else {
+        if (!App.get(treatmentWeekNumber).isEmpty()) {
 
             int weekNo = Integer.parseInt(App.get(treatmentWeekNumber));
             if (weekNo > 30) {
@@ -336,8 +341,17 @@ public class PetTreatmentAdherenceForm extends AbstractFormActivity implements R
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         observations.add(new String[]{"NUMBER OF WEEKS ON TREATMENT", App.get(treatmentWeekNumber)});
-        observations.add(new String[]{"NUMBER OF MISSED MEDICATION DOSES IN LAST MONTH", App.get(missedDosage)});
-        observations.add(new String[]{"ADVERSE EVENTS REPORTED", App.get(adverseEventReport).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        observations.add(new String[]{"CONTACT TO THE PATIENT", App.get(patientContacted).equals(getResources().getString(R.string.yes)) ? "YES" : App.get(patientContacted).equals(getResources().getString(R.string.no))? "NO" : "YES, BUT NOT INTERESTED"});
+        if(reasonPatientNotContacted.getVisibility() == View.VISIBLE){
+            observations.add(new String[]{"UNABLE TO CONTACT THE PATIENT", App.get(reasonPatientNotContacted).equals(getResources().getString(R.string.pet_reason_patient_not_contacted_phone_switched_off)) ? "PHONE SWITCHED OFF" : App.get(reasonPatientNotContacted).equals(getResources().getString(R.string.pet_reason_patient_not_contacted_not_responding))? "PATIENT DID NOT RECEIVE CALL" :
+                    App.get(reasonPatientNotContacted).equals(getResources().getString(R.string.pet_reason_patient_not_contacted_invalid_number)) ? "INCORRECT CONTACT NUMBER" : App.get(reasonPatientNotContacted).equals(getResources().getString(R.string.pet_reason_patient_not_contacted_wrong_number)) ? "WRONG NUMBER" : "OTHER REASON TO NOT CONTACTED WITH THE THE PATIENT"  });
+        }
+        if(otherReasonPatientNotContacted.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"OTHER REASON TO NOT CONTACTED WITH THE THE PATIENT", App.get(otherReasonPatientNotContacted)});
+        if(missedDosage.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"NUMBER OF MISSED MEDICATION DOSES IN LAST MONTH", App.get(missedDosage)});
+        if(adverseEventReport.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"ADVERSE EVENTS REPORTED", App.get(adverseEventReport).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         if (adverseEffectsLayout.getVisibility() == View.VISIBLE) {
             String adverseEventString = "";
             for (CheckBox cb : adverseEffects1.getCheckedBoxes()) {
@@ -368,10 +382,14 @@ public class PetTreatmentAdherenceForm extends AbstractFormActivity implements R
         }
         if (otherEffects.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER ADVERSE EVENT", App.get(otherEffects)});
-        observations.add(new String[]{"CARETAKER COMMENTS", App.get(caretakerComments)});
-        observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(clincianNote)});
-        observations.add(new String[]{"TREATMENT PLAN (TEXT)", App.get(plan)});
-        observations.add(new String[]{"CLINICIAN INFORMED", App.get(clinicianInformed).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        if (caretakerComments.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"CARETAKER COMMENTS", App.get(caretakerComments)});
+        if (clincianNote.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(clincianNote)});
+        if (plan.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"TREATMENT PLAN (TEXT)", App.get(plan)});
+        if (clinicianInformed.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"CLINICIAN INFORMED", App.get(clinicianInformed).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -519,7 +537,16 @@ public class PetTreatmentAdherenceForm extends AbstractFormActivity implements R
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        MySpinner spinner = (MySpinner) parent;
 
+        if (spinner == reasonPatientNotContacted.getSpinner()) {
+
+            if(App.get(reasonPatientNotContacted).equals(getResources().getString(R.string.other)))
+                otherReasonPatientNotContacted.setVisibility(View.VISIBLE);
+            else
+                otherReasonPatientNotContacted.setVisibility(View.GONE);
+
+        }
     }
 
     @Override
@@ -546,6 +573,8 @@ public class PetTreatmentAdherenceForm extends AbstractFormActivity implements R
         adverseEffectsLayout.setVisibility(View.GONE);
         otherEffects.setVisibility(View.GONE);
         clinicianInformed.setVisibility(View.GONE);
+        reasonPatientNotContacted.setVisibility(View.GONE);
+        otherReasonPatientNotContacted.setVisibility(View.GONE);
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -592,6 +621,59 @@ public class PetTreatmentAdherenceForm extends AbstractFormActivity implements R
                 else
                     otherEffects.setVisibility(View.GONE);
             }
+        } else if (group == patientContacted.getRadioGroup()){
+            if (App.get(patientContacted).equals(getResources().getString(R.string.yes))) {
+                reasonPatientNotContacted.setVisibility(View.GONE);
+                otherReasonPatientNotContacted.setVisibility(View.GONE);
+                missedDosage.setVisibility(View.VISIBLE);
+                adverseEventReport.setVisibility(View.VISIBLE);
+                if(App.get(adverseEventReport).equals(getResources().getString(R.string.no)))
+                    adverseEffectsLayout.setVisibility(View.GONE);
+                else {
+                    adverseEffectsLayout.setVisibility(View.VISIBLE);
+                    boolean flag = false;
+                    for (CheckBox cb : adverseEffects2.getCheckedBoxes()) {
+                        if (cb.getText().equals(getString(R.string.pet_other)) && cb.isChecked()) {
+                            flag = true;
+                            break;
+                        }
+                    }
+                    if (flag)
+                        otherEffects.setVisibility(View.VISIBLE);
+                    else
+                        otherEffects.setVisibility(View.GONE);
+                }
+                caretakerComments.setVisibility(View.VISIBLE);
+                clincianNote.setVisibility(View.VISIBLE);
+                plan.setVisibility(View.VISIBLE);
+                clinicianInformed.setVisibility(View.VISIBLE);
+            } else if (App.get(patientContacted).equals(getResources().getString(R.string.no))) {
+                reasonPatientNotContacted.setVisibility(View.VISIBLE);
+                if(App.get(reasonPatientNotContacted).equals(getResources().getString(R.string.other)))
+                    otherReasonPatientNotContacted.setVisibility(View.VISIBLE);
+                else
+                    otherReasonPatientNotContacted.setVisibility(View.GONE);
+                missedDosage.setVisibility(View.GONE);
+                adverseEventReport.setVisibility(View.GONE);
+                adverseEffectsLayout.setVisibility(View.GONE);
+                otherEffects.setVisibility(View.GONE);
+                caretakerComments.setVisibility(View.GONE);
+                clincianNote.setVisibility(View.GONE);
+                plan.setVisibility(View.GONE);
+                clinicianInformed.setVisibility(View.GONE);
+            } else if (App.get(patientContacted).equals(getResources().getString(R.string.pet_yes_but_not_interested))) {
+                reasonPatientNotContacted.setVisibility(View.GONE);
+                otherReasonPatientNotContacted.setVisibility(View.GONE);
+                missedDosage.setVisibility(View.GONE);
+                adverseEventReport.setVisibility(View.GONE);
+                adverseEffectsLayout.setVisibility(View.GONE);
+                otherEffects.setVisibility(View.GONE);
+                caretakerComments.setVisibility(View.VISIBLE);
+                clincianNote.setVisibility(View.VISIBLE);
+                plan.setVisibility(View.GONE);
+                clinicianInformed.setVisibility(View.GONE);
+            }
+
         }
     }
 

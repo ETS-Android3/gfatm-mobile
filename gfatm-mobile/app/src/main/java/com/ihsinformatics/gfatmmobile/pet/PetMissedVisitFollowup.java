@@ -455,7 +455,8 @@ public class PetMissedVisitFollowup extends AbstractFormActivity implements Radi
             observations.add(new String[]{"UNABLE TO CONTACT THE PATIENT", App.get(whyUnableToContact).equals(getResources().getString(R.string.ctb_phone_switched_off)) ? "PHONE SWITCHED OFF" :
                     (App.get(whyUnableToContact).equals(getResources().getString(R.string.ctb_patient_did_not_recieve_call)) ? "PATIENT DID NOT RECEIVE CALL" :
                             (App.get(whyUnableToContact).equals(getResources().getString(R.string.ctb_incorrect_contact_number)) ? "INCORRECT CONTACT NUMBER" :
-                                                    "OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT"))});
+                                    (App.get(whyUnableToContact).equals(getResources().getString(R.string.ctb_wrong_number)) ? "WRONG NUMBER" :
+                                            "OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT")))});
 
         }
         if(otherUnableToContact.getVisibility()==View.VISIBLE) {
@@ -660,7 +661,12 @@ public class PetMissedVisitFollowup extends AbstractFormActivity implements Radi
                     } else if (rb.getText().equals(getResources().getString(R.string.ctb_incorrect_contact_number)) && obs[0][1].equals("INCORRECT CONTACT NUMBER")) {
                         rb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_other_title)) && obs[0][1].equals("OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT")) {
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_wrong_number)) && obs[0][1].equals("WRONG NUMBER")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_other_title)) && obs[0][1].equals("OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT")) {
                         rb.setChecked(true);
                         break;
                     }
