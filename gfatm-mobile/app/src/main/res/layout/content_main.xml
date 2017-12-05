@@ -35,7 +35,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/small"
-                app:srcCompat="@drawable/ic_edit" />
+                app:srcCompat="@drawable/ic_edit"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/patientName"
@@ -175,66 +176,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/buttonLayout" />
-
-    <LinearLayout
-        android:id="@+id/programLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/fragment_place"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/select_program_continue"
-            android:textSize="@dimen/large" />
-
-        <RadioGroup
-            android:id="@+id/radioGroup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:divider="?android:attr/dividerHorizontal"
-            android:showDividers="middle">
-
-            <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/medium"
-                android:paddingTop="@dimen/medium"
-                android:text="@string/fast" />
-
-           <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/medium"
-                android:paddingTop="@dimen/medium"
-                android:text="@string/childhood_tb" />
-
-            <!--<RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/medium"
-                android:paddingTop="@dimen/medium"
-                android:text="@string/pmdt" />-->
-
-            <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/medium"
-                android:paddingTop="@dimen/medium"
-                android:text="@string/pet" />
-
-           <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/medium"
-                android:paddingTop="@dimen/medium"
-                android:text="@string/comorbidities" />
-
-        </RadioGroup>
-
-    </LinearLayout>
 
     <!--<android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
