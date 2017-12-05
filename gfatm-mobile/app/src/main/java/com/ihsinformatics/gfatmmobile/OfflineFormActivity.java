@@ -16,17 +16,22 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
+import com.ihsinformatics.gfatmmobile.model.Patient;
+import com.ihsinformatics.gfatmmobile.shared.ListViewAdapter;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.concurrent.Semaphore;
 
 /**
@@ -40,8 +45,8 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
     protected ImageView emailIcon;
     protected ImageView deleteIcon;
 
-    protected TextView programName;
     protected LinearLayout contentLinearLayout;
+    //protected ListView listView ;
 
     ArrayList<CheckBox> checkBoxes = new ArrayList<CheckBox>();
     ServerService serverService;
@@ -65,8 +70,10 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
         submitIcon = (ImageView) findViewById(R.id.submitIcon);
         emailIcon = (ImageView) findViewById(R.id.emailIcon);
         deleteIcon = (ImageView) findViewById(R.id.deleteIcon);
+        //listView = (ListView) findViewById(R.id.list);
 
-        int color = App.getColor(this, R.attr.colorAccent);
+        final int color = App.getColor(this, R.attr.colorAccent);
+        int color1 = App.getColor(this, R.attr.colorAccent);
         DrawableCompat.setTint(submitIcon.getDrawable(), color);
         DrawableCompat.setTint(emailIcon.getDrawable(), color);
         DrawableCompat.setTint(deleteIcon.getDrawable(), color);
@@ -75,7 +82,6 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
         emailIcon.setOnTouchListener(this);
         deleteIcon.setOnTouchListener(this);
 
-        programName = (TextView) findViewById(R.id.program);
         contentLinearLayout = (LinearLayout) findViewById(R.id.content);
 
         if (App.getMode().equalsIgnoreCase("OFFLINE")) {
@@ -91,6 +97,85 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
         fillList();
 
     }
+
+    /*public void fillOfflineFormList(){
+
+        // Getting adapter
+        ListViewAdapter adapter;
+        ArrayList<HashMap<String, Object[]>> menuItems;
+        menuItems = new ArrayList<HashMap<String, Object[]>>();
+
+        final Object[][] forms = serverService.getSavedForms(App.getUsername());
+
+        int counter = forms.length;
+        *//*if(forms.length > 5){
+            Button btnLoadMore = new Button(this);
+            btnLoadMore.setText("Load More");
+            listView.addFooterView(btnLoadMore);
+
+            counter = 5;
+        }*//*
+
+        for (int i = 0; i < counter; i++) {
+            HashMap<String, Object[]> map = new HashMap<String, Object[]>();
+            map.put("main", forms[i]);
+
+            final TextView text = new TextView(this);
+            text.setText(String.valueOf(forms[i][1]) + " - " + forms[i][2]);
+            final Object obj = forms[i][6];
+            final String id = String.valueOf(forms[i][0]);
+            final String pid = String.valueOf(forms[i][3]);
+            if(obj != null) {
+                text.setOnLongClickListener(new View.OnLongClickListener() {
+
+                    @Override
+                    public boolean onLongClick(View v) {
+
+                        Patient patient = serverService.getPatientBySystemIdFromLocalDB(pid);
+
+                        if (patient.getUuid() == null || patient.getUuid().equals("")){
+
+                            final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
+                            alertDialog.setMessage(getResources().getString(R.string.offline_patient));
+                            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                            alertDialog.setIcon(clearIcon);
+                            alertDialog.setTitle(getResources().getString(R.string.title_error));
+                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                            alertDialog.show();
+
+                            return true;
+                        }
+
+                        Intent i = new Intent();
+                        i.putExtra("form_id", id);
+                        i.putExtra("open", true);
+                        i.putExtra("form_object", (byte[]) obj);
+                        setResult(RESULT_OK, i);
+                        onBackPressed();
+                        return true;
+                    }
+
+                });
+            }
+
+            map.put("textview", new Object[]{text});
+
+            CheckBox selection = new CheckBox(this);
+            selection.setTag(String.valueOf(forms[i][0]));
+            map.put("checkbox", new Object[]{selection});
+            checkBoxes.add(selection);
+
+            menuItems.add(map);
+        }
+
+        adapter = new ListViewAdapter(this, menuItems);
+        listView.setAdapter(adapter);
+    }*/
 
 
     @Override
@@ -109,9 +194,9 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
         checkBoxes.clear();
         contentLinearLayout.removeAllViews();
 
-        final Object[][] forms = serverService.getSavedForms(App.getUsername(), App.getProgram());
+        final Object[][] forms = serverService.getSavedForms(App.getUsername());
 
-        programName.setText(App.getProgram());
+        //programName.setText(App.getProgram());
 
         if (forms == null || forms.length == 0) {
             final TextView text = new TextView(this);

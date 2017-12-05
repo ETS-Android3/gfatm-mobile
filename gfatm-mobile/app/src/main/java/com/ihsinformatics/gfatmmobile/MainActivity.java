@@ -11,9 +11,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.media.RingtoneManager;
@@ -35,15 +38,15 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -55,6 +58,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ihsinformatics.gfatmmobile.custom.MyLinearLayout;
+import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.shared.FormsObject;
@@ -69,8 +74,6 @@ import java.io.ObjectInputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnTouchListener {
@@ -79,18 +82,16 @@ public class MainActivity extends AppCompatActivity
     private static final int SAVED_FORM_ACTIVITY = 1;
     protected static ProgressDialog loading;
     LinearLayout buttonLayout;
-    LinearLayout programLayout;
     public static LinearLayout headerLayout;
     public static  Button formButton;
     Button reportButton;
     Button searchButton;
-    RadioGroup radioGroup;
     public static FormFragment fragmentForm = new FormFragment();
     public static ReportFragment fragmentReport = new ReportFragment();
-    public static SummaryFragment fragmentSearch = new SummaryFragment();
+    public static SummaryFragment fragmentSummary = new SummaryFragment();
     ImageView change;
     public static ImageView update;
-    public static ImageView edit;
+    //public static ImageView edit;
 
     public static TextView patientName;
     public static TextView patientDob;
@@ -99,9 +100,12 @@ public class MainActivity extends AppCompatActivity
 
     View editView;
     PopupWindow popupWindow;
-    public static LinearLayout popupContent;
-    Context context = this;
+    LinearLayout attributeContent;
+    LinearLayout addressContent;
     RelativeLayout backDimLayout;
+
+    Context context = this;
+
 
     static boolean active = false;
     public static ServerService serverService;
@@ -137,8 +141,8 @@ public class MainActivity extends AppCompatActivity
 
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
                 mBuilder.setSmallIcon(R.drawable.error);
-                mBuilder.setContentTitle("Aao TB Mitao - Forms Upload completed");
-                mBuilder.setContentText("Offline form upload with some error. Go to offline forms to see pending forms.");
+                mBuilder.setContentTitle("Aao TB Mitao - Error in Forms Upload");
+                mBuilder.setContentText("Go to offline forms to see pending forms.");
                 mBuilder.setPriority(Notification.PRIORITY_HIGH);
                 Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                 mBuilder.setSound(alarmSound);
@@ -195,11 +199,11 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.add(R.id.fragment_place, fragmentForm, "FORM");
         fragmentTransaction.add(R.id.fragment_place, fragmentReport, "REPORT");
-        fragmentTransaction.add(R.id.fragment_place, fragmentSearch, "SEARCH");
+        fragmentTransaction.add(R.id.fragment_place, fragmentSummary, "SEARCH");
 
         fragmentTransaction.hide(fragmentForm);
         fragmentTransaction.hide(fragmentReport);
-        fragmentTransaction.hide(fragmentSearch);
+        fragmentTransaction.hide(fragmentSummary);
 
         fragmentTransaction.commit();
 
@@ -235,10 +239,10 @@ public class MainActivity extends AppCompatActivity
         DrawableCompat.setTint(update.getDrawable(), color);
         update.setOnTouchListener(this);
 
-        edit = (ImageView) findViewById(R.id.edit);
+        /*edit = (ImageView) findViewById(R.id.edit);
         DrawableCompat.setTint(edit.getDrawable(), color);
         edit.setOnTouchListener(this);
-        edit.setVisibility(View.GONE);
+        edit.setVisibility(View.GONE);*/
 
         getSupportActionBar().setTitle(Html.fromHtml("<small>" + App.getProgram() + "  |  " + App.getLocation() + "</small>"));
         if (App.getMode().equalsIgnoreCase("OFFLINE")) {
@@ -249,45 +253,16 @@ public class MainActivity extends AppCompatActivity
 
             if (App.getPatient() == null) {
                 update.setVisibility(View.GONE);
-                edit.setVisibility(View.GONE);
+                //edit.setVisibility(View.GONE);
             }
             else {
                 update.setVisibility(View.VISIBLE);
-                edit.setVisibility(View.VISIBLE);
+                //edit.setVisibility(View.VISIBLE);
             }
 
         }
 
         buttonLayout = (LinearLayout) findViewById(R.id.buttonLayout);
-        programLayout = (LinearLayout) findViewById(R.id.programLayout);
-
-        radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-
-                RadioButton rb = (RadioButton) findViewById(checkedId);
-                App.setProgram(rb.getText().toString());
-
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putString(Preferences.PROGRAM, App.getProgram());
-                editor.apply();
-
-                buttonLayout.setVisibility(View.VISIBLE);
-                programLayout.setVisibility(View.GONE);
-                headerLayout.setVisibility(View.VISIBLE);
-
-                getSupportActionBar().setTitle(App.getProgram() + "  |  " + App.getLocation());
-                //nav_default.setText(getResources().getString(R.string.program) + App.getProgram() + "  |  " + getResources().getString(R.string.location) + App.getLocation());
-                fragmentForm.fillMainContent();
-                fragmentReport.fillReportFragment();
-                showFormFragment();
-
-                if (App.getLocation().equals(""))
-                    openLocationSelectionDialog();
-
-            }
-        });
 
         headerLayout = (LinearLayout) findViewById(R.id.header);
         formButton = (Button) findViewById(R.id.formButton);
@@ -304,8 +279,8 @@ public class MainActivity extends AppCompatActivity
         popupWindow = new PopupWindow(editView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         popupWindow.setFocusable(true);
         popupWindow.update();
-        popupContent =  (LinearLayout) editView.findViewById(R.id.content);
-
+        attributeContent =  (LinearLayout) editView.findViewById(R.id.attributes);
+        addressContent = (LinearLayout) editView.findViewById(R.id.address);
         backDimLayout = (RelativeLayout) findViewById(R.id.bac_dim_layout);
 
         loadEditPopup();
@@ -337,20 +312,18 @@ public class MainActivity extends AppCompatActivity
                 id.setVisibility(View.VISIBLE);
             patientId.setText(App.getPatient().getPatientId());
             update.setVisibility(View.VISIBLE);
-            edit.setVisibility(View.VISIBLE);
+            //edit.setVisibility(View.VISIBLE);
         }
 
         if (!App.getProgram().equals("")) {
             showFormFragment();
-
-            if (App.getLocation().equals(""))
-                openLocationSelectionDialog();
         }
-        else
-            showProgramSelection();
 
-        /*if(App.getMode().equalsIgnoreCase("ONLINE")) {
-            int count = serverService.getPendingSavedFormsCount(App.getUsername(), App.getProgram());
+        if (App.getLocation().equals(""))
+            openLocationSelectionDialog();
+
+        if(App.getMode().equalsIgnoreCase("ONLINE")) {
+            int count = serverService.getPendingSavedFormsCount(App.getUsername());
             if (count > 0) {
 
                 final int color1 = App.getColor(this, R.attr.colorAccent);
@@ -380,7 +353,7 @@ public class MainActivity extends AppCompatActivity
                 alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
 
             }
-        }*/
+        }
     }
 
     @Override
@@ -418,15 +391,39 @@ public class MainActivity extends AppCompatActivity
         if (!getSupportActionBar().getTitle().toString().contains(App.getProgram())) {
             //nav_default.setText(getResources().getString(R.string.program) + App.getProgram() + "  |  " + getResources().getString(R.string.location) + App.getLocation());
             getSupportActionBar().setTitle(App.getProgram() + "  |  " + App.getLocation());
-            fragmentForm.fillMainContent();
+            fragmentForm.fillProgramFormContent();
             fragmentReport.fillReportFragment();
-            fragmentSearch.updateSummaryFragment();
+            fragmentSummary.updateSummaryFragment();
             showFormFragment();
         }
 
         if (!getSupportActionBar().getTitle().toString().contains(App.getLocation())) {
             //nav_default.setText(getResources().getString(R.string.program) + App.getProgram() + "  |  " + getResources().getString(R.string.location) + App.getLocation());
             getSupportActionBar().setTitle(App.getProgram() + "  |  " + App.getLocation());
+
+            Boolean flag = true;
+            String[] locatinPrograms = serverService.getLocationsProgamByName(App.getLocation());
+            if (!locatinPrograms[0].equals("Y") && App.getProgram().equals(getResources().getString(R.string.fast)))
+                flag = false;
+            if (!locatinPrograms[1].equals("Y") && App.getProgram().equals(getResources().getString(R.string.pet)))
+                flag = false;
+            if (!locatinPrograms[2].equals("Y") && App.getProgram().equals(getResources().getString(R.string.childhood_tb)))
+                flag = false;
+            if (!locatinPrograms[3].equals("Y") && App.getProgram().equals(getResources().getString(R.string.comorbidities)))
+                flag = false;
+
+            if(!flag) {
+                App.setProgram("");
+
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(Preferences.PROGRAM, App.getProgram());
+                editor.apply();
+
+                fragmentReport.fillReportFragment();
+                fragmentSummary.updateSummaryFragment();
+            }
+
         }
 
         if (App.getMode().equalsIgnoreCase("OFFLINE")) {
@@ -439,16 +436,16 @@ public class MainActivity extends AppCompatActivity
             getSupportActionBar().setSubtitle(null);
             if (App.getPatient() == null) {
                 update.setVisibility(View.GONE);
-                edit.setVisibility(View.GONE);
+                //edit.setVisibility(View.GONE);
                 patientName.setText("");
                 patientDob.setText("");
                 patientId.setText("");
                 id.setText("");
 
                 getSupportActionBar().setTitle(App.getProgram() + "  |  " + App.getLocation());
-                fragmentForm.fillMainContent();
+                fragmentForm.fillProgramFormContent();
                 fragmentReport.fillReportFragment();
-                fragmentSearch.updateSummaryFragment();
+                fragmentSummary.updateSummaryFragment();
                 showFormFragment();
 
             }
@@ -482,20 +479,20 @@ public class MainActivity extends AppCompatActivity
                     patientId.setText(App.getPatient().getPatientId());
 
                     getSupportActionBar().setTitle(App.getProgram() + "  |  " + App.getLocation());
-                    fragmentForm.fillMainContent();
+                    fragmentForm.fillProgramFormContent();
                     fragmentReport.fillReportFragment();
-                    fragmentSearch.updateSummaryFragment();
+                    fragmentSummary.updateSummaryFragment();
                     showFormFragment();
 
                 }
 
                 update.setVisibility(View.VISIBLE);
-                edit.setVisibility(View.VISIBLE);
+                //edit.setVisibility(View.VISIBLE);
             }
 
 
-            /*if(flag) {
-                int count = serverService.getPendingSavedFormsCount(App.getUsername(), App.getProgram());
+            if(flag) {
+                int count = serverService.getPendingSavedFormsCount(App.getUsername());
                 if (count > 0) {
 
                     final int color1 = App.getColor(this, R.attr.colorAccent);
@@ -525,7 +522,7 @@ public class MainActivity extends AppCompatActivity
                     alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
 
                 }
-            }*/
+            }
 
         }
 
@@ -591,8 +588,8 @@ public class MainActivity extends AppCompatActivity
         }
 
         form = fm.findFragmentByTag("SEARCH");
-        if (form != null && form.isVisible() && fragmentSearch.isViewVisible()) {
-            fragmentSearch.setMainContentVisible(true);
+        if (form != null && form.isVisible() && fragmentSummary.isViewVisible()) {
+            fragmentSummary.setMainContentVisible(true);
             return;
         }
 
@@ -654,9 +651,6 @@ public class MainActivity extends AppCompatActivity
             Intent selectPatientActivityIntent = new Intent(this, SearchActivity.class);
             startActivityForResult(selectPatientActivityIntent, SELECT_PATIENT_ACTIVITY);
         } else if (id == R.id.sync_metadata) {
-
-
-
             Intent updateDatabaseIntent = new Intent(this, UpdateDatabaseActivity.class);
             startActivityForResult(updateDatabaseIntent, SELECT_PATIENT_ACTIVITY);
         }
@@ -664,7 +658,6 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -776,7 +769,7 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.show(fragmentForm);
         fragmentTransaction.hide(fragmentReport);
-        fragmentTransaction.hide(fragmentSearch);
+        fragmentTransaction.hide(fragmentSummary);
         fragmentTransaction.commit();
     }
 
@@ -800,7 +793,7 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.hide(fragmentForm);
         fragmentTransaction.show(fragmentReport);
-        fragmentTransaction.hide(fragmentSearch);
+        fragmentTransaction.hide(fragmentSummary);
         fragmentTransaction.commit();
     }
 
@@ -824,16 +817,8 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.hide(fragmentForm);
         fragmentTransaction.hide(fragmentReport);
-        fragmentTransaction.show(fragmentSearch);
+        fragmentTransaction.show(fragmentSummary);
         fragmentTransaction.commit();
-    }
-
-    private void showProgramSelection() {
-
-        programLayout.setVisibility(View.VISIBLE);
-        buttonLayout.setVisibility(View.GONE);
-        headerLayout.setVisibility(View.GONE);
-
     }
 
     /**
@@ -874,13 +859,13 @@ public class MainActivity extends AppCompatActivity
                     updatePatientDetails();
 
                     break;
-                } else if (view == edit) {
+                } /*else if (view == edit) {
 
                     updatePopupContent();
                     popupWindow.showAsDropDown(edit);
                     backDimLayout.setVisibility(View.VISIBLE);
                     break;
-                }
+                }*/
             }
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL: {
@@ -910,7 +895,6 @@ public class MainActivity extends AppCompatActivity
 
                 String result = serverService.updatePatientDetails(App.getPatient().getPatientId(), true);
                 return result;
-                //return "SUCCESS";
             }
 
             @Override
@@ -925,7 +909,6 @@ public class MainActivity extends AppCompatActivity
                 loading.dismiss();
 
                 if (result.equals("SUCCESS")) {
-                    //resetViews();
 
                     String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
                     String lname = App.getPatient().getPerson().getFamilyName();
@@ -953,8 +936,8 @@ public class MainActivity extends AppCompatActivity
                     patientId.setText(App.getPatient().getPatientId());
 
                     fragmentReport.fillReportFragment();
-                    fragmentForm.fillMainContent();
-                    fragmentSearch.updateSummaryFragment();
+                    fragmentForm.fillProgramFormContent();
+                    fragmentSummary.updateSummaryFragment();
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.patient_updated));
@@ -1049,8 +1032,8 @@ public class MainActivity extends AppCompatActivity
                         patientId.setText(App.getPatient().getPatientId());
 
                         fragmentReport.fillReportFragment();
-                        fragmentForm.fillMainContent();
-                        fragmentSearch.updateSummaryFragment();
+                        fragmentForm.fillProgramFormContent();
+                        fragmentSummary.updateSummaryFragment();
 
                     }
                 } else if (returnString != null && returnString.equals("CREATE")) {
@@ -1087,8 +1070,8 @@ public class MainActivity extends AppCompatActivity
                         toast.show();*/
 
                         fragmentReport.fillReportFragment();
-                        fragmentForm.fillMainContent();
-                        fragmentSearch.updateSummaryFragment();
+                        fragmentForm.fillProgramFormContent();
+                        fragmentSummary.updateSummaryFragment();
 
                     }
                 }
@@ -1277,35 +1260,155 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        popupContent.removeAllViews();
+        addressContent.removeAllViews();
+        attributeContent.removeAllViews();
+
+        LinearLayout linearLayoutPatientSource = new LinearLayout(this);
+        linearLayoutPatientSource.setOrientation(LinearLayout.HORIZONTAL);
+        int padding = (int) getResources().getDimension(R.dimen.tiny);
+        linearLayoutPatientSource.setPadding(padding, padding, padding, padding);
+
+        TextView patientSourceTextView = new TextView(this);
+        patientSourceTextView.setText(getResources().getString(R.string.patient_source) + ": ");
+        linearLayoutPatientSource.addView(patientSourceTextView);
+
+        Spinner patientSource = new Spinner(context, Spinner.MODE_DIALOG);
+        ArrayAdapter<String> adapterr =
+                new ArrayAdapter<String>(this,
+                        android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.patient_source_options));
+        adapterr.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        patientSource.setAdapter(adapterr);
+
+        linearLayoutPatientSource.addView(patientSource);
+
+        addressContent.addView(linearLayoutPatientSource);
+
+        TextView address = new TextView(this);
+        address.setText("Patient's Address");
+        address.setTypeface(null, Typeface.BOLD);
+        address.setPaintFlags(address.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+        addressContent.addView(address);
+
+        TitledEditText address1 = new TitledEditText(context, null, getResources().getString(R.string.pet_address_1), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        MyLinearLayout addressLayout = new MyLinearLayout(context, null, App.VERTICAL);
+        MyTextView townTextView = new MyTextView(context, getResources().getString(R.string.pet_address_2));
+        AutoCompleteTextView address2 = new AutoCompleteTextView(context);
+        InputFilter[] fArray = new InputFilter[1];
+        fArray[0] = new InputFilter.LengthFilter(20);
+        address2.setFilters(fArray);
+        addressLayout.addView(townTextView);
+        addressLayout.addView(address2);
+
+        addressContent.addView(address1);
+        addressContent.addView(addressLayout);
+
+        LinearLayout linearLayoutProvince = new LinearLayout(this);
+        linearLayoutProvince.setOrientation(LinearLayout.HORIZONTAL);
+        linearLayoutProvince.setPadding(padding, padding, padding, padding);
+
+        TextView provinceTextView = new TextView(this);
+        provinceTextView.setText(getResources().getString(R.string.province) + ": ");
+        linearLayoutProvince.addView(provinceTextView);
+
+        Spinner province = new Spinner(context, Spinner.MODE_DIALOG);
+        ArrayAdapter<String> adapterr2 =
+                new ArrayAdapter<String>(this,
+                        android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.provinces));
+        adapterr2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        province.setAdapter(adapterr2);
+        province.setSelection(adapterr2.getPosition(App.getProvince()));
+
+        linearLayoutProvince.addView(province);
+
+        addressContent.addView(linearLayoutProvince);
+
+        LinearLayout linearLayoutDistrict = new LinearLayout(this);
+        linearLayoutDistrict.setOrientation(LinearLayout.HORIZONTAL);
+        linearLayoutDistrict.setPadding(padding, padding, padding, padding);
+
+        TextView districtTextView = new TextView(this);
+        districtTextView.setText(getResources().getString(R.string.pet_district) + ": ");
+        linearLayoutDistrict.addView(districtTextView);
+
+        Spinner district = new Spinner(context, Spinner.MODE_DIALOG);
+        String[] districts = serverService.getDistrictList(App.getProvince());
+        ArrayAdapter<String> adapterr3 =
+                new ArrayAdapter<String>(this,
+                        android.R.layout.simple_spinner_item, districts);
+        adapterr3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        district.setAdapter(adapterr3);
+
+        linearLayoutDistrict.addView(district);
+
+        addressContent.addView(linearLayoutDistrict);
+
+        LinearLayout linearLayoutCity = new LinearLayout(this);
+        linearLayoutCity.setOrientation(LinearLayout.HORIZONTAL);
+        linearLayoutCity.setPadding(padding, padding, padding, padding);
+
+        TextView cityTextView = new TextView(this);
+        cityTextView.setText(getResources().getString(R.string.pet_city) + ": ");
+        linearLayoutCity.addView(cityTextView);
+
+        Spinner city = new Spinner(context, Spinner.MODE_DIALOG);
+        String[] cities = serverService.getCityList(App.get(district));
+        ArrayAdapter<String> adapterr4 =
+                new ArrayAdapter<String>(this,
+                        android.R.layout.simple_spinner_item, cities);
+        adapterr4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        city.setAdapter(adapterr4);
+
+        linearLayoutCity.addView(city);
+
+        addressContent.addView(linearLayoutCity);
+
+        TitledEditText landmark = new TitledEditText(context, null, getResources().getString(R.string.pet_landmark), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        addressContent.addView(landmark);
+
+        Object[][]  towns = serverService.getAllTowns();
+        String[] townList = new String[towns.length];
+
+        for (int i = 0; i < towns.length; i++) {
+            townList[i] = String.valueOf(towns[i][1]);
+        }
+
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, townList);
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        address2.setAdapter(spinnerArrayAdapter);
+
+        TextView attribute = new TextView(this);
+        attribute.setText("Patient's Attributes");
+        attribute.setTypeface(null, Typeface.BOLD);
+        attribute.setPaintFlags(address.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+        addressContent.addView(attribute);
+
         Object personAttributeTypes[][] = serverService.getAllPersonAttributeTypes();
         for(Object[] personAttributeType : personAttributeTypes){
             if(String.valueOf(personAttributeType[1]).equalsIgnoreCase("java.lang.String")) {
 
                 TitledEditText attributeTextView = new TitledEditText(context, null, String.valueOf(personAttributeType[0]) + ": ", "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
-                popupContent.addView(attributeTextView);
+                attributeContent.addView(attributeTextView);
             } else if(String.valueOf(personAttributeType[1]).equalsIgnoreCase("java.lang.Integer")) {
 
                 TitledEditText attributeTextView = new TitledEditText(context, null, String.valueOf(personAttributeType[0]) + ": ", "", "", 100, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
-                popupContent.addView(attributeTextView);
+                attributeContent.addView(attributeTextView);
             } else if(String.valueOf(personAttributeType[1]).equalsIgnoreCase("java.lang.Float")) {
 
                 TitledEditText attributeTextView = new TitledEditText(context, null, String.valueOf(personAttributeType[0]) + ": ", "", "", 100, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-                popupContent.addView(attributeTextView);
+                attributeContent.addView(attributeTextView);
             } else if(String.valueOf(personAttributeType[1]).equalsIgnoreCase("java.lang.Boolean")) {
 
                 TitledRadioGroup attributeRadioGroup = new TitledRadioGroup(context, null, String.valueOf(personAttributeType[0]) + ": ", getResources().getStringArray(R.array.yes_no_options), "", App.HORIZONTAL, App.HORIZONTAL);
-                popupContent.addView(attributeRadioGroup);
+                attributeContent.addView(attributeRadioGroup);
             } else if(String.valueOf(personAttributeType[1]).equalsIgnoreCase("org.openmrs.Location")) {
 
-                LinearLayout linearLayout = new LinearLayout(this);
-                linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-                int padding = (int) getResources().getDimension(R.dimen.tiny);
-                linearLayout.setPadding(padding, padding, padding, padding);
+                LinearLayout ll = new LinearLayout(this);
+                ll.setOrientation(LinearLayout.HORIZONTAL);
+                ll.setPadding(padding, padding, padding, padding);
 
-                TextView tv = new TextView(this);
-                tv.setText(String.valueOf(personAttributeType[0]) + ": ");
-                linearLayout.addView(tv);
+                TextView tv1 = new TextView(this);
+                tv1.setText(String.valueOf(personAttributeType[0]) + ": ");
+                ll.addView(tv1);
 
                 ServerService serverService = new ServerService(getApplicationContext());
                 final Object[][] locations = serverService.getAllLocations();
@@ -1319,26 +1422,25 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 Spinner spinner = new Spinner(context, Spinner.MODE_DIALOG);
-                ArrayAdapter<String> adapterr =
+                ArrayAdapter<String> adapt =
                         new ArrayAdapter<String>(MainActivity.this,
                                 android.R.layout.simple_spinner_item, locs);
-                adapterr.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spinner.setAdapter(adapterr);
+                adapt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner.setAdapter(adapt);
 
-                linearLayout.addView(spinner);
+                ll.addView(spinner);
 
-                popupContent.addView(linearLayout);
+                attributeContent.addView(ll);
 
             }else if(String.valueOf(personAttributeType[1]).equalsIgnoreCase("org.openmrs.Concept")) {
 
-                LinearLayout linearLayout = new LinearLayout(this);
-                linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-                int padding = (int) getResources().getDimension(R.dimen.tiny);
-                linearLayout.setPadding(padding, padding, padding, padding);
+                LinearLayout ll = new LinearLayout(this);
+                ll.setOrientation(LinearLayout.HORIZONTAL);
+                ll.setPadding(padding, padding, padding, padding);
 
-                TextView tv = new TextView(this);
-                tv.setText(String.valueOf(personAttributeType[0]) + ": ");
-                linearLayout.addView(tv);
+                TextView tv1 = new TextView(this);
+                tv1.setText(String.valueOf(personAttributeType[0]) + ": ");
+                ll.addView(tv1);
 
                 String foreignKey = String.valueOf(personAttributeType[2]);
                 String conceptUuid = serverService.getConceptMappingForConceptId(foreignKey);
@@ -1350,15 +1452,15 @@ public class MainActivity extends AppCompatActivity
                     answers[i+1] = String.valueOf(conceptAnswers[i][0]);
 
                 Spinner spinner = new Spinner(context, Spinner.MODE_DIALOG);
-                ArrayAdapter<String> adapterr =
+                ArrayAdapter<String> adap =
                         new ArrayAdapter<String>(MainActivity.this,
                                 android.R.layout.simple_spinner_item, answers);
-                adapterr.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spinner.setAdapter(adapterr);
+                adap.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner.setAdapter(adap);
 
-                linearLayout.addView(spinner);
+                ll.addView(spinner);
 
-                popupContent.addView(linearLayout);
+                attributeContent.addView(ll);
             }
         }
 
@@ -1366,8 +1468,8 @@ public class MainActivity extends AppCompatActivity
 
     public static void updatePopupContent(){
 
-        for(int i = 0; i < popupContent.getChildCount(); i++){
-            View v = popupContent.getChildAt(i);
+        /*for(int i = 0; i < attributeContent.getChildCount(); i++){
+            View v = attributeContent.getChildAt(i);
             if(v instanceof TitledEditText){
 
                 String attributeType = ((TitledEditText)v).getQuestionView().getText().toString();
@@ -1419,16 +1521,16 @@ public class MainActivity extends AppCompatActivity
                 }
 
             }
-        }
+        }*/
 
     }
 
     public void savePersonAttributes(){
 
-        final HashMap<String, String> personAttribute = new HashMap<String, String>();
+        /*final HashMap<String, String> personAttribute = new HashMap<String, String>();
 
-        for(int i = 0; i < popupContent.getChildCount(); i++){
-            View v = popupContent.getChildAt(i);
+        for(int i = 0; i < attributeContent.getChildCount(); i++){
+            View v = attributeContent.getChildAt(i);
             if(v instanceof TitledEditText){
 
                 String attributeType = ((TitledEditText)v).getQuestionView().getText().toString().replace(": ","");
@@ -1618,6 +1720,7 @@ public class MainActivity extends AppCompatActivity
             }
         };
         submissionFormTask.execute("");
+        */
     }
 
 }
