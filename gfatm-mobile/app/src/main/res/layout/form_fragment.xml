@@ -15,13 +15,53 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/content_main"
             android:orientation="vertical"
-            android:padding="@dimen/activity_vertical_margin"
-            android:divider="?android:attr/dividerHorizontal"
-            android:showDividers="middle">
+            android:id="@+id/mainContent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Common"
+                android:id="@+id/common"
+                android:visibility="gone"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/common_form"
+                android:orientation="vertical"
+                android:padding="@dimen/activity_vertical_margin"
+                android:divider="?android:attr/dividerHorizontal"
+                android:showDividers="middle"
+                android:background="@drawable/summary_button"
+                android:layout_marginBottom="@dimen/tiny"
+                android:visibility="gone">
+
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Program"
+                android:id="@+id/program"
+                android:visibility="gone"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/content_main"
+                android:orientation="vertical"
+                android:padding="@dimen/activity_vertical_margin"
+                android:divider="?android:attr/dividerHorizontal"
+                android:showDividers="middle"
+                android:background="@drawable/summary_button">
+
+
+            </LinearLayout>
 
         </LinearLayout>
+
 
 
     </ScrollView>
