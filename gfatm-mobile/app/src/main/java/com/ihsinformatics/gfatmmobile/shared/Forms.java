@@ -26,6 +26,10 @@ import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbTreatmentFollowup;
 import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbTreatmentInitiation;
 import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbUltrasoundTest;
 import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbVerbalScreeningForm;
+import com.ihsinformatics.gfatmmobile.common.GeneXpertResultForm;
+import com.ihsinformatics.gfatmmobile.common.GpxSpecimenCollectionForm;
+import com.ihsinformatics.gfatmmobile.common.PatientInformationForm;
+import com.ihsinformatics.gfatmmobile.common.ScreeningChestXrayOrderAndResultForm;
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesBloodSugarForm;
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesCOPDScreeningForm;
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesCreatinineTestForm;
@@ -113,6 +117,19 @@ import java.util.ArrayList;
  */
 
 public class Forms{
+
+    /********************************
+     * Common
+     ********************************/
+    public static final String PATIENT_INFORMATION_FORM = "Patient Information";
+    public static final String GXP_SPECIMEN_COLLECTION_FORM = "GXP Specimen Collection";
+    public static final String GENEXPERT_RESULT_FORM = "GeneXpert Result Form";
+    public static final String SCREENING_CHEST_XRAY_ORDER_AND_RESULT_FORM = "Screening CXR(CAD4TB)";
+
+    public static final FormsObject patientInformationForm = new FormsObject(PATIENT_INFORMATION_FORM, PatientInformationForm.class, R.drawable.fast_presumptive_information_form, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SCREENER, Roles.FAST_SITE_MANAGER,  Roles.FAST_FIELD_SUPERVISOR});
+    public static final FormsObject gxpSpecimenCollectionForm = new FormsObject(GXP_SPECIMEN_COLLECTION_FORM, GpxSpecimenCollectionForm.class, R.drawable.pet_treatment_adherence, FormTypeColor.TEST_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_LAB_TECHNICIAN, Roles.FAST_SCREENER, Roles.FAST_SITE_MANAGER,  Roles.FAST_FIELD_SUPERVISOR});
+    public static final FormsObject geneXpertResultForm = new FormsObject(GENEXPERT_RESULT_FORM, GeneXpertResultForm.class, R.drawable.fast_result_form, FormTypeColor.TEST_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_LAB_TECHNICIAN, Roles.FAST_SITE_MANAGER,  Roles.FAST_FIELD_SUPERVISOR});
+    public static final FormsObject screeningChestXrayOrderAndResultForm = new FormsObject(SCREENING_CHEST_XRAY_ORDER_AND_RESULT_FORM, ScreeningChestXrayOrderAndResultForm.class, R.drawable.ctb_xray, FormTypeColor.TEST_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SCREENER, Roles.FAST_LAB_TECHNICIAN, Roles.FAST_SITE_MANAGER,  Roles.FAST_FIELD_SUPERVISOR});
 
     /********************************
      * PET
@@ -502,6 +519,19 @@ public class Forms{
         childhoodtbList.add(childhoodTb_end_of_followup);
 
         return childhoodtbList;
+
+    }
+
+    public static ArrayList<FormsObject> getCommonFormList() {
+
+        ArrayList<FormsObject> commonList = new ArrayList<>();
+
+        commonList.add(patientInformationForm);
+        commonList.add(gxpSpecimenCollectionForm);
+        commonList.add(geneXpertResultForm);
+        commonList.add(screeningChestXrayOrderAndResultForm);
+
+        return commonList;
 
     }
 
