@@ -781,6 +781,25 @@
     <!-- Monthly Home Follow-Up -->
     <string name="pet_followup_details">Follow-up Details - TB Symptoms</string>
     <string name="pet_adverse_event_report">Are there any adverse events?</string>
+    <string name="pet_patient_contacted">Have you been able to contact the patient?</string>
+    <string name="pet_yes_but_not_interested">Yes, but not interested</string>
+    <string-array name="pet_patient_contacted_option">
+        <item>@string/yes</item>
+        <item>@string/no</item>
+        <item>@string/pet_yes_but_not_interested</item>
+    </string-array>
+    <string name="pet_reason_patient_not_contacted">Why were you unable to contact the patient?</string>
+    <string name="pet_reason_patient_not_contacted_phone_switched_off">Phone switched off</string>
+    <string name="pet_reason_patient_not_contacted_not_responding">Phone not responding</string>
+    <string name="pet_reason_patient_not_contacted_invalid_number">Invalid / Incorrect contact number</string>
+    <string name="pet_reason_patient_not_contacted_wrong_number">Wrong Number</string>
+    <string-array name="pet_reason_patient_not_contacted_option">
+        <item>@string/pet_reason_patient_not_contacted_phone_switched_off</item>
+        <item>@string/pet_reason_patient_not_contacted_not_responding</item>
+        <item>@string/pet_reason_patient_not_contacted_invalid_number</item>
+        <item>@string/pet_reason_patient_not_contacted_wrong_number</item>
+        <item>@string/other</item>
+    </string-array>
     <string name="pet_adverse_effects">Adverse effects</string>
     <string name="pet_joint_pain">Joint pain</string>
     <string name="pet_headache">Headache</string>
