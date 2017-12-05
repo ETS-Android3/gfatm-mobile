@@ -160,17 +160,18 @@ public class ComorbiditiesMissedVisitFollowUp extends AbstractFormActivity imple
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
 //        diabetesEyeScreeningMonthOfTreatment = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.comorbidities_urinedr_month_of_treatment), getResources().getStringArray(R.array.comorbidities_followup_month), "0", App.HORIZONTAL);
-        missedVisitTreatmentRegimen = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_missed_visit_for_treatment_regimen), getResources().getStringArray(R.array.comorbidities_missed_visit_for_treatment_regimen_array), getResources().getString(R.string.comorbidities_missed_visit_for_treatment_regimen_diabetes), App.VERTICAL, App.VERTICAL);
-        missedVisitDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_missed_visit_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
+        missedVisitTreatmentRegimen = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_missed_visit_for_treatment_regimen), getResources().getStringArray(R.array.comorbidities_missed_visit_for_treatment_regimen_array), null, App.VERTICAL, App.VERTICAL);
+        missedVisitDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_missed_visit_date),/* DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()*/"", App.HORIZONTAL);
+
         returnVisitDate = new TitledButton(context, null, getResources().getString(R.string.comorbidities_return_visit_date), DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
         patientContacted = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_patient_contacted), getResources().getStringArray(R.array.comorbidities_yes_no), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL);
-        ReasonPatientNotContacted = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_reason_patient_not_contacted), getResources().getStringArray(R.array.comorbidities_reason_patient_not_contacted_array), getResources().getString(R.string.comorbidities_reason_patient_not_contacted_phone_off), App.VERTICAL, App.VERTICAL);
+        ReasonPatientNotContacted = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_reason_patient_not_contacted), getResources().getStringArray(R.array.comorbidities_reason_patient_not_contacted_array), getResources().getString(R.string.comorbidities_reason_patient_not_contacted_other_2), App.VERTICAL, App.VERTICAL);
         referralTransfer = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_referral_transfer), getResources().getStringArray(R.array.comorbidities_referral_transfer_array), getResources().getString(R.string.comorbidities_referral_transfer_options_refrell), App.VERTICAL, App.VERTICAL);
         reasonForChangingFacilityCheckBoxes = new TitledCheckBoxes(context, null, getResources().getString(R.string.comorbidities_reason_for_changing_facility), getResources().getStringArray(R.array.comorbidities_reason_for_changing_facility_array), new Boolean[]{true, false, false, false}, App.VERTICAL, App.VERTICAL);
         ReasonPatientNotContactedOther = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_reason_patient_not_contacted_other), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         referralTransferSite = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_referral_transfer_site), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        phoneCounsellingConsent = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_phone_counselling_consent_2), getResources().getStringArray(R.array.comorbidities_phone_counselling_consent_2_array), getResources().getString(R.string.comorbidities_phone_counselling_consent_2_weekly), App.VERTICAL, App.VERTICAL);
-        reasonMissedVisit = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_reason_missed_visit), getResources().getStringArray(R.array.comorbidities_reason_missed_visit_array), getResources().getString(R.string.comorbidities_reason_missed_visit_patient_relocated), App.VERTICAL, App.VERTICAL);
+        phoneCounsellingConsent = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_phone_counselling_consent_2), getResources().getStringArray(R.array.comorbidities_phone_counselling_consent_2_array), null, App.VERTICAL, App.VERTICAL);
+        reasonMissedVisit = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_reason_missed_visit), getResources().getStringArray(R.array.comorbidities_reason_missed_visit_array), null, App.VERTICAL, App.VERTICAL);
         ReasonMissedVisitOther = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_reason_missed_visit_other), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         newLocation = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_new_location), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         facilityTreatment = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_facility_treatment), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
@@ -184,7 +185,7 @@ public class ComorbiditiesMissedVisitFollowUp extends AbstractFormActivity imple
 
 
         formDate.getButton().setOnClickListener(this);
-        missedVisitDate.getButton().setOnClickListener(this);
+//        missedVisitDate.getButton().setOnClickListener(this);
         returnVisitDate.getButton().setOnClickListener(this);
         missedVisitTreatmentRegimen.getRadioGroup().setOnCheckedChangeListener(this);
         referralTransfer.getRadioGroup().setOnCheckedChangeListener(this);
@@ -193,8 +194,14 @@ public class ComorbiditiesMissedVisitFollowUp extends AbstractFormActivity imple
         phoneCounsellingConsent.getRadioGroup().setOnCheckedChangeListener(this);
         reasonMissedVisit.getRadioGroup().setOnCheckedChangeListener(this);
 
+        for (int i = 0; i < referralTransfer.getRadioGroup().getChildCount(); i++) {
+            referralTransfer.getRadioGroup().getChildAt(i).setClickable(false);
+        }
         for (CheckBox cb : reasonForChangingFacilityCheckBoxes.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
+        referralTransferSite.getEditText().setFocusable(false);
+        referralTransferSite.getEditText().setClickable(true);
+
 
         resetViews();
     }
@@ -390,7 +397,8 @@ public class ComorbiditiesMissedVisitFollowUp extends AbstractFormActivity imple
             observations.add(new String[]{"UNABLE TO CONTACT THE PATIENT",
                     App.get(ReasonPatientNotContacted).equals(getResources().getString(R.string.comorbidities_reason_patient_not_contacted_phone_off)) ? "PHONE SWITCHED OFF" :
                             (App.get(ReasonPatientNotContacted).equals(getResources().getString(R.string.comorbidities_reason_patient_not_contacted_not_responding)) ? "PATIENT DID NOT RECEIVE CALL" :
-                                    (App.get(ReasonPatientNotContacted).equals(getResources().getString(R.string.comorbidities_reason_patient_not_contacted_invalid_number)) ? "INCORRECT CONTACT NUMBER" : "OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT"))});
+                                    (App.get(ReasonPatientNotContacted).equals(getResources().getString(R.string.comorbidities_reason_patient_not_contacted_invalid_number)) ? "INCORRECT CONTACT NUMBER" :
+                                            (App.get(ReasonPatientNotContacted).equals(getResources().getString(R.string.comorbidities_reason_patient_not_contacted_wrong_number)) ? "WRONG NUMBER" : "OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT")))});
         if (ReasonPatientNotContactedOther.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT", App.get(ReasonPatientNotContactedOther)});
         if (referralTransfer.getVisibility() == View.VISIBLE)
@@ -612,6 +620,9 @@ public class ComorbiditiesMissedVisitFollowUp extends AbstractFormActivity imple
                         rb.setChecked(true);
                         break;
                     } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_reason_patient_not_contacted_invalid_number)) && obs[0][1].equals("INCORRECT CONTACT NUMBER")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_reason_patient_not_contacted_wrong_number)) && obs[0][1].equals("WRONG NUMBER")) {
                         rb.setChecked(true);
                         break;
                     } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_reason_patient_not_contacted_other_2)) && obs[0][1].equals("OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT")) {
@@ -916,11 +927,11 @@ public class ComorbiditiesMissedVisitFollowUp extends AbstractFormActivity imple
                     HashMap<String, String> result = new HashMap<String, String>();
                     String date1 = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_DIABETES_TREATMENT_INITIATION, "RETURN VISIT DATE");
                     String date2 = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_DIABETES_TREATMENT_FOLLOWUP_FORM, "RETURN VISIT DATE");
-                        diabetesDate = least(App.stringToDate(date1, "yyyy-MM-dd"), App.stringToDate(date2, "yyyy-MM-dd"));
+                    diabetesDate = least(App.stringToDate(date1, "yyyy-MM-dd"), App.stringToDate(date2, "yyyy-MM-dd"));
 
                     String datea = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_MENTAL_HEALTH_SCREENING_FORM, "RETURN VISIT DATE");
                     String dateb = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.COMORBIDITIES_TREATMENT_FOLLOWUP_MENTAL_HEALTH_FORM, "RETURN VISIT DATE");
-                        mentalHealthDate = least(App.stringToDate(datea, "yyyy-MM-dd"), App.stringToDate(dateb, "yyyy-MM-dd"));
+                    mentalHealthDate = least(App.stringToDate(datea, "yyyy-MM-dd"), App.stringToDate(dateb, "yyyy-MM-dd"));
                     return result;
                 }
 
@@ -934,10 +945,10 @@ public class ComorbiditiesMissedVisitFollowUp extends AbstractFormActivity imple
                     loading.dismiss();
                     if (diabetesDate != null) {
                         secondDateCalendar.setTime(diabetesDate);
-                        missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-                    }else{
+                       // missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+                    } else {
                         secondDateCalendar.setTime(formDateCalendar.getTime());
-                        missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        //missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
                     }
                 }
             };
@@ -1002,16 +1013,19 @@ public class ComorbiditiesMissedVisitFollowUp extends AbstractFormActivity imple
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
         if (radioGroup == patientContacted.getRadioGroup()) {
-            ReasonPatientNotContacted.getRadioGroup().getButtons().get(0).setChecked(true);
+            ReasonPatientNotContacted.getRadioGroup().getButtons().get(4).setChecked(true);
             if (patientContacted.getRadioGroupSelectedValue().equals(getResources().getString(R.string.yes))) {
                 ReasonPatientNotContacted.setVisibility(View.GONE);
+                ReasonPatientNotContactedOther.setVisibility(View.GONE);
             } else if (patientContacted.getRadioGroupSelectedValue().equals(getResources().getString(R.string.no))) {
                 ReasonPatientNotContacted.setVisibility(View.VISIBLE);
+                ReasonPatientNotContactedOther.setVisibility(View.VISIBLE);
+
 
             }
 
         } else if (radioGroup == ReasonPatientNotContacted.getRadioGroup()) {
-            if (ReasonPatientNotContacted.getRadioGroupSelectedValue().equals(getResources().getString(R.string.comorbidities_reason_patient_not_contacted_other_2))) {
+            if (ReasonPatientNotContacted.getRadioGroupSelectedValue().equals(getResources().getString(R.string.comorbidities_reason_patient_not_contacted_other_2)) && patientContacted.getRadioGroupSelectedValue().equals(getResources().getString(R.string.no))) {
                 ReasonPatientNotContactedOther.setVisibility(View.VISIBLE);
             } else {
                 ReasonPatientNotContactedOther.setVisibility(View.GONE);

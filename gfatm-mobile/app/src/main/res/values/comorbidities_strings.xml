@@ -18,11 +18,13 @@
     <string name="comorbidities_reason_patient_not_contacted_phone_off">Phone switched off</string>
     <string name="comorbidities_reason_patient_not_contacted_not_responding">Patient not responding</string>
     <string name="comorbidities_reason_patient_not_contacted_invalid_number">Invalid / incorrect contact number</string>
+    <string name="comorbidities_reason_patient_not_contacted_wrong_number">Wrong Number</string>
     <string name="comorbidities_reason_patient_not_contacted_other_2">Other</string>
     <string-array name="comorbidities_reason_patient_not_contacted_array">
         <item>@string/comorbidities_reason_patient_not_contacted_phone_off</item>
         <item>@string/comorbidities_reason_patient_not_contacted_not_responding</item>
         <item>@string/comorbidities_reason_patient_not_contacted_invalid_number</item>
+        <item>@string/comorbidities_reason_patient_not_contacted_wrong_number</item>
         <item>@string/comorbidities_reason_patient_not_contacted_other_2</item>
     </string-array>
 
