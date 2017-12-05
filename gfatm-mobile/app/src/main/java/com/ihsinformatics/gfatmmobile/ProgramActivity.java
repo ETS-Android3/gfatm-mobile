@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
 
+import com.ihsinformatics.gfatmmobile.util.ServerService;
+
 public class ProgramActivity extends AbstractSettingActivity {
 
     @Override
@@ -21,7 +23,19 @@ public class ProgramActivity extends AbstractSettingActivity {
 
         String[] programs = getResources().getStringArray(R.array.programs);
 
+        ServerService serverService = new ServerService(this);
+        String[] locatinPrograms = serverService.getLocationsProgamByName(App.getLocation());
+
         for (String pro : programs) {
+
+            if (!locatinPrograms[0].equals("Y") && pro.equals(getResources().getString(R.string.fast)))
+                continue;
+            if (!locatinPrograms[1].equals("Y") && pro.equals(getResources().getString(R.string.pet)))
+                continue;
+            if (!locatinPrograms[2].equals("Y") && pro.equals(getResources().getString(R.string.childhood_tb)))
+                continue;
+            if (!locatinPrograms[3].equals("Y") && pro.equals(getResources().getString(R.string.comorbidities)))
+                continue;
 
             RadioButton rb = new RadioButton(this);
             rb.setText(pro);
@@ -77,8 +91,6 @@ public class ProgramActivity extends AbstractSettingActivity {
                                     SharedPreferences.Editor editor = preferences.edit();
                                     editor.putString(Preferences.PROGRAM, App.getProgram());
                                     editor.apply();
-
-                                    openLocationSelectionDialog();
 
                                     onBackPressed();
                                 }
