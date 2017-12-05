@@ -42,7 +42,7 @@ public class RegexUtil {
     public static final String floatingPointPatternForThreeDecimalPlaces = "^[0-9]*.[0-9]{0,3}$";
     public static final String floatingPointPatternForTwoDecimalPlaces = "^[0-9]*.[0-9]{0,2}$";
     public static final String addressPattern ="^[-A-Za-z0-9.#&():;,'\" \\/]+";
-    public static final String otherPattern ="^[-A-Za-z0-9.#&():;,'\"+%*=!| \\/]+";
+    public static final String otherPattern ="^[-A-Za-z0-9@.#&():;,'\"+%*=!| \\/]+";
     public static final String cartridgeIdPattern = "^[-A-Za-z0-9]+";
     public static final String treatmentSupporterIdPattern = "^[0-9]{7,7}";
     public static final String otherPatternWithNewline = "^[-A-Za-z0-9.#&():;,'\"+%*=!| \r\n\\/]+";
