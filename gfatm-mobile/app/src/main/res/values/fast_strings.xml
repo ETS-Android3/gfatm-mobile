@@ -503,7 +503,21 @@
     <string name="fast_baseline_diagnostic">Baseline Diagnostic</string>
     <string name="fast_followup">Followup</string>
     <string name="fast_wrong_number">Wrong Number</string>
+    <string name="fast_pulmonary_specify">If pulmonary, Specify</string>
+    <string name="fast_gastric_nasogastric">Gastric/Nasogastric Aspirate</string>
+    <string name="fast_specify_outside">If Outside the site, specify</string>
+    <string name="fast_within_site">Within the site</string>
+    <string name="fast_outside_site">Outside the site</string>
 
+    <string-array name="fast_within_outside_site_list">
+        <item>@string/fast_within_site</item>
+        <item>@string/fast_outside_site</item>
+    </string-array>
+
+    <string-array name="fast_pulmonary_list">
+        <item>@string/fast_sputum</item>
+        <item>@string/fast_gastric_nasogastric</item>
+    </string-array>
 
     <string-array name="fast_reason_for_xray_list">
         <item>@string/fast_screening_title</item>
@@ -516,12 +530,8 @@
 
     <string-array name="fast_reason_for_xray_list_temp">
         <item>@string/fast_screening_title</item>
-        <item>@string/fast_childhood_tb_program</item>
-        <item>@string/fast_PET_tb_program</item>
-        <item>@string/fast_doctor_referral</item>
         <item>@string/fast_baseline_diagnostic</item>
         <item>@string/fast_followup</item>
-        <item>@string/fast_other_title</item>
     </string-array>
     
     <string-array name="fast_cad_score_range_list">
@@ -765,7 +775,7 @@
     </string-array>
 
     <string-array name="fast_specimen_type_list">
-        <item>@string/fast_sputum</item>
+        <item>@string/fast_pulmonary</item>
         <item>@string/fast_extra_pulmonary</item>
     </string-array>
 
