@@ -1122,9 +1122,8 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
 
     @Override
     public boolean submit() {
-
+        String ownerString = "";
         final ArrayList<String[]> observations = new ArrayList<String[]>();
-
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean saveFlag = bundle.getBoolean("save", false);
@@ -1157,8 +1156,8 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         if(cnicNumber.length() == 15)
             observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnicNumber});
 
-        if (cnicOwner.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(cnicOwner).equals(getResources().getString(R.string.fast_self)) ? "SELF" :
+        if (cnicOwner.getVisibility() == View.VISIBLE) {
+            ownerString = App.get(cnicOwner).equals(getResources().getString(R.string.fast_self)) ? "SELF" :
                     (App.get(cnicOwner).equals(getResources().getString(R.string.fast_mother)) ? "MOTHER" :
                             (App.get(cnicOwner).equals(getResources().getString(R.string.fast_father)) ? "FATHER" :
                                     (App.get(cnicOwner).equals(getResources().getString(R.string.fast_sister)) ? "SISTER" :
@@ -1171,7 +1170,9 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
                                                                                             (App.get(cnicOwner).equals(getResources().getString(R.string.fast_uncle)) ? "UNCLE" :
                                                                                                     (App.get(cnicOwner).equals(getResources().getString(R.string.fast_aunt)) ? "AUNT" :
                                                                                                             (App.get(cnicOwner).equals(getResources().getString(R.string.fast_son)) ? "SON" :
-                                                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_daughter)) ? "DAUGHTER" : "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER")))))))))))))});
+                                                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_daughter)) ? "DAUGHTER" : "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER")))))))))))));
+            observations.add(new String[]{"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", ownerString});
+        }
         if (otherCnicOwner.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(otherCnicOwner)});
 
@@ -1218,6 +1219,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         if (city.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"VILLAGE", App.get(city)});
 
+        final String finalOwnerString = ownerString;
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
             protected String doInBackground(String... params) {
@@ -1242,6 +1244,43 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
                     if (result.contains("_")) {
                         String[] successArray = result.split("_");
                         encounterId = successArray[1];
+                    }
+
+                    if (!App.get(contactExternalId).isEmpty() && App.hasKeyListener(contactExternalId)) {
+                        if(App.getPatient().getExternalId() != null) {
+                            if(!App.getPatient().getExternalId().equals("")) {
+                                if (!App.getPatient().getExternalId().equalsIgnoreCase(App.get(contactExternalId))) {
+                                    result = serverService.saveIdentifier("External ID", App.get(contactExternalId), encounterId);
+                                    if (!result.equals("SUCCESS"))
+                                        return result;
+                                }
+                            }
+                            else {
+                                result = serverService.saveIdentifier("External ID", App.get(contactExternalId), encounterId);
+                                if (!result.equals("SUCCESS"))
+                                    return result;
+                            }
+                        } else {
+                            result = serverService.saveIdentifier("External ID", App.get(contactExternalId), encounterId);
+                            if (!result.equals("SUCCESS"))
+                                return result;
+                        }
+                    }
+
+
+                    String finalCnic = App.get(cnic1)+"-"+App.get(cnic2)+"-"+App.get(cnic3);
+                    if(!finalCnic.equals("")) {
+                        result = serverService.savePersonAttributeType("National ID", finalCnic, encounterId);
+                        if (!result.equals("SUCCESS"))
+                            return result;
+                    }
+
+
+                    if(!finalOwnerString.equals("")) {
+                        String[][] cnicOwnerConcept = serverService.getConceptUuidAndDataType(finalOwnerString);
+                        result = serverService.savePersonAttributeType("National ID Owner", cnicOwnerConcept[0][0], encounterId);
+                        if (!result.equals("SUCCESS"))
+                            return result;
                     }
 
                     if (!(App.get(addressHouse).equals("") && App.get(addressStreet).equals("") && App.get(district).equals("") && App.get(nearestLandmark).equals(""))) {

@@ -885,7 +885,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
     @Override
     public boolean submit() {
         final ArrayList<String[]> observations = new ArrayList<String[]>();
-
+        String ownerString = "";
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean saveFlag = bundle.getBoolean("save", false);
@@ -917,7 +917,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         }
 
         if (cnicOwner.getVisibility() == View.VISIBLE) {
-            observations.add(new String[]{"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(cnicOwner).equals(getResources().getString(R.string.ctb_mother)) ? "MOTHER" :
+            ownerString = App.get(cnicOwner).equals(getResources().getString(R.string.ctb_mother)) ? "MOTHER" :
                     (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_father)) ? "FATHER" :
                             (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_brother)) ? "BROTHER" :
                                     (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_sister)) ? "SISTER" :
@@ -926,7 +926,9 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                                                             (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_maternal_grandfather)) ? "MATERNAL GRANDFATHER" :
                                                                     (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_maternal_grandmother)) ? "MATERNAL GRANDMOTHER" :
                                                                             (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_uncle)) ? "UNCLE" :
-                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_aunt)) ? "AUNT" : "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER")))))))))});
+                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_aunt)) ? "AUNT" : "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER")))))))));
+
+            observations.add(new String[]{"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", ownerString});
         }
         if(cnicOwnerOther.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(cnicOwnerOther)});
@@ -1044,6 +1046,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                                                                                     (App.get(secondaryLandlineContact).equals(getResources().getString(R.string.ctb_aunt)) ? "AUNT" : "OTHER FAMILY RELATION")))))))))});
         }
 
+        final String finalOwnerString = ownerString;
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
             protected String doInBackground(String... params) {
@@ -1093,6 +1096,20 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                             if (!result.equals("SUCCESS"))
                                 return result;
                         }
+                    }
+
+                    String finalCnic = App.get(cnic1)+"-"+App.get(cnic2)+"-"+App.get(cnic3);
+                    if(!finalCnic.equals("")) {
+                        result = serverService.savePersonAttributeType("National ID", finalCnic, encounterId);
+                        if (!result.equals("SUCCESS"))
+                            return result;
+                    }
+
+                    if(!finalOwnerString.equals("")) {
+                        String[][] cnicOwnerConcept = serverService.getConceptUuidAndDataType(finalOwnerString);
+                        result = serverService.savePersonAttributeType("National ID Owner", cnicOwnerConcept[0][0], encounterId);
+                        if (!result.equals("SUCCESS"))
+                            return result;
                     }
 
                     if (!(App.get(address1).equals("") && App.get(district).equals("") && App.get(nearestLandmark).equals(""))) {

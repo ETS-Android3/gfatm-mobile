@@ -281,7 +281,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(s.length()>0){
+                if(s.length()>0 && s.toString().matches("^[0-9]*.[0-9]{0,2}$")){
                     float value = Float.parseFloat(s.toString());
 
                     //CURRENT FORMULATION
@@ -399,7 +399,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
             @Override
             public void afterTextChanged(Editable s) {
 
-                if (!App.get(weight).equals("")){
+                if (!App.get(weight).equals("") && App.get(weight).matches("^[0-9]*.[0-9]{0,2}$")){
                     String percentile = serverService.getPercentile(App.get(weight));
                     weightPercentileEditText.getEditText().setText(percentile);
 
