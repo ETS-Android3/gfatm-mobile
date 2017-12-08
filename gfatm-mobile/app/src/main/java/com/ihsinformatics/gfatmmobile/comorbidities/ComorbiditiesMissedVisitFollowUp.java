@@ -422,7 +422,7 @@ public class ComorbiditiesMissedVisitFollowUp extends AbstractFormActivity imple
                                                             (App.get(reasonMissedVisit).equals(getResources().getString(R.string.comorbidities_reason_missed_visit_unwell)) ? "PATIENT UNWELL" :
                                                                     (App.get(reasonMissedVisit).equals(getResources().getString(R.string.comorbidities_reason_missed_visit_service_complaint)) ? "SERVICE COMPLAINT" :
                                                                             (App.get(reasonMissedVisit).equals(getResources().getString(R.string.comorbidities_reason_missed_visit_lack_fund)) ? "LACK OF FUNDS TO TRAVEL TO THE FACILITY" :
-                                                                                    (App.get(reasonMissedVisit).equals(getResources().getString(R.string.comorbidities_reason_missed_visit_unable_to_locate)) ? "UNABLE TO RELOCATE REFERRAL SITE" :
+                                                                                    (App.get(reasonMissedVisit).equals(getResources().getString(R.string.comorbidities_reason_missed_visit_unable_to_locate)) ? "UNABLE TO LOCATE REFERRAL SITE" :
                                                                                             (App.get(reasonMissedVisit).equals(getResources().getString(R.string.comorbidities_reason_missed_visit_want_treatment_at_parent_site)) ? "WANT TREATMENT AT PARENT SITE" : "OTHER REASON TO MISSED VISIT")))))))))});
         if (ReasonMissedVisitOther.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER REASON TO MISSED VISIT", App.get(ReasonMissedVisitOther)});
@@ -691,7 +691,7 @@ public class ComorbiditiesMissedVisitFollowUp extends AbstractFormActivity imple
                     } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_reason_missed_visit_lack_fund)) && obs[0][1].equals("LACK OF FUNDS TO TRAVEL TO THE FACILITY")) {
                         rb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_reason_missed_visit_unable_to_locate)) && obs[0][1].equals("UNABLE TO RELOCATE REFERRAL SITE")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_reason_missed_visit_unable_to_locate)) && obs[0][1].equals("UNABLE TO LOCATE REFERRAL SITE")) {
                         rb.setChecked(true);
                         break;
                     } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_reason_missed_visit_want_treatment_at_parent_site)) && obs[0][1].equals("WANT TREATMENT AT PARENT SITE")) {
