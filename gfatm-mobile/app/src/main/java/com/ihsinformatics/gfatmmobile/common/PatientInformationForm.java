@@ -646,6 +646,26 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
             error = true;
         }
 
+        if (App.get(patientSource).equals("")) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            patientSource.getQuestionView().setError(getString(R.string.invalid_value));
+            patientSource.getSpinner().requestFocus();
+            error = true;
+        }
+
+        if (otherPatientSource.getVisibility() == View.VISIBLE && App.get(otherPatientSource).equals("")) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            otherPatientSource.getEditText().setError(getString(R.string.invalid_value));
+            otherPatientSource.getEditText().requestFocus();
+            error = true;
+        }
+
       /*  if (contactExternalId.getVisibility() == View.VISIBLE && contactExternalId.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
@@ -1137,7 +1157,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
-            }else {
+            } else {
                 endTime = new Date();
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
@@ -1150,33 +1170,48 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
 
-        String cnicNumber = cnic1.getText().toString() +"-"+ cnic2.getText().toString() +"-"+ cnic3.getText().toString();
-        final String mobileNumber = mobile1.getText().toString() +"-"+ mobile2.getText().toString();
-        final String secondaryMobileNumber = secondaryMobile1.getText().toString() +"-"+ secondaryMobile2.getText().toString();
-        final String landlineNumber = landline1.getText().toString() +"-"+ landline2.getText().toString();
-        final String secondaryLandlineLinearLayout = secondaryLandline1.getText().toString() +"-"+ secondaryLandline2.getText().toString();
+        final String cnicNumber = cnic1.getText().toString() + "-" + cnic2.getText().toString() + "-" + cnic3.getText().toString();
+        final String mobileNumber = mobile1.getText().toString() + "-" + mobile2.getText().toString();
+        final String secondaryMobileNumber = secondaryMobile1.getText().toString() + "-" + secondaryMobile2.getText().toString();
+        final String landlineNumber = landline1.getText().toString() + "-" + landline2.getText().toString();
+        final String secondaryLandlineLinearLayout = secondaryLandline1.getText().toString() + "-" + secondaryLandline2.getText().toString();
 
         if (contactExternalId.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"CONTACT EXTERNAL ID", App.get(contactExternalId)});
 
-        if(cnicNumber.length() == 15)
+        final String finalSource = App.get(patientSource).equals(getResources().getString(R.string.screening)) ? "IDENTIFIED PATIENT THROUGH SCREENING" :
+                (App.get(patientSource).equals(getResources().getString(R.string.referred)) ? "PATIENT REFERRED" :
+                        (App.get(patientSource).equals(getResources().getString(R.string.contact_patient)) ? "TUBERCULOSIS CONTACT" :
+                                (App.get(patientSource).equals(getResources().getString(R.string.walkin)) ? "WALK IN" : "OTHER PATIENT SOURCE")));
+        observations.add(new String[]{"PATIENT SOURCE", finalSource});
+
+        if(otherPatientSource.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"OTHER PATIENT SOURCE", App.get(otherPatientSource)});
+
+        if (cnicNumber.length() == 15)
             observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnicNumber});
 
-        if (cnicOwner.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(cnicOwner).equals(getResources().getString(R.string.fast_self)) ? "SELF" :
-                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_mother)) ? "MOTHER" :
-                            (App.get(cnicOwner).equals(getResources().getString(R.string.fast_father)) ? "FATHER" :
-                                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_sister)) ? "SISTER" :
-                                            (App.get(cnicOwner).equals(getResources().getString(R.string.fast_brother)) ? "BROTHER" :
-                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_spouse)) ? "SPOUSE" :
-                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.fast_paternal_grandfather)) ? "PATERNAL GRANDFATHER" :
-                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_paternal_grandmother)) ? "PATERNAL GRANDMOTHER" :
-                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.fast_maternal_grandfather)) ? "MATERNAL GRANDFATHER" :
-                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_maternal_grandmother)) ? "MATERNAL GRANDMOTHER" :
-                                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.fast_uncle)) ? "UNCLE" :
-                                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_aunt)) ? "AUNT" :
-                                                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.fast_son)) ? "SON" :
-                                                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_daughter)) ? "DAUGHTER" : "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER")))))))))))))});
+        String ownerString = "";
+        if (cnicOwner.getVisibility() == View.VISIBLE){
+            ownerString = App.get(cnicOwner).equals(getResources().getString(R.string.pet_self)) ? "SELF" :
+                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_mother)) ? "MOTHER" :
+                            (App.get(cnicOwner).equals(getResources().getString(R.string.pet_father)) ? "FATHER" :
+                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_maternal_grandmother)) ? "MATERNAL GRANDMOTHER" :
+                                            (App.get(cnicOwner).equals(getResources().getString(R.string.pet_maternal_grandfather)) ? "MATERNAL GRANDFATHER" :
+                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_paternal_grandmother)) ? "PATERNAL GRANDMOTHER" :
+                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.pet_paternal_grandfather)) ? "PATERNAL GRANDFATHER" :
+                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_brother)) ? "BROTHER" :
+                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.pet_sister)) ? "SISTER" :
+                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_son)) ? "SON" :
+                                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.pet_daughter)) ? "DAUGHTER" :
+                                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_spouse)) ? "SPOUSE" :
+                                                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.pet_aunt)) ? "AUNT" :
+                                                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_uncle)) ? "UNCLE" : "OTHER FAMILY MEMBER")))))))))))));
+
+
+            observations.add(new String[]{"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", ownerString});
+        }
+        final String finalOwnerString = ownerString;
         if (otherCnicOwner.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(otherCnicOwner)});
 
@@ -1237,7 +1272,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("Presumptive Information", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
+                String result = serverService.saveEncounterAndObservation("FAST-"+"Presumptive Information", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (!result.contains("SUCCESS"))
                     return result;
                 else {
@@ -1273,6 +1308,26 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
                     if (!(App.get(secondaryLandline1).isEmpty() && App.get(secondaryLandline2).isEmpty())) {
                         result = serverService.savePersonAttributeType("Quaternary Contact", secondaryLandlineLinearLayout, encounterId);
+                        if (!result.equals("SUCCESS"))
+                            return result;
+                    }
+
+                    if(!cnicNumber.equals("")) {
+                        result = serverService.savePersonAttributeType("National ID", cnicNumber, encounterId);
+                        if (!result.equals("SUCCESS"))
+                            return result;
+                    }
+
+                    if(!finalOwnerString.equals("")) {
+                        String[][] cnicOwnerConcept = serverService.getConceptUuidAndDataType(finalOwnerString);
+                        result = serverService.savePersonAttributeType("National ID Owner", cnicOwnerConcept[0][0], encounterId);
+                        if (!result.equals("SUCCESS"))
+                            return result;
+                    }
+
+                    if(!finalSource.equals("")) {
+                        String[][] finalSourceConcept = serverService.getConceptUuidAndDataType(finalSource);
+                        result = serverService.savePersonAttributeType("Source type", finalSourceConcept[0][0], encounterId);
                         if (!result.equals("SUCCESS"))
                             return result;
                     }
@@ -1399,6 +1454,19 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
             String[][] obs = obsValue.get(i);
             if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
                 timeTakeToFill = obs[0][1];
+            }
+            else if (obs[0][0].equals("PATIENT SOURCE")) {
+                final String source = obs[0][1].equals(getResources().getString(R.string.screening)) ? "IDENTIFIED PATIENT THROUGH SCREENING" :
+                        (obs[0][1].equals(getResources().getString(R.string.referred)) ? "PATIENT REFERRED" :
+                                (obs[0][1].equals(getResources().getString(R.string.contact_patient)) ? "TUBERCULOSIS CONTACT" :
+                                        (obs[0][1].equals(getResources().getString(R.string.walkin)) ? "WALK IN" : "OTHER PATIENT SOURCE")));
+
+                patientSource.getSpinner().selectValue(source);
+                patientSource.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("OTHER PATIENT SOURCE")) {
+                otherPatientSource.getEditText().setText(obs[0][1]);
+                otherPatientSource.setVisibility(View.VISIBLE);
             }
             else if (obs[0][0].equals("CONTACT EXTERNAL ID")) {
                 contactExternalId.getEditText().setText(obs[0][1]);

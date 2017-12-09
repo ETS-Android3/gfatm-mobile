@@ -48,6 +48,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
+/**
+ * Created by Haris on 1/24/2017.
+ */
+
 public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener{
     Context context;
 
@@ -55,13 +59,15 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
     boolean emptyError = false;
     Boolean dateChoose = false;
 
+
+
     // Views...
     TitledButton formDate;
     TitledRadioGroup pastXray;
     TitledRadioGroup pregnancyHistory;
     MyTextView cxrResultTitle;
     MyTextView cxrOrderTitle;
-    TitledRadioGroup screenXrayType;
+    TitledCheckBoxes screenXrayType;
     TitledRadioGroup formType;
     TitledSpinner monthOfTreatment;
     //  TitledButton testDate;
@@ -72,14 +78,13 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
     TitledEditText abnormalDetailedDiagnosisOther;
     TitledRadioGroup extentOfDisease;
     TitledEditText radiologistRemarks;
-  //  ImageView testIdView;
-  //  LinearLayout linearLayout;
+    //  ImageView testIdView;
+    //  LinearLayout linearLayout;
 
     TitledSpinner orderIds;
     TitledEditText orderId;
 
     TitledSpinner reasonForXray;
-    TitledEditText otherReasonForXray;
     TitledRadioGroup cadScoreRange;
     TitledRadioGroup presumptiveTbCxr;
     TitledButton returnVisitDate;
@@ -161,7 +166,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
         formType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_select_form_type), getResources().getStringArray(R.array.fast_order_and_result_list), "", App.HORIZONTAL, App.HORIZONTAL);
         cxrOrderTitle = new MyTextView(context, getResources().getString(R.string.fast_cxr_order_title));
         cxrOrderTitle.setTypeface(null, Typeface.BOLD);
-        screenXrayType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_what_type_of_xray_is_this), getResources().getStringArray(R.array.fast_type_of_xray_is_this_list),"", App.VERTICAL, App.VERTICAL, true);
+        screenXrayType = new TitledCheckBoxes(context, null, getResources().getString(R.string.fast_what_type_of_xray_is_this), getResources().getStringArray(R.array.fast_type_of_xray_is_this_list),null, App.VERTICAL, App.VERTICAL, true);
         monthOfTreatment = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_month_of_treatment), getResources().getStringArray(R.array.fast_number_list), "", App.VERTICAL);
         updateFollowUpMonth();
         //   testDate = new TitledButton(context, null, getResources().getString(R.string.fast_test_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
@@ -174,26 +179,25 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
         extentOfDisease = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_extent_of_desease), getResources().getStringArray(R.array.fast_extent_of_disease_list), getResources().getString(R.string.fast_normal), App.VERTICAL, App.VERTICAL, true);
         radiologistRemarks = new TitledEditText(context, null, getResources().getString(R.string.fast_radiologist_remarks), "", "", 500, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         orderId = new TitledEditText(context, null, getResources().getString(R.string.order_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-       // orderId.setLongClickable(false);
+        // orderId.setLongClickable(false);
         orderIds = new TitledSpinner(context, "", getResources().getString(R.string.order_id), getResources().getStringArray(R.array.pet_empty_array), "", App.HORIZONTAL);
 
-        reasonForXray = new TitledSpinner(context, "", getResources().getString(R.string.fast_reason_for_xray), getResources().getStringArray(R.array.fast_reason_for_xray_list), "", App.VERTICAL, true);
-        otherReasonForXray = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        reasonForXray = new TitledSpinner(context, "", getResources().getString(R.string.fast_reason_for_xray), getResources().getStringArray(R.array.fast_reason_for_xray_list_temp), "", App.VERTICAL, true);
         cadScoreRange = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_cad_score_range), getResources().getStringArray(R.array.fast_cad_score_range_list), "", App.VERTICAL, App.VERTICAL, true);
         presumptiveTbCxr = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_presumptive_tb_score_through_cxr), getResources().getStringArray(R.array.fast_yes_no_list), "", App.VERTICAL, App.VERTICAL, true);
         presumptiveTbCxr.getRadioGroup().setOnKeyListener(null);
         presumptiveTbCxr.getRadioGroup().setFocusable(false);
         returnVisitDate = new TitledButton(context, null, getResources().getString(R.string.fast_next_appointment_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), formType.getRadioGroup(), testId.getEditText(), screenXrayType.getRadioGroup(),
+        views = new View[]{formDate.getButton(), formType.getRadioGroup(), testId.getEditText(),
                 monthOfTreatment.getSpinner(), radiologicalDiagnosis.getRadioGroup(), cat4tbScore.getEditText(), abnormalDetailedDiagnosis,
                 abnormalDetailedDiagnosisOther.getEditText(), extentOfDisease.getRadioGroup(), radiologistRemarks.getEditText()
-        , orderId.getEditText(), orderIds.getSpinner(), reasonForXray.getSpinner(), otherReasonForXray.getEditText(), cadScoreRange.getRadioGroup()
-        , presumptiveTbCxr.getRadioGroup(),returnVisitDate.getButton()};
+                , orderId.getEditText(), orderIds.getSpinner(), reasonForXray.getSpinner(), cadScoreRange.getRadioGroup()
+                , presumptiveTbCxr.getRadioGroup(),returnVisitDate.getButton()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formType, formDate, cxrOrderTitle,  pastXray, pregnancyHistory, reasonForXray, otherReasonForXray, orderId,  screenXrayType, monthOfTreatment, cxrResultTitle, orderIds, testId, cat4tbScore,cadScoreRange, radiologicalDiagnosis,
+                {{formType, formDate, cxrOrderTitle,  pastXray, pregnancyHistory, reasonForXray,orderId,  screenXrayType, monthOfTreatment, cxrResultTitle, orderIds, testId, cat4tbScore,cadScoreRange, radiologicalDiagnosis,
                         abnormalDetailedDiagnosis, abnormalDetailedDiagnosisOther, extentOfDisease, radiologistRemarks,presumptiveTbCxr,returnVisitDate}};
 
         formDate.getButton().setOnClickListener(this);
@@ -205,6 +209,10 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
         pregnancyHistory.getRadioGroup().setOnCheckedChangeListener(this);
         orderIds.getSpinner().setOnItemSelectedListener(this);
         returnVisitDate.getButton().setOnClickListener(this);
+
+
+        for (CheckBox cb : screenXrayType.getCheckedBoxes())
+            cb.setOnCheckedChangeListener(this);
 
         for (CheckBox cb : abnormalDetailedDiagnosis.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
@@ -278,7 +286,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                 if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.fast_result))) {
 
                     if (!App.get(orderIds).equals("")) {
-                        String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), App.getProgram() + "-" + "Screening CXR Test Order", "ORDER ID", App.get(orderIds));
+                        String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), "FAST-" + "Screening CXR Test Order", "ORDER ID", App.get(orderIds));
 
                         String format = "";
                         if (encounterDateTime.contains("/")) {
@@ -307,7 +315,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
 
                     }
                 } else if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.fast_order))) {
-                    String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+                    String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), "FAST-" + "Treatment Initiation", "REGISTRATION DATE");
                     if (treatmentDate != null) {
                         treatDateCalender = App.getCalendar(App.stringToDate(treatmentDate, "yyyy-MM-dd"));
                         if (formDateCalendar.before(treatDateCalender)) {
@@ -333,7 +341,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
             if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.fast_result))) {
 
                 if (!App.get(orderIds).equals("")) {
-                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), App.getProgram() + "-" + "Screening CXR Test Order", "ORDER ID", App.get(orderIds));
+                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), "FAST-" + "Screening CXR Test Order", "ORDER ID", App.get(orderIds));
 
                     String format = "";
                     if (encounterDateTime.contains("/")) {
@@ -410,7 +418,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
 
     public void updateFollowUpMonth() {
 
-        String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+        String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), "FAST-" + "Treatment Initiation", "REGISTRATION DATE");
         String format = "";
         String[] monthArray;
 
@@ -530,24 +538,17 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
             error = true;
         }
 
-
-        if (otherReasonForXray.getVisibility() == View.VISIBLE && otherReasonForXray.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            otherReasonForXray.getEditText().setError(getString(R.string.empty_field));
-            otherReasonForXray.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (screenXrayType.getVisibility() == View.VISIBLE && App.get(screenXrayType).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            emptyError = true;
-            error = true;
+        if (screenXrayType.getVisibility() == View.VISIBLE) {
+            for(CheckBox cb : screenXrayType.getCheckedBoxes()){
+                if(cb.isChecked()){
+                    isChecked = true;
+                }
+            }
+            if(isChecked==false){
+                screenXrayType.getQuestionView().setError(getResources().getString(R.string.empty_field));
+                emptyError = true;
+                error = true;
+            }
         }
 
         if (radiologicalDiagnosis.getVisibility() == View.VISIBLE && App.get(radiologicalDiagnosis).isEmpty()) {
@@ -596,7 +597,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
 
 
         if (orderIds.getVisibility() == View.VISIBLE && flag) {
-            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Screening CXR Test Result", "ORDER ID");
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), "FAST-" + "Screening CXR Test Result", "ORDER ID");
             if (resultTestIds != null) {
                 for (String id : resultTestIds) {
 
@@ -627,7 +628,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
         }
 
         if (testId.getVisibility() == View.VISIBLE && flag) {
-            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Screening CXR Test Result", "TEST ID");
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), "FAST-" + "Screening CXR Test Result", "TEST ID");
             if (resultTestIds != null) {
                 for (String id : resultTestIds) {
                     if (id.equals(App.get(testId))) {
@@ -736,16 +737,19 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
 
             if (reasonForXray.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"REASON FOR X-RAY", App.get(reasonForXray).equals(getResources().getString(R.string.fast_screening_title)) ? "IDENTIFIED PATIENT THROUGH SCREENING" :
-                        (App.get(reasonForXray).equals(getResources().getString(R.string.fast_childhood_tb_program)) ? "CHILDHOOD-TB PROGRAM" :
-                                (App.get(reasonForXray).equals(getResources().getString(R.string.fast_PET_tb_program)) ? "TUBERCULOSIS CONTACT" :
-                                        (App.get(reasonForXray).equals(getResources().getString(R.string.fast_doctor_referral)) ? "DOCTOR REFERRAL" : "OTHER REASON FOR X-RAY")))});
+                        (App.get(reasonForXray).equals(getResources().getString(R.string.fast_baseline_diagnostic)) ? "BASELINE DIAGNOSTIC" :
+                                "FOLLOW UP")});
 
-            if (otherReasonForXray.getVisibility() == View.VISIBLE) {
-                observations.add(new String[]{"OTHER REASON FOR X-RAY", App.get(otherReasonForXray)});
+            if (screenXrayType.getVisibility() == View.VISIBLE){
+                String screenXrayTypeString = "";
+                for (CheckBox cb : screenXrayType.getCheckedBoxes()) {
+                    if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_chest_xray_cad4tb)))
+                        screenXrayTypeString = screenXrayTypeString + "CHEST XRAY" + " ; ";
+                    else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_chest_xray_other)))
+                        screenXrayTypeString = screenXrayTypeString + "X-RAY, OTHER" + " ; ";
+                }
+                observations.add(new String[]{"TYPE OF X RAY", screenXrayTypeString});
             }
-
-            if (screenXrayType.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"TYPE OF X RAY", App.get(screenXrayType).equals(getResources().getString(R.string.fast_chest_xray_cad4tb)) ? "CHEST XRAY" : "X-RAY, OTHER"});
             if (monthOfTreatment.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"FOLLOW-UP MONTH", monthOfTreatment.getSpinner().getSelectedItem().toString()});
             if (formDate.getVisibility() == View.VISIBLE)
@@ -833,11 +837,11 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                 String result = "";
 
                 if (App.get(formType).equals(getResources().getString(R.string.fast_order))) {
-                    result = serverService.saveEncounterAndObservation("Screening CXR Test Order", FORM, formDateCalendar, observations.toArray(new String[][]{}), true);
+                    result = serverService.saveEncounterAndObservation("FAST-Screening CXR Test Order", FORM, formDateCalendar, observations.toArray(new String[][]{}), true);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 } else if (App.get(formType).equals(getResources().getString(R.string.fast_result))) {
-                    result = serverService.saveEncounterAndObservation("Screening CXR Test Result", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
+                    result = serverService.saveEncounterAndObservation("FAST-Screening CXR Test Result", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 }
@@ -954,17 +958,10 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
         if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_order))) {
 
             cxrOrderTitle.setVisibility(View.VISIBLE);
-           // formDate.getQuestionView().setText(getResources().getString(R.string.fast_test_date));
+            // formDate.getQuestionView().setText(getResources().getString(R.string.fast_test_date));
             screenXrayType.setVisibility(View.VISIBLE);
             monthOfTreatment.setVisibility(View.VISIBLE);
             reasonForXray.setVisibility(View.VISIBLE);
-            if(reasonForXray.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))){
-                otherReasonForXray.setVisibility(View.VISIBLE);
-            }
-            else{
-                otherReasonForXray.setVisibility(View.GONE);
-            }
-            //   testDate.setVisibility(View.VISIBLE);
 
             cxrResultTitle.setVisibility(View.GONE);
             cat4tbScore.setVisibility(View.GONE);
@@ -984,7 +981,6 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
             orderId.setOnKeyListener(null);
             orderId.getEditText().setFocusable(false);
 
-            screenXrayType.getRadioGroup().selectDefaultValue();
             monthOfTreatment.getSpinner().selectDefaultValue();
             updateFollowUpMonth();
 
@@ -995,7 +991,6 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
             pastXray.setVisibility(View.GONE);
             pregnancyHistory.setVisibility(View.GONE);
             reasonForXray.setVisibility(View.GONE);
-            otherReasonForXray.setVisibility(View.GONE);
             cxrResultTitle.setVisibility(View.VISIBLE);
             presumptiveTbCxr.setVisibility(View.VISIBLE);
             radiologistRemarks.setVisibility(View.VISIBLE);
@@ -1021,38 +1016,59 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                 }
             }
 
-            String value = serverService.getObsValueByObs(App.getPatientId(), App.getProgram() + "-" + "Screening CXR Test Order", "ORDER ID", App.get(orderIds),"TYPE OF X RAY");
-            if(value != null && formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result))&& value.equals("CHEST XRAY")){
-                cat4tbScore.setVisibility(View.VISIBLE);
-                cadScoreRange.setVisibility(View.VISIBLE);
+            String value = serverService.getObsValueByObs(App.getPatientId(), "FAST-" + "Screening CXR Test Order", "ORDER ID", App.get(orderIds),"TYPE OF X RAY");
+            if(value != null){
+                if(formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result))){
+                    if(value.contains("CHEST XRAY") && value.contains("X-RAY, OTHER")){
+                        cat4tbScore.setVisibility(View.VISIBLE);
+                        cadScoreRange.setVisibility(View.VISIBLE);
 
-                radiologicalDiagnosis.setVisibility(View.GONE);
-                extentOfDisease.setVisibility(View.GONE);
-                abnormalDetailedDiagnosis.setVisibility(View.GONE);
-                abnormalDetailedDiagnosisOther.setVisibility(View.GONE);
-            }else{
-                cat4tbScore.setVisibility(View.GONE);
-                cadScoreRange.setVisibility(View.GONE);
-
-                radiologicalDiagnosis.setVisibility(View.VISIBLE);
-                if (radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_not_suggestive_of_tb))) {
-                    abnormalDetailedDiagnosis.setVisibility(View.VISIBLE);
-                    for (CheckBox cb : abnormalDetailedDiagnosis.getCheckedBoxes()) {
-                        if (App.get(cb).equals(getResources().getString(R.string.fast_others))) {
-                            if (cb.isChecked()) {
-                                abnormalDetailedDiagnosisOther.setVisibility(View.VISIBLE);
-                            } else {
-                                abnormalDetailedDiagnosisOther.setVisibility(View.GONE);
+                        radiologicalDiagnosis.setVisibility(View.VISIBLE);
+                        if (radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_not_suggestive_of_tb))) {
+                            abnormalDetailedDiagnosis.setVisibility(View.VISIBLE);
+                            for (CheckBox cb : abnormalDetailedDiagnosis.getCheckedBoxes()) {
+                                if (App.get(cb).equals(getResources().getString(R.string.fast_others))) {
+                                    if (cb.isChecked()) {
+                                        abnormalDetailedDiagnosisOther.setVisibility(View.VISIBLE);
+                                    } else {
+                                        abnormalDetailedDiagnosisOther.setVisibility(View.GONE);
+                                    }
+                                }
                             }
                         }
+                        extentOfDisease.setVisibility(View.VISIBLE);
+
+                    }
+                    else if(value.equals("CHEST XRAY")){
+                        cat4tbScore.setVisibility(View.VISIBLE);
+                        cadScoreRange.setVisibility(View.VISIBLE);
+
+                        radiologicalDiagnosis.setVisibility(View.GONE);
+                        extentOfDisease.setVisibility(View.GONE);
+                        abnormalDetailedDiagnosis.setVisibility(View.GONE);
+                        abnormalDetailedDiagnosisOther.setVisibility(View.GONE);
+                    }
+                    else if(value.equals("X-RAY, OTHER")) {
+                        cat4tbScore.setVisibility(View.GONE);
+                        cadScoreRange.setVisibility(View.GONE);
+
+                        radiologicalDiagnosis.setVisibility(View.VISIBLE);
+                        if (radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_not_suggestive_of_tb))) {
+                            abnormalDetailedDiagnosis.setVisibility(View.VISIBLE);
+                            for (CheckBox cb : abnormalDetailedDiagnosis.getCheckedBoxes()) {
+                                if (App.get(cb).equals(getResources().getString(R.string.fast_others))) {
+                                    if (cb.isChecked()) {
+                                        abnormalDetailedDiagnosisOther.setVisibility(View.VISIBLE);
+                                    } else {
+                                        abnormalDetailedDiagnosisOther.setVisibility(View.GONE);
+                                    }
+                                }
+                            }
+                        }
+                        extentOfDisease.setVisibility(View.VISIBLE);
                     }
                 }
-                extentOfDisease.setVisibility(View.VISIBLE);
-            }
-
-
-
-            if(cadScoreRange.getRadioGroup().equals(getResources().getString(R.string.fast_70_100_abnormal)) ||
+            }if(cadScoreRange.getRadioGroup().equals(getResources().getString(R.string.fast_70_100_abnormal)) ||
                     radiologicalDiagnosis.getRadioGroup().equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb))
                     || radiologicalDiagnosis.getRadioGroup().equals(getResources().getString(R.string.fast_abnormal_not_suggestive_of_tb))){
                 for (RadioButton rb : presumptiveTbCxr.getRadioGroup().getButtons()) {
@@ -1080,7 +1096,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
             radiologistRemarks.getEditText().setDefaultValue();
             abnormalDetailedDiagnosis.selectDefaultValue();
 
-            String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Screening CXR Test Order", "ORDER ID");
+            String[] testIds = serverService.getAllObsValues(App.getPatientId(), "FAST-" + "Screening CXR Test Order", "ORDER ID");
 
             if (testIds == null || testIds.length == 0) {
                 final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
@@ -1132,7 +1148,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
             if (fo.getFormName().contains("Order")) {
                 formType.getRadioGroup().getButtons().get(0).setChecked(true);
                 formType.getRadioGroup().getButtons().get(1).setEnabled(false);
-              //  testIdView.setImageResource(R.drawable.ic_checked_green);
+                //  testIdView.setImageResource(R.drawable.ic_checked_green);
 
                 if(obs[0][0].equals("ORDER ID")){
                     orderId.getEditText().setText(obs[0][1]);
@@ -1144,7 +1160,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                     for (RadioButton rb : pastXray.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
                             testId.getEditText().setEnabled(true);
-                       //     testIdView.setEnabled(true);
+                            //     testIdView.setEnabled(true);
                             rb.setChecked(true);
                             break;
                         } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
@@ -1159,7 +1175,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                     for (RadioButton rb : pregnancyHistory.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
                             testId.getEditText().setEnabled(true);
-                          //  testIdView.setEnabled(true);
+                            //  testIdView.setEnabled(true);
                             rb.setChecked(true);
                             break;
                         } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
@@ -1172,25 +1188,20 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
 
                 else if (obs[0][0].equals("REASON FOR X-RAY")) {
                     String value = obs[0][1].equals("IDENTIFIED PATIENT THROUGH SCREENING") ? getResources().getString(R.string.fast_screening_title) :
-                            (obs[0][1].equals("CHILDHOOD-TB PROGRAM") ? getResources().getString(R.string.fast_childhood_tb_program) :
-                                    (obs[0][1].equals("TUBERCULOSIS CONTACT") ? getResources().getString(R.string.fast_PET_tb_program) :
-                                            (obs[0][1].equals("DOCTOR REFERRAL") ? getResources().getString(R.string.fast_doctor_referral) : getResources().getString(R.string.fast_other_title))));
+                            (obs[0][1].equals("BASELINE DIAGNOSTIC") ? getResources().getString(R.string.fast_baseline_diagnostic) :
+                                    (obs[0][1].equals("FOLLOW UP") ? getResources().getString(R.string.fast_followup) :getResources().getString(R.string.fast_other_title)));
 
                     reasonForXray.getSpinner().selectValue(value);
                     reasonForXray.setVisibility(View.VISIBLE);
                 }
 
-                else if (obs[0][0].equals("OTHER REASON FOR X-RAY")) {
-                    otherReasonForXray.getEditText().setText(obs[0][1]);
-                }
-
                 else if (obs[0][0].equals("TYPE OF X RAY")) {
-                    for (RadioButton rb : screenXrayType.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.fast_chest_xray_cad4tb)) && obs[0][1].equals("CHEST XRAY")) {
-                            rb.setChecked(true);
+                    for (CheckBox cb : screenXrayType.getCheckedBoxes()) {
+                        if (cb.getText().equals(getResources().getString(R.string.fast_chest_xray_cad4tb)) && obs[0][1].equals("CHEST XRAY")) {
+                            cb.setChecked(true);
                             break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_chest_xray_other)) && obs[0][1].equals("X-RAY, OTHER")) {
-                            rb.setChecked(true);
+                        } else if (cb.getText().equals(getResources().getString(R.string.fast_chest_xray_other)) && obs[0][1].equals("X-RAY, OTHER")) {
+                            cb.setChecked(true);
                             break;
                         }
                     }
@@ -1213,9 +1224,9 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                 if (obs[0][0].equals("TEST ID")) {
                     testId.getEditText().setText(obs[0][1]);
                     testId.getEditText().setEnabled(false);
-                //    testIdView.setEnabled(false);
-                //    testIdView.setImageResource(R.drawable.ic_checked);
-                //    checkTestId();
+                    //    testIdView.setEnabled(false);
+                    //    testIdView.setImageResource(R.drawable.ic_checked);
+                    //    checkTestId();
                 }
                 else if (obs[0][0].equals("CAD4TB SCORE RANGE")) {
                     for (RadioButton rb : cadScoreRange.getRadioGroup().getButtons()) {
@@ -1335,8 +1346,8 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
             args.putBoolean("allowFutureDate", false);
         }
 
-       if (view == returnVisitDate.getButton()) {
-           returnVisitDate.getButton().setEnabled(false);
+        if (view == returnVisitDate.getButton()) {
+            returnVisitDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             secondDateFragment.setArguments(args);
@@ -1345,7 +1356,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
             args.putBoolean("allowFutureDate", true);
             dateChoose = true;
 
-       }
+        }
     }
 
     @Override
@@ -1356,6 +1367,8 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        screenXrayType.getQuestionView().setError(null);
+        abnormalDetailedDiagnosis.getQuestionView().setError(null);
         for (CheckBox cb : abnormalDetailedDiagnosis.getCheckedBoxes()) {
             if (App.get(cb).equals(getResources().getString(R.string.fast_others))) {
                 if (cb.isChecked()) {
@@ -1375,16 +1388,16 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
         pastXray.setVisibility(View.GONE);
         pregnancyHistory.setVisibility(View.GONE);
         presumptiveTbCxr.setEnabled(false);
-      //  testIdView.setVisibility(View.GONE);
+        //  testIdView.setVisibility(View.GONE);
         testId.setVisibility(View.GONE);
-     //   testIdView.setImageResource(R.drawable.ic_checked);
+        //   testIdView.setImageResource(R.drawable.ic_checked);
         goneVisibility();
         submitButton.setEnabled(false);
 
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
-        String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Screening CXR Test Order", "ORDER ID");
+        String[] testIds = serverService.getAllObsValues(App.getPatientId(), "FAST-" + "Screening CXR Test Order", "ORDER ID");
         if(testIds != null) {
             orderIds.getSpinner().setSpinnerData(testIds);
         }
@@ -1414,10 +1427,6 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
         screenXrayType.setVisibility(View.GONE);
         monthOfTreatment.setVisibility(View.GONE);
         reasonForXray.setVisibility(View.GONE);
-        otherReasonForXray.setVisibility(View.GONE);
-
-
-
         // testDate.setVisibility(View.GONE);
         cxrResultTitle.setVisibility(View.GONE);
         cat4tbScore.setVisibility(View.GONE);
@@ -1439,40 +1448,59 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         MySpinner spinner = (MySpinner) parent;
-
-        if (spinner == reasonForXray.getSpinner()) {
-            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title))) {
-                otherReasonForXray.setVisibility(View.VISIBLE);
-            } else {
-                otherReasonForXray.setVisibility(View.GONE);
-            }
-        }
-
         if (spinner == orderIds.getSpinner()) {
-            String value = serverService.getObsValueByObs(App.getPatientId(), App.getProgram() + "-" + "Screening CXR Test Order", "ORDER ID", App.get(orderIds),"TYPE OF X RAY");
-            if(value != null && formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result))&& value.equals("CHEST XRAY")){
-                cat4tbScore.setVisibility(View.VISIBLE);
+            String value = serverService.getObsValueByObs(App.getPatientId(), "FAST-" + "Screening CXR Test Order", "ORDER ID", App.get(orderIds),"TYPE OF X RAY");
+            if(value != null){
+                if(formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result))){
+                    if(value.contains("CHEST XRAY") && value.contains("X-RAY, OTHER")){
+                        cat4tbScore.setVisibility(View.VISIBLE);
+                        cadScoreRange.setVisibility(View.VISIBLE);
 
-                radiologicalDiagnosis.setVisibility(View.GONE);
-                extentOfDisease.setVisibility(View.GONE);
-                abnormalDetailedDiagnosis.setVisibility(View.GONE);
-                abnormalDetailedDiagnosisOther.setVisibility(View.GONE);
-            }else{
-                cat4tbScore.setVisibility(View.GONE);
-                radiologicalDiagnosis.setVisibility(View.VISIBLE);
-                if (radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_not_suggestive_of_tb))) {
-                    abnormalDetailedDiagnosis.setVisibility(View.VISIBLE);
-                    for (CheckBox cb : abnormalDetailedDiagnosis.getCheckedBoxes()) {
-                        if (App.get(cb).equals(getResources().getString(R.string.fast_others))) {
-                            if (cb.isChecked()) {
-                                abnormalDetailedDiagnosisOther.setVisibility(View.VISIBLE);
-                            } else {
-                                abnormalDetailedDiagnosisOther.setVisibility(View.GONE);
+                        radiologicalDiagnosis.setVisibility(View.VISIBLE);
+                        if (radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_not_suggestive_of_tb))) {
+                            abnormalDetailedDiagnosis.setVisibility(View.VISIBLE);
+                            for (CheckBox cb : abnormalDetailedDiagnosis.getCheckedBoxes()) {
+                                if (App.get(cb).equals(getResources().getString(R.string.fast_others))) {
+                                    if (cb.isChecked()) {
+                                        abnormalDetailedDiagnosisOther.setVisibility(View.VISIBLE);
+                                    } else {
+                                        abnormalDetailedDiagnosisOther.setVisibility(View.GONE);
+                                    }
+                                }
                             }
                         }
+                        extentOfDisease.setVisibility(View.VISIBLE);
+
+                    }
+                    else if(value.equals("CHEST XRAY")){
+                        cat4tbScore.setVisibility(View.VISIBLE);
+                        cadScoreRange.setVisibility(View.VISIBLE);
+
+                        radiologicalDiagnosis.setVisibility(View.GONE);
+                        extentOfDisease.setVisibility(View.GONE);
+                        abnormalDetailedDiagnosis.setVisibility(View.GONE);
+                        abnormalDetailedDiagnosisOther.setVisibility(View.GONE);
+                    }
+                    else if(value.equals("X-RAY, OTHER")) {
+                        cat4tbScore.setVisibility(View.GONE);
+                        cadScoreRange.setVisibility(View.GONE);
+
+                        radiologicalDiagnosis.setVisibility(View.VISIBLE);
+                        if (radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_not_suggestive_of_tb))) {
+                            abnormalDetailedDiagnosis.setVisibility(View.VISIBLE);
+                            for (CheckBox cb : abnormalDetailedDiagnosis.getCheckedBoxes()) {
+                                if (App.get(cb).equals(getResources().getString(R.string.fast_others))) {
+                                    if (cb.isChecked()) {
+                                        abnormalDetailedDiagnosisOther.setVisibility(View.VISIBLE);
+                                    } else {
+                                        abnormalDetailedDiagnosisOther.setVisibility(View.GONE);
+                                    }
+                                }
+                            }
+                        }
+                        extentOfDisease.setVisibility(View.VISIBLE);
                     }
                 }
-                extentOfDisease.setVisibility(View.VISIBLE);
             }
             updateDisplay();
         }
@@ -1494,7 +1522,6 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
 
                 pastXray.getRadioGroup().selectDefaultValue();
                 pregnancyHistory.getRadioGroup().selectDefaultValue();
-                screenXrayType.getRadioGroup().selectDefaultValue();
                 monthOfTreatment.getSpinner().selectDefaultValue();
 
                 if (App.getPatient().getPerson().getGender().equals("female") || App.getPatient().getPerson().getGender().equals("F")) {
@@ -1509,9 +1536,6 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                     monthOfTreatment.setVisibility(View.VISIBLE);
                     orderId.setVisibility(View.VISIBLE);
                     reasonForXray.setVisibility(View.VISIBLE);
-                    if(App.get(reasonForXray).equals(getResources().getString(R.string.fast_other_title))){
-                        otherReasonForXray.setVisibility(View.VISIBLE);
-                    }
 
                 }
                 else{
@@ -1519,7 +1543,6 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                     monthOfTreatment.setVisibility(View.GONE);
                     orderId.setVisibility(View.GONE);
                     reasonForXray.setVisibility(View.GONE);
-                    otherReasonForXray.setVisibility(View.GONE);
                 }
 
                 if(pregnancyHistory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))
@@ -1529,16 +1552,12 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                     orderId.setVisibility(View.VISIBLE);
 
                     reasonForXray.setVisibility(View.VISIBLE);
-                    if(App.get(reasonForXray).equals(getResources().getString(R.string.fast_other_title))){
-                        otherReasonForXray.setVisibility(View.VISIBLE);
-                    }
                 }
                 else{
                     screenXrayType.setVisibility(View.GONE);
                     monthOfTreatment.setVisibility(View.GONE);
                     orderId.setVisibility(View.GONE);
                     reasonForXray.setVisibility(View.GONE);
-                    otherReasonForXray.setVisibility(View.GONE);
                 }
 
                 //showTestOrderOrTestResult();
@@ -1609,7 +1628,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                 submitButton.setEnabled(false);
             }*/
         }
-         else if (radioGroup == radiologicalDiagnosis.getRadioGroup()) {
+        else if (radioGroup == radiologicalDiagnosis.getRadioGroup()) {
             if (radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_not_suggestive_of_tb))) {
                 abnormalDetailedDiagnosis.setVisibility(View.VISIBLE);
                 presumptiveTbCxr.getRadioGroup().getButtons().get(0).setChecked(true);
@@ -1647,9 +1666,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                 monthOfTreatment.setVisibility(View.VISIBLE);
                 orderId.setVisibility(View.VISIBLE);
                 reasonForXray.setVisibility(View.VISIBLE);
-                if(App.get(reasonForXray).equals(getResources().getString(R.string.fast_other_title))){
-                    otherReasonForXray.setVisibility(View.VISIBLE);
-                }
+
             }
 
             else if(pastXray.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title)) && pregnancyHistory.getVisibility() == View.GONE){
@@ -1658,16 +1675,13 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                 monthOfTreatment.setVisibility(View.VISIBLE);
                 orderId.setVisibility(View.VISIBLE);
                 reasonForXray.setVisibility(View.VISIBLE);
-                if(App.get(reasonForXray).equals(getResources().getString(R.string.fast_other_title))){
-                    otherReasonForXray.setVisibility(View.VISIBLE);
-                }
+
             }
             else{
                 screenXrayType.setVisibility(View.GONE);
                 monthOfTreatment.setVisibility(View.GONE);
                 orderId.setVisibility(View.GONE);
                 reasonForXray.setVisibility(View.GONE);
-                otherReasonForXray.setVisibility(View.GONE);
             }
               /*  linearLayout.setVisibility(View.VISIBLE);
                 submitButton.setEnabled(false);
@@ -1695,9 +1709,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                 monthOfTreatment.setVisibility(View.VISIBLE);
                 orderId.setVisibility(View.VISIBLE);
                 reasonForXray.setVisibility(View.VISIBLE);
-                if(App.get(reasonForXray).equals(getResources().getString(R.string.fast_other_title))){
-                    otherReasonForXray.setVisibility(View.VISIBLE);
-                }
+
             }
             else if(pastXray.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title)) && pregnancyHistory.getVisibility() == View.GONE){
                 formDate.setVisibility(View.VISIBLE);
@@ -1705,16 +1717,12 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                 monthOfTreatment.setVisibility(View.VISIBLE);
                 orderId.setVisibility(View.VISIBLE);
                 reasonForXray.setVisibility(View.VISIBLE);
-                if(App.get(reasonForXray).equals(getResources().getString(R.string.fast_other_title))){
-                    otherReasonForXray.setVisibility(View.VISIBLE);
-                }
             }
             else{
                 screenXrayType.setVisibility(View.GONE);
                 monthOfTreatment.setVisibility(View.GONE);
                 orderId.setVisibility(View.GONE);
                 reasonForXray.setVisibility(View.GONE);
-                otherReasonForXray.setVisibility(View.GONE);
             }
               /*  linearLayout.setVisibility(View.VISIBLE);
                 submitButton.setEnabled(false);
