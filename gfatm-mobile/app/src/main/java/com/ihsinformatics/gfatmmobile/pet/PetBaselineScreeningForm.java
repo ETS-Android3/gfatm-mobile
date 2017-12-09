@@ -903,7 +903,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
+                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (!result.contains("SUCCESS"))
                     return result;
                 else {
@@ -1140,7 +1140,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                 otherRelation.setVisibility(View.GONE);
         } else if (spinner == district.getSpinner()) {
 
-            if(district.getSpinner().getTag() == null) {
+            if(city.getSpinner().getTag() == null) {
 
                 String[] cities = serverService.getCityList(App.get(district));
                 city.getSpinner().setSpinnerData(cities);
@@ -1149,11 +1149,11 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
 
         } else if (spinner == province.getSpinner()) {
 
-            if(province.getSpinner().getTag() == null) {
+            if(district.getSpinner().getTag() == null) {
                 String[] districts = serverService.getDistrictList(App.get(province));
                 district.getSpinner().setSpinnerData(districts);
             }
-            else province.getSpinner().setTag(null);
+            else district.getSpinner().setTag(null);
         }
 
     }

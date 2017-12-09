@@ -803,11 +803,11 @@ public class PetDSTCultureTestForm extends AbstractFormActivity implements Radio
                 String result = "";
 
                 if (App.get(formType).equals(getResources().getString(R.string.ctb_order))){
-                    result = serverService.saveEncounterAndObservation("DST Culture Test Order", FORM, formDateCalendar, observations.toArray(new String[][]{}),true);
+                    result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+"DST Culture Test Order", FORM, formDateCalendar, observations.toArray(new String[][]{}),true);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
-                    result = serverService.saveEncounterAndObservation("DST Culture Test Result", FORM, formDateCalendar, observations.toArray(new String[][]{}),false);
+                    result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+"DST Culture Test Result", FORM, formDateCalendar, observations.toArray(new String[][]{}),false);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 }

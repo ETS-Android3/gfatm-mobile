@@ -772,7 +772,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                 });
 
                 String result = "";
-                result = serverService.saveEncounterAndObservation(FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
+                result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (!result.contains("SUCCESS"))
                     return result;
                 else {
@@ -1070,7 +1070,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
             }
 
             if (App.get(husbandName).equals("")) {
-                String husbandNameString = App.getPatient().getPerson().getGuardianName();
+                String husbandNameString = App.getPatient().getPerson().getPersonAttribute("Guardian Name");
                 if (husbandNameString == null || husbandNameString.equals("")) {
                     husbandName.getEditText().setText("");
                 } else {

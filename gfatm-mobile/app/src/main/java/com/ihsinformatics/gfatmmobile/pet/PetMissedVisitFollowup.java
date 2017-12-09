@@ -476,7 +476,7 @@ public class PetMissedVisitFollowup extends AbstractFormActivity implements Radi
                                     (App.get(missedVisitReason).equals(getResources().getString(R.string.ctb_patient_died)) ? "DIED":
                                             (App.get(missedVisitReason).equals(getResources().getString(R.string.ctb_patient_service_complain)) ? "SERVICE COMPLAINT" :
                                                     (App.get(missedVisitReason).equals(getResources().getString(R.string.ctb_lack_fund_travel)) ? "LACK OF FUNDS TO TRAVEL TO THE FACILITY" :
-                                                            (App.get(missedVisitReason).equals(getResources().getString(R.string.ctb_unable_to_locate_referral)) ? "UNABLE TO RELOCATE REFERRAL SITE" :
+                                                            (App.get(missedVisitReason).equals(getResources().getString(R.string.ctb_unable_to_locate_referral)) ? "UNABLE TO LOCATE REFERRAL SITE" :
                                                                     (App.get(missedVisitReason).equals(getResources().getString(R.string.ctb_treatment_at_parent_side)) ? "WANT TREATMENT AT PARENT SITE":
                                                                                                                                                             "OTHER REASON TO MISSED VISIT")))))))});
 
@@ -519,7 +519,7 @@ public class PetMissedVisitFollowup extends AbstractFormActivity implements Radi
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}),false);
+                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}),false);
                 if (!result.contains("SUCCESS"))
                     return result;
 
@@ -700,7 +700,7 @@ public class PetMissedVisitFollowup extends AbstractFormActivity implements Radi
                                         (obs[0][1].equals("DIED") ? getResources().getString(R.string.ctb_patient_died) :
                                                 (obs[0][1].equals("SERVICE COMPLAINT") ? getResources().getString(R.string.ctb_patient_service_complain) :
                                                         (obs[0][1].equals("LACK OF FUNDS TO TRAVEL TO THE FACILITY") ? getResources().getString(R.string.ctb_lack_fund_travel) :
-                                                                (obs[0][1].equals("UNABLE TO RELOCATE REFERRAL SITE") ? getResources().getString(R.string.ctb_unable_to_locate_referral) :
+                                                                (obs[0][1].equals("UNABLE TO LOCATE REFERRAL SITE") ? getResources().getString(R.string.ctb_unable_to_locate_referral) :
                                                                         (obs[0][1].equals("WANT TREATMENT AT PARENT SITE") ? getResources().getString(R.string.ctb_treatment_at_parent_side) :
                                                                                  getResources().getString(R.string.ctb_other_title))))))));
                 missedVisitReason.getSpinner().selectValue(value);

@@ -264,7 +264,7 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
         othersSite.setVisibility(View.GONE);
         tbRuledOut.setVisibility(View.VISIBLE);
 
-        String s = App.getPatient().getPerson().getMaritalStatus();
+        String s = App.getPatient().getPerson().getPersonAttribute("Marital Status");
 
         if (App.getPatient().getPerson().getAge() > 14 && !(s.equalsIgnoreCase("Single")))
             pregnancyHistory.setVisibility(View.VISIBLE);
@@ -460,7 +460,7 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
+                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (!result.contains("SUCCESS"))
                     return result;
                 else {
