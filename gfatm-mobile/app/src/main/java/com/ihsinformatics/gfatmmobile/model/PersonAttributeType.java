@@ -21,7 +21,7 @@ import org.json.JSONObject;
  * @author owais.hussain@irdresearch.org
  */
 public class PersonAttributeType extends AbstractModel {
-    public static final String FIELDS = "display,format,foreignKey,uuid";
+    public static final String FIELDS = "display,format,foreignKey,uuid,retired";
     private String name = "";
     private String format = "";
     private String foreignKey = "";
