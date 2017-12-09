@@ -45,6 +45,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -59,6 +61,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.custom.MyLinearLayout;
+import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
@@ -74,9 +77,11 @@ import java.io.ObjectInputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, View.OnTouchListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnTouchListener, AdapterView.OnItemSelectedListener {
 
     private static final int SELECT_PATIENT_ACTIVITY = 0;
     private static final int SAVED_FORM_ACTIVITY = 1;
@@ -91,7 +96,7 @@ public class MainActivity extends AppCompatActivity
     public static SummaryFragment fragmentSummary = new SummaryFragment();
     ImageView change;
     public static ImageView update;
-    //public static ImageView edit;
+    public static ImageView edit;
 
     public static TextView patientName;
     public static TextView patientDob;
@@ -103,6 +108,13 @@ public class MainActivity extends AppCompatActivity
     LinearLayout attributeContent;
     LinearLayout addressContent;
     RelativeLayout backDimLayout;
+
+    TitledEditText address1;
+    AutoCompleteTextView address2;
+    Spinner province;
+    Spinner district;
+    Spinner city;
+    TitledEditText landmark;
 
     Context context = this;
 
@@ -239,10 +251,10 @@ public class MainActivity extends AppCompatActivity
         DrawableCompat.setTint(update.getDrawable(), color);
         update.setOnTouchListener(this);
 
-        /*edit = (ImageView) findViewById(R.id.edit);
+        edit = (ImageView) findViewById(R.id.edit);
         DrawableCompat.setTint(edit.getDrawable(), color);
         edit.setOnTouchListener(this);
-        edit.setVisibility(View.GONE);*/
+        edit.setVisibility(View.GONE);
 
         getSupportActionBar().setTitle(Html.fromHtml("<small>" + App.getProgram() + "  |  " + App.getLocation() + "</small>"));
         if (App.getMode().equalsIgnoreCase("OFFLINE")) {
@@ -253,11 +265,11 @@ public class MainActivity extends AppCompatActivity
 
             if (App.getPatient() == null) {
                 update.setVisibility(View.GONE);
-                //edit.setVisibility(View.GONE);
+                edit.setVisibility(View.GONE);
             }
             else {
                 update.setVisibility(View.VISIBLE);
-                //edit.setVisibility(View.VISIBLE);
+                edit.setVisibility(View.VISIBLE);
             }
 
         }
@@ -312,7 +324,7 @@ public class MainActivity extends AppCompatActivity
                 id.setVisibility(View.VISIBLE);
             patientId.setText(App.getPatient().getPatientId());
             update.setVisibility(View.VISIBLE);
-            //edit.setVisibility(View.VISIBLE);
+            edit.setVisibility(View.VISIBLE);
         }
 
         if (!App.getProgram().equals("")) {
@@ -354,6 +366,7 @@ public class MainActivity extends AppCompatActivity
 
             }
         }
+        showFormFragment();
     }
 
     @Override
@@ -436,7 +449,7 @@ public class MainActivity extends AppCompatActivity
             getSupportActionBar().setSubtitle(null);
             if (App.getPatient() == null) {
                 update.setVisibility(View.GONE);
-                //edit.setVisibility(View.GONE);
+                edit.setVisibility(View.GONE);
                 patientName.setText("");
                 patientDob.setText("");
                 patientId.setText("");
@@ -487,7 +500,7 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 update.setVisibility(View.VISIBLE);
-                //edit.setVisibility(View.VISIBLE);
+                edit.setVisibility(View.VISIBLE);
             }
 
 
@@ -859,13 +872,13 @@ public class MainActivity extends AppCompatActivity
                     updatePatientDetails();
 
                     break;
-                } /*else if (view == edit) {
+                } else if (view == edit) {
 
                     updatePopupContent();
                     popupWindow.showAsDropDown(edit);
                     backDimLayout.setVisibility(View.VISIBLE);
                     break;
-                }*/
+                }
             }
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL: {
@@ -1263,25 +1276,12 @@ public class MainActivity extends AppCompatActivity
         addressContent.removeAllViews();
         attributeContent.removeAllViews();
 
-        LinearLayout linearLayoutPatientSource = new LinearLayout(this);
-        linearLayoutPatientSource.setOrientation(LinearLayout.HORIZONTAL);
+        LinearLayout linearLayout = new LinearLayout(this);
+        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
         int padding = (int) getResources().getDimension(R.dimen.tiny);
-        linearLayoutPatientSource.setPadding(padding, padding, padding, padding);
+        linearLayout.setPadding(padding, padding, padding, padding);
 
-        TextView patientSourceTextView = new TextView(this);
-        patientSourceTextView.setText(getResources().getString(R.string.patient_source) + ": ");
-        linearLayoutPatientSource.addView(patientSourceTextView);
-
-        Spinner patientSource = new Spinner(context, Spinner.MODE_DIALOG);
-        ArrayAdapter<String> adapterr =
-                new ArrayAdapter<String>(this,
-                        android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.patient_source_options));
-        adapterr.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        patientSource.setAdapter(adapterr);
-
-        linearLayoutPatientSource.addView(patientSource);
-
-        addressContent.addView(linearLayoutPatientSource);
+        addressContent.addView(linearLayout);
 
         TextView address = new TextView(this);
         address.setText("Patient's Address");
@@ -1289,10 +1289,10 @@ public class MainActivity extends AppCompatActivity
         address.setPaintFlags(address.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
         addressContent.addView(address);
 
-        TitledEditText address1 = new TitledEditText(context, null, getResources().getString(R.string.pet_address_1), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        address1 = new TitledEditText(context, null, getResources().getString(R.string.pet_address_1), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         MyLinearLayout addressLayout = new MyLinearLayout(context, null, App.VERTICAL);
         MyTextView townTextView = new MyTextView(context, getResources().getString(R.string.pet_address_2));
-        AutoCompleteTextView address2 = new AutoCompleteTextView(context);
+        address2 = new AutoCompleteTextView(context);
         InputFilter[] fArray = new InputFilter[1];
         fArray[0] = new InputFilter.LengthFilter(20);
         address2.setFilters(fArray);
@@ -1310,13 +1310,14 @@ public class MainActivity extends AppCompatActivity
         provinceTextView.setText(getResources().getString(R.string.province) + ": ");
         linearLayoutProvince.addView(provinceTextView);
 
-        Spinner province = new Spinner(context, Spinner.MODE_DIALOG);
+        province = new Spinner(context, Spinner.MODE_DIALOG);
         ArrayAdapter<String> adapterr2 =
                 new ArrayAdapter<String>(this,
                         android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.provinces));
         adapterr2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         province.setAdapter(adapterr2);
         province.setSelection(adapterr2.getPosition(App.getProvince()));
+        province.setOnItemSelectedListener(this);
 
         linearLayoutProvince.addView(province);
 
@@ -1330,13 +1331,14 @@ public class MainActivity extends AppCompatActivity
         districtTextView.setText(getResources().getString(R.string.pet_district) + ": ");
         linearLayoutDistrict.addView(districtTextView);
 
-        Spinner district = new Spinner(context, Spinner.MODE_DIALOG);
+        district = new Spinner(context, Spinner.MODE_DIALOG);
         String[] districts = serverService.getDistrictList(App.getProvince());
         ArrayAdapter<String> adapterr3 =
                 new ArrayAdapter<String>(this,
                         android.R.layout.simple_spinner_item, districts);
         adapterr3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         district.setAdapter(adapterr3);
+        district.setOnItemSelectedListener(this);
 
         linearLayoutDistrict.addView(district);
 
@@ -1350,7 +1352,7 @@ public class MainActivity extends AppCompatActivity
         cityTextView.setText(getResources().getString(R.string.pet_city) + ": ");
         linearLayoutCity.addView(cityTextView);
 
-        Spinner city = new Spinner(context, Spinner.MODE_DIALOG);
+        city = new Spinner(context, Spinner.MODE_DIALOG);
         String[] cities = serverService.getCityList(App.get(district));
         ArrayAdapter<String> adapterr4 =
                 new ArrayAdapter<String>(this,
@@ -1362,7 +1364,7 @@ public class MainActivity extends AppCompatActivity
 
         addressContent.addView(linearLayoutCity);
 
-        TitledEditText landmark = new TitledEditText(context, null, getResources().getString(R.string.pet_landmark), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        landmark = new TitledEditText(context, null, getResources().getString(R.string.pet_landmark), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         addressContent.addView(landmark);
 
         Object[][]  towns = serverService.getAllTowns();
@@ -1466,9 +1468,65 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public static void updatePopupContent(){
+    public void updatePopupContent(){
 
-        /*for(int i = 0; i < attributeContent.getChildCount(); i++){
+        address1.getEditText().setText(App.getPatient().getPerson().getAddress1());
+        address2.setText(App.getPatient().getPerson().getAddress1());
+        landmark.getEditText().setText(App.getPatient().getPerson().getAddress1());
+        String p = App.getPatient().getPerson().getStateProvince();
+        String d = App.getPatient().getPerson().getCountyDistrict();
+        String c = App.getPatient().getPerson().getCityVillage();
+
+        province.setSelection(0);
+        if(!(p == null|| p.equals("null") || p.equals("")))
+        {
+            for (int j = 0; j < province.getCount(); j++) {
+                if (province.getItemAtPosition(j).toString().equals(App.getPatient().getPerson().getStateProvince())) {
+                    province.setSelection(j);
+                    break;
+                }
+            }
+
+            String[] districts = serverService.getDistrictList(App.getPatient().getPerson().getStateProvince());
+            ArrayAdapter<String> adapt1 =
+                    new ArrayAdapter<String>(MainActivity.this,
+                            android.R.layout.simple_spinner_item, districts);
+            adapt1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            district.setAdapter(adapt1);
+            district.setSelection(0);
+            for (int j = 0; j < district.getCount(); j++) {
+                if (district.getItemAtPosition(j).toString().equals(App.getPatient().getPerson().getCountyDistrict())) {
+                    district.setSelection(j);
+                    break;
+                }
+            }
+            district.setTag("selected");
+            String[] cities = serverService.getCityList(App.getPatient().getPerson().getCountyDistrict());
+            ArrayAdapter<String> adapt =
+                    new ArrayAdapter<String>(MainActivity.this,
+                            android.R.layout.simple_spinner_item, cities);
+            adapt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            city.setAdapter(adapt);
+            city.setSelection(0);
+            for (int j = 0; j < city.getCount(); j++) {
+                if (city.getItemAtPosition(j).toString().equals(App.getPatient().getPerson().getCityVillage())) {
+                    city.setSelection(j);
+                    break;
+                }
+            }
+            city.setTag("selected");
+        }
+        else{
+            String[] provinces = serverService.getProvinceList(App.getCountry());
+            ArrayAdapter<String> adapt =
+                    new ArrayAdapter<String>(MainActivity.this,
+                            android.R.layout.simple_spinner_item, provinces);
+            adapt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            province.setAdapter(adapt);
+            province.setSelection(adapt.getPosition(App.getProvince()));
+        }
+
+        for(int i = 0; i < attributeContent.getChildCount(); i++){
             View v = attributeContent.getChildAt(i);
             if(v instanceof TitledEditText){
 
@@ -1483,8 +1541,9 @@ public class MainActivity extends AppCompatActivity
                 String val = App.getPatient().getPerson().getPersonAttribute(attributeType.replace(": ",""));
                 if(val == null) val = "";
                 else{
-                    if(val.equalsIgnoreCase("false")) val = "No";
-                    else val = "Yes";
+                    if(val.equalsIgnoreCase("false") || val.equalsIgnoreCase("No")) val = "No";
+                    else if(val.equalsIgnoreCase("true") || val.equalsIgnoreCase("Yes")) val = "Yes";
+                    else val = "";
                 }
 
                 ((TitledRadioGroup)v).getRadioGroup().clearCheck();
@@ -1508,7 +1567,6 @@ public class MainActivity extends AppCompatActivity
                         else val = String.valueOf(locs[1]);
                     }
 
-
                 }
 
                 Spinner spinner = (Spinner) ((LinearLayout)v).getChildAt(1);
@@ -1521,13 +1579,19 @@ public class MainActivity extends AppCompatActivity
                 }
 
             }
-        }*/
+        }
 
     }
 
     public void savePersonAttributes(){
 
-        /*final HashMap<String, String> personAttribute = new HashMap<String, String>();
+        loading.setInverseBackgroundForced(true);
+        loading.setIndeterminate(true);
+        loading.setCancelable(false);
+        loading.setMessage(getResources().getString(R.string.submitting_form));
+        loading.show();
+
+        final HashMap<String, String> personAttribute = new HashMap<String, String>();
 
         for(int i = 0; i < attributeContent.getChildCount(); i++){
             View v = attributeContent.getChildAt(i);
@@ -1548,7 +1612,8 @@ public class MainActivity extends AppCompatActivity
                 if(val == null) val = "";
                 else{
                     if(val.equalsIgnoreCase("false")) val = "No";
-                    else val = "Yes";
+                    else if(val.equalsIgnoreCase("true")) val = "Yes";
+                    else val = "";
                 }
 
                 String newVal = App.get((TitledRadioGroup)v);
@@ -1593,6 +1658,7 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
+
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
             protected String doInBackground(String... params) {
@@ -1629,17 +1695,29 @@ public class MainActivity extends AppCompatActivity
 
                     }
 
-                }
+                    String add1 = App.getPatient().getPerson().getAddress1();
+                    String add2 = App.getPatient().getPerson().getAddress2();
+                    String add3 = App.getPatient().getPerson().getAddress2();
+                    String pro = App.getPatient().getPerson().getStateProvince();
+                    String dist = App.getPatient().getPerson().getCountyDistrict();
+                    String cit = App.getPatient().getPerson().getCityVillage();
 
-                return "SUCCESS";
+                    if (!(add1.equals(App.get(address1)) && add2.equals(App.get(address2)) && add3.equals(App.get(landmark)) && pro.equals(App.get(province)) && dist.equals(App.get(district)) && city.equals(App.get(city)))) {
+                        if (!(App.get(address1).equals("") && App.get(address2).equals("") && App.get(district).equals("") && App.get(landmark).equals(""))) {
+                            result = serverService.savePersonAddress(App.get(address1), App.get(address2), App.get(city), App.get(district), App.get(province), App.getCountry(), App.getLongitude(), App.getLatitude(), App.get(landmark), encounterId);
+                        }
+
+                    }
+
+                    return "SUCCESS";
+
+                }
 
             }
 
             @Override
             protected void onProgressUpdate(String... values) {
             }
-
-            ;
 
             @Override
             protected void onPostExecute(String result) {
@@ -1716,11 +1794,47 @@ public class MainActivity extends AppCompatActivity
                     alertDialog.show();
                 }
 
-
             }
         };
         submissionFormTask.execute("");
-        */
+
+
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+        Spinner spinner = (Spinner) parent;
+
+        if (spinner == district) {
+
+            if(city.getTag() == null) {
+                String[] cities = serverService.getCityList(App.get(district));
+                ArrayAdapter<String> adapt =
+                        new ArrayAdapter<String>(MainActivity.this,
+                                android.R.layout.simple_spinner_item, cities);
+                adapt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                city.setAdapter(adapt);
+            }
+            else city.setTag(null);
+
+        } else if (spinner == province) {
+
+            if(district.getTag() == null) {
+                String[] districts = serverService.getDistrictList(App.get(province));
+                ArrayAdapter<String> adapt =
+                        new ArrayAdapter<String>(MainActivity.this,
+                                android.R.layout.simple_spinner_item, districts);
+                adapt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                district.setAdapter(adapt);
+            }
+            else district.setTag(null);
+        }
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 }
