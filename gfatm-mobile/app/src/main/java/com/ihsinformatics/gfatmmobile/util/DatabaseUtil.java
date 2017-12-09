@@ -36,7 +36,7 @@ import java.util.ArrayList;
 public class DatabaseUtil extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseUtil";
     private static final String DB_NAME = "globalfund.db";
-    private static final int DB_VERSION = 42;
+    private static final int DB_VERSION = 44;
     private Context context;
 
     public DatabaseUtil(Context context) {
@@ -176,7 +176,6 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                 //insertsStream = context.getResources().openRawResource(R.raw.db_update_v39);
                 break;
             case 39: // Script to upgrade from version 39 to 40
-
               /* int birthplaceAttrId = 2;
                 int citizenshipAttrId = 3;
                 int maritalStatusAttrId = 5;
@@ -432,6 +431,784 @@ public class DatabaseUtil extends SQLiteOpenHelper {
             case 41: // Script to upgrade from version 41 to 42
                 insertsStream = context.getResources().openRawResource(R.raw.db_update_v42);
                 break;
+            case 42: // Script to upgrade from version 42 to 43
+                insertsStream = context.getResources().openRawResource(R.raw.db_update_v43);
+                break;
+            case 43: // Script to upgrade from version 43 to 44
+
+                int birthplaceAttrId = 2;
+                int citizenshipAttrId = 3;
+                int maritalStatusAttrId = 5;
+                int healthCenterAttrId = 7;
+                int healthDistrictAttrId = 6;
+                int motherNameAttrId = 4;
+                int primaryContactAttrId = 8;
+                int primaryContactOwnerAttrId = 11;
+                int secondaryContactAttrId = 12;
+                int secondaryContactOwnerAttrId = 13;
+                int ethinicityAttrId = 14;
+                int educationLevelAttrId = 15;
+                int employmentStatusAttrId = 16;
+                int occupationAttrId = 17;
+                int incomeClassAttrId = 20;
+                int motherTongueAttrId = 18;
+                int nationIdAttrId = 21;
+                int nationalIdOwnerAttrId = 22;
+                int guardianNameAttrId = 26;
+                int tertiaryContactAttrId = 23;
+                int quaternaryContactAttrId = 24;
+                int treatmentSupporterAttrId = 25;
+
+                if (isColumnExists(db,  Metadata.PATIENT, "birthplace")) {
+                    String query = "Select patient_id, birthplace from " + Metadata.PATIENT;
+
+                    ArrayList<String[]> data = new ArrayList<String[]>();
+                    Cursor cursor = db.rawQuery(query, null);
+                    if (cursor != null) {
+                        int columns = cursor.getColumnCount();
+                        if (cursor.moveToFirst()) {
+                            do {
+                                String[] record = new String[columns];
+                                for (int i = 0; i < columns; i++)
+                                    record[i] = cursor.getString(i);
+                                data.add(record);
+                            }
+                            while (cursor.moveToNext());
+                        }
+                    }
+                    String[][] results = data.toArray(new String[][]{});
+
+                    for (String[] result : results) {
+
+                        String pid = result[0];
+                        String birthplace = result[1];
+
+                        if (!(birthplace == null || birthplace.equals(""))) {
+                            ContentValues values = new ContentValues();
+                            values.put("person_attribute_type", birthplaceAttrId);
+                            values.put("value", birthplace);
+                            values.put("patient_id", pid);
+                            db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
+                        }
+                    }
+                }
+
+                if (isColumnExists(db,  Metadata.PATIENT, "citizenship")) {
+                    String query = "Select patient_id, citizenship from " + Metadata.PATIENT;
+
+                    ArrayList<String[]> data = new ArrayList<String[]>();
+                    Cursor cursor = db.rawQuery(query, null);
+                    if (cursor != null) {
+                        int columns = cursor.getColumnCount();
+                        if (cursor.moveToFirst()) {
+                            do {
+                                String[] record = new String[columns];
+                                for (int i = 0; i < columns; i++)
+                                    record[i] = cursor.getString(i);
+                                data.add(record);
+                            }
+                            while (cursor.moveToNext());
+                        }
+                    }
+                    String[][] results = data.toArray(new String[][]{});
+
+                    for (String[] result : results) {
+
+                        String pid = result[0];
+                        String citizenship = result[1];
+
+                        if (!(citizenship == null || citizenship.equals(""))) {
+                            ContentValues values = new ContentValues();
+                            values.put("person_attribute_type", citizenshipAttrId);
+                            values.put("value", citizenship);
+                            values.put("patient_id", pid);
+                            db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
+                        }
+                    }
+                }
+
+                if (isColumnExists(db,  Metadata.PATIENT, "maritalstatus")) {
+                    String query = "Select patient_id, maritalstatus from " + Metadata.PATIENT;
+
+                    ArrayList<String[]> data = new ArrayList<String[]>();
+                    Cursor cursor = db.rawQuery(query, null);
+                    if (cursor != null) {
+                        int columns = cursor.getColumnCount();
+                        if (cursor.moveToFirst()) {
+                            do {
+                                String[] record = new String[columns];
+                                for (int i = 0; i < columns; i++)
+                                    record[i] = cursor.getString(i);
+                                data.add(record);
+                            }
+                            while (cursor.moveToNext());
+                        }
+                    }
+                    String[][] results = data.toArray(new String[][]{});
+
+                    for (String[] result : results) {
+
+                        String pid = result[0];
+                        String maritalStatus = result[1];
+
+                        if (!(maritalStatus == null || maritalStatus.equals(""))) {
+                            ContentValues values = new ContentValues();
+                            values.put("person_attribute_type", maritalStatusAttrId);
+                            values.put("value", maritalStatus);
+                            values.put("patient_id", pid);
+                            db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
+                        }
+                    }
+                }
+
+                if (isColumnExists(db,  Metadata.PATIENT, "healthcenter")) {
+                    String query = "Select patient_id, healthcenter from " + Metadata.PATIENT;
+
+                    ArrayList<String[]> data = new ArrayList<String[]>();
+                    Cursor cursor = db.rawQuery(query, null);
+                    if (cursor != null) {
+                        int columns = cursor.getColumnCount();
+                        if (cursor.moveToFirst()) {
+                            do {
+                                String[] record = new String[columns];
+                                for (int i = 0; i < columns; i++)
+                                    record[i] = cursor.getString(i);
+                                data.add(record);
+                            }
+                            while (cursor.moveToNext());
+                        }
+                    }
+                    String[][] results = data.toArray(new String[][]{});
+
+                    for (String[] result : results) {
+
+                        String pid = result[0];
+                        String healthCenter = result[1];
+
+                        if (!(healthCenter == null || healthCenter.equals(""))) {
+                            ContentValues values = new ContentValues();
+                            values.put("person_attribute_type", healthCenterAttrId);
+                            values.put("value", healthCenter);
+                            values.put("patient_id", pid);
+                            db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
+                        }
+                    }
+                }
+
+                if (isColumnExists(db,  Metadata.PATIENT, "healthdistrict")) {
+                    String query = "Select patient_id, healthdistrict from " + Metadata.PATIENT;
+
+                    ArrayList<String[]> data = new ArrayList<String[]>();
+                    Cursor cursor = db.rawQuery(query, null);
+                    if (cursor != null) {
+                        int columns = cursor.getColumnCount();
+                        if (cursor.moveToFirst()) {
+                            do {
+                                String[] record = new String[columns];
+                                for (int i = 0; i < columns; i++)
+                                    record[i] = cursor.getString(i);
+                                data.add(record);
+                            }
+                            while (cursor.moveToNext());
+                        }
+                    }
+                    String[][] healthDistricts = data.toArray(new String[][]{});
+
+                    for (String[] result : healthDistricts) {
+
+                        String pid = result[0];
+                        String birthplace = result[1];
+
+                        if (!(birthplace == null || birthplace.equals(""))) {
+                            ContentValues values = new ContentValues();
+                            values.put("person_attribute_type", healthDistrictAttrId);
+                            values.put("value", birthplace);
+                            values.put("patient_id", pid);
+                            db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
+                        }
+                    }
+                }
+
+                if (isColumnExists(db,  Metadata.PATIENT, "mothername")) {
+                    String query = "Select patient_id, mothername from " + Metadata.PATIENT;
+
+                    ArrayList<String[]> data = new ArrayList<String[]>();
+                    Cursor cursor = db.rawQuery(query, null);
+                    if (cursor != null) {
+                        int columns = cursor.getColumnCount();
+                        if (cursor.moveToFirst()) {
+                            do {
+                                String[] record = new String[columns];
+                                for (int i = 0; i < columns; i++)
+                                    record[i] = cursor.getString(i);
+                                data.add(record);
+                            }
+                            while (cursor.moveToNext());
+                        }
+                    }
+                    String[][] results = data.toArray(new String[][]{});
+
+                    for (String[] result : results) {
+
+                        String pid = result[0];
+                        String motherName = result[1];
+
+                        if (!(motherName == null || motherName.equals(""))) {
+                            ContentValues values = new ContentValues();
+                            values.put("person_attribute_type", motherNameAttrId);
+                            values.put("value", motherName);
+                            values.put("patient_id", pid);
+                            db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
+                        }
+                    }
+                }
+
+                if (isColumnExists(db,  Metadata.PATIENT, "primarycontact")) {
+                    String query = "Select patient_id, primarycontact from " + Metadata.PATIENT;
+
+                    ArrayList<String[]> data = new ArrayList<String[]>();
+                    Cursor cursor = db.rawQuery(query, null);
+                    if (cursor != null) {
+                        int columns = cursor.getColumnCount();
+                        if (cursor.moveToFirst()) {
+                            do {
+                                String[] record = new String[columns];
+                                for (int i = 0; i < columns; i++)
+                                    record[i] = cursor.getString(i);
+                                data.add(record);
+                            }
+                            while (cursor.moveToNext());
+                        }
+                    }
+                    String[][] results = data.toArray(new String[][]{});
+
+                    for (String[] result : results) {
+
+                        String pid = result[0];
+                        String primaryContact = result[1];
+
+                        if (!(primaryContact == null || primaryContact.equals(""))) {
+                            ContentValues values = new ContentValues();
+                            values.put("person_attribute_type", primaryContactAttrId);
+                            values.put("value", primaryContact);
+                            values.put("patient_id", pid);
+                            db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
+                        }
+                    }
+                }
+
+                if (isColumnExists(db,  Metadata.PATIENT, "primarycontactowner")) {
+                    String query = "Select patient_id, primarycontactowner from " + Metadata.PATIENT;
+
+                    ArrayList<String[]> data = new ArrayList<String[]>();
+                    Cursor cursor = db.rawQuery(query, null);
+                    if (cursor != null) {
+                        int columns = cursor.getColumnCount();
+                        if (cursor.moveToFirst()) {
+                            do {
+                                String[] record = new String[columns];
+                                for (int i = 0; i < columns; i++)
+                                    record[i] = cursor.getString(i);
+                                data.add(record);
+                            }
+                            while (cursor.moveToNext());
+                        }
+                    }
+                    String[][] results = data.toArray(new String[][]{});
+
+                    for (String[] result : results) {
+
+                        String pid = result[0];
+                        String primaryContactOwner = result[1];
+
+                        if (!(primaryContactOwner == null || primaryContactOwner.equals(""))) {
+                            ContentValues values = new ContentValues();
+                            values.put("person_attribute_type", primaryContactOwnerAttrId);
+                            values.put("value", primaryContactOwner);
+                            values.put("patient_id", pid);
+                            db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
+                        }
+                    }
+                }
+
+                if (isColumnExists(db,  Metadata.PATIENT, "secondarycontact")) {
+                    String query = "Select patient_id, secondarycontact from " + Metadata.PATIENT;
+
+                    ArrayList<String[]> data = new ArrayList<String[]>();
+                    Cursor cursor = db.rawQuery(query, null);
+                    if (cursor != null) {
+                        int columns = cursor.getColumnCount();
+                        if (cursor.moveToFirst()) {
+                            do {
+                                String[] record = new String[columns];
+                                for (int i = 0; i < columns; i++)
+                                    record[i] = cursor.getString(i);
+                                data.add(record);
+                            }
+                            while (cursor.moveToNext());
+                        }
+                    }
+                    String[][] results = data.toArray(new String[][]{});
+
+                    for (String[] result : results) {
+
+                        String pid = result[0];
+                        String secondaryContact = result[1];
+
+                        if (!(secondaryContact == null || secondaryContact.equals(""))) {
+                            ContentValues values = new ContentValues();
+                            values.put("person_attribute_type", secondaryContactAttrId);
+                            values.put("value", secondaryContact);
+                            values.put("patient_id", pid);
+                            db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
+                        }
+                    }
+                }
+
+                if (isColumnExists(db,  Metadata.PATIENT, "secondarycontactOwner")) {
+                    String query = "Select patient_id, secondarycontactOwner from " + Metadata.PATIENT;
+
+                    ArrayList<String[]> data = new ArrayList<String[]>();
+                    Cursor cursor = db.rawQuery(query, null);
+                    if (cursor != null) {
+                        int columns = cursor.getColumnCount();
+                        if (cursor.moveToFirst()) {
+                            do {
+                                String[] record = new String[columns];
+                                for (int i = 0; i < columns; i++)
+                                    record[i] = cursor.getString(i);
+                                data.add(record);
+                            }
+                            while (cursor.moveToNext());
+                        }
+                    }
+                    String[][] results = data.toArray(new String[][]{});
+
+                    for (String[] result : results) {
+
+                        String pid = result[0];
+                        String secondaryContactOwner = result[1];
+
+                        if (!(secondaryContactOwner == null || secondaryContactOwner.equals(""))) {
+                            ContentValues values = new ContentValues();
+                            values.put("person_attribute_type", secondaryContactOwnerAttrId);
+                            values.put("value", secondaryContactOwner);
+                            values.put("patient_id", pid);
+                            db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
+                        }
+                    }
+                }
+
+                if (isColumnExists(db,  Metadata.PATIENT, "ethnicity")) {
+                    String query = "Select patient_id, ethnicity from " + Metadata.PATIENT;
+
+                    ArrayList<String[]> data = new ArrayList<String[]>();
+                    Cursor cursor = db.rawQuery(query, null);
+                    if (cursor != null) {
+                        int columns = cursor.getColumnCount();
+                        if (cursor.moveToFirst()) {
+                            do {
+                                String[] record = new String[columns];
+                                for (int i = 0; i < columns; i++)
+                                    record[i] = cursor.getString(i);
+                                data.add(record);
+                            }
+                            while (cursor.moveToNext());
+                        }
+                    }
+                    String[][] results = data.toArray(new String[][]{});
+
+                    for (String[] result : results) {
+
+                        String pid = result[0];
+                        String ethinicity = result[1];
+
+                        if (!(ethinicity == null || ethinicity.equals(""))) {
+                            ContentValues values = new ContentValues();
+                            values.put("person_attribute_type", ethinicityAttrId);
+                            values.put("value", ethinicity);
+                            values.put("patient_id", pid);
+                            db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
+                        }
+                    }
+                }
+
+                if (isColumnExists(db,  Metadata.PATIENT, "educationlevel")) {
+                    String query = "Select patient_id, educationlevel from " + Metadata.PATIENT;
+
+                    ArrayList<String[]> data = new ArrayList<String[]>();
+                    Cursor cursor = db.rawQuery(query, null);
+                    if (cursor != null) {
+                        int columns = cursor.getColumnCount();
+                        if (cursor.moveToFirst()) {
+                            do {
+                                String[] record = new String[columns];
+                                for (int i = 0; i < columns; i++)
+                                    record[i] = cursor.getString(i);
+                                data.add(record);
+                            }
+                            while (cursor.moveToNext());
+                        }
+                    }
+                    String[][] results = data.toArray(new String[][]{});
+
+                    for (String[] result : results) {
+
+                        String pid = result[0];
+                        String educationLevel = result[1];
+
+                        if (!(educationLevel == null || educationLevel.equals(""))) {
+                            ContentValues values = new ContentValues();
+                            values.put("person_attribute_type", educationLevelAttrId);
+                            values.put("value", educationLevel);
+                            values.put("patient_id", pid);
+                            db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
+                        }
+                    }
+                }
+
+                if (isColumnExists(db,  Metadata.PATIENT, "employmentstatus")) {
+                    String query = "Select patient_id, employmentstatus from " + Metadata.PATIENT;
+
+                    ArrayList<String[]> data = new ArrayList<String[]>();
+                    Cursor cursor = db.rawQuery(query, null);
+                    if (cursor != null) {
+                        int columns = cursor.getColumnCount();
+                        if (cursor.moveToFirst()) {
+                            do {
+                                String[] record = new String[columns];
+                                for (int i = 0; i < columns; i++)
+                                    record[i] = cursor.getString(i);
+                                data.add(record);
+                            }
+                            while (cursor.moveToNext());
+                        }
+                    }
+                    String[][] results = data.toArray(new String[][]{});
+
+                    for (String[] result : results) {
+
+                        String pid = result[0];
+                        String employmentStatus = result[1];
+
+                        if (!(employmentStatus == null || employmentStatus.equals(""))) {
+                            ContentValues values = new ContentValues();
+                            values.put("person_attribute_type", employmentStatusAttrId);
+                            values.put("value", employmentStatus);
+                            values.put("patient_id", pid);
+                            db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
+                        }
+                    }
+                }
+
+                if (isColumnExists(db,  Metadata.PATIENT, "occupation")) {
+                    String query = "Select patient_id, occupation from " + Metadata.PATIENT;
+
+                    ArrayList<String[]> data = new ArrayList<String[]>();
+                    Cursor cursor = db.rawQuery(query, null);
+                    if (cursor != null) {
+                        int columns = cursor.getColumnCount();
+                        if (cursor.moveToFirst()) {
+                            do {
+                                String[] record = new String[columns];
+                                for (int i = 0; i < columns; i++)
+                                    record[i] = cursor.getString(i);
+                                data.add(record);
+                            }
+                            while (cursor.moveToNext());
+                        }
+                    }
+                    String[][] results = data.toArray(new String[][]{});
+
+                    for (String[] result : results) {
+
+                        String pid = result[0];
+                        String occupation = result[1];
+
+                        if (!(occupation == null || occupation.equals(""))) {
+                            ContentValues values = new ContentValues();
+                            values.put("person_attribute_type", occupationAttrId);
+                            values.put("value", occupation);
+                            values.put("patient_id", pid);
+                            db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
+                        }
+                    }
+                }
+
+                if (isColumnExists(db,  Metadata.PATIENT, "incomeClass")) {
+                    String query = "Select patient_id, incomeClass from " + Metadata.PATIENT;
+
+                    ArrayList<String[]> data = new ArrayList<String[]>();
+                    Cursor cursor = db.rawQuery(query, null);
+                    if (cursor != null) {
+                        int columns = cursor.getColumnCount();
+                        if (cursor.moveToFirst()) {
+                            do {
+                                String[] record = new String[columns];
+                                for (int i = 0; i < columns; i++)
+                                    record[i] = cursor.getString(i);
+                                data.add(record);
+                            }
+                            while (cursor.moveToNext());
+                        }
+                    }
+                    String[][] results = data.toArray(new String[][]{});
+
+                    for (String[] result : results) {
+
+                        String pid = result[0];
+                        String incomeClass = result[1];
+
+                        if (!(incomeClass == null || incomeClass.equals(""))) {
+                            ContentValues values = new ContentValues();
+                            values.put("person_attribute_type", incomeClassAttrId);
+                            values.put("value", incomeClass);
+                            values.put("patient_id", pid);
+                            db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
+                        }
+                    }
+                }
+
+                if (isColumnExists(db,  Metadata.PATIENT, "mothertongue")) {
+                    String query = "Select patient_id, mothertongue from " + Metadata.PATIENT;
+
+                    ArrayList<String[]> data = new ArrayList<String[]>();
+                    Cursor cursor = db.rawQuery(query, null);
+                    if (cursor != null) {
+                        int columns = cursor.getColumnCount();
+                        if (cursor.moveToFirst()) {
+                            do {
+                                String[] record = new String[columns];
+                                for (int i = 0; i < columns; i++)
+                                    record[i] = cursor.getString(i);
+                                data.add(record);
+                            }
+                            while (cursor.moveToNext());
+                        }
+                    }
+                    String[][] results = data.toArray(new String[][]{});
+
+                    for (String[] result : results) {
+
+                        String pid = result[0];
+                        String motherTongue = result[1];
+
+                        if (!(motherTongue == null || motherTongue.equals(""))) {
+                            ContentValues values = new ContentValues();
+                            values.put("person_attribute_type", motherTongueAttrId);
+                            values.put("value", motherTongue);
+                            values.put("patient_id", pid);
+                            db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
+                        }
+                    }
+                }
+
+                if (isColumnExists(db,  Metadata.PATIENT, "nationalid")) {
+                    String query = "Select patient_id, nationalid from " + Metadata.PATIENT;
+
+                    ArrayList<String[]> data = new ArrayList<String[]>();
+                    Cursor cursor = db.rawQuery(query, null);
+                    if (cursor != null) {
+                        int columns = cursor.getColumnCount();
+                        if (cursor.moveToFirst()) {
+                            do {
+                                String[] record = new String[columns];
+                                for (int i = 0; i < columns; i++)
+                                    record[i] = cursor.getString(i);
+                                data.add(record);
+                            }
+                            while (cursor.moveToNext());
+                        }
+                    }
+                    String[][] results = data.toArray(new String[][]{});
+
+                    for (String[] result : results) {
+
+                        String pid = result[0];
+                        String nationalId = result[1];
+
+                        if (!(nationalId == null || nationalId.equals(""))) {
+                            ContentValues values = new ContentValues();
+                            values.put("person_attribute_type", nationIdAttrId);
+                            values.put("value", nationalId);
+                            values.put("patient_id", pid);
+                            db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
+                        }
+                    }
+                }
+
+                if (isColumnExists(db,  Metadata.PATIENT, "nationalidowner")) {
+                    String query = "Select patient_id, nationalidowner from " + Metadata.PATIENT;
+
+                    ArrayList<String[]> data = new ArrayList<String[]>();
+                    Cursor cursor = db.rawQuery(query, null);
+                    if (cursor != null) {
+                        int columns = cursor.getColumnCount();
+                        if (cursor.moveToFirst()) {
+                            do {
+                                String[] record = new String[columns];
+                                for (int i = 0; i < columns; i++)
+                                    record[i] = cursor.getString(i);
+                                data.add(record);
+                            }
+                            while (cursor.moveToNext());
+                        }
+                    }
+                    String[][] results = data.toArray(new String[][]{});
+
+                    for (String[] result : results) {
+
+                        String pid = result[0];
+                        String nationalIdOwner = result[1];
+
+                        if (!(nationalIdOwner == null || nationalIdOwner.equals(""))) {
+                            ContentValues values = new ContentValues();
+                            values.put("person_attribute_type", nationalIdOwnerAttrId);
+                            values.put("value", nationalIdOwner);
+                            values.put("patient_id", pid);
+                            db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
+                        }
+                    }
+                }
+
+                if (isColumnExists(db,  Metadata.PATIENT, "guardianname")) {
+                    String query = "Select patient_id, guardianname from " + Metadata.PATIENT;
+
+                    ArrayList<String[]> data = new ArrayList<String[]>();
+                    Cursor cursor = db.rawQuery(query, null);
+                    if (cursor != null) {
+                        int columns = cursor.getColumnCount();
+                        if (cursor.moveToFirst()) {
+                            do {
+                                String[] record = new String[columns];
+                                for (int i = 0; i < columns; i++)
+                                    record[i] = cursor.getString(i);
+                                data.add(record);
+                            }
+                            while (cursor.moveToNext());
+                        }
+                    }
+                    String[][] results = data.toArray(new String[][]{});
+
+                    for (String[] result : results) {
+
+                        String pid = result[0];
+                        String guardiaName = result[1];
+
+                        if (!(guardiaName == null || guardiaName.equals(""))) {
+                            ContentValues values = new ContentValues();
+                            values.put("person_attribute_type", guardianNameAttrId);
+                            values.put("value", guardiaName);
+                            values.put("patient_id", pid);
+                            db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
+                        }
+                    }
+                }
+
+                if (isColumnExists(db,  Metadata.PATIENT, "tertiarycontact")) {
+                    String query = "Select patient_id, tertiarycontact from " + Metadata.PATIENT;
+
+                    ArrayList<String[]> data = new ArrayList<String[]>();
+                    Cursor cursor = db.rawQuery(query, null);
+                    if (cursor != null) {
+                        int columns = cursor.getColumnCount();
+                        if (cursor.moveToFirst()) {
+                            do {
+                                String[] record = new String[columns];
+                                for (int i = 0; i < columns; i++)
+                                    record[i] = cursor.getString(i);
+                                data.add(record);
+                            }
+                            while (cursor.moveToNext());
+                        }
+                    }
+                    String[][] results = data.toArray(new String[][]{});
+
+                    for (String[] result : results) {
+
+                        String pid = result[0];
+                        String tertiaryContact = result[1];
+
+                        if (!(tertiaryContact == null || tertiaryContact.equals(""))) {
+                            ContentValues values = new ContentValues();
+                            values.put("person_attribute_type", tertiaryContactAttrId);
+                            values.put("value", tertiaryContact);
+                            values.put("patient_id", pid);
+                            db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
+                        }
+                    }
+                }
+
+                if (isColumnExists(db,  Metadata.PATIENT, "quaternarycontact")) {
+                    String query = "Select patient_id, quaternarycontact from " + Metadata.PATIENT;
+
+                    ArrayList<String[]> data = new ArrayList<String[]>();
+                    Cursor cursor = db.rawQuery(query, null);
+                    if (cursor != null) {
+                        int columns = cursor.getColumnCount();
+                        if (cursor.moveToFirst()) {
+                            do {
+                                String[] record = new String[columns];
+                                for (int i = 0; i < columns; i++)
+                                    record[i] = cursor.getString(i);
+                                data.add(record);
+                            }
+                            while (cursor.moveToNext());
+                        }
+                    }
+                    String[][] results = data.toArray(new String[][]{});
+
+                    for (String[] result : results) {
+
+                        String pid = result[0];
+                        String quaternaryContact = result[1];
+
+                        if (!(quaternaryContact == null || quaternaryContact.equals(""))) {
+                            ContentValues values = new ContentValues();
+                            values.put("person_attribute_type", quaternaryContactAttrId);
+                            values.put("value", quaternaryContact);
+                            values.put("patient_id", pid);
+                            db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
+                        }
+                    }
+                }
+
+                if (isColumnExists(db,  Metadata.PATIENT, "treatmentsupporter")) {
+                    String query = "Select patient_id, treatmentsupporter from " + Metadata.PATIENT;
+
+                    ArrayList<String[]> data = new ArrayList<String[]>();
+                    Cursor cursor = db.rawQuery(query, null);
+                    if (cursor != null) {
+                        int columns = cursor.getColumnCount();
+                        if (cursor.moveToFirst()) {
+                            do {
+                                String[] record = new String[columns];
+                                for (int i = 0; i < columns; i++)
+                                    record[i] = cursor.getString(i);
+                                data.add(record);
+                            }
+                            while (cursor.moveToNext());
+                        }
+                    }
+                    String[][] results = data.toArray(new String[][]{});
+
+                    for (String[] result : results) {
+
+                        String pid = result[0];
+                        String treatmentSupporter = result[1];
+
+                        if (!(treatmentSupporter == null || treatmentSupporter.equals(""))) {
+                            ContentValues values = new ContentValues();
+                            values.put("person_attribute_type", treatmentSupporterAttrId);
+                            values.put("value", treatmentSupporter);
+                            values.put("patient_id", pid);
+                            db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
+                        }
+                    }
+                }
+
+                break;
+
         }
 
         if(insertsStream !=  null) {

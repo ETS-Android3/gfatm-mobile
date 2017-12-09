@@ -382,7 +382,7 @@ public class HttpPost {
             personAddressObject.put("country", personAddress.getCountry());
             personAddressObject.put("longitude", personAddress.getLongitude());
             personAddressObject.put("latitude", personAddress.getLatitude());
-            //personAddressObject.put("preferred", 1);
+            personAddressObject.put("preferred", 1);
 
             if (App.getMode().equalsIgnoreCase("OFFLINE")) {
 
