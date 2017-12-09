@@ -64,7 +64,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:scrollbarFadeDuration="0">
 
         <LinearLayout
             android:id="@+id/mainlayout"
@@ -84,13 +85,14 @@
 
             </LinearLayout>
 
+            <Button
+                android:id="@+id/loadMoreButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Load More"/>
+
         </LinearLayout>
 
     </ScrollView>
-
-    <!--<ListView-->
-        <!--android:id="@+id/list"-->
-        <!--android:layout_width="fill_parent"-->
-        <!--android:layout_height="fill_parent"/>-->
 
 </LinearLayout>
