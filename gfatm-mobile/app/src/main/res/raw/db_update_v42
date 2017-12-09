@@ -4,6 +4,17 @@ INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('WRONG
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('83c9daa8-de8d-4256-a470-8bac9013124e',166045);
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER REASON TO NOT CONTACTED WITH THE THE PATIENT','reason_patient_not_contacted_other','Text','a6f1393f-79ed-430a-9192-1c4e077a77bb');
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('a6f1393f-79ed-430a-9192-1c4e077a77bb',164473);
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT SOURCE','patient_source','Coded','4499f7a0-8a69-426b-9f57-9e94d25b12cb');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('4499f7a0-8a69-426b-9f57-9e94d25b12cb',166056);
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('WALK IN','walk_in','N/A','10bca6b6-8580-4379-aa38-504521e28625');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('10bca6b6-8580-4379-aa38-504521e28625',165991);
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER PATIENT SOURCE','other_patient_source','Text','4a6a5ca3-196e-442b-8941-880889b9027a');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('4a6a5ca3-196e-442b-8941-880889b9027a',166057);
+INSERT INTO concept_answers (question_concept_uuid, answer_concept_uuid) VALUES('4499f7a0-8a69-426b-9f57-9e94d25b12cb','f23342e6-b4ad-4124-9c7a-20df7f27d5e0');
+INSERT INTO concept_answers (question_concept_uuid, answer_concept_uuid) VALUES('4499f7a0-8a69-426b-9f57-9e94d25b12cb','1648AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept_answers (question_concept_uuid, answer_concept_uuid) VALUES('4499f7a0-8a69-426b-9f57-9e94d25b12cb','124068AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept_answers (question_concept_uuid, answer_concept_uuid) VALUES('4499f7a0-8a69-426b-9f57-9e94d25b12cb','10bca6b6-8580-4379-aa38-504521e28625');
+INSERT INTO concept_answers (question_concept_uuid, answer_concept_uuid) VALUES('4499f7a0-8a69-426b-9f57-9e94d25b12cb','4a6a5ca3-196e-442b-8941-880889b9027a');
 
 update OR IGNORE concept_answers set answer_concept_uuid='eb532c58-48a6-4770-9c5e-bef293c6bfe2' where answer_concept_uuid = '2fd6470d-3faa-453f-8e1e-e96d805b819e';
 
@@ -11,7 +22,6 @@ update OR IGNORE concept set var_name='cat_1' where uuid = '003399f9-294e-4c2c-a
 
 DROP TABLE IF EXISTS person_attribute_type;
 create table person_attribute_type(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name VARCHAR, format VARCHAR, foreign_key VARCHAR, uuid VARCHAR);
-INSERT OR IGNORE INTO person_attribute_type VALUES (1, 'Race','java.lang.String', NULL,'8d871386-c2cc-11de-8d13-0010c6dffd0f');
 INSERT OR IGNORE INTO person_attribute_type VALUES (2, 'Birthplace','java.lang.String', NULL,'8d8718c2-c2cc-11de-8d13-0010c6dffd0f');
 INSERT OR IGNORE INTO person_attribute_type VALUES (3, 'Citizenship','java.lang.String', NULL,'8d871afc-c2cc-11de-8d13-0010c6dffd0f');
 INSERT OR IGNORE INTO person_attribute_type VALUES (4, 'Mother Name','java.lang.String', NULL,'8d871d18-c2cc-11de-8d13-0010c6dffd0f');
@@ -29,16 +39,17 @@ INSERT OR IGNORE INTO person_attribute_type VALUES (15, 'Education Level','org.o
 INSERT OR IGNORE INTO person_attribute_type VALUES (16, 'Employment Status','org.openmrs.Concept', '164145','fa190df0-eacb-4ea8-980b-519ff02957c7');
 INSERT OR IGNORE INTO person_attribute_type VALUES (17, 'Occupation','org.openmrs.Concept', '163399','2debbc4b-caaf-4dfc-b0aa-edef1dc4d511');
 INSERT OR IGNORE INTO person_attribute_type VALUES (18,  'Mother Tongue','org.openmrs.Concept', '164205','ed6619e6-4177-4a87-8e70-10e11745c047');
-INSERT OR IGNORE INTO person_attribute_type VALUES (19, 'Income Class','org.openmrs.Concept', '164174','bfb9c659-660f-4c41-a387-1a315f602f2a');
-INSERT OR IGNORE INTO person_attribute_type VALUES (20, 'National ID','java.lang.String', NULL,'dc528cb6-8037-4688-960e-7bf484914c43');
-INSERT OR IGNORE INTO person_attribute_type VALUES (21, 'National ID Owner','org.openmrs.Concept', '164078','691871fa-4448-4f67-9343-2ad105214cc2');
-INSERT OR IGNORE INTO person_attribute_type VALUES (22, 'Tertiary Contact','java.lang.String', NULL,'c1c2ba98-dc5f-4cf2-9e44-44cd57b2725a');
-INSERT OR IGNORE INTO person_attribute_type VALUES (23, 'Quaternary Contact','java.lang.String', NULL,'1b2ede79-bfee-4e9f-81be-86d6e1567556');
-INSERT OR IGNORE INTO person_attribute_type VALUES (24, 'Treatment Supporter','java.lang.String', NULL,'f083e422-b1e9-4951-8bc9-95c2992a6a72');
-INSERT OR IGNORE INTO person_attribute_type VALUES (25, 'Guardian Name','java.lang.String', NULL,'30b27db4-4e92-4ef8-857a-58e8f65fcad5');
-INSERT OR IGNORE INTO person_attribute_type VALUES (26, 'Other Identification Number','java.lang.String', NULL,'540ae1f5-c544-4096-b328-0bb69330ab07');
-INSERT OR IGNORE INTO person_attribute_type VALUES (27, 'Transgender','java.lang.Boolean', NULL,'1d703cf8-766f-44ba-a6ad-5c7f8a699c49');
-INSERT OR IGNORE INTO person_attribute_type VALUES (28, 'Patient type','org.openmrs.Concept', NULL,'0cb7b30c-c6d8-49af-8882-d63e4ee94807');
+INSERT OR IGNORE INTO person_attribute_type VALUES (20, 'Income Class','org.openmrs.Concept', '164174','bfb9c659-660f-4c41-a387-1a315f602f2a');
+INSERT OR IGNORE INTO person_attribute_type VALUES (21, 'National ID','java.lang.String', NULL,'dc528cb6-8037-4688-960e-7bf484914c43');
+INSERT OR IGNORE INTO person_attribute_type VALUES (22, 'National ID Owner','org.openmrs.Concept', '164078','691871fa-4448-4f67-9343-2ad105214cc2');
+INSERT OR IGNORE INTO person_attribute_type VALUES (23, 'Tertiary Contact','java.lang.String', NULL,'c1c2ba98-dc5f-4cf2-9e44-44cd57b2725a');
+INSERT OR IGNORE INTO person_attribute_type VALUES (24, 'Quaternary Contact','java.lang.String', NULL,'1b2ede79-bfee-4e9f-81be-86d6e1567556');
+INSERT OR IGNORE INTO person_attribute_type VALUES (25, 'Treatment Supporter','java.lang.String', NULL,'f083e422-b1e9-4951-8bc9-95c2992a6a72');
+INSERT OR IGNORE INTO person_attribute_type VALUES (26, 'Guardian Name','java.lang.String', NULL,'30b27db4-4e92-4ef8-857a-58e8f65fcad5');
+INSERT OR IGNORE INTO person_attribute_type VALUES (27, 'Other Identification Number','java.lang.String', NULL,'540ae1f5-c544-4096-b328-0bb69330ab07');
+INSERT OR IGNORE INTO person_attribute_type VALUES (28, 'Transgender','java.lang.Boolean', NULL,'1d703cf8-766f-44ba-a6ad-5c7f8a699c49');
+INSERT OR IGNORE INTO person_attribute_type VALUES (29, 'Email Address','java.lang.String', NULL, '54813ba4-a0a0-403f-adc7-51420d4d379c');
+INSERT OR IGNORE INTO person_attribute_type VALUES (30, 'Source type','org.openmrs.Concept', '166056','3146d347-9220-4f63-9d82-fa401cfe8ff3');
 
 DROP TABLE IF EXISTS person_attribute;
 create table if not exists person_attribute(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, person_attribute_type INTEGER NOT NULL, value VARCHAR, patient_id INTEGER NOT NULL, retired INTEGER DEFAULT 0);

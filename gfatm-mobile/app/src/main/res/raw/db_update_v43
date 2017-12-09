@@ -1,0 +1,29 @@
+update OR IGNORE concept set full_name='MTB DETECTED WITH RIF RESISTANCE', var_name='mtb_detected_with_rif_resistance' where uuid = '162203AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
+update OR IGNORE concept set full_name='MTB DETECTED WITHOUT RIF RESISTANCE', var_name='mtb_detected_without_rif_resistance' where uuid = '162204AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
+update OR IGNORE concept set full_name='UNABLE TO LOCATE REFERRAL SITE', var_name='unable_to_locate_referral_site' where uuid = 'e76e99d6-0444-4b2b-830c-d591bacc541c';
+
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('OUTSIDE THE SITE','outside_site','N/A','feaf675d-6738-414f-8d3e-58ad18669937');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('feaf675d-6738-414f-8d3e-58ad18669937',166053);
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('WITHIN THE SITE','within_site','N/A','e9852e70-9dd9-484b-b647-82826250b1f5');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('e9852e70-9dd9-484b-b647-82826250b1f5',166052);
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('PULMONARY','pulmonary','N/A','a4822bf0-7a81-4abb-8ad8-011488f3ecea');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('a4822bf0-7a81-4abb-8ad8-011488f3ecea',166058);
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('SAMPLE COLLECTED OUTSIDE THE SITE OTHER','sample_collected_outside_site_other','N/A','0a6003ec-4ad8-47ae-bfec-ae507e2e9a09');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('0a6003ec-4ad8-47ae-bfec-ae507e2e9a09',166055);
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('BASELINE DIAGNOSTIC','baseline_diagnostic','N/A','3f3e7241-a899-4afa-9dc2-0c7daa82a144');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('3f3e7241-a899-4afa-9dc2-0c7daa82a144',166050);
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('FOLLOW UP','followup','N/A','ec681c0e-4d00-424c-b7b3-2299d9c2a14f');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('ec681c0e-4d00-424c-b7b3-2299d9c2a14f',166051);
+
+delete from encounter_type where uuid = '6ae83468-00ae-4f25-ad5a-cec3b43f337b';
+INSERT OR IGNORE INTO encounter_type VALUES ('FAST-Screening CXR Test Order','Add FAST Forms','View FAST Forms','6ae83468-00ae-4f25-ad5a-cec3b43f337b');
+delete from encounter_type where uuid = 'ba390e08-753f-4f80-9f04-d2369a3f8a15';
+INSERT OR IGNORE INTO encounter_type VALUES ('FAST-Screening CXR Test Result','Add FAST Forms','View FAST Forms','ba390e08-753f-4f80-9f04-d2369a3f8a15');
+delete from encounter_type where uuid = 'b27b9f68-1552-45df-9e46-4325d9652710';
+INSERT OR IGNORE INTO encounter_type VALUES ('FAST-AFB Smear Test Order','Add FAST Forms','View FAST Forms','b27b9f68-1552-45df-9e46-4325d9652710');
+delete from encounter_type where uuid = '0ed933d0-1104-4c97-9d94-6837ef73ded9';
+INSERT OR IGNORE INTO encounter_type VALUES ('FAST-AFB Smear Test Result','Add FAST Forms','View FAST Forms','0ed933d0-1104-4c97-9d94-6837ef73ded9');
+delete from encounter_type where uuid = 'edf92ef1-6301-426d-a1f2-562a57c412ff';
+INSERT OR IGNORE INTO encounter_type VALUES ('FAST-DST Culture Test Order','Add FAST Forms','View FAST Forms','edf92ef1-6301-426d-a1f2-562a57c412ff');
+delete from encounter_type where uuid = 'ab43cd19-4454-4ebf-9814-5f2c2e07d815';
+INSERT OR IGNORE INTO encounter_type VALUES ('FAST-DST Culture Test Result','Add FAST Forms','View FAST Forms','ab43cd19-4454-4ebf-9814-5f2c2e07d815');
