@@ -110,6 +110,8 @@ import com.ihsinformatics.gfatmmobile.pmdt.PmdtProviderRegistration;
 import com.ihsinformatics.gfatmmobile.pmdt.PmdtSocialSupportFoodBasketForm;
 import com.ihsinformatics.gfatmmobile.pmdt.PmdtTreatmentCoordinatorMonitoringForm;
 
+import org.openmrs.Role;
+
 import java.util.ArrayList;
 
 /**
@@ -126,10 +128,19 @@ public class Forms{
     public static final String GENEXPERT_RESULT_FORM = "GeneXpert Result Form";
     public static final String SCREENING_CHEST_XRAY_ORDER_AND_RESULT_FORM = "Screening CXR(CAD4TB)";
 
-    public static final FormsObject patientInformationForm = new FormsObject(PATIENT_INFORMATION_FORM, PatientInformationForm.class, R.drawable.fast_presumptive_information_form, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SCREENER, Roles.FAST_SITE_MANAGER,  Roles.FAST_FIELD_SUPERVISOR});
-    public static final FormsObject gxpSpecimenCollectionForm = new FormsObject(GXP_SPECIMEN_COLLECTION_FORM, GpxSpecimenCollectionForm.class, R.drawable.pet_treatment_adherence, FormTypeColor.TEST_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_LAB_TECHNICIAN, Roles.FAST_SCREENER, Roles.FAST_SITE_MANAGER,  Roles.FAST_FIELD_SUPERVISOR});
-    public static final FormsObject geneXpertResultForm = new FormsObject(GENEXPERT_RESULT_FORM, GeneXpertResultForm.class, R.drawable.fast_result_form, FormTypeColor.TEST_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_LAB_TECHNICIAN, Roles.FAST_SITE_MANAGER,  Roles.FAST_FIELD_SUPERVISOR});
-    public static final FormsObject screeningChestXrayOrderAndResultForm = new FormsObject(SCREENING_CHEST_XRAY_ORDER_AND_RESULT_FORM, ScreeningChestXrayOrderAndResultForm.class, R.drawable.ctb_xray, FormTypeColor.TEST_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SCREENER, Roles.FAST_LAB_TECHNICIAN, Roles.FAST_SITE_MANAGER,  Roles.FAST_FIELD_SUPERVISOR});
+    public static final FormsObject patientInformationForm = new FormsObject(PATIENT_INFORMATION_FORM, PatientInformationForm.class, R.drawable.fast_presumptive_information_form, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.PET_CLINICIAN, Roles.PET_PSYCHOLOGIST, Roles.PET_FIELD_SUPERVISOR, Roles.PET_HEALTH_WORKER, Roles.PET_PROGRAM_MANAGER,
+                                                                                                                                                                                                                                        Roles.FAST_FIELD_SUPERVISOR, Roles.FAST_SCREENER, Roles.FAST_FACILITATOR, Roles.FAST_LAB_TECHNICIAN, Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SITE_MANAGER,
+                                                                                                                                                                                                                                        Roles.CHILDHOODTB_MEDICAL_OFFICER, Roles.CHILDHOODTB_LAB_TECHNICIAN, Roles.CHILDHOODTB_MONITOR, Roles.CHILDHOODTB_NURSE, Roles.CHILDHOODTB_PROGRAM_ASSISTANT, Roles.CHILDHOODTB_PROGRAM_MANAGER,
+                                                                                                                                                                                                                                        Roles.COMORBIDITIES_DIABETES_EDUCATOR, Roles.COMORBIDITIES_ASSOCIATE_DIABETOLOGIST, Roles.COMORBIDITIES_COUNSELOR, Roles.COMORBIDITIES_EYE_SCREENER, Roles.COMORBIDITIES_FOOT_SCREENER, Roles.COMORBIDITIES_PROGRAM_MANAGER, Roles.COMORBIDITIES_HEALTH_WORKER, Roles.COMORBIDITIES_PSYCHOLOGIST});
+    public static final FormsObject gxpSpecimenCollectionForm = new FormsObject(GXP_SPECIMEN_COLLECTION_FORM, GpxSpecimenCollectionForm.class, R.drawable.pet_treatment_adherence, FormTypeColor.TEST_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_LAB_TECHNICIAN, Roles.FAST_SCREENER, Roles.FAST_SITE_MANAGER,  Roles.FAST_FIELD_SUPERVISOR,
+                                                                                                                                                                                                                            Roles.PET_PROGRAM_MANAGER, Roles.PET_FIELD_SUPERVISOR, Roles.PET_HEALTH_WORKER,
+                                                                                                                                                                                                                            Roles.CHILDHOODTB_PROGRAM_MANAGER, Roles.CHILDHOODTB_LAB_TECHNICIAN, Roles.CHILDHOODTB_MEDICAL_OFFICER});
+    public static final FormsObject geneXpertResultForm = new FormsObject(GENEXPERT_RESULT_FORM, GeneXpertResultForm.class, R.drawable.fast_result_form, FormTypeColor.TEST_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_LAB_TECHNICIAN, Roles.FAST_SITE_MANAGER,  Roles.FAST_FIELD_SUPERVISOR,
+                                                                                                                                                                                                        Roles.PET_PROGRAM_MANAGER, Roles.PET_FIELD_SUPERVISOR, Roles.PET_HEALTH_WORKER,
+                                                                                                                                                                                                        Roles.CHILDHOODTB_PROGRAM_MANAGER, Roles.CHILDHOODTB_LAB_TECHNICIAN, Roles.CHILDHOODTB_MEDICAL_OFFICER});
+    public static final FormsObject screeningChestXrayOrderAndResultForm = new FormsObject(SCREENING_CHEST_XRAY_ORDER_AND_RESULT_FORM, ScreeningChestXrayOrderAndResultForm.class, R.drawable.ctb_xray, FormTypeColor.TEST_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SCREENER, Roles.FAST_LAB_TECHNICIAN, Roles.FAST_SITE_MANAGER,  Roles.FAST_FIELD_SUPERVISOR,
+                                                                                                                                                                                                                                                Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_MEDICAL_OFFICER,
+                                                                                                                                                                                                                                                Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN});
 
     /********************************
      * PET
