@@ -569,7 +569,7 @@ public class ComorbiditiesDrugDisbursement extends AbstractFormActivity implemen
                 });
 
                 String result = "";
-                result = serverService.saveEncounterAndObservation(FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
+                result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 

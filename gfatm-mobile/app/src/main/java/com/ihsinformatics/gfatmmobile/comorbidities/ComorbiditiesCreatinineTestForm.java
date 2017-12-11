@@ -629,11 +629,11 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
                 String result = "";
 
                 if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
-                    result = serverService.saveEncounterAndObservation("Creatinine Test Order", FORM, formDateCalendar, observations.toArray(new String[][]{}), true);
+                    result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+"Creatinine Test Order", FORM, formDateCalendar, observations.toArray(new String[][]{}), true);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 } else if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))) {
-                    result = serverService.saveEncounterAndObservation("Creatinine Test Result", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
+                    result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+"Creatinine Test Result", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 }
