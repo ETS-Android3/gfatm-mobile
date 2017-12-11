@@ -496,7 +496,7 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("GXP Test", FORM, formDateCalendar, observations.toArray(new String[][]{}),false);
+                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-GXP Test", FORM, formDateCalendar, observations.toArray(new String[][]{}),false);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 

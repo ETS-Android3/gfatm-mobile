@@ -740,13 +740,12 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("Supplement Disbursement Form", FORM, formDateCalendar, observations.toArray(new String[][]{}), true);
+                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-Supplement Disbursement Form", FORM, formDateCalendar, observations.toArray(new String[][]{}), true);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 
                 return result;
             }
-
             @Override
             protected void onProgressUpdate(String... values) {
             }

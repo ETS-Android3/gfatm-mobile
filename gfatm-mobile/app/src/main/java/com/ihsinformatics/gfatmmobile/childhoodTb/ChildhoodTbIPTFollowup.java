@@ -431,7 +431,7 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("IPT Followup", FORM, formDateCalendar, observations.toArray(new String[][]{}),false);
+                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-IPT Followup", FORM, formDateCalendar, observations.toArray(new String[][]{}),false);
                 if (!result.contains("SUCCESS"))
                     return result;
 
@@ -692,7 +692,7 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
 
         }
 
-        String husbandNameString = App.getPatient().getPerson().getGuardianName();
+        String husbandNameString = App.getPatient().getPerson().getPersonAttribute("Guardian Name");
         if(husbandNameString!=null) {
             fathersName.getEditText().setText(husbandNameString);
         }

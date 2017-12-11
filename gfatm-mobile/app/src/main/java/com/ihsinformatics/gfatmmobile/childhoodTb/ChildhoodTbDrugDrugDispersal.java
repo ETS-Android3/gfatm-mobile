@@ -649,7 +649,7 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("Drug Dispersal Form", FORM, formDateCalendar, observations.toArray(new String[][]{}),true);
+                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-Drug Dispersal Form", FORM, formDateCalendar, observations.toArray(new String[][]{}),true);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 

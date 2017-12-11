@@ -529,7 +529,7 @@ public class ChildhoodTbScreeningLocation extends AbstractFormActivity implement
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("Screening Location", FORM, formDateCalendar, observations.toArray(new String[][]{}),false);
+                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-Screening Location", FORM, formDateCalendar, observations.toArray(new String[][]{}),false);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 
