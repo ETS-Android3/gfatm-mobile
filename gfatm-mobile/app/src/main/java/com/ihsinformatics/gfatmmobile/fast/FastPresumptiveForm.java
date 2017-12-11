@@ -580,7 +580,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("Presumptive", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
+                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+"Presumptive", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (!result.contains("SUCCESS"))
                     return result;
                 else {

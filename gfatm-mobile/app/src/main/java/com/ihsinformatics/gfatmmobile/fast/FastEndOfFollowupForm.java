@@ -535,7 +535,7 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("End of Followup", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
+                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+"End of Followup", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (!result.contains("SUCCESS"))
                     return result;
                 else {

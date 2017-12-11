@@ -1234,7 +1234,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("Presumptive Information", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
+                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+"Presumptive Information", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (!result.contains("SUCCESS"))
                     return result;
                 else {

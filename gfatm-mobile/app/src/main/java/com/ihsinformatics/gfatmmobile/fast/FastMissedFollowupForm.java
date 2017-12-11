@@ -478,7 +478,7 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
                                                     (App.get(reasonMissedVisit).equals(getResources().getString(R.string.fast_patient_unwell)) ? "PATIENT UNWELL" :
                                                             (App.get(reasonMissedVisit).equals(getResources().getString(R.string.fast_service_complaint)) ? "SERVICE COMPLAINT" :
                                                                     (App.get(reasonMissedVisit).equals(getResources().getString(R.string.fast_lack_of_funds_to_travel)) ? "PATIENT UNWELL" :
-                                                                            (App.get(reasonMissedVisit).equals(getResources().getString(R.string.fast_unable_to_relocate)) ? "UNABLE TO RELOCATE REFERRAL SITE" :
+                                                                            (App.get(reasonMissedVisit).equals(getResources().getString(R.string.fast_unable_to_relocate)) ? "UNABLE TO LOCATE REFERRAL SITE" :
                                                                                     (App.get(reasonMissedVisit).equals(getResources().getString(R.string.fast_want_treatment_at_parent_site)) ? "WANT TREATMENT AT PARENT SITE" :"OTHER REASON TO MISSED VISIT")))))))))});
 
 
@@ -514,7 +514,7 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("Missed Visit Followup", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
+                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+"Missed Visit Followup", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 
@@ -711,7 +711,7 @@ public class FastMissedFollowupForm extends AbstractFormActivity implements Radi
                                                         (obs[0][1].equals("PATIENT UNWELL") ? getResources().getString(R.string.fast_patient_unwell) :
                                                                 (obs[0][1].equals("SERVICE COMPLAINT") ? getResources().getString(R.string.fast_service_complaint) :
                                                                         (obs[0][1].equals("LACK OF FUNDS TO TRAVEL TO THE FACILITY") ? getResources().getString(R.string.fast_lack_of_funds_to_travel) :
-                                                                                (obs[0][1].equals("UNABLE TO RELOCATE REFERRAL SITE") ? getResources().getString(R.string.fast_unable_to_relocate) :
+                                                                                (obs[0][1].equals("UNABLE TO LOCATE REFERRAL SITE") ? getResources().getString(R.string.fast_unable_to_relocate) :
                                                                                         (obs[0][1].equals("WANT TREATMENT AT PARENT SITE") ? getResources().getString(R.string.fast_want_treatment_at_parent_site) :
                                                                                                 getResources().getString(R.string.fast_other_title))))))))));
 
