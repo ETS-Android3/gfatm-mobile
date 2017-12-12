@@ -1312,7 +1312,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
                             return result;
                     }
 
-                    if(!cnicNumber.equals("")) {
+                    if(cnicNumber.length() == 15) {
                         result = serverService.savePersonAttributeType("National ID", cnicNumber, encounterId);
                         if (!result.equals("SUCCESS"))
                             return result;
@@ -1321,13 +1321,6 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
                     if(!finalOwnerString.equals("")) {
                         String[][] cnicOwnerConcept = serverService.getConceptUuidAndDataType(finalOwnerString);
                         result = serverService.savePersonAttributeType("National ID Owner", cnicOwnerConcept[0][0], encounterId);
-                        if (!result.equals("SUCCESS"))
-                            return result;
-                    }
-
-                    if(!finalSource.equals("")) {
-                        String[][] finalSourceConcept = serverService.getConceptUuidAndDataType(finalSource);
-                        result = serverService.savePersonAttributeType("Source type", finalSourceConcept[0][0], encounterId);
                         if (!result.equals("SUCCESS"))
                             return result;
                     }

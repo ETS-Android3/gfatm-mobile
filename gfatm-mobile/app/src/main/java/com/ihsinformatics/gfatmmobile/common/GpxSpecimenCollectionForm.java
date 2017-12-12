@@ -420,6 +420,8 @@ public class GpxSpecimenCollectionForm extends AbstractFormActivity implements R
         if (sampleCollectedFrom.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"SAMPLE COLLECTED FROM", App.get(sampleCollectedFrom).equals(getResources().getString(R.string.fast_within_site)) ? "WITHIN THE SITE" : "OUTSIDE THE SITE"});
 
+        if (outsideSpecify.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"SAMPLE COLLECTED OUTSIDE THE SITE OTHER", App.get(outsideSpecify)});
 
         observations.add(new String[]{"SPECIMEN SUBMISSION DATE", App.getSqlDateTime(secondDateCalendar)});
 
@@ -613,7 +615,10 @@ public class GpxSpecimenCollectionForm extends AbstractFormActivity implements R
                     }
                 }
                 sampleCollectedFrom.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("SPECIMEN SUBMISSION DATE")) {
+            } else if (obs[0][0].equals("SAMPLE COLLECTED OUTSIDE THE SITE OTHER")) {
+                outsideSpecify.getEditText().setText(obs[0][1]);
+                outsideSpecify.setVisibility(View.VISIBLE);
+            }  else if (obs[0][0].equals("SPECIMEN SUBMISSION DATE")) {
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                 sampleSubmissionDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
