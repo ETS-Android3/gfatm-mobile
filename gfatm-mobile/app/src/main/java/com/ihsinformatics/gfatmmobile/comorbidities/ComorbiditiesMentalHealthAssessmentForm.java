@@ -610,9 +610,9 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
                 (App.get(akuadsUrination).equals(getResources().getString(R.string.comorbidities_MH_screening_options_sometimes)) ? "SOMETIMES" :
                         (App.get(akuadsUrination).equals(getResources().getString(R.string.comorbidities_MH_screening_options_mostly)) ? "MOSTLY" : "ALWAYS"))});
         observations.add(new String[]{"AKUADS SCORE", App.get(akuadsTotalScore)});
-        observations.add(new String[]{"AKUADS SEVERITY", App.get(akuadsUrination).equals(getResources().getString(R.string.comorbidities_MH_severity_level_normal)) ? "NORMAL" :
-                (App.get(akuadsUrination).equals(getResources().getString(R.string.comorbidities_MH_severity_level_mild)) ? "MILD" :
-                        (App.get(akuadsUrination).equals(getResources().getString(R.string.comorbidities_MH_severity_level_moderate)) ? "MODERATE" : "SEVERE"))});
+        observations.add(new String[]{"AKUADS SEVERITY", App.get(akuadsSeverity).equals(getResources().getString(R.string.comorbidities_MH_severity_level_normal)) ? "NORMAL" :
+                (App.get(akuadsSeverity).equals(getResources().getString(R.string.comorbidities_MH_severity_level_mild)) ? "MILD" :
+                        (App.get(akuadsSeverity).equals(getResources().getString(R.string.comorbidities_MH_severity_level_moderate)) ? "MODERATE" : "SEVERE"))});
         observations.add(new String[]{"CONTINUATION STATUS", App.get(continuationStatus).equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_continuation_status_options_continue)) ? "EXERCISE THERAPY" :
                 (App.get(continuationStatus).equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_continuation_status_options_last)) ? "END OF THERAPY" :
                         (App.get(continuationStatus).equals(getResources().getString(R.string.comorbidities_treatment_followup_MH_continuation_status_options_referred)) ? "PATIENT REFERRED" : "OTHER CONTINUATION STATUS"))});
