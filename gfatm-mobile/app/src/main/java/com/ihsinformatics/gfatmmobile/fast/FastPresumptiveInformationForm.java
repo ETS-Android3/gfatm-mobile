@@ -1276,7 +1276,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
                     }
 
 
-                    if(!finalOwnerString.equals("")) {
+                    if(!finalOwnerString.equals("") || !finalOwnerString.equals("--")) {
                         String[][] cnicOwnerConcept = serverService.getConceptUuidAndDataType(finalOwnerString);
                         result = serverService.savePersonAttributeType("National ID Owner", cnicOwnerConcept[0][0], encounterId);
                         if (!result.equals("SUCCESS"))
@@ -1289,9 +1289,11 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
                             return result;
                     }
 
-                    result = serverService.savePersonAttributeType("Primary Contact", mobileNumber, encounterId);
-                    if (!result.equals("SUCCESS"))
-                        return result;
+                    if(!mobileNumber.equals("-") || !mobileNumber.equals("")) {
+                        result = serverService.savePersonAttributeType("Primary Contact", mobileNumber, encounterId);
+                        if (!result.equals("SUCCESS"))
+                            return result;
+                    }
 
                     if (!(App.get(secondaryMobile1).isEmpty() && App.get(secondaryMobile2).isEmpty())) {
                         result = serverService.savePersonAttributeType("Secondary Contact", secondaryMobileNumber, encounterId);
