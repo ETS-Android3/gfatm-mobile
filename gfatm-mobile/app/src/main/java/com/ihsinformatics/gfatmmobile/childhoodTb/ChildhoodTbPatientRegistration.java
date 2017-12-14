@@ -1099,7 +1099,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                     }
 
                     String finalCnic = App.get(cnic1)+"-"+App.get(cnic2)+"-"+App.get(cnic3);
-                    if(!finalCnic.equals("")) {
+                    if(!finalCnic.equals("") || !finalCnic.equals("--")) {
                         result = serverService.savePersonAttributeType("National ID", finalCnic, encounterId);
                         if (!result.equals("SUCCESS"))
                             return result;
@@ -1118,9 +1118,11 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                             return result;
                     }
 
-                    result = serverService.savePersonAttributeType("Primary Contact", App.get(mobileNumber1)+ "-" + App.get(mobileNumber2), encounterId);
-                    if (!result.equals("SUCCESS"))
-                        return result;
+                    if(!App.get(mobileNumber1).isEmpty() && !App.get(mobileNumber2).isEmpty()) {
+                        result = serverService.savePersonAttributeType("Primary Contact", App.get(mobileNumber1) + "-" + App.get(mobileNumber2), encounterId);
+                        if (!result.equals("SUCCESS"))
+                            return result;
+                    }
 
                     String[][] concept = serverService.getConceptUuidAndDataType(primaryMobileNumberContactString);
                     result = serverService.savePersonAttributeType("Primary Contact Owner", concept[0][0], encounterId);
