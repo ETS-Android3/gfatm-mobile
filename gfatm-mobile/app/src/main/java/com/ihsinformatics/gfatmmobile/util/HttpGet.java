@@ -639,10 +639,12 @@ public class HttpGet {
     public JSONObject getPersonAddressByPersonUuid(String personUuid) {
         JSONObject json = null;
         JSONArray jsonArray = getJsonArray(PERSON_RESOURCE, personUuid, ADDRESS);
-        try {
-            json = jsonArray.getJSONObject(0);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if(!(jsonArray == null || jsonArray.length() == 1)) {
+            try {
+                json = jsonArray.getJSONObject(jsonArray.length() - 1);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
         return json;
     }
