@@ -1628,21 +1628,21 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
                         }
                     }
                 }
-            }
-            else if (radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_normal))){
+            } else if (radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_normal))) {
                 presumptiveTbCxr.getRadioGroup().getButtons().get(1).setChecked(true);
-            }
-            else {
+                abnormalDetailedDiagnosis.setVisibility(View.GONE);
+                abnormalDetailedDiagnosisOther.setVisibility(View.GONE);
+
+            } else {
                 abnormalDetailedDiagnosis.setVisibility(View.GONE);
                 abnormalDetailedDiagnosisOther.setVisibility(View.GONE);
                 presumptiveTbCxr.getRadioGroup().clearCheck();
             }
-            if (radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb))){
+            if (radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb))) {
                 returnVisitDate.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 returnVisitDate.setVisibility(View.GONE);
             }
-
         }
 
         else if(radioGroup == pastXray.getRadioGroup()){
