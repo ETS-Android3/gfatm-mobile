@@ -3,13 +3,16 @@ package com.ihsinformatics.gfatmmobile;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.IdRes;
 import android.support.design.widget.AppBarLayout;
+import android.support.v7.app.AlertDialog;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
@@ -272,16 +275,35 @@ public class OperationModeActivity extends AbstractSettingActivity implements Ra
                     submissionTask.execute("");
                 }
             }
-
-
             else {
-                App.setMode(rb.getText().toString());
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(OperationModeActivity.this);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putString(Preferences.MODE, App.getMode());
-                editor.apply();
 
-                onBackPressed();
+                int count = serverService.getPendingSavedFormsCount(App.getUsername());
+
+                if(count >= App.OFFLINE_FORM_CAP){
+                    final AlertDialog alertDialog = new AlertDialog.Builder(this, R.style.dialog).create();
+                    String statement = getResources().getString(R.string.offline_forms_limit_error);
+                    statement = statement.replace("#no#",String.valueOf(count));
+                    alertDialog.setMessage(statement);
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.ic_warning);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_alert));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    onBackPressed();
+                                }
+                            });
+                    alertDialog.show();
+                }
+                else {
+                    App.setMode(rb.getText().toString());
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(OperationModeActivity.this);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString(Preferences.MODE, App.getMode());
+                    editor.apply();
+                    onBackPressed();
+                }
             }
         }
         if (v == resetButton) {

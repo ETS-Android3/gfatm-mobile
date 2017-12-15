@@ -38,12 +38,11 @@ import java.util.ArrayList;
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class FormFragment extends Fragment{
 
-    private LinearLayout prgramForms;
-    private LinearLayout commonForms;
+    private LinearLayout programForms;
+    //private LinearLayout commonForms;
     private LinearLayout mainContent;
     private View mainview;
-    private TextView program;
-    private TextView common;
+    //private TextView program;
 
     public static ServerService serverService;
 
@@ -54,10 +53,9 @@ public class FormFragment extends Fragment{
         mainview = inflater.inflate(R.layout.form_fragment, container, false);
 
         mainContent = (LinearLayout) mainview.findViewById(R.id.mainContent);
-        prgramForms = (LinearLayout) mainview.findViewById(R.id.content_main);
-        commonForms = (LinearLayout) mainview.findViewById(R.id.common_form);
-        program = (TextView) mainview.findViewById(R.id.program);
-        common = (TextView) mainview.findViewById(R.id.common);
+        programForms = (LinearLayout) mainview.findViewById(R.id.content_main);
+        //commonForms = (LinearLayout) mainview.findViewById(R.id.common_form);
+        //program = (TextView) mainview.findViewById(R.id.program);
 
         serverService = new ServerService(mainContent.getContext());
 
@@ -71,15 +69,14 @@ public class FormFragment extends Fragment{
     public void showMainContent(Boolean flag){
 
         if(flag){
-            prgramForms.setVisibility(View.VISIBLE);
-            commonForms.setVisibility(View.VISIBLE);
-            program.setVisibility(View.VISIBLE);
-            common.setVisibility(View.VISIBLE);
+            programForms.setVisibility(View.VISIBLE);
+            //commonForms.setVisibility(View.VISIBLE);
+            //program.setVisibility(View.VISIBLE);
         }else {
-            prgramForms.setVisibility(View.GONE);
-            commonForms.setVisibility(View.GONE);
-            program.setVisibility(View.GONE);
-            common.setVisibility(View.GONE);
+            programForms.setVisibility(View.GONE);
+            //commonForms.setVisibility(View.GONE);
+            //program.setVisibility(View.GONE);
+            //common.setVisibility(View.GONE);
         }
 
 
@@ -87,12 +84,12 @@ public class FormFragment extends Fragment{
 
     public void fillCommonFormContent() {
 
-        FragmentManager fm = getFragmentManager();
+        /*FragmentManager fm = getFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_form, new BlankFragment());
         fragmentTransaction.commit();
-        commonForms.setVisibility(View.VISIBLE);
-        commonForms.removeAllViews();
+        //commonForms.setVisibility(View.VISIBLE);
+        //commonForms.removeAllViews();
 
         ArrayList<FormsObject> forms = Forms.getCommonFormList();
 
@@ -192,10 +189,10 @@ public class FormFragment extends Fragment{
 
         }
 
-        if(commonForms.getChildCount() == 0){
-            common.setVisibility(View.GONE);
+        if(commonForms.getChildCount() == 0)
             commonForms.setVisibility(View.GONE);
-        }
+        else
+            commonForms.setVisibility(View.VISIBLE);*/
 
     }
 
@@ -205,8 +202,10 @@ public class FormFragment extends Fragment{
         if(App.getProgram().equals("")){
 
             if(!App.getLocation().equals("")) {
-                //program.setText(App.getProgram());
-                prgramForms.removeAllViews();
+                //program.setVisibility(View.VISIBLE);
+                //program.setText(App.getProgram() + " " + getResources().getString(R.string.forms));
+                programForms.removeAllViews();
+                programForms.setVisibility(View.VISIBLE);
 
                 String[] locatinPrograms = serverService.getLocationsProgamByName(App.getLocation());
 
@@ -244,7 +243,7 @@ public class FormFragment extends Fragment{
                 }
 
 
-                prgramForms.addView(programSelection);
+                programForms.addView(programSelection);
             }
         }
         else {
@@ -252,9 +251,10 @@ public class FormFragment extends Fragment{
             FragmentTransaction fragmentTransaction = fm.beginTransaction();
             fragmentTransaction.replace(R.id.fragment_form, new BlankFragment());
             fragmentTransaction.commit();
-            prgramForms.setVisibility(View.VISIBLE);
-            prgramForms.removeAllViews();
-            program.setText(App.getProgram());
+            //program.setVisibility(View.VISIBLE);
+            //program.setText(App.getProgram() + " " + getResources().getString(R.string.forms));
+            programForms.removeAllViews();
+            programForms.setVisibility(View.VISIBLE);
 
             ArrayList<FormsObject> forms = new ArrayList<FormsObject>();
 
@@ -296,7 +296,7 @@ public class FormFragment extends Fragment{
 
             for (int i = 0; i < formsShown.size(); i++) {
 
-                LinearLayout layout = new LinearLayout(prgramForms.getContext());
+                LinearLayout layout = new LinearLayout(programForms.getContext());
                 layout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f));
                 layout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
                 layout.setDividerDrawable(getResources().getDrawable(R.drawable.divider));
@@ -308,11 +308,11 @@ public class FormFragment extends Fragment{
 
                     final FormsObject form = formsShown.get(i);
 
-                    Button b = new Button(prgramForms.getContext());
-                    int color = App.getColor(prgramForms.getContext(), R.attr.colorBackground);
+                    Button b = new Button(programForms.getContext());
+                    int color = App.getColor(programForms.getContext(), R.attr.colorBackground);
                     b.setBackgroundColor(color);
                     b.setText(form.getName());
-                    b.setTextColor(App.getColor(prgramForms.getContext(), form.getColor()));
+                    b.setTextColor(App.getColor(programForms.getContext(), form.getColor()));
                     b.setTypeface(null, Typeface.NORMAL);
                     LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
                             LinearLayout.LayoutParams.MATCH_PARENT,
@@ -321,18 +321,18 @@ public class FormFragment extends Fragment{
                     b.setLayoutParams(param);
                     Drawable icon = this.getResources().getDrawable(form.getIcon());
                     b.setCompoundDrawablesWithIntrinsicBounds(null, icon, null, null);
-                    DrawableCompat.setTint(b.getCompoundDrawables()[1], App.getColor(prgramForms.getContext(), form.getColor()));
+                    DrawableCompat.setTint(b.getCompoundDrawables()[1], App.getColor(programForms.getContext(), form.getColor()));
 
                     b.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
 
                             if (App.getLocation() == null || App.getLocation().equals("")) {
-                                Toast toast = Toast.makeText(prgramForms.getContext(), getResources().getString(R.string.location_not_select), Toast.LENGTH_LONG);
+                                Toast toast = Toast.makeText(programForms.getContext(), getResources().getString(R.string.location_not_select), Toast.LENGTH_LONG);
                                 toast.setGravity(Gravity.CENTER, 0, 0);
                                 toast.show();
                             } else if (!(form.getName().equals(Forms.FAST_SCREENING_FORM) || form.getName().equals(Forms.PMDT_BASIC_MANAGEMENT_UNIT_VISIT)) && App.getPatient() == null) {
-                                Toast toast = Toast.makeText(prgramForms.getContext(), getResources().getString(R.string.patient_not_select), Toast.LENGTH_LONG);
+                                Toast toast = Toast.makeText(programForms.getContext(), getResources().getString(R.string.patient_not_select), Toast.LENGTH_LONG);
                                 toast.setGravity(Gravity.CENTER, 0, 0);
                                 toast.show();
                             } else {
@@ -363,16 +363,21 @@ public class FormFragment extends Fragment{
                 }
 
                 i--;
-                prgramForms.addView(layout);
+                programForms.addView(layout);
 
             }
         }
+
+        /*if(commonForms.getChildCount() == 0)
+            commonForms.setVisibility(View.GONE);
+        else
+            commonForms.setVisibility(View.VISIBLE);*/
 
     }
 
     public boolean isFormVisible() {
 
-        if (prgramForms.getVisibility() == View.GONE)
+        if (programForms.getVisibility() == View.GONE)
             return true;
 
         else
@@ -382,7 +387,7 @@ public class FormFragment extends Fragment{
 
     public void setMainContentVisible(Boolean visible) {
         if (visible) {
-            prgramForms.setVisibility(View.VISIBLE);
+            programForms.setVisibility(View.VISIBLE);
             FragmentManager fm = getFragmentManager();
             FragmentTransaction fragmentTransaction = fm.beginTransaction();
             fragmentTransaction.replace(R.id.fragment_form, new BlankFragment());
@@ -391,12 +396,14 @@ public class FormFragment extends Fragment{
             showMainContent(true);
 
         } else
-            prgramForms.setVisibility(View.GONE);
+            programForms.setVisibility(View.GONE);
 
     }
 
     public void openForm(FormsObject form, String formId, Boolean openFlag) {
-        prgramForms.setVisibility(View.GONE);
+        //commonForms.setVisibility(View.GONE);
+        //program.setVisibility(View.GONE);
+        programForms.setVisibility(View.GONE);
 
         FragmentManager fm = getFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();

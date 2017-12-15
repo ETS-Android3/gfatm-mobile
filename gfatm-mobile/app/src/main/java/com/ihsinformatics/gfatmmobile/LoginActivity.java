@@ -1,11 +1,14 @@
 package com.ihsinformatics.gfatmmobile;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -13,6 +16,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -211,6 +215,31 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
 
         if (v == loginButton) {
+
+            if(offlineCheckBox.isChecked()){
+
+                int count = serverService.getPendingSavedFormsCount(App.get(username));
+
+                if(count >= App.OFFLINE_FORM_CAP){
+                    final AlertDialog alertDialog = new AlertDialog.Builder(this, R.style.dialog).create();
+                    String statement = getResources().getString(R.string.offline_forms_limit_error);
+                    statement = statement.replace("#no#",String.valueOf(count));
+                    alertDialog.setMessage(statement);
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.ic_warning);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_alert));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                    return;
+                }
+
+            }
+
             attemptLogin();
         }
 

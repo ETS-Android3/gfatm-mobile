@@ -55,6 +55,8 @@ import static java.util.Calendar.YEAR;
 public class App {
     public static final int HORIZONTAL = 0;
     public static final int VERTICAL = 1;
+    public static final int OFFLINE_FORM_CAP = 500;
+    public static final int OFFLINE_FORM_WARNING = 400;
     private static String program = "";
     private static String version = "";
     private static String theme = "";

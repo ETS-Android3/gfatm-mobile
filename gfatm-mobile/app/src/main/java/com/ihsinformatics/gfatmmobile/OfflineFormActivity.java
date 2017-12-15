@@ -128,7 +128,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
             linearLayout.addView(selection);
 
             final TextView text = new TextView(this);
-            text.setText(String.valueOf(forms[i][1]) + " - " + forms[i][2]);
+            text.setText(String.valueOf(forms[i][2]));
             final Object obj = forms[i][6];
             final String id = String.valueOf(forms[i][0]);
             final String pid = String.valueOf(forms[i][3]);
@@ -138,24 +138,27 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                     @Override
                     public boolean onLongClick(View v) {
 
-                        Patient patient = serverService.getPatientBySystemIdFromLocalDB(pid);
+                        if(!(pid == null || pid.equals("") || pid.equals("null"))){
 
-                        if (patient.getUuid() == null || patient.getUuid().equals("")){
+                            Patient patient = serverService.getPatientBySystemIdFromLocalDB(pid);
 
-                            final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
-                            alertDialog.setMessage(getResources().getString(R.string.offline_patient));
-                            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-                            alertDialog.setIcon(clearIcon);
-                            alertDialog.setTitle(getResources().getString(R.string.title_error));
-                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            dialog.dismiss();
-                                        }
-                                    });
-                            alertDialog.show();
+                            if (patient.getUuid() == null || patient.getUuid().equals("")) {
 
-                            return true;
+                                final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
+                                alertDialog.setMessage(getResources().getString(R.string.offline_patient));
+                                Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                                alertDialog.setIcon(clearIcon);
+                                alertDialog.setTitle(getResources().getString(R.string.title_error));
+                                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                            }
+                                        });
+                                alertDialog.show();
+
+                                return true;
+                            }
                         }
 
                         Intent i = new Intent();
@@ -323,7 +326,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
             linearLayout.addView(selection);
 
             final TextView text = new TextView(this);
-            text.setText(String.valueOf(forms[i][1]) + " - " + forms[i][2]);
+            text.setText(String.valueOf(forms[i][2]));
             final Object obj = forms[i][6];
             final String id = String.valueOf(forms[i][0]);
             final String pid = String.valueOf(forms[i][3]);
@@ -333,25 +336,29 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                     @Override
                     public boolean onLongClick(View v) {
 
-                        Patient patient = serverService.getPatientBySystemIdFromLocalDB(pid);
+                        if(!(pid == null || pid.equals("") || pid.equals("null"))){
 
-                        if (patient.getUuid() == null || patient.getUuid().equals("")){
+                            Patient patient = serverService.getPatientBySystemIdFromLocalDB(pid);
 
-                            final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
-                            alertDialog.setMessage(getResources().getString(R.string.offline_patient));
-                            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-                            alertDialog.setIcon(clearIcon);
-                            alertDialog.setTitle(getResources().getString(R.string.title_error));
-                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            dialog.dismiss();
-                                        }
-                                    });
-                            alertDialog.show();
+                            if (patient.getUuid() == null || patient.getUuid().equals("")) {
 
-                            return true;
+                                final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
+                                alertDialog.setMessage(getResources().getString(R.string.offline_patient));
+                                Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                                alertDialog.setIcon(clearIcon);
+                                alertDialog.setTitle(getResources().getString(R.string.title_error));
+                                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                            }
+                                        });
+                                alertDialog.show();
+
+                                return true;
+                            }
                         }
+
 
                         Intent i = new Intent();
                         i.putExtra("form_id", id);
@@ -360,6 +367,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                         setResult(RESULT_OK, i);
                         onBackPressed();
                         return true;
+
                     }
 
                 });
