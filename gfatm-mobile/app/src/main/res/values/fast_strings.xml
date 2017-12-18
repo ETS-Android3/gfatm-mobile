@@ -779,6 +779,12 @@
         <item>@string/fast_extra_pulmonary</item>
     </string-array>
 
+
+    <string-array name="fast_sputum_extra_pul">
+        <item>@string/fast_sputum</item>
+        <item>@string/fast_extra_pulmonary</item>
+    </string-array>
+
     <string-array name="fast_specimen_come_from_list">
         <item>@string/fast_lymph</item>
         <item>@string/fast_pleural_fluid</item>

@@ -450,6 +450,10 @@ public class GpxSpecimenCollectionForm extends AbstractFormActivity implements R
         if (sampleType.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"SPECIMEN TYPE", App.get(sampleType).equals(getResources().getString(R.string.fast_pulmonary)) ? "PULMONARY" : "EXTRA-PULMONARY TUBERCULOSIS"});
 
+        if (pulmonaryType.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"PULMONARY SPECIMEN TYPE", App.get(pulmonaryType).equals(getResources().getString(R.string.fast_sputum)) ? "SPUTUM" : "GASTRIC ASPIRATE"});
+
+
         if (specimenSource.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"SPECIMEN SOURCE", App.get(specimenSource).equals(getResources().getString(R.string.fast_gastric_aspirate)) ? "GASTRIC ASPIRATE" :
                     (App.get(specimenSource).equals(getResources().getString(R.string.fast_pleural_fluid)) ? "PLEURAL EFFUSION" :
@@ -686,7 +690,21 @@ public class GpxSpecimenCollectionForm extends AbstractFormActivity implements R
                     }
                 }
                 sampleType.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("SPECIMEN SOURCE")) {
+            }
+            else if (obs[0][0].equals("PULMONARY SPECIMEN TYPE")) {
+
+                for (RadioButton rb : pulmonaryType.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_sputum)) && obs[0][1].equals("SPUTUM")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_gastric_aspirate)) && obs[0][1].equals("GASTRIC ASPIRATE")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                pulmonaryType.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("SPECIMEN SOURCE")) {
 
                 for (RadioButton rb : specimenSource.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_gastric_aspirate)) && obs[0][1].equals("GASTRIC ASPIRATE")) {
