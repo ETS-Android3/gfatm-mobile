@@ -310,7 +310,15 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
                 patientConsultationOther.getEditText().requestFocus();
                 error = true;
             }
-
+            if(patientConsultation.getVisibility()==View.VISIBLE && App.get(patientConsultation).isEmpty()){
+                if (App.isLanguageRTL())
+                    gotoPage(2);
+                else
+                    gotoPage(0);
+                patientConsultation.getQuestionView().setError(getString(R.string.empty_field));
+                patientConsultation.getSpinner().requestFocus();
+                error = true;
+            }
 
             if (husbandName.getVisibility() == View.VISIBLE && App.get(husbandName).length() == 1) {
                 if (App.isLanguageRTL())
@@ -974,6 +982,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         MySpinner spinner = (MySpinner) parent;
         if (spinner == patientConsultation.getSpinner()) {
+            patientConsultation.getQuestionView().setError(null);
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title))) {
                 patientConsultationOther.setVisibility(View.VISIBLE);
             } else {
