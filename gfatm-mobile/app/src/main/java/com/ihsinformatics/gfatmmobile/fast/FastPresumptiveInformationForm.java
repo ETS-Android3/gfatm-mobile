@@ -1276,11 +1276,13 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
                     }
 
 
-                    if(!finalOwnerString.equals("") || !finalOwnerString.equals("--")) {
-                        String[][] cnicOwnerConcept = serverService.getConceptUuidAndDataType(finalOwnerString);
-                        result = serverService.savePersonAttributeType("National ID Owner", cnicOwnerConcept[0][0], encounterId);
-                        if (!result.equals("SUCCESS"))
-                            return result;
+                    if(!App.get(cnic1).isEmpty() || !App.get(cnic2).isEmpty() || !App.get(cnic3).isEmpty()) {
+                        if (!finalOwnerString.equals("--")) {
+                            String[][] cnicOwnerConcept = serverService.getConceptUuidAndDataType(finalOwnerString);
+                            result = serverService.savePersonAttributeType("National ID Owner", cnicOwnerConcept[0][0], encounterId);
+                            if (!result.equals("SUCCESS"))
+                                return result;
+                        }
                     }
 
                     if (!(App.get(addressHouse).equals("") && App.get(addressStreet).equals("") && App.get(district).equals("") && App.get(nearestLandmark).equals(""))) {
