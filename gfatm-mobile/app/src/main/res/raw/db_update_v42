@@ -49,7 +49,6 @@ INSERT OR IGNORE INTO person_attribute_type VALUES (26, 'Guardian Name','java.la
 INSERT OR IGNORE INTO person_attribute_type VALUES (27, 'Other Identification Number','java.lang.String', NULL,'540ae1f5-c544-4096-b328-0bb69330ab07');
 INSERT OR IGNORE INTO person_attribute_type VALUES (28, 'Transgender','java.lang.Boolean', NULL,'1d703cf8-766f-44ba-a6ad-5c7f8a699c49');
 INSERT OR IGNORE INTO person_attribute_type VALUES (29, 'Email Address','java.lang.String', NULL, '54813ba4-a0a0-403f-adc7-51420d4d379c');
-INSERT OR IGNORE INTO person_attribute_type VALUES (30, 'Source type','org.openmrs.Concept', '166056','3146d347-9220-4f63-9d82-fa401cfe8ff3');
 
 DROP TABLE IF EXISTS person_attribute;
 create table if not exists person_attribute(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, person_attribute_type INTEGER NOT NULL, value VARCHAR, patient_id INTEGER NOT NULL, retired INTEGER DEFAULT 0);

@@ -252,10 +252,6 @@ public class ServerService {
         return false;
     }
 
-    public int getTotalSavedForms() {
-        return Integer.parseInt(dbUtil.getObject("select count(*) from " + Metadata.FORMS + " where username='" + App.getUsername() + "'"));
-    }
-
     public int getGwtAppFormCount(String date, String formName){
         Object[][] data = dbUtil.getFormTableData("select counts from " + Metadata.SCREENING_COUNT + " where username='" + App.getUsername() + "' and form='" + formName + "' and today='" + date + "'");
         if(data.length == 0)
@@ -478,8 +474,8 @@ public class ServerService {
             if (providerUUid == "")
                 return "PROVIDER_NOT_FOUND";
 
-            /*if (!isMobileAppCompatible())
-                return "VERSION_MISMATCH";*/
+            if (!isMobileAppCompatible())
+                return "VERSION_MISMATCH";
 
             App.setUserFullName(user.getFullName());
             App.setRoles(user.getRoles());
@@ -961,7 +957,7 @@ public class ServerService {
                     else {
 
                         JSONObject response = httpGet.getPatientByUuid(uuid);
-                        patient = com.ihsinformatics.gfatmmobile.model.Patient.parseJSONObject(response);
+                        patient = com.ihsinformatics.gfatmmobile.model.Patient.parseJSONObject(response, context);
 
                         com.ihsinformatics.gfatmmobile.model.Person person = patient.getPerson();
                         String puuid = patient.getUuid();
@@ -2118,7 +2114,7 @@ public class ServerService {
                         return "PARSER_ERROR";
                     }
 
-                } else if (String.valueOf(form[1]).equals(Metadata.PERSON_ATTRIBUTE_FORM) || String.valueOf(form[1]).equals(Metadata.PERSON_ADDRESS_FORM) || String.valueOf(form[1]).equals(Metadata.PATIENT_IDENTIFIER_FORM) || String.valueOf(form[1]).equals(Metadata.PROGRAM)) {
+                } else if (String.valueOf(form[1]).equals(Metadata.PERSON_ATTRIBUTE_FORM) || String.valueOf(form[1]).equals(Metadata.PERSON_ADDRESS_FORM) || String.valueOf(form[1]).equals(Metadata.PATIENT_IDENTIFIER_FORM) || String.valueOf(form[1]).equals(Metadata.PROGRAM) || String.valueOf(form[1]).equals(Metadata.PERSON_ATTRIBUTE)) {
                     String returnString = httpPost.backgroundPost(String.valueOf(form[3]), String.valueOf(form[4]));
                     if (returnString == null)
                         return "POST_ERROR";
@@ -2328,7 +2324,7 @@ public class ServerService {
                         return "PATIENT_NOT_FOUND";
 
                     JSONObject response = httpGet.getPatientByUuid(uuid);
-                    patient = com.ihsinformatics.gfatmmobile.model.Patient.parseJSONObject(response);
+                    patient = com.ihsinformatics.gfatmmobile.model.Patient.parseJSONObject(response, context);
 
                     com.ihsinformatics.gfatmmobile.model.Person person = patient.getPerson();
                     String puuid = patient.getUuid();
@@ -3103,7 +3099,7 @@ public class ServerService {
 
 
             JSONObject response = httpGet.getPatientByUuid(uuid);
-            patient = com.ihsinformatics.gfatmmobile.model.Patient.parseJSONObject(response);
+            patient = com.ihsinformatics.gfatmmobile.model.Patient.parseJSONObject(response, context);
 
             com.ihsinformatics.gfatmmobile.model.Person person = patient.getPerson();
             String identifier = patient.getPatientId();

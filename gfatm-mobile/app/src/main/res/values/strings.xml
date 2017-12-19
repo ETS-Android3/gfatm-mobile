@@ -352,10 +352,10 @@
     <string name="city_default" translatable="false">Karachi</string>
     <string name="province_default" translatable="false">Sindh</string>
     <string name="country_default" translatable="false">Pakistan</string>
-    <!--<string name="ip_default" translatable="false">mrs.ghd.ihn.org.pk</string>
-    <string name="port_default" translatable="false">443</string>-->
-    <string name="ip_default" translatable="false">124.29.207.74</string>
-    <string name="port_default" translatable="false">9902</string>
+    <string name="ip_default" translatable="false">mrs.ghd.ihn.org.pk</string>
+    <string name="port_default" translatable="false">443</string>
+    <!--<string name="ip_default" translatable="false">124.29.207.74</string>
+    <string name="port_default" translatable="false">9902</string>-->
 
     <string name="support_contact">Support Contact</string>
     <string name="support_email">Support Email</string>
@@ -388,6 +388,7 @@
     <string name="patient_not_found">PATIENT NOT FOUND</string>
     <string name="offline_patient">This patient was created offline. Please submit offline form before you can start using the patient in online mode.</string>
     <string name="data_connection_error">Could not connect to Server! Please check your connection settings or contact Admin</string>
+    <string name="offline_forms_limit_error">There are already #no# offline forms in your tablet. Please upload them in online mode.</string>
     <string name="patient_creation_error">Error while creating patient.</string>
     <string name="patient_get_error">Error while fetching patient.</string>
     <string name="authentication_error">Authentication failed! Please enter valid username and password.</string>
@@ -423,6 +424,7 @@
     <string name="warning_before_close">Are you sure you want to close the App?</string>
     <string name="error_no_selection">Select at least one form to continue.</string>
     <string name="title_error">Error!</string>
+    <string name="title_alert">Alert!</string>
     <string name="form_error">Resolve all the issue(s) to continue.</string>
     <string name="enrollment_date_error">Enrollment Date can\'t be after form date.</string>
     <string name="duplicate_patient_id">Patient ID already exists.</string>
@@ -583,7 +585,9 @@
     <string name="provide_search_criteria">Please select any of the search criteria.</string>
     <string name="guardian_name">Guardian Name</string>
 
-    <string name="offline_form_alert">offline form found. Press yes, to start upload in background.</string>
+    <string name="offline_form_alert">offline form found.</string>
+    <string name="offline_form_alert_warning">offline form found. You\'re reaching close to allowed number of offline forms(#off#).</string>
+    <string name="offline_form_alert_error">offline form found. You\'ve passed the number of allowed number of offline forms.</string>
     <string name="pid_copied">Patient ID copied.</string>
     <string name="warning_before_get_Patient">Are you sure you want to select this patient? If yes, app will fetch this patient from openmrs.</string>
 
@@ -816,7 +820,9 @@
         <item>@string/other</item>
     </string-array>
     <string name="sms_instruction">Instructions: Inform the patient regarding phone calls/sms</string>
+    <string name="common">common</string>
 
-
+    <string name="offline_forms_upload_completed">Aao TB Mitao - Forms Upload completed</string>
+    <string name="offline_forms_upload_completed_successfully">Offline form upload completed successfully.</string>
 
 </resources>

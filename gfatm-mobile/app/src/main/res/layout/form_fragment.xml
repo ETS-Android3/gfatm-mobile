@@ -18,13 +18,7 @@
             android:orientation="vertical"
             android:id="@+id/mainContent">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Common"
-                android:id="@+id/common"/>
-
-            <LinearLayout
+            <!--<LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/common_form"
@@ -42,7 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Program"
-                android:id="@+id/program"/>
+                android:id="@+id/program"/>-->
 
             <LinearLayout
                 android:layout_width="match_parent"

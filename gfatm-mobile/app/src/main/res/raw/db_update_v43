@@ -27,3 +27,5 @@ delete from encounter_type where uuid = 'edf92ef1-6301-426d-a1f2-562a57c412ff';
 INSERT OR IGNORE INTO encounter_type VALUES ('FAST-DST Culture Test Order','Add FAST Forms','View FAST Forms','edf92ef1-6301-426d-a1f2-562a57c412ff');
 delete from encounter_type where uuid = 'ab43cd19-4454-4ebf-9814-5f2c2e07d815';
 INSERT OR IGNORE INTO encounter_type VALUES ('FAST-DST Culture Test Result','Add FAST Forms','View FAST Forms','ab43cd19-4454-4ebf-9814-5f2c2e07d815');
+
+delete from person_attribute_type where name = 'Source Type';

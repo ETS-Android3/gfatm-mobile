@@ -1,0 +1,5 @@
+update OR IGNORE concept set data_type='Text' where uuid = '0a6003ec-4ad8-47ae-bfec-ae507e2e9a09';
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('PULMONARY SPECIMEN TYPE','pulmonary_specimen_type','Coded','e5156451-5d01-45e0-a7d2-52d65012ac9b');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('e5156451-5d01-45e0-a7d2-52d65012ac9b',166059);
+INSERT INTO concept_answers (question_concept_uuid, answer_concept_uuid) VALUES('e5156451-5d01-45e0-a7d2-52d65012ac9b','1004AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept_answers (question_concept_uuid, answer_concept_uuid) VALUES('e5156451-5d01-45e0-a7d2-52d65012ac9b','aeadcb3e-86b7-4471-8aab-7e910d427f38');

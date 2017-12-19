@@ -8,4 +8,5 @@
     <attr name="colorFollowup" format="color" />
     <attr name="colorOther" format="color" />
     <attr name="colorButton" format="color" />
+    <attr name="colorWarning" format="color"/>
 </resources>
