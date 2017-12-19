@@ -1269,7 +1269,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
 
 
                     String finalCnic = App.get(cnic1)+"-"+App.get(cnic2)+"-"+App.get(cnic3);
-                    if(!finalCnic.equals("")) {
+                    if(!finalCnic.equals("--")) {
                         result = serverService.savePersonAttributeType("National ID", finalCnic, encounterId);
                         if (!result.equals("SUCCESS"))
                             return result;
@@ -1277,7 +1277,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
 
 
                     if(!App.get(cnic1).isEmpty() || !App.get(cnic2).isEmpty() || !App.get(cnic3).isEmpty()) {
-                        if (!finalOwnerString.equals("--")) {
+                        if (!finalOwnerString.equals("")) {
                             String[][] cnicOwnerConcept = serverService.getConceptUuidAndDataType(finalOwnerString);
                             result = serverService.savePersonAttributeType("National ID Owner", cnicOwnerConcept[0][0], encounterId);
                             if (!result.equals("SUCCESS"))
