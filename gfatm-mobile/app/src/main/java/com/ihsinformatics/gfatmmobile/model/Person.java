@@ -14,6 +14,11 @@ Interactive Health Solutions, hereby disclaims all copyright interest in this pr
 
 package com.ihsinformatics.gfatmmobile.model;
 
+import android.content.Context;
+
+import com.ihsinformatics.gfatmmobile.App;
+import com.ihsinformatics.gfatmmobile.util.HttpGet;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -62,7 +67,7 @@ public class Person extends AbstractModel {
 
     }
 
-    public static Person parseJSONObject(JSONObject json) {
+    public static Person parseJSONObject(JSONObject json, Context context) {
         Person person = null;
         String uuid = "";
         String givenName = "";
@@ -89,21 +94,24 @@ public class Person extends AbstractModel {
             birthdate = json.getString("birthdate");
             gender = json.getString("gender");
 
-            JSONObject addressObject = json.getJSONObject("preferredAddress");
-            if(!addressObject.getBoolean("voided")) {
-                if (addressObject.getString("address1") != null)
+            HttpGet httpGet = new HttpGet(App.getIp(), App.getPort(), context);
+            JSONObject addressObject = httpGet.getPersonAddressByPersonUuid(uuid);
+
+            //JSONObject addressObject = json.getJSONObject("preferredAddress");
+            if(addressObject != null && !addressObject.getBoolean("voided")) {
+                if (!(addressObject.getString("address1") == null || addressObject.getString("address1").equals("null")))
                     address1 = addressObject.getString("address1");
-                if (addressObject.getString("address2") != null)
+                if (!(addressObject.getString("address2") == null || addressObject.getString("address2").equals("null")))
                     address2 = addressObject.getString("address2");
-                if (addressObject.getString("stateProvince") != null)
+                if (!(addressObject.getString("stateProvince") != null || addressObject.getString("stateProvince").equals("null")))
                     stateProvince = addressObject.getString("stateProvince");
-                if (addressObject.getString("cityVillage") != null)
+                if (!(addressObject.getString("cityVillage") != null || addressObject.getString("stateProvince").equals("null")))
                     cityVillage = addressObject.getString("cityVillage");
-                if (addressObject.getString("countyDistrict") != null)
+                if (!(addressObject.getString("countyDistrict") != null || addressObject.getString("countyDistrict").equals("null")))
                     countyDistrict = addressObject.getString("countyDistrict");
-                if (addressObject.getString("country") != null)
+                if (!(addressObject.getString("country") != null || addressObject.getString("country").equals("null")))
                     country = addressObject.getString("country");
-                if (addressObject.getString("address3") != null)
+                if (!(addressObject.getString("address3") != null || addressObject.getString("country").equals("null")))
                     address3 = addressObject.getString("address3");
             }
 

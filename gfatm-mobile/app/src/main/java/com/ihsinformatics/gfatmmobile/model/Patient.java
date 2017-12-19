@@ -14,6 +14,8 @@ Interactive Health Solutions, hereby disclaims all copyright interest in this pr
 
 package com.ihsinformatics.gfatmmobile.model;
 
+import android.content.Context;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,7 +41,7 @@ public class Patient extends AbstractModel {
         this.person = person;
     }
 
-    public static Patient parseJSONObject(JSONObject json) {
+    public static Patient parseJSONObject(JSONObject json, Context context) {
         Patient patient = null;
         String uuid = "";
         String patientId = "";
@@ -51,7 +53,7 @@ public class Patient extends AbstractModel {
         try {
             uuid = json.getString("uuid");
             JSONObject jsonobject = json.getJSONObject("person");
-            person = Person.parseJSONObject(jsonobject);
+            person = Person.parseJSONObject(jsonobject, context);
             JSONArray identifiers = json.getJSONArray("identifiers");
 
             for (int i = 0; i < identifiers.length(); i++) {

@@ -90,7 +90,7 @@ public class Encounter extends AbstractModel {
                             if (obs1 != null)
                                 obsGroup.add(obs1);
                         }
-                    } else { //post returns doesn't indlude group members :/
+                    } else { //post returns doesn't include group members :/
                         HttpGet httpGet = new HttpGet(App.getIp(), App.getPort(), context);
                         JSONArray linkJsonArray = jsonObject.getJSONArray("links");
                         JSONObject linkObject = linkJsonArray.getJSONObject(0);
