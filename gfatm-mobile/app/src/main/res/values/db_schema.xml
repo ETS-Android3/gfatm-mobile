@@ -337,14 +337,6 @@
             );
         </item>
 
-        <item>
-            create table location_mapping(
-                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                uuid VARCHAR,
-                location_id integer
-            );
-        </item>
-
     </string-array>
 
 </resources>
