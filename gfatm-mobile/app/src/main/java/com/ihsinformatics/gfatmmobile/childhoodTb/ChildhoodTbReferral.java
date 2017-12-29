@@ -6,8 +6,6 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -161,7 +159,7 @@ public class ChildhoodTbReferral extends AbstractFormActivity implements RadioGr
         else if (App.getProgram().equals(getResources().getString(R.string.childhood_tb)))
             columnName = "childhood_tb_location";
 
-        final Object[][] locations = serverService.getAllLocations(columnName);
+        final Object[][] locations = serverService.getAllLocationsFromLocalDB(columnName);
         String[] locationArray = new String[locations.length+1];
         for (int i = 0; i < locations.length; i++) {
             Object objLoc = locations[i][1];

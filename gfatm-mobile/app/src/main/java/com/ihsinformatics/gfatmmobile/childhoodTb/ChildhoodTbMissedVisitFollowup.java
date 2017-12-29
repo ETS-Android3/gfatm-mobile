@@ -175,7 +175,7 @@ public class ChildhoodTbMissedVisitFollowup extends AbstractFormActivity impleme
         else if (App.getProgram().equals(getResources().getString(R.string.childhood_tb)))
             columnName = "childhood_tb_location";
 
-        final Object[][] locations = serverService.getAllLocations(columnName);
+        final Object[][] locations = serverService.getAllLocationsFromLocalDB(columnName);
         String[] locationArray = new String[locations.length+1];
         for (int i = 0; i < locations.length; i++) {
             Object objLoc = locations[i][1];
