@@ -15,5 +15,6 @@ public class RequestType {
 
     /* miscellaneous form types */
     public static final String GFATM_SEARCH = "gfatm_search";
+    public static final String GFATM_GET_LOCATION = "gfatm_get_location";
 
 }
