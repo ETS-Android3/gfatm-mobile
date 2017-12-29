@@ -39,6 +39,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
+import com.ihsinformatics.gfatmmobile.shared.RequestType;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
@@ -154,7 +155,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
         else if (App.getProgram().equals(getResources().getString(R.string.childhood_tb)))
             columnName = "childhood_tb_location";
 
-        final Object[][] locations = serverService.getAllLocations(columnName);
+        final Object[][] locations = serverService.getAllLocationsFromLocalDB(columnName);
         String[] locationArray = new String[locations.length];
         for (int i = 0; i < locations.length; i++) {
             locationArray[i] = String.valueOf(locations[i][1]);
@@ -427,7 +428,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
                     }
                 });
 
-                String result = serverService.submitToGwtApp("fast_screening", FORM, values, observations.toArray(new String[][]{}));
+                String result = serverService.submitToGwtApp(RequestType.FAST_SCREENING, FORM, values, observations.toArray(new String[][]{}));
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 
