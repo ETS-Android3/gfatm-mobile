@@ -187,7 +187,7 @@ public class PmdtContactBaselineScreening extends AbstractFormActivity implement
         else if (App.getProgram().equals(getResources().getString(R.string.childhood_tb)))
             program = "childhood_tb_location";
 
-        final Object[][] locations = serverService.getAllLocations(program);
+        final Object[][] locations = serverService.getAllLocationsFromLocalDB(program);
         String[] locationArray = new String[locations.length + 1];
         for (int i = 0; i < locations.length; i++) {
             locationArray[i] = String.valueOf(locations[i][1]);
