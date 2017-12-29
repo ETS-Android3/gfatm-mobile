@@ -43,12 +43,13 @@ public class Person extends AbstractModel {
     String cityVillage;
     String countyDistrict;
     String country;
+    String addressuuid;
 
     HashMap<String, String> personAttributes;
 
     public Person(String uuid, String givenName, String familyName, int age, String birthdate, String gender,
                   String address1, String address2, String address3, String stateProvince, String countyDistrict,
-                  String cityVillage, String country, HashMap<String,String> personAttributes ) {
+                  String cityVillage, String country, String addressUuid, HashMap<String,String> personAttributes ) {
 
         super(uuid);
         this.givenName = givenName;
@@ -63,6 +64,7 @@ public class Person extends AbstractModel {
         this.cityVillage = cityVillage;
         this.countyDistrict = countyDistrict;
         this.country = country;
+        this.addressuuid = addressUuid;
         this.personAttributes = personAttributes;
 
     }
@@ -83,6 +85,7 @@ public class Person extends AbstractModel {
         String cityVillage = "";
         String countyDistrict = "";
         String country = "";
+        String addressUuid = "";
         HashMap<String, String> personAttributes = new HashMap<>();
 
         try {
@@ -103,16 +106,19 @@ public class Person extends AbstractModel {
                     address1 = addressObject.getString("address1");
                 if (!(addressObject.getString("address2") == null || addressObject.getString("address2").equals("null")))
                     address2 = addressObject.getString("address2");
-                if (!(addressObject.getString("stateProvince") != null || addressObject.getString("stateProvince").equals("null")))
+                if (!(addressObject.getString("stateProvince") == null || addressObject.getString("stateProvince").equals("null")))
                     stateProvince = addressObject.getString("stateProvince");
                 if (!(addressObject.getString("cityVillage") != null || addressObject.getString("stateProvince").equals("null")))
                     cityVillage = addressObject.getString("cityVillage");
-                if (!(addressObject.getString("countyDistrict") != null || addressObject.getString("countyDistrict").equals("null")))
+                if (!(addressObject.getString("countyDistrict") == null || addressObject.getString("countyDistrict").equals("null")))
                     countyDistrict = addressObject.getString("countyDistrict");
-                if (!(addressObject.getString("country") != null || addressObject.getString("country").equals("null")))
+                if (!(addressObject.getString("country") == null || addressObject.getString("country").equals("null")))
                     country = addressObject.getString("country");
-                if (!(addressObject.getString("address3") != null || addressObject.getString("country").equals("null")))
+                if (!(addressObject.getString("address3") == null || addressObject.getString("address3").equals("null")))
                     address3 = addressObject.getString("address3");
+                if (!(addressObject.getString("uuid") == null || addressObject.getString("uuid").equals("null")))
+                    addressUuid = addressObject.getString("uuid");
+
             }
 
             JSONArray attributes = json.getJSONArray("attributes");
@@ -145,7 +151,7 @@ public class Person extends AbstractModel {
         }
         person = new Person(uuid, givenName, familyName, age, birthdate, gender,
                 address1, address2, address3, stateProvince, countyDistrict,
-                cityVillage, country, personAttributes);
+                cityVillage, country, addressUuid, personAttributes);
         return person;
     }
 
@@ -254,6 +260,14 @@ public class Person extends AbstractModel {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public String getAddressUuid() {
+        return addressuuid;
+    }
+
+    public void setAddressUuid(String country) {
+        this.addressuuid = addressuuid;
     }
 
     public String getPersonAttribute(String personAttributeType){
